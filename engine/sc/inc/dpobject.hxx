@@ -358,6 +358,12 @@ public:
         SC_DLLPUBLIC ScDPCache* getExistingCache(const ScRange& rRange);
         SC_DLLPUBLIC const ScDPCache* getExistingCache(const ScRange& rRange) const;
 
+        /**
+         * Stores a cache that was built ahead of time for the range. A range that already has a
+         * cache keeps it, and the passed cache is dropped.
+         */
+        SC_DLLPUBLIC void addCache(const ScRange& rRange, std::unique_ptr<ScDPCache> pCache);
+
         void updateCache(const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
 
@@ -381,6 +387,13 @@ public:
         SC_DLLPUBLIC ScDPCache* getExistingCache(const OUString& rName);
         SC_DLLPUBLIC std::vector<OUString> getAllNames() const;
         size_t size() const;
+
+        /**
+         * Stores a cache that was built ahead of time for the range name. A name that already
+         * has a cache keeps it, and the passed cache is dropped.
+         */
+        SC_DLLPUBLIC void addCache(const OUString& rName, std::unique_ptr<ScDPCache> pCache);
+
     private:
 
         void updateCache(

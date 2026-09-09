@@ -45,6 +45,8 @@
 #include <tablebuffer.hxx>
 #include <unitconverter.hxx>
 #include <worksheetbuffer.hxx>
+#include <document.hxx>
+#include <dpitemdata.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <tools/datetime.hxx>
@@ -360,6 +362,95 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
         }
     }
 }
+
+namespace
+{
+
+template <typename MapType, typename KeyType>
+SCROW lclFindOrAddItem(MapType& rMap, const KeyType& rKey, const ScDPItemData& rItem,
+                       ScDPCache::ScDPItemDataVec& rItems)
+{
+    auto [aIterator, bInserted] = rMap.try_emplace(rKey, static_cast<SCROW>(rItems.size()));
+    if (bInserted)
+        rItems.push_back(rItem);
+    return aIterator->second;
+}
+
+/** Returns the number format of the data cells of one source column: the format all of them
+    share, else the first format a numeric cell carries. */
+sal_uInt32 lclGetColumnNumberFormat(ScDocument& rDocument, const ScRange& rDataCells)
+{
+    sal_uInt32 nFormat = rDocument.GetNumberFormat(rDataCells);
+    if (nFormat)
+        return nFormat;
+
+    // The formats differ, for example blank cells next to formatted numbers. A formula cell with
+    // the default format takes the format of its result when it is calculated, so calculate
+    // them first.
+    rDocument.EnsureFormulaCellResults(rDataCells);
+    for (SCROW nRow = rDataCells.aStart.Row(); nRow <= rDataCells.aEnd.Row(); ++nRow)
+    {
+        ScAddress aPosition(rDataCells.aStart.Col(), nRow, rDataCells.aStart.Tab());
+        CellType eCellType = rDocument.GetCellType(aPosition);
+        if ((eCellType != CELLTYPE_VALUE) && (eCellType != CELLTYPE_FORMULA))
+            continue;
+        nFormat = rDocument.GetNumberFormat(ScRange(aPosition));
+        if (nFormat)
+            return nFormat;
+    }
+    return 0;
+}
+
+} // namespace
+
+void PivotCacheRecordColumn::addSharedItem(const ScDPItemData& rItem)
+{
+    maSharedItems.push_back(addItem(rItem));
+}
+
+SCROW PivotCacheRecordColumn::getSharedItem(sal_Int32 nSharedIndex)
+{
+    if (nSharedIndex < 0 || o3tl::make_unsigned(nSharedIndex) >= maSharedItems.size())
+        return addItem(ScDPItemData());
+    return maSharedItems[nSharedIndex];
+}
+
+SCROW PivotCacheRecordColumn::addItem(const ScDPItemData& rItem)
+{
+    switch (rItem.GetType())
+    {
+        case ScDPItemData::Value:
+            return lclFindOrAddItem(maValueItems, rItem.GetValue(), rItem, maColumn.maItems);
+        case ScDPItemData::String:
+            return lclFindOrAddItem(maStringItems, rItem.GetString(), rItem, maColumn.maItems);
+        case ScDPItemData::Error:
+            return lclFindOrAddItem(maErrorItems, rItem.GetString(), rItem, maColumn.maItems);
+        default:
+            if (mnEmptyItem < 0)
+            {
+                mnEmptyItem = maColumn.maItems.size();
+                maColumn.maItems.emplace_back();
+            }
+            return mnEmptyItem;
+    }
+}
+
+void PivotCacheRecordColumn::setRecord(SCROW nRecordIndex, SCROW nItemIndex)
+{
+    padRecords(nRecordIndex);
+    if (maColumn.maData.size() == o3tl::make_unsigned(nRecordIndex))
+        maColumn.maData.push_back(nItemIndex);
+}
+
+void PivotCacheRecordColumn::padRecords(SCROW nRecordCount)
+{
+    if (maColumn.maData.size() >= o3tl::make_unsigned(nRecordCount))
+        return;
+    SCROW nEmptyItem = addItem(ScDPItemData());
+    maColumn.maData.resize(nRecordCount, nEmptyItem);
+}
+
+bool PivotCacheRecordColumn::hasValueItems() const { return !maValueItems.empty(); }
 
 PCFieldModel::PCFieldModel() :
     mnNumFmtId( 0 ),
@@ -829,23 +920,18 @@ void PivotCacheField::writeSourceDataCell( const WorksheetHelper& rSheetHelper, 
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, const WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
+PivotCacheItem PivotCacheField::readPCRecordItem(SequenceInputStream& rStream) const
 {
-    if( hasSharedItems() )
-    {
-        writeSharedItemToSourceDataCell( rSheetHelper, nCol, nRow, rStrm.readInt32() );
-    }
+    PivotCacheItem aItem;
+    if (hasSharedItems())
+        aItem.readIndex(rStream);
+    else if (maSharedItemsModel.mbIsNumeric)
+        aItem.readDouble(rStream);
+    else if (maSharedItemsModel.mbHasDate && !maSharedItemsModel.mbHasString)
+        aItem.readDate(rStream);
     else
-    {
-        PivotCacheItem aItem;
-        if( maSharedItemsModel.mbIsNumeric )
-           aItem.readDouble( rStrm );
-        else if( maSharedItemsModel.mbHasDate && !maSharedItemsModel.mbHasString )
-           aItem.readDate( rStrm );
-        else
-           aItem.readString( rStrm );
-        writeItemToSourceDataCell( rSheetHelper, nCol, nRow, aItem );
-    }
+        aItem.readString(rStream);
+    return aItem;
 }
 
 // private --------------------------------------------------------------------
@@ -1155,24 +1241,111 @@ void PivotCache::writeSourceDataCell( const WorksheetHelper& rSheetHelper, sal_I
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Col() <= nCol ) && ( nCol <= maSheetSrcModel.maRange.aEnd.Col() ), "PivotCache::writeSourceDataCell - invalid column index" );
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row() + nRowIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::writeSourceDataCell - invalid row index" );
+    if (nCol > getAddressConverter().getMaxApiAddress().Col())
+        return;
     updateSourceDataRow( nRow );
     if( const PivotCacheField* pCacheField = maDatabaseFields.get( nColIdx ).get() )
         pCacheField->writeSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCache::importPCRecord( SequenceInputStream& rStrm, const WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
+PivotCacheItem PivotCache::readPCRecordItem(SequenceInputStream& rStream,
+                                            sal_Int32 nColumnIndex) const
 {
-    SCROW nRow = maSheetSrcModel.maRange.aStart.Row() + nRowIdx;
-    OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::importPCRecord - invalid row index" );
-    SCCOL nCol = maSheetSrcModel.maRange.aStart.Col();
-    SCCOL nMaxCol = getAddressConverter().getMaxApiAddress().Col();
-    for( const auto& rxDatabaseField : maDatabaseFields )
+    if (const PivotCacheField* pCacheField = maDatabaseFields.get(nColumnIndex).get())
+        return pCacheField->readPCRecordItem(rStream);
+    return PivotCacheItem();
+}
+
+bool PivotCache::hasRecords() const
+{
+    return maDefModel.mbSaveData && !maDefModel.maRelId.isEmpty();
+}
+
+void PivotCache::startRecordsImport()
+{
+    maRecordColumns.clear();
+    maRecordColumns.resize(maDatabaseFields.size());
+    for (size_t nColumn = 0; nColumn < maDatabaseFields.size(); ++nColumn)
     {
-        if( rStrm.isEof() || (nCol > nMaxCol) )
-            break;
-        rxDatabaseField->importPCRecordItem( rStrm, rSheetHelper, nCol, nRow );
-        ++nCol;
+        const PivotCacheItemList& rSharedItems = maDatabaseFields[nColumn]->getSharedItems();
+        for (size_t nItem = 0; nItem < rSharedItems.size(); ++nItem)
+            maRecordColumns[nColumn].addSharedItem(
+                createItemData(*rSharedItems.getCacheItem(nItem)));
     }
+}
+
+void PivotCache::addRecordItem(sal_Int32 nColumnIndex, sal_Int32 nRecordIndex,
+                               const PivotCacheItem& rItem)
+{
+    if (nColumnIndex < 0 || o3tl::make_unsigned(nColumnIndex) >= maRecordColumns.size()
+        || nRecordIndex < 0)
+        return;
+
+    PivotCacheRecordColumn& rColumn = maRecordColumns[nColumnIndex];
+    SCROW nItem = -1;
+    if (rItem.getType() == XML_x)
+    {
+        sal_Int32 nSharedIndex = -1;
+        rItem.getValue() >>= nSharedIndex;
+        nItem = rColumn.getSharedItem(nSharedIndex);
+    }
+    else
+        nItem = rColumn.addItem(createItemData(rItem));
+    rColumn.setRecord(nRecordIndex, nItem);
+}
+
+void PivotCache::finalizeRecordsImport(sal_Int32 nRecordCount)
+{
+    std::vector<PivotCacheRecordColumn> aRecordColumns = std::move(maRecordColumns);
+    maRecordColumns.clear();
+
+    if (nRecordCount <= 0)
+        return;
+
+    ScRange aRange = maSheetSrcModel.maRange;
+    // Only the start address of the source range from the file has the sheet set.
+    aRange.aEnd.SetTab(aRange.aStart.Tab());
+    SCTAB nTab = aRange.aStart.Tab();
+
+    // Number formats are not part of the records. They come from the data cells of the source
+    // range, which matches the records only while it has one column per source field and at
+    // least one data row.
+    bool bSourceColumnsMatch
+        = (aRange.aStart.Row() < aRange.aEnd.Row())
+          && (aRecordColumns.size()
+              == o3tl::make_unsigned(aRange.aEnd.Col() - aRange.aStart.Col() + 1));
+
+    ScDocument& rDocument = getScDocument();
+    std::vector<ScDPCache::SourceColumn> aColumns;
+    aColumns.reserve(aRecordColumns.size());
+    for (size_t nColumn = 0; nColumn < aRecordColumns.size(); ++nColumn)
+    {
+        PivotCacheRecordColumn& rRecordColumn = aRecordColumns[nColumn];
+        rRecordColumn.padRecords(nRecordCount);
+        bool bHasValues = rRecordColumn.hasValueItems();
+
+        ScDPCache::SourceColumn aColumn = rRecordColumn.takeColumn();
+        // The pivot table definition refers to the fields by the cache field names.
+        aColumn.maLabel = maDatabaseFields[nColumn]->getName();
+        if (bSourceColumnsMatch && bHasValues)
+        {
+            SCCOL nDocColumn = aRange.aStart.Col() + nColumn;
+            aColumn.mnNumFormat = lclGetColumnNumberFormat(
+                rDocument, ScRange(nDocColumn, aRange.aStart.Row() + 1, nTab, nDocColumn,
+                                   aRange.aEnd.Row(), nTab));
+        }
+        aColumns.push_back(std::move(aColumn));
+    }
+
+    auto pCache = std::make_unique<ScDPCache>(rDocument);
+    if (!pCache->InitFromColumns(std::move(aColumns)))
+        return;
+
+    ScDPCollection* pDPCollection = rDocument.GetDPCollection();
+    if (!maSheetSrcModel.maDefName.isEmpty())
+        pDPCollection->GetNameCaches().addCache(maSheetSrcModel.maDefName, std::move(pCache));
+    else
+        pDPCollection->GetSheetCaches().addCache(aRange, std::move(pCache));
 }
 
 // private --------------------------------------------------------------------
@@ -1255,6 +1428,41 @@ void PivotCache::updateSourceDataRow( sal_Int32 nRow ) const
     {
         mnCurrRow = nRow;
     }
+}
+
+ScDPItemData PivotCache::createItemData(const PivotCacheItem& rItem) const
+{
+    ScDPItemData aData;
+    switch (rItem.getType())
+    {
+        case XML_s:
+            aData.SetString(rItem.getValue().get<OUString>());
+            break;
+        case XML_n:
+            aData.SetValue(rItem.getValue().get<double>());
+            break;
+        case XML_i:
+        {
+            sal_Int32 nValue = 0;
+            rItem.getValue() >>= nValue;
+            aData.SetValue(nValue);
+        }
+        break;
+        case XML_d:
+            aData.SetValue(getUnitConverter().calcSerialFromDateTime(
+                rItem.getValue().get<css::util::DateTime>()));
+            break;
+        case XML_b:
+            // A boolean source cell holds the number 1 or 0 with a boolean number format.
+            aData.SetValue(rItem.getValue().get<bool>() ? 1.0 : 0.0);
+            break;
+        case XML_e:
+            aData.SetErrorString(rItem.getValue().get<OUString>());
+            break;
+        default:
+            break;
+    }
+    return aData;
 }
 
 PivotCacheBuffer::PivotCacheBuffer( const WorkbookHelper& rHelper ) :

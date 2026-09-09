@@ -184,6 +184,12 @@ void ScDPItemData::SetErrorStringInterned( rtl_uString* pS )
     meType = Error;
 }
 
+void ScDPItemData::SetErrorString(const OUString& rString)
+{
+    SetString(rString);
+    meType = Error;
+}
+
 bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
 {
     if (meType != r.meType)

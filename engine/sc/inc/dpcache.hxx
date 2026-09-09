@@ -120,6 +120,20 @@ public:
         virtual ~DBConnector() {}
     };
 
+    /**
+     * Source data of one column, already split into its distinct items and one item index per
+     * record. The items may come in any order and their strings need not be interned.
+     */
+    struct SourceColumn
+    {
+        OUString maLabel;
+        /** Distinct items of the column. */
+        ScDPItemDataVec maItems;
+        /** Index into maItems for every record, in record order. */
+        IndexArrayType maData;
+        sal_uInt32 mnNumFormat = 0;
+    };
+
 private:
 
     ScDocument& mrDoc;
@@ -196,6 +210,13 @@ public:
     bool InitFromDataBase(DBConnector& rDB);
 
     /**
+     * Fills the cache from columns that are already split into distinct items and item indexes.
+     * Returns false and leaves the cache empty when there are no records, when the columns hold
+     * different numbers of records, or when an index points outside its item list.
+     */
+    SC_DLLPUBLIC bool InitFromColumns(std::vector<SourceColumn>&& rColumns);
+
+    /**
      * Row count is the number of records plus any trailing empty rows in case
      * the source data is sheet and contains trailing empty rows.
      */
@@ -223,8 +244,8 @@ public:
 
     ScDPCache(const ScDPCache&) = delete;
     const ScDPCache& operator=(const ScDPCache&) = delete;
-    ScDPCache(ScDocument& rDoc);
-    ~ScDPCache();
+    SC_DLLPUBLIC ScDPCache(ScDocument& rDocument);
+    SC_DLLPUBLIC ~ScDPCache();
 
     void dumpAsXml(tools::XmlWriter& rWriter) const;
 

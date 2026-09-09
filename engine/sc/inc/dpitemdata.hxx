@@ -58,21 +58,22 @@ public:
     // case insensitive equality
     static sal_Int32 Compare(const ScDPItemData& rA, const ScDPItemData& rB);
 
-    ScDPItemData();
-    ScDPItemData(const ScDPItemData& r);
+    SC_DLLPUBLIC ScDPItemData();
+    SC_DLLPUBLIC ScDPItemData(const ScDPItemData& rDPItemData);
     ScDPItemData(const OUString& rStr);
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
     SC_DLLPUBLIC ~ScDPItemData();
 
     Type GetType() const { return static_cast<Type>(meType); }
     void SetEmpty();
-    void SetString(const OUString& rS);
+    SC_DLLPUBLIC void SetString(const OUString& rString);
     void SetStringInterned( rtl_uString* pS );
-    void SetValue(double fVal);
+    SC_DLLPUBLIC void SetValue(double fValue);
     void SetRangeStart(double fVal);
     void SetRangeFirst();
     void SetRangeLast();
     void SetErrorStringInterned( rtl_uString* pS );
+    SC_DLLPUBLIC void SetErrorString(const OUString& rString);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     // exact equality

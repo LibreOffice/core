@@ -25,6 +25,7 @@ namespace oox::xls {
 
 class PivotCache;
 class PivotCacheField;
+class PivotCacheItem;
 
 class PivotCacheFieldContext : public WorkbookContextBase
 {
@@ -61,29 +62,32 @@ private:
     PivotCache&         mrPivotCache;
 };
 
-class PivotCacheRecordsFragment : public WorksheetFragmentBase
+class PivotCacheRecordsFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            PivotCacheRecordsFragment(
-                            const WorksheetHelper& rHelper,
-                            const OUString& rFragmentPath,
-                            const PivotCache& rPivotCache );
+    /** The sheet globals name the sheet that takes the records as cells. They are null when the
+        source sheet is part of the document. */
+    explicit PivotCacheRecordsFragment(const WorkbookHelper& rHelper, const OUString& rFragmentPath,
+                                       PivotCache& rPivotCache, WorksheetGlobalsRef xSheetGlobals);
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
     virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
+    virtual void finalizeImport() override;
 
 private:
     void                startCacheRecord();
+    void addRecordItem(const PivotCacheItem& rItem);
     void                importPCRecord( SequenceInputStream& rStrm );
     void                importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
 private:
-    const PivotCache&   mrPivotCache;
-    sal_Int32           mnColIdx;           /// Relative column index in source data.
-    sal_Int32           mnRowIdx;           /// Relative row index in source data.
-    bool                mbInRecord;
+    PivotCache& mrPivotCache;
+    WorksheetGlobalsRef mxSheetGlobals; /// Sheet that takes the records as cells, or null.
+    sal_Int32 mnColIdx = 0; /// Relative column index in source data.
+    sal_Int32 mnRowIdx = 0; /// Relative row index in source data.
+    bool mbInRecord = false;
 };
 
 } // namespace oox::xls

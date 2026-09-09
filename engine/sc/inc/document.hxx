@@ -1441,7 +1441,7 @@ public:
     void                                      RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC double                       RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScInterpreterContext* pContext = nullptr ) const;
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    sal_uInt32                                GetNumberFormat( const ScRange& rRange ) const;
+    SC_DLLPUBLIC sal_uInt32 GetNumberFormat(const ScRange& rRange) const;
     SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
     SC_DLLPUBLIC void                         SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 

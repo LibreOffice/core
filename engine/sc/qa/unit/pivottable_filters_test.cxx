@@ -21,6 +21,7 @@
 #include <dpsave.hxx>
 #include <dputil.hxx>
 #include <attrib.hxx>
+#include <dbdocfun.hxx>
 #include <dpshttab.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -3153,16 +3154,16 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testDatesDiscreteGrouping)
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testInvalidFormats)
 {
+    // The saved cache has 18 fields while the source sheet only has 9 columns. The cache is
+    // recreated from the saved records, so every format still refers to an existing field and
+    // all of them round-trip.
     createScDoc("xlsx/pivottable_invalid_formats.xlsx");
     save(TestFilter::XLSX);
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    // Without the fix in place, this would have failed with
-    // - Expected: 7
-    // - Actual  : 9
-    assertXPath(pDoc, "/x:pivotTableDefinition/x:formats", "count", u"7");
+    assertXPath(pDoc, "/x:pivotTableDefinition/x:formats", "count", u"9");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testNumberGroupingXLS)
@@ -3237,26 +3238,120 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldDiffAggregationXLSX)
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFieldNameErrorXLSX)
 {
-    // tdf#78486: When the pivot cache field name differs from the actual source
-    // column name (e.g. cache has "Werte2" but source column is "Werte"), the
-    // calculated field formula must use #NAME? for the unresolvable reference
-    // after import, matching Excel behavior. Otherwise re-saving produces a
-    // corrupt file (formula references a field that doesn't exist in the cache).
+    // tdf#78486: The cache field is named "Werte2" while the source column header says "Werte".
+    // The cache is recreated from the saved records, so the field keeps the cache name and the
+    // calculated field formula that refers to it stays valid. The re-saved formula refers to
+    // a field that the cache has.
     createScDoc("xlsx/pivot-table/pivot_calcfield_nameerror.xlsx");
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
 
-    // The cache should have "Werte" (from actual source data), not "Werte2"
-    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", u"Werte");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name",
+                u"Werte2");
 
-    // The calculated field formula should contain #NAME? instead of the stale "Werte2"
     OUString aFormula
         = getXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "formula");
-    // Original formula was IF(Werte2 >0,Werte2,0) but "Werte2" is not a valid
-    // source column (actual column is "Werte"), so it becomes #NAME?.
-    CPPUNIT_ASSERT_EQUAL(u"IF(#NAME? >0,#NAME?,0)"_ustr, aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"IF('Werte2' >0,'Werte2',0)"_ustr, aFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableLoadsCacheRecordsXLSX)
+{
+    // The saved cache records hold 1 in the first data row of field A, while the source sheet
+    // holds 100 there. The saved records are shown until the table is refreshed.
+    createScDoc("xlsx/pivot-table/CacheRecordsStaleSource.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Sum of A for K=1, then the grand total.
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT(pDPs);
+    const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(ScRange(0, 0, 1, 10, 4, 1));
+    CPPUNIT_ASSERT(pCache);
+    CPPUNIT_ASSERT_EQUAL(SCROW(4), pCache->GetDataSize());
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pCache->GetDimensionName(0));
+    const ScDPCache::ScDPItemDataVec& rItems = pCache->GetDimMemberValues(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), rItems.size());
+    CPPUNIT_ASSERT_EQUAL(1.0, rItems[0].GetValue());
+    // Field K lists its shared items, and the records refer to them by index.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pCache->GetDimMemberValues(10).size());
+
+    // A refresh reads the source cells again.
+    ScDBDocFunc aFunc(*getScDocShell());
+    aFunc.RefreshPivotTables(&(*pDPs)[0], false);
+    CPPUNIT_ASSERT_EQUAL(u"104"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"109"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableRefreshOnLoadReadsSheetXLSX)
+{
+    // Same document with the refresh-on-load flag set. The file asks for a refresh, so the
+    // source cells rebuild the cache and the saved records are not used.
+    createScDoc("xlsx/pivot-table/CacheRecordsRefreshOnLoad.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"104"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"109"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableInvalidCacheReadsSheetXLSX)
+{
+    // Same document with the cache marked invalid. The saved records are out of date, so the
+    // source cells rebuild the cache.
+    createScDoc("xlsx/pivot-table/CacheRecordsInvalid.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"104"_ustr, pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"109"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableWithoutSourceDataXLSX)
+{
+    // The source range A1:C7 on the first sheet is empty, only the saved cache records hold the
+    // data. The table is shown from those records and can be rearranged from them.
+    createScDoc("xlsx/pivot-table/PivotTableWithNoData.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(ScAddress(1, 1, 0)));
+
+    // Sum of B by A (rows) and C (columns), with the totals.
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"9"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(1, 5, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(1, 6, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"13"_ustr, pDoc->GetString(ScAddress(1, 7, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"14"_ustr, pDoc->GetString(ScAddress(2, 7, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"27"_ustr, pDoc->GetString(ScAddress(3, 7, 1)));
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    ScDPObject& rDPObj = (*pDPs)[0];
+    const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(ScRange(0, 0, 0, 2, 6, 0));
+    CPPUNIT_ASSERT(pCache);
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pCache->GetDataSize());
+
+    // Counting instead of summing recomputes the table from the same records.
+    ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+    ScDPSaveDimension* pDataDim = pSaveData->GetExistingDimensionByName(u"B");
+    CPPUNIT_ASSERT(pDataDim);
+    pDataDim->SetFunction(ScGeneralFunction::COUNT);
+    rDPObj.SetSaveData(*pSaveData);
+    ScDBDocFunc aFunc(*getScDocShell());
+    CPPUNIT_ASSERT(aFunc.UpdatePivotTable(rDPObj, false, false));
+
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(ScAddress(3, 7, 1)));
+    const ScDPCache* pCacheAfter
+        = pDPs->GetSheetCaches().getExistingCache(ScRange(0, 0, 0, 2, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(pCache, pCacheAfter);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -705,6 +705,90 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
     }
 }
 
+bool ScDPCache::InitFromColumns(std::vector<SourceColumn>&& rColumns)
+{
+    Clear();
+
+    if (rColumns.empty())
+        return false;
+
+    const size_t nRecordCount = rColumns[0].maData.size();
+    if (nRecordCount == 0)
+        return false;
+
+    for (const SourceColumn& rColumn : rColumns)
+    {
+        if (rColumn.maData.size() != nRecordCount)
+            return false;
+
+        for (SCROW nItem : rColumn.maData)
+            if (nItem < 0 || o3tl::make_unsigned(nItem) >= rColumn.maItems.size())
+                return false;
+    }
+
+    mnColumnCount = static_cast<SCCOL>(rColumns.size());
+    mnRowCount = static_cast<SCROW>(nRecordCount);
+    maStringPools.resize(mnColumnCount);
+    maFields.reserve(mnColumnCount);
+
+    maLabelNames.reserve(mnColumnCount + 1);
+    LabelSet aExistingNames;
+    normalizeAddLabel(ScResId(STR_PIVOT_DATA), maLabelNames, aExistingNames);
+
+    std::vector<bool> aEmptyRows(nRecordCount, true);
+    std::vector<Bucket> aBuckets;
+    std::vector<SCROW> aItemBuckets;
+    for (size_t nDimension = 0; nDimension < rColumns.size(); ++nDimension)
+    {
+        const SourceColumn& rColumn = rColumns[nDimension];
+        normalizeAddLabel(rColumn.maLabel, maLabelNames, aExistingNames);
+
+        maFields.push_back(std::make_unique<Field>());
+        Field& rField = *maFields.back();
+        rField.mnNumFormat = rColumn.mnNumFormat;
+
+        // Only the items that a record refers to become members of the field. Each of them gets
+        // one bucket, so the sort and the case-insensitive merge run over as many buckets as
+        // the column has distinct items.
+        aBuckets.clear();
+        aItemBuckets.assign(rColumn.maItems.size(), -1);
+        for (SCROW nRow = 0; nRow < mnRowCount; ++nRow)
+        {
+            SCROW nItem = rColumn.maData[nRow];
+            const ScDPItemData& rItem = rColumn.maItems[nItem];
+            SCROW& rBucket = aItemBuckets[nItem];
+            if (rBucket < 0)
+            {
+                rBucket = static_cast<SCROW>(aBuckets.size());
+                ScDPItemData aData(rItem);
+                if (rItem.GetType() == ScDPItemData::String)
+                    aData.SetStringInterned(InternString(nDimension, rItem.GetString()));
+                else if (rItem.GetType() == ScDPItemData::Error)
+                    aData.SetErrorStringInterned(InternString(nDimension, rItem.GetString()));
+                aBuckets.emplace_back(aData, rBucket);
+            }
+            if (!rItem.IsEmpty())
+                aEmptyRows[nRow] = false;
+        }
+
+        processBuckets(aBuckets, rField);
+
+        // processBuckets leaves one member index per bucket. Expand that to one per record.
+        IndexArrayType aBucketMembers = std::move(rField.maData);
+        rField.maData.clear();
+        rField.maData.reserve(mnRowCount);
+        for (SCROW nItem : rColumn.maData)
+            rField.maData.push_back(aBucketMembers[aItemBuckets[nItem]]);
+    }
+
+    for (SCROW nRow = 0; nRow < mnRowCount; ++nRow)
+        if (!aEmptyRows[nRow])
+            maEmptyRows.insert_back(nRow, nRow + 1, false);
+
+    PostInit();
+    return true;
+}
+
 bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 {
     if (!rParam.GetEntryCount())

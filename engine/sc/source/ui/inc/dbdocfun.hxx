@@ -142,7 +142,7 @@ public:
      * Reload the referenced pivot cache, and refresh all pivot tables that
      * reference the cache.
      */
-    void RefreshPivotTables(const ScDPObject* pDPObj, bool bApi);
+    SC_DLLPUBLIC void RefreshPivotTables(const ScDPObject* pDPObj, bool bApi);
 
     /**
      * Refresh the group dimensions of all pivot tables referencing the same

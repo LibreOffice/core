@@ -20,6 +20,7 @@
 #include <pivotcachefragment.hxx>
 
 #include <osl/diagnose.h>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/token/namespaces.hxx>
 #include <biffhelper.hxx>
 #include <formulabuffer.hxx>
@@ -197,35 +198,55 @@ void PivotCacheDefinitionFragment::finalizeImport()
     // finalize the cache (check source range etc.)
     mrPivotCache.finalizeImport();
 
-    // load the cache records, if the cache is based on a deleted or an external worksheet
-    if( mrPivotCache.isValidDataSource() && mrPivotCache.isBasedOnDummySheet() )
+    if (!mrPivotCache.isValidDataSource())
+        return;
+
+    /*  The cache records fill the pivot cache, so the table shows the data the file was
+        saved with. A cache the file marks as out of date is refreshed instead, which means the
+        source cells rebuild it. For a deleted or an external source sheet the records also
+        rebuild its cells. */
+    bool bDummySheet = mrPivotCache.isBasedOnDummySheet();
+    if (!bDummySheet && (!mrPivotCache.hasRecords() || mrPivotCache.needsRefresh()))
+        return;
+
+    OUString aRecFragmentPath
+        = getRelations().getFragmentPathFromRelId(mrPivotCache.getRecordsRelId());
+    if (aRecFragmentPath.isEmpty())
+        return;
+
+    WorksheetGlobalsRef xSheetGlobals;
+    if (bDummySheet)
     {
-        OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
-        if( !aRecFragmentPath.isEmpty() )
-        {
-            SCTAB nSheet = mrPivotCache.getSourceRange().aStart.Tab();
-            WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), WorksheetType::Work, nSheet );
-            if( xSheetGlob )
-                importOoxFragment( new PivotCacheRecordsFragment( *xSheetGlob, aRecFragmentPath, mrPivotCache ) );
-        }
+        SCTAB nSheet = mrPivotCache.getSourceRange().aStart.Tab();
+        xSheetGlobals = WorksheetHelper::constructGlobals(*this, ISegmentProgressBarRef(),
+                                                          WorksheetType::Work, nSheet);
+        if (!xSheetGlobals)
+            return;
     }
+    importOoxFragment(
+        new PivotCacheRecordsFragment(*this, aRecFragmentPath, mrPivotCache, xSheetGlobals));
 }
 
-PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHelper,
-        const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath ),
-    mrPivotCache( rPivotCache ),
-    mnColIdx( 0 ),
-    mnRowIdx( 0 ),
-    mbInRecord( false )
+PivotCacheRecordsFragment::PivotCacheRecordsFragment(const WorkbookHelper& rHelper,
+                                                     const OUString& rFragmentPath,
+                                                     PivotCache& rPivotCache,
+                                                     WorksheetGlobalsRef xSheetGlobals)
+    : WorkbookFragmentBase(rHelper, rFragmentPath)
+    , mrPivotCache(rPivotCache)
+    , mxSheetGlobals(std::move(xSheetGlobals))
 {
-    sal_Int32 nSheetCount = rPivotCache.getWorksheets().getAllSheetCount();
-
-    // prepare sheet: insert column header names into top row
-    rPivotCache.writeSourceHeaderCells( *this );
-    // resize formula buffers since we've added a new dummy sheet
-    rHelper.getFormulaBuffer().SetSheetCount( nSheetCount );
+    if (mxSheetGlobals)
+    {
+        sal_Int32 nSheetCount = getWorksheets().getAllSheetCount();
+        // prepare sheet: insert column header names into top row
+        mrPivotCache.writeSourceHeaderCells(WorksheetHelper(*mxSheetGlobals));
+        // resize formula buffers since we've added a new dummy sheet
+        getFormulaBuffer().SetSheetCount(nSheetCount);
+    }
+    mrPivotCache.startRecordsImport();
 }
+
+void PivotCacheRecordsFragment::finalizeImport() { mrPivotCache.finalizeRecordsImport(mnRowIdx); }
 
 ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
@@ -253,8 +274,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
                 default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
-            mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
-            ++mnColIdx;
+            addRecordItem(aItem);
         }
         break;
     }
@@ -300,10 +320,22 @@ void PivotCacheRecordsFragment::startCacheRecord()
     mbInRecord = true;
 }
 
+void PivotCacheRecordsFragment::addRecordItem(const PivotCacheItem& rItem)
+{
+    if (mxSheetGlobals)
+        mrPivotCache.writeSourceDataCell(WorksheetHelper(*mxSheetGlobals), mnColIdx, mnRowIdx,
+                                         rItem);
+    // The first record follows the header row, so its record index is one less than the row.
+    mrPivotCache.addRecordItem(mnColIdx, mnRowIdx - 1, rItem);
+    ++mnColIdx;
+}
+
 void PivotCacheRecordsFragment::importPCRecord( SequenceInputStream& rStrm )
 {
     startCacheRecord();
-    mrPivotCache.importPCRecord( rStrm, *this, mnRowIdx );
+    for (sal_Int32 nColumn = 0, nCount = mrPivotCache.getDatabaseFieldCount();
+         (nColumn < nCount) && !rStrm.isEof(); ++nColumn)
+        addRecordItem(mrPivotCache.readPCRecordItem(rStrm, nColumn));
     mbInRecord = false;
 }
 
@@ -324,8 +356,7 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
         case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
         default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
     }
-    mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
-    ++mnColIdx;
+    addRecordItem(aItem);
 }
 
 

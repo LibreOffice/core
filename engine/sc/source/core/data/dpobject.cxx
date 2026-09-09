@@ -3228,11 +3228,22 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
         pCalculatedDimData->WriteToCache(*pCache,
             collectGroupFieldNames(pDimData));
 
+    const ScDPCache* p = pCache.get();
+    addCache(rRange, std::move(pCache));
+    return p;
+}
+
+void ScDPCollection::SheetCaches::addCache(const ScRange& rRange, std::unique_ptr<ScDPCache> pCache)
+{
+    if (!pCache || hasCache(rRange))
+        return;
+
     // Get the smallest available range index.
-    it = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
+    RangeIndexType::iterator aIterator
+        = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
 
     size_t nIndex = maRanges.size();
-    if (it == maRanges.end())
+    if (aIterator == maRanges.end())
     {
         // All range indices are valid.  Append a new index.
         maRanges.push_back(rRange);
@@ -3240,13 +3251,11 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     else
     {
         // Slot with invalid range.  Re-use this slot.
-        *it = rRange;
-        nIndex = std::distance(maRanges.begin(), it);
+        *aIterator = rRange;
+        nIndex = std::distance(maRanges.begin(), aIterator);
     }
 
-    const ScDPCache* p = pCache.get();
     m_Caches.insert(std::make_pair(nIndex, std::move(pCache)));
-    return p;
 }
 
 ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
@@ -3398,8 +3407,16 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
             collectGroupFieldNames(pDimData));
 
     const ScDPCache *const p = pCache.get();
-    m_Caches.insert(std::make_pair(rName, std::move(pCache)));
+    addCache(rName, std::move(pCache));
     return p;
+}
+
+void ScDPCollection::NameCaches::addCache(const OUString& rName, std::unique_ptr<ScDPCache> pCache)
+{
+    if (!pCache)
+        return;
+
+    m_Caches.emplace(rName, std::move(pCache));
 }
 
 ScDPCache* ScDPCollection::NameCaches::getExistingCache(const OUString& rName)

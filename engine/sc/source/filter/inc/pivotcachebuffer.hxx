@@ -22,7 +22,10 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/refvector.hxx>
+#include <dpcache.hxx>
 #include "workbookhelper.hxx"
+
+#include <unordered_map>
 
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
@@ -122,6 +125,38 @@ private:
 
 private:
     std::vector< PivotCacheItem >  maItems;            /// All items of this list.
+};
+
+/** Collects the records of one source column as distinct items plus the item index of every
+    record. */
+class PivotCacheRecordColumn
+{
+public:
+    /** Appends a shared item of the field. Shared items are added first and in file order. */
+    void addSharedItem(const ScDPItemData& rItem);
+    /** Returns the distinct item index of a shared item, or the empty item for an index the
+        field does not have. */
+    SCROW getSharedItem(sal_Int32 nSharedIndex);
+    /** Adds an item to the distinct items and returns its index. An item that is equal to an
+        existing one returns the index of that one. */
+    SCROW addItem(const ScDPItemData& rItem);
+    /** Stores the item index of the record. Records that were skipped before it get the empty
+        item. */
+    void setRecord(SCROW nRecordIndex, SCROW nItemIndex);
+    /** Appends the empty item until the column holds the passed number of records. */
+    void padRecords(SCROW nRecordCount);
+    /** Returns true if any distinct item is a number. */
+    bool hasValueItems() const;
+    /** Moves the collected data out of this column. */
+    ScDPCache::SourceColumn takeColumn() { return std::move(maColumn); }
+
+private:
+    ScDPCache::SourceColumn maColumn;
+    std::vector<SCROW> maSharedItems; /// Distinct item index of every shared item.
+    std::unordered_map<OUString, SCROW> maStringItems; /// Distinct item index by string value.
+    std::unordered_map<OUString, SCROW> maErrorItems; /// Distinct item index by error string.
+    std::unordered_map<double, SCROW> maValueItems; /// Distinct item index by number.
+    SCROW mnEmptyItem = -1; /// Distinct item index of the empty item.
 };
 
 struct PCFieldModel
@@ -268,6 +303,8 @@ public:
     /** Returns the field model data (used by PivotCache for deferred BIFF12 formula resolution). */
     PCFieldModel&       getFieldModel() { return maFieldModel; }
 
+    /** Returns the shared items of the field. */
+    const PivotCacheItemList& getSharedItems() const { return maSharedItems; }
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all shared or group items. */
@@ -295,9 +332,8 @@ public:
                             sal_Int32 nCol, sal_Int32 nRow,
                             const PivotCacheItem& rItem ) const;
 
-    /** Reads an item from the PCRECORD record and writes it to the passed sheet. */
-    void                importPCRecordItem( SequenceInputStream& rStrm,
-                            const WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
+    /** Reads the item of this field from a PCRECORD record. */
+    PivotCacheItem readPCRecordItem(SequenceInputStream& rStream) const;
 
 private:
     /** Tries to write the passed value to the passed sheet position. */
@@ -386,6 +422,13 @@ public:
     bool         isValidDataSource() const { return mbValidSource; }
     /** Returns true, if the pivot cache is based on a dummy sheet created in finalizeImport. */
     bool         isBasedOnDummySheet() const { return mbDummySheet; }
+    /** Returns true, if the file holds the cache records. */
+    bool hasRecords() const;
+    /** Returns true, if the file marks the cache as out of date, through refreshOnLoad or
+        through invalid. */
+    bool needsRefresh() const { return maDefModel.mbRefreshOnLoad || maDefModel.mbInvalid; }
+    /** Returns the number of cache fields that are based on source data. */
+    sal_Int32 getDatabaseFieldCount() const { return maDatabaseFields.size(); }
     /** Returns the internal cell range the cache is based on. */
     const ScRange&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
@@ -407,9 +450,15 @@ public:
                             sal_Int32 nColIdx, sal_Int32 nRowIdx,
                             const PivotCacheItem& rItem ) const;
 
-    /** Reads a PCRECORD record and writes all item values to the passed sheet. */
-    void                importPCRecord( SequenceInputStream& rStrm,
-                            const WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
+    /** Reads the item of the passed source column from a PCRECORD record. */
+    PivotCacheItem readPCRecordItem(SequenceInputStream& rStream, sal_Int32 nColumnIndex) const;
+    /** Prepares one record column per source field, seeded with the shared items. */
+    void startRecordsImport();
+    /** Stores one record item in its record column. */
+    void addRecordItem(sal_Int32 nColumnIndex, sal_Int32 nRecordIndex, const PivotCacheItem& rItem);
+    /** Builds the document's pivot cache from the record columns and stores it in the
+        document. */
+    void finalizeRecordsImport(sal_Int32 nRecordCount);
 
     /** Resolves deferred BIFF12 calculated field formulas using PNAMES data. */
     void                resolveCalculatedFieldFormulas();
@@ -423,6 +472,8 @@ private:
     void                prepareSourceDataSheet();
     /** Checks, if the row index has changed since last call, and initializes the sheet data buffer. */
     void                updateSourceDataRow( sal_Int32 nRow ) const;
+    /** Converts a cache item to the item type of the document's pivot cache. */
+    ScDPItemData createItemData(const PivotCacheItem& rItem) const;
 
 private:
     typedef RefVector< PivotCacheField >    PivotCacheFieldVector;
@@ -435,6 +486,7 @@ private:
     PCSourceModel       maSourceModel;      /// Pivot cache source settings.
     PCWorksheetSourceModel maSheetSrcModel; /// Sheet source data if cache type is sheet.
     ValueRangeSet       maColSpans;         /// Column spans used by SheetDataBuffer for optimized cell import.
+    std::vector<PivotCacheRecordColumn> maRecordColumns; /// One record column per source field.
     OUString     maTargetUrl;        /// URL of an external source document.
     mutable sal_Int32   mnCurrRow;          /// Current row index in dummy sheet.
     bool                mbValidSource;      /// True = pivot cache is based on supported data source.
