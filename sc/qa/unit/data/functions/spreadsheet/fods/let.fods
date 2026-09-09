@@ -5623,6 +5623,116 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="25"/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;_xlpm.f;COM.MICROSOFT.LAMBDA(_xlpm.x;_xlpm.x*3);_xlpm.f(7))" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A101]=[.E101])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A101])" office:value-type="string" office:string-value="=LET(x;5;f;LAMBDA(x;x*3);f(7))" calcext:value-type="string">
+      <text:p>=LET(x;5;f;LAMBDA(x;x*3);f(7))</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>more shadowing tests</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="25"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;_xlpm.f;COM.MICROSOFT.LAMBDA(_xlpm.x;_xlpm.x*3);_xlpm.f(7))" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="21" calcext:value-type="float">
+      <text:p>21</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A102]=[.E102])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A102])" office:value-type="string" office:string-value="=LET(x;5;f;LAMBDA(x;x*3);f(7))" calcext:value-type="string">
+      <text:p>=LET(x;5;f;LAMBDA(x;x*3);f(7))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="26"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;_xlpm.f;COM.MICROSOFT.LAMBDA(_xlpm.z;_xlpm.z*3+_xlpm.x);_xlpm.f(7))" office:value-type="float" office:value="26" calcext:value-type="float">
+      <text:p>26</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="26" calcext:value-type="float">
+      <text:p>26</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A103]=[.E103])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A103])" office:value-type="string" office:string-value="=LET(x;5;f;LAMBDA(z;z*3+x);f(7))" calcext:value-type="string">
+      <text:p>=LET(x;5;f;LAMBDA(z;z*3+x);f(7))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="26"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;COM.MICROSOFT.LET(_xlpm.x;7;_xlpm.x*2)+_xlpm.x)" office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A104]=[.E104])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A104])" office:value-type="string" office:string-value="=LET(x;5;LET(x;7;x*2)+x)" calcext:value-type="string">
+      <text:p>=LET(x;5;LET(x;7;x*2)+x)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="26"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;COM.MICROSOFT.LET(_xlpm.y;1;_xlpm.x;7;_xlpm.x*2)+_xlpm.x)" office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="19" calcext:value-type="float">
+      <text:p>19</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A105]=[.E105])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A105])" office:value-type="string" office:string-value="=LET(x;5;LET(y;1;x;7;x*2)+x)" calcext:value-type="string">
+      <text:p>=LET(x;5;LET(y;1;x;7;x*2)+x)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="26"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.LET(_xlpm.x;5;COM.MICROSOFT.LET(_xlpm.y;1;_xlpm.x;_xlpm.x+2;_xlpm.x*9)+_xlpm.x)" office:value-type="float" office:value="68" calcext:value-type="float">
+      <text:p>68</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce17" office:value-type="float" office:value="68" calcext:value-type="float">
+      <text:p>68</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce36" table:formula="of:=([.A106]=[.E106])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A106])" office:value-type="string" office:string-value="=LET(x;5;LET(y;1;x;x+2;x*9)+x)" calcext:value-type="string">
+      <text:p>=LET(x;5;LET(y;1;x;x+2;x*9)+x)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="26"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="105">
+     <table:table-cell table:number-columns-repeated="8"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:number-columns-repeated="27"/>
+    </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="111">
      <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce37"/>
