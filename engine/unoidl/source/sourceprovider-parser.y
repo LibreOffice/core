@@ -1821,7 +1821,7 @@ interfaceMethod:
       }
       auto ann = annotations($1);
       if ($2 != nullptr) {
-          ann.push_back("overload " + convertName($2));
+          ann.push_back("overload=" + convertName($2));
       }
       pad->directMethods.emplace_back(
           id, t.getName(),

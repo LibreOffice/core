@@ -543,7 +543,7 @@ std::vector<OUString> findOverloads(
         }
         desc.makeComplete();
         collectOverloadMembers(
-            OUString(OUString::Concat("overload ") + name),
+            OUString(OUString::Concat("overload=") + name),
             reinterpret_cast<typelib_InterfaceTypeDescription *>(desc.get()), visited, members);
     }
     return members;
