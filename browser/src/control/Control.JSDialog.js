@@ -1112,8 +1112,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 		// Parent container will
 		if (instance.isAutofilter || instance.isAutoCompletePopup || !instance.isDocumentAreaPopup) {
-			if (instance.isModalPopUp && document.fullscreenElement)
-				return document.fullscreenElement;
+			const fullscreenElement = document.fullscreenElement;
+			if (instance.isModalPopUp && fullscreenElement
+				&& !fullscreenElement.contains(document.body))
+				return fullscreenElement;
 			return document.body;
 		}
 		return document.getElementById('document-container');
