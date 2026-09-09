@@ -1014,9 +1014,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		else if (e.commandName === 'TableAutoFillInfo') {
 			this._onTableRangeHandleStateChanged(e.state.marks);
 		}
-		else if (e.commandName === 'SparklineGroup') {
-			this._onSparklineGroupMsg(e.state);
-		}
 		else if (e.commandName === 'CellRangeMarker') {
 			this._onCellRangeMarkerMsg(e.state);
 		}

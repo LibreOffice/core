@@ -7703,54 +7703,34 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
 
     if (comphelper::COKit::isActive())
     {
-        // The native overlay is not visible to the client, so send the cells of
-        // the sparkline group to the client and let it draw the highlight. An
-        // empty set clears any previous highlight when the cursor leaves a
-        // sparkline cell. The cell rectangles are computed the same way as
-        // formula reference marks, but they are sent on a separate channel so
-        // the two highlights do not interfere with each other.
-        std::vector<ReferenceMark> aReferenceMarks;
+        // The native overlay is not visible to the client, so send the cells of the sparkline
+        // group and let it draw the highlight. An empty list of cell ranges clears the
+        // highlight when the cursor leaves a sparkline cell.
+        CellRangeMarkerOptions aOptions;
+        aOptions.aName = "SparklineGroup"_ostr;
+        aOptions.nPart = aCurrentAddress.Tab();
+        aOptions.aColor = SvtOptionsDrawinglayer::getHilightColor();
+        aOptions.fFillOpacity = 0.25;
 
         auto pSparkline = rDocument.GetSparkline(aCurrentAddress);
         auto* pList = pSparkline ? rDocument.GetSparklineList(aCurrentAddress.Tab()) : nullptr;
         if (pList)
         {
             auto const aSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
-            const Color aColor = SvtOptionsDrawinglayer::getHilightColor();
             const SCTAB nTab = aCurrentAddress.Tab();
-            ScDocShell* pDocSh = mrViewData.GetDocShell();
 
-            aReferenceMarks.reserve(aSparklines.size());
+            aOptions.aCellRanges.reserve(aSparklines.size());
             for (auto const& pCurrentSparkline : aSparklines)
             {
-                const SCCOL nColumn = pCurrentSparkline->getColumn();
-                const SCROW nRow = pCurrentSparkline->getRow();
-                aReferenceMarks.push_back(ScInputHandler::GetReferenceMark(
-                    mrViewData, *pDocSh, nColumn, nColumn, nRow, nRow, nTab, aColor));
+                ScRange aCellRange(pCurrentSparkline->getColumn(), pCurrentSparkline->getRow(),
+                                   nTab);
+                if (rDocument.IsMerged(aCellRange.aStart))
+                    rDocument.ExtendMerge(aCellRange);
+                aOptions.aCellRanges.push_back(aCellRange);
             }
         }
 
-        tools::JsonWriter aWriter;
-        aWriter.put("commandName", "SparklineGroup");
-        {
-            const auto aStateNode = aWriter.startNode("state");
-            const auto aMarksArray = aWriter.startArray("marks");
-            for (auto const& rMark : aReferenceMarks)
-            {
-                if (!rMark.Is())
-                    continue;
-                const auto aMarkStruct = aWriter.startStruct();
-                aWriter.put("rectangle",
-                            rtl::Concat2View(OString::number(rMark.nX) + ", "
-                                + OString::number(rMark.nY) + ", "
-                                + OString::number(rMark.nWidth) + ", "
-                                + OString::number(rMark.nHeight)));
-                aWriter.put("color", rMark.aColor.AsRGBHexString());
-                aWriter.put("part", OString::number(rMark.nTab));
-            }
-        }
-        if (ScTabViewShell* pViewShell = mrViewData.GetViewShell())
-            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aWriter.finishAndGetAsOString());
+        notifyCellRangeMarker(mrViewData, aOptions);
         return;
     }
 

@@ -82,7 +82,6 @@ window.L.Map.include({
 			this._partsDirection = (part >= docLayer._selectedPart) ? 1 : -1;
 			docLayer._selectedPart = part;
 			docLayer._updateReferenceMarks();
-			docLayer._updateSparklineGroupReferences();
 		}
 		else {
 			return;
