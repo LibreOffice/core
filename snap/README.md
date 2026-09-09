@@ -7,37 +7,46 @@ from the source copy of parts that use `source: .`, breaking the build.
 
 ## Files
 
-- `snapcraft.yaml` — snap package definition (2 parts: the engine +
-   Collabora Online + coda-qt — POCO is built within the engine — and branding)
-- `Dockerfile` — Ubuntu 24.04 build image with systemd for snapd support
-- `docker-build.sh` — local build script (interactive, reusable container)
-- `ci-build.sh` — CI build script (disposable container, Jenkins/other CI)
-- `Jenkinsfile` — declarative Jenkins pipeline
+- `snapcraft.yaml` — snap package definition. Four parts: `local-parts` (the
+  command-chain wrapper), `collabora-office` (the engine plus Collabora Online
+  and coda-qt in one build — POCO is built within the engine), `branding`, and
+  `mythes-pl`.
+- `local/bin/set-chromium-flags` — command-chain wrapper that assembles
+  `QTWEBENGINE_CHROMIUM_FLAGS` at launch
+- `hooks/configure` — initialises the `enable-gpu` snap option
+- `qtpaths6-wrapper` — shadows the SDK snap's `qtpaths6`, whose compiled-in
+  multiarch defaults do not match its own layout
 
-## Building locally
+The following are **unmaintained** and not used for releases. They describe a
+Docker-based build that differs from the manifest in ways that matter — the
+Dockerfile substitutes the distribution's `qt6-*-dev` packages for the
+`kde-qt6-core24-sdk` build-snap and stubs out `snap` and `snapctl` — so a
+result obtained through them does not necessarily hold for the shipped build:
 
-Requires Docker. The core build takes several hours on first run;
-subsequent builds are incremental via a named Docker volume.
+- `Dockerfile`, `docker-build.sh`, `ci-build.sh`, `Jenkinsfile`,
+  `snapcraft-wrapper`, `snap-stub`
 
-    snap/docker-build.sh
+## Building
 
-The resulting `.snap` file is written to `snap/output/`.
+Requires snapcraft and LXD on an Ubuntu host. From the repository root:
 
-## Building on CI
+    snapcraft pack
 
-    snap/ci-build.sh
+snapcraft builds inside an LXD container; the source tree is left clean. The
+first build takes several hours, dominated by the engine.
 
-Or use `snap/Jenkinsfile` for a Jenkins Pipeline job. The only requirement on
-the CI host is Docker — works on any distro (AlmaLinux, Ubuntu, etc.).
+To rebuild only part of it, clean the specific part rather than deleting
+`stage/` or `prime/` by hand — removing those wipes every part's staged state
+and forces a full rebuild:
+
+    snapcraft clean collabora-office
 
 ## Publishing
 
     snapcraft login
-    snapcraft upload snap/output/collabora-office_*.snap --release=edge
+    snapcraft upload collabora-office_*.snap --release=latest/edge
 
 ## Testing
-
-Testers need to install from the edge channel:
 
     sudo snap install collabora-office --edge
 
@@ -47,20 +56,16 @@ See also https://snapcraft.io/collabora-office
 
 ### WSL2: first launch may abort once
 
-On WSL2 (the snap works fine on real Ubuntu 24.04 and other distros) the
-very first launch after install or after `rm -rf ~/snap/collabora-office`
-sometimes aborts silently:
+Recorded before the startup abort fixed in "snap: fix the intermittent abort
+at startup" was understood, and **not re-verified since**. It reads:
 
-    $ collabora-office
-    ... (Qt warnings)
-    Aborted
+> On WSL2 (the snap works fine on real Ubuntu 24.04 and other distros) the
+> very first launch after install sometimes aborts silently, and re-running
+> succeeds. The abort is in the Mesa shader-compilation path used by
+> QtWebEngine's GL init on WSL2's dxgkrnl-backed `llvmpipe` stack.
 
-Re-running succeeds and the app behaves normally from that point on. The
-abort is in the Mesa shader-compilation path used by QtWebEngine's GL
-init on WSL2's dxgkrnl-backed `llvmpipe` stack; the partial Mesa shader
-cache that survives the crash is enough to let subsequent launches skip
-the doomed code path. Diagnosed but not worked around in the snap
-because the fix paths (pre-bake the Mesa cache; force QtWebEngine onto
-SwiftShader) are fragile against noble Mesa/LLVM updates and the issue
-doesn't affect non-WSL2 environments. If a clean first launch matters
-to you on WSL2, run the app once, ignore the abort, run it again.
+Treat that with suspicion. Its premise is now known to be false: the snap did
+*not* work reliably on real Ubuntu 24.04 — roughly half of all launches
+aborted in Chromium's user-namespace probe, which produces the same
+"launch fails once, works on retry" shape. The two may well be the same bug.
+Re-test on WSL2 before spending any effort on the Mesa theory.
