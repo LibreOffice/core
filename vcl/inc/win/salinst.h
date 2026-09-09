@@ -72,7 +72,7 @@ public:
 
     virtual OUString GetToolkitName() const override;
 
-    virtual void BeforeAbort(const OUString&, bool) override;
+    virtual void BeforeAbort() override;
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 

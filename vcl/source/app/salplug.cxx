@@ -321,9 +321,10 @@ void DestroySalInstance( SalInstance *pInst )
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     if (GetSalInstance())
-        GetSalInstance()->BeforeAbort(rErrorText, bDumpCore);
+        GetSalInstance()->BeforeAbort();
 
 #if defined _WIN32
+    (void)bDumpCore;
     if( rErrorText.isEmpty() )
     {
         // make sure crash reporter is triggered

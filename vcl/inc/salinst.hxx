@@ -231,7 +231,7 @@ public:
 
     virtual void* CreateGStreamerSink(const SystemChildWindow*) { return nullptr; }
 
-    virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
+    virtual void BeforeAbort() {}
 
     // both must be implemented, if the VCL plugin needs to run via system event loop
     virtual bool DoExecute();

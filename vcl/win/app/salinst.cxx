@@ -815,10 +815,7 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
 
 OUString WinSalInstance::GetToolkitName() const { return u"win"_ustr; }
 
-void WinSalInstance::BeforeAbort(const OUString&, bool)
-{
-    ImplFreeSalGDI();
-}
+void WinSalInstance::BeforeAbort() { ImplFreeSalGDI(); }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
 WinSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
