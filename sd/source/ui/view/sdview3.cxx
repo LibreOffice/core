@@ -1636,7 +1636,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     // tdf#139269 - prevent text pasting into readonly areas of master views
                     if (!pPage)
-                        pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
+                    {
+                        // tdf#173370 - avoid unchecked GetSdrPageView()
+                        SdrObject* pObj = GetTextEditObject();
+                        pPage = static_cast<SdPage*>(pObj ? pObj->getSdrPageFromSdrObject()
+                                                          : nullptr);
+                    }
 
                     if (pPage && pPage->IsMasterPage() && pOLV->IsReadOnly())
                         return false;
