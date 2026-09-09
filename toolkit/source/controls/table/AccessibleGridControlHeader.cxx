@@ -36,12 +36,10 @@ using namespace ::vcl;
 
 namespace accessibility {
 
-
 AccessibleGridControlHeader::AccessibleGridControlHeader(
-        const Reference< XAccessible >& rxParent,
-        svt::table::TableControl& rTable,
-        AccessibleTableControlObjType eObjType):
-        AccessibleGridControlTableBase( rxParent, rTable, eObjType )
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
+    AccessibleTableControlObjType eObjType)
+    : AccessibleGridControlTableBase(rpParent, rTable, eObjType)
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
         "AccessibleGridControlHeaderBar - invalid object type" );

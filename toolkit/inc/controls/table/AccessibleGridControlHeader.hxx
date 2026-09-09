@@ -32,15 +32,13 @@ namespace accessibility {
 class AccessibleGridControlHeader final : public AccessibleGridControlTableBase
 {
 public:
-    /**  @param rxParent  accessible parent control
+    /**  @param rpParent  accessible parent control
          @param rTable    accessible table
          @param eObjType  One of the two allowed types AccessibleTableControlObjType::ROWHEADERBAR or
                           AccessibleTableControlObjType::COLUMNHEADERBAR. */
-    AccessibleGridControlHeader(
-        const css::uno::Reference<
-            css::accessibility::XAccessible >& rxParent,
-            svt::table::TableControl& rTable,
-            AccessibleTableControlObjType eObjType);
+    AccessibleGridControlHeader(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                svt::table::TableControl& rTable,
+                                AccessibleTableControlObjType eObjType);
 
 private:
     virtual ~AccessibleGridControlHeader() override = default;
