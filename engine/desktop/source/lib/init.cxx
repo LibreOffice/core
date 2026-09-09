@@ -1388,7 +1388,7 @@ rtl::Reference<KitClipboard> forceSetClipboardForCurrentView(COKitDocument *pThi
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
-    if (!pDoc)
+    if (!pDoc || !xClip.is())
     {
         return xClip;
     }
@@ -7486,6 +7486,11 @@ static bool fetchClipboardContents(const char **pMimeTypes,
                                    std::vector<std::vector<char>>& rOutStreams)
 {
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
+    if (!xClip.is())
+    {
+        SetLastExceptionMsg(u"No clipboard available"_ustr);
+        return false;
+    }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
     SAL_INFO("kit", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);

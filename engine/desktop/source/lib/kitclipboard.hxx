@@ -12,6 +12,7 @@
 #include <limits>
 #include <map>
 #include <optional>
+#include <unordered_map>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -143,6 +144,13 @@ class KitClipboardFactory : public ::cppu::WeakComponentImplHelper<css::lang::XS
 {
     static osl::Mutex gMutex;
 
+    /// The clipboards by view id, or nullptr once the registry is gone. See the
+    /// definition for why it is reached through a function.
+    static std::unordered_map<int, rtl::Reference<KitClipboard>>* getClipboards();
+
+    /// Frees the registry; a later request builds a new one.
+    static void freeClipboards();
+
     /// True while a process-global clipboard provider is installed, which the
     /// in-process desktop apps do and the collaborative server does not. The kit
     /// then serves one shared clipboard for all views and documents, instead of
@@ -182,6 +190,10 @@ public:
     /// clipboard for all views. Pass nullptr to remove it and return to
     /// per-view clipboards.
     static void installGlobalProvider(const COKitClipboardProvider* pProvider);
+
+    /// Clears the contents of every clipboard and frees the registry, which a
+    /// later request builds again. The unit-test teardown uses this.
+    static void clearAllContentsAndFree();
 
     /// Render the shared clipboard's formats now, so its contents survive the
     /// close of the document that produced them (see KitClipboard::flushContents).

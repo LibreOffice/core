@@ -30,37 +30,78 @@ using namespace cpo::uno;
 
 /* static */ osl::Mutex KitClipboardFactory::gMutex;
 /* static */ bool KitClipboardFactory::gHasGlobalProvider = false;
-static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
+namespace
 {
-    // Allocated once and never freed. Static destructors elsewhere still ask
-    // for a clipboard while the process exits, and a destroyed DeleteOnDeinit
-    // keeps reporting the map it used to hold, so get() would hand out a dead
-    // map. Leaving the object alive keeps get() truthful: DeInitVCL empties it
-    // through doCleanup, and from then on it answers nullptr.
-    static auto* const pClipboards =
-        new tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>{};
-    return *pClipboards;
+using KitClipboardMap = std::unordered_map<int, rtl::Reference<KitClipboard>>;
+
+// The registry is reached through a pointer with static storage duration and
+// no destructor of its own, because it is asked for a clipboard while the
+// process is exiting: SwDLL::~SwDLL runs from an exit handler and creates the
+// system clipboard to drop its contents, see sw/source/uibase/app/swdll.cxx.
+// An object that destroys itself would already be gone by then, and reading
+// it would be undefined. The map is emptied on VCL deinit and can be freed
+// explicitly; nothing recreates it during exit, so that late caller still
+// finds the answer it expects.
+tools::DeleteOnDeinit<KitClipboardMap>* gpClipboards = nullptr;
+}
+
+/* static */ KitClipboardMap* KitClipboardFactory::getClipboards()
+{
+    // gMutex is recursive, so callers that hold it already are fine.
+    osl::MutexGuard aGuard(gMutex);
+
+    if (!gpClipboards)
+        gpClipboards = new tools::DeleteOnDeinit<KitClipboardMap>;
+
+    // DeleteOnDeinit empties the map on VCL deinit and answers nullptr from
+    // then on, which is what a caller during shutdown gets.
+    return gpClipboards->get();
+}
+
+/* static */ void KitClipboardFactory::freeClipboards()
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    delete gpClipboards;
+    gpClipboards = nullptr;
+}
+
+/* static */ void KitClipboardFactory::clearAllContentsAndFree()
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    // Deliberately does not build a registry only to free it again.
+    if (gpClipboards)
+    {
+        if (KitClipboardMap* pClipboards = gpClipboards->get())
+        {
+            for (const auto& rPair : *pClipboards)
+                rPair.second->setContents(nullptr, nullptr);
+        }
+        freeClipboards();
+    }
 }
 
 rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
 {
-    // VCL deinit takes the registry away while shutdown is still asking for a clipboard, to drop
-    // what it holds. Answer with nothing, which creating the service turns into the
-    // DeploymentException that such a caller already expects from a UNO on its way out.
-    if (!getClipboards().get())
-        return {};
-
     {
         osl::MutexGuard aGuard(gMutex);
+
+        // The registry is gone once the kit has been destroyed, and empty once VCL has been
+        // deinitialised. Answer with nothing, which creating the service turns into the
+        // DeploymentException that such a caller already expects from a UNO on its way out.
+        KitClipboardMap* pClipboards = getClipboards();
+        if (!pClipboards)
+            return {};
+
         if (gHasGlobalProvider)
         {
             // One clipboard for every view and document (the desktop app).
-            auto& gClipboards = getClipboards();
-            auto it = gClipboards.get()->find(SHARED_VIEW_KEY);
-            if (it != gClipboards.get()->end())
+            auto it = pClipboards->find(SHARED_VIEW_KEY);
+            if (it != pClipboards->end())
                 return it->second;
             rtl::Reference<KitClipboard> xClip(new KitClipboard());
-            (*gClipboards.get())[SHARED_VIEW_KEY] = xClip;
+            (*pClipboards)[SHARED_VIEW_KEY] = xClip;
             SAL_INFO("kit", "Created shared clipboard " << xClip.get());
             return xClip;
         }
@@ -70,9 +111,12 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
 
     osl::MutexGuard aGuard(gMutex);
 
-    auto& gClipboards = getClipboards();
-    auto it = gClipboards.get()->find(nViewId);
-    if (it != gClipboards.get()->end())
+    KitClipboardMap* pClipboards = getClipboards();
+    if (!pClipboards)
+        return {};
+
+    auto it = pClipboards->find(nViewId);
+    if (it != pClipboards->end())
     {
         SAL_INFO("kit", "Got clip: " << it->second.get() << " from " << nViewId);
         return it->second;
@@ -80,7 +124,7 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
     rtl::Reference<KitClipboard> xClip(new KitClipboard());
     xClip->setViewId(nViewId);
     xClip->setDocId(KitHelper::getDocumentIdOfView(nViewId));
-    (*gClipboards.get())[nViewId] = xClip;
+    (*pClipboards)[nViewId] = xClip;
     SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
 }
@@ -89,7 +133,7 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getExistingClipboardForView(in
 {
     osl::MutexGuard aGuard(gMutex);
 
-    auto* pClipboards = getClipboards().get();
+    KitClipboardMap* pClipboards = getClipboards();
     if (!pClipboards)
         return {};
     auto it = pClipboards->find(nViewId);
@@ -105,7 +149,7 @@ void KitClipboardFactory::releaseClipboardForView(int nViewId)
     if (gHasGlobalProvider)
         return; // the shared clipboard is process-global, not per-view
 
-    auto* pClipboards = getClipboards().get();
+    KitClipboardMap* pClipboards = getClipboards();
     if (!pClipboards)
         return;
 
@@ -124,7 +168,7 @@ void KitClipboardFactory::releaseClipboardsForDocument(int nDocId)
     if (gHasGlobalProvider)
         return; // the shared clipboard is process-global, not per-document
 
-    auto* pClipboards = getClipboards().get();
+    KitClipboardMap* pClipboards = getClipboards();
     if (!pClipboards)
         return;
 
@@ -137,11 +181,14 @@ void KitClipboardFactory::installGlobalProvider(const COKitClipboardProvider* pP
 {
     osl::MutexGuard aGuard(gMutex);
 
-    auto& gClipboards = getClipboards();
+    KitClipboardMap* pClipboards = getClipboards();
+    if (!pClipboards)
+        return;
+
     if (pProvider)
     {
         gHasGlobalProvider = true;
-        auto& xShared = (*gClipboards.get())[SHARED_VIEW_KEY];
+        auto& xShared = (*pClipboards)[SHARED_VIEW_KEY];
         if (!xShared.is())
             xShared = new KitClipboard();
         xShared->setProvider(pProvider);
@@ -149,7 +196,7 @@ void KitClipboardFactory::installGlobalProvider(const COKitClipboardProvider* pP
     }
     else
     {
-        if (auto* pClipboards = gClipboards.get())
+        if (pClipboards)
         {
             auto it = pClipboards->find(SHARED_VIEW_KEY);
             if (it != pClipboards->end())
@@ -170,7 +217,7 @@ void KitClipboardFactory::flushSharedClipboard()
         osl::MutexGuard aGuard(gMutex);
         if (!gHasGlobalProvider)
             return;
-        if (auto* pClipboards = getClipboards().get())
+        if (KitClipboardMap* pClipboards = getClipboards())
         {
             auto it = pClipboards->find(SHARED_VIEW_KEY);
             if (it != pClipboards->end())
@@ -189,8 +236,9 @@ uno::Reference<cpo::uno::XInterface>
 
 void clearAllKitClipboardsContents()
 {
-    for (const auto & pair : *getClipboards().get())
-        pair.second->setContents(nullptr, nullptr);
+    // Drops the references the clipboards hold and then the registry itself, so
+    // that a test leaves nothing behind. A later request builds a new one.
+    KitClipboardFactory::clearAllContentsAndFree();
 }
 
 KitClipboard::KitClipboard()
