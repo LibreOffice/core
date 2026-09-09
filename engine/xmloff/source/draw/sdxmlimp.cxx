@@ -58,7 +58,7 @@ public:
 
     SdXMLBodyContext_Impl( SdXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
                 sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
@@ -88,7 +88,7 @@ protected:
 public:
     SdXMLDocContext_Impl( SdXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -100,7 +100,7 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLDocContext_Impl::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > SdXMLDocContext_Impl::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     switch (nElement)
@@ -181,7 +181,7 @@ public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -195,7 +195,7 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLFlatDocContext_Impl::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > SdXMLFlatDocContext_Impl::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     // behave like meta base class iff we encounter office:meta
@@ -317,7 +317,7 @@ SdXMLImport::SdXMLImport(
 }
 
 // XImporter
-void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+void SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
 {
     SvXMLImport::setTargetDocument( xDoc );
 
@@ -370,7 +370,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 }
 
 // XInitialization
-void SAL_CALL SdXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void SdXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SvXMLImport::initialize( aArguments );
 
@@ -405,7 +405,7 @@ void SAL_CALL SdXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >
     }
 }
 
-void SAL_CALL SdXMLImport::endDocument()
+void SdXMLImport::endDocument()
 {
     SvXMLImport::endDocument();
 

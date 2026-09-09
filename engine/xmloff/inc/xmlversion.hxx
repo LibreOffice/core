@@ -76,7 +76,7 @@ public:
 
     virtual ~XMLVersionListContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext(sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
@@ -99,14 +99,14 @@ public:
 class XMLVersionListPersistence final : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
 {
 public:
-    virtual cpo::uno::Sequence< css::util::RevisionTag > SAL_CALL load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual void SAL_CALL store( const css::uno::Reference< css::embed::XStorage >& Storage, const cpo::uno::Sequence< css::util::RevisionTag >& List ) override;
+    virtual cpo::uno::Sequence< css::util::RevisionTag > load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void store( const css::uno::Reference< css::embed::XStorage >& Storage, const cpo::uno::Sequence< css::util::RevisionTag >& List ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

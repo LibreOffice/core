@@ -70,7 +70,7 @@ public:
 
     virtual ~SvXMLStyleContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override final;
 
@@ -168,7 +168,7 @@ public:
     virtual ~SvXMLStylesContext() override;
 
     // Create child element.
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
 
     // This allows to add an SvXMLStyleContext to this context from extern

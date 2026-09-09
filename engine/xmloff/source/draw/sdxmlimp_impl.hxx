@@ -92,12 +92,12 @@ public:
         bool bIsDraw, SvXMLImportFlags nImportFlags );
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
     virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 

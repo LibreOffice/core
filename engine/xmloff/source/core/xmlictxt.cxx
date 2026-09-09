@@ -38,37 +38,37 @@ void SvXMLImportContext::endFastElement(sal_Int32 )
 }
 
 // css::xml::sax::XFastContextHandler:
-void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & )
+void SvXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & )
 {
 }
 
-void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & /*rElementName*/,
+void SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & /*rElementName*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
 }
 
-void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & /*rNamespace*/, const OUString & /*rElementName*/)
+void SvXMLImportContext::endUnknownElement (const OUString & /*rNamespace*/, const OUString & /*rElementName*/)
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext
+uno::Reference< xml::sax::XFastContextHandler > SvXMLImportContext::createFastChildContext
     (sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
     return nullptr;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext
+uno::Reference< xml::sax::XFastContextHandler > SvXMLImportContext::createUnknownChildContext
     (const OUString & /*rNamespace*/, const OUString & /*rName*/, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
     return nullptr;
 }
 
-void SAL_CALL SvXMLImportContext::characters(const OUString &/*rChars*/)
+void SvXMLImportContext::characters(const OUString &/*rChars*/)
 {
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const cpo::uno::Type& aType )
+cpo::uno::Any SvXMLImportContext::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any a = ::cppu::queryInterface(
                 aType,
@@ -80,13 +80,13 @@ cpo::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const cpo::uno::Type&
 }
 
 // XTypeProvider
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvXMLImportContext::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvXMLImportContext::getTypes()
 {
     return { cppu::UnoType<XFastContextHandler>::get(),
              cppu::UnoType<XTypeProvider>::get() };
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvXMLImportContext::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvXMLImportContext::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }

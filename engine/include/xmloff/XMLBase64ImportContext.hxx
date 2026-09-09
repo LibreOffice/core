@@ -39,8 +39,8 @@ public:
 
     virtual ~XMLBase64ImportContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32) override;
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void endFastElement(sal_Int32) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLBASE64IMPORTCONTEXT_HXX

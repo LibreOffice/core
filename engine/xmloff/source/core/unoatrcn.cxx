@@ -45,12 +45,12 @@ SvUnoAttributeContainer::SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrConta
 }
 
 // container::XElementAccess
-cpo::uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
+cpo::uno::Type SvUnoAttributeContainer::getElementType()
 {
     return cppu::UnoType<xml::AttributeData>::get();
 }
 
-bool SAL_CALL SvUnoAttributeContainer::hasElements()
+bool SvUnoAttributeContainer::hasElements()
 {
     return mpContainer->GetAttrCount() != 0;
 }
@@ -86,7 +86,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(std::u16string_view aName ) c
 }
 
 // container::XNameAccess
-cpo::uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
+cpo::uno::Any SvUnoAttributeContainer::getByName(const OUString& aName)
 {
     sal_uInt16 nAttr = getIndexByName(aName );
 
@@ -101,7 +101,7 @@ cpo::uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
     return cpo::uno::Any(aData);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames()
+cpo::uno::Sequence< OUString > SvUnoAttributeContainer::getElementNames()
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
@@ -120,13 +120,13 @@ cpo::uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames
     return aElementNames;
 }
 
-bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName)
+bool SvUnoAttributeContainer::hasByName(const OUString& aName)
 {
     return getIndexByName(aName ) != USHRT_MAX;
 }
 
 // container::XNameReplace
-void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, const cpo::uno::Any& aElement)
+void SvUnoAttributeContainer::replaceByName(const OUString& aName, const cpo::uno::Any& aElement)
 {
     if( auto pData = o3tl::tryAccess<xml::AttributeData>(aElement) )
     {
@@ -165,7 +165,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
 }
 
 // container::XNameContainer
-void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const cpo::uno::Any& aElement)
+void SvUnoAttributeContainer::insertByName(const OUString& aName, const cpo::uno::Any& aElement)
 {
     auto pData = o3tl::tryAccess<xml::AttributeData>(aElement);
     if( !pData )
@@ -202,7 +202,7 @@ void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const
     }
 }
 
-void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
+void SvUnoAttributeContainer::removeByName(const OUString& Name)
 {
     sal_uInt16 nAttr = getIndexByName(Name);
     if( nAttr == USHRT_MAX )
@@ -212,7 +212,7 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 }
 
 //XServiceInfo
-OUString SAL_CALL SvUnoAttributeContainer::getImplementationName()
+OUString SvUnoAttributeContainer::getImplementationName()
 {
     return u"SvUnoAttributeContainer"_ustr;
 }

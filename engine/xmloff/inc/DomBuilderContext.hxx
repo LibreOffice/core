@@ -71,19 +71,19 @@ public:
 
     // implement SvXMLImportContext methods:
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString& Namespace, const OUString& Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name,
+    virtual void startUnknownElement(const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

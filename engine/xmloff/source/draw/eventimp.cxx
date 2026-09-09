@@ -83,10 +83,10 @@ public:
 
     SdXMLEventContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList>& xAttrList, const Reference< XShape >& rxShape );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class XMLEventSoundContext : public SvXMLImportContext

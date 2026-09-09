@@ -120,9 +120,9 @@ using namespace cpo::uno;
             virtual ~OMergedPropertySetInfo() override;
 
             // XPropertySetInfo
-            virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
-            virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-            virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+            virtual cpo::uno::Sequence< css::beans::Property > getProperties(  ) override;
+            virtual css::beans::Property getPropertyByName( const OUString& aName ) override;
+            virtual bool hasPropertyByName( const OUString& Name ) override;
         };
 
         OMergedPropertySetInfo::OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo )
@@ -135,7 +135,7 @@ using namespace cpo::uno;
         {
         }
 
-        Sequence< Property > SAL_CALL OMergedPropertySetInfo::getProperties(  )
+        Sequence< Property > OMergedPropertySetInfo::getProperties(  )
         {
             // add a "ParaAdjust" property to the master properties
             Sequence< Property > aProperties;
@@ -149,7 +149,7 @@ using namespace cpo::uno;
             return aProperties;
         }
 
-        Property SAL_CALL OMergedPropertySetInfo::getPropertyByName( const OUString& aName )
+        Property OMergedPropertySetInfo::getPropertyByName( const OUString& aName )
         {
             if ( aName == PARA_ADJUST )
                 return Property( PARA_ADJUST, -1,
@@ -161,7 +161,7 @@ using namespace cpo::uno;
             return m_xMasterInfo->getPropertyByName( aName );
         }
 
-        bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name )
+        bool OMergedPropertySetInfo::hasPropertyByName( const OUString& Name )
         {
             if ( Name == PARA_ADJUST )
                 return true;
@@ -184,7 +184,7 @@ using namespace cpo::uno;
     {
     }
 
-    Reference< XPropertySetInfo > SAL_CALL OGridColumnPropertyTranslator::getPropertySetInfo(  )
+    Reference< XPropertySetInfo > OGridColumnPropertyTranslator::getPropertySetInfo(  )
     {
         Reference< XPropertySetInfo > xColumnPropInfo;
         if ( m_xGridColumn.is() )
@@ -192,7 +192,7 @@ using namespace cpo::uno;
         return new OMergedPropertySetInfo( xColumnPropInfo );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::setPropertyValue( const OUString& _rPropertyName, const Any& aValue )
+    void OGridColumnPropertyTranslator::setPropertyValue( const OUString& _rPropertyName, const Any& aValue )
     {
         // we implement this by delegating it to setPropertyValues, which is to ignore unknown properties. On the other hand, our
         // contract requires us to throw a UnknownPropertyException for unknown properties, so check this first.
@@ -205,7 +205,7 @@ using namespace cpo::uno;
         setPropertyValues( aNames, aValues );
     }
 
-    Any SAL_CALL OGridColumnPropertyTranslator::getPropertyValue( const OUString& PropertyName )
+    Any OGridColumnPropertyTranslator::getPropertyValue( const OUString& PropertyName )
     {
         Sequence< OUString > aNames( &PropertyName, 1 );
         Sequence< Any > aValues = getPropertyValues( aNames );
@@ -215,27 +215,27 @@ using namespace cpo::uno;
         return Any();
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+    void OGridColumnPropertyTranslator::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::addPropertyChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+    void OGridColumnPropertyTranslator::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::removePropertyChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+    void OGridColumnPropertyTranslator::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::addVetoableChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+    void OGridColumnPropertyTranslator::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::removeVetoableChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
+    void OGridColumnPropertyTranslator::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
     {
         if ( !m_xGridColumn.is() )
             return;
@@ -259,7 +259,7 @@ using namespace cpo::uno;
         m_xGridColumn->setPropertyValues( aTranslatedNames, aTranslatedValues );
     }
 
-    Sequence< Any > SAL_CALL OGridColumnPropertyTranslator::getPropertyValues( const Sequence< OUString >& aPropertyNames )
+    Sequence< Any > OGridColumnPropertyTranslator::getPropertyValues( const Sequence< OUString >& aPropertyNames )
     {
         Sequence< Any > aValues( aPropertyNames.getLength() );
         if ( !m_xGridColumn.is() )
@@ -277,17 +277,17 @@ using namespace cpo::uno;
         return aValues;
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+    void OGridColumnPropertyTranslator::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::addPropertiesChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
+    void OGridColumnPropertyTranslator::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::removePropertiesChangeListener: not implemented - this should not be needed!" );
     }
 
-    void SAL_CALL OGridColumnPropertyTranslator::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+    void OGridColumnPropertyTranslator::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     {
         OSL_FAIL( "OGridColumnPropertyTranslator::firePropertiesChangeEvent: not implemented - this should not be needed!" );
     }

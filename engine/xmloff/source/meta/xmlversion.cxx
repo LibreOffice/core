@@ -134,7 +134,7 @@ XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport)
 XMLVersionListContext::~XMLVersionListContext()
 {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+css::uno::Reference< css::xml::sax::XFastContextHandler >
 XMLVersionListContext::createFastChildContext(sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList)
 {
@@ -301,7 +301,7 @@ bool XMLVersionContext::ParseISODateTimeString(
     return bSuccess;
 }
 
-void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const cpo::uno::Sequence< util::RevisionTag >& rVersions )
+void XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const cpo::uno::Sequence< util::RevisionTag >& rVersions )
 {
     // no storage, no version list!
     if ( !xRoot.is() )
@@ -343,7 +343,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
     }
 }
 
-cpo::uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
+cpo::uno::Sequence< util::RevisionTag > XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
 {
     cpo::uno::Sequence < css::util::RevisionTag > aVersions;
 

@@ -62,7 +62,7 @@ public:
     OUString familyName() const;
     OUString styleName() const;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -77,7 +77,7 @@ public:
     XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
             const XMLFontStyleContextFontFace& font );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -102,8 +102,8 @@ public:
     virtual void SetAttribute( sal_Int32 nElement,
         const OUString& rValue ) override;
     void SetFormat( const OUString& rFormat );
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    void endFastElement(sal_Int32 nElement) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };

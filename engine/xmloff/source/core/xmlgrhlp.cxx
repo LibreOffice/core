@@ -80,11 +80,11 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile const & rMtf )
 class GraphicInputStream : public cppu::WeakImplHelper<XInputStream>
 {
 private:
-    virtual sal_Int32 SAL_CALL readBytes(Sequence<sal_Int8> & aData, sal_Int32 nBytesToRead) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes(Sequence<sal_Int8> & aData, sal_Int32 nMaxBytesToRead) override;
-    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual sal_Int32 readBytes(Sequence<sal_Int8> & aData, sal_Int32 nBytesToRead) override;
+    virtual sal_Int32 readSomeBytes(Sequence<sal_Int8> & aData, sal_Int32 nMaxBytesToRead) override;
+    virtual void skipBytes(sal_Int32 nBytesToSkip) override;
+    virtual sal_Int32 available() override;
+    virtual void closeInput() override;
 
 private:
     utl::TempFileFast maTempFile;
@@ -167,7 +167,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
     }
 }
 
-sal_Int32 SAL_CALL GraphicInputStream::readBytes(Sequence<sal_Int8> & rData, sal_Int32 nBytesToRead)
+sal_Int32 GraphicInputStream::readBytes(Sequence<sal_Int8> & rData, sal_Int32 nBytesToRead)
 {
     if (!mxStreamWrapper.is())
         throw NotConnectedException();
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL GraphicInputStream::readBytes(Sequence<sal_Int8> & rData, sal
     return mxStreamWrapper->readBytes(rData, nBytesToRead);
 }
 
-sal_Int32 SAL_CALL GraphicInputStream::readSomeBytes(Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead )
+sal_Int32 GraphicInputStream::readSomeBytes(Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead )
 {
     if (!mxStreamWrapper.is())
         throw NotConnectedException() ;
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL GraphicInputStream::readSomeBytes(Sequence<sal_Int8>& rData, 
     return mxStreamWrapper->readSomeBytes(rData, nMaxBytesToRead);
 }
 
-void SAL_CALL GraphicInputStream::skipBytes(sal_Int32 nBytesToSkip)
+void GraphicInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if (!mxStreamWrapper.is())
         throw NotConnectedException();
@@ -191,7 +191,7 @@ void SAL_CALL GraphicInputStream::skipBytes(sal_Int32 nBytesToSkip)
     mxStreamWrapper->skipBytes(nBytesToSkip);
 }
 
-sal_Int32 SAL_CALL GraphicInputStream::available()
+sal_Int32 GraphicInputStream::available()
 {
     if (!mxStreamWrapper.is())
         throw NotConnectedException();
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL GraphicInputStream::available()
     return mxStreamWrapper->available();
 }
 
-void SAL_CALL GraphicInputStream::closeInput()
+void GraphicInputStream::closeInput()
 {
     if (!mxStreamWrapper.is())
         throw NotConnectedException();
@@ -213,9 +213,9 @@ class SvXMLGraphicOutputStream:
 private:
 
     // XOutputStream
-    virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) override;
-    virtual void SAL_CALL           flush() override;
-    virtual void SAL_CALL           closeOutput() override;
+    virtual void           writeBytes( const Sequence< sal_Int8 >& rData ) override;
+    virtual void           flush() override;
+    virtual void           closeOutput() override;
 
 private:
 
@@ -253,7 +253,7 @@ SvXMLGraphicOutputStream::~SvXMLGraphicOutputStream()
     moTmp.reset();
 }
 
-void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
+void SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
 {
     if( !mxStmWrapper.is() )
         throw NotConnectedException() ;
@@ -261,7 +261,7 @@ void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& 
     mxStmWrapper->writeBytes( rData );
 }
 
-void SAL_CALL SvXMLGraphicOutputStream::flush()
+void SvXMLGraphicOutputStream::flush()
 {
     if( !mxStmWrapper.is() )
         throw NotConnectedException() ;
@@ -269,7 +269,7 @@ void SAL_CALL SvXMLGraphicOutputStream::flush()
     mxStmWrapper->flush();
 }
 
-void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
+void SvXMLGraphicOutputStream::closeOutput()
 {
     if( !mxStmWrapper.is() )
         throw NotConnectedException() ;
@@ -559,13 +559,13 @@ void splitUserDataFromURL(OUString const & rWholeURL, OUString & rJustURL, OUStr
 } // end anonymous namespace
 
 // XGraphicObjectResolver
-OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& /*rURL*/ )
+OUString SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& /*rURL*/ )
 {
     throw cpo::uno::RuntimeException(u"XGraphicObjectResolver has been removed in LibreOffice 6.1"_ustr);
 }
 
 // XGraphicStorageHandler
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(OUString const & rURL)
+uno::Reference<graphic::XGraphic> SvXMLGraphicHelper::loadGraphic(OUString const & rURL)
 {
     return loadGraphicAtPage(rURL, -1);
 }
@@ -640,13 +640,13 @@ uno::Reference<graphic::XGraphic> SvXMLGraphicHelper::loadGraphicFromOutputStrea
     return loadGraphicFromOutputStreamAtPage(rxOutputStream, -1);
 }
 
-OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+OUString SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                                         OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
     return implSaveGraphic(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
-OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+OUString SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     OUString aOutMimeType;
     return implSaveGraphic(rxGraphic, aOutMimeType, std::u16string_view());
@@ -891,7 +891,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
     return OUString();
 }
 
-uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+uno::Reference<io::XInputStream> SvXMLGraphicHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     Reference<XInputStream> xInputStream;
 
@@ -912,13 +912,13 @@ uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicHelper::createInputStream(
 }
 
 // XBinaryStreamResolver
-Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUString& /*rURL*/ )
+Reference< XInputStream > SvXMLGraphicHelper::getInputStream( const OUString& /*rURL*/ )
 {
     Reference<XInputStream> xRet;
     return xRet;
 }
 
-Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
+Reference< XOutputStream > SvXMLGraphicHelper::createOutputStream()
 {
     Reference< XOutputStream > xRet;
 
@@ -936,7 +936,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
     return xRet;
 }
 
-OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOutputStream >& rxBinaryStream )
+OUString SvXMLGraphicHelper::resolveOutputStream( const Reference< XOutputStream >& rxBinaryStream )
 {
     OUString aRet;
 
@@ -990,37 +990,37 @@ protected:
 
     // ____ XInitialization ____
     // one argument is allowed, which is the XStorage
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
 
     // ____ XGraphicObjectResolver ____
-    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;
+    virtual OUString resolveGraphicObjectURL( const OUString& aURL ) override;
 
     // ____ XGraphicStorageHandler ____
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+    virtual css::uno::Reference<css::graphic::XGraphic>
         loadGraphic(const OUString& aURL) override;
 
     // ____ XGraphicStorageHandler ____
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+    virtual css::uno::Reference<css::graphic::XGraphic>
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
-    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
+    virtual css::uno::Reference<css::io::XInputStream>
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     // ____ XBinaryStreamResolver ____
-    virtual Reference< io::XInputStream > SAL_CALL getInputStream( const OUString& aURL ) override;
-    virtual Reference< io::XOutputStream > SAL_CALL createOutputStream() override;
-    virtual OUString SAL_CALL resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream ) override;
+    virtual Reference< io::XInputStream > getInputStream( const OUString& aURL ) override;
+    virtual Reference< io::XOutputStream > createOutputStream() override;
+    virtual OUString resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream ) override;
 
     // ____ XServiceInfo ____
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     SvXMLGraphicHelperMode              m_eGraphicHelperMode;
@@ -1041,7 +1041,7 @@ void SvXMLGraphicImportExportHelper::disposing(std::unique_lock<std::mutex>&)
 }
 
 // ____ XInitialization ____
-void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
+void SvXMLGraphicImportExportHelper::initialize(
     const Sequence< Any >& aArguments )
 {
     Reference< embed::XStorage > xStorage;
@@ -1052,67 +1052,67 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
 }
 
 // ____ XGraphicObjectResolver ____
-OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const OUString& aURL )
+OUString SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const OUString& aURL )
 {
     return m_xXMLGraphicHelper->resolveGraphicObjectURL( aURL );
 }
 
 // ____ XGraphicStorageHandler ____
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphic(OUString const & rURL)
+uno::Reference<graphic::XGraphic> SvXMLGraphicImportExportHelper::loadGraphic(OUString const & rURL)
 {
     return m_xXMLGraphicHelper->loadGraphic(rURL);
 }
 
 // ____ XGraphicStorageHandler ____
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
+uno::Reference<graphic::XGraphic> SvXMLGraphicImportExportHelper::loadGraphicFromOutputStream(uno::Reference<io::XOutputStream> const & rxOutputStream)
 {
     return m_xXMLGraphicHelper->loadGraphicFromOutputStream(rxOutputStream);
 }
 
-OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+OUString SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     return m_xXMLGraphicHelper->saveGraphic(rxGraphic);
 }
 
-OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+OUString SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                                                     OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
     return m_xXMLGraphicHelper->saveGraphicByName(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
-uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+uno::Reference<io::XInputStream> SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     return m_xXMLGraphicHelper->createInputStream(rxGraphic);
 }
 
 // ____ XBinaryStreamResolver ____
-Reference< io::XInputStream > SAL_CALL SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
+Reference< io::XInputStream > SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
 {
     return m_xXMLGraphicHelper->getInputStream( aURL );
 }
-Reference< io::XOutputStream > SAL_CALL SvXMLGraphicImportExportHelper::createOutputStream()
+Reference< io::XOutputStream > SvXMLGraphicImportExportHelper::createOutputStream()
 {
     return m_xXMLGraphicHelper->createOutputStream();
 }
-OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
+OUString SvXMLGraphicImportExportHelper::resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
 {
     return m_xXMLGraphicHelper->resolveOutputStream( aBinaryStream );
 }
 
 // ____ XServiceInfo ____
-OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
+OUString SvXMLGraphicImportExportHelper::getImplementationName()
 {
     if( m_eGraphicHelperMode == SvXMLGraphicHelperMode::Read )
         return u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr;
     return u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr;
 }
 
-bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
+bool SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
+Sequence< OUString > SvXMLGraphicImportExportHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.GraphicObjectResolver"_ustr,
              u"com.sun.star.document.GraphicStorageHandler"_ustr,

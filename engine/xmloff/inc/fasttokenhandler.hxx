@@ -31,8 +31,8 @@ public:
     explicit FastTokenHandler() = default;
 
     // XFastTokenHandler
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getUTF8Identifier( sal_Int32 nToken ) override;
+    virtual sal_Int32 getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
 
     static const OUString& getIdentifier(sal_Int32 nToken);
 

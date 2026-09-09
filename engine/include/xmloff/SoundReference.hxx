@@ -38,8 +38,8 @@ public:
     {
     }
 
-    OUString SAL_CALL getURL() override { return maURL; }
-    bool SAL_CALL getAllowed() override { return mbAllowed; }
+    OUString getURL() override { return maURL; }
+    bool getAllowed() override { return mbAllowed; }
 };
 
 // A sound URL that points inside the document package, the same scheme the

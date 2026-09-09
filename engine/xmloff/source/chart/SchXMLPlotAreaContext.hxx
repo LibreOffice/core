@@ -95,13 +95,13 @@ public:
                            const css::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
 private:
     SchXMLImportHelper& mrImportHelper;
@@ -142,8 +142,8 @@ private:
     OUStringBuffer maCharBuffer;
 public:
     SchXMLDataLabelSpanContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels);
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void characters( const OUString& rChars ) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class SchXMLDataLabelParaContext: public SvXMLImportContext
@@ -152,7 +152,7 @@ private:
     ::std::vector<OUString>& mrLabels;
 public:
     SchXMLDataLabelParaContext( SvXMLImport& rImport, ::std::vector<OUString>& rLabels);
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -166,11 +166,11 @@ public:
     SchXMLDataLabelContext(SvXMLImport& rImport,
                             CustomLabelsInfo& rLabels, DataRowPointStyle& rDataLabel);
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -193,13 +193,13 @@ public:
                              bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class SchXMLCoordinateRegionContext : public SvXMLImportContext
@@ -209,7 +209,7 @@ public:
             SvXMLImport& rImport
             , SchXMLPositionAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext() override;
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -237,7 +237,7 @@ public:
                             css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext() override;
-    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+    virtual void startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 };
 
@@ -262,7 +262,7 @@ public:
                         css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext() override;
-    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+    virtual void startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 };
 
@@ -286,7 +286,7 @@ public:
 
     virtual ~SchXMLStatisticsObjectContext() override;
 
-    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+    virtual void startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
 private:

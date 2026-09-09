@@ -42,11 +42,11 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -65,7 +65,7 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -85,10 +85,10 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -108,11 +108,11 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -143,7 +143,7 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -162,7 +162,7 @@ public:
                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };

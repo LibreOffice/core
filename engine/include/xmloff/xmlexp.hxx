@@ -318,23 +318,23 @@ public:
     void setEmbeddedFontFiles(const std::unordered_map<OString, OUString>&);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel() override;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual void cancel() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) override final;
-    virtual void SAL_CALL setName( const OUString& aName ) override final;
+    virtual OUString getName(  ) override final;
+    virtual void setName( const OUString& aName ) override final;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) final override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
+    virtual OUString getImplementationName(  ) final override;
+    virtual bool supportsService( const OUString& ServiceName ) final override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) final override;
 
     /** ensures that the given namespace is in scope at the next started
         element.

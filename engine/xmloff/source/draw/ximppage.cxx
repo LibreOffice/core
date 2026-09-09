@@ -66,9 +66,9 @@ class DrawAnnotationContext : public SvXMLImportContext
 public:
     DrawAnnotationContext( SvXMLImport& rImport, const Reference< xml::sax::XFastAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
 private:
     Reference< XAnnotation > mxAnnotation;
@@ -540,12 +540,12 @@ public:
     explicit XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual Any getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -559,12 +559,12 @@ XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  )
+sal_Int32 XoNavigationOrderAccess::getCount(  )
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index )
+Any XoNavigationOrderAccess::getByIndex( sal_Int32 Index )
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -573,12 +573,12 @@ Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-Type SAL_CALL XoNavigationOrderAccess::getElementType(  )
+Type XoNavigationOrderAccess::getElementType(  )
 {
     return cppu::UnoType<XShape>::get();
 }
 
-bool SAL_CALL XoNavigationOrderAccess::hasElements(  )
+bool XoNavigationOrderAccess::hasElements(  )
 {
     return !maShapes.empty();
 }

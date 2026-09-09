@@ -65,15 +65,15 @@ public:
         OUString aService);              /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
-    virtual void SAL_CALL characters( const OUString& sContent ) override;
+    virtual void characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     /// create the appropriate field context from
     /// (for use in paragraph import)
@@ -129,7 +129,7 @@ public:
 
 protected:
     /// start element
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
@@ -157,7 +157,7 @@ public:
 
 private:
     /// start element
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
@@ -337,7 +337,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
     /// handle database-location children
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -771,7 +771,7 @@ public:
 
 private:
     /// for <office:events> children
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
@@ -805,7 +805,7 @@ public:
 
 private:
     /// start element
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
@@ -825,7 +825,7 @@ public:
 
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -838,7 +838,7 @@ public:
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport);
 
     // create fieldmaster
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 };
@@ -860,7 +860,7 @@ private:
                                    std::string_view sAttrValue ) override;
 
     /// create textfield, attach master, and insert into document
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     /// empty method
     virtual void PrepareField(
@@ -938,7 +938,7 @@ public:
 
 private:
     /// process attributes (fill aValues)
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
@@ -988,10 +988,10 @@ private:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 /** Import a script field (<text:script>) */
@@ -1054,7 +1054,7 @@ public:
     XMLDropDownFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:

@@ -67,9 +67,9 @@ public:
         XMLFootnoteConfigurationImportContext& rConfigImport,
         bool bBegin);
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 }

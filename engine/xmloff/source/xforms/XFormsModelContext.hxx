@@ -35,7 +35,7 @@ public:
 
     // implement SvXMLImportContext & TokenContext methods:
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
 protected:
     virtual void HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter ) override;

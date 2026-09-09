@@ -1222,12 +1222,12 @@ public:
                     const Reference<XFastAttributeList>& xAttrList) override;
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual Any queryInterface( const Type& aType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XAnimationNodeSupplier
-    Reference< XAnimationNode > SAL_CALL getAnimationNode() override;
+    Reference< XAnimationNode > getAnimationNode() override;
 
 private:
     Reference< XAnimationNode > mxRootNode;
@@ -1245,7 +1245,7 @@ AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxCon
 }
 
 // XInterface
-Any SAL_CALL AnimationsImport::queryInterface( const Type& aType )
+Any AnimationsImport::queryInterface( const Type& aType )
 {
     if ( aType == cppu::UnoType<XAnimationNodeSupplier>::get())
     {
@@ -1257,12 +1257,12 @@ Any SAL_CALL AnimationsImport::queryInterface( const Type& aType )
     }
 }
 
-void SAL_CALL AnimationsImport::acquire() noexcept
+void AnimationsImport::acquire() noexcept
 {
     SvXMLImport::acquire();
 }
 
-void SAL_CALL AnimationsImport::release() noexcept
+void AnimationsImport::release() noexcept
 {
     SvXMLImport::release();
 }
@@ -1282,7 +1282,7 @@ SvXMLImportContext *AnimationsImport::CreateFastContext(
 }
 
 // XAnimationNodeSupplier
-Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode()
+Reference< XAnimationNode > AnimationsImport::getAnimationNode()
 {
     return mxRootNode;
 }

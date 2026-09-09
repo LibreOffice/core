@@ -126,10 +126,10 @@ public:
                                     SvXMLNumFormatContext& rParentContext, SvXMLStyleTokens nNewType,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void characters( const OUString& rChars ) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     void    AddEmbeddedElement( sal_Int32 nFormatPos, std::u16string_view rContent, std::u16string_view rBlankWidthString );
 };
@@ -146,8 +146,8 @@ public:
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void characters( const OUString& rChars ) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class SvXMLNumFmtMapContext : public SvXMLImportContext
@@ -161,7 +161,7 @@ public:
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class SvXMLNumFmtPropContext : public SvXMLImportContext
@@ -175,7 +175,7 @@ public:
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 enum class SvXMLStyleTokens

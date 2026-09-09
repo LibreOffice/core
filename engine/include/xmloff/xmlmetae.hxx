@@ -80,18 +80,18 @@ public:
                         const css::util::DateTime& rDateTime );
 
     // css::xml::sax::XDocumentHandler:
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement(const OUString & i_rName,
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void startElement(const OUString & i_rName,
         const css::uno::Reference<
                 css::xml::sax::XAttributeList > & i_xAttribs) override;
-    virtual void SAL_CALL endElement(const OUString & i_rName) override;
-    virtual void SAL_CALL characters(const OUString & i_rChars) override;
-    virtual void SAL_CALL ignorableWhitespace(
+    virtual void endElement(const OUString & i_rName) override;
+    virtual void characters(const OUString & i_rChars) override;
+    virtual void ignorableWhitespace(
         const OUString & i_rWhitespaces) override;
-    virtual void SAL_CALL processingInstruction(
+    virtual void processingInstruction(
         const OUString & i_rTarget, const OUString & i_rData) override;
-    virtual void SAL_CALL setDocumentLocator(
+    virtual void setDocumentLocator(
         const css::uno::Reference<
                 css::xml::sax::XLocator > & i_xLocator) override;
 

@@ -54,16 +54,16 @@ namespace xmloff
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+        virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
+        virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-        virtual bool SAL_CALL hasElements(  ) override;
+        virtual cpo::uno::Type getElementType(  ) override;
+        virtual bool hasElements(  ) override;
     };
 
 }   // namespace xmloff

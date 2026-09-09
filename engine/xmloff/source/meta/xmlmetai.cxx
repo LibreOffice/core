@@ -57,19 +57,19 @@ public:
         css::uno::Reference<css::xml::dom::XSAXDocumentBuilder2> xDocBuilder,
         SvXMLMetaDocumentContext * pTopLevel);
 
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual void characters( const OUString& aChars ) override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name,
+    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+    virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 };
@@ -86,13 +86,13 @@ XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
 {
 }
 
-void SAL_CALL XMLDocumentBuilderContext::startFastElement( sal_Int32 nElement,
+void XMLDocumentBuilderContext::startFastElement( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
 {
     mxDocBuilder->startFastElement(nElement, xAttribs);
 }
 
-void SAL_CALL XMLDocumentBuilderContext::endFastElement( sal_Int32 nElement )
+void XMLDocumentBuilderContext::endFastElement( sal_Int32 nElement )
 {
     mxDocBuilder->endFastElement(nElement);
     if (m_pTopLevel)
@@ -104,23 +104,23 @@ void SAL_CALL XMLDocumentBuilderContext::endFastElement( sal_Int32 nElement )
     }
 }
 
-void SAL_CALL XMLDocumentBuilderContext::startUnknownElement( const OUString& rNamespace,
+void XMLDocumentBuilderContext::startUnknownElement( const OUString& rNamespace,
         const OUString& rName, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     mxDocBuilder->startUnknownElement(rNamespace, rName, xAttrList);
 }
 
-void SAL_CALL XMLDocumentBuilderContext::endUnknownElement( const OUString& rNamespace, const OUString& rName )
+void XMLDocumentBuilderContext::endUnknownElement( const OUString& rNamespace, const OUString& rName )
 {
     mxDocBuilder->endUnknownElement(rNamespace, rName);
 }
 
-void SAL_CALL XMLDocumentBuilderContext::characters( const OUString& rChars )
+void XMLDocumentBuilderContext::characters( const OUString& rChars )
 {
     mxDocBuilder->characters(rChars);
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL XMLDocumentBuilderContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > XMLDocumentBuilderContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     return new XMLDocumentBuilderContext(GetImport(), nElement, xAttrList, mxDocBuilder, nullptr);
@@ -197,7 +197,7 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 {
 }
 
-void SAL_CALL SvXMLMetaDocumentContext::startFastElement(sal_Int32 /*nElement*/,
+void SvXMLMetaDocumentContext::startFastElement(sal_Int32 /*nElement*/,
             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     mxDocBuilder->startDocument();
@@ -220,7 +220,7 @@ void SvXMLMetaDocumentContext::FinishMetaElement()
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > SvXMLMetaDocumentContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(OFFICE, XML_META) )

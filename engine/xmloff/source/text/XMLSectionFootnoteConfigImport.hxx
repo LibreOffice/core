@@ -49,7 +49,7 @@ public:
 
     virtual ~XMLSectionFootnoteConfigImport() override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
 };

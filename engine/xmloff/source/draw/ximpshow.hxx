@@ -35,7 +35,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
     virtual ~SdXMLShowsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
                 sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 private:
     css::uno::Reference< css::lang::XSingleServiceFactory > mxShowFactory;

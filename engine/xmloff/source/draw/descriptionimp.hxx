@@ -36,11 +36,11 @@ public:
         const css::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

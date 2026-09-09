@@ -51,27 +51,27 @@ public:
     virtual ~OOo2OasisTransformer() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel(  ) override;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual void cancel(  ) override;
 
     /// @throws cpo::uno::Exception
     /// @throws cpo::uno::RuntimeException
     void Initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
+    virtual void startDocument() override;
 
     virtual OUString GetEventName( const OUString& rName,
                                             bool bForm = false ) override;

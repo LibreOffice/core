@@ -31,7 +31,7 @@ public:
                     css::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty);
     ~XMLThemeContext();
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttribs) override;
 };
@@ -48,7 +48,7 @@ public:
                           model::Theme& mrTheme);
     ~XMLThemeColorsContext();
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttribs) override;
 };

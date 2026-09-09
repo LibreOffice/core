@@ -63,12 +63,12 @@ public:
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 
 };
 
@@ -90,9 +90,9 @@ public:
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & i_xAttrList );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     sal_Int16 GetLevel() const { return m_Level; }
@@ -136,11 +136,11 @@ public:
             sal_uInt8 nStarFontsConvFlags = 0
              );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

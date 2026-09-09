@@ -80,7 +80,7 @@ private:
 public:
     SchXMLCategoriesContext( SvXMLImport& rImport,
                                    OUString& rAddress );
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -90,7 +90,7 @@ public:
     DateScaleContext( SvXMLImport& rImport,
                         const Reference< beans::XPropertySet >& rAxisProps );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:

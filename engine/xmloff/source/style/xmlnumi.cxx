@@ -91,7 +91,7 @@ public:
             const Reference< xml::sax::XFastAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -185,7 +185,7 @@ public:
             SvXMLImport& rImport, sal_Int32 nElement,
             const Reference< xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 

@@ -41,7 +41,7 @@ namespace xmloff
             IEventAttacher& _rEventAttacher);
 
     protected:
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
     };
 
     //= ODefaultEventAttacherManager

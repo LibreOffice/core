@@ -1616,7 +1616,7 @@ OOo2OasisTransformer::~OOo2OasisTransformer() noexcept
 }
 
 // XImporter
-void SAL_CALL OOo2OasisTransformer::setTargetDocument(
+void OOo2OasisTransformer::setTargetDocument(
         const Reference< XComponent >& xDoc )
 {
     if( !GetDocHandler().is() )
@@ -1636,7 +1636,7 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
 }
 
 // XFilter
-bool SAL_CALL OOo2OasisTransformer::filter(
+bool OOo2OasisTransformer::filter(
         const Sequence< PropertyValue >& aDescriptor )
 {
     Reference< XFilter> xFilter( GetDocHandler(), UNO_QUERY );
@@ -1647,7 +1647,7 @@ bool SAL_CALL OOo2OasisTransformer::filter(
     return false;
 }
 
-void SAL_CALL OOo2OasisTransformer::cancel(  )
+void OOo2OasisTransformer::cancel(  )
 {
     Reference< XFilter> xFilter( GetDocHandler(), UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "doc handler is not a filter" );
@@ -1656,13 +1656,13 @@ void SAL_CALL OOo2OasisTransformer::cancel(  )
 }
 
 // XInitialize
-void SAL_CALL OOo2OasisTransformer::initialize(
+void OOo2OasisTransformer::initialize(
                 const Sequence< Any >& rArguments )
 {
     Initialize( rArguments );
 }
 
-void SAL_CALL OOo2OasisTransformer::startDocument()
+void OOo2OasisTransformer::startDocument()
 {
     if( !GetDocHandler().is() )
     {
@@ -1710,17 +1710,17 @@ void OOo2OasisTransformer::Initialize(
 }
 
 // XServiceInfo
-OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
+OUString OOo2OasisTransformer::getImplementationName()
 {
     return m_aImplName;
 }
 
-bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& ServiceName )
+bool OOo2OasisTransformer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
+Sequence< OUString > OOo2OasisTransformer::getSupportedServiceNames(  )
 {
     return { };
 }

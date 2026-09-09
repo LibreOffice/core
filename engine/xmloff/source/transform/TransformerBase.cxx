@@ -193,17 +193,17 @@ XMLTransformerBase::~XMLTransformerBase() noexcept
 {
 }
 
-void SAL_CALL XMLTransformerBase::startDocument()
+void XMLTransformerBase::startDocument()
 {
     m_xHandler->startDocument();
 }
 
-void SAL_CALL XMLTransformerBase::endDocument()
+void XMLTransformerBase::endDocument()
 {
     m_xHandler->endDocument();
 }
 
-void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
+void XMLTransformerBase::startElement( const OUString& rName,
                                          const Reference< XAttributeList >& rAttrList )
 {
     std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
@@ -293,7 +293,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     xContext->StartElement( xAttrList );
 }
 
-void SAL_CALL XMLTransformerBase::endElement( const OUString&
+void XMLTransformerBase::endElement( const OUString&
 #if OSL_DEBUG_LEVEL > 0
 rName
 #endif
@@ -329,7 +329,7 @@ rName
     }
 }
 
-void SAL_CALL XMLTransformerBase::characters( const OUString& rChars )
+void XMLTransformerBase::characters( const OUString& rChars )
 {
     if( !m_vContexts.empty() )
     {
@@ -337,44 +337,44 @@ void SAL_CALL XMLTransformerBase::characters( const OUString& rChars )
     }
 }
 
-void SAL_CALL XMLTransformerBase::ignorableWhitespace( const OUString& rWhitespaces )
+void XMLTransformerBase::ignorableWhitespace( const OUString& rWhitespaces )
 {
     m_xHandler->ignorableWhitespace( rWhitespaces );
 }
 
-void SAL_CALL XMLTransformerBase::processingInstruction( const OUString& rTarget,
+void XMLTransformerBase::processingInstruction( const OUString& rTarget,
                                        const OUString& rData )
 {
     m_xHandler->processingInstruction( rTarget, rData );
 }
 
-void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator >& )
+void XMLTransformerBase::setDocumentLocator( const Reference< XLocator >& )
 {
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL XMLTransformerBase::startCDATA()
+void XMLTransformerBase::startCDATA()
 {
 }
 
-void SAL_CALL XMLTransformerBase::endCDATA()
+void XMLTransformerBase::endCDATA()
 {
 }
 
-void SAL_CALL XMLTransformerBase::comment( const OUString& /*rComment*/ )
+void XMLTransformerBase::comment( const OUString& /*rComment*/ )
 {
 }
 
-void SAL_CALL XMLTransformerBase::allowLineBreak()
+void XMLTransformerBase::allowLineBreak()
 {
 }
 
-void SAL_CALL XMLTransformerBase::unknown( const OUString& /*rString*/ )
+void XMLTransformerBase::unknown( const OUString& /*rString*/ )
 {
 }
 
 // XInitialize
-void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments )
+void XMLTransformerBase::initialize( const Sequence< Any >& aArguments )
 {
     for( const auto& rArgument : aArguments )
     {

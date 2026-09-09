@@ -251,7 +251,7 @@ protected:
 
     /// create XTextField, attach master and insert into document;
     /// also calls PrepareTextField
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     /// find appropriate field master
     bool FindFieldMaster(
@@ -366,7 +366,7 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         enum VarType eVarType);                 /// variable type
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -446,7 +446,7 @@ private:
                                    std::string_view sAttrValue ) override;
 
     /// create, prepare and insert database field master and database field
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

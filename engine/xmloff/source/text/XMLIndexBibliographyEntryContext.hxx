@@ -51,12 +51,12 @@ public:
 protected:
 
     /** process parameters */
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     /** call FillPropertyValues and insert into template */
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(

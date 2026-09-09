@@ -24,7 +24,7 @@ public:
     SvXMLLineBreakContext(SvXMLImport& rImport, XMLTextImportHelper& rHelper);
 
 protected:
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };

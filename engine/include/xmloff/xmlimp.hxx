@@ -140,8 +140,8 @@ public:
     void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList );
 
     //XFastNamespaceHandler
-    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
-    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
+    virtual void registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
+    virtual OUString getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLLegacyToFastDocHandler final : public ::cppu::WeakImplHelper<
@@ -157,19 +157,19 @@ public:
     SvXMLLegacyToFastDocHandler( rtl::Reference< SvXMLImport > xImport );
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement(const OUString& aName,
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void startElement(const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
-    virtual void SAL_CALL endElement(const OUString& aName) override;
-    virtual void SAL_CALL characters(const OUString& aChars) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+    virtual void endElement(const OUString& aName) override;
+    virtual void characters(const OUString& aChars) override;
+    virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
+    virtual void processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 };
 
 class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public cppu::WeakImplHelper<
@@ -304,55 +304,55 @@ public:
 
     virtual ~SvXMLImport() noexcept override;
 
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL characters(const OUString& aChars) override final;
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void characters(const OUString& aChars) override final;
+    virtual void processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override final;
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override final;
+    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override final;
 
     // ::css::xml::sax::XFastContextHandler
-    virtual void SAL_CALL startFastElement(sal_Int32 Element,
+    virtual void startFastElement(sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
-    virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
+    virtual void startUnknownElement(const OUString & Namespace,
         const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
-    virtual void SAL_CALL endFastElement(sal_Int32 Element) override final;
-    virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
+    virtual void endFastElement(sal_Int32 Element) override final;
+    virtual void endUnknownElement(const OUString & Namespace,
         const OUString & Name) override final;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
     createFastChildContext(sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
     createUnknownChildContext(const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override final;
-    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override final;
-    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override final;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override final;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override final;
-    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override final;
-    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
-    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override final;
-    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
-    virtual void SAL_CALL setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
+    virtual void parseStream( const css::xml::sax::InputSource& aInputSource ) override final;
+    virtual void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override final;
+    virtual void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override final;
+    virtual void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override final;
+    virtual OUString getNamespaceURL( const OUString& rPrefix ) override final;
+    virtual void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override final;
+    virtual void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
+    virtual void setLocale( const css::lang::Locale& rLocale ) override final;
+    virtual void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
+    virtual void setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel(  ) override final;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual void cancel(  ) override final;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) final override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
+    virtual OUString getImplementationName(  ) final override;
+    virtual bool supportsService( const OUString& ServiceName ) final override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) final override;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics

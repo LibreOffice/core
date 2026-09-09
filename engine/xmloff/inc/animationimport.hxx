@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         const std::shared_ptr<AnimationsImportHelperImpl>& pImpl = nullptr );
 
-    virtual css::uno::Reference< XFastContextHandler >  SAL_CALL createFastChildContext(sal_Int32 Element,
+    virtual css::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 
     static void postProcessRootNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::beans::XPropertySet > const & xPageProps );

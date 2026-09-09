@@ -63,7 +63,7 @@ XMLThemeContext::~XMLThemeContext()
     }
 }
 
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL XMLThemeContext::createFastChildContext(
+uno::Reference<xml::sax::XFastContextHandler> XMLThemeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs)
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_THEME_COLORS))
@@ -101,7 +101,7 @@ XMLThemeColorsContext::~XMLThemeColorsContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL XMLThemeColorsContext::createFastChildContext(
+    XMLThemeColorsContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs)
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_COLOR))

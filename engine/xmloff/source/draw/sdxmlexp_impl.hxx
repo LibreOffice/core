@@ -174,7 +174,7 @@ public:
     void collectAutoStyles() override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // get factories and mappers
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper.get(); }

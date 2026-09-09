@@ -1422,7 +1422,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLUnitConverter::convertEnum( sTmp, nCommand, aAnimations_EnumMap_Command );
         mxExport->AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
-    // todo virtual cpo::uno::Any SAL_CALL getParameter() throw (cpo::uno::RuntimeException) = 0;
+    // todo virtual cpo::uno::Any getParameter() throw (cpo::uno::RuntimeException) = 0;
 
         SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 

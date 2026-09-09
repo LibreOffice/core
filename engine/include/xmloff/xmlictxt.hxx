@@ -74,40 +74,40 @@ public:
     virtual ~SvXMLImportContext();
 
     // css::xml::sax::XFastContextHandler:
-    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+    virtual void startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
-    virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name,
+    virtual void startUnknownElement(const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     /** endFastElement is called before a context will be destructed, but
      * after an elements context has been parsed. It may be used for actions
      * that require virtual methods. The default is to do nothing. */
-    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
+    virtual void endFastElement(sal_Int32 Element) override;
 
-    virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
+    virtual void endUnknownElement(const OUString & Namespace, const OUString & Name) override;
 
-    virtual css::uno::Reference< XFastContextHandler >  SAL_CALL createFastChildContext(sal_Int32 Element,
+    virtual css::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     /** This method is called for all characters that are contained in the
      * current element. The default is to ignore them. */
-    virtual void SAL_CALL characters(const OUString & aChars) override;
+    virtual void characters(const OUString & aChars) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) final override;
-    virtual void SAL_CALL acquire() noexcept final override
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) final override;
+    virtual void acquire() noexcept final override
     { osl_atomic_increment(&m_nRefCount); }
-    virtual void SAL_CALL release() noexcept final override
+    virtual void release() noexcept final override
     { if (osl_atomic_decrement(&m_nRefCount) == 0) delete this; }
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) final override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) final override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) final override;
 };
 
 #define XMLOFF_WARN_UNKNOWN(area, rIter) \

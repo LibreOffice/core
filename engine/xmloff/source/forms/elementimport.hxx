@@ -107,9 +107,9 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
@@ -207,8 +207,8 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -275,7 +275,7 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
 
@@ -295,7 +295,7 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
 
@@ -365,7 +365,7 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
     };
@@ -388,7 +388,7 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList ) override;
 
@@ -415,13 +415,13 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
     private:
         void    adjustDefaultControlProperty();
@@ -465,10 +465,10 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        virtual void startFastElement( sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual void endFastElement(sal_Int32 nElement) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
@@ -502,7 +502,7 @@ namespace xmloff
         OListOptionImport(SvXMLImport& _rImport,
             OListAndComboImportRef _xListBox);
 
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        virtual void startFastElement( sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
     };
 
@@ -520,7 +520,7 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        virtual void startFastElement( sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
     };
 
@@ -564,10 +564,10 @@ namespace xmloff
                 const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer);
 
         // SvXMLImportContext overridables
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
     private:
@@ -587,10 +587,10 @@ namespace xmloff
             OControlElement::ElementType _eType);
 
         // SvXMLImportContext overridables
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
     private:
         // OElementImport overridables
@@ -611,12 +611,12 @@ namespace xmloff
 
     private:
         // SvXMLImportContext overridables
-        virtual void SAL_CALL startFastElement(
+        virtual void startFastElement(
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
         // OPropertyImport overridables

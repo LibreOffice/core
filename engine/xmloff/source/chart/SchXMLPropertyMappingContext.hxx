@@ -30,7 +30,7 @@ public:
 
     virtual ~SchXMLPropertyMappingContext() override;
 
-    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+    virtual void startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 private:
 

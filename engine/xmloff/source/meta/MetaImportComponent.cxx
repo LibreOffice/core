@@ -47,7 +47,7 @@ protected:
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 };
 
 }
@@ -84,7 +84,7 @@ SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElemen
     return nullptr;
 }
 
-void SAL_CALL XMLMetaImportComponent::setTargetDocument(
+void XMLMetaImportComponent::setTargetDocument(
     const uno::Reference< lang::XComponent >& xDoc )
 {
     mxDocProps.set( xDoc, uno::UNO_QUERY );

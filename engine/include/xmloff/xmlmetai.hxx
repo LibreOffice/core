@@ -45,10 +45,10 @@ public:
 
     virtual ~SvXMLMetaDocumentContext() override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override final;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:

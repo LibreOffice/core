@@ -36,85 +36,85 @@ XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () noexcept
 {
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument()
+void XMLEmbeddedObjectExportFilter::startDocument()
 {
     // do nothing, filter this
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument()
+void XMLEmbeddedObjectExportFilter::endDocument()
 {
     // do nothing, filter this
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::startElement(
+void XMLEmbeddedObjectExportFilter::startElement(
         const OUString& rName,
         const Reference< XAttributeList >& xAttrList )
 {
     xHandler->startElement( rName, xAttrList );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::endElement( const OUString& rName )
+void XMLEmbeddedObjectExportFilter::endElement( const OUString& rName )
 {
     xHandler->endElement( rName );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::characters( const OUString& rChars )
+void XMLEmbeddedObjectExportFilter::characters( const OUString& rChars )
 {
     xHandler->characters( rChars );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::ignorableWhitespace(
+void XMLEmbeddedObjectExportFilter::ignorableWhitespace(
         const OUString& rWhitespaces )
 {
     xHandler->ignorableWhitespace( rWhitespaces );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::processingInstruction(
+void XMLEmbeddedObjectExportFilter::processingInstruction(
         const OUString& rTarget,
         const OUString& rData )
 {
     xHandler->processingInstruction( rTarget, rData );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::setDocumentLocator(
+void XMLEmbeddedObjectExportFilter::setDocumentLocator(
         const Reference< XLocator >& rLocator )
 {
     xHandler->setDocumentLocator( rLocator );
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL XMLEmbeddedObjectExportFilter::startCDATA()
+void XMLEmbeddedObjectExportFilter::startCDATA()
 {
     if( xExtHandler.is() )
         xExtHandler->startCDATA();
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::endCDATA()
+void XMLEmbeddedObjectExportFilter::endCDATA()
 {
     if( xExtHandler.is() )
         xExtHandler->endCDATA();
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::comment( const OUString& rComment )
+void XMLEmbeddedObjectExportFilter::comment( const OUString& rComment )
 {
     if( xExtHandler.is() )
         xExtHandler->comment( rComment );
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::allowLineBreak()
+void XMLEmbeddedObjectExportFilter::allowLineBreak()
 {
     if( xExtHandler.is() )
         xExtHandler->allowLineBreak();
 }
 
-void SAL_CALL XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
+void XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
 {
     if( xExtHandler.is() )
         xExtHandler->unknown( rString );
 }
 
 // XInitialize
-void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
+void XMLEmbeddedObjectExportFilter::initialize(
         const Sequence< Any >& aArguments )
 {
     for( const auto& rAny : aArguments )
@@ -125,17 +125,17 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
 }
 
 // XServiceInfo
-OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
+OUString XMLEmbeddedObjectExportFilter::getImplementationName()
 {
     return OUString();
 }
 
-bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
+bool XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL XMLEmbeddedObjectExportFilter::getSupportedServiceNames(  )
+Sequence< OUString > XMLEmbeddedObjectExportFilter::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSeq;
     return aSeq;

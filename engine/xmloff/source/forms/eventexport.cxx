@@ -84,13 +84,13 @@ using namespace cpo::uno;
         }
     }
 
-    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& )
+    void OEventDescriptorMapper::replaceByName( const OUString&, const Any& )
     {
         throw IllegalArgumentException(
             u"replacing is not implemented for this wrapper class."_ustr, getXWeak(), 1);
     }
 
-    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName )
+    Any OEventDescriptorMapper::getByName( const OUString& _rName )
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
@@ -101,23 +101,23 @@ using namespace cpo::uno;
         return Any(aPos->second);
     }
 
-    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  )
+    Sequence< OUString > OEventDescriptorMapper::getElementNames(  )
     {
         return comphelper::mapKeysToSequence(m_aMappedEvents);
     }
 
-    bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName )
+    bool OEventDescriptorMapper::hasByName( const OUString& _rName )
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
     }
 
-    Type SAL_CALL OEventDescriptorMapper::getElementType(  )
+    Type OEventDescriptorMapper::getElementType(  )
     {
         return ::cppu::UnoType<PropertyValue>::get();
     }
 
-    bool SAL_CALL OEventDescriptorMapper::hasElements(  )
+    bool OEventDescriptorMapper::hasElements(  )
     {
         return !m_aMappedEvents.empty();
     }

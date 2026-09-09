@@ -70,7 +70,7 @@ public:
     SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, uno::Reference< XNameContainer > xTable,
         bool bOOoFormat );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext(sal_Int32 Element,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
@@ -114,10 +114,10 @@ namespace
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             const css::uno::Reference< XNameContainer >& rxTable);
         virtual ~XMLGradientHelperContext() override;
-        virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
             sal_Int32 nElement,
             const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
     };
 
     XMLGradientHelperContext::XMLGradientHelperContext(

@@ -37,7 +37,7 @@ public:
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override
      * StartElement need to call the parent method. */
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -45,10 +45,10 @@ public:
      * create a warning for all others. Classes that wish to override
      * CreateChildContext may want to call the parent method for
      * handling of defaults. */
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString& Namespace, const OUString& Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
@@ -56,7 +56,7 @@ public:
      * content. Classes that wish to deal with character content have
      * to override this method anyway, and will thus get rid of the
      * warnings. */
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 
 protected:
     /** will be called for each attribute */

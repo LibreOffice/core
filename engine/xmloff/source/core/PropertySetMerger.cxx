@@ -45,24 +45,24 @@ public:
     PropertySetMergerImpl( const Reference< XPropertySet > & rPropSet1, const Reference< XPropertySet > & rPropSet2 );
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
+    virtual Reference< XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
 
     // XPropertyState
-    virtual PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual Sequence< PropertyState > SAL_CALL getPropertyStates( const Sequence< OUString >& aPropertyName ) override;
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual PropertyState getPropertyState( const OUString& PropertyName ) override;
+    virtual Sequence< PropertyState > getPropertyStates( const Sequence< OUString >& aPropertyName ) override;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    virtual Any getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  ) override;
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual Sequence< Property > getProperties(  ) override;
+    virtual Property getPropertyByName( const OUString& aName ) override;
+    virtual bool hasPropertyByName( const OUString& Name ) override;
 };
 
 }
@@ -80,12 +80,12 @@ PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > const & 
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL PropertySetMergerImpl::getPropertySetInfo(  )
+Reference< XPropertySetInfo > PropertySetMergerImpl::getPropertySetInfo(  )
 {
     return this;
 }
 
-void SAL_CALL PropertySetMergerImpl::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void PropertySetMergerImpl::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     if( mxPropSet1Info->hasPropertyByName( aPropertyName ) )
     {
@@ -97,7 +97,7 @@ void SAL_CALL PropertySetMergerImpl::setPropertyValue( const OUString& aProperty
     }
 }
 
-Any SAL_CALL PropertySetMergerImpl::getPropertyValue( const OUString& PropertyName )
+Any PropertySetMergerImpl::getPropertyValue( const OUString& PropertyName )
 {
     if( mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -109,24 +109,24 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyValue( const OUString& PropertyNa
     }
 }
 
-void SAL_CALL PropertySetMergerImpl::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+void PropertySetMergerImpl::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
+void PropertySetMergerImpl::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+void PropertySetMergerImpl::addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
 {
 }
 
-void SAL_CALL PropertySetMergerImpl::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+void PropertySetMergerImpl::removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
 {
 }
 
 // XPropertyState
-PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& PropertyName )
+PropertyState PropertySetMergerImpl::getPropertyState( const OUString& PropertyName )
 {
     if( mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -152,7 +152,7 @@ PropertyState SAL_CALL PropertySetMergerImpl::getPropertyState( const OUString& 
     }
 }
 
-Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( const Sequence< OUString >& aPropertyName )
+Sequence< PropertyState > PropertySetMergerImpl::getPropertyStates( const Sequence< OUString >& aPropertyName )
 {
     const sal_Int32 nCount = aPropertyName.getLength();
     Sequence< PropertyState > aPropStates( nCount );
@@ -163,7 +163,7 @@ Sequence< PropertyState > SAL_CALL PropertySetMergerImpl::getPropertyStates( con
     return aPropStates;
 }
 
-void SAL_CALL PropertySetMergerImpl::setPropertyToDefault( const OUString& PropertyName )
+void PropertySetMergerImpl::setPropertyToDefault( const OUString& PropertyName )
 {
     if( mxPropSet1State.is() && mxPropSet1Info->hasPropertyByName( PropertyName ) )
     {
@@ -178,7 +178,7 @@ void SAL_CALL PropertySetMergerImpl::setPropertyToDefault( const OUString& Prope
     }
 }
 
-Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropertyName )
+Any PropertySetMergerImpl::getPropertyDefault( const OUString& aPropertyName )
 {
     if( mxPropSet1State.is() && mxPropSet1Info->hasPropertyByName( aPropertyName ) )
     {
@@ -199,7 +199,7 @@ Any SAL_CALL PropertySetMergerImpl::getPropertyDefault( const OUString& aPropert
 }
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties()
+Sequence< Property > PropertySetMergerImpl::getProperties()
 {
     Sequence< Property > aProps1( mxPropSet1Info->getProperties() );
     Sequence< Property > aProps2( mxPropSet2Info->getProperties() );
@@ -207,7 +207,7 @@ Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties()
     return comphelper::concatSequences(aProps1, aProps2);
 }
 
-Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aName )
+Property PropertySetMergerImpl::getPropertyByName( const OUString& aName )
 {
     if( mxPropSet1Info->hasPropertyByName( aName ) )
         return mxPropSet1Info->getPropertyByName( aName );
@@ -215,7 +215,7 @@ Property SAL_CALL PropertySetMergerImpl::getPropertyByName( const OUString& aNam
     return mxPropSet2Info->getPropertyByName( aName );
 }
 
-bool SAL_CALL PropertySetMergerImpl::hasPropertyByName( const OUString& Name )
+bool PropertySetMergerImpl::hasPropertyByName( const OUString& Name )
 {
     if(mxPropSet1Info->hasPropertyByName( Name ) )
         return true;

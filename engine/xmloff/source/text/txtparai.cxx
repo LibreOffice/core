@@ -278,10 +278,10 @@ public:
 
     virtual ~XMLImpHyperlinkContext_Impl() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 }
@@ -401,10 +401,10 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 }
@@ -457,9 +457,9 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
@@ -479,7 +479,7 @@ public:
             const Reference< xml::sax::XFastAttributeList > & xAttrList,
             XMLImpRubyContext_Impl & rParent );
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 };
 
 }
@@ -589,16 +589,16 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
             sal_Int32 nElement,
             const Reference<xml::sax::XFastAttributeList> & i_xAttrList) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL characters( const OUString& i_rChars ) override;
+    virtual void characters( const OUString& i_rChars ) override;
 
     virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter);
 
@@ -861,7 +861,7 @@ public:
         SvXMLImport& rImport,
         XMLHints_Impl& rHints);
 
-    void SAL_CALL startFastElement(sal_Int32 nElement, const Reference<xml::sax::XFastAttributeList> & xAttrList) override;
+    void startFastElement(sal_Int32 nElement, const Reference<xml::sax::XFastAttributeList> & xAttrList) override;
 
 protected:
 

@@ -348,14 +348,14 @@ void SvXMLMetaExport::Export()
 }
 
 // css::xml::sax::XDocumentHandler:
-void SAL_CALL
+void
 SvXMLMetaExport::startDocument()
 {
     // ignore: has already been done by SvXMLExport::exportDoc
     assert(m_level == 0 && "SvXMLMetaExport: level error");
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::endDocument()
 {
     // ignore: will be done by SvXMLExport::exportDoc
@@ -363,7 +363,7 @@ SvXMLMetaExport::endDocument()
 }
 
 // unfortunately, this method contains far too much ugly namespace mangling.
-void SAL_CALL
+void
 SvXMLMetaExport::startElement(const OUString & i_rName,
     const uno::Reference< xml::sax::XAttributeList > & i_xAttribs)
 {
@@ -444,7 +444,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
     ++m_level;
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::endElement(const OUString & i_rName)
 {
     --m_level;
@@ -456,26 +456,26 @@ SvXMLMetaExport::endElement(const OUString & i_rName)
     mrExport.EndElement(i_rName, false);
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::characters(const OUString & i_rChars)
 {
     mrExport.Characters(i_rChars);
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::ignorableWhitespace(const OUString & /*i_rWhitespaces*/)
 {
     mrExport.IgnorableWhitespace(/*i_rWhitespaces*/);
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::processingInstruction(const OUString &,
     const OUString &)
 {
     // ignore; the exporter cannot handle these
 }
 
-void SAL_CALL
+void
 SvXMLMetaExport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>&)
 {
     // nothing to do here, move along...

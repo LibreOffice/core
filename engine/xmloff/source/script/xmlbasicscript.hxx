@@ -46,7 +46,7 @@ public:
     BasicLibrariesElement(SvXMLImport& rImport,
                           const css::uno::Reference<css::frame::XModel>& rxModel);
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 };
@@ -65,10 +65,10 @@ public:
         const css::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
         OUString aLibName, bool bReadOnly);
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class BasicModuleElement : public BasicElementBase
@@ -82,7 +82,7 @@ public:
                        const css::uno::Reference<css::container::XNameContainer>& rxLib,
                        OUString aName);
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 };
@@ -99,8 +99,8 @@ public:
                            const css::uno::Reference<css::container::XNameContainer>& rxLib,
                            OUString rName);
 
-    virtual void SAL_CALL characters(const OUString& rChars) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void characters(const OUString& rChars) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 } // namespace xmloff

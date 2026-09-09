@@ -1866,17 +1866,17 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() noexcept
 }
 
 // XServiceInfo
-OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
+OUString Oasis2OOoTransformer::getImplementationName()
 {
     return u"com.sun.star.comp.Oasis2OOoTransformer"_ustr;
 }
 
-bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
+bool Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
+Sequence< OUString > Oasis2OOoTransformer::getSupportedServiceNames(  )
 {
     return { };
 }

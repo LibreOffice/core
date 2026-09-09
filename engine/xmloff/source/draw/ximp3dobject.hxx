@@ -39,7 +39,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DObjectContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -58,7 +58,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DCubeObjectShapeContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -77,7 +77,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DSphereObjectShapeContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -96,7 +96,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DPolygonBasedShapeContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -112,7 +112,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DLatheObjectShapeContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -128,7 +128,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DExtrudeObjectShapeContext() override;
 
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };

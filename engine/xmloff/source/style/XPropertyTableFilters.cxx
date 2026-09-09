@@ -50,12 +50,12 @@ public:
     {
     }
 
-    virtual bool SAL_CALL filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
-    virtual void SAL_CALL cancel() override {}
+    virtual bool filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    virtual void cancel() override {}
 
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& rServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
     XPropertyTableFilterMode meMode;

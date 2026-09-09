@@ -322,7 +322,7 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext()
     return pStylesCtxt;
 }
 
-void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
+void SchXMLImport::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     uno::Reference<chart2::XChartDocument> xOldDoc(GetModel(), uno::UNO_QUERY);
     if (xOldDoc.is() && xOldDoc->hasControllersLocked())

@@ -74,7 +74,7 @@ class XMLProxyContext : public SvXMLImportContext
 public:
     XMLProxyContext( SvXMLImport& rImport, SvXMLImportContextRef xParent );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
@@ -137,11 +137,11 @@ class XMLTableImportContext : public SvXMLImportContext
 public:
     XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, Reference< XColumnRowRange > const & xColumnRowRange );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     void InitColumns();
 
@@ -176,11 +176,11 @@ public:
                           sal_Int32 nElement,
                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     sal_Int32 getColumnSpan() const { return mnColSpan; }
     sal_Int32 getRowSpan() const { return mnRowSpan; }
@@ -200,10 +200,10 @@ public:
     XMLTableTemplateContext( SvXMLImport& rImport );
 
     // Create child element.
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
 protected:
     virtual void SetAttribute( sal_Int32 nElement,

@@ -96,28 +96,28 @@ public:
 public:
 
     // XGraphicObjectResolver
-    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;
+    virtual OUString resolveGraphicObjectURL( const OUString& aURL ) override;
 
     // XGraphicStorageHandler
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+    virtual css::uno::Reference<css::graphic::XGraphic>
         loadGraphic(OUString const & aURL) override;
 
-    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+    virtual css::uno::Reference<css::graphic::XGraphic>
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
-    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
+    virtual css::uno::Reference<css::io::XInputStream>
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     // XBinaryStreamResolver
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL createOutputStream(  ) override;
-    virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream( const OUString& rURL ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > createOutputStream(  ) override;
+    virtual OUString resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
 
     css::uno::Reference<css::graphic::XGraphic>
         loadGraphicAtPage(OUString const& aURL, sal_Int32 nPage);

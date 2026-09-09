@@ -47,7 +47,7 @@ public:
     virtual ~XMLAutoTextEventExport() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         const cpo::uno::Sequence<cpo::uno::Any> & rArguments ) override;
 
 private:

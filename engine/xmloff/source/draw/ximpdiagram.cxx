@@ -51,7 +51,7 @@ uno::Reference<xml::sax::XFastContextHandler> SdXMLDiagramContext::createFastChi
             , mrText(rText)
         {
         }
-        virtual void SAL_CALL characters(const OUString& rChars) override { mrText += rChars; }
+        virtual void characters(const OUString& rChars) override { mrText += rChars; }
     };
 
     switch (nElement)

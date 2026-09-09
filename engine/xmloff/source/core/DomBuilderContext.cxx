@@ -127,7 +127,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::cre
     return new DomBuilderContext( GetImport(), rNamespace, rName, mxNode );
 }
 
-void SAL_CALL DomBuilderContext::startFastElement(
+void DomBuilderContext::startFastElement(
     sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
@@ -137,7 +137,7 @@ void SAL_CALL DomBuilderContext::startFastElement(
     HandleAttributes(xAttrList);
 }
 
-void SAL_CALL DomBuilderContext::startUnknownElement(
+void DomBuilderContext::startUnknownElement(
     const OUString & /*rNamespace*/, const OUString & /*rName*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {

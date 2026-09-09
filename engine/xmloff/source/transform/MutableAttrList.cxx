@@ -58,35 +58,35 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
     m_xAttrList = nullptr;
 }
 
-sal_Int16 SAL_CALL XMLMutableAttributeList::getLength()
+sal_Int16 XMLMutableAttributeList::getLength()
 {
     return m_xAttrList->getLength();
 }
 
 
-OUString SAL_CALL XMLMutableAttributeList::getNameByIndex(sal_Int16 i)
+OUString XMLMutableAttributeList::getNameByIndex(sal_Int16 i)
 {
     return m_xAttrList->getNameByIndex( i );
 }
 
 
-OUString SAL_CALL XMLMutableAttributeList::getTypeByIndex(sal_Int16 i)
+OUString XMLMutableAttributeList::getTypeByIndex(sal_Int16 i)
 {
     return m_xAttrList->getTypeByIndex( i );
 }
 
-OUString SAL_CALL  XMLMutableAttributeList::getValueByIndex(sal_Int16 i)
+OUString  XMLMutableAttributeList::getValueByIndex(sal_Int16 i)
 {
     return m_xAttrList->getValueByIndex( i );
 }
 
-OUString SAL_CALL XMLMutableAttributeList::getTypeByName(
+OUString XMLMutableAttributeList::getTypeByName(
         const OUString& rName )
 {
     return m_xAttrList->getTypeByName( rName );
 }
 
-OUString SAL_CALL XMLMutableAttributeList::getValueByName(
+OUString XMLMutableAttributeList::getValueByName(
         const OUString& rName)
 {
     return m_xAttrList->getValueByName( rName );

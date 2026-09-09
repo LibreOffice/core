@@ -84,26 +84,26 @@ public:
     virtual ~XMLTransformerBase() noexcept override;
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement(const OUString& aName,
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void startElement(const OUString& aName,
                               const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
-    virtual void SAL_CALL endElement(const OUString& aName) override;
-    virtual void SAL_CALL characters(const OUString& aChars) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+    virtual void endElement(const OUString& aName) override;
+    virtual void characters(const OUString& aChars) override;
+    virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
+    virtual void processingInstruction(const OUString& aTarget,
                                        const OUString& aData) override;
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
     // css::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() override;
-    virtual void SAL_CALL endCDATA() override;
-    virtual void SAL_CALL comment(const OUString& sComment) override;
-    virtual void SAL_CALL allowLineBreak() override;
-    virtual void SAL_CALL unknown(const OUString& sString) override;
+    virtual void startCDATA() override;
+    virtual void endCDATA() override;
+    virtual void comment(const OUString& sComment) override;
+    virtual void allowLineBreak() override;
+    virtual void unknown(const OUString& sString) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // C++
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }

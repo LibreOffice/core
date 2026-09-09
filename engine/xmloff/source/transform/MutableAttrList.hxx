@@ -45,15 +45,15 @@ public:
     virtual ~XMLMutableAttributeList() override;
 
     // css::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength() override;
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
+    virtual sal_Int16 getLength() override;
+    virtual OUString getNameByIndex(sal_Int16 i) override;
+    virtual OUString getTypeByIndex(sal_Int16 i) override;
+    virtual OUString getTypeByName(const OUString& aName) override;
+    virtual OUString getValueByIndex(sal_Int16 i) override;
+    virtual OUString getValueByName(const OUString& aName) override;
 
     // css::util::XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // methods that are not contained in any interface
     void SetValueByIndex( sal_Int16 i, const OUString& rValue );

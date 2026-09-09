@@ -52,7 +52,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+void XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
 {
     try
     {

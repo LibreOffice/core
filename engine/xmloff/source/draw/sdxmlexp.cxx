@@ -392,7 +392,7 @@ SdXMLExport::SdXMLExport(
 }
 
 // XExporter
-void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
+void SdXMLExport::setSourceDocument( const Reference< lang::XComponent >& xDoc )
 {
     SvXMLExport::setSourceDocument( xDoc );
 

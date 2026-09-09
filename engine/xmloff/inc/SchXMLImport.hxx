@@ -40,7 +40,7 @@ public:
     SvXMLImportContext* CreateStylesContext();
 
     // XImporter
-    virtual void SAL_CALL
+    virtual void
     setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 };
 
