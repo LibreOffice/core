@@ -58,6 +58,24 @@ bool lcl_hasFontAttrSet(const ScPatternAttr* pPattern)
     return false;
 }
 
+// A corner element overrides only the edges it sets, so the header or totals row underneath it
+// keeps the rest of its border.
+std::unique_ptr<SvxBoxItem> lcl_cloneCornerBorder(const SvxBoxItem* pRowItem,
+                                                  const SvxBoxItem* pCornerItem)
+{
+    std::unique_ptr<SvxBoxItem> pNewBoxItem;
+    if (pCornerItem)
+    {
+        pNewBoxItem.reset(pCornerItem->Clone());
+        if (pRowItem)
+            pNewBoxItem->FillUnsetLines(*pRowItem);
+    }
+    else if (pRowItem)
+        pNewBoxItem.reset(pRowItem->Clone());
+
+    return pNewBoxItem;
+}
+
 // The elements that contribute a font to one cell, highest precedence first, plus a key
 // identifying the combination so the merged result can be cached per combination.
 struct ScTableStyleFontElements
@@ -346,8 +364,9 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
     bool bHasTotal = rDBData.HasTotals();
     if (bHasTotal && pParam->mbLastColumn && nRow == aRange.aEnd.Row() && nCol == aRange.aEnd.Col())
     {
-        const SvxBoxItem* pPoolItem
-            = GetElementItem(ScTableStyleElement::LastTotalCell, ATTR_BORDER);
+        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
+            GetElementItem(ScTableStyleElement::TotalRow, ATTR_BORDER),
+            GetElementItem(ScTableStyleElement::LastTotalCell, ATTR_BORDER));
         if (const SvxBoxItem* pBoxItem
             = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
         {
@@ -357,7 +376,6 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                 = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT) : nullptr;
             if (pBLine || pRLine || pLLine)
             {
-                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
                 if (!pNewBoxItem)
                     pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
                 if (pBLine)
@@ -366,20 +384,19 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                     pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
                 if (pLLine)
                     pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-
-                return pNewBoxItem;
             }
         }
 
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
+        if (pNewBoxItem)
+            return pNewBoxItem;
     }
 
     if (bHasTotal && pParam->mbFirstColumn && nRow == aRange.aEnd.Row()
         && nCol == aRange.aStart.Col())
     {
-        const SvxBoxItem* pPoolItem
-            = GetElementItem(ScTableStyleElement::FirstTotalCell, ATTR_BORDER);
+        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
+            GetElementItem(ScTableStyleElement::TotalRow, ATTR_BORDER),
+            GetElementItem(ScTableStyleElement::FirstTotalCell, ATTR_BORDER));
         if (const SvxBoxItem* pBoxItem
             = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
         {
@@ -389,7 +406,6 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                 = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT) : nullptr;
             if (pBLine || pLLine || pRLine)
             {
-                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
                 if (!pNewBoxItem)
                     pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
                 if (pBLine)
@@ -398,20 +414,19 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                     pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
                 if (pRLine)
                     pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                return pNewBoxItem;
             }
         }
 
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
+        if (pNewBoxItem)
+            return pNewBoxItem;
     }
 
     if (bHasHeader && pParam->mbLastColumn && nRow == aRange.aStart.Row()
         && nCol == aRange.aEnd.Col())
     {
-        const SvxBoxItem* pPoolItem
-            = GetElementItem(ScTableStyleElement::LastHeaderCell, ATTR_BORDER);
+        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
+            GetElementItem(ScTableStyleElement::HeaderRow, ATTR_BORDER),
+            GetElementItem(ScTableStyleElement::LastHeaderCell, ATTR_BORDER));
         if (const SvxBoxItem* pBoxItem
             = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
         {
@@ -421,7 +436,6 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                 = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT) : nullptr;
             if (pTLine || pRLine || pLLine)
             {
-                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
                 if (!pNewBoxItem)
                     pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
                 if (pTLine)
@@ -430,20 +444,19 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                     pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
                 if (pLLine)
                     pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-
-                return pNewBoxItem;
             }
         }
 
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
+        if (pNewBoxItem)
+            return pNewBoxItem;
     }
 
     if (bHasHeader && pParam->mbFirstColumn && nRow == aRange.aStart.Row()
         && nCol == aRange.aStart.Col())
     {
-        const SvxBoxItem* pPoolItem
-            = GetElementItem(ScTableStyleElement::FirstHeaderCell, ATTR_BORDER);
+        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
+            GetElementItem(ScTableStyleElement::HeaderRow, ATTR_BORDER),
+            GetElementItem(ScTableStyleElement::FirstHeaderCell, ATTR_BORDER));
         if (const SvxBoxItem* pBoxItem
             = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
         {
@@ -453,7 +466,6 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                 = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT) : nullptr;
             if (pTLine || pLLine || pRLine)
             {
-                std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone() : nullptr);
                 if (!pNewBoxItem)
                     pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
                 if (pTLine)
@@ -462,13 +474,11 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
                     pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
                 if (pRLine)
                     pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                return pNewBoxItem;
             }
         }
 
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
+        if (pNewBoxItem)
+            return pNewBoxItem;
     }
 
     if (bHasHeader && nRow == aRange.aStart.Row())

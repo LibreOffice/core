@@ -1142,6 +1142,58 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFirstLastColumn)
     m_pDoc->DeleteTab(0);
 }
 
+// The First and Last Column options claim the corner cells, but they must not take the header or
+// totals row's own border off them.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleCornerCellRowBorder)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData aDBData(u"CornerBorder"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    aStyleParam.mbRowStripes = true;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = true;
+    aStyleParam.mbLastColumn = true;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // Medium2 draws the double line above its totals row, corner cells included
+    for (SCCOL nCol : { SCCOL(0), SCCOL(1), SCCOL(3) })
+    {
+        const SvxBoxItem* pTotalBox = pStyle->GetBoxItem(aDBData, nCol, 10, 9);
+        CPPUNIT_ASSERT(pTotalBox);
+        const editeng::SvxBorderLine* pTotalTop = pTotalBox->GetLine(SvxBoxItemLine::TOP);
+        CPPUNIT_ASSERT(pTotalTop);
+        CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE_THIN, pTotalTop->GetBorderLineStyle());
+    }
+
+    // Light1 puts a line under its header row, where Medium2 has none
+    ScDBData aLightData(u"CornerHeaderBorder"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    aStyleParam.maStyleID = u"TableStyleLight1"_ustr;
+    aLightData.SetTableStyleInfo(aStyleParam);
+
+    const ScTableStyle* pLightStyle
+        = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleLight1"_ustr);
+    CPPUNIT_ASSERT(pLightStyle);
+
+    for (SCCOL nCol : { SCCOL(0), SCCOL(1), SCCOL(3) })
+    {
+        const SvxBoxItem* pHeaderBox = pLightStyle->GetBoxItem(aLightData, nCol, 0, -1);
+        CPPUNIT_ASSERT(pHeaderBox);
+        CPPUNIT_ASSERT(pHeaderBox->GetLine(SvxBoxItemLine::BOTTOM));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test 12: The smallest Tables — one column, and the smallest one with a total row
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleTinyTable)
 {
