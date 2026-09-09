@@ -313,8 +313,8 @@ namespace svt::table
 
     rtl::Reference<comphelper::OAccessible> TableControl::CreateAccessible()
     {
-        css::uno::Reference<css::accessibility::XAccessible> xParent = GetAccessibleParent();
-        return m_pImpl->getAccessible(xParent);
+        rtl::Reference<comphelper::OAccessible> pParent = GetAccessibleParent();
+        return m_pImpl->getAccessible(pParent);
     }
 
     OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
