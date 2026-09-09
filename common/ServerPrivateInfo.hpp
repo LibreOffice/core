@@ -31,6 +31,12 @@ inline constexpr std::string_view OverrideFields[] = {
     "ESignatureClientId",
     "ESignatureSecret",
 };
+
+// The fields that hold a secret. These are never sent to the browser in cleartext and are
+// preserved across a settings save unless the administrator replaces them.
+inline constexpr std::string_view SecretFields[] = {
+    "ESignatureSecret",
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

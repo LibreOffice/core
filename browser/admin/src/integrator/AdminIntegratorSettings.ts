@@ -70,6 +70,9 @@ interface ServerPrivateSettings {
 	ESignatureBaseUrl: string;
 	ESignatureClientId: string;
 	ESignatureSecret: string;
+	// True when the server holds a secret it did not send down. Travels with the
+	// file but is not part of it.
+	ESignatureSecretStored?: boolean;
 }
 
 interface ViewSettings {
@@ -94,13 +97,17 @@ interface ViewSettings {
 	aiImageProviderAPIKeyStored?: boolean;
 }
 
-// Secret view-setting fields the server never sends to the browser in
-// cleartext. Kept in sync with common/ViewSettings.hpp on the server.
-const SECRET_VIEW_SETTING_FIELDS = [
+// Secret fields the server holds but never sends to the browser in cleartext.
+// Each pairs with a "<field>Stored" flag: true on the way down when a value is
+// saved, and true on the way back when the field was left untouched and the
+// saved value stays. Kept in sync with common/ViewSettings.hpp and
+// common/ServerPrivateInfo.hpp on the server.
+const SECRET_SETTING_FIELDS = [
 	'aiProviderAPIKey',
 	'aiImageProviderAPIKey',
 	'zoteroAPIKey',
 	'signatureKey',
+	'ESignatureSecret',
 ];
 
 interface AIProvider {
@@ -643,6 +650,10 @@ class SettingIframe {
 	private _serverPrivateSetting: ServerPrivateSettings =
 		SettingIframe.getDefaultServerPrivateSettings();
 	private _serverPrivateSection: HTMLElement | null = null;
+	// URL of the stored serverprivateinfo.json, remembered when it is fetched so
+	// a save can tell the server where to read back the secret the
+	// administrator chose to keep.
+	private _serverPrivateSettingFileUrl = '';
 	// Set when the user edits a chat AI field in this dialog session. Drives the
 	// View-tab / sidebar payoff so it fires on a real change, not on every save
 	// that happens to have a key already set. Set only by user input handlers,
@@ -2838,8 +2849,13 @@ class SettingIframe {
 		};
 	}
 
-	private static readonly EDITABLE_SERVER_PRIVATE_FIELDS: (keyof ServerPrivateSettings)[] =
-		['ESignatureClientId', 'ESignatureSecret'];
+	// The fields an administrator edits here. The service address lives in the
+	// same file but is not offered for editing, and the stored-secret flag is
+	// not a field of its own.
+	private static readonly EDITABLE_SERVER_PRIVATE_FIELDS = [
+		'ESignatureClientId',
+		'ESignatureSecret',
+	] as const satisfies readonly (keyof ServerPrivateSettings)[];
 
 	private static serverPrivateSettingsFile(
 		settings: ServerPrivateSettings,
@@ -2856,6 +2872,7 @@ class SettingIframe {
 		await this.uploadFile(
 			this.PATH.serverPrivateSettingsUpload(),
 			SettingIframe.serverPrivateSettingsFile(settings),
+			this._serverPrivateSettingFileUrl,
 		);
 	}
 
@@ -4257,6 +4274,10 @@ class SettingIframe {
 
 		if (!isUserConfig && !isCODesktop && data && this.isAdmin()) {
 			let stored: any = null;
+			this._serverPrivateSettingFileUrl =
+				data.serverprivateinfo && data.serverprivateinfo.length > 0
+					? data.serverprivateinfo[0].uri
+					: '';
 			if (data.serverprivateinfo && data.serverprivateinfo.length > 0) {
 				const content = await this.settingsStorage.fetchSettingFile(
 					data.serverprivateinfo[0].uri,
@@ -4293,6 +4314,7 @@ class SettingIframe {
 						ESignatureBaseUrl: stored.ESignatureBaseUrl || '',
 						ESignatureClientId: stored.ESignatureClientId || '',
 						ESignatureSecret: stored.ESignatureSecret || '',
+						ESignatureSecretStored: !!stored.ESignatureSecretStored,
 					},
 					settingsContainer,
 				);
@@ -4504,7 +4526,7 @@ class SettingIframe {
 			'signatureCa',
 		].includes(key);
 
-		const isSecretField = SECRET_VIEW_SETTING_FIELDS.includes(key);
+		const isSecretField = SECRET_SETTING_FIELDS.includes(key);
 		const storedFlag = `${key}Stored`;
 		const hasStoredSecret = isSecretField && !!(data as any)[storedFlag];
 

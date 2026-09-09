@@ -434,6 +434,7 @@ shared_headers = \
                  common/Seccomp.hpp \
                  common/ServerPrivateInfo.hpp \
                  common/Session.hpp \
+                 common/SettingsSecrets.hpp \
                  common/SettingsStorage.hpp \
                  common/SigHandlerTrap.hpp \
                  common/SigUtil.hpp \

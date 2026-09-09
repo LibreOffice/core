@@ -30,8 +30,8 @@
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Protocol.hpp>
+#include <common/SettingsSecrets.hpp>
 #include <common/Util.hpp>
-#include <common/ViewSettings.hpp>
 #include <common/base64.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/NetUtil.hpp>
@@ -2390,8 +2390,7 @@ void FileServerRequestHandler::fetchWopiSettingConfigs(const Poco::Net::HTTPRequ
 namespace
 {
 // Return the setting-file name a settings request refers to, taken from the
-// last path segment of the WOPI file URL (query stripped). Used to single out
-// viewsetting.json, the only settings file that carries user secrets.
+// last path segment of the WOPI file URL (query stripped).
 std::string settingFileName(const std::string& fileUrl)
 {
     try
@@ -2406,18 +2405,19 @@ std::string settingFileName(const std::string& fileUrl)
     }
 }
 
-// Replace each stored secret in a viewsetting.json body with an empty value and
-// add a companion "<field>Stored": true flag, so the browser learns that a
-// secret exists without receiving it. A body that is not JSON, or that holds
-// none of these fields with a value, is returned unchanged.
-std::string redactViewSettingSecrets(const std::string& body)
+// Replace each stored secret in a settings body with an empty value and add a
+// companion "<field>Stored": true flag, so the browser learns that a secret
+// exists without receiving it. A body that is not JSON, or that holds none of
+// these fields with a value, is returned unchanged.
+std::string redactSettingSecrets(const std::string& body,
+                                 std::span<const std::string_view> secretFields)
 {
     Poco::JSON::Object::Ptr json;
     if (!JsonUtil::parseJSON(body, json) || !json)
         return body;
 
     bool changed = false;
-    for (const std::string_view& field : ViewSettings::SecretFields)
+    for (const std::string_view& field : secretFields)
     {
         const std::string name(field);
         if (!json->has(name))
@@ -2427,7 +2427,7 @@ std::string redactViewSettingSecrets(const std::string& body)
         if (value.empty())
             continue;
         json->set(name, std::string());
-        json->set(name + std::string(ViewSettings::StoredFlagSuffix), true);
+        json->set(name + std::string(SettingsSecrets::StoredFlagSuffix), true);
         changed = true;
     }
 
@@ -2437,14 +2437,15 @@ std::string redactViewSettingSecrets(const std::string& body)
 // True when the uploaded body asks to keep at least one stored secret, i.e. it
 // carries a "<field>Stored": true flag. Only then must the server read the
 // currently stored file to restore that secret.
-bool bodyKeepsStoredSecret(const std::string& body)
+bool bodyKeepsStoredSecret(const std::string& body, std::span<const std::string_view> secretFields)
 {
     Poco::JSON::Object::Ptr json;
     if (!JsonUtil::parseJSON(body, json) || !json)
         return false;
-    for (const std::string_view& field : ViewSettings::SecretFields)
+    for (const std::string_view& field : secretFields)
     {
-        const std::string flag = std::string(field) + std::string(ViewSettings::StoredFlagSuffix);
+        const std::string flag =
+            std::string(field) + std::string(SettingsSecrets::StoredFlagSuffix);
         bool keep = false;
         if (json->has(flag) && JsonUtil::findJSONValue(json, flag, keep) && keep)
             return true;
@@ -2452,13 +2453,13 @@ bool bodyKeepsStoredSecret(const std::string& body)
     return false;
 }
 
-// Produce the viewsetting.json body to persist. For each secret flagged
+// Produce the settings body to persist. For each secret flagged
 // "<field>Stored": true the value is taken from the currently stored file; a
 // field without that flag keeps the uploaded value (empty clears it, new text
 // replaces it). The transport-only flags are removed. On a parse problem the
 // uploaded body is returned unchanged.
-std::string mergeKeptViewSettingSecrets(const std::string& uploadedBody,
-                                        const std::string& storedBody)
+std::string mergeKeptSettingSecrets(const std::string& uploadedBody, const std::string& storedBody,
+                                    std::span<const std::string_view> secretFields)
 {
     Poco::JSON::Object::Ptr uploaded;
     if (!JsonUtil::parseJSON(uploadedBody, uploaded) || !uploaded)
@@ -2467,10 +2468,10 @@ std::string mergeKeptViewSettingSecrets(const std::string& uploadedBody,
     Poco::JSON::Object::Ptr stored;
     const bool haveStored = JsonUtil::parseJSON(storedBody, stored) && stored;
 
-    for (const std::string_view& field : ViewSettings::SecretFields)
+    for (const std::string_view& field : secretFields)
     {
         const std::string name(field);
-        const std::string flag = name + std::string(ViewSettings::StoredFlagSuffix);
+        const std::string flag = name + std::string(SettingsSecrets::StoredFlagSuffix);
         bool keep = false;
         if (uploaded->has(flag))
         {
@@ -2548,12 +2549,14 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
     std::weak_ptr<StreamSocket> socketWeak(socket);
     const std::string shortMessage = "Failed to fetch setting file";
 
-    // Only viewsetting.json holds user secrets. For it, strip the secrets from
-    // the body before it reaches the browser.
-    const bool redactSecrets = settingFileName(fileUrl) == "viewsetting.json";
+    // Strip the secrets this settings file holds from the body before it
+    // reaches the browser. The span refers to a list with static storage
+    // duration, so it stays valid after this function returns.
+    const std::span<const std::string_view> secretFields =
+        SettingsSecrets::fieldsFor(settingFileName(fileUrl));
 
     http::Session::FinishedCallback finishedCallback =
-        [uriAnonym, socketWeak, requestPath = getRequestPath(request), redactSecrets,
+        [uriAnonym, socketWeak, requestPath = getRequestPath(request), secretFields,
          shortMessage](const std::shared_ptr<http::Session>& wopiSession)
     {
         std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
@@ -2586,8 +2589,9 @@ void FileServerRequestHandler::fetchSettingFile(const Poco::Net::HTTPRequest& re
         clientResponse.set("Content-Type", "text/plain; charset=utf-8");
         clientResponse.set("Cache-Control", "no-cache");
         clientResponse.set("Content-Disposition", "attachment");
-        clientResponse.setBody(redactSecrets ? redactViewSettingSecrets(httpResponse->getBody())
-                                             : httpResponse->getBody());
+        clientResponse.setBody(secretFields.empty()
+                                   ? httpResponse->getBody()
+                                   : redactSettingSecrets(httpResponse->getBody(), secretFields));
         destSocket->sendAndShutdown(clientResponse);
         LOG_DBG("Successfully fetched setting file from [" << uriAnonym << ']');
     };
@@ -3015,13 +3019,15 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
 
     auto uploadedFileOwnership = partHandler.getFileOwnership();
 
-    if (fileName == "viewsetting.json")
+    const std::span<const std::string_view> secretFields = SettingsSecrets::fieldsFor(fileName);
+    if (!secretFields.empty())
     {
-        // viewsetting.json carries user secrets. Restore any the browser asked
-        // to keep from the stored file, then write the merged file back.
-        handleViewSettingUpload(wopiSettingBaseUrl, fileId, token,
-                                form.get("currentFileUrl", std::string()), uploadedFilePath,
-                                std::move(uploadedFileOwnership), getRequestPath(request), socket);
+        // This settings file carries a secret. Restore any the browser asked to
+        // keep from the stored file, then write the merged file back.
+        handleSettingsUploadWithSecrets(wopiSettingBaseUrl, fileId, token,
+                                        form.get("currentFileUrl", std::string()), uploadedFilePath,
+                                        std::move(uploadedFileOwnership), secretFields,
+                                        getRequestPath(request), socket);
         return;
     }
 
@@ -3075,10 +3081,11 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
     httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
 }
 
-void FileServerRequestHandler::handleViewSettingUpload(
-    const std::string& wopiSettingBaseUrl, const std::string& fileId, const std::string& accessToken,
-    const std::string& currentFileUrl, const std::string& uploadedFilePath,
-    std::shared_ptr<FileUtil::OwnedFile> uploadedFileOwnership, const std::string& requestPath,
+void FileServerRequestHandler::handleSettingsUploadWithSecrets(
+    const std::string& wopiSettingBaseUrl, const std::string& fileId,
+    const std::string& accessToken, const std::string& currentFileUrl,
+    const std::string& uploadedFilePath, std::shared_ptr<FileUtil::OwnedFile> uploadedFileOwnership,
+    std::span<const std::string_view> secretFields, const std::string& requestPath,
     const std::shared_ptr<StreamSocket>& socket)
 {
     const std::string shortMessage = "Failed to upload preset file.";
@@ -3127,8 +3134,7 @@ void FileServerRequestHandler::handleViewSettingUpload(
             std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
             if (!destSocket)
             {
-                LOG_ERR("Invalid socket while uploading viewsetting.json to wopiHost["
-                        << uriAnonym << ']');
+                LOG_ERR("Invalid socket while uploading settings to wopiHost[" << uriAnonym << ']');
                 return;
             }
 
@@ -3136,7 +3142,7 @@ void FileServerRequestHandler::handleViewSettingUpload(
             const http::StatusLine statusLine = httpResponse->statusLine();
             if (statusLine.statusCode() != http::StatusCode::OK)
             {
-                LOG_ERR("Failed to upload viewsetting.json to wopiHost["
+                LOG_ERR("Failed to upload settings to wopiHost["
                         << uriAnonym << "] with status[" << statusLine.reasonPhrase() << ']');
                 sendError(statusLine.statusCode(), requestPath, destSocket, shortMessage,
                           statusLine.reasonPhrase());
@@ -3146,7 +3152,7 @@ void FileServerRequestHandler::handleViewSettingUpload(
             http::Response httpResponseToClient(http::StatusCode::OK);
             httpResponseToClient.setBody("File uploaded successfully to WopiHost.");
             destSocket->sendAndShutdown(httpResponseToClient);
-            LOG_TRC("Successfully uploaded viewsetting.json to wopiHost[" << uriAnonym << ']');
+            LOG_TRC("Successfully uploaded settings to wopiHost[" << uriAnonym << ']');
         };
 
         auto httpSession = StorageConnectionManager::getHttpSession(wopiUri);
@@ -3155,9 +3161,9 @@ void FileServerRequestHandler::handleViewSettingUpload(
     };
 
     // Nothing to keep: strip the transport-only flags and write straight back.
-    if (!bodyKeepsStoredSecret(uploadedBody))
+    if (!bodyKeepsStoredSecret(uploadedBody, secretFields))
     {
-        postBody(mergeKeptViewSettingSecrets(uploadedBody, std::string()));
+        postBody(mergeKeptSettingSecrets(uploadedBody, std::string(), secretFields));
         return;
     }
 
@@ -3200,14 +3206,13 @@ void FileServerRequestHandler::handleViewSettingUpload(
 
     http::Session::FinishedCallback storedCallback =
         [uploadedBody = std::move(uploadedBody), postBody = std::move(postBody), storedUriAnonym,
-         requestPath, shortMessage,
+         requestPath, shortMessage, secretFields,
          socketWeak](const std::shared_ptr<http::Session>& wopiSession)
     {
         std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
         if (!destSocket)
         {
-            LOG_ERR("Invalid socket while reading stored viewsetting.json from ["
-                    << storedUriAnonym << ']');
+            LOG_ERR("Invalid socket reading stored settings from [" << storedUriAnonym << ']');
             return;
         }
 
@@ -3216,7 +3221,7 @@ void FileServerRequestHandler::handleViewSettingUpload(
         {
             // Do not write back: merging a partial file would drop the secret we
             // were asked to keep.
-            LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
+            LOG_ERR("Failed to read stored settings from [" << storedUriAnonym
                     << "]: the transfer did not complete");
             sendError(http::StatusCode::BadGateway, requestPath, destSocket, shortMessage,
                       "The transfer did not complete");
@@ -3226,18 +3231,17 @@ void FileServerRequestHandler::handleViewSettingUpload(
         if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
         {
             // Do not write back: that would drop the secret we were asked to keep.
-            LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
+            LOG_ERR("Failed to read stored settings from [" << storedUriAnonym
                     << "] with status [" << httpResponse->statusLine().reasonPhrase() << ']');
             sendError(httpResponse->statusLine().statusCode(), requestPath, destSocket, shortMessage,
                       "Could not read the stored settings needed to keep the saved key");
             return;
         }
 
-        postBody(mergeKeptViewSettingSecrets(uploadedBody, httpResponse->getBody()));
+        postBody(mergeKeptSettingSecrets(uploadedBody, httpResponse->getBody(), secretFields));
     };
 
-    LOG_DBG("Reading stored viewsetting.json from [" << storedUriAnonym
-            << "] to keep a saved secret");
+    LOG_DBG("Reading stored settings from [" << storedUriAnonym << "] to keep a saved secret");
     auto storedSession = StorageConnectionManager::getHttpSession(storedUri);
     storedSession->setFinishedHandler(std::move(storedCallback));
     if (!storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll()))

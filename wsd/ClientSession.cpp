@@ -33,9 +33,9 @@
 #include <common/Protocol.hpp>
 #include <common/ServerPrivateInfo.hpp>
 #include <common/Session.hpp>
+#include <common/SettingsSecrets.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Util.hpp>
-#include <common/ViewSettings.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
@@ -2100,7 +2100,7 @@ void ClientSession::restoreKeptViewSettingSecrets(Poco::JSON::Object::Ptr& viewS
     // fields here must match ViewSettings::SecretFields.
     auto keep = [&](const std::string& field, const std::string& applied)
     {
-        const std::string flag = field + std::string(ViewSettings::StoredFlagSuffix);
+        const std::string flag = field + std::string(SettingsSecrets::StoredFlagSuffix);
         bool wantKeep = false;
         if (viewSettings->has(flag))
         {
