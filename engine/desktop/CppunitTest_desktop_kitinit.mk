@@ -42,6 +42,11 @@ $(eval $(call gb_CppunitTest_add_libs,desktop_kit_init,\
     -lm \
     -ldl \
 ))
+else ifeq ($(OS),FREEBSD)
+# The dl functions are in libc there, so there is no -ldl to link.
+$(eval $(call gb_CppunitTest_add_libs,desktop_kit_init,\
+    -lm \
+))
 endif
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_kit_init))
