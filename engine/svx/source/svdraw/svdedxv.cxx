@@ -120,6 +120,15 @@ IMPL_LINK_NOARG(SdrObjEditView, ImpModifyHdl, LinkParamNone*, void)
     // reset & restart the timer
     maTextEditUpdateTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
     maTextEditUpdateTimer.Start();
+
+    // A reader that draws the text of the edit from the model wants it as it is typed. The
+    // timer above waits for a pause before it moves the model, which is the cadence the shapes
+    // want and far too slow for the text itself.
+    if (mxWeakTextEditObj.get()->getSdrModelFromSdrObject().IsDrawnFromModel())
+    {
+        if (SfxViewShell* pViewShell = GetSfxViewShell())
+            pViewShell->textEditContentChanged();
+    }
 }
 
 IMPL_LINK_NOARG(SdrObjEditView, TextEditUpdate, Timer*, void)

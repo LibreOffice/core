@@ -637,6 +637,40 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObjec
     CPPUNIT_ASSERT_EQUAL(nObjectCount, aFull.getSize("/objects").value_or(0));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTypingMovesThePartVersionAtOnce)
+{
+    // The model change the shapes follow waits for a pause in the typing, which
+    // is far too slow for the text being typed. A keystroke moves the part's
+    // version, so the entry that carries the edit travels at once and a client
+    // does not drop the delta as one it already holds.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Typed"_ustr);
+
+    // The first pull is what marks the model as drawn from.
+    getVectorPrimitives(u"testTypingBase");
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(page(1)->GetObj(0));
+
+    const sal_Int64 nBefore
+        = getVectorPrimitives(u"testTypingBeforeKey").getInt("/version").value_or(-1);
+
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"X"_ustr);
+
+    const sal_Int64 nAfter
+        = getVectorPrimitives(u"testTypingAfterKey").getInt("/version").value_or(-1);
+
+    // A model change follows a pause in the typing, and by then the text has
+    // already travelled, so it adds nothing.
+    auto aSettled = getVectorPrimitives(u"testTypingSettled", nAfter);
+    CPPUNIT_ASSERT(!aSettled.has("/type"));
+
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_GREATER(nBefore, nAfter);
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectUnderTextEditSaysSo)
 {
     // The object a text edit runs on hides its own text and says the edit is

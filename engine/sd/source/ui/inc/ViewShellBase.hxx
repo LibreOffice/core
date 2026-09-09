@@ -95,6 +95,9 @@ public:
     SAL_RET_MAYBENULL static ViewShellBase* GetViewShellBase (SfxViewFrame const * pFrame);
 
     DrawDocShell* GetDocShell() const { return mpDocShell;}
+
+    /// @see SfxViewShell::textEditContentChanged().
+    virtual void textEditContentChanged() override;
     SdDrawDocument* GetDocument() const { return mpDocument;}
 
     /** Callback function for general slot calls.  At the moment these are

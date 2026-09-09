@@ -221,6 +221,11 @@ public:
     bool recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
                                 const std::vector<sal_uInt64>& rOrder);
 
+    /// A text edit running in a view shows something other than it did. Counts the part's
+    /// version up and tells the views, so the entry carrying the edit travels. No object is
+    /// recorded against, since only that entry changed.
+    void notifyTextEditChanged();
+
     /// True when the part's master page last changed at a version later
     /// than nSince.
     bool isVectorMasterChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nSince) const;

@@ -61,6 +61,7 @@
 
 #include <sal/log.hxx>
 #include <rtl/ref.hxx>
+#include <unomodel.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -924,6 +925,17 @@ OUString ViewShellBase::GetInitialViewShellType() const
     while (false);
 
     return sRequestedView;
+}
+
+void ViewShellBase::textEditContentChanged()
+{
+    if (!mpDocShell)
+        return;
+
+    rtl::Reference<SdXImpressDocument> xModel(
+        dynamic_cast<SdXImpressDocument*>(mpDocShell->GetModel().get()));
+    if (xModel)
+        xModel->notifyTextEditChanged();
 }
 
 const SdViewOptions& ViewShellBase::GetViewOptions() const

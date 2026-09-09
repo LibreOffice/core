@@ -2333,6 +2333,7 @@ constexpr sal_Int64 constPageEntryId = 0;
 /// The id of the entry that carries the text of a running text edit. An object's unique id
 /// counts up from 1 and the page is zero, so a negative id can collide with neither.
 constexpr sal_Int64 constTextEditEntryId = -1;
+constexpr sal_uInt64 constTextEditEntryKey = sal_uInt64(-1);
 
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
@@ -2580,6 +2581,28 @@ void bumpMasterChangeForUsers(
 }
 }
 
+void SdXImpressDocument::notifyTextEditChanged()
+{
+    if (!mpDoc || !mpDocShell)
+        return;
+
+    ::sd::ViewShell* pViewShell = mpDocShell->GetViewShell();
+    const SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
+    if (!pView || !pView->IsTextEdit())
+        return;
+
+    const SdrObject* pEdited = pView->GetTextEditObject();
+    const auto oPart
+        = partAndModeOfPage(pEdited ? static_cast<const SdPage*>(pEdited->getSdrPageFromSdrObject())
+                                    : nullptr);
+    if (!oPart)
+        return;
+
+    // The write that follows looks at the text and counts the version up when it moved, which
+    // is what makes the client take the delta rather than drop it as one it already holds.
+    notifyViewsVectorPartChanged(mpDocShell, oPart->mnPart, oPart->mnMode);
+}
+
 bool SdXImpressDocument::isVectorMasterChangedSince(sal_Int32 nPart, sal_Int32 nMode,
                                                     sal_uInt64 nSince) const
 {
@@ -2777,6 +2800,7 @@ public:
         // what was written last is what decides whether the part's version moves at all, so it
         // happens before the version is reported.
         resolveDirtyObjects(pPage);
+        resolveTextEditEntry(pPage);
 
         // A trigger only says that something may have changed. Once the comparison has had its
         // say there is often nothing left to tell the client, and then the response carries
@@ -3196,8 +3220,9 @@ private:
             return true;
         }
 
-        // The text of a running edit changes with every keystroke.
-        if (editingView(pPage))
+        // The text of a running edit, when a keystroke moved it.
+        if (mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode, constTextEditEntryKey,
+                                                sal_uInt64(mnSinceVersion)))
             return true;
 
         std::vector<SdrObject*> aObjects;
@@ -3224,20 +3249,49 @@ private:
         if (!pView)
             return;
 
-        drawinglayer::primitive2d::Primitive2DContainer aPrimitives(
-            pView->getTextEditPrimitives());
-        if (aPrimitives.empty())
+        // A delta carries the entry only when a keystroke moved the text, so the model change
+        // that follows a pause in the typing adds nothing to it.
+        if (isDelta()
+            && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode, constTextEditEntryKey,
+                                                    sal_uInt64(mnSinceVersion)))
+        {
             return;
+        }
+
+        // An edit whose text is empty still gets its entry, with an empty primitive list. The
+        // order names the entry for as long as the edit runs, and a client that holds the text
+        // from before the last deletion replaces it with nothing.
+        const SdXImpressDocument::VectorObjectContent aContent(textEditContent(*pView));
 
         const SdrObject* pEdited = pView->GetTextEditObject();
-
-        SdXImpressDocument::VectorObjectContent aContent;
-        aContent.maPrimitives = std::move(aPrimitives);
-        aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
-        aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
-
         writeEntry(rWriter, constTextEditEntryId, pEdited ? pEdited->GetUniqueID() : 0,
                    "texteditoverlay", aContent);
+    }
+
+    /// What is written for a running text edit: the text it shows, and where that text sits.
+    SdXImpressDocument::VectorObjectContent textEditContent(SdrObjEditView& rView)
+    {
+        SdXImpressDocument::VectorObjectContent aContent;
+        aContent.maPrimitives = rView.getTextEditPrimitives();
+        aContent.maDrawn = aContent.maPrimitives;
+        aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
+        aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
+        return aContent;
+    }
+
+    /// Looks at the text of a running edit and counts the part's version up when it moved, the
+    /// way a changed object does. An edit that has ended leaves nothing recorded behind it.
+    void resolveTextEditEntry(SdPage* pPage)
+    {
+        SdrObjEditView* pView = editingView(pPage);
+        if (!pView)
+        {
+            mpModel->forgetVectorObject(mnResolvedPage, mnMode, constTextEditEntryKey);
+            return;
+        }
+
+        mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, constTextEditEntryKey,
+                                           textEditContent(*pView));
     }
 
     /// The mapping of the unit rectangle onto an upright box, for an entry that has no
