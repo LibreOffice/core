@@ -2365,7 +2365,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			control.style.gridRow = gridRow;
 		}
 
-		if (data.hexpand) {
+		// The mobile wizard sizes widgets through CSS.
+		if (data.hexpand && this.options.cssClass !== 'mobile-wizard') {
 			control.style.width = '100%';
 		}
 
