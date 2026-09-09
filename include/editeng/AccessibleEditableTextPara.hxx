@@ -334,7 +334,7 @@ private:
     sal_Int64 mnStateSet;
 
     /// The shape we're the accessible for (unguarded)
-    css::uno::Reference< css::accessibility::XAccessible > mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
 private:
     // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)

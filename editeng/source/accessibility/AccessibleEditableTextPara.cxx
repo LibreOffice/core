@@ -104,7 +104,7 @@ AccessibleEditableTextPara::AccessibleEditableTextPara(
       mnIndexInParent( 0 ),
       mpEditSource( nullptr ),
       maEEOffset( 0, 0 ),
-      mxParent(rpParent),
+      mpParent(rpParent),
       mpParaManager( _pParaManager )
 {
 
@@ -255,7 +255,7 @@ void SAL_CALL AccessibleEditableTextPara::dispose()
         xBullet->dispose();
     maImageBullet.clear();
 
-    mxParent = nullptr;
+    mpParent = nullptr;
     mpEditSource = nullptr;
 
     comphelper::OAccessible::dispose();
@@ -567,9 +567,9 @@ uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessible
 
 uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent()
 {
-    SAL_WARN_IF(!mxParent.is(), "editeng", "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
+    SAL_WARN_IF(!mpParent.is(), "editeng", "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 
-    return mxParent;
+    return mpParent;
 }
 
 sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleIndexInParent()
@@ -1196,21 +1196,16 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
             anyChar >>= crChar;
             if (COL_AUTO == crChar )
             {
-                uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
-                if (xComponent.is())
+                if (mpParent->getAccessibleRole() == AccessibleRole::SHAPE
+                    || mpParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
                 {
-                    uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
-                    if (xContext->getAccessibleRole() == AccessibleRole::SHAPE
-                        || xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
-                    {
-                        anyChar <<= COL_BLACK;
-                    }
-                    else
-                    {
-                        Color cr(ColorTransparency, xComponent->getBackground());
-                        crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
-                        anyChar <<= crChar;
-                    }
+                    anyChar <<= COL_BLACK;
+                }
+                else
+                {
+                    Color cr(ColorTransparency, mpParent->getBackground());
+                    crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                    anyChar <<= crChar;
                 }
             }
             continue;
@@ -1228,21 +1223,16 @@ void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >&
             anyCharUnderLine >>= crCharUnderLine;
             if (COL_AUTO == crCharUnderLine )
             {
-                uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
-                if (xComponent.is())
+                if (mpParent->getAccessibleRole() == AccessibleRole::SHAPE
+                    || mpParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
                 {
-                    uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
-                    if (xContext->getAccessibleRole() == AccessibleRole::SHAPE
-                        || xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
-                    {
-                        anyCharUnderLine <<= COL_BLACK;
-                    }
-                    else
-                    {
-                        Color cr(ColorTransparency, xComponent->getBackground());
-                        crCharUnderLine = cr.IsDark() ? COL_WHITE : COL_BLACK;
-                        anyCharUnderLine <<= crCharUnderLine;
-                    }
+                    anyCharUnderLine <<= COL_BLACK;
+                }
+                else
+                {
+                    Color cr(ColorTransparency, mpParent->getBackground());
+                    crCharUnderLine = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                    anyCharUnderLine <<= crCharUnderLine;
                 }
             }
             continue;
