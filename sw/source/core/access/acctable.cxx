@@ -1098,8 +1098,8 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrameOrObj,
     // the map, and we have to call our superclass.
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
-    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( pFrame, false ) );
-    if( !xAcc.is() )
+    rtl::Reference<SwAccessibleContext> pAcc(GetMap()->GetContextImpl(pFrame, false));
+    if (!pAcc.is())
         SwAccessibleContext::DisposeChild( rChildFrameOrObj, bRecursive, bCanSkipInvisible );
 }
 
