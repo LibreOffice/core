@@ -41,13 +41,12 @@ class AccessibleGridControlTableBase :
 {
 public:
     /** Constructor sets specified name and description.
-        @param rxParent  XAccessible interface of the parent object.
+        @param rpParent  accessible parent object.
         @param rTable    The Table control.
         @param eObjType  Type of table control object */
-    AccessibleGridControlTableBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        svt::table::TableControl& rTable,
-        AccessibleTableControlObjType  eObjType);
+    AccessibleGridControlTableBase(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                   svt::table::TableControl& rTable,
+                                   AccessibleTableControlObjType eObjType);
 
 protected:
     virtual ~AccessibleGridControlTableBase() override = default;

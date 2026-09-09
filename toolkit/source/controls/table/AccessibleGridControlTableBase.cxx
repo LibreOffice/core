@@ -34,12 +34,10 @@ using namespace ::vcl;
 
 namespace accessibility {
 
-
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
-        const Reference< XAccessible >& rxParent,
-        svt::table::TableControl& rTable,
-        AccessibleTableControlObjType eObjType ) :
-    AccessibleGridControlTableImplHelper( rxParent, rTable, eObjType )
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
+    AccessibleTableControlObjType eObjType)
+    : AccessibleGridControlTableImplHelper(rpParent, rTable, eObjType)
 {
 }
 
