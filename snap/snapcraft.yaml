@@ -374,6 +374,13 @@ parts:
       - libnss3
       - libnspr4
       - libssl3t64
+      # The openssl CLI, not just the library: Application.cpp shells out
+      # to `openssl req` and to an `openssl x509 | openssl pkey |
+      # openssl dgst` pipeline to mint the ephemeral loopback cert the
+      # embedded HTTPS server serves cool.html over. Without the binary
+      # every launch logs "openssl failed generating embed cert" and the
+      # integrator embed flow has no usable certificate.
+      - openssl
       - zlib1g
       - libzstd1
       - libhyphen0
