@@ -36,9 +36,8 @@ class AccessibleGridControlTable final
                                          css::accessibility::XAccessibleSelection>
 {
 public:
-    AccessibleGridControlTable(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-            svt::table::TableControl& rTable);
+    AccessibleGridControlTable(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                               svt::table::TableControl& rTable);
 
 private:
     virtual ~AccessibleGridControlTable() override = default;

@@ -38,9 +38,9 @@ using namespace ::vcl;
 
 namespace accessibility {
 
-AccessibleGridControlTable::AccessibleGridControlTable(const Reference<XAccessible>& rxParent,
-                                                       svt::table::TableControl& rTable)
-    : ImplInheritanceHelper(rxParent, rTable, AccessibleTableControlObjType::TABLE)
+AccessibleGridControlTable::AccessibleGridControlTable(
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable)
+    : ImplInheritanceHelper(rpParent, rTable, AccessibleTableControlObjType::TABLE)
 {
 }
 
