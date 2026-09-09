@@ -29,11 +29,10 @@ namespace accessibility
     using namespace ::com::sun::star::uno;
     using namespace ::vcl;
 
-AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
-                                  const Reference< XAccessible >& rxParent,
-                                  svt::table::TableControl& rTable,
-                                  AccessibleTableControlObjType  eObjType)
-    : AccessibleGridControlCell(rxParent, rTable,
+    AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(
+        sal_Int32 _nColumnRowId, const rtl::Reference<AccessibleGridControlHeader>& rpParent,
+        svt::table::TableControl& rTable, AccessibleTableControlObjType eObjType)
+    : AccessibleGridControlCell(rpParent, rTable,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
                             eObjType)

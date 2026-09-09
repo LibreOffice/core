@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <controls/table/AccessibleGridControlHeader.hxx>
 #include <controls/table/AccessibleGridControlTableCell.hxx>
 #include <controls/table/tablecontrol.hxx>
 
@@ -28,9 +29,9 @@ namespace accessibility
         sal_Int32   m_nColumnRowId;
     public:
         AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
-                        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                        svt::table::TableControl& _rTable,
-                        AccessibleTableControlObjType  _eObjType);
+                                        const rtl::Reference<AccessibleGridControlHeader>& rpParent,
+                                        svt::table::TableControl& _rTable,
+                                        AccessibleTableControlObjType _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
