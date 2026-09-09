@@ -70,6 +70,7 @@
 #include <compare.hxx>
 #include <callable.hxx>
 #include <cellsuno.hxx>
+#include <comphelper/flagguard.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -10510,8 +10511,8 @@ void ScInterpreter::ScCall( FormulaCallableRef rCallable, sal_uInt8 nArgCount )
     // and the stack is set up with the relevant args
     // we just need to dispatch the OpCode
     FormulaTokenRef pTempToken = new FormulaByteToken(eOpCode, nArgCount);
-    pCur = pTempToken.get();
-    cPar = nArgCount;
+    comphelper::ValueRestorationGuard const curGuard(pCur, pTempToken.get());
+    comphelper::ValueRestorationGuard const parGuard(cPar, nArgCount);
     DispatchOpCode( eOpCode );
 }
 
