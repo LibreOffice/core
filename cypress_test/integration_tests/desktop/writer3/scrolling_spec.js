@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -141,6 +141,24 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		});
 
 		desktopHelper.assertScrollbarPosition('vertical', 200, 900);
+	});
+
+	it('The view stops following the caret once the user scrolls it out of sight', function() {
+		desktopHelper.selectZoomLevel('40');
+
+		// Put the caret on the last page. The view follows its own caret while the
+		// caret is on screen.
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.processToIdle(this.win);
+		cy.then(() => {
+			expect(this.win.app.isFollowingUser()).to.equal(true);
+		});
+
+		desktopHelper.scrollWriterDocumentToTop();
+
+		cy.then(() => {
+			expect(this.win.app.isFollowingOff()).to.equal(true);
+		});
 	});
 
 });

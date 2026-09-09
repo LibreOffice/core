@@ -130,7 +130,6 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 		// Scroll document to the top so cursor is no longer visible, that turns following off
 		desktopHelper.scrollWriterDocumentToTop();
-		desktopHelper.updateFollowingUsers();
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Text').dblclick();
 		desktopHelper.assertVisiblePage(5, 6, 8);
@@ -160,7 +159,6 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 		// Scroll document to the top so the text cursor is no longer visible.
 		desktopHelper.scrollWriterDocumentToTop();
-		desktopHelper.updateFollowingUsers();
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 
 		// Double-click an image on a different page (graphics10 is on page 5).

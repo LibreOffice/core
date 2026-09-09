@@ -996,6 +996,9 @@ class ViewLayoutBase {
 		if (scrolled) {
 			this.updateViewData();
 			app.sectionContainer.requestReDraw();
+
+			// Following our own caret only holds while the caret is on screen.
+			if (userIsScrolling) app.updateFollowingUsers();
 		}
 
 		return scrolled;

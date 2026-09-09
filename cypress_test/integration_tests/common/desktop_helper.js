@@ -583,33 +583,28 @@ function setAccessibilityState(enable) {
 	cy.log('<< setAccessibilityState - end');
 }
 
-// best way to simulate scrolling using mouse wheel I found -> no click performed
+// Scroll through the scroll section, the path a wheel and a scrollbar drag take,
+// so a test scroll gets the same view bookkeeping a real one does.
+function scrollVerticalAsUser(win, offset) {
+	win.app.sectionContainer
+		.getSectionWithName(win.app.CSections.Scroll.name)
+		.scrollVerticalWithOffset(offset);
+}
+
 function scrollWriterDocumentToTop() {
-	// map.panTo was removed with the leaflet scroll path. Scroll the layout up
-	// to the top (large negative view-space delta clamps to 0); the horizontal
+	// A large negative view-space delta clamps to the top; the horizontal
 	// position (page centering) is preserved.
 	cy.getFrameWindow()
 		.then(function(win) {
-			win.app.activeDocument.activeLayout.scroll(0, -100000);
+			scrollVerticalAsUser(win, -100000);
 		});
 	assertScrollbarPosition('vertical', 0, 10);
 }
 
 function scrollViewDown(win) {
 	cy.then(function() {
-		// map.panBy was removed with the leaflet scroll path; scroll the layout
-		// directly (view-space core-pixel delta).
-		win.app.activeDocument.activeLayout.scroll(0, 4000);
-		win.app.updateFollowingUsers();
+		scrollVerticalAsUser(win, 4000);
 	});
-}
-
-function updateFollowingUsers() {
-	cy.getFrameWindow()
-		.its('app')
-		.then(function(app) {
-			app.updateFollowingUsers();
-		});
 }
 
 function assertVisiblePage(min, max, allPages) {
@@ -954,7 +949,6 @@ module.exports.checkAccessibilityEnabledToBe = checkAccessibilityEnabledToBe;
 module.exports.setAccessibilityState = setAccessibilityState;
 module.exports.scrollWriterDocumentToTop = scrollWriterDocumentToTop;
 module.exports.scrollViewDown = scrollViewDown;
-module.exports.updateFollowingUsers = updateFollowingUsers;
 module.exports.assertVisiblePage = assertVisiblePage;
 module.exports.closeNavigatorSidebar = closeNavigatorSidebar;
 module.exports.sidebarToggle = sidebarToggle;

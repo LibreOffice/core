@@ -127,7 +127,6 @@ describe.skip(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search 
 
 		// Scroll document to the top so cursor is no longer visible, that turns following off
 		desktopHelper.scrollWriterDocumentToTop();
-		desktopHelper.updateFollowingUsers();
 
 		cy.getFrameWindow().its('app').then((app) => {
 			expect(app.isFollowingOff()).to.be.true;

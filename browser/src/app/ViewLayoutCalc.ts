@@ -248,6 +248,9 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	public override scroll(pX: number, pY: number): any {
 		if (this.isRTL()) pX = -pX;
 		this.scrollByDocumentDelta(pX, pY);
+
+		// Following our own cursor only holds while the cursor is on screen.
+		app.updateFollowingUsers();
 	}
 
 	// The scroll position is scrollProperties.viewX and viewY, in canvas (core)
