@@ -343,6 +343,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_Type                 == rInfoItem.m_Type              &&
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
+         m_bUseThumbnailSave    == rInfoItem.m_bUseThumbnailSave &&
          comphelper::ContainerUniquePtrEquals(m_aCustomProperties, rInfoItem.m_aCustomProperties) &&
          m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
 }
