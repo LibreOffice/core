@@ -119,6 +119,11 @@
 #include <svx/svditer.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdopage.hxx>
+#include <svtools/colorcfg.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -2326,6 +2331,7 @@ constexpr sal_Int64 constPageEntryId = 0;
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
 constexpr sal_Int32 constVectorModeMasterPages = 1;
+constexpr sal_Int32 constVectorModeNotesPages = 2;
 
 /// The views render the changed part from vector primitives only if
 /// they asked for them, so each view's callback handler decides itself
@@ -2352,6 +2358,34 @@ sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPa
             return nIndex;
     }
     return -1;
+}
+
+/// The part and mode a request names the page by, or nothing for a page vector rendering does
+/// not serve. A slide and its notes page sit next to each other in the document's own list, so
+/// one index names either in its own list. A master page is named by its place in the master
+/// list.
+std::optional<SdXImpressDocument::VectorPartKey> partAndModeOfPage(const SdPage* pPage)
+{
+    if (!pPage || pPage->GetPageNum() == 0)
+        return {};
+
+    if (pPage->GetPageKind() == PageKind::Notes && !pPage->IsMasterPage())
+        return SdXImpressDocument::VectorPartKey{ sal_Int32((pPage->GetPageNum() - 1) / 2),
+                                                  constVectorModeNotesPages };
+
+    if (pPage->GetPageKind() != PageKind::Standard)
+        return {};
+
+    if (!pPage->IsMasterPage())
+        return SdXImpressDocument::VectorPartKey{ sal_Int32((pPage->GetPageNum() - 1) / 2),
+                                                  constVectorModeSlides };
+
+    auto& rDocument = static_cast<SdDrawDocument&>(pPage->getSdrModelFromSdrPage());
+    const sal_Int32 nMasterPart = findMasterPageIndex(rDocument, pPage);
+    if (nMasterPart >= 0)
+        return SdXImpressDocument::VectorPartKey{ nMasterPart, constVectorModeMasterPages };
+
+    return {};
 }
 
 /// Count the part's version up and remember it as the version the object set, or the order it
@@ -2391,6 +2425,28 @@ void forgetSubtree(SdXImpressDocument::VectorPartState& rState, const SdrObject*
             if (const SdrObject* pChild = pChildren->GetObj(i))
                 forgetSubtree(rState, pChild);
         }
+    }
+}
+
+/// Marks every object of the page, and of the master it draws under itself, for a fresh look.
+/// Text and lines in the automatic color resolve against the page background, so a change to
+/// the page changes how they draw with no hint naming them, and the comparison finds them.
+void markPageObjectsDirty(SdXImpressDocument::VectorPartState& rState, const SdrPage& rPage)
+{
+    for (size_t i = 0; i < rPage.GetObjCount(); ++i)
+    {
+        if (const SdrObject* pObject = rPage.GetObj(i))
+            markSubtreeDirty(rState, pObject);
+    }
+
+    if (!rPage.TRG_HasMasterPage())
+        return;
+
+    const SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
+    for (size_t i = 0; i < rMasterPage.GetObjCount(); ++i)
+    {
+        if (const SdrObject* pObject = rMasterPage.GetObj(i))
+            markSubtreeDirty(rState, pObject);
     }
 }
 
@@ -2450,25 +2506,69 @@ void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int
     }
 }
 
-/// A master change shows on every slide that uses the master, so raise
-/// those slides' versions, remember the master change and tell the
-/// views. A master's page number is a position in the master-page
-/// list, so it names no slide.
+/// The notes page of a slide shows the slide in its page object, so a change on the slide is a
+/// change of that object, recorded on the part of the notes page. The write that follows compares
+/// the object and counts the version up only when what it shows really differs.
+void recordSlidePreviewChange(
+    SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
+    std::unordered_map<SdXImpressDocument::VectorPartKey, SdXImpressDocument::VectorPartState,
+                       SdXImpressDocument::VectorPartKey::Hash>& rVectorParts,
+    sal_Int32 nSlide)
+{
+    if (nSlide < 0 || nSlide >= rDocument.GetSdPageCount(PageKind::Notes))
+        return;
+
+    SdPage* pNotesPage = rDocument.GetSdPage(sal_uInt16(nSlide), PageKind::Notes);
+    const SdPage* pSlide = rDocument.GetSdPage(sal_uInt16(nSlide), PageKind::Standard);
+    if (!pNotesPage || !pSlide)
+        return;
+
+    // Every page object on the notes page that shows the slide, whether or not it is the one
+    // the layout placed there.
+    bool bShown = false;
+    for (size_t i = 0; i < pNotesPage->GetObjCount(); ++i)
+    {
+        const auto* pPageObject = dynamic_cast<const SdrPageObj*>(pNotesPage->GetObj(i));
+        if (!pPageObject || pPageObject->GetReferencedPage() != pSlide)
+            continue;
+        rVectorParts[{ nSlide, constVectorModeNotesPages }].maDirtyObjects.insert(
+            pPageObject->GetUniqueID());
+        bShown = true;
+    }
+    if (bShown)
+        notifyViewsVectorPartChanged(pDocShell, nSlide, constVectorModeNotesPages);
+}
+
+/// A master change shows on every page that uses the master, so raise those pages' versions,
+/// remember it and tell the views. A slide master serves the slides and a notes master the
+/// notes pages. A master's page number is a place in the master list, so it names no page.
 void bumpMasterChangeForUsers(
     SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
     std::unordered_map<SdXImpressDocument::VectorPartKey, SdXImpressDocument::VectorPartState,
                        SdXImpressDocument::VectorPartKey::Hash>& rVectorParts,
     const SdPage* pMasterPage)
 {
-    const sal_uInt16 nPageCount = rDocument.GetSdPageCount(PageKind::Standard);
+    const PageKind ePageKind = pMasterPage->GetPageKind();
+    if (ePageKind != PageKind::Standard && ePageKind != PageKind::Notes)
+        return;
+    const sal_Int32 nMode
+        = ePageKind == PageKind::Standard ? constVectorModeSlides : constVectorModeNotesPages;
+
+    const sal_uInt16 nPageCount = rDocument.GetSdPageCount(ePageKind);
     for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
     {
-        const SdPage* pStandardPage = rDocument.GetSdPage(nPage, PageKind::Standard);
-        if (pStandardPage && pStandardPage->TRG_HasMasterPage()
-            && &pStandardPage->TRG_GetMasterPage() == pMasterPage)
+        const SdPage* pUserPage = rDocument.GetSdPage(nPage, ePageKind);
+        if (pUserPage && pUserPage->TRG_HasMasterPage()
+            && &pUserPage->TRG_GetMasterPage() == pMasterPage)
         {
-            recordMasterChange(rVectorParts[{ nPage, constVectorModeSlides }]);
-            notifyViewsVectorPartChanged(pDocShell, nPage, constVectorModeSlides);
+            SdXImpressDocument::VectorPartState& rState = rVectorParts[{ nPage, nMode }];
+            recordMasterChange(rState);
+            // The master's background is what the automatic color of the page's objects
+            // resolves against when the page defines none of its own.
+            markPageObjectsDirty(rState, *pUserPage);
+            notifyViewsVectorPartChanged(pDocShell, nPage, nMode);
+            if (nMode == constVectorModeSlides)
+                recordSlidePreviewChange(rDocument, pDocShell, rVectorParts, nPage);
         }
     }
 }
@@ -2506,47 +2606,44 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     const SdPage* pPage
                         = dynamic_cast<const SdPage*>(pObject->getSdrPageFromSdrObject());
-                    if (pPage && pPage->GetPageKind() == PageKind::Standard)
+                    if (pPage && pPage->IsMasterPage())
                     {
-                        if (pPage->IsMasterPage())
-                        {
-                            // The master shows on every slide that uses it,
-                            // and is a part of its own in master view.
-                            bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+                        // The master shows on every page that uses it, and a
+                        // slide master is a part of its own in master view.
+                        bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
 
-                            const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
-                            if (nMasterPart >= 0)
-                            {
-                                recordObjectChange(
-                                    maVectorParts[{ nMasterPart, constVectorModeMasterPages }],
-                                    pObject, eKind);
-                                notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
-                                                             constVectorModeMasterPages);
-                            }
+                        const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
+                        if (nMasterPart >= 0)
+                        {
+                            recordObjectChange(
+                                maVectorParts[{ nMasterPart, constVectorModeMasterPages }],
+                                pObject, eKind);
+                            notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
+                                                         constVectorModeMasterPages);
                         }
-                        else if (pPage->GetPageNum() > 0)
+                    }
+                    else if (const auto oPart = partAndModeOfPage(pPage))
+                    {
+                        // A page keeps the content its source gave it until an edit, and
+                        // this change is one, so the slide becomes the document's own.
+                        if (oPart->mnMode == constVectorModeSlides)
+                            sd::SlideLink::BreakOnEdit(*mpDoc, oPart->mnPart);
+
+                        recordObjectChange(maVectorParts[*oPart], pObject, eKind);
+                        notifyViewsVectorPartChanged(mpDocShell, oPart->mnPart, oPart->mnMode);
+
+                        // An animated image came, went or moved, so
+                        // re-send the presentation info. A move arrives
+                        // coalesced, and only the slides have such info.
+                        if (oPart->mnMode == constVectorModeSlides)
                         {
-                            const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-
-                            // A page holds the content its source gave it until somebody edits
-                            // it, and this change is such an edit, so the page becomes the
-                            // document's own.
-                            sd::SlideLink::BreakOnEdit(*mpDoc, nPart);
-
-                            recordObjectChange(maVectorParts[{ nPart, constVectorModeSlides }],
-                                               pObject, eKind);
-                            notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
-
-                            // An animated image was added, moved, resized,
-                            // replaced or removed on the slide, so re-send the
-                            // presentation info. A move is coalesced by the
-                            // drawing layer into one change at drop, so this
-                            // fires once per committed edit.
+                            recordSlidePreviewChange(*mpDoc, mpDocShell, maVectorParts,
+                                                     oPart->mnPart);
                             if (const SdrGrafObj* pGraphicObject
                                     = dynamic_cast<const SdrGrafObj*>(pObject))
                             {
                                 if (pGraphicObject->GetGraphic().IsAnimated())
-                                    notifyViewsPresentationInfoChanged(mpDocShell, nPart);
+                                    notifyViewsPresentationInfoChanged(mpDocShell, oPart->mnPart);
                             }
                         }
                     }
@@ -2559,29 +2656,33 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 // travels with the master page content, so it is
                 // remembered as a master change.
                 const SdPage* pPage = dynamic_cast<const SdPage*>(pSdrHint->GetPage());
-                if (pPage && pPage->GetPageKind() == PageKind::Standard)
+                if (pPage && pPage->IsMasterPage())
                 {
-                    if (pPage->IsMasterPage())
-                    {
-                        bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+                    bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
 
-                        // In master view the master is the page itself, so its
-                        // background is part of its own master-page content.
-                        const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
-                        if (nMasterPart >= 0)
-                        {
-                            recordMasterChange(
-                                maVectorParts[{ nMasterPart, constVectorModeMasterPages }]);
-                            notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
-                                                         constVectorModeMasterPages);
-                        }
-                    }
-                    else if (pPage->GetPageNum() > 0)
+                    // In master view the master is the page itself, so its
+                    // background is part of its own master-page content.
+                    const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
+                    if (nMasterPart >= 0)
                     {
-                        const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                        recordMasterChange(maVectorParts[{ nPart, constVectorModeSlides }]);
-                        notifyViewsVectorPartChanged(mpDocShell, nPart, constVectorModeSlides);
+                        SdXImpressDocument::VectorPartState& rState
+                            = maVectorParts[{ nMasterPart, constVectorModeMasterPages }];
+                        recordMasterChange(rState);
+                        markPageObjectsDirty(rState, *pPage);
+                        notifyViewsVectorPartChanged(mpDocShell, nMasterPart,
+                                                     constVectorModeMasterPages);
                     }
+                }
+                else if (const auto oPart = partAndModeOfPage(pPage))
+                {
+                    // The background changed, and with it what the automatic color of the
+                    // objects resolves against.
+                    SdXImpressDocument::VectorPartState& rState = maVectorParts[*oPart];
+                    recordMasterChange(rState);
+                    markPageObjectsDirty(rState, *pPage);
+                    notifyViewsVectorPartChanged(mpDocShell, oPart->mnPart, oPart->mnMode);
+                    if (oPart->mnMode == constVectorModeSlides)
+                        recordSlidePreviewChange(*mpDoc, mpDocShell, maVectorParts, oPart->mnPart);
                 }
             }
 
@@ -2686,7 +2787,8 @@ private:
     SdPage* resolveCurrentPage()
     {
         const bool bMasterPages = mnMode == constVectorModeMasterPages;
-        if (mnMode != constVectorModeSlides && !bMasterPages)
+        const bool bNotesPages = mnMode == constVectorModeNotesPages;
+        if (mnMode != constVectorModeSlides && !bMasterPages && !bNotesPages)
             return nullptr;
 
         sal_uInt16 nCurrentPage = 0;
@@ -2714,7 +2816,8 @@ private:
                 }
                 else if (pActualPage)
                 {
-                    // Slide and notes pages are interleaved; this is the slides.
+                    // Slides and notes pages are interleaved in one list, two per
+                    // slide, so the same arithmetic gives the index in either list.
                     nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
                 }
             }
@@ -2722,6 +2825,8 @@ private:
         mnResolvedPage = nCurrentPage;
         if (bMasterPages)
             return mpDocument->GetMasterSdPage(nCurrentPage, PageKind::Standard);
+        if (bNotesPages)
+            return mpDocument->GetSdPage(nCurrentPage, PageKind::Notes);
         return mpDocument->GetSdPage(nCurrentPage, PageKind::Standard);
     }
 
@@ -2788,39 +2893,33 @@ private:
             rWriter.putSimpleValue(0.0);
         }
         auto aPrimArray = rWriter.startArray("primitives");
+        drawinglayer::primitive2d::Primitive2DContainer aContent;
+        pageContentPrimitives(pPage, aContent);
+        if (!aContent.empty())
+            maProcessor->decomposeAndWrite(aContent);
+    }
 
+    /// What lies behind the objects of a page, in paint order: the background, the page fill
+    /// and the master content, without the master placeholders the page does not show.
+    static void pageContentPrimitives(SdPage* pPage,
+                                      drawinglayer::primitive2d::Primitive2DContainer& rContent)
+    {
         // ViewContactOfSdrPage fixed child order:
         //   0=Background, 1=Shadow, 2=Fill, 3=MasterPage
 
         // PageBackground: emits a BackgroundColorPrimitive2D with the
         // configured DOCCOLOR. Drawn first so the slide fill paints
         // over it.
-        {
-            sdr::contact::ViewContact& rBackgroundVC = pPage->GetViewContact().GetViewContact(0);
-            drawinglayer::primitive2d::Primitive2DContainer aBackgroundPrimitives;
-            rBackgroundVC.getViewIndependentPrimitive2DContainer(aBackgroundPrimitives);
-            if (!aBackgroundPrimitives.empty())
-                maProcessor->decomposeAndWrite(aBackgroundPrimitives);
-        }
+        pPage->GetViewContact().GetViewContact(0).getViewIndependentPrimitive2DContainer(rContent);
 
         // PageFill: always produces a solid fill for the slide background
-        {
-            sdr::contact::ViewContact& rPageFillVC = pPage->GetViewContact().GetViewContact(2);
-            drawinglayer::primitive2d::Primitive2DContainer aFillPrimitives;
-            rPageFillVC.getViewIndependentPrimitive2DContainer(aFillPrimitives);
-            if (!aFillPrimitives.empty())
-                maProcessor->decomposeAndWrite(aFillPrimitives);
-        }
+        pPage->GetViewContact().GetViewContact(2).getViewIndependentPrimitive2DContainer(rContent);
 
         if (!pPage->TRG_HasMasterPage())
             return;
 
         // MasterPageDescriptor: adds a background fill if the master page defines one.
-        sdr::contact::ViewContact& rMasterVC = pPage->GetViewContact().GetViewContact(3);
-        drawinglayer::primitive2d::Primitive2DContainer aBackgroundPrimitives;
-        rMasterVC.getViewIndependentPrimitive2DContainer(aBackgroundPrimitives);
-        if (!aBackgroundPrimitives.empty())
-            maProcessor->decomposeAndWrite(aBackgroundPrimitives);
+        pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(rContent);
 
         // Master page objects: objects on the master page.
         // We need to filter out (header, footer, datetime, slidenumber) placeholders
@@ -2855,11 +2954,52 @@ private:
                 || (eKind == PresObjKind::SlideNumber && !rSettings.mbSlideNumberVisible))
                 continue;
 
-            drawinglayer::primitive2d::Primitive2DContainer aObjPrimitives;
-            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aObjPrimitives);
-            if (!aObjPrimitives.empty())
-                maProcessor->decomposeAndWrite(aObjPrimitives);
+            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(rContent);
         }
+    }
+
+    /// What a page object shows: the page it stands for, drawn as it presents and fitted into
+    /// the object's box. The drawing layer decomposes such an object to a yellow outline that
+    /// stands in for the page, so the content is built from the page here.
+    static drawinglayer::primitive2d::Primitive2DContainer
+    pagePreviewContent(const SdrPageObj& rPageObject)
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aPreview;
+        SdPage* pShown = dynamic_cast<SdPage*>(rPageObject.GetReferencedPage());
+        if (!pShown)
+            return aPreview;
+
+        drawinglayer::primitive2d::Primitive2DContainer aPageContent;
+        pageContentPrimitives(pShown, aPageContent);
+        for (size_t i = 0; i < pShown->GetObjCount(); ++i)
+        {
+            if (SdrObject* pObject = pShown->GetObj(i))
+                pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPageContent);
+        }
+        if (aPageContent.empty())
+            return aPreview;
+
+        const basegfx::B2DRange aBox
+            = vcl::unotools::b2DRectangleFromRectangle(rPageObject.GetCurrentBoundRect());
+        basegfx::B2DHomMatrix aTransform;
+        aTransform.set(0, 0, aBox.getWidth());
+        aTransform.set(1, 1, aBox.getHeight());
+        aTransform.set(0, 2, aBox.getMinX());
+        aTransform.set(1, 2, aBox.getMinY());
+
+        aPreview.push_back(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
+            GetXDrawPageForSdrPage(pShown), aTransform, double(pShown->GetWidth()),
+            double(pShown->GetHeight()), std::move(aPageContent)));
+
+        // The office frames a page object in the color it draws the boundaries of a document
+        // in, so the preview reads as a page.
+        const Color aFrameColor(
+            svtools::ColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor);
+        basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
+        aOutline.transform(aTransform);
+        aPreview.push_back(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+            std::move(aOutline), aFrameColor.getBColor()));
+        return aPreview;
     }
 
     /// Every object the list paints, in paint order: each object followed by the objects
@@ -2901,7 +3041,13 @@ private:
         const SdrObjList* pChildren = rObject.GetSubList();
         if (!pChildren || pChildren->GetObjCount() == 0)
         {
-            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(aContent.maPrimitives);
+            // A page object shows the page it stands for. One that stands for no page keeps
+            // the outline the drawing layer gives it.
+            if (const auto* pPageObject = dynamic_cast<const SdrPageObj*>(&rObject))
+                aContent.maPrimitives = pagePreviewContent(*pPageObject);
+            if (aContent.maPrimitives.empty())
+                rObject.GetViewContact().getViewIndependentPrimitive2DContainer(
+                    aContent.maPrimitives);
 
             for (const auto& rPrimitive : aContent.maPrimitives)
                 rPrimitive->get2DDecomposition(aContent.maDrawn, maViewInformation);

@@ -163,6 +163,21 @@ protected:
         return std::nullopt;
     }
 
+    /// True when a node of the type with the given color is anywhere under rNode.
+    static bool hasNodeWithColor(const tools::JsonPath& rNode, const OString& rType,
+                                 const OString& rColor)
+    {
+        if (rNode.getString("type").value_or(OString()) == rType
+            && rNode.getString("color").value_or(OString()) == rColor)
+            return true;
+        for (const auto& rChild : rNode.tree())
+        {
+            if (hasNodeWithColor(rNode.sub(rChild.second), rType, rColor))
+                return true;
+        }
+        return false;
+    }
+
     /// True when the objects array of the given response carries the id.
     static bool carriesObject(const tools::JsonPath& rJson, sal_uInt64 nObjectId)
     {
@@ -503,6 +518,57 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditRaisesBothVersions)
         getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesEditRaisesTheNotesVersion)
+{
+    // An edit on a notes page raises the notes part and leaves the slide's
+    // part alone.
+    createBlankDoc();
+    const sal_Int64 nNotesBefore
+        = getVectorPrimitives(u"testNotesVersion", -1, 2).getInt("/version").value_or(-1);
+    const sal_Int64 nSlideBefore
+        = getVectorPrimitives(u"testNotesVersionSlide").getInt("/version").value_or(-1);
+
+    SdrPage* pNotesPage = page(2);
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        pNotesPage->getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    pNotesPage->NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    CPPUNIT_ASSERT_GREATER(
+        nNotesBefore,
+        getVectorPrimitives(u"testNotesVersion", -1, 2).getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(
+        nSlideBefore,
+        getVectorPrimitives(u"testNotesVersionSlide").getInt("/version").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesMasterEditRaisesTheNotesVersion)
+{
+    // The notes master shows on every notes page that uses it, so an edit on
+    // it raises the notes part and leaves the slide's part alone.
+    createBlankDoc();
+    SdrPage* pNotesPage = page(2);
+    CPPUNIT_ASSERT(pNotesPage->TRG_HasMasterPage());
+
+    const sal_Int64 nNotesBefore
+        = getVectorPrimitives(u"testNotesMasterVersion", -1, 2).getInt("/version").value_or(-1);
+    const sal_Int64 nSlideBefore
+        = getVectorPrimitives(u"testNotesMasterVersionSlide").getInt("/version").value_or(-1);
+
+    SdrPage& rNotesMaster = pNotesPage->TRG_GetMasterPage();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rNotesMaster.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rNotesMaster.NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    CPPUNIT_ASSERT_GREATER(
+        nNotesBefore,
+        getVectorPrimitives(u"testNotesMasterVersion", -1, 2).getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(
+        nSlideBefore,
+        getVectorPrimitives(u"testNotesMasterVersionSlide").getInt("/version").value_or(-1));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObject)
 {
     // A delta in master view behaves as it does for a slide: the order lists
@@ -539,6 +605,46 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditViewOnlyContentTravels)
     CPPUNIT_ASSERT_MESSAGE("no edit-view-only content in the payload", oWrapper.has_value());
     CPPUNIT_ASSERT_MESSAGE("the edit-view-only content arrived empty",
                            oWrapper->getSize("children").value_or(0) > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPageShowsTheSlide)
+{
+    // The page object on a notes page shows the slide, so its entry carries the
+    // slide's content rather than the outline the drawing layer stands in with,
+    // and a change on the slide reaches the notes page as a delta carrying it.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    SdPage* pNotesPage = static_cast<SdPage*>(page(2));
+    SdrObject* pPreview = pNotesPage->GetPresObj(PresObjKind::Page);
+    CPPUNIT_ASSERT(pPreview);
+
+    auto aNotes = getVectorPrimitives(u"testNotesPreview", -1, 2);
+    const sal_Int64 nVersion = aNotes.getInt("/version").value_or(-1);
+    const auto oEntry = findEntryOfObject(aNotes, pPreview->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the preview does not show the slide's rectangle",
+                           hasNodeWithColor(*oEntry, "polyPolygonColor"_ostr, "#4472c4"_ostr));
+
+    moveObject(page(1)->GetObj(0), Size(500, 0));
+
+    auto aDelta = getVectorPrimitives(u"testNotesPreviewDelta", nVersion, 2);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_MESSAGE("the notes delta does not carry the preview",
+                           findEntryOfObject(aDelta, pPreview->GetUniqueID()).has_value());
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewIsFramed)
+{
+    // The office draws a gray frame around a page object, and the preview carries one too.
+    createBlankDoc();
+    SdPage* pNotesPage = static_cast<SdPage*>(page(2));
+    const SdrObject* pPreview = pNotesPage->GetPresObj(PresObjKind::Page);
+    CPPUNIT_ASSERT(pPreview);
+
+    auto aNotes = getVectorPrimitives(u"testNotesPreviewFrame", -1, 2);
+    const auto oEntry = findEntryOfObject(aNotes, pPreview->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT(findNodeOfType(*oEntry, "polygonHairline"_ostr).has_value());
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)

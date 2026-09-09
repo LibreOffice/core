@@ -13,6 +13,7 @@
 #include <tools/json_writer.hxx>
 
 #include <cmath>
+#include <optional>
 
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
@@ -22,6 +23,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -1328,6 +1330,18 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                                                       + OString::number(sal_Int32(nLocalId))));
             }
 
+            // A page preview shows another page, and a field inside it reads against that page
+            // rather than the one being drawn, so its content is decomposed with the shown page
+            // as the visualized one, the way the drawing processors do it.
+            std::optional<geometry::ViewInformation2D> oOuterViewInformation;
+            if (nId == PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D)
+            {
+                const auto& rPreview
+                    = static_cast<const primitive2d::PagePreviewPrimitive2D&>(rBasePrimitive);
+                oOuterViewInformation = maViewInformation2D;
+                maViewInformation2D.setVisualizedPage(rPreview.getXDrawPage());
+            }
+
             Primitive2DContainer aContainer;
             rBasePrimitive.get2DDecomposition(aContainer, maViewInformation2D);
             if (!aContainer.empty())
@@ -1335,6 +1349,9 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 auto aChildArray = mrWriter.startArray("children");
                 decomposeAndWrite(aContainer);
             }
+
+            if (oOuterViewInformation)
+                maViewInformation2D = *oOuterViewInformation;
         }
         break;
     }
