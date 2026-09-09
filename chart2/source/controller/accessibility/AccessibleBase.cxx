@@ -410,8 +410,6 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 
 
 Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i ) const
 {
-    rtl::Reference<AccessibleBase> xResult;
-
     MutexGuard aGuard( m_aMutex);
     if( ! m_bMayHaveChildren ||
         i < 0 ||
@@ -425,10 +423,8 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i
                                                  static_cast< const ::cppu::OWeakObject * >( this )));
         throw aEx;
     }
-    else
-        xResult = m_aChildList[i];
 
-    return xResult;
+    return m_aChildList[i];
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
