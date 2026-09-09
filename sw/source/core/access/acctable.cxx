@@ -919,17 +919,14 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
 uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
-    uno::Reference< XAccessible > xRet;
-
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
 
-    const SwFrame* pCellFrame = GetTableData().GetCell(nRow, nColumn);
-    if( pCellFrame )
-        xRet = GetMap()->GetContext( pCellFrame );
+    if (const SwFrame* pCellFrame = GetTableData().GetCell(nRow, nColumn))
+        return GetMap()->GetContextImpl(pCellFrame);
 
-    return xRet;
+    return {};
 }
 
 uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCaption()
