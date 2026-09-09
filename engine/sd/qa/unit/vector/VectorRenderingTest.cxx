@@ -53,6 +53,7 @@
 #include <cmath>
 #include <fstream>
 #include <optional>
+#include <set>
 #include <string_view>
 
 using namespace css;
@@ -176,6 +177,33 @@ protected:
                 return true;
         }
         return false;
+    }
+
+    /// True when every entry that names a parent names one the same response
+    /// reports, so a client can always resolve a member to its group.
+    static bool everyParentResolves(const tools::JsonPath& rJson)
+    {
+        const size_t nCount = rJson.getSize("/objects").value_or(0);
+        std::set<sal_Int64> aReported;
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            aReported.insert(rJson.getInt(rtl::Concat2View("/objects/"
+                                                           + OString::number(sal_Int32(nIndex))
+                                                           + "/id"))
+                                 .value_or(-1));
+        }
+
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            const sal_Int64 nParent
+                = rJson.getInt(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nIndex))
+                                                + "/parent"))
+                      .value_or(0);
+            if (nParent != 0 && !aReported.contains(nParent))
+                return false;
+        }
+
+        return true;
     }
 
     /// True when the objects array of the given response carries the id.
@@ -645,6 +673,41 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewIsFramed)
     const auto oEntry = findEntryOfObject(aNotes, pPreview->GetUniqueID());
     CPPUNIT_ASSERT(oEntry.has_value());
     CPPUNIT_ASSERT(findNodeOfType(*oEntry, "polygonHairline"_ostr).has_value());
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryParentNamesAReportedObject)
+{
+    // A member names the group it sits in, and a client resolves that name
+    // against the same response, so every name has to be in it.
+    createBlankDoc();
+    SdrObject* pMember = addGroupedRectangle(
+        tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
+    CPPUNIT_ASSERT(pMember);
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+
+    CPPUNIT_ASSERT(everyParentResolves(getVectorPrimitives(u"testParentsResolve")));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPageIsServedInItsOwnMode)
+{
+    // The notes pages are the third page list, so a view that shows them asks
+    // in mode 2 and is served the notes page at that index rather than the
+    // slide.
+    createBlankDoc();
+
+    auto aNotes = getVectorPrimitives(u"testNotesPage", -1, 2);
+    assertJsonPath(aNotes, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(2), aNotes.getInt("/mode").value_or(-1));
+
+    // The page comes first here as it does in the other modes, and the notes
+    // page keeps the placeholders a blank slide has none of.
+    assertJsonPath(aNotes, "/objects/0/kind", "page");
+    CPPUNIT_ASSERT(aNotes.getSize("/objects").value_or(0) > 1);
+
+    // The slide at the same index is blank apart from its page entry, so the
+    // two modes really are different pages.
+    auto aSlide = getVectorPrimitives(u"testNotesPageSlide");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aSlide.getSize("/objects").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
