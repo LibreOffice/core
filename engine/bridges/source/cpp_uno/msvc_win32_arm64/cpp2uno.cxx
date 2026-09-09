@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 namespace
 {
 void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
-          uno::TypeDescription const& description, typelib_TypeDescriptionReference* returnType,
+          cpo::uno::TypeDescription const& description, typelib_TypeDescriptionReference* returnType,
           sal_Int32 count, typelib_MethodParameter* parameters, sal_uInt64* gpr, sal_uInt64* fpr,
           sal_uInt64* stack, void* indirectRet)
 {
@@ -228,7 +228,7 @@ extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_
     assert(functionIndex < pInterfaceTD->nMapFunctionIndexToMemberIndex);
     sal_Int32 nMemberPos = pInterfaceTD->pMapFunctionIndexToMemberIndex[functionIndex];
     assert(nMemberPos < pInterfaceTD->nAllMembers);
-    uno::TypeDescription aMemberDescr(pInterfaceTD->ppAllMembers[nMemberPos]);
+    cpo::uno::TypeDescription aMemberDescr(pInterfaceTD->ppAllMembers[nMemberPos]);
 
     switch (aMemberDescr.get()->eTypeClass)
     {
