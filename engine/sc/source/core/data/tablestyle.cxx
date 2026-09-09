@@ -58,22 +58,24 @@ bool lcl_hasFontAttrSet(const ScPatternAttr* pPattern)
     return false;
 }
 
-// A corner element overrides only the edges it sets, so the header or totals row underneath it
-// keeps the rest of its border.
-std::unique_ptr<SvxBoxItem> lcl_cloneCornerBorder(const SvxBoxItem* pRowItem,
-                                                  const SvxBoxItem* pCornerItem)
+// Which of the two stripe elements the cell falls in, and whether it sits on the band's first
+// or last row (column) - an element's border applies on the edges of its own region only.
+struct ScTableStyleStripe
 {
-    std::unique_ptr<SvxBoxItem> pNewBoxItem;
-    if (pCornerItem)
-    {
-        pNewBoxItem.reset(pCornerItem->Clone());
-        if (pRowItem)
-            pNewBoxItem->FillUnsetLines(*pRowItem);
-    }
-    else if (pRowItem)
-        pNewBoxItem.reset(pRowItem->Clone());
+    bool bFirst;
+    bool bBandStart;
+    bool bBandEnd;
+};
 
-    return pNewBoxItem;
+ScTableStyleStripe lcl_stripeAt(sal_Int32 nIndex, sal_Int32 nFirstSize, sal_Int32 nSecondSize,
+                                bool bLastInTable)
+{
+    const sal_Int32 nPos = nIndex % (nFirstSize + nSecondSize);
+    const bool bFirst = nPos < nFirstSize;
+    const sal_Int32 nInBand = bFirst ? nPos : nPos - nFirstSize;
+    const sal_Int32 nBandSize = bFirst ? nFirstSize : nSecondSize;
+
+    return { bFirst, nInBand == 0, nInBand + 1 == nBandSize || bLastInTable };
 }
 
 // The elements that contribute a font to one cell, highest precedence first, plus a key
@@ -302,28 +304,26 @@ sal_uInt32 ScTableStyle::GetBoxCacheKey(const ScDBData& rDBData, SCCOL nCol, SCR
     ScRange aRange;
     rDBData.GetArea(aRange);
 
-    // Parity only counts where the banding is actually consulted, so cells that never reach
-    // it share an entry instead of splitting one per stripe.
+    // The stripe only counts where the banding is actually consulted, so cells that never reach
+    // it share an entry instead of splitting one per stripe. Where it is, the band edges go in
+    // too: two rows of one band take different borders from the same stripe element.
     const bool bBanded = nRowIndex >= 0;
-    bool bFirstRowStripe = false;
+    ScTableStyleStripe aRowStripe = {};
     if (pParam->mbRowStripes && bBanded)
-    {
-        sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
-        bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
-    }
+        aRowStripe = lcl_stripeAt(nRowIndex, mnFirstRowStripeSize, mnSecondRowStripeSize,
+                                  nRow == aRange.aEnd.Row() - SCROW(rDBData.HasTotals()));
 
-    bool bFirstColStripe = false;
+    ScTableStyleStripe aColStripe = {};
     if (pParam->mbColumnStripes && bBanded)
-    {
-        SCCOL nRelativeCol = nCol - aRange.aStart.Col();
-        sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
-        bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-    }
+        aColStripe = lcl_stripeAt(nCol - aRange.aStart.Col(), mnFirstColStripeSize,
+                                  mnSecondColStripeSize, nCol == aRange.aEnd.Col());
 
     const bool aKeyBits[] = { nCol == aRange.aStart.Col(),
                               nCol == aRange.aEnd.Col(),
                               nRow == aRange.aStart.Row(),
                               nRow == aRange.aEnd.Row(),
+                              nRow == aRange.aStart.Row() + SCROW(rDBData.HasHeader()),
+                              nRow == aRange.aEnd.Row() - SCROW(rDBData.HasTotals()),
                               rDBData.HasHeader(),
                               rDBData.HasTotals(),
                               pParam->mbFirstColumn,
@@ -331,8 +331,12 @@ sal_uInt32 ScTableStyle::GetBoxCacheKey(const ScDBData& rDBData, SCCOL nCol, SCR
                               pParam->mbRowStripes,
                               pParam->mbColumnStripes,
                               bBanded,
-                              bFirstRowStripe,
-                              bFirstColStripe };
+                              aRowStripe.bFirst,
+                              aRowStripe.bBandStart,
+                              aRowStripe.bBandEnd,
+                              aColStripe.bFirst,
+                              aColStripe.bBandStart,
+                              aColStripe.bBandEnd };
 
     sal_uInt32 nKey = 0;
     for (size_t i = 0; i < SAL_N_ELEMENTS(aKeyBits); ++i)
@@ -351,6 +355,53 @@ const SvxBoxItem* ScTableStyle::GetBoxItem(const ScDBData& rDBData, SCCOL nCol, 
     return aItr->second.get();
 }
 
+namespace
+{
+// One element the cell falls in, with where the cell sits in that element's region: its border
+// paints on the sides the cell shares with the region, its inner lines on the boundaries within.
+struct ScTableStyleBorderElement
+{
+    ScTableStyleElement eElement;
+    bool bTop;
+    bool bBottom;
+    bool bLeft;
+    bool bRight;
+};
+
+// The elements that contribute a border to one cell, highest precedence first.
+struct ScTableStyleBorderElements
+{
+    ScTableStyleBorderElement aElements[nTableStyleElementCount] = {};
+    size_t nCount = 0;
+
+    void Add(ScTableStyleElement eElement, bool bTop, bool bBottom, bool bLeft, bool bRight)
+    {
+        aElements[nCount++] = { eElement, bTop, bBottom, bLeft, bRight };
+    }
+};
+
+// Fill in one edge unless a higher element has claimed it already. An element only defines the
+// edges it names, so an edge it leaves open falls through to the element below it.
+void lcl_addBorderEdge(std::unique_ptr<SvxBoxItem>& rpBoxItem, SvxBoxItemLine eLine,
+                       bool bOuterEdge, const SvxBoxItem* pElementBox,
+                       const ::editeng::SvxBorderLine* pInnerLine)
+{
+    if (rpBoxItem && rpBoxItem->GetLine(eLine))
+        return;
+
+    const ::editeng::SvxBorderLine* pLine = pInnerLine;
+    if (bOuterEdge)
+        pLine = pElementBox ? pElementBox->GetLine(eLine) : nullptr;
+
+    if (!pLine)
+        return;
+
+    if (!rpBoxItem)
+        rpBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
+    rpBoxItem->SetLine(pLine, eLine);
+}
+}
+
 // Anything this reads about the cell's position or the table's options has to go into
 // GetBoxCacheKey too, or GetBoxItem hands a cached border to a cell that should not share it.
 std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, SCCOL nCol,
@@ -360,493 +411,94 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::BuildBoxItem(const ScDBData& rDBData, 
     ScRange aRange;
     rDBData.GetArea(aRange);
 
-    bool bHasHeader = rDBData.HasHeader();
-    bool bHasTotal = rDBData.HasTotals();
-    if (bHasTotal && pParam->mbLastColumn && nRow == aRange.aEnd.Row() && nCol == aRange.aEnd.Col())
-    {
-        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
-            GetElementItem(ScTableStyleElement::TotalRow, ATTR_BORDER),
-            GetElementItem(ScTableStyleElement::LastTotalCell, ATTR_BORDER));
-        if (const SvxBoxItem* pBoxItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
-        {
-            const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-            const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-            const ::editeng::SvxBorderLine* pLLine
-                = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT) : nullptr;
-            if (pBLine || pRLine || pLLine)
-            {
-                if (!pNewBoxItem)
-                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                if (pBLine)
-                    pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                if (pRLine)
-                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-                if (pLLine)
-                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-            }
-        }
+    const SCCOL nFirstCol = aRange.aStart.Col();
+    const SCCOL nLastCol = aRange.aEnd.Col();
+    const SCROW nFirstRow = aRange.aStart.Row();
+    const SCROW nLastRow = aRange.aEnd.Row();
+    const bool bFirstCol = nCol == nFirstCol;
+    const bool bLastCol = nCol == nLastCol;
+    const bool bHeaderRow = rDBData.HasHeader() && nRow == nFirstRow;
+    const bool bTotalRow = rDBData.HasTotals() && nRow == nLastRow;
+    // Banding covers the data rows only, so a stripe's region starts below the header row and
+    // ends above the totals row.
+    const SCROW nFirstDataRow = nFirstRow + SCROW(rDBData.HasHeader());
+    const SCROW nLastDataRow = nLastRow - SCROW(rDBData.HasTotals());
 
-        if (pNewBoxItem)
-            return pNewBoxItem;
-    }
+    // Collect the elements the cell falls in, highest precedence first, the order GetFontItemSet
+    // uses.
+    ScTableStyleBorderElements aElements;
+    if (bTotalRow && pParam->mbLastColumn && bLastCol)
+        aElements.Add(ScTableStyleElement::LastTotalCell, true, true, true, true);
 
-    if (bHasTotal && pParam->mbFirstColumn && nRow == aRange.aEnd.Row()
-        && nCol == aRange.aStart.Col())
-    {
-        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
-            GetElementItem(ScTableStyleElement::TotalRow, ATTR_BORDER),
-            GetElementItem(ScTableStyleElement::FirstTotalCell, ATTR_BORDER));
-        if (const SvxBoxItem* pBoxItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
-        {
-            const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-            const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-            const ::editeng::SvxBorderLine* pRLine
-                = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT) : nullptr;
-            if (pBLine || pLLine || pRLine)
-            {
-                if (!pNewBoxItem)
-                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                if (pBLine)
-                    pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                if (pLLine)
-                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-                if (pRLine)
-                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-            }
-        }
+    if (bTotalRow && pParam->mbFirstColumn && bFirstCol)
+        aElements.Add(ScTableStyleElement::FirstTotalCell, true, true, true, true);
 
-        if (pNewBoxItem)
-            return pNewBoxItem;
-    }
+    if (bHeaderRow && pParam->mbLastColumn && bLastCol)
+        aElements.Add(ScTableStyleElement::LastHeaderCell, true, true, true, true);
 
-    if (bHasHeader && pParam->mbLastColumn && nRow == aRange.aStart.Row()
-        && nCol == aRange.aEnd.Col())
-    {
-        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
-            GetElementItem(ScTableStyleElement::HeaderRow, ATTR_BORDER),
-            GetElementItem(ScTableStyleElement::LastHeaderCell, ATTR_BORDER));
-        if (const SvxBoxItem* pBoxItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
-        {
-            const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-            const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-            const ::editeng::SvxBorderLine* pLLine
-                = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT) : nullptr;
-            if (pTLine || pRLine || pLLine)
-            {
-                if (!pNewBoxItem)
-                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                if (pTLine)
-                    pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-                if (pRLine)
-                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-                if (pLLine)
-                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-            }
-        }
+    if (bHeaderRow && pParam->mbFirstColumn && bFirstCol)
+        aElements.Add(ScTableStyleElement::FirstHeaderCell, true, true, true, true);
 
-        if (pNewBoxItem)
-            return pNewBoxItem;
-    }
+    if (bTotalRow)
+        aElements.Add(ScTableStyleElement::TotalRow, true, true, bFirstCol, bLastCol);
 
-    if (bHasHeader && pParam->mbFirstColumn && nRow == aRange.aStart.Row()
-        && nCol == aRange.aStart.Col())
-    {
-        std::unique_ptr<SvxBoxItem> pNewBoxItem = lcl_cloneCornerBorder(
-            GetElementItem(ScTableStyleElement::HeaderRow, ATTR_BORDER),
-            GetElementItem(ScTableStyleElement::FirstHeaderCell, ATTR_BORDER));
-        if (const SvxBoxItem* pBoxItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER))
-        {
-            const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-            const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-            const ::editeng::SvxBorderLine* pRLine
-                = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT) : nullptr;
-            if (pTLine || pLLine || pRLine)
-            {
-                if (!pNewBoxItem)
-                    pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                if (pTLine)
-                    pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-                if (pLLine)
-                    pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-                if (pRLine)
-                    pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-            }
-        }
+    if (bHeaderRow)
+        aElements.Add(ScTableStyleElement::HeaderRow, true, true, bFirstCol, bLastCol);
 
-        if (pNewBoxItem)
-            return pNewBoxItem;
-    }
+    if (pParam->mbFirstColumn && bFirstCol)
+        aElements.Add(ScTableStyleElement::FirstColumn, nRow == nFirstRow, nRow == nLastRow, true,
+                      true);
 
-    if (bHasHeader && nRow == aRange.aStart.Row())
-    {
-        const SvxBoxItem* pPoolItem = GetElementItem(ScTableStyleElement::HeaderRow, ATTR_BORDER);
-        const SvxBoxItem* pBoxItem = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER);
-        const SvxBoxInfoItem* pBoxInfoItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER_INNER);
-        if (pBoxItem || pBoxInfoItem)
-        {
-            if (pBoxItem && nCol == aRange.aStart.Col())
-            {
-                const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-                const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                const ::editeng::SvxBorderLine* pRLine
-                    = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
-                                                : nullptr;
-                if (pTLine || pLLine || pRLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pTLine)
-                        pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-                    if (pLLine)
-                        pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-                    if (pRLine)
-                        pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
+    if (pParam->mbLastColumn && bLastCol)
+        aElements.Add(ScTableStyleElement::LastColumn, nRow == nFirstRow, nRow == nLastRow, true,
+                      true);
 
-                    return pNewBoxItem;
-                }
-            }
-            else if (pBoxItem && nCol == aRange.aEnd.Col())
-            {
-                const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-                const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-                if (pTLine || pRLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pTLine)
-                        pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-                    if (pRLine)
-                        pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                    return pNewBoxItem;
-                }
-            }
-            else
-            {
-                const ::editeng::SvxBorderLine* pTLine = nullptr;
-                if (pBoxItem)
-                    pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-
-                const ::editeng::SvxBorderLine* pVLine = nullptr;
-                if (pBoxInfoItem)
-                    pVLine = pBoxInfoItem->GetVert();
-
-                if (pTLine || pVLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pTLine)
-                        pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-                    if (pVLine)
-                    {
-                        pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::LEFT);
-                        pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::RIGHT);
-                    }
-
-                    return pNewBoxItem;
-                }
-            }
-        }
-
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
-    }
-
-    if (bHasTotal && nRow == aRange.aEnd.Row())
-    {
-        const SvxBoxItem* pPoolItem = GetElementItem(ScTableStyleElement::TotalRow, ATTR_BORDER);
-        const SvxBoxItem* pBoxItem = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER);
-        const SvxBoxInfoItem* pBoxInfoItem
-            = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER_INNER);
-        if (pBoxItem || pBoxInfoItem)
-        {
-            if (pBoxItem && nCol == aRange.aStart.Col())
-            {
-                const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-                const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                const ::editeng::SvxBorderLine* pRLine
-                    = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
-                                                : nullptr;
-                if (pBLine || pLLine || pRLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pBLine)
-                        pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                    if (pLLine)
-                        pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-                    if (pRLine)
-                        pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                    return pNewBoxItem;
-                }
-            }
-            else if (pBoxItem && nCol == aRange.aEnd.Col())
-            {
-                const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-                const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-                if (pBLine || pRLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pBLine)
-                        pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                    if (pRLine)
-                        pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                    return pNewBoxItem;
-                }
-            }
-            else
-            {
-                const ::editeng::SvxBorderLine* pBLine = nullptr;
-                if (pBoxItem)
-                    pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-
-                const ::editeng::SvxBorderLine* pVLine = nullptr;
-                if (pBoxInfoItem)
-                    pVLine = pBoxInfoItem->GetVert();
-
-                if (pBLine || pVLine)
-                {
-                    std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                      : nullptr);
-                    if (!pNewBoxItem)
-                        pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                    if (pBLine)
-                        pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                    if (pVLine)
-                    {
-                        pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::LEFT);
-                        pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::RIGHT);
-                    }
-
-                    return pNewBoxItem;
-                }
-            }
-        }
-
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
-    }
-
-    if (pParam->mbFirstColumn && nCol == aRange.aStart.Col())
-    {
-        const SvxBoxItem* pPoolItem = GetElementItem(ScTableStyleElement::FirstColumn, ATTR_BORDER);
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
-    }
-
-    if (pParam->mbLastColumn && nCol == aRange.aEnd.Col())
-    {
-        const SvxBoxItem* pPoolItem = GetElementItem(ScTableStyleElement::LastColumn, ATTR_BORDER);
-        if (pPoolItem)
-            return std::make_unique<SvxBoxItem>(*pPoolItem);
-    }
-
-    if (!bHasTotal || aRange.aEnd.Row() != nRow)
+    if (!bTotalRow)
     {
         if (pParam->mbRowStripes && nRowIndex >= 0)
         {
-            sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
-            bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
-
-            const SvxBoxItem* pPoolItem = nullptr;
-            if (bFirstRowStripe)
-                pPoolItem = GetElementItem(ScTableStyleElement::FirstRowStripe, ATTR_BORDER);
-            else if (!bFirstRowStripe)
-                pPoolItem = GetElementItem(ScTableStyleElement::SecondRowStripe, ATTR_BORDER);
-
-            if (pPoolItem)
-            {
-                const SvxBoxItem* pBoxItem
-                    = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER);
-                const SvxBoxInfoItem* pBoxInfoItem
-                    = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER_INNER);
-                if (pBoxItem || pBoxInfoItem)
-                {
-                    if (pBoxItem && nCol == aRange.aStart.Col())
-                    {
-                        const ::editeng::SvxBorderLine* pLLine
-                            = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                        const ::editeng::SvxBorderLine* pBLine = nullptr;
-                        if (aRange.aEnd.Row() == nRow)
-                            pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-                        const ::editeng::SvxBorderLine* pRLine
-                            = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
-                                                        : nullptr;
-                        if (pLLine || pBLine || pRLine)
-                        {
-                            std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                              : nullptr);
-                            if (!pNewBoxItem)
-                                pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                            if (pBLine)
-                                pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                            if (pLLine)
-                                pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-                            if (pRLine)
-                                pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                            return pNewBoxItem;
-                        }
-                    }
-                    else if (pBoxItem && nCol == aRange.aEnd.Col())
-                    {
-                        const ::editeng::SvxBorderLine* pRLine
-                            = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-                        const ::editeng::SvxBorderLine* pBLine = nullptr;
-                        if (aRange.aEnd.Row() == nRow)
-                            pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-                        if (pRLine || pBLine)
-                        {
-                            std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                              : nullptr);
-                            if (!pNewBoxItem)
-                                pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                            if (pBLine)
-                                pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                            if (pRLine)
-                                pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-
-                            return pNewBoxItem;
-                        }
-                    }
-                    else
-                    {
-                        const ::editeng::SvxBorderLine* pBLine = nullptr;
-                        if (pBoxItem && aRange.aEnd.Row() == nRow)
-                            pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-
-                        const ::editeng::SvxBorderLine* pVLine = nullptr;
-                        if (pBoxInfoItem)
-                            pVLine = pBoxInfoItem->GetVert();
-
-                        if (pBLine || pVLine)
-                        {
-                            std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
-                                                                              : nullptr);
-                            if (!pNewBoxItem)
-                                pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-                            if (pBLine)
-                                pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-                            if (pVLine)
-                            {
-                                pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::LEFT);
-                                pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::RIGHT);
-                            }
-
-                            return pNewBoxItem;
-                        }
-                    }
-                }
-            }
-
-            if (pPoolItem)
-                return std::make_unique<SvxBoxItem>(*pPoolItem);
+            const ScTableStyleStripe aStripe = lcl_stripeAt(
+                nRowIndex, mnFirstRowStripeSize, mnSecondRowStripeSize, nRow == nLastDataRow);
+            aElements.Add(aStripe.bFirst ? ScTableStyleElement::FirstRowStripe
+                                         : ScTableStyleElement::SecondRowStripe,
+                          aStripe.bBandStart, aStripe.bBandEnd, bFirstCol, bLastCol);
         }
 
         if (pParam->mbColumnStripes && nRowIndex >= 0)
         {
-            SCCOL nRelativeCol = nCol - aRange.aStart.Col();
-            sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
-            bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-            if (!bFirstColStripe)
-            {
-                const SvxBoxItem* pPoolItem
-                    = GetElementItem(ScTableStyleElement::SecondColumnStripe, ATTR_BORDER);
-                if (pPoolItem)
-                    return std::make_unique<SvxBoxItem>(*pPoolItem);
-            }
-
-            if (bFirstColStripe)
-            {
-                const SvxBoxItem* pPoolItem
-                    = GetElementItem(ScTableStyleElement::FirstColumnStripe, ATTR_BORDER);
-                if (pPoolItem)
-                    return std::make_unique<SvxBoxItem>(*pPoolItem);
-            }
+            const ScTableStyleStripe aStripe
+                = lcl_stripeAt(nCol - nFirstCol, mnFirstColStripeSize, mnSecondColStripeSize,
+                               bLastCol);
+            aElements.Add(aStripe.bFirst ? ScTableStyleElement::FirstColumnStripe
+                                         : ScTableStyleElement::SecondColumnStripe,
+                          nRow == nFirstDataRow, nRow == nLastDataRow, aStripe.bBandStart,
+                          aStripe.bBandEnd);
         }
     }
 
-    const SvxBoxItem* pBoxItem = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER);
-    const SvxBoxInfoItem* pBoxInfoItem
-        = GetElementItem(ScTableStyleElement::WholeTable, ATTR_BORDER_INNER);
+    aElements.Add(ScTableStyleElement::WholeTable, nRow == nFirstRow, nRow == nLastRow, bFirstCol,
+                  bLastCol);
 
-    if (pBoxItem || pBoxInfoItem)
+    std::unique_ptr<SvxBoxItem> pNewBoxItem;
+    for (size_t i = 0; i < aElements.nCount; ++i)
     {
-        std::unique_ptr<SvxBoxItem> pNewBoxItem = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-        // Start/End col borders
-        if (pBoxItem && nCol == aRange.aStart.Col())
-        {
-            const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-            if (pLLine)
-            {
-                pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
-            }
-        }
-        if (pBoxItem && nCol == aRange.aEnd.Col())
-        {
-            const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-            if (pRLine)
-            {
-                pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
-            }
-        }
-        // Start/End row borders
-        if (pBoxItem && nRow == aRange.aStart.Row())
-        {
-            const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
-            if (pTLine)
-            {
-                pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
-            }
-        }
-        if (pBoxItem && nRow == aRange.aEnd.Row())
-        {
-            const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-            if (pBLine)
-            {
-                pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
-            }
-        }
-        // Inner borders
-        if (pBoxInfoItem)
-        {
-            const ::editeng::SvxBorderLine* pHLine = pBoxInfoItem->GetHori();
-            if (pHLine)
-            {
-                pNewBoxItem->SetLine(pHLine, SvxBoxItemLine::TOP);
-                pNewBoxItem->SetLine(pHLine, SvxBoxItemLine::BOTTOM);
-            }
+        const ScTableStyleBorderElement& rElement = aElements.aElements[i];
+        const SvxBoxItem* pElementBox = GetElementItem(rElement.eElement, ATTR_BORDER);
+        const SvxBoxInfoItem* pElementInner
+            = GetElementItem(rElement.eElement, ATTR_BORDER_INNER);
+        if (!pElementBox && !pElementInner)
+            continue;
 
-            const ::editeng::SvxBorderLine* pVLine = pBoxInfoItem->GetVert();
-            if (pVLine)
-            {
-                pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::LEFT);
-                pNewBoxItem->SetLine(pVLine, SvxBoxItemLine::RIGHT);
-            }
-        }
-
-        return pNewBoxItem;
+        const ::editeng::SvxBorderLine* pHori = pElementInner ? pElementInner->GetHori() : nullptr;
+        const ::editeng::SvxBorderLine* pVert = pElementInner ? pElementInner->GetVert() : nullptr;
+        lcl_addBorderEdge(pNewBoxItem, SvxBoxItemLine::TOP, rElement.bTop, pElementBox, pHori);
+        lcl_addBorderEdge(pNewBoxItem, SvxBoxItemLine::BOTTOM, rElement.bBottom, pElementBox,
+                          pHori);
+        lcl_addBorderEdge(pNewBoxItem, SvxBoxItemLine::LEFT, rElement.bLeft, pElementBox, pVert);
+        lcl_addBorderEdge(pNewBoxItem, SvxBoxItemLine::RIGHT, rElement.bRight, pElementBox, pVert);
     }
 
-    return nullptr;
+    return pNewBoxItem;
 }
 
 namespace

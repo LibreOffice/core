@@ -402,6 +402,129 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumnInnerVert
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleColumnBorderInRowElements)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData aDBData(u"ColumnBorder"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleDark1"_ustr;
+    aStyleParam.mbRowStripes = false;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = true;
+    aStyleParam.mbLastColumn = true;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleDark1"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // Header row, data row, totals row
+    for (SCROW nRow : { SCROW(0), SCROW(5), SCROW(10) })
+    {
+        const SvxBoxItem* pFirstColBox = pStyle->GetBoxItem(aDBData, 0, nRow, nRow - 1);
+        CPPUNIT_ASSERT(pFirstColBox);
+        const editeng::SvxBorderLine* pRightLine = pFirstColBox->GetLine(SvxBoxItemLine::RIGHT);
+        CPPUNIT_ASSERT(pRightLine);
+        CPPUNIT_ASSERT_EQUAL(tools::Long(SvxBorderLineWidth::Medium), pRightLine->GetWidth());
+
+        const SvxBoxItem* pLastColBox = pStyle->GetBoxItem(aDBData, 3, nRow, nRow - 1);
+        CPPUNIT_ASSERT(pLastColBox);
+        CPPUNIT_ASSERT(pLastColBox->GetLine(SvxBoxItemLine::LEFT));
+    }
+
+    // The row element keeps its own edge underneath the column's
+    CPPUNIT_ASSERT(pStyle->GetBoxItem(aDBData, 0, 0, -1)->GetLine(SvxBoxItemLine::BOTTOM));
+    CPPUNIT_ASSERT(pStyle->GetBoxItem(aDBData, 0, 10, 9)->GetLine(SvxBoxItemLine::TOP));
+
+    // Dark1's WholeTable draws no border, so no other edge appears
+    const SvxBoxItem* pDataBox = pStyle->GetBoxItem(aDBData, 0, 5, 4);
+    CPPUNIT_ASSERT(!pDataBox->GetLine(SvxBoxItemLine::TOP));
+    CPPUNIT_ASSERT(!pDataBox->GetLine(SvxBoxItemLine::LEFT));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleStripeBordersMerge)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData aDBData(u"StripeBorder"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleLight9"_ustr;
+    aStyleParam.mbRowStripes = true;
+    aStyleParam.mbColumnStripes = true;
+    aStyleParam.mbFirstColumn = false;
+    aStyleParam.mbLastColumn = false;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleLight9"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // Light9's WholeTable has an outer box and no inner line, so an interior cell gets its
+    // horizontal from the row stripe and its vertical from the column stripe
+    const SvxBoxItem* pDataBox = pStyle->GetBoxItem(aDBData, 1, 5, 4);
+    CPPUNIT_ASSERT(pDataBox);
+    CPPUNIT_ASSERT(pDataBox->GetLine(SvxBoxItemLine::TOP));
+    CPPUNIT_ASSERT(pDataBox->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(!pDataBox->GetLine(SvxBoxItemLine::RIGHT));
+
+    // Banding stops at the totals row, which keeps only its own double line
+    const SvxBoxItem* pTotalBox = pStyle->GetBoxItem(aDBData, 1, 10, 9);
+    CPPUNIT_ASSERT(pTotalBox);
+    const editeng::SvxBorderLine* pTotalTop = pTotalBox->GetLine(SvxBoxItemLine::TOP);
+    CPPUNIT_ASSERT(pTotalTop);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE_THIN, pTotalTop->GetBorderLineStyle());
+    CPPUNIT_ASSERT(!pTotalBox->GetLine(SvxBoxItemLine::LEFT));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleInnerLinesInRowElements)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData* pDBData = createTestDBData(m_pDoc, u"TableStyleMedium9"_ustr);
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium9"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // The vertical runs through all three bands
+    for (SCROW nRow : { SCROW(0), SCROW(5), SCROW(10) })
+    {
+        const SvxBoxItem* pBoxItem = pStyle->GetBoxItem(*pDBData, 1, nRow, nRow - 1);
+        CPPUNIT_ASSERT(pBoxItem);
+        CPPUNIT_ASSERT(pBoxItem->GetLine(SvxBoxItemLine::LEFT));
+        CPPUNIT_ASSERT(pBoxItem->GetLine(SvxBoxItemLine::RIGHT));
+    }
+
+    // The header row's own thick line wins the edge the inner horizontal shares with it, and
+    // no inner line leaks onto the table's outer edges
+    const SvxBoxItem* pHeaderBox = pStyle->GetBoxItem(*pDBData, 1, 0, -1);
+    const editeng::SvxBorderLine* pHeaderBottom = pHeaderBox->GetLine(SvxBoxItemLine::BOTTOM);
+    CPPUNIT_ASSERT(pHeaderBottom);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(SvxBorderLineWidth::Thick), pHeaderBottom->GetWidth());
+    CPPUNIT_ASSERT(!pHeaderBox->GetLine(SvxBoxItemLine::TOP));
+    CPPUNIT_ASSERT(!pStyle->GetBoxItem(*pDBData, 0, 5, 4)->GetLine(SvxBoxItemLine::LEFT));
+    CPPUNIT_ASSERT(!pStyle->GetBoxItem(*pDBData, 1, 10, 9)->GetLine(SvxBoxItemLine::BOTTOM));
+
+    m_pDoc->DeleteTab(0);
+}
+
+
 // Test 4: Verify font properties (bold, color)
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFonts)
 {
