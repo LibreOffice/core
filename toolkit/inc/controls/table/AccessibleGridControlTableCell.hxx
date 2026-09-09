@@ -27,6 +27,8 @@
 
 namespace accessibility
 {
+class AccessibleGridControlTable;
+
 class AccessibleGridControlCell : public AccessibleGridControlBase
 {
 private:
@@ -71,9 +73,9 @@ private:
     virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
 public:
-    AccessibleGridControlTableCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        svt::table::TableControl& _rTable, sal_Int32 _nRowId, sal_uInt16 _nColId);
+    AccessibleGridControlTableCell(const rtl::Reference<AccessibleGridControlTable>& rpParent,
+                                   svt::table::TableControl& _rTable, sal_Int32 _nRowId,
+                                   sal_uInt16 _nColId);
 
     /** @return  The index of this object among the parent's children. */
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
