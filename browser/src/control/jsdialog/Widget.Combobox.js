@@ -602,7 +602,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			if (cache && cache.images[container._selectedValuePos]) {
 				preview.src = cache.images[container._selectedValuePos];
 			} else {
-				preview.removeAttribute('src');
+				// the element keeps the previous preview until the new render arrives
 				var pendingKey = data.id + ':' + container._selectedValuePos;
 				if (!app.pendingOnDemandRenderRequests.has(pendingKey)) {
 					app.pendingOnDemandRenderRequests.add(pendingKey);
