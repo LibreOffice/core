@@ -130,6 +130,7 @@ class VectorManager extends RenderManagerBase {
 		options?: cool.VectorRenderOptions,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._renderer.setEditViewContentVisible(options?.editView === true);
 		for (const id of data.order) {
 			const obj = data.objects.get(id);
 			if (!obj) continue;

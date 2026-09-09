@@ -27,6 +27,10 @@ namespace cool {
 		private _slideHeight = 0;
 		private _scratch = new VectorScratchCanvases();
 		private _gradients = new VectorGradientPrimitiveRenderer(this._scratch);
+		// Whether the content an editing view alone shows is drawn. Every
+		// entry point sets it from what the render is for, so it never
+		// carries over from an earlier render.
+		private _editViewContentVisible = false;
 
 		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
@@ -38,6 +42,13 @@ namespace cool {
 		setSlideBounds(width: number, height: number): void {
 			this._slideWidth = width;
 			this._slideHeight = height;
+		}
+
+		/// Show or hide the content only an editing view shows: the prompt
+		/// of an empty placeholder and the stand-in graphic of an empty
+		/// picture. A thumbnail and a slideshow leave it out.
+		setEditViewContentVisible(visible: boolean): void {
+			this._editViewContentVisible = visible;
 		}
 
 		renderPrimitive(
@@ -161,11 +172,15 @@ namespace cool {
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
 				case HiddenGeometryPrimitive.type:
-				case ExclusiveEditViewPrimitive.type:
 					// Non-painting subtree. Return so the recursion
 					// at the end of renderPrimitive does not descend
 					// into the children.
 					return;
+				case ExclusiveEditViewPrimitive.type:
+					// Wraps what only an editing view shows, so the
+					// recursion below descends into it only there.
+					if (!this._editViewContentVisible) return;
+					break;
 			}
 
 			if (primitive.children)

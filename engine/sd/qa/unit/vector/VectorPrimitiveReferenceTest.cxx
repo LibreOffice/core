@@ -56,6 +56,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 #include <basegfx/color/bcolormodifier.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -95,6 +96,11 @@ protected:
         {
             drawinglayer::Primitive2dJsonProcessor aProcessor(aWriter);
             aProcessor.setBitmapCache(aBitmapCache);
+            // The writer serves an editing view, so a fixture has to say the same or the
+            // content kept for such a view alone would be missing from it.
+            drawinglayer::geometry::ViewInformation2D aViewInformation;
+            aViewInformation.setEditViewActive(true);
+            aProcessor.setViewInformation2D(aViewInformation);
             auto aArray = aWriter.startArray("primitives");
             aProcessor.decomposeAndWrite(rPrimitives);
         }
@@ -352,9 +358,9 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testHiddenGeometry)
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testExclusiveEditView)
 {
-    // ExclusiveEditViewPrimitive2D wraps content visible only in
-    // edit mode. Same shape as hiddenGeometry - real children but
-    // those get dropped on the wire.
+    // ExclusiveEditViewPrimitive2D wraps the content an editing view alone
+    // shows. The payload serves such a view, so the children travel with it
+    // and a reader that is not an editing view leaves them undrawn.
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
     aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
@@ -371,6 +377,8 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testExclusiveEditView)
     auto aJson = writeReference(u"testExclusiveEditView", aPrimitives);
 
     assertJsonPath(aJson, "/primitives/0/type", "exclusiveEditView");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testObjectInfoPrimitive)

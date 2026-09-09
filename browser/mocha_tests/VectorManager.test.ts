@@ -359,6 +359,33 @@ describe('VectorManager', function () {
 		nodeassert.ok(recorder.findCall('stroke'), 'the frame is stroked');
 	});
 
+	// A placeholder that holds no content yet carries its prompt text inside
+	// a wrapper only an editing view unfolds, so a thumbnail and a slideshow
+	// leave the prompt out and the editing view shows it.
+	it('draws the prompt of an empty placeholder in the edit view only', function () {
+		const manager = new VectorManager();
+		const prompt = {
+			type: 'exclusiveEditView',
+			children: [{ type: 'polygonHairline', path: 'M0 0 L1 1' }],
+		};
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			objects: [
+				{ id: 0, kind: 'page', width: 1000, height: 800, primitives: [] },
+				{ id: 11, primitives: [prompt] },
+			],
+		});
+		const data: any = manager.requestPart(0);
+
+		let recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data);
+		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 0);
+
+		recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data, { editView: true });
+		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
+	});
+
 	// A text portion names its font face by id. The manager asks the
 	// engine for that font so it can be loaded and used for an exact match.
 	it('requests the font a text portion names', function () {

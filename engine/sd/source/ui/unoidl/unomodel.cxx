@@ -2750,6 +2750,12 @@ private:
         // page that is the page background, the master page's when the page defines none.
         aViewInfo.setAutoColor(pPage->GetPageBackgroundColor());
 
+        // Some content is kept for an editing view alone: the prompt of an empty placeholder
+        // and the stand-in graphic of an empty picture. The drawing layer empties the wrapper
+        // holding it unless the output says it is such a view, and the payload serves one, so
+        // the content travels.
+        aViewInfo.setEditViewActive(true);
+
         maViewInformation = aViewInfo;
         maProcessor->setViewInformation2D(aViewInfo);
     }

@@ -148,6 +148,21 @@ protected:
         pObject->BroadcastObjectChange();
     }
 
+    /// The first node under rNode whose type is sType, anywhere in the tree.
+    static std::optional<tools::JsonPath> findNodeOfType(const tools::JsonPath& rNode,
+                                                         const OString& rType)
+    {
+        if (rNode.getString("type").value_or(OString()) == rType)
+            return rNode;
+        for (const auto& rChild : rNode.tree())
+        {
+            auto oFound = findNodeOfType(rNode.sub(rChild.second), rType);
+            if (oFound)
+                return oFound;
+        }
+        return std::nullopt;
+    }
+
     /// True when the objects array of the given response carries the id.
     static bool carriesObject(const tools::JsonPath& rJson, sal_uInt64 nObjectId)
     {
@@ -509,6 +524,21 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObjec
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     CPPUNIT_ASSERT(carriesObject(aDelta, pRect->GetUniqueID()));
     CPPUNIT_ASSERT_EQUAL(nObjectCount, aFull.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditViewOnlyContentTravels)
+{
+    // The prompt of an empty placeholder sits inside a wrapper the drawing
+    // layer empties unless the output says it is an editing view. The payload
+    // serves one, so the wrapper arrives full and a thumbnail leaves it shut.
+    createSdImpressDoc();
+
+    auto aJson = getVectorPrimitives(u"testEditViewOnlyContent");
+
+    const auto oWrapper = findNodeOfType(aJson, "exclusiveEditView"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("no edit-view-only content in the payload", oWrapper.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the edit-view-only content arrived empty",
+                           oWrapper->getSize("children").value_or(0) > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
