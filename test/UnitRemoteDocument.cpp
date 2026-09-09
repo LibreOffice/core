@@ -29,6 +29,7 @@
 
 #include <Poco/Net/HTTPRequest.h>
 
+#include <mutex>
 #include <set>
 #include <string>
 #include <thread>
@@ -537,6 +538,8 @@ class UnitRelatedDocumentDelete : public WopiTestServer
     /// Whether the list the views are sent has named the remote document.
     bool _listed = false;
 
+    /// Guards the start of the POST and the DELETE against the threads they run on.
+    std::mutex _mutex;
     std::thread _postThread;
     std::thread _deleteThread;
 
@@ -578,6 +581,8 @@ class UnitRelatedDocumentDelete : public WopiTestServer
     /// Registers the document once the view has a token and the document is up.
     void maybeStartPost()
     {
+        std::lock_guard<std::mutex> lock(_mutex);
+
         if (_phase != Phase::WaitToken || _oneTimeToken.empty() || !_documentLoaded ||
             _postThread.joinable())
             return;
@@ -590,12 +595,17 @@ class UnitRelatedDocumentDelete : public WopiTestServer
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
                                  postRelatedDocument(oneTimeToken));
                 TRANSITION_STATE(_phase, Phase::WaitFreshToken);
+                // The fresh token and the list may already have arrived while the POST
+                // was in flight, so nothing else would start the drop.
+                maybeStartDelete();
             });
     }
 
     /// Drops the document again, once the accepted POST has rotated the token.
     void maybeStartDelete()
     {
+        std::lock_guard<std::mutex> lock(_mutex);
+
         if (_phase != Phase::WaitFreshToken || !_listed || _oneTimeToken == _usedToken ||
             _deleteThread.joinable())
             return;
