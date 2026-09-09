@@ -78,14 +78,14 @@ public:
   DragSource& operator=(const DragSource&) = delete;
 
   // XInitialization
-  virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+  virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
   // XDragSource
-  virtual bool SAL_CALL isDragImageSupported(  ) override;
+  virtual bool isDragImageSupported(  ) override;
 
-  virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction) override;
+  virtual sal_Int32 getDefaultCursor(sal_Int8 dragAction) override;
 
-  virtual void SAL_CALL startDrag( const css::datatransfer::dnd::DragGestureEvent& trigger,
+  virtual void startDrag( const css::datatransfer::dnd::DragGestureEvent& trigger,
                                    sal_Int8 sourceActions,
                                    sal_Int32 cursor,
                                    sal_Int32 image,
@@ -93,9 +93,9 @@ public:
                                    const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener ) override;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() override;
-  virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-  virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+  virtual OUString getImplementationName() override;
+  virtual bool supportsService(const OUString& ServiceName) override;
+  virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
   void saveMouseEvent(NSEvent* theEvent);
   unsigned int getSupportedDragOperations(bool isLocal) const;

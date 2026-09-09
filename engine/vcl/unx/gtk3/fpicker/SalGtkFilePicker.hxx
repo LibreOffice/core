@@ -55,78 +55,78 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XFilePickerNotifier
 
-        virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
-        virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+        virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+        virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
 
         // XExecutableDialog functions
 
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+        virtual void setTitle( const OUString& aTitle ) override;
 
-        virtual sal_Int16 SAL_CALL execute() override;
+        virtual sal_Int16 execute() override;
 
         // XFilePicker functions
 
-        virtual void SAL_CALL setMultiSelectionMode( bool bMode ) override;
+        virtual void setMultiSelectionMode( bool bMode ) override;
 
-        virtual void SAL_CALL setDefaultName( const OUString& aName ) override;
+        virtual void setDefaultName( const OUString& aName ) override;
 
-        virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory ) override;
+        virtual void setDisplayDirectory( const OUString& aDirectory ) override;
 
-        virtual OUString SAL_CALL getDisplayDirectory(  ) override;
+        virtual OUString getDisplayDirectory(  ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
+        virtual cpo::uno::Sequence< OUString > getFiles(  ) override;
 
         // XFilePicker2 functions
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
+        virtual cpo::uno::Sequence< OUString > getSelectedFiles() override;
 
         // XFilterManager functions
 
-        virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter ) override;
+        virtual void appendFilter( const OUString& aTitle, const OUString& aFilter ) override;
 
-        virtual void SAL_CALL setCurrentFilter( const OUString& aTitle ) override;
+        virtual void setCurrentFilter( const OUString& aTitle ) override;
 
-        virtual OUString SAL_CALL getCurrentFilter(  ) override;
+        virtual OUString getCurrentFilter(  ) override;
 
         // XFilterGroupManager functions
 
-        virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const cpo::uno::Sequence< css::beans::StringPair >& aFilters ) override;
+        virtual void appendFilterGroup( const OUString& sGroupTitle, const cpo::uno::Sequence< css::beans::StringPair >& aFilters ) override;
 
         // XFilePickerControlAccess functions
 
-        virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& aValue ) override;
+        virtual void setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& aValue ) override;
 
-        virtual cpo::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
+        virtual cpo::uno::Any getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) override;
 
-        virtual void SAL_CALL enableControl( sal_Int16 nControlId, bool bEnable ) override;
+        virtual void enableControl( sal_Int16 nControlId, bool bEnable ) override;
 
-        virtual void SAL_CALL setLabel( sal_Int16 nControlId, const OUString& aLabel ) override;
+        virtual void setLabel( sal_Int16 nControlId, const OUString& aLabel ) override;
 
-        virtual OUString SAL_CALL getLabel( sal_Int16 nControlId ) override;
+        virtual OUString getLabel( sal_Int16 nControlId ) override;
 
         // XFilePreview
 
-        virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) override;
+        virtual cpo::uno::Sequence< sal_Int16 > getSupportedImageFormats(  ) override;
 
-        virtual sal_Int32 SAL_CALL getTargetColorDepth(  ) override;
+        virtual sal_Int32 getTargetColorDepth(  ) override;
 
-        virtual sal_Int32 SAL_CALL getAvailableWidth(  ) override;
+        virtual sal_Int32 getAvailableWidth(  ) override;
 
-        virtual sal_Int32 SAL_CALL getAvailableHeight(  ) override;
+        virtual sal_Int32 getAvailableHeight(  ) override;
 
-        virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const cpo::uno::Any& aImage ) override;
+        virtual void setImage( sal_Int16 aImageFormat, const cpo::uno::Any& aImage ) override;
 
-        virtual bool SAL_CALL setShowState( bool bShowState ) override;
+        virtual bool setShowState( bool bShowState ) override;
 
-        virtual bool SAL_CALL getShowState(  ) override;
+        virtual bool getShowState(  ) override;
 
         // XInitialization
 
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XCancellable
 
-        virtual void SAL_CALL cancel( ) override;
+        virtual void cancel( ) override;
 
         // FilePicker Event functions
 

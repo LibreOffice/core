@@ -38,13 +38,13 @@ public:
   DragSourceContext(const DragSourceContext&) = delete;
   DragSourceContext& operator=(const DragSourceContext&) = delete;
 
-  virtual sal_Int32 SAL_CALL getCurrentCursor(  ) override;
+  virtual sal_Int32 getCurrentCursor(  ) override;
 
-  virtual void SAL_CALL setCursor( sal_Int32 cursorId ) override;
+  virtual void setCursor( sal_Int32 cursorId ) override;
 
-  virtual void SAL_CALL setImage( sal_Int32 imageId ) override;
+  virtual void setImage( sal_Int32 imageId ) override;
 
-  virtual void SAL_CALL transferablesFlavorsChanged(  ) override;
+  virtual void transferablesFlavorsChanged(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

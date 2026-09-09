@@ -319,7 +319,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< cpo::uno::XComponentCo
 
 // XFilePickerNotifier
 
-void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
+void SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
 {
     SolarMutexGuard g;
 
@@ -328,7 +328,7 @@ void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFil
     m_xListener = xListener;
 }
 
-void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
+void SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
 {
     SolarMutexGuard g;
 
@@ -482,7 +482,7 @@ void SalGtkFilePicker::ensureFilterVector( const OUString& _rInitialCurrentFilte
     }
 }
 
-void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
+void SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
 {
     SolarMutexGuard g;
 
@@ -498,7 +498,7 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
     m_pFilterVector->insert( m_pFilterVector->end(), FilterEntry( aTitle, aFilter ) );
 }
 
-void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
+void SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 {
     SolarMutexGuard g;
 
@@ -556,7 +556,7 @@ void SalGtkFilePicker::UpdateFilterfromUI()
     }
 }
 
-OUString SAL_CALL SalGtkFilePicker::getCurrentFilter()
+OUString SalGtkFilePicker::getCurrentFilter()
 {
     SolarMutexGuard g;
 
@@ -569,7 +569,7 @@ OUString SAL_CALL SalGtkFilePicker::getCurrentFilter()
 
 // XFilterGroupManager functions
 
-void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const cpo::uno::Sequence<beans::StringPair>& aFilters )
+void SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const cpo::uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard g;
 
@@ -596,7 +596,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 
 // XFilePicker functions
 
-void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( bool bMode )
+void SalGtkFilePicker::setMultiSelectionMode( bool bMode )
 {
     SolarMutexGuard g;
 
@@ -605,7 +605,7 @@ void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( bool bMode )
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER(m_pDialog), bMode );
 }
 
-void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
+void SalGtkFilePicker::setDefaultName( const OUString& aName )
 {
     SolarMutexGuard g;
 
@@ -619,21 +619,21 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
         gtk_file_chooser_set_current_name( GTK_FILE_CHOOSER( m_pDialog ), aStr.getStr() );
 }
 
-void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const OUString& rDirectory )
+void SalGtkFilePicker::setDisplayDirectory( const OUString& rDirectory )
 {
     SolarMutexGuard g;
 
     implsetDisplayDirectory(rDirectory);
 }
 
-OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory()
+OUString SalGtkFilePicker::getDisplayDirectory()
 {
     SolarMutexGuard g;
 
     return implgetDisplayDirectory();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
+cpo::uno::Sequence<OUString> SalGtkFilePicker::getFiles()
 {
     // no member access => no mutex needed
 
@@ -683,7 +683,7 @@ bool lcl_matchFilter( std::u16string_view rFilter, std::u16string_view rExt )
 
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SalGtkFilePicker::getSelectedFiles()
 {
     SolarMutexGuard g;
 
@@ -831,7 +831,7 @@ cpo::uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
 
 // XExecutableDialog functions
 
-void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle )
+void SalGtkFilePicker::setTitle( const OUString& rTitle )
 {
     SolarMutexGuard g;
 
@@ -839,7 +839,7 @@ void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle )
 }
 
 
-sal_Int16 SAL_CALL SalGtkFilePicker::execute()
+sal_Int16 SalGtkFilePicker::execute()
 {
     SolarMutexGuard g;
 
@@ -1226,7 +1226,7 @@ cpo::uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int
     return aAny;
 }
 
-void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
+void SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const cpo::uno::Any& rValue )
 {
     SolarMutexGuard g;
 
@@ -1251,7 +1251,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
     }
 }
 
-cpo::uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
+cpo::uno::Any SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nControlAction )
 {
     SolarMutexGuard g;
 
@@ -1276,7 +1276,7 @@ cpo::uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int
     return aRetval;
 }
 
-void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
+void SalGtkFilePicker::enableControl( sal_Int16 nControlId, bool bEnable )
 {
     // skip this built-in one which is Enabled by default
     if (nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR && bEnable)
@@ -1303,7 +1303,7 @@ void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, bool bEnabl
         SAL_WARN( "vcl.gtk", "enable unknown control " << nControlId );
 }
 
-void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& rLabel )
+void SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& rLabel )
 {
     SolarMutexGuard g;
 
@@ -1327,7 +1327,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
         SAL_WARN( "vcl.gtk", "Can't set label on list");
 }
 
-OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
+OUString SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 {
     SolarMutexGuard g;
 
@@ -1349,7 +1349,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 
 // XFilePreview functions
 
-cpo::uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats()
+cpo::uno::Sequence<sal_Int16> SalGtkFilePicker::getSupportedImageFormats()
 {
     SolarMutexGuard g;
 
@@ -1359,7 +1359,7 @@ cpo::uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormat
     return cpo::uno::Sequence<sal_Int16>();
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth()
+sal_Int32 SalGtkFilePicker::getTargetColorDepth()
 {
     SolarMutexGuard g;
 
@@ -1369,7 +1369,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth()
     return 0;
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth()
+sal_Int32 SalGtkFilePicker::getAvailableWidth()
 {
     SolarMutexGuard g;
 
@@ -1378,7 +1378,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth()
     return g_PreviewImageWidth;
 }
 
-sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
+sal_Int32 SalGtkFilePicker::getAvailableHeight()
 {
     SolarMutexGuard g;
 
@@ -1387,7 +1387,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
     return g_PreviewImageHeight;
 }
 
-void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const cpo::uno::Any& /*aImage*/ )
+void SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const cpo::uno::Any& /*aImage*/ )
 {
     SolarMutexGuard g;
 
@@ -1484,7 +1484,7 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
         g_free( filename );
 }
 
-bool SAL_CALL SalGtkFilePicker::setShowState( bool bShowState )
+bool SalGtkFilePicker::setShowState( bool bShowState )
 {
     SolarMutexGuard g;
 
@@ -1518,7 +1518,7 @@ bool SAL_CALL SalGtkFilePicker::setShowState( bool bShowState )
     return true;
 }
 
-bool SAL_CALL SalGtkFilePicker::getShowState()
+bool SalGtkFilePicker::getShowState()
 {
     SolarMutexGuard g;
 
@@ -1561,7 +1561,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>
 
 // XInitialization
 
-void SAL_CALL SalGtkFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
+void SalGtkFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     // parameter checking
     cpo::uno::Any aAny;
@@ -1750,7 +1750,7 @@ void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP
 
 // XCancellable
 
-void SAL_CALL SalGtkFilePicker::cancel()
+void SalGtkFilePicker::cancel()
 {
     SolarMutexGuard g;
 

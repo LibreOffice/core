@@ -77,7 +77,7 @@ AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(
         xComponent->addEventListener(static_cast< XEventListener *> (this));
 }
 
-css::awt::Rectangle SAL_CALL AccessibleBrowseBoxTableCell::getCharacterBounds( sal_Int32 nIndex )
+css::awt::Rectangle AccessibleBrowseBoxTableCell::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -96,7 +96,7 @@ css::awt::Rectangle SAL_CALL AccessibleBrowseBoxTableCell::getCharacterBounds( s
     return aRect;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getIndexAtPoint( const css::awt::Point& _aPoint )
+sal_Int32 AccessibleBrowseBoxTableCell::getIndexAtPoint( const css::awt::Point& _aPoint )
 {
     //! TODO CTL bidi
     // OSL_FAIL("Need to be done by base class!");
@@ -110,19 +110,19 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getIndexAtPoint( const css::awt
 /** @return
         The name of this class.
 */
-OUString SAL_CALL AccessibleBrowseBoxTableCell::getImplementationName()
+OUString AccessibleBrowseBoxTableCell::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell"_ustr;
 }
 
 /** @return  The count of visible children. */
-sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleChildCount()
+sal_Int64 AccessibleBrowseBoxTableCell::getAccessibleChildCount()
 {
     return 0;
 }
 
 /** @return  The XAccessible interface of the specified child. */
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
     AccessibleBrowseBoxTableCell::getAccessibleChild( sal_Int64 )
 {
     throw css::lang::IndexOutOfBoundsException();
@@ -152,7 +152,7 @@ sal_Int64 AccessibleBrowseBoxTableCell::implCreateStateSet()
 
 // XAccessibleContext -----------------------------------------------------
 
-sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
+sal_Int64 AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -160,12 +160,12 @@ sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
     return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(mpBrowseBox->GetColumnCount())) + getColumnPos();
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCaretPosition(  )
+sal_Int32 AccessibleBrowseBoxTableCell::getCaretPosition(  )
 {
     return -1;
 }
 
-bool SAL_CALL AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex )
+bool AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -175,14 +175,14 @@ bool SAL_CALL AccessibleBrowseBoxTableCell::setCaretPosition ( sal_Int32 nIndex 
 
     return false;
 }
-sal_Unicode SAL_CALL AccessibleBrowseBoxTableCell::getCharacter( sal_Int32 nIndex )
+sal_Unicode AccessibleBrowseBoxTableCell::getCharacter( sal_Int32 nIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
-cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTableCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > AccessibleBrowseBoxTableCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -194,7 +194,7 @@ cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTabl
 
     return cpo::uno::Sequence< css::beans::PropertyValue >();
 }
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCharacterCount(  )
+sal_Int32 AccessibleBrowseBoxTableCell::getCharacterCount(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -202,28 +202,28 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCharacterCount(  )
     return implGetText().getLength();
 }
 
-OUString SAL_CALL AccessibleBrowseBoxTableCell::getSelectedText(  )
+OUString AccessibleBrowseBoxTableCell::getSelectedText(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getSelectedText(  );
 }
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getSelectionStart(  )
+sal_Int32 AccessibleBrowseBoxTableCell::getSelectionStart(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getSelectionStart(  );
 }
-sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getSelectionEnd(  )
+sal_Int32 AccessibleBrowseBoxTableCell::getSelectionEnd(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getSelectionEnd(  );
 }
-bool SAL_CALL AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -233,42 +233,42 @@ bool SAL_CALL AccessibleBrowseBoxTableCell::setSelection( sal_Int32 nStartIndex,
 
     return false;
 }
-OUString SAL_CALL AccessibleBrowseBoxTableCell::getText(  )
+OUString AccessibleBrowseBoxTableCell::getText(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return implGetText(  );
 }
-OUString SAL_CALL AccessibleBrowseBoxTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+OUString AccessibleBrowseBoxTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
 }
-css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleBrowseBoxTableCell::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
 }
-css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleBrowseBoxTableCell::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
 }
-css::accessibility::TextSegment SAL_CALL AccessibleBrowseBoxTableCell::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleBrowseBoxTableCell::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
 }
-bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -280,7 +280,7 @@ bool SAL_CALL AccessibleBrowseBoxTableCell::copyText( sal_Int32 nStartIndex, sal
     //!!! don't know how to put a string into the clipboard
     return false;
 }
-bool SAL_CALL AccessibleBrowseBoxTableCell::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool AccessibleBrowseBoxTableCell::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }

@@ -4143,17 +4143,17 @@ public:
     }
 
     // XDropTargetDropContext
-    virtual void SAL_CALL acceptDrop(sal_Int8 dragOperation) override
+    virtual void acceptDrop(sal_Int8 dragOperation) override
     {
         gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
-    virtual void SAL_CALL rejectDrop() override
+    virtual void rejectDrop() override
     {
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
     }
 
-    virtual void SAL_CALL dropComplete(bool bSuccess) override
+    virtual void dropComplete(bool bSuccess) override
     {
         gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);
         if (GtkInstDragSource::g_ActiveDragSource)
@@ -4185,7 +4185,7 @@ public:
     {
     }
 
-    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    virtual cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
@@ -4326,12 +4326,12 @@ public:
     {
     }
 
-    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override
+    virtual void acceptDrag(sal_Int8 dragOperation) override
     {
         gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
-    virtual void SAL_CALL rejectDrag() override
+    virtual void rejectDrag() override
     {
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
     }

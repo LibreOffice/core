@@ -34,9 +34,9 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
-    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
+    void disposing(const css::lang::EventObject& /*Source*/) override;
 
     void startListening();
 

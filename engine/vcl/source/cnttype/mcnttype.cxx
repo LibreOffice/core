@@ -31,32 +31,32 @@ CMimeContentType::CMimeContentType( const OUString& aCntType )
     init( aCntType );
 }
 
-OUString SAL_CALL CMimeContentType::getMediaType( )
+OUString CMimeContentType::getMediaType( )
 {
     return m_MediaType;
 }
 
-OUString SAL_CALL CMimeContentType::getMediaSubtype( )
+OUString CMimeContentType::getMediaSubtype( )
 {
     return m_MediaSubtype;
 }
 
-OUString SAL_CALL CMimeContentType::getFullMediaType( )
+OUString CMimeContentType::getFullMediaType( )
 {
     return m_MediaType + "/" + m_MediaSubtype;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
+cpo::uno::Sequence< OUString > CMimeContentType::getParameters( )
 {
     return comphelper::mapKeysToSequence(m_ParameterMap);
 }
 
-bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
+bool CMimeContentType::hasParameter( const OUString& aName )
 {
     return m_ParameterMap.contains( aName.toAsciiLowerCase() );
 }
 
-OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
+OUString CMimeContentType::getParameterValue( const OUString& aName )
 {
     auto const lower = aName.toAsciiLowerCase();
 

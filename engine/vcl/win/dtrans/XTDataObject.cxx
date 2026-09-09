@@ -92,7 +92,7 @@ public:
         : maTransferable(rTransferable)
     {}
 
-    virtual void SAL_CALL notify(cpo::uno::Any const &) override
+    virtual void notify(cpo::uno::Any const &) override
     {
         maTransferable.clear();
     }

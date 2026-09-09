@@ -52,23 +52,23 @@ public:
     JSDropTarget();
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArgs) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArgs) override;
 
     // XDropTarget
-    virtual void SAL_CALL addDropTargetListener(
+    virtual void addDropTargetListener(
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual void SAL_CALL removeDropTargetListener(
+    virtual void removeDropTargetListener(
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
-    virtual bool SAL_CALL isActive() override;
-    virtual void SAL_CALL setActive(bool active) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions() override;
-    virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
+    virtual bool isActive() override;
+    virtual void setActive(bool active) override;
+    virtual sal_Int8 getDefaultActions() override;
+    virtual void setDefaultActions(sal_Int8 actions) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const& ServiceName) override;
+    bool supportsService(OUString const& ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
 

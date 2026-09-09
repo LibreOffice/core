@@ -35,19 +35,19 @@ DNDListenerContainer::~DNDListenerContainer()
 {
 }
 
-void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
+void DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
 {
     std::unique_lock g(m_aMutex);
     maDragGestureListeners.addInterface( g, dgl );
 }
 
-void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
+void DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
 {
     std::unique_lock g(m_aMutex);
     maDragGestureListeners.removeInterface( g, dgl );
 }
 
-void SAL_CALL DNDListenerContainer::resetRecognizer(  )
+void DNDListenerContainer::resetRecognizer(  )
 {
 }
 
@@ -57,34 +57,34 @@ bool DNDListenerContainer::hasDragGestureListeners() const
     return maDragGestureListeners.getLength(g) > 0;
 }
 
-void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
     std::unique_lock g(m_aMutex);
     maDropTargetListeners.addInterface( g, dtl );
 }
 
-void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
     std::unique_lock g(m_aMutex);
     maDropTargetListeners.removeInterface( g, dtl );
 }
 
-bool SAL_CALL DNDListenerContainer::isActive(  )
+bool DNDListenerContainer::isActive(  )
 {
     return m_bActive;
 }
 
-void SAL_CALL DNDListenerContainer::setActive( bool active )
+void DNDListenerContainer::setActive( bool active )
 {
     m_bActive = active;
 }
 
-sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
+sal_Int8 DNDListenerContainer::getDefaultActions(  )
 {
     return m_nDefaultActions;
 }
 
-void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
+void DNDListenerContainer::setDefaultActions( sal_Int8 actions )
 {
     m_nDefaultActions = actions;
 }
@@ -389,7 +389,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
     return nRet;
 }
 
-void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation )
+void DNDListenerContainer::acceptDrag( sal_Int8 dragOperation )
 {
     std::unique_lock g(m_aMutex);
     if( !m_xDropTargetDragContext )
@@ -399,23 +399,23 @@ void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation )
     xTmpDragContext->acceptDrag( dragOperation );
 }
 
-void SAL_CALL DNDListenerContainer::rejectDrag(  )
+void DNDListenerContainer::rejectDrag(  )
 {
     // nothing to do here
 }
 
-void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation )
+void DNDListenerContainer::acceptDrop( sal_Int8 dropOperation )
 {
     if( m_xDropTargetDropContext.is() )
         m_xDropTargetDropContext->acceptDrop( dropOperation );
 }
 
-void SAL_CALL DNDListenerContainer::rejectDrop(  )
+void DNDListenerContainer::rejectDrop(  )
 {
     // nothing to do here
 }
 
-void SAL_CALL DNDListenerContainer::dropComplete( bool success )
+void DNDListenerContainer::dropComplete( bool success )
 {
     if( m_xDropTargetDropContext.is() )
     {

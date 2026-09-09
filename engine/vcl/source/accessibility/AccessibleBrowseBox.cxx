@@ -49,7 +49,7 @@ AccessibleBrowseBox::~AccessibleBrowseBox()
 }
 
 
-void SAL_CALL AccessibleBrowseBox::disposing()
+void AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -74,7 +74,7 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 
 // css::accessibility::XAccessibleContext
 
-sal_Int64 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
+sal_Int64 AccessibleBrowseBox::getAccessibleChildCount()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -83,7 +83,7 @@ sal_Int64 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -110,7 +110,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
 
 // css::accessibility::XAccessibleComponent
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -137,7 +137,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 }
 
 
-void SAL_CALL AccessibleBrowseBox::grabFocus()
+void AccessibleBrowseBox::grabFocus()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -146,7 +146,7 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
 }
 
 // XServiceInfo
-OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
+OUString AccessibleBrowseBox::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleBrowseBox"_ustr;
 }

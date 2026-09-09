@@ -46,12 +46,12 @@ public:
 
     // XTransferable
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
-    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> getTransferDataFlavors() override;
 
-    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
+    bool isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     // Helper functions not part of the XTransferable interface
 

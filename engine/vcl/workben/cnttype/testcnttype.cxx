@@ -136,7 +136,7 @@ bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecDa
 
 //  main
 
-int SAL_CALL main( int nArgc, char* argv[] )
+int main( int nArgc, char* argv[] )
 {
     if ( nArgc != 3 )
         printf( "Start with: testcnttype input-file output-file\n" );

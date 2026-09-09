@@ -123,7 +123,7 @@ CXNotifyingDataObject* CWinClipboard::getOwnClipContent() const
 // and so on, we simply return the original XTransferable instead of our
 // DOTransferable
 
-uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents()
+uno::Reference<datatransfer::XTransferable> CWinClipboard::getContents()
 {
     std::unique_lock aGuard(m_aMutex);
     return getContents_noLock();
@@ -188,7 +188,7 @@ sal::systools::COMReference<IDataObject> CWinClipboard::getIDataObject()
     return pIDataObject;
 }
 
-void SAL_CALL CWinClipboard::setContents(
+void CWinClipboard::setContents(
     const uno::Reference<datatransfer::XTransferable>& xTransferable,
     const uno::Reference<datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
@@ -225,7 +225,7 @@ void SAL_CALL CWinClipboard::setContents(
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
 }
 
-OUString SAL_CALL CWinClipboard::getName()
+OUString CWinClipboard::getName()
 {
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
@@ -237,7 +237,7 @@ OUString SAL_CALL CWinClipboard::getName()
 
 // XFlushableClipboard
 
-void SAL_CALL CWinClipboard::flushClipboard()
+void CWinClipboard::flushClipboard()
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -261,7 +261,7 @@ void SAL_CALL CWinClipboard::flushClipboard()
 
 // XClipboardEx
 
-sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
+sal_Int8 CWinClipboard::getRenderingCapabilities()
 {
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -273,7 +273,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities()
 
 // XClipboardNotifier
 
-void SAL_CALL CWinClipboard::addClipboardListener(
+void CWinClipboard::addClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     std::unique_lock aGuard(m_aMutex);
@@ -289,7 +289,7 @@ void SAL_CALL CWinClipboard::addClipboardListener(
     maClipboardListeners.addInterface(aGuard, listener);
 }
 
-void SAL_CALL CWinClipboard::removeClipboardListener(
+void CWinClipboard::removeClipboardListener(
     const uno::Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     std::unique_lock aGuard(m_aMutex);
@@ -344,17 +344,17 @@ void CWinClipboard::handleClipboardContentChanged()
 
 // XServiceInfo
 
-OUString SAL_CALL CWinClipboard::getImplementationName()
+OUString CWinClipboard::getImplementationName()
 {
     return "com.sun.star.datatransfer.clipboard.ClipboardW32";
 }
 
-bool SAL_CALL CWinClipboard::supportsService(const OUString& ServiceName)
+bool CWinClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> CWinClipboard::getSupportedServiceNames()
 {
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }

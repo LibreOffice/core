@@ -35,15 +35,15 @@ public:
 
     // XMimeContentTypeFactory
 
-    virtual css::uno::Reference< css::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const OUString& aContentType ) override;
+    virtual css::uno::Reference< css::datatransfer::XMimeContentType > createMimeContentType( const OUString& aContentType ) override;
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual OUString getImplementationName(  ) override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

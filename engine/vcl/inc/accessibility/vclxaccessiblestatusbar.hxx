@@ -46,21 +46,21 @@ private:
     virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     // XComponent
-    virtual void SAL_CALL   disposing() override;
+    virtual void   disposing() override;
 
 public:
     VCLXAccessibleStatusBar(vcl::Window* pWindow);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
+    virtual sal_Int64 getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 };
 
 

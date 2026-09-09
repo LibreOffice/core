@@ -83,10 +83,10 @@ public:
     static css::uno::Reference< css::accessibility::XAccessible > getAccessible(const css::lang::EventObject& aEvent );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
 private:
     o3tl::sorted_vector< css::uno::Reference< cpo::uno::XInterface > > m_aRefList;

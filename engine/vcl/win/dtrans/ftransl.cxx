@@ -336,7 +336,7 @@ CDataFormatTranslatorUNO::CDataFormatTranslatorUNO( const Reference< XComponentC
 {
 }
 
-Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
+Any CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
 {
     Any aAny;
 
@@ -395,7 +395,7 @@ Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const Da
     return aAny;
 }
 
-DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( const Any& aSysDataType )
+DataFlavor CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( const Any& aSysDataType )
 {
     OSL_PRECOND( aSysDataType.hasValue( ), "Empty system data type delivered" );
 
@@ -417,17 +417,17 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 
 // XServiceInfo
 
-OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
+OUString CDataFormatTranslatorUNO::getImplementationName(  )
 {
     return "com.sun.star.datatransfer.DataFormatTranslator";
 }
 
-bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
+bool CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames( )
+Sequence< OUString > CDataFormatTranslatorUNO::getSupportedServiceNames( )
 {
     return { "com.sun.star.datatransfer.DataFormatTranslator" };
 }

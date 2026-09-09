@@ -142,16 +142,16 @@ private:
     private:
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void queryTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void notifyTermination( const css::lang::EventObject& aEvent ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& sServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     public:
 
@@ -179,29 +179,29 @@ protected:
 public:
 
     // XTransferable
-    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
-    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors() override;
+    virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // Transferable2
-    virtual cpo::uno::Any SAL_CALL getTransferData2(
+    virtual cpo::uno::Any getTransferData2(
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual bool SAL_CALL isComplex() override;
+    virtual bool isComplex() override;
 
 private:
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XDragSourceListener
-    virtual void SAL_CALL dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) override;
-    virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
-    virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) override;
-    virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
-    virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
+    virtual void dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) override;
+    virtual void dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
+    virtual void dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) override;
+    virtual void dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
+    virtual void dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
 
     // XClipboardOwner
-    virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+    virtual void lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 
 protected:
     // derivees need to access lostOwnership in case hey override it
@@ -383,10 +383,10 @@ private:
     private:
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XDragGestureListener
-        virtual void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) override;
+        virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) override;
 
     public:
 
@@ -428,14 +428,14 @@ private:
         std::unique_ptr<AcceptDropEvent>   mpLastDragOverEvent;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XDropTargetListener
-        virtual void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override;
-        virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
-        virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
-        virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
-        virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
+        virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override;
+        virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
+        virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
+        virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
+        virtual void dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
 
     public:
 

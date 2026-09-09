@@ -79,22 +79,22 @@ class VCLSession:
 
     virtual ~VCLSession() override {}
 
-    virtual void SAL_CALL addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void SAL_CALL removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) override;
-    virtual void SAL_CALL queryInteraction( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void SAL_CALL interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void SAL_CALL saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual bool SAL_CALL cancelShutdown() override;
+    virtual void addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) override;
+    virtual void queryInteraction( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual bool cancelShutdown() override;
 
-    OUString SAL_CALL getImplementationName() override {
+    OUString getImplementationName() override {
         return u"com.sun.star.frame.VCLSessionManagerClient"_ustr;
     }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override {
+    bool supportsService(OUString const & ServiceName) override {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override {
         return {u"com.sun.star.frame.SessionManagerClient"_ustr};
     }
 
@@ -267,7 +267,7 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
     }
 }
 
-void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::addSessionManagerListener" );
 
@@ -277,7 +277,7 @@ void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<X
     m_aListeners.emplace_back( xListener );
 }
 
-void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::removeSessionManagerListener" );
 
@@ -288,7 +288,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
     std::erase_if(m_aListeners, [&](Listener& listener) {return xListener == listener.m_xListener;});
 }
 
-void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::queryInteraction");
 
@@ -327,7 +327,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
     }
 }
 
-void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener )
+void VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::interactionDone");
 
@@ -355,7 +355,7 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
     }
 }
 
-void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener )
+void VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::saveDone");
 
@@ -380,7 +380,7 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
     }
 }
 
-bool SAL_CALL VCLSession::cancelShutdown()
+bool VCLSession::cancelShutdown()
 {
     SAL_INFO("vcl.se", "VCLSession::cancelShutdown");
 

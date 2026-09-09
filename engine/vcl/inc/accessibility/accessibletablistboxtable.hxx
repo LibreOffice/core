@@ -76,16 +76,16 @@ private:
 
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     // XAccessibleSelection
-    void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-    bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
-    void SAL_CALL clearAccessibleSelection(  ) override;
-    void SAL_CALL selectAllAccessibleChildren(  ) override;
-    sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-    void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    void selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    bool isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    void clearAccessibleSelection(  ) override;
+    void selectAllAccessibleChildren(  ) override;
+    sal_Int64 getSelectedAccessibleChildCount(  ) override;
+    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

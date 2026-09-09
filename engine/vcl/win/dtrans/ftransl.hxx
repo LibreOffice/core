@@ -40,17 +40,17 @@ public:
 
     // XDataFormatTranslator
 
-    virtual cpo::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) override;
+    virtual cpo::uno::Any getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) override;
 
-    virtual css::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const cpo::uno::Any& aSysDataType ) override;
+    virtual css::datatransfer::DataFlavor getDataFlavorFromSystemDataType( const cpo::uno::Any& aSysDataType ) override;
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual OUString getImplementationName(  ) override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     const css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;

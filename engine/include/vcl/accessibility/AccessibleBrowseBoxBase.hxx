@@ -83,40 +83,40 @@ protected:
     AccessibleBrowseBoxBase& operator=(const AccessibleBrowseBoxBase&) = delete;
 
     /** Commits DeFunc event to listeners and cleans up members. */
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     virtual css::awt::Rectangle implGetBounds() override;
 
 public:
     // XAccessibleContext
     /** @return  A reference to the parent accessible object. */
-    virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible > getAccessibleParent() override;
 
     /** @return
             The description of this object.
     */
-    virtual OUString SAL_CALL getAccessibleDescription() override;
+    virtual OUString getAccessibleDescription() override;
 
     /** @return
             The name of this object.
     */
-    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual OUString getAccessibleName() override;
 
     /** @return
             The relation set (the BrowseBox does not have one).
     */
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
 
     /** @return  The set of current states. */
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     /** @return  The parent's locale. */
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual css::lang::Locale getLocale() override;
 
     /** @return
             The role of this object. Panel, ROWHEADER, COLUMNHEADER, TABLE, TABLE_CELL are supported.
     */
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
 
     /*  Derived classes have to implement:
         -   getAccessibleChildCount,
@@ -127,13 +127,13 @@ public:
 
     // XAccessibleComponent
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     // XFocusListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
-    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
+    virtual void focusGained( const css::awt::FocusEvent& e ) override;
+    virtual void focusLost( const css::awt::FocusEvent& e ) override;
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
@@ -142,15 +142,15 @@ public:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     // XServiceInfo
 
     /** @return  Whether the specified service is supported by this class. */
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
 
     /** @return  A list of all supported services. */
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     /*  Derived classes have to implement:
         -   getImplementationName. */

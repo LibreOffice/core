@@ -76,9 +76,9 @@ public:
     GenericDropTargetDropContext() {}
 
     // XDropTargetDropContext
-    virtual void SAL_CALL acceptDrop(sal_Int8 /*dragOperation*/) override {}
-    virtual void SAL_CALL rejectDrop() override {}
-    virtual void SAL_CALL dropComplete(bool /*success*/) override {}
+    virtual void acceptDrop(sal_Int8 /*dragOperation*/) override {}
+    virtual void rejectDrop() override {}
+    virtual void dropComplete(bool /*success*/) override {}
 };
 
 class GenericDropTargetDragContext
@@ -88,8 +88,8 @@ public:
     GenericDropTargetDragContext() {}
 
     // XDropTargetDragContext
-    virtual void SAL_CALL acceptDrag(sal_Int8 /*dragOperation*/) override {}
-    virtual void SAL_CALL rejectDrag() override {}
+    virtual void acceptDrag(sal_Int8 /*dragOperation*/) override {}
+    virtual void rejectDrag() override {}
 };
 }
 

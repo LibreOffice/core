@@ -81,31 +81,31 @@ public:
     virtual ~CWinClipboard() override;
 
     // XClipboard
-    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
-    virtual void SAL_CALL setContents(
+    virtual css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
+    virtual void setContents(
         const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
         override;
-    virtual OUString SAL_CALL getName() override;
+    virtual OUString getName() override;
 
     // XFlushableClipboard
-    virtual void SAL_CALL flushClipboard() override;
+    virtual void flushClipboard() override;
 
     // XClipboardEx
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
+    virtual sal_Int8 getRenderingCapabilities() override;
 
     // XClipboardNotifier
-    virtual void SAL_CALL addClipboardListener(
+    virtual void addClipboardListener(
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
-    virtual void SAL_CALL removeClipboardListener(
+    virtual void removeClipboardListener(
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     sal::systools::COMReference<IDataObject> getIDataObject();
 

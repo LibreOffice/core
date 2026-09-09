@@ -274,7 +274,7 @@ sal_Int64 VCLXAccessibleBox::implGetAccessibleChildCount()
     return nCount;
 }
 
-Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64 i)
+Reference<XAccessible> VCLXAccessibleBox::getAccessibleChild (sal_Int64 i)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -315,7 +315,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
     }
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
+sal_Int16 VCLXAccessibleBox::getAccessibleRole()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -331,7 +331,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 
 //=====  XAccessibleAction  ===================================================
 
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
+sal_Int32 VCLXAccessibleBox::getAccessibleActionCount()
 {
     ::osl::Guard< ::osl::Mutex> aGuard (GetMutex());
 
@@ -340,7 +340,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
     return m_bIsDropDownBox ? 1 : 0;
 }
 
-bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
+bool VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 {
     bool bNotify = false;
 
@@ -381,7 +381,7 @@ bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
     return bNotify;
 }
 
-OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
+OUString VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     if (nIndex!=0 || !m_bIsDropDownBox)

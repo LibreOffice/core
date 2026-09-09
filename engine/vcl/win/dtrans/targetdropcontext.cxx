@@ -32,17 +32,17 @@ TargetDropContext::TargetDropContext(DropTarget* p)
 
 TargetDropContext::~TargetDropContext() { m_pDropTarget->release(); }
 
-void SAL_CALL TargetDropContext::acceptDrop(sal_Int8 dropOperation)
+void TargetDropContext::acceptDrop(sal_Int8 dropOperation)
 {
     m_pDropTarget->_acceptDrop(dropOperation, static_cast<XDropTargetDropContext*>(this));
 }
 
-void SAL_CALL TargetDropContext::rejectDrop()
+void TargetDropContext::rejectDrop()
 {
     m_pDropTarget->_rejectDrop(static_cast<XDropTargetDropContext*>(this));
 }
 
-void SAL_CALL TargetDropContext::dropComplete(bool success)
+void TargetDropContext::dropComplete(bool success)
 {
     m_pDropTarget->_dropComplete(success, static_cast<XDropTargetDropContext*>(this));
 }

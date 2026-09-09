@@ -103,7 +103,7 @@ void VCLXAccessibleList::SetIndexInParent (sal_Int32 nIndex)
 }
 
 
-void SAL_CALL VCLXAccessibleList::disposing()
+void VCLXAccessibleList::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
@@ -526,7 +526,7 @@ void VCLXAccessibleList::HandleChangedItemList()
 
 // XAccessibleContext
 
-sal_Int64 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()
+sal_Int64 VCLXAccessibleList::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -542,7 +542,7 @@ sal_Int64 VCLXAccessibleList::implGetAccessibleChildCount()
     return nCount;
 }
 
-Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int64 i)
+Reference<XAccessible> VCLXAccessibleList::getAccessibleChild (sal_Int64 i)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -564,14 +564,14 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int6
     return xChild;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
+Reference< XAccessible > VCLXAccessibleList::getAccessibleParent(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return m_xParent;
 }
 
-sal_Int64 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent()
+sal_Int64 VCLXAccessibleList::getAccessibleIndexInParent()
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
         return m_nIndexInParent;
@@ -579,7 +579,7 @@ sal_Int64 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent()
         return VCLXAccessibleComponent::getAccessibleIndexInParent();
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole()
+sal_Int16 VCLXAccessibleList::getAccessibleRole()
 {
     return AccessibleRole::LIST;
 }
@@ -727,7 +727,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 
 // XAccessibleSelection
 
-void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int64 nChildIndex )
+void VCLXAccessibleList::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     bool bNotify = false;
 
@@ -752,7 +752,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int64 nChildIndex )
         UpdateSelection_Impl();
 }
 
-bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool VCLXAccessibleList::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -767,7 +767,7 @@ bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int64 nChildInd
     return bRet;
 }
 
-void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  )
+void VCLXAccessibleList::clearAccessibleSelection(  )
 {
     bool bNotify = false;
 
@@ -786,7 +786,7 @@ void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  )
         UpdateSelection_Impl();
 }
 
-void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  )
+void VCLXAccessibleList::selectAllAccessibleChildren(  )
 {
     bool bNotify = false;
 
@@ -811,7 +811,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  )
         UpdateSelection_Impl();
 }
 
-sal_Int64 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleList::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -822,7 +822,7 @@ sal_Int64 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  )
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+Reference< XAccessible > VCLXAccessibleList::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -836,7 +836,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild
     return nullptr;
 }
 
-void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+void VCLXAccessibleList::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     bool bNotify = false;
 

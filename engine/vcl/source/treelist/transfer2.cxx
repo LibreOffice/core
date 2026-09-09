@@ -58,12 +58,12 @@ DragSourceHelper::DragGestureListener::~DragGestureListener()
 }
 
 
-void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObject& )
+void DragSourceHelper::DragGestureListener::disposing( const EventObject& )
 {
 }
 
 
-void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE )
+void DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE )
 {
     const SolarMutexGuard aGuard;
 
@@ -115,12 +115,12 @@ DropTargetHelper::DropTargetListener::~DropTargetListener()
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject& )
+void DropTargetHelper::DropTargetListener::disposing( const EventObject& )
 {
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE )
+void DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE )
 {
     const SolarMutexGuard aGuard;
 
@@ -165,7 +165,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetDragEnterEvent& rDTDEE )
+void DropTargetHelper::DropTargetListener::dragEnter( const DropTargetDragEnterEvent& rDTDEE )
 {
     const SolarMutexGuard aGuard;
 
@@ -181,7 +181,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE )
+void DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE )
 {
     const SolarMutexGuard aGuard;
 
@@ -203,7 +203,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& )
+void DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& )
 {
     const SolarMutexGuard aGuard;
 
@@ -224,7 +224,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 }
 
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const DropTargetDragEvent& )
+void DropTargetHelper::DropTargetListener::dropActionChanged( const DropTargetDragEvent& )
 {
 }
 

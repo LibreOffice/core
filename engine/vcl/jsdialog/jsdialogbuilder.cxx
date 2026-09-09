@@ -74,11 +74,11 @@ public:
     JSDropTargetDropContext() {}
 
     // XDropTargetDropContext
-    virtual void SAL_CALL acceptDrop(sal_Int8 /*dragOperation*/) override {}
+    virtual void acceptDrop(sal_Int8 /*dragOperation*/) override {}
 
-    virtual void SAL_CALL rejectDrop() override {}
+    virtual void rejectDrop() override {}
 
-    virtual void SAL_CALL dropComplete(bool /*bSuccess*/) override {}
+    virtual void dropComplete(bool /*bSuccess*/) override {}
 };
 }
 

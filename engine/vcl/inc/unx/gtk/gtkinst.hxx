@@ -72,10 +72,10 @@ protected:
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
 
 public:
-    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
+    virtual cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
-    virtual cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    virtual cpo::uno::Sequence<css::datatransfer::DataFlavor> getTransferDataFlavors() override;
+    virtual bool isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 class GtkDnDTransferable;
@@ -94,11 +94,11 @@ public:
 
     void deinitialize();
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
     {
@@ -140,20 +140,20 @@ public:
     virtual ~GtkInstDragSource() override;
 
     // XDragSource
-    virtual bool    SAL_CALL isDragImageSupported() override;
-    virtual sal_Int32   SAL_CALL getDefaultCursor(sal_Int8 dragAction) override;
-    virtual void        SAL_CALL startDrag(
+    virtual bool    isDragImageSupported() override;
+    virtual sal_Int32   getDefaultCursor(sal_Int8 dragAction) override;
+    virtual void        startDrag(
         const css::datatransfer::dnd::DragGestureEvent& trigger, sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
         const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
         const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener) override;
 
     void deinitialize();
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     void dragFailed();
     void dragDelete();

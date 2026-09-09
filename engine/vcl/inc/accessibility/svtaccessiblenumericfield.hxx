@@ -35,14 +35,14 @@ public:
     virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 
     // XAccessibleContext
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
 
     // XAccessibleValue
-    virtual ::cpo::uno::Any SAL_CALL getCurrentValue() override;
-    virtual bool SAL_CALL setCurrentValue(const cpo::uno::Any& aNumber) override;
-    virtual ::cpo::uno::Any SAL_CALL getMaximumValue() override;
-    virtual ::cpo::uno::Any SAL_CALL getMinimumValue() override;
-    virtual ::cpo::uno::Any SAL_CALL getMinimumIncrement() override;
+    virtual ::cpo::uno::Any getCurrentValue() override;
+    virtual bool setCurrentValue(const cpo::uno::Any& aNumber) override;
+    virtual ::cpo::uno::Any getMaximumValue() override;
+    virtual ::cpo::uno::Any getMinimumValue() override;
+    virtual ::cpo::uno::Any getMinimumIncrement() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

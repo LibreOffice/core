@@ -106,11 +106,11 @@ class ImpFilterOutputStream : public ::cppu::WeakImplHelper< css::io::XOutputStr
 {
     SvStream&               mrStm;
 
-    virtual void SAL_CALL   writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData ) override
+    virtual void   writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData ) override
         { mrStm.WriteBytes(rData.getConstArray(), rData.getLength()); }
-    virtual void SAL_CALL   flush() override
+    virtual void   flush() override
         { mrStm.FlushBuffer(); }
-    virtual void SAL_CALL   closeOutput() override {}
+    virtual void   closeOutput() override {}
 
 public:
 

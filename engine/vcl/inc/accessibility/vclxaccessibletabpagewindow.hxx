@@ -38,14 +38,14 @@ private:
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // XComponent
-    virtual void SAL_CALL   disposing() override;
+    virtual void   disposing() override;
 
 public:
     VCLXAccessibleTabPageWindow(vcl::Window* pWindow);
 
     // XAccessibleContext
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual sal_Int64 getAccessibleIndexInParent(  ) override;
 };
 
 

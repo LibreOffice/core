@@ -155,7 +155,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString& rURL )
 }
 
 
-cpo::uno::Any SAL_CALL GraphicDescriptor::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any GraphicDescriptor::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -176,38 +176,38 @@ cpo::uno::Any SAL_CALL GraphicDescriptor::queryInterface( const cpo::uno::Type &
 }
 
 
-void SAL_CALL GraphicDescriptor::acquire()
+void GraphicDescriptor::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
 
-void SAL_CALL GraphicDescriptor::release()
+void GraphicDescriptor::release()
     noexcept
 {
     OWeakObject::release();
 }
 
 
-OUString SAL_CALL GraphicDescriptor::getImplementationName()
+OUString GraphicDescriptor::getImplementationName()
 {
     return u"com.sun.star.comp.graphic.GraphicDescriptor"_ustr;
 }
 
-bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
+bool GraphicDescriptor::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.GraphicDescriptor"_ustr };
 }
 
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicDescriptor::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GraphicDescriptor::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<cpo::uno::XAggregation>::get(),
@@ -219,7 +219,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GraphicDescriptor::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }

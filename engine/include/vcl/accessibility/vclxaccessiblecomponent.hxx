@@ -65,35 +65,35 @@ public:
     template< class derived_type > derived_type* GetAsDynamic() const {
         return dynamic_cast< derived_type * >( GetWindow() ); }
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::accessibility::XAccessibleContext
-    sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-    OUString SAL_CALL getAccessibleDescription(  ) override;
-    OUString SAL_CALL getAccessibleName(  ) override;
-    OUString SAL_CALL getAccessibleId(  ) override;
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
-    css::lang::Locale SAL_CALL getLocale(  ) override;
+    sal_Int64 getAccessibleChildCount(  ) override;
+    css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    sal_Int16 getAccessibleRole(  ) override;
+    OUString getAccessibleDescription(  ) override;
+    OUString getAccessibleName(  ) override;
+    OUString getAccessibleId(  ) override;
+    css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    sal_Int64 getAccessibleStateSet(  ) override;
+    css::lang::Locale getLocale(  ) override;
 
     // css::accessibility::XAccessibleComponent
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    void SAL_CALL grabFocus(  ) override;
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    css::awt::Point getLocationOnScreen(  ) override;
+    void grabFocus(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     // css::accessibility::XAccessibleExtendedComponent
-    virtual OUString SAL_CALL getTitledBorderText(  ) override;
-    virtual OUString SAL_CALL getToolTipText(  ) override;
+    virtual OUString getTitledBorderText(  ) override;
+    virtual OUString getToolTipText(  ) override;
 
 protected:
     // base class overridables

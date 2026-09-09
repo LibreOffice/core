@@ -99,18 +99,18 @@ public:
 
     // XTopWindowListener
     using cppu::WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) override;
-    virtual void SAL_CALL windowClosing( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowClosed( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowActivated( const css::lang::EventObject& ) override {}
-    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& ) override {}
+    virtual void disposing( const css::lang::EventObject& ) override {}
+    virtual void windowOpened( const css::lang::EventObject& e ) override;
+    virtual void windowClosing( const css::lang::EventObject& ) override {}
+    virtual void windowClosed( const css::lang::EventObject& ) override {}
+    virtual void windowMinimized( const css::lang::EventObject& ) override {}
+    virtual void windowNormalized( const css::lang::EventObject& ) override {}
+    virtual void windowActivated( const css::lang::EventObject& ) override {}
+    virtual void windowDeactivated( const css::lang::EventObject& ) override {}
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+    virtual void queryTermination( const css::lang::EventObject& aEvent ) override;
+    virtual void notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
     RunDialog(GtkWidget *pDialog,
         css::uno::Reference<css::awt::XExtendedToolkit> xToolkit,

@@ -42,24 +42,24 @@ public:
         : ImplInheritanceHelper(pButton) {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual OUString getAccessibleName(  ) override;
 
     // XAccessibleAction
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;
-    virtual bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;
-    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getAccessibleActionCount( ) override;
+    virtual bool doAccessibleAction ( sal_Int32 nIndex ) override;
+    virtual OUString getAccessibleActionDescription ( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
-    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
-    virtual bool SAL_CALL setCurrentValue( const cpo::uno::Any& aNumber ) override;
-    virtual cpo::uno::Any SAL_CALL getMaximumValue(  ) override;
-    virtual cpo::uno::Any SAL_CALL getMinimumValue(  ) override;
-    virtual cpo::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+    virtual cpo::uno::Any getCurrentValue(  ) override;
+    virtual bool setCurrentValue( const cpo::uno::Any& aNumber ) override;
+    virtual cpo::uno::Any getMaximumValue(  ) override;
+    virtual cpo::uno::Any getMinimumValue(  ) override;
+    virtual cpo::uno::Any getMinimumIncrement(  ) override;
 };
 
 

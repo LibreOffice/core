@@ -31,25 +31,25 @@ public:
     explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
     virtual ~UIObjectUnoObj() override;
 
-    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID) override;
+    css::uno::Reference<css::ui::test::XUIObject> getChild(const OUString& rID) override;
 
-    void SAL_CALL executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
+    void executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
 
-    cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState() override;
+    cpo::uno::Sequence<css::beans::PropertyValue> getState() override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getChildren() override;
+    cpo::uno::Sequence<OUString> getChildren() override;
 
-    OUString SAL_CALL getType() override;
+    OUString getType() override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    OUString SAL_CALL getHierarchy() override;
+    OUString getHierarchy() override;
 
-    bool SAL_CALL equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
+    bool equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -101,7 +101,7 @@ OSXTransferable::~OSXTransferable()
   [mPasteboard release];
 }
 
-Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& rFlavor )
+Any OSXTransferable::getTransferData( const DataFlavor& rFlavor )
 {
   if (!isValidFlavor(rFlavor) || !isDataFlavorSupported(rFlavor))
   {
@@ -144,12 +144,12 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
   return dp->getOOoData();
 }
 
-Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
+Sequence< DataFlavor > OSXTransferable::getTransferDataFlavors(  )
 {
   return mFlavorList;
 }
 
-bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
+bool OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
 {
     for (const DataFlavor& rFlavor : mFlavorList)
       if (compareDataFlavors(aFlavor, rFlavor))

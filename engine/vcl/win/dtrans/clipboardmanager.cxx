@@ -52,22 +52,22 @@ ClipboardManager::~ClipboardManager()
 {
 }
 
-OUString SAL_CALL ClipboardManager::getImplementationName(  )
+OUString ClipboardManager::getImplementationName(  )
 {
     return "com.sun.star.comp.datatransfer.ClipboardManager";
 }
 
-bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
+bool ClipboardManager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
+Sequence< OUString > ClipboardManager::getSupportedServiceNames(  )
 {
     return { "com.sun.star.datatransfer.clipboard.ClipboardManager" };
 }
 
-Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
+Reference< XClipboard > ClipboardManager::getClipboard( const OUString& aName )
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -85,7 +85,7 @@ Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString&
     throw NoSuchElementException(aName, static_cast < XClipboardManager * > (this));
 }
 
-void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
+void ClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
 {
     OSL_ASSERT(xClipboard.is());
 
@@ -122,14 +122,14 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
     }
 }
 
-void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
+void ClipboardManager::removeClipboard( const OUString& aName )
 {
     std::unique_lock aGuard(m_aMutex);
     if (!m_bDisposed)
         m_aClipboardMap.erase(aName.getLength() ? aName : m_aDefaultName );
 }
 
-Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
+Sequence< OUString > ClipboardManager::listClipboardNames()
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -176,7 +176,7 @@ void ClipboardManager::disposing(std::unique_lock<std::mutex>& rGuard)
     }
 }
 
-void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
+void  ClipboardManager::disposing( const EventObject& event )
 {
     Reference < XClipboard > xClipboard(event.Source, UNO_QUERY);
 

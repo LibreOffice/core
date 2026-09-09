@@ -376,7 +376,7 @@ namespace
  */
 class VCLUnoWrapperDeleter : public cppu::WeakImplHelper<css::lang::XEventListener>
 {
-    virtual void SAL_CALL disposing(lang::EventObject const& rSource) override;
+    virtual void disposing(lang::EventObject const& rSource) override;
 };
 
 void

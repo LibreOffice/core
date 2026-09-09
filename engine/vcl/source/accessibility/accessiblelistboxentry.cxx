@@ -158,7 +158,7 @@ css::awt::Rectangle AccessibleListBoxEntry::implGetBounds()
 
 // XComponent
 
-void SAL_CALL AccessibleListBoxEntry::disposing()
+void AccessibleListBoxEntry::disposing()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -175,7 +175,7 @@ void SAL_CALL AccessibleListBoxEntry::disposing()
     m_pTreeListBox = nullptr;
 }
 
-cpo::uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const cpo::uno::Type& rType)
+cpo::uno::Any AccessibleListBoxEntry::queryInterface(const cpo::uno::Type& rType)
 {
     if (rType == cppu::UnoType<XAccessibleText>::get())
     {
@@ -192,24 +192,24 @@ cpo::uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const cpo::uno::Ty
 
 // XServiceInfo
 
-OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
+OUString AccessibleListBoxEntry::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleTreeListBoxEntry"_ustr;
 }
 
-Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
+Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
-bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
+bool AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 // XAccessibleContext
 
-sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
+sal_Int64 AccessibleListBoxEntry::getAccessibleChildCount(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -223,7 +223,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleListBoxEntry::getAccessibleChild( sal_Int64 i )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -273,7 +273,7 @@ rtl::Reference<comphelper::OAccessible> AccessibleListBoxEntry::implGetParentAcc
 }
 
 
-Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  )
+Reference< XAccessible > AccessibleListBoxEntry::getAccessibleParent(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -282,7 +282,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  
     return implGetParentAccessible( );
 }
 
-sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
+sal_Int64 AccessibleListBoxEntry::getAccessibleIndexInParent(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -319,7 +319,7 @@ sal_Int32 AccessibleListBoxEntry::GetRoleType() const
     return nCase;
 }
 
-sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  )
+sal_Int16 AccessibleListBoxEntry::getAccessibleRole(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -350,7 +350,7 @@ sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  )
         return AccessibleRole::TREE_ITEM;
 }
 
-OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
+OUString AccessibleListBoxEntry::getAccessibleDescription(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -367,7 +367,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
     return OUString();
 }
 
-OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
+OUString AccessibleListBoxEntry::getAccessibleName(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -383,7 +383,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
     return implGetText();
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
+Reference< XAccessibleRelationSet > AccessibleListBoxEntry::getAccessibleRelationSet(  )
 {
     rtl::Reference<comphelper::OAccessible> pParent;
     if ( m_aEntryPath.size() > 1 ) // not a root entry
@@ -398,7 +398,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessib
     return pRelationSetHelper;
 }
 
-sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
+sal_Int64 AccessibleListBoxEntry::getAccessibleStateSet(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -435,7 +435,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
     return nStateSet;
 }
 
-Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )
+Locale AccessibleListBoxEntry::getLocale(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -445,7 +445,7 @@ Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )
 
 // XAccessibleComponent
 
-Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
+Reference< XAccessible > AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -467,7 +467,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( 
     return {};
 }
 
-void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
+void AccessibleListBoxEntry::grabFocus(  )
 {
     // do nothing, because no focus for each item
 }
@@ -509,7 +509,7 @@ sal_Int32 AccessibleListBoxEntry::getBackground(  )
 // XAccessibleText
 
 
-awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex )
+awt::Rectangle AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -534,7 +534,7 @@ awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nI
     return aBounds;
 }
 
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint )
+sal_Int32 AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aP
     return nIndex;
 }
 
-bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -577,14 +577,14 @@ bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32
     return true;
 }
 
-bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
 
 // XAccessibleAction
 
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
+sal_Int32 AccessibleListBoxEntry::getAccessibleActionCount(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -604,7 +604,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
     return 0;
 }
 
-bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
+bool AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -642,7 +642,7 @@ bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
     return bRet;
 }
 
-OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex )
+OUString AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -690,7 +690,7 @@ Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKe
 
 // XAccessibleSelection
 
-void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -707,7 +707,7 @@ void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildInd
     m_pTreeListBox->Select( pEntry );
 }
 
-bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -725,7 +725,7 @@ bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChil
     return m_pTreeListBox->IsSelected( pEntry );
 }
 
-void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
+void AccessibleListBoxEntry::clearAccessibleSelection(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -744,7 +744,7 @@ void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
     }
 }
 
-void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
+void AccessibleListBoxEntry::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -763,7 +763,7 @@ void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
     }
 }
 
-sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
+sal_Int64 AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -786,7 +786,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
     return nSelCount;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+Reference< XAccessible > AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -821,7 +821,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleC
     return xChild;
 }
 
-void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+void AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -838,11 +838,11 @@ void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelect
 
     m_pTreeListBox->Select( pEntry, false );
 }
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  )
+sal_Int32 AccessibleListBoxEntry::getCaretPosition(  )
 {
     return -1;
 }
-bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
+bool AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -853,14 +853,14 @@ bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
 
     return false;
 }
-sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
+sal_Unicode AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
-cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -873,7 +873,7 @@ cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry:
 
     return cpo::uno::Sequence< css::beans::PropertyValue >();
 }
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
+sal_Int32 AccessibleListBoxEntry::getCharacterCount(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -881,28 +881,28 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
     return implGetText().getLength();
 }
 
-OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  )
+OUString AccessibleListBoxEntry::getSelectedText(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return OUString();
 }
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  )
+sal_Int32 AccessibleListBoxEntry::getSelectionStart(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return 0;
 }
-sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
+sal_Int32 AccessibleListBoxEntry::getSelectionEnd(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return 0;
 }
-bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -913,35 +913,35 @@ bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_I
 
     return false;
 }
-OUString SAL_CALL AccessibleListBoxEntry::getText(  )
+OUString AccessibleListBoxEntry::getText(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return implGetText(  );
 }
-OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+OUString AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
 }
-css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
 }
-css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     ensureAlive();
     return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
 }
-css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );

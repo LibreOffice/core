@@ -47,21 +47,21 @@ public:
     FontIdentificator() {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>&) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>&) override;
 
     // XMaterialHolder
-    virtual cpo::uno::Any SAL_CALL getMaterial() override;
+    virtual cpo::uno::Any getMaterial() override;
 
 };
 
 }
 
-void SAL_CALL FontIdentificator::initialize(const cpo::uno::Sequence<cpo::uno::Any>& i_rArgs)
+void FontIdentificator::initialize(const cpo::uno::Sequence<cpo::uno::Any>& i_rArgs)
 {
     if( !ImplGetSVData() )
         return; // VCL not initialized
@@ -77,7 +77,7 @@ void SAL_CALL FontIdentificator::initialize(const cpo::uno::Sequence<cpo::uno::A
     }
 }
 
-cpo::uno::Any SAL_CALL FontIdentificator::getMaterial()
+cpo::uno::Any FontIdentificator::getMaterial()
 {
     if( !ImplGetSVData() )
         return cpo::uno::Any(); // VCL not initialized
@@ -143,17 +143,17 @@ cpo::uno::Any SAL_CALL FontIdentificator::getMaterial()
 }
 
 // XServiceInfo
-OUString SAL_CALL FontIdentificator::getImplementationName()
+OUString FontIdentificator::getImplementationName()
 {
     return u"vcl::FontIdentificator"_ustr;
 }
 
-bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
+bool FontIdentificator::supportsService( const OUString& i_rServiceName )
 {
     return cppu::supportsService(this, i_rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> FontIdentificator::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.FontIdentificator"_ustr };
 }

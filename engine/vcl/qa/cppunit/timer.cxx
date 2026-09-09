@@ -40,7 +40,7 @@ public:
     {
         create();
     }
-    virtual void SAL_CALL run() override
+    virtual void run() override
     {
         osl::Thread::wait( std::chrono::seconds(mnSeconds) );
         fprintf(stderr, "ERROR: WatchDog timer thread expired, failing the test!\n");

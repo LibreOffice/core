@@ -3878,13 +3878,13 @@ bool SelectionManager::handleEvent(const void* pEvent)
     return handleXEvent(*pXEvent);
 }
 
-void SAL_CALL SelectionManager::disposing( const css::lang::EventObject& rEvt )
+void SelectionManager::disposing( const css::lang::EventObject& rEvt )
 {
     if (rEvt.Source == m_xDesktop || rEvt.Source == m_xDisplayConnection->getXWeak())
         shutdown();
 }
 
-void SAL_CALL SelectionManager::queryTermination( const css::lang::EventObject& )
+void SelectionManager::queryTermination( const css::lang::EventObject& )
 {
 }
 
@@ -3893,7 +3893,7 @@ void SAL_CALL SelectionManager::queryTermination( const css::lang::EventObject& 
  * the downing event can be too late if paste are requested during shutdown and ~SfxApplication
  * has been called before vcl is shutdown
  */
-void SAL_CALL SelectionManager::notifyTermination( const css::lang::EventObject& rEvent )
+void SelectionManager::notifyTermination( const css::lang::EventObject& rEvent )
 {
     disposing(rEvent);
 }

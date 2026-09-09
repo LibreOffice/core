@@ -685,12 +685,12 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
     return aVector;
 }
 
-cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavors()
 {
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
 
-bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+bool GtkTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<css::datatransfer::DataFlavor> aAll =
         getTransferDataFlavorsAsVector();
@@ -723,7 +723,7 @@ public:
      * XTransferable
      */
 
-    virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    virtual cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         cpo::uno::Any aRet;
 
@@ -808,40 +808,40 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     /*
      * XClipboard
      */
 
-    virtual Reference< css::datatransfer::XTransferable > SAL_CALL getContents() override;
+    virtual Reference< css::datatransfer::XTransferable > getContents() override;
 
-    virtual void SAL_CALL setContents(
+    virtual void setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
-    virtual OUString SAL_CALL getName() override;
+    virtual OUString getName() override;
 
     /*
      * XClipboardEx
      */
 
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
+    virtual sal_Int8 getRenderingCapabilities() override;
 
     /*
      * XFlushableClipboard
      */
-    virtual void SAL_CALL flushClipboard() override;
+    virtual void flushClipboard() override;
 
     /*
      * XClipboardNotifier
      */
-    virtual void SAL_CALL addClipboardListener(
+    virtual void addClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
-    virtual void SAL_CALL removeClipboardListener(
+    virtual void removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
     void ClipboardGet(GtkSelectionData *selection_data, guint info);
@@ -1288,17 +1288,17 @@ GtkInstDropTarget::GtkInstDropTarget(GtkSalFrame* pFrame)
     setActive(true);
 }
 
-OUString SAL_CALL GtkInstDropTarget::getImplementationName()
+OUString GtkInstDropTarget::getImplementationName()
 {
     return u"com.sun.star.datatransfer.dnd.VclGtkDropTarget"_ustr;
 }
 
-bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
+bool GtkInstDropTarget::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL GtkInstDropTarget::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> GtkInstDropTarget::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDropTarget"_ustr };
     return aRet;
@@ -1358,17 +1358,17 @@ sal_Int32 GtkInstDragSource::getDefaultCursor( sal_Int8 )
     return 0;
 }
 
-OUString SAL_CALL GtkInstDragSource::getImplementationName()
+OUString GtkInstDragSource::getImplementationName()
 {
     return u"com.sun.star.datatransfer.dnd.VclGtkDragSource"_ustr;
 }
 
-bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
+bool GtkInstDragSource::supportsService(OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> GtkInstDragSource::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDragSource"_ustr };
     return aRet;

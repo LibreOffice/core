@@ -42,25 +42,25 @@ public:
 
     // XEventListener
     using AccessibleBrowseBoxBase::disposing;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     /** @return  The index of this object among the parent's children. */
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
 
     /** @return
             The name of this class.
     */
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     /** @return
             The count of visible children.
     */
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return
             The XAccessible interface of the specified child.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** Return a bitset of states of the current object.
@@ -68,24 +68,24 @@ public:
     sal_Int64 implCreateStateSet() override;
 
     // XAccessibleText
-    virtual sal_Int32 SAL_CALL getCaretPosition() override;
-    virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
-    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
-    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
-    virtual sal_Int32 SAL_CALL getCharacterCount() override;
-    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
-    virtual OUString SAL_CALL getSelectedText() override;
-    virtual sal_Int32 SAL_CALL getSelectionStart() override;
-    virtual sal_Int32 SAL_CALL getSelectionEnd() override;
-    virtual bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual OUString SAL_CALL getText() final override;
-    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
-    virtual bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+    virtual sal_Int32 getCaretPosition() override;
+    virtual bool setCaretPosition( sal_Int32 nIndex ) override;
+    virtual sal_Unicode getCharacter( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual css::awt::Rectangle getCharacterBounds( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getCharacterCount() override;
+    virtual sal_Int32 getIndexAtPoint( const css::awt::Point& aPoint ) override;
+    virtual OUString getSelectedText() override;
+    virtual sal_Int32 getSelectionStart() override;
+    virtual sal_Int32 getSelectionEnd() override;
+    virtual bool setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual OUString getText() final override;
+    virtual OUString getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual css::accessibility::TextSegment getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual css::accessibility::TextSegment getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual css::accessibility::TextSegment getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual bool copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual bool scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
 private:
     AccessibleBrowseBoxTableCell(const AccessibleBrowseBoxTableCell&) = delete;

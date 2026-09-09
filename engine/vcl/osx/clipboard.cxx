@@ -136,7 +136,7 @@ AquaClipboard::~AquaClipboard()
     [mPasteboard release];
 }
 
-uno::Reference<datatransfer::XTransferable> SAL_CALL AquaClipboard::getContents()
+uno::Reference<datatransfer::XTransferable> AquaClipboard::getContents()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -161,7 +161,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL AquaClipboard::getContents(
                                     mPasteboard));
 }
 
-void SAL_CALL AquaClipboard::setContents(
+void AquaClipboard::setContents(
     uno::Reference<datatransfer::XTransferable> const & xTransferable,
     uno::Reference<datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner)
 {
@@ -191,17 +191,17 @@ void SAL_CALL AquaClipboard::setContents(
     fireClipboardChangedEvent();
 }
 
-OUString SAL_CALL AquaClipboard::getName()
+OUString AquaClipboard::getName()
 {
     return OUString();
 }
 
-sal_Int8 SAL_CALL AquaClipboard::getRenderingCapabilities()
+sal_Int8 AquaClipboard::getRenderingCapabilities()
 {
     return 0;
 }
 
-void SAL_CALL AquaClipboard::addClipboardListener(uno::Reference<datatransfer::clipboard::XClipboardListener> const & listener)
+void AquaClipboard::addClipboardListener(uno::Reference<datatransfer::clipboard::XClipboardListener> const & listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -212,7 +212,7 @@ void SAL_CALL AquaClipboard::addClipboardListener(uno::Reference<datatransfer::c
     mClipboardListeners.push_back(listener);
 }
 
-void SAL_CALL AquaClipboard::removeClipboardListener(uno::Reference<datatransfer::clipboard::XClipboardListener> const & listener)
+void AquaClipboard::removeClipboardListener(uno::Reference<datatransfer::clipboard::XClipboardListener> const & listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -309,7 +309,7 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* typ
     }
 }
 
-void SAL_CALL AquaClipboard::flushClipboard()
+void AquaClipboard::flushClipboard()
 {
     if (mXClipboardContent.is())
     {
@@ -339,17 +339,17 @@ NSPasteboard* AquaClipboard::getPasteboard() const
     return mPasteboard;
 }
 
-OUString SAL_CALL AquaClipboard::getImplementationName()
+OUString AquaClipboard::getImplementationName()
 {
     return clipboard_getImplementationName();
 }
 
-bool SAL_CALL AquaClipboard::supportsService(OUString const & rServiceName)
+bool AquaClipboard::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL AquaClipboard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> AquaClipboard::getSupportedServiceNames()
 {
     return clipboard_getSupportedServiceNames();
 }

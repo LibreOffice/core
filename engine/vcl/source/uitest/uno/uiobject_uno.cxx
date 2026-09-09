@@ -52,7 +52,7 @@ UIObjectUnoObj::~UIObjectUnoObj()
     mpObj.reset();
 }
 
-css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(const OUString& rID)
+css::uno::Reference<css::ui::test::XUIObject> UIObjectUnoObj::getChild(const OUString& rID)
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
 
 }
 
-void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& rPropValues)
+void UIObjectUnoObj::executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& rPropValues)
 {
     auto aIdle = std::make_unique<Idle>("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
@@ -181,13 +181,13 @@ cpo::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
     return aRet;
 }
 
-OUString SAL_CALL UIObjectUnoObj::getType()
+OUString UIObjectUnoObj::getType()
 {
     SolarMutexGuard aGuard;
     return mpObj->get_type();
 }
 
-OUString SAL_CALL UIObjectUnoObj::getImplementationName()
+OUString UIObjectUnoObj::getImplementationName()
 {
     return u"org.libreoffice.uitest.UIObject"_ustr;
 }
@@ -202,13 +202,13 @@ cpo::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
     return { u"com.sun.star.ui.test.UIObject"_ustr };
 }
 
-OUString SAL_CALL UIObjectUnoObj::getHierarchy()
+OUString UIObjectUnoObj::getHierarchy()
 {
     SolarMutexGuard aGuard;
     return mpObj->dumpHierarchy();
 }
 
-bool SAL_CALL UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
+bool UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
 {
     return mpObj->equals(*static_cast<UIObjectUnoObj&>(*rOther).mpObj);
 }

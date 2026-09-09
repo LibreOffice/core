@@ -95,7 +95,7 @@ iOSTransferable::iOSTransferable(const Reference<XMimeContentTypeFactory>& rXMim
 
 iOSTransferable::~iOSTransferable() {}
 
-Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
+Any iOSTransferable::getTransferData(const DataFlavor& aFlavor)
 {
     if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
     {
@@ -132,9 +132,9 @@ Any SAL_CALL iOSTransferable::getTransferData(const DataFlavor& aFlavor)
     return dp->getOOoData();
 }
 
-Sequence<DataFlavor> SAL_CALL iOSTransferable::getTransferDataFlavors() { return mFlavorList; }
+Sequence<DataFlavor> iOSTransferable::getTransferDataFlavors() { return mFlavorList; }
 
-bool SAL_CALL iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
+bool iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
 {
     for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
         if (compareDataFlavors(aFlavor, mFlavorList[i]))

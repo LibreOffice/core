@@ -35,20 +35,20 @@ DragSourceContext::~DragSourceContext()
 {
 }
 
-sal_Int32 SAL_CALL DragSourceContext::getCurrentCursor(  )
+sal_Int32 DragSourceContext::getCurrentCursor(  )
 {
     return 0;
 }
 
-void SAL_CALL DragSourceContext::setCursor( sal_Int32 /*cursorId*/ )
+void DragSourceContext::setCursor( sal_Int32 /*cursorId*/ )
 {
 }
 
-void SAL_CALL DragSourceContext::setImage( sal_Int32 /*imageId*/ )
+void DragSourceContext::setImage( sal_Int32 /*imageId*/ )
 {
 }
 
-void SAL_CALL DragSourceContext::transferablesFlavorsChanged(  )
+void DragSourceContext::transferablesFlavorsChanged(  )
 {
 }
 

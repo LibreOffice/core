@@ -274,28 +274,28 @@ TransferableHelper::TerminateListener::~TerminateListener()
 }
 
 
-void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& )
+void TransferableHelper::TerminateListener::disposing( const EventObject& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const EventObject& )
+void TransferableHelper::TerminateListener::queryTermination( const EventObject& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& )
+void TransferableHelper::TerminateListener::notifyTermination( const EventObject& )
 {
     mrParent.ImplFlush();
     mrParent.mxTerminateListener.clear();
 }
 
-OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
+OUString TransferableHelper::TerminateListener::getImplementationName()
 {
     return u"com.sun.star.comp.svt.TransferableHelperTerminateListener"_ustr;
 }
 
-bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
+bool TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
 {
     return false;
 }
@@ -318,12 +318,12 @@ TransferableHelper::~TransferableHelper()
     }
 }
 
-Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
+Any TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 {
     return getTransferData2(rFlavor, OUString());
 }
 
-Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
+Any TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     if( !maAny.hasValue() || maFormats.empty() || ( maLastFormat != rFlavor.MimeType ) )
     {
@@ -468,14 +468,14 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
     return maAny;
 }
 
-bool SAL_CALL TransferableHelper::isComplex()
+bool TransferableHelper::isComplex()
 {
     // By default everything is complex, until proven otherwise
     // in the respective document type transferable handler.
     return true;
 }
 
-Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
+Sequence< DataFlavor > TransferableHelper::getTransferDataFlavors()
 {
     const SolarMutexGuard aGuard;
 
@@ -492,7 +492,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
 }
 
 
-bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor )
+bool TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
 
@@ -517,7 +517,7 @@ bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlav
 }
 
 
-void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& )
+void TransferableHelper::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& )
 {
     const SolarMutexGuard aGuard;
 
@@ -539,12 +539,12 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
 }
 
 
-void SAL_CALL TransferableHelper::disposing( const EventObject& )
+void TransferableHelper::disposing( const EventObject& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE )
+void TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE )
 {
     const SolarMutexGuard aGuard;
 
@@ -559,22 +559,22 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
 }
 
 
-void SAL_CALL TransferableHelper::dragEnter( const DragSourceDragEvent& )
+void TransferableHelper::dragEnter( const DragSourceDragEvent& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::dragExit( const DragSourceEvent& )
+void TransferableHelper::dragExit( const DragSourceEvent& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& )
+void TransferableHelper::dragOver( const DragSourceDragEvent& )
 {
 }
 
 
-void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& )
+void TransferableHelper::dropActionChanged( const DragSourceDragEvent& )
 {
 }
 
@@ -1072,10 +1072,10 @@ private:
 
 protected:
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const clipboard::ClipboardEvent& event ) override;
+    virtual void changedContents( const clipboard::ClipboardEvent& event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) override;
+    virtual void disposing( const EventObject& Source ) override;
 
 public:
     TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener );
@@ -1104,7 +1104,7 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
 }
 
 
-void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event )
+void TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event )
 {
     SolarMutexGuard aSolarGuard;
     if( mpListener )
@@ -1112,7 +1112,7 @@ void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::C
 }
 
 
-void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& )
+void TransferableClipboardNotifier::disposing( const EventObject& )
 {
     // clipboard is being disposed. Hmm. Okay, become disfunctional myself.
     dispose();

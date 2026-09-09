@@ -27,11 +27,11 @@ public:
     VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt16 nItemPos);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

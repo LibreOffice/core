@@ -75,7 +75,7 @@ DropTarget::~DropTarget()
 // interface. (m_pDropTarget)
 // If the HWND is invalid then it doesn't decrement and
 // the IDropTarget object will live on. MEMORY LEAK
-void SAL_CALL DropTarget::disposing()
+void DropTarget::disposing()
 {
     if( m_threadIdTarget)
     {
@@ -105,7 +105,7 @@ void SAL_CALL DropTarget::disposing()
 
 }
 
-void SAL_CALL DropTarget::initialize(const Sequence<cpo::uno::Any>& aArguments)
+void DropTarget::initialize(const Sequence<cpo::uno::Any>& aArguments)
 {
     // The window must be registered for Dnd by RegisterDragDrop. We must ensure
     // that RegisterDragDrop is called from an STA ( OleInitialize) thread.
@@ -260,49 +260,49 @@ unsigned __stdcall DndTargetOleSTAFunc(void* pParams)
 }
 
 // XServiceInfo
-OUString SAL_CALL DropTarget::getImplementationName(  )
+OUString DropTarget::getImplementationName(  )
 {
     return "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1";
 }
 // XServiceInfo
-bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
+bool DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
+Sequence< OUString > DropTarget::getSupportedServiceNames(  )
 {
     return { "com.sun.star.datatransfer.dnd.OleDropTarget" };
 }
 
 // XDropTarget
-void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
     rBHelper.addListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
-void SAL_CALL DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
+void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
     rBHelper.removeListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
-bool SAL_CALL DropTarget::isActive(  )
+bool DropTarget::isActive(  )
 {
     return m_bActive; //m_bDropTargetRegistered;
 }
 
-void SAL_CALL DropTarget::setActive( bool _b )
+void DropTarget::setActive( bool _b )
 {
     MutexGuard g(m_aMutex);
     m_bActive= _b;
 }
 
-sal_Int8 SAL_CALL DropTarget::getDefaultActions(  )
+sal_Int8 DropTarget::getDefaultActions(  )
 {
     return m_nDefaultActions;
 }
 
-void SAL_CALL DropTarget::setDefaultActions( sal_Int8 actions )
+void DropTarget::setDefaultActions( sal_Int8 actions )
 {
     OSL_ENSURE( actions < 8, "No valid default actions");
     m_nDefaultActions= actions;

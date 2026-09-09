@@ -271,7 +271,7 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds()
 // XComponent
 
 
-void SAL_CALL OAccessibleMenuItemComponent::disposing()
+void OAccessibleMenuItemComponent::disposing()
 {
     OAccessibleMenuBaseComponent::disposing();
 

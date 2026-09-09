@@ -49,7 +49,7 @@ Graphic::~Graphic() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL Graphic::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any Graphic::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
     if( rType == cppu::UnoType<graphic::XGraphic>::get())
@@ -64,28 +64,28 @@ cpo::uno::Any SAL_CALL Graphic::queryInterface( const cpo::uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL Graphic::acquire()
+void Graphic::acquire()
     noexcept
 {
     unographic::GraphicDescriptor::acquire();
 }
 
-void SAL_CALL Graphic::release() noexcept
+void Graphic::release() noexcept
 {
     unographic::GraphicDescriptor::release();
 }
 
-OUString SAL_CALL Graphic::getImplementationName()
+OUString Graphic::getImplementationName()
 {
     return u"com.sun.star.comp.graphic.Graphic"_ustr;
 }
 
-bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
+bool Graphic::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Graphic::getSupportedServiceNames()
 {
     cpo::uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
     const cpo::uno::Sequence< OUString >    aNew { u"com.sun.star.graphic.Graphic"_ustr };
@@ -98,7 +98,7 @@ cpo::uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     return aRet;
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Graphic::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Graphic::getTypes()
 {
     return cppu::OTypeCollection(
             cppu::UnoType<graphic::XGraphic>::get(),
@@ -107,7 +107,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Graphic::getTypes()
         ).getTypes();
 }
 
-sal_Int8 SAL_CALL Graphic::getType()
+sal_Int8 Graphic::getType()
 {
     sal_Int8 cRet = graphic::GraphicType::EMPTY;
 
@@ -122,7 +122,7 @@ sal_Int8 SAL_CALL Graphic::getType()
 
 // XBitmap
 
-awt::Size SAL_CALL Graphic::getSize()
+awt::Size Graphic::getSize()
 {
     SolarMutexGuard aGuard;
 
@@ -134,7 +134,7 @@ awt::Size SAL_CALL Graphic::getSize()
     return awt::Size(aVclSize.Width(), aVclSize.Height());
 }
 
-cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
+cpo::uno::Sequence<sal_Int8> Graphic::getDIB()
 {
     SolarMutexGuard aGuard;
 
@@ -151,7 +151,7 @@ cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
     }
 }
 
-cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
+cpo::uno::Sequence<sal_Int8> Graphic::getMaskDIB()
 {
     SolarMutexGuard aGuard;
 
@@ -166,7 +166,7 @@ cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 }
 
 // XGraphicTransformer
-uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
+uno::Reference< graphic::XGraphic > Graphic::colorChange(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
 {
     ::Graphic aGraphic(rxGraphic);
@@ -213,7 +213,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
     return aReturnGraphic.GetXGraphic();
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyDuotone(
+uno::Reference< graphic::XGraphic > Graphic::applyDuotone(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorOne, sal_Int32 nColorTwo )
 {
     ::Graphic aGraphic(rxGraphic);
@@ -229,7 +229,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyDuotone(
     return aReturnGraphic.GetXGraphic();
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyBrightnessContrast(
+uno::Reference< graphic::XGraphic > Graphic::applyBrightnessContrast(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nBrightness, sal_Int32 nContrast, bool mso )
 {
     ::Graphic aGraphic(rxGraphic);

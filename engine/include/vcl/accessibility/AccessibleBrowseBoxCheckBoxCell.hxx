@@ -43,18 +43,18 @@ public:
                             bool _bIsTriState);
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual sal_Int64 getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual OUString getImplementationName() override;
+    virtual sal_Int64 getAccessibleIndexInParent(  ) override;
 
 
     // XAccessibleValue
-    virtual cpo::uno::Any SAL_CALL getCurrentValue(  ) override;
-    virtual bool SAL_CALL setCurrentValue( const cpo::uno::Any& aNumber ) override;
-    virtual cpo::uno::Any SAL_CALL getMaximumValue(  ) override;
-    virtual cpo::uno::Any SAL_CALL getMinimumValue(  ) override;
-    virtual cpo::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+    virtual cpo::uno::Any getCurrentValue(  ) override;
+    virtual bool setCurrentValue( const cpo::uno::Any& aNumber ) override;
+    virtual cpo::uno::Any getMaximumValue(  ) override;
+    virtual cpo::uno::Any getMinimumValue(  ) override;
+    virtual cpo::uno::Any getMinimumIncrement(  ) override;
 
     // internal
     void        SetChecked( bool _bChecked );

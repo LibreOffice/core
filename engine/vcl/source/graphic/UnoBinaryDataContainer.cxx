@@ -14,7 +14,7 @@
 
 using namespace css;
 
-cpo::uno::Sequence<sal_Int8> SAL_CALL UnoBinaryDataContainer::getCopyAsByteSequence()
+cpo::uno::Sequence<sal_Int8> UnoBinaryDataContainer::getCopyAsByteSequence()
 {
     return maBinaryDataContainer.getCopyAsByteSequence();
 }

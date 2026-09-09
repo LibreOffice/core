@@ -162,7 +162,7 @@ DragSource::~DragSource()
         [mLastMouseEventBeforeStartDrag release];
 }
 
-void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
+void DragSource::initialize(const Sequence< Any >& aArguments)
 {
   if (aArguments.getLength() < 2)
   {
@@ -206,17 +206,17 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   [static_cast<id <MouseEventListener>>(mView) registerMouseEventListener: mDragSourceHelper];
 }
 
-bool SAL_CALL DragSource::isDragImageSupported(  )
+bool DragSource::isDragImageSupported(  )
 {
   return true;
 }
 
-sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
+sal_Int32 DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
 {
   return 0;
 }
 
-void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
+void DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
                                     sal_Int32 /*cursor*/,
                                     sal_Int32 /*image*/,
@@ -329,17 +329,17 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   return srcActions;
 }
 
-OUString SAL_CALL DragSource::getImplementationName(  )
+OUString DragSource::getImplementationName(  )
 {
   return dragSource_getImplementationName();
 }
 
-bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
+bool DragSource::supportsService( const OUString& ServiceName )
 {
   return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames()
+Sequence< OUString > DragSource::getSupportedServiceNames()
 {
   return dragSource_getSupportedServiceNames();
 }

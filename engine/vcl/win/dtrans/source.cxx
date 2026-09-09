@@ -130,7 +130,7 @@ void DragSource::StartDragImpl(
 
 // XInitialization
 /** aArguments contains a machine id */
-void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
+void DragSource::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.getLength() >=2)
         m_hAppWindow= reinterpret_cast<HWND>(static_cast<sal_uIntPtr>(*o3tl::doAccess<sal_uInt64>(aArguments[1])));
@@ -138,19 +138,19 @@ void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
 }
 
 /** XDragSource */
-bool SAL_CALL DragSource::isDragImageSupported(  )
+bool DragSource::isDragImageSupported(  )
 {
     return false;
 }
 
-sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
+sal_Int32 DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
 {
     return 0;
 }
 
 /** Notifies the XDragSourceListener by
      calling dragDropEnd */
-void SAL_CALL DragSource::startDrag(
+void DragSource::startDrag(
     const DragGestureEvent& trigger,
     sal_Int8 sourceActions,
     sal_Int32 cursor,
@@ -278,17 +278,17 @@ dwEffect
 }
 
 // XServiceInfo
-OUString SAL_CALL DragSource::getImplementationName(  )
+OUString DragSource::getImplementationName(  )
 {
     return "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1";
 }
 // XServiceInfo
-bool SAL_CALL DragSource::supportsService( const OUString& ServiceName )
+bool DragSource::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  )
+Sequence< OUString > DragSource::getSupportedServiceNames(  )
 {
     return { "com.sun.star.datatransfer.dnd.OleDragSource" };
 }

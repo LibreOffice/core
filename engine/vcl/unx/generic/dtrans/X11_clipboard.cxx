@@ -130,7 +130,7 @@ void X11Clipboard::clearContents()
         xOwner->lostOwnership(xThis, xTrans);
 }
 
-Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
+Reference< XTransferable > X11Clipboard::getContents()
 {
     MutexGuard aGuard(m_xSelectionManager->getMutex());
 
@@ -139,7 +139,7 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     return m_aContents;
 }
 
-void SAL_CALL X11Clipboard::setContents(
+void X11Clipboard::setContents(
     const Reference< XTransferable >& xTrans,
     const Reference< XClipboardOwner >& xClipboardOwner )
 {
@@ -171,23 +171,23 @@ void SAL_CALL X11Clipboard::setContents(
     fireChangedContentsEvent();
 }
 
-OUString SAL_CALL X11Clipboard::getName()
+OUString X11Clipboard::getName()
 {
     return m_xSelectionManager->getString( m_aSelection );
 }
 
-sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
+sal_Int8 X11Clipboard::getRenderingCapabilities()
 {
     return RenderingCapabilities::Delayed;
 }
 
-void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
+void X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
     MutexGuard aGuard( m_xSelectionManager->getMutex() );
     m_aListeners.push_back( listener );
 }
 
-void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
+void X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
     MutexGuard aGuard( m_xSelectionManager->getMutex() );
     std::erase(m_aListeners, listener);
@@ -213,17 +213,17 @@ Reference< XInterface > X11Clipboard::getReference() noexcept
     return getXWeak();
 }
 
-OUString SAL_CALL X11Clipboard::getImplementationName(  )
+OUString X11Clipboard::getImplementationName(  )
 {
     return X11_CLIPBOARD_IMPLEMENTATION_NAME;
 }
 
-bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
+bool X11Clipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
+Sequence< OUString > X11Clipboard::getSupportedServiceNames(    )
 {
     return X11Clipboard_getSupportedServiceNames();
 }

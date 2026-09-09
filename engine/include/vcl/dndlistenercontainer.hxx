@@ -75,9 +75,9 @@ public:
      * XDragGestureRecognizer
      */
 
-    virtual void SAL_CALL addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
-    virtual void SAL_CALL removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
-    virtual void SAL_CALL resetRecognizer(  ) override;
+    virtual void addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void resetRecognizer(  ) override;
 
     // Helper method to check if there are any drag gesture listeners registered
     bool hasDragGestureListeners() const;
@@ -86,27 +86,27 @@ public:
      * XDropTargetDragContext
      */
 
-    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) override;
-    virtual void SAL_CALL rejectDrag(  ) override;
+    virtual void acceptDrag( sal_Int8 dragOperation ) override;
+    virtual void rejectDrag(  ) override;
 
        /*
      * XDropTargetDropContext
      */
 
-    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) override;
-    virtual void SAL_CALL rejectDrop(  ) override;
-    virtual void SAL_CALL dropComplete( bool success ) override;
+    virtual void acceptDrop( sal_Int8 dropOperation ) override;
+    virtual void rejectDrop(  ) override;
+    virtual void dropComplete( bool success ) override;
 
     /*
      * XDropTarget
      */
 
-    virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
-    virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
-    virtual bool SAL_CALL isActive(  ) override;
-    virtual void SAL_CALL setActive( bool active ) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
-    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
+    virtual void addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual void removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual bool isActive(  ) override;
+    virtual void setActive( bool active ) override;
+    virtual sal_Int8 getDefaultActions(  ) override;
+    virtual void setDefaultActions( sal_Int8 actions ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

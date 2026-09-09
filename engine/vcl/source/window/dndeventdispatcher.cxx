@@ -85,7 +85,7 @@ void DNDEventDispatcher::designate_currentwindow(vcl::Window *pWindow)
         m_pCurrentWindow->AddEventListener(LINK(this, DNDEventDispatcher, WindowEventListener));
 }
 
-void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
+void DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 {
     std::scoped_lock aImplGuard( m_aMutex );
 
@@ -118,7 +118,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     m_aDataFlavorList.realloc( 0 );
 }
 
-void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
+void DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
 {
     std::scoped_lock aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
@@ -141,7 +141,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
 }
 
-void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
+void DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 {
     std::scoped_lock aImplGuard( m_aMutex );
 
@@ -152,7 +152,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     m_aDataFlavorList.realloc( 0 );
 }
 
-void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
+void DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 {
     std::scoped_lock aImplGuard( m_aMutex );
 
@@ -188,7 +188,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     }
 }
 
-void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
+void DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
 {
     std::scoped_lock aImplGuard( m_aMutex );
 
@@ -224,7 +224,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     }
 }
 
-void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
+void DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
 {
     std::scoped_lock aImplGuard( m_aMutex );
 
@@ -235,15 +235,15 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
     fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
 }
 
-void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
+void DNDEventDispatcher::disposing( const EventObject& )
 {
 }
 
-void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ )
+void DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ )
 {
 }
 
-void SAL_CALL DNDEventDispatcher::rejectDrag()
+void DNDEventDispatcher::rejectDrag()
 {
 }
 

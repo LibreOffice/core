@@ -38,8 +38,8 @@ public:
     TargetDragContext(const TargetDragContext&) = delete;
     TargetDragContext& operator=(const TargetDragContext&) = delete;
 
-    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override;
-    virtual void SAL_CALL rejectDrag() override;
+    virtual void acceptDrag(sal_Int8 dragOperation) override;
+    virtual void rejectDrag() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,13 +57,13 @@ rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleT
 
 // XAccessibleContext ---------------------------------------------------------
 
-sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
+sal_Int64 AccessibleTabListBox::getAccessibleChildCount()
 {
     // only the table; header is handled by HeaderBar (which is a sibling of the SvHeaderTabListBox)
     return 1;
 }
 
-Reference< XAccessible > SAL_CALL
+Reference< XAccessible >
 AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());

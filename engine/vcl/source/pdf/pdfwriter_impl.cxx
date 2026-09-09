@@ -4250,7 +4250,7 @@ class PDFStreamIf : public cppu::WeakImplHelper< css::io::XOutputStream >
     public:
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
 
-    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override
+    virtual void writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override
     {
         if( m_bWrite && aData.hasElements() )
         {
@@ -4258,8 +4258,8 @@ class PDFStreamIf : public cppu::WeakImplHelper< css::io::XOutputStream >
             (void)m_pWriter->writeBufferBytes( aData.getConstArray(), nBytes );
         }
     }
-    virtual void SAL_CALL flush() override {}
-    virtual void SAL_CALL closeOutput() override
+    virtual void flush() override {}
+    virtual void closeOutput() override
     {
         m_bWrite = false;
     }

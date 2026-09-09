@@ -80,30 +80,30 @@ public:
      * XDropTargetDragContext
      */
 
-    virtual void SAL_CALL acceptDrag( sal_Int8 dropAction ) override;
-    virtual void SAL_CALL rejectDrag() override;
+    virtual void acceptDrag( sal_Int8 dropAction ) override;
+    virtual void rejectDrag() override;
 
     /*
      * XDropTargetListener
      */
 
-    virtual void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override;
-    virtual void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
-    virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
-    virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
-    virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
+    virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override;
+    virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
+    virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
+    virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
+    virtual void dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
 
     /*
      * XDragGestureListener
      */
 
-    virtual void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;
+    virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;
 
     /*
      * XEventListener
      */
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& eo ) override;
+    virtual void disposing( const css::lang::EventObject& eo ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

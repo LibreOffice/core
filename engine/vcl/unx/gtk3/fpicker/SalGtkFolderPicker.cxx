@@ -51,7 +51,7 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< cpo::uno::XCompone
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 }
 
-void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirectory )
+void SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     SolarMutexGuard g;
 
@@ -70,7 +70,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirector
     gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(m_pDialog), aTxt.getStr());
 }
 
-OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory()
+OUString SalGtkFolderPicker::getDisplayDirectory()
 {
     SolarMutexGuard g;
 
@@ -85,7 +85,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory()
     return aCurrentFolderName;
 }
 
-OUString SAL_CALL SalGtkFolderPicker::getDirectory()
+OUString SalGtkFolderPicker::getDirectory()
 {
     SolarMutexGuard g;
 
@@ -99,13 +99,13 @@ OUString SAL_CALL SalGtkFolderPicker::getDirectory()
     return aSelectedFolderName;
 }
 
-void SAL_CALL SalGtkFolderPicker::setDescription( const OUString& /*rDescription*/ )
+void SalGtkFolderPicker::setDescription( const OUString& /*rDescription*/ )
 {
 }
 
 // XExecutableDialog functions
 
-void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle )
+void SalGtkFolderPicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard g;
 
@@ -116,7 +116,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle )
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
 
-sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
+sal_Int16 SalGtkFolderPicker::execute()
 {
     SolarMutexGuard g;
 
@@ -156,14 +156,14 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 
 // XInitialization
 
-void SAL_CALL SalGtkFolderPicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments)
+void SalGtkFolderPicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments)
 {
     m_pParentWidget = GetParentWidget(aArguments);
 }
 
 // XCancellable
 
-void SAL_CALL SalGtkFolderPicker::cancel()
+void SalGtkFolderPicker::cancel()
 {
     SolarMutexGuard g;
 

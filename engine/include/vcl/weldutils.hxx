@@ -66,100 +66,100 @@ public:
     }
 
     // css::awt::XWindow
-    void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
+    void setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
     {
         throw cpo::uno::RuntimeException(u"not implemented"_ustr);
     }
 
-    css::awt::Rectangle SAL_CALL getPosSize() override
+    css::awt::Rectangle getPosSize() override
     {
         throw cpo::uno::RuntimeException(u"not implemented"_ustr);
     }
 
-    void SAL_CALL setVisible(bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }
+    void setVisible(bool bVisible) override { m_pWeldWidget->set_visible(bVisible); }
 
-    void SAL_CALL setEnable(bool bSensitive) override { m_pWeldWidget->set_sensitive(bSensitive); }
+    void setEnable(bool bSensitive) override { m_pWeldWidget->set_sensitive(bSensitive); }
 
-    void SAL_CALL setFocus() override { m_pWeldWidget->grab_focus(); }
+    void setFocus() override { m_pWeldWidget->grab_focus(); }
 
-    void SAL_CALL
+    void
     addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aWindowListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aWindowListeners.removeInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aFocusListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aFocusListeners.removeInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aKeyListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aKeyListeners.removeInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMouseListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMouseListeners.removeInterface(g, rListener);
     }
 
-    void SAL_CALL addMouseMotionListener(
+    void addMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMotionListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL removeMouseMotionListener(
+    void removeMouseMotionListener(
         const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMotionListeners.removeInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aPaintListeners.addInterface(g, rListener);
     }
 
-    void SAL_CALL
+    void
     removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
@@ -187,10 +187,10 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
-    SAL_DLLPRIVATE void SAL_CALL
+    SAL_DLLPRIVATE void
     statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
-    SAL_DLLPRIVATE void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
+    SAL_DLLPRIVATE void disposing(const css::lang::EventObject& /*Source*/) override;
 
     const css::uno::Reference<css::frame::XFrame>& getFrame() const { return mxFrame; }
 

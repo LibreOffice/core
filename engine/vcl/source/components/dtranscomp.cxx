@@ -74,9 +74,9 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     static Sequence< OUString > getSupportedServiceNames_static();
 
@@ -84,27 +84,27 @@ public:
      * XClipboard
      */
 
-    virtual Reference< css::datatransfer::XTransferable > SAL_CALL getContents() override;
+    virtual Reference< css::datatransfer::XTransferable > getContents() override;
 
-    virtual void SAL_CALL setContents(
+    virtual void setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
-    virtual OUString SAL_CALL getName() override;
+    virtual OUString getName() override;
 
     /*
      * XClipboardEx
      */
 
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
+    virtual sal_Int8 getRenderingCapabilities() override;
 
     /*
      * XClipboardNotifier
      */
-    virtual void SAL_CALL addClipboardListener(
+    virtual void addClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
-    virtual void SAL_CALL removeClipboardListener(
+    virtual void removeClipboardListener(
         const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 };
 
@@ -214,9 +214,9 @@ public:
     GenericDragSource() {}
 
     // XDragSource
-    virtual bool    SAL_CALL isDragImageSupported() override;
-    virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
-    virtual void        SAL_CALL startDrag(
+    virtual bool    isDragImageSupported() override;
+    virtual sal_Int32   getDefaultCursor( sal_Int8 dragAction ) override;
+    virtual void        startDrag(
                                      const datatransfer::dnd::DragGestureEvent& trigger,
                                      sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
                                      const Reference< datatransfer::XTransferable >& transferable,
@@ -224,15 +224,15 @@ public:
                                      ) override;
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) override;
+    virtual void        initialize( const Sequence< Any >& arguments ) override;
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.datatransfer.dnd.VclGenericDragSource"_ustr; }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     { return getSupportedServiceNames_static(); }
 
     static Sequence< OUString > getSupportedServiceNames_static()
@@ -290,23 +290,23 @@ public:
     GenericDropTarget() {}
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& args ) override;
+    virtual void        initialize( const Sequence< Any >& args ) override;
 
     // XDropTarget
-    virtual void        SAL_CALL addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
-    virtual void        SAL_CALL removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
-    virtual bool    SAL_CALL isActive() override;
-    virtual void        SAL_CALL setActive( bool active ) override;
-    virtual sal_Int8    SAL_CALL getDefaultActions() override;
-    virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) override;
+    virtual void        addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
+    virtual void        removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& ) override;
+    virtual bool    isActive() override;
+    virtual void        setActive( bool active ) override;
+    virtual sal_Int8    getDefaultActions() override;
+    virtual void        setDefaultActions( sal_Int8 actions ) override;
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.datatransfer.dnd.VclGenericDropTarget"_ustr; }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     { return getSupportedServiceNames_static(); }
 
     static Sequence< OUString > getSupportedServiceNames_static()

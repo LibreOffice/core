@@ -39,17 +39,17 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 
 // XServiceInfo
 
-OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
+OUString CMimeContentTypeFactory::getImplementationName(  )
 {
     return u"com.sun.star.datatransfer.MimeCntTypeFactory"_ustr;
 }
 
-bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
+bool CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
+Sequence< OUString > CMimeContentTypeFactory::getSupportedServiceNames( )
 {
     return { u"com.sun.star.datatransfer.MimeContentTypeFactory"_ustr };
 }

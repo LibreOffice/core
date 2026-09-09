@@ -60,13 +60,13 @@ AquaA11yEventListener::~AquaA11yEventListener()
     [ m_wrapperObject release ];
 }
 
-void SAL_CALL
+void
 AquaA11yEventListener::disposing( const EventObject& )
 {
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ static_cast<AquaA11yWrapper *>(m_wrapperObject) accessibleContext ] ];
 }
 
-void SAL_CALL
+void
 AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent )
 {
     NSString * notification = nil;

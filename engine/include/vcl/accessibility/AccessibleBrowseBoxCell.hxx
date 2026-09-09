@@ -43,7 +43,7 @@ protected:
     virtual tools::Rectangle implGetBoundingBox() override;
 
     // XAccessibleComponent
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
 
 protected:
     AccessibleBrowseBoxCell(

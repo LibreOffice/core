@@ -22,7 +22,7 @@
 #include <com/sun/star/cui/GetCreateDialogFactoryService.hpp>
 #include <comphelper/processfactory.hxx>
 
-typedef VclAbstractDialogFactory*(SAL_CALL* FuncPtrCreateDialogFactory)();
+typedef VclAbstractDialogFactory*(* FuncPtrCreateDialogFactory)();
 
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {

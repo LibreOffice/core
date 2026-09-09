@@ -50,46 +50,46 @@ public:
         actual list.  The text field is not provided for non drop down list
         boxes.
     */
-    sal_Int64 SAL_CALL getAccessibleChildCount() final override;
+    sal_Int64 getAccessibleChildCount() final override;
     /** For drop down list boxes the text field is a not editable
         VCLXAccessibleTextField, for combo boxes it is an
         editable VCLXAccessibleEdit.
     */
-    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 i) override;
 
-    sal_Int16 SAL_CALL getAccessibleRole() override;
+    sal_Int16 getAccessibleRole() override;
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount() final override;
+    virtual sal_Int32 getAccessibleActionCount() final override;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
-    virtual bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
+    virtual bool doAccessibleAction (sal_Int32 nIndex) override;
     /** The returned string is associated with resource
         RID_STR_ACC_ACTION_TOGGLEPOPUP.
     */
-    virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex) override;
+    virtual OUString getAccessibleActionDescription (sal_Int32 nIndex) override;
     /** No keybinding returned so far.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding >
             getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
 
-    virtual cpo::uno::Any SAL_CALL getCurrentValue( ) override;
+    virtual cpo::uno::Any getCurrentValue( ) override;
 
-    virtual bool SAL_CALL setCurrentValue(
+    virtual bool setCurrentValue(
         const cpo::uno::Any& aNumber ) override;
 
-    virtual cpo::uno::Any SAL_CALL getMaximumValue(  ) override;
+    virtual cpo::uno::Any getMaximumValue(  ) override;
 
-    virtual cpo::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual cpo::uno::Any getMinimumValue(  ) override;
 
-    virtual cpo::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+    virtual cpo::uno::Any getMinimumIncrement(  ) override;
 
 protected:
     virtual ~VCLXAccessibleBox() override;

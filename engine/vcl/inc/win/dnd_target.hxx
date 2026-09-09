@@ -101,25 +101,25 @@ public:
     // Overrides WeakComponentImplHelper::disposing which is called by
     // WeakComponentImplHelper::dispose
     // Must be called.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XDropTarget
-    virtual void SAL_CALL addDropTargetListener(
+    virtual void addDropTargetListener(
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
-    virtual void SAL_CALL removeDropTargetListener(
+    virtual void removeDropTargetListener(
         const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
     // Default is not active
-    virtual bool SAL_CALL isActive() override;
-    virtual void SAL_CALL setActive(bool isActive) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions() override;
-    virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
+    virtual bool isActive() override;
+    virtual void setActive(bool isActive) override;
+    virtual sal_Int8 getDefaultActions() override;
+    virtual void setDefaultActions(sal_Int8 actions) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // Functions called from the IDropTarget implementation ( m_pDropTarget)
     virtual HRESULT DragEnter(

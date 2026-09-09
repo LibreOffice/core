@@ -76,10 +76,10 @@ namespace x11 {
         void initialize(::Window aWindow);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual OUString getImplementationName() override;
+        virtual bool    supportsService( const OUString& ServiceName ) override;
         virtual cpo::uno::Sequence< OUString >
-                            SAL_CALL getSupportedServiceNames() override;
+                            getSupportedServiceNames() override;
     };
 
     class SelectionManagerHolder :
@@ -96,17 +96,17 @@ namespace x11 {
         virtual ~SelectionManagerHolder() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual OUString getImplementationName() override;
+        virtual bool    supportsService( const OUString& ServiceName ) override;
         virtual cpo::uno::Sequence< OUString >
-                            SAL_CALL getSupportedServiceNames() override;
+                            getSupportedServiceNames() override;
 
         void initialize();
 
         // XDragSource
-        virtual bool    SAL_CALL isDragImageSupported() override;
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
-        virtual void        SAL_CALL startDrag(
+        virtual bool    isDragImageSupported() override;
+        virtual sal_Int32   getDefaultCursor( sal_Int8 dragAction ) override;
+        virtual void        startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
@@ -424,9 +424,9 @@ namespace x11 {
         void shutdown() noexcept override;
 
         // XDragSource
-        virtual bool    SAL_CALL isDragImageSupported() override;
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
-        virtual void        SAL_CALL startDrag(
+        virtual bool    isDragImageSupported() override;
+        virtual sal_Int32   getDefaultCursor( sal_Int8 dragAction ) override;
+        virtual void        startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
@@ -440,11 +440,11 @@ namespace x11 {
         virtual css::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void queryTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void notifyTermination( const css::lang::EventObject& aEvent ) override;
     };
 
     cpo::uno::Sequence< OUString > Xdnd_getSupportedServiceNames();

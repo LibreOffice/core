@@ -75,21 +75,21 @@ public:
     static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
 protected:
     void init( const ::Graphic& rGraphic );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // PropertySetHelper
      virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;

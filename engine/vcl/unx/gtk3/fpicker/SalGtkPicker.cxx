@@ -115,7 +115,7 @@ RunDialog::~RunDialog()
     g_source_remove_by_user_data (this);
 }
 
-void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
+void RunDialog::windowOpened(const css::lang::EventObject& e)
 {
     SolarMutexGuard g;
 
@@ -134,7 +134,7 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
 }
 
-void SAL_CALL RunDialog::queryTermination( const css::lang::EventObject& )
+void RunDialog::queryTermination( const css::lang::EventObject& )
 {
     SolarMutexGuard g;
 
@@ -145,7 +145,7 @@ void SAL_CALL RunDialog::queryTermination( const css::lang::EventObject& )
     throw css::frame::TerminationVetoException();
 }
 
-void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
+void RunDialog::notifyTermination( const css::lang::EventObject& )
 {
 }
 

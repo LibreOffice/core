@@ -53,20 +53,20 @@ void SourceContext::removeDragSourceListener(
 {
 }
 
-sal_Int32 SAL_CALL SourceContext::getCurrentCursor(  )
+sal_Int32 SourceContext::getCurrentCursor(  )
 {
     return 0;
 }
 
-void SAL_CALL SourceContext::setCursor( sal_Int32 /*cursorId*/ )
+void SourceContext::setCursor( sal_Int32 /*cursorId*/ )
 {
 }
 
-void SAL_CALL SourceContext::setImage( sal_Int32 /*imageId*/ )
+void SourceContext::setImage( sal_Int32 /*imageId*/ )
 {
 }
 
-void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
+void SourceContext::transferablesFlavorsChanged(  )
 {
 }
 

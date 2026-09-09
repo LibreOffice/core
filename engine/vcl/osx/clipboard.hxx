@@ -86,31 +86,31 @@ public:
 
   // XClipboard
 
-  virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
+  virtual css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
 
-  virtual void SAL_CALL setContents(css::uno::Reference<css::datatransfer::XTransferable> const & xTransferable,
+  virtual void setContents(css::uno::Reference<css::datatransfer::XTransferable> const & xTransferable,
                                     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner) override;
 
-  virtual OUString SAL_CALL getName() override;
+  virtual OUString getName() override;
 
   // XClipboardEx
 
-  virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
+  virtual sal_Int8 getRenderingCapabilities() override;
 
   // XClipboardNotifier
 
-  virtual void SAL_CALL addClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
-  virtual void SAL_CALL removeClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
+  virtual void addClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
+  virtual void removeClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
 
   // XFlushableClipboard
 
-  virtual void SAL_CALL flushClipboard() override;
+  virtual void flushClipboard() override;
 
   // XServiceInfo
 
-  virtual OUString SAL_CALL getImplementationName() override;
-  virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-  virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+  virtual OUString getImplementationName() override;
+  virtual bool supportsService( const OUString& ServiceName ) override;
+  virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
   /* Get a reference to the used pastboard.
    */

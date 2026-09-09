@@ -32,21 +32,21 @@ public:
 
 protected:
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     {
         return u"com.sun.star.comp.graphic.GraphicMapper"_ustr;
     }
-    bool SAL_CALL supportsService(const OUString& ServiceName) override
+    bool supportsService(const OUString& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.graphic.GraphicMapper"_ustr };
     }
 
     // XTypeProvider
-    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     {
         static const cpo::uno::Sequence<cpo::uno::Type> aTypes{
             cppu::UnoType<lang::XServiceInfo>::get(), cppu::UnoType<lang::XTypeProvider>::get(),
@@ -54,13 +54,13 @@ protected:
         };
         return aTypes;
     }
-    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    cpo::uno::Sequence<sal_Int8> getImplementationId() override
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
     // XGraphicMapper
-    css::uno::Reference<css::graphic::XGraphic> SAL_CALL findGraphic(const OUString& rId) override
+    css::uno::Reference<css::graphic::XGraphic> findGraphic(const OUString& rId) override
     {
         auto aIterator = maGraphicMap.find(rId);
 
@@ -69,7 +69,7 @@ protected:
 
         return aIterator->second;
     }
-    void SAL_CALL putGraphic(const OUString& rId,
+    void putGraphic(const OUString& rId,
                              css::uno::Reference<css::graphic::XGraphic> const& rGraphic) override
     {
         maGraphicMap.emplace(rId, rGraphic);

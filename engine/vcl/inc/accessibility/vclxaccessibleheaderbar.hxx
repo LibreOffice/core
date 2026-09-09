@@ -36,17 +36,17 @@ public:
     VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar);
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleChild(sal_Int64 i) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+        getAccessibleChild(sal_Int64 i) override;
+    virtual sal_Int16 getAccessibleRole() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 public:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
     rtl::Reference<VCLXAccessibleHeaderBarItem> CreateChild(sal_Int32 i);
 
 private:

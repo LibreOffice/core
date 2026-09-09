@@ -74,7 +74,7 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         m_xFocusWindow->addFocusListener( this );
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::disposing()
+void AccessibleBrowseBoxBase::disposing()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     if ( m_xFocusWindow.is() )
@@ -96,28 +96,28 @@ css::awt::Rectangle AccessibleBrowseBoxBase::implGetBounds()
 
 // css::accessibility::XAccessibleContext
 
-Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
+Reference< css::accessibility::XAccessible > AccessibleBrowseBoxBase::getAccessibleParent()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return mxParent;
 }
 
-OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleDescription()
+OUString AccessibleBrowseBoxBase::getAccessibleDescription()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return maDescription;
 }
 
-OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
+OUString AccessibleBrowseBoxBase::getAccessibleName()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return maName;
 }
 
-Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
+Reference< css::accessibility::XAccessibleRelationSet >
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -126,7 +126,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
     return new utl::AccessibleRelationSetHelper;
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 AccessibleBrowseBoxBase::getAccessibleStateSet()
 {
     SolarMethodGuard aGuard( getMutex() );
@@ -134,7 +134,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
     return implCreateStateSet();
 }
 
-lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
+lang::Locale AccessibleBrowseBoxBase::getLocale()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
@@ -150,7 +150,7 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 // css::accessibility::XAccessibleComponent
 
-void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
+void AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
 {
     cpo::uno::Any aFocused;
     cpo::uno::Any aEmpty;
@@ -160,7 +160,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& 
 }
 
 
-void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
+void AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
 {
     cpo::uno::Any aFocused;
     cpo::uno::Any aEmpty;
@@ -171,13 +171,13 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
 
 // XServiceInfo
 
-bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
+bool AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames()
+Sequence< OUString > AccessibleBrowseBoxBase::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
@@ -267,7 +267,7 @@ void AccessibleBrowseBoxBase::commitEvent(
     NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
 }
 
-sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
+sal_Int16 AccessibleBrowseBoxBase::getAccessibleRole()
 {
     osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
@@ -298,17 +298,17 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     return nRole;
 }
 
-Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const css::awt::Point& )
+Reference<XAccessible > AccessibleBrowseBoxBase::getAccessibleAtPoint( const css::awt::Point& )
 {
     return nullptr;
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& )
+void AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& )
 {
     m_xFocusWindow = nullptr;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  )
+sal_Int32 AccessibleBrowseBoxBase::getForeground(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -333,7 +333,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  )
     return sal_Int32(nColor);
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  )
+sal_Int32 AccessibleBrowseBoxBase::getBackground(  )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();

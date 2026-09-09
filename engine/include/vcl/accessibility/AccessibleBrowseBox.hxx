@@ -45,16 +45,16 @@ protected:
 
     /** Cleans up members. */
     using AccessibleBrowseBoxBase::disposing;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XAccessibleContext
 
     /** @return  The count of visible children. */
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference<
-        css::accessibility::XAccessible > SAL_CALL
+        css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     // XAccessibleComponent
@@ -63,18 +63,18 @@ protected:
             The accessible child rendered under the given point.
     */
     virtual css::uno::Reference<
-        css::accessibility::XAccessible > SAL_CALL
+        css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     /** Grabs the focus to the BrowseBox. */
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
 
     // XServiceInfo
 
     /** @return
             The name of this class.
     */
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
 public:
     // helper functions

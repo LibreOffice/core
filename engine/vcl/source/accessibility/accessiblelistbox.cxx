@@ -233,7 +233,7 @@ void AccessibleListBox::RemoveChildEntries(SvTreeListEntry* pEntry)
 
 // XComponent
 
-void SAL_CALL AccessibleListBox::disposing()
+void AccessibleListBox::disposing()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -244,12 +244,12 @@ void SAL_CALL AccessibleListBox::disposing()
 
 // XServiceInfo
 
-OUString SAL_CALL AccessibleListBox::getImplementationName()
+OUString AccessibleListBox::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleTreeListBox"_ustr;
 }
 
-Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
+Sequence< OUString > AccessibleListBox::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
             u"com.sun.star.awt.AccessibleTreeListBox"_ustr};
@@ -257,7 +257,7 @@ Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
 
 // XAccessibleContext
 
-sal_Int64 SAL_CALL AccessibleListBox::getAccessibleChildCount(  )
+sal_Int64 AccessibleListBox::getAccessibleChildCount(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -269,7 +269,7 @@ sal_Int64 SAL_CALL AccessibleListBox::getAccessibleChildCount(  )
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleListBox::getAccessibleChild( sal_Int64 i )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -280,7 +280,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int
     return implGetAccessible(*pEntry);
 }
 
-Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  )
+Reference< XAccessible > AccessibleListBox::getAccessibleParent(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -317,7 +317,7 @@ sal_Int32 AccessibleListBox::GetRoleType() const
     return nCase;
 }
 
-sal_Int16 SAL_CALL AccessibleListBox::getAccessibleRole()
+sal_Int16 AccessibleListBox::getAccessibleRole()
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -336,14 +336,14 @@ sal_Int16 SAL_CALL AccessibleListBox::getAccessibleRole()
         return AccessibleRole::TREE;
 }
 
-OUString SAL_CALL AccessibleListBox::getAccessibleDescription(  )
+OUString AccessibleListBox::getAccessibleDescription(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
     return getListBox()->GetAccessibleDescription();
 }
 
-OUString SAL_CALL AccessibleListBox::getAccessibleName(  )
+OUString AccessibleListBox::getAccessibleName(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -352,7 +352,7 @@ OUString SAL_CALL AccessibleListBox::getAccessibleName(  )
 
 // XAccessibleSelection
 
-void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleListBox::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -363,7 +363,7 @@ void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int64 nChildIndex )
     getListBox()->Select( pEntry );
 }
 
-bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleListBox::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -377,7 +377,7 @@ bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int64 nChildInde
     return getListBox()->IsSelected( pEntry );
 }
 
-void SAL_CALL AccessibleListBox::clearAccessibleSelection(  )
+void AccessibleListBox::clearAccessibleSelection(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -390,7 +390,7 @@ void SAL_CALL AccessibleListBox::clearAccessibleSelection(  )
     }
 }
 
-void SAL_CALL AccessibleListBox::selectAllAccessibleChildren(  )
+void AccessibleListBox::selectAllAccessibleChildren(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -403,14 +403,14 @@ void SAL_CALL AccessibleListBox::selectAllAccessibleChildren(  )
     }
 }
 
-sal_Int64 SAL_CALL AccessibleListBox::getSelectedAccessibleChildCount(  )
+sal_Int64 AccessibleListBox::getSelectedAccessibleChildCount(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
     return getListBox()->GetSelectionCount();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+Reference< XAccessible > AccessibleListBox::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -436,7 +436,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild(
     return xChild;
 }
 
-void SAL_CALL AccessibleListBox::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+void AccessibleListBox::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 

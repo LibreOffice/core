@@ -34,7 +34,7 @@ class CEventNotification
 public:
     virtual ~CEventNotification(){};
 
-    virtual void SAL_CALL notifyEventListener(css::uno::Reference<cpo::uno::XInterface> xListener)
+    virtual void notifyEventListener(css::uno::Reference<cpo::uno::XInterface> xListener)
         = 0;
 };
 

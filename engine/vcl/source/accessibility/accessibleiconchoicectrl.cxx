@@ -93,12 +93,12 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
 
 // XServiceInfo
 
-OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName()
+OUString AccessibleIconChoiceCtrl::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleIconChoiceControl"_ustr;
 }
 
-Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames()
+Sequence< OUString > AccessibleIconChoiceCtrl::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
             u"com.sun.star.awt.AccessibleIconChoiceControl"_ustr};
@@ -106,14 +106,14 @@ Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames
 
 // XAccessibleContext
 
-sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChildCount(  )
+sal_Int64 AccessibleIconChoiceCtrl::getAccessibleChildCount(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
     return getCtrl()->GetEntryCount();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleIconChoiceCtrl::getAccessibleChild( sal_Int64 i )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -124,20 +124,20 @@ Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChild( 
     return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
 }
 
-sal_Int16 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleRole(  )
+sal_Int16 AccessibleIconChoiceCtrl::getAccessibleRole(  )
 {
     //return AccessibleRole::TREE;
     return AccessibleRole::LIST;
 }
 
-OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleDescription(  )
+OUString AccessibleIconChoiceCtrl::getAccessibleDescription(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
     return getCtrl()->GetAccessibleDescription();
 }
 
-OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  )
+OUString AccessibleIconChoiceCtrl::getAccessibleName(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -146,7 +146,7 @@ OUString SAL_CALL AccessibleIconChoiceCtrl::getAccessibleName(  )
 
 // XAccessibleSelection
 
-void SAL_CALL AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -161,7 +161,7 @@ void SAL_CALL AccessibleIconChoiceCtrl::selectAccessibleChild( sal_Int64 nChildI
     pCtrl->SetCursor( pEntry );
 }
 
-bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -176,12 +176,12 @@ bool SAL_CALL AccessibleIconChoiceCtrl::isAccessibleChildSelected( sal_Int64 nCh
     return ( pCtrl->GetCursor() == pEntry );
 }
 
-void SAL_CALL AccessibleIconChoiceCtrl::clearAccessibleSelection(  )
+void AccessibleIconChoiceCtrl::clearAccessibleSelection(  )
 {
     // one entry should always be selected, so don't unselect
 }
 
-void SAL_CALL AccessibleIconChoiceCtrl::selectAllAccessibleChildren(  )
+void AccessibleIconChoiceCtrl::selectAllAccessibleChildren(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -195,7 +195,7 @@ void SAL_CALL AccessibleIconChoiceCtrl::selectAllAccessibleChildren(  )
     pCtrl->SetCursor(pCtrl->GetEntry(0));
 }
 
-sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
+sal_Int64 AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -206,7 +206,7 @@ sal_Int64 SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChildCount(  )
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+Reference< XAccessible > AccessibleIconChoiceCtrl::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -233,7 +233,7 @@ Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibl
     return xChild;
 }
 
-void SAL_CALL AccessibleIconChoiceCtrl::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+void AccessibleIconChoiceCtrl::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::comphelper::OExternalLockGuard aGuard( this );
 

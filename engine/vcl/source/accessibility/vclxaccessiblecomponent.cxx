@@ -697,7 +697,7 @@ void VCLXAccessibleComponent::grabFocus(  )
         m_xWindow->GrabFocus();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
+sal_Int32 VCLXAccessibleComponent::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -724,7 +724,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
     return sal_Int32(nColor);
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
+sal_Int32 VCLXAccessibleComponent::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -743,7 +743,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  )
+OUString VCLXAccessibleComponent::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -754,7 +754,7 @@ OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  )
     return sRet;
 }
 
-OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  )
+OUString VCLXAccessibleComponent::getToolTipText(  )
 {
     OExternalLockGuard aGuard( this );
 

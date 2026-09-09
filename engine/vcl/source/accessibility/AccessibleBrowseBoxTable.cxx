@@ -45,7 +45,7 @@ AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable()
 
 // XAccessibleContext ---------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL
+Reference< XAccessible >
 AccessibleBrowseBoxTable::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -56,7 +56,7 @@ AccessibleBrowseBoxTable::getAccessibleChild( sal_Int64 nChildIndex )
         implGetRow( nChildIndex ), static_cast<sal_Int16>(implGetColumn( nChildIndex )) );
 }
 
-sal_Int64 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
+sal_Int64 AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 {
     osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
@@ -65,7 +65,7 @@ sal_Int64 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL
+Reference< XAccessible >
 AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -81,7 +81,7 @@ AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
     return xChild;
 }
 
-void SAL_CALL AccessibleBrowseBoxTable::grabFocus()
+void AccessibleBrowseBoxTable::grabFocus()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -90,7 +90,7 @@ void SAL_CALL AccessibleBrowseBoxTable::grabFocus()
 
 // XAccessibleTable -----------------------------------------------------------
 
-OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int32 nRow )
+OUString AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int32 nRow )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -98,7 +98,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int
     return mpBrowseBox->GetRowDescription( nRow );
 }
 
-OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -107,21 +107,21 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnDescription( sal_
     return mpBrowseBox->GetColumnDescription( static_cast<sal_uInt16>(nColumn) );
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowHeaders()
+Reference< XAccessibleTable > AccessibleBrowseBoxTable::getAccessibleRowHeaders()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return implGetHeaderBar( vcl::BBINDEX_ROWHEADERBAR );
 }
 
-Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnHeaders()
+Reference< XAccessibleTable > AccessibleBrowseBoxTable::getAccessibleColumnHeaders()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return implGetHeaderBar( vcl::BBINDEX_COLUMNHEADERBAR );
 }
 
-Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleRows()
+Sequence< sal_Int32 > AccessibleBrowseBoxTable::getSelectedAccessibleRows()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -131,7 +131,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleRo
     return aSelSeq;
 }
 
-Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleColumns()
+Sequence< sal_Int32 > AccessibleBrowseBoxTable::getSelectedAccessibleColumns()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -141,7 +141,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleCo
     return aSelSeq;
 }
 
-bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleRowSelected( sal_Int32 nRow )
+bool AccessibleBrowseBoxTable::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -150,7 +150,7 @@ bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleRowSelected( sal_Int32 nRow 
     return implIsRowSelected( nRow );
 }
 
-bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool AccessibleBrowseBoxTable::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -159,7 +159,7 @@ bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleColumnSelected( sal_Int32 nC
     return implIsColumnSelected( nColumn );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTable::getAccessibleCellAt(
+Reference< XAccessible > AccessibleBrowseBoxTable::getAccessibleCellAt(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -169,7 +169,7 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTable::getAccessibleCellAt(
     return mpBrowseBox->CreateAccessibleCell( nRow, static_cast<sal_Int16>(nColumn) );
 }
 
-bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
+bool AccessibleBrowseBoxTable::isAccessibleSelected(
         sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -181,7 +181,7 @@ bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
 
 // XServiceInfo ---------------------------------------------------------------
 
-OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
+OUString AccessibleBrowseBoxTable::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleBrowseBoxTable"_ustr;
 }

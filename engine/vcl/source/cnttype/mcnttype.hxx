@@ -35,15 +35,15 @@ public:
 
     // XMimeContentType
 
-    virtual OUString SAL_CALL getMediaType(  ) override;
-    virtual OUString SAL_CALL getMediaSubtype(  ) override;
-    virtual OUString SAL_CALL getFullMediaType(  ) override;
+    virtual OUString getMediaType(  ) override;
+    virtual OUString getMediaSubtype(  ) override;
+    virtual OUString getFullMediaType(  ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getParameters(  ) override;
+    virtual cpo::uno::Sequence< OUString > getParameters(  ) override;
 
-    virtual bool SAL_CALL hasParameter( const OUString& aName ) override;
+    virtual bool hasParameter( const OUString& aName ) override;
 
-    virtual OUString SAL_CALL getParameterValue( const OUString& aName ) override;
+    virtual OUString getParameterValue( const OUString& aName ) override;
 
 private:
     /// @throws css::lang::IllegalArgumentException

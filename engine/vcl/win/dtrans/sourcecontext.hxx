@@ -52,10 +52,10 @@ public:
     /// @throws RuntimeException
     virtual void removeDragSourceListener(
         const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& dsl);
-    virtual sal_Int32 SAL_CALL getCurrentCursor() override;
-    virtual void SAL_CALL setCursor(sal_Int32 cursorId) override;
-    virtual void SAL_CALL setImage(sal_Int32 imageId) override;
-    virtual void SAL_CALL transferablesFlavorsChanged() override;
+    virtual sal_Int32 getCurrentCursor() override;
+    virtual void setCursor(sal_Int32 cursorId) override;
+    virtual void setImage(sal_Int32 imageId) override;
+    virtual void transferablesFlavorsChanged() override;
 
     // non - interface functions
     void fire_dragDropEnd(bool success, sal_Int8 byte);

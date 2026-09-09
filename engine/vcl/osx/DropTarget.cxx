@@ -343,11 +343,11 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 // called from WeakComponentImplHelperX::dispose
 // WeakComponentImplHelper calls disposing before it destroys
 // itself.
-void SAL_CALL DropTarget::disposing()
+void DropTarget::disposing()
 {
 }
 
-void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
+void DropTarget::initialize(const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() < 2)
     {
@@ -382,58 +382,58 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-void SAL_CALL DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
+void DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
 {
     rBHelper.addListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-void SAL_CALL DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
+void DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
 {
     rBHelper.removeListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-bool SAL_CALL DropTarget::isActive(  )
+bool DropTarget::isActive(  )
 {
     return mbActive;
 }
 
-void SAL_CALL DropTarget::setActive(bool active)
+void DropTarget::setActive(bool active)
 {
     mbActive = active;
 }
 
-sal_Int8 SAL_CALL DropTarget::getDefaultActions()
+sal_Int8 DropTarget::getDefaultActions()
 {
     return mDefaultActions;
 }
 
-void SAL_CALL DropTarget::setDefaultActions(sal_Int8 actions)
+void DropTarget::setDefaultActions(sal_Int8 actions)
 {
     OSL_ENSURE( actions < 8, "No valid default actions");
     mDefaultActions= actions;
 }
 
-void SAL_CALL DropTarget::acceptDrag(sal_Int8 dragOperation)
+void DropTarget::acceptDrag(sal_Int8 dragOperation)
 {
     mSelectedDropAction = dragOperation;
 }
 
-void SAL_CALL DropTarget::rejectDrag()
+void DropTarget::rejectDrag()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void SAL_CALL DropTarget::acceptDrop(sal_Int8 dropOperation)
+void DropTarget::acceptDrop(sal_Int8 dropOperation)
 {
     mSelectedDropAction = dropOperation;
 }
 
-void SAL_CALL DropTarget::rejectDrop()
+void DropTarget::rejectDrop()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void SAL_CALL DropTarget::dropComplete(bool success)
+void DropTarget::dropComplete(bool success)
 {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
@@ -523,17 +523,17 @@ void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
     }
 }
 
-OUString SAL_CALL DropTarget::getImplementationName()
+OUString DropTarget::getImplementationName()
 {
     return dropTarget_getImplementationName();
 }
 
-bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
+bool DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
+Sequence< OUString > DropTarget::getSupportedServiceNames(  )
 {
     return dropTarget_getSupportedServiceNames();
 }

@@ -38,11 +38,11 @@ public:
     TargetDropContext& operator=(const TargetDropContext&) = delete;
 
     // XDropTargetDragContext
-    virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) override;
-    virtual void SAL_CALL rejectDrop() override;
+    virtual void acceptDrop(sal_Int8 dropOperation) override;
+    virtual void rejectDrop() override;
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
-    virtual void SAL_CALL dropComplete(bool success) override;
+    virtual void dropComplete(bool success) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

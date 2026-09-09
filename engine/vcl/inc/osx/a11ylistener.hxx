@@ -34,10 +34,10 @@ public:
     virtual ~AquaA11yEventListener() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL
+    virtual void
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
 private:

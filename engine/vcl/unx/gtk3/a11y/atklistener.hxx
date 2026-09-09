@@ -32,10 +32,10 @@ public:
     explicit AtkListener(AtkObjectWrapper * pWrapper);
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
 private:
 

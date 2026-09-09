@@ -500,7 +500,7 @@ void VCLXAccessibleToolBox::ProcessWindowChildEvent( const VclWindowEvent& rVclW
 }
 
 // XComponent
-void SAL_CALL VCLXAccessibleToolBox::disposing()
+void VCLXAccessibleToolBox::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
@@ -526,7 +526,7 @@ Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleToolBox::getAccessibleChildCount(  )
 {
     comphelper::OExternalLockGuard aGuard( this );
     return implGetAccessibleChildCount();
@@ -542,7 +542,7 @@ sal_Int64 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  )
     return nCount;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > VCLXAccessibleToolBox::getAccessibleChild( sal_Int64 i )
 {
     comphelper::OExternalLockGuard aGuard( this );
 
@@ -585,7 +585,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     return xChild;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( const awt::Point& _rPoint )
+Reference< XAccessible > VCLXAccessibleToolBox::getAccessibleAtPoint( const awt::Point& _rPoint )
 {
     comphelper::OExternalLockGuard aGuard( this );
 

@@ -45,7 +45,7 @@ void SVTXAccessibleNumericField::ProcessWindowEvent(const VclWindowEvent& rVclWi
 
 sal_Int16 SVTXAccessibleNumericField::getAccessibleRole() { return AccessibleRole::SPIN_BOX; }
 
-cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
+cpo::uno::Any SVTXAccessibleNumericField::getCurrentValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -71,7 +71,7 @@ bool SVTXAccessibleNumericField::setCurrentValue(const cpo::uno::Any& aNumber)
     return true;
 }
 
-cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
+cpo::uno::Any SVTXAccessibleNumericField::getMaximumValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -83,7 +83,7 @@ cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
     return cpo::uno::Any(dValue);
 }
 
-cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
+cpo::uno::Any SVTXAccessibleNumericField::getMinimumValue()
 {
     OExternalLockGuard aGuard(this);
 
@@ -95,7 +95,7 @@ cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
     return cpo::uno::Any(dValue);
 }
 
-cpo::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
+cpo::uno::Any SVTXAccessibleNumericField::getMinimumIncrement()
 {
     OExternalLockGuard aGuard(this);
 

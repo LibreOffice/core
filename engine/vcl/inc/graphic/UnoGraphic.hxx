@@ -41,36 +41,36 @@ public:
     const ::Graphic& GetGraphic() const { return maGraphic; }
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 private:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
     // XGraphic
-    virtual ::sal_Int8 SAL_CALL getType(  ) override;
+    virtual ::sal_Int8 getType(  ) override;
 
     // XBitmap
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
-    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) override;
-    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) override;
+    virtual css::awt::Size getSize(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > getDIB(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > getMaskDIB(  ) override;
 
     // XGraphicTransformer
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(
+    virtual css::uno::Reference< css::graphic::XGraphic > colorChange(
         const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
         sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo ) override;
 
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyDuotone(
+    virtual css::uno::Reference< css::graphic::XGraphic > applyDuotone(
         const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
         sal_Int32 nColorOne, sal_Int32 nColorTwo ) override;
 
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
+    virtual css::uno::Reference< css::graphic::XGraphic > applyBrightnessContrast(
         const css::uno::Reference< css::graphic::XGraphic >& rxGraphic,
         sal_Int32 nBrightness, sal_Int32 nContrast, bool mso ) override;
 

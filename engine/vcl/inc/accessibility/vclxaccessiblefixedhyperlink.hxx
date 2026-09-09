@@ -29,8 +29,8 @@ public:
     VCLXAccessibleFixedHyperlink(vcl::Window* pWindow);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

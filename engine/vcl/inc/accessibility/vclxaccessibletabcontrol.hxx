@@ -57,29 +57,29 @@ private:
     virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
     // XComponent
-    virtual void SAL_CALL   disposing() override;
+    virtual void   disposing() override;
 
 public:
     VCLXAccessibleTabControl(vcl::Window* pWindow);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual sal_Int64 getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual sal_Int16 getAccessibleRole(  ) override;
+    virtual OUString getAccessibleName(  ) override;
 
     // XAccessibleSelection
-    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-    virtual bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
-    virtual void SAL_CALL clearAccessibleSelection(  ) override;
-    virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual void selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    virtual bool isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    virtual void clearAccessibleSelection(  ) override;
+    virtual void selectAllAccessibleChildren(  ) override;
+    virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual void deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 };
 
 

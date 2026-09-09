@@ -36,9 +36,9 @@ public:
     VCLXAccessibleDropDownComboBox(ComboBox* pComboBox);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
     // Return drop down combo box specific services.
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
     virtual ~VCLXAccessibleDropDownComboBox() override = default;

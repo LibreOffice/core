@@ -43,11 +43,11 @@ class CDOTransferable : public ::cppu::WeakImplHelper<
 public:
     // XTransferable
 
-    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
 
-    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors(  ) override;
 
-    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     explicit CDOTransferable(
         const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,

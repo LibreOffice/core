@@ -142,7 +142,7 @@ awt::Rectangle VCLXAccessibleListItem::implGetBounds()
 
 // XComponent
 
-void SAL_CALL VCLXAccessibleListItem::disposing()
+void VCLXAccessibleListItem::disposing()
 {
     m_sEntryText.clear();
     m_xParent = nullptr;
@@ -170,41 +170,41 @@ Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames()
 
 // XAccessibleContext
 
-sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleChildCount(  )
+sal_Int64 VCLXAccessibleListItem::getAccessibleChildCount(  )
 {
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleChild( sal_Int64 )
+Reference< XAccessible > VCLXAccessibleListItem::getAccessibleChild( sal_Int64 )
 {
     return Reference< XAccessible >();
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  )
+Reference< XAccessible > VCLXAccessibleListItem::getAccessibleParent(  )
 {
     SolarMutexGuard aSolarGuard;
 
     return m_xParent;
 }
 
-sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  )
+sal_Int64 VCLXAccessibleListItem::getAccessibleIndexInParent(  )
 {
     return m_nIndexInParent;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleListItem::getAccessibleRole(  )
+sal_Int16 VCLXAccessibleListItem::getAccessibleRole(  )
 {
     return AccessibleRole::LIST_ITEM;
     //  return AccessibleRole::LABEL;
 }
 
-OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  )
+OUString VCLXAccessibleListItem::getAccessibleDescription(  )
 {
     // no description for every item
     return OUString();
 }
 
-OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
+OUString VCLXAccessibleListItem::getAccessibleName(  )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -212,12 +212,12 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
     return m_sEntryText;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessibleRelationSet(  )
+Reference< XAccessibleRelationSet > VCLXAccessibleListItem::getAccessibleRelationSet(  )
 {
     return new utl::AccessibleRelationSetHelper;
 }
 
-sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
+sal_Int64 VCLXAccessibleListItem::getAccessibleStateSet(  )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -249,7 +249,7 @@ sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
     return nStateSet;
 }
 
-Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
+Locale VCLXAccessibleListItem::getLocale(  )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -258,24 +258,24 @@ Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
 
 // XAccessibleComponent
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleAtPoint( const awt::Point& )
+Reference< XAccessible > VCLXAccessibleListItem::getAccessibleAtPoint( const awt::Point& )
 {
     return Reference< XAccessible >();
 }
 
-void SAL_CALL VCLXAccessibleListItem::grabFocus(  )
+void VCLXAccessibleListItem::grabFocus(  )
 {
     // no focus for each item
 }
 
 // XAccessibleText
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getCaretPosition()
+sal_Int32 VCLXAccessibleListItem::getCaretPosition()
 {
     return -1;
 }
 
-bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
+bool VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -285,14 +285,14 @@ bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
     return false;
 }
 
-sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex )
+sal_Unicode VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
 
     return OCommonAccessibleText::implGetCharacter( m_sEntryText, nIndex );
 }
 
-Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& )
+Sequence< PropertyValue > VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -302,7 +302,7 @@ Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttribute
     return Sequence< PropertyValue >();
 }
 
-awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nIndex )
+awt::Rectangle VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -322,14 +322,14 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
     return aBounds;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount()
+sal_Int32 VCLXAccessibleListItem::getCharacterCount()
 {
     SolarMutexGuard aSolarGuard;
 
     return m_sEntryText.getLength();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aPoint )
+sal_Int32 VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aPoint )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -348,22 +348,22 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     return nIndex;
 }
 
-OUString SAL_CALL VCLXAccessibleListItem::getSelectedText()
+OUString VCLXAccessibleListItem::getSelectedText()
 {
     return OUString();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionStart()
+sal_Int32 VCLXAccessibleListItem::getSelectionStart()
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd()
+sal_Int32 VCLXAccessibleListItem::getSelectionEnd()
 {
     return 0;
 }
 
-bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -373,7 +373,7 @@ bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_I
     return false;
 }
 
-OUString SAL_CALL VCLXAccessibleListItem::getText()
+OUString VCLXAccessibleListItem::getText()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -385,35 +385,35 @@ OUString VCLXAccessibleListItem::getTextRangeImpl(sal_Int32 nStartIndex, sal_Int
     return OCommonAccessibleText::implGetTextRange(m_sEntryText, nStartIndex, nEndIndex);
 }
 
-OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+OUString VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
 
     return getTextRangeImpl(nStartIndex, nEndIndex);
 }
 
-css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
 
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
 
-css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
 
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
 
-css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
 
-bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -451,7 +451,7 @@ bool VCLXAccessibleListItem::scrollSubstringTo( sal_Int32, sal_Int32, Accessible
 // AF (Oct. 29 2002): Return black as constant foreground color.  This is an
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
+sal_Int32 VCLXAccessibleListItem::getForeground()
 {
     return sal_Int32(COL_BLACK);
 }
@@ -459,7 +459,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
 // AF (Oct. 29 2002): Return white as constant background color.  This is an
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
-sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground()
+sal_Int32 VCLXAccessibleListItem::getBackground()
 {
     return sal_Int32(COL_WHITE);
 }

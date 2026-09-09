@@ -43,7 +43,7 @@ GenericClipboard::~GenericClipboard()
 {
 }
 
-void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
+void GenericClipboard::initialize( const Sequence< Any >& aArguments )
 {
     if (!m_bInitialized)
     {
@@ -56,28 +56,28 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-OUString SAL_CALL GenericClipboard::getImplementationName(  )
+OUString GenericClipboard::getImplementationName(  )
 {
     return "com.sun.star.comp.datatransfer.clipboard.GenericClipboard";
 }
 
-bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
+bool GenericClipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
+Sequence< OUString > GenericClipboard::getSupportedServiceNames(    )
 {
     return { "com.sun.star.datatransfer.clipboard.GenericClipboard" };
 }
 
-Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
+Reference< XTransferable > GenericClipboard::getContents()
 {
     std::unique_lock aGuard(m_aMutex);
     return m_aContents;
 }
 
-void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xTrans,
+void GenericClipboard::setContents(const Reference< XTransferable >& xTrans,
                                       const Reference< XClipboardOwner >& xClipboardOwner )
 {
     // remember old values for callbacks before setting the new ones.
@@ -101,17 +101,17 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
     maClipboardListeners.notifyEach(aGuard, &XClipboardListener::changedContents, aEvent);
 }
 
-OUString SAL_CALL GenericClipboard::getName()
+OUString GenericClipboard::getName()
 {
     return m_aName;
 }
 
-sal_Int8 SAL_CALL GenericClipboard::getRenderingCapabilities()
+sal_Int8 GenericClipboard::getRenderingCapabilities()
 {
     return RenderingCapabilities::Delayed;
 }
 
-void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
+void GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
     std::unique_lock aGuard( m_aMutex );
     OSL_ENSURE( !m_bDisposed, "object is disposed" );
@@ -119,7 +119,7 @@ void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboar
         maClipboardListeners.addInterface( aGuard, listener );
 }
 
-void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
+void GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
     std::unique_lock aGuard( m_aMutex );
     OSL_ENSURE( !m_bDisposed, "object is disposed" );

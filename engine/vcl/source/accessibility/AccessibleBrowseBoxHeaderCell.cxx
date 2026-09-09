@@ -69,7 +69,7 @@ sal_Int64 AccessibleBrowseBoxHeaderCell::implCreateStateSet()
 /** @return
         The count of visible children.
 */
-sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
+sal_Int64 AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 {
     return 0;
 }
@@ -78,14 +78,14 @@ sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
 /** @return
         The XAccessible interface of the specified child.
 */
-Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChild( sal_Int64 )
+Reference<XAccessible > AccessibleBrowseBoxHeaderCell::getAccessibleChild( sal_Int64 )
 {
     throw IndexOutOfBoundsException();
 }
 
 
 /** Grabs the focus to the column header. */
-void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
+void AccessibleBrowseBoxHeaderCell::grabFocus()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -99,7 +99,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 /** @return
         The name of this class.
 */
-OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
+OUString AccessibleBrowseBoxHeaderCell::getImplementationName()
 {
     return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell"_ustr;
 }
@@ -118,7 +118,7 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
     return tools::Rectangle(aRet.TopLeft() - Point(0, aRet.GetHeight()), aRet.GetSize());
 }
 
-sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
+sal_Int64 AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();

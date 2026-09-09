@@ -36,17 +36,17 @@ public:
                             const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     // XAccessibleContext
-    sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    sal_Int64 getAccessibleChildCount() override;
+    css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 i) override;
-    sal_Int16 SAL_CALL getAccessibleRole() override;
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    sal_Int16 getAccessibleRole() override;
+    css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleParent(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
     // Return text field specific services.
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
 private:

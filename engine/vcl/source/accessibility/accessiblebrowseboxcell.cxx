@@ -45,7 +45,7 @@ AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
 {
 }
 
-void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
+void AccessibleBrowseBoxCell::grabFocus()
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();

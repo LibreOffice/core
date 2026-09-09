@@ -676,19 +676,19 @@ public:
     FolderFileAccess(uno::Reference< cpo::uno::XComponentContext > context, OUString url)
         : mxContext(std::move(context)), maURL(std::move(url)) {}
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
-    virtual bool SAL_CALL hasElements() override { return true; }
+    virtual cpo::uno::Type getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
+    virtual bool hasElements() override { return true; }
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any getByName( const OUString& aName ) override
     {
         uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(mxContext)->openFileRead( maURL + "/" + aName );
         return cpo::uno::Any(xInputStream);
     }
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence< OUString > getElementNames() override
     {
         return {};
     }
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool hasByName( const OUString& aName ) override
     {
         osl::File aBaseFile(maURL + "/" + aName);
         return osl::File::E_None == aBaseFile.open(osl_File_OpenFlag_Read);

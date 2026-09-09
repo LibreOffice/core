@@ -44,7 +44,7 @@ X11Transferable::~X11Transferable()
 {
 }
 
-Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
+Any X11Transferable::getTransferData( const DataFlavor& rFlavor )
 {
     Any aRet;
     Sequence< sal_Int8 > aData;
@@ -70,7 +70,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     return aRet;
 }
 
-Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
+Sequence< DataFlavor > X11Transferable::getTransferDataFlavors()
 {
     Sequence< DataFlavor > aFlavorList;
     bool bSuccess = m_rManager.getPasteDataTypes( m_aSelection ? m_aSelection : XA_PRIMARY, aFlavorList );
@@ -80,7 +80,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     return aFlavorList;
 }
 
-bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+bool X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
 {
     if( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
     {
