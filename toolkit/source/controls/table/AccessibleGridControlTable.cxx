@@ -333,22 +333,19 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
 {
     Reference< XAccessible > xRet;
 
-    if (!m_xParent.is())
+    if (!m_pParent.is())
         return nullptr;
 
-    Reference<XAccessibleContext> xContext = m_xParent->getAccessibleContext();
-    if( xContext.is() )
+    try
     {
-        try
-        {
-            xRet = xContext->getAccessibleChild( nChildIndex );
-        }
-        catch (const lang::IndexOutOfBoundsException&)
-        {
-            OSL_FAIL( "implGetHeaderBar - wrong child index" );
-        }
-        // RuntimeException goes to caller
+        xRet = m_pParent->getAccessibleChild(nChildIndex);
     }
+    catch (const lang::IndexOutOfBoundsException&)
+    {
+        OSL_FAIL("implGetHeaderBar - wrong child index");
+    }
+    // RuntimeException goes to caller
+
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
 

@@ -155,7 +155,7 @@ protected:
     // members
 
     /** The parent accessible object. */
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    rtl::Reference<comphelper::OAccessible> m_pParent;
     /** The SVT Table control. */
     svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */

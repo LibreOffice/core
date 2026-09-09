@@ -48,7 +48,7 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 AccessibleGridControlBase::AccessibleGridControlBase(
     const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
     AccessibleTableControlObjType eObjType)
-    : m_xParent(rpParent)
+    : m_pParent(rpParent)
     , m_aTable(rTable)
     , m_eObjType(eObjType)
 {
@@ -60,7 +60,7 @@ void SAL_CALL AccessibleGridControlBase::disposing()
 
     OAccessible::disposing();
 
-    m_xParent = nullptr;
+    m_pParent = nullptr;
     //m_aTable = NULL;
 }
 
@@ -71,7 +71,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridCo
     SolarMutexGuard g;
 
     ensureAlive();
-    return m_xParent;
+    return m_pParent;
 }
 
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
@@ -114,13 +114,9 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     SolarMutexGuard g;
 
     ensureAlive();
-    if( m_xParent.is() )
-    {
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-            xParentContext( m_xParent->getAccessibleContext() );
-        if( xParentContext.is() )
-            return xParentContext->getLocale();
-    }
+    if (m_pParent.is())
+        return m_pParent->getLocale();
+
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -129,13 +125,10 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 bool AccessibleGridControlBase::implIsShowing()
 {
     bool bShowing = false;
-    if( m_xParent.is() )
+    if (m_pParent.is())
     {
-        css::uno::Reference< css::accessibility::XAccessibleComponent >
-            xParentComp( m_xParent->getAccessibleContext(), uno::UNO_QUERY );
-        if( xParentComp.is() )
-            bShowing = implGetBoundingBox().Overlaps(
-                vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
+        bShowing = implGetBoundingBox().Overlaps(
+            vcl::unohelper::ConvertToVCLRect(m_pParent->getBounds()));
     }
     return bShowing;
 }
@@ -144,14 +137,10 @@ tools::Rectangle AccessibleGridControlBase::implGetBoundingBox()
 {
     // calculate parent-relative position from own and parent's absolute position
     tools::Rectangle aBound(implGetBoundingBoxOnScreen());
-    if (!m_xParent.is())
+    if (!m_pParent.is())
         return aBound;
 
-    uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(m_xParent->getAccessibleContext(), uno::UNO_QUERY);
-    if (!xParentComponent.is())
-        return aBound;
-
-    awt::Point aParentPos = xParentComponent->getLocationOnScreen();
+    awt::Point aParentPos = m_pParent->getLocationOnScreen();
     aBound.Move(-aParentPos.X, -aParentPos.Y);
     return aBound;
 }
