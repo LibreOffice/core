@@ -5980,6 +5980,7 @@ dnl machine when doing cross-compilation
 dnl ===================================================================
 
 m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
+m4_pattern_allow([PKG_CONFIG_PATH_FOR_BUILD])
 m4_pattern_allow([PKG_CONFIG_LIBDIR])
 if test "$cross_compiling" = "yes"; then
     AC_MSG_CHECKING([for BUILD platform configuration])
@@ -6032,6 +6033,7 @@ if test "$cross_compiling" = "yes"; then
         CXX_BASE=`first_arg_basename "$CXX"`
     fi
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
+    test -n "$PKG_CONFIG_PATH_FOR_BUILD" && export PKG_CONFIG_PATH="$PKG_CONFIG_PATH_FOR_BUILD"
     cd CONF-FOR-BUILD
 
     # Handle host configuration, which affects the cross-toolset too

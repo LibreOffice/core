@@ -73,5 +73,6 @@ pkgs.mkShell.override { stdenv = pkgs.clangStdenv; } {
     export STRIP=llvm-strip
     export PATH="$PATH:${toolchainBinPath}"
     export LD_LIBRARY_PATH="${pkgs.libgcc}/lib:$LD_LIBRARY_PATH"
+    export PKG_CONFIG_PATH_FOR_BUILD="$PKG_CONFIG_PATH"
   '';
 }
