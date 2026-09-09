@@ -35,6 +35,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/reflection/XAnnotations.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
@@ -544,6 +545,20 @@ static typelib_TypeDescription * createCTD(
             break;
         default:
             break;
+        }
+    }
+
+    if (pRet != nullptr) {
+        if (auto const ann = Reference<reflection::XAnnotations>(xType, UNO_QUERY)) {
+            auto const anns = ann->getAnnotations();
+            std::vector<OUString> owners;
+            owners.reserve(anns.getLength()); // for guaranteed-stable ptrs
+            std::vector<rtl_uString *> ptrs;
+            for (auto const & a: anns) {
+                owners.emplace_back(a.Value.IsPresent ? a.Name + "=" + a.Value.Value : a.Name);
+                ptrs.push_back(owners.back().pData);
+            }
+            typelib_typedescription_setAnnotations(pRet, ptrs.size(), ptrs.data());
         }
     }
 

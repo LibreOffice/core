@@ -106,6 +106,10 @@ typedef struct SAL_DLLPUBLIC_RTTI _typelib_TypeDescription
     /** alignment of type
     */
     sal_Int32                           nAlignment;
+    /* Annotations of the form "name" or "name=value"; ppAnnotations can be null when nAnnotations
+       is zero: */
+    sal_Int32 nAnnotations;
+    rtl_uString ** ppAnnotations;
     /** pointer to weak reference
     */
     typelib_TypeDescriptionReference *  pWeakRef;
@@ -596,6 +600,10 @@ CPPU_DLLPUBLIC void typelib_typedescription_newExtendedInterfaceAttribute(
     bool bReadOnly,
     sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
     sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
+    SAL_THROW_EXTERN_C();
+
+CPPU_DLLPUBLIC void typelib_typedescription_setAnnotations(
+    typelib_TypeDescription * desc, sal_Int32 count, rtl_uString ** annotations)
     SAL_THROW_EXTERN_C();
 
 /** Increments reference count of given type description.

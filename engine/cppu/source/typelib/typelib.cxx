@@ -626,6 +626,8 @@ extern "C" void typelib_typedescription_newEmpty(
     pRet->bComplete = true;
     pRet->nSize = 0;
     pRet->nAlignment = 0;
+    pRet->nAnnotations = 0;
+    pRet->ppAnnotations = nullptr;
     pRet->pWeakRef = nullptr;
     pRet->bOnDemand = false;
     *ppRet = pRet;
@@ -1282,6 +1284,23 @@ static void typelib_typedescription_destructExtendedMembers(
 }
 
 
+extern "C" void typelib_typedescription_setAnnotations(
+    typelib_TypeDescription * desc, sal_Int32 count, rtl_uString ** annotations) noexcept
+{
+    auto const copy = count == 0 ? nullptr : new rtl_uString *[count];
+    for (sal_Int32 i = 0; i != count; ++i) {
+        copy[i] = annotations[i];
+        rtl_uString_acquire(copy[i]);
+    }
+    for (sal_Int32 i = 0; i != desc->nAnnotations; ++i) {
+        rtl_uString_release(desc->ppAnnotations[i]);
+    }
+    delete[] desc->ppAnnotations;
+    desc->nAnnotations = count;
+    desc->ppAnnotations = copy;
+}
+
+
 extern "C" void typelib_typedescription_release(
     typelib_TypeDescription * pTD ) noexcept
 {
@@ -1316,6 +1335,12 @@ extern "C" void typelib_typedescription_release(
     }
 
     typelib_typedescription_destructExtendedMembers( pTD );
+    for (sal_Int32 i = 0; i != pTD->nAnnotations; ++i) {
+        rtl_uString_release(pTD->ppAnnotations[i]);
+    }
+    delete[] pTD->ppAnnotations;
+    pTD->ppAnnotations = nullptr;
+    pTD->nAnnotations = 0;
     rtl_uString_release( pTD->pTypeName );
 
 #if OSL_DEBUG_LEVEL > 0

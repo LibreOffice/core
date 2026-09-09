@@ -24,6 +24,7 @@
 
 /** Reflects a UNOIDL entity.
 
+    @see XAnnotations
     @see XPublished
     @see XIndirectTypeDescription
     @see XEnumTypeDescription

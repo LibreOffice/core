@@ -357,6 +357,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/loader,\
 	XImplementationLoader \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
+	Annotation \
 	FieldAccessMode \
 	InvalidTypeNameException \
 	InvocationTargetException \
@@ -365,6 +366,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
 	ParamInfo \
 	ParamMode \
 	TypeDescriptionSearchDepth \
+	XAnnotations \
 	XArrayTypeDescription \
 	XCompoundTypeDescription \
 	XConstantTypeDescription \

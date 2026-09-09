@@ -21,10 +21,13 @@
 #include <vector>
 #include <algorithm>
 
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/reflection/Annotation.hpp>
 #include <com/sun/star/reflection/NoSuchTypeNameException.hpp>
 #include <com/sun/star/reflection/TypeDescriptionSearchDepth.hpp>
+#include <com/sun/star/reflection/XAnnotations.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
@@ -127,11 +130,42 @@ private:
     OUString componentType_;
 };
 
+class AnnotatedDescription: public cppu::WeakImplHelper<css::reflection::XAnnotations> {
+protected:
+    explicit AnnotatedDescription(std::vector<OUString> annotations):
+        annotations_(std::move(annotations)) {}
+
+    virtual ~AnnotatedDescription() override {}
+
+private:
+    virtual cpo::uno::Sequence<css::reflection::Annotation> getAnnotations() override {
+        assert(annotations_.size() <= SAL_MAX_INT32);
+        cpo::uno::Sequence<css::reflection::Annotation> s(
+            static_cast<sal_Int32>(annotations_.size()));
+        auto r = asNonConstRange(s);
+        for (sal_Int32 i = 0; i != s.getLength(); ++i) {
+            auto const & entry = annotations_[i];
+            auto const eq = entry.indexOf('=');
+            if (eq == -1) {
+                r[i].Name = entry;
+            } else {
+                r[i].Name = entry.copy(0, eq);
+                r[i].Value.IsPresent = true;
+                r[i].Value.Value = entry.copy(eq + 1);
+            }
+        }
+        return s;
+    }
+
+    std::vector<OUString> annotations_;
+};
+
 class PublishableDescription:
-    public cppu::WeakImplHelper< css::reflection::XPublished >
+    public cppu::ImplInheritanceHelper< AnnotatedDescription, css::reflection::XPublished >
 {
 protected:
-    explicit PublishableDescription(bool published): published_(published) {}
+    explicit PublishableDescription(std::vector<OUString> annotations, bool published):
+        ImplInheritanceHelper(std::move(annotations)), published_(published) {}
 
     virtual ~PublishableDescription() override {}
 
@@ -201,7 +235,8 @@ public:
     EnumTypeDescription(
         OUString name,
         rtl::Reference< unoidl::EnumTypeEntity > const & entity):
-        EnumTypeDescription_Base(entity->isPublished()), name_(std::move(name)),
+        EnumTypeDescription_Base(entity->getAnnotations(), entity->isPublished()),
+        name_(std::move(name)),
         entity_(entity)
     { assert(entity.is()); }
 
@@ -259,7 +294,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::PlainStructTypeEntity > const & entity):
-        PlainStructTypeDescription_Base(entity->isPublished()),
+        PlainStructTypeDescription_Base(entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -362,7 +397,8 @@ public:
         OUString name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity):
-        PolymorphicStructTypeTemplateDescription_Base(entity->isPublished()),
+        PolymorphicStructTypeTemplateDescription_Base(
+            entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -555,7 +591,8 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::ExceptionTypeEntity > const & entity):
-        ExceptionTypeDescription_Base(entity->isPublished()), manager_(manager),
+        ExceptionTypeDescription_Base(entity->getAnnotations(), entity->isPublished()),
+        manager_(manager),
         name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -613,8 +650,8 @@ cpo::uno::Sequence< OUString > ExceptionTypeDescription::getMemberNames()
 }
 
 class AttributeDescription:
-    public cppu::WeakImplHelper<
-        css::reflection::XInterfaceAttributeTypeDescription2 >
+    public cppu::ImplInheritanceHelper<
+        AnnotatedDescription, css::reflection::XInterfaceAttributeTypeDescription2 >
 {
 public:
     AttributeDescription(
@@ -622,6 +659,7 @@ public:
         OUString name,
         unoidl::InterfaceTypeEntity::Attribute  attribute,
         sal_Int32 position):
+        ImplInheritanceHelper(attribute.annotations),
         manager_(manager), name_(std::move(name)), attribute_(std::move(attribute)),
         position_(position)
     { assert(manager.is()); }
@@ -747,14 +785,15 @@ private:
 };
 
 class MethodDescription:
-    public cppu::WeakImplHelper<
-        css::reflection::XInterfaceMethodTypeDescription >
+    public cppu::ImplInheritanceHelper<
+        AnnotatedDescription, css::reflection::XInterfaceMethodTypeDescription >
 {
 public:
     MethodDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         unoidl::InterfaceTypeEntity::Method method, sal_Int32 position):
+        ImplInheritanceHelper(method.annotations),
         manager_(manager), name_(std::move(name)), method_(std::move(method)), position_(position)
     { assert(manager.is()); }
 
@@ -889,7 +928,8 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
-        InterfaceTypeDescription_Base(entity->isPublished()), manager_(manager),
+        InterfaceTypeDescription_Base(entity->getAnnotations(), entity->isPublished()),
+        manager_(manager),
         name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -1061,7 +1101,8 @@ public:
     ConstantGroupDescription(
         OUString name,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity):
-        ConstantGroupDescription_Base(entity->isPublished()), name_(std::move(name)),
+        ConstantGroupDescription_Base(entity->getAnnotations(), entity->isPublished()),
+        name_(std::move(name)),
         entity_(entity)
     { assert(entity.is()); }
 
@@ -1107,7 +1148,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::TypedefEntity > const & entity):
-        TypedefDescription_Base(entity->isPublished()), manager_(manager),
+        TypedefDescription_Base(entity->getAnnotations(), entity->isPublished()), manager_(manager),
         name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -1245,7 +1286,8 @@ public:
         OUString name,
         rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const &
             entity):
-        SingleInterfaceBasedServiceDescription_Base(entity->isPublished()),
+        SingleInterfaceBasedServiceDescription_Base(
+            entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -1383,7 +1425,7 @@ public:
         OUString name,
         rtl::Reference< unoidl::AccumulationBasedServiceEntity > const &
             entity):
-        AccumulationBasedServiceDescription_Base(entity->isPublished()),
+        AccumulationBasedServiceDescription_Base(entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -1551,7 +1593,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity):
-        InterfaceBasedSingletonDescription_Base(entity->isPublished()),
+        InterfaceBasedSingletonDescription_Base(entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
@@ -1595,7 +1637,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString name,
         rtl::Reference< unoidl::ServiceBasedSingletonEntity > const & entity):
-        ServiceBasedSingletonDescription_Base(entity->isPublished()),
+        ServiceBasedSingletonDescription_Base(entity->getAnnotations(), entity->isPublished()),
         manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
