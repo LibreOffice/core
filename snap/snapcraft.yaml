@@ -263,7 +263,7 @@ parts:
       # plugin: nil parts that use override-build.
       QT6_SDK=/snap/kde-qt6-core24-sdk/current
       export PATH="$QT6_SDK/usr/bin/qt6:$QT6_SDK/usr/lib/qt6/libexec:$QT6_SDK/usr/bin:$PATH"
-      export PKG_CONFIG_PATH="$QT6_SDK/usr/lib/x86_64-linux-gnu/pkgconfig:$QT6_SDK/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+      export PKG_CONFIG_PATH="$QT6_SDK/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig:$QT6_SDK/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
       # Shadow qtpaths6 with snap/qtpaths6-wrapper so configure's
       # QT_INSTALL_LIBEXECS / QT_INSTALL_BINS lookups get the real paths
       # instead of qtpaths6's broken multiarch defaults.
@@ -493,13 +493,15 @@ parts:
     stage:
       # Dictionary stage-packages pull in Ubuntu's libreoffice-core as a
       # transitive dep. Excluding from stage (not just prime) is what
-      # matters: snapcraft puts $CRAFT_STAGE/usr/lib/x86_64-linux-gnu/ on
+      # matters: snapcraft puts $CRAFT_STAGE/usr/lib/<triplet>/ on
       # LD_LIBRARY_PATH during build, which outranks the engine's RPATH and
       # causes build-time tools (e.g. svidl) to load Ubuntu's older
       # libuno_sal.so.3 instead of the one we just built, breaking any
       # symbol added since that Ubuntu release.
+      # These are glob patterns, not shell, so match the triplet with a
+      # wildcard rather than a craft variable.
       - -usr/lib/libreoffice
-      - -usr/lib/x86_64-linux-gnu/libuno*
+      - -usr/lib/*-linux-gnu/libuno*
       - -usr/share/doc/libreoffice*
       - -usr/share/doc/libuno*
       - -usr/share/doc/ure*
