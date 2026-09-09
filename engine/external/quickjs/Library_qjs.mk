@@ -12,10 +12,7 @@ $(eval $(call gb_Library_Library,qjs))
 $(eval $(call gb_Library_add_defs,qjs,-DBUILDING_QJS_SHARED))
 
 $(eval $(call gb_Library_add_generated_cobjects,qjs, \
-    UnpackedTarball/quickjs/dtoa \
-    UnpackedTarball/quickjs/libregexp \
-    UnpackedTarball/quickjs/libunicode \
-    UnpackedTarball/quickjs/quickjs \
+    UnpackedTarball/quickjs/quickjs-amalgam \
 ))
 
 $(eval $(call gb_Library_set_warnings_disabled,qjs))
@@ -29,9 +26,10 @@ $(eval $(call gb_Library_add_libs,qjs, \
 ))
 endif
 
-# At least VS 2022 defaults to a pre-C11 that doesn't support <stdatomic.h>:
+# At least VS 2022 defaults to a pre-C11 that doesn't support <stdatomic.h>, and even then requires
+# the experimental switch:
 ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_cflags,qjs,/std:c11))
+$(eval $(call gb_Library_add_cflags,qjs,/std:c11 /experimental:c11atomics))
 endif
 
 # vim: set noet sw=4 ts=4:

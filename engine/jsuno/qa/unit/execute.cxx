@@ -66,7 +66,7 @@ public:
             CPPUNIT_ASSERT_EQUAL(std::size_t(1), e.stack.size());
             CPPUNIT_ASSERT_EQUAL(u"<input>"_ustr, e.stack[0].source);
             CPPUNIT_ASSERT_EQUAL(u"1"_ustr, e.stack[0].line);
-            CPPUNIT_ASSERT_EQUAL(u"10"_ustr, e.stack[0].column);
+            CPPUNIT_ASSERT_EQUAL(u"11"_ustr, e.stack[0].column);
             CPPUNIT_ASSERT_EQUAL(u"<eval>"_ustr, e.stack[0].functionName);
             CPPUNIT_ASSERT_EQUAL(u"Error"_ustr, e.name);
         }

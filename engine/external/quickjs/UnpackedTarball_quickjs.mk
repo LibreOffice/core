@@ -9,6 +9,6 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,quickjs))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,quickjs,$(QUICKJS_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,quickjs,$(QUICKJS_TARBALL),0))
 
 # vim: set noet sw=4 ts=4:
