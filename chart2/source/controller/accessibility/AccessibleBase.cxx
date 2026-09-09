@@ -395,7 +395,6 @@ sal_Int64 AccessibleBase::ImplGetAccessibleChildCount() const
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 i )
 {
     ensureAlive();
-    Reference< XAccessible > xResult;
 
     ClearableMutexGuard aGuard( m_aMutex );
     bool bMustUpdateChildren = ( m_bMayHaveChildren &&
@@ -406,9 +405,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 
     if( bMustUpdateChildren )
         UpdateChildren();
 
-    xResult.set( ImplGetAccessibleChildById( i ));
-
-    return xResult;
+    return ImplGetAccessibleChildById(i);
 }
 
 Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i ) const
