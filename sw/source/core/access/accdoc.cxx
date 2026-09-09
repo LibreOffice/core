@@ -162,15 +162,14 @@ sal_Int64 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<XAccessibleContext> xAcc(mpParent->getAccessibleContext());
     uno::Reference < XAccessible > xThis( this );
-    sal_Int64 nCount = xAcc->getAccessibleChildCount();
+    sal_Int64 nCount = mpParent->getAccessibleChildCount();
 
     for( sal_Int64 i=0; i < nCount; i++ )
     {
         try
         {
-            if( xAcc->getAccessibleChild( i ) == xThis )
+            if (mpParent->getAccessibleChild(i) == xThis)
                 return i;
         }
         catch(const css::lang::IndexOutOfBoundsException &)
