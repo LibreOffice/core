@@ -520,6 +520,276 @@ public:
     }
 };
 
+/// The host rejects PutFile with 409 and an X-WOPI-Lock header. Per the WOPI
+/// protocol that is a lock mismatch, not a change in storage: someone else holds
+/// the lock. Nothing was written, so this must not be reported as a conflict.
+class UnitWOPIFailUploadLockMismatch : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload,
+               WaitSuccessfulUpload, Done)
+    _phase;
+
+    /// How many PutFile attempts to reject before letting one through.
+    static constexpr std::size_t UploadsToFail = 2;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ModifiedDocContent = "aOriginal contents\n";
+
+public:
+    UnitWOPIFailUploadLockMismatch()
+        : WopiTestServer("UnitWOPIFailUploadLockMismatch", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("per_document.limit_store_failures", UploadsToFail + 2);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // A lock mismatch only arises where locking is in play.
+        fileInfo->set("SupportsLocks", "true");
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        if (getCountPutFile() <= UploadsToFail)
+        {
+            TST_LOG("PutFile #" << getCountPutFile() << ": rejecting with a lock mismatch");
+
+            // 409 plus the lock currently held. Storage is left untouched.
+            auto response = std::make_unique<http::Response>(http::StatusCode::Conflict);
+            response->set("X-WOPI-Lock", "another-editors-lock-token");
+            return response;
+        }
+
+        TST_LOG("PutFile #" << getCountPutFile() << ": accepting");
+        LOK_ASSERT_STATE(_phase, Phase::WaitSuccessfulUpload);
+
+        return nullptr; // Success.
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        // A lock mismatch says nothing about the document having changed.
+        LOK_ASSERT_MESSAGE("Unexpected documentconflict on a lock mismatch: " + message,
+                           !message.starts_with("error: cmd=storage kind=documentconflict"));
+        LOK_ASSERT_MESSAGE("Expected only savefailed errors: " + message,
+                           message.starts_with("error: cmd=storage kind=savefailed"));
+
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure") << ", PutFile count "
+                                       << getCountPutFile());
+
+        if (!success)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+
+            if (getCountPutFile() == UploadsToFail)
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSuccessfulUpload);
+            }
+
+            return;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSuccessfulUpload);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected the rejected uploads to be retried",
+                                 UploadsToFail + 1, getCountPutFile());
+        LOK_ASSERT_EQUAL_MESSAGE("Expected the modified document in storage",
+                                 std::string(ModifiedDocContent), getFileContent());
+
+        passTest("Lock mismatch retried to success without a spurious conflict");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::WaitSuccessfulUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
+/// A bare 409, with neither the DOC_CHANGED marker nor a lock header, stays a
+/// conflict. We cannot tell what such a host means, and hosts that send it mean
+/// the document changed, so leave that reading alone.
+class UnitWOPIFailUploadBare409 : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload, Done) _phase;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+
+public:
+    UnitWOPIFailUploadBare409()
+        : WopiTestServer("UnitWOPIFailUploadBare409", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+
+        TST_LOG("PutFile: rejecting with a bare 409");
+
+        return std::make_unique<http::Response>(http::StatusCode::Conflict);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        if (message.starts_with("error: cmd=storage kind=savefailed"))
+        {
+            return true;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+        LOK_ASSERT_MESSAGE("Expected a documentconflict error: " + message,
+                           message.starts_with("error: cmd=storage kind=documentconflict"));
+
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        TST_LOG("Discarding own changes via closedocument");
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        TST_LOG("Modified document being unloaded: " << reason);
+
+        LOK_ASSERT_MESSAGE("Expected reason to be 'Data-loss detected'",
+                           reason.starts_with("Data-loss detected"));
+
+        return failed();
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << ']');
+        LOK_ASSERT_STATE(_phase, Phase::Done);
+
+        passTest("A bare 409 is still treated as a conflict");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 /// A host that answers PutFile without a timestamp, as SharePoint does, leaves
 /// us with no last-known time at all. A later failed upload then has no
 /// baseline to compare against, and a timestamp we never had cannot be evidence
@@ -691,11 +961,13 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [6]
+    return new UnitBase* [8]
     {
         new UnitWOPIFailUploadIntactStorage(http::StatusCode::Locked),
             new UnitWOPIFailUploadIntactStorage(http::StatusCode::InternalServerError),
-            new UnitWOPIFailUploadChangedStorage(), new UnitWOPIFailUploadTimeoutChangedStorage(),
+            new UnitWOPIFailUploadLockMismatch(), new UnitWOPIFailUploadBare409(),
+            new UnitWOPIFailUploadChangedStorage(),
+            new UnitWOPIFailUploadTimeoutChangedStorage(),
             new UnitWOPINoLastKnownTimestamp(), nullptr
     };
 }

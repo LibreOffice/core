@@ -305,6 +305,11 @@ protected:
         const http::StatusCode httpResponseCode;
         const bool isSaveAs;
         const bool isRename;
+        /// Whether the response carried an X-WOPI-Lock header, which on a 409
+        /// identifies the rejection as a lock mismatch rather than a change in
+        /// storage. The lock token itself is of no use to us: we only ever hold
+        /// one lock per document and we don't take over somebody else's.
+        const bool hasWopiLockHeader;
     };
 
     /// Handles the response from the server when uploading the document.

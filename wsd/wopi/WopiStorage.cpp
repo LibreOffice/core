@@ -901,7 +901,8 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
                                           size,
                                           httpResponse->statusLine().statusCode(),
                                           isSaveAs,
-                                          isRename };
+                                          isRename,
+                                          httpResponse->header().has("X-WOPI-Lock") };
 
             // Handle the response.
             StorageBase::UploadResult res =
@@ -1066,6 +1067,7 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
         {
             result.setResult(StorageBase::UploadResult::Result::CONFLICT);
             Poco::JSON::Object::Ptr object;
+            bool docChanged = false;
             if (JsonUtil::parseJSON(origResponseString, object))
             {
                 const unsigned coolStatusCode =
@@ -1074,12 +1076,25 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
                     JsonUtil::getJSONValue<unsigned>(object, "LOOLStatusCode") ==
                         static_cast<unsigned>(COOLStatusCode::DOC_CHANGED))
                 {
+                    docChanged = true;
                     result.setResult(StorageBase::UploadResult::Result::DOC_CHANGED);
                 }
             }
             else
             {
                 LOG_ERR("Invalid or missing JSON in " << wopiLog << " HTTP_CONFLICT response.");
+            }
+
+            if (!docChanged && details.hasWopiLockHeader)
+            {
+                // Per the WOPI protocol a 409 carrying X-WOPI-Lock is a lock
+                // mismatch: the host refused the write because someone else holds
+                // the lock. It says nothing about the document having changed, so
+                // treat it as an ordinary rejected upload and let the timestamp in
+                // storage decide whether there is anything to reconcile.
+                LOG_INF(wopiLog << " was rejected with a lock mismatch, not a change in storage");
+                result.setResult(StorageBase::UploadResult::Result::FAILED);
+                result.setReason("Locked by another editor");
             }
         }
         else
