@@ -628,11 +628,17 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaSkipsAnObjectThatOnlyBroadcas
 
     pObject->BroadcastObjectChange();
 
+    // With nothing left to say the response is empty rather than a header
+    // over empty arrays, so the push it came from sends no frame at all.
     auto aDelta = getVectorPrimitives(u"testUnchangedDelta", nVersion);
-    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    CPPUNIT_ASSERT(!aDelta.has("/type"));
+    CPPUNIT_ASSERT(!aDelta.has("/objects"));
+
     // The version did not move either, so the next delta starts from here.
-    CPPUNIT_ASSERT_EQUAL(nVersion, aDelta.getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(nVersion,
+                         getVectorPrimitives(u"testUnchangedFullAgain")
+                             .getInt("/version")
+                             .value_or(-1));
 
     // Moving it really does change it, so then it travels.
     moveObject(pObject, Size(500, 0));
@@ -975,11 +981,11 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
     auto oDelta = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
     CPPUNIT_ASSERT(oDelta.has_value());
 
-    assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
-    // Nothing changed since the pull, so the push carries neither an order
-    // nor any object content.
+    // Nothing changed since the pull, so the push has nothing to carry and
+    // the response is empty.
+    CPPUNIT_ASSERT(!oDelta->has("/type"));
     CPPUNIT_ASSERT(!oDelta->has("/order"));
-    CPPUNIT_ASSERT_EQUAL(size_t(0), oDelta->getSize("/objects").value_or(SIZE_MAX));
+    CPPUNIT_ASSERT(!oDelta->has("/objects"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)

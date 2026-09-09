@@ -2138,6 +2138,12 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
         pDocument->getCommandValues(aJsonWriter,
                                     std::string_view(aCommand.getStr(), aCommand.getLength()));
         const OString aDelta = aJsonWriter.finishAndGetAsOString();
+
+        // The command writes nothing when the comparison found the client already holds what
+        // the part looks like, and an empty document is not worth a frame of its own.
+        if (aDelta.indexOf("\"type\"") < 0)
+            continue;
+
         m_pCallback(COKitCallbackType::VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);
     }
 }

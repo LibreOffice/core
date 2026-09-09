@@ -2654,6 +2654,12 @@ public:
         // happens before the version is reported.
         resolveDirtyObjects(pPage);
 
+        // A trigger only says that something may have changed. Once the comparison has had its
+        // say there is often nothing left to tell the client, and then the response carries
+        // nothing at all rather than a header with empty arrays under it.
+        if (isDelta() && !hasContentToSend(pPage))
+            return;
+
         writeHeader(rWriter);
 
         // The order names every live object on the part, so it travels only when that set or the
@@ -2944,6 +2950,37 @@ private:
             mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, nObjectId,
                                                contentOf(*aFound->second));
         }
+    }
+
+    /// True when a delta would carry something: the page's own content changed, the object set
+    /// or its order moved, or at least one object differs from what the client holds.
+    bool hasContentToSend(SdPage* pPage)
+    {
+        if (mpModel->isVectorMasterChangedSince(mnResolvedPage, mnMode,
+                                                sal_uInt64(mnSinceVersion))
+            || mpModel->isVectorOrderChangedSince(mnResolvedPage, mnMode,
+                                                  sal_uInt64(mnSinceVersion)))
+        {
+            return true;
+        }
+
+        std::vector<SdrObject*> aObjects;
+        collectPaintedObjects(*pPage, aObjects);
+
+        for (SdrObject* pObject : aObjects)
+        {
+            // The text of a running edit changes with every keystroke, and none of it reaches
+            // the model until the edit is committed, so no comparison can find it.
+            if (hasActiveTextEdit(pObject)
+                || mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                       pObject->GetUniqueID(),
+                                                       sal_uInt64(mnSinceVersion)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// One entry per painted object on the page, into the open objects array, in the order the
