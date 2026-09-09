@@ -695,8 +695,6 @@ public:
                 position broadcasted. */
     bool BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SfxHintId nHint );
 
-    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode );
-
     void UpdateReference(
         sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr,
         bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );

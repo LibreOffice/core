@@ -53,7 +53,6 @@ public:
     SC_DLLPUBLIC void set( const svl::SharedString& rStr );
     SC_DLLPUBLIC void set( const EditTextObject& rEditText );
     SC_DLLPUBLIC void set( EditTextObject&& rEditText );
-    SC_DLLPUBLIC void set( std::unique_ptr<EditTextObject> );
     SC_DLLPUBLIC void set( ScFormulaCell* pFormula );
 
     SC_DLLPUBLIC CellType getType() const;

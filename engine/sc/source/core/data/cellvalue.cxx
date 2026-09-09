@@ -351,12 +351,6 @@ void ScCellValue::set( EditTextObject&& rEditText )
     maData = new EditTextObject(std::move(rEditText));
 }
 
-void ScCellValue::set( std::unique_ptr<EditTextObject> xEditText )
-{
-    clear();
-    maData = xEditText.release();
-}
-
 void ScCellValue::set( ScFormulaCell* pFormula )
 {
     clear();

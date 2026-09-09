@@ -1598,18 +1598,6 @@ public:
     void              CompileAll();
     void              CompileXML();
 
-    /**
-     * Re-compile formula cells with error.
-     *
-     * @param nErrCode specified error code to match. Only those cells with
-     *                 this error code will be re-compiled.  If this value is
-     *                 0, cells with any error values will be re-compiled.
-     *
-     * @return true if at least one cell is re-compiled, false if no cells are
-     *         re-compiled.
-     */
-    bool CompileErrorCells(FormulaError nErrCode);
-
     ScAutoNameCache*     GetAutoNameCache()     { return pAutoNameCache.get(); }
     void                 SetPreviewFont( std::unique_ptr<SfxItemSet> pFontSet );
     SfxItemSet*          GetPreviewFont() { return pPreviewFont.get(); }

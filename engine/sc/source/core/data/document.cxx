@@ -4366,19 +4366,6 @@ void ScDocument::CompileXML()
     SetAutoCalc( bOldAutoCalc );
 }
 
-bool ScDocument::CompileErrorCells(FormulaError nErrCode)
-{
-    bool bCompiled = false;
-    sc::CompileFormulaContext aCxt(*this);
-    for (const auto& pTab : maTabs)
-    {
-        if (pTab && pTab->CompileErrorCells(aCxt, nErrCode))
-            bCompiled = true;
-    }
-
-    return bCompiled;
-}
-
 void ScDocument::CalcAfterLoad( bool bStartListening )
 {
     if (bIsClip)    // Excel data is loaded from the Clipboard to a Clip-Doc

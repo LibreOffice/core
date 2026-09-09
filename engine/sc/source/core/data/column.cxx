@@ -2901,48 +2901,6 @@ public:
     }
 };
 
-class CompileErrorCellsHandler
-{
-    sc::CompileFormulaContext& mrCxt;
-    ScColumn& mrColumn;
-    sc::CellStoreType::iterator miPos;
-    FormulaError mnErrCode;
-    bool mbCompiled;
-public:
-    CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, FormulaError nErrCode ) :
-        mrCxt(rCxt),
-        mrColumn(rColumn),
-        miPos(mrColumn.GetCellStore().begin()),
-        mnErrCode(nErrCode),
-        mbCompiled(false)
-    {
-    }
-
-    void operator() (size_t nRow, ScFormulaCell* pCell)
-    {
-        FormulaError nCurError = pCell->GetRawError();
-        if (nCurError == FormulaError::NONE)
-            // It's not an error cell. Skip it.
-            return;
-
-        if (mnErrCode != FormulaError::NONE && nCurError != mnErrCode)
-            // Error code is specified, and it doesn't match. Skip it.
-            return;
-
-        sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
-        miPos = aPos.first;
-        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
-        pCell->GetCode()->SetCodeError(FormulaError::NONE);
-        OUString aFormula = pCell->GetFormula(mrCxt);
-        pCell->Compile(mrCxt, aFormula);
-        ScColumn::JoinNewFormulaCell(aPos, *pCell);
-
-        mbCompiled = true;
-    }
-
-    bool isCompiled() const { return mbCompiled; }
-};
-
 class CalcAfterLoadHandler
 {
     sc::CompileFormulaContext& mrCxt;
@@ -3310,13 +3268,6 @@ void ScColumn::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgres
     CompileXMLHandler aFunc(rCxt, rProgress, *this);
     sc::ProcessFormula(maCells, aFunc);
     RegroupFormulaCells();
-}
-
-bool ScColumn::CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode )
-{
-    CompileErrorCellsHandler aHdl(rCxt, *this, nErrCode);
-    sc::ProcessFormula(maCells, aHdl);
-    return aHdl.isCompiled();
 }
 
 void ScColumn::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )

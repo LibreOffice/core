@@ -493,8 +493,6 @@ public:
                 position broadcasted. */
     bool BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, SfxHintId nHint );
 
-    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode );
-
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
     bool UpdateReferenceOnCopy( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr );
