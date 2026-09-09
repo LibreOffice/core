@@ -722,8 +722,6 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 
     ThrowIfDisposed();
 
-    uno::Reference< XAccessible > xAcc;
-
     vcl::Window *pWin = GetWindow();
     if (!pWin)
     {
@@ -741,19 +739,13 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 
     const SwAccessibleChild aChild( GetChildAtPixel( aPixPoint, *(GetMap()) ) );
     if( aChild.GetSwFrame() )
-    {
-        xAcc = GetMap()->GetContext( aChild.GetSwFrame() );
-    }
-    else if( aChild.GetDrawObject() )
-    {
-        xAcc = GetMap()->GetContext( aChild.GetDrawObject(), this );
-    }
-    else if ( aChild.GetWindow() )
-    {
-        xAcc = aChild.GetWindow()->GetAccessible();
-    }
+        return GetMap()->GetContext(aChild.GetSwFrame());
+    if (aChild.GetDrawObject())
+        return GetMap()->GetContext(aChild.GetDrawObject(), this);
+    if (aChild.GetWindow())
+        return aChild.GetWindow()->GetAccessible();
 
-    return xAcc;
+    return {};
 }
 
 /**
