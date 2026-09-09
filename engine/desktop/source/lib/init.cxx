@@ -1359,7 +1359,7 @@ static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnable
 static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
                                     const char* pJsonOptions);
 
-static char* doc_getSlideLinks(COKitDocument* pThis);
+static std::string doc_getSlideLinks(COKitDocument* pThis);
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl);
 
@@ -1907,7 +1907,7 @@ bool COKitDocumentImpl::insertPagesFromFile(const char* pUrl, const char* pJsonO
     return doc_insertPagesFromFile(this, pUrl, pJsonOptions);
 }
 
-char* COKitDocumentImpl::getSlideLinks()
+std::string COKitDocumentImpl::getSlideLinks()
 {
     return doc_getSlideLinks(this);
 }
@@ -7102,7 +7102,7 @@ static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
                                      pJsonOptions ? OString(pJsonOptions) : OString());
 }
 
-static char* doc_getSlideLinks(COKitDocument* pThis)
+static std::string doc_getSlideLinks(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7111,7 +7111,7 @@ static char* doc_getSlideLinks(COKitDocument* pThis)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return nullptr;
+        return {};
     }
 
     tools::JsonWriter aJsonWriter;
@@ -7120,9 +7120,9 @@ static char* doc_getSlideLinks(COKitDocument* pThis)
     // nothing was written; the partial data is discarded.
     OString aLinks = aJsonWriter.finishAndGetAsOString();
     if (!bWritten)
-        return nullptr;
+        return {};
 
-    return convertOString(aLinks);
+    return convertOStringToStdString(aLinks);
 }
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl)

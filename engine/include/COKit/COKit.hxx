@@ -2564,10 +2564,10 @@ struct COKitDocument
      *         "name":"<source page>"},...]},...]}, where a source document is named as the user
      *         knows it, a part is the unique identifier the linked page holds now and a source page
      *         is named as the user sees it in the source document. A document that links to nothing
-     *         reports an empty array. The caller owns the returned string and frees it. nullptr for
-     *         a document that holds no pages, which is anything but a presentation or a drawing.
+     *         reports an empty array. Empty for a document that holds no pages, which is anything
+     *         but a presentation or a drawing.
      */
-    virtual char* getSlideLinks() = 0;
+    virtual std::string getSlideLinks() = 0;
 
     /**
      * Refresh the pages linked to one source document.
