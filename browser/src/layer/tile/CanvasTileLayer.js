@@ -1715,8 +1715,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const editorViewId = obj.editorViewId !== undefined ? parseInt(obj.editorViewId) : null;
 		var modifierViewId = editorViewId !== null && editorViewId !== -1 ? editorViewId : parseInt(obj.viewId);
 		var weAreModifier = (modifierViewId === this._viewId);
-		if (weAreModifier && app.isFollowingOff())
-			app.setFollowingUser(this._viewId);
 
 		this._cursorAtMispelledWord = obj.mispelledWord ? Boolean(parseInt(obj.mispelledWord)).valueOf() : false;
 

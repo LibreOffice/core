@@ -161,4 +161,39 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		});
 	});
 
+	it('The view stays put when the caret is re-reported after a reflow', function() {
+		desktopHelper.selectZoomLevel('40');
+
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.processToIdle(this.win);
+
+		desktopHelper.scrollWriterDocumentToTop();
+
+		// Where the user left the view, read from the layout, which carries the
+		// position through every scroll.
+		let readingPosition;
+
+		// A reflow makes core report the caret again, naming our own view.
+		cy.then(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			readingPosition = layout.viewedRectangle.y1;
+
+			const caret = this.win.app.file.textCursor.rectangle;
+			const CARET_SHIFT_TWIPS = 15;
+			const payload = {
+				viewId: this.win.app.map._docLayer._viewId,
+				rectangle: (caret.x1 + CARET_SHIFT_TWIPS) + ', ' + caret.y1 + ', ' +
+					caret.width + ', ' + caret.height,
+			};
+			this.win.app.map._docLayer._onMessage(
+				'invalidatecursor: ' + JSON.stringify(payload));
+		});
+
+		// The user is reading the top of the document, so the view stays there.
+		cy.then(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			expect(layout.viewedRectangle.y1).to.equal(readingPosition);
+		});
+	});
+
 });
