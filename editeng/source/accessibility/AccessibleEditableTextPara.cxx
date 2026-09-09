@@ -98,13 +98,13 @@ static const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
 
 // #i27138# - add parameter <_pParaManager>
 AccessibleEditableTextPara::AccessibleEditableTextPara(
-                            uno::Reference< XAccessible > xParent,
-                            const AccessibleParaManager* _pParaManager )
+    const rtl::Reference<comphelper::OAccessible>& rpParent,
+    const AccessibleParaManager* _pParaManager)
     : mnParagraphIndex( 0 ),
       mnIndexInParent( 0 ),
       mpEditSource( nullptr ),
       maEEOffset( 0, 0 ),
-      mxParent(std::move( xParent )),
+      mxParent(rpParent),
       mpParaManager( _pParaManager )
 {
 

@@ -71,8 +71,8 @@ public:
     // - add parameter <_pParaManager> (default value NULL)
     //   This has to be the instance of <AccessibleParaManager>, which
     //   created and manages this accessible paragraph.
-    AccessibleEditableTextPara ( css::uno::Reference< css::accessibility::XAccessible > xParent,
-                                 const AccessibleParaManager* _pParaManager = nullptr );
+    AccessibleEditableTextPara(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                               const AccessibleParaManager* _pParaManager = nullptr);
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
