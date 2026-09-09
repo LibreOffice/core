@@ -39,6 +39,8 @@ class TextChainCursorManager;
 
 namespace cpo::uno { class Any; }
 
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
+
 namespace sdr {
     class SelectionController;
 }
@@ -269,6 +271,13 @@ public:
     {
         return mpTextEditOutlinerView;
     }
+
+    /** The text of the running text edit, as the drawing layer paints it.
+
+        This is what has been typed so far, laid out and placed where the edit shows it, in the
+        logic coordinates a shape's primitives use. It is empty while no text edit runs.
+     */
+    drawinglayer::primitive2d::Primitive2DContainer getTextEditPrimitives() const;
 
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin) override;

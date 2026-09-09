@@ -488,6 +488,69 @@ namespace
 class TextEditFrameOverlayObject;
 class TextEditHighContrastOverlaySelection;
 
+/// The text of a running text edit, laid out and placed where the edit shows it.
+drawinglayer::primitive2d::Primitive2DContainer
+createTextEditTextPrimitives(const OutlinerView& rOutlinerView)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aTextPrimitives;
+    SdrOutliner* pSdrOutliner = dynamic_cast<SdrOutliner*>(&rOutlinerView.GetOutliner());
+
+    if (!pSdrOutliner)
+        return aTextPrimitives;
+
+    basegfx::B2DHomMatrix aNewTransformA;
+    basegfx::B2DHomMatrix aNewTransformB;
+    basegfx::B2DRange aClipRange;
+
+    // active Outliner is always in unified oriented coordinate system (currently)
+    // so just translate to TopLeft of visible Range. Keep in mind that top-left
+    // depends on vertical text and top-to-bottom text attributes
+    const tools::Rectangle aOutArea(rOutlinerView.GetOutputArea());
+    const tools::Rectangle aVisArea(rOutlinerView.GetVisArea());
+    const bool bVerticalWriting(pSdrOutliner->IsVertical());
+    const bool bTopToBottom(pSdrOutliner->IsTopToBottom());
+    const double fStartInX(bVerticalWriting && bTopToBottom ? aOutArea.Right() - aVisArea.Left()
+                                                            : aOutArea.Left() - aVisArea.Left());
+    const double fStartInY(bVerticalWriting && !bTopToBottom ? aOutArea.Bottom() - aVisArea.Top()
+                                                             : aOutArea.Top() - aVisArea.Top());
+
+    aNewTransformB.translate(fStartInX, fStartInY);
+
+    // get the current TextPrimitives. This is the most expensive part
+    // of this mechanism, it *may* be possible to buffer layouted
+    // primitives per ParaPortion with/in/dependent on the EditEngine
+    // content if needed. For now, get and compare
+    TextHierarchyBreakupBlockText aBreakup(*pSdrOutliner, aNewTransformA, aNewTransformB,
+                                           aClipRange);
+    pSdrOutliner->StripPortions(aBreakup);
+    aTextPrimitives.append(aBreakup.getTextPortionPrimitives());
+
+    return aTextPrimitives;
+}
+
+/** What a running text edit has selected, as ranges in logic coordinates.
+ *
+ * Each range is grown by rGrowBy, which a view sets to what one of its pixels measures so that the
+ * selection covers the edges of the glyphs it contains.
+ */
+std::vector<basegfx::B2DRange> createTextEditSelectionRanges(const OutlinerView& rOutlinerView,
+                                                             const Size& rGrowBy)
+{
+    std::vector<tools::Rectangle> aLogicRects;
+    rOutlinerView.GetSelectionRectangles(aLogicRects);
+
+    std::vector<basegfx::B2DRange> aLogicRanges;
+    aLogicRanges.reserve(aLogicRects.size());
+    for (const auto& aRect : aLogicRects)
+    {
+        aLogicRanges.emplace_back(aRect.Left() - rGrowBy.Width(), aRect.Top() - rGrowBy.Height(),
+                                  aRect.Right() + rGrowBy.Width(),
+                                  aRect.Bottom() + rGrowBy.Height());
+    }
+
+    return aLogicRanges;
+}
+
 /**
         Helper class to visualize the content of an active EditView as an
         OverlayObject. These objects work with Primitives and are handled
@@ -770,45 +833,13 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
     }
 
     // check if text primitives did change
-    SdrOutliner* pSdrOutliner = dynamic_cast<SdrOutliner*>(&getOutlinerView().GetOutliner());
+    drawinglayer::primitive2d::Primitive2DContainer aNewTextPrimitives(
+        createTextEditTextPrimitives(mrOutlinerView));
 
-    if (pSdrOutliner)
+    if (aNewTextPrimitives != maTextPrimitives)
     {
-        // get TextPrimitives directly from active Outliner
-        basegfx::B2DHomMatrix aNewTransformA;
-        basegfx::B2DHomMatrix aNewTransformB;
-        basegfx::B2DRange aClipRange;
-        drawinglayer::primitive2d::Primitive2DContainer aNewTextPrimitives;
-
-        // active Outliner is always in unified oriented coordinate system (currently)
-        // so just translate to TopLeft of visible Range. Keep in mind that top-left
-        // depends on vertical text and top-to-bottom text attributes
-        const tools::Rectangle aVisArea(mrOutlinerView.GetVisArea());
-        const bool bVerticalWriting(pSdrOutliner->IsVertical());
-        const bool bTopToBottom(pSdrOutliner->IsTopToBottom());
-        const double fStartInX(bVerticalWriting && bTopToBottom
-                                   ? aOutArea.Right() - aVisArea.Left()
-                                   : aOutArea.Left() - aVisArea.Left());
-        const double fStartInY(bVerticalWriting && !bTopToBottom
-                                   ? aOutArea.Bottom() - aVisArea.Top()
-                                   : aOutArea.Top() - aVisArea.Top());
-
-        aNewTransformB.translate(fStartInX, fStartInY);
-
-        // get the current TextPrimitives. This is the most expensive part
-        // of this mechanism, it *may* be possible to buffer layouted
-        // primitives per ParaPortion with/in/dependent on the EditEngine
-        // content if needed. For now, get and compare
-        TextHierarchyBreakupBlockText aBreakup(*pSdrOutliner, aNewTransformA, aNewTransformB,
-                                               aClipRange);
-        pSdrOutliner->StripPortions(aBreakup);
-        aNewTextPrimitives.append(aBreakup.getTextPortionPrimitives());
-
-        if (aNewTextPrimitives != maTextPrimitives)
-        {
-            maTextPrimitives = std::move(aNewTextPrimitives);
-            bObjectChange = true;
-        }
+        maTextPrimitives = std::move(aNewTextPrimitives);
+        bObjectChange = true;
     }
 
     if (bObjectChange)
@@ -831,22 +862,9 @@ void TextEditOverlayObject::checkSelectionChange()
     if (!(getOverlaySelection() && getOverlayManager()))
         return;
 
-    std::vector<tools::Rectangle> aLogicRects;
-    std::vector<basegfx::B2DRange> aLogicRanges;
     const Size aLogicPixel(getOverlayManager()->getOutputDevice().PixelToLogic(Size(1, 1)));
-
-    // get logic selection
-    getOutlinerView().GetSelectionRectangles(aLogicRects);
-
-    aLogicRanges.reserve(aLogicRects.size());
-    for (const auto& aRect : aLogicRects)
-    {
-        // convert from logic Rectangles to logic Ranges, do not forget to add
-        // one Unit (in this case logical units for one pixel, pre-calculated)
-        aLogicRanges.emplace_back(
-            aRect.Left() - aLogicPixel.Width(), aRect.Top() - aLogicPixel.Height(),
-            aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height());
-    }
+    std::vector<basegfx::B2DRange> aLogicRanges(
+        createTextEditSelectionRanges(mrOutlinerView, aLogicPixel));
 
     if (mxOverlayTransparentSelection)
         mxOverlayTransparentSelection->setRanges(std::move(aLogicRanges));
@@ -899,6 +917,16 @@ void SdrObjEditView::EditViewSelectionChange()
             pCandidate->checkSelectionChange();
         }
     }
+}
+
+drawinglayer::primitive2d::Primitive2DContainer SdrObjEditView::getTextEditPrimitives() const
+{
+    const OutlinerView* pOutlinerView = GetTextEditOutlinerView();
+
+    if (!IsTextEdit() || !pOutlinerView)
+        return drawinglayer::primitive2d::Primitive2DContainer();
+
+    return createTextEditTextPrimitives(*pOutlinerView);
 }
 
 OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *mpTextEditWin->GetOutDev(); }
