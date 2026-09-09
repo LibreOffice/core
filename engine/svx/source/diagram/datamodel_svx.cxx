@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <set>
+#include <unordered_map>
 #include <unordered_set>
 #include <algorithm>
 #include <fstream>
@@ -967,10 +968,16 @@ struct PresentationRole
     sal_Int32 mnOrderInContainer = 0;
     /* XML_srcOrd of the presOf Connection that reaches it */
     sal_Int32 mnPresOfSourceOrder = 0;
+    /* XML_destOrd of the presOf Connection that reaches it, which is the paragraph of a
+       presentation Point that draws the text of more than one node */
+    sal_Int32 mnPresOfDestinationOrder = 0;
     /* XML_bulletEnabled */
     bool mbBulletEnabled = false;
     /* whether a presOf Connection reaches it at all, which a container has none of */
     bool mbHasPresOf = false;
+    /* True for a node that owns no presentation Point and is one paragraph of a Point that
+       belongs to another node. msTemplateModelId names that shared Point. */
+    bool mbSharedPresentation = false;
 };
 
 typedef std::vector< PresentationRole > PresentationRoles;
@@ -1044,6 +1051,54 @@ PresentationRoles readPresentationRoles(const Points& rPoints, const Connections
         aRetval.push_back(aRole);
     }
 
+    // A layout may draw the text of every node below a node as the paragraphs of one Point that
+    // belongs to the parent. Such a node owns no presentation Point, a presOf Connection ties it
+    // to the shared one and its XML_destOrd says which paragraph it is.
+    bool bOwnsOne(false);
+
+    for (const PresentationRole& rRole : aRetval)
+        if (PresentationAssociation::Node == rRole.meAssociation)
+            bOwnsOne = true;
+
+    if (!bOwnsOne)
+        for (const rtl::Reference<Connection>& rCxn : rConnections)
+        {
+            if (TypeConstant::XML_presOf != rCxn->mnXMLType || rCxn->msSourceId != rNodeId)
+                continue;
+
+            for (const rtl::Reference<Point>& rPoint : rPoints)
+            {
+                if (rPoint->msModelId != rCxn->msDestId
+                    || TypeConstant::XML_pres != rPoint->mnXMLType)
+                    continue;
+
+                PresentationRole aShared;
+                aShared.meAssociation = PresentationAssociation::Node;
+                aShared.msTemplateModelId = rPoint->msModelId;
+                aShared.msPresName = rPoint->getPresentation().msPresentationLayoutName;
+                aShared.msStyleLabel = rPoint->getPresentation().msPresentationLayoutStyleLabel;
+                aShared.mnStyleIndex = rPoint->getPresentation().mnLayoutStyleIndex;
+                aShared.mnStyleCount = rPoint->getPresentation().mnLayoutStyleCount;
+                aShared.mbBulletEnabled = rPoint->getLayoutVariables().mbBulletEnabled;
+                aShared.msLayoutId = rCxn->msPresId;
+                aShared.mnPresOfSourceOrder = rCxn->mnSourceOrder;
+                aShared.mnPresOfDestinationOrder = rCxn->mnDestOrder;
+                aShared.mbHasPresOf = true;
+                aShared.mbSharedPresentation = true;
+
+                for (const rtl::Reference<Connection>& rOther : rConnections)
+                    if (TypeConstant::XML_presParOf == rOther->mnXMLType
+                        && rOther->msDestId == rPoint->msModelId)
+                    {
+                        aShared.msContainerId = rOther->msSourceId;
+                        aShared.mnOrderInContainer = rOther->mnSourceOrder;
+                    }
+
+                aRetval.push_back(aShared);
+                break;
+            }
+        }
+
     std::sort(aRetval.begin(), aRetval.end(),
               [](const PresentationRole& rA, const PresentationRole& rB)
               { return rA.mnOrderInContainer < rB.mnOrderInContainer; });
@@ -1108,6 +1163,26 @@ namespace
 {
 // The Connection that leads to the node that comes first under the given parent, nullptr when the
 // parent holds no node.
+sal_Int32 calcDepth( std::u16string_view rNodeName,
+                     const svx::diagram::Connections& rCnx )
+{
+    // find length of longest path in 'isChild' graph, ending with rNodeName
+    for (const rtl::Reference<Connection>& elem : rCnx)
+    {
+        if( !elem->msParTransId.isEmpty() &&
+            !elem->msSibTransId.isEmpty() &&
+            !elem->msSourceId.isEmpty() &&
+            !elem->msDestId.isEmpty() &&
+            elem->mnXMLType == TypeConstant::XML_parOf &&
+            rNodeName == elem->msDestId )
+        {
+            return calcDepth(elem->msSourceId, rCnx) + 1;
+        }
+    }
+
+    return 0;
+}
+
 const Connection* readFirstNodeUnder(const Connections& rConnections, std::u16string_view rParentId)
 {
     const Connection* pRetval(nullptr);
@@ -1169,38 +1244,60 @@ AddedDiagramNode DiagramData_svx::addDiagramNode(std::u16string_view rTargetNode
         return AddedDiagramNode();
     }
 
-    // A node that hangs below another node takes the new node beside itself, right behind it,
-    // whether or not a node below it was asked for. So does a node at the top level when no node
-    // below it was asked for. Either way it is the template as well.
-    const bool bTargetIsAtTopLevel(aParentId == xRoot->msModelId);
-
-    if (!bAsChild || !bTargetIsAtTopLevel)
+    // Without a node below it being asked for, the new node goes beside the node to go by, right
+    // behind it, and that node is the template as well.
+    if (!bAsChild)
         return insertDiagramNode(aParentId, nTargetSourceOrder + 1, xTarget->msModelId);
 
-    // The new node goes below the node to go by, as the first of the nodes there. The node that
-    // comes first below it is the template, and when it holds none, the node that comes first
-    // below the first node at the top level that holds any.
+    // The new node goes below the node to go by, as the first of the nodes there, on any level.
+    // The node that comes first below it is the template.
     const Connection* pTemplate(readFirstNodeUnder(maConnections, xTarget->msModelId));
 
+    // The node to go by holds none yet, so a node that already sits on the level the new one
+    // lands on says how it is drawn. Any path of the Diagram will do.
+    const sal_Int32 nNewLevel(calcDepth(xTarget->msModelId, maConnections) + 1);
+
     if (nullptr == pTemplate)
+        for (const rtl::Reference<Connection>& rCxn : maConnections)
+        {
+            if (TypeConstant::XML_parOf != rCxn->mnXMLType
+                || calcDepth(rCxn->msDestId, maConnections) != nNewLevel)
+                continue;
+
+            const rtl::Reference<Point> xCandidate(getDataNodeForModelID(rCxn->msDestId));
+
+            if (xCandidate.is() && TypeConstant::XML_node == xCandidate->mnXMLType)
+            {
+                pTemplate = rCxn.get();
+                break;
+            }
+        }
+
+    // No node sits on that level yet. A layout that repeats itself draws every level below the
+    // first alike, so the deepest one there is answers for the new one. Level 1 never does, it is
+    // drawn its own way.
+    if (nullptr == pTemplate && nNewLevel > 2)
     {
-        // the node that comes first at the top level and holds nodes below it
-        const Connection* pHolder(nullptr);
+        sal_Int32 nBestLevel(1);
 
         for (const rtl::Reference<Connection>& rCxn : maConnections)
         {
-            if (TypeConstant::XML_parOf != rCxn->mnXMLType || rCxn->msSourceId != xRoot->msModelId)
+            if (TypeConstant::XML_parOf != rCxn->mnXMLType)
                 continue;
 
-            if (nullptr != pHolder && rCxn->mnSourceOrder > pHolder->mnSourceOrder)
+            const sal_Int32 nLevel(calcDepth(rCxn->msDestId, maConnections));
+
+            if (nLevel < 2 || nLevel >= nNewLevel || nLevel <= nBestLevel)
                 continue;
 
-            if (nullptr != readFirstNodeUnder(maConnections, rCxn->msDestId))
-                pHolder = rCxn.get();
+            const rtl::Reference<Point> xCandidate(getDataNodeForModelID(rCxn->msDestId));
+
+            if (xCandidate.is() && TypeConstant::XML_node == xCandidate->mnXMLType)
+            {
+                pTemplate = rCxn.get();
+                nBestLevel = nLevel;
+            }
         }
-
-        if (nullptr != pHolder)
-            pTemplate = readFirstNodeUnder(maConnections, pHolder->msDestId);
     }
 
     if (nullptr == pTemplate)
@@ -1273,10 +1370,22 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
     const bool bNewNodeIsLast(nNewSourceOrder > nHighestSourceOrder);
 
     // what the new node is to be drawn with, which is what the template is drawn with
-    PresentationRoles aRoles(readPresentationRoles(maPoints, maConnections, aTemplateNodeId,
-                                                   aTemplateParTransId, aTemplateSibTransId));
+    PresentationRoles aAllRoles(readPresentationRoles(maPoints, maConnections, aTemplateNodeId,
+                                                      aTemplateParTransId, aTemplateSibTransId));
 
-    if (aRoles.empty())
+    // A role that the template owns becomes a presentation Point of its own for the new node. A
+    // role that the template only shares with the nodes beside it makes the new node one more
+    // paragraph of that same Point instead.
+    PresentationRoles aRoles;
+    PresentationRoles aSharedRoles;
+
+    for (const PresentationRole& rRole : aAllRoles)
+        if (rRole.mbSharedPresentation)
+            aSharedRoles.push_back(rRole);
+        else
+            aRoles.push_back(rRole);
+
+    if (aRoles.empty() && aSharedRoles.empty())
     {
         SAL_WARN("svx.diagram", "insertDiagramNode: the template node has no presentation Point");
         return AddedDiagramNode();
@@ -1344,6 +1453,57 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
             std::erase_if(aRoles, [](const PresentationRole& rRole)
                           { return PresentationAssociation::SibTrans == rRole.meAssociation; });
     }
+
+    // A shape that draws the text of the nodes below a node draws the ones below those as well,
+    // so the new node joins the shape that already holds the nodes beside and above it. That is
+    // the one of the nearest node from the parent upwards that owns a Point of that name, and the
+    // new node goes into it right behind the paragraph of its own parent.
+    if (bTemplateUnderOtherParent)
+        for (PresentationRole& rRole : aSharedRoles)
+        {
+            OUString aSharedId;
+            OUString aAbove(aParentId);
+            std::unordered_set<OUString> aWalked;
+
+            while (!aAbove.isEmpty() && aWalked.insert(aAbove).second)
+            {
+                for (const rtl::Reference<Point>& rPoint : maPoints)
+                    if (TypeConstant::XML_pres == rPoint->mnXMLType
+                        && rPoint->getPresentation().msPresentationAssociationId == aAbove
+                        && rPoint->getPresentation().msPresentationLayoutName == rRole.msPresName)
+                        aSharedId = rPoint->msModelId;
+
+                if (!aSharedId.isEmpty())
+                    break;
+
+                OUString aNextAbove;
+
+                for (const rtl::Reference<Connection>& rCxn : maConnections)
+                    if (TypeConstant::XML_parOf == rCxn->mnXMLType
+                        && rCxn->msDestId == aAbove)
+                        aNextAbove = rCxn->msSourceId;
+
+                aAbove = aNextAbove;
+            }
+
+            if (aSharedId.isEmpty())
+            {
+                SAL_WARN("svx.diagram",
+                         "addDiagramNode: no node from the parent upwards holds a shared Point of "
+                         "that name");
+                return AddedDiagramNode();
+            }
+
+            rRole.msTemplateModelId = aSharedId;
+
+            // behind the paragraph the parent holds there, and at the end when it holds none
+            rRole.mnPresOfDestinationOrder = -1;
+
+            for (const rtl::Reference<Connection>& rCxn : maConnections)
+                if (TypeConstant::XML_presOf == rCxn->mnXMLType && rCxn->msSourceId == aParentId
+                    && rCxn->msDestId == aSharedId)
+                    rRole.mnPresOfDestinationOrder = rCxn->mnDestOrder;
+        }
 
     // the container each new presentation Point hangs under
     if (bTemplateUnderOtherParent)
@@ -1598,6 +1758,40 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
                                  rNew.msAssociationId, rNew.msModelId,
                                  rRole.mnPresOfSourceOrder, rRole.msLayoutId);
         }
+    }
+
+    // The new node becomes one more paragraph of a Point that already draws the nodes beside it,
+    // right behind the one it goes behind, and the paragraphs behind that move down one.
+    for (const PresentationRole& rRole : aSharedRoles)
+    {
+        sal_Int32 nNewDestinationOrder(0);
+
+        if (rRole.mnPresOfDestinationOrder < 0)
+        {
+            // the parent held no node yet, so the new one is the only paragraph so far
+            for (const rtl::Reference<Connection>& rCxn : maConnections)
+                if (TypeConstant::XML_presOf == rCxn->mnXMLType
+                    && rCxn->msDestId == rRole.msTemplateModelId
+                    && rCxn->mnDestOrder >= nNewDestinationOrder)
+                    nNewDestinationOrder = rCxn->mnDestOrder + 1;
+        }
+        else
+        {
+            nNewDestinationOrder
+                = bInFront ? rRole.mnPresOfDestinationOrder : rRole.mnPresOfDestinationOrder + 1;
+
+            for (const rtl::Reference<Connection>& rCxn : maConnections)
+                if (TypeConstant::XML_presOf == rCxn->mnXMLType
+                    && rCxn->msDestId == rRole.msTemplateModelId
+                    && rCxn->mnDestOrder >= nNewDestinationOrder)
+                    rCxn->mnDestOrder++;
+        }
+
+        Connection& rShared(appendConnection(maConnections, TypeConstant::XML_presOf,
+                                             createModelId(), aNewNodeId,
+                                             rRole.msTemplateModelId, rRole.mnPresOfSourceOrder,
+                                             rRole.msLayoutId));
+        rShared.mnDestOrder = nNewDestinationOrder;
     }
 
     // The added entries were given the orders they need, this only closes what is left over.
@@ -1925,26 +2119,6 @@ OString normalizeDotName( const OUString& rStr )
 }
 #endif
 
-static sal_Int32 calcDepth( std::u16string_view rNodeName,
-                            const svx::diagram::Connections& rCnx )
-{
-    // find length of longest path in 'isChild' graph, ending with rNodeName
-    for (const rtl::Reference<Connection>& elem : rCnx)
-    {
-        if( !elem->msParTransId.isEmpty() &&
-            !elem->msSibTransId.isEmpty() &&
-            !elem->msSourceId.isEmpty() &&
-            !elem->msDestId.isEmpty() &&
-            elem->mnXMLType == TypeConstant::XML_parOf &&
-            rNodeName == elem->msDestId )
-        {
-            return calcDepth(elem->msSourceId, rCnx) + 1;
-        }
-    }
-
-    return 0;
-}
-
 void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
 {
     // build name-object maps
@@ -1966,6 +2140,52 @@ void DiagramData_svx::buildDiagramDataModel(bool /*bClearOoxShapes*/)
         SAL_WARN_IF(!bFirstWithThatId, "oox.drawingml",
                     "DiagramData_svx::buildDiagramDataModel(): non-unique point model id");
     }
+
+    // The nodes of a Diagram form a tree, every walk over them takes that for granted, and the
+    // parOf Connections are what builds it. A Connection whose node already hangs somewhere above
+    // its parent would make a ring instead, so it is left out and the tree keeps the Connection
+    // that reached the node first.
+    std::unordered_set<OUString> aRingClosingConnections;
+    std::unordered_map<OUString, OUString> aParentOfNode;
+
+    for (const rtl::Reference<Connection>& rConnection : getConnections())
+    {
+        if (TypeConstant::XML_parOf != rConnection->mnXMLType
+            || rConnection->msSourceId.isEmpty() || rConnection->msDestId.isEmpty())
+            continue;
+
+        // walk from the parent up to the top and see whether the node is already up there
+        OUString aAbove(rConnection->msSourceId);
+        std::unordered_set<OUString> aWalked;
+        bool bWouldCloseARing(false);
+
+        while (!aAbove.isEmpty() && aWalked.insert(aAbove).second)
+        {
+            if (aAbove == rConnection->msDestId)
+            {
+                bWouldCloseARing = true;
+                break;
+            }
+
+            const auto aFound(aParentOfNode.find(aAbove));
+            aAbove = (aParentOfNode.end() == aFound) ? OUString() : aFound->second;
+        }
+
+        if (bWouldCloseARing)
+        {
+            SAL_WARN("svx.diagram", "DiagramData_svx::buildDiagramDataModel(): a parOf Connection "
+                                    "leads back to a node above it and is left out");
+            aRingClosingConnections.insert(rConnection->msModelId);
+            continue;
+        }
+
+        aParentOfNode.emplace(rConnection->msDestId, rConnection->msSourceId);
+    }
+
+    if (!aRingClosingConnections.empty())
+        std::erase_if(maConnections,
+                      [&aRingClosingConnections](const rtl::Reference<Connection>& rConnection)
+                      { return 0 != aRingClosingConnections.count(rConnection->msModelId); });
 
     for (const rtl::Reference<Connection>& rConnection : getConnections())
     {
