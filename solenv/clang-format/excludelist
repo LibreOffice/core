@@ -13329,8 +13329,6 @@ toolkit/source/controls/table/cellvalueconversion.hxx
 toolkit/source/controls/table/defaultinputhandler.cxx
 toolkit/source/controls/table/gridtablerenderer.cxx
 toolkit/source/controls/table/mousefunction.cxx
-toolkit/source/controls/table/tablecontrol_impl.cxx
-toolkit/source/controls/table/tablecontrol_impl.hxx
 toolkit/source/controls/table/tabledatawindow.cxx
 toolkit/source/controls/table/tabledatawindow.hxx
 toolkit/source/controls/table/tablegeometry.cxx
