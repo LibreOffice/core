@@ -17,6 +17,7 @@
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <fillinfo.hxx>
 #include <formulacell.hxx>
 #include <patattr.hxx>
 #include <sc.hrc>
@@ -27,6 +28,8 @@
 #include <undomanager.hxx>
 
 #include <docmodel/color/ComplexColor.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -853,6 +856,57 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleHeaderFontPosture)
     vcl::Font aPlainFont;
     pPlain->fillFontOnly(aPlainFont, nullptr, nullptr, nullptr, pHeaderFont);
     CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, aPlainFont.GetItalic());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleDirectBorderEdge)
+{
+    // Table1 is C3:F20 in TableStyleMedium2. Row 11 carries a thick top border applied in MSO
+    // across the whole table width, row 6 was given "No Border" there.
+    createScDoc("xlsx/tablestyle-direct-border.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleMedium2"_ustr, pParam->maStyleID);
+
+    // MSO writes the three sides it did not touch as empty elements, so C11 imports with a top
+    // line and nothing else.
+    const SvxBoxItem* pCellBox
+        = pDoc->GetPattern(2, 10, 0)->GetItemSet().GetItemIfSet(ATTR_BORDER);
+    CPPUNIT_ASSERT(pCellBox);
+    CPPUNIT_ASSERT(pCellBox->GetTop());
+    CPPUNIT_ASSERT(!pCellBox->GetLeft());
+
+    ScTableInfo aTabInfo(0, 20, false);
+    pDoc->FillInfo(aTabInfo, 0, 0, 5, 20, 0, 1, 1, false, false);
+
+    // MSO paints that row with its own top line and the style's outer edges either side, so the
+    // table still closes on both sides.
+    RowInfo& rBorderRow = aTabInfo.mpRowInfo[10 + 1];
+    const SvxBoxItem* pFirstBox
+        = static_cast<const SvxBoxItem*>(rBorderRow.cellInfo(2).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pFirstBox);
+    CPPUNIT_ASSERT(pFirstBox->GetTop());
+    CPPUNIT_ASSERT_EQUAL(pCellBox->GetTop()->GetWidth(), pFirstBox->GetTop()->GetWidth());
+    CPPUNIT_ASSERT_MESSAGE("the style's outer left edge must survive the direct top border",
+                           pFirstBox->GetLeft());
+
+    const SvxBoxItem* pLastBox
+        = static_cast<const SvxBoxItem*>(rBorderRow.cellInfo(5).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pLastBox);
+    CPPUNIT_ASSERT_MESSAGE("the style's outer right edge must survive the direct top border",
+                           pLastBox->GetRight());
+
+    // "No Border" reaches us as borderId=0 + applyBorder=1, which sets no edge at all; MSO
+    // leaves the style's border alone there too.
+    const SvxBoxItem* pClearedBox = static_cast<const SvxBoxItem*>(
+        aTabInfo.mpRowInfo[5 + 1].cellInfo(2).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pClearedBox);
+    CPPUNIT_ASSERT_MESSAGE("an empty cell border must not clear the style's",
+                           pClearedBox->GetLeft());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)

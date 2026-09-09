@@ -141,6 +141,9 @@ public:
     //The Pointers are being copied!
     void    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxItemLine nLine );
 
+    // Take every line this box leaves unset from rOther
+    void    FillUnsetLines( const SvxBoxItem& rOther );
+
     sal_Int16  GetDistance( SvxBoxItemLine nLine, bool bAllowNegative = false ) const;
     sal_uInt16  GetSmallestDistance() const;
 

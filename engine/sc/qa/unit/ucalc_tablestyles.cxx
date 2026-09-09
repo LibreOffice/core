@@ -2504,6 +2504,54 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorderEmptyCellOverride)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorderDirectEdge)
+{
+    // GIVEN a TableStyleMedium2 range with a direct top border over one whole data row, the
+    // way the Borders toolbar applies one.
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData* pDBData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+
+    constexpr SCROW nRow = 5;
+    constexpr SCTAB nTab = 0;
+    SvxBoxItem aBox(ATTR_BORDER);
+    editeng::SvxBorderLine aLine(nullptr, SvxBorderLineWidth::Thick);
+    aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+    for (SCCOL nCol = 0; nCol <= 3; ++nCol)
+        m_pDoc->ApplyAttr(nCol, nRow, nTab, aBox);
+
+    // WHEN ScDocument::FillInfo runs over the table.
+    ScTableInfo aTabInfo(0, 10, false);
+    m_pDoc->FillInfo(aTabInfo, 0, 0, 3, 10, nTab, 1, 1, false, false);
+
+    // THEN the cell keeps the edge it set itself and the style keeps the others, so the row
+    // still closes on both sides.
+    RowInfo& rRowInfo = aTabInfo.mpRowInfo[nRow + 1];
+    const SvxBoxItem* pFirstBox
+        = static_cast<const SvxBoxItem*>(rRowInfo.cellInfo(0).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pFirstBox);
+    const editeng::SvxBorderLine* pTopLine = pFirstBox->GetTop();
+    CPPUNIT_ASSERT(pTopLine);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(SvxBorderLineWidth::Thick), pTopLine->GetWidth());
+    CPPUNIT_ASSERT_MESSAGE("a direct top border must not take the style's left edge off the row",
+                           pFirstBox->GetLeft());
+
+    const SvxBoxItem* pLastBox
+        = static_cast<const SvxBoxItem*>(rRowInfo.cellInfo(3).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pLastBox);
+    CPPUNIT_ASSERT(pLastBox->GetTop());
+    CPPUNIT_ASSERT_MESSAGE("a direct top border must not take the style's right edge off the row",
+                           pLastBox->GetRight());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableUpdatesStructuredRefs)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);

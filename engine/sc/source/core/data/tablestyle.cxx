@@ -900,16 +900,15 @@ void ScTableStyle::BakeInto(ScDocument& rDoc, const ScDBData& rDBData) const
                 }
             }
 
-            // Border: same, except an "empty" explicit border (no edges) yields to the style.
-            const SvxBoxItem* pCellBox = rCellSet.GetItemIfSet(ATTR_BORDER);
-            const bool bCellBoxNonEmpty = pCellBox
-                                          && (pCellBox->GetTop() || pCellBox->GetBottom()
-                                              || pCellBox->GetLeft() || pCellBox->GetRight());
-            if (!bCellBoxNonEmpty)
+            // Border: the style fills the edges the cell leaves open, as fillinfo paints it.
+            if (const SvxBoxItem* pBox = GetBoxItem(rDBData, nCol, nRow, nRowIndex))
             {
-                if (const SvxBoxItem* pBox = GetBoxItem(rDBData, nCol, nRow, nRowIndex))
+                const SvxBoxItem* pCellBox = rCellSet.GetItemIfSet(ATTR_BORDER);
+                SvxBoxItem aBorder(pCellBox ? *pCellBox : SvxBoxItem(ATTR_BORDER));
+                aBorder.FillUnsetLines(*pBox);
+                if (!pCellBox || aBorder != *pCellBox)
                 {
-                    aBake.ItemSetPut(*pBox);
+                    aBake.ItemSetPut(aBorder);
                     bAny = true;
                 }
             }

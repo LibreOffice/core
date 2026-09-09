@@ -3618,6 +3618,16 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
     }
 }
 
+void SvxBoxItem::FillUnsetLines( const SvxBoxItem& rOther )
+{
+    for (SvxBoxItemLine eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
+                                  SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
+    {
+        if (!GetLine(eLine))
+            SetLine(rOther.GetLine(eLine), eLine);
+    }
+}
+
 
 sal_uInt16 SvxBoxItem::GetSmallestDistance() const
 {

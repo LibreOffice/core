@@ -630,15 +630,20 @@ void ScDocument::FillInfo(
                                 pInfo->bFilterActive = bFilterActive;
                                 if (pInfo->maLinesAttr)
                                 {
-                                    // pExplicitLinesAttr is "empty" when the cell xf set
-                                    // borderId=0 + applyBorder=1. Treat that as not-explicit
-                                    // so the table-style decoration survives.
+                                    // The cell keeps the edges it sets itself and takes the rest
+                                    // from the table style. Nothing to merge when the cell xf set
+                                    // borderId=0 + applyBorder=1, which leaves the border empty.
                                     const bool bExplicitNonEmpty = pExplicitLinesAttr
                                         && (pExplicitLinesAttr->GetTop() || pExplicitLinesAttr->GetBottom()
                                             || pExplicitLinesAttr->GetLeft() || pExplicitLinesAttr->GetRight());
                                     if (bExplicitNonEmpty)
                                     {
-                                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pExplicitLinesAttr);
+                                        const SvxBoxItem* pStyleBox
+                                            = static_cast<const SvxBoxItem*>(
+                                                pInfo->maLinesAttr.getItem());
+                                        SvxBoxItem aBorder(*pExplicitLinesAttr);
+                                        aBorder.FillUnsetLines(*pStyleBox);
+                                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, &aBorder);
                                     }
                                 }
                                 else
@@ -766,6 +771,8 @@ void ScDocument::FillInfo(
                     }
 
                             // Border
+                    //TODO: replaces the table style's border, where a cell's own border above
+                    //only fills in the edges it leaves open; wants an MSO check first
                     if ( const SvxBoxItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER ) )
                     {
                         pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pItem);
