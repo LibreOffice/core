@@ -233,7 +233,7 @@
       "analysis": {
         "state": "not_affected",
         "justification": "code_not_present",
-        "detail": "engine/external/curl/ExternalProject_curl.mk builds curl for HTTP/HTTPS only: --without-libssh --without-libssh2 and --without-wolfssl."
+        "detail": "engine/external/curl/ExternalProject_curl.mk builds curl for HTTP/HTTPS only: --without-libssh --without-libssh2, no SSH/SFTP/SCP, and OpenSSL is the only TLS backend selected (--with-openssl), so neither wolfSSH nor wolfSSL is built."
       }
     },
     {
@@ -296,7 +296,7 @@
       "analysis": {
         "state": "not_affected",
         "justification": "code_not_present",
-        "detail": "engine/external/curl/ExternalProject_curl.mk builds curl for HTTP/HTTPS only: --without-gnutls (OpenSSL is the only TLS backend) and no QUIC."
+        "detail": "engine/external/curl/ExternalProject_curl.mk builds curl for HTTP/HTTPS only: OpenSSL is the only TLS backend selected (--with-openssl), GnuTLS is not built, and there is no QUIC (--without-ngtcp2 --without-quiche)."
       }
     },
     {
@@ -312,168 +312,168 @@
       "id": "CVE-2025-9086",
       "description": "curl: out of bounds read for cookie path",
       "analysis": {
-        "state": "resolved_with_pedigree",
-        "detail": "The upstream fix is backported via engine/external/curl/0001-cookie-don-t-treat-the-leading-slash-as-trailing.patch."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.16.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix. The local backport patch was dropped in the curl 8.22.0 upgrade."
       }
     },
     {
       "id": "CVE-2025-10148",
       "description": "curl: predictable WebSocket mask",
       "analysis": {
-        "state": "resolved_with_pedigree",
-        "detail": "The upstream fix is backported via engine/external/curl/0001-ws-get-a-new-mask-for-each-new-outgoing-frame.patch."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.16.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix. The local backport patch was dropped in the curl 8.22.0 upgrade."
       }
     },
     {
       "id": "CVE-2026-11856",
       "description": "curl: cross-origin Digest auth state leak",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-8924",
       "description": "curl: trailing dot domain super cookie",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-8926",
       "description": "curl: password leak with netrc and user in URL",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-8927",
       "description": "curl: env-set cross-proxy Digest auth state leak",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-9079",
       "description": "curl: stale proxy password leak",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-6276",
       "description": "curl: stale custom cookie host causes cookie leak",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-8932",
       "description": "curl: incomplete mTLS config matching in connection reuse",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-9080",
       "description": "curl: use-after-free after pause in socket callback",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2025-14524",
       "description": "curl: bearer token leak on cross-protocol redirect",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.18.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2025-14819",
       "description": "curl: OpenSSL partial chain store policy bypass",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.18.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-1965",
       "description": "curl: bad reuse of HTTP Negotiate connection",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.19.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-3783",
       "description": "curl: token leak with redirect and netrc",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.19.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-3784",
       "description": "curl: wrong proxy connection reuse with credentials",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.19.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-4873",
       "description": "curl: connection reuse ignores TLS requirement",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-5545",
       "description": "curl: wrong reuse of HTTP Negotiate connection",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-6253",
       "description": "curl: proxy credentials leak over redirect-to proxy",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-6429",
       "description": "curl: netrc credential leak with reused proxy connection",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-7168",
       "description": "curl: cross-proxy Digest auth state leak",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.20.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     },
     {
       "id": "CVE-2026-8458",
       "description": "curl: wrong reuse for different services",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Fixed upstream in curl 8.18.0-8.21.0; the bundled curl is 8.14.1. Eleven curl security fixes are backported in engine/external/curl (the proxy credential, HTTP Negotiate reuse, Digest state and bearer clusters), and some of these CVEs are plausibly among them, but the mapping has not been verified patch by patch. The definitive remediation is bumping curl, which needs the Windows build migrated off curl's winbuild/nmake system (removed upstream in 8.17.0) to CMake. curl is reached through the WebDAV/CMIS UCPs, LanguageTool and the translation service; note that most of these flaws need a proxy, netrc or credential setup that a Collabora Online server does not use."
+        "state": "resolved",
+        "detail": "Fixed upstream in curl 8.21.0; the bundled curl is 8.22.0 (engine/download.lst), which contains the fix."
       }
     }
   ]

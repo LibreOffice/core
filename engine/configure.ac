@@ -3679,6 +3679,14 @@ if test $_os = iOS; then
     RANLIB=`xcrun -find ranlib`
 fi
 
+dnl The makefiles need to tell the device and the simulator apart, e.g. to pick
+dnl the matching target of an external's own build system.
+ENABLE_IOS_SIMULATOR=
+if test "$enable_ios_simulator" = "yes"; then
+    ENABLE_IOS_SIMULATOR=TRUE
+fi
+AC_SUBST(ENABLE_IOS_SIMULATOR)
+
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
 if test $_os = Darwin; then

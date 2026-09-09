@@ -101,6 +101,11 @@ iOS)
 
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
 
+	# libcurl is built against OpenSSL, so these have to follow libcurl.a
+	if [ "$ENABLE_OPENSSL" = "TRUE" ]; then
+	    oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
+	fi
+
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
     ;;

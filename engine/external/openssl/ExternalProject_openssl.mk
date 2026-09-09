@@ -41,7 +41,11 @@ OPENSSL_PLATFORM := \
       )\
     ,\
       $(if $(filter iOS,$(OS)),\
-        ios-aarch64\
+        $(if $(filter TRUE,$(ENABLE_IOS_SIMULATOR)),\
+          $(if $(filter X86_64,$(CPUNAME)),iossimulator-x86_64-xcrun,iossimulator-arm64-xcrun)\
+        ,\
+          ios64-xcrun\
+        )\
       ,\
         $(if $(filter WNT,$(OS)),\
           $(if $(filter INTEL,$(CPUNAME)),VC-WIN32)\
