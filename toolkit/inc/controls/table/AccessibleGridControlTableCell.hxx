@@ -48,7 +48,7 @@ public:
     virtual OUString SAL_CALL getAccessibleName() override;
 
 protected:
-    AccessibleGridControlCell(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
+    AccessibleGridControlCell(const rtl::Reference<comphelper::OAccessible>& rpParent,
                               svt::table::TableControl& _rTable, sal_Int32 _nRowPos,
                               sal_uInt16 _nColPos, AccessibleTableControlObjType _eType);
 

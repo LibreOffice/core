@@ -49,10 +49,9 @@ using namespace ::vcl;
 // = AccessibleGridControlCell
 
 AccessibleGridControlCell::AccessibleGridControlCell(
-    const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-    svt::table::TableControl& _rTable, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-    AccessibleTableControlObjType _eType)
-    : AccessibleGridControlBase(_rxParent, _rTable, _eType)
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& _rTable,
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleTableControlObjType _eType)
+    : AccessibleGridControlBase(rpParent, _rTable, _eType)
     , m_nRowPos(_nRowPos)
     , m_nColPos(_nColPos)
 {
