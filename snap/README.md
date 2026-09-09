@@ -17,15 +17,6 @@ from the source copy of parts that use `source: .`, breaking the build.
 - `qtpaths6-wrapper` — shadows the SDK snap's `qtpaths6`, whose compiled-in
   multiarch defaults do not match its own layout
 
-The following are **unmaintained** and not used for releases. They describe a
-Docker-based build that differs from the manifest in ways that matter — the
-Dockerfile substitutes the distribution's `qt6-*-dev` packages for the
-`kde-qt6-core24-sdk` build-snap and stubs out `snap` and `snapctl` — so a
-result obtained through them does not necessarily hold for the shipped build:
-
-- `Dockerfile`, `docker-build.sh`, `ci-build.sh`, `Jenkinsfile`,
-  `snapcraft-wrapper`, `snap-stub`
-
 ## Building
 
 Requires snapcraft and LXD on an Ubuntu host. From the repository root:

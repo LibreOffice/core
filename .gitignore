@@ -93,6 +93,9 @@ coolwsd.log
 *.tmp
 *.sw?
 
+# snapcraft pack drops the built package in the working directory
+*.snap
+
 gcov/*
 *.gcno
 *.gcda
