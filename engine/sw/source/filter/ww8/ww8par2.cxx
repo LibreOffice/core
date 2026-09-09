@@ -78,7 +78,7 @@ using namespace ::com::sun::star;
 WW8TabBandDesc::WW8TabBandDesc():
     pNextBand(nullptr), nGapHalf(0), mnDefaultLeft(0), mnDefaultTop(0), mnDefaultRight(0),
     mnDefaultBottom(0), mbHasSpacing(false), nLineHeight(0), nRows(0), nCenter{}, nWidth{},
-    nWwCols(0), nSwCols(0), bLEmptyCol(false), bREmptyCol(false), bCantSplit(false),
+    nWwCols(0), nSwCols(0), bLEmptyCol(false), bREmptyCol(false), bCantSplit(false), bHasWidthAfter(false),
     pTCs(nullptr), nOverrideSpacing{}, nOverrideValues{}, pSHDs(nullptr),
     pNewSHDs(nullptr), bExist{}, nTransCell{}
 {
@@ -1613,7 +1613,8 @@ enum wwTableSprm
     sprmTSetBrc, sprmTSetBrc90, sprmTDxaCol, sprmTInsert, sprmTDelete,
     sprmTTableHeader, sprmTDxaGapHalf, sprmTTableBorders, sprmTTableBorders90,
     sprmTDefTableNewShd, sprmTDefTableNewShd2nd, sprmTDefTableNewShd3rd,
-    sprmTCellPadding, sprmTCellPaddingDefault
+    sprmTCellPadding, sprmTCellPaddingDefault,
+    sprmTWidthAfter
 };
 
 }
@@ -1671,6 +1672,8 @@ static wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTCellPadding;
                 case NS_sprm::TCellPaddingDefault::val:
                     return sprmTCellPaddingDefault;
+                case NS_sprm::TWidthAfter::val:
+                    return sprmTWidthAfter;
             }
             break;
         case ww::eWW7:
@@ -1825,6 +1828,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                 wwTableSprm eSprm = GetTableSprm(nId, m_pIo->GetFib().GetFIBVersion());
                 switch (eSprm)
                 {
+                    case sprmTWidthAfter:
+                        pNewBand->bHasWidthAfter = true;
+                        break;
                     case sprmTTableWidth:
                         {
                         const sal_uInt8 b0 = pParams[0];
@@ -2292,6 +2298,8 @@ void WW8TabDesc::CalcDefaults()
         pR->nTransCell[i++] = static_cast<sal_Int8>(j++);  // Can exceed by 2 among other
         pR->nTransCell[i] = static_cast<sal_Int8>(j);        // things because of bREmptyCol
 
+        if (nAddCols == 0)
+            pR->bHasWidthAfter = false;
         pR->nSwCols = pR->nSwCols + nAddCols;
         if( pR->nSwCols < nMinCols )
             nMinCols = pR->nSwCols;
@@ -3220,6 +3228,15 @@ void WW8TabDesc::AdjustNewBand()
         {
             m_pActBand->nWidth[j] = m_pActBand->nCenter[j+1] - m_pActBand->nCenter[j];
             j++;
+        }
+        if (m_pActBand->bHasWidthAfter && i + 1 == m_pActBand->nSwCols)
+        {
+            //set font heigt to 1pt
+            SwPaM aPam( *pBox->GetSttNd(), 0 );
+            aPam.GetPoint()->Adjust(SwNodeOffset(1));
+            SvxFontHeightItem aSz(20, 100, RES_CHRATR_FONTSIZE);
+            m_pIo->NewAttr(aSz);
+            m_pIo->m_xCtrlStck->SetAttr(*aPam.GetPoint(), RES_CHRATR_FONTSIZE);
         }
     }
 }

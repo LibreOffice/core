@@ -723,6 +723,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         InfoRow<NS_sprm::CFELayout>(),
         InfoRow<NS_sprm::PItap>(), // undocumented
         InfoRow<NS_sprm::TTableWidth>(), // undocumented
+        InfoRow<NS_sprm::TWidthAfter>(),
         InfoRow<NS_sprm::TDefTableShd>(),
         InfoRow<NS_sprm::TTableBorders>(),
         InfoRow<NS_sprm::TBrcTopCv>(), // undocumented

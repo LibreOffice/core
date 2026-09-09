@@ -6348,6 +6348,7 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                                                          // 3 bytes;
         {NS_sprm::TTableWidth::val,       nullptr},                                       // recorded as 3 bytes;
         {NS_sprm::TWidthBefore::val,      nullptr},
+        {NS_sprm::TWidthAfter::val,       nullptr},
         {NS_sprm::TWidthIndent::val,      nullptr},
     };
 

@@ -13,6 +13,8 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <editeng/boxitem.hxx>
@@ -319,6 +321,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134902)
         { /* ignore */ }
     }
 
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTWidthAfter)
+{
+    // cells are inserted automatically to match the table width
+    // their font height must not increase the row height
+    // so the font height is set to 1 pt for those (empty) cells
+    // the same is done for docx in
+    // void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue& val )
+    createSwDoc("TWidthAfter.doc");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xTables->getCount());
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B32"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xParaA1(getParagraphOrTable(1, xCell->getText()), uno::UNO_QUERY_THROW);
+    double nFontHeight = getProperty<double>(xParaA1, u"CharHeight"_ustr);
+    CPPUNIT_ASSERT_LESSEQUAL(1.0, nFontHeight);
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
