@@ -1179,18 +1179,22 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         // LOG_TRC("Request details " << requestDetails.toString());
 
 #if !MOBILEAPP
-        // A headless connection that a RemoteDocumentBroker made carries the secret.
-        // A browser sets no such header of its own on an upgrade request.
+        // A headless connection that a RemoteDocumentBroker made provides the secret.
         if (const std::string secret =
                 request.get(std::string(RemoteDocumentBroker::ChainSecretHeader), std::string());
             !secret.empty())
         {
-            const bool matches = secret == RemoteDocumentBroker::getChainSecret();
-            if (!matches)
-                LOG_WRN("A request carried a remote document secret that does not match this "
-                        "node's, so it is not taken for a headless connection");
+            if (secret != RemoteDocumentBroker::getChainSecret())
+            {
+                // The URI carries the access token of the document, so it is not logged.
+                LOG_WRN("Refusing a request that carried a remote document secret which does "
+                        "not match this node's");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
+                                                 "invalid remote document secret");
+                return MessageResult::Ignore;
+            }
 
-            requestDetails.setRemoteDocument(matches);
+            requestDetails.setRemoteDocument(true);
         }
 #endif // !MOBILEAPP
 

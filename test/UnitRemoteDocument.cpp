@@ -1227,9 +1227,10 @@ public:
 };
 
 /// A headless connection carries the secret of the server that made it, and
-/// names the documents already on the chain it was made for. Verifies that
-/// such a connection naming no chain is refused, and that the same connection
-/// naming one loads the document.
+/// names the documents already on the chain it was made for. Verifies that a
+/// request carrying a secret which is not this server's is refused outright,
+/// that a connection carrying the secret and naming no chain is refused, and
+/// that the same connection naming one loads the document.
 class UnitRemoteDocumentNoChain : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, Connecting, Done) _phase;
@@ -1241,6 +1242,20 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
     std::string fileWopiSrc(int fileId) const
     {
         return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(fileId);
+    }
+
+    /// The status a request carrying the given secret is answered with. The
+    /// request itself is one every server answers, so the status is the answer
+    /// to the secret alone.
+    unsigned statusWithSecret(const std::string& secret)
+    {
+        http::Request request("/hosting/discovery");
+        request.add(std::string(RemoteDocumentBroker::ChainSecretHeader), secret);
+
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
+        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
     }
 
     /// Loads the given document over a connection carrying the secret of a
@@ -1319,6 +1334,28 @@ public:
             {
                 static constexpr std::string_view Refusal = "error: cmd=load kind=syntax";
 
+                // A secret that is not this server's
+                const unsigned wrongSecret = statusWithSecret("notthesecretofthisserver");
+                if (wrongSecret != static_cast<unsigned>(http::StatusCode::Forbidden))
+                {
+                    failTest("A request carrying a secret that is not this server's must be "
+                             "refused with " +
+                             std::to_string(static_cast<unsigned>(http::StatusCode::Forbidden)) +
+                             ", got " + std::to_string(wrongSecret));
+                    return;
+                }
+
+                // The same request carrying this server's own secret is answered.
+                const unsigned rightSecret =
+                    statusWithSecret(RemoteDocumentBroker::getChainSecret());
+                if (rightSecret != static_cast<unsigned>(http::StatusCode::OK))
+                {
+                    failTest("A request carrying this server's secret must be answered with " +
+                             std::to_string(static_cast<unsigned>(http::StatusCode::OK)) +
+                             ", got " + std::to_string(rightSecret));
+                    return;
+                }
+
                 // The chain is the whole record the source has of what reads
                 // it, and the only thing a link of its own back to the other
                 // end is refused by, so a connection naming none is refused.
@@ -1345,8 +1382,8 @@ public:
                 }
 
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("A headless connection naming no chain is refused, and one naming a "
-                         "chain loads");
+                passTest("A wrong secret is refused, a headless connection naming no chain is "
+                         "refused, and one naming a chain loads");
             });
 
         return true;
