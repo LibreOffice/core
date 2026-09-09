@@ -56,6 +56,9 @@ constexpr auto ActionExecutors
         { u"render_entry", CustomRendererExecutor },
     });
 
+/// render_entry only draws what the widget holds, so an insensitive widget must still answer it
+bool isRenderOnlyAction(std::u16string_view sAction) { return sAction == u"render_entry"; }
+
 } // end of namespace
 
 namespace JSWidgetExecutorSelector
@@ -153,11 +156,11 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
     weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
 
-    if (pWidget && !pWidget->get_sensitive())
-        return true;
-
     OUString sControlType = rData.at(u"type"_ustr);
     OUString sAction = rData.at(u"cmd"_ustr);
+
+    if (pWidget && !pWidget->get_sensitive() && !isRenderOnlyAction(sAction))
+        return true;
 
     if (sControlType == "responsebutton")
     {
