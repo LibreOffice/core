@@ -80,7 +80,6 @@
 
 #include <notxtfrm.hxx>
 #include <ftnfrm.hxx>
-#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 
