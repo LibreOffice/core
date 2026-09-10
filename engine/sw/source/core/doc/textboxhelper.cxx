@@ -156,7 +156,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     xTextFrame->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
     xTextFrame->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
 
-    xTextFrame->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(sal_Int32(100)));
+    xTextFrame->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(sal_Int16(100)));
 
     xTextFrame->setPropertyValue(UNO_NAME_SIZE_TYPE, cpo::uno::Any(text::SizeType::FIX));
 
@@ -266,7 +266,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(sal_Int32(100)));
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, cpo::uno::Any(sal_Int16(100)));
     xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, cpo::uno::Any(text::SizeType::FIX));
     xPropertySet->setPropertyValue(UNO_NAME_SURROUND, cpo::uno::Any(text::WrapTextMode_THROUGH));
     // Add a new name to it
