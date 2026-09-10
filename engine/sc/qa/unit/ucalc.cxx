@@ -4642,6 +4642,40 @@ CPPUNIT_TEST_FIXTURE(Test, testSearchCells)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSearchCellsIgnoreDiacritics)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // The same two letters, written with a precomposed accented character and
+    // with a base letter followed by a combining mark.
+    m_pDoc->SetString(ScAddress(0,0,0), u"a\u00e1"_ustr);
+    m_pDoc->SetString(ScAddress(0,1,0), u"a\u0061\u0308"_ustr);
+
+    SvxSearchItem aItem(SID_SEARCH_ITEM);
+    aItem.SetSearchString(u"aa"_ustr);
+    aItem.SetCommand(SvxSearchCmd::FIND_ALL);
+    aItem.SetTransliterationFlags(TransliterationFlags::IGNORE_DIACRITICS_CTL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
+    aMarkData.SelectOneTable(0);
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    SCTAB nTab = 0;
+    ScRangeList aMatchedRanges;
+    OUString aUndoStr;
+    bool bMatchedRangesWereClamped = false;
+    bool bSuccess = m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges,
+                                             aUndoStr, nullptr, bMatchedRangesWereClamped);
+
+    // A search that ignores diacritics finds both spellings. Without the
+    // accompanying fix only the second cell was found, because the accent of
+    // the first one was still compared.
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT(aMatchedRanges.Contains(ScRange(ScAddress(0,0,0))));
+    CPPUNIT_ASSERT(aMatchedRanges.Contains(ScRange(ScAddress(0,1,0))));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFormulaPosition)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);
