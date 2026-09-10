@@ -1696,11 +1696,23 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:SpacePara15</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -2182,11 +2194,25 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
+            <!-- tdf#142257 Hungarian keeps this key for Shrink, see the secondary keys -->
+            <value xml:lang="hu">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -2416,28 +2442,10 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleUpdateByExample</value>
           </prop>
         </node>
-        <node oor:name="F12" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultNumbering</value>
-          </prop>
-        </node>
         <node oor:name="F12_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertTable</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultBullet</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RemoveBullets</value>
           </prop>
         </node>
         <node oor:name="F2" oor:op="replace">
@@ -3072,11 +3080,23 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:SpacePara15</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -3209,12 +3229,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de">.uno:SaveAs</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultBullet</value>
           </prop>
         </node>
         <node oor:name="F2" oor:op="replace">
@@ -3774,11 +3788,25 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
+            <!-- tdf#142257 Hungarian keeps this key for Shrink, see the secondary keys -->
+            <value xml:lang="hu">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -4007,28 +4035,10 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleUpdateByExample</value>
           </prop>
         </node>
-        <node oor:name="F12" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultNumbering</value>
-          </prop>
-        </node>
         <node oor:name="F12_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertTable</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultBullet</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RemoveBullets</value>
           </prop>
         </node>
         <node oor:name="F2" oor:op="replace">
@@ -4651,11 +4661,25 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="de">.uno:SpacePara15</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
+            <!-- tdf#142257 Hungarian keeps this key for Shrink, see the secondary keys -->
+            <value xml:lang="hu">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -4981,7 +5005,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="F12" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultNumbering</value>
             <value xml:lang="de">.uno:SaveAs</value>
           </prop>
         </node>
@@ -4989,18 +5012,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertTable</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultBullet</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RemoveBullets</value>
           </prop>
         </node>
         <node oor:name="F2" oor:op="replace">
@@ -5668,11 +5679,25 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
+        <node oor:name="7_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultNumbering</value>
+          </prop>
+        </node>
         <node oor:name="8_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:DefaultBullet</value>
+            <!-- tdf#142257 Hungarian keeps this key for Shrink, see the secondary keys -->
+            <value xml:lang="hu">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -5901,28 +5926,10 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="en-US">.uno:StyleUpdateByExample</value>
           </prop>
         </node>
-        <node oor:name="F12" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultNumbering</value>
-          </prop>
-        </node>
         <node oor:name="F12_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertTable</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:DefaultBullet</value>
-          </prop>
-        </node>
-        <node oor:name="F12_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RemoveBullets</value>
           </prop>
         </node>
         <node oor:name="F2" oor:op="replace">
