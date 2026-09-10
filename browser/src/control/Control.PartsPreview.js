@@ -719,14 +719,18 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return img;
 	},
 
-	// Unlike the visible digit, the alt text and tooltip are plain
-	// attribute strings, so they only ever hold the position they were
-	// given here. Callers that move a preview to a different position
-	// must call this again with the new position. A slide linked to another
-	// file names that file and the slide of it in both.
+	// The visible digit, the alt text and the tooltip are plain position
+	// strings, so they only ever hold the position they were given here.
+	// Callers that move a preview to a different position must call this
+	// again with the new position. A slide linked to another file names
+	// that file and the slide of it in the alt text and the tooltip.
 	_setPreviewPositionLabels: function (img, i) {
 		const link = this._pageLink(img);
 		const position = String(i + 1);
+		const slideNumber = img.parentNode &&
+			img.parentNode.querySelector('.preview-slide-number');
+		if (slideNumber)
+			slideNumber.textContent = position;
 		// One pass, with the replacement returned by a function, so a name
 		// holding a '$' pattern or a '%N' of its own goes in as it is.
 		const fill = function (text, values) {
