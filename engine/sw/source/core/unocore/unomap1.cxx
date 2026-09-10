@@ -179,6 +179,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStyleP
         { UNO_NAME_CHAR_AUTO_KERNING, RES_CHRATR_AUTOKERN  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { UNO_NAME_CHAR_BACK_TRANSPARENT, RES_CHRATR_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+        { UNO_NAME_CHAR_SHADING_VALUE, RES_CHRATR_BACKGROUND,     cppu::UnoType<sal_Int32>::get(),    PROPERTY_NONE, MID_SHADING_VALUE },
         { UNO_NAME_CHAR_BACKGROUND_COMPLEX_COLOR, RES_CHRATR_BACKGROUND, cppu::UnoType<css::util::XComplexColor>::get(), PROPERTY_NONE ,MID_BACKGROUND_COMPLEX_COLOR },
         { UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},

@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -163,6 +164,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSaveReportsProgress)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRecorder->mnStartCount);
     CPPUNIT_ASSERT(xRecorder->mnLastValue >= 0);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xRecorder->mnEndCount);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCharStyleShadingPattern)
+{
+    // A character style whose shading is a 20 percent pattern.
+    createSwDoc("special_styles.docx");
+
+    // Without the fix a named character style had nowhere to keep the pattern, so the style
+    // held only the color that the pattern and the fill blend into.
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"CharacterStyles"_ustr)->getByName(u"Message Header Char"_ustr),
+        uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(drawing::ShadingPattern::PCT20),
+                         getProperty<sal_Int32>(xStyle, u"CharShadingValue"_ustr));
 }
 
 } // end of anonymous namespace
