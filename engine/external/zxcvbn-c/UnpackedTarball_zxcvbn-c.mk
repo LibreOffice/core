@@ -13,8 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxcvbn-c,$(ZXCVBN_C_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zxcvbn-c,2))
 
+# 0001-ReduceTrie-sort-the-nodes-at-one-height-by-checksum.patch upstream attempt as:
+# https://github.com/tsyrogit/zxcvbn-c/pull/42
+
 $(eval $(call gb_UnpackedTarball_add_patches,zxcvbn-c,\
 	external/zxcvbn-c/zxcvbn-c-2.5-do-not-use-stdafx.patch \
+	external/zxcvbn-c/0001-ReduceTrie-sort-the-nodes-at-one-height-by-checksum.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

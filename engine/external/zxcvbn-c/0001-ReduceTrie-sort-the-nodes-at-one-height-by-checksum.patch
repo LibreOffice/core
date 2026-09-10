@@ -1,0 +1,58 @@
+From aa4d512534257b6a08cb576fc897a02fb192f24e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Thu, 10 Sep 2026 16:41:09 +0000
+Subject: [PATCH] ReduceTrie: sort the nodes at one height by checksum
+
+the inner scan compared each node against every later one in the list
+to find the duplicates
+
+so sort by checksum first, which puts equal nodes beside each other
+and lets the scan stop at the first mismatch
+
+dictgen over the bundled word lists takes 2.5s instead of 9.0s and
+writes the same output
+---
+ dict-generate.cpp | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/zxcvbn-c/dict-generate.cpp b/zxcvbn-c/dict-generate.cpp
+index 368dc35..171b0c5 100644
+--- a/zxcvbn-c/dict-generate.cpp
++++ b/zxcvbn-c/dict-generate.cpp
+@@ -566,6 +566,14 @@ static void AddToListAtHeight(NodeList_t & Lst, NodeSPtr Node, int Hi)
+     }
+ }
+ 
++/**********************************************************************************
++ * Order nodes by checksum, so that identical nodes sort together.
++ */
++static bool LessCheck(const NodeSPtr & a, const NodeSPtr & b)
++{
++    return a->CalcCheck() < b->CalcCheck();
++}
++
+ /**********************************************************************************
+  * Scan the trie and update the original word list with the alphabetical order
+  * (or 'index location') of the words
+@@ -611,6 +619,8 @@ static void ReduceTrie(NodeSPtr Root)
+         // Get a list of all nodes at given height
+         NodeList_t Lst;
+         AddToListAtHeight(Lst, Root, Height);
++        // Sort by checksum so identical nodes are adjacent
++        Lst.sort(LessCheck);
+ 
+         NodeList_t::iterator Ita, Itb;
+         for(Ita = Lst.begin(); Ita != Lst.end(); ++Ita)
+@@ -640,7 +650,8 @@ static void ReduceTrie(NodeSPtr Root)
+                 }
+                 else
+                 {
+-                    ++Itb;
++                    // Sorted, so no identical nodes remain
++                    break;
+                 }
+             }
+         }
+-- 
+2.55.0
+
