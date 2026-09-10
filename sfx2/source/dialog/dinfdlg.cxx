@@ -39,6 +39,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/imagemgr.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <openuriexternally.hxx>
@@ -1272,7 +1273,10 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_xUseUserDataCB->set_sensitive( bEnableUseUserData );
     bHandleDelete = false;
     m_xDeleteBtn->set_sensitive( bEnableUseUserData );
-    m_xUseThumbnailSaveCB->set_active(bUseThumbnailSave);
+
+    const bool bGenThumbnail = officecfg::Office::Common::Save::Document::GenerateThumbnail::get();
+    m_xUseThumbnailSaveCB->set_sensitive(bGenThumbnail);
+    m_xUseThumbnailSaveCB->set_active(bUseThumbnailSave && bGenThumbnail);
     m_xUseThumbnailSaveCB->save_state();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
