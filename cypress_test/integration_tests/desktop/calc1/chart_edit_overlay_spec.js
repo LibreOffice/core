@@ -64,6 +64,50 @@ describe(['tagdesktop'], 'Chart edit mode dark overlay', function() {
 		assertOverlayAppearsOnEdit();
 	});
 
+	// Reads one pixel of the document canvas as [r, g, b].
+	function readPixel(win, x, y) {
+		var canvas = win.document.getElementById('document-canvas');
+		var data = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
+		return [data[0], data[1], data[2]];
+	}
+
+	// A zoom commit lays the sections out again, and every section hears about
+	// it. The dimming belongs to the document area alone, so the row and column
+	// headers keep their colour through the relayout.
+	it('headers stay undimmed through the relayout of a zoom', function() {
+		insertChartFromColumn(1);
+		assertOverlayAppearsOnEdit();
+
+		cy.getFrameWindow().then(function(win) {
+			var container = win.app.sectionContainer;
+			var anchor = container.getDocumentAnchorSection();
+			var rowHeader = [Math.round(anchor.myTopLeft[0] / 2),
+				Math.round(anchor.myTopLeft[1] + anchor.size[1] / 2)];
+			var columnHeader = [Math.round(anchor.myTopLeft[0] + anchor.size[0] / 2),
+				Math.round(anchor.myTopLeft[1] / 2)];
+			var expected = readPixel(win, rowHeader[0], rowHeader[1]);
+			var original = container.reNewAllSections.bind(container);
+			win.relayoutCount = 0;
+
+			// Sample the headers right after each relayout, before the next draw pass
+			// can paint over what the relayout left on the canvas.
+			container.reNewAllSections = function(redraw) {
+				var result = original(redraw);
+				win.relayoutCount++;
+				expect(readPixel(win, rowHeader[0], rowHeader[1])).to.deep.equal(expected);
+				expect(readPixel(win, columnHeader[0], columnHeader[1])).to.deep.equal(expected);
+				return result;
+			};
+
+			win.app.zoomControl.zoomTo(win.app.map.getZoom() + 1);
+		});
+		cy.wait(2000);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+			expect(win.relayoutCount).to.be.greaterThan(0);
+		});
+	});
+
 	// A zoom animation scales the tiles frame by frame. The overlay holds the
 	// chart in pixels of the zoom it started from, and each frame has to scale
 	// them the same way, so the chart stays the one area that is not dimmed.

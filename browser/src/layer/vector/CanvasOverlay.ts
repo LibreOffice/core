@@ -123,7 +123,10 @@ class CanvasOverlay extends CanvasSectionObject {
 		this.paths.forEach(function (path: CPath) {
 			path.onResize();
 		});
-		this.onDraw();
+		// A relayout of the sections runs outside a draw pass, with the pen of the canvas left
+		// where the last drawn section put it. The paths are drawn in the next draw pass, where
+		// the pen sits at this section and the clip covers the document area only.
+		this.containerObject.requestReDraw();
 	}
 
 	onDraw(): void {
