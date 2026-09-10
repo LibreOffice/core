@@ -883,10 +883,13 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
 
     const SwSortedObjs *pSorted = m_pPage->GetSortedObjs();
     const size_t nCount = pSorted ? pSorted->size() : 0;
-    const bool bFooterHeader = nullptr != m_pCurrFrame->FindFooterOrHeader();
+    const SwFrame* pCurrHeaderFooter = m_pCurrFrame->FindFooterOrHeader();
+    const bool bFooterHeader = nullptr != pCurrHeaderFooter;
     const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
+    // Page header/footer content only wraps around floating screen objects in
+    // DOCX files written in compatibility mode 15 or newer.
     const bool bWordCompatibility = !pIDSA->get(DocumentSettingId::TAB_OVER_MARGIN)
                                     && pIDSA->get(DocumentSettingId::TAB_OVER_SPACING);
     const bool bWrapAllowed
@@ -924,32 +927,39 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
             assert(pAnchoredObj);
 
-            // #108724# -> MS Word lays out the text of the paragraph that
-            // anchors a "Word text frame" wrapping around it, unlike
-            // floating images/shapes, which it ignores.
-            // Check if the Object is a "Word text frame" with wrap around.
+            // #108724# - Text in a page header or footer used to never wrap around an
+            // object anchored there. A file in compatibility mode 15 wraps it around a
+            // picture or a shape that asks for wrapping at its side. A frame that holds text,
+            // which is how a DOCX paragraph with a w:framePr arrives, is only wrapped around
+            // by the paragraph it is anchored in, and an object laid out above and below the
+            // text, or behind or in front of it, still leaves the text where it is.
             bool bSkipHdrFtrObj = bFooterHeader && !bAllowCompatWrap
                                   && !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING);
 
-            if (bSkipHdrFtrObj && pAnchoredObj->GetAnchorFrame() == m_pCurrFrame)
+            if (bSkipHdrFtrObj
+                && pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() == pCurrHeaderFooter)
             {
-                if (const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame())
+                const SwFrameFormat* pObjectFormat = pAnchoredObj->GetFrameFormat();
+                const css::text::WrapTextMode eSurround
+                    = pObjectFormat->GetSurround().GetSurround();
+                // Everything that is not laid out above and below the object, or behind
+                // or in front of the text, leaves the text room at a side. "Largest side
+                // only" arrives as DYNAMIC and only picks its side while the line is
+                // being built.
+                const bool bSideWrap = eSurround != css::text::WrapTextMode_NONE
+                                       && eSurround != css::text::WrapTextMode_THROUGH;
+
+                const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
+                const bool bTextFrame = pFly && pFly->Lower() && !pFly->Lower()->IsNoTextFrame();
+                // The text of a shape comes with the shape itself, which is wrapped around
+                // on its own.
+                const bool bDrawTextBox
+                    = pFly && SwTextBoxHelper::isTextBox(pObjectFormat, RES_FLYFRMFMT);
+
+                if (bSideWrap && !bDrawTextBox
+                    && (!bTextFrame || pAnchoredObj->GetAnchorFrame() == m_pCurrFrame))
                 {
-                    const css::text::WrapTextMode eSurround
-                        = pFly->GetFormat()->GetSurround().GetSurround();
-
-                    const bool bExplicitSideWrap = eSurround == css::text::WrapTextMode_PARALLEL
-                                                   || eSurround == css::text::WrapTextMode_LEFT
-                                                   || eSurround == css::text::WrapTextMode_RIGHT;
-
-                    // a framePr frame has text content (not a floating image/OLE)
-                    const bool bTextContent = pFly->Lower() && !pFly->Lower()->IsNoTextFrame();
-                    // and is not the textbox companion of a draw shape
-                    const bool bDrawTextBox
-                        = SwTextBoxHelper::isTextBox(pFly->GetFormat(), RES_FLYFRMFMT);
-
-                    if (bExplicitSideWrap && bTextContent && !bDrawTextBox)
-                        bSkipHdrFtrObj = false;
+                    bSkipHdrFtrObj = false;
                 }
             }
 
