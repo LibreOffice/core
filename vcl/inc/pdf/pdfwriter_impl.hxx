@@ -1025,7 +1025,7 @@ private:
     // the maximum array elements allowed for PDF array object
     static const sal_uInt32 ncMaxPDFArraySize = 8191;
     //check if internal dummy container are needed in the structure elements
-    void addInternalStructureContainer( PDFStructureElement& rEle );
+    void addInternalStructureContainer(sal_Int32 nEle);
     //<---i94258
     // writes namespaces
     void emitNamespaces();
