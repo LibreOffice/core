@@ -8,6 +8,7 @@
  */
 
 #include <sctiledrenderingtest.hxx>
+#include <sc.hrc>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -18,7 +19,9 @@
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
@@ -2374,6 +2377,49 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
     // - Expected: 8
     // - Actual  : 1
     CPPUNIT_ASSERT_EQUAL(std::string("8"), index);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeStateInReadOnlyView)
+{
+    // The first row and the first column of this sheet are frozen.
+    createDoc("frozen-panes.ods");
+    SfxViewShell* pView = SfxViewShell::Current();
+    SfxBindings& rBindings = pView->GetViewFrame().GetBindings();
+    KitHelper::setViewReadOnly(KitHelper::getCurrentView(), true);
+    Scheduler::ProcessEventsToIdle();
+
+    // A read-only view has to be told where the sheet is frozen. Without the
+    // accompanying fix the state arrived empty and the client showed the sheet
+    // unfrozen. The freeze index is in X for both slots. Y holds the sheet
+    // number.
+    std::unique_ptr<SfxPoolItem> pColumn;
+    CPPUNIT_ASSERT(SfxItemState::DISABLED
+                   != rBindings.QueryState(sal_uInt16(SID_WINDOW_FIX_COL), pColumn));
+    auto pColumnPoint = dynamic_cast<SfxPointItem*>(pColumn.get());
+    CPPUNIT_ASSERT(pColumnPoint);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1), pColumnPoint->GetValue().X());
+
+    std::unique_ptr<SfxPoolItem> pRow;
+    CPPUNIT_ASSERT(SfxItemState::DISABLED
+                   != rBindings.QueryState(sal_uInt16(SID_WINDOW_FIX_ROW), pRow));
+    auto pRowPoint = dynamic_cast<SfxPointItem*>(pRow.get());
+    CPPUNIT_ASSERT(pRowPoint);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1), pRowPoint->GetValue().X());
+
+    // The freeze is shared by all the views of a sheet, so a read-only view
+    // must not be able to move it.
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"Index"_ustr, cpo::uno::Any(static_cast<sal_Int32>(4))),
+    };
+    comphelper::dispatchCommand(u".uno:FreezePanesColumn"_ustr, aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // The sheet is still frozen at the first column.
+    pColumn.reset();
+    rBindings.QueryState(sal_uInt16(SID_WINDOW_FIX_COL), pColumn);
+    pColumnPoint = dynamic_cast<SfxPointItem*>(pColumn.get());
+    CPPUNIT_ASSERT(pColumnPoint);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1), pColumnPoint->GetValue().X());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)

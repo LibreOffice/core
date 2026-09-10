@@ -6450,7 +6450,11 @@ void COKitImpl::dumpState(rtl::OStringBuffer &rState)
 // We have special handling for some uno commands and it seems we need to check for readonly state.
 static bool isCommandAllowed(std::u16string_view command)
 {
-    static constexpr std::u16string_view denyList[] = { u".uno:SidebarShow", u".uno:SidebarHide" };
+    // The freeze position of a sheet is shared by every view, so a read-only view is told where the
+    // sheet is frozen but cannot move it.
+    static constexpr std::u16string_view denyList[]
+        = { u".uno:FreezePanesColumn", u".uno:FreezePanesRow", u".uno:SidebarShow",
+            u".uno:SidebarHide" };
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell || !pViewShell->IsKitReadOnlyView())

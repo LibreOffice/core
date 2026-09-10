@@ -1549,6 +1549,15 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_WINDOW_FIX_COL:
         case SID_WINDOW_FIX_ROW:
             {
+                // The slots stay available in a read-only document so that a read-only
+                // view learns where the sheet is frozen. The freeze position is shared
+                // by every view of the sheet, so such a view can read it but not move it.
+                if (IsKitReadOnlyView() || GetViewData().GetDocShell()->IsReadOnly())
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
                 bool bIsCol = (nSlot == SID_WINDOW_FIX_COL);
                 sal_Int32 nFreezeIndex = 1;
                 if (const SfxInt32Item* pItem = rReq.GetArg<SfxInt32Item>(FN_PARAM_1))
