@@ -991,7 +991,7 @@ define run_prettier_check
 		$(1)
 endef
 
-.PHONY: build-cool
+.PHONY: build-cool install-demo-extensions
 
 all-local: build-cool $(MOCHA_JS_DIR)/main.js
 
@@ -1410,7 +1410,6 @@ $(DIST_FOLDER)/extensions/%: $(srcdir)/extensions/%
 	fi
 
 if ENABLE_DEBUG
-.PHONY: install-demo-extensions
 install-demo-extensions:
 	ids= && \
 	for dir in $(srcdir)/extensions/*/; do \

@@ -783,8 +783,6 @@ SYSTEM_STAMP =
 
 endif
 
-.PHONY: cleanup setup-wsd
-
 if ENABLE_FUZZERS
 ALL_LOCAL_DEPS=build-fuzzer-gbuild-libs
 else
@@ -1059,4 +1057,4 @@ sbom-freshness: collabora-online-sbom.spdx.json
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
-.PHONY: sbom-check sbom-audit sbom-freshness
+.PHONY: cleanup setup-wsd sbom-check sbom-audit sbom-freshness
