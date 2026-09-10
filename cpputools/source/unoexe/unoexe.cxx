@@ -89,7 +89,7 @@ const char arUsingText[] =
 static bool readOption( OUString * pValue, const char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    static constexpr OUString dash(u"-"_ustr);
+    static constexpr std::u16string_view dash(u"-");
     if(!aArg.startsWith(dash))
         return false;
 
