@@ -1243,7 +1243,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                         rEvent.mxAttributes->add( nAttributeToken, std::string_view(XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ]) );
                     else
                     {
-                        SAL_WARN("xmloff", "unknown attribute " << XML_CAST( attributes[ i ] ) << "=" <<
+                        SAL_INFO("sax", "unknown attribute " << XML_CAST( attributes[ i ] ) << "=" <<
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
                         rEvent.mxAttributes->addUnknown( OString(XML_CAST( attributes[ i ] )),
                             OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
