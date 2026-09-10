@@ -452,8 +452,8 @@ LXML_TARBALL := lxml-6.1.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LZMA_SHA256SUM := 3d3a1b973af218114f4f889bbaa2f4c037deaae0c8e815eec381c3d546b974a0
-LZMA_TARBALL := xz-5.8.3.tar.gz
+LZMA_SHA256SUM := 0014c7886930454fe8bd4228665b51af55eeae560ea135c9c4cd33f55b2591d9
+LZMA_TARBALL := xz-5.8.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
