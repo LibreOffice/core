@@ -238,7 +238,7 @@ public:
 
         if (!bClearSalt)
         {
-            // wilful contamination
+            // willful contamination
             pSaltData[0] = 1;
         }
 

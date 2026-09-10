@@ -237,7 +237,7 @@ public:
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000001) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000001) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000001) == false);
-            // we check til 14 values after comma
+            // we check till 14 values after comma
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
@@ -475,7 +475,7 @@ public:
 
             sal_Bool bRes = check_replaceAt(new OString("Java desktop system"),
             new OString("Sun "), new OString("Java desktop system"), -4, 8 );
-            CPPUNIT_ASSERT_MESSAGE("navigate index", bRes == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("negative index", bRes == sal_True);
         }
     void replaceAt_005()
         {
@@ -501,8 +501,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::replaceAt);
 
 } // namespace rtl_OString
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+// this macro creates an empty function, which will be called by RegisterAllFunctions()
+// to give the user the possibility to also register some functions by hand.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

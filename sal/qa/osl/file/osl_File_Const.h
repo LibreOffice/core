@@ -54,9 +54,9 @@ extern "C"
 {
 #endif
 
-// common used string resource
-// these common used string will be used as assist resource in test
-// they are mostly OS independent, some of the resource can be reused
+// commonly used string resources
+// these commonly used strings will be used as assistant resources in test
+// they are mostly OS independent, some of the resources can be reused
 // so, a common test data repository will be better since it can be
 // shared among all test code
 
@@ -124,7 +124,7 @@ OUString aTempDirectoryURL(getTempDirectoryURL_());
 OUString aUserDirectorySys( aTempDirectorySys + "" );
 OUString aUserDirectoryURL( aTempDirectoryURL + "" );
 
-// common used URL:temp, canonical, root, relative, link,etc
+// commonly used URLs: temp, canonical, root, relative, link, etc.
 
 OUString aCanURL1( aTempDirectoryURL +  "/canonical.name" );
 OUString aCanURL2(
@@ -150,7 +150,7 @@ OUString aRelURL5( aTempDirectoryURL + "/./../"     );
 OUString aLnkURL1( aTempDirectoryURL + "/link.file" );
 OUString aHidURL1( u".hiddenfile"_ustr );
 
-// common used System Path:temp, root,etc
+// commonly used System Paths: temp, root, etc.
 
 OUString aRootSys( u"" TEST_PLATFORM_ROOT ""_ustr);
 OUString aSysPath1( aTempDirectorySys + "/system.path" );

@@ -45,7 +45,7 @@ public:
     void getDefault_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
-        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != nullptr);
+        CPPUNIT_ASSERT_MESSAGE("locale must not be null", pData != nullptr);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -77,7 +77,7 @@ public:
     {
         rtl_locale_setDefault(u"en", u"US", u"");
         rtl_Locale* pData = rtl_locale_getDefault();
-        CPPUNIT_ASSERT_MESSAGE("locale must not null", pData != nullptr);
+        CPPUNIT_ASSERT_MESSAGE("locale must not be null", pData != nullptr);
 
         // be sure to not GPF
     }

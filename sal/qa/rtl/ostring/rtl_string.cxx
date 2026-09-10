@@ -162,8 +162,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::convertUStringToString);
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+// this macro creates an empty function, which will be called by RegisterAllFunctions()
+// to give the user the possibility to also register some functions by hand.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

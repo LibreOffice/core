@@ -71,7 +71,7 @@ public class _XTransliteration extends MultiMethodTest {
     }
 
     /**
-    * Calls the method for load IGNORE_CASE module and checks the name returned
+    * Calls the method to load IGNORE_CASE module and checks the name returned
     * by the method <code>getName</code>. <p>
     * Has <b>OK</b> status if the method <code>getName</code> returns the
     * string "case ignore (generic)".
@@ -91,7 +91,7 @@ public class _XTransliteration extends MultiMethodTest {
      * Loads <code>LOWERCASE_UPPERCASE</code> module and checks the current
      * name of object. <p>
      *
-     * Has <b>OK</b> status if the name of the object is equals to
+     * Has <b>OK</b> status if the name of the object is equal to
      * 'lower_to_upper(generic)'
      */
     public void _loadModuleNew() {
@@ -109,7 +109,7 @@ public class _XTransliteration extends MultiMethodTest {
     }
 
     /**
-    * Calls the method for load LOWERCASE_UPPERCASE module and
+    * Calls the method to load LOWERCASE_UPPERCASE module and
     * checks the name returned by the method <code>getName</code>. <p>
     * Has <b>OK</b> status if the method <code>getName</code> returns the
     * string "lower_to_upper(generic)".
@@ -126,7 +126,7 @@ public class _XTransliteration extends MultiMethodTest {
     }
 
     /**
-    * Calls the method for load UPPERCASE_LOWERCASE module and
+    * Calls the method to load UPPERCASE_LOWERCASE module and
     * checks the name returned by the method <code>getName</code>. <p>
     * Has <b>OK</b> status if the method <code>getName</code> returns the
     * string "upper_to_lower(generic)".
@@ -276,10 +276,10 @@ public class _XTransliteration extends MultiMethodTest {
      * substrings, and without of bounds offset and length
      * parameters.<p>
      *
-     * Has <b>OK</b> status if comparings of equal substrings
-     * always return 0, if comparisons of none equal returns
+     * Has <b>OK</b> status if comparisons of equal substrings
+     * always return 0, if comparisons of non-equal returns
      * proper value according to lexicographical order and if
-     * comparisons with invalid parameters return none 0 value.
+     * comparisons with invalid parameters return non-zero value.
      */
     public void _compareSubstring() {
         oObj.loadModule(TransliterationModules.LOWERCASE_UPPERCASE, loc);
@@ -352,9 +352,9 @@ public class _XTransliteration extends MultiMethodTest {
      * Test performed for sets of equal strings and not equal
      * strings.<p>
      *
-     * Has <b>OK</b> status if comparings of equal strings
-     * always return 0 and if comparisons of none equal returns
-     * proper value according to lexicographical order .
+     * Has <b>OK</b> status if comparisons of equal strings
+     * always return 0 and if comparisons of non-equal returns
+     * proper value according to lexicographical order.
      */
     public void _compareString() {
         oObj.loadModule(TransliterationModules.LOWERCASE_UPPERCASE, loc);

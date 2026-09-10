@@ -42,11 +42,11 @@ import com.sun.star.util.XURLTransformer;
  * This test needs the following object relations :
  * <ul>
  *  <li> <code>'FrameLoader.URL'</code> (of type <code>String</code>):
- *   a url of component to be loaded </li>
+ *   a url of the component to be loaded </li>
  *  <li> <code>'FrameLoader.Frame'</code> <b>(optional)</b>
  *  (of type <code>com.sun.star.frame.XFrame</code>):
- *   a target frame where component to be loaded. If this
- *   relation is omitted then a text document created and its
+ *   a target frame where component is to be loaded. If this
+ *   relation is omitted then a text document is created and its
  *   frame is used. </li>
  * <ul> <p>
  *
@@ -61,7 +61,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
 
     /**
      * Retrieves all relations. If optional relation
-     * <code>FrameLoader.Frame</code> not found
+     * <code>FrameLoader.Frame</code> is not found,
      * creates a new document and obtains its frame for loading. <p>
      *
      * Also <code>MediaDescriptor</code> is created using
@@ -101,7 +101,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
                     (XURLTransformer.class, o) ;
 
             } catch ( com.sun.star.uno.Exception e ) {
-                // Some exception occurs.FAILED
+                // Some exception occurred. FAILED
                 e.printStackTrace( log );
                 throw new StatusException( "Couldn't create a document.", e );
             }
@@ -122,7 +122,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
 
 
     /**
-     * Tries to load component to a frame. <p>
+     * Tries to load a component into a frame. <p>
      * Has <b> OK </b> status if <code>true</code> is returned.
      */
     public void _load() {
@@ -132,7 +132,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
     }
 
     /**
-     * Tries to load component to a frame in separate thread to
+     * Tries to load component to a frame in a separate thread to
      * avoid blocking of the current thread and immediately
      * cancels loading. <p>
      *

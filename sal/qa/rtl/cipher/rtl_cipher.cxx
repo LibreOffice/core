@@ -46,7 +46,7 @@ public:
     void create_002()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeECB);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_003()
         {
@@ -61,7 +61,7 @@ public:
     void create_004()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeCBC);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_005()
         {
@@ -72,17 +72,17 @@ public:
     void create_006()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeStream);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_007()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_008()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
 
     // Change the following lines only, if you add, remove or rename
@@ -134,7 +134,7 @@ public:
     void createBF_004()
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provides wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
             // rtl_cipher_destroy(aCipher);
         }
     // Change the following lines only, if you add, remove or rename

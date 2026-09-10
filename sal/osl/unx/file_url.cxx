@@ -746,7 +746,7 @@ namespace
 {
     /**
      No separate error code if unicode to text conversion or getcwd fails because for the
-     caller there is no difference why a file could not be found in CDW
+     caller there is no difference why a file could not be found in CWD
     */
     bool find_in_CWD(const OUString& file_path, OUString& result)
     {

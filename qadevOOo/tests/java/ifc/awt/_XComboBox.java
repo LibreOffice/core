@@ -135,7 +135,7 @@ public class _XComboBox extends MultiMethodTest {
     }
 
     /**
-    * Adds one two items to the last position and check the number of
+    * Adds two items to the last position and check the number of
     * items after addition. <p>
     * Has <b>OK</b> status if the number of items increased by 2.<p>
     * The following method tests are to be executed before :
@@ -157,7 +157,7 @@ public class _XComboBox extends MultiMethodTest {
     /**
     * Gets the current number of items and tries to remove them all
     * then checks number of items. <p>
-    * Has <b>OK</b> status if no items remains. <p>
+    * Has <b>OK</b> status if no items remain. <p>
     * The following method tests are to be executed before :
     * <ul>
     *  <li> <code> getItems </code> </li>

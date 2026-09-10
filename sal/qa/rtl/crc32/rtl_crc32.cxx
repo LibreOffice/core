@@ -55,7 +55,7 @@ public:
 
         nCRC = rtl_crc32(nCRC, buf, num);
 
-        CPPUNIT_ASSERT_MESSAGE("buffer contain 2 empty bytes, crc is zero", nCRC != 0);
+        CPPUNIT_ASSERT_MESSAGE("buffer contains 2 empty bytes, crc is zero", nCRC != 0);
     }
 
     void rtl_crc32_002_1()
@@ -67,7 +67,7 @@ public:
 
         nCRC = rtl_crc32(nCRC, buf, num);
 
-        CPPUNIT_ASSERT_MESSAGE("buffer contain 3 empty bytes, crc is zero", nCRC != 0);
+        CPPUNIT_ASSERT_MESSAGE("buffer contains 3 empty bytes, crc is zero", nCRC != 0);
     }
 
     /**
@@ -93,7 +93,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("checksum should differ for buf1 and buf2", nCRC1 != nCRC2);
     }
 
-    /** check if the crc32 only use as much values, as given
+    /** check if the crc32 only uses as many values as given
      *
      */
     void rtl_crc32_003_1()
@@ -110,10 +110,10 @@ public:
 
         nCRC2 = rtl_crc32(nCRC2, buf2, num2);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("checksum leave it's bounds", nCRC2, nCRC1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("checksum leaves its bounds", nCRC2, nCRC1);
     }
 
-    /** check if the crc32 differ at same content in reverse order
+    /** check if the crc32 differs with same content in reverse order
      *
      */
     void rtl_crc32_003_2()

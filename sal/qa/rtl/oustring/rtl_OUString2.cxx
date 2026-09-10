@@ -276,7 +276,7 @@ public:
                 CPPUNIT_ASSERT (!is_double_equal(1.0, 1.00000000001));
                 CPPUNIT_ASSERT (!is_double_equal(1.0, 1.000000000001));
                 CPPUNIT_ASSERT (!is_double_equal(1.0, 1.0000000000001));
-                // we check til 15 values after comma
+                // we check till 15 values after comma
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001));
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001));
                 CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001));
@@ -622,7 +622,7 @@ public:
         }
     void lastIndexOf_test_salunicode_offset_002()
         {
-            // search for 's', start pos is last occur from search behind, found (17)
+            // search for 's', start pos is last occurrence from search behind, found (17)
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(u"the sun sun java system"_ustr, cuChar, 17, 19);
         }
@@ -828,7 +828,7 @@ public:
 
     void intern()
     {
-        // The empty string is 'static' a special case ...
+        // The empty string is 'static', a special case ...
         OUString().intern();
         OUString::intern( "",strlen(""),RTL_TEXTENCODING_ASCII_US );
 
@@ -837,7 +837,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "string contents", u"foo"_ustr, aFooIntern);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("string length", static_cast<sal_Int32>(3), aFooIntern.getLength());
         // We have to dup due to no atomic 'intern' bit-set operation
-        CPPUNIT_ASSERT_MESSAGE("intern dups", aFoo.pData != aFooIntern.pData);
+        CPPUNIT_ASSERT_MESSAGE("intern duplicates", aFoo.pData != aFooIntern.pData);
 
         // Test interning lots of things
         int i;

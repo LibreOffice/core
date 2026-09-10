@@ -55,11 +55,11 @@ public class Pump extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service <code>com.sun.star.io.Pump</code>.
-    * Settings up input and output streams for the created pump.
+    * Setting up input and output streams for the created pump.
     * Object relations created :
     * <ul>
     *  <li> <code>'InputStream'</code> for
-    *      {@link ifc.io._XActiveDataSource}(an input stream to set) </li>
+    *      {@link ifc.io._XActiveDataSink}(an input stream to set) </li>
     *  <li> <code>'OutputStream'</code> for
     *      {@link ifc.io._XActiveDataSource}(an output stream to set) </li>
     * </ul>

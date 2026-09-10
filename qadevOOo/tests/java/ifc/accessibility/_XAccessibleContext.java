@@ -59,7 +59,7 @@ public class _XAccessibleContext extends MultiMethodTest {
 
     /**
      * Calls the method and stores the number of children. <p>
-     * Has <b> OK </b> status if non-negative number returned.
+     * Has <b> OK </b> status if a non-negative number is returned.
      */
     public void _getAccessibleChildCount() {
         childCount = oObj.getAccessibleChildCount();
@@ -70,8 +70,8 @@ public class _XAccessibleContext extends MultiMethodTest {
     /**
      * Tries to get every child and checks its parent. <p>
      *
-     * Has <b> OK </b> status if parent of every child
-     * and the tested component are the same objects.
+     * Has <b> OK </b> status if the parent of every child
+     * and the tested component are the same object.
      *
      * The following method tests are to be completed successfully before :
      * <ul>
@@ -190,7 +190,7 @@ public class _XAccessibleContext extends MultiMethodTest {
      * it with tested component.<p>
      *
      * Has <b> OK </b> status if the parent's child and the tested
-     * component are the same objects.
+     * component are the same object.
      *
      * The following method tests are to be completed successfully before :
      * <ul>
@@ -238,7 +238,7 @@ public class _XAccessibleContext extends MultiMethodTest {
     /**
      * Get the accessible role of component. <p>
      *
-     * Has <b> OK </b> status if non-negative number returned.
+     * Has <b> OK </b> status if a non-negative number is returned.
      */
     public void _getAccessibleRole() {
         short role = oObj.getAccessibleRole();
@@ -249,7 +249,7 @@ public class _XAccessibleContext extends MultiMethodTest {
     /**
      * Get the accessible name of the component. <p>
      *
-     * Has <b> OK </b> status if the name has non-zero length.
+     * Has <b> OK </b> status if the name is not null.
      */
     public void _getAccessibleName() {
         String name = oObj.getAccessibleName();
@@ -260,7 +260,7 @@ public class _XAccessibleContext extends MultiMethodTest {
     /**
      * Get the accessible description of the component. <p>
      *
-     * Has <b> OK </b> status if the description has non-zero length.
+     * Has <b> OK </b> status if the description is not null.
      */
     public void _getAccessibleDescription() {
         String descr = oObj.getAccessibleDescription();
