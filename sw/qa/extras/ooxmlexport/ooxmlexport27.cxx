@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -244,6 +245,112 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146973_perFieldDateLocale)
     // English field's date reverted to Ukrainian (a single locale for both).
     assertXPath(pXmlDoc, "(//w:r[w:instrText])[1]/w:rPr/w:lang", "val", u"en-US");
     assertXPath(pXmlDoc, "(//w:r[w:instrText])[2]/w:rPr/w:lang", "val", u"uk-UA");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCap)
+{
+    // Given a paragraph starting with a drop cap three lines tall
+    createSwDoc("tdf109308_dropCap.fodt");
+    save(TestFilter::DOCX);
+
+    // Word wants the initial in a framed paragraph of its own, followed by a paragraph
+    // with the rest of the text. Without the fix the drop cap was not written at all.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "dropCap", u"drop");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "lines", u"3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hSpace", u"283");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", u"L");
+
+    // Word does not enlarge the initial itself, so the size of it has to be written out:
+    // in half-points, well above the 24 of the 12pt body text
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "lineRule", u"exact");
+    CPPUNIT_ASSERT_GREATER(
+        sal_Int32(24),
+        getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:sz", "val").toInt32());
+
+    // and the text the initial was taken from stays in the paragraph that follows
+    CPPUNIT_ASSERT(
+        getXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:t").startsWith("orem ipsum"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCapRoundtrip)
+{
+    createSwDoc("tdf109308_dropCap.fodt");
+    saveAndReload(TestFilter::DOCX);
+
+    // The two paragraphs Word needs have to come back as the single one they were
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    auto aDropCap = getProperty<css::style::DropCapFormat>(xParagraph, u"DropCapFormat"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int8(3), aDropCap.Lines);
+    CPPUNIT_ASSERT_EQUAL(sal_Int8(1), aDropCap.Count);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(499), aDropCap.Distance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCapHyperlink)
+{
+    // Given a paragraph with a drop cap whose whole text is one hyperlink
+    createSwDoc("tdf109308_dropCapHyperlink.fodt");
+    save(TestFilter::DOCX);
+
+    // The initial cannot be given a paragraph of its own here, because the hyperlink
+    // wraps the runs of both paragraphs and the first paragraph would have to end inside
+    // it. Without the fix the file was written that way and could not be opened again.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p", 1);
+    assertXPath(pXmlDoc, "//w:framePr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCapRuby)
+{
+    // Given a paragraph with a drop cap whose whole text carries a ruby
+    createSwDoc("tdf109308_dropCapRuby.fodt");
+    save(TestFilter::DOCX);
+
+    // The initial cannot be given a paragraph of its own here either, because the ruby
+    // wraps the runs of both paragraphs and the first paragraph would have to end between
+    // the ruby base and the end of the ruby, which is a file that does not open.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p", 1);
+    assertXPath(pXmlDoc, "//w:framePr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:ruby", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCapSdt)
+{
+    // Given a paragraph with a drop cap whose initial sits in a structured document tag
+    // that the document model cannot show, so it is only known from a grab bag
+    createSwDoc("tdf109308_dropCapSdt.docx");
+    save(TestFilter::DOCX);
+
+    // The tag wraps the runs, so the paragraph cannot be split for the initial. The size
+    // of a drop cap has to be given up with the frame, or the file would open with a large
+    // letter in the middle of a sentence.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:framePr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]//w:sdt", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]//w:r[1]/w:rPr/w:sz", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109308_dropCapNumbered)
+{
+    // Given a numbered paragraph that starts with a drop cap, where the list comes from
+    // the paragraph style
+    createSwDoc("tdf109308_dropCapNumbered.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "dropCap", u"drop");
+
+    // The paragraph that frames the initial carries the paragraph style, so it has to be
+    // taken out of the list again, or the number would be shown twice. Without the fix
+    // nothing did that and the initial got a number of its own.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val", u"0");
+
+    // The number belongs in front of the text, which is in the paragraph that follows
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:numId", "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146973_rtlDateLocale)

@@ -2544,7 +2544,11 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
                 xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
+                // The size the initial is written with belongs to the frame Word puts it
+                // in, not to the character: Writer's layout sizes a drop cap itself.
                 xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT_ASIAN));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT_COMPLEX));
                 //handles (2) and part of (6)
                 pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
                 sal_Int32 nCount = xParaCursor->getString().getLength();
