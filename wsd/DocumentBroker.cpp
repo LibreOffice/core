@@ -4107,6 +4107,10 @@ bool DocumentBroker::manualSave(const std::shared_ptr<ClientSession>& session,
 
 bool DocumentBroker::isBackgroundSaveWorking(bool canBackground) const
 {
+    // A background save runs in a forked process, which only the server builds have.
+    if constexpr (Util::isMobileApp())
+        return false;
+
     constexpr std::size_t MaxBackgroundSaveFailures = 2; // Give only 1 extra chance.
     return canBackground && _saveManager.lastSaveSuccessful() &&
            _saveManager.saveFailureCount() < MaxBackgroundSaveFailures;
