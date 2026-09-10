@@ -181,14 +181,17 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 
 		if (commandName === '.uno:CharFontName') {
 			if (window.ThisIsTheiOSApp) {
-				if (state === '')
-					$('#fontnamecomboboxios').text(_('Font Name'));
-				else
-					$('#fontnamecomboboxios').text(state);
+				const fontNameCombobox = document.getElementById('fontnamecomboboxios');
+				if (fontNameCombobox)
+					fontNameCombobox.textContent = state === '' ? _('Font Name') : state;
 				window.LastSetiOSFontNameButtonFont = state;
 			}
 		} else if (commandName === '.uno:StyleApply') {
-			$('#applystyle').val(state).trigger('change');
+			const applyStyle = document.getElementById('applystyle');
+			if (applyStyle) {
+				applyStyle.value = state;
+				applyStyle.dispatchEvent(new Event('change'));
+			}
 		}
 		else if (commandName === '.uno:ModifiedStatus') {
 			const saveEle = document.querySelector('[id^="save"].unotoolbutton');
