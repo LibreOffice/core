@@ -63,4 +63,36 @@ describe(['tagdesktop'], 'Chart edit mode dark overlay', function() {
 		insertChartFromColumn(500);
 		assertOverlayAppearsOnEdit();
 	});
+
+	// A zoom animation scales the tiles frame by frame. The overlay holds the
+	// chart in pixels of the zoom it started from, and each frame has to scale
+	// them the same way, so the chart stays the one area that is not dimmed.
+	it('chart stays undimmed while the zoom animates', function() {
+		insertChartFromColumn(500);
+		assertOverlayAppearsOnEdit();
+
+		// Cypress runs normally commit a zoom at once. Turn the animation back
+		// on, stretch it, and zoom one level in.
+		cy.getFrameWindow().then(function(win) {
+			win.L.Browser.cypressTest = false;
+			win.app.zoomControl.zoomDurationMs = 8000;
+			win.app.zoomControl.zoomTo(win.app.map.getZoom() + 1);
+		});
+		cy.wait(3000);
+
+		// Mid-animation the dimming covers the sheet but leaves the chart alone,
+		// so a clear share of the document area is still white.
+		cy.getFrameWindow().then(function(win) {
+			var shaded = readShadedFraction(win);
+			expect(shaded).to.be.greaterThan(0.5);
+			expect(shaded).to.be.lessThan(0.95);
+		});
+
+		cy.wait(6000);
+		cy.getFrameWindow().then(function(win) {
+			win.L.Browser.cypressTest = true;
+			expect(readShadedFraction(win)).to.be.greaterThan(0.5);
+			expect(readShadedFraction(win)).to.be.lessThan(0.95);
+		});
+	});
 });

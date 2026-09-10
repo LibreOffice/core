@@ -210,6 +210,17 @@ class CanvasOverlay extends CanvasSectionObject {
 		return this.map.getSplitPanesContext();
 	}
 
+	// The panes of the view in document core pixels. The paths hold pixels of the zoom the
+	// document was at when they were built, and a zoom animation scales those pixels frame by
+	// frame from the zoom start, so during an animation the panes are those of the zoom start.
+	getPaneBoundsList(): cool.Bounds[] {
+		if (this.tsManager._inZoomAnim && this.tsManager._paintContext)
+			return this.tsManager._paintContext().paneBoundsList;
+
+		var spc = this.getSplitPanesContext();
+		return spc ? spc.getPxBoundList() : [this.getBounds().clone()];
+	}
+
 	private isPathVisible(path: CPath): boolean {
 		var pathBounds = path.getBounds();
 		if (!pathBounds.isValid())
@@ -219,8 +230,9 @@ class CanvasOverlay extends CanvasSectionObject {
 
 	private intersectsVisible(queryBounds: cool.Bounds): boolean {
 		this.updateCanvasBounds();
-		var spc = this.getSplitPanesContext();
-		return spc ? spc.intersectsVisible(queryBounds) : this.bounds.intersects(queryBounds);
+		return this.getPaneBoundsList().some(function (paneBounds: cool.Bounds) {
+			return queryBounds.intersects(paneBounds);
+		});
 	}
 
 	private static renderOrderComparator(a: CPath, b: CPath): number {

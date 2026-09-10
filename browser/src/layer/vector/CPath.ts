@@ -181,10 +181,7 @@ abstract class CPath extends CEventsHandler {
 			return;
 		}
 
-		var splitPanesContext = this.renderer.getSplitPanesContext();
-		var paneBoundsList: Array<cool.Bounds> = splitPanesContext ?
-			splitPanesContext.getPxBoundList() :
-			[viewBounds];
+		var paneBoundsList: Array<cool.Bounds> = this.renderer.getPaneBoundsList();
 
 		let maxXBound = 0;
 		let maxYBound = 0;
