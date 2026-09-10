@@ -595,7 +595,12 @@ class VectorManager extends RenderManagerBase {
 		// Twips to canvas pixels.
 		context.scale(pxW / data.slideWidth, pxH / data.slideHeight);
 
-		this.renderInto(context, data);
+		// A master page is only ever looked at while it is being edited, so
+		// its thumbnail draws the prompt text of an empty placeholder. A slide
+		// stands on its own, and its thumbnail leaves the prompts out.
+		this.renderInto(context, data, {
+			editView: mode === cool.VectorMode.MasterPages,
+		});
 
 		const previewImage = new Image();
 		previewImage.width = maxWidth;

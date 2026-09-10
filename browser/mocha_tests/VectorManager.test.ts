@@ -668,4 +668,146 @@ describe('VectorManager', function () {
 			(app as any).map = originalMap;
 		}
 	});
+
+	describe('Thumbnails', function () {
+		let originalDocument: any;
+		let originalImage: any;
+		let originalMap: any;
+		let originalImpress: any;
+		let originalDpiScale: number;
+		let drawn: any[];
+		// One recorder per thumbnail drawn, in the order they were drawn.
+		let recorders: any[];
+
+		// The text a thumbnail drew, read back from its recorder.
+		const drawnText = (event: any): string =>
+			recorders[drawn.indexOf(event)].calls
+				.filter(
+					(call: any) =>
+						call.method === 'fillText' || call.method === 'strokeText',
+				)
+				.map((call: any) => call.args[0])
+				.join(' ');
+
+		beforeEach(function () {
+			drawn = [];
+			recorders = [];
+			originalDocument = (globalThis as any).document;
+			originalImage = (globalThis as any).Image;
+			originalMap = (app as any).map;
+			originalImpress = (app as any).impress;
+			originalDpiScale = app.roundedDpiScale;
+			app.roundedDpiScale = 1;
+			// A thumbnail draws to an offscreen canvas and reports itself
+			// through the map, so a recorder stands in for both.
+			(globalThis as any).document = {
+				createElement: function () {
+					return {
+						width: 0,
+						height: 0,
+						getContext: function () {
+							recorders.push(new CanvasRecorder(100, 100));
+							return recorders[recorders.length - 1];
+						},
+						toDataURL: function () {
+							return 'data:image/png;base64,';
+						},
+					};
+				},
+			};
+			// The finished thumbnail is handed over as an image, which node
+			// does not have.
+			(globalThis as any).Image = function () {};
+			(app as any).map = {
+				_docLayer: { _docType: 'presentation', _selectedPart: 0 },
+				fire: function (name: string, event: any) {
+					if (name === 'tilepreview') drawn.push(event);
+				},
+			};
+			(app as any).impress = { partList: [] };
+		});
+
+		afterEach(function () {
+			(globalThis as any).document = originalDocument;
+			(globalThis as any).Image = originalImage;
+			(app as any).map = originalMap;
+			(app as any).impress = originalImpress;
+			app.roundedDpiScale = originalDpiScale;
+		});
+
+		// A response for a page with a page entry of the given size and the
+		// given objects on it.
+		const page = (part: number, mode: number, objects: any[]): any => ({
+			part: part,
+			mode: mode,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 100, height: 100, primitives: [] },
+			].concat(objects),
+		});
+
+		const prompt: any = {
+			type: 'exclusiveEditView',
+			children: [{ type: 'textSimplePortion', text: 'Click to edit' }],
+		};
+
+		// A master page is the layout the slides are built on, and its
+		// placeholders are what there is to see on it. A thumbnail of one
+		// draws them, prompt text and all.
+		it('draws the prompt text of a master page thumbnail', function () {
+			const manager = new VectorManager();
+			manager.requestThumbnail(0, 0, cool.VectorMode.MasterPages, 100, 100);
+			manager.handleVectorPrimitivesResponse(
+				page(0, cool.VectorMode.MasterPages, [
+					{ id: 1, emptyPresObj: true, primitives: [prompt] },
+				]),
+			);
+
+			nodeassert.strictEqual(drawn.length, 1);
+			nodeassert.strictEqual(drawn[0].mode, cool.VectorMode.MasterPages);
+			nodeassert.ok(
+				drawnText(drawn[0]).indexOf('Click to edit') >= 0,
+				'the master thumbnail drew no prompt text',
+			);
+		});
+
+		// A request for a page the document does not hold is answered with
+		// the header alone. The thumbnail is dropped, so a page that turns
+		// up at that index later is not drawn into a preview that has since
+		// stopped asking for it.
+		it('drops a thumbnail of a part the document does not hold', function () {
+			const manager = new VectorManager();
+			manager.requestThumbnail(0, 4, cool.VectorMode.MasterPages, 100, 100);
+
+			manager.handleVectorPrimitivesResponse({
+				part: 4,
+				mode: cool.VectorMode.MasterPages,
+			});
+			nodeassert.strictEqual(drawn.length, 0);
+
+			manager.handleVectorPrimitivesResponse(
+				page(4, cool.VectorMode.MasterPages, []),
+			);
+			nodeassert.strictEqual(drawn.length, 0);
+		});
+
+		// A slide stands on its own, so the prompt that invites an edit is
+		// not part of the picture.
+		it('leaves the prompt text out of a slide thumbnail', function () {
+			const manager = new VectorManager();
+			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
+			manager.handleVectorPrimitivesResponse(
+				page(0, cool.VectorMode.Slides, [
+					{ id: 1, emptyPresObj: true, primitives: [prompt] },
+				]),
+			);
+
+			nodeassert.strictEqual(drawn.length, 1);
+			nodeassert.strictEqual(
+				drawnText(drawn[0]).indexOf('Click to edit'),
+				-1,
+				'the slide thumbnail drew prompt text',
+			);
+		});
+	});
 });
