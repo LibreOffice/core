@@ -56,7 +56,9 @@ class TopToolbar extends JSDialog.Toolbar {
 		}
 
 		// Use original template as provided by server
-		$('#toolbar-logo').after(this.map.toolbarUpTemplate.cloneNode(true));
+		const toolbarLogo = document.getElementById('toolbar-logo');
+		if (toolbarLogo)
+			toolbarLogo.after(this.map.toolbarUpTemplate.cloneNode(true));
 		this.parentContainer = window.L.DomUtil.get('toolbar-up');
 		window.L.DomUtil.addClass(this.parentContainer, 'ui-toolbar');
 	}
@@ -372,23 +374,26 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		switch (docType) {
 		case 'spreadsheet':
-			if (this.parentContainer) {
-				['reset', 'textalign', 'wraptextbutton', 'breakspacing', 'insertannotation', 'conditionalformatdialog',
-					'numberformatcurrency', 'numberformatpercent',
-					'numberformatincdecimals', 'numberformatdecdecimals', 'break-number', 'togglemergecells', 'breakmergecells',
-					'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', 'sidebar', 'printoptions'
-				].forEach((id) => {
-					this.showItem(id, true);
-				});
+			{
+				if (this.parentContainer) {
+					['reset', 'textalign', 'wraptextbutton', 'breakspacing', 'insertannotation', 'conditionalformatdialog',
+						'numberformatcurrency', 'numberformatpercent',
+						'numberformatincdecimals', 'numberformatdecdecimals', 'break-number', 'togglemergecells', 'breakmergecells',
+						'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', 'sidebar', 'printoptions'
+					].forEach((id) => {
+						this.showItem(id, true);
+					});
 
-				this.showItem('print', false);
-				this.showItem('styles', false);
-			}
+					this.showItem('print', false);
+					this.showItem('styles', false);
+				}
 
-			$('#toolbar-wrapper').addClass('spreadsheet');
-			if (window.mode.isTablet()) {
-				$(this.map.options.documentContainer).addClass('tablet');
-				$('#toolbar-wrapper').addClass('tablet');
+				const toolbarWrapper = document.getElementById('toolbar-wrapper');
+				if (toolbarWrapper) toolbarWrapper.classList.add('spreadsheet');
+				if (window.mode.isTablet()) {
+					$(this.map.options.documentContainer).addClass('tablet');
+					if (toolbarWrapper) toolbarWrapper.classList.add('tablet');
+				}
 			}
 
 			break;
