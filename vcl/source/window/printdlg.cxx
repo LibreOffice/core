@@ -580,12 +580,22 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ) )
     , maNoPageStr( VclResId( SV_PRINT_NOPAGES ) )
     , maNoPreviewStr( VclResId( SV_PRINT_NOPREVIEW ) )
+    , mnInitialPage( 0 )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
     , mbShowLayoutFrame( true )
     , mbHasCustomPaperEntry( false )
     , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
 {
+    // Retrieve current page, it'll be used later in updatePageRange method
+    PropertyValue* pPageRange = maPController->getValue(u"PageRange"_ustr);
+    if (pPageRange && pPageRange->Value.hasValue())
+    {
+        OUString aPageRange;
+        pPageRange->Value >>= aPageRange;
+        mnInitialPage = aPageRange.toInt32();
+    }
+
     // save printbutton text, gets exchanged occasionally with print to file
     maPrintText = mxOKButton->get_label();
 
@@ -1150,18 +1160,51 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
 
 void PrintDialog::updatePageRange(sal_Int32 nPages)
 {
-    if (nPages > 0 && !mxPageRangesRadioButton->get_active())
+    if (nPages <= 0)
+        return;
+
+    PropertyValue* pContentVal = maPController->getValue(u"PrintContent"_ustr);
+    sal_Int32 nContent = -1;
+    if (pContentVal)
+        pContentVal->Value >>= nContent;
+
+    if (nContent == 1)
     {
+        OUString sRange;
+        if (nPages == 1)
+            sRange = u"1"_ustr;
+        else
+            sRange = u"1-"_ustr + OUString::number(nPages);
+
+        mxPageRangeEdit->set_text(sRange);
+        maPController->setValue(u"PageRange"_ustr, Any(sRange));
+        return;
+    }
+
+    OUString sRange;
+
+    if (nContent == 3)
+    {
+        // Current page: preserve the document page selected when
+        // the print dialog was opened.
+        sRange = OUString::number(mnInitialPage);
+    }
+    else if (nContent == 0)
+    {
+        // All pages
         OUStringBuffer aBuf(32);
         aBuf.append("1");
         if (nPages > 1)
-        {
             aBuf.append("-" + OUString::number(nPages));
-        }
-        OUString sRange = aBuf.makeStringAndClear();
-        mxPageRangeEdit->set_text(sRange);
-        maPController->setValue(u"PageRange"_ustr, Any(sRange));
+        sRange = aBuf.makeStringAndClear();
     }
+    else
+    {
+        return;
+    }
+
+    mxPageRangeEdit->set_text(sRange);
+    maPController->setValue(u"PageRange"_ustr, Any(sRange));
 }
 
 void PrintDialog::updatePageSize(int nOrientation)
@@ -2364,6 +2407,15 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::Toggleable&, i_rBtn, void )
 
     sal_Int32 nVal = it->second;
     pVal->Value <<= nVal;
+
+    if (pVal->Name == "PrintContent" && nVal == 3)
+    {
+        PropertyValue* pPageRange = maPController->getValue(u"PageRange"_ustr);
+        if (pPageRange)
+        {
+            pPageRange->Value <<= OUString::number(mnInitialPage);
+        }
+    }
 
     updateOrientationBox();
 

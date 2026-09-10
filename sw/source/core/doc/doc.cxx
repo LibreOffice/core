@@ -743,7 +743,7 @@ void SwDoc::CalculatePagesForPrinting(
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
-        if (1 == nContent)
+        if (1 == nContent || 3 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange" );
 
         if (2 == nContent)

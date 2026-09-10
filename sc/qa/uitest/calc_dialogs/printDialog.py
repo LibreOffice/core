@@ -40,4 +40,11 @@ class printDialog(UITestCase):
                 xLandscapePageRange = xDialog.getChild("pagerange")
                 self.assertEqual(get_state_as_dict(xLandscapePageRange)["Text"], "1")
 
+                # check that when reselecting Portrait, the range is again 1-2
+                # Expected: "1-2"
+                # Actual  : "1"
+                select_by_text(xpageorientationbox, "Portrait")
+                xPortraitPageRange = xDialog.getChild("pagerange")
+                self.assertEqual(get_state_as_dict(xPortraitPageRange)["Text"], "1-2")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

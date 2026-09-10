@@ -2591,6 +2591,11 @@ SwDoc * SwXTextDocument::GetRenderDoc(
 
     uno::Reference< frame::XModel > xModel;
     rSelection >>= xModel;
+    const bool bPrintCurrentPage =  m_pPrintUIOptions  && m_pPrintUIOptions->getIntValue("PrintContent", 0) == 3;
+
+    if (bPrintCurrentPage)
+        return m_pDocShell->GetDoc();
+
     if (xModel == m_pDocShell->GetModel())
         pDoc = m_pDocShell->GetDoc();
     else
