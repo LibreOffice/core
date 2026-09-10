@@ -47,14 +47,14 @@ public:
         {}
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes(
+    virtual sal_Int32 readBytes(
         Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes(
+    virtual sal_Int32 readSomeBytes(
         Sequence< sal_Int8 > & rData, sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes(
+    virtual void skipBytes(
         sal_Int32 nBytesToSkip ) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual sal_Int32 available() override;
+    virtual void closeInput() override;
 };
 
 }
@@ -108,10 +108,10 @@ public:
         {}
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes(
+    virtual void writeBytes(
         Sequence< sal_Int8 > const & rData ) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
+    virtual void flush() override;
+    virtual void closeOutput() override;
 };
 
 }

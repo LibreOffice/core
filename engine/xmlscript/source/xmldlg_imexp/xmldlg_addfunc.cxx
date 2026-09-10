@@ -46,7 +46,7 @@ public:
     }
 
     // XInputStreamProvider
-    virtual uno::Reference< io::XInputStream > SAL_CALL createInputStream() override;
+    virtual uno::Reference< io::XInputStream > createInputStream() override;
 };
 
 }

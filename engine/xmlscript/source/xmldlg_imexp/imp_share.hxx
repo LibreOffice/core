@@ -174,16 +174,16 @@ public:
     const css::uno::Reference< css::frame::XModel >& getDocOwner() const { return _xDoc; }
 
     // XRoot
-    virtual void SAL_CALL startDocument(
+    virtual void startDocument(
         css::uno::Reference< css::xml::input::XNamespaceMapping >
         const & xNamespaceMapping ) override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL processingInstruction(
+    virtual void endDocument() override;
+    virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
-    virtual void SAL_CALL setDocumentLocator(
+    virtual void setDocumentLocator(
         css::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startRootElement(
+    startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 };
@@ -209,19 +209,19 @@ public:
     virtual ~ElementBase() override;
 
     // XElement
-    virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL getParent() override;
-    virtual OUString SAL_CALL getLocalName() override;
-    virtual sal_Int32 SAL_CALL getUid() override;
+    virtual css::uno::Reference<css::xml::input::XElement> getParent() override;
+    virtual OUString getLocalName() override;
+    virtual sal_Int32 getUid() override;
     virtual css::uno::Reference< css::xml::input::XAttributes >
-    SAL_CALL getAttributes() override;
-    virtual void SAL_CALL ignorableWhitespace(
+    getAttributes() override;
+    virtual void ignorableWhitespace(
         OUString const & rWhitespaces ) override;
-    virtual void SAL_CALL characters( OUString const & rChars ) override;
-    virtual void SAL_CALL processingInstruction(
+    virtual void characters( OUString const & rChars ) override;
+    virtual void processingInstruction(
         OUString const & Target, OUString const & Data ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 };
@@ -231,7 +231,7 @@ class StylesElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
@@ -266,10 +266,10 @@ class StyleElement
 
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     void importTextColorStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
@@ -318,7 +318,7 @@ public:
     cpo::uno::Sequence< sal_Int16 > getSelectedItems();
 
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
@@ -501,10 +501,10 @@ class WindowElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     WindowElement(
         OUString const & rLocalName,
@@ -518,7 +518,7 @@ class EventElement
     : public ElementBase
 {
 public:
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     EventElement(
         sal_Int32 nUid, OUString const & rLocalName,
@@ -535,7 +535,7 @@ class BulletinBoardElement
     rtl::Reference<DialogImport> mxDialogImport;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
@@ -550,10 +550,10 @@ class ButtonElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     ButtonElement(
         OUString const & rLocalName,
@@ -568,10 +568,10 @@ class CheckBoxElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     CheckBoxElement(
         OUString const & rLocalName,
@@ -587,10 +587,10 @@ class ComboBoxElement
     rtl::Reference< MenuPopupElement > _popup;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     ComboBoxElement(
         OUString const & rLocalName,
@@ -606,10 +606,10 @@ class MenuListElement
     rtl::Reference< MenuPopupElement > _popup;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     MenuListElement(
         OUString const & rLocalName,
@@ -624,7 +624,7 @@ class RadioElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
@@ -642,10 +642,10 @@ class RadioGroupElement
     std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    void SAL_CALL endElement() override;
+    void endElement() override;
 
     RadioGroupElement(
         OUString const & rLocalName,
@@ -662,10 +662,10 @@ class TitledBoxElement
     std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     TitledBoxElement(
         OUString const & rLocalName,
@@ -680,10 +680,10 @@ class TextElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     TextElement(
         OUString const & rLocalName,
@@ -697,10 +697,10 @@ class FixedHyperLinkElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     FixedHyperLinkElement(
         OUString const & rLocalName,
@@ -715,10 +715,10 @@ class TextFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     TextFieldElement(
         OUString const & rLocalName,
@@ -733,10 +733,10 @@ class ImageControlElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     ImageControlElement(
         OUString const & rLocalName,
@@ -751,10 +751,10 @@ class FileControlElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     FileControlElement(
         OUString const & rLocalName,
@@ -769,10 +769,10 @@ class TreeControlElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     TreeControlElement(
         OUString const & rLocalName,
@@ -787,10 +787,10 @@ class CurrencyFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     CurrencyFieldElement(
         OUString const & rLocalName,
@@ -805,10 +805,10 @@ class DateFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     DateFieldElement(
         OUString const & rLocalName,
@@ -823,10 +823,10 @@ class NumericFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     NumericFieldElement(
         OUString const & rLocalName,
@@ -841,10 +841,10 @@ class TimeFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     TimeFieldElement(
         OUString const & rLocalName,
@@ -859,10 +859,10 @@ class PatternFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     PatternFieldElement(
         OUString const & rLocalName,
@@ -877,10 +877,10 @@ class FormattedFieldElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     FormattedFieldElement(
         OUString const & rLocalName,
@@ -895,10 +895,10 @@ class FixedLineElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     FixedLineElement(
         OUString const & rLocalName,
@@ -913,10 +913,10 @@ class ScrollBarElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     ScrollBarElement(
         OUString const & rLocalName,
@@ -931,10 +931,10 @@ class SpinButtonElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     SpinButtonElement(
         OUString const & rLocalName,
@@ -949,10 +949,10 @@ class MultiPage
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     MultiPage(
         OUString const & rLocalName,
@@ -972,10 +972,10 @@ class Frame
     OUString _label;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     Frame(
         OUString const & rLocalName,
@@ -992,10 +992,10 @@ class Page
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     Page(
         OUString const & rLocalName,
@@ -1014,10 +1014,10 @@ class ProgressBarElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     ProgressBarElement(
         OUString const & rLocalName,
@@ -1033,10 +1033,10 @@ class GridControlElement
 {
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
-    SAL_CALL startChildElement(
+    startChildElement(
         sal_Int32 nUid,::rtl::OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     GridControlElement(OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,

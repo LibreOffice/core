@@ -49,17 +49,17 @@ namespace xmlscript
         virtual ~XMLBasicExporterBase() override;
 
         // XServiceInfo
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XExporter
-        virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc ) override;
+        virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc ) override;
 
         // XFilter
-        virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-        virtual void SAL_CALL cancel() override;
+        virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        virtual void cancel() override;
     };
 
 
@@ -70,8 +70,8 @@ namespace xmlscript
         virtual ~XMLBasicExporter() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
     };
 
 
@@ -82,8 +82,8 @@ namespace xmlscript
         virtual ~XMLOasisBasicExporter() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
     };
 
 }   // namespace xmlscript

@@ -129,14 +129,14 @@ public:
     virtual ~LibraryImport() override;
 
     // XRoot
-    virtual void SAL_CALL startDocument(
+    virtual void startDocument(
         css::uno::Reference< css::xml::input::XNamespaceMapping > const & xNamespaceMapping ) override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL processingInstruction(
+    virtual void endDocument() override;
+    virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
-    virtual void SAL_CALL setDocumentLocator(
+    virtual void setDocumentLocator(
         css::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL startRootElement(
+    virtual css::uno::Reference< css::xml::input::XElement > startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
@@ -159,17 +159,17 @@ public:
     virtual ~LibElementBase() override;
 
     // XElement
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL getParent() override;
-    virtual OUString SAL_CALL getLocalName() override;
-    virtual sal_Int32 SAL_CALL getUid() override;
-    virtual css::uno::Reference< css::xml::input::XAttributes > SAL_CALL getAttributes() override;
-    virtual void SAL_CALL ignorableWhitespace(
+    virtual css::uno::Reference< css::xml::input::XElement > getParent() override;
+    virtual OUString getLocalName() override;
+    virtual sal_Int32 getUid() override;
+    virtual css::uno::Reference< css::xml::input::XAttributes > getAttributes() override;
+    virtual void ignorableWhitespace(
         OUString const & rWhitespaces ) override;
-    virtual void SAL_CALL characters( OUString const & rChars ) override;
-    virtual void SAL_CALL processingInstruction(
+    virtual void characters( OUString const & rChars ) override;
+    virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
-    virtual void SAL_CALL endElement() override;
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL startChildElement(
+    virtual void endElement() override;
+    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
@@ -181,10 +181,10 @@ class LibrariesElement : public LibElementBase
     std::vector< LibDescriptor > mLibDescriptors;
 
 public:
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL startChildElement(
+    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     LibrariesElement(
         OUString const & rLocalName,
@@ -200,10 +200,10 @@ class LibraryElement : public LibElementBase
 
 public:
 
-    virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL startChildElement(
+    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
-    virtual void SAL_CALL endElement() override;
+    virtual void endElement() override;
 
     LibraryElement(
         OUString const & rLocalName,
