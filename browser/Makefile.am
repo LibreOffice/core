@@ -1428,7 +1428,7 @@ install-demo-extensions:
 		elif test -f "$$dir/appsscript.json"; then \
 			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
 			cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
-			if test "$(ENABLE_MOBILEAPP)" = true; then \
+			if test "$(ENABLE_MOBILEAPP)" = true || test "$(ENABLE_QTAPP)" = true; then \
 				scripts= && \
 				for gs in "$$dir"/*.gs; do \
 					test -f "$$gs" || continue; \
@@ -1447,7 +1447,7 @@ install-demo-extensions:
 			ids="$$ids$${ids:+,}\"$$id\""; \
 		fi; \
 	done && \
-	if test "$(ENABLE_MOBILEAPP)" = true; then \
+	if test "$(ENABLE_MOBILEAPP)" = true || test "$(ENABLE_QTAPP)" = true; then \
 		printf '[%s]\n' "$$ids" > $(DIST_FOLDER)/extensions/index.json; \
 	fi
 
