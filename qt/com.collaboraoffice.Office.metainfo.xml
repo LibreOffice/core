@@ -41,6 +41,23 @@
   </kudos>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="26.04.3.3-1" date="2026-09-10">
+      <description>
+        <p>New features and fixes in this release:</p>
+        <ul>
+          <li>Open documents from Nextcloud and OpenCloud servers straight from the start screen, and save them back - switching to real-time collaboration when someone else joins</li>
+          <li>A refreshed start screen with introductory documents, better templates handling, and Recent files that keep up with Save As</li>
+          <li>Multi-monitor presenting fixes, videos that start with their slide, and animated GIFs in Impress and Draw</li>
+          <li>New in Calc: Principal Component Analysis, the ARRAYTOTEXT and MSVD functions, spilled-range references, and Text to Column</li>
+          <li>Copy and paste as Markdown in Writer, Calc and Impress</li>
+          <li>The AI assistant now builds whole presentations - it proposes an outline you can edit, then lays it out on a design template of your choice</li>
+          <li>Maximize the Impress slide panel into a grid of large thumbnails, reorder slides by dragging, and rename sections in place</li>
+          <li>Settings that persist, sharper cursors on HiDPI screens, and automatic dark mode following your desktop</li>
+          <li>A broad set of accessibility improvements: keyboard navigation, screen-reader labels, and focus and contrast fixes throughout</li>
+          <li>All fixes and improvements from the shared codebase with Collabora Online 26.04.3.3, including many document compatibility fixes for Microsoft Word, Excel and PowerPoint files</li>
+        </ul>
+      </description>
+    </release>
     <release version="26.04.2.4-2" date="2026-08-01">
       <description>
         <p>New features and fixes in this release:</p>
