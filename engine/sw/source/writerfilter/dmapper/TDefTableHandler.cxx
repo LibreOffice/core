@@ -24,6 +24,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <comphelper/sequence.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -377,6 +378,9 @@ void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Prop
         return;
 
     m_nLineWidth = m_nLineType = m_nLineColor = 0;
+    m_eThemeColorType = model::ThemeColorType::Unknown;
+    m_nThemeShade = 0;
+    m_nThemeTint = 0;
     std::vector<beans::PropertyValue> aSavedGrabBag;
     if (!m_aInteropGrabBagName.isEmpty())
     {
@@ -386,42 +390,59 @@ void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Prop
     pProperties->resolve( *this );
     table::BorderLine2 aBorderLine;
     ConversionHelper::MakeBorderLine(m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, /*bIsOOXML=*/true);
+    const model::ComplexColor aComplexColor = getComplexColor();
     const bool rtl = false; // TODO
     switch( rName )
     {
         case NS_ooxml::LN_CT_TcBorders_top:
             m_aTopBorderLines.push_back(aBorderLine);
+            m_aTopBorderComplexColors.push_back(aComplexColor);
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"top"_ustr));
         break;
         case NS_ooxml::LN_CT_TcBorders_start:
             if( rtl )
+            {
                 m_aRightBorderLines.push_back(aBorderLine);
+                m_aRightBorderComplexColors.push_back(aComplexColor);
+            }
             else
+            {
                 m_aLeftBorderLines.push_back(aBorderLine);
+                m_aLeftBorderComplexColors.push_back(aComplexColor);
+            }
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"start"_ustr));
         break;
         case NS_ooxml::LN_CT_TcBorders_left:
             m_aLeftBorderLines.push_back(aBorderLine);
+            m_aLeftBorderComplexColors.push_back(aComplexColor);
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"left"_ustr));
         break;
         case NS_ooxml::LN_CT_TcBorders_bottom:
             m_aBottomBorderLines.push_back(aBorderLine);
+            m_aBottomBorderComplexColors.push_back(aComplexColor);
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"bottom"_ustr));
         break;
         case NS_ooxml::LN_CT_TcBorders_end:
             if( rtl )
+            {
                 m_aLeftBorderLines.push_back(aBorderLine);
+                m_aLeftBorderComplexColors.push_back(aComplexColor);
+            }
             else
+            {
                 m_aRightBorderLines.push_back(aBorderLine);
+                m_aRightBorderComplexColors.push_back(aComplexColor);
+            }
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"end"_ustr));
         break;
         case NS_ooxml::LN_CT_TcBorders_right:
             m_aRightBorderLines.push_back(aBorderLine);
+            m_aRightBorderComplexColors.push_back(aComplexColor);
             if (!m_aInteropGrabBagName.isEmpty())
                 aSavedGrabBag.push_back(getInteropGrabBag(u"right"_ustr));
         break;
@@ -473,6 +494,45 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
     }
 }
 
+model::ComplexColor TDefTableHandler::getComplexColor() const
+{
+    model::ComplexColor aComplexColor;
+    if (m_eThemeColorType == model::ThemeColorType::Unknown)
+        return aComplexColor;
+
+    aComplexColor.setThemeColor(m_eThemeColorType);
+
+    if (m_nThemeTint > 0)
+    {
+        sal_Int16 nTint = sal_Int16((255.0 - m_nThemeTint) * 10000.0 / 255.0);
+        aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
+    }
+    if (m_nThemeShade > 0)
+    {
+        sal_Int16 nShade = sal_Int16((255.0 - m_nThemeShade) * 10000.0 / 255.0);
+        aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+    }
+
+    return aComplexColor;
+}
+
+namespace
+{
+void lcl_insertBorderComplexColor(const ::tools::SvRef<TablePropertyMap>& pCellProperties,
+                                  PropertyIds eId,
+                                  const std::vector<model::ComplexColor>& rComplexColors)
+{
+    if (rComplexColors.empty()
+        || rComplexColors[0].getThemeColorType() == model::ThemeColorType::Unknown)
+    {
+        return;
+    }
+
+    pCellProperties->Insert(eId,
+                            cpo::uno::Any(model::color::createXComplexColor(rComplexColors[0])));
+}
+}
+
 void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMap >& pCellProperties ) const
 {
     if( !m_aTopBorderLines.empty() )
@@ -488,22 +548,15 @@ void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMa
     if( !m_aInsideVBorderLines.empty() )
         pCellProperties->Insert( META_PROP_VERTICAL_BORDER, cpo::uno::Any( m_aInsideVBorderLines[0] ) );
 
-    if (m_eThemeColorType != model::ThemeColorType::Unknown)
-    {
-        model::ComplexColor aComplexColor;
-        aComplexColor.setThemeColor(m_eThemeColorType);
-
-        if (m_nThemeTint > 0 )
-        {
-            sal_Int16 nTint = sal_Int16((255.0 - m_nThemeTint) * 10000.0 / 255.0);
-            aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
-        }
-        if (m_nThemeShade > 0)
-        {
-            sal_Int16 nShade = sal_Int16((255.0 - m_nThemeShade) * 10000.0 / 255.0);
-            aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
-        }
-    }
+    // A border can name a theme color, which the cell keeps next to the color it resolves to.
+    lcl_insertBorderComplexColor(pCellProperties, PROP_BORDER_TOP_COMPLEX_COLOR,
+                                 m_aTopBorderComplexColors);
+    lcl_insertBorderComplexColor(pCellProperties, PROP_BORDER_LEFT_COMPLEX_COLOR,
+                                 m_aLeftBorderComplexColors);
+    lcl_insertBorderComplexColor(pCellProperties, PROP_BORDER_BOTTOM_COMPLEX_COLOR,
+                                 m_aBottomBorderComplexColors);
+    lcl_insertBorderComplexColor(pCellProperties, PROP_BORDER_RIGHT_COMPLEX_COLOR,
+                                 m_aRightBorderComplexColors);
 }
 
 

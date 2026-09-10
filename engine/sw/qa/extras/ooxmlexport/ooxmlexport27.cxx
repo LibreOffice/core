@@ -286,6 +286,27 @@ CPPUNIT_TEST_FIXTURE(Test, testCharShadingThemeFillOnlyWithItsOwnFill)
     assertXPathNoAttribute(pXmlDoc, "//w:r/w:rPr/w:shd", "themeFill");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCellBorderThemeColor)
+{
+    // A cell whose borders name a theme color, one of them with a tint, one with a shade, and
+    // one border with a plain color.
+    createSwDoc("cell-border-theme-color.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the fix the theme color was read but never reached the cell, so only the color it
+    // resolves to came back and the borders stopped following the document theme.
+    assertXPath(pXmlDoc, "//w:tcBorders/w:top", "themeColor", u"accent1");
+    assertXPath(pXmlDoc, "//w:tcBorders/w:top", "themeTint", u"33");
+    assertXPath(pXmlDoc, "//w:tcBorders/w:start", "themeColor", u"accent2");
+    assertXPath(pXmlDoc, "//w:tcBorders/w:start", "themeShade", u"80");
+    assertXPath(pXmlDoc, "//w:tcBorders/w:end", "themeColor", u"accent3");
+
+    // The border that names no theme color keeps only its own color.
+    assertXPathNoAttribute(pXmlDoc, "//w:tcBorders/w:bottom", "themeColor");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

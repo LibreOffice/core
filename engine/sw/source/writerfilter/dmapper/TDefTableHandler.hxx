@@ -44,6 +44,11 @@ class TDefTableHandler : public LoggedProperties
     std::vector<css::table::BorderLine2> m_aBottomBorderLines;
     std::vector<css::table::BorderLine2> m_aInsideHBorderLines;
     std::vector<css::table::BorderLine2> m_aInsideVBorderLines;
+    /// The theme color of each border above, where it has one.
+    std::vector<model::ComplexColor> m_aLeftBorderComplexColors;
+    std::vector<model::ComplexColor> m_aRightBorderComplexColors;
+    std::vector<model::ComplexColor> m_aTopBorderComplexColors;
+    std::vector<model::ComplexColor> m_aBottomBorderComplexColors;
 
     //values of the current border
     sal_Int32 m_nLineWidth;
@@ -53,6 +58,9 @@ class TDefTableHandler : public LoggedProperties
     model::ThemeColorType m_eThemeColorType = model::ThemeColorType::Unknown;
     sal_Int32 m_nThemeShade = 0;
     sal_Int32 m_nThemeTint = 0;
+
+    /// The theme color the attributes of the border being read describe.
+    model::ComplexColor getComplexColor() const;
 
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
