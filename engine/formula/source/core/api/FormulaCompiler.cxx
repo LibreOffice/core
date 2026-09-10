@@ -64,7 +64,7 @@ class FormulaCompilerRecursionGuard
 // comes before it, so a binary operator may follow it.
 bool isOperatorExpectingOperand(OpCode eOp)
 {
-    return ocStartBinaryOperators <= eOp && eOp < ocStopUnaryOperators
+    return (isBinaryOperatorOpCode(eOp) || isUnaryOperatorOpCode(eOp))
            && eOp != ocSpill;
 }
 
@@ -2570,8 +2570,7 @@ void FormulaCompiler::UnaryLine()
 {
     if( mpToken->GetOpCode() == ocAdd )
         GetToken();
-    else if (ocStartUnaryOperators <= mpToken->GetOpCode() &&
-            mpToken->GetOpCode() < ocStopUnaryOperators)
+    else if (isUnaryOperatorOpCode(mpToken->GetOpCode()))
     {
         FormulaTokenRef p = mpToken;
         NextToken();
@@ -3411,8 +3410,7 @@ OpCode FormulaCompiler::NextToken()
     {
         // Before an operator there must not be another operator, with the
         // exception of AND and OR.
-        if ( eOp != ocAnd && eOp != ocOr &&
-                (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators )
+        if ( eOp != ocAnd && eOp != ocOr && isBinaryOperatorOpCode(eOp)
                 && (meLastOp == ocOpen || meLastOp == ocSep ||
                     isOperatorExpectingOperand(meLastOp)))
         {
@@ -3686,7 +3684,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
             // below.
             rCurr->SetInForceArray( ParamClass::ForceArray);
         }
-        else if (mnPC >= 2 && ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators)
+        else if (mnPC >= 2 && isBinaryOperatorOpCode(eOp))
         {
             // Binary operators are not functions followed by arguments
             // and need some peeking into RPN to inspect their operands.
@@ -3713,7 +3711,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
                 rCurr->SetInForceArray( eArrayReturn);
             }
         }
-        else if (mnPC >= 1 && ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators)
+        else if (mnPC >= 1 && isUnaryOperatorOpCode(eOp))
         {
             // Similar for unary operators.
             if (mpCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(mpCode[-1]->GetOpCode()))

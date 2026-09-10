@@ -3259,11 +3259,9 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
     OpCode eOp = maRawToken.GetOpCode();
     if (eOp == ocSub || eOp == ocNegSub)
     {
-        bool bShouldBeNegSub =
-            (meLastOp == ocOpen || meLastOp == ocSep || meLastOp == ocNegSub ||
-             (ocStartBinaryOperators <= meLastOp && meLastOp < ocStopBinaryOperators) ||
-             meLastOp == ocArrayOpen ||
-             meLastOp == ocArrayColSep || meLastOp == ocArrayRowSep);
+        bool bShouldBeNegSub = (meLastOp == ocOpen || meLastOp == ocSep || meLastOp == ocNegSub
+                                || isBinaryOperatorOpCode(meLastOp) || meLastOp == ocArrayOpen
+                                || meLastOp == ocArrayColSep || meLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
             maRawToken.NewOpCode( ocNegSub );
             //TODO: if ocNegSub had ForceArray we'd have to set it here
@@ -6207,8 +6205,7 @@ bool ScCompiler::GetRefColRowNames(const FormulaToken* pToken, ScComplexRefData&
             if (eOp1 != ocColRowName && eOp1 != ocIntersect && eOp2 != ocColRowName
                 && eOp2 != ocIntersect)
             {
-                if ((ocStartBinaryOperators <= eOp1 && eOp1 < ocStopBinaryOperators)
-                    || (ocStartBinaryOperators <= eOp2 && eOp2 < ocStopBinaryOperators))
+                if (isBinaryOperatorOpCode(eOp1) || isBinaryOperatorOpCode(eOp2))
                     bSingle = true;
             }
             if (bSingle)
@@ -6995,9 +6992,8 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         mPendingImplicitIntersectionOptimizations.emplace_back( pppToken[0], token );
         return true;
     }
-    else if ((nOpCode >= ocStartBinaryOperators && nOpCode < ocStopBinaryOperators
-                && nOpCode != ocAnd && nOpCode != ocOr)
-              || nOpCode == ocRound || nOpCode == ocRoundUp || nOpCode == ocRoundDown)
+    else if ((isBinaryOperatorOpCode(nOpCode) && nOpCode != ocAnd && nOpCode != ocOr)
+             || nOpCode == ocRound || nOpCode == ocRoundUp || nOpCode == ocRoundDown)
     {
         if (nNumParams != 2)
             return false;
@@ -7014,8 +7010,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
             mPendingImplicitIntersectionOptimizations.emplace_back( pppToken[1], token );
         return true;
     }
-    else if ((nOpCode >= ocStartUnaryOperators && nOpCode < ocStopUnaryOperators)
-              || nOpCode == ocPercentSign)
+    else if (isUnaryOperatorOpCode(nOpCode) || nOpCode == ocPercentSign)
     {
         if (nNumParams != 1)
             return false;

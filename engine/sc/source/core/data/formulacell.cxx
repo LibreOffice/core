@@ -1742,13 +1742,12 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
             // svDoubleRef push. The result is always a multi-cell
             // reference, so the array flag flows through.
             bResultArray = true;
-        else if (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators
-                 && eOp != ocAnd && eOp != ocOr)
+        else if (isBinaryOperatorOpCode(eOp) && eOp != ocAnd && eOp != ocOr)
             // ocAnd and ocOr share the binary-operator opcode range but
             // reduce their arguments to a scalar boolean. Treat them as
             // function-form reducers, not elementwise operators.
             bResultArray = bAnyArrayArgument;
-        else if (ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators)
+        else if (isUnaryOperatorOpCode(eOp))
             bResultArray = bAnyArrayArgument;
         aStackIsArray.push_back(bResultArray);
     }
