@@ -194,6 +194,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
             helpers::getResponseString(socket, "slideimport:", testname);
         Poco::JSON::Object::Ptr insertObject = helpers::parseJsonReply(insertReply, "slideimport:");
         LOK_ASSERT_EQUAL(std::string("inserted"), insertObject->getValue<std::string>("status"));
+        LOK_ASSERT_EQUAL(2, insertObject->getValue<int>("count"));
 
         Poco::JSON::Array::Ptr links = getLinks(socket);
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), links->size());
@@ -228,6 +229,15 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
                            !named->getObject(0)->getValue<std::string>("name").empty());
         LOK_ASSERT_MESSAGE("a page linked to a position must record no slide identifier",
                            named->getObject(0)->getValue<std::string>("sourceGuid").empty());
+
+        // An insert that names no slides takes every page of the staged file, and reports how
+        // many pages it added.
+        stageSource(socket, documentURL, "source.odp");
+        helpers::sendTextFrame(socket, insertCommand("at=0 keepdesign=0 link=0"), testname);
+        const std::string wholeReply = helpers::getResponseString(socket, "slideimport:", testname);
+        Poco::JSON::Object::Ptr wholeObject = helpers::parseJsonReply(wholeReply, "slideimport:");
+        LOK_ASSERT_EQUAL(std::string("inserted"), wholeObject->getValue<std::string>("status"));
+        LOK_ASSERT_EQUAL(10, wholeObject->getValue<int>("count"));
 
         socketPoll->joinThread();
     }

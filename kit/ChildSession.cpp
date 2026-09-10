@@ -62,6 +62,7 @@
 #include <wasmapp.hpp>
 #endif
 
+#include <algorithm>
 #include <cassert>
 #include <climits>
 #include <fstream>
@@ -2605,6 +2606,8 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
 
+    const int slidesBefore = getLOKitDocument()->getParts();
+
     // The document reads the staged file within this call, so the pages of it belong to the
     // document from here on and the file itself is wanted no longer.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
@@ -2617,8 +2620,13 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
+    // The slides the document gained are the ones this insert added. An insert naming no
+    // slides takes every page of the staged file, so the count is read off the document
+    // rather than off the command.
+    const int insertedCount = std::max(0, getLOKitDocument()->getParts() - slidesBefore);
+
     return sendTextFrame("slideimport: {\"status\":\"inserted\",\"count\":" +
-                         std::to_string(slides.size()) + '}');
+                         std::to_string(insertedCount) + '}');
 }
 
 namespace
