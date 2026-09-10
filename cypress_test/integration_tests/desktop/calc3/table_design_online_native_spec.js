@@ -32,6 +32,15 @@ describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 		// lays out again as it brings the style of the new table into view.
 		cy.cGet('#tablestyles_design .ui-iconview-entry').should('have.length.greaterThan', 10);
 		helper.processToIdle(win);
+		// The gallery marks the style of the new table and smooth-scrolls the row
+		// holding it into view. That animation continues after core reports idle.
+		// It ends with the marked entry fully inside the strip, so wait for that.
+		cy.cGet('#tablestyles_design .ui-iconview-entry.selected').should(function(entry) {
+			var strip = entry[0].closest('.ui-iconview').getBoundingClientRect();
+			var rect = entry[0].getBoundingClientRect();
+			expect(rect.top).to.be.at.least(strip.top - 1);
+			expect(rect.bottom).to.be.at.most(strip.bottom + 1);
+		});
 	}
 
 	it('the browser-drawn gallery is populated and grouped into families', function() {
