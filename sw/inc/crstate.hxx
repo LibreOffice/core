@@ -106,14 +106,9 @@ enum class SwSPExtendRange : sal_uInt8
 
 struct SwSpecialPos
 {
-    sal_Int32 nCharOfst;
-    sal_Int32 nLineOfst;
-    SwSPExtendRange nExtendRange;
-
-    // #i27615#
-    SwSpecialPos() : nCharOfst(0), nLineOfst(0),
-                     nExtendRange(SwSPExtendRange::NONE)
-    {}
+    sal_Int32 nCharOfst = 0;
+    sal_Int32 nLineOfst = 0;
+    SwSPExtendRange nExtendRange = SwSPExtendRange::NONE;
 };
 
 // CursorTravelling-States (for GetModelPositionForViewPoint)
