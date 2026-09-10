@@ -534,7 +534,7 @@ public:
         NfKeywordTable matches the locale with which the SvNumberFormatter
         instance was created and initialized.
 
-        This function preliminary exists for unit tests and otherwise is
+        This function primarily exists for unit tests and otherwise is
         pretty much useless.
      */
     const NfKeywordTable& GetKeywords(sal_uInt32 nKey);

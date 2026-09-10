@@ -155,7 +155,7 @@ TMList const TMlist[] = {                //      Modules      ModulesNew
 
 // no enum defined for these trans. application has to use impl name to load them
 //  TmItem2 (NumToCharArabic_Indic),    // () (67)
-//  TmItem2 (NumToCharEstern_Arabic_Indic),// () (68)
+//  TmItem2 (NumToCharEastern_Arabic_Indic),// () (68)
 //  TmItem2 (NumToCharIndic),           // () (69)
 //  TmItem2 (NumToCharThai),            // () (70)
   {TransliterationModules(0), TransliterationModulesNew(0),  nullptr}

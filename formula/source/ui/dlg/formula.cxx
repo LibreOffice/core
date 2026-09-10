@@ -1542,7 +1542,7 @@ void FormulaDlg_Impl::UpdateSelection()
         aOrigSelection = m_pTheRefEdit->GetSelection();
     }
 
-    // because its initially hidden, give it its optimal size so clicking the
+    // because it is initially hidden, give it its optimal size so clicking the
     // refbutton has an initial size to work when retro-fitting this to .ui
     m_xEdRef->GetWidget()->set_size_request(m_xEdRef->GetWidget()->get_preferred_size().Width(), -1);
     m_xEdRef->GetWidget()->show();

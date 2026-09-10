@@ -30,16 +30,16 @@
 namespace framework{
 
 /**
-    @short          implement XFrames, XIndexAccess and XElementAccess interfaces as helper for services
+    @short          implements XFrames, XIndexAccess and XElementAccess interfaces as helper for services
     @descr          Use this class as helper for these interfaces. We share mutex and framecontainer with our owner.
                     The framecontainer is a member of it from type "FrameContainer". That means;
                     we have the same information as our owner. In current implementation we use mutex and lock-mechanism
-                    to prevent against compete access. In future we plan support of semaphore!
+                    to prevent concurrent access. In future we plan support of semaphore!
 
     @devstatus      deprecated
 
     @ATTENTION      Don't use this class as direct member - use it dynamically. Do not derive from this class.
-                    We hold a weakreference to our owner not to our superclass.
+                    We hold a weak reference to our owner, not to our superclass.
 */
 class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 {
@@ -47,10 +47,10 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         /**
             @short      standard ctor
-            @descr      These initialize a new instance of this class with all needed information for work.
+            @descr      This initializes a new instance of this class with all needed information for work.
                         We share framecontainer with owner implementation! It's a threadsafe container.
-            @param      xOwner            , reference to our owner. We hold a wekreference to prevent us against cross-references!
-            @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
+            @param      xOwner            , reference to our owner. We hold a weak reference to prevent cross-references!
+            @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weak reference is valid!
         */
          OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
@@ -83,9 +83,9 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         /**
             @short      return list of all applicable frames for given flags
-            @descr      Call these to get a list of all frames, which are match with given search flags.
+            @descr      Call this to get a list of all frames, which match given search flags.
             @param      "nSearchFlag", flags to search right frames.
-            @return     A list of founded frames.
+            @return     A list of found frames.
 
             @onerror    An empty list is returned.
         */
@@ -96,19 +96,19 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
         /**
             @short      get count of all current frames in container
             @descr      This is the beginning of full index-access. With a count you can step over all items in container.
-                        Next call should be getByIndex(). But these mechanism works only, if no lock in container is set!
+                        Next call should be getByIndex(). But this mechanism works only, if no lock in container is set!
 
             @seealso    class FrameContainer
             @seealso    method getByIndex()
             @return     Count of current items in container.
 
-            @onerror    If a lock is set, we return 0 for prevent further access!
+            @onerror    If a lock is set, we return 0 to prevent further access!
         */
         virtual sal_Int32 SAL_CALL getCount() override;
 
         /**
             @short      get specified container item by index
-            @descr      If you called getCount() successful - this method return the specified element as an Any.
+            @descr      If you called getCount() successfully - this method returns the specified element as an Any.
                         You must observe the range from 0 to count-1! Otherwise an IndexOutOfBoundsException is thrown.
 
             @seealso    class FrameContainer
@@ -134,7 +134,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         /**
             @short      get fill state of current container
-            @descr      Call these to get information about, if items exist in container or not.
+            @descr      Call this to get information about, if items exist in container or not.
                         (container-lock is ignored)
             @return     sal_True, if container contains some items.
             @return     sal_False, otherwise.
@@ -147,7 +147,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         /**
             @short      standard destructor
-            @descr      This method destruct an instance of this class and clear some member.
+            @descr      This method destructs an instance of this class and clear some member.
                         This method is protected, because it's not allowed to use this class as a member!
                         You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
         */
@@ -158,7 +158,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @descr      There are two ways to delete an instance of this class.<BR>
                         1) delete with destructor<BR>
                         2) dispose from parent or factory or...<BR>
-                        This method do the same for both ways! It free used memory and release references ...
+                        This method does the same for both ways! It frees used memory and release references ...
 
             @seealso    method dispose() (if it exist!)
             @seealso    destructor ~TaskEnumeration()

@@ -526,7 +526,7 @@ void CGM::ImplDoClass5()
         case 0xf4 : /*set color name - for Pantone support*/ break;
         default: break;
     }
-};
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

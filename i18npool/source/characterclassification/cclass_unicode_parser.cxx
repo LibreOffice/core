@@ -659,7 +659,7 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c, const cclass_Un
                 ParserFlags::CHAR_DONTCARE : (bStart ? ParserFlags::CHAR_WORD : (ParserFlags::CHAR_DONTCARE | ParserFlags::WORD_SEP | ParserFlags::VALUE_SEP) ));
         case U_OTHER_PUNCTUATION:
             // fdo#61754 Let's see (if we are not at the start) if this is midletter
-            // punctuation and allow it in a word if it is similarly to
+            // punctuation and allow it in a word if it is similar to
             // U_NON_SPACING_MARK, for example U+00B7 MIDDLE DOT.
             // tdf#123575 for U+30FB KATAKANA MIDDLE DOT property is not
             // U_WB_MIDLETTER but U_WB_KATAKANA instead, explicitly test that
@@ -802,14 +802,14 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     eState = ssGetWordFirstChar;
                     bQuote = true;
                     postSymbolIndex = nextCharIndex;
-                    nParseTokensType = 0;   // will be taken of first real character
+                    nParseTokensType = 0;   // will be taken from first real character
                     r.TokenType = KParseType::SINGLE_QUOTE_NAME;
                 }
                 else if ( nMask & ParserFlags::CHAR_STRING )
                 {
                     eState = ssGetString;
                     postSymbolIndex = nextCharIndex;
-                    nParseTokensType = 0;   // will be taken of first real character
+                    nParseTokensType = 0;   // will be taken from first real character
                     r.TokenType = KParseType::DOUBLE_QUOTE_STRING;
                 }
                 else if ( nMask & ParserFlags::CHAR_DONTCARE )
@@ -854,7 +854,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if (current == cGroupSep)
                     {
-                        // depending or requested nContTypes, accept only if
+                        // depending on requested nContTypes, accept only if
                         // it is followed by 3 digits
                         sal_Int32 tempIndex(index);
                         sal_uInt32 const nextChar2((tempIndex < rText.getLength()) ? rText.iterateCodePoints(&tempIndex) : 0);

@@ -114,7 +114,7 @@ public:
 
 /**
     @short      standard ctor
-    @descr      It initialize this new instance.
+    @descr      It initializes this new instance.
 
     @param      xContext
                     reference to the uno service manager
@@ -182,7 +182,7 @@ void JobExecutor::disposing(std::unique_lock<std::mutex>& /*rGuard*/) {
     @short  implementation of XJobExecutor interface
     @descr  We use the given event to locate any registered job inside our configuration
             and execute it. Further we control the lifetime of it and suppress
-            shutdown of the office till all jobs was finished.
+            shutdown of the office till all jobs were finished.
 
     @param  sEvent
                 is used to locate registered jobs
@@ -196,7 +196,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
         std::unique_lock g(m_aMutex);
 
         // Optimization!
-        // Check if the given event name exist inside configuration and reject wrong requests.
+        // Check if the given event name exists inside configuration and reject wrong requests.
         // This optimization suppress using of the cfg api for getting event and job descriptions ...
         if (std::find(m_lEvents.begin(), m_lEvents.end(), sEvent) == m_lEvents.end())
             return;
@@ -205,7 +205,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
 
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
-    // filter disabled jobs using it's time stamp values.
+    // filter disabled jobs using its timestamp values.
     std::vector< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
 
     // step over all enabled jobs and execute it
@@ -237,8 +237,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     ::std::vector< JobData::TJob2DocEventBinding > lJobs;
 
     // Optimization!
-    // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization suppress using of the cfg api for getting event and job descriptions.
+    // Check if the given event name exists inside configuration and reject wrong requests.
+    // This optimization suppresses using of the cfg api for getting event and job descriptions.
     // see using of m_lEvents.find() below ...
 
     // retrieve event context from event source
@@ -253,7 +253,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     {
         std::unique_lock g(m_aMutex);
 
-        // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
+        // Special feature: If the events "OnNew" or "OnLoad" occur - we generate our own event "onDocumentOpened".
         if (
             (aEvent.EventName == "OnNew") ||
             (aEvent.EventName == "OnLoad")
@@ -263,7 +263,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
                 JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_OPENED, lJobs);
         }
 
-        // Special feature: If the events "OnCreate" or "OnLoadFinished" occurs - we generate our own event "onDocumentAdded".
+        // Special feature: If the events "OnCreate" or "OnLoadFinished" occur - we generate our own event "onDocumentAdded".
         if (
             (aEvent.EventName == "OnCreate") ||
             (aEvent.EventName == "OnLoadFinished")
@@ -340,7 +340,7 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
     // I'm not interested on changed items :-)
 }
 
-/** @short  the used cfg changes notifier wish to be released in its reference.
+/** @short  the used cfg changes notifier wishes to be released in its reference.
 
     @descr  We close our internal used configuration instance to
             free this reference.
@@ -351,8 +351,8 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
                 the global event broadcaster service. But we don't hold any reference to this service
                 which can or must be released. Because this broadcaster itself is a one instance service
                 too, we can ignore this request. On the other side we must release our internal CFG
-                reference... SOLUTION => check the given event source and react only, if it's our internal
-                hold configuration object!
+                reference... SOLUTION => check the given event source and react only, if it's our internally
+                held configuration object!
  */
 void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent )
 {

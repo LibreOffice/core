@@ -48,10 +48,10 @@ namespace {
     @descr  Such dispatch object will be used by the generic dispatch mechanism if
             a URL "vnd.sun.star.job:alias=<name>" occurs.
             Then an instance of this class will be created and used.
-            This new instance will be called within his method
+            This new instance will be called within its method
             dispatch() or dispatchWithNotification() for executing the
             real job. We do it, control the life cycle of this internal
-            wrapped job and inform any interested listener if it finish.
+            wrapped job and inform any interested listener if it finishes.
  */
 class JobDispatch : public  ::cppu::WeakImplHelper<
                             css::lang::XServiceInfo
@@ -128,7 +128,7 @@ public:
 
 /**
     @short      standard ctor
-    @descr      It initialize this new instance.
+    @descr      It initializes this new instance.
 
     @param      xContext
                     reference to the uno service manager
@@ -151,7 +151,7 @@ JobDispatch::~JobDispatch()
 
 /**
     @short  implementation of XInitialization
-    @descr  A protocol handler can provide this functionality, if it wish to get additional information
+    @descr  A protocol handler can provide this functionality, if it wishes to get additional information
             about the context it runs. In this case the frame reference would be given by the outside code.
 
     @param  lArguments
@@ -182,7 +182,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
 
 /**
     @short  implementation of XDispatchProvider::queryDispatches()
-    @descr  Every protocol handler will be asked for his agreement, if a URL was queried
+    @descr  Every protocol handler will be asked for its agreement, if a URL was queried
             for which this handler is registered. It's the chance for this handler to validate
             the given URL and return a dispatch object (may be itself) or not.
 
@@ -300,7 +300,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 {
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
-    // filter disabled jobs using it's time stamp values.
+    // filter disabled jobs using its timestamp values.
     std::vector< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
 
     css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -428,7 +428,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
 
 /**
     @short  implementation of XDispatch::dispatch()
-    @descr  Because the methods dispatch() and dispatchWithNotification() are different in her parameters
+    @descr  Because the methods dispatch() and dispatchWithNotification() are different in their parameters
             only, we can forward this request to dispatchWithNotification() by using an empty listener!
 
     @param  aURL

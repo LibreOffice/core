@@ -166,7 +166,7 @@ void Hyphenator::ensureLocales()
             aSuppLocales = comphelper::containerToSequence(aLocalesVec);
 
             //! For each dictionary and each locale we need a separate entry.
-            //! If this results in more than one dictionary per locale than (for now)
+            //! If this results in more than one dictionary per locale then (for now)
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
@@ -429,7 +429,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         // pa: fields contain stems resulted by compound word analysis of non-dictionary words
         // hy: fields contain hyphenation data of dictionary (compound) words
         Reference< XSpellAlternatives > xTmpRes;
-        bool bAnalyzed = false; // enough the analyse once the word
+        bool bAnalyzed = false; // enough to analyse once the word
         bool bCompoundHyphenation = true; // try to hyphenate compound words better
         OUString sStems; // processed result of the compound word analysis, e.g. com|pound|word
         sal_Int32 nSuffixLen = 0; // do not remove break points in suffixes

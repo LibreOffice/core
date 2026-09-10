@@ -209,7 +209,7 @@ void ArgInput::Hide()
     }
 }
 
-//Casts the Controls again.
+//Shows the Controls again.
 void ArgInput::Show()
 {
     if (m_pFtArg && m_pBtnFx && m_pEdArg && m_pRefBtn)

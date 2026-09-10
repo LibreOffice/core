@@ -1374,7 +1374,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     FormulaMissingContext* pCtx = (nAlloc < nTokens ? new FormulaMissingContext[nTokens] : &aCtx[0]);
     int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
     int* pOcds = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeDcountStack[0]);
-    // Never go below 0, never use 0, mpFunc always NULL.
+    // Never go below 0, never use 0, mpFunc always nullptr.
     pCtx[0].Clear();
     int nFn = 0;
     int nOcas = 0;

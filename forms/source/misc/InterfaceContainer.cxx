@@ -774,7 +774,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     }
 
 
-    // approveNewElement (no matter if called here or outside) has ensure that all relevant interfaces
+    // approveNewElement (no matter if called here or outside) has ensured that all relevant interfaces
     // exist
 
     // set the name, and add as change listener for the name

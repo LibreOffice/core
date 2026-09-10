@@ -45,9 +45,9 @@ namespace oox::ppt {
 class PPTShape final : public oox::drawingml::Shape
 {
     OUString                    msModelId;              // fallback dgs smartart shape reference
-    ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
-    bool                        mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
-                                                        // placeholdershapes on Slide are displayed always
+    ShapeLocation               meShapeLocation;        // placeholder shapes (mnSubType != 0) on Master are never displayed
+    bool                        mbReferenced;           // placeholder shapes on Layout are displayed only if they are not referenced
+                                                        // placeholder shapes on Slide are always displayed
     oox::drawingml::ShapePtr mpPlaceholder;
     /// Set if spPr tag is non empty for the shape
     bool mbHasNoninheritedShapeProperties;

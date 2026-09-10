@@ -118,7 +118,7 @@ OUString replacePunctuation( const OUString &rStr )
                .replace(u'\u201E', '"')
                .replace(u'\u201F', '"');
 }
-};
+}
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
@@ -164,7 +164,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
         // match is not case-altered, leave case-(in)sensitive to regex engine.
         transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
     }
-    else if ( aSrchPara.searchString.indexOf('\'') > - 1 || aSrchPara.searchString.indexOf('"') > - 1 )
+    else if ( aSrchPara.searchString.indexOf('\'') > -1 || aSrchPara.searchString.indexOf('"') > -1 )
     {
         bSearchApostrophe = true;
         bReplaceApostrophe = isReplacePunctuation(aSrchPara.searchString);
@@ -794,7 +794,7 @@ SearchResult TextSearch::NSrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, c
     return aRet;
 }
 
-SearchResult TextSearch::NSrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/,const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
+SearchResult TextSearch::NSrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;

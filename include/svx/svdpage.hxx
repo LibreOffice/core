@@ -239,7 +239,7 @@ private:
     std::optional<std::vector<unotools::WeakReference<SdrObject>>> mxNavigationOrder;
     bool                mbObjOrdNumsDirty;
     bool                mbRectsDirty;
-    /// This flag is <TRUE/> when the mpNavigation list has been changed but
+    /// This flag is <TRUE/> when the mxNavigationOrder list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.
     bool mbIsNavigationOrderDirty;
 
@@ -458,7 +458,7 @@ protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage();
 
     // Copying of pages is split into two parts: construction and copying of page objects,
-    // because the copying might need access to fully initialized page. CloneSdrPage() is responsible
+    // because the copying might need access to a fully initialized page. CloneSdrPage() is responsible
     // to call lateInit() after copy-construction of a new object. Any initialization in derived
     // classes that needs access to the page objects must be deferred to lateInit. And it must
     // call lateInit() of its parent class.
