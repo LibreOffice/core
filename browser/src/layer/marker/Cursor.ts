@@ -94,7 +94,8 @@ class Cursor {
 		if (this.map._docLayer._docType === 'presentation') {
 			$('.leaflet-interactive').css('cursor', '');
 		} else {
-			$('#document-canvas').css('cursor', '');
+			const canvas = document.getElementById('document-canvas');
+			if (canvas) canvas.style.cursor = '';
 		}
 		if (this.container && this.domAttached) {
 			this.map.getCursorOverlayContainer().removeChild(this.container);
