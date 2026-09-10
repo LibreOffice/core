@@ -1428,20 +1428,22 @@ install-demo-extensions:
 		elif test -f "$$dir/appsscript.json"; then \
 			mkdir -p $(DIST_FOLDER)/extensions/$$id && \
 			cp -r $$dir/. $(DIST_FOLDER)/extensions/$$id/ && \
-			scripts= && \
-			for gs in "$$dir"/*.gs; do \
-				test -f "$$gs" || continue; \
-				name=$$(basename "$$gs") && \
-				scripts="$$scripts$${scripts:+,}\"$$name\""; \
-			done && \
-			sidebar= && \
-			for html in "$$dir"/*.html; do \
-				test -f "$$html" || continue; \
-				sidebar=$$(basename "$$html") && \
-				break; \
-			done && \
-			printf '{"scripts":[%s],"sidebar":"%s"}\n' "$$scripts" "$$sidebar" \
-				> $(DIST_FOLDER)/extensions/$$id/_cool-gas.json && \
+			if test "$(ENABLE_MOBILEAPP)" = true; then \
+				scripts= && \
+				for gs in "$$dir"/*.gs; do \
+					test -f "$$gs" || continue; \
+					name=$$(basename "$$gs") && \
+					scripts="$$scripts$${scripts:+,}\"$$name\""; \
+				done && \
+				sidebar= && \
+				for html in "$$dir"/*.html; do \
+					test -f "$$html" || continue; \
+					sidebar=$$(basename "$$html") && \
+					break; \
+				done && \
+				printf '{"scripts":[%s],"sidebar":"%s"}\n' "$$scripts" "$$sidebar" \
+					> $(DIST_FOLDER)/extensions/$$id/_cool-gas.json; \
+			fi && \
 			ids="$$ids$${ids:+,}\"$$id\""; \
 		fi; \
 	done && \
