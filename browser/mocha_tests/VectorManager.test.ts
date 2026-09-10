@@ -455,4 +455,55 @@ describe('VectorManager', function () {
 		nodeassert.ok(notified > 0, 'listeners hear about the drop');
 		nodeassert.strictEqual(manager.requestPart(0), undefined);
 	});
+
+	// Two views can edit the same text box at once, each with an entry of its
+	// own carrying the same text. Only one of them is drawn: this view's own
+	// where it is one of the two, and otherwise the first.
+	it('draws one text edit entry per edited object', function () {
+		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
+		const response: any = {
+			part: 0,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 100, height: 100, primitives: [] },
+				{ id: 11, textEdit: true, primitives: [] },
+				{
+					id: -2,
+					kind: 'texteditoverlay',
+					parent: 11,
+					viewId: 1,
+					primitives: [hairline('M0 0 L1 1')],
+				},
+				{
+					id: -3,
+					kind: 'texteditoverlay',
+					parent: 11,
+					viewId: 2,
+					primitives: [hairline('M0 0 L2 2'), hairline('M0 0 L3 3')],
+				},
+			],
+		};
+		const originalMap = (app as any).map;
+		try {
+			// This client is view 2, so its own entry is the one drawn.
+			(app as any).map = { _docLayer: { _viewId: 2 } };
+			let manager = new VectorManager();
+			manager.handleVectorPrimitivesResponse(response);
+			let recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, manager.requestPart(0) as any, {
+				editView: true,
+			});
+			nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
+
+			// A view that is not editing the box draws the first entry.
+			(app as any).map = { _docLayer: { _viewId: 7 } };
+			manager = new VectorManager();
+			manager.handleVectorPrimitivesResponse(response);
+			recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, manager.requestPart(0) as any);
+			nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
+		} finally {
+			(app as any).map = originalMap;
+		}
+	});
 });

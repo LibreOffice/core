@@ -2330,10 +2330,14 @@ namespace
 /// zero as its parent.
 constexpr sal_Int64 constPageEntryId = 0;
 
-/// The id of the entry that carries the text of a running text edit. An object's unique id
-/// counts up from 1 and the page is zero, so a negative id can collide with neither.
-constexpr sal_Int64 constTextEditEntryId = -1;
-constexpr sal_uInt64 constTextEditEntryKey = sal_uInt64(-1);
+/// The id of the entry carrying the text of the edit running in the view with the given id.
+/// An object's unique id counts up from 1 and the page is zero, so a negative id collides with
+/// neither. Several views can edit at once, even the same object, so the id comes from the view.
+constexpr sal_Int64 textEditEntryId(sal_Int32 nViewId) { return -1 - sal_Int64(nViewId); }
+constexpr sal_uInt64 textEditEntryKey(sal_Int32 nViewId)
+{
+    return sal_uInt64(textEditEntryId(nViewId));
+}
 
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
@@ -2581,20 +2585,13 @@ void bumpMasterChangeForUsers(
 }
 }
 
-void SdXImpressDocument::notifyTextEditChanged()
+void SdXImpressDocument::notifyTextEditChanged(const SdrObject& rEdited)
 {
     if (!mpDoc || !mpDocShell)
         return;
 
-    ::sd::ViewShell* pViewShell = mpDocShell->GetViewShell();
-    const SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
-    if (!pView || !pView->IsTextEdit())
-        return;
-
-    const SdrObject* pEdited = pView->GetTextEditObject();
     const auto oPart
-        = partAndModeOfPage(pEdited ? static_cast<const SdPage*>(pEdited->getSdrPageFromSdrObject())
-                                    : nullptr);
+        = partAndModeOfPage(static_cast<const SdPage*>(rEdited.getSdrPageFromSdrObject()));
     if (!oPart)
         return;
 
@@ -2915,7 +2912,7 @@ private:
         // While a text edit runs, the object it runs on hides its own text and the entry for the
         // edit carries what has been typed so far. Saying the edit is active is what makes the
         // object hide it, so the text is not drawn twice.
-        aViewInfo.setTextEditActive(editingView(pPage) != nullptr);
+        aViewInfo.setTextEditActive(anyViewIsEditing(pPage));
 
         maViewInformation = aViewInfo;
         maProcessor->setViewInformation2D(aViewInfo);
@@ -3086,24 +3083,67 @@ private:
         for (const SdrObject* pObject : aObjects)
             rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
 
-        // The text of a running edit is last, so it draws over the object it runs on.
-        if (editingView(pPage))
-            rWriter.putSimpleValue(constTextEditEntryId);
+        // The text of a running edit is last, so it draws over the object it runs on. Several
+        // views can be editing at once, so there is one entry for each of them.
+        for (const EditingView& rView : viewsOfDocument(pPage))
+        {
+            if (rView.mpView)
+                rWriter.putSimpleValue(textEditEntryId(rView.mnViewId));
+        }
     }
 
-    /// The view running a text edit on an object of the page, or nothing when none is. An edit
-    /// belongs to one view while the payload is shared, so its text travels to every view of
-    /// the part, as the object it runs on does.
-    SdrObjEditView* editingView(SdPage* pPage) const
+    /// One entry per view of the document, saying which of them is running a text edit on the
+    /// page. A view that is not editing it is named too, so what it last had recorded can be
+    /// forgotten.
+    struct EditingView
     {
-        ::sd::ViewShell* pViewShell
-            = mpModel->GetDocShell() ? mpModel->GetDocShell()->GetViewShell() : nullptr;
-        SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
-        if (!pView || !pView->IsTextEdit())
-            return nullptr;
+        sal_Int32 mnViewId = -1;
+        SdrObjEditView* mpView = nullptr;
+    };
 
-        const SdrObject* pEdited = pView->GetTextEditObject();
-        return pEdited && pEdited->getSdrPageFromSdrObject() == pPage ? pView : nullptr;
+    std::vector<EditingView> viewsOfDocument(SdPage* pPage) const
+    {
+        std::vector<EditingView> aViews;
+        if (!mpModel->GetDocShell())
+            return aViews;
+
+        SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+        while (pShell)
+        {
+            if (pShell->GetObjectShell() == mpModel->GetDocShell())
+            {
+                EditingView aView;
+                aView.mnViewId = sal_Int32(pShell->GetViewShellId().get());
+
+                // The main view shell is the one that edits the slide. An edit in the outline
+                // or the notes pane of the same base is not mirrored here.
+                ::sd::ViewShellBase* pBase = dynamic_cast<::sd::ViewShellBase*>(pShell);
+                std::shared_ptr<::sd::ViewShell> pViewShell
+                    = pBase ? pBase->GetMainViewShell() : nullptr;
+                SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
+
+                // Only an edit running on this page belongs in this page's payload.
+                if (pView && pView->IsTextEdit())
+                {
+                    const SdrObject* pEdited = pView->GetTextEditObject();
+                    if (pEdited && pEdited->getSdrPageFromSdrObject() == pPage)
+                        aView.mpView = pView;
+                }
+
+                aViews.push_back(aView);
+            }
+            pShell = SfxViewShell::GetNext(*pShell, false);
+        }
+
+        return aViews;
+    }
+
+    /// True when any view is running a text edit on the page.
+    bool anyViewIsEditing(SdPage* pPage) const
+    {
+        const std::vector<EditingView> aViews = viewsOfDocument(pPage);
+        return std::any_of(aViews.begin(), aViews.end(),
+                           [](const EditingView& rView) { return rView.mpView != nullptr; });
     }
 
     /// True when the object, or any object inside it when it is a group, has a text edit
@@ -3152,6 +3192,8 @@ private:
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
         aContent.mbTextEdit = hasActiveTextEdit(&rObject);
+        const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+        aContent.mnParentId = pParent ? pParent->GetUniqueID() : 0;
         // The text primitive resolves the automatic color when it is drawn, so the
         // decomposition above reads the same on a light and on a dark page. An object with
         // text is compared against the background it was drawn on, and travels when it moves.
@@ -3221,9 +3263,15 @@ private:
         }
 
         // The text of a running edit, when a keystroke moved it.
-        if (mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode, constTextEditEntryKey,
-                                                sal_uInt64(mnSinceVersion)))
-            return true;
+        for (const EditingView& rView : viewsOfDocument(pPage))
+        {
+            if (mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                    textEditEntryKey(rView.mnViewId),
+                                                    sal_uInt64(mnSinceVersion)))
+            {
+                return true;
+            }
+        }
 
         std::vector<SdrObject*> aObjects;
         collectPaintedObjects(*pPage, aObjects);
@@ -3245,30 +3293,46 @@ private:
     /// The object it runs on hides its own text, so this is what shows what has been typed.
     void writeTextEditEntry(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        SdrObjEditView* pView = editingView(pPage);
-        if (!pView)
-            return;
-
-        // A delta carries the entry only when a keystroke moved the text, so the model change
-        // that follows a pause in the typing adds nothing to it.
-        if (isDelta()
-            && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode, constTextEditEntryKey,
-                                                    sal_uInt64(mnSinceVersion)))
+        for (const EditingView& rView : viewsOfDocument(pPage))
         {
-            return;
+            if (!rView.mpView)
+                continue;
+
+            // A delta carries an entry only when a keystroke moved its text, so the model
+            // change that follows a pause in the typing adds nothing to it.
+            if (isDelta()
+                && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                        textEditEntryKey(rView.mnViewId),
+                                                        sal_uInt64(mnSinceVersion)))
+            {
+                continue;
+            }
+
+            // An edit whose text is empty still gets its entry, with an empty primitive list.
+            // The order names the entry for as long as the edit runs, and a client that holds
+            // the text from before the last deletion replaces it with nothing.
+            const SdrObject* pEdited = rView.mpView->GetTextEditObject();
+            writeEntry(rWriter, textEditEntryId(rView.mnViewId),
+                       pEdited ? pEdited->GetUniqueID() : 0, "texteditoverlay",
+                       textEditContentOf(rView), rView.mnViewId,
+                       pEdited ? std::optional<sal_Int32>(pEdited->GetLayer().get())
+                               : std::nullopt);
         }
-
-        // An edit whose text is empty still gets its entry, with an empty primitive list. The
-        // order names the entry for as long as the edit runs, and a client that holds the text
-        // from before the last deletion replaces it with nothing.
-        const SdXImpressDocument::VectorObjectContent aContent(textEditContent(*pView));
-
-        const SdrObject* pEdited = pView->GetTextEditObject();
-        writeEntry(rWriter, constTextEditEntryId, pEdited ? pEdited->GetUniqueID() : 0,
-                   "texteditoverlay", aContent);
     }
 
-    /// What is written for a running text edit: the text it shows, and where that text sits.
+    /// The content of the entry carrying the view's running edit, laid out once per write. The
+    /// comparison that decides whether the entry travels and the write that follows both read
+    /// it, and laying out a long edit is what a keystroke costs.
+    const SdXImpressDocument::VectorObjectContent& textEditContentOf(const EditingView& rView)
+    {
+        auto aFound = maTextEditContent.find(rView.mnViewId);
+        if (aFound != maTextEditContent.end())
+            return aFound->second;
+
+        auto aAdded = maTextEditContent.emplace(rView.mnViewId, textEditContent(*rView.mpView));
+        return aAdded.first->second;
+    }
+
     SdXImpressDocument::VectorObjectContent textEditContent(SdrObjEditView& rView)
     {
         SdXImpressDocument::VectorObjectContent aContent;
@@ -3276,6 +3340,10 @@ private:
         aContent.maDrawn = aContent.maPrimitives;
         aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
         aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
+        // The entry names the object the edit runs on as its parent, so moving the edit to
+        // another object is a change of the entry.
+        const SdrObject* pEdited = rView.GetTextEditObject();
+        aContent.mnParentId = pEdited ? pEdited->GetUniqueID() : 0;
         return aContent;
     }
 
@@ -3283,15 +3351,17 @@ private:
     /// way a changed object does. An edit that has ended leaves nothing recorded behind it.
     void resolveTextEditEntry(SdPage* pPage)
     {
-        SdrObjEditView* pView = editingView(pPage);
-        if (!pView)
+        for (const EditingView& rView : viewsOfDocument(pPage))
         {
-            mpModel->forgetVectorObject(mnResolvedPage, mnMode, constTextEditEntryKey);
-            return;
-        }
+            const sal_uInt64 nKey = textEditEntryKey(rView.mnViewId);
 
-        mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, constTextEditEntryKey,
-                                           textEditContent(*pView));
+            // A view that stopped editing, or moved to another page, leaves nothing behind.
+            if (!rView.mpView)
+                mpModel->forgetVectorObject(mnResolvedPage, mnMode, nKey);
+            else
+                mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, nKey,
+                                                   textEditContentOf(rView));
+        }
     }
 
     /// The mapping of the unit rectangle onto an upright box, for an entry that has no
@@ -3405,12 +3475,20 @@ private:
     /// rather than by a layer and a name of its own.
     void writeEntry(tools::JsonWriter& rWriter, sal_Int64 nId, sal_uInt64 nParentId,
                     const char* pKind,
-                    const SdXImpressDocument::VectorObjectContent& rContent)
+                    const SdXImpressDocument::VectorObjectContent& rContent,
+                    std::optional<sal_Int32> oViewId = std::nullopt,
+                    std::optional<sal_Int32> oLayer = std::nullopt)
     {
         auto pEntryNode = rWriter.startStruct();
         rWriter.put("id", nId);
         rWriter.put("parent", sal_Int64(nParentId));
         rWriter.put("kind", pKind);
+        // Whose edit it is, so a reader can tell its own from another user's.
+        if (oViewId)
+            rWriter.put("viewId", sal_Int32(*oViewId));
+        // The layer of the object the entry belongs to, so the entry is hidden with it.
+        if (oLayer)
+            rWriter.put("layer", *oLayer);
 
         writeEntryGeometry(rWriter, rContent);
     }
@@ -3449,6 +3527,8 @@ private:
     sal_uInt16 mnResolvedPage = 0;
     drawinglayer::geometry::ViewInformation2D maViewInformation;
     std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
+    /// The content of the text edit entry of each editing view, by view id, for this write.
+    std::unordered_map<sal_Int32, SdXImpressDocument::VectorObjectContent> maTextEditContent;
 };
 
 } // anonymous namespace

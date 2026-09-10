@@ -70,6 +70,15 @@ class VectorManager extends RenderManagerBase {
 		return app.map._docLayer as unknown as cool.CanvasTileLayerInterface;
 	}
 
+	/// The id of the view this client is, or undefined before the document
+	/// reported it or before there is a document at all.
+	private get _ownViewId(): number | undefined {
+		const docLayer = app.map?._docLayer as unknown as
+			| cool.CanvasTileLayerInterface
+			| undefined;
+		return docLayer?._viewId;
+	}
+
 	isVectorRendering(): boolean {
 		return true;
 	}
@@ -131,11 +140,13 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(options?.editView === true);
+		const textEdits = this._textEditEntriesToDraw(data);
 		for (const id of data.order) {
 			const obj = data.objects.get(id);
 			if (!obj) continue;
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
 				continue;
+			if (obj.kind === 'texteditoverlay' && !textEdits.has(id)) continue;
 			if (obj.primitives) {
 				for (const primitive of obj.primitives) {
 					this._renderer.renderPrimitive(context, primitive);
@@ -144,6 +155,28 @@ class VectorManager extends RenderManagerBase {
 			if (options?.editView && obj.emptyPlaceholder && obj.transform)
 				this._renderer.renderPlaceholderFrame(context, obj.transform);
 		}
+	}
+
+	/// The text edit entries to draw, one per edited object: this view's own
+	/// where it has one, otherwise the first in the order. Several views can
+	/// edit one object, and drawing every entry would paint the text twice.
+	private _textEditEntriesToDraw(data: cool.VectorPrimitivesData): Set<number> {
+		const ownViewId = this._ownViewId;
+		const chosen = new Map<number, cool.SlideObject>();
+		for (const id of data.order) {
+			const obj = data.objects.get(id);
+			if (!obj || obj.kind !== 'texteditoverlay') continue;
+			const parent = obj.parent ?? 0;
+			const current = chosen.get(parent);
+			const isOwn = ownViewId !== undefined && obj.viewId === ownViewId;
+			if (!current || (isOwn && current.viewId !== ownViewId))
+				chosen.set(parent, obj);
+		}
+		const ids = new Set<number>();
+		for (const obj of chosen.values()) {
+			if (obj.id !== undefined) ids.add(obj.id);
+		}
+		return ids;
 	}
 
 	/// Request a thumbnail for a preview.

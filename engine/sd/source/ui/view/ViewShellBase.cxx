@@ -81,6 +81,9 @@
 #include <editeng/editview.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <svx/svdedxv.hxx>
 #include <svx/svdobjkind.hxx>
 #include <vcl/EnumContext.hxx>
 #include <tools/svborder.hxx>
@@ -932,10 +935,18 @@ void ViewShellBase::textEditContentChanged()
     if (!mpDocShell)
         return;
 
+    // The edit belongs to this view, so the object it runs on comes from here rather than from
+    // whichever view the document happens to call its current one.
+    std::shared_ptr<ViewShell> pViewShell = GetMainViewShell();
+    const SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
+    const SdrObject* pEdited = pView && pView->IsTextEdit() ? pView->GetTextEditObject() : nullptr;
+    if (!pEdited)
+        return;
+
     rtl::Reference<SdXImpressDocument> xModel(
         dynamic_cast<SdXImpressDocument*>(mpDocShell->GetModel().get()));
     if (xModel)
-        xModel->notifyTextEditChanged();
+        xModel->notifyTextEditChanged(*pEdited);
 }
 
 const SdViewOptions& ViewShellBase::GetViewOptions() const

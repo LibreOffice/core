@@ -108,6 +108,19 @@ protected:
         return std::nullopt;
     }
 
+    /// The master of the first slide, with a placeholder of every kind that takes an area
+    /// name in master view.
+    SdPage* createMasterPlaceholders()
+    {
+        SdPage* pMasterPage = static_cast<SdPage*>(&page(1)->TRG_GetMasterPage());
+        for (PresObjKind eKind : { PresObjKind::Title, PresObjKind::Header, PresObjKind::Footer,
+                                   PresObjKind::DateTime, PresObjKind::SlideNumber })
+        {
+            pMasterPage->CreateDefaultPresObj(eKind);
+        }
+        return pMasterPage;
+    }
+
     /// Add a filled rectangle with a border to the first slide.
     /// rRect is in 1/100 mm.
     void addRectangle(const tools::Rectangle& rRect, Color aFillColor, Color aStrokeColor)
@@ -635,6 +648,128 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObjec
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     CPPUNIT_ASSERT(carriesObject(aDelta, pRect->GetUniqueID()));
     CPPUNIT_ASSERT_EQUAL(nObjectCount, aFull.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextEditEntryNamesItsView)
+{
+    // A view runs at most one text edit and several views can be editing at
+    // once, even the same object, so an entry is named by the view whose edit
+    // it carries rather than by what that edit is running on.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Named"_ustr);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(pObject);
+
+    auto aJson = getVectorPrimitives(u"testTextEditEntryView");
+    const auto oEntry = findEntryOfKind(aJson, "texteditoverlay");
+
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    const sal_Int32 nViewId = sal_Int32(pViewShell->GetViewShellId().get());
+
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(nViewId), oEntry->getInt("viewId").value_or(-1));
+    // Below zero, where no object and no page can reach.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(-1 - nViewId), oEntry->getInt("id").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()), oEntry->getInt("parent").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterTextEditIsServedInMasterView)
+{
+    // A master page is a part of master view, so an edit on one of its objects
+    // travels there: the entry that carries the edit comes with the page, and
+    // a keystroke moves the version of that part. The slide that uses the
+    // master carries no such entry.
+    createBlankDoc();
+    SdPage* pMasterPage = createMasterPlaceholders();
+    SdrObject* pTitle = pMasterPage->GetPresObj(PresObjKind::Title);
+    CPPUNIT_ASSERT(pTitle);
+
+    // The first pull is what marks the model as drawn from.
+    const sal_Int64 nBefore
+        = getVectorPrimitives(u"testMasterTextEditBase", -1, 1).getInt("/version").value_or(-1);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    CPPUNIT_ASSERT(pView->SdrBeginTextEdit(pTitle));
+
+    auto aMaster = getVectorPrimitives(u"testMasterTextEdit", -1, 1);
+    const auto oEntry = findEntryOfKind(aMaster, "texteditoverlay");
+    const sal_Int64 nAtBegin = aMaster.getInt("/version").value_or(-1);
+
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"X"_ustr);
+    const sal_Int64 nAfterKey
+        = getVectorPrimitives(u"testMasterTextEditKey", -1, 1).getInt("/version").value_or(-1);
+
+    auto aSlide = getVectorPrimitives(u"testMasterTextEditSlide");
+    const bool bSlideCarriesEdit = findEntryOfKind(aSlide, "texteditoverlay").has_value();
+
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_MESSAGE("master view carries no entry for the edit", oEntry.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pTitle->GetUniqueID()), oEntry->getInt("parent").value_or(-1));
+    CPPUNIT_ASSERT_GREATER(nBefore, nAtBegin);
+    CPPUNIT_ASSERT_GREATER(nAtBegin, nAfterKey);
+    CPPUNIT_ASSERT(!bSlideCarriesEdit);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEmptyTextEditKeepsItsEntry)
+{
+    // The order names the entry of a running edit for as long as the edit
+    // runs, so the entry is written even when the edit holds no text. A client
+    // that has the text from before a deletion then replaces it with nothing,
+    // rather than keeping it or dropping the part because the order names an
+    // entry it never got.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Gone"_ustr);
+
+    // The first pull is what marks the model as drawn from.
+    const sal_Int64 nBase
+        = getVectorPrimitives(u"testEmptyEditBase").getInt("/version").value_or(-1);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    CPPUNIT_ASSERT(pView->SdrBeginTextEdit(page(1)->GetObj(0)));
+    const sal_Int64 nAtBegin
+        = getVectorPrimitives(u"testEmptyEditBegin").getInt("/version").value_or(-1);
+
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection::All());
+    rEditView.DeleteSelected();
+
+    auto aDelta = getVectorPrimitives(u"testEmptyEditDelta", nAtBegin);
+    // Since before the edit began, so the order the edit added its entry to travels.
+    auto aFull = getVectorPrimitives(u"testEmptyEditSinceBase", nBase);
+    const sal_Int64 nEntryId = -1 - sal_Int64(SfxViewShell::Current()->GetViewShellId().get());
+
+    pView->SdrEndTextEdit();
+
+    const auto oDeltaEntry = findEntryOfKind(aDelta, "texteditoverlay");
+    CPPUNIT_ASSERT_MESSAGE("the delta carries no entry for the emptied edit",
+                           oDeltaEntry.has_value());
+    // What is left of the text is an empty portion, or nothing at all.
+    const auto oPortion = findNodeOfType(*oDeltaEntry, "textSimplePortion"_ostr);
+    CPPUNIT_ASSERT_EQUAL(OString(),
+                         oPortion ? oPortion->getString("text").value_or(OString()) : OString());
+
+    const auto oFullEntry = findEntryOfKind(aFull, "texteditoverlay");
+    CPPUNIT_ASSERT_MESSAGE("the delta since before the edit carries no entry for it",
+                           oFullEntry.has_value());
+    bool bOrdered = false;
+    const size_t nOrderCount = aFull.getSize("/order").value_or(0);
+    for (size_t nIndex = 0; nIndex < nOrderCount; ++nIndex)
+    {
+        if (aFull.getInt(rtl::Concat2View("/order/" + OString::number(sal_Int32(nIndex))))
+                .value_or(0)
+            == nEntryId)
+            bOrdered = true;
+    }
+    CPPUNIT_ASSERT_MESSAGE("the order does not name the entry", bOrdered);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTypingMovesThePartVersionAtOnce)

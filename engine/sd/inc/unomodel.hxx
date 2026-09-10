@@ -65,6 +65,7 @@ namespace com::sun::star::i18n { class XForbiddenCharacters; }
 namespace avmedia { struct MediaTempFile; }
 
 class SdrGrafObj;
+class SdrObject;
 class SdDrawDocument;
 class SdPage;
 class SvxItemPropertySet;
@@ -170,6 +171,9 @@ public:
         /// True while a text edit runs on the object. It is compared along with the rest so
         /// that an edit which ends without changing the text still reaches the client.
         bool mbTextEdit = false;
+        /// The id of the group the object sits in, 0 for an object directly on the page. For
+        /// the entry of a running text edit, the id of the object the edit runs on.
+        sal_uInt64 mnParentId = 0;
         /// The page background the automatic color of the object's text resolved against when
         /// it was written, COL_TRANSPARENT when it has no text. The decomposition stops above
         /// the text and resolves the color only when drawn, so the background is compared too.
@@ -179,8 +183,8 @@ public:
         {
             return maPaintedBox == rOther.maPaintedBox
                    && maTransformation == rOther.maTransformation
-                   && mbTextEdit == rOther.mbTextEdit && maAutoColor == rOther.maAutoColor
-                   && maDrawn == rOther.maDrawn;
+                   && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
+                   && maAutoColor == rOther.maAutoColor && maDrawn == rOther.maDrawn;
         }
     };
 
@@ -221,10 +225,10 @@ public:
     bool recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
                                 const std::vector<sal_uInt64>& rOrder);
 
-    /// A text edit running in a view shows something other than it did. Counts the part's
-    /// version up and tells the views, so the entry carrying the edit travels. No object is
-    /// recorded against, since only that entry changed.
-    void notifyTextEditChanged();
+    /// The text edit running on rEdited shows something other than it did. Tells the views of
+    /// the part it sits on, and the write that follows counts the version up if the text really
+    /// moved. Only the entry carrying the edit is affected, so no object is recorded against.
+    void notifyTextEditChanged(const SdrObject& rEdited);
 
     /// True when the part's master page last changed at a version later
     /// than nSince.

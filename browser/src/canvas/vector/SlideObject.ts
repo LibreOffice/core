@@ -18,11 +18,15 @@ namespace cool {
 		/// "page" for the entry that stands for the slide itself: it is
 		/// drawn first and holds the background, the page fill and the
 		/// master page content, and its box is the slide.
-		/// "texteditoverlay" for the entry that carries the text of a
+		/// "texteditoverlay" for an entry that carries the text of a
 		/// running text edit: it is drawn last, over the object it runs
-		/// on, which hides its own text while the edit runs. Absent for a
-		/// drawing object.
+		/// on, which hides its own text while the edit runs. There is one
+		/// per view that is editing, and two of them can name the same
+		/// object. Absent for a drawing object.
 		kind?: 'page' | 'texteditoverlay';
+		/// Which view's text edit an entry of kind "texteditoverlay"
+		/// carries, so a reader can tell its own from another user's.
+		viewId?: number;
 		/// Id of the group the object sits in, 0 for an object directly
 		/// on the slide. A group's members follow it in the object list
 		/// and draw its content, so a group with members has no
