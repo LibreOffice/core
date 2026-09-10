@@ -80,12 +80,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this._postLoadedBound = this._postLoaded.bind(this);
 		// init messages handlers should be available as soon as possible
 		this.postLoadEnable();
+		this._map.on('wopiprops', this._setWopiProps, this);
 	},
 
 	addHooks: function() {
 		this._map.on('postMessage', this._postMessage, this);
 
-		this._map.on('wopiprops', this._setWopiProps, this);
 		window.L.DomEvent.on(window, 'message', this._postMessageListener, this);
 
 		this._map.on('updateviewslist', function() { this._postViewsMessage('Views_List'); }, this);
@@ -124,7 +124,6 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 		this.postLoadDisable();
 
-		this._map.off('wopiprops', this._setWopiProps, this);
 		window.L.DomEvent.off(window, 'message', this._postMessageListener, this);
 
 		this._map.off('updateviewslist');
@@ -180,8 +179,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.UserCanRename = !!wopiInfo['UserCanRename'];
 		this.EnableShare = !!wopiInfo['EnableShare'];
 		this.UserCanWrite = !!wopiInfo['UserCanWrite'];
-		this.DisablePresentation = wopiInfo['DisablePresentation'];
-		this.PresentationLeader = wopiInfo['PresentationLeader'];
+		this.DisablePresentation = !!wopiInfo['DisablePresentation'];
+		this.PresentationLeader = wopiInfo['PresentationLeader'] || '';
 		this.CommentAvatarUrl = wopiInfo['CommentAvatarUrl'];
 
 		if (this.UserCanWrite && !app.isReadOnly()) // There are 2 places that set the file permissions, WOPI and URI. Don't change permission if URI doesn't allow.

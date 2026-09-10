@@ -1212,6 +1212,17 @@ bool DocumentBroker::download(
 
                 session->setUserId(localfileinfo->getUserId());
                 session->setUserName(localfileinfo->getUsername());
+
+                Object::Ptr wopiInfo = new Object();
+                wopiInfo->set("BaseFileName", localStorage->getFileInfo().getFilename());
+                wopiInfo->set("UserCanWrite", !session->isReadOnly());
+                wopiInfo->set("UserCanNotWriteRelative", true);
+                wopiInfo->set("DisableCopy", false);
+                wopiInfo->set("DisableExport", false);
+                wopiInfo->set("DisablePrint", false);
+                std::ostringstream ossWopiInfo;
+                wopiInfo->stringify(ossWopiInfo);
+                session->sendTextFrame("wopi: " + ossWopiInfo.str());
             }
         }
         else
