@@ -1409,6 +1409,7 @@ $(DIST_FOLDER)/extensions/%: $(srcdir)/extensions/%
 		`ln -sf $(abs_srcdir)/$< $@`; \
 	fi
 
+if ENABLE_DEBUG
 .PHONY: install-demo-extensions
 install-demo-extensions:
 	ids= && \
@@ -1450,6 +1451,7 @@ install-demo-extensions:
 	if test "$(ENABLE_MOBILEAPP)" = true || test "$(ENABLE_QTAPP)" = true; then \
 		printf '[%s]\n' "$$ids" > $(DIST_FOLDER)/extensions/index.json; \
 	fi
+endif
 
 # tsc must compile the .js sources so TypeScript can resolve globals defined in
 # them (e.g. classes in Control.Tooltip.js referenced from .ts). This has to
