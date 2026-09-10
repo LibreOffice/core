@@ -1780,8 +1780,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		// _onDropDown only works for splitbutton or dropdown arrow button
 		// for decorative button we need to manage it via click function and closeDropdown
 		div._onDropDown = function(open) {
-
-			if (JSDialog.IsDropdownButton(id, data.command))
+			// A menu of one entry gets no arrow, so the button itself owns the popup.
+			if (JSDialog.IsDropdownButton(id, data.command) || !arrowbackground)
 				button.setAttribute('aria-expanded', open);
 			else
 				arrowbackground.setAttribute('aria-expanded', open);
