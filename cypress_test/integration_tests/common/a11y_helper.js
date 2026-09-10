@@ -909,6 +909,22 @@ function coolDocumentNodeIn(root) {
 	return found;
 }
 
+/// The DOM id of every element of a DOM tree, keyed by the backend node id that
+/// the accessibility tree reports for it.
+function domIdsIn(root) {
+	const ids = {};
+
+	walkDomTree(root, function (node) {
+		const attributes = node.attributes || [];
+		for (let at = 0; at < attributes.length; at += 2) {
+			if (attributes[at] === 'id' && attributes[at + 1])
+				ids[node.backendNodeId] = attributes[at + 1];
+		}
+	});
+
+	return ids;
+}
+
 /// The accessibility subtree of the one element of a document that matches a
 /// selector.
 function axNodesWithin(documentNodeId, selector) {
@@ -1010,12 +1026,11 @@ function getFocusedAXNode() {
 	});
 }
 
-/**
- * A toolbutton shows it is on with the selected class; what a screen reader is
- * told is the pressed state of its node in the accessibility tree. Assert the
- * two never disagree over a container, reading the tree rather than the
- * attribute the browser built it from.
- */
+/// Every toolbutton of one container that shows it is on, with the selected class,
+/// also announces it, with aria-pressed, and the two never disagree. Each button is
+/// paired with its own node of the accessibility tree, through its DOM id, and the
+/// pressed state of that node is what a screen reader is told. The container has to
+/// be exposed in the tree, since only a shown container has nodes to pair with.
 function assertToggleStatesAgree(win, container, when) {
 	const root = win.document.querySelector(container);
 	expect(root, container + ' exists').to.not.equal(null);
@@ -1025,44 +1040,48 @@ function assertToggleStatesAgree(win, container, when) {
 		function (button) {
 			return {
 				id: button.id,
-				name: (button.getAttribute('aria-label') ||
-					button.textContent || '').trim(),
 				looksPressed: button.classList.contains('selected'),
 			};
 		}).filter(function (button) {
-			return button.name;
+			return button.id;
 		});
 
-	getAXNodes().then(function (nodes) {
-		const byName = {};
-		nodes.forEach(function (node) {
-			if (node.role !== 'button') return;
-			const key = node.name.trim();
-			if (key) byName[key] = node;
+	getDomTree().then(function (root) {
+		return axNodesWithin(coolDocumentNodeIn(root), container).then(function (nodes) {
+			const ids = domIdsIn(root);
+			const byId = {};
+			nodes.forEach(function (node) {
+				if (node.role !== 'button') return;
+				const id = ids[node.backendDOMNodeId];
+				if (id) byId[id] = node;
+			});
+
+			expect(Object.keys(byId), container + ' buttons in the accessibility tree ' + when)
+				.to.not.be.empty;
+
+			const silent = [];
+			const mismatched = [];
+
+			shown.forEach(function (button) {
+				const node = byId[button.id];
+				if (!node) return;
+				const says = node.properties.pressed;
+
+				if (button.looksPressed && says === undefined) {
+					silent.push(button.id);
+				} else if (says !== undefined &&
+						(says === 'true') !== button.looksPressed) {
+					mismatched.push(button.id + ' looks ' +
+						(button.looksPressed ? 'pressed' : 'unpressed') +
+						' but the tree says ' + says);
+				}
+			});
+
+			expect(silent, 'buttons that look pressed and announce nothing ' + when)
+				.to.deep.equal([]);
+			expect(mismatched, 'buttons whose announced state disagrees ' + when)
+				.to.deep.equal([]);
 		});
-
-		const silent = [];
-		const mismatched = [];
-
-		shown.forEach(function (button) {
-			const node = byName[button.name];
-			if (!node) return;
-			const says = node.properties.pressed;
-
-			if (button.looksPressed && says === undefined) {
-				silent.push(button.id + ' (' + button.name + ')');
-			} else if (says !== undefined &&
-					(says === 'true') !== button.looksPressed) {
-				mismatched.push(button.id + ' looks ' +
-					(button.looksPressed ? 'pressed' : 'unpressed') +
-					' but the tree says ' + says);
-			}
-		});
-
-		expect(silent, 'buttons that look pressed and announce nothing ' + when)
-			.to.be.empty;
-		expect(mismatched, 'buttons whose announced state disagrees ' + when)
-			.to.be.empty;
 	});
 }
 

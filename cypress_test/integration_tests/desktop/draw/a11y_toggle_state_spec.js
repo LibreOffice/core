@@ -6,7 +6,9 @@ const a11yHelper = require('../../common/a11y_helper');
 
 // The twin of the writer spec. The toolbuttons are built by the same code, but
 // draw reaches its formatting state another way: through the text of a shape,
-// since it has no body text to select.
+// since it has no body text to select. The shape stays selected while its text
+// is edited, so the notebookbar shows the Shape tab, and the Home tab has to be
+// shown before its buttons can be read from the accessibility tree.
 describe(['tagdesktop'], 'Draw toggle state', { testIsolation: false }, function () {
 	let win;
 
@@ -36,6 +38,8 @@ describe(['tagdesktop'], 'Draw toggle state', { testIsolation: false }, function
 		cy.then(function () {
 			return helper.processToIdle(win);
 		});
+
+		desktopHelper.selectNotebookbarTab('Home');
 	});
 
 	it('a pressed toolbutton announces that it is pressed', function () {
