@@ -2105,6 +2105,10 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::Lay :
         case PortionType::Text :
         case PortionType::Para :
+        // index, reference and metadata marks
+        case PortionType::Tox:
+        case PortionType::Ref:
+        case PortionType::Meta:
             {
                 // Check for Link:
                 if( pInetFormatAttr )

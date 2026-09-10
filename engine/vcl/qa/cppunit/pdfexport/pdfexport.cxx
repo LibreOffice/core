@@ -3347,6 +3347,151 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkSpanWraps)
     }
 }
 
+// ISO 14289-1 7.18.5: every link annotation is an OBJR kid of a Link structure element
+void AssertLinkAnnotsAreTagged(vcl::filter::PDFDocument& rDocument, const size_t nLinks,
+                               const size_t nAnnots)
+{
+    std::vector<vcl::filter::PDFObjectElement*> aPages = rDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(nAnnots, pAnnots->GetElements().size());
+
+    // what the Link structure elements claim as their annotations
+    size_t nLinkSE(0);
+    std::set<vcl::filter::PDFObjectElement*> aKidAnnots;
+    for (const auto& rDocElement : rDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "StructElem" || !pS || pS->GetValue() != "Link")
+            continue;
+        ++nLinkSE;
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pKids);
+        for (const auto pElement : pKids->GetElements())
+        {
+            auto pObjR = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement);
+            if (!pObjR)
+                continue;
+            auto pOType
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->LookupElement("Type"_ostr));
+            CPPUNIT_ASSERT(pOType);
+            // a kid on another page is an MCR dictionary, not an OBJR
+            if (pOType->GetValue() == "MCR")
+                continue;
+            CPPUNIT_ASSERT_EQUAL("OBJR"_ostr, pOType->GetValue());
+            auto pRef
+                = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->LookupElement("Obj"_ostr));
+            CPPUNIT_ASSERT(pRef);
+            auto pKidAnnot = pRef->LookupObject();
+            CPPUNIT_ASSERT_MESSAGE("an OBJR must resolve to an annotation", pKidAnnot);
+            CPPUNIT_ASSERT_MESSAGE("an annotation is claimed by more than one OBJR",
+                                   aKidAnnots.insert(pKidAnnot).second);
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(nLinks, nLinkSE);
+    CPPUNIT_ASSERT_EQUAL(nAnnots, aKidAnnots.size());
+
+    for (const auto pElement : pAnnots->GetElements())
+    {
+        auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pAnnotRef);
+        auto pAnnot = pAnnotRef->LookupObject();
+        CPPUNIT_ASSERT(pAnnot);
+        CPPUNIT_ASSERT_MESSAGE("every annotation needs a StructParent",
+                               pAnnot->Lookup("StructParent"_ostr));
+        CPPUNIT_ASSERT_MESSAGE("every annotation needs an OBJR in a Link",
+                               aKidAnnots.contains(pAnnot));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf167121)
+{
+    loadFromFile(u"LinkWithIndexMark.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // an index mark over one of three links must not orphan that link's annotation
+    AssertLinkAnnotsAreTagged(aDocument, /*nLinks=*/3, /*nAnnots=*/3);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithRefMark)
+{
+    loadFromFile(u"LinkWithRefMark.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // a reference mark shades a run the way an index mark does, and lost the tag with it
+    AssertLinkAnnotsAreTagged(aDocument, /*nLinks=*/3, /*nAnnots=*/3);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithMeta)
+{
+    loadFromFile(u"LinkWithMeta.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // an RDF metadata field shades a run the same way, and lost the tag with it
+    AssertLinkAnnotsAreTagged(aDocument, /*nLinks=*/3, /*nAnnots=*/3);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testIndexMarkWithSpan)
+{
+    loadFromFile(u"IndexMarkWithSpan.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // the tag a marked run needs is not always a Link: this one carries the language
+    vcl::filter::PDFObjectElement* pSpanSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Span")
+        {
+            CPPUNIT_ASSERT(!pSpanSE);
+            pSpanSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pSpanSE);
+
+    auto pSpanLang
+        = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pSpanSE->Lookup("Lang"_ostr));
+    CPPUNIT_ASSERT(pSpanLang);
+    CPPUNIT_ASSERT_EQUAL("de-DE"_ostr, pSpanLang->GetValue());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testRubyWithSpan)
 {
     cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
