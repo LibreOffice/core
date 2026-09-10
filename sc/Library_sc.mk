@@ -225,7 +225,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/address \
     sc/source/core/tool/adiasync \
     sc/source/core/tool/appoptio \
-    sc/source/core/tool/arraysumSSE2 \
     sc/source/core/tool/autoform \
     sc/source/core/tool/calcconfig \
     sc/source/core/tool/callable \
@@ -310,6 +309,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/userlist \
     sc/source/core/tool/viewopti \
     sc/source/core/tool/webservicelink \
+    sc/source/core/tool/x86-64/arraysumSSE2 \
+    sc/source/core/tool/x86-64/arraysumAVX \
     sc/source/filter/xml/datastreamimport \
     sc/source/filter/xml/SparklineGroupsExport \
     sc/source/filter/xml/SparklineGroupsImportContext \

@@ -25,6 +25,11 @@ namespace sc::op
 // Whenever we raise baseline to e.g. AVX, this may get
 // replaced with AVX code (get it from mentioned git commit).
 // Do it similarly with other platforms.
+#if defined(__AVX__)
+#define SC_USE_AVX 1
+KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent);
+#endif
+
 #if defined(X86_64) || (defined(INTEL) && defined(_WIN32))
 #define SC_USE_SSE2 1
 KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
