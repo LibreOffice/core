@@ -1005,8 +1005,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.2.3.tar.gz",
-          "sha256": "2d0c9b407019d4744a57a2771ec42bf97685f082601e075237a04ee6c6b7e8e3"
+          "url": "https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.3.3.tar.gz",
+          "sha256": "95b178ea49bf1f6cd2bb0507a9246283850348b8534449f8af7f0cd3aeb690f9"
         }
       ]
     }
