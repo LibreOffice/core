@@ -1744,6 +1744,28 @@ std::string boolToString(const bool value)
 {
     return value ? std::string("true"): std::string("false");
 }
+
+/// The frame ancestors the admin has configured, from the obsolete net.frame_ancestors entry
+/// and from any frame-ancestors sources in net.content_security_policy.
+std::string getConfiguredFrameAncestors(const Poco::Util::AbstractConfiguration& config)
+{
+    std::string configFrameAncestor = config.getString("net.frame_ancestors", "");
+    if (!configFrameAncestor.empty())
+    {
+        static bool warned = false;
+        if (!warned)
+        {
+            warned = true;
+            LOG_WRN("The config entry net.frame_ancestors is obsolete and will be removed in the "
+                    "future. Please add 'frame-ancestors "
+                    << configFrameAncestor << ";' in the net.content_security_policy config");
+        }
+    }
+
+    const ContentSecurityPolicy configCSP(config.getString("net.content_security_policy", ""));
+    configFrameAncestor += configCSP.getDirective("frame-ancestors");
+    return configFrameAncestor;
+}
 }
 
 FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::preprocessFile(
@@ -2004,27 +2026,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
         csp.appendDirectiveUrl("img-src", commentAvatarUrl);
 
     // Frame ancestors: Allow coolwsd host, wopi host and anything configured.
-    // This is deprecated.
-    std::string configFrameAncestor = config.getString("net.frame_ancestors", "");
-    if (!configFrameAncestor.empty())
-    {
-        static bool warned = false;
-        if (!warned)
-        {
-            warned = true;
-            LOG_WRN("The config entry net.frame_ancestors is obsolete and will be removed in the "
-                    "future. Please add 'frame-ancestors "
-                    << configFrameAncestor << ";' in the net.content_security_policy config");
-        }
-    }
-
-    ContentSecurityPolicy configCSP(config.getString("net.content_security_policy", ""));
-    // Get the frame ancestors out of the configured CSP.
-    auto configCspFrameAncestors = configCSP.getDirective("frame-ancestors");
-    if (!configCspFrameAncestors.empty())
-    {
-        configFrameAncestor += configCspFrameAncestors;
-    }
+    const std::string configFrameAncestor = getConfiguredFrameAncestors(config);
 
     std::string frameAncestors = configFrameAncestor;
     Poco::URI uriHost(cnxDetails.getWebSocketUrl());
@@ -2112,7 +2114,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     }
 #endif // !MOBILEAPP
 
-    csp.merge(configCSP);
+    csp.merge(config.getString("net.content_security_policy", ""));
 
     // Append CSP to response headers too
     httpResponse.add("Content-Security-Policy", csp.generate());
@@ -3316,6 +3318,48 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     csp.appendDirective("worker-src", "'self' blob:");
 
     csp.merge(config.getString("net.content_security_policy", ""));
+
+    // The integrator embeds this page in an iframe, so a configured frame-ancestors list has to
+    // be widened with coolwsd's own host and the integrator's host, the way preprocessFile()
+    // widens it for the document page. Pinning frame-ancestors to one integrator would
+    // otherwise block the settings iframe of every other one, this host included. Where the
+    // config names no frame ancestor the page carries no frame-ancestors directive at all and
+    // stays framable by any integrator, so there is nothing to widen.
+    std::string frameAncestors = getConfiguredFrameAncestors(config);
+    if (!frameAncestors.empty())
+    {
+        const Poco::URI uriHost(cnxDetails.getWebSocketUrl());
+        const std::string coolwsdHost = uriHost.getHost();
+        if (!coolwsdHost.empty())
+            frameAncestors += ' ' + coolwsdHost + ":*";
+
+        // The integrator posts the base URL of its own settings endpoint, which names the host
+        // the settings iframe is framed from.
+        const std::string settingBaseUrl = form.get("wopi_setting_base_url", "");
+        if (!settingBaseUrl.empty())
+        {
+            try
+            {
+                const Poco::URI uriSettingBase(settingBaseUrl);
+                const std::string integratorHost = uriSettingBase.getHost();
+                if (!integratorHost.empty() && net::isValidHost(integratorHost) &&
+                    integratorHost != coolwsdHost)
+                {
+                    frameAncestors += ' ' + integratorHost + ":*";
+                    LOG_TRC("Picking frame ancestor from wopi_setting_base_url: "
+                            << integratorHost);
+                }
+            }
+            catch (const Poco::SyntaxException&)
+            {
+                LOG_WRN("Not taking a frame ancestor from wopi_setting_base_url ["
+                        << settingBaseUrl << "]: it is not a valid URI");
+            }
+        }
+
+        LOG_TRC("Allowed frame ancestors:" << frameAncestors);
+        csp.appendDirective("frame-ancestors", frameAncestors);
+    }
 
     response.add("Content-Security-Policy", csp.generate());
     response.set("Last-Modified", Util::getHttpTimeNow());

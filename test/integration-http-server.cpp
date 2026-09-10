@@ -40,6 +40,7 @@ class HTTPServerTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCoolGet);
     CPPUNIT_TEST(testCoolPostPoco);
     CPPUNIT_TEST(testCoolPost);
+    CPPUNIT_TEST(testIntegratorSettingsUnrestrictedFraming);
     CPPUNIT_TEST(testScriptsAndLinksGet);
     CPPUNIT_TEST(testScriptsAndLinksPost);
     CPPUNIT_TEST(testConvertTo);
@@ -56,6 +57,7 @@ class HTTPServerTest : public CPPUNIT_NS::TestFixture
     void testCoolGet();
     void testCoolPostPoco();
     void testCoolPost();
+    void testIntegratorSettingsUnrestrictedFraming();
     void testScriptsAndLinksGet();
     void testScriptsAndLinksPost();
     void testConvertTo();
@@ -276,6 +278,33 @@ void HTTPServerTest::assertHTTPFilesExist(const Poco::URI& uri, const std::regex
     }
 
     LOK_ASSERT_MESSAGE("No match found", found);
+}
+
+/// With no frame ancestor named in the config, the integrator settings page carries no
+/// frame-ancestors directive at all and any integrator may frame it. Only a configured list is
+/// widened with coolwsd's own host and the integrator's host, so this default has to stay
+/// unrestricted.
+void HTTPServerTest::testIntegratorSettingsUnrestrictedFraming()
+{
+    constexpr std::string_view testname = __func__;
+
+    http::Request httpRequest("/browser/dist/adminIntegratorSettings.html",
+                              http::Request::VERB_POST);
+    httpRequest.setBody("wopi_setting_base_url=https%3A%2F%2Fintegrator.example.org%2Fsettings",
+                        "application/x-www-form-urlencoded");
+
+    std::shared_ptr<http::Session> httpSession = http::Session::create(_uri.toString());
+    const std::shared_ptr<const http::Response> httpResponse =
+        httpSession->syncRequest(httpRequest, http::Session::getDefaultTimeout());
+
+    LOK_ASSERT_EQUAL(http::StatusCode::OK, httpResponse->statusLine().statusCode());
+
+    const std::string csp =
+        httpResponse->header().get("Content-Security-Policy", std::string());
+    LOK_ASSERT_MESSAGE("The settings page must not restrict framing when the config names no "
+                       "frame ancestor; its CSP was [" +
+                           csp + ']',
+                       csp.find("frame-ancestors") == std::string::npos);
 }
 
 void HTTPServerTest::testScriptsAndLinksGet()
