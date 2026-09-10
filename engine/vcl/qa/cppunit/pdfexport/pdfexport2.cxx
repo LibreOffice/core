@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <string_view>
+#include <unordered_map>
 
 #include <config_fonts.h>
 #include <config_vclplug.h>
@@ -2055,6 +2056,107 @@ OString GetCellType(vcl::filter::PDFElement* pElement)
     auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pCell->Lookup("S"_ostr));
     CPPUNIT_ASSERT(pS);
     return pS->GetValue();
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166963)
+{
+    // Takes about two minutes locally, most of it in the PDFDocument below, which rescans its
+    // element list once per object. Disable the test if that costs CI too much.
+    //
+    // A table with more rows than ncMaxPDFArraySize, so its kid list has to be split into Div
+    // containers, and with a repeated heading row, which is emitted as a NonStructElement: that
+    // gives the Table element more children than kids, which is what the split used to mishandle.
+    utl::TempFileNamed aSource(u"tdf166963", true, u".fodt");
+    aSource.EnableKillingFile();
+    SvStream* pSource = aSource.GetStream(StreamMode::WRITE | StreamMode::TRUNC);
+    pSource->WriteOString(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document"
+        " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+        " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\""
+        " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
+        " xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\""
+        " xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\""
+        " xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\""
+        " office:version=\"1.3\""
+        " office:mimetype=\"application/vnd.oasis.opendocument.text\">"
+        "<office:font-face-decls><style:font-face"
+        " style:name=\"Liberation Serif\""
+        " svg:font-family=\"&apos;Liberation Serif&apos;\"/>"
+        "</office:font-face-decls>"
+        "<office:styles><style:default-style style:family=\"paragraph\">"
+        "<style:text-properties style:font-name=\"Liberation Serif\""
+        " fo:font-size=\"6pt\" fo:language=\"en\" fo:country=\"US\"/>"
+        "</style:default-style></office:styles>"
+        "<office:body><office:text><table:table table:name=\"T\">"
+        "<table:table-column/>"
+        "<table:table-header-rows><table:table-row><table:table-cell"
+        " office:value-type=\"string\"><text:p>h</text:p></table:table-cell>"
+        "</table:table-row></table:table-header-rows>");
+    for (int i = 0; i < 8300; ++i)
+        pSource->WriteOString("<table:table-row><table:table-cell office:value-type=\"string\">"
+                              "<text:p>r</text:p></table:table-cell></table:table-row>");
+    pSource->WriteOString("</table:table></office:text></office:body></office:document>");
+    aSource.CloseStream();
+
+    loadFromURL(aSource.GetURL());
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // which element actually lists each structure element as its kid
+    std::unordered_map<vcl::filter::PDFObjectElement*, vcl::filter::PDFObjectElement*> aLister;
+    std::vector<vcl::filter::PDFObjectElement*> aElements;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType)
+            continue;
+        const bool bRoot(pType->GetValue() == "StructTreeRoot");
+        if (!bRoot && pType->GetValue() != "StructElem")
+            continue;
+        if (!bRoot)
+            aElements.push_back(pObject);
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr));
+        if (!pKids)
+            continue;
+        for (const auto pKid : pKids->GetElements())
+        {
+            auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid);
+            if (!pRef)
+                continue;
+            CPPUNIT_ASSERT_MESSAGE("a structure element is the kid of two elements",
+                                   aLister.emplace(pRef->LookupObject(), pObject).second);
+        }
+    }
+    // a generated container holds exactly ncMaxPDFArraySize kids; without one the kid list
+    // never overflowed and the document proves nothing
+    size_t nFullContainers(0);
+    for (const auto pElement : aElements)
+    {
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pElement->Lookup("S"_ostr));
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pElement->Lookup("K"_ostr));
+        if (pS && pS->GetValue() == "Div" && pKids && pKids->GetElements().size() == 8191)
+            ++nFullContainers;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nFullContainers);
+
+    for (const auto pElement : aElements)
+    {
+        auto pParent = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement->Lookup("P"_ostr));
+        CPPUNIT_ASSERT(pParent);
+        CPPUNIT_ASSERT_MESSAGE("a structure element that nothing lists as its kid",
+                               aLister.contains(pElement));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("a structure element claims a parent that does not list it",
+                                     aLister.at(pElement), pParent->LookupObject());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173194)
