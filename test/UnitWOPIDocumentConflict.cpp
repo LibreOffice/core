@@ -710,12 +710,115 @@ public:
     }
 };
 
+class UnitPutFileNoJSON : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitUploaded,
+               WaitSecondModifiedStatus, WaitSecondUploaded, Done)
+    _phase;
+
+public:
+    UnitPutFileNoJSON()
+        : WopiTestServer("UnitPutFileNoJSON")
+        , _phase(Phase::Load)
+    {
+        _dontSendJSONOnPutFile = true;
+        setTimeout(60s);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        // Modify the view so the next save uploads and advances the stored time.
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=97 key=0");
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+
+        if (_phase == Phase::WaitModifiedStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUploaded);
+            WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else if (_phase == Phase::WaitSecondModifiedStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitSecondUploaded);
+            WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else
+        {
+            LOK_ASSERT_MESSAGE("state is neither Phase::WaitModifiedStatus nor Phase::WaitSecondModifiedStatus", false);
+        }
+
+        // A modified notification reaches every modification, so this fires more than once
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: success=" << success);
+
+        if (_phase == Phase::WaitUploaded)
+        {
+            LOK_ASSERT_MESSAGE("Upload should be successful", success);
+            TRANSITION_STATE(_phase, Phase::WaitSecondModifiedStatus);
+
+            // Modify the view again so the next save uploads and advances the stored time.
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=97 key=0");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
+            return;
+        }
+        else if (_phase == Phase::WaitSecondUploaded)
+        {
+            LOK_ASSERT_MESSAGE("Second upload should be successful", success);
+            TRANSITION_STATE(_phase, Phase::Done);
+            return;
+        }
+
+        LOK_ASSERT_MESSAGE("state is neither Phase::WaitUploaded nor Phase::WaitSecondUploaded",
+                           (_phase != Phase::WaitUploaded) && (_phase != Phase::WaitSecondUploaded));
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket.");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitUploaded:
+            case Phase::WaitSecondModifiedStatus:
+            case Phase::WaitSecondUploaded:
+                break;
+            case Phase::Done:
+                passTest("No conflict triggered with an empty JSON reply.");
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[6]{ new UnitConflictRecoveryTimeout(), new UnitWOPIDocumentConflict(),
+    return new UnitBase*[7]{ new UnitConflictRecoveryTimeout(), new UnitWOPIDocumentConflict(),
                              new UnitConflictAfterTimeoutSuccess(),
                              new UnitConflictAfterTimeoutFailure(),
-                             new UnitWOPIStaleCheckFileInfo(), nullptr };
+                             new UnitWOPIStaleCheckFileInfo(),
+                             new UnitPutFileNoJSON(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

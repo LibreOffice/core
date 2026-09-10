@@ -1052,7 +1052,14 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
             {
                 // An empty payload is valid.
                 setLastModifiedTimeUnSafe();
-                LOG_DBG("Invalid or missing JSON in " << wopiLog << " HTTP_OK response. Expected json object with a LastModifiedTime value, marking LastModifiedTime as unsafe.");
+                if (!origResponseString.empty())
+                {
+                    LOG_WRN("Invalid JSON in " << wopiLog << " HTTP_OK response. Expected JSON object with a LastModifiedTime value, marking LastModifiedTime as unsafe.");
+                }
+                else
+                {
+                    LOG_DBG("Empty response in " << wopiLog << " HTTP_OK response. Marking LastModifiedTime as unsafe.");
+                }
             }
         }
         else if (details.httpResponseCode == http::StatusCode::PayloadTooLarge)
