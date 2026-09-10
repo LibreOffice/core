@@ -2680,6 +2680,62 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testFooterNoWrapObject)
     CPPUNIT_ASSERT(!isFlyAboveText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15691_headerTextWrapsAroundImage)
+{
+    // Two header paragraphs, with a picture anchored in the first one. It is tall enough to
+    // reach into the second paragraph. The first file wraps the picture on both sides, the
+    // second one on its largest side only, which arrives as WrapTextMode_DYNAMIC and only
+    // settles on a side once the line is laid out.
+    createSwDoc("Cool15691_headerTextWrapsAroundImage.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/root/page/header/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/header/txt[1]/anchored/fly", 1);
+
+    // Without the fix the header text kept the whole line for itself and ran over the
+    // picture: neither paragraph had a fly portion to step over it. The picture is 4cm
+    // wide, so the gap it leaves in a line is at least that.
+    for (int i = 1; i <= 2; ++i)
+    {
+        const OString aLine = "/root/page/header/txt[" + OString::number(i)
+                              + "]/SwParaPortion/SwLineLayout[1]/"
+                                "SwFixPortion[@type='PortionType::Fly']";
+        const sal_Int32 nGap = getXPath(pXmlDoc, aLine, "width").toInt32();
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Paragraph " + OString::number(i) + ", gap " + OString::number(nGap)).getStr(),
+            nGap >= 2268);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15691_headerTextWrapsAroundImageLargest)
+{
+    // Two header paragraphs, with a picture anchored in the first one. It is tall enough to
+    // reach into the second paragraph. The first file wraps the picture on both sides, the
+    // second one on its largest side only, which arrives as WrapTextMode_DYNAMIC and only
+    // settles on a side once the line is laid out.
+    createSwDoc("Cool15691_headerTextWrapsAroundImageLargest.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/root/page/header/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/header/txt[1]/anchored/fly", 1);
+
+    // Without the fix the header text kept the whole line for itself and ran over the
+    // picture: neither paragraph had a fly portion to step over it. The picture is 4cm
+    // wide, so the gap it leaves in a line is at least that.
+    for (int i = 1; i <= 2; ++i)
+    {
+        const OString aLine = "/root/page/header/txt[" + OString::number(i)
+                              + "]/SwParaPortion/SwLineLayout[1]/"
+                                "SwFixPortion[@type='PortionType::Fly']";
+        const sal_Int32 nGap = getXPath(pXmlDoc, aLine, "width").toInt32();
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Paragraph " + OString::number(i) + ", gap " + OString::number(nGap)).getStr(),
+            nGap >= 2268);
+    }
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
