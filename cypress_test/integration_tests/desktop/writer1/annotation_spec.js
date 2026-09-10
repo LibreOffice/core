@@ -1383,4 +1383,25 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		cy.getFrameWindow().then(function(win) { win.app.sectionContainer.getSectionWithName('scroll').scrollVerticalWithOffset(10); });
 		cy.cGet('#comment-container-1').should('exist').should('not.have.class', 'annotation-active');
 	})
+
+	it('Keep full view comment on scroll', function() {
+		// Given a full-view comment in a document:
+		desktopHelper.insertComment('test comment');
+		cy.cGet('#comment-container-1').should('exist');
+		cy.cGet('#comment-container-1').click();
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-active');
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Open in full view').click();
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-pop-up');
+
+		// When scrolling:
+		cy.getFrameWindow().then(function(win) { win.app.sectionContainer.getSectionWithName('scroll').scrollVerticalWithOffset(10); });
+
+		// Then make sure the comment is still in full-view:
+		// Without the accompanying fix in place, this test would have failed with:
+		// AssertionError: Timed out retrying after 60000ms: expected '<div#comment-container-1.cool-annotation.cool-annotation-collapsed-show>' to have class 'annotation-active'
+		// i.e. the annotation's active state was lost for a full-view comment on scroll.
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-active');
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-pop-up');
+	})
 });

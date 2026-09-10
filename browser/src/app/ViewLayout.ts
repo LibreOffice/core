@@ -921,6 +921,13 @@ class ViewLayoutBase {
 		) as cool.CommentSection;
 
 		if (commentSection && commentSection.sectionProperties.selectedComment) {
+			if (
+				commentSection.isShownBig(
+					commentSection.sectionProperties.selectedComment,
+				)
+			)
+				// Deselecting the comment would also close its full-view.
+				return;
 			commentSection.unselect();
 		}
 	}
