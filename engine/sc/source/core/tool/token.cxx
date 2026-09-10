@@ -1553,7 +1553,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 ;
         }
     }
-    else if (ocStartUnaryOperators <= eOp && eOp < ocStopUnaryOperators)
+    else if (isBinaryOperatorOpCode(eOp) || isUnaryOperatorOpCode(eOp))
     {
         if (ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
             ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
