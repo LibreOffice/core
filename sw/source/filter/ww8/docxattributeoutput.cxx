@@ -2677,7 +2677,7 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
         }
 
         // Store databindings data for later writing to corresponding XMLs
-        OUString sPrefixMapping, sXpath;
+        OUString sPrefixMapping, sXpath, sStoreItemID;
         for (const auto& rProp : aGrabBagSdt)
         {
             if (rProp.Name == "ooxml:CT_SdtPr_dataBinding")
@@ -2690,6 +2690,8 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
                         sPrefixMapping = rDBProp.Value.get<OUString>();
                     else if (rDBProp.Name == "ooxml:CT_DataBinding_xpath")
                         sXpath = rDBProp.Value.get<OUString>();
+                    else if (rDBProp.Name == "ooxml:CT_DataBinding_storeItemID")
+                        sStoreItemID = rDBProp.Value.get<OUString>();
                 }
             }
         }
@@ -2697,7 +2699,7 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
         if (sXpath.getLength())
         {
             // Given xpath is sufficient
-            m_rExport.AddSdtData(sPrefixMapping, sXpath, sValue);
+            m_rExport.AddSdtData(sPrefixMapping, sXpath, sStoreItemID, sValue);
         }
     }
 
@@ -2911,7 +2913,8 @@ void DocxAttributeOutput::WriteContentControlStart()
                 0
             };
             aSnippet = comphelper::string::removeAny(aSnippet, aForbidden);
-            m_rExport.AddSdtData(rPrefixMapping, rXpath, aSnippet);
+            m_rExport.AddSdtData(rPrefixMapping, rXpath,
+                                 m_pContentControl->GetDataBindingStoreItemID(), aSnippet);
         }
     }
 
