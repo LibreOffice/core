@@ -107,7 +107,9 @@ class NotebookbarBase extends JSDialogComponent {
 		let toolbar = window.L.DomUtil.get('toolbar-up');
 		if (toolbar) toolbar.outerHTML = '';
 		// create toolbar from template
-		$('#toolbar-logo').after(this.map.toolbarUpTemplate.cloneNode(true));
+		const toolbarLogo = document.getElementById('toolbar-logo');
+		if (toolbarLogo)
+			toolbarLogo.after(this.map.toolbarUpTemplate.cloneNode(true));
 		toolbar = window.L.DomUtil.get('toolbar-up');
 
 		this.container = window.L.DomUtil.create(
