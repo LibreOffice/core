@@ -1717,7 +1717,8 @@ void SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropert
             }
             catch (beans::UnknownPropertyException&)
             {
-                DBG_UNHANDLED_EXCEPTION("svx");
+                // ignore, as above: various code likes to opportunistically set properties
+                // on objects that don't support those properties
             }
             catch (cpo::uno::Exception&)
             {
