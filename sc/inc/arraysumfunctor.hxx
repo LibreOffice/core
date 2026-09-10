@@ -52,7 +52,9 @@ static inline KahanSum executeUnrolled(size_t& i, size_t nSize, const double* pC
   */
 static inline KahanSum executeFast(size_t& i, size_t nSize, const double* pCurrent)
 {
-#if SC_USE_SSE2
+#if SC_USE_AVX
+    return executeAVX(i, nSize, pCurrent);
+#elif SC_USE_SSE2
     return executeSSE2(i, nSize, pCurrent);
 #else
     return executeUnrolled(i, nSize, pCurrent);
