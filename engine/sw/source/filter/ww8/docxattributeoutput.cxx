@@ -8558,22 +8558,132 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
         m_pSerializer->singleElementNS(XML_w, XML_effect, FSNS(XML_w, XML_val), "none");
 }
 
+namespace
+{
+/// One MS Office character shading: the value of w:shd, and the share of the shading color, in
+/// per mille, that it paints over the fill color. Keep this the inverse of the shading the
+/// import reads in CellColorHandler.
+struct ShadingPatternValue
+{
+    sal_Int32 nShadingPattern;
+    std::u16string_view aValue;
+    sal_Int32 nShadingShare;
+};
+
+constexpr ShadingPatternValue aShadingPatternValues[] = {
+    { ShadingPattern::SOLID, u"solid", 1000 },
+    { ShadingPattern::PCT5, u"pct5", 50 },
+    { ShadingPattern::PCT10, u"pct10", 100 },
+    { ShadingPattern::PCT20, u"pct20", 200 },
+    { ShadingPattern::PCT25, u"pct25", 250 },
+    { ShadingPattern::PCT30, u"pct30", 300 },
+    { ShadingPattern::PCT40, u"pct40", 400 },
+    { ShadingPattern::PCT50, u"pct50", 500 },
+    { ShadingPattern::PCT60, u"pct60", 600 },
+    { ShadingPattern::PCT70, u"pct70", 700 },
+    { ShadingPattern::PCT75, u"pct75", 750 },
+    { ShadingPattern::PCT80, u"pct80", 800 },
+    { ShadingPattern::PCT90, u"pct90", 900 },
+    { ShadingPattern::HORZ_STRIPE, u"horzStripe", 333 },
+    { ShadingPattern::VERT_STRIPE, u"vertStripe", 333 },
+    { ShadingPattern::REVERSE_DIAG_STRIPE, u"reverseDiagStripe", 333 },
+    { ShadingPattern::DIAG_STRIPE, u"diagStripe", 333 },
+    { ShadingPattern::HORZ_CROSS, u"horzCross", 333 },
+    { ShadingPattern::DIAG_CROSS, u"diagCross", 333 },
+    { ShadingPattern::THIN_HORZ_STRIPE, u"thinHorzStripe", 333 },
+    { ShadingPattern::THIN_VERT_STRIPE, u"thinVertStripe", 333 },
+    { ShadingPattern::THIN_REVERSE_DIAG_STRIPE, u"thinReverseDiagStripe", 333 },
+    { ShadingPattern::THIN_DIAG_STRIPE, u"thinDiagStripe", 333 },
+    { ShadingPattern::THIN_HORZ_CROSS, u"thinHorzCross", 333 },
+    { ShadingPattern::THIN_DIAG_CROSS, u"thinDiagCross", 333 },
+    { ShadingPattern::PCT12, u"pct12", 125 },
+    { ShadingPattern::PCT15, u"pct15", 150 },
+    { ShadingPattern::PCT35, u"pct35", 350 },
+    { ShadingPattern::PCT37, u"pct37", 375 },
+    { ShadingPattern::PCT45, u"pct45", 450 },
+    { ShadingPattern::PCT55, u"pct55", 550 },
+    { ShadingPattern::PCT62, u"pct62", 625 },
+    { ShadingPattern::PCT65, u"pct65", 650 },
+    { ShadingPattern::PCT85, u"pct85", 850 },
+    { ShadingPattern::PCT87, u"pct87", 875 },
+    { ShadingPattern::PCT95, u"pct95", 950 },
+};
+
+const ShadingPatternValue* lcl_GetShadingPatternValue(sal_Int32 nShadingPattern)
+{
+    auto pFound = std::find_if(std::begin(aShadingPatternValues), std::end(aShadingPatternValues),
+                               [nShadingPattern](const ShadingPatternValue& rValue) {
+                                   return rValue.nShadingPattern == nShadingPattern;
+                               });
+
+    return pFound == std::end(aShadingPatternValues) ? nullptr : pFound;
+}
+
+/// Return the fill color that blends into rBlended under a shading that paints nShadingShare
+/// per mille of black over it, or nothing when no fill color does.
+std::optional<Color> lcl_GetFillOfShading(const Color& rBlended, sal_Int32 nShadingShare)
+{
+    // A shading that covers the whole fill leaves nothing of it in the blended color, so the
+    // fill cannot be worked out from that color.
+    const sal_Int32 nFillShare = 1000 - nShadingShare;
+    if (nFillShare <= 0)
+        return {};
+
+    const sal_uInt8 aBlended[3] = { rBlended.GetRed(), rBlended.GetGreen(), rBlended.GetBlue() };
+    sal_uInt8 aFill[3] = {};
+    for (size_t i = 0; i < 3; ++i)
+    {
+        // The import rounds the blend down, so take the smallest fill value that reaches this
+        // blended value, and drop the whole color when even white stays below it.
+        const sal_Int32 nFill = (sal_Int32(aBlended[i]) * 1000 + nFillShare - 1) / nFillShare;
+        if (nFill > 255 || nFill * nFillShare / 1000 != aBlended[i])
+            return {};
+
+        // Several fill values can round to the same blended value. Where white is one of them,
+        // take white, so that a channel that was saturated comes back as it was.
+        aFill[i] = (255 * nFillShare / 1000 == aBlended[i]) ? 255 : static_cast<sal_uInt8>(nFill);
+    }
+
+    return Color(aFill[0], aFill[1], aFill[2]);
+}
+}
+
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
-    // Check if the brush shading pattern is 'PCT15'. If so - write it back to the DOCX
-    if (rBrush.GetShadingValue() == ShadingPattern::PCT15)
+    // A shading is written back as a shading, so that a file that came in that way keeps it.
+    // The brush item holds only the color that the shading and the fill blend into, so the fill
+    // color has to be worked back out of it.
+    if (const ShadingPatternValue* pShading = lcl_GetShadingPatternValue(rBrush.GetShadingValue()))
     {
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_val ), u"pct15"_ustr,
-            FSNS( XML_w, XML_color ), u"auto"_ustr,
-            FSNS( XML_w, XML_fill ), u"FFFFFF"_ustr );
+        if (pShading->nShadingShare == 1000)
+        {
+            // The shading covers the fill color, so the color the item holds is the shading one.
+            m_pSerializer->singleElementNS( XML_w, XML_shd,
+                FSNS( XML_w, XML_val ), OUString(pShading->aValue),
+                FSNS( XML_w, XML_color ), msfilter::util::ConvertColor(rBrush.GetColor()),
+                FSNS( XML_w, XML_fill ), u"auto"_ustr );
+            return;
+        }
+
+        // The shading color is written as automatic, which is black, so the fill color is what
+        // the rest of the blend came from.
+        std::optional<Color> oFill
+            = lcl_GetFillOfShading(rBrush.GetColor(), pShading->nShadingShare);
+        if (oFill)
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_shd,
+                FSNS( XML_w, XML_val ), OUString(pShading->aValue),
+                FSNS( XML_w, XML_color ), u"auto"_ustr,
+                FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor(*oFill) );
+            return;
+        }
     }
-    else
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor(rBrush.GetColor()),
-            FSNS( XML_w, XML_val ), "clear" );
-    }
+
+    // No shading, or no fill color that the shading blends into the color the item holds: write
+    // that color as a plain fill.
+    m_pSerializer->singleElementNS( XML_w, XML_shd,
+        FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor(rBrush.GetColor()),
+        FSNS( XML_w, XML_val ), "clear" );
 }
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )

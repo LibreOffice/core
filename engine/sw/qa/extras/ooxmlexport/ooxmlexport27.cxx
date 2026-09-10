@@ -180,6 +180,68 @@ CPPUNIT_TEST_FIXTURE(Test, testCharStyleShadingPattern)
                          getProperty<sal_Int32>(xStyle, u"CharShadingValue"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testShadingPatternKeepsFillColor)
+{
+    createSwDoc("char-style-shading-pattern.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    // Without the fix a 15 percent shading was always written over white, so the yellow of this
+    // style turned grey.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Shaded']/w:rPr/w:shd", "fill",
+                u"FFFF00");
+
+    // This one blends red over white, which no 15 percent shading over black reaches, so it
+    // keeps the color it shows rather than a shading that would paint something else.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='ShadedRed']/w:rPr/w:shd", "val",
+                u"clear");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='ShadedRed']/w:rPr/w:shd", "fill",
+                u"FFD8D8");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testShadingPatternsOtherThanPct15)
+{
+    createSwDoc("char-shading-patterns.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    // Without the fix only a 15 percent shading was written back as a shading, and every other
+    // one came out as a plain fill of the color it blends into.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Pct35Yellow']/w:rPr/w:shd", "val",
+                u"pct35");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Pct35Yellow']/w:rPr/w:shd", "fill",
+                u"FFFF00");
+
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='DiagStripe']/w:rPr/w:shd", "val",
+                u"diagStripe");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='DiagStripe']/w:rPr/w:shd", "fill",
+                u"00FF00");
+
+    // A solid shading paints its own color over the whole fill, so that color is the one the
+    // style shows.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='SolidRed']/w:rPr/w:shd", "val", u"solid");
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='SolidRed']/w:rPr/w:shd", "color",
+                u"FF0000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCharShadingRoundTripOnSavedFile)
+{
+    // A run shaded with a 15 percent pattern, in a file that was saved out in this format
+    // rather than built by hand for the test.
+    createSwDoc("fdo65400.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // A 15 percent pattern over white blends to the grey the brush item holds, and the fill
+    // worked back out of that grey is white again, so the run goes out as it came in.
+    assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", 1);
+    assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", "color", u"auto");
+    assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", "fill", u"FFFFFF");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
