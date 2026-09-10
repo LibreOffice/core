@@ -28,30 +28,16 @@ tables.
 Generate the ttf from updated sfd:
 fontforge -lang=ff -c 'Open($1); Generate($2)' extras/source/truetype/symbol/OpenSymbol.sfd opens___.ttf
 
-Upload opens___.ttf to the external repo, which is where the build fetches it
-from. The file is named after its own checksum, so a new version is a new file
-rather than a replacement, and the old one keeps working for older branches.
-
-Clone the repo. Skipping the smudge filter matters: it holds ~18 GB of git-lfs
-objects and a plain clone downloads every one of them.
-
-GIT_LFS_SKIP_SMUDGE=1 git clone ssh://USER@gerrit.collaboraoffice.com:29418/external.git
-cd external
-git lfs install --local --skip-smudge
-curl -Lo .git/hooks/commit-msg https://gerrit.collaboraoffice.com/tools/hooks/commit-msg
-chmod +x .git/hooks/commit-msg
-
-Add the font and push it for review:
+Upload the font to the external repo, under extern/ and named after its own
+checksum, so that a new version is a new file and branches pinning the old one
+keep working:
 
 cp opens___.ttf extern/$(sha256sum opens___.ttf | awk '{ print $1 }')-opens___.ttf
-git add extern
-git commit
-git push origin HEAD:refs/for/main
 
-Once the change is submitted it is served from
-https://gerrit.collaboraoffice.com/extern/<sha256>-opens___.ttf
+See the README.md in that repository for how to clone it and push the change
+for review.
 
-Finally update the checksum everywhere it is pinned. The name contains the
+Then update the checksum everywhere it is pinned. The name contains the
 checksum, so all three have to move together or the build fetches a file that
 is no longer referenced:
 

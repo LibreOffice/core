@@ -35,12 +35,12 @@ After an engine build the artefacts live at:
 
 ## Fetching the tarball / bumping the version
 
-POCO is not on the LibreOffice tarball mirror, so it has its own fetch bucket in
-`engine/Makefile.fetch` (`fetch_POCO_TARBALLS`), downloaded from
-`https://pocoproject.org/releases/poco-<version>`. Bumping the POCO version
-therefore means editing two places: `engine/download.lst` (`POCO_TARBALL` +
-`POCO_SHA256SUM`) and the version in the `Makefile.fetch` download URL; the
-SBOM picks the version up from `download.lst` automatically.
+POCO comes from our own mirror like every other external, so it sits in
+`fetch_SRC_TARBALLS` in `engine/Makefile.fetch`. Bumping the version means
+uploading the new tarball to the `external` repository and editing
+`engine/download.lst` (`POCO_TARBALL` + `POCO_SHA256SUM`); the SBOM picks the
+version up from `download.lst` automatically. New releases are announced at
+`https://pocoproject.org/releases/`.
 (`make fetch-names` must list the
 tarball, otherwise the CI tarball cache via `bin/cached-fetch.sh` won't include
 it and the build fails with "No rule to make target .../poco-...tar.bz2".)
