@@ -870,49 +870,67 @@ function getAXNodes() {
 	});
 }
 
-/// The document node of the cool frame, which is what a selector is resolved
-/// against. DOM.getDocument returns the runner's document, and the cool one is
-/// two frames down from it. Document nodes carry documentURL, not frameId --
-/// that sits on the IFRAME element above them.
-function coolDocumentNodeId() {
+/// The whole DOM tree of the runner, frames included, in one round trip. The root
+/// is the runner's document, and the cool one is two frames down from it.
+function getDomTree() {
 	return cy.then(function () {
 		return cdp('DOM.enable');
 	}).then(function () {
 		return cdp('DOM.getDocument', { depth: -1, pierce: true });
-	}).then(function (res) {
-		let found = null;
+	}).then(function (result) {
+		return result.root;
+	});
+}
 
-		(function walk(node) {
-			if (found !== null) return;
-			if (node.nodeName === '#document' &&
-					(node.documentURL || '').indexOf('cool.html') !== -1)
-				found = node.nodeId;
-			(node.children || []).forEach(walk);
-			if (node.contentDocument) walk(node.contentDocument);
-		})(res.root);
+/// Call visit on every node of a DOM tree, including the documents of frames.
+function walkDomTree(node, visit) {
+	visit(node);
+	(node.children || []).forEach(function (child) {
+		walkDomTree(child, visit);
+	});
+	if (node.contentDocument) walkDomTree(node.contentDocument, visit);
+}
 
-		expect(found, 'the cool.html document node in the DOM tree')
-			.to.not.equal(null);
-		return found;
+/// The document node of the cool frame, which is what a selector is resolved
+/// against. Document nodes carry documentURL, not frameId -- that sits on the
+/// IFRAME element above them.
+function coolDocumentNodeIn(root) {
+	let found = null;
+
+	walkDomTree(root, function (node) {
+		if (found !== null) return;
+		if (node.nodeName === '#document' &&
+				(node.documentURL || '').indexOf('cool.html') !== -1)
+			found = node.nodeId;
+	});
+
+	expect(found, 'the cool.html document node in the DOM tree')
+		.to.not.equal(null);
+	return found;
+}
+
+/// The accessibility subtree of the one element of a document that matches a
+/// selector.
+function axNodesWithin(documentNodeId, selector) {
+	return cdp('DOM.querySelector', {
+		nodeId: documentNodeId,
+		selector: selector,
+	}).then(function (result) {
+		expect(result.nodeId, 'a node matching ' + selector).to.not.equal(0);
+
+		return cdp('Accessibility.enable').then(function () {
+			return cdp('Accessibility.queryAXTree', { nodeId: result.nodeId });
+		});
+	}).then(function (result) {
+		return ((result && result.nodes) || []).map(axNode);
 	});
 }
 
 /// The accessibility subtree of one container, so an assertion names the
 /// surface it actually read.
 function getAXNodesWithin(selector) {
-	return coolDocumentNodeId().then(function (documentNodeId) {
-		return cdp('DOM.querySelector', {
-			nodeId: documentNodeId,
-			selector: selector,
-		});
-	}).then(function (res) {
-		expect(res.nodeId, 'a node matching ' + selector).to.not.equal(0);
-
-		return cdp('Accessibility.enable').then(function () {
-			return cdp('Accessibility.queryAXTree', { nodeId: res.nodeId });
-		});
-	}).then(function (res) {
-		return ((res && res.nodes) || []).map(axNode);
+	return getDomTree().then(function (root) {
+		return axNodesWithin(coolDocumentNodeIn(root), selector);
 	});
 }
 
