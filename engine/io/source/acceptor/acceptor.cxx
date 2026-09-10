@@ -50,13 +50,13 @@ namespace {
         virtual ~OAcceptor() override;
     public:
         // Methods
-        virtual Reference< XConnection > SAL_CALL accept( const OUString& sConnectionDescription ) override;
-        virtual void SAL_CALL stopAccepting(  ) override;
+        virtual Reference< XConnection > accept( const OUString& sConnectionDescription ) override;
+        virtual void stopAccepting(  ) override;
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() override;
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-                virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+                virtual OUString              getImplementationName() override;
+                virtual Sequence< OUString >  getSupportedServiceNames() override;
+                virtual bool              supportsService(const OUString& ServiceName) override;
 
     private:
         std::unique_ptr<io_acceptor::PipeAcceptor> m_pPipe;
@@ -210,7 +210,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
     return r;
 }
 
-void SAL_CALL OAcceptor::stopAccepting(  )
+void OAcceptor::stopAccepting(  )
 {
     std::unique_lock guard( m_mutex );
 

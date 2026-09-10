@@ -42,12 +42,12 @@ namespace stoc_connector
         explicit PipeConnection( OUString sConnectionDescription );
         virtual ~PipeConnection() override;
 
-        virtual sal_Int32 SAL_CALL read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead ) override;
-        virtual void SAL_CALL write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
-        virtual void SAL_CALL flush(  ) override;
-        virtual void SAL_CALL close(  ) override;
-        virtual OUString SAL_CALL getDescription(  ) override;
+        virtual void write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+        virtual void flush(  ) override;
+        virtual void close(  ) override;
+        virtual OUString getDescription(  ) override;
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
@@ -62,17 +62,17 @@ namespace stoc_connector
         explicit SocketConnection( OUString sConnectionDescription  );
         virtual ~SocketConnection() override;
 
-        virtual sal_Int32 SAL_CALL read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead ) override;
-        virtual void SAL_CALL write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
-        virtual void SAL_CALL flush(  ) override;
-        virtual void SAL_CALL close(  ) override;
-        virtual OUString SAL_CALL getDescription(  ) override;
+        virtual void write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+        virtual void flush(  ) override;
+        virtual void close(  ) override;
+        virtual OUString getDescription(  ) override;
 
 
         // XConnectionBroadcaster
-        virtual void SAL_CALL addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
-        virtual void SAL_CALL removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
 
     public:
         void completeConnectionString();

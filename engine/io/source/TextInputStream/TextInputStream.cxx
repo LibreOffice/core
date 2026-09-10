@@ -93,26 +93,26 @@ public:
     OTextInputStream();
 
     // Methods XTextInputStream
-    virtual OUString SAL_CALL readLine(  ) override;
-    virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, bool bRemoveDelimiter ) override;
-    virtual bool SAL_CALL isEOF(  ) override;
-    virtual void SAL_CALL setEncoding( const OUString& Encoding ) override;
+    virtual OUString readLine(  ) override;
+    virtual OUString readString( const Sequence< sal_Unicode >& Delimiters, bool bRemoveDelimiter ) override;
+    virtual bool isEOF(  ) override;
+    virtual void setEncoding( const OUString& Encoding ) override;
 
     // Methods XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
-    virtual sal_Int32 SAL_CALL available(  ) override;
-    virtual void SAL_CALL closeInput(  ) override;
+    virtual sal_Int32 readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual void skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 available(  ) override;
+    virtual void closeInput(  ) override;
 
     // Methods XActiveDataSink
-    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream ) override;
-    virtual Reference< XInputStream > SAL_CALL getInputStream() override;
+    virtual void setInputStream( const Reference< XInputStream >& aStream ) override;
+    virtual Reference< XInputStream > getInputStream() override;
 
     // Methods XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() override;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-        virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual OUString              getImplementationName() override;
+        virtual Sequence< OUString >  getSupportedServiceNames() override;
+        virtual bool              supportsService(const OUString& ServiceName) override;
 };
 
 }

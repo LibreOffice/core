@@ -53,16 +53,16 @@ namespace io_acceptor {
     public:
         explicit SocketConnection( OUString sConnectionDescription );
 
-        virtual sal_Int32 SAL_CALL read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead ) override;
-        virtual void SAL_CALL write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
-        virtual void SAL_CALL flush(  ) override;
-        virtual void SAL_CALL close(  ) override;
-        virtual OUString SAL_CALL getDescription(  ) override;
+        virtual void write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+        virtual void flush(  ) override;
+        virtual void close(  ) override;
+        virtual OUString getDescription(  ) override;
 
         // XConnectionBroadcaster
-        virtual void SAL_CALL addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
-        virtual void SAL_CALL removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
 
     public:
         void completeConnectionString();
@@ -252,14 +252,14 @@ namespace io_acceptor {
 
 
     // XConnectionBroadcaster
-    void SAL_CALL SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener)
+    void SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener)
     {
         std::unique_lock guard(_mutex);
 
         _listeners.insert(aListener);
     }
 
-    void SAL_CALL SocketConnection::removeStreamListener(const Reference<XStreamListener> & aListener)
+    void SocketConnection::removeStreamListener(const Reference<XStreamListener> & aListener)
     {
         std::unique_lock guard(_mutex);
 

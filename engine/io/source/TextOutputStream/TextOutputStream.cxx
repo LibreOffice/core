@@ -71,22 +71,22 @@ class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInf
 
 public:
     // Methods XTextOutputStream
-    virtual void SAL_CALL writeString( const OUString& aString ) override;
-    virtual void SAL_CALL setEncoding( const OUString& Encoding ) override;
+    virtual void writeString( const OUString& aString ) override;
+    virtual void setEncoding( const OUString& Encoding ) override;
 
     // Methods XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) override;
-    virtual void SAL_CALL flush(  ) override;
-    virtual void SAL_CALL closeOutput(  ) override;
+    virtual void writeBytes( const Sequence< sal_Int8 >& aData ) override;
+    virtual void flush(  ) override;
+    virtual void closeOutput(  ) override;
 
     // Methods XActiveDataSource
-    virtual void SAL_CALL setOutputStream( const Reference< XOutputStream >& aStream ) override;
-    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) override;
+    virtual void setOutputStream( const Reference< XOutputStream >& aStream ) override;
+    virtual Reference< XOutputStream > getOutputStream(  ) override;
 
     // Methods XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() override;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
-        virtual bool              SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual OUString              getImplementationName() override;
+        virtual Sequence< OUString >  getSupportedServiceNames() override;
+        virtual bool              supportsService(const OUString& ServiceName) override;
 };
 
 }

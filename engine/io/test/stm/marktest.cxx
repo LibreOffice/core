@@ -53,23 +53,23 @@ public: // implementation names
     static OUString                 getImplementationName_Static() throw ();
 
 public:
-    virtual void SAL_CALL testInvariant(
+    virtual void testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
         throw ( IllegalArgumentException,
                 RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL  test(   const OUString& TestName,
+    virtual sal_Int32  test(   const OUString& TestName,
                         const Reference < XInterface >& TestObject,
                         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException, RuntimeException);
-    virtual bool SAL_CALL testPassed()
+    virtual bool testPassed()
         throw ( RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors()
+    virtual Sequence< OUString > getErrors()
         throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions()
+    virtual Sequence< Any > getErrorExceptions()
         throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings()
+    virtual Sequence< OUString > getWarnings()
         throw (RuntimeException);
 
 private:
@@ -359,7 +359,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
 *
 *
 **/
-Reference < XInterface > SAL_CALL OMarkableOutputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
+Reference < XInterface > OMarkableOutputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     return getXWeak(new OMarkableOutputStreamTest( rSMgr ));
 }
@@ -397,25 +397,25 @@ public: // implementation names
     static OUString                 getImplementationName_Static() throw () ;
 
 public:
-    virtual void SAL_CALL testInvariant(
+    virtual void testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
         throw ( IllegalArgumentException, RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL test(
+    virtual sal_Int32 test(
         const OUString& TestName,
         const Reference < XInterface >& TestObject,
         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException,
                 RuntimeException) ;
 
-    virtual bool SAL_CALL testPassed()
+    virtual bool testPassed()
         throw ( RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors()
+    virtual Sequence< OUString > getErrors()
         throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions()
+    virtual Sequence< Any > getErrorExceptions()
         throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings()
+    virtual Sequence< OUString > getWarnings()
         throw (RuntimeException);
 
 private:
@@ -617,7 +617,7 @@ void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream >
 *
 *
 **/
-Reference < XInterface > SAL_CALL OMarkableInputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
+Reference < XInterface > OMarkableInputStreamTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     return getXWeak(new OMarkableInputStreamTest( rSMgr ));
 }

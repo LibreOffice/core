@@ -64,7 +64,7 @@ public:
 protected:
 
     /// Working method which should be overridden.
-    virtual void SAL_CALL run() {
+    virtual void run() {
         for( int i = 0 ; i < m_iMax ; i ++ ) {
             m_output->writeBytes( createIntSeq(i) );
         }
@@ -74,7 +74,7 @@ protected:
     /** Called when run() is done.
     * You might want to override it to do some cleanup.
     */
-    virtual void SAL_CALL onTerminated()
+    virtual void onTerminated()
     {
         delete this;
     }
@@ -98,19 +98,19 @@ public: // implementation names
     static OUString                 getImplementationName_Static() throw();
 
 public:
-    virtual void SAL_CALL testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
+    virtual void testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
         throw  ( IllegalArgumentException, RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL test(    const OUString& TestName,
+    virtual sal_Int32 test(    const OUString& TestName,
                                         const Reference < XInterface >& TestObject,
                                         sal_Int32 hTestHandle)
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
-    virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException) ;
-    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings()                 throw  (RuntimeException);
+    virtual bool testPassed()                              throw  (    RuntimeException) ;
+    virtual Sequence< OUString > getErrors()               throw  (RuntimeException) ;
+    virtual Sequence< Any > getErrorExceptions()       throw  (RuntimeException);
+    virtual Sequence< OUString > getWarnings()                 throw  (RuntimeException);
 
 private:
     void testSimple( const Reference < XInterface > & );
@@ -391,7 +391,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 *
 *
 **/
-Reference < XInterface > SAL_CALL OPipeTest_CreateInstance( const Reference< XMultiServiceFactory>  & rSMgr ) throw (Exception)
+Reference < XInterface > OPipeTest_CreateInstance( const Reference< XMultiServiceFactory>  & rSMgr ) throw (Exception)
 {
     return getXWeak(new OPipeTest( rSMgr ));
 }

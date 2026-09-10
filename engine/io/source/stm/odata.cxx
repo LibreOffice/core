@@ -63,39 +63,39 @@ public:
         }
 
 public: // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override;
-    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual sal_Int32 readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override;
+    virtual sal_Int32 readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override;
+    virtual void skipBytes(sal_Int32 nBytesToSkip) override;
+    virtual sal_Int32 available() override;
+    virtual void closeInput() override;
 
 public: // XDataInputStream
-    virtual sal_Int8 SAL_CALL readBoolean() override;
-    virtual sal_Int8 SAL_CALL readByte() override;
-    virtual sal_Unicode SAL_CALL readChar() override;
-    virtual sal_Int16 SAL_CALL readShort() override;
-    virtual sal_Int32 SAL_CALL readLong() override;
-    virtual sal_Int64 SAL_CALL readHyper() override;
-    virtual float SAL_CALL readFloat() override;
-    virtual double SAL_CALL readDouble() override;
-    virtual OUString SAL_CALL readUTF() override;
+    virtual sal_Int8 readBoolean() override;
+    virtual sal_Int8 readByte() override;
+    virtual sal_Unicode readChar() override;
+    virtual sal_Int16 readShort() override;
+    virtual sal_Int32 readLong() override;
+    virtual sal_Int64 readHyper() override;
+    virtual float readFloat() override;
+    virtual double readDouble() override;
+    virtual OUString readUTF() override;
 
 
 public: // XActiveDataSink
-    virtual void SAL_CALL setInputStream(const Reference< XInputStream > & aStream) override;
-    virtual Reference< XInputStream > SAL_CALL getInputStream() override;
+    virtual void setInputStream(const Reference< XInputStream > & aStream) override;
+    virtual Reference< XInputStream > getInputStream() override;
 
 public: // XConnectable
-    virtual void SAL_CALL setPredecessor(const Reference < XConnectable >& aPredecessor) override;
-    virtual Reference < XConnectable > SAL_CALL getPredecessor() override;
-    virtual void SAL_CALL setSuccessor(const Reference < XConnectable >& aSuccessor) override;
-    virtual Reference < XConnectable > SAL_CALL getSuccessor() override ;
+    virtual void setPredecessor(const Reference < XConnectable >& aPredecessor) override;
+    virtual Reference < XConnectable > getPredecessor() override;
+    virtual void setSuccessor(const Reference < XConnectable >& aSuccessor) override;
+    virtual Reference < XConnectable > getSuccessor() override ;
 
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() override;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString                     getImplementationName() override;
+    Sequence< OUString >         getSupportedServiceNames() override;
+    bool                        supportsService(const OUString& ServiceName) override;
 
 protected:
 
@@ -427,35 +427,35 @@ public:
         }
 
 public: // XOutputStream
-    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
+    virtual void writeBytes(const Sequence< sal_Int8 >& aData) override;
+    virtual void flush() override;
+    virtual void closeOutput() override;
 
 public: // XDataOutputStream
-    virtual void SAL_CALL writeBoolean(bool Value) override;
-    virtual void SAL_CALL writeByte(sal_Int8 Value) override;
-    virtual void SAL_CALL writeChar(sal_Unicode Value) override;
-    virtual void SAL_CALL writeShort(sal_Int16 Value) override;
-    virtual void SAL_CALL writeLong(sal_Int32 Value) override;
-    virtual void SAL_CALL writeHyper(sal_Int64 Value) override;
-    virtual void SAL_CALL writeFloat(float Value) override;
-    virtual void SAL_CALL writeDouble(double Value) override;
-    virtual void SAL_CALL writeUTF(const OUString& Value) override;
+    virtual void writeBoolean(bool Value) override;
+    virtual void writeByte(sal_Int8 Value) override;
+    virtual void writeChar(sal_Unicode Value) override;
+    virtual void writeShort(sal_Int16 Value) override;
+    virtual void writeLong(sal_Int32 Value) override;
+    virtual void writeHyper(sal_Int64 Value) override;
+    virtual void writeFloat(float Value) override;
+    virtual void writeDouble(double Value) override;
+    virtual void writeUTF(const OUString& Value) override;
 
 public: // XActiveDataSource
-    virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream) override;
-    virtual Reference < XOutputStream > SAL_CALL getOutputStream() override;
+    virtual void setOutputStream(const Reference< XOutputStream > & aStream) override;
+    virtual Reference < XOutputStream > getOutputStream() override;
 
 public: // XConnectable
-    virtual void SAL_CALL setPredecessor(const Reference < XConnectable >& aPredecessor) override;
-    virtual Reference < XConnectable > SAL_CALL getPredecessor() override;
-    virtual void SAL_CALL setSuccessor(const Reference < XConnectable >& aSuccessor) override;
-    virtual Reference < XConnectable > SAL_CALL getSuccessor() override;
+    virtual void setPredecessor(const Reference < XConnectable >& aPredecessor) override;
+    virtual Reference < XConnectable > getPredecessor() override;
+    virtual void setSuccessor(const Reference < XConnectable >& aSuccessor) override;
+    virtual Reference < XConnectable > getSuccessor() override;
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() override;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString                     getImplementationName() override;
+    Sequence< OUString >         getSupportedServiceNames() override;
+    bool                     supportsService(const OUString& ServiceName) override;
 
 protected:
     Reference < XConnectable >  m_succ;
@@ -751,50 +751,50 @@ public:
 
 public:
     // XOutputStream
-    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) override
+    virtual void writeBytes(const Sequence< sal_Int8 >& aData) override
         { ODataOutputStream::writeBytes( aData ); }
 
-    virtual void SAL_CALL flush() override
+    virtual void flush() override
         { ODataOutputStream::flush(); }
 
-    virtual void SAL_CALL closeOutput() override
+    virtual void closeOutput() override
         { ODataOutputStream::closeOutput(); }
 
 public:
     // XDataOutputStream
-    virtual void SAL_CALL writeBoolean(bool Value) override
+    virtual void writeBoolean(bool Value) override
                 { ODataOutputStream::writeBoolean( Value ); }
-    virtual void SAL_CALL writeByte(sal_Int8 Value) override
+    virtual void writeByte(sal_Int8 Value) override
                 { ODataOutputStream::writeByte( Value ); }
-    virtual void SAL_CALL writeChar(sal_Unicode Value) override
+    virtual void writeChar(sal_Unicode Value) override
                 { ODataOutputStream::writeChar( Value ); }
-    virtual void SAL_CALL writeShort(sal_Int16 Value) override
+    virtual void writeShort(sal_Int16 Value) override
                 { ODataOutputStream::writeShort( Value ); }
-    virtual void SAL_CALL writeLong(sal_Int32 Value) override
+    virtual void writeLong(sal_Int32 Value) override
                 { ODataOutputStream::writeLong( Value ); }
-    virtual void SAL_CALL writeHyper(sal_Int64 Value) override
+    virtual void writeHyper(sal_Int64 Value) override
                 { ODataOutputStream::writeHyper( Value ); }
-    virtual void SAL_CALL writeFloat(float Value) override
+    virtual void writeFloat(float Value) override
                 { ODataOutputStream::writeFloat( Value ); }
-    virtual void SAL_CALL writeDouble(double Value) override
+    virtual void writeDouble(double Value) override
                 { ODataOutputStream::writeDouble( Value ); }
-    virtual void SAL_CALL writeUTF(const OUString& Value) override
+    virtual void writeUTF(const OUString& Value) override
                 { ODataOutputStream::writeUTF( Value );}
 
     // XObjectOutputStream
-        virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) override;
+        virtual void writeObject( const Reference< XPersistObject > & r ) override;
 
 public: // XMarkableStream
-    virtual sal_Int32 SAL_CALL createMark() override;
-    virtual void SAL_CALL deleteMark(sal_Int32 Mark) override;
-    virtual void SAL_CALL jumpToMark(sal_Int32 nMark) override;
-    virtual void SAL_CALL jumpToFurthest() override;
-    virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark) override;
+    virtual sal_Int32 createMark() override;
+    virtual void deleteMark(sal_Int32 Mark) override;
+    virtual void jumpToMark(sal_Int32 nMark) override;
+    virtual void jumpToFurthest() override;
+    virtual sal_Int32 offsetToMark(sal_Int32 nMark) override;
 
 public: // XServiceInfo
-    OUString                   SAL_CALL   getImplementationName() override;
-    Sequence< OUString >       SAL_CALL   getSupportedServiceNames() override;
-    bool                   SAL_CALL   supportsService(const OUString& ServiceName) override;
+    OUString                     getImplementationName() override;
+    Sequence< OUString >         getSupportedServiceNames() override;
+    bool                     supportsService(const OUString& ServiceName) override;
 
 private:
     void connectToMarkable();
@@ -981,55 +981,55 @@ public:
         }
 
 public: // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override
+    virtual sal_Int32 readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override
         { return ODataInputStream::readBytes( aData , nBytesToRead ); }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override
+    virtual sal_Int32 readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override
         { return ODataInputStream::readSomeBytes( aData, nMaxBytesToRead ); }
 
-    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override
+    virtual void skipBytes(sal_Int32 nBytesToSkip) override
         { ODataInputStream::skipBytes( nBytesToSkip ); }
 
-    virtual sal_Int32 SAL_CALL available() override
+    virtual sal_Int32 available() override
         { return ODataInputStream::available(); }
 
-    virtual void SAL_CALL closeInput() override
+    virtual void closeInput() override
         { ODataInputStream::closeInput(); }
 
 public: // XDataInputStream
-    virtual sal_Int8 SAL_CALL readBoolean() override
+    virtual sal_Int8 readBoolean() override
                 { return ODataInputStream::readBoolean(); }
-    virtual sal_Int8 SAL_CALL readByte() override
+    virtual sal_Int8 readByte() override
                 { return ODataInputStream::readByte(); }
-    virtual sal_Unicode SAL_CALL readChar() override
+    virtual sal_Unicode readChar() override
                 { return ODataInputStream::readChar(); }
-    virtual sal_Int16 SAL_CALL readShort() override
+    virtual sal_Int16 readShort() override
                 { return ODataInputStream::readShort(); }
-    virtual sal_Int32 SAL_CALL readLong() override
+    virtual sal_Int32 readLong() override
                 { return ODataInputStream::readLong(); }
-    virtual sal_Int64 SAL_CALL readHyper() override
+    virtual sal_Int64 readHyper() override
                 { return ODataInputStream::readHyper(); }
-    virtual float SAL_CALL readFloat() override
+    virtual float readFloat() override
                 { return ODataInputStream::readFloat(); }
-    virtual double SAL_CALL readDouble() override
+    virtual double readDouble() override
         { return ODataInputStream::readDouble(); }
-    virtual OUString SAL_CALL readUTF() override
+    virtual OUString readUTF() override
                 { return ODataInputStream::readUTF(); }
 
 public: // XObjectInputStream
-        virtual Reference< XPersistObject > SAL_CALL readObject( ) override;
+        virtual Reference< XPersistObject > readObject( ) override;
 
 public: // XMarkableStream
-    virtual sal_Int32 SAL_CALL createMark() override;
-    virtual void SAL_CALL deleteMark(sal_Int32 Mark) override;
-    virtual void SAL_CALL jumpToMark(sal_Int32 nMark) override;
-    virtual void SAL_CALL jumpToFurthest() override;
-    virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark) override;
+    virtual sal_Int32 createMark() override;
+    virtual void deleteMark(sal_Int32 Mark) override;
+    virtual void jumpToMark(sal_Int32 nMark) override;
+    virtual void jumpToFurthest() override;
+    virtual sal_Int32 offsetToMark(sal_Int32 nMark) override;
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() override;
-    Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
-    bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString                     getImplementationName() override;
+    Sequence< OUString >         getSupportedServiceNames() override;
+    bool                     supportsService(const OUString& ServiceName) override;
 
 private:
     void connectToMarkable();

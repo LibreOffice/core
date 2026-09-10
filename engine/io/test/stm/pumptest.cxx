@@ -67,19 +67,19 @@ public: // implementation names
     static OUString                 getImplementationName_Static() throw();
 
 public:
-    virtual void SAL_CALL testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
+    virtual void testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
         throw  ( IllegalArgumentException, RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL test(    const OUString& TestName,
+    virtual sal_Int32 test(    const OUString& TestName,
                                         const Reference < XInterface >& TestObject,
                                         sal_Int32 hTestHandle)
         throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual bool SAL_CALL testPassed()                              throw  (    RuntimeException) ;
-    virtual Sequence< OUString > SAL_CALL getErrors()               throw  (RuntimeException) ;
-    virtual Sequence< Any > SAL_CALL getErrorExceptions()       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings()                 throw  (RuntimeException);
+    virtual bool testPassed()                              throw  (    RuntimeException) ;
+    virtual Sequence< OUString > getErrors()               throw  (RuntimeException) ;
+    virtual Sequence< Any > getErrorExceptions()       throw  (RuntimeException);
+    virtual Sequence< OUString > getWarnings()                 throw  (RuntimeException);
 
 private:
     void testSimple( const Reference < XInterface > & );
@@ -235,28 +235,28 @@ public:
                      m_bDisposed( false )
     {}
 
-    virtual void SAL_CALL disposing( const EventObject &obj  ) throw (cpo::uno::RuntimeException)
+    virtual void disposing( const EventObject &obj  ) throw (cpo::uno::RuntimeException)
     {
         m_bDisposed = true;
 //         printf( "disposing called\n");
     }
 
-    virtual void SAL_CALL started(  ) throw (cpo::uno::RuntimeException)
+    virtual void started(  ) throw (cpo::uno::RuntimeException)
     {
         m_bStarted = true;
 //         printf( "started called\n");
     }
-    virtual void SAL_CALL closed(  ) throw (cpo::uno::RuntimeException)
+    virtual void closed(  ) throw (cpo::uno::RuntimeException)
     {
         m_bClosed = true;
 //         printf( "closed called\n");
     }
-    virtual void SAL_CALL terminated(  ) throw (cpo::uno::RuntimeException)
+    virtual void terminated(  ) throw (cpo::uno::RuntimeException)
     {
         m_bTerminated = true;
 //         printf( "terminated called\n");
     }
-    virtual void SAL_CALL error( const cpo::uno::Any& aException )
+    virtual void error( const cpo::uno::Any& aException )
         throw (cpo::uno::RuntimeException)
     {
         m_bError = true;
@@ -408,7 +408,7 @@ void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
     mywait();
 }
 
-Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
+Reference< XInterface > OPumpTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
 {
     return *new OPumpTest( rSMgr );
 }

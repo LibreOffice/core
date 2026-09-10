@@ -54,7 +54,7 @@ public:
         m_rAcceptor( r ),
         m_sConnectionDescription( sConnectionDescription )
         {}
-    virtual void SAL_CALL run();
+    virtual void run();
 
     Reference < XAcceptor > m_rAcceptor;
 private:

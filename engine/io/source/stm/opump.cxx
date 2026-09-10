@@ -73,29 +73,29 @@ namespace io_stm {
         virtual ~Pump() override;
 
         // XActiveDataSource
-        virtual void SAL_CALL setOutputStream( const Reference< css::io::XOutputStream >& xOutput ) override;
-        virtual Reference< css::io::XOutputStream > SAL_CALL getOutputStream() override;
+        virtual void setOutputStream( const Reference< css::io::XOutputStream >& xOutput ) override;
+        virtual Reference< css::io::XOutputStream > getOutputStream() override;
 
         // XActiveDataSink
-        virtual void SAL_CALL setInputStream( const Reference< css::io::XInputStream >& xStream ) override;
-        virtual Reference< css::io::XInputStream > SAL_CALL getInputStream() override;
+        virtual void setInputStream( const Reference< css::io::XInputStream >& xStream ) override;
+        virtual Reference< css::io::XInputStream > getInputStream() override;
 
         // XActiveDataControl
-        virtual void SAL_CALL addListener( const Reference< css::io::XStreamListener >& xListener ) override;
-        virtual void SAL_CALL removeListener( const Reference< css::io::XStreamListener >& xListener ) override;
-        virtual void SAL_CALL start() override;
-        virtual void SAL_CALL terminate() override;
+        virtual void addListener( const Reference< css::io::XStreamListener >& xListener ) override;
+        virtual void removeListener( const Reference< css::io::XStreamListener >& xListener ) override;
+        virtual void start() override;
+        virtual void terminate() override;
 
         // XConnectable
-        virtual void SAL_CALL setPredecessor( const Reference< css::io::XConnectable >& xPred ) override;
-        virtual Reference< css::io::XConnectable > SAL_CALL getPredecessor() override;
-        virtual void SAL_CALL setSuccessor( const Reference< css::io::XConnectable >& xSucc ) override;
-        virtual Reference< css::io::XConnectable > SAL_CALL getSuccessor() override;
+        virtual void setPredecessor( const Reference< css::io::XConnectable >& xPred ) override;
+        virtual Reference< css::io::XConnectable > getPredecessor() override;
+        virtual void setSuccessor( const Reference< css::io::XConnectable >& xSucc ) override;
+        virtual Reference< css::io::XConnectable > getSuccessor() override;
 
     public: // XServiceInfo
-        virtual OUString    SAL_CALL getImplementationName() override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-        virtual bool     SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual OUString    getImplementationName() override;
+        virtual Sequence< OUString > getSupportedServiceNames() override;
+        virtual bool     supportsService(const OUString& ServiceName) override;
     };
 
     }

@@ -47,11 +47,11 @@ namespace io_acceptor
     public:
         explicit PipeConnection( OUString sConnectionDescription);
 
-        virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead ) override;
-        virtual void SAL_CALL write( const Sequence< sal_Int8 >& aData ) override;
-        virtual void SAL_CALL flush(  ) override;
-        virtual void SAL_CALL close(  ) override;
-        virtual OUString SAL_CALL getDescription(  ) override;
+        virtual sal_Int32 read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead ) override;
+        virtual void write( const Sequence< sal_Int8 >& aData ) override;
+        virtual void flush(  ) override;
+        virtual void close(  ) override;
+        virtual OUString getDescription(  ) override;
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
