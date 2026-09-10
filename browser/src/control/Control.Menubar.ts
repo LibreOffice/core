@@ -1777,13 +1777,59 @@ class Menubar extends window.L.Control {
 		}
 		const target = menu[idx];
 		const exts = (this._map._extensions || {}) as { [id: string]: any };
-		// Only an extension with a sidebar `entry` has anything for this toggle to
-		// open; a commands-only extension reaches the menu solely through
-		// _applyExtensionMenuContributions below.
-		const ids = Object.keys(exts)
-			.filter((id) => exts[id].options.manifest.entry)
-			.sort();
-		if (ids.length === 0) {
+		const entries: MenuItem[] = [];
+		for (const id of Object.keys(exts).sort()) {
+			const manifest = exts[id].options.manifest;
+			// An extension author's name and command titles are not engine-translated UI
+			// text, so they need the same HTML-escaping any other externally-supplied
+			// label would.
+			const name = app.LOUtil.escapeHtml(manifest.name as string);
+			// Only an extension with a sidebar `entry` has anything for this toggle to
+			// open. An extension that places its commands in a document menu of its own
+			// choosing reaches the menu through _applyExtensionMenuContributions below
+			// instead.
+			if (manifest.entry) {
+				entries.push({
+					name: name,
+					id: 'extension-toggle-' + id,
+					type: 'action',
+				});
+			}
+			const placement = manifest.contributes && manifest.contributes.extensionsMenu;
+			if (!placement || !placement.length) continue;
+			const commands = manifest.contributes.commands || [];
+			const submenu: MenuItem[] = [];
+			for (const item of placement) {
+				if (item.separator) {
+					submenu.push({ type: 'separator' });
+					continue;
+				}
+				const command = commands.find(
+					(c: { id: string; title: string }) => c.id === item.command,
+				);
+				if (!command) {
+					console.warn(
+						'extension ' +
+							id +
+							': contributes.extensionsMenu names unknown command "' +
+							item.command +
+							'"',
+					);
+					continue;
+				}
+				submenu.push({
+					name: app.LOUtil.escapeHtml(command.title),
+					id: 'ext:' + id + ':' + item.command,
+					type: 'action',
+				});
+			}
+			if (submenu.length) {
+				// The extension's own name is the submenu, so several extensions' commands
+				// stay told apart under one Extensions menu.
+				entries.push({ name: name, id: 'ext-menu-' + id, type: 'menu', menu: submenu });
+			}
+		}
+		if (entries.length === 0) {
 			// Hide the whole Extensions submenu when nothing is installed.
 			// Use the `hidden` flag rather than splicing the entry out, so a
 			// later refresh (once discovery populates app.map._extensions) can
@@ -1793,11 +1839,7 @@ class Menubar extends window.L.Control {
 			return;
 		}
 		target.hidden = false;
-		target.menu = ids.map((id) => ({
-			name: app.LOUtil.escapeHtml(exts[id].options.manifest.name as string),
-			id: 'extension-toggle-' + id,
-			type: 'action',
-		}));
+		target.menu = entries;
 	}
 
 	// Splices each loaded extension's contributes.menus entries into the matching

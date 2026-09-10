@@ -105,6 +105,22 @@ ui.json:
   is optional and shown on a notebookbar button or dropdown entry that references
   this command - the classic menu never renders it.
 
+- `contributes.extensionsMenu` offers commands under the extension's own name, in the
+  Extensions menu and as a dropdown in the Extensions notebookbar tab, in the order
+  given:
+
+  ```json
+  "extensionsMenu": [
+    { "command": "insertDate" },
+    { "separator": true },
+    { "command": "about" }
+  ]
+  ```
+
+  For an extension whose commands are its whole user interface. An extension that
+  wants its commands in a document menu of its own choosing uses `menus` below
+  instead; the two are independent, and a command may appear in both.
+
 - `contributes.menus` maps an existing top-level classic-menu id (`file`, `editmenu`,
   `view`, `insert`, `format`, and so on, depending on the document type) to a list of
   command ids appended to the end of that menu.
@@ -307,10 +323,28 @@ sidebar to load in the browser.
 ### Menu-driven add-ons
 
 Plenty of add-ons have no HTML at all: their `onOpen()` builds an add-on menu,
-and the menu items are the whole user interface. For those, `gas-menu.html`
-takes the sidebar's place and shows one button per menu item. It gets the items
-by calling the reserved name `__coolGasMenu`, which runs `onOpen()` and returns
-the menu that building it produced.
+and the menu items are the whole user interface. The sidecar synthesis reads
+that menu out of the sources - the literal `addItem()` and `addSeparator()`
+calls, in source order - and each item becomes a contributed command placed in
+`contributes.extensionsMenu`. The add-on's items then sit under its own name in
+the Extensions menu and in the Extensions notebookbar tab, where an editor
+add-on's menu belongs, and such an add-on gets no sidebar panel at all.
+
+Choosing an item ships the runner, the add-on's sources and a call to the item's
+function to the kit as one `executescript` message, the same way any contributed
+command runs. Messages the add-on passes to `getUi().alert()` then arrive as a
+snackbar rather than as the panel banner.
+
+An add-on that builds its menu some other way - captions from a loop, or read
+from a property - leaves nothing for that sniffing to find. It keeps the panel
+instead: `gas-menu.html` shows one button per menu item, asking the kit for the
+menu at display time through the reserved name `__coolGasMenu`, which runs
+`onOpen()` and returns the menu that building it produced. An add-on that has a
+sidebar of its own always keeps it, menu or no menu.
+
+One thing a contributed command cannot do is call back into the iframe, because
+for a menu command there is no iframe: `PropertiesService` and
+`LanguageApp.translate` work from a panel and fail from a menu item.
 
 ### What the shims cover
 

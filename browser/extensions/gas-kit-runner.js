@@ -10,7 +10,7 @@
  */
 
 // The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-kit-runner.js:
-window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) {
+globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) {
     // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {

@@ -277,16 +277,27 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 	// Shared filter used by each doc-type notebookbar's getTabs/getTabsJSON
 	// to drop the Extensions entries.  The tab strip (getTabs labels) and the
+	// True when some extension has anything for the Extensions tab: a sidebar panel to toggle,
+	// or commands it asked to have offered under its own name.
+	_hasExtensionsTabContent: function() {
+		var exts = app.map._extensions || {};
+		return Object.keys(exts).some(function(id) {
+			var manifest = exts[id].options.manifest;
+			if (manifest.entry) return true;
+			var placement = manifest.contributes && manifest.contributes.extensionsMenu;
+			return !!(placement && placement.length);
+		});
+	},
+
 	// tab pages (getTabsJSON) are zipped by index in NotebookbarBuilder, so the
 	// label and its page must be dropped together or every following tab shifts
 	// by one.  Drop the Extensions label when extension support is disabled by
-	// runtime config, or when no extension has a sidebar panel; the matching
-	// page is a null from getExtensionsTab in those cases and is dropped by
-	// the !t guard.
+	// runtime config, or when no extension has anything to put there; the
+	// matching page is a null from getExtensionsTab in those cases and is
+	// dropped by the !t guard.
 	_filterExtensionsTab: function(arr) {
-		var exts = app.map._extensions || {};
-		var hideExtensionsTab = !window.enableExperimentalFeatures || !Object.keys(exts).some(
-			function(id) { return !!exts[id].options.manifest.entry; });
+		var hideExtensionsTab = !window.enableExperimentalFeatures
+			|| !this._hasExtensionsTabContent();
 		return arr.filter(function(t) {
 			if (!t) return false;
 			if (t.name === 'Extensions' && hideExtensionsTab)
@@ -306,31 +317,68 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	// tab against the real extension list.
 	getExtensionsTab: function() {
 		var exts = app.map._extensions || {};
-		var ids = Object.keys(exts)
-			.filter(function(id) { return !!exts[id].options.manifest.entry; })
-			.sort();
-		// Drop the Extensions tab entirely when no extension has a sidebar
-		// panel: returning null here lets _filterExtensionsTab strip it.
-		// refresh() (called once Control.Extension.loadExtensions resolves)
-		// rebuilds the notebookbar, so the tab appears as soon as discovery
-		// populates app.map._extensions.
-		if (ids.length === 0)
-			return null;
+		var ids = Object.keys(exts).sort();
 		var content = [];
 		for (var i = 0; i < ids.length; i++) {
 			var id = ids[i];
 			var manifest = exts[id].options.manifest;
 			var baseUrl = exts[id].options.baseUrl;
-			content.push({
-				'id': 'extension-toggle-' + id,
-				'type': 'bigcustomtoolitem',
-				'text': manifest.name,
-				'icon': manifest.icon
-					? baseUrl + manifest.icon
-					: app.LOUtil.getURL('images/extension-fallback.svg'),
-				'command': 'extension-toggle-' + id,
+			var icon = manifest.icon
+				? baseUrl + manifest.icon
+				: app.LOUtil.getURL('images/extension-fallback.svg');
+			if (manifest.entry) {
+				content.push({
+					'id': 'extension-toggle-' + id,
+					'type': 'bigcustomtoolitem',
+					'text': manifest.name,
+					'icon': icon,
+					'command': 'extension-toggle-' + id,
+				});
+			}
+			// Commands the extension asked to have offered under its own name arrive as one
+			// dropdown per extension.  Ids are built from the extension and command ids
+			// rather than a counter, so a rebuild leaves them where they were.  A menubutton
+			// id carries its menu's id behind a colon, and an id of two dash-separated parts
+			// reads the same way, so a menubutton's own id holds neither character:
+			var placement = manifest.contributes && manifest.contributes.extensionsMenu;
+			if (!placement || !placement.length)
+				continue;
+			var commands = manifest.contributes.commands || [];
+			var menu = [];
+			placement.forEach(function(item) {
+				if (item.separator)
+					return;
+				var command = commands.filter(function(c) { return c.id === item.command; })[0];
+				if (!command) {
+					console.warn(
+						'extension ' + id + ': contributes.extensionsMenu names unknown '
+						+ 'command "' + item.command + '"');
+					return;
+				}
+				menu.push({
+					'id': 'ext:' + id + ':extentry:' + item.command,
+					'text': command.title,
+					'icon': command.icon ? baseUrl + command.icon : undefined,
+					'action': 'ext:' + id + ':' + item.command,
+				});
 			});
+			if (menu.length) {
+				content.push({
+					'id': 'extmenu_' + id.replace(/[.-]/g, '_'),
+					'type': 'menubutton',
+					'text': manifest.name,
+					'icon': icon,
+					'menu': menu,
+				});
+			}
 		}
+		// Drop the Extensions tab entirely when no extension offers anything here:
+		// returning null lets _filterExtensionsTab strip it, and both sides read the same
+		// predicate because the label strip and the pages are zipped by index.  refresh()
+		// (called once Control.Extension.loadExtensions resolves) rebuilds the notebookbar,
+		// so the tab appears as soon as discovery populates app.map._extensions.
+		if (!this._hasExtensionsTabContent())
+			return null;
 		//HACK: Control.JSDialogBuilder.build's "hasManyChildren && isContainer" path only
 		// emits the <div id="Extensions-container"> wrapper when the inner overflowmanager
 		// has more than one child; so pin a trailing dummy spacer so the 1-extension case
@@ -393,7 +441,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 				};
 			}).filter(function(entry) { return !!entry; });
 			return {
-				'id': 'ext:' + extId + ':menu:' + (this._nextContributedId++),
+				'id': 'extmenu_' + extId.replace(/[.-]/g, '_') + '_'
+					+ (this._nextContributedId++),
 				'type': 'menubutton',
 				'text': item.title,
 				'icon': item.icon ? baseUrl + item.icon : undefined,

@@ -220,8 +220,17 @@ interface ExtensionKeybinding {
 	modifier?: ('ctrl' | 'alt' | 'shift')[];
 }
 
+// One entry of contributes.extensionsMenu: a command to offer, or a divider between groups of
+// them.
+type ExtensionMenuEntry = { command: string } | { separator: true };
+
 interface ExtensionContributes {
 	commands?: ExtensionCommand[];
+	// Commands offered under the extension's own name in the Extensions menu and the
+	// Extensions notebookbar tab, in this order. For an extension whose commands are its
+	// whole user interface, rather than one placing them in a document menu of its own
+	// choosing with `menus` below.
+	extensionsMenu?: ExtensionMenuEntry[];
 	menus?: { [menuId: string]: string[] };
 	notebookbar?: ExtensionNotebookbarTab[];
 	contextMenu?: ExtensionContextMenuEntry[];
@@ -472,9 +481,21 @@ window.L.Control.Extension = window.L.Control.extend({
 		}
 		const callId = 'cmd-' + this.options.id + '-' + this._nextCommandCallId++;
 		this._pendingCommandCalls[callId] = {
-			onSuccess: function () {
-				// Menu commands run for effect; nothing consumes their return
-				// value today.
+			onSuccess: (value: unknown) => {
+				// A result marked __coolGas carries the messages an Apps Script add-on
+				// passed to getUi().alert(); the sidebar iframe shows those as a banner,
+				// and a command invoked from a menu has the snackbar instead.
+				const envelope = value as {
+					__coolGas?: boolean;
+					alerts?: { title?: string; message?: string }[];
+				} | null;
+				if (!envelope || envelope.__coolGas !== true) return;
+				for (const alert of envelope.alerts || []) {
+					if (!this.map.uiManager) return;
+					this.map.uiManager.showSnackbar(
+						alert.title ? alert.title + ': ' + alert.message : alert.message,
+					);
+				}
 			},
 			onError: (err: Error) => {
 				console.error(
@@ -977,6 +998,50 @@ window.L.control.extension = function (
 	});
 };
 
+// The kit-side text behind every command of an Apps Script add-on: the runner, followed by a
+// `commands` entry per menu function that hands the add-on's own sources to it.  The sources
+// travel as string literals rather than being pasted in, because the runner evaluates each one
+// under its own file name so an exception's frames name the add-on's file.  The runner comes
+// first and nothing is prepended to it, so its line 1 stays line 1.
+async function appsScriptCommandSource(
+	baseRel: string,
+	scriptNames: string[],
+	functionNames: string[],
+): Promise<string> {
+	const urls = [app.LOUtil.getURL(baseRel + '../gas-kit-runner.js')].concat(
+		scriptNames.map((name) => app.LOUtil.getURL(baseRel + name)),
+	);
+	const texts = await Promise.all(
+		urls.map(async (url) => {
+			const resp = await fetch(url);
+			if (!resp.ok) throw new Error(url + ' HTTP ' + resp.status);
+			return await resp.text();
+		}),
+	);
+	return (
+		texts[0] +
+		'\nvar commands = {};\n' +
+		'(function() {\n' +
+		'var sources = ' +
+		JSON.stringify(texts.slice(1)) +
+		';\n' +
+		'var names = ' +
+		JSON.stringify(scriptNames) +
+		';\n' +
+		'var functions = ' +
+		JSON.stringify(functionNames) +
+		';\n' +
+		'for (var i = 0; i !== functions.length; ++i) {\n' +
+		'(function(fn) {\n' +
+		'commands[fn] = function() {\n' +
+		'return globalThis.__gasKitRunner("gascmd-" + fn, sources, names, fn, []);\n' +
+		'};\n' +
+		'})(functions[i]);\n' +
+		'}\n' +
+		'})();\n'
+	);
+}
+
 // If the directory carries appsscript.json, synthesize a manifest that hands the sidebar off
 // to the shared gas-wrapper.html; the _cool-gas.json sidecar lists .gs sources and sidebar file:
 async function tryLoadAppsScriptExtension(
@@ -991,6 +1056,7 @@ async function tryLoadAppsScriptExtension(
 		supports?: string[];
 		name?: string;
 		icon?: string;
+		menu?: { caption?: string; functionName?: string; separator?: boolean }[];
 	} = {};
 	try {
 		const listResp = await fetch(app.LOUtil.getURL(baseRel + '_cool-gas.json'));
@@ -1007,15 +1073,70 @@ async function tryLoadAppsScriptExtension(
 	if (listing.scripts && listing.scripts.length) {
 		params.set('scripts', listing.scripts.join(','));
 	}
-	// The shared wrapper sits one directory above <id>/ so a leading "../" reaches it:
 	const manifest: ExtensionManifest = {
 		manifestVersion: '0.1',
 		name: listing.name && listing.name.length ? listing.name : id,
-		entry: '../gas-wrapper.html?' + params.toString(),
 	};
 	if (listing.icon) manifest.icon = listing.icon;
 	if (listing.supports && listing.supports.length) {
 		manifest.supports = listing.supports;
+	}
+
+	// The add-on menu the sidecar found in the sources becomes one command per item, offered
+	// under the add-on's name where an editor add-on's menu belongs. Every command carries the
+	// same kit-side text: it defines them all, and which one runs is chosen at invocation.
+	const items = listing.menu || [];
+	const commands: ExtensionCommand[] = [];
+	const placement: ExtensionMenuEntry[] = [];
+	const functionNames: string[] = [];
+	for (const item of items) {
+		if (!item.functionName) {
+			// Two dividers in a row, or one before any item, would render as a stray line.
+			if (
+				placement.length &&
+				!('separator' in placement[placement.length - 1])
+			) {
+				placement.push({ separator: true });
+			}
+			continue;
+		}
+		if (functionNames.indexOf(item.functionName) < 0) {
+			functionNames.push(item.functionName);
+			commands.push({
+				id: item.functionName,
+				title: item.caption || item.functionName,
+				script: '../gas-kit-runner.js',
+			});
+		}
+		placement.push({ command: item.functionName });
+	}
+	while (placement.length && 'separator' in placement[placement.length - 1]) {
+		placement.pop();
+	}
+	if (commands.length) {
+		try {
+			const source = await appsScriptCommandSource(
+				baseRel,
+				listing.scripts || [],
+				functionNames,
+			);
+			for (const command of commands) command.source = source;
+			manifest.contributes = { commands: commands, extensionsMenu: placement };
+		} catch (err) {
+			console.warn(
+				'extension ' + id + ': Apps Script sources unreadable:',
+				err,
+			);
+			commands.length = 0;
+		}
+	}
+
+	// A panel is what an add-on with a sidebar of its own shows, and the fallback for one whose
+	// menu could not be read from its sources: gas-menu.html then asks the kit for the menu at
+	// display time.  An add-on whose menu is known needs neither.  The shared wrapper sits one
+	// directory above <id>/ so a leading "../" reaches it:
+	if (listing.sidebar || !commands.length) {
+		manifest.entry = '../gas-wrapper.html?' + params.toString();
 	}
 	return manifest;
 }

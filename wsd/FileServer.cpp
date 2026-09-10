@@ -1075,6 +1075,9 @@ static std::string jsonQuote(std::string const & s) {
 // Assemble an Apps Script <id>/_cool-gas.json sidecar body from the extension directory contents:
 //  - `scripts` is a list of (server-side script file name, source text) pairs
 //  - `htmls` is a list of .html/.htm file names
+// Besides the script and sidebar names, the body carries the add-on's display name, the document
+// types it targets, and the menu its onOpen() installs, as far as sniffing the sources finds
+// them.
 // The client-side tryLoadAppsScriptExtension in Control.Extension.ts reads the body to know
 // which scripts to fetch and which sidebar to load, and picks up an optional display name
 // and target document types the sniffing here can extract:
@@ -1141,6 +1144,26 @@ static std::string synthesizeGasSidecar(
         displayName = tryMatch(reTitleConst);
     }
 
+    // The add-on menu, from the literal addItem() and addSeparator() calls in source order.  A
+    // menu assembled some other way - captions built in a loop, or read from a property - leaves
+    // nothing to find here, and such an add-on keeps the panel that asks the kit for its menu at
+    // display time instead.  An empty caption stands for a separator:
+    std::vector<std::pair<std::string, std::string>> menuItems;
+    static const std::regex reMenuItem(
+        R"RE(addItem\s*\(\s*(?:'([^']*)'|"([^"]*)")\s*,\s*(?:'([^']*)'|"([^"]*)")|addSeparator\s*\(\s*\))RE");
+    for (auto const & [name, src]: scripts) {
+        (void) name;
+        for (std::sregex_iterator it(src.begin(), src.end(), reMenuItem), end; it != end; ++it) {
+            auto const & match = *it;
+            if (match[1].matched || match[2].matched) {
+                menuItems.emplace_back(match[1].matched ? match[1].str() : match[2].str(),
+                                       match[3].matched ? match[3].str() : match[4].str());
+            } else {
+                menuItems.emplace_back(std::string(), std::string());
+            }
+        }
+    }
+
     std::string body = "{\"scripts\":[";
     bool firstScript = true;
     for (auto const & [name, src]: scripts) {
@@ -1165,6 +1188,26 @@ static std::string synthesizeGasSidecar(
             }
             firstSupport = false;
             body.append(jsonQuote(s));
+        }
+        body.push_back(']');
+    }
+    if (!menuItems.empty()) {
+        body.append(",\"menu\":[");
+        bool firstItem = true;
+        for (auto const & [caption, function]: menuItems) {
+            if (!firstItem) {
+                body.push_back(',');
+            }
+            firstItem = false;
+            if (caption.empty()) {
+                body.append("{\"separator\":true}");
+            } else {
+                body.append("{\"caption\":");
+                body.append(jsonQuote(caption));
+                body.append(",\"functionName\":");
+                body.append(jsonQuote(function));
+                body.push_back('}');
+            }
         }
         body.push_back(']');
     }
