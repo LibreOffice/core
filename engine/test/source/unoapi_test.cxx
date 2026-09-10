@@ -412,6 +412,9 @@ void UnoApiTest::saveAndReload(TestFilter eFilter, const char* pPassword)
 
 std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)
 {
+    // Clear memory - for several calls in a test
+    maMemory.Seek(0);
+    maMemory.SetStreamSize(0);
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
