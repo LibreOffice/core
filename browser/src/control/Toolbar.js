@@ -716,10 +716,13 @@ window.L.Map.include({
 
 		if (!isAnyMatchingContent) {
 			this.resetFilterResults();
-			$('#online-help-search-input').addClass('search-not-found');
-			setTimeout(function () {
-				$('#online-help-search-input').removeClass('search-not-found');
-			}, 800);
+			const searchInput = document.getElementById('online-help-search-input');
+			if (searchInput) {
+				searchInput.classList.add('search-not-found');
+				setTimeout(function () {
+					searchInput.classList.remove('search-not-found');
+				}, 800);
+			}
 		}
 	},
 
@@ -897,7 +900,8 @@ window.L.Map.include({
 			jsdialogFormulabar.show('AutoSumMenu');
 		}
 
-		$('#AutoSumMenu-button').css('margin-inline', '0');
+		const autoSumMenuButton = document.getElementById('AutoSumMenu-button');
+		if (autoSumMenuButton) autoSumMenuButton.style.marginInline = '0';
 		$('#AutoSumMenu .unoarrow').css('margin', '0');
 
 		map.formulabar.blurField();
