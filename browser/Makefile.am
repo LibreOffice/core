@@ -1423,6 +1423,13 @@ install-demo-extensions:
 					name=$$(basename "$$gs") && \
 					scripts="$$scripts$${scripts:+,}\"$$name\""; \
 				done && \
+				if test -z "$$scripts"; then \
+					for js in "$$dir"/*.js; do \
+						test -f "$$js" || continue; \
+						name=$$(basename "$$js") && \
+						scripts="$$scripts$${scripts:+,}\"$$name\""; \
+					done; \
+				fi && \
 				sidebar= && \
 				for html in "$$dir"/*.html; do \
 					test -f "$$html" || continue; \

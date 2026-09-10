@@ -1073,10 +1073,10 @@ static std::string jsonQuote(std::string const & s) {
 }
 
 // Assemble an Apps Script <id>/_cool-gas.json sidecar body from the extension directory contents:
-//  - `scripts` is a list of (.gs file name, source text) pairs
+//  - `scripts` is a list of (server-side script file name, source text) pairs
 //  - `htmls` is a list of .html/.htm file names
 // The client-side tryLoadAppsScriptExtension in Control.Extension.ts reads the body to know
-// which .gs files to fetch and which sidebar to load, and picks up an optional display name
+// which scripts to fetch and which sidebar to load, and picks up an optional display name
 // and target document types the sniffing here can extract:
 static std::string synthesizeGasSidecar(
     std::vector<std::pair<std::string, std::string>> const & scripts,
@@ -1257,10 +1257,11 @@ void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
     indexJson.push_back(']');
     installAsset(prefix + "index.json", std::move(indexJson));
 
-    // Stash a <id>/_cool-gas.json sidecar listing each Apps Script directory's .gs and sidebar:
+    // Stash a <id>/_cool-gas.json sidecar listing each Apps Script directory's scripts and sidebar:
     for (auto const & id: gasIds) {
         const std::string dirPrefix = prefix + id + "/";
         std::vector<std::pair<std::string, std::string>> scripts;
+        std::vector<std::pair<std::string, std::string>> jsScripts;
         std::vector<std::string> htmls;
         for (auto const & entry: FileHash) {
             auto const & key = entry.first;
@@ -1273,9 +1274,17 @@ void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
             }
             if (name.ends_with(".gs")) {
                 scripts.emplace_back(name, entry.second.first);
+            } else if (name.ends_with(".js")) {
+                jsScripts.emplace_back(name, entry.second.first);
             } else if (name.ends_with(".html") || name.ends_with(".htm")) {
                 htmls.push_back(name);
             }
+        }
+        // An Apps Script project's server code is .gs in the web editor, which clasp writes out
+        // as .js on disk, so a directory holds one or the other.  Where both are there, the .gs
+        // files are the project's and a .js is something the sidebar loads in the browser:
+        if (scripts.empty()) {
+            scripts = std::move(jsScripts);
         }
         std::sort(scripts.begin(), scripts.end());
         std::sort(htmls.begin(), htmls.end());
@@ -1423,6 +1432,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
             return true;
         }
         std::vector<std::pair<std::string, std::string>> scripts;
+        std::vector<std::pair<std::string, std::string>> jsScripts;
         std::vector<std::string> htmls;
         try {
             for (Poco::DirectoryIterator it(dirPath), end; it != end; ++it) {
@@ -1430,11 +1440,15 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
                     continue;
                 }
                 auto const & name = it.name();
-                if (name.ends_with(".gs")) {
+                if (name.ends_with(".gs") || name.ends_with(".js")) {
                     Poco::FileInputStream stream(it->path());
                     std::string src;
                     Poco::StreamCopier::copyToString(stream, src);
-                    scripts.emplace_back(name, std::move(src));
+                    if (name.ends_with(".gs")) {
+                        scripts.emplace_back(name, std::move(src));
+                    } else {
+                        jsScripts.emplace_back(name, std::move(src));
+                    }
                 } else if (name.ends_with(".html") || name.ends_with(".htm")) {
                     htmls.push_back(name);
                 }
@@ -1445,6 +1459,12 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
                 << configId << "/" << id << "]: " << e.displayText());
             HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
             return true;
+        }
+        // An Apps Script project's server code is .gs in the web editor, which clasp writes out
+        // as .js on disk, so a directory holds one or the other.  Where both are there, the .gs
+        // files are the project's and a .js is something the sidebar loads in the browser:
+        if (scripts.empty()) {
+            scripts = std::move(jsScripts);
         }
         std::sort(scripts.begin(), scripts.end());
         std::sort(htmls.begin(), htmls.end());
