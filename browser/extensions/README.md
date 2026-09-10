@@ -314,9 +314,10 @@ the menu that building it produced.
 
 ### What the shims cover
 
-`DocumentApp` (documents, the body, the active selection and cursor),
-`HtmlService`, `PropertiesService.getUserProperties` (stored in the iframe's
-`localStorage`), `LanguageApp.translate`, `Session`, `Utilities` and `Logger`.
+`DocumentApp` and `SpreadsheetApp` (documents, sheets, ranges, the active
+selection and cursor), `HtmlService`, `PropertiesService.getUserProperties`
+(stored in the iframe's `localStorage`), `LanguageApp.translate`, `Session`,
+`Utilities` and `Logger`.
 
 `getUi().alert()` records its message rather than blocking on a modal, and the
 message becomes a dismissible banner in the panel once the call returns. Script
@@ -327,6 +328,20 @@ Anything else is simply absent, so an add-on that reaches for it fails naming
 the call. That is the point of packaging real add-ons unmodified: what they need
 and we do not have shows up as a gap in the shims rather than as a patch to
 someone else's sample.
+
+### Where the two spreadsheet models differ
+
+Two differences are in the sheet itself rather than in any call, and an add-on
+written for Sheets can be surprised by both.
+
+A sheet here has a fixed grid, a million rows by sixteen thousand columns, and
+deleting rows shifts the cells below up and leaves blank rows at the bottom. In
+Sheets a grid grows and shrinks, so an add-on that deletes rows to trim a sheet
+finds the row count unchanged afterwards.
+
+`getMaxRows()` therefore returns that million, and an add-on that asks for the
+values of a range spanning every row gets a million cells read one at a time.
+The call works and is slow.
 
 ## Local testing
 

@@ -149,6 +149,164 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             GlyphType: uno.idl.scriptinterop.GlyphType
         };
 
+        // GAS's Spreadsheet/Sheet/Range on top of scriptinterop's XSpreadsheet/XSheet/XRange.
+        // Only what add-ons have actually asked for so far is wired up; anything missing is
+        // simply absent, so an add-on that needs more fails naming the call it wanted:
+        function activeSpreadsheet() { return cool.getActiveSpreadsheet(); }
+
+        // An empty cell reads as a void Any, which arrives here as null, while GAS hands out ''
+        // for it - and add-ons test a cell for emptiness with === '':
+        function cellValue(v) { return v === null || v === undefined ? '' : v; }
+
+        function rangeFacade(xr, sheet) {
+            if (!xr) return null;
+            const r = {
+                getRow: function() { return xr.getRow(); },
+                getRowIndex: function() { return xr.getRow(); },
+                getColumn: function() { return xr.getColumn(); },
+                getColumnIndex: function() { return xr.getColumn(); },
+                getNumRows: function() { return xr.getNumRows(); },
+                getHeight: function() { return xr.getNumRows(); },
+                getNumColumns: function() { return xr.getNumColumns(); },
+                getWidth: function() { return xr.getNumColumns(); },
+                getLastRow: function() { return xr.getRow() + xr.getNumRows() - 1; },
+                getLastColumn: function() { return xr.getColumn() + xr.getNumColumns() - 1; },
+                getSheet: function() { return sheet; },
+                getValue: function() { return cellValue(xr.getValue()); },
+                getValues: function() {
+                    return xr.getValues().map(function(row) { return row.map(cellValue); });
+                },
+                // Formatted cell text, which scriptinterop has no call of its own for yet.
+                // Stringifying the raw values gets the emptiness tests add-ons use this for
+                // right, but a formatted number comes out unformatted:
+                getDisplayValues: function() {
+                    return xr.getValues().map(function(row) {
+                        return row.map(function(v) { return String(cellValue(v)); });
+                    });
+                },
+                setValue: function(v) { xr.setValue(v); return r; },
+                setValues: function(v) { xr.setValues(v); return r; },
+                // GAS counts an omitted numRows/numColumns as "keep this dimension":
+                offset: function(rowOffset, columnOffset, numRows, numColumns) {
+                    return rangeFacade(
+                        xr.offset(
+                            rowOffset, columnOffset,
+                            numRows === undefined ? xr.getNumRows() : numRows,
+                            numColumns === undefined ? xr.getNumColumns() : numColumns),
+                        sheet);
+                },
+                setBackground: function(c) { xr.setBackgroundColor(String(c)); return r; },
+                setFontWeight: function(w) { xr.setFontWeight(String(w)); return r; },
+                setFontStyle: function(w) { xr.setFontStyle(String(w)); return r; },
+                setFontColor: function(c) { xr.setFontColor(String(c)); return r; },
+                setNumberFormat: function(f) { xr.setNumberFormat(String(f)); return r; }
+            };
+            return r;
+        }
+
+        function sheetFacade(xs) {
+            if (!xs) return null;
+            const s = {
+                getName: function() { return xs.getName(); },
+                getSheetName: function() { return xs.getName(); },
+                // One JS name for scriptinterop's four getRange overloads, dispatched the way
+                // GAS dispatches its own: A1 notation, a cell, a column of cells, a block:
+                getRange: function(a, b, numRows, numColumns) {
+                    if (typeof a === 'string') return rangeFacade(xs.getRange(a), s);
+                    if (numRows === undefined) return rangeFacade(xs.getRange(a, b), s);
+                    if (numColumns === undefined) {
+                        return rangeFacade(xs.getRange(a, b, numRows), s);
+                    }
+                    return rangeFacade(xs.getRange(a, b, numRows, numColumns), s);
+                },
+                getActiveRange: function() { return rangeFacade(xs.getActiveRange(), s); },
+                getActiveCell: function() { return rangeFacade(xs.getActiveCell(), s); },
+                getDataRange: function() { return rangeFacade(xs.getDataRange(), s); },
+                getMaxRows: function() { return xs.getMaxRows(); },
+                getMaxColumns: function() { return xs.getMaxColumns(); },
+                getLastRow: function() { return xs.getLastRow(); },
+                getLastColumn: function() { return xs.getLastColumn(); },
+                getFrozenRows: function() { return xs.getFrozenRows(); },
+                getFrozenColumns: function() { return xs.getFrozenColumns(); },
+                deleteRow: function(row) { xs.deleteRow(row); return s; },
+                deleteRows: function(row, numRows) { xs.deleteRows(row, numRows); return s; },
+                deleteColumn: function(column) { xs.deleteColumn(column); return s; },
+                deleteColumns: function(column, numColumns) {
+                    xs.deleteColumns(column, numColumns);
+                    return s;
+                },
+                setColumnWidth: function(column, pixels) {
+                    xs.setColumnWidth(column, pixels);
+                    return s;
+                },
+                autoResizeColumn: function(column) { xs.autoResizeColumns(column, 1); return s; },
+                autoResizeColumns: function(column, numColumns) {
+                    xs.autoResizeColumns(column, numColumns);
+                    return s;
+                },
+                autoResizeRows: function(row, numRows) {
+                    xs.autoResizeRows(row, numRows);
+                    return s;
+                },
+                clear: function() { xs.clear(); return s; },
+                getParent: function() { return spreadsheetFacade(activeSpreadsheet()); }
+            };
+            return s;
+        }
+
+        function spreadsheetFacade(xss) {
+            const ss = {
+                getName: function() { return xss.getName(); },
+                getId: function() { return ''; },
+                getUrl: function() { return ''; },
+                getActiveSheet: function() { return sheetFacade(xss.getActiveSheet()); },
+                getSheetByName: function(name) {
+                    return sheetFacade(xss.getSheetByName(String(name)));
+                },
+                getSheets: function() {
+                    return xss.getSheets().map(function(x) { return sheetFacade(x); });
+                },
+                insertSheet: function(name) {
+                    return sheetFacade(name === undefined ? xss.insertSheet()
+                                                          : xss.insertSheet(String(name)));
+                },
+                getRangeByName: function(name) {
+                    return rangeFacade(xss.getRangeByName(String(name)), null);
+                },
+                getActiveRange: function() {
+                    return sheetFacade(xss.getActiveSheet()).getActiveRange();
+                },
+                getActiveCell: function() {
+                    return sheetFacade(xss.getActiveSheet()).getActiveCell();
+                },
+                flush: function() { xss.flush(); },
+                // Not a modal, but the same one-way message, so it takes the alert path:
+                toast: function(message, title) {
+                    pendingAlerts.push(
+                        { title: title === undefined ? '' : String(title),
+                          message: String(message) });
+                },
+                getUi: function() { return uiStub; }
+            };
+            return ss;
+        }
+
+        globalThis.SpreadsheetApp = {
+            getActive: function() { return spreadsheetFacade(activeSpreadsheet()); },
+            getActiveSpreadsheet: function() { return spreadsheetFacade(activeSpreadsheet()); },
+            getActiveSheet: function() {
+                return sheetFacade(activeSpreadsheet().getActiveSheet());
+            },
+            getActiveRange: function() {
+                return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveRange();
+            },
+            getActiveCell: function() {
+                return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveCell();
+            },
+            flush: function() { activeSpreadsheet().flush(); },
+            getUi: function() { return uiStub; }
+        };
+
         function makeHtmlOutput() {
             const o = {
                 setTitle: function() { return o; },
