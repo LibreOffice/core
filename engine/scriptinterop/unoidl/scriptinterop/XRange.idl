@@ -32,16 +32,16 @@ interface XRange : XBase
     XRange offset([in] long rowOffset, [in] long columnOffset, [in] long numRows,
                  [in] long numColumns);
 
-    XRange setBackgroundColor([in] string hexColor);
+    XRange setBackgroundColor([in] string color);
 
     XRange setFontWeight([in] string fontWeight);
 
     XRange setFontStyle([in] string fontStyle);
 
-    XRange setFontColor([in] string hexColor);
+    XRange setFontColor([in] string color);
 
     XRange setBorder([in] boolean top, [in] boolean left, [in] boolean bottom,
-                     [in] boolean right, [in] string hexColor);
+                     [in] boolean right, [in] string color);
 
     XRange setNumberFormat([in] string format);
 

@@ -106,7 +106,7 @@
 
 using scriptinterop::detail::extentToHundredthMm;
 using scriptinterop::detail::hundredthMmToPoints;
-using scriptinterop::detail::parseHexColor;
+using scriptinterop::detail::parseColor;
 using scriptinterop::detail::pointsToHundredthMm;
 
 namespace
@@ -840,7 +840,7 @@ public:
         }
         cursorProperties(text_, range_)
             ->setPropertyValue(u"CharColor"_ustr,
-                               cpo::uno::Any(parseHexColor(color.get<OUString>())));
+                               cpo::uno::Any(parseColor(color.get<OUString>())));
         return this;
     }
 
@@ -1830,7 +1830,7 @@ public:
     cpo::uno::Reference<scriptinterop::XSlide>
         SAL_CALL setBackgroundColor(OUString const& hexColor) override
     {
-        auto const color = parseHexColor(hexColor);
+        auto const color = parseColor(hexColor);
         cpo::uno::Reference<css::lang::XMultiServiceFactory> const factory(model_,
                                                                            cpo::uno::UNO_QUERY);
         if (!factory.is())

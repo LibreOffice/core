@@ -594,8 +594,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSetBackgroundColor)
     sal_Int32 nColor = 0;
     xProps->getPropertyValue(u"CellBackColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2a6099), nColor);
-    // A malformed color string is rejected.
-    CPPUNIT_ASSERT_THROW(xRange->setBackgroundColor(u"blue"_ustr), cpo::uno::RuntimeException);
+    // A string that is neither a hex color nor a color name is rejected.
+    CPPUNIT_ASSERT_THROW(xRange->setBackgroundColor(u"bluish"_ustr), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSetColumnWidth)
@@ -724,7 +724,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSetFontColor)
     sal_Int32 nColor = 0;
     xProps->getPropertyValue(u"CharColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2a6099), nColor);
-    CPPUNIT_ASSERT_THROW(xRange->setFontColor(u"blue"_ustr), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xRange->setFontColor(u"bluish"_ustr), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSetBorder)

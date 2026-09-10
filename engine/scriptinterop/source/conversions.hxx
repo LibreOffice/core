@@ -17,6 +17,7 @@
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/ustring.hxx>
+#include <svtools/htmltokn.h>
 #include <sal/config.h>
 #include <sal/types.h>
 
@@ -78,27 +79,34 @@ inline sal_Int32 pixelsToHundredthMm(sal_Int32 pixels)
     return static_cast<sal_Int32>(hundredthMm);
 }
 
-inline sal_Int32 parseHexColor(OUString const& hexColor)
+// A color the way SpreadsheetApp-style code states one: "#rrggbb", or one of the color names
+// CSS gives, such as "yellow".  The name table is the one the HTML parser already carries.
+inline sal_Int32 parseColor(OUString const& color)
 {
-    bool valid = hexColor.getLength() == 7 && hexColor[0] == '#';
-    if (valid)
+    bool hex = color.getLength() == 7 && color[0] == '#';
+    if (hex)
     {
         for (sal_Int32 i = 1; i != 7; ++i)
         {
-            auto const c = hexColor[i];
+            auto const c = color[i];
             if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
             {
-                valid = false;
+                hex = false;
                 break;
             }
         }
     }
-    if (!valid)
+    if (hex)
     {
-        throw cpo::uno::RuntimeException(
-            OUString::Concat("expected a color in \"#rrggbb\" form, got ") + hexColor);
+        return static_cast<sal_Int32>(o3tl::toUInt32(color.subView(1), 16));
     }
-    return static_cast<sal_Int32>(o3tl::toUInt32(hexColor.subView(1), 16));
+    auto const named = GetHTMLColor(color);
+    if (named != SAL_MAX_UINT32)
+    {
+        return static_cast<sal_Int32>(named);
+    }
+    throw cpo::uno::RuntimeException(
+        OUString::Concat("expected a color in \"#rrggbb\" form or a color name, got ") + color);
 }
 }
 

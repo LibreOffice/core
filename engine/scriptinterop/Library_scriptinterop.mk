@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,scriptinterop,\
     cppuhelper \
     i18nlangtag \
     sal \
+    svt \
 ))
 
 $(eval $(call gb_Library_use_api,scriptinterop,\

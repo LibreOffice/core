@@ -374,8 +374,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSlideBackgroundColor)
     sal_Int32 nColor = 0;
     xBackground->getPropertyValue(u"FillColor"_ustr) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2a6099), nColor);
-    // A malformed color string is rejected.
-    CPPUNIT_ASSERT_THROW(xSlide->setBackgroundColor(u"blue"_ustr), cpo::uno::RuntimeException);
+    // A string that is neither a hex color nor a color name is rejected.
+    CPPUNIT_ASSERT_THROW(xSlide->setBackgroundColor(u"bluish"_ustr), cpo::uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)

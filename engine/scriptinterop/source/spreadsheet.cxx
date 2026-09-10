@@ -91,7 +91,7 @@
 #include "spreadsheet.hxx"
 
 using scriptinterop::detail::extentToHundredthMm;
-using scriptinterop::detail::parseHexColor;
+using scriptinterop::detail::parseColor;
 using scriptinterop::detail::pixelsToHundredthMm;
 
 namespace
@@ -610,11 +610,11 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XRange>
-        SAL_CALL setBackgroundColor(OUString const& hexColor) override
+        SAL_CALL setBackgroundColor(OUString const& color) override
     {
         cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
                                                                   cpo::uno::UNO_QUERY_THROW);
-        props->setPropertyValue(u"CellBackColor"_ustr, cpo::uno::Any(parseHexColor(hexColor)));
+        props->setPropertyValue(u"CellBackColor"_ustr, cpo::uno::Any(parseColor(color)));
         return this;
     }
 
@@ -658,17 +658,17 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XRange> SAL_CALL setFontColor(OUString const& hexColor)
+    cpo::uno::Reference<scriptinterop::XRange> SAL_CALL setFontColor(OUString const& color)
         override
     {
         cpo::uno::Reference<css::beans::XPropertySet> const props(range_,
                                                                   cpo::uno::UNO_QUERY_THROW);
-        props->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(parseHexColor(hexColor)));
+        props->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(parseColor(color)));
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XRange>
-        SAL_CALL setBorder(bool top, bool left, bool bottom, bool right, OUString const& hexColor)
+        SAL_CALL setBorder(bool top, bool left, bool bottom, bool right, OUString const& color)
         override
     {
         // A single fixed solid, medium-width line for every requested edge; no style or
@@ -676,7 +676,7 @@ public:
         // touched. An edge whose flag is false is left as it already was, not cleared: this
         // can only add borders, not remove ones a cell already has.
         css::table::BorderLine2 line;
-        line.Color = parseHexColor(hexColor);
+        line.Color = parseColor(color);
         line.InnerLineWidth = 0;
         line.OuterLineWidth = 35;
         line.LineDistance = 0;
