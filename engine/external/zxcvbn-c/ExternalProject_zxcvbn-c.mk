@@ -27,8 +27,8 @@ $(call gb_ExternalProject_get_state_target,zxcvbn-c,generate-dictionary-nodes): 
 		,\
 			$(MAKE) dict-src.h \
 				AR="$(gb_AR)" \
-				CFLAGS="$(gb_CFLAGS)" \
-				CXXFLAGS="$(gb_CXXFLAGS)" \
+				CFLAGS="$(gb_CFLAGS) $(call gb_ExternalProject_get_build_flags,zxcvbn-c)" \
+				CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,zxcvbn-c)" \
 				$(if $(filter MSC,$(COM)),$(gb_AUTOCONF_WRAPPERS) )\
 		)\
 	)
