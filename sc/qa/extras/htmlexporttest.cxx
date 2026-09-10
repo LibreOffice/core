@@ -69,7 +69,7 @@ public:
         CPPUNIT_ASSERT(pDoc);
 
         // Without the fix in place, this test would have failed
-        // i.e. href attribute would have been turned into an absolute file
+        // i.e. href attribute would have been turned into an absolute file URL
         CPPUNIT_ASSERT(!getXPath(pDoc, "//a", "href").startsWith("file:"));
     }
 

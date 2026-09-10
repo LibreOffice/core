@@ -738,7 +738,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf137000_handle_upright)
 {
     // Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when in a textbox menu we
     // choose, 'do not rotate this element'. Implementations are in tdf#106197 with followup
-    // tdf#137000. tdf#149538, tdf#149551 improve the implementation to export 'upright' instead
+    // tdf#137000; tdf#149538, tdf#149551 improve the implementation to export 'upright' instead
     // of workaround 'rot'.
     createScDoc("xlsx/tdf137000_export_upright.xlsx");
 

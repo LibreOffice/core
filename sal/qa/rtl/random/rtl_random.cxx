@@ -43,7 +43,7 @@ public:
 
         rtlRandomPool aPool = rtl_random_createPool();
 
-        // LLA: seems to be that another test is not possible for createPool()
+        // LLA: it seems that no other test is possible for createPool()
         CPPUNIT_ASSERT_MESSAGE("create failed", aPool != nullptr);
 
         rtl_random_destroyPool(aPool);
@@ -72,7 +72,7 @@ public:
     {
         rtlRandomPool aPool = rtl_random_createPool();
 
-        // LLA: seems to be that another test is not possible for createPool()
+        // LLA: it seems that no other test is possible for createPool()
         CPPUNIT_ASSERT_MESSAGE("create failed", aPool != nullptr);
 
         rtl_random_destroyPool(aPool);
@@ -303,7 +303,7 @@ public:
         aStat.build(nCountMax);
         aStat.print();
 
-        CPPUNIT_ASSERT_MESSAGE("deviation should be less average", aStat.getMaxDeviation() < aStat.getAverage());
+        CPPUNIT_ASSERT_MESSAGE("deviation should be less than average", aStat.getMaxDeviation() < aStat.getAverage());
 
         rtl_random_destroyPool(aPool);
     }
@@ -335,7 +335,7 @@ public:
         aStat.build(nCountMax * nBufLen);
         aStat.print();
 
-        CPPUNIT_ASSERT_MESSAGE("deviation should be less average", aStat.getMaxDeviation() < aStat.getAverage());
+        CPPUNIT_ASSERT_MESSAGE("deviation should be less than average", aStat.getMaxDeviation() < aStat.getAverage());
 
         rtl_random_destroyPool(aPool);
     }

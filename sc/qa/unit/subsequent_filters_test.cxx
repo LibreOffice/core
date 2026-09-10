@@ -90,7 +90,7 @@ void testContentImpl(ScDocument& rDoc, bool bCheckMergedCells)
     OUString aString = rDoc.GetString(1, 0, 0);
 
     //check string import
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("string imported not correctly", u"String1"_ustr, aString);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", u"String1"_ustr, aString);
     aString = rDoc.GetString(1, 1, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("string not imported correctly", u"String2"_ustr, aString);
 

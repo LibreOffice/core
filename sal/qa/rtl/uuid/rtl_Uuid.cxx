@@ -110,7 +110,7 @@ public:
 
         sal_uInt8 pNamedUUID[16], pNamedUUID2[16];
 
-        // Same name does generate the same uuid
+        // Same name generates the same uuid
         rtl_String *pName = nullptr;
         rtl_string_newFromStr( &pName , "this is a bla.blubs.DNS-Name" );
         rtl_createNamedUuid( pNamedUUID , NameSpace_DNS , pName );
@@ -119,22 +119,22 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Same name should generate the same uuid", sal_Int32(0), rtl_compareUuid( pNamedUUID , pNamedUUID2 ) );
         CPPUNIT_ASSERT_MESSAGE( "Same name should generate the same uuid", ! memcmp( pNamedUUID  , pPriorCalculatedUUID , 16 ) );
 
-        // Different names does not generate the same uuid
+        // Different names do not generate the same uuid
         rtl_string_newFromStr( &pName , "this is a bla.blubs.DNS-Namf" );
         rtl_createNamedUuid( pNamedUUID2 , NameSpace_DNS , pName );
-        CPPUNIT_ASSERT_MESSAGE("Different names does not generate the same uuid.", memcmp( pNamedUUID , pNamedUUID2 , 16 ) );
+        CPPUNIT_ASSERT_MESSAGE("Different names do not generate the same uuid.", memcmp( pNamedUUID , pNamedUUID2 , 16 ) );
 
-        // the same name with different namespace uuid produces different uuids
+        // The same name with different namespace uuid produces different uuids
         rtl_createNamedUuid( pNamedUUID , NameSpace_URL , pName );
-        CPPUNIT_ASSERT_MESSAGE( " same name with different namespace uuid produces different uuids", memcmp( pNamedUUID , pNamedUUID2 , 16 ));
-        CPPUNIT_ASSERT_MESSAGE( " same name with different namespace uuid produces different uuids", rtl_compareUuid( pNamedUUID , pNamedUUID2 ) != 0);
+        CPPUNIT_ASSERT_MESSAGE( "Same name with different namespace uuid produces different uuids", memcmp( pNamedUUID , pNamedUUID2 , 16 ));
+        CPPUNIT_ASSERT_MESSAGE( "Same name with different namespace uuid produces different uuids", rtl_compareUuid( pNamedUUID , pNamedUUID2 ) != 0);
 
-        //test compareUuid
+        // test compareUuid
         if ( rtl_compareUuid( pNamedUUID , pNamedUUID2 ) > 0 )
-        {   CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) < 0);
+        {   CPPUNIT_ASSERT_MESSAGE( "compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) < 0);
         }
         else
-            CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) > 0);
+            CPPUNIT_ASSERT_MESSAGE( "compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) > 0);
 
         rtl_string_release( pName );
     }

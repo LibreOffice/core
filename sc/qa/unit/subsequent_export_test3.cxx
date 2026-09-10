@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
             pDoc->GetBorderLines(nCol + 2, (nRow * 2) + 8, 0, nullptr, &pLineTop, nullptr,
                                  &pLineBottom);
             if ((nCol < 3) && (nRow == 6))
-            { // in this range no lines since minimum size to create a double is 0.5
+            { // in this range there are no lines since minimum size to create a double is 0.5
                 CPPUNIT_ASSERT(!pLineTop);
                 CPPUNIT_ASSERT(!pLineBottom);
                 continue;

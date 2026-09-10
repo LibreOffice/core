@@ -127,7 +127,7 @@ namespace test_comtools
             CPPUNIT_ASSERT_EQUAL_MESSAGE("COMReference should be empty", static_cast<IUnknown *>(nullptr), r.get());
 
             r = comObjectSource();
-            CPPUNIT_ASSERT_MESSAGE("COMReference should be empty", r.get() != nullptr);
+            CPPUNIT_ASSERT_MESSAGE("COMReference should not be empty", r.get() != nullptr);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count 1 is expected", ULONG(1), reinterpret_cast<COMObject*>(r.get())->GetRefCount());
         }
 
@@ -240,7 +240,7 @@ namespace test_comtools
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test_comtools::test_COMReference);
 
-} // namespace rtl_OUString
+} // namespace test_comtools
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -206,7 +206,7 @@ public:
 
     /**
      * Transfer the ownership of the passed token array instance to the
-     * formula cell being constructed.  The caller <i>must not</i> pass a NULL
+     * formula cell being constructed.  The caller <i>must not</i> pass a nullptr
      * token array pointer.
      */
     SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
@@ -222,7 +222,7 @@ public:
                    ScMatrixMode = ScMatrixMode::NONE );
 
     /** With formula string and grammar to compile with.
-       formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that
+        formula::FormulaGrammar::GRAM_DEFAULT effectively is formula::FormulaGrammar::GRAM_NATIVE_UI that
         also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefore uses the address
         convention associated with rPos::nTab by default. */
     SC_DLLPUBLIC ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
@@ -363,13 +363,13 @@ public:
      */
     formula::FormulaCallableRef GetRawCallable() const;
     /**
-     * Get a value without potentially triggering re-calculation. May return NULL if the
+     * Get a value without potentially triggering re-calculation. May return nullptr if the
      * result is not a token.
      */
     formula::FormulaConstTokenRef GetRawResultToken() const;
     /**
      * Get a copy of the token without potentially triggering re-calculation. Will not
-     * return NULL, but the caller is responsible for the reference.
+     * return nullptr, but the caller is responsible for the reference.
      */
     formula::FormulaTokenRef CloneRawResultToken() const;
     const ScMatrix* GetMatrix();

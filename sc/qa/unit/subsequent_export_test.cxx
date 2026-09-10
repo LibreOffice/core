@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
     CPPUNIT_ASSERT(pDoc);
     OUString sTarget = getXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target");
 
-    // Document is saved to the temporary directory, relative path should be different than original one
+    // Document is saved to the temporary directory, relative path should be different from the original one
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
 }
 

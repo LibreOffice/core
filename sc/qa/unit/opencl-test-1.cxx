@@ -1846,7 +1846,7 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaArcSin)
     ScDocument* pDocRes = getScDoc2();
     pDoc->CalcAll();
 
-    // Verify ACotH Function
+    // Verify ASin Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
         double fLibre = pDoc->GetValue(1, i, 0);

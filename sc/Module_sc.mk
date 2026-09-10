@@ -74,7 +74,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_dataprovider \
 	CppunitTest_sc_cache_test \
 	CppunitTest_sc_parallelism \
-    CppunitTest_sc_shapetest \
+	CppunitTest_sc_shapetest \
 ))
 endif
 
@@ -107,7 +107,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_filters_test2 \
 	CppunitTest_sc_subsequent_filters_test3 \
 	CppunitTest_sc_subsequent_filters_test4 \
-    CppunitTest_sc_subsequent_filters_test5 \
+	CppunitTest_sc_subsequent_filters_test5 \
 	CppunitTest_sc_subsequent_export_test \
 	CppunitTest_sc_subsequent_export_test2 \
 	CppunitTest_sc_subsequent_export_test3 \

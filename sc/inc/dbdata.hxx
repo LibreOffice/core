@@ -241,7 +241,7 @@ public:
     const OUString& GetTableType() const           { return aTableType; }
 
     void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }
-    /** Returns header row range if has headers, else invalid range. */
+    /** Returns header row range if it has headers, else invalid range. */
     ScRange     GetHeaderArea() const;
     void        StartTableColumnNamesListener();
     void        EndTableColumnNamesListener();
@@ -270,8 +270,8 @@ public:
      */
     sal_Int32   GetColumnNameOffset( const OUString& rName ) const;
 
-    /** Returns table column name if nCol is within column range and name
-        is stored, else empty string. */
+    /** Returns table column name if nCol is within column range and the name
+        is stored, else an empty string. */
     const OUString & GetTableColumnName( SCCOL nCol ) const;
 
     OUString GetSourceString() const;

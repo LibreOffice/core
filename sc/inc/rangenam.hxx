@@ -224,7 +224,7 @@ public:
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
 
     /** Compile those names that couldn't be resolved during loading and
-        inserting because they may have referred a name that was inserted later.
+        inserting because they may have referred to a name that was inserted later.
      */
     void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 

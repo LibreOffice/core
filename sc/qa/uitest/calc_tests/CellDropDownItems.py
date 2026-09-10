@@ -15,22 +15,22 @@ class CellDropDownItems(UITestCase):
 
     def test_dropdownitems(self):
 
-        #This is to test Dropdown items in grid window
+        # This is to test Dropdown items in grid window
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            #select cell C10
+            # select cell C10
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C10"}))
 
-            #Open Validation Dialog
+            # Open Validation Dialog
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
 
-                #Select List option
+                # Select List option
                 xallow = xDialog.getChild("allow")
                 select_pos(xallow, "6")
 
-                #Add items to the List
+                # Add items to the List
                 xminlist = xDialog.getChild("minlist")
                 xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item1"}))
                 xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
@@ -42,13 +42,13 @@ class CellDropDownItems(UITestCase):
                 xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
                 xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item5"}))
 
-                #Close the dialog
+                # Close the dialog
 
-            #Launch the Select Menu to view the list and select first item in the list
+            # Launch the Select Menu to view the list and select the first item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 
-            #Select the TreeList UI Object
+            # Select the TreeList UI Object
             xWin = self.xUITest.getTopFocusWindow()
             xlist = xWin.getChild("list")
 
@@ -56,11 +56,11 @@ class CellDropDownItems(UITestCase):
             xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
             self.assertEqual(get_cell_by_position(document, 0, 2, 9).getString(), "Item1")
 
-            #Launch the Select Menu to view the list and select Third item in the list
+            # Launch the Select Menu to view the list and select the third item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 
-            #Select the TreeList UI Object
+            # Select the TreeList UI Object
             xWin = self.xUITest.getTopFocusWindow()
             xlist = xWin.getChild("list")
 
@@ -68,7 +68,7 @@ class CellDropDownItems(UITestCase):
             xListItem.executeAction("DOUBLECLICK" , mkPropertyValues({}) )
             self.assertEqual(get_cell_by_position(document, 0, 2, 9).getString(), "Item3")
 
-            #Launch the Select Menu to view the list and select Fifth item in the list
+            # Launch the Select Menu to view the list and select the fifth item in the list
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("LAUNCH", mkPropertyValues({"SELECTMENU": "", "COL": "2", "ROW": "9"}))
 

@@ -172,7 +172,7 @@
 #define SCSTR_UNDO_CELL_ANCHOR                      NC_("SCSTR_UNDO_CELL_ANCHOR", "Cell Anchor" )
 #define SCSTR_CONDITION                             NC_("SCSTR_CONDITION", "Condition ")
 
-//  content description strings are also use        d in ScLinkTargetsObj
+//  content description strings are also used in ScLinkTargetsObj
 #define SCSTR_CONTENT_ROOT                          NC_("SCSTR_CONTENT_ROOT", "Contents" )
 #define SCSTR_CONTENT_TABLE                         NC_("SCSTR_CONTENT_TABLE", "Sheets" )
 #define SCSTR_CONTENT_RANGENAME                     NC_("SCSTR_CONTENT_RANGENAME", "Range names" )

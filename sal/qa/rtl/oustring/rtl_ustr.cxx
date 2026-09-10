@@ -196,7 +196,7 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST(compare_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+}; // class shortenedCompareIgnoreAsciiCase_WithLength
 
 //
 //
@@ -389,7 +389,7 @@ namespace rtl_ustr
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class compare
+    }; // class indexOfStr
 
     class lastIndexOfStr : public CppUnit::TestFixture
     {
@@ -508,7 +508,7 @@ namespace rtl_ustr
         CPPUNIT_TEST(replaceChar_WithLength_001);
         CPPUNIT_TEST(replaceChar_WithLength_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; // class replaceChar_WithLength
 
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
@@ -530,7 +530,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; // class toAsciiLowerCase
 
     class toAsciiLowerCase_WithLength : public CppUnit::TestFixture
     {
@@ -558,7 +558,7 @@ namespace rtl_ustr
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_000);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; // class toAsciiLowerCase_WithLength
 
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
@@ -580,7 +580,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; // class toAsciiUpperCase
 
     class toAsciiUpperCase_WithLength : public CppUnit::TestFixture
     {
@@ -609,7 +609,7 @@ namespace rtl_ustr
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_000);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; // class toAsciiUpperCase_WithLength
 
     class trim_WithLength : public CppUnit::TestFixture
     {
@@ -1041,7 +1041,7 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE(getToken);
         CPPUNIT_TEST(getToken_000);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ascii_compareIgnoreAsciiCase
+    }; // class getToken
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compare);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase);
