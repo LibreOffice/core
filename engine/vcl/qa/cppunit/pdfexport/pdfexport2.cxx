@@ -2045,6 +2045,70 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
     CPPUNIT_ASSERT_EQUAL(6, nTH);
 }
 
+// the structure element type of a table cell that a row's kid refers to
+OString GetCellType(vcl::filter::PDFElement* pElement)
+{
+    auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+    CPPUNIT_ASSERT(pRef);
+    auto pCell = pRef->LookupObject();
+    CPPUNIT_ASSERT(pCell);
+    auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pCell->Lookup("S"_ostr));
+    CPPUNIT_ASSERT(pS);
+    return pS->GetValue();
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173194)
+{
+    loadFromFile(u"TableHeadingDerived.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    vcl::filter::PDFObjectElement* pTableSE(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Table")
+        {
+            CPPUNIT_ASSERT(!pTableSE);
+            pTableSE = pObject;
+        }
+    }
+    CPPUNIT_ASSERT(pTableSE);
+
+    auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTableSE->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pRows);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pRows->GetElements().size());
+
+    // the first column is Table Heading in row one and a style derived from it in row two,
+    // so both rows read TH then TD
+    for (const auto pRowElement : pRows->GetElements())
+    {
+        auto pRowRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRowElement);
+        CPPUNIT_ASSERT(pRowRef);
+        auto pRow = pRowRef->LookupObject();
+        CPPUNIT_ASSERT(pRow);
+        auto pRowS = dynamic_cast<vcl::filter::PDFNameElement*>(pRow->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pRowS);
+        CPPUNIT_ASSERT_EQUAL("TR"_ostr, pRowS->GetValue());
+
+        auto pCells = dynamic_cast<vcl::filter::PDFArrayElement*>(pRow->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pCells);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pCells->GetElements().size());
+        CPPUNIT_ASSERT_EQUAL("TH"_ostr, GetCellType(pCells->GetElement(0)));
+        CPPUNIT_ASSERT_EQUAL("TD"_ostr, GetCellType(pCells->GetElement(1)));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
 {
     // Enable PDF/UA
