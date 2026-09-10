@@ -51,8 +51,9 @@
                         window.__gasScriptSources || [],
                         window.__gasScriptNames || [],
                         prop,
-                        callArgs).then(function(value) {
+                        callArgs).then(function(result) {
                         done();
+                        const value = unwrapEnvelope(result);
                         if (typeof state.success === 'function') {
                             try { state.success(value, state.userObject); }
                             catch (ex) { console.warn('gas-shim success handler threw:', ex); }
@@ -72,6 +73,49 @@
             }
         });
     }
+    // A result marked __coolGas holds the add-on function's own return value in value, and every
+    // message it passed to getUi().alert() in alerts.  Show the messages, return the value:
+    function unwrapEnvelope(result) {
+        if (!result || result.__coolGas !== true) return result;
+        const alerts = Array.isArray(result.alerts) ? result.alerts : [];
+        for (const a of alerts) {
+            showAlert(a.title, a.message);
+        }
+        return result.value;
+    }
+
+    // GAS shows ui.alert() as a modal the script waits on.  A message that arrives once the call
+    // is over becomes a dismissible banner at the top of the panel instead:
+    function showAlert(title, message) {
+        const box = document.createElement('div');
+        box.style.cssText = 'margin: 8px; padding: 8px 28px 8px 8px; position: relative;'
+            + ' border: 1px solid #d0d7de; border-left: 3px solid #0b57d0; border-radius: 4px;'
+            + ' background: #f6f8fa; font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI",'
+            + ' sans-serif; white-space: pre-wrap; word-break: break-word;';
+        if (title) {
+            const h = document.createElement('div');
+            h.style.cssText = 'font-weight: 600; margin-bottom: 2px;';
+            h.textContent = title;
+            box.appendChild(h);
+        }
+        const body = document.createElement('div');
+        body.textContent = message || '';
+        box.appendChild(body);
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.setAttribute('aria-label', 'Dismiss');
+        close.textContent = '\u00d7';
+        close.style.cssText = 'position: absolute; top: 2px; right: 2px; border: none;'
+            + ' background: none; cursor: pointer; font-size: 16px; line-height: 1;'
+            + ' padding: 2px 6px; color: #57606a;';
+        close.onclick = function() { box.remove(); };
+        box.appendChild(close);
+        document.body.insertBefore(box, document.body.firstChild);
+    }
+
+    // A page's own messages get the same presentation through this:
+    window.__gasShowAlert = showAlert;
+
     window.google = window.google || {};
     window.google.script = window.google.script || {};
     Object.defineProperty(window.google.script, 'run', {

@@ -280,6 +280,54 @@ saved (`"download"`, `"filesystem"`). Only the base name of `filename` is used.
 
     await cool.saveFile('picture.svg', svgText, 'image/svg+xml');
 
+## Google Apps Script add-ons
+
+A directory holding an `appsscript.json` instead of a `manifest.json` is a
+Google Apps Script editor add-on, and COOL runs it without any file of ours
+added to it. Discovery synthesizes the manifest such a directory has no room
+for: the entry point becomes the shared `gas-wrapper.html`, the name comes from
+a `setTitle("...")` call or an `APP_TITLE`-style constant in the sources, and
+the target document types come from which of `DocumentApp`, `SpreadsheetApp`
+and `SlidesApp` the sources mention.
+
+The pieces:
+
+| File | Role |
+|---|---|
+| `gas-wrapper.html` | The page loaded into the sidebar panel. It fetches the add-on's server sources and grafts its sidebar HTML into itself, expanding `<?!= include('name') ?>`. |
+| `gas-shim.js` | Client half. Exposes `google.script.run` as a Proxy, so a leaf call ships the kit half through `cool.callRemote`. |
+| `gas-kit-runner.js` | Kit half. Shims a subset of the Apps Script services on top of scriptinterop, then calls the named function. |
+| `gas-menu.html` | The panel for an add-on that ships no HTML of its own. |
+
+An Apps Script project keeps its server code in `.gs` files in the web editor,
+which clasp writes out as `.js` on disk. Either is picked up; where a directory
+has both, the `.gs` files are taken as the project's and a `.js` is left to the
+sidebar to load in the browser.
+
+### Menu-driven add-ons
+
+Plenty of add-ons have no HTML at all: their `onOpen()` builds an add-on menu,
+and the menu items are the whole user interface. For those, `gas-menu.html`
+takes the sidebar's place and shows one button per menu item. It gets the items
+by calling the reserved name `__coolGasMenu`, which runs `onOpen()` and returns
+the menu that building it produced.
+
+### What the shims cover
+
+`DocumentApp` (documents, the body, the active selection and cursor),
+`HtmlService`, `PropertiesService.getUserProperties` (stored in the iframe's
+`localStorage`), `LanguageApp.translate`, `Session`, `Utilities` and `Logger`.
+
+`getUi().alert()` records its message rather than blocking on a modal, and the
+message becomes a dismissible banner in the panel once the call returns. Script
+and document properties, `getUi().prompt()`, the dialog calls and installable
+triggers all throw, naming what was missing.
+
+Anything else is simply absent, so an add-on that reaches for it fails naming
+the call. That is the point of packaging real add-ons unmodified: what they need
+and we do not have shows up as a gap in the shims rather than as a patch to
+someone else's sample.
+
 ## Local testing
 
 `make -C browser install-demo-extensions` copies every directory under

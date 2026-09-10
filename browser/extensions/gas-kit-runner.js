@@ -16,41 +16,83 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
     try {
         function activeDoc() { return cool.getActiveDocument(); }
 
+        // What getUi() collects over one call: the messages an add-on passed to alert(), and the
+        // items it put in its menu.  Both travel back with the call's result:
+        const pendingAlerts = [];
+        const menuItems = [];
+
+        // ButtonSet and Button members are objects rather than strings so alert()'s overloads
+        // stay distinguishable: alert(title, prompt) and alert(prompt, buttons) both take two
+        // arguments, and only the second one's type tells them apart:
+        const buttonValues = {
+            OK: { name: 'OK' }, CANCEL: { name: 'CANCEL' }, YES: { name: 'YES' },
+            NO: { name: 'NO' }, CLOSE: { name: 'CLOSE' }
+        };
+        const buttonSetValues = {
+            OK: { name: 'OK' }, OK_CANCEL: { name: 'OK_CANCEL' }, YES_NO: { name: 'YES_NO' },
+            YES_NO_CANCEL: { name: 'YES_NO_CANCEL' }
+        };
+
+        // An add-on's onOpen() builds its menu against this.  Submenu items land in the same flat
+        // list as top-level ones, so a menu is a sequence of captioned items and separators:
+        function menuBuilder() {
+            const m = {
+                addItem: function(caption, functionName) {
+                    menuItems.push(
+                        { caption: String(caption), functionName: String(functionName) });
+                    return m;
+                },
+                addSeparator: function() {
+                    menuItems.push({ separator: true });
+                    return m;
+                },
+                addSubMenu: function() { return m; },
+                addToUi: function() {}
+            };
+            return m;
+        }
+
         const uiStub = {
-            createAddonMenu: function() {
-                const m = { addItem: function() { return m; }, addToUi: function() {} };
-                return m;
-            },
-            createMenu: function() {
-                const m = { addItem: function() { return m; }, addToUi: function() {} };
-                return m;
-            },
+            createAddonMenu: menuBuilder,
+            createMenu: menuBuilder,
             showSidebar: function() {},
             showDialog: function() {
                 throw new Error(
-                    'DocumentApp.getUi().showDialog is not yet supported in the COOL Apps'
-                        + ' Script wrapper');
+                    'getUi().showDialog is not yet supported in the COOL Apps Script wrapper');
             },
             showModalDialog: function() {
                 throw new Error(
-                    'DocumentApp.getUi().showModalDialog is not yet supported in the COOL'
-                        + ' Apps Script wrapper');
+                    'getUi().showModalDialog is not yet supported in the COOL Apps Script'
+                        + ' wrapper');
             },
             showModelessDialog: function() {
                 throw new Error(
-                    'DocumentApp.getUi().showModelessDialog is not yet supported in the COOL'
-                        + ' Apps Script wrapper');
-            },
-            alert: function() {
-                throw new Error(
-                    'DocumentApp.getUi().alert is not yet supported in the COOL Apps Script'
+                    'getUi().showModelessDialog is not yet supported in the COOL Apps Script'
                         + ' wrapper');
+            },
+            // GAS blocks the script on a modal here.  This one only records the message, which
+            // travels back with the call's result, so an add-on that alerts and then keeps
+            // editing has its message appear after the edit rather than before it:
+            alert: function() {
+                const texts = [];
+                for (let i = 0; i !== arguments.length; ++i) {
+                    const a = arguments[i];
+                    if (typeof a === 'string' || typeof a === 'number') {
+                        texts.push(String(a));
+                    }
+                }
+                pendingAlerts.push({
+                    title: texts.length > 1 ? texts[0] : '',
+                    message: texts.length > 1 ? texts.slice(1).join('\n') : (texts[0] || '')
+                });
+                return buttonValues.OK;
             },
             prompt: function() {
                 throw new Error(
-                    'DocumentApp.getUi().prompt is not yet supported in the COOL Apps Script'
-                        + ' wrapper');
-            }
+                    'getUi().prompt is not yet supported in the COOL Apps Script wrapper');
+            },
+            ButtonSet: buttonSetValues,
+            Button: buttonValues
         };
 
         globalThis.DocumentApp = {
@@ -224,11 +266,25 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
             const name = (gsNames && gsNames[i]) || ('gs-source-' + i);
             $internal.evalWithSource(gsSources[i], name, 1);
         }
-        const fn = globalThis[fnName];
-        if (typeof fn !== 'function') {
-            throw new Error('Apps Script function not defined: ' + fnName);
+        // The name __coolGasMenu is reserved and stands for none of the add-on's own functions:
+        // it runs onOpen() and returns the menu that building it produced.  That is how a
+        // menu-driven add-on, which ships no HTML at all, still describes a user interface:
+        let value;
+        if (fnName === '__coolGasMenu') {
+            if (typeof globalThis.onOpen === 'function') {
+                globalThis.onOpen({});
+            }
+            value = menuItems;
+        } else {
+            const fn = globalThis[fnName];
+            if (typeof fn !== 'function') {
+                throw new Error('Apps Script function not defined: ' + fnName);
+            }
+            value = fn.apply(null, callArgs || []);
         }
-        return fn.apply(null, callArgs || []);
+        // A result marked __coolGas holds the add-on function's own return value in value, and
+        // every message it passed to getUi().alert() in alerts:
+        return { __coolGas: true, value: value, alerts: pendingAlerts };
     } finally {
         $internal.takeProxy(proxyId);
     }

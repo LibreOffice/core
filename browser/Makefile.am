@@ -159,6 +159,7 @@ endif
 COOL_EXTENSIONS_SRC = \
 	$(srcdir)/extensions/cool.js \
 	$(srcdir)/extensions/gas-kit-runner.js \
+	$(srcdir)/extensions/gas-menu.html \
 	$(srcdir)/extensions/gas-shim.js \
 	$(srcdir)/extensions/gas-wrapper.html
 COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))

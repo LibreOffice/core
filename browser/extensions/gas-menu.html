@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Apps Script menu</title>
+<style>
+  #gas-menu {
+    padding: 12px;
+    font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #gas-menu button {
+    display: block; width: 100%; margin: 0 0 8px; padding: 7px 12px; text-align: left;
+    border: 1px solid #d0d7de; border-radius: 4px; background: #fff; cursor: pointer;
+    font: inherit; color: #1f2328;
+  }
+  #gas-menu button:hover:not(:disabled) { background: #f3f4f6; }
+  #gas-menu button:disabled { color: #8c959f; cursor: default; }
+  #gas-menu hr { border: none; border-top: 1px solid #d0d7de; margin: 12px 0; }
+  #gas-menu .status { color: #57606a; }
+  #gas-menu .status.error { color: #b00; }
+</style>
+</head>
+<body>
+
+<!-- The panel for an add-on that ships no HTML of its own: one button per item that the add-on's
+     onOpen() put in its menu. -->
+<div id="gas-menu"><div class="status">Loading...</div></div>
+
+<script>
+(function() {
+    const root = document.getElementById('gas-menu');
+    function setStatus(text, isError) {
+        root.textContent = '';
+        const el = document.createElement('div');
+        el.className = isError ? 'status error' : 'status';
+        el.textContent = text;
+        root.appendChild(el);
+    }
+    function errorText(err) {
+        return (err && err.message) ? err.message : String(err);
+    }
+    function run(item, button) {
+        const caption = button.textContent;
+        button.disabled = true;
+        button.textContent = caption + ' ...';
+        const restore = function() {
+            button.disabled = false;
+            button.textContent = caption;
+        };
+        google.script.run
+            .withSuccessHandler(restore)
+            .withFailureHandler(function(err) {
+                restore();
+                // The add-on threw: same presentation its own getUi().alert() messages get.
+                window.__gasShowAlert(item.caption, errorText(err));
+            })[item.functionName]();
+    }
+    function render(items) {
+        root.textContent = '';
+        const usable = (items || []).filter(function(i) { return i.functionName || i.separator; });
+        if (!usable.length) {
+            setStatus('This add-on installs no menu items and has no sidebar of its own.', true);
+            return;
+        }
+        for (const item of usable) {
+            if (item.separator) {
+                root.appendChild(document.createElement('hr'));
+                continue;
+            }
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = item.caption;
+            button.onclick = function() { run(item, button); };
+            root.appendChild(button);
+        }
+    }
+    // The name __coolGasMenu is reserved and stands for none of the add-on's own functions: the
+    // call runs onOpen() and returns the menu that building it produced:
+    google.script.run
+        .withSuccessHandler(render)
+        .withFailureHandler(function(err) {
+            setStatus('Could not read the add-on\'s menu: ' + errorText(err), true);
+        })
+        .__coolGasMenu();
+})();
+</script>
+</body>
+</html>
