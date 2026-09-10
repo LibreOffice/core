@@ -1964,8 +1964,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			$(menuEntry).click(() => {
 				if (window.insertionMobileWizard)
 					app.dispatcher.dispatch('insertion_mobile_wizard');
-				else if (window.mobileMenuWizard)
-					$('#main-menu-state').click();
+				else if (window.mobileMenuWizard) {
+					const menuState = document.getElementById('main-menu-state');
+					if (menuState) menuState.click();
+				}
 				else if (window.contextMenuWizard) {
 					window.contextMenuWizard = false;
 					builder.map.fire('closemobilewizard');
