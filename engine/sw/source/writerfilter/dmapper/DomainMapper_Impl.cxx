@@ -9404,7 +9404,10 @@ void DomainMapper_Impl::PopFieldContext()
                                     {
                                         if (!charStyle.isEmpty() && charStyle.equalsIgnoreAsciiCase("Internet Link"))
                                         {
-                                            xCrsrProperties->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(u"Default Style"_ustr));
+                                            // "Standard" is the name the API knows the
+                                            // default character style by; "Default Style" is
+                                            // what an English user interface calls it.
+                                            xCrsrProperties->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(u"Standard"_ustr));
                                         }
                                         else
                                         {

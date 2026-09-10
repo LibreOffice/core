@@ -307,6 +307,21 @@ CPPUNIT_TEST_FIXTURE(Test, testCellBorderThemeColor)
     assertXPathNoAttribute(pXmlDoc, "//w:tcBorders/w:bottom", "themeColor");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testHyperlinkKeepsNoEmptyStyledSpan)
+{
+    // Hyperlink fields whose text already carries the hyperlink character style.
+    createSwDoc("fdo76597.docx");
+
+    save(TestFilter::ODT);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Resetting the character style of such a run was refused, because it was asked for by
+    // the name an English user interface shows rather than the one the API knows, so every
+    // hyperlink left an empty styled span behind.
+    // Without the fix there were 42 of them, one per hyperlink.
+    assertXPath(pXmlDoc, "//text:span[@text:style-name='Internet_20_link']", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
