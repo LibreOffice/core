@@ -1288,12 +1288,14 @@ class BackstageView extends window.L.Class {
 	}
 
 	private hideDocumentContainer(): void {
-		$('#document-container').addClass('hidden');
+		const container = document.getElementById('document-container');
+		if (container) container.classList.add('hidden');
 		$('.notebookbar-scroll-wrapper').addClass('hidden');
 	}
 
 	private showDocumentContainer(): void {
-		$('#document-container').removeClass('hidden');
+		const container = document.getElementById('document-container');
+		if (container) container.classList.remove('hidden');
 		$('.notebookbar-scroll-wrapper').removeClass('hidden');
 	}
 
