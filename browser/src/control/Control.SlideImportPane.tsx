@@ -93,6 +93,9 @@ class SlideImportPane {
   // Whether the pages this pane asked a source to write are still to come.
   private awaitingExport: boolean = false;
 
+  // Set while a drag start switches the pane over to another source.
+  private renderDeferred: boolean = false;
+
   constructor(map: any) {
     this.map = map;
     this.session = new SlideImportSession(map);
@@ -184,7 +187,8 @@ class SlideImportPane {
   // Something the pane shows changed: the state of the import, or the links
   // the source badges read.
   private redraw(): void {
-    if (this.visible) this.render();
+    if (this.renderDeferred || !this.visible) return;
+    this.render();
   }
 
   private onRelatedDocuments(): void {
@@ -1351,7 +1355,7 @@ class SlideImportPane {
         aria-label={this.slideLabel(source, index)}
         tabindex={focused ? 0 : -1}
         data-index={index}
-        draggable={active ? 'true' : 'false'}
+        draggable="true"
         onMouseDown={(e: MouseEvent) => this.onSlideMouseDown(e, index)}
         onClick={(e: MouseEvent) => this.onSlideClick(e, source, index)}
         onDragStart={(e: DragEvent) => this.onSlideDragStart(e, source, index)}
@@ -1387,6 +1391,19 @@ class SlideImportPane {
   ): void {
     // A drag consumes the press, so no click follows it.
     this.pressedCheckboxIndex = -1;
+
+    // The drag takes its slides out of the source it started in, so it makes
+    // that source the active one, like a click on a slide does.
+    if (!this.isActive(source)) {
+      this.renderDeferred = true;
+      this.activate(source);
+      this.focusIndex = index;
+      this.anchorIndex = index;
+      this.session.selectOnly(index);
+      this.renderDeferred = false;
+      app.layoutingService.appendLayoutingTask(() => this.redraw());
+    }
+
     const session = this.session;
     const slides = session.selection.has(index)
       ? Array.from(session.selection).sort((a, b) => a - b)
