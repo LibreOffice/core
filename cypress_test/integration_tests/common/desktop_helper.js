@@ -442,6 +442,11 @@ function switchUIToCompact() {
 			getNbIcon('toggleuimode', 'View').click();
 			// Wait for the compact toolbar to load
 			cy.cGet('#toolbar-up').should('be.visible');
+			// Core resends the status bar state after the switch. Wait for
+			// that to settle before the caller uses the classic UI.
+			cy.getFrameWindow().then(function(frameWindow) {
+				return helper.processToIdle(frameWindow);
+			});
 		}
 	});
 
