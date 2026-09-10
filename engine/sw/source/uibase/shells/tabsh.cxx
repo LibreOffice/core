@@ -97,6 +97,7 @@
 #include <swabstdlg.hxx>
 
 #include <memory>
+#include <unordered_map>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1925,7 +1926,9 @@ void SwTableShell::ExecTableDesignStyle(SfxRequest& rReq)
         case FN_TABLE_SET_STYLE:
         {
             if (const SfxStringItem* pArg = pArgs->GetItemIfSet(FN_TABLE_SET_STYLE, false))
+            {
                 rSh.SetTableStyleLive(TableStyleName(pArg->GetValue()));
+            }
             break;
         }
         case SID_TABLE_STYLE_SETTINGS:
@@ -2008,30 +2011,87 @@ void SwTableShell::GetTableDesignStyleState(SfxItemSet &rSet)
                 const bool bIsPageDark
                     = rPageBackColor != COL_TRANSPARENT && rPageBackColor.IsDark();
 
+                // The list is grouped into sections in a fixed order: the styles the
+                // document's tables use, then the styles outside the built-in catalog (the
+                // default style and user styles), then the catalog's Plain, Grid and List
+                // tables. A used style appears in its catalog section as well. Each section
+                // that has styles opens with a separator entry carrying its title.
+                const SwDoc& rDoc = *rSh.GetDoc();
+                const SwTableAutoFormatTable& rStyles = rDoc.GetTableStyles();
                 tools::JsonWriter aJson;
                 {
                     auto aArray = aJson.startArray("TableStyles");
-                    const SwTableAutoFormatTable& rStyles = rSh.GetDoc()->GetTableStyles();
+                    bool bSectionOpen = false;
+                    auto aOpenSection = [&aJson, &bSectionOpen](TranslateId pTitle)
+                    {
+                        auto aSeparatorStruct = aJson.startStruct();
+                        aJson.put("Separator", true);
+                        aJson.put("Title", SwResId(pTitle));
+                        bSectionOpen = true;
+                    };
+                    // A used style is listed twice, so each preview is kept for the second
+                    // entry.
+                    std::unordered_map<OUString, OUString> aPreviews;
+                    auto aPutStyle = [&aJson, &aSettings, bIsPageDark,
+                                      &aPreviews](const SwTableAutoFormat& rStyle)
+                    {
+                        auto aStyleStruct = aJson.startStruct();
+                        const OUString& rName = rStyle.GetName().toString();
+                        aJson.put("Name", rName);
+                        aJson.put("DisplayName", rStyle.GetUIName().toString());
+                        auto it = aPreviews.find(rName);
+                        if (it == aPreviews.end())
+                        {
+                            // The browser falls back to a placeholder icon if this is empty,
+                            // so one style's rendering failure doesn't blank the whole list.
+                            OString aDataUri;
+                            try
+                            {
+                                aDataUri = sw::CreateTableStylePreviewDataUri(rStyle, aSettings,
+                                                                              bIsPageDark);
+                            }
+                            catch (...)
+                            {
+                            }
+                            it = aPreviews
+                                     .emplace(rName,
+                                              OStringToOUString(aDataUri, RTL_TEXTENCODING_UTF8))
+                                     .first;
+                        }
+                        aJson.put("Image", it->second);
+                    };
+
+                    // A used style is listed here whether it is hidden or not: the document
+                    // has it, so the user must be able to see and pick it.
                     for (size_t i = 0; i < rStyles.size(); ++i)
                     {
                         const SwTableAutoFormat& rStyle = rStyles[i];
-                        if (rStyle.IsHidden())
+                        if (!rDoc.IsUsed(rStyle))
                             continue;
-                        auto aStyleStruct = aJson.startStruct();
-                        aJson.put("Name", rStyle.GetName().toString());
-                        aJson.put("DisplayName", rStyle.GetUIName().toString());
-                        // The browser falls back to a placeholder icon if this is empty,
-                        // so one style's rendering failure doesn't blank the whole list.
-                        OString aDataUri;
-                        try
+                        if (!bSectionOpen)
+                            aOpenSection(STR_TABSTYLE_GROUP_USED);
+                        aPutStyle(rStyle);
+                    }
+
+                    using CatalogGroup = SwTableAutoFormat::CatalogGroup;
+                    const std::pair<CatalogGroup, TranslateId> aSections[] = {
+                        { CatalogGroup::None, STR_TABSTYLE_GROUP_CUSTOM },
+                        { CatalogGroup::Plain, STR_TABSTYLE_GROUP_PLAIN },
+                        { CatalogGroup::Grid, STR_TABSTYLE_GROUP_GRID },
+                        { CatalogGroup::List, STR_TABSTYLE_GROUP_LIST },
+                    };
+                    for (const auto& [eGroup, pTitle] : aSections)
+                    {
+                        bSectionOpen = false;
+                        for (size_t i = 0; i < rStyles.size(); ++i)
                         {
-                            aDataUri = sw::CreateTableStylePreviewDataUri(rStyle, aSettings,
-                                                                          bIsPageDark);
+                            const SwTableAutoFormat& rStyle = rStyles[i];
+                            if (rStyle.IsHidden() || rStyle.GetCatalogGroup() != eGroup)
+                                continue;
+                            if (!bSectionOpen)
+                                aOpenSection(pTitle);
+                            aPutStyle(rStyle);
                         }
-                        catch (...)
-                        {
-                        }
-                        aJson.put("Image", OStringToOUString(aDataUri, RTL_TEXTENCODING_UTF8));
                     }
                 }
                 const OString aStr = aJson.finishAndGetAsOString();

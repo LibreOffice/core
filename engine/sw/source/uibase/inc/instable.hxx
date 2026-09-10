@@ -29,6 +29,7 @@
 #include "autoformatpreview.hxx"
 #include <view.hxx>
 #include <tblafmt.hxx>
+#include "tblafmtlistbox.hxx"
 #include <itabenum.hxx>
 #include <memory>
 
@@ -40,10 +41,10 @@ class SwInsTableDlg final : public SfxDialogController
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
-    sal_uInt8 m_lbIndex;
-    sal_uInt8 m_tbIndex;
+    int m_lbIndex;
+    size_t m_tbIndex;
     sal_uInt8 minTableIndexInLb;
-    sal_uInt8 maxTableIndexInLb;
+    SwTableStyleListBoxIndexes m_aListBoxIndexes;
     sal_Int64 m_nEnteredValRepeatHeaderNF;
 
     AutoFormatPreview m_aWndPreview;
@@ -62,9 +63,8 @@ class SwInsTableDlg final : public SfxDialogController
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
     std::unique_ptr<weld::Frame> m_xStyleFrame;
 
-    // Returns 255 if mapping is not possible.
-    // This means there cannot be more than 255 autotable style.
-    sal_uInt8 lbIndexToTableIndex(const sal_uInt8 listboxIndex);
+    // Returns SwTableStyleListBoxIndexes::nNoStyle if mapping is not possible.
+    size_t lbIndexToTableIndex(int listboxIndex);
     void InitAutoTableFormat();
 
     DECL_LINK(TextFilterHdl, OUString&, bool);

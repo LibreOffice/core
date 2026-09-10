@@ -237,6 +237,15 @@ public:
     UIName GetUIName() const;
     static UIName GetUIName(const TableStyleName& rName);
 
+    /// The section of the built-in catalog a style belongs to, by its name. Plain holds the
+    /// "Plain Table" styles, "Table Grid" and "Grid Table Light"; Grid the "Grid Table"
+    /// styles and List the "List Table" styles. None is every other name: user styles,
+    /// Writer's default style and the older catalog generations, which are shown on demand
+    /// only.
+    enum class CatalogGroup { None, Plain, Grid, List };
+    CatalogGroup GetCatalogGroup() const { return GetCatalogGroup(m_aName); }
+    static CatalogGroup GetCatalogGroup(const TableStyleName& rName);
+
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
     // bCellSpansToEndV means either "single-row table", or "a cell that spans several rows till the

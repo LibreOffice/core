@@ -39,6 +39,8 @@
 
 #include <COKit/COKit.hxx>
 
+#include <vector>
+
 class SwTextFormatColl;
 class SwPageDesc;
 class SwFrameFormat;
@@ -279,6 +281,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SelectCycle m_aSelectCycle;
 
     int m_nMaxOutlineLevelShown = 10;
+
+    /// The names of the table styles that the document's tables use, sorted, as of the last
+    /// attribute change notification.
+    std::vector<OUString> m_aUsedTableStyleNames;
 
     bool m_bIsSpotlightCharDF = false;
     bool m_bIsSpotlightParaStyles = false;
@@ -587,6 +593,10 @@ public:
 
     // attributes have changed
     DECL_LINK( AttrChangedNotify, LinkParamNone*, void );
+
+    /// Refresh the table style list in every view of the document when the set of table
+    /// styles that the document's tables use differs from the last one seen.
+    void CheckUsedTableStyles();
 
     // form control has been activated
     DECL_DLLPRIVATE_LINK( FormControlActivated, LinkParamNone*, void );

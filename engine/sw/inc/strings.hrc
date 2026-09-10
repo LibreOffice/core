@@ -277,6 +277,12 @@
 // The number, the variant and the accent can each be missing, and their place is then dropped
 // together with the spaces around it. Keep all four placeholders.
 #define STR_TABSTYLE_CATALOG_NAME               NC_("STR_TABSTYLE_CATALOG_NAME", "%FAMILY %NUMBER %VARIANT %ACCENT")
+// Section titles of the table style gallery
+#define STR_TABSTYLE_GROUP_USED                 NC_("STR_TABSTYLE_GROUP_USED", "In This Document")
+#define STR_TABSTYLE_GROUP_CUSTOM               NC_("STR_TABSTYLE_GROUP_CUSTOM", "Custom")
+#define STR_TABSTYLE_GROUP_PLAIN                NC_("STR_TABSTYLE_GROUP_PLAIN", "Plain Tables")
+#define STR_TABSTYLE_GROUP_GRID                 NC_("STR_TABSTYLE_GROUP_GRID", "Grid Tables")
+#define STR_TABSTYLE_GROUP_LIST                 NC_("STR_TABSTYLE_GROUP_LIST", "List Tables")
 
 #define STR_PARAGRAPHSTYLEFAMILY                NC_("STR_PARAGRAPHSTYLEFAMILY", "Paragraph Styles")
 #define STR_CHARACTERSTYLEFAMILY                NC_("STR_CHARACTERSTYLEFAMILY", "Character Styles")

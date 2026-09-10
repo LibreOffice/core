@@ -210,17 +210,20 @@ void SwConvertTableDlg::Init()
     // Then the list to be expanded by the entry "- none -".
     m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
     m_nDfltStylePos = 1;
-    m_nIndex = 255;
+    m_nIndex = SwTableStyleListBoxIndexes::nNoStyle;
+    m_aListBoxIndexes.Fill(*m_xLbFormat, *m_xTableTable, m_nDfltStylePos);
 
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
+    if (pSelFormat)
     {
-        SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetUIName().toString());
-        if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
-            m_nIndex = i;
+        for (size_t i = 0, nCount = m_xTableTable->size(); i < nCount; i++)
+        {
+            if ((*m_xTableTable)[i].GetName() == pSelFormat->GetName())
+                m_nIndex = i;
+        }
     }
 
-    m_xLbFormat->select(255 != m_nIndex ? (m_nDfltStylePos + m_nIndex) : 0);
+    const int nSelectedRow = SwTableStyleListBoxIndexes::nNoStyle != m_nIndex ? m_aListBoxIndexes.RowOf(m_nIndex) : -1;
+    m_xLbFormat->select(nSelectedRow >= 0 ? nSelectedRow : 0);
     SelFormatHdl(*m_xLbFormat);
 }
 
@@ -244,7 +247,7 @@ void SwConvertTableDlg::UpdateChecks(const SwTableAutoFormat& rFormat, bool bEna
 
 std::unique_ptr<SwTableAutoFormat> SwConvertTableDlg::FillAutoFormatOfIndex() const
 {
-    if (255 != m_nIndex)
+    if (SwTableStyleListBoxIndexes::nNoStyle != m_nIndex)
     {
         return std::make_unique<SwTableAutoFormat>((*m_xTableTable)[m_nIndex]);
     }
@@ -254,7 +257,7 @@ std::unique_ptr<SwTableAutoFormat> SwConvertTableDlg::FillAutoFormatOfIndex() co
 
 IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
-    if (m_nIndex == 255)
+    if (m_nIndex == SwTableStyleListBoxIndexes::nNoStyle)
         return;
 
     SwTableAutoFormat& rData = (*m_xTableTable)[m_nIndex];
@@ -287,18 +290,19 @@ IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 
 IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
-    sal_uInt8 nOldIdx = m_nIndex;
-    int nSelPos = m_xLbFormat->get_selected_index();
-    if (nSelPos >= m_nDfltStylePos)
+    const size_t nOldIdx = m_nIndex;
+    const size_t nSelectedIndex
+        = m_aListBoxIndexes.TableIndexAt(m_xLbFormat->get_selected_index());
+    if (nSelectedIndex != SwTableStyleListBoxIndexes::nNoStyle)
     {
-        m_nIndex = nSelPos - m_nDfltStylePos;
+        m_nIndex = nSelectedIndex;
         m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
         UpdateChecks((*m_xTableTable)[m_nIndex], true);
         mxTAutoFormat = FillAutoFormatOfIndex();
     }
     else
     {
-        m_nIndex = 255;
+        m_nIndex = SwTableStyleListBoxIndexes::nNoStyle;
 
         SwTableAutoFormat aTmp(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
         aTmp.SetFont(false);

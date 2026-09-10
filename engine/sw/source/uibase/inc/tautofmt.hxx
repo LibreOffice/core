@@ -28,6 +28,7 @@
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"
 #include <tblafmt.hxx>
+#include "tblafmtlistbox.hxx"
 
 class SwTableAutoFormat;
 class SwTableAutoFormatTable;
@@ -44,8 +45,9 @@ class SwAutoFormatDlg final : public SfxDialogController
     OUString m_aStrInvalidFormat;
 
     SwWrtShell* m_pShell;
-    sal_uInt8 m_nIndex;
+    size_t m_nIndex;
     sal_uInt8 m_nDfltStylePos;
+    SwTableStyleListBoxIndexes m_aListBoxIndexes;
     bool m_bCoreDataChanged : 1;
     bool m_bSetAutoFormat : 1;
 
@@ -66,6 +68,9 @@ class SwAutoFormatDlg final : public SfxDialogController
 
     void Init(const SwTableAutoFormat* pSelFormat);
     void UpdateChecks(const SwTableAutoFormat&, bool bEnableBtn);
+    /// Rebuild the style list from the table and select the style with catalog index
+    /// nSelectIndex, or "- none -" for SwTableStyleListBoxIndexes::nNoStyle or a hidden style.
+    void FillListBox(size_t nSelectIndex);
 
     DECL_LINK(CheckHdl, weld::Toggleable&, void);
     DECL_LINK(AddHdl, weld::Button&, void);

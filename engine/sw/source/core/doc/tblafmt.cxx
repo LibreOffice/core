@@ -1170,6 +1170,19 @@ bool lcl_IsNumber(std::u16string_view rToken)
 }
 }
 
+SwTableAutoFormat::CatalogGroup SwTableAutoFormat::GetCatalogGroup(const TableStyleName& rName)
+{
+    const OUString& rModelName = rName.toString();
+    if (rModelName.startsWith("Plain Table ") || rModelName == "Table Grid"
+        || rModelName == "Grid Table Light")
+        return CatalogGroup::Plain;
+    if (rModelName.startsWith("Grid Table "))
+        return CatalogGroup::Grid;
+    if (rModelName.startsWith("List Table "))
+        return CatalogGroup::List;
+    return CatalogGroup::None;
+}
+
 UIName SwTableAutoFormat::GetUIName() const
 {
     // Composing the name takes several translated strings, and a style list looks up every
@@ -1491,6 +1504,10 @@ void lcl_LoadWordTableStylePresets(std::vector<std::unique_ptr<SwTableAutoFormat
         auto pPreset = std::make_unique<SwTableAutoFormat>(rStyle);
         // These are Word's built-in presets, not user-created styles, like the default one.
         pPreset->SetUserDefined(false);
+        // The gallery offers the current generation of the catalog, the Plain, Grid and List
+        // tables. The two older generations stay in the catalog for files that refer to
+        // them, but are hidden like a hidden paragraph style.
+        pPreset->SetHidden(pPreset->GetCatalogGroup() == SwTableAutoFormat::CatalogGroup::None);
         rTarget.push_back(std::move(pPreset));
     }
 }

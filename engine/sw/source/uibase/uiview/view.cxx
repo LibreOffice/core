@@ -76,6 +76,7 @@
 #include <usrpref.hxx>
 #include <srcview.hxx>
 #include <doc.hxx>
+#include <swtable.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -686,6 +687,33 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
         // actual cursor position is a post-it field
         m_pPostItMgr->SetShadowState( m_pWrtShell->GetPostItFieldAtCursor() );
     }
+
+    CheckUsedTableStyles();
+}
+
+void SwView::CheckUsedTableStyles()
+{
+    // The table style list opens with the styles that the document's tables use. Applying a
+    // style, undo and redo, deleting or pasting a table and another view's edit can all
+    // change that set.
+    std::vector<OUString> aNames;
+    const SwDoc& rDoc = *m_pWrtShell->GetDoc();
+    for (size_t i = 0, nCount = rDoc.GetTableFrameFormatCount(true); i < nCount; ++i)
+    {
+        const SwTable* pTable = SwTable::FindTable(&rDoc.GetTableFrameFormat(i, true));
+        if (pTable && !pTable->GetTableStyleName().isEmpty())
+            aNames.push_back(pTable->GetTableStyleName().toString());
+    }
+    std::sort(aNames.begin(), aNames.end());
+    aNames.erase(std::unique(aNames.begin(), aNames.end()), aNames.end());
+    if (aNames == m_aUsedTableStyleNames)
+        return;
+
+    m_aUsedTableStyleNames = std::move(aNames);
+    SwDocShell* pDocShell = GetDocShell();
+    for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDocShell); pFrame;
+         pFrame = SfxViewFrame::GetNext(*pFrame, pDocShell))
+        pFrame->GetBindings().Invalidate(SID_TABLE_STYLE_LIST);
 }
 
 IMPL_LINK_NOARG(SwView, TimeoutHdl, Timer *, void)

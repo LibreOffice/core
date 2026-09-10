@@ -120,20 +120,28 @@ void SwAutoFormatDlg::Init(const SwTableAutoFormat* pSelFormat)
     m_xBtnAdd->set_sensitive(m_bSetAutoFormat);
 
     // Expand list with the entry "- none -".
-    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
     m_nDfltStylePos = 1;
-    m_nIndex = 255;
-
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
+    size_t nSelectIndex = SwTableStyleListBoxIndexes::nNoStyle;
+    if (pSelFormat)
     {
-        SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetUIName().toString());
-        if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
-            m_nIndex = i;
+        for (size_t i = 0, nCount = m_xTableTable->size(); i < nCount; i++)
+        {
+            if ((*m_xTableTable)[i].GetName() == pSelFormat->GetName())
+                nSelectIndex = i;
+        }
     }
-
-    m_xLbFormat->select(255 != m_nIndex ? (m_nDfltStylePos + m_nIndex) : 0);
+    FillListBox(nSelectIndex);
     SelFormatHdl(*m_xLbFormat);
+}
+
+void SwAutoFormatDlg::FillListBox(size_t nSelectIndex)
+{
+    m_xLbFormat->clear();
+    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
+    m_aListBoxIndexes.Fill(*m_xLbFormat, *m_xTableTable, m_nDfltStylePos);
+    const int nRow = nSelectIndex != SwTableStyleListBoxIndexes::nNoStyle ? m_aListBoxIndexes.RowOf(nSelectIndex) : -1;
+    m_xLbFormat->select(nRow >= 0 ? nRow : 0);
+    m_nIndex = m_aListBoxIndexes.TableIndexAt(m_xLbFormat->get_selected_index());
 }
 
 void SwAutoFormatDlg::UpdateChecks(const SwTableAutoFormat& rFormat, bool bEnable)
@@ -156,7 +164,7 @@ void SwAutoFormatDlg::UpdateChecks(const SwTableAutoFormat& rFormat, bool bEnabl
 
 std::unique_ptr<SwTableAutoFormat> SwAutoFormatDlg::FillAutoFormatOfIndex() const
 {
-    if (255 != m_nIndex)
+    if (SwTableStyleListBoxIndexes::nNoStyle != m_nIndex)
     {
         return std::make_unique<SwTableAutoFormat>((*m_xTableTable)[m_nIndex]);
     }
@@ -167,7 +175,7 @@ std::unique_ptr<SwTableAutoFormat> SwAutoFormatDlg::FillAutoFormatOfIndex() cons
 // Handler:
 IMPL_LINK(SwAutoFormatDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
-    if (m_nIndex == 255)
+    if (m_nIndex == SwTableStyleListBoxIndexes::nNoStyle)
         return;
 
     SwTableAutoFormat& rData = (*m_xTableTable)[m_nIndex];
@@ -230,8 +238,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
                             break;
 
                     m_xTableTable->InsertAutoFormat(n, std::move(pNewData));
-                    m_xLbFormat->insert_text(m_nDfltStylePos + n, aFormatName);
-                    m_xLbFormat->select(m_nDfltStylePos + n);
+                    FillListBox(n);
                     bFormatInserted = true;
                     m_xBtnAdd->set_sensitive(false);
                     if (!m_bCoreDataChanged)
@@ -268,19 +275,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, weld::Button&, void)
 
     if (xBox->run() == RET_OK)
     {
-        sal_uInt8 nIndex = m_nIndex;
-
-        m_xLbFormat->remove(m_nDfltStylePos + nIndex);
-        m_xLbFormat->select(m_nDfltStylePos + nIndex - 1);
-
-        m_xTableTable->EraseAutoFormat(nIndex);
-        m_nIndex = nIndex - 1;
-
-        if (!m_nIndex)
-        {
-            m_xBtnRemove->set_sensitive(false);
-            m_xBtnRename->set_sensitive(false);
-        }
+        // The row above the removed style gets selected; the default style in the first
+        // style row is never removed, so there always is one.
+        const size_t nSelectIndex
+            = m_aListBoxIndexes.TableIndexAt(m_aListBoxIndexes.RowOf(m_nIndex) - 1);
+        m_xTableTable->EraseAutoFormat(m_nIndex);
+        FillListBox(nSelectIndex);
 
         if (!m_bCoreDataChanged)
         {
@@ -315,11 +315,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
 
                 if (n >= m_xTableTable->size())
                 {
-                    sal_uInt8 nIndex = m_nIndex;
-
                     // no format with this name exists, so rename it
-                    m_xLbFormat->remove(m_nDfltStylePos + nIndex);
-                    std::unique_ptr<SwTableAutoFormat> p(m_xTableTable->ReleaseAutoFormat(nIndex));
+                    std::unique_ptr<SwTableAutoFormat> p(m_xTableTable->ReleaseAutoFormat(m_nIndex));
 
                     p->SetName(TableStyleName(aFormatName));
 
@@ -331,8 +328,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
                         }
 
                     m_xTableTable->InsertAutoFormat(n, std::move(p));
-                    m_xLbFormat->insert_text(m_nDfltStylePos + n, aFormatName);
-                    m_xLbFormat->select(m_nDfltStylePos + n);
+                    FillListBox(n);
 
                     if (!m_bCoreDataChanged)
                     {
@@ -362,18 +358,19 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
 {
     bool bBtnEnable = false;
-    sal_uInt8 nOldIdx = m_nIndex;
-    int nSelPos = m_xLbFormat->get_selected_index();
-    if (nSelPos >= m_nDfltStylePos)
+    const size_t nOldIdx = m_nIndex;
+    const size_t nSelectedIndex
+        = m_aListBoxIndexes.TableIndexAt(m_xLbFormat->get_selected_index());
+    if (nSelectedIndex != SwTableStyleListBoxIndexes::nNoStyle)
     {
-        m_nIndex = nSelPos - m_nDfltStylePos;
+        m_nIndex = nSelectedIndex;
         m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
         bBtnEnable = 0 != m_nIndex;
         UpdateChecks((*m_xTableTable)[m_nIndex], true);
     }
     else
     {
-        m_nIndex = 255;
+        m_nIndex = SwTableStyleListBoxIndexes::nNoStyle;
 
         SwTableAutoFormat aTmp(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
         aTmp.SetFont(false);
@@ -396,7 +393,7 @@ void SwAutoFormatDlg::Apply()
 {
     if (m_bSetAutoFormat)
     {
-        if (m_nIndex == 255)
+        if (m_nIndex == SwTableStyleListBoxIndexes::nNoStyle)
             m_pShell->ResetTableStyle();
         else
             m_pShell->SetTableStyle((*m_xTableTable)[m_nIndex]);

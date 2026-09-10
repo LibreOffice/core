@@ -1007,23 +1007,30 @@ label.notebookbar.ui-checkbox-label {
 	padding: 5px 10px;
 }
 
-#tablestyles_design.notebookbar .ui-iconview-separator {
+/* The section titles of a style gallery only fit the expanded view: the strip in the
+   notebookbar has no room for them and fills every row, the dropdown shows each title on a
+   row of its own. */
+#tablestyles_design.notebookbar .ui-iconview-separator,
+#table-design-styles.notebookbar .ui-iconview-separator {
 	display: none;
 }
 
 #masterpagenb-entries .static-label.ui-text,
-#tablestyles_design .ui-iconview-separator.label {
+#tablestyles_design .ui-iconview-separator.label,
+#table-design-styles .ui-iconview-separator.label {
 	grid-column: 1 / -1;
 	padding-inline-start: 8px;
 	font-size: var(--default-font-size);
 	font-weight: 500;
 }
 
-/* Table Design Tab (Impress) */
+/* Table Design Tab (Writer and Impress) */
 
+/* Seven columns: the built-in catalog comes in rows of one style variant in its plain form
+   and its six theme accents, so each grid row is one variant and each column one accent. */
 #table-design-styles.notebookbar,
 #table-design-styles.jsdialog {
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(7, 1fr);
 	grid-gap: 10px;
 	padding: 5px 10px;
 }

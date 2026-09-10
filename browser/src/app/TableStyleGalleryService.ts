@@ -22,8 +22,21 @@ interface TableStyleGalleryEntry {
 	Image: string; // data:image/png;base64,... rendered by the engine
 }
 
+// A section title between two runs of styles in the list the engine sends.
+interface TableStyleGallerySeparator {
+	Separator: true;
+	Title: string;
+}
+
+type TableStyleGalleryListItem =
+	| TableStyleGalleryEntry
+	| TableStyleGallerySeparator;
+
 class TableStyleGalleryService {
+	// The styles alone, in list order; the row index of a gallery entry indexes this array.
 	private styles: Array<TableStyleGalleryEntry> = [];
+	// The list as the engine sent it: the styles with the section titles between them.
+	private listItems: Array<TableStyleGalleryListItem> = [];
 	private currentStyleName: string = '';
 
 	constructor() {
@@ -55,7 +68,10 @@ class TableStyleGalleryService {
 		try {
 			const parsed =
 				typeof e.state === 'string' ? JSON.parse(e.state) : e.state;
-			this.styles = parsed.TableStyles || [];
+			this.listItems = parsed.TableStyles || [];
+			this.styles = this.listItems.filter(
+				(item): item is TableStyleGalleryEntry => !('Separator' in item),
+			);
 		} catch (ex) {
 			app.console.error('Failed to parse TableStyleList: ' + ex);
 			return;
@@ -83,23 +99,38 @@ class TableStyleGalleryService {
 			text: _('Table Styles'),
 			aria: { label: _('Table Styles') },
 			accessibility: { focusBack: true, combination: 'TL' },
-			entries: this.styles.map((style, index) => {
-				return {
-					row: index,
-					text: style.DisplayName || style.Name,
-					// The engine falls back to an empty string per-style if
-					// rendering that one style's preview failed - don't let
-					// that show as a broken image.
-					image: style.Image || 'images/lc_table_none.svg',
-					width: 56,
-					height: 31,
-					selected: style.Name === this.currentStyleName,
-				};
-			}),
+			entries: this.generateEntries(),
 			singleclickactivate: true,
 			textWithIconEnabled: !this.styles.some((style) => style.Image),
 			selectionmode: 'single',
 		} as IconViewJSON;
+	}
+
+	// A section title becomes a separator entry without a row. A style's row is its index in
+	// the styles array, which is what the selection callback reports back.
+	private generateEntries(): Array<any> {
+		let row = 0;
+		// A used style is listed twice, first among the styles the document uses and again in
+		// its catalog section, and only the first entry shows as selected.
+		let selectedFound = false;
+		return this.listItems.map((item) => {
+			if ('Separator' in item) {
+				return { separator: true, text: item.Title };
+			}
+			const isSelected = !selectedFound && item.Name === this.currentStyleName;
+			if (isSelected) selectedFound = true;
+			return {
+				row: row++,
+				text: item.DisplayName || item.Name,
+				// The engine falls back to an empty string per-style if
+				// rendering that one style's preview failed - don't let
+				// that show as a broken image.
+				image: item.Image || 'images/lc_table_none.svg',
+				width: 56,
+				height: 31,
+				selected: isSelected,
+			};
+		});
 	}
 
 	public applyStyle(stylePos: number) {

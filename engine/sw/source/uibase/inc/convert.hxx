@@ -28,6 +28,7 @@
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"
 #include <tblafmt.hxx>
+#include "tblafmtlistbox.hxx"
 
 class SwTableAutoFormat;
 class SwView;
@@ -35,8 +36,9 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg final : public SfxDialogController
 {
-    sal_uInt8 m_nIndex;
+    size_t m_nIndex;
     sal_uInt8 m_nDfltStylePos;
+    SwTableStyleListBoxIndexes m_aListBoxIndexes;
     bool m_bCoreDataChanged : 1;
 
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;

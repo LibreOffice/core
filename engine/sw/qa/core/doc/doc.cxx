@@ -1311,6 +1311,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBuiltInWordTableStyleCatalog)
         CPPUNIT_ASSERT(pByUIName);
         CPPUNIT_ASSERT_EQUAL(rName, pByUIName->GetName().toString());
     }
+    // The gallery shows the current generation of the catalog in three sections, and the
+    // older generations only on demand: they stay in the catalog for files that use them
+    // but are hidden. The catalog's bare base style is not imported at all.
+    using CatalogGroup = SwTableAutoFormat::CatalogGroup;
+    const struct { OUString aName; CatalogGroup eGroup; bool bHidden; } aExpected[] = {
+        { u"Plain Table 1"_ustr, CatalogGroup::Plain, false },
+        { u"Table Grid"_ustr, CatalogGroup::Plain, false },
+        { u"Grid Table Light"_ustr, CatalogGroup::Plain, false },
+        { u"Grid Table 4 Accent 1"_ustr, CatalogGroup::Grid, false },
+        { u"List Table 7 Colorful Accent 6"_ustr, CatalogGroup::List, false },
+        { u"Light Shading Accent 1"_ustr, CatalogGroup::None, true },
+        { u"Table Classic 1"_ustr, CatalogGroup::None, true },
+    };
+    for (const auto& rExpected : aExpected)
+    {
+        const SwTableAutoFormat* pStyle = rStyles.FindAutoFormat(TableStyleName(rExpected.aName));
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(rExpected.aName, RTL_TEXTENCODING_UTF8).getStr(),
+                               pStyle);
+        CPPUNIT_ASSERT_EQUAL(static_cast<int>(rExpected.eGroup),
+                             static_cast<int>(pStyle->GetCatalogGroup()));
+        CPPUNIT_ASSERT_EQUAL(rExpected.bHidden, pStyle->IsHidden());
+    }
+    const TableStyleName aUserName(u"My Table"_ustr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(CatalogGroup::None),
+                         static_cast<int>(SwTableAutoFormat::GetCatalogGroup(aUserName)));
+
     CPPUNIT_ASSERT_EQUAL(u"My Table"_ustr,
                          SwTableAutoFormat::GetUIName(TableStyleName(u"My Table"_ustr)).toString());
     CPPUNIT_ASSERT_EQUAL(u"Grid Table 4 Accent 1 Wide"_ustr,

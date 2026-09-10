@@ -67,6 +67,22 @@ describe(['tagdesktop'], 'Table Design tab', function() {
 			expect(call.args[1].SetTableStyle.type).to.equal('string');
 			expect(call.args[1].SetTableStyle.value).to.be.a('string').and.not.empty;
 		});
+
+		// The document's table now uses a style, so the engine sends the list
+		// again with a section for the styles in use in front. Wait for that
+		// list to arrive in the strip before opening the expanded gallery, where
+		// the section title is shown and the style follows it.
+		cy.cGet('#table-design-styles.notebookbar .ui-iconview-separator.label')
+			.first()
+			.should('have.text', 'In This Document');
+		cy.cGet('#table-design-styles-iconview-list-expand-button').click();
+		cy.cGet('#table-design-styles.jsdialog .ui-iconview-separator.label')
+			.first()
+			.should('have.text', 'In This Document');
+		cy.cGet('#table-design-styles.jsdialog .ui-iconview-separator.label')
+			.first()
+			.next()
+			.should('have.class', 'ui-iconview-entry');
 	});
 
 	it('Toggles a style option checkbox', function() {
