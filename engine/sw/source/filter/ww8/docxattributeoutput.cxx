@@ -2271,6 +2271,20 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
     DoWriteBookmarksEnd(m_rFinalBookmarksEnd); // Write all final bookmarks
     DoWriteBookmarkEndIfExist(nPos);
+
+    // The run that just ended is the initial of a drop cap: give it its own paragraph.
+    if (m_oDropCap)
+    {
+        // A hyperlink or a structured document tag that is still open here wraps the runs
+        // of both paragraphs, so the end of the first paragraph would land inside it and
+        // the file would not open at all. What can be seen from the document is already
+        // left out in FormatDrop(), and a structured document tag that was kept in a grab
+        // bag in WriteCollectedRunProperties(), so this is only a backstop.
+        if (m_nHyperLinkCount.back() > 0 || m_aRunSdt.m_bStartedSdt)
+            m_oDropCap.reset();
+        else
+            SplitParagraphAtDropCap();
+    }
 }
 
 void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString& bookmarkName)
@@ -3425,6 +3439,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     m_pCharLangAttrList = nullptr;
     m_oFontSize.reset();
     m_bCharPostureWritten = false;
+    m_bCharPositionWritten = false;
+    m_bCharStyleWritten = false;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -3681,6 +3697,32 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     if ( m_pFontsAttrList.is() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, detachFrom( m_pFontsAttrList ) );
+    }
+
+    if (m_oDropCap && !m_oDropCap->bSizeWritten)
+    {
+        if (m_aRunSdt.m_oSdtPrToken.has_value())
+        {
+            // A structured document tag begins on this run, and it wraps the runs of both
+            // paragraphs, so EndRun() will not be able to split the paragraph. Give up the
+            // drop cap here, while the size can still be left out: an initial written large
+            // without a frame around it reads as a stray letter in the middle of a
+            // sentence, which is worse to look at than a paragraph that lost its drop cap.
+            m_oDropCap.reset();
+        }
+        else
+        {
+            // This run is the initial of a drop cap, which Word only renders large if the
+            // size and the offset of the baseline are spelled out for it.
+            m_oFontSize = m_oDropCap->nFontSize;
+            if (!m_bCharPositionWritten)
+                m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val),
+                                               OString::number(m_oDropCap->nPosition));
+            if (!m_bCharStyleWritten && !m_oDropCap->aCharStyleId.isEmpty())
+                m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val),
+                                               m_oDropCap->aCharStyleId);
+            m_oDropCap->bSizeWritten = true;
+        }
     }
 
     if ( m_oFontSize )
@@ -4619,9 +4661,130 @@ void DocxAttributeOutput::EndRedline(const SwRedlineData* pRedlineData, bool bPa
         EndRedline(pRedlineData->Next());
 }
 
-void DocxAttributeOutput::FormatDrop( const SwTextNode& /*rNode*/, const SwFormatDrop& /*rSwFormatDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
+void DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
 {
-    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle )" );
+    // Word frames the initial in a paragraph of its own, followed by a paragraph with
+    // the rest of the text, so remember what it takes to write that frame. The split
+    // itself has to wait until the initial's run is closed, in EndRun().
+    const sal_Int32 nDropLen
+        = rSwFormatDrop.GetWholeWord() ? rNode.GetDropLen(0) : rSwFormatDrop.GetChars();
+    if (nDropLen <= 0 || nDropLen >= rNode.GetText().getLength())
+    {
+        // Nothing would be left for the second paragraph, and reading such a file back
+        // would take the following paragraph's text into the frame instead.
+        return;
+    }
+
+    // A hyperlink, a content control or a ruby that begins in the initial and reaches past
+    // it wraps runs of both paragraphs, so the end of the first paragraph would land inside
+    // it and the file would not open at all. Leave the drop cap out in that case.
+    if (const SwpHints* pHints = rNode.GetpSwpHints())
+    {
+        for (size_t i = 0; i < pHints->Count(); ++i)
+        {
+            const SwTextAttr* pHint = pHints->Get(i);
+            if (pHint->Which() != RES_TXTATR_INETFMT
+                && pHint->Which() != RES_TXTATR_CONTENTCONTROL
+                && pHint->Which() != RES_TXTATR_CJK_RUBY)
+                continue;
+            const sal_Int32* pEnd = pHint->End();
+            if (pHint->GetStart() < nDropLen && pEnd && *pEnd > nDropLen)
+                return;
+        }
+    }
+
+    // Word does not enlarge the initial on its own, it expects the sizes that the
+    // layout came up with.
+    int nFontHeight = 0;
+    int nDropHeight = 0;
+    int nDropDescent = 0;
+    rNode.GetDropSize(nFontHeight, nDropHeight, nDropDescent);
+    if (nDropHeight <= 0)
+    {
+        // GetDropSize guesses the same sizes itself when the layout has not measured an
+        // initial, but it can still hand back a height of zero, and a line height of
+        // zero together with the line rule "exact" would make the line collapse.
+        nFontHeight = rNode.GetSwAttrSet().Get(RES_CHRATR_FONTSIZE).GetHeight();
+        nDropHeight = rSwFormatDrop.GetLines() * nFontHeight;
+        nDropDescent = nFontHeight / 5;
+    }
+
+    DropCapInfo aDropCap;
+    aDropCap.aStyleId = m_rExport.m_pStyles->GetStyleId(nStyle);
+    // The frame paragraph carries the paragraph style, so a list that comes with the
+    // style would put a number in front of the initial as well as in front of the text.
+    const SwTextFormatColl* pTextColl = rNode.GetTextColl();
+    aDropCap.bStyleIsNumbered = pTextColl && !pTextColl->GetNumRule().GetValue().isEmpty();
+    if (const SwCharFormat* pCharFormat = rSwFormatDrop.GetCharFormat())
+        aDropCap.aCharStyleId = m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat));
+    aDropCap.nLines = rSwFormatDrop.GetLines();
+    aDropCap.nDistance = rSwFormatDrop.GetDistance();
+    aDropCap.nLineHeight = nDropHeight;
+    aDropCap.nFontSize = nFontHeight / 10;
+    aDropCap.nPosition = -((aDropCap.nLines - 1) * nDropDescent) / 10;
+    m_oDropCap = aDropCap;
+}
+
+void DocxAttributeOutput::SplitParagraphAtDropCap()
+{
+    const DropCapInfo& rDropCap = *m_oDropCap;
+
+    // The initial's run is in this mark already, so the properties of the paragraph
+    // framing it have to be prepended.
+    m_pSerializer->mark(Tag_DropCapParagraphProperties);
+    m_pSerializer->startElementNS(XML_w, XML_pPr);
+    if (!rDropCap.aStyleId.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), rDropCap.aStyleId);
+
+    rtl::Reference<sax_fastparser::FastAttributeList> pFramePrAttrList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+    pFramePrAttrList->add(FSNS(XML_w, XML_dropCap), "drop");
+    pFramePrAttrList->add(FSNS(XML_w, XML_lines), OString::number(rDropCap.nLines));
+    if (rDropCap.nDistance)
+        pFramePrAttrList->add(FSNS(XML_w, XML_hSpace), OString::number(rDropCap.nDistance));
+    pFramePrAttrList->add(FSNS(XML_w, XML_wrap), "around");
+    pFramePrAttrList->add(FSNS(XML_w, XML_vAnchor), "text");
+    pFramePrAttrList->add(FSNS(XML_w, XML_hAnchor), "text");
+    m_pSerializer->singleElementNS(XML_w, XML_framePr, pFramePrAttrList);
+
+    if (rDropCap.bStyleIsNumbered)
+    {
+        // Take the frame paragraph out of the list again: the number belongs in front of
+        // the text, which is in the paragraph that follows. A numbering id of zero is how
+        // OOXML says that a paragraph is in no list at all.
+        m_pSerializer->startElementNS(XML_w, XML_numPr);
+        m_pSerializer->singleElementNS(XML_w, XML_ilvl, FSNS(XML_w, XML_val), "0");
+        m_pSerializer->singleElementNS(XML_w, XML_numId, FSNS(XML_w, XML_val), "0");
+        m_pSerializer->endElementNS(XML_w, XML_numPr);
+    }
+
+    m_pSerializer->singleElementNS(XML_w, XML_spacing,
+                                   FSNS(XML_w, XML_line), OString::number(rDropCap.nLineHeight),
+                                   FSNS(XML_w, XML_lineRule), "exact");
+
+    m_pSerializer->startElementNS(XML_w, XML_rPr);
+    if (!rDropCap.aCharStyleId.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val),
+                                       rDropCap.aCharStyleId);
+    m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val),
+                                   OString::number(rDropCap.nPosition));
+    m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val),
+                                   OString::number(rDropCap.nFontSize));
+    m_pSerializer->endElementNS(XML_w, XML_rPr);
+
+    m_pSerializer->endElementNS(XML_w, XML_pPr);
+    m_pSerializer->mergeTopMarks(Tag_DropCapParagraphProperties,
+                                 sax_fastparser::MergeMarks::PREPEND);
+
+    // Close the initial's paragraph and open the one that takes the rest of the text.
+    // The paragraph properties are written at the end of the text node and prepended,
+    // so they land in this second paragraph, where they belong.
+    m_pSerializer->endElementNS(XML_w, XML_p);
+    m_pSerializer->mergeTopMarks(Tag_StartParagraph_2);
+    m_pSerializer->startElementNS(XML_w, XML_p);
+    m_pSerializer->mark(Tag_StartParagraph_2);
+
+    m_oDropCap.reset();
 }
 
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
@@ -8394,6 +8557,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     float fHeight = rItem.GetHeight();
     OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
     m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
+    m_bCharPositionWritten = true;
 
     if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_oFontSize )
     {
@@ -8922,7 +9086,10 @@ void DocxAttributeOutput::TextINetFormat( const SwFormatINetFormat& rLink )
     {
         OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pFormat)));
         if (!aStyleId.equalsIgnoreAsciiCase("DefaultStyle"))
+        {
             m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val), aStyleId);
+            m_bCharStyleWritten = true;
+        }
     }
 }
 
@@ -8931,6 +9098,7 @@ void DocxAttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat 
     OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(rCharFormat.GetCharFormat())));
 
     m_pSerializer->singleElementNS(XML_w, XML_rStyle, FSNS(XML_w, XML_val), aStyleId);
+    m_bCharStyleWritten = true;
 }
 
 void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef )
@@ -11103,6 +11271,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
       m_bCharPostureWritten(false),
+      m_bCharPositionWritten(false),
+      m_bCharStyleWritten(false),
       m_bEndCharSdt(false),
       m_endPageRef( false ),
       m_pFootnotesList( new ::docx::FootnotesList() ),

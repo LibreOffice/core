@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:drop-cap style:lines="3" style:length="1" style:distance="0.5cm"/>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="Rubi1" style:family="ruby">
+   <style:ruby-properties style:ruby-align="center" style:ruby-position="above"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="P1"><text:ruby text:style-name="Rubi1"><text:ruby-base>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec pellentesque eros molestie eget.</text:ruby-base><text:ruby-text>ruby</text:ruby-text></text:ruby></text:p>
+  </office:text>
+ </office:body>
+</office:document>
