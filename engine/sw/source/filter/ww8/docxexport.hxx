@@ -62,6 +62,8 @@ struct SdtData
 {
     OUString namespaces;
     OUString xpath;
+    /// The ds:itemID of the customXml item the value belongs to. Empty when the binding names none.
+    OUString storeItemID;
     OUString data;
 };
 
@@ -222,9 +224,10 @@ public:
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
 
-    void AddSdtData(const OUString & namespaces, const OUString & xpath, const OUString & data)
+    void AddSdtData(const OUString & namespaces, const OUString & xpath,
+                    const OUString & storeItemID, const OUString & data)
     {
-        m_SdtData.push_back({ namespaces, xpath, data });
+        m_SdtData.push_back({ namespaces, xpath, storeItemID, data });
     }
 
 protected:

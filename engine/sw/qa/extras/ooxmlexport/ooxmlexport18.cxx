@@ -663,6 +663,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147724)
     assertXPathNoAttribute(pXmlDoc, "//w:p[2]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomXmlTwoDataStores)
+{
+    createSwDoc("customxml-two-data-stores.docx");
+    saveAndReload(TestFilter::DOCX);
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // Each data-bound content control keeps the value held by the custom xml item its own data
+    // binding names, so the two controls still show different values after the round trip.
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]", u"Placeholder -> *ABC*");
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[2]", u"Placeholder -> *HERUNTERLADEN*");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
 {
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);

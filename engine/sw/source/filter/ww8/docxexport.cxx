@@ -1895,6 +1895,28 @@ void DocxExport::WriteGlossary()
     }
 }
 
+static OUString lcl_GetStoreItemID(const uno::Reference<xml::dom::XDocument>& xDocumentProps)
+{
+    if (!xDocumentProps.is())
+        return OUString();
+
+    uno::Reference<xml::xpath::XXPathAPI> xXPathAPI
+        = xml::xpath::XPathAPI::create(comphelper::getProcessComponentContext());
+    xXPathAPI->registerNS(u"ds"_ustr,
+                          u"http://schemas.openxmlformats.org/officeDocument/2006/customXml"_ustr);
+
+    try
+    {
+        return xXPathAPI->eval(xDocumentProps, u"string(/ds:datastoreItem/@ds:itemID)"_ustr)
+            ->getString();
+    }
+    catch (cpo::uno::Exception const&)
+    {
+        TOOLS_WARN_EXCEPTION("sw.ww8", "custom xml store id");
+        return OUString();
+    }
+}
+
 static void lcl_UpdateXmlValues(const SdtData& rSdtData,
                                 const uno::Reference<xml::dom::XDocument>& xDocument)
 {
@@ -1955,16 +1977,27 @@ void DocxExport::WriteCustomXml()
                 "customXml/item" + OUString::number(j + 1) + ".xml", u"application/xml"_ustr);
 
             uno::Reference<xml::dom::XDocument> xItemDom = customXmlDom;
-            if (m_SdtData.size())
+            const OUString aStoreItemID = lcl_GetStoreItemID(customXmlDomProps);
+            if (!aStoreItemID.isEmpty())
             {
                 // A data-bound content control can hold a value the user has edited since the
-                // document was loaded, so write the current values into the stored XML. The edit
-                // goes to a copy, which leaves the document model as it is.
-                uno::Reference<xml::dom::XDocument> xCopy(customXmlDom->cloneNode(true),
-                                                          uno::UNO_QUERY_THROW);
+                // document was loaded, so write the current values into the stored XML. Each
+                // value goes to the item its own data binding names. The edit goes to a copy,
+                // which leaves the document model as it is.
+                uno::Reference<xml::dom::XDocument> xCopy;
                 for (const SdtData& rSdtData : m_SdtData)
+                {
+                    if (rSdtData.storeItemID != aStoreItemID)
+                        continue;
+
+                    if (!xCopy.is())
+                        xCopy.set(customXmlDom->cloneNode(true), uno::UNO_QUERY_THROW);
+
                     lcl_UpdateXmlValues(rSdtData, xCopy);
-                xItemDom = xCopy;
+                }
+
+                if (xCopy.is())
+                    xItemDom = xCopy;
             }
 
             uno::Reference<xml::sax::XSAXSerializable> xSerializer(xItemDom, uno::UNO_QUERY_THROW);
