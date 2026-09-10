@@ -260,8 +260,13 @@ bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescr
         writerfilter::ooxml::OOXMLStream::Pointer_t pVBAProjectStream(
             writerfilter::ooxml::OOXMLDocumentFactory::createStream(
                 pDocStream, writerfilter::ooxml::OOXMLStream::StreamType_t::VBAPROJECT));
-        oox::StorageRef xVbaPrjStrg = std::make_shared<::oox::ole::OleStorage>(
-            m_xContext, pVBAProjectStream->getDocumentStream(), false);
+        // A document without macros has no such stream, and a storage cannot be built from
+        // one that is not there.
+        uno::Reference<io::XInputStream> xVbaProjectStream(pVBAProjectStream->getDocumentStream());
+        oox::StorageRef xVbaPrjStrg;
+        if (xVbaProjectStream.is())
+            xVbaPrjStrg = std::make_shared<::oox::ole::OleStorage>(m_xContext, xVbaProjectStream,
+                                                                  false);
         if (xVbaPrjStrg && xVbaPrjStrg->isStorage())
         {
             ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, u"Writer");
