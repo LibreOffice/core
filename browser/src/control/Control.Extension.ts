@@ -999,7 +999,10 @@ async function tryLoadAppsScriptExtension(
 		// Missing sidecar is not fatal; the wrapper still loads the sidebar with no scripts.
 	}
 	const params = new URLSearchParams();
-	params.set('base', app.LOUtil.getURL(baseRel));
+	params.set(
+		'base',
+		new URL(app.LOUtil.getURL(baseRel), document.baseURI).href,
+	);
 	if (listing.sidebar) params.set('sidebar', listing.sidebar);
 	if (listing.scripts && listing.scripts.length) {
 		params.set('scripts', listing.scripts.join(','));
