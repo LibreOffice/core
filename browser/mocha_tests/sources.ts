@@ -131,6 +131,7 @@
 /// <reference path="../src/canvas/vector/VectorGradientPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/vector/VectorScratchCanvases.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitiveRenderer.ts" />
+/// <reference path="../src/canvas/vector/VectorHitTest.ts" />
 /// <reference path="../src/canvas/vector/PreviewId.ts" />
 /// <reference path="../src/canvas/vector/VectorPartId.ts" />
 /// <reference path="../src/canvas/vector/VectorPrimitivesData.ts" />

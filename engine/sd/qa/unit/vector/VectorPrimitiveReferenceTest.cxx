@@ -333,11 +333,9 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTransform)
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testHiddenGeometry)
 {
-    // HiddenGeometryPrimitive2D wraps content that is rendered
-    // only for hit-testing. The fixture wraps a filled triangle so
-    // there are real children present. The wire output only carries
-    // the type tag, since the JSON processor drops the children on
-    // purpose.
+    // HiddenGeometryPrimitive2D wraps content that is there to be
+    // hit rather than seen. The children travel, so a reader can
+    // hit-test against them, and the type tag says not to draw them.
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(0.0, 0.0));
     aTriangle.append(basegfx::B2DPoint(100.0, 0.0));
@@ -354,6 +352,7 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testHiddenGeometry)
     auto aJson = writeReference(u"testHiddenGeometry", aPrimitives);
 
     assertJsonPath(aJson, "/primitives/0/type", "hiddenGeometry");
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testExclusiveEditView)

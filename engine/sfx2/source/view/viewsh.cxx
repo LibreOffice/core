@@ -3304,6 +3304,10 @@ static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_
     if (!comphelper::COKit::isActive())
         return true;
 
+    // A client that works out this kind of payload for itself is not sent it.
+    if (pImpl->m_aUnwantedCallbacks.contains(eType))
+        return true;
+
     if (comphelper::COKit::isTiledPaintingOf(pImpl->m_nDocId))
     {
         switch (eType)
@@ -3379,6 +3383,14 @@ void SfxViewShell::viewCallbackWithViewId(COKitCallbackType eType, const OString
 bool SfxViewShell::hasKitClient() const { return pImpl->m_pCOKitViewCallback != nullptr; }
 
 ViewShellDocId SfxViewShell::getKitDocId() const { return GetDocId(); }
+
+void SfxViewShell::setCallbackWanted(COKitCallbackType eType, bool bWanted)
+{
+    if (bWanted)
+        pImpl->m_aUnwantedCallbacks.erase(eType);
+    else
+        pImpl->m_aUnwantedCallbacks.insert(eType);
+}
 
 bool SfxViewShell::acceptsViewCallback(COKitCallbackType eType) const
 {

@@ -289,6 +289,12 @@ class CanvasSectionContainer {
 		return this.context;
 	}
 
+	// Where the mouse was last seen, in the coordinates of this container, or null while it has not
+	// been seen at all.
+	public getMousePosition (): Array<number> {
+		return this.mousePosition;
+	}
+
 	public setDocumentAnchorSection(sectionName: string) {
 		var section: CanvasSectionObject = this.getSectionWithName(sectionName);
 		if (section) {

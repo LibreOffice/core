@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager ViewState */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection */
 
 function clamp(num, min, max)
 {
@@ -362,6 +362,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// rendering is enabled. The tile grid stays empty in this mode.
 		if (RenderManager.isVectorRendering()) {
 			app.sectionContainer.addSection(new cool.VectorContentSection());
+
+			// The geometry the client holds answers what lies under the mouse, so
+			// the pointer is worked out here. The engine keeps reporting its own,
+			// since the hand over a hyperlink is known to it alone.
+			app.sectionContainer.addSection(new RenderGeometrySection());
 		}
 
 		this._canvasOverlay = new CanvasOverlay(this._map, app.sectionContainer.getContext());
@@ -1681,6 +1686,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		textMsg = textMsg.substring(14); // "mousepointer: "
 		textMsg = Cursor.getCustomCursor(textMsg) || textMsg;
 		this._coreMousePointer = textMsg;
+
+		// While the shapes answer for the pointer theirs is the one on screen, apart
+		// from the hand over a hyperlink, which only the engine can tell.
+		if (RenderGeometrySection.answersPointer() && textMsg !== 'pointer')
+			return;
+
 		const canvas = document.getElementById('document-canvas');
 		if (canvas && canvas.style.cursor !== textMsg) {
 			canvas.style.cursor = textMsg;

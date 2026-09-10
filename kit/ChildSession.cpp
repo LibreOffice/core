@@ -649,6 +649,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "clientzoom") ||
                tokens.equals(0, "clientvisiblearea") ||
                tokens.equals(0, "outlinestate") ||
+               tokens.equals(0, "reportmousepointer") ||
                tokens.equals(0, "downloadas") ||
                tokens.equals(0, "getchildid") ||
                tokens.equals(0, "gettextselection") ||
@@ -709,6 +710,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "outlinestate"))
         {
             return outlineState(tokens);
+        }
+        else if (tokens.equals(0, "reportmousepointer"))
+        {
+            return reportMousePointer(tokens);
         }
         else if (tokens.equals(0, "downloadas"))
         {
@@ -1526,6 +1531,24 @@ bool ChildSession::outlineState(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     getLOKitDocument()->setOutlineState(column, level, index, hidden);
+    return true;
+}
+
+bool ChildSession::reportMousePointer(const StringVector& tokens)
+{
+    std::string wanted;
+
+    if (tokens.size() != 2 || !getTokenString(tokens[1], "wanted", wanted) ||
+        (wanted != "true" && wanted != "false"))
+    {
+        sendTextFrameAndLogError("error: cmd=reportmousepointer kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+
+    // A client that works out the pointer from the geometry it holds is sent none.
+    getLOKitDocument()->setViewOption("mousepointer", wanted == "true" ? "on" : "off");
     return true;
 }
 

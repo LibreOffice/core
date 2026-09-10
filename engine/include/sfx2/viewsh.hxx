@@ -443,6 +443,13 @@ public:
     virtual ViewShellDocId getKitDocId() const override;
     /// ICOKitNotifier.
     virtual bool acceptsViewCallback(COKitCallbackType eType) const override;
+
+    /** Says whether the client of this view wants payloads of the given kind.
+     *
+     * A kind the client does not want is dropped before it is built, whichever of the callbacks
+     * would have carried it.
+     */
+    void setCallbackWanted(COKitCallbackType eType, bool bWanted);
     /// ICOKitNotifier. Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.

@@ -338,7 +338,9 @@ class DebugManager {
 		});
 
 		// The geometry of each object is a Draw and Impress thing, and it is drawn from the
-		// vector rendering cache, so the tool is offered only where that cache exists.
+		// vector rendering cache, so the tool is offered only where that cache exists. The tool
+		// turns the drawing of that geometry on. The section that holds it is there whenever
+		// the document is drawn from vector primitives.
 		const docType = self._docLayer._docType;
 		if (
 			(docType === 'presentation' || docType === 'drawing') &&
@@ -354,7 +356,7 @@ class DebugManager {
 				},
 				onRemove: function () {
 					self.renderGeometryOn = false;
-					RenderGeometrySection.remove();
+					RenderGeometrySection.update();
 				},
 			});
 

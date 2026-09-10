@@ -6451,7 +6451,14 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
     SetLastExceptionMsg();
 
     const OUString sOption = getUString(pOption);
-    if (sOption == "zoom")
+    if (sOption == "mousepointer")
+    {
+        // A client that works out the pointer from what it holds says "off" and is sent none.
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            pViewShell->setCallbackWanted(COKitCallbackType::MOUSE_POINTER,
+                                          getUString(pValue) != "off");
+    }
+    else if (sOption == "zoom")
     {
         const int nZoom = getUString(pValue).toInt32();
 

@@ -23,6 +23,10 @@ void DocWindow::SetPointer(PointerStyle nPointer)
     if (!pWin)
         return;
 
+    const vcl::ICOKitNotifier* pNotifier = pWin->GetKitNotifier();
+    if (!pNotifier || !pNotifier->acceptsViewCallback(COKitCallbackType::MOUSE_POINTER))
+        return;
+
     PointerStyle aPointer = GetPointer();
     // We don't map all possible pointers hence we need a default
     OString aPointerString = "default"_ostr;
@@ -32,7 +36,7 @@ void DocWindow::SetPointer(PointerStyle nPointer)
         aPointerString = aIt->second;
     }
 
-    pWin->GetKitNotifier()->viewCallback(COKitCallbackType::MOUSE_POINTER, aPointerString);
+    pNotifier->viewCallback(COKitCallbackType::MOUSE_POINTER, aPointerString);
 }
 } // namespace vcl
 

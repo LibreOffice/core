@@ -739,8 +739,16 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 
         case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
         {
-            // Hidden geometry is for hit-testing only, not visual - skip entirely
+            const auto& rPrimitive = static_cast<const HiddenGeometryPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "hiddenGeometry");
+
+            // What this holds is there to be hit and to give the object its range, not to be seen,
+            // and its own decomposition is empty for that reason. The children are written out
+            // directly instead.
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
         }
         break;
 

@@ -508,6 +508,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorScratchCanvases.ts \
 	src/canvas/vector/VectorResourceWalker.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
+	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
 	src/canvas/vector/VectorRenderingFontResponse.ts \

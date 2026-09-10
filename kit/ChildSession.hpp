@@ -201,6 +201,9 @@ private:
     bool clientZoom(const StringVector& tokens);
     bool clientVisibleArea(const StringVector& tokens);
     bool outlineState(const StringVector& tokens);
+
+    /// Says whether this client wants to be told the mouse pointer the document asks for.
+    bool reportMousePointer(const StringVector& tokens);
     bool downloadAs(const StringVector& tokens);
     /// Whether core will put a question to the person while writing the document out in
     /// this format.

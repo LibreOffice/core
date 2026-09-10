@@ -557,6 +557,12 @@ outlinestate type=<type> level=<level> index=<index> state=<state>
 
     Invokes  lok::Document::setOutlineState().
 
+reportmousepointer wanted=<wanted>
+
+    <wanted> is 'true' or 'false'. Says whether this client wants to be told the mouse pointer the
+    document asks for. A client that works out the pointer from the geometry it holds says 'false'
+    and is sent none until it says 'true' again.
+
 useractive
 
     Sent when the user regains focus or clicks within the active area to
