@@ -201,7 +201,7 @@ namespace basegfx::utils
         if (fFact >= 1.0)
             return BColor(rEndRGB.getRed(), rEndRGB.getGreen(), rEndRGB.getBlue());
 
-        // The hue is undefined for Gray, the rgb2hsl conversion sets it to 0 degree. Thus Gray needs
+        // The hue is undefined for Gray, the rgb2hsl conversion sets it to 0 degrees. Thus Gray needs
         // some special treatment in interpolating.
         const bool bIsStartGray = rStartRGB.getRed() == rStartRGB.getGreen()
                                   && rStartRGB.getGreen() == rStartRGB.getBlue();

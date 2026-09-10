@@ -191,7 +191,7 @@ namespace basegfx
 
             if(nMaxRecursionDepth)
             {
-                // divide at 0.5 ad test both edges for angle criteria
+                // divide at 0.5 and test both edges for angle criteria
                 const B2DPoint aS1L(average(rfPA, rfEA));
                 const B2DPoint aS1C(average(rfEA, rfEB));
                 const B2DPoint aS1R(average(rfEB, rfPB));

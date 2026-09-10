@@ -847,7 +847,7 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 ))
 endif
 
-# 'test_unittest' is only package delivering to workdir.
+# 'test_unittest' is the only package delivering to workdir.
 # Other packages could be potentially autoinstalled.
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \

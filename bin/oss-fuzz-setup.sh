@@ -111,8 +111,8 @@ grep -h "rng:attribute name=" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema
 echo "# attributes' values" >> odf.dict
 grep -h "rng:value" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libreoffice/schema/libreoffice/OpenDocument-v1.4+libreoffice-schema.rng | sed -n 's#.*<rng:value>\([^<]*\)</rng:value>.*#"\1"#p' | sort | uniq >> odf.dict
 
-#fuzzing corpuses
-#afl jpeg, gif, bmp, png, webp
+# fuzzing corpora
+# afl jpeg, gif, bmp, png, webp
 curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
 mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && cd .. && \
     zip -q $SRC/jpgfuzzer_seed_corpus.zip afl-testcases/jpeg*/full/images/* && \

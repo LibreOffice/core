@@ -117,7 +117,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dvector);
 } // namespace basegfx3d
 
 // this macro creates an empty function, which will be called by the RegisterAllFunctions()
-// to allow the user the possibility to also register some functions by hand.
+// to give the user the possibility to also register some functions by hand.
 // NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

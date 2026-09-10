@@ -53,7 +53,7 @@ bool SbModule::Compile()
 
     GetSbData()->pCompMod = pOld;
 
-    // compiling a module, the module-global
+    // When compiling a module, the module-global
     // variables of all modules become invalid
     bool bRet = IsCompiled();
     if( bRet )

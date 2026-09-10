@@ -282,7 +282,7 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     return nRetError;
 }
 
-// The number is prepared unformattedly with the given number of
+// The number is prepared without formatting with the given number of
 // NK-positions. A leading minus is added if applicable.
 // This routine is public because it's also used by the Put-functions
 // in the class SbxImpSTRING.

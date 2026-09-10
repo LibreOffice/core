@@ -79,8 +79,8 @@ def get_current_version(libName):
     return Version("0.0.0")
 
 def get_library_list(fileName):
-    inputProces = "include " + fileName + "\nall:\n\t$(foreach v,$(sort $(filter %TARBALL,$(.VARIABLES))),$(info export $(v)=$($(v))))"
-    process = subprocess.run(["make", "-q", "-f", "-"], input=bytes(inputProces, 'UTF-8'), stdout=subprocess.PIPE)
+    inputProcess = "include " + fileName + "\nall:\n\t$(foreach v,$(sort $(filter %TARBALL,$(.VARIABLES))),$(info export $(v)=$($(v))))"
+    process = subprocess.run(["make", "-q", "-f", "-"], input=bytes(inputProcess, 'UTF-8'), stdout=subprocess.PIPE)
 
     libraryList = []
     for lib in process.stdout.splitlines():

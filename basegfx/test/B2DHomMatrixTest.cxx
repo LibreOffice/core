@@ -219,7 +219,7 @@ public:
         B2DHomMatrix mat;
         mat.shearX(3.0);
         mat.shearY(7.0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("translate", maShear, mat);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("shear", maShear, mat);
     }
 
     void multiply()

@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(ColorSchemeDialog, OptionHdl, weld::Toggleable&, void)
 IMPL_LINK_NOARG(ColorSchemeDialog, SelectHdl, weld::ItemView&, void)
 {
     // Apply the selected scheme only for the current ModulWinLayout for preview
-    // Only if the user presses OK the scheme will be applied to all ModulWinLayout(s)
+    // Only if the user presses OK will the scheme be applied to all ModulWinLayout(s)
     m_sSelectedSchemeId = m_xSchemeList->get_selected_id();
     m_pModulWinLayout->ApplyColorSchemeToCurrentWindow(m_sSelectedSchemeId);
 }

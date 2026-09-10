@@ -149,7 +149,7 @@ android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some extent)
  */
 
 // Assets that are unpacked at run-time into the app's data directory. These
-// are files read by non-LO code, fontconfig and freetype for now, that doesn't
+// are files read by non-LO code, fontconfig and freetype for now, that don't
 // understand "/assets" paths.
 tasks.register<Copy>("copyUnpackAssets") {
     description = "copies assets that need to be extracted on the device"

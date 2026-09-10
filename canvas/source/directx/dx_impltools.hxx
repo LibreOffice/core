@@ -37,7 +37,7 @@ namespace basegfx
     class B2DHomMatrix;
     class B2IRange;
     class B2DPolyPolygon;
-};
+}
 
 namespace com::sun::star::geometry
 {

@@ -66,12 +66,12 @@ public:
         CPPUNIT_ASSERT_MESSAGE("0.51", fTools::equal(fAlpha, 0.025));
 
         std::tie(nIndex, fAlpha) = maKeyStops.lerp(0.9);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.51", std::ptrdiff_t(1), nIndex);
-        CPPUNIT_ASSERT_MESSAGE("0.51", fTools::equal(fAlpha, 1.0));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.9", std::ptrdiff_t(1), nIndex);
+        CPPUNIT_ASSERT_MESSAGE("0.9", fTools::equal(fAlpha, 1.0));
 
         std::tie(nIndex, fAlpha) = maKeyStops.lerp(1.0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("0.51", std::ptrdiff_t(1), nIndex);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("0.51", 1.0, fAlpha, 1E-12);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("1.0", std::ptrdiff_t(1), nIndex);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("1.0", 1.0, fAlpha, 1E-12);
     }
 
     // Change the following lines only, if you add, remove or rename

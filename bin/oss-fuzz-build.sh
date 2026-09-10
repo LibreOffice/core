@@ -71,7 +71,7 @@ EOF
 done
 popd
 
-#starting corpuses
+#starting corpora
 for zip_file in $SRC/*_seed_corpus.zip; do
     cp $zip_file $OUT
 done
