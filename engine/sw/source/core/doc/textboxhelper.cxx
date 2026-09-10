@@ -601,6 +601,10 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
                     UNO_NAME_PARA_ADJUST,
                     cpo::uno::Any(style::ParagraphAdjust::ParagraphAdjust_RIGHT)); //1
                 break;
+            case drawing::TextHorizontalAdjust::TextHorizontalAdjust_BLOCK:
+                // Centered and justified shape text both arrive as block, so this says nothing
+                // about how a paragraph is aligned. Leave the paragraphs their own alignment.
+                break;
             default:
                 SAL_WARN("sw.core",
                          "SwTextBoxHelper::syncProperty: unhandled TextHorizontalAdjust: "
@@ -652,6 +656,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
             sal_Int16 nDirection = 0;
             switch (nAngle)
             {
+                case 0:
+                    // The text is not turned, which is what a frame does anyway.
+                    break;
                 case -90:
                     nDirection = text::WritingMode2::TB_RL90;
                     break;
@@ -798,6 +805,10 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 case MID_HORIORIENT_POSITION:
                     aPropertyName = UNO_NAME_HORI_ORIENT_POSITION;
                     bAdjustX = true;
+                    break;
+                case MID_HORIORIENT_PAGETOGGLE:
+                    // syncFlyFrameAttr() copies the whole orientation item over, so the text box
+                    // already mirrors on even pages together with its shape.
                     break;
                 default:
                     SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
@@ -961,7 +972,10 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             break;
         default:
-            SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled which-id: "
+            // Only the items a text box has to follow are listed above. A shape carries many
+            // more, from its wrap to the property that made it a text box in the first place,
+            // and those simply have nothing to copy.
+            SAL_INFO("sw.core", "SwTextBoxHelper::syncProperty: unhandled which-id: "
                                     << nWID << " (member-id: "
                                     << o3tl::narrowing<sal_uInt16>(nMemberID) << ")");
             break;
@@ -1952,7 +1966,9 @@ SwFrameFormat* SwTextBoxNode::GetTextBox(const SdrObject* pDrawObject) const
                 return it->m_pTextBoxFormat;
             }
         }
-        SAL_WARN("sw.core", "SwTextBoxNode::GetTextBox(): Not found!");
+        // A caller asking whether a draw object has a text box gets its answer from the
+        // return value, so finding none here is ordinary.
+        SAL_INFO("sw.core", "SwTextBoxNode::GetTextBox(): Not found!");
     }
 
     return nullptr;
