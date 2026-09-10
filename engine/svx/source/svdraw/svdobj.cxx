@@ -1013,7 +1013,11 @@ void SdrObject::ensureSortedImmediatelyAfter(const SdrObject& rFirst)
     bool bDirty = pParentList->IsObjOrdNumsDirty();
     if (!bDirty)
     {
-        pParentList->SetObjectOrdNum(GetOrdNum(), rFirst.GetOrdNum() + 1);
+        // Moving takes the object out of the list before putting it back in, so coming from
+        // below rFirst leaves rFirst one place lower than it is now.
+        const size_t nOwn(GetOrdNum());
+        const size_t nFirst(rFirst.GetOrdNum());
+        pParentList->SetObjectOrdNum(nOwn, nOwn < nFirst ? nFirst : nFirst + 1);
     }
     else
     {
@@ -1028,7 +1032,7 @@ void SdrObject::ensureSortedImmediatelyAfter(const SdrObject& rFirst)
             {
                 auto ord1 = std::distance(pParentList->begin(), *itFound1);
                 auto ord2 = std::distance(pParentList->begin(), *itFound2);
-                pParentList->SetObjectOrdNum(ord1, ord2 + 1);
+                pParentList->SetObjectOrdNum(ord1, ord1 < ord2 ? ord2 : ord2 + 1);
                 break;
             }
         }
