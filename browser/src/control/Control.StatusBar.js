@@ -12,7 +12,7 @@
  * JSDialog.StatusBar - statusbar component
  */
 
-/* global $ app JSDialog _ _UNO  getPermissionModeElements URLPopUpSection */
+/* global app JSDialog _ _UNO  getPermissionModeElements URLPopUpSection */
 class StatusBar extends JSDialog.Toolbar {
 	constructor(map) {
 		super(map, 'Statusbar', 'toolbar-down');
@@ -135,10 +135,15 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('cancelsearch', false);
 			}
 			window.L.DomUtil.addClass(searchInput, 'search-not-found');
-			$('#findthis').addClass('search-not-found');
+			var findThis = document.getElementById('findthis');
+			if (findThis) findThis.classList.add('search-not-found');
 			app.searchService.resetSelection();
 			setTimeout(function () {
-				$('#findthis').removeClass('search-not-found');
+				// Query again to get the current instance for sure: the
+				// element found above may no longer be the live one after
+				// this delay.
+				var findThis = document.getElementById('findthis');
+				if (findThis) findThis.classList.remove('search-not-found');
 				window.L.DomUtil.removeClass(searchInput, 'search-not-found');
 			}, 800);
 		}
@@ -178,8 +183,20 @@ class StatusBar extends JSDialog.Toolbar {
 			statemsg = _UNO('.uno:ShowAnnotations') +': ' + _('On');
 		else if (state === 'false')
 			statemsg = _UNO('.uno:ShowAnnotations') +': ' + _('Off');
-		$('#showcomments-container').attr('default-state', state || null);
+		this._setDefaultState('showcomments-container', state);
 		this.updateHtmlItem('ShowComments', state ? statemsg : ' ');
+	}
+
+	// Toggles a data attribute used purely as a CSS state hook: present with
+	// the given value when truthy, removed entirely when falsy (mirrors the
+	// old jQuery .attr(name, value || null) shorthand).
+	_setDefaultState(id, value) {
+		var el = document.getElementById(id);
+		if (!el) return;
+		if (value)
+			el.setAttribute('default-state', value);
+		else
+			el.removeAttribute('default-state');
 	}
 
 	_generateHtmlItem(id, dataPriority, configPeers) {
@@ -585,11 +602,7 @@ class StatusBar extends JSDialog.Toolbar {
 
 	onPermissionChanged(event) {
 		var isReadOnlyMode = event.detail.perm === 'readonly';
-		if (isReadOnlyMode) {
-			$('#toolbar-down').addClass('readonly');
-		} else {
-			$('#toolbar-down').removeClass('readonly');
-		}
+		this.parentContainer.classList.toggle('readonly', isReadOnlyMode);
 
 		var canUserWrite = window.ThisIsAMobileApp ? !app.isReadOnly() : this.map['wopi'].UserCanWrite;
 		var NotEditDocMode = false;
@@ -676,10 +689,10 @@ class StatusBar extends JSDialog.Toolbar {
 		else if (commandName === '.uno:InsertMode') {
 			this.updateHtmlItem('InsertMode', state ? window.L.Styles.insertMode[state] : ' ', !state);
 
-			$('#InsertMode').removeClass();
-			$('#InsertMode').addClass('jsdialog ui-badge insert-mode-' + state);
+			var insertModeEl = document.getElementById('InsertMode');
+			if (insertModeEl) insertModeEl.className = 'jsdialog ui-badge insert-mode-' + state;
 			var isDefaultState = state === 'true' || state === '';
-			$('#insertmode-container').attr('default-state', isDefaultState || null);
+			this._setDefaultState('insertmode-container', isDefaultState);
 
 			if ((state === 'false' || !state) && URLPopUpSection.isOpen()) {
 				this.map.hyperlinkUnderCursor = null;
@@ -687,7 +700,7 @@ class StatusBar extends JSDialog.Toolbar {
 			}
 		}
 		else if (commandName === '.uno:StatusSelectionMode' || commandName === '.uno:SelectionMode') {
-			$('#statusselectionmode-container').attr('default-state', state === '0' || null);
+			this._setDefaultState('statusselectionmode-container', state === '0');
 			this.updateHtmlItem('StatusSelectionMode', state ? window.L.Styles.selectionMode[state] : _('Selection mode: inactive'), !state);
 		}
 		else if (commandName === '.uno:Size') {
@@ -731,7 +744,7 @@ class StatusBar extends JSDialog.Toolbar {
 		}
 		else if (commandName === '.uno:EditDoc') {
 			state = state !== "false";
-			$('#permissionmode-container').attr('default-state', this.map.isEditMode() || null);
+			this._setDefaultState('permissionmode-container', this.map.isEditMode());
 			this.onPermissionChanged({detail : {
 				perm: state && this.map.isEditMode() ? "edit" : "readonly"
 			} });
