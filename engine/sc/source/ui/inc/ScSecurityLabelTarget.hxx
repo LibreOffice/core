@@ -13,9 +13,11 @@
 
 class ScTabViewShell;
 
-/// Calc implementation of the security-label placement target: the marking is
-/// written as the centre header text of the active sheet's page style; plus the
-/// online banner push. Cover/portion/watermark placements do not apply to Calc.
+/// Calc implementation of the security-label placement target: the marking is written as
+/// the centre header and footer text (coloured) of the active sheet's page style, plus the
+/// online banner push. The header/footer render in print / page-layout view only; the
+/// on-screen marking is the banner. Cover/portion placements and the watermark are
+/// Writer-only (Calc has no native watermark).
 class ScSecurityLabelTarget final : public svx::seclabel::SecurityLabelTarget
 {
     ScTabViewShell& m_rViewShell;

@@ -16,9 +16,10 @@ namespace sd
 class DrawViewShell;
 }
 
-/// Impress implementation of the security-label placement target: the marking is
-/// written as the footer text of every standard slide; plus the online banner push.
-/// Cover/portion/watermark placements do not apply to Impress.
+/// Impress implementation of the security-label placement target: the marking is written
+/// as the visible footer text of every standard slide (colour follows the master style),
+/// plus the online banner push. Cover/portion placements and the watermark are Writer-only
+/// (Impress has no native watermark).
 class SdSecurityLabelTarget final : public svx::seclabel::SecurityLabelTarget
 {
     sd::DrawViewShell& m_rViewShell;

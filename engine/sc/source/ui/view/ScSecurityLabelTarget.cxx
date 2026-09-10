@@ -56,15 +56,17 @@ uno::Reference<beans::XPropertySet> getActivePageStyle(ScTabViewShell& rViewShel
     return xPageStyle;
 }
 
-// Replace the centre text of the page style's (right/shared) header.
-void setHeaderCenter(const uno::Reference<beans::XPropertySet>& xPageStyle, const OUString& rText,
-                     sal_Int32 nColor)
+// Replace the centre text (coloured) of one page-style header/footer content property
+// (the right/shared variant). Only the centre section is touched, so the user's own
+// left/right header/footer content is left intact.
+void setCenterText(const uno::Reference<beans::XPropertySet>& xPageStyle,
+                   const OUString& rContentProp, const OUString& rText, sal_Int32 nColor)
 {
     if (!xPageStyle.is())
         return;
 
     uno::Reference<sheet::XHeaderFooterContent> xContent;
-    xPageStyle->getPropertyValue(SC_UNO_PAGE_RIGHTHDRCON) >>= xContent;
+    xPageStyle->getPropertyValue(rContentProp) >>= xContent;
     if (!xContent.is())
         return;
 
@@ -83,7 +85,7 @@ void setHeaderCenter(const uno::Reference<beans::XPropertySet>& xPageStyle, cons
             xRun->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(nColor));
     }
 
-    xPageStyle->setPropertyValue(SC_UNO_PAGE_RIGHTHDRCON, cpo::uno::Any(xContent));
+    xPageStyle->setPropertyValue(rContentProp, cpo::uno::Any(xContent));
 }
 }
 
@@ -102,18 +104,24 @@ void ScSecurityLabelTarget::applyMarking(const svx::seclabel::LabelPlacement& rP
     if (!xPageStyle.is())
         return;
 
-    // Turn the header on (shared, so a single centre text covers all pages) and
-    // write the marking. Cover/portion/watermark placements do not apply to Calc.
+    // Turn the header and footer on (shared, so a single centre text covers all pages)
+    // and write the marking to both. Cover/portion placements and the watermark are
+    // Writer-only (Calc has no native watermark); the on-screen marking is the banner.
+    // Calc header/footer render in print / page-layout view only.
     xPageStyle->setPropertyValue(SC_UNO_PAGE_HDRON, cpo::uno::Any(true));
     xPageStyle->setPropertyValue(SC_UNO_PAGE_HDRSHARED, cpo::uno::Any(true));
-    setHeaderCenter(xPageStyle, rPlacement.aMarking, rPlacement.nColor);
+    xPageStyle->setPropertyValue(SC_UNO_PAGE_FTRON, cpo::uno::Any(true));
+    xPageStyle->setPropertyValue(SC_UNO_PAGE_FTRSHARED, cpo::uno::Any(true));
+    setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTHDRCON, rPlacement.aMarking, rPlacement.nColor);
+    setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTFTRCON, rPlacement.aMarking, rPlacement.nColor);
 }
 
 void ScSecurityLabelTarget::clearMarkings()
 {
     uno::Reference<frame::XModel> xModel = getModel();
     uno::Reference<beans::XPropertySet> xPageStyle = getActivePageStyle(m_rViewShell, xModel);
-    setHeaderCenter(xPageStyle, OUString(), 0); // empty centre text
+    setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTHDRCON, OUString(), 0); // empty centre text
+    setCenterText(xPageStyle, SC_UNO_PAGE_RIGHTFTRCON, OUString(), 0);
 }
 
 void ScSecurityLabelTarget::notify(const svx::seclabel::LabelChange& rChange)
