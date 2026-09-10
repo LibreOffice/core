@@ -427,7 +427,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			);
 		}
 
-		if (window.wopiSettingBaseUrl) {
+		if (app.LOUtil.canOpenSettings()) {
 			content.push({
 				'type': 'separator',
 				'id': 'file-properties-break',
@@ -1725,11 +1725,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'command': '.uno:Navigator',
 				'accessibility': { focusBack: true,	combination: 'NV', de: null }
 			},
-			// Show the AI Assistant only to a non-anonymous user who may either
-			// configure AI or already has a configured provider. A guest can do
-			// neither, so they never see it.
-			!this.map['wopi'].IsAnonymousUser &&
-			(!this.map['wopi'].DisableAISettings || this.map['wopi'].AIConfigured) ? {
+			app.LOUtil.isAIAssistantAvailable(this.map) ? {
 				'id': 'view-ai-sidebar',
 				'type': 'bigcustomtoolitem',
 				'text': _('AI Assistant'),

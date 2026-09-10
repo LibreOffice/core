@@ -3042,7 +3042,7 @@ class Menubar extends window.L.Control {
 		    $.inArray(menuItem.id, this._hiddenItems) !== -1)
 			return false;
 
-		if (menuItem.id === 'settings-dialog' && !window.wopiSettingBaseUrl)
+		if (menuItem.id === 'settings-dialog' && !app.LOUtil.canOpenSettings())
 			return false;
 
 		return true;

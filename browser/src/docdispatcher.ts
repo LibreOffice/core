@@ -641,7 +641,17 @@ class Dispatcher {
 		}
 	}
 
+	// Sending an unconfigured user to the Options dialog only helps where
+	// that dialog exists. Where it does not, AI has to come from the server
+	// configuration, so say who can turn it on rather than opening a dialog
+	// that has nothing to offer.
 	private static openAISetup() {
+		if (!app.LOUtil.canOpenSettings()) {
+			app.map.uiManager.showSnackbar(
+				_('AI is not configured, contact your administrator'),
+			);
+			return;
+		}
 		(app.map as any).settings.showSettingsDialog('ai-section');
 	}
 

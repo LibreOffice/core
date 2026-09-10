@@ -981,6 +981,35 @@ class LOUtil {
 		);
 	}
 
+	// The Options dialog needs somewhere to read and write the settings it
+	// shows. The apps carry their own store, reached through the native
+	// bridge; in the browser it takes an integration that hands us a settings
+	// endpoint, and plenty of integrations do not implement one. The apps
+	// have to be answered before wopiSettingBaseUrl is consulted: they load
+	// cool.html off disk with its placeholders unsubstituted, so the value
+	// there is the literal "%WOPI_SETTING_BASE_URL%" and means nothing.
+	// Without a persistable preference store the settings handler is not even
+	// installed on the map, so map.settings would be undefined.
+	public static canOpenSettings(): boolean {
+		if (!window.prefs.canPersist) return false;
+		if (window.ThisIsAMobileApp) return true;
+		return !!window.wopiSettingBaseUrl;
+	}
+
+	// Offer the AI assistant only when the user can get an answer out of it:
+	// either a provider is configured already - centrally in coolwsd.xml, or
+	// in the user's own settings - or they can still reach the Options dialog
+	// to configure one. A guest can do neither.
+	public static isAIAssistantAvailable(map: any): boolean {
+		const wopi = map['wopi'];
+		if (wopi.IsAnonymousUser) return false;
+		// isAIConfigured starts out as the WOPI value and follows every
+		// settings change, so a provider the user just removed takes the
+		// entry point with it on the next rebuild.
+		if (map.isAIConfigured) return true;
+		return !wopi.DisableAISettings && LOUtil.canOpenSettings();
+	}
+
 	public static containsDOMRect(
 		viewRect: RectangleLike,
 		rect: RectangleLike,

@@ -426,7 +426,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 
 		}
 
-		if (window.wopiSettingBaseUrl) {
+		if (app.LOUtil.canOpenSettings()) {
 			content.push({
 				'type': 'separator',
 				'id': 'file-properties-break',
