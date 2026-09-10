@@ -224,7 +224,7 @@ constexpr OUString aLinkString = u"Link"_ustr;
 constexpr OUStringLiteral aNoteString = u"Note";
 constexpr OUStringLiteral aAnnotString = u"Annot";
 
-// returns true if first paragraph in cell frame has 'table heading' style
+// returns true if first paragraph in cell frame has 'table heading' style, or one derived from it
 bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
 {
     bool bRet = false;
@@ -233,11 +233,14 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
     if ( pCnt && pCnt->IsTextFrame() )
     {
         SwTextNode const*const pTextNode = static_cast<const SwTextFrame*>(pCnt)->GetTextNodeForParaProps();
-        const SwFormat* pTextFormat = pTextNode->GetFormatColl();
-
-        ProgName sStyleName;
-        SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
-        bRet = sStyleName.toString() == aTableHeadingName;
+        for (const SwFormat* pFormat = pTextNode->GetFormatColl(); pFormat && !bRet;
+             pFormat = pFormat->DerivedFrom())
+        {
+            ProgName sStyleName;
+            SwStyleNameMapper::FillProgName(pFormat->GetName(), sStyleName,
+                                            SwGetPoolIdFromName::TxtColl);
+            bRet = sStyleName == aTableHeadingName;
+        }
     }
 
     // tdf#153935 wild guessing for 1st row based on table autoformat
