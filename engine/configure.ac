@@ -6055,7 +6055,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-gtk3 \
         --disable-libcmis \
         --disable-nss \
-        --disable-online-update \
         --disable-opencl \
         --disable-openssl \
         --disable-pdfimport \
