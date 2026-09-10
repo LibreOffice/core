@@ -8650,40 +8650,51 @@ std::optional<Color> lcl_GetFillOfShading(const Color& rBlended, sal_Int32 nShad
 
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList
+        = FastSerializerHelper::createAttrList();
+
     // A shading is written back as a shading, so that a file that came in that way keeps it.
     // The brush item holds only the color that the shading and the fill blend into, so the fill
     // color has to be worked back out of it.
-    if (const ShadingPatternValue* pShading = lcl_GetShadingPatternValue(rBrush.GetShadingValue()))
+    const ShadingPatternValue* pShading = lcl_GetShadingPatternValue(rBrush.GetShadingValue());
+    if (pShading && pShading->nShadingShare == 1000)
     {
-        if (pShading->nShadingShare == 1000)
-        {
-            // The shading covers the fill color, so the color the item holds is the shading one.
-            m_pSerializer->singleElementNS( XML_w, XML_shd,
-                FSNS( XML_w, XML_val ), OUString(pShading->aValue),
-                FSNS( XML_w, XML_color ), msfilter::util::ConvertColor(rBrush.GetColor()),
-                FSNS( XML_w, XML_fill ), u"auto"_ustr );
-            return;
-        }
-
-        // The shading color is written as automatic, which is black, so the fill color is what
-        // the rest of the blend came from.
-        std::optional<Color> oFill
-            = lcl_GetFillOfShading(rBrush.GetColor(), pShading->nShadingShare);
-        if (oFill)
-        {
-            m_pSerializer->singleElementNS( XML_w, XML_shd,
-                FSNS( XML_w, XML_val ), OUString(pShading->aValue),
-                FSNS( XML_w, XML_color ), u"auto"_ustr,
-                FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor(*oFill) );
-            return;
-        }
+        // The shading covers the fill color, so the color the item holds is the shading one.
+        pAttrList->add(FSNS(XML_w, XML_val), pShading->aValue);
+        pAttrList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(rBrush.GetColor()));
+        pAttrList->add(FSNS(XML_w, XML_fill), "auto");
+        m_pSerializer->singleElementNS(XML_w, XML_shd, detachFrom(pAttrList));
+        return;
     }
 
-    // No shading, or no fill color that the shading blends into the color the item holds: write
-    // that color as a plain fill.
-    m_pSerializer->singleElementNS( XML_w, XML_shd,
-        FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor(rBrush.GetColor()),
-        FSNS( XML_w, XML_val ), "clear" );
+    // The shading color is written as automatic, which is black, so the fill color is what the
+    // rest of the blend came from.
+    std::optional<Color> oFill;
+    if (pShading)
+        oFill = lcl_GetFillOfShading(rBrush.GetColor(), pShading->nShadingShare);
+
+    if (oFill)
+    {
+        pAttrList->add(FSNS(XML_w, XML_val), pShading->aValue);
+        pAttrList->add(FSNS(XML_w, XML_color), "auto");
+        pAttrList->add(FSNS(XML_w, XML_fill), msfilter::util::ConvertColor(*oFill));
+    }
+    else
+    {
+        // No shading, or no fill color that the shading blends into the color the item holds:
+        // write that color as a plain fill.
+        pAttrList->add(FSNS(XML_w, XML_fill), msfilter::util::ConvertColor(rBrush.GetColor()));
+        pAttrList->add(FSNS(XML_w, XML_val), "clear");
+    }
+
+    // The fill can be a theme color, which the file names next to the color it resolves to.
+    // That only holds where the color written is the fill itself. Where the pattern could not
+    // be worked back to a fill, the color written is the one the two blend into, and a reader
+    // that resolves the theme would paint the fill over it.
+    if (!pShading || oFill)
+        lclAddThemeFillColorAttributes(pAttrList, rBrush.getComplexColor());
+
+    m_pSerializer->singleElementNS(XML_w, XML_shd, detachFrom(pAttrList));
 }
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )

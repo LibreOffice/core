@@ -15,6 +15,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <pam.hxx>
@@ -240,6 +242,48 @@ CPPUNIT_TEST_FIXTURE(Test, testCharShadingRoundTripOnSavedFile)
     assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", 1);
     assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", "color", u"auto");
     assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd[@w:val='pct15']", "fill", u"FFFFFF");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCharShadingThemeFill)
+{
+    createSwDoc("char-shading-theme-fill.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the fix the theme color of a character shading was dropped and only the color it
+    // resolves to came back, so the shading no longer followed the document theme.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:shd", "themeFill", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:shd", "themeFill", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:shd", "themeFillTint", u"33");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCharShadingThemeFillOnlyWithItsOwnFill)
+{
+    createSwDoc();
+
+    // A run shaded with a 15 percent pattern over a color that no fill blends into, and a
+    // theme color on top of that. The document is built here because no file in the corpus
+    // carries a character shading of that shape.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    xTextDocument->getText()->setString(u"shaded"_ustr);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
+    xRun->setPropertyValue(u"CharBackColor"_ustr, cpo::uno::Any(sal_Int32(0xffd8d8)));
+    xRun->setPropertyValue(u"CharShadingValue"_ustr,
+                           cpo::uno::Any(sal_Int32(drawing::ShadingPattern::PCT15)));
+    model::ComplexColor aComplexColor;
+    aComplexColor.setThemeColor(model::ThemeColorType::Accent1);
+    xRun->setPropertyValue(u"CharBackgroundComplexColor"_ustr,
+                           cpo::uno::Any(model::color::createXComplexColor(aComplexColor)));
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // The color written is the one the pattern and the fill blend into, which the theme color
+    // does not name, so the run goes out with that color alone.
+    assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd", "val", u"clear");
+    assertXPath(pXmlDoc, "//w:r/w:rPr/w:shd", "fill", u"FFD8D8");
+    assertXPathNoAttribute(pXmlDoc, "//w:r/w:rPr/w:shd", "themeFill");
 }
 
 } // end of anonymous namespace
