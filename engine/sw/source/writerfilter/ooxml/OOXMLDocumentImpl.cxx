@@ -558,7 +558,7 @@ void OOXMLDocument::resolve(Stream & rStream)
     resolveEmbeddingsStream(mpStream);
 
     // Custom xml's are handled as part of grab bag.
-    resolveCustomXmlStream(rStream);
+    resolveCustomXmlStream();
 
     resolveWebSettingsStream(rStream);
 
@@ -617,7 +617,7 @@ void OOXMLDocument::incrementProgress()
     }
 }
 
-void OOXMLDocument::resolveCustomXmlStream(Stream & rStream)
+void OOXMLDocument::resolveCustomXmlStream()
 {
     // Resolving all item[n].xml files from CustomXml folder.
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
@@ -657,7 +657,6 @@ void OOXMLDocument::resolveCustomXmlStream(Stream & rStream)
             {
                 aCustomXmlDomList.push_back(customXmlTemp);
                 aCustomXmlDomPropsList.push_back(mxCustomXmlProsDom);
-                resolveFastSubStream(rStream, OOXMLStream::StreamType_t::CUSTOMXML);
             }
 
             bFound = false;

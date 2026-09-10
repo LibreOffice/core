@@ -182,7 +182,7 @@ private:
     writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int32 nNoteId);
 
-    void resolveCustomXmlStream(Stream & rStream);
+    void resolveCustomXmlStream();
     void resolveWebSettingsStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
