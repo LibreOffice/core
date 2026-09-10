@@ -1814,6 +1814,32 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf66377)
     CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), rColor);*/
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf122945TabColorProtectedSheet)
+{
+    createScDoc("xlsx/tdf122945_TabColorProtectedSheet.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc->IsTabProtected(0));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ff0000ff] (RED)
+    // - Actual  : rgba[ffffff00] (COL_AUTO)
+    // i.e. the sheet protection prevented the import of the tab color
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), pDoc->GetTabBgColor(0));
+
+    saveAndReload(TestFilter::XLSX);
+
+    // check that the tab color was exported correctly
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor", "rgb", u"FFFF0000");
+
+    // check that sheet protection and tab color are still present after save and reload
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc->IsTabProtected(0));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), pDoc->GetTabBgColor(0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

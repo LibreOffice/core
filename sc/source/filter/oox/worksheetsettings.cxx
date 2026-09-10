@@ -286,7 +286,8 @@ void WorksheetSettings::finalizeImport()
     if( !maSheetSettings.maTabColor.isAuto() )
     {
         ::Color nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
-        xSheet->setPropertyValue( u"TabColor"_ustr, Any(nColor) );
+        // tdf#122945 - set the color directly to avoid sheet protection preventing the import
+        getScDocument().SetTabBgColor(getSheetIndex(), nColor);
     }
 
     // Summary data below or above the contents
