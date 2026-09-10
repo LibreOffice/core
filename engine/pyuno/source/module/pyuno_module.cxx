@@ -72,23 +72,36 @@ using namespace pyuno;
 namespace {
 
 OUString getOrigin() {
-    auto const frame = PyEval_GetFrame();
+    auto frame = PyEval_GetFrame();
     if (frame == nullptr) {
         return u"<no frame>"_ustr;
     }
-    OUString filename;
-    if (auto const code = PyFrame_GetCode(frame)) {
-        auto const name = PyObject_GetAttrString(reinterpret_cast<PyObject *>(code), "co_filename");
-        if (name != nullptr && PyUnicode_Check(name)) {
-            if (auto const utf8 = PyUnicode_AsUTF8(name)) {
-                filename = OUString::fromUtf8(utf8);
+    // Bump the topmost frame to keep the PyFrame_GetBack chain balanced with the Py_DECREF loop:
+    Py_INCREF(frame);
+    OUStringBuffer buf;
+    while (frame != nullptr) {
+        OUString filename;
+        if (auto const code = PyFrame_GetCode(frame)) {
+            auto const name
+                = PyObject_GetAttrString(reinterpret_cast<PyObject *>(code), "co_filename");
+            if (name != nullptr && PyUnicode_Check(name)) {
+                if (auto const utf8 = PyUnicode_AsUTF8(name)) {
+                    filename = OUString::fromUtf8(utf8);
+                }
             }
+            Py_XDECREF(name);
+            Py_DECREF(code);
         }
-        Py_XDECREF(name);
-        Py_DECREF(code);
+        if (!buf.isEmpty()) {
+            buf.append(u" <- ");
+        }
+        buf.append((filename.isEmpty() ? u"<unknown>"_ustr : filename) + ":"
+            + OUString::number(PyFrame_GetLineNumber(frame)));
+        auto const back = PyFrame_GetBack(frame);
+        Py_DECREF(frame);
+        frame = back;
     }
-    return (filename.isEmpty() ? u"<unknown>"_ustr : filename) + ":"
-        + OUString::number(PyFrame_GetLineNumber(frame));
+    return buf.makeStringAndClear();
 }
 
 /**
