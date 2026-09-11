@@ -23,6 +23,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <comphelper/sequence.hxx>
@@ -959,6 +960,9 @@ Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry*
         else if( pMap->aType == ::cppu::UnoType<css::table::BorderLine>::get()
                  && aAny.getValueType() == ::cppu::UnoType<css::table::BorderLine2>::get() )
             ; // do not warn for valid case
+        else if( pMap->aType == ::cppu::UnoType<css::awt::Gradient>::get()
+                 && aAny.getValueType() == ::cppu::UnoType<css::awt::Gradient2>::get() )
+            ; // a gradient that carries its own color stops is the richer form of the same thing
         else
             SAL_WARN("svx", "GetAnyForItem() Return value has wrong type for property " << pMap->aName
                         << ", expected " << pMap->aType << " but have " << aAny.getValueType());

@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
@@ -1177,6 +1178,9 @@ cpo::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         else if( pEntry->aType == ::cppu::UnoType<css::table::BorderLine>::get()
                  && aAny.getValueType() == ::cppu::UnoType<css::table::BorderLine2>::get() )
             ; // do not warn for valid case
+        else if( pEntry->aType == ::cppu::UnoType<css::awt::Gradient>::get()
+                 && aAny.getValueType() == ::cppu::UnoType<css::awt::Gradient2>::get() )
+            ; // a gradient that carries its own color stops is the richer form of the same thing
         else
         {
             SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Return value has wrong type, expected "
