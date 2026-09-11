@@ -477,11 +477,15 @@ export class Comment extends CanvasSectionObject {
 			}
 		}
 
+		let maxHeight = '';
 		if (this.sectionProperties.commentListSection.isShownBig(this)) {
 			// Full view lifts the card and the overlay it casts over the sidebars.
 			// That level lives in the stylesheet, so leave the inline value empty
 			// here instead of pinning the card back down beside the document.
 			this.sectionProperties.container.style.zIndex = '';
+			// Content taller than the viewport would otherwise cut the content.
+			const marginY = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
+			maxHeight = Math.round(canvasContainerBounds.bottom - top - marginY) + 'px';
 		} else if (this.isSelected()) {
 			this.sectionProperties.container.style.zIndex = 14;
 		} else if (this.isEdit()) {
@@ -489,6 +493,7 @@ export class Comment extends CanvasSectionObject {
 		} else {
 			this.sectionProperties.container.style.zIndex = ''; // Default for .cool-annotation is 12
 		}
+		this.sectionProperties.container.style.maxHeight = maxHeight;
 
 		this.sectionProperties.container.style.left = Math.round(left) + 'px';
 		this.sectionProperties.container.style.top = Math.round(top) + 'px';

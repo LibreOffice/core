@@ -738,6 +738,23 @@ input, button {
 	width: 66ch;
 	/* Centered align comment in TS, we cannot align it here with position relative */
 	z-index: 1000;
+	/* Limit the card at the max-height above and let the text inside scroll. */
+	display: flex;
+	flex-direction: column;
+}
+
+/* The content wrapper is all of the annotation pop-up, except the margins. */
+.cool-annotation.annotation-pop-up > .cool-annotation-content-wrapper {
+	min-height: 0;
+	flex: 1;
+	overflow: hidden;
+}
+
+/* The annotation content is the actual text without the table/header and the footer. */
+.cool-annotation.annotation-pop-up .cool-annotation-content {
+	min-height: 0;
+	flex: 1;
+	max-height: none;
 }
 .cool-annotation.annotation-pop-up:not(.annotation-active) > .cool-annotation-content-wrapper {
 	margin-right: 8px;

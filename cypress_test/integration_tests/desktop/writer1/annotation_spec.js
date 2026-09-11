@@ -1405,3 +1405,37 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		cy.cGet('#comment-container-1').should('have.class', 'annotation-pop-up');
 	})
 });
+
+describe(['tagdesktop'], 'Large Annotation Tests', function() {
+	beforeEach(function() {
+		cy.viewport(1920, 1080);
+		helper.setupAndLoadDocument('writer/annotation-large.odt');
+		desktopHelper.switchUIToNotebookbar();
+		desktopHelper.sidebarToggle();
+	});
+
+	it('Full view fits in viewport', function() {
+		// Given a large comment in a document:
+		cy.cGet('#comment-container-1').should('exist');
+		cy.cGet('#comment-container-1').click();
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-active');
+
+		// When opening it in full view:
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Open in full view').click();
+		cy.cGet('#comment-container-1').should('have.class', 'annotation-pop-up');
+
+		// Then make sure the card's wrapper fits inside the document area:
+		cy.cGet('#document-container').then(function($doc) {
+			var docBottom = $doc[0].getBoundingClientRect().bottom;
+			cy.cGet('#comment-container-1 .cool-annotation-content-wrapper').should(function($el) {
+				var wrapperBottom = $el[0].getBoundingClientRect().bottom;
+				// Without the accompanying fix in place, this test would have failed with:
+				// AssertionError: Timed out retrying after 60000ms: wrapper bottom vs document bottom: expected 1080 to be at most 1047
+				// i.e. the comment bottom was cut off and you couldn't scroll down
+				// further.
+				expect(wrapperBottom, 'wrapper bottom vs document bottom').to.be.at.most(docBottom);
+			});
+		});
+	})
+});
