@@ -3163,7 +3163,13 @@ bool COOLWSD::createForKit()
     args.push_back("--version");
 
     const bool capabilityJailWasTheChoice = !EnableMountNamespaces && !NoCapsForKit;
-    RequireLandlock = capabilityJailWasTheChoice && CapabilityJailUnusable && LandlockAvailable;
+    if (capabilityJailWasTheChoice && CapabilityJailUnusable && LandlockAvailable)
+    {
+        RequireLandlock = true;
+        // The kits run without a chroot from here on, so the paths they are given are the
+        // real ones.
+        NoCapsForKit = true;
+    }
     const bool usingCapabilityJail = capabilityJailWasTheChoice && !RequireLandlock;
 
     if (usingCapabilityJail && CapabilityJailUnusable)
