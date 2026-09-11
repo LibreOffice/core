@@ -19,8 +19,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <cpo/uno/Reference.hxx>
@@ -29,10 +32,12 @@
 #include <cool.hpp>
 #include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
+#include <scriptinterop/PageElementType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/XAffineTransform.hpp>
 #include <scriptinterop/XAffineTransformBuilder.hpp>
+#include <scriptinterop/XPageElement.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -430,6 +435,50 @@ CPPUNIT_TEST_FIXTURE(Test, testAffineTransformBuilder)
     CPPUNIT_ASSERT_EQUAL(99.0, xCopy->getTranslateX());
     CPPUNIT_ASSERT_EQUAL(3.0, xCopy->getScaleY());
     CPPUNIT_ASSERT_EQUAL(10.0, xTransform->getTranslateX());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPageElementsAndTheirTypes)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSlide = xPresentation->getSlides()[0];
+    // The fresh slide's two layout placeholders are shapes, so both listings hold them.
+    auto const aElements = xSlide->getPageElements();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aElements.getLength());
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageElementType_SHAPE,
+                         aElements[0]->getPageElementType());
+    auto const xAsShape = aElements[0]->asShape();
+    CPPUNIT_ASSERT(xAsShape.is());
+    CPPUNIT_ASSERT_EQUAL(aElements[0]->getuno(), xAsShape->getuno());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(xAsShape->getLeft(), aElements[0]->getLeft(), 0.05);
+    // A shape is not an image.
+    CPPUNIT_ASSERT_THROW(aElements[0]->asImage(), cpo::uno::RuntimeException);
+    // An image added through UNO is a page element but not a shape.
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const xFactory(xPresentation->getuno(),
+                                                                        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XShape> const xImage(
+        xFactory->createInstance(u"com.sun.star.drawing.GraphicObjectShape"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XShapes> const xShapes(xSlide->getuno(),
+                                                             cpo::uno::UNO_QUERY_THROW);
+    xShapes->add(xImage);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSlide->getPageElements().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getShapes().getLength());
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageElementType_IMAGE,
+                         xSlide->getPageElements()[2]->getPageElementType());
+    // Removing through the element takes the shape off the page.
+    xSlide->getPageElements()[2]->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPageElements().getLength());
+    // An organisation chart placeholder is an embedded object, which the API has no type for.
+    cpo::uno::Reference<css::drawing::XShape> const xOrgChart(
+        xFactory->createInstance(u"com.sun.star.presentation.OrgChartShape"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    xShapes->add(xOrgChart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSlide->getPageElements().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getShapes().getLength());
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageElementType_UNSUPPORTED,
+                         xSlide->getPageElements()[2]->getPageElementType());
+    xSlide->getPageElements()[2]->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPageElements().getLength());
 }
 }
 

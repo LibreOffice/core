@@ -17,6 +17,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -44,6 +45,7 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <scriptinterop/ContentAlignment.hpp>
+#include <scriptinterop/PageElementType.hpp>
 #include <scriptinterop/PageType.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
@@ -157,6 +159,83 @@ bool isSlide(cpo::uno::Reference<css::frame::XModel> const& model,
         }
     }
     return false;
+}
+
+// A custom shape is word art when its CustomShapeGeometry carries a TextPath group whose TextPath
+// flag is set.
+bool isWordArt(cpo::uno::Reference<css::drawing::XShape> const& shape)
+{
+    cpo::uno::Reference<css::beans::XPropertySet> const props(shape, cpo::uno::UNO_QUERY);
+    if (!props.is())
+    {
+        return false;
+    }
+    cpo::uno::Sequence<css::beans::PropertyValue> geometry;
+    props->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= geometry;
+    for (auto const& entry : geometry)
+    {
+        if (entry.Name != "TextPath")
+        {
+            continue;
+        }
+        cpo::uno::Sequence<css::beans::PropertyValue> textPath;
+        entry.Value >>= textPath;
+        for (auto const& inner : textPath)
+        {
+            if (inner.Name == "TextPath")
+            {
+                bool on = false;
+                inner.Value >>= on;
+                return on;
+            }
+        }
+    }
+    return false;
+}
+
+// Classifies a UNO shape by its service name.  Presentation placeholder services map like the
+// plain drawing services they specialise.  Embedded objects, charts, applets, plug-ins, frames
+// and form controls have no counterpart in the API and report UNSUPPORTED.  Everything else,
+// including text boxes and custom shapes, is a plain shape.
+scriptinterop::PageElementType
+pageElementType(cpo::uno::Reference<css::drawing::XShape> const& shape)
+{
+    auto const type = shape->getShapeType();
+    if (type == "com.sun.star.drawing.GraphicObjectShape"
+        || type == "com.sun.star.presentation.GraphicObjectShape")
+    {
+        return scriptinterop::PageElementType_IMAGE;
+    }
+    if (type == "com.sun.star.drawing.MediaShape" || type == "com.sun.star.presentation.MediaShape")
+    {
+        return scriptinterop::PageElementType_VIDEO;
+    }
+    if (type == "com.sun.star.drawing.TableShape" || type == "com.sun.star.presentation.TableShape")
+    {
+        return scriptinterop::PageElementType_TABLE;
+    }
+    if (type == "com.sun.star.drawing.GroupShape")
+    {
+        return scriptinterop::PageElementType_GROUP;
+    }
+    if (type == "com.sun.star.drawing.LineShape" || type == "com.sun.star.drawing.ConnectorShape")
+    {
+        return scriptinterop::PageElementType_LINE;
+    }
+    if (type == "com.sun.star.drawing.CustomShape" && isWordArt(shape))
+    {
+        return scriptinterop::PageElementType_WORD_ART;
+    }
+    if (type == "com.sun.star.drawing.OLE2Shape" || type == "com.sun.star.presentation.OLE2Shape"
+        || type == "com.sun.star.presentation.ChartShape"
+        || type == "com.sun.star.presentation.CalcShape"
+        || type == "com.sun.star.presentation.OrgChartShape"
+        || type == "com.sun.star.drawing.AppletShape" || type == "com.sun.star.drawing.PluginShape"
+        || type == "com.sun.star.drawing.FrameShape" || type == "com.sun.star.drawing.ControlShape")
+    {
+        return scriptinterop::PageElementType_UNSUPPORTED;
+    }
+    return scriptinterop::PageElementType_SHAPE;
 }
 
 // Throwing defaults for the shared page element surface.  A leaf implementation class derives
@@ -348,214 +427,80 @@ public:
     }
 };
 
-// Throwing defaults for the shared page surface.  A leaf implementation class derives from this
-// template with its own interface and overrides the methods it implements; the rest keep
-// throwing until an implementation is added.
-template <typename Iface> class EditablePageStub : public cppu::WeakImplHelper<Iface>
+// The page element behaviour every element kind shares: identity, geometry and removal.  Position
+// and size convert between the API's points and the drawing layer's 1/100 mm.
+template <typename Iface> class PageElementCommon : public PageElementStub<Iface>
 {
 public:
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XGroup>> SAL_CALL getGroups() override
+    PageElementCommon(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
+                      cpo::uno::Reference<css::drawing::XShape> const& shape)
+        : page_(page)
+        , shape_(shape)
     {
-        throw cpo::uno::RuntimeException(u"getGroups: not implemented"_ustr);
     }
 
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XImage>> SAL_CALL getImages() override
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return shape_; }
+
+    scriptinterop::PageElementType getPageElementType() override
     {
-        throw cpo::uno::RuntimeException(u"getImages: not implemented"_ustr);
+        return pageElementType(shape_);
     }
 
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLine>> SAL_CALL getLines() override
+    double SAL_CALL getLeft() override { return hundredthMmToPoints(shape_->getPosition().X); }
+
+    double SAL_CALL getTop() override { return hundredthMmToPoints(shape_->getPosition().Y); }
+
+    css::beans::Optional<double> getWidth() override
     {
-        throw cpo::uno::RuntimeException(u"getLines: not implemented"_ustr);
+        return {true, hundredthMmToPoints(shape_->getSize().Width)};
     }
 
-    OUString SAL_CALL getObjectId() override
+    css::beans::Optional<double> getHeight() override
     {
-        throw cpo::uno::RuntimeException(u"getObjectId: not implemented"_ustr);
+        return {true, hundredthMmToPoints(shape_->getSize().Height)};
     }
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
-        SAL_CALL getPageElementById(OUString const&) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setLeft(double points) override
     {
-        throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
+        auto pos = shape_->getPosition();
+        pos.X = pointsToHundredthMm(points);
+        shape_->setPosition(pos);
+        return this;
     }
 
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>> SAL_CALL
-    getPageElements() override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setTop(double points) override
     {
-        throw cpo::uno::RuntimeException(u"getPageElements: not implemented"_ustr);
+        auto pos = shape_->getPosition();
+        pos.Y = pointsToHundredthMm(points);
+        shape_->setPosition(pos);
+        return this;
     }
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
-        SAL_CALL getPlaceholder(scriptinterop::PlaceholderType) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setWidth(double points) override
     {
-        throw cpo::uno::RuntimeException(u"getPlaceholder: not implemented"_ustr);
+        auto size = shape_->getSize();
+        size.Width = extentToHundredthMm(points);
+        shape_->setSize(size);
+        return this;
     }
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
-        SAL_CALL getPlaceholderByIndex(scriptinterop::PlaceholderType, sal_Int32) override
+    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setHeight(double points) override
     {
-        throw cpo::uno::RuntimeException(u"getPlaceholderByIndex: not implemented"_ustr);
-    }
-
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>> SAL_CALL
-    getPlaceholders() override
-    {
-        throw cpo::uno::RuntimeException(u"getPlaceholders: not implemented"_ustr);
-    }
-
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XShape>> SAL_CALL getShapes() override
-    {
-        throw cpo::uno::RuntimeException(u"getShapes: not implemented"_ustr);
-    }
-
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlideTable>> SAL_CALL
-    getTables() override
-    {
-        throw cpo::uno::RuntimeException(u"getTables: not implemented"_ustr);
-    }
-
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XVideo>> SAL_CALL getVideos() override
-    {
-        throw cpo::uno::RuntimeException(u"getVideos: not implemented"_ustr);
-    }
-
-    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XWordArt>> SAL_CALL
-    getWordArts() override
-    {
-        throw cpo::uno::RuntimeException(u"getWordArts: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageBackground> SAL_CALL getBackground() override
-    {
-        throw cpo::uno::RuntimeException(u"getBackground: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XColorScheme> SAL_CALL getColorScheme() override
-    {
-        throw cpo::uno::RuntimeException(u"getColorScheme: not implemented"_ustr);
-    }
-
-    scriptinterop::PageType SAL_CALL getPageType() override
-    {
-        throw cpo::uno::RuntimeException(u"getPageType: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XGroup> SAL_CALL
-    group(cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElementBase>> const&)
-        override
-    {
-        throw cpo::uno::RuntimeException(u"group: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XGroup> SAL_CALL
-    insertGroup(cpo::uno::Reference<scriptinterop::XGroup> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertGroup: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XImage> SAL_CALL insertImage(cpo::uno::Any const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertImage: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XImage> SAL_CALL
-    insertImageAt(cpo::uno::Any const&, double, double, double, double) override
-    {
-        throw cpo::uno::RuntimeException(u"insertImageAt: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XLine> SAL_CALL
-    insertLine(cpo::uno::Reference<scriptinterop::XLine> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertLine: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XLine> SAL_CALL
-    insertLineBetween(scriptinterop::LineCategory,
-                      cpo::uno::Reference<scriptinterop::XConnectionSite> const&,
-                      cpo::uno::Reference<scriptinterop::XConnectionSite> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertLineBetween: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XLine> SAL_CALL
-    insertLineAt(scriptinterop::LineCategory, double, double, double, double) override
-    {
-        throw cpo::uno::RuntimeException(u"insertLineAt: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
-    insertPageElement(cpo::uno::Reference<scriptinterop::XPageElement> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertPageElement: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL insertShape(cpo::uno::Any const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertShape: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL
-    insertShapeAt(scriptinterop::ShapeType, double, double, double, double) override
-    {
-        throw cpo::uno::RuntimeException(u"insertShapeAt: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XSlideTable> SAL_CALL insertTable(sal_Int32,
-                                                                         sal_Int32) override
-    {
-        throw cpo::uno::RuntimeException(u"insertTable: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XSlideTable> SAL_CALL
-    insertTableAt(sal_Int32, sal_Int32, double, double, double, double) override
-    {
-        throw cpo::uno::RuntimeException(u"insertTableAt: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XSlideTable> SAL_CALL
-    insertTableCopy(cpo::uno::Reference<scriptinterop::XSlideTable> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertTableCopy: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL insertTextBox(OUString const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertTextBox: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL
-    insertTextBoxAt(OUString const&, double, double, double, double) override
-    {
-        throw cpo::uno::RuntimeException(u"insertTextBoxAt: not implemented"_ustr);
-    }
-
-    cpo::uno::Reference<scriptinterop::XWordArt> SAL_CALL
-    insertWordArt(cpo::uno::Reference<scriptinterop::XWordArt> const&) override
-    {
-        throw cpo::uno::RuntimeException(u"insertWordArt: not implemented"_ustr);
+        auto size = shape_->getSize();
+        size.Height = extentToHundredthMm(points);
+        shape_->setSize(size);
+        return this;
     }
 
     void SAL_CALL remove() override
     {
-        throw cpo::uno::RuntimeException(u"remove: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XShapes> const shapes(page_, cpo::uno::UNO_QUERY_THROW);
+        shapes->remove(shape_);
     }
 
-    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
-    {
-        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
-    }
-
-    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
-    {
-        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
-    }
-
-    void SAL_CALL selectAsCurrentPage() override
-    {
-        throw cpo::uno::RuntimeException(u"selectAsCurrentPage: not implemented"_ustr);
-    }
+protected:
+    cpo::uno::Reference<css::drawing::XDrawPage> page_;
+    cpo::uno::Reference<css::drawing::XShape> shape_;
 };
 
 class TextStyleImpl : public cppu::WeakImplHelper<scriptinterop::XTextStyle>
@@ -1075,17 +1020,14 @@ private:
     cpo::uno::Reference<css::text::XTextRange> range_;
 };
 
-class ShapeImpl : public PageElementStub<scriptinterop::XShape>
+class ShapeImpl : public PageElementCommon<scriptinterop::XShape>
 {
 public:
     ShapeImpl(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
               cpo::uno::Reference<css::drawing::XShape> const& shape)
-        : page_(page)
-        , shape_(shape)
+        : PageElementCommon(page, shape)
     {
     }
-
-    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return shape_; }
 
     cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL getText() override
     {
@@ -1095,56 +1037,6 @@ public:
             throw cpo::uno::RuntimeException(u"getText: shape cannot hold text"_ustr);
         }
         return new TextRangeImpl(text);
-    }
-
-    double SAL_CALL getLeft() override { return hundredthMmToPoints(shape_->getPosition().X); }
-
-    double SAL_CALL getTop() override { return hundredthMmToPoints(shape_->getPosition().Y); }
-
-    css::beans::Optional<double> SAL_CALL getWidth() override {
-        return {true, hundredthMmToPoints(shape_->getSize().Width)};
-    }
-
-    css::beans::Optional<double> SAL_CALL getHeight() override {
-        return {true, hundredthMmToPoints(shape_->getSize().Height)};
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setLeft(double points) override
-    {
-        auto pos = shape_->getPosition();
-        pos.X = pointsToHundredthMm(points);
-        shape_->setPosition(pos);
-        return this;
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setTop(double points) override
-    {
-        auto pos = shape_->getPosition();
-        pos.Y = pointsToHundredthMm(points);
-        shape_->setPosition(pos);
-        return this;
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setWidth(double points) override
-    {
-        auto size = shape_->getSize();
-        size.Width = extentToHundredthMm(points);
-        shape_->setSize(size);
-        return this;
-    }
-
-    cpo::uno::Reference<scriptinterop::XPageElementBase> SAL_CALL setHeight(double points) override
-    {
-        auto size = shape_->getSize();
-        size.Height = extentToHundredthMm(points);
-        shape_->setSize(size);
-        return this;
-    }
-
-    void SAL_CALL remove() override
-    {
-        cpo::uno::Reference<css::drawing::XShapes> const shapes(page_, cpo::uno::UNO_QUERY_THROW);
-        shapes->remove(shape_);
     }
 
     cpo::uno::Reference<scriptinterop::XFill> SAL_CALL getFill() override
@@ -1226,17 +1118,69 @@ public:
     {
         throw cpo::uno::RuntimeException(u"replaceWithImageCropped: not implemented"_ustr);
     }
-
-private:
-    cpo::uno::Reference<css::drawing::XDrawPage> page_;
-    cpo::uno::Reference<css::drawing::XShape> shape_;
 };
 
-class SlideImpl : public EditablePageStub<scriptinterop::XSlide>
+// The generic page element handed back by page listings.  The typed views hand the same shape to
+// a typed facade when its kind matches.  Only the shape view has a facade so far; the others
+// are still awaiting an implementation.
+class PageElementImpl : public PageElementCommon<scriptinterop::XPageElement>
 {
 public:
-    SlideImpl(cpo::uno::Reference<css::frame::XModel> const& model,
-              cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+    PageElementImpl(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
+                    cpo::uno::Reference<css::drawing::XShape> const& shape)
+        : PageElementCommon(page, shape)
+    {
+    }
+
+    cpo::uno::Reference<scriptinterop::XShape> asShape() override
+    {
+        if (getPageElementType() != scriptinterop::PageElementType_SHAPE)
+        {
+            throw cpo::uno::RuntimeException(u"asShape: the page element is not a shape"_ustr);
+        }
+        return new ShapeImpl(page_, shape_);
+    }
+
+    cpo::uno::Reference<scriptinterop::XGroup> asGroup() override
+    {
+        throw cpo::uno::RuntimeException(u"asGroup: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XImage> asImage() override
+    {
+        throw cpo::uno::RuntimeException(u"asImage: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLine> asLine() override
+    {
+        throw cpo::uno::RuntimeException(u"asLine: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlideTable> asTable() override
+    {
+        throw cpo::uno::RuntimeException(u"asTable: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XVideo> asVideo() override
+    {
+        throw cpo::uno::RuntimeException(u"asVideo: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XWordArt> asWordArt() override
+    {
+        throw cpo::uno::RuntimeException(u"asWordArt: not implemented"_ustr);
+    }
+};
+
+// The page behaviour every page kind shares.  A leaf implementation class derives from this
+// template with its own interface.  Listings walk the page's shapes in drawing order.  The typed
+// listings other than getShapes still await their element facades and keep throwing; so do the
+// object id lookups.
+template <typename Iface> class PageBaseImpl : public cppu::WeakImplHelper<Iface>
+{
+public:
+    PageBaseImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+                 cpo::uno::Reference<css::drawing::XDrawPage> const& page)
         : model_(model)
         , page_(page)
     {
@@ -1244,9 +1188,100 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return page_; }
 
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>
+    getPageElements() override
+    {
+        std::vector<cpo::uno::Reference<scriptinterop::XPageElement>> elements;
+        for (auto const& shape : shapes())
+        {
+            elements.emplace_back(new PageElementImpl(page_, shape));
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>(
+            elements.data(), elements.size());
+    }
+
+    // Only elements of the plain shape kind are shapes; images, lines, tables and the rest are
+    // left out.
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XShape>> SAL_CALL getShapes() override
     {
-        std::vector<cpo::uno::Reference<scriptinterop::XShape>> shapes;
+        std::vector<cpo::uno::Reference<scriptinterop::XShape>> result;
+        for (auto const& shape : shapes())
+        {
+            if (pageElementType(shape) == scriptinterop::PageElementType_SHAPE)
+            {
+                result.emplace_back(new ShapeImpl(page_, shape));
+            }
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XShape>>(result.data(),
+                                                                              result.size());
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XGroup>> SAL_CALL getGroups() override
+    {
+        throw cpo::uno::RuntimeException(u"getGroups: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XImage>> SAL_CALL getImages() override
+    {
+        throw cpo::uno::RuntimeException(u"getImages: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLine>> SAL_CALL getLines() override
+    {
+        throw cpo::uno::RuntimeException(u"getLines: not implemented"_ustr);
+    }
+
+    OUString SAL_CALL getObjectId() override
+    {
+        throw cpo::uno::RuntimeException(u"getObjectId: not implemented"_ustr);
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPageElementById(OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPlaceholder(scriptinterop::PlaceholderType) override
+    {
+        throw cpo::uno::RuntimeException(u"getPlaceholder: not implemented"_ustr);
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPlaceholderByIndex(scriptinterop::PlaceholderType, sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"getPlaceholderByIndex: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>
+    getPlaceholders() override
+    {
+        throw cpo::uno::RuntimeException(u"getPlaceholders: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlideTable>>
+    getTables() override
+    {
+        throw cpo::uno::RuntimeException(u"getTables: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XVideo>> SAL_CALL getVideos() override
+    {
+        throw cpo::uno::RuntimeException(u"getVideos: not implemented"_ustr);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XWordArt>>
+    getWordArts() override
+    {
+        throw cpo::uno::RuntimeException(u"getWordArts: not implemented"_ustr);
+    }
+
+protected:
+    // The page's shapes in drawing order.
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> shapes()
+    {
+        std::vector<cpo::uno::Reference<css::drawing::XShape>> result;
         cpo::uno::Reference<css::container::XIndexAccess> const access = page_;
         if (access.is())
         {
@@ -1257,13 +1292,24 @@ public:
                 access->getByIndex(i) >>= shape;
                 if (shape.is())
                 {
-                    shapes.emplace_back(new ShapeImpl(page_, shape));
+                    result.push_back(shape);
                 }
             }
         }
-        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XShape>>(shapes.data(),
-                                                                              shapes.size());
+        return result;
     }
+
+    cpo::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::drawing::XDrawPage> page_;
+};
+
+// Throwing defaults for the editable page surface, plus the text box insertion every editable
+// page kind supports.  A leaf implementation class derives from this template with its own
+// interface and overrides the methods it implements.
+template <typename Iface> class EditablePageImpl : public PageBaseImpl<Iface>
+{
+public:
+    using PageBaseImpl<Iface>::PageBaseImpl;
 
     cpo::uno::Reference<scriptinterop::XShape> SAL_CALL
     insertTextBox(OUString const& text) override
@@ -1275,7 +1321,7 @@ public:
         return insertTextBoxAt(text, 0.0, 0.0, defaultExtent, defaultExtent);
     }
 
-    // The geometry is converted up front, so a bad value fails before the slide is touched.
+    // The geometry is converted up front, so a bad value fails before the page is touched.
     cpo::uno::Reference<scriptinterop::XShape> SAL_CALL insertTextBoxAt(OUString const& text,
                                                                         double left, double top,
                                                                         double width,
@@ -1283,7 +1329,7 @@ public:
     {
         css::awt::Point const position(pointsToHundredthMm(left), pointsToHundredthMm(top));
         css::awt::Size const size(extentToHundredthMm(width), extentToHundredthMm(height));
-        cpo::uno::Reference<css::lang::XMultiServiceFactory> const factory(model_,
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> const factory(this->model_,
                                                                            cpo::uno::UNO_QUERY);
         if (!factory.is())
         {
@@ -1292,7 +1338,8 @@ public:
         cpo::uno::Reference<css::drawing::XShape> const shape(
             factory->createInstance(u"com.sun.star.drawing.TextShape"_ustr),
             cpo::uno::UNO_QUERY_THROW);
-        cpo::uno::Reference<css::drawing::XShapes> const shapes(page_, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XShapes> const shapes(this->page_,
+                                                                cpo::uno::UNO_QUERY_THROW);
         // The shape only gets its edit engine when it enters the page, so the text is set after
         // the add:
         shapes->add(shape);
@@ -1305,7 +1352,137 @@ public:
         // The geometry goes in last, after the text, so no text-driven resize can override it:
         shape->setPosition(position);
         shape->setSize(size);
-        return new ShapeImpl(page_, shape);
+        return new ShapeImpl(this->page_, shape);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageBackground> SAL_CALL getBackground() override
+    {
+        throw cpo::uno::RuntimeException(u"getBackground: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XColorScheme> SAL_CALL getColorScheme() override
+    {
+        throw cpo::uno::RuntimeException(u"getColorScheme: not implemented"_ustr);
+    }
+
+    scriptinterop::PageType SAL_CALL getPageType() override
+    {
+        throw cpo::uno::RuntimeException(u"getPageType: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XGroup>
+    group(cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElementBase>> const&)
+        override
+    {
+        throw cpo::uno::RuntimeException(u"group: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XGroup>
+    insertGroup(cpo::uno::Reference<scriptinterop::XGroup> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertGroup: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XImage> SAL_CALL insertImage(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertImage: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XImage>
+    insertImageAt(cpo::uno::Any const&, double, double, double, double) override
+    {
+        throw cpo::uno::RuntimeException(u"insertImageAt: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLine>
+    insertLine(cpo::uno::Reference<scriptinterop::XLine> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertLine: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLine>
+    insertLineBetween(scriptinterop::LineCategory,
+                      cpo::uno::Reference<scriptinterop::XConnectionSite> const&,
+                      cpo::uno::Reference<scriptinterop::XConnectionSite> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertLineBetween: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XLine>
+    insertLineAt(scriptinterop::LineCategory, double, double, double, double) override
+    {
+        throw cpo::uno::RuntimeException(u"insertLineAt: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPageElement>
+    insertPageElement(cpo::uno::Reference<scriptinterop::XPageElement> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertPageElement: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL insertShape(cpo::uno::Any const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertShape: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XShape>
+    insertShapeAt(scriptinterop::ShapeType, double, double, double, double) override
+    {
+        throw cpo::uno::RuntimeException(u"insertShapeAt: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlideTable> SAL_CALL insertTable(sal_Int32,
+                                                                         sal_Int32) override
+    {
+        throw cpo::uno::RuntimeException(u"insertTable: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlideTable>
+    insertTableAt(sal_Int32, sal_Int32, double, double, double, double) override
+    {
+        throw cpo::uno::RuntimeException(u"insertTableAt: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XSlideTable>
+    insertTableCopy(cpo::uno::Reference<scriptinterop::XSlideTable> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertTableCopy: not implemented"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XWordArt>
+    insertWordArt(cpo::uno::Reference<scriptinterop::XWordArt> const&) override
+    {
+        throw cpo::uno::RuntimeException(u"insertWordArt: not implemented"_ustr);
+    }
+
+    void SAL_CALL remove() override
+    {
+        throw cpo::uno::RuntimeException(u"remove: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
+    }
+
+    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
+    }
+
+    void SAL_CALL selectAsCurrentPage() override
+    {
+        throw cpo::uno::RuntimeException(u"selectAsCurrentPage: not implemented"_ustr);
+    }
+};
+
+class SlideImpl : public EditablePageImpl<scriptinterop::XSlide>
+{
+public:
+    SlideImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+              cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+        : EditablePageImpl(model, page)
+    {
     }
 
     cpo::uno::Reference<scriptinterop::XSlide>
@@ -1380,23 +1557,16 @@ public:
     {
         throw cpo::uno::RuntimeException(u"setSkipped: not implemented"_ustr);
     }
-
-private:
-    cpo::uno::Reference<css::frame::XModel> model_;
-    cpo::uno::Reference<css::drawing::XDrawPage> page_;
 };
 
-class PageImpl : public EditablePageStub<scriptinterop::XPage>
+class PageImpl : public EditablePageImpl<scriptinterop::XPage>
 {
 public:
     PageImpl(cpo::uno::Reference<css::frame::XModel> const& model,
              cpo::uno::Reference<css::drawing::XDrawPage> const& page)
-        : model_(model)
-        , page_(page)
+        : EditablePageImpl(model, page)
     {
     }
-
-    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return page_; }
 
     cpo::uno::Reference<scriptinterop::XLayout> SAL_CALL asLayout() override
     {
@@ -1418,10 +1588,6 @@ public:
         }
         return new SlideImpl(model_, page_);
     }
-
-private:
-    cpo::uno::Reference<css::frame::XModel> model_;
-    cpo::uno::Reference<css::drawing::XDrawPage> page_;
 };
 
 class SlideSelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSlideSelection>
