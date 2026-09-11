@@ -12,6 +12,8 @@
 module scriptinterop {
 
 interface XContainerElement: XElement {
+    void clear();
+
     XElement getChild([in] long index);
 
     long getNumChildren();

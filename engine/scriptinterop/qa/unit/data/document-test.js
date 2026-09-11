@@ -158,4 +158,41 @@ function documentTest() {
     console.assert(listItem.getGlyphType() === DocumentApp.GlyphType.NUMBER);
     console.assert(typeof listItem.getListId() === 'string');
     console.assert(body.getNumChildren() === 7);
+
+    // clear empties the paragraph text without removing the paragraph from the body:
+    const cleared = body.appendParagraph('Doomed');
+    console.assert(body.getNumChildren() === 8);
+    console.assert(cleared.getText() === 'Doomed');
+    cleared.clear();
+    console.assert(cleared.getText() === '');
+    console.assert(body.getNumChildren() === 8);
+
+    // GAS refuses to remove the section's last paragraph, so append a guard first, then remove
+    // cleared (which is no longer the last):
+    body.appendParagraph('Guard');
+    console.assert(body.getNumChildren() === 9);
+    cleared.removeFromParent();
+    console.assert(body.getNumChildren() === 8);
+
+    // Removing a whole added paragraph via its Text view works too, again with a guard so what
+    // we remove is not the last paragraph:
+    const viaText = body.appendParagraph('AlsoDoomed');
+    body.appendParagraph('Guard');
+    console.assert(body.getNumChildren() === 10);
+    viaText.editAsText().removeFromParent();
+    console.assert(body.getNumChildren() === 9);
+
+    // A table cell's clear empties the cell's text:
+    const tab = body.getChild(3);
+    console.assert(tab.getType() === DocumentApp.ElementType.TABLE);
+    const cell = tab.getChild(0).getChild(0);
+    console.assert(cell.getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(cell.getText().length > 0);
+    cell.clear();
+    console.assert(cell.getText() === '');
+
+    // Removing a table row shrinks the surrounding table:
+    console.assert(tab.getNumChildren() === 2);
+    tab.getChild(0).removeFromParent();
+    console.assert(tab.getNumChildren() === 1);
 }

@@ -101,6 +101,22 @@ cpo::uno::Reference<scriptinterop::XElement> siblingContent(
     cpo::uno::Reference<css::text::XTextContent> const & content,
     cpo::uno::Reference<scriptinterop::XElement> const & parent, bool forward);
 
+void removeContent(cpo::uno::Reference<css::text::XTextContent> const & content)
+{
+    if (!content.is()) {
+        throw cpo::uno::RuntimeException(u"element is not attached to a document"_ustr);
+    }
+    auto const anchor = content->getAnchor();
+    if (!anchor.is()) {
+        throw cpo::uno::RuntimeException(u"element has no anchor"_ustr);
+    }
+    auto const host = anchor->getText();
+    if (!host.is()) {
+        throw cpo::uno::RuntimeException(u"element has no containing text"_ustr);
+    }
+    host->removeTextContent(content);
+}
+
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
 {
 public:
@@ -395,6 +411,8 @@ public:
         return underline != css::awt::FontUnderline::NONE;
     }
 
+    void removeFromParent() override { removeContent(content_); }
+
     cpo::uno::Reference<scriptinterop::XText> setBold(bool value) override {
         setBoldOn(wholeRange(), value);
         return this;
@@ -623,6 +641,11 @@ public:
         return new TextImpl(parent_, content_, getType());
     }
 
+    void clear() override {
+        cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
+            ->setString(OUString());
+    }
+
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
@@ -833,6 +856,8 @@ public:
         return mode != css::text::WritingMode2::RL_TB;
     }
 
+    void removeFromParent() override { removeContent(content_); }
+
 private:
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
@@ -846,6 +871,13 @@ public:
         parent_(parent), text_(text) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+
+    void clear() override {
+        if (!text_.is()) {
+            throw cpo::uno::RuntimeException(u"clear: the table cell has no text"_ustr);
+        }
+        text_->setString(OUString());
+    }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
@@ -897,6 +929,11 @@ public:
         return text_->getString();
     }
 
+    void removeFromParent() override {
+        throw cpo::uno::RuntimeException(
+            u"a table cell cannot be removed on its own; remove its row instead"_ustr);
+    }
+
 private:
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XText> text_;
@@ -919,6 +956,10 @@ public:
             rows->getByIndex(rowIndex_) >>= row;
         }
         return row;
+    }
+
+    void clear() override {
+        throw cpo::uno::RuntimeException(u"TableRow.clear is not yet implemented"_ustr); // TODO
     }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
@@ -997,6 +1038,19 @@ public:
         return buf.makeStringAndClear();
     }
 
+    void removeFromParent() override {
+        if (!table_.is()) {
+            throw cpo::uno::RuntimeException(
+                u"removeFromParent: the row is not part of a table"_ustr);
+        }
+        auto const rows = table_->getRows();
+        if (!rows.is() || rowIndex_ < 0 || rowIndex_ >= rows->getCount()) {
+            throw cpo::uno::RuntimeException(
+                u"removeFromParent: the row is not attached to its table"_ustr);
+        }
+        rows->removeByIndex(rowIndex_, 1);
+    }
+
 private:
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextTable> table_;
@@ -1011,6 +1065,10 @@ public:
         parent_(parent), table_(table) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
+
+    void clear() override {
+        throw cpo::uno::RuntimeException(u"Table.clear is not yet implemented"_ustr); // TODO
+    }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
@@ -1067,6 +1125,10 @@ public:
             buf.append(row->getText());
         }
         return buf.makeStringAndClear();
+    }
+
+    void removeFromParent() override {
+        removeContent(cpo::uno::Reference<css::text::XTextContent>(table_, cpo::uno::UNO_QUERY_THROW));
     }
 
 private:
@@ -1396,6 +1458,13 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
+    void clear() override {
+        if (!text_.is()) {
+            throw cpo::uno::RuntimeException(u"clear: the footnote section has no text"_ustr);
+        }
+        text_->setString(OUString());
+    }
+
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
@@ -1425,6 +1494,11 @@ public:
 
     scriptinterop::ElementType getType() override {
         return scriptinterop::ElementType_FOOTNOTE_SECTION;
+    }
+
+    void removeFromParent() override {
+        throw cpo::uno::RuntimeException(
+            u"a footnote section cannot be removed on its own; remove its footnote instead"_ustr);
     }
 
 private:
@@ -1464,6 +1538,11 @@ public:
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_FOOTNOTE; }
 
+    void removeFromParent() override {
+        removeContent(
+            cpo::uno::Reference<css::text::XTextContent>(footnote_, cpo::uno::UNO_QUERY_THROW));
+    }
+
 private:
     cpo::uno::Reference<css::text::XFootnote> footnote_;
 };
@@ -1481,6 +1560,10 @@ public:
 
     cpo::uno::Reference<scriptinterop::XParagraph> appendParagraph(OUString const & text) override {
         return appendImpl(text, u""_ustr);
+    }
+
+    void clear() override {
+        throw cpo::uno::RuntimeException(u"Body.clear is not yet implemented"_ustr); // TODO
     }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
@@ -1515,6 +1598,10 @@ public:
 
     scriptinterop::ElementType getType() override {
         return scriptinterop::ElementType_BODY_SECTION;
+    }
+
+    void removeFromParent() override {
+        throw cpo::uno::RuntimeException(u"the body has no parent to remove it from"_ustr);
     }
 
 private:

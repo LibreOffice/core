@@ -24,6 +24,8 @@ interface XElement: XBase {
     string getText();
 
     ElementType getType();
+
+    void removeFromParent();
 };
 
 };
