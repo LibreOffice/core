@@ -2309,8 +2309,9 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
+    // A file may name a paragraph style it never defines, which leaves nothing to read the
+    // numbering and the spacing below out of; everything that uses it checks first.
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
-    SAL_WARN_IF(!pEntry, "writerfilter.dmapper", "no style sheet found");
     sal_Int32 nListId = pParaContext ? pParaContext->props().GetListId() : -1;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = nListId > -1;
