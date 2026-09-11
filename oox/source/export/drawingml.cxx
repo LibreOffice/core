@@ -2943,6 +2943,12 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
         mAny >>= sURL;
         if (!sURL.isEmpty())
         {
+            OUString sName;
+            if (GetProperty(rXPropSet, u"Name"_ustr))
+                mAny >>= sName;
+            // OOXML keeps the accessible name in the tooltip attribute
+            const auto oTooltip = sax_fastparser::UseIf(sName, !sName.isEmpty());
+
             if (!sURL.match("#action?jump="))
             {
                 bool bExtURL = URLTransformer().isExternalURL(sURL);
@@ -2960,15 +2966,16 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                 if (bExtURL)
                 {
                     if (isDiagaramExport())
-                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId);
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
                     else
-                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_tooltip, oTooltip);
                 }
                 else
                 {
                     mpFS->singleElementNS(
                         XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
-                        sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
+                        sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump",
+                        XML_tooltip, oTooltip);
                 }
             }
             else
@@ -2976,7 +2983,8 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                 sal_Int32 nIndex = sURL.indexOf('=');
                 std::u16string_view aDestination(sURL.subView(nIndex + 1));
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
-                                      OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination);
+                                      OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination,
+                                      XML_tooltip, oTooltip);
             }
         }
     }

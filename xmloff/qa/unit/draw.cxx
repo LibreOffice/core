@@ -28,6 +28,7 @@
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -97,6 +98,29 @@ uno::Reference<drawing::XShape> XmloffDrawTest::getShape(sal_uInt8 nShapeIndex)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(nShapeIndex),
                                            uno::UNO_QUERY_THROW);
     return xShape;
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHyperlinkName)
+{
+    // the accessible name of a hyperlink
+    loadFromFile(u"hyperlink-name.fodp");
+
+    auto getHyperlinkName = [this]() -> OUString {
+        uno::Reference<beans::XPropertySet> xPortion(getShapeTextPortion(0, getShape(0)));
+        CPPUNIT_ASSERT(xPortion.is());
+        auto xField = xPortion->getPropertyValue(u"TextField"_ustr).queryThrow<text::XTextField>();
+        OUString aName;
+        xField.queryThrow<beans::XPropertySet>()->getPropertyValue(u"Name"_ustr) >>= aName;
+        return aName;
+    };
+
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice home page"_ustr, getHyperlinkName());
+
+    saveAndReload(TestFilter::ODP);
+
+    // office:name was dropped on import and never written on export, so the name a document
+    // carried did not survive a round trip
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice home page"_ustr, getHyperlinkName());
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)

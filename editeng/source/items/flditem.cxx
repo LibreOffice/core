@@ -112,8 +112,13 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL_TARGET) >>= aTarget;
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL) >>= aURL;
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL_FORMAT) >>= nFmt;
+                    // Calc's own URL field has no name, and a miss here would drop the field
+                    OUString aName;
+                    if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_NAME))
+                        xPropSet->getPropertyValue(UNO_TC_PROP_NAME) >>= aName;
                     SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SvxURLFormat::Url : SvxURLFormat::Repr);
                     pData->SetTargetFrame(aTarget);
+                    pData->SetName(aName);
                     if (static_cast<SvxURLFormat>(nFmt) >= SvxURLFormat::AppDefault &&
                         static_cast<SvxURLFormat>(nFmt) <= SvxURLFormat::Repr)
                         pData->SetFormat(static_cast<SvxURLFormat>(nFmt));

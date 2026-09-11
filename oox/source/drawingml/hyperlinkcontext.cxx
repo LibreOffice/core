@@ -37,7 +37,7 @@ using namespace ::oox::core;
 namespace oox::drawingml {
 
 HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
-        const AttributeList& rAttribs, PropertyMap& aProperties )
+        const AttributeList& rAttribs, PropertyMap& aProperties, bool bTextRun )
     : ContextHandler2( rParent )
     , maProperties(aProperties)
 {
@@ -58,7 +58,11 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
     }
     OUString sTooltip = rAttribs.getStringDefaulted( XML_tooltip );
     if ( !sTooltip.isEmpty() )
-        maProperties.setProperty(PROP_Representation, sTooltip);
+    {
+        // a shape's map is the shape's own, where Name is its name and Shape::finalizeXShape
+        // expects the tooltip in Representation
+        maProperties.setProperty(bTextRun ? PROP_Name : PROP_Representation, sTooltip);
+    }
 
     OUString sFrame = rAttribs.getStringDefaulted( XML_tgtFrame );
     if( !sFrame.isEmpty() )

@@ -909,7 +909,9 @@ class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sURL;
     OUString sFrame;
+    OUString sName;
     bool bFrameOK;
+    bool bNameOK;
 
 public:
 
