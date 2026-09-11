@@ -354,7 +354,14 @@ void ShapeContextHandler::endFastElement(::sal_Int32 Element)
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
 
     if (xContextHandler.is())
-        xContextHandler->endFastElement(Element);
+    {
+        // A shape can arrive in pieces, with its text handled in between, and the context for
+        // the rest of it is then made in the middle of the shape. Such a context never saw the
+        // shape element start, so it is not the one to end it either.
+        auto* pHandler = dynamic_cast<oox::core::ContextHandler2Helper*>(xContextHandler.get());
+        if (!pHandler || pHandler->getCurrentElementWithMce() != XML_ROOT_CONTEXT)
+            xContextHandler->endFastElement(Element);
+    }
     // In case a textbox is sent, and later we get additional properties for
     // the textbox, then the wps context is not cleared, so do that here.
     if (Element != (NMSP_wps | XML_wsp))
