@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <cpo/uno/Reference.hxx>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
@@ -39,6 +40,7 @@
 #include <scriptinterop/PageType.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
+#include <scriptinterop/SelectionType.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/XAffineTransform.hpp>
 #include <scriptinterop/XAffineTransformBuilder.hpp>
@@ -47,6 +49,8 @@
 #include <scriptinterop/XNotesMaster.hpp>
 #include <scriptinterop/XNotesPage.hpp>
 #include <scriptinterop/XPageElement.hpp>
+#include <scriptinterop/XPageElementRange.hpp>
+#include <scriptinterop/XPageRange.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -700,6 +704,38 @@ CPPUNIT_TEST_FIXTURE(Test, testPresentationName)
         xPresentation->getuno(), cpo::uno::UNO_QUERY_THROW);
     xSupplier->getDocumentProperties()->setTitle(u"Quarterly review"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Quarterly review"_ustr, xPresentation->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectionRanges)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSelection = getValue(xPresentation->getSelection());
+    // A fresh view has nothing marked, so the current page is the selection and the ranges are
+    // empty.
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SelectionType_CURRENT_PAGE,
+                         xSelection->getSelectionType());
+    CPPUNIT_ASSERT(!xSelection->getPageElementRange().IsPresent);
+    CPPUNIT_ASSERT(!xSelection->getPageRange().IsPresent);
+    CPPUNIT_ASSERT(!xSelection->getTextRange().IsPresent);
+    // Marking a shape in the view makes it the selected page element.
+    auto const xSlide = xPresentation->getSlides()[0];
+    auto const xShape = xSlide->insertTextBoxAt(u"pick me"_ustr, 36, 36, 288, 72);
+    cpo::uno::Reference<css::frame::XModel> const xModel(xPresentation->getuno(),
+                                                         cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::view::XSelectionSupplier> const xSupplier(
+        xModel->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xSupplier->select(cpo::uno::Any(xShape->getuno())));
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SelectionType_PAGE_ELEMENT,
+                         xSelection->getSelectionType());
+    auto const xRange = getValue(xSelection->getPageElementRange());
+    auto const aElements = xRange->getPageElements();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aElements.getLength());
+    CPPUNIT_ASSERT_EQUAL(xShape->getuno(), aElements[0]->getuno());
+    CPPUNIT_ASSERT_EQUAL(u"pick me"_ustr, aElements[0]->asShape()->getText()->asString());
+    // The selected element knows its page, so removing it through the range takes it off the
+    // slide.
+    aElements[0]->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getShapes().getLength());
 }
 }
 

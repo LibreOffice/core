@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -46,6 +47,7 @@
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/util/XReplaceable.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/Any.hxx>
@@ -61,6 +63,7 @@
 #include <scriptinterop/PageType.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
+#include <scriptinterop/SelectionType.hpp>
 #include <scriptinterop/ShapeType.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/TextBaselineOffset.hpp>
@@ -83,6 +86,8 @@
 #include <scriptinterop/XPageBackground.hpp>
 #include <scriptinterop/XPageElement.hpp>
 #include <scriptinterop/XPageElementBase.hpp>
+#include <scriptinterop/XPageElementRange.hpp>
+#include <scriptinterop/XPageRange.hpp>
 #include <scriptinterop/XParagraphStyle.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
@@ -1951,6 +1956,60 @@ public:
     }
 };
 
+class PageRangeImpl : public cppu::WeakImplHelper<scriptinterop::XPageRange>
+{
+public:
+    PageRangeImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+                  std::vector<cpo::uno::Reference<css::drawing::XDrawPage>> const& pages)
+        : model_(model)
+        , pages_(pages)
+    {
+    }
+
+    // A range is a grouping made here; there is no single drawing layer object behind it.
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return nullptr; }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPage>> getPages() override
+    {
+        std::vector<cpo::uno::Reference<scriptinterop::XPage>> result;
+        for (auto const& page : pages_)
+        {
+            result.emplace_back(new PageImpl(model_, page));
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPage>>(result.data(),
+                                                                             result.size());
+    }
+
+private:
+    cpo::uno::Reference<css::frame::XModel> model_;
+    std::vector<cpo::uno::Reference<css::drawing::XDrawPage>> pages_;
+};
+
+class PageElementRangeImpl : public cppu::WeakImplHelper<scriptinterop::XPageElementRange>
+{
+public:
+    PageElementRangeImpl(
+        cpo::uno::Reference<css::drawing::XShapes> const& shapes,
+        std::vector<cpo::uno::Reference<scriptinterop::XPageElement>> const& elements)
+        : shapes_(shapes)
+        , elements_(elements)
+    {
+    }
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return shapes_; }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>
+    getPageElements() override
+    {
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>(
+            elements_.data(), elements_.size());
+    }
+
+private:
+    cpo::uno::Reference<css::drawing::XShapes> shapes_;
+    std::vector<cpo::uno::Reference<scriptinterop::XPageElement>> elements_;
+};
+
 class SlideSelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSlideSelection>
 {
 public:
@@ -1984,21 +2043,74 @@ public:
         return {true, new PageImpl(model_, page)};
     }
 
+    // Each marked shape is wrapped with the page that holds it, so geometry changes and removal
+    // through the range reach the right page.
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElementRange>>
         SAL_CALL getPageElementRange() override
     {
-        throw cpo::uno::RuntimeException(u"getPageElementRange: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XShapes> shapes;
+        if (!(currentSelection() >>= shapes) || shapes->getCount() == 0)
+        {
+            return {false, {}};
+        }
+        std::vector<cpo::uno::Reference<scriptinterop::XPageElement>> elements;
+        auto const n = shapes->getCount();
+        for (sal_Int32 i = 0; i != n; ++i)
+        {
+            cpo::uno::Reference<css::drawing::XShape> shape;
+            shapes->getByIndex(i) >>= shape;
+            if (!shape.is())
+            {
+                continue;
+            }
+            cpo::uno::Reference<css::container::XChild> const child(shape, cpo::uno::UNO_QUERY);
+            cpo::uno::Reference<css::drawing::XDrawPage> const page(
+                child.is() ? child->getParent() : nullptr, cpo::uno::UNO_QUERY);
+            elements.emplace_back(new PageElementImpl(page, shape));
+        }
+        return {true, new PageElementRangeImpl(shapes, elements)};
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageRange>>
         SAL_CALL getPageRange() override
     {
-        throw cpo::uno::RuntimeException(u"getPageRange: not implemented"_ustr);
+        cpo::uno::Sequence<cpo::uno::Reference<cpo::uno::XInterface>> selected;
+        if (!(currentSelection() >>= selected) || !selected.hasElements())
+        {
+            return {false, {}};
+        }
+        std::vector<cpo::uno::Reference<css::drawing::XDrawPage>> pages;
+        for (auto const& entry : selected)
+        {
+            cpo::uno::Reference<css::drawing::XDrawPage> const page(entry, cpo::uno::UNO_QUERY);
+            if (page.is())
+            {
+                pages.push_back(page);
+            }
+        }
+        return {true, new PageRangeImpl(model_, pages)};
     }
 
     scriptinterop::SelectionType SAL_CALL getSelectionType() override
     {
-        throw cpo::uno::RuntimeException(u"getSelectionType: not implemented"_ustr);
+        auto const selection = currentSelection();
+        cpo::uno::Reference<css::text::XTextRange> text;
+        if (selection >>= text)
+        {
+            return scriptinterop::SelectionType_TEXT;
+        }
+        cpo::uno::Reference<css::drawing::XShapes> shapes;
+        if ((selection >>= shapes) && shapes->getCount() > 0)
+        {
+            return scriptinterop::SelectionType_PAGE_ELEMENT;
+        }
+        cpo::uno::Sequence<cpo::uno::Reference<cpo::uno::XInterface>> pages;
+        if ((selection >>= pages) && pages.hasElements())
+        {
+            return scriptinterop::SelectionType_PAGE;
+        }
+        return getCurrentPage().IsPresent ? scriptinterop::SelectionType_CURRENT_PAGE
+                                          : scriptinterop::SelectionType_NONE;
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideTableCellRange>>
@@ -2010,10 +2122,25 @@ public:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>>
         SAL_CALL getTextRange() override
     {
-        throw cpo::uno::RuntimeException(u"getTextRange: not implemented"_ustr);
+        cpo::uno::Reference<css::text::XTextRange> cursor;
+        if (!(currentSelection() >>= cursor))
+        {
+            return {false, {}};
+        }
+        return {true, new TextRangeImpl(cursor->getText(), cursor)};
     }
 
 private:
+    // The drawing view reports a text cursor while edited text is highlighted, a shape collection
+    // while shapes are marked, and nothing otherwise.  The slide sorter view reports the selected
+    // pages as a sequence of interfaces.
+    cpo::uno::Any currentSelection()
+    {
+        cpo::uno::Reference<css::view::XSelectionSupplier> const supplier(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY);
+        return supplier.is() ? supplier->getSelection() : cpo::uno::Any();
+    }
+
     cpo::uno::Reference<css::frame::XModel> model_;
 };
 
