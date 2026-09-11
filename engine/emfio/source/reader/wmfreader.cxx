@@ -334,7 +334,8 @@ namespace emfio
         aBR.AdjustY( -1 );
         if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
         {
-            SAL_WARN("emfio", "broken rectangle");
+            // A file may give the two corners in either order, so put them the way round the
+            // rest of the code expects.
             return tools::Rectangle::Normalize(aTL, aBR);
         }
         return tools::Rectangle( aTL, aBR );
