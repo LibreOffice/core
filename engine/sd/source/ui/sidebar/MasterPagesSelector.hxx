@@ -194,6 +194,13 @@ private:
         sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
 
+    /** Bring the token to index map back in step with the icon view after the row with the given
+        index has been taken out of it.  The token that the removed row showed is left with the -1
+        of a token that has no row, and every index below the removed row moves up by one.
+    */
+    void UpdateTokenToIndexEntriesForRemovedRow (
+        sal_uInt16 nIndex);
+
     static ScopedVclPtr<VirtualDevice> GetVirtualDevice(const Image& rPreview);
 };
 

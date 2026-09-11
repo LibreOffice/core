@@ -84,7 +84,18 @@ Image TemplatePreviewProvider::operator() (
     SdPage*,
     ::sd::PreviewRenderer&)
 {
-    return Image(ThumbnailView::readThumbnail(msURL));
+    try
+    {
+        return Image(ThumbnailView::readThumbnail(msURL));
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("sd");
+    }
+
+    // Reading the thumbnail of a template document can fail with any UNO exception, for example
+    // when the document storage is not there. Such a template gets an empty preview.
+    return Image();
 }
 
 int TemplatePreviewProvider::GetCostIndex()
@@ -127,8 +138,10 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument*)
             }
         }
     }
-    catch (const cpo::uno::RuntimeException&)
+    catch (const cpo::uno::Exception&)
     {
+        // Loading a template document can fail with any UNO exception, for example when the
+        // document storage is not there. Such a template has no master page to offer.
         DBG_UNHANDLED_EXCEPTION("sd");
         pPage = nullptr;
     }

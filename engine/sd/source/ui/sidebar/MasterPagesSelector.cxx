@@ -435,9 +435,10 @@ void MasterPagesSelector::SetItem (
         if (eState == MasterPageContainer::PS_CREATABLE)
             mpContainer->RequestPreview(aToken);
     }
-    else
+    else if (nIndex < mxPreviewIconView->n_children())
     {
         mxPreviewIconView->remove(nIndex);
+        UpdateTokenToIndexEntriesForRemovedRow(nIndex);
     }
     mxPreviewIconView->thaw();
 }
@@ -468,6 +469,23 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
         {
             maTokenToValueSetIndex[aOldToken] = -1;
         }
+    }
+}
+
+void MasterPagesSelector::UpdateTokenToIndexEntriesForRemovedRow (
+    sal_uInt16 nIndex)
+{
+    const ::osl::MutexGuard aGuard (maMutex);
+
+    // Removing a row moves the rows below it up by one position, so the indices stored for their
+    // tokens move with them.  The token of the removed row is left with the -1 that stands for a
+    // token that has no row.
+    for (auto& rEntry : maTokenToValueSetIndex)
+    {
+        if (rEntry.second == nIndex)
+            rEntry.second = -1;
+        else if (rEntry.second > nIndex)
+            --rEntry.second;
     }
 }
 
