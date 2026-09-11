@@ -646,6 +646,48 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectAsCurrentPage)
     CPPUNIT_ASSERT(
         getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide().is());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDuplicateSkipAndInsertSlide)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xFirst = xPresentation->getSlides()[0];
+    xFirst->insertTextBoxAt(u"copy me"_ustr, 36, 36, 288, 72);
+    // The duplicate lands right after the original and carries the same shapes.
+    auto const xCopy = xFirst->duplicate();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPresentation->getSlides().getLength());
+    CPPUNIT_ASSERT_EQUAL(xCopy->getuno(), xPresentation->getSlides()[1]->getuno());
+    CPPUNIT_ASSERT_EQUAL(xFirst->getShapes().getLength(), xCopy->getShapes().getLength());
+    // A slide shows by default; skipping hides it from the show.
+    CPPUNIT_ASSERT(!xCopy->isSkipped());
+    xCopy->setSkipped(true);
+    CPPUNIT_ASSERT(xCopy->isSkipped());
+    cpo::uno::Reference<css::beans::XPropertySet> const xProps(xCopy->getuno(),
+                                                               cpo::uno::UNO_QUERY_THROW);
+    bool bVisible = true;
+    xProps->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT(!bVisible);
+    xCopy->setSkipped(false);
+    CPPUNIT_ASSERT(!xCopy->isSkipped());
+    // A slide that was not created from another presentation is not linked.
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SlideLinkingMode_NOT_LINKED,
+                         xCopy->getSlideLinkingMode());
+    // Inserting puts a blank slide at the index; inserting with a layout brings its placeholders.
+    auto const xInserted = xPresentation->insertSlide(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xPresentation->getSlides().getLength());
+    CPPUNIT_ASSERT_EQUAL(xInserted->getuno(), xPresentation->getSlides()[1]->getuno());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xInserted->getShapes().getLength());
+    auto const xTitled = xPresentation->insertSlideFrom(
+        3, cpo::uno::Any(scriptinterop::PredefinedLayout_TITLE_ONLY));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTitled->getShapes().getLength());
+    CPPUNIT_ASSERT_EQUAL(xTitled->getuno(), xPresentation->getSlides()[3]->getuno());
+    // An index outside 0..count is rejected and leaves the slides alone.
+    CPPUNIT_ASSERT_THROW(xPresentation->insertSlide(-1), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xPresentation->insertSlide(5), cpo::uno::RuntimeException);
+    // The drawing layer only inserts a page after an existing one, so a slide before the first
+    // one is not implemented yet.
+    CPPUNIT_ASSERT_THROW(xPresentation->insertSlide(0), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xPresentation->getSlides().getLength());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

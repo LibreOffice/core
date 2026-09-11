@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -1855,9 +1856,12 @@ public:
         pages->remove(page_);
     }
 
+    // The copy is inserted directly after this slide.
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL duplicate() override
     {
-        throw cpo::uno::RuntimeException(u"duplicate: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XDrawPageDuplicator> const duplicator(
+            model_, cpo::uno::UNO_QUERY_THROW);
+        return new SlideImpl(model_, duplicator->duplicate(page_));
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayout() override
@@ -1872,14 +1876,24 @@ public:
         return new NotesPageImpl(model_, notesPageOf(page_));
     }
 
+    // A slide from another presentation that stays linked to its source carries that source's
+    // URL as its bookmark.
     scriptinterop::SlideLinkingMode SAL_CALL getSlideLinkingMode() override
     {
-        throw cpo::uno::RuntimeException(u"getSlideLinkingMode: not implemented"_ustr);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(page_, cpo::uno::UNO_QUERY_THROW);
+        OUString bookmark;
+        props->getPropertyValue(u"BookmarkURL"_ustr) >>= bookmark;
+        return bookmark.isEmpty() ? scriptinterop::SlideLinkingMode_NOT_LINKED
+                                  : scriptinterop::SlideLinkingMode_LINKED;
     }
 
+    // A skipped slide is one the drawing layer marks as not visible in the slide show.
     bool SAL_CALL isSkipped() override
     {
-        throw cpo::uno::RuntimeException(u"isSkipped: not implemented"_ustr);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(page_, cpo::uno::UNO_QUERY_THROW);
+        bool visible = true;
+        props->getPropertyValue(u"Visible"_ustr) >>= visible;
+        return !visible;
     }
 
     void SAL_CALL move(sal_Int32) override
@@ -1887,9 +1901,10 @@ public:
         throw cpo::uno::RuntimeException(u"move: not implemented"_ustr);
     }
 
-    void SAL_CALL setSkipped(bool) override
+    void setSkipped(bool skipped) override
     {
-        throw cpo::uno::RuntimeException(u"setSkipped: not implemented"_ustr);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(page_, cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"Visible"_ustr, cpo::uno::Any(!skipped));
     }
 };
 
@@ -2010,22 +2025,13 @@ public:
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL appendSlide() override
     {
-        return appendSlideWithLayout(AUTOLAYOUT_NONE);
+        return insertSlideWithLayout(drawPages()->getCount(), AUTOLAYOUT_NONE);
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
     appendSlideFrom(cpo::uno::Any const& layoutOrSlide) override
     {
-        // The argument is checked before the slide is created, so a rejected call leaves the
-        // presentation unchanged.
-        scriptinterop::PredefinedLayout predefined;
-        if (!(layoutOrSlide >>= predefined))
-        {
-            throw cpo::uno::RuntimeException(
-                u"appendSlide with a layout argument that is not a predefined layout: not "
-                "implemented"_ustr);
-        }
-        return appendSlideWithLayout(predefinedAutoLayout(predefined));
+        return insertSlideFrom(drawPages()->getCount(), layoutOrSlide);
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
@@ -2117,15 +2123,24 @@ public:
                                                                               slides.size());
     }
 
-    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL insertSlide(sal_Int32) override
+    cpo::uno::Reference<scriptinterop::XSlide> insertSlide(sal_Int32 index) override
     {
-        throw cpo::uno::RuntimeException(u"insertSlide: not implemented"_ustr);
+        return insertSlideWithLayout(index, AUTOLAYOUT_NONE);
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
-    insertSlideFrom(sal_Int32, cpo::uno::Any const&) override
+    insertSlideFrom(sal_Int32 index, cpo::uno::Any const& layoutOrSlide) override
     {
-        throw cpo::uno::RuntimeException(u"insertSlideFrom: not implemented"_ustr);
+        // The argument is checked before the slide is created, so a rejected call leaves the
+        // presentation unchanged.
+        scriptinterop::PredefinedLayout predefined;
+        if (!(layoutOrSlide >>= predefined))
+        {
+            throw cpo::uno::RuntimeException(
+                u"insertSlide with a layout argument that is not a predefined layout: not "
+                "implemented"_ustr);
+        }
+        return insertSlideWithLayout(index, predefinedAutoLayout(predefined));
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL
@@ -2159,11 +2174,26 @@ public:
     }
 
 private:
-    cpo::uno::Reference<scriptinterop::XSlide> appendSlideWithLayout(sal_Int16 autoLayout)
+    // Inserts a slide before the slide at index, or at the end when index equals the slide
+    // count.  The drawing layer inserts a new page after an existing one, so the page goes in
+    // after the slide at index - 1.  A slide before the first one has no such neighbour and is
+    // still awaiting an implementation.  The new page is blank unless a layout creates
+    // placeholder shapes on it.
+    cpo::uno::Reference<scriptinterop::XSlide> insertSlideWithLayout(sal_Int32 index,
+                                                                     sal_Int16 autoLayout)
     {
         auto const pages = drawPages();
-        // Inserting at getCount() appends; the new page is blank, without layout placeholders.
-        auto const page = pages->insertNewByIndex(pages->getCount());
+        if (index < 0 || index > pages->getCount())
+        {
+            throw cpo::uno::RuntimeException(u"insertSlide: expected an index between 0 and "_ustr
+                                             + OUString::number(pages->getCount()) + ", got "
+                                             + OUString::number(index));
+        }
+        if (index == 0)
+        {
+            throw cpo::uno::RuntimeException(u"insertSlide at index 0: not implemented"_ustr);
+        }
+        auto const page = pages->insertNewByIndex(index - 1);
         if (autoLayout != AUTOLAYOUT_NONE)
         {
             // Setting the page's Layout property creates the layout's placeholder shapes.
