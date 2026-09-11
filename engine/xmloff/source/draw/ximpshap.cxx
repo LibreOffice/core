@@ -177,6 +177,8 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
     const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
+    // Some children are read here and then, so they leave no context behind them.
+    bool bReadHere = false;
     // #i68101#
     if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG, XML_DESC)
         || nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC) )
@@ -198,11 +200,13 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
     else if( nElement == XML_ELEMENT(DRAW, XML_GLUE_POINT) )
     {
         addGluePoint( xAttrList );
+        bReadHere = true;
     }
     else if( nElement == XML_ELEMENT(DRAW, XML_THUMBNAIL) )
     {
         // search attributes for xlink:href
         maThumbnailURL = xAttrList->getOptionalValue(XML_ELEMENT(XLINK, XML_HREF));
+        bReadHere = true;
     }
     else
     {
@@ -237,7 +241,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
         }
     }
 
-    if (!xContext)
+    if (!xContext && !bReadHere)
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return xContext;
