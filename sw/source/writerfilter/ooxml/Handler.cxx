@@ -335,7 +335,9 @@ OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 
 void OOXMLHyperlinkHandler::writetext()
 {
-    OUString sReturn = " HYPERLINK \"" + mURL + "\"" + mFieldCode;
+    // hack: put mToolTip at the very end so broken code parsing in FieldContext::GetCommandParts
+    // does not mess up the other FieldCodes.
+    OUString sReturn = " HYPERLINK \"" + mURL + "\"" + mFieldCode + mToolTip;
     mpFastContext->text(sReturn);
 }
 
@@ -349,9 +351,9 @@ void OOXMLHyperlinkHandler::attribute(Id name, const Value & val)
         mFieldCode += "\"";
         break;
     case NS_ooxml::LN_CT_Hyperlink_tooltip:
-        mFieldCode += " \\o \"";
-        mFieldCode += val.getString();
-        mFieldCode += "\"";
+        mToolTip += " \\o \"";
+        mToolTip += val.getString();
+        mToolTip += "\"";
         break;
     case NS_ooxml::LN_CT_Hyperlink_docLocation:
         break;

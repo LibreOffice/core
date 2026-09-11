@@ -887,6 +887,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf32363)
                 "expand", u"4 ");
     assertXPath(pLayout, "/root/page[8]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
                 "expand", u"Hidden text with the referred character style");
+
+    // tdf#168053
+    // TOC hyperlinks should activate at import, and thus show up in export as well
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:hyperlink", 4);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent/w:p[2]/w:hyperlink", "tooltip",
+                u"Do not shorten this short heading");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf163894_from_top_to_beginning_of_the_documentMarguerite)
