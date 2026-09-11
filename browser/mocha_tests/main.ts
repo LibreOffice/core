@@ -39,6 +39,7 @@
 /// <reference path="./DPIChangeListener.test.ts" />
 /// <reference path="./CanvasSectionContainer.test.ts" />
 /// <reference path="./CBounds.test.ts" />
+/// <reference path="./CleanupSidebar.test.ts" />
 /// <reference path="./SlideAvatars.test.ts" />
 /// <reference path="./CPointSet.test.ts" />
 /// <reference path="./Events.test.ts" />

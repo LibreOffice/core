@@ -39,6 +39,7 @@ interface WidgetJSON {
 	aria?: AriaLabelAttributes; // ARIA Label attributes
 	ariaLive?: 'polite' | 'assertive' | 'off';
 	gridKeyboardNavigation?: boolean; // receives keyboard navigation for elements in col/rows
+	cssClass?: string; // extra class(es) on the widget root, next to the builder's own
 }
 
 // A widget that can carry a list of entries, such as a combo box or the styles icon view
@@ -384,7 +385,28 @@ interface PanelWidgetJSON extends WidgetJSON {
 	closeCommand?: string; // UNO command that leaves the panel's deck
 }
 
-type ExpanderWidgetJSON = any;
+// type: 'expander' - a section that folds shut under the text of its first child
+interface ExpanderWidgetJSON extends WidgetJSON {
+	expanded?: boolean; // true when the section starts open
+	hidden?: boolean;
+	command?: string; // command to trigger options for the section
+}
+
+// type: 'progressbar'
+interface ProgressBarWidgetJSON extends WidgetJSON {
+	value?: number; // steps done
+	maxValue?: number; // steps in the whole, 100 when not given
+	infinite?: boolean; // the whole is not known, so the bar moves on its own
+}
+
+// type: 'spinfield'
+interface SpinFieldWidgetJSON extends WidgetJSON {
+	value?: number;
+	min?: number;
+	max?: number;
+	step?: number;
+	unit?: string;
+}
 
 // type: 'fixedtext'
 interface TextWidget extends WidgetJSON {

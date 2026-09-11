@@ -9,20 +9,82 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/* The Cleanup deck. The chrome around the panel is the sidebar's own, and everything below is
-   the panel's markup, so every rule here names one of the panel's classes. */
+/* The Cleanup deck. Its widgets are the sidebar's own, so what is here lays them out; the
+   classes are the ones the deck's JSON puts on its widgets. */
 
-/* The panel stands under the heading row of the deck and lays itself out inside the width its
-   parent leaves it. Its inline padding is the padding of that heading row, so the rows line up
-   with the title over them. The panel reads at the size the rest of the client reads at, so a
-   piece of text that names no size of its own still comes out at the size of the row text
-   beside it. */
-.cleanup-sidebar {
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	min-width: 0;
-	padding-inline: var(--spacing-xl);
-	font-size: var(--default-font-size);
-	line-height: normal;
+/* The phase of the run on the left, Stop at the end of the line. */
+.cleanup-status-line {
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	column-gap: var(--spacing-m);
+}
+
+/* The bar takes the line, the counts stand at its end. */
+.cleanup-progress-line {
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	column-gap: var(--spacing-m);
+}
+
+.cleanup-progress-figures {
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+/* The band that adds the list up carries a faint tint of the primary colour, so it reads as
+   the result of the run rather than as one more row. */
+.cleanup-summary {
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	column-gap: var(--spacing-m);
+	margin-block: var(--spacing-m);
+	padding: var(--spacing-m);
+	border-radius: var(--border-radius);
+	background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.cleanup-total {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+/* What the scan button is for, or what the list came to. */
+.cleanup-message {
+	color: var(--color-text-light);
+}
+
+/* A row: the two lines on the left take what the badge and the button leave. */
+.cleanup-row {
+	align-items: center;
+	column-gap: var(--spacing-m);
+	padding-block: var(--spacing-s);
+	border-bottom: 1px solid var(--color-border-lighter);
+}
+
+/* A row a cleanup has dealt with waits here, dimmed, until the fresh scan that follows says
+   what the list now holds. */
+.cleanup-row-gone {
+	opacity: 0.5;
+}
+
+.cleanup-row-text {
+	text-align: start;
+	overflow-wrap: anywhere;
+}
+
+/* The figures the finding was made on, dimmed against the line above them. */
+.cleanup-row-detail {
+	color: var(--color-text-light);
+	font-variant-numeric: tabular-nums;
+}
+
+/* How much the document sheds, as a badge with a faint tint of the colour that stands for a
+   gain. */
+.cleanup-row-saving {
+	white-space: nowrap;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	padding: var(--spacing-xs) var(--spacing-m);
+	border-radius: var(--border-radius-large);
+	background-color: color-mix(in srgb, var(--color-success) 18%, transparent);
 }

@@ -93,6 +93,14 @@
 		background-color: #e9e9ed;
 	}
 
+	/* Cleanup deck: the tinted band and the badge on a row say what they are through a
+	   background colour, which forced colours drops, so each gets a border of a system colour
+	   and still reads as a shape. */
+	.cleanup-summary,
+	.cleanup-row-saving {
+		border: 1px solid ButtonBorder;
+	}
+
 	/* Dark mode: invert hardcoded light backgrounds for icon visibility */
 	[data-theme='dark'] .unobutton img,
 	[data-theme='dark'] .savemodified.unotoolbutton .unobutton img,

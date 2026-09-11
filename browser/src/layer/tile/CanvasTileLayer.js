@@ -2186,9 +2186,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			success = false;
 		}
 
-		this._map.hideBusy();
+		// A presentation cleanup run reports every step of itself through this message, and
+		// none of those steps is the answer to a command the user is waiting on. So the busy
+		// overlay stays as it is, and the steps are kept off the COMMANDRESULT bridge to the
+		// native shells as well, which carries the answers to the commands a shell sent.
+		const isCleanupEvent = commandName === '.uno:PresentationCleanup';
+
+		if (!isCleanupEvent)
+			this._map.hideBusy();
 		this._map.fire('commandresult', {commandName: commandName, success: success, result: obj.result});
-		if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp) {
+		if (!isCleanupEvent && (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp)) {
 			window.postMobileMessage('COMMANDRESULT ' + textMsg);
 		}
 

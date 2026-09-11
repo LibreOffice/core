@@ -284,6 +284,7 @@
 /// <reference path="../src/control/Notebookbar.ImpressAnimationTab.ts" />
 /// <reference path="../src/control/Notebookbar.ImpressTableDesignTab.ts" />
 /// <reference path="../src/control/Notebookbar.ImpressTransitionTab.ts" />
+/// <reference path="../src/control/Control.CleanupSidebar.ts" />
 /// <reference path="../src/control/Sidebar.FromNotebookbarPanel.ts" />
 /// <reference path="../src/control/Control.NavigatorPanel.ts" />
 /// <reference path="../src/control/Control.QuickFindPanel.ts" />
