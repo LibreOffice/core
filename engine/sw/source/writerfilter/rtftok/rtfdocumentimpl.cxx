@@ -3162,7 +3162,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 else if (!bTextFrame)
                     // If there is no fill, the Word default is 100% transparency.
                     xPropertySet->setPropertyValue(u"FillTransparence"_ustr,
-                                                   cpo::uno::Any(sal_Int32(100)));
+                                                   cpo::uno::Any(sal_Int16(100)));
 
                 RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 

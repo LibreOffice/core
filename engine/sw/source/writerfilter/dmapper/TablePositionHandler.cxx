@@ -141,7 +141,7 @@ cpo::uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition(
     aFrameProperties[u"VertOrient"_ustr] <<= nVertOrient;
     aFrameProperties[u"VertOrientRelation"_ustr] <<= nVertOrientRelation;
     aFrameProperties[u"VertOrientPositionEMU"_ustr] <<= sal_Int64(m_nY.as_emu());
-    aFrameProperties[u"FillTransparence"_ustr] <<= sal_Int32(100);
+    aFrameProperties[u"FillTransparence"_ustr] <<= sal_Int16(100);
 
     if (m_nTableOverlap == NS_ooxml::LN_Value_ST_TblOverlap_never)
     {
