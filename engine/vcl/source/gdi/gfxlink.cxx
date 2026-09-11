@@ -50,8 +50,19 @@ size_t GfxLink::GetHash() const
 {
     if (!maHash)
     {
+        // The hash stands for the bytes of the link, so bytes that are in a temporary file come
+        // back into memory before they are hashed. Two links holding the same bytes then have the
+        // same hash whichever of them was swapped out.
+        (void)maDataContainer.getData();
+
         std::size_t seed = maDataContainer.calculateHash();
         o3tl::hash_combine(seed, meType);
+
+        // A link with no bytes at all is hashed on its type alone, and that answer is worked out
+        // again on every call.
+        if (maDataContainer.getSizeBytes() == 0)
+            return seed;
+
         maHash = seed;
     }
     return maHash;

@@ -195,6 +195,12 @@ private:
 
     bool ensureAvailable () const;
 
+    /** Brings the encoded data of the link back into memory and tells the memory manager what
+        those bytes cost. A graphic with no link, or one whose link holds no bytes, is left as it
+        is. The graphic content itself stays where it is, so a graphic that was swapped out is
+        still swapped out afterwards. */
+    void ensureEncodedDataAvailable() const;
+
     sal_Int32 getPageNumber() const;
 
     // Set the pref size, but don't force swap-in

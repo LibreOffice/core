@@ -43,7 +43,9 @@ public:
     BinaryDataContainer& operator=(const BinaryDataContainer& rBinaryDataContainer) = default;
     BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) noexcept = default;
 
+    /// Number of bytes held, whether they are in memory right now or in the temp file.
     size_t getSize() const;
+    /// True when the container holds no bytes at all.
     bool isEmpty() const;
     const sal_uInt8* getData() const;
 
@@ -58,7 +60,7 @@ public:
     /// memory for the life of the reference, even if this container swaps its
     /// copy out to disk in the meantime.
     std::shared_ptr<const std::vector<sal_uInt8>> getSharedData() const;
-    SAL_DLLPRIVATE cpo::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
+    cpo::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a readonly stream open for reading
     SAL_DLLPRIVATE std::unique_ptr<SvStream> getAsStream() const;
@@ -75,6 +77,11 @@ public:
     /// swap out to disk for now. The bytes stay in memory while a size holder is registered.
     SAL_DLLPRIVATE void swapOut() const;
 
+    /// Whether a call to swapOut would move the bytes out of memory and into a temporary file.
+    SAL_DLLPRIVATE bool canSwapOut() const;
+
+    /// Hashes the bytes that are in memory. A container whose bytes are in the temporary file
+    /// answers zero.
     size_t calculateHash() const;
     std::vector<unsigned char> calculateSHA1() const;
 

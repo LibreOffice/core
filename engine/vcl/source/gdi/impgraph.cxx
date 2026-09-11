@@ -1321,7 +1321,22 @@ bool ImpGraphic::swapOutContent(SvStream& rStream)
 bool ImpGraphic::swapOut()
 {
     if (isSwappedOut())
-        return false;
+    {
+        // The graphic content is out already. What can still be in memory is the encoded data
+        // in the link, read back by a caller that wanted a look at the raw bytes.
+        if (!mpGfxLink || !mpGfxLink->getDataContainer().canSwapOut())
+            return false;
+
+        mpGfxLink->getDataContainer().swapOut();
+
+        // The graphic goes back to costing nothing once the bytes really left memory.
+        if (mpGfxLink->getSizeBytes() > 0)
+            return false;
+
+        swappedOut(0);
+
+        return true;
+    }
 
     bool bResult = false;
 
@@ -1405,6 +1420,25 @@ bool ImpGraphic::ensureAvailable() const
 
     resetLastUsed();
     return bResult;
+}
+
+void ImpGraphic::ensureEncodedDataAvailable() const
+{
+    if (!mpGfxLink)
+        return;
+
+    // Asking the link for its bytes brings them back from the temporary file they were written
+    // to, and there they stay until a reduction takes them out again.
+    (void)mpGfxLink->getDataContainer().getData();
+
+    // The graphic content is still out, and what it costs now is the encoded data that just came
+    // in. The memory manager is told so, so its running total counts those bytes.
+    if (isSwappedOut() && mpGfxLink->getSizeBytes() > 0)
+    {
+        auto pThis = const_cast<ImpGraphic*>(this);
+        pThis->registerIntoManager();
+        pThis->changeExisting(mpGfxLink->getSizeBytes());
+    }
 }
 
 void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
@@ -1767,7 +1801,9 @@ BitmapChecksum ImpGraphic::getChecksum() const
     {
         // We have a compressed stream: then do the CRC on it to avoid
         // decompressing just for checksum purposes.
+        ensureEncodedDataAvailable();
         mnChecksum = mpGfxLink->getDataContainer().getChecksum();
+
         if (mnChecksum != 0)
             return mnChecksum;
     }
@@ -1812,7 +1848,12 @@ sal_Int32 ImpGraphic::getPageNumber() const
 
 bool ImpGraphic::canReduceMemory() const
 {
-    return !isSwappedOut();
+    if (!isSwappedOut())
+        return true;
+
+    // The graphic content is out already, and what is left to give back is the encoded data in
+    // the link, for as long as those bytes can be written out to a temporary file.
+    return mpGfxLink && mpGfxLink->getDataContainer().canSwapOut();
 }
 
 bool ImpGraphic::reduceMemory()

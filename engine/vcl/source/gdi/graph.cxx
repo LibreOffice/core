@@ -500,6 +500,11 @@ const std::shared_ptr<VectorGraphicData>& Graphic::getVectorGraphicData() const
     return mxImpGraphic->getVectorGraphicData();
 }
 
+void Graphic::ensureEncodedDataAvailable() const
+{
+    mxImpGraphic->ensureEncodedDataAvailable();
+}
+
 sal_Int32 Graphic::getPageNumber() const
 {
     return mxImpGraphic->getPageNumber();

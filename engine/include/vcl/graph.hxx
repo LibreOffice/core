@@ -185,6 +185,13 @@ public:
 
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
+    /** Brings the encoded source bytes of the graphic back into memory. Afterwards those bytes
+        are in memory and the graphic memory manager counts them, so a reduction can write them
+        back out to their temporary file. The image itself is not decoded, so a graphic that was
+        swapped out is still swapped out afterwards. A graphic that keeps no encoded bytes is left
+        as it is. */
+    void ensureEncodedDataAvailable() const;
+
     /// Get the page number of the multi-page source this Graphic is rendered from.
     sal_Int32 getPageNumber() const;
 };

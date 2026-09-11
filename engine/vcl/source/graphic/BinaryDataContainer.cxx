@@ -30,6 +30,8 @@ struct BinaryDataContainer::Impl
     mutable BitmapChecksum mnChecksum = 0;
     /// Holders that each account an equal share of the bytes.
     std::atomic<size_t> mnSizeHolders = 0;
+    /// How many bytes the container holds. Stays right while the data sits in the temp file.
+    size_t mnSize = 0;
 
     Impl(SvStream& stream, size_t size) { readData(stream, size); }
 
@@ -38,7 +40,10 @@ struct BinaryDataContainer::Impl
     {
         auto pData = std::make_shared<std::vector<sal_uInt8>>(size);
         if (stream.ReadBytes(pData->data(), pData->size()) == size)
+        {
             mpData = std::move(pData);
+            mnSize = mpData->size();
+        }
     }
 
     /// ensure the data is in-RAM
@@ -54,6 +59,10 @@ struct BinaryDataContainer::Impl
         // Horrifying data loss ...
         SAL_WARN_IF(pStream->GetError(), "vcl",
                     "Inconsistent system - failed to swap image back in");
+
+        // Nothing came back from the file, so the container is empty from here on.
+        if (!mpData)
+            mnSize = 0;
     }
 
     void swapOut()
@@ -113,8 +122,14 @@ BitmapChecksum BinaryDataContainer::getChecksum() const
 
 std::vector<unsigned char> BinaryDataContainer::calculateSHA1() const
 {
+    // The bytes come back from the temporary file first, so the count that follows is the count
+    // the pointer really reaches.
+    const sal_uInt8* pData = getData();
+    const size_t nSize = getSize();
+
     comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
-    aHashEngine.update(getData(), getSize());
+    if (pData && nSize > 0)
+        aHashEngine.update(pData, nSize);
     return aHashEngine.finalize();
 }
 
@@ -123,6 +138,12 @@ cpo::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const
     if (isEmpty())
         return cpo::uno::Sequence<sal_Int8>();
     assert(mpImpl);
+
+    ensureSwappedIn();
+
+    // The container is empty from here on when nothing came back from the file.
+    if (!mpImpl->mpData)
+        return cpo::uno::Sequence<sal_Int8>();
 
     cpo::uno::Sequence<sal_Int8> aData(getSize());
 
@@ -181,11 +202,7 @@ std::size_t BinaryDataContainer::writeToStream(SvStream& rStream) const
     return rStream.WriteBytes(getData(), getSize());
 }
 
-size_t BinaryDataContainer::getSize() const
-{
-    ensureSwappedIn();
-    return mpImpl && mpImpl->mpData ? mpImpl->mpData->size() : 0;
-}
+size_t BinaryDataContainer::getSize() const { return mpImpl ? mpImpl->mnSize : 0; }
 
 size_t BinaryDataContainer::getSizeBytes() const
 {
@@ -212,11 +229,7 @@ size_t BinaryDataContainer::getSizeHolderCount() const
     return mpImpl ? mpImpl->mnSizeHolders.load() : 0;
 }
 
-bool BinaryDataContainer::isEmpty() const
-{
-    ensureSwappedIn();
-    return !mpImpl || !mpImpl->mpData || mpImpl->mpData->empty();
-}
+bool BinaryDataContainer::isEmpty() const { return !mpImpl || mpImpl->mnSize == 0; }
 
 const sal_uInt8* BinaryDataContainer::getData() const
 {
@@ -236,15 +249,23 @@ void BinaryDataContainer::ensureSwappedIn() const
         mpImpl->ensureSwappedIn();
 }
 
-void BinaryDataContainer::swapOut() const
+bool BinaryDataContainer::canSwapOut() const
 {
     // Only bother reducing memory footprint in kit mode - for mobile/online etc.
     if (!mpImpl || !comphelper::COKit::isActive())
-        return;
+        return false;
 
     // Every registered size holder still reads these bytes from memory, so the swap to disk
     // happens once the last holder is gone.
     if (mpImpl->mnSizeHolders > 0)
+        return false;
+
+    return mpImpl->mpData && !mpImpl->mpData->empty();
+}
+
+void BinaryDataContainer::swapOut() const
+{
+    if (!canSwapOut())
         return;
 
     mpImpl->swapOut();

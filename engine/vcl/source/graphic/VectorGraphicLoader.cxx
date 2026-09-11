@@ -19,6 +19,10 @@ std::shared_ptr<VectorGraphicData> loadVectorGraphic(BinaryDataContainer const& 
     if (rDataContainer.isEmpty())
         return std::shared_ptr<VectorGraphicData>();
 
+    // The vector graphic is built from these bytes and counts them, so bytes that went out to a
+    // temporary file are read back into memory first.
+    (void)rDataContainer.getData();
+
     return std::make_shared<VectorGraphicData>(rDataContainer, eType);
 }
 }

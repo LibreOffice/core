@@ -22,7 +22,10 @@
 #include <tools/stream.hxx>
 
 #include <impgraph.hxx>
+#include <vcl/graphic/Manager.hxx>
 #include <vcl/graphic/MemoryManaged.hxx>
+
+#include "KitModeScope.hxx"
 
 using namespace css;
 
@@ -247,6 +250,83 @@ CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManager)
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), rManager.getManagedObjects().size());
     CPPUNIT_ASSERT_EQUAL(sal_Int64(300), rManager.getTotalSize());
+}
+
+// A caller that only wants the checksum reads the encoded data back in. Those bytes have to be
+// counted while they are there and have to be able to leave again.
+CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testAChecksumCountsTheBytesItReadBack)
+{
+    KitModeScope aKitMode;
+
+    auto& rManager = vcl::graphic::MemoryManager::get();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rManager.getManagedObjects().size());
+
+    Graphic aGraphic = makeUnloadedGraphic(u"jpg", Size(300, 300));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+
+    ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
+    vcl::graphic::MemoryManaged* pMemoryManaged = pImpGraphic;
+
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->swapOut());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
+
+    // Nothing of this graphic is in memory, so there is nothing to reduce.
+    CPPUNIT_ASSERT_EQUAL(false, pMemoryManaged->canReduceMemory());
+
+    // Hashing only reaches bytes that are in memory, so it finds nothing to hash.
+    const BinaryDataContainer& rContainer = aGraphic.GetSharedGfxLink()->getDataContainer();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rContainer.calculateHash());
+
+    CPPUNIT_ASSERT(aGraphic.GetChecksum() != 0);
+
+    // The checksum ran over the encoded data, which is back in memory and counted for.
+    CPPUNIT_ASSERT(rContainer.calculateHash() != 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(rContainer.getSize()), rManager.getTotalSize());
+
+    // The graphic is still swapped out, and those bytes are what a reduction can hand back.
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(true, pMemoryManaged->canReduceMemory());
+    CPPUNIT_ASSERT_EQUAL(true, pMemoryManaged->reduceMemory());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rContainer.calculateHash());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
+}
+
+// A caller can ask for the encoded data of a graphic on its own, without going through the
+// checksum. Those bytes are counted while they are in memory and can leave again.
+CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testEncodedDataBroughtInIsCountedAndCanGoAgain)
+{
+    KitModeScope aKitMode;
+
+    auto& rManager = vcl::graphic::MemoryManager::get();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rManager.getManagedObjects().size());
+
+    Graphic aGraphic = makeUnloadedGraphic(u"jpg", Size(300, 300));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+
+    ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
+    vcl::graphic::MemoryManaged* pMemoryManaged = pImpGraphic;
+
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->swapOut());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
+
+    // Hashing only reaches bytes that are in memory, so it finds nothing to hash.
+    const BinaryDataContainer& rContainer = aGraphic.GetSharedGfxLink()->getDataContainer();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rContainer.calculateHash());
+
+    aGraphic.ensureEncodedDataAvailable();
+
+    // The encoded data is back in memory and the running total counts it.
+    CPPUNIT_ASSERT(rContainer.calculateHash() != 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(rContainer.getSize()), rManager.getTotalSize());
+
+    // The graphic is still swapped out, and those bytes are what a reduction can hand back.
+    CPPUNIT_ASSERT_EQUAL(true, pImpGraphic->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(true, pMemoryManaged->canReduceMemory());
+    CPPUNIT_ASSERT_EQUAL(true, pMemoryManaged->reduceMemory());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rContainer.calculateHash());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rManager.getTotalSize());
 }
 
 namespace

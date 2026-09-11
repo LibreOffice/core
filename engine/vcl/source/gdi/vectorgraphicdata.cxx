@@ -36,7 +36,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <rtl/crc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -323,7 +322,7 @@ const Bitmap& VectorGraphicData::getReplacement() const
 
 BitmapChecksum VectorGraphicData::GetChecksum() const
 {
-    return rtl_crc32(0, maDataContainer.getData(), maDataContainer.getSize());
+    return maDataContainer.getChecksum();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
