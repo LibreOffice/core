@@ -308,6 +308,8 @@ var getElementsFromId = function (
 		return (window as any).getConnectorsPopupElements(closeCallback);
 	else if (id === 'userslistpopup')
 		return window.L.control.createUserListWidget();
+	else if (id === 'slideuserspopup')
+		return window.L.control.createSlideUserList(data.viewIds);
 	else if (id === 'permissionmode')
 		return getPermissionModeElements(
 			data.isReadOnlyMode,

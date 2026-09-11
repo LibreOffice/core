@@ -5053,7 +5053,11 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     {
         // The payload is the identifier of the part the view switched to.
         if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT && !payload.empty())
+        {
             _currentPartId = payload;
+            if (_docManager)
+                _docManager->notifyViewPart(getViewId(), _currentPartId);
+        }
 
         sendTextFrame("setpart: part=" + payload);
         break;

@@ -383,6 +383,9 @@ public:
     /// Notify all views of viewId and their associated usernames
     void notifyViewInfo();
 
+    /// Tell the other views which part the given view switched to.
+    void notifyViewPart(int viewId, const std::string& partId);
+
     std::shared_ptr<ChildSession> findSessionByViewId(int viewId);
 
     void invalidateCanonicalId(const std::string& sessionId);

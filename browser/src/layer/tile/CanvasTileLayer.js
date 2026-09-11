@@ -868,6 +868,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('viewinfo:')) {
 			this._onViewInfoMsg(textMsg);
 		}
+		else if (textMsg.startsWith('viewpart:')) {
+			this._onViewPartMsg(textMsg);
+		}
 		else if (textMsg.startsWith('textviewselection:')) {
 			this._onTextViewSelectionMsg(textMsg);
 		}
@@ -1984,6 +1987,19 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		for (var viewInfoIdx in this._map._viewInfo) {
 			this._removeView(parseInt(viewInfoIdx));
 		}
+	},
+
+	// Another view moved to a part. Only the part identifier travels; the
+	// rest of that view's info stays as the last viewinfo left it.
+	_onViewPartMsg: function(textMsg) {
+		var obj = JSON.parse(textMsg.substring('viewpart:'.length + 1));
+		var viewId = parseInt(obj.viewId);
+
+		if (viewId === this._viewId || !this._map._viewInfo[viewId])
+			return;
+
+		this._map._viewInfo[viewId].part = obj.part;
+		this._map.fire('updateviewpart', {viewId: viewId, part: obj.part});
 	},
 
 	_onViewInfoMsg: function(textMsg) {

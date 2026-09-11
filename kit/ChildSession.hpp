@@ -83,6 +83,7 @@ public:
     bool getPartStatus();
     int getViewId() const { return _viewId; }
     void setViewId(const int viewId) { _viewId = viewId; }
+    const std::string& getCurrentPartId() const { return _currentPartId; }
     const std::string& getViewUserId() const { return getUserId(); }
     const std::string& getViewUserName() const { return getUserName(); }
     const std::string& getViewUserExtraInfo() const { return getUserExtraInfo(); }

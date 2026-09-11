@@ -27,6 +27,7 @@ interface User {
 	you: boolean;
 	cachedHeaderAvatar?: HTMLImageElement;
 	cachedUserListAvatar?: HTMLImageElement;
+	cachedSlideAvatar?: HTMLImageElement;
 }
 
 interface UserEvent {

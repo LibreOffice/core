@@ -290,6 +290,7 @@ interface MenuDefinition extends WidgetJSON {
 
 interface HtmlContentJson extends WidgetJSON {
 	htmlId: string;
+	viewIds?: Array<number>;
 	closeCallback?: EventListenerOrEventListenerObject;
 	isReadOnlyMode?: boolean;
 	canUserWrite?: boolean;

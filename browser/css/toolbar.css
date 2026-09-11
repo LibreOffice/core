@@ -1677,9 +1677,13 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	padding: 4px 8px;
 }
 
+.slide-user-item:hover,
+.user-list-item:hover {
+	background-color: var(--color-background-dark);
+}
+
 .user-list-item:hover {
 	cursor: pointer;
-	background-color: var(--color-background-dark);
 }
 
 .user-list-item--name-container {

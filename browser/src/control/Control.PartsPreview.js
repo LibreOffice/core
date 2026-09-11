@@ -111,6 +111,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('updatesections', this._updateSections, this);
 		map.on('docloaded', this._focusCurrentSlideOnLoad, this);
 		app.events.on('slidelink:changed', this._updateLinkMarks.bind(this));
+		map.on('addview', this._updateViewAvatars, this);
+		map.on('removeview', this._updateViewAvatars, this);
+		map.on('updateviewpart', this._updateViewAvatars, this);
 
 		window.addEventListener('resize', window.L.bind(this._resize, this));
 	},
@@ -193,6 +196,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			this._updateLinkMarks();
 			this._updateA11ySelection();
+			this._updateViewAvatars();
 
 			if (!this.options.allowOrientation) {
 				return;
@@ -359,6 +363,120 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (img && img.placeholderName)
 				this._setPlaceholder(img, img.placeholderName);
 		}
+	},
+
+	// Three avatars at most, never our own
+	_maxFrameAvatars: 3,
+
+	// Put every other user's avatar on the preview of the slide that user is on.
+	_updateViewAvatars: function () {
+		if (!this._previewInitialized || !this._map.userList)
+			return;
+
+		if (window.mode.isSmallScreenDevice() || this._map.userList.hideUserList())
+			return;
+
+		var viewIdsByPart = new Map();
+		var myViewId = this._map._docLayer._viewId;
+
+		for (var viewId in this._map._viewInfo) {
+			var id = parseInt(viewId);
+			var part = this._map._viewInfo[viewId].part;
+			if (id === myViewId || !part)
+				continue;
+			if (!viewIdsByPart.has(part))
+				viewIdsByPart.set(part, []);
+			viewIdsByPart.get(part).push(id);
+		}
+
+		for (var i = 0; i < this._previewTiles.length; i++) {
+			var img = this._previewTiles[i];
+			if (!img || !img.parentNode)
+				continue;
+			this._setFrameAvatars(img, i, viewIdsByPart.get(img._part) || []);
+		}
+	},
+
+	// The avatars of the given views over one preview
+	_setFrameAvatars: function (img, i, viewIds) {
+		// Every slide is offered on every update; only redo the ones that changed.
+		var key = viewIds.join(',');
+		if (img.viewKey === key)
+			return;
+		img.viewKey = key;
+
+		var map = this._map;
+		var frame = img.parentNode;
+		var strip = frame.querySelector('.preview-avatars');
+
+		img.viewNames = viewIds.map(function (viewId) {
+			return map.getViewName(viewId) || '';
+		});
+		this._setPreviewPositionLabels(img, i);
+
+		if (!viewIds.length) {
+			if (strip)
+				strip.remove();
+			return;
+		}
+
+		if (!strip) {
+			strip = window.L.DomUtil.create('div', 'preview-avatars');
+			strip.setAttribute('aria-hidden', 'true');
+			frame.insertBefore(strip, img.nextSibling);
+		}
+
+		var shown = Math.min(
+			viewIds.length > 2 ? viewIds.length - 1 : viewIds.length,
+			this._maxFrameAvatars);
+
+		var children = viewIds.slice(0, shown).map(function (viewId, index) {
+			// The user list keeps the avatar between updates
+			var user = map.userList.users.get(viewId);
+			var avatar = map.userList.createAvatar(user && user.cachedSlideAvatar,
+				viewId, img.viewNames[index], undefined,
+				app.LOUtil.rgbToHex(map.getViewColor(viewId)));
+			if (user)
+				user.cachedSlideAvatar = avatar;
+			return avatar;
+		});
+
+		if (viewIds.length > shown) {
+			var more = window.L.DomUtil.create('span', 'preview-avatars-more');
+			more.textContent = '+' + (viewIds.length - shown);
+			window.L.DomEvent.on(more, 'click', function (e) {
+				window.L.DomEvent.stop(e);
+				this._openFrameUserList(more, viewIds);
+			}, this);
+			children.push(more);
+		}
+
+		strip.replaceChildren.apply(strip, children);
+	},
+
+	_openFrameUserList: function (anchor, viewIds) {
+		var map = this._map;
+		var present = viewIds.filter(function (viewId) {
+			return map.hasInfoForView(viewId);
+		});
+
+		JSDialog.OpenDropdown(
+			'slide-frame-users',
+			anchor,
+			[{
+				type: 'json',
+				content: {
+					id: 'slide-frame-users-list',
+					type: 'htmlcontent',
+					htmlId: 'slideuserspopup',
+					viewIds: present,
+				},
+			}],
+			function () {
+				JSDialog.CloseAllDropdowns();
+				return true;
+			},
+			'', false, false, true);
 	},
 
 	_createPreview: function (i, part) {
@@ -2643,6 +2761,24 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this.partsFocused = true;
 	},
 });
+
+window.L.control.createSlideUserList = function (viewIds) {
+	var map = app.map;
+	var list = window.L.DomUtil.create('div', 'slide-user-list');
+	list.replaceChildren.apply(list, viewIds.map(function (viewId) {
+		var item = window.L.DomUtil.create('div', 'slide-user-item');
+		var name = map.getViewName(viewId) || '';
+		var avatar = map.userList.createAvatar(undefined, viewId, name, undefined,
+			app.LOUtil.rgbToHex(map.getViewColor(viewId)));
+		// The row's own text names the user, so the picture stays decoration.
+		avatar.alt = '';
+		avatar.setAttribute('aria-hidden', 'true');
+		item.appendChild(avatar);
+		window.L.DomUtil.create('span', 'slide-user-name', item).textContent = name;
+		return item;
+	}));
+	return list;
+};
 
 window.L.control.partsPreview = function (container, preview, options) {
 	return new window.L.Control.PartsPreview(container, preview, options);

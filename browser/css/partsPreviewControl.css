@@ -72,6 +72,52 @@
 	border-bottom: 20px solid var(--color-primary);
 }
 
+.preview-avatars {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	justify-content: flex-end;
+	flex: 0 0 0;
+	min-width: 0;
+	align-self: flex-end;
+	pointer-events: none;
+	inset-inline-end: 2px;
+	bottom: -9px;
+}
+
+.preview-avatars .avatar-img,
+.slide-user-list .avatar-img {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+	box-sizing: border-box;
+	object-fit: cover;
+	box-shadow: 0 1px 2px var(--color-box-shadow);
+}
+
+.preview-avatars > * + * {
+	margin-inline-start: -6px;
+}
+
+.slide-user-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 8px;
+	white-space: nowrap;
+	font-size: var(--default-font-size);
+}
+
+.preview-avatars-more {
+	flex: 0 0 auto;
+	min-width: 24px;
+	height: 24px;
+	border: 2px solid var(--color-background-lighter);
+	border-radius: 12px;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
 /* Fluid drag-and-drop reordering: while a slide drag is in progress the
    frames animate size and margin changes, so the remaining slides close
    the space the dragged slide left and a new insertion gap opens under
@@ -108,21 +154,25 @@
 }
 
 /* How many slides the drag carries, over the top picture's corner. */
-.slide-drag-ghost-count {
-	position: absolute;
-	min-width: 22px;
-	height: 22px;
-	padding: 0 6px;
-	box-sizing: border-box;
+.slide-drag-ghost-count,
+.preview-avatars-more {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 11px;
+	box-sizing: border-box;
+	padding: 0 6px;
 	background: var(--color-primary);
 	color: var(--color-primary-text);
 	font-family: var(--cool-font);
 	font-size: 12px;
 	font-weight: 600;
+}
+
+.slide-drag-ghost-count {
+	position: absolute;
+	min-width: 22px;
+	height: 22px;
+	border-radius: 11px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -363,8 +413,12 @@
 	margin: 0;
 }
 
-/* The picture fills its cell here and carries no strip margin, so the mark
-   sits that much closer to the cell's edge. */
+/* The picture fills its cell here and carries no strip margin, so the marks
+   sit that much closer to the cell's edge. */
 .parts-preview-grid .preview-link-badge::before {
 	left: -22px;
+}
+
+.parts-preview-grid .preview-avatars {
+	inset-inline-end: -8px;
 }

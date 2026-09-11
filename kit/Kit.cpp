@@ -1924,6 +1924,12 @@ void Document::notifyViewInfo()
             }
         }
 
+        // The part the view is on, so a view that joins can place the others.
+        const std::shared_ptr<ChildSession> session = findSessionByViewId(viewId);
+        if (session && !session->getCurrentPartId().empty())
+            oss << "\"part\":\"" << JsonUtil::escapeJSONValue(session->getCurrentPartId())
+                << "\",";
+
         oss << "\"color\":" << color;
 
         viewStrings[viewId] = oss.str();
@@ -1970,6 +1976,21 @@ void Document::notifyViewInfo()
         oss << ']';
 
         it.second->sendTextFrame(oss.str());
+    }
+}
+
+void Document::notifyViewPart(int viewId, const std::string& partId)
+{
+    std::ostringstream oss;
+    oss << "viewpart: {\"viewId\":" << viewId << ",\"part\":\""
+        << JsonUtil::escapeJSONValue(partId) << "\"}";
+    const std::string message = oss.str();
+
+    // The view that moved already knows; it gets "setpart:" of its own.
+    for (const auto& it : _sessions)
+    {
+        if (it.second->getViewId() != viewId)
+            it.second->sendTextFrame(message);
     }
 }
 
