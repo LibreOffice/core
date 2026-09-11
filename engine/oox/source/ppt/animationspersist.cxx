@@ -143,12 +143,15 @@ namespace oox::ppt {
                 sShapeName = maShapeTarget.msSubShapeId;
 
             ::oox::drawingml::ShapePtr pShape = pSlide->getShape( sShapeName );
-            SAL_WARN_IF( !pShape, "oox.ppt", "failed to locate Shape" );
 
             if( !pShape && maShapeTarget.mnType == XML_dgm )
             {
+                // A shape of a diagram is known under the name of the diagram when the fallback
+                // drawing is what the file holds.
                 pShape = pSlide->getShape( msValue );
             }
+
+            SAL_WARN_IF( !pShape, "oox.ppt", "failed to locate Shape" );
 
             if( pShape )
             {
