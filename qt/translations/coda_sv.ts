@@ -152,22 +152,22 @@
     <message>
         <location filename="../Bridge.cpp" line="353"/>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportfel</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="354"/>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Misslyckades att exportera dokumentet.</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="939"/>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte öppna fjärrdokument</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="942"/>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>Collabora Online-servern</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="1129"/>
@@ -199,12 +199,12 @@
     <message>
         <location filename="../DBusService.cpp" line="86"/>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Mall fel</translation>
     </message>
     <message>
         <location filename="../DBusService.cpp" line="87"/>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte skapa ett nytt dokument utifrån den här mallen.</translation>
     </message>
 </context>
 <context>
