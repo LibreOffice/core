@@ -1681,19 +1681,30 @@ public:
         throw cpo::uno::RuntimeException(u"remove: not implemented"_ustr);
     }
 
-    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
+    sal_Int32 replaceAllText(OUString const& findText,
+                             OUString const& replaceText) override
     {
-        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
+        return replaceAllOnPage(this->page_, findText, replaceText, false);
     }
 
-    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
+    sal_Int32 replaceAllTextMatchCase(OUString const& findText,
+                                      OUString const& replaceText, bool matchCase) override
     {
-        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
+        return replaceAllOnPage(this->page_, findText, replaceText, matchCase);
     }
 
+    // The drawing view switches to the page and enters or leaves master page mode to match the
+    // page's kind.
     void SAL_CALL selectAsCurrentPage() override
     {
-        throw cpo::uno::RuntimeException(u"selectAsCurrentPage: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XDrawView> const view(
+            this->model_->getCurrentController(), cpo::uno::UNO_QUERY);
+        if (!view.is())
+        {
+            throw cpo::uno::RuntimeException(
+                u"selectAsCurrentPage: the presentation has no drawing view"_ustr);
+        }
+        view->setCurrentPage(this->page_);
     }
 };
 
@@ -2124,14 +2135,27 @@ public:
         throw cpo::uno::RuntimeException(u"insertSlideLinked: not implemented"_ustr);
     }
 
-    sal_Int32 SAL_CALL replaceAllText(OUString const&, OUString const&) override
+    sal_Int32 replaceAllText(OUString const& findText,
+                             OUString const& replaceText) override
     {
-        throw cpo::uno::RuntimeException(u"replaceAllText: not implemented"_ustr);
+        return replaceAllTextMatchCase(findText, replaceText, false);
     }
 
-    sal_Int32 SAL_CALL replaceAllTextMatchCase(OUString const&, OUString const&, bool) override
+    // The replacement covers every slide, each slide's notes page, and every master page.
+    sal_Int32 replaceAllTextMatchCase(OUString const& findText,
+                                      OUString const& replaceText, bool matchCase) override
     {
-        throw cpo::uno::RuntimeException(u"replaceAllTextMatchCase: not implemented"_ustr);
+        sal_Int32 count = 0;
+        for (auto const& slide : pageList(drawPages()))
+        {
+            count += replaceAllOnPage(slide, findText, replaceText, matchCase);
+            count += replaceAllOnPage(notesPageOf(slide), findText, replaceText, matchCase);
+        }
+        for (auto const& master : pageList(masterPages(model_)))
+        {
+            count += replaceAllOnPage(master, findText, replaceText, matchCase);
+        }
+        return count;
     }
 
 private:

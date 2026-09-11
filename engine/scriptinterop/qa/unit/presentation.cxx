@@ -607,6 +607,45 @@ CPPUNIT_TEST_FIXTURE(Test, testNotesPage)
     CPPUNIT_ASSERT(xPresentation->getNotesPageWidth() > 0);
     CPPUNIT_ASSERT(xPresentation->getNotesPageHeight() > xPresentation->getNotesPageWidth());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testReplaceAllText)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSlide = xPresentation->appendSlide();
+    xSlide->insertTextBoxAt(u"Hello World"_ustr, 36, 36, 288, 72);
+    xSlide->insertTextBoxAt(u"hello again"_ustr, 36, 144, 288, 72);
+    xSlide->getNotesPage()->getSpeakerNotesShape()->getText()->setText(u"hello notes"_ustr);
+    // The default match ignores case and counts every replaced occurrence on the page.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->replaceAllText(u"hello"_ustr, u"Bye"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Bye World"_ustr, xSlide->getShapes()[0]->getText()->asString());
+    CPPUNIT_ASSERT_EQUAL(u"Bye again"_ustr, xSlide->getShapes()[1]->getText()->asString());
+    // A case-sensitive match leaves a differently cased word alone.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         xSlide->replaceAllTextMatchCase(u"bye"_ustr, u"x"_ustr, true));
+    // The presentation-wide replacement reaches the notes pages too.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         xPresentation->replaceAllText(u"hello"_ustr, u"Farewell"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Farewell notes"_ustr,
+                         xSlide->getNotesPage()->getSpeakerNotesShape()->getText()->asString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectAsCurrentPage)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSecond = xPresentation->appendSlide();
+    xSecond->selectAsCurrentPage();
+    CPPUNIT_ASSERT_EQUAL(
+        xSecond->getuno(),
+        getValue(getValue(xPresentation->getSelection())->getCurrentPage())->getuno());
+    // A master page can become current too; the view then shows master pages.
+    xPresentation->getMasters()[0]->selectAsCurrentPage();
+    CPPUNIT_ASSERT(
+        getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asMaster().is());
+    // Selecting a slide brings the view back to the slides.
+    xPresentation->getSlides()[0]->selectAsCurrentPage();
+    CPPUNIT_ASSERT(
+        getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide().is());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
