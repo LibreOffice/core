@@ -39,6 +39,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
+    virtual bool QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 };
 
 #endif

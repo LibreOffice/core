@@ -387,7 +387,8 @@ bool XFillTransparenceItem::supportsHashCode() const
 // virtual
 bool XFillTransparenceItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8) const
 {
-    rVal <<= m_nValue;
+    // The value runs from 0 to 100, and the property it stands behind is declared as a short.
+    rVal <<= static_cast<sal_Int16>(m_nValue);
     return true;
 }
 
@@ -443,6 +444,13 @@ XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
 XGradientStepCountItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XGradientStepCountItem( *this );
+}
+
+bool XGradientStepCountItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
+{
+    // The property this stands behind is declared as a short.
+    rVal <<= static_cast<sal_Int16>(GetValue());
+    return true;
 }
 
 bool XGradientStepCountItem::GetPresentation
