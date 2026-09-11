@@ -6898,8 +6898,10 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
     mAny >>= aGrabBag;
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [](const PropertyValue& rProp) { return rProp.Name == "ArtisticEffectProperties"; });
-    if (pProp != std::cend(aGrabBag))
-        pProp->Value >>= aEffect;
+    if (pProp == std::cend(aGrabBag))
+        // The shape carries a grab bag, but no artistic effect in it.
+        return;
+    pProp->Value >>= aEffect;
     sal_Int32 nEffectToken = ArtisticEffectProperties::getEffectToken( aEffect.Name );
     if( nEffectToken == XML_none )
         return;
@@ -6910,14 +6912,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
     OString sRelId;
     for (const auto& rAttr : aAttrs)
     {
-        sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( rAttr.Name );
-        if( nToken != XML_none )
-        {
-            sal_Int32 nVal = 0;
-            rAttr.Value >>= nVal;
-            aAttrList->add( nToken, OString::number( nVal ) );
-        }
-        else if( rAttr.Name == "OriginalGraphic" )
+        if( rAttr.Name == "OriginalGraphic" )
         {
             Sequence< PropertyValue > aGraphic;
             rAttr.Value >>= aGraphic;
@@ -6931,6 +6926,15 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
                     rProp.Value >>= aGraphicData;
             }
             sRelId = WriteWdpPicture( sGraphicId, aGraphicData );
+            continue;
+        }
+
+        sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( rAttr.Name );
+        if( nToken != XML_none )
+        {
+            sal_Int32 nVal = 0;
+            rAttr.Value >>= nVal;
+            aAttrList->add( nToken, OString::number( nVal ) );
         }
     }
 
