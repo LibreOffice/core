@@ -152,14 +152,14 @@ bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
     return rAttributes.erase(nId);
 }
 
-RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId)
+RTFSprms* getLastAttributes(RTFSprms& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = rSprms.find(nId);
     if (p && !p->getSprms().empty())
-        return p->getSprms().back().second->getAttributes();
+        return &p->getSprms().back().second->getAttributes();
 
-    SAL_WARN("writerfilter.rtf", "trying to set property when no type is defined");
-    return rSprms;
+    // Nothing of that kind has started, so the property belongs nowhere and is dropped.
+    return nullptr;
 }
 
 void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue)
@@ -188,13 +188,13 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
     // Attributes of the last border type
     else if (aStates.top().getBorderState() == RTFBorderState::PARAGRAPH)
         pAttributes
-            = &getLastAttributes(aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr);
+            = getLastAttributes(aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr);
     else if (aStates.top().getBorderState() == RTFBorderState::CELL)
-        pAttributes = &getLastAttributes(aStates.top().getTableCellSprms(),
-                                         NS_ooxml::LN_CT_TcPrBase_tcBorders);
+        pAttributes = getLastAttributes(aStates.top().getTableCellSprms(),
+                                        NS_ooxml::LN_CT_TcPrBase_tcBorders);
     else if (aStates.top().getBorderState() == RTFBorderState::PAGE)
-        pAttributes = &getLastAttributes(aStates.top().getSectionSprms(),
-                                         NS_ooxml::LN_EG_SectPrContents_pgBorders);
+        pAttributes = getLastAttributes(aStates.top().getSectionSprms(),
+                                        NS_ooxml::LN_EG_SectPrContents_pgBorders);
     else if (aStates.top().getBorderState() == RTFBorderState::NONE)
     {
         // this is invalid, but Word apparently clears or overrides all paragraph borders now

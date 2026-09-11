@@ -697,7 +697,7 @@ RTFValue::Pointer_t getNestedSprm(RTFSprms& rSprms, Id nParent, Id nId);
 /// Checks if rName is contained at least once in rProperties as a key.
 bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties,
                       const OUString& rName);
-RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId);
+RTFSprms* getLastAttributes(RTFSprms& rSprms, Id nId);
 OUString DTTM22OUString(tools::Long nDTTM);
 
 /// Implementation of the RTFDocument interface.

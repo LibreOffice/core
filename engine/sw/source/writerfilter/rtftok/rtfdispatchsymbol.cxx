@@ -368,7 +368,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         auto pSizeValue = new RTFValue(0);
                         putNestedSprm(rCurrentCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders,
                                       aBorderIds[i], pBorderValue, RTFConflictPolicy::Overwrite);
-                        RTFSprms* pAttributes = &getLastAttributes(
+                        RTFSprms* pAttributes = getLastAttributes(
                             rCurrentCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
                         if (pAttributes)
                         {
