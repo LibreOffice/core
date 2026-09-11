@@ -22,6 +22,8 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/ole/olehelper.hxx>
+#include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include "epptooxml.hxx"
 #include <oox/export/shapes.hxx>
@@ -61,8 +63,10 @@
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
@@ -100,6 +104,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdxcgv.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
@@ -649,6 +654,12 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
     {
         // A comment is a shape on the page, and it goes out as a part of its own beside the
         // shapes of the slide.
+    }
+    else if (sShapeType == "com.sun.star.drawing.ControlShape")
+    {
+        // A form control is written after the shapes of the page, where OOXML keeps the list of
+        // them.
+        mrExport.maControlShapes.push_back(xShape);
     }
     else
         SAL_WARN("sd.eppt", "unknown shape not handled: " << sShapeType.toUtf8());
@@ -2316,6 +2327,8 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
 
     WriteShapeTree(pFS, NORMAL, false);
 
+    WriteControls(pFS);
+
     pFS->endElementNS(XML_p, XML_cSld);
 
     WriteTransition(pFS);
@@ -3035,6 +3048,168 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
     pFS->endElementNS(XML_p, XML_sldLayout);
 
     pFS->endDocument();
+}
+
+void PowerPointExport::WriteControls(const FSHelperPtr& pFS)
+{
+    if (maControlShapes.empty())
+        return;
+
+    std::vector<uno::Reference<drawing::XShape>> aControlShapes;
+    aControlShapes.swap(maControlShapes);
+
+    // Only a control that the OLE export knows goes out, and the parts below stand for those, so
+    // find them before the first of those parts is made.
+    std::vector<std::pair<uno::Reference<drawing::XShape>,
+                          std::unique_ptr<oox::ole::OleFormCtrlExportHelper>>>
+        aControls;
+    for (const uno::Reference<drawing::XShape>& xShape : aControlShapes)
+    {
+        uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
+        if (!xControlShape.is())
+            continue;
+        uno::Reference<awt::XControlModel> xControlModel(xControlShape->getControl());
+        if (!xControlModel.is())
+            continue;
+
+        auto pHelper = std::make_unique<oox::ole::OleFormCtrlExportHelper>(getComponentContext(),
+                                                                          mXModel, xControlModel);
+        if (!pHelper->isValid())
+            continue;
+
+        aControls.emplace_back(xShape, std::move(pHelper));
+    }
+
+    if (aControls.empty())
+        return;
+
+    PowerPointShapeExport aDML(pFS, &maShapeMap, this);
+
+    // The shape a control is read back through lives in a drawing of the older kind, which the
+    // list below points into by its identifier.
+    ++mnVmlDrawings;
+    const OUString sVmlPath = "ppt/drawings/vmlDrawing" + OUString::number(mnVmlDrawings) + ".vml";
+    ::sax_fastparser::FSHelperPtr pVmlFS = openFragmentStreamWithSerializer(
+        sVmlPath, u"application/vnd.openxmlformats-officedocument.vmlDrawing"_ustr);
+    addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::VMLDRAWING),
+                Concat2View("../drawings/vmlDrawing" + OUString::number(mnVmlDrawings) + ".vml"));
+    pVmlFS->write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
+    pVmlFS->startElement(XML_xml, FSNS(XML_xmlns, XML_v), getNamespaceURL(OOX_NS(vml)).toUtf8(),
+                         FSNS(XML_xmlns, XML_o), getNamespaceURL(OOX_NS(vmlOffice)).toUtf8());
+    // An identifier of that kind holds a sequence the writer would otherwise escape.
+    pVmlFS->setAllowXEscape(false);
+    pVmlFS->startElement(FSNS(XML_v, XML_shapetype), XML_id, "_x0000_t201", XML_coordsize,
+                         "21600,21600", FSNS(XML_o, XML_spt), "201", XML_path,
+                         "m,l,21600r21600,l21600,xe");
+    pVmlFS->singleElement(FSNS(XML_v, XML_stroke), XML_joinstyle, "miter");
+    pVmlFS->singleElement(FSNS(XML_v, XML_path), XML_shadowok, "t", FSNS(XML_o, XML_connecttype),
+                          "rect");
+    pVmlFS->endElement(FSNS(XML_v, XML_shapetype));
+
+    pFS->startElementNS(XML_p, XML_controls);
+
+    for (const auto& [xShape, pHelper] : aControls)
+    {
+        ++mnActiveXControls;
+        const OUString sNumber = OUString::number(mnActiveXControls);
+        const OUString sGUID(pHelper->getGUID());
+        const OUString& rName = pHelper->getName();
+        const awt::Size aShapeSize = xShape->getSize();
+
+        // The control itself is kept the way OLE keeps it, in a stream of its own.
+        const OUString sBinaryPath = "ppt/activeX/activeX" + sNumber + ".bin";
+        uno::Reference<io::XStream> xOutStorage(
+            openFragmentStream(sBinaryPath, u"application/vnd.ms-office.activeX"_ustr),
+            uno::UNO_QUERY);
+        {
+            oox::ole::OleStorage aOleStorage(getComponentContext(), xOutStorage, false);
+            uno::Reference<io::XOutputStream> xOutputStream(
+                aOleStorage.openOutputStream(u"contents"_ustr), uno::UNO_SET_THROW);
+            pHelper->exportControl(xOutputStream, aShapeSize, true);
+            aOleStorage.commit();
+        }
+
+        // Beside it stands the part that names which control it is.
+        const OUString sFragmentPath = "ppt/activeX/activeX" + sNumber + ".xml";
+        ::sax_fastparser::FSHelperPtr pControlFS = openFragmentStreamWithSerializer(
+            sFragmentPath, u"application/vnd.ms-office.activeX+xml"_ustr);
+        const OUString sBinaryId
+            = addRelation(pControlFS->getOutputStream(),
+                          oox::getRelationship(Relationship::ACTIVEXCONTROLBINARY),
+                          Concat2View("activeX" + sNumber + ".bin"));
+        pControlFS->singleElementNS(
+            XML_ax, XML_ocx, FSNS(XML_xmlns, XML_ax), getNamespaceURL(OOX_NS(ax)),
+            FSNS(XML_xmlns, XML_r), getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_ax, XML_classid),
+            OUStringToOString(Concat2View("{" + sGUID + "}"), RTL_TEXTENCODING_UTF8),
+            FSNS(XML_ax, XML_persistence), "persistStorage", FSNS(XML_r, XML_id),
+            OUStringToOString(sBinaryId, RTL_TEXTENCODING_UTF8));
+        pControlFS->endDocument();
+
+        const OUString sFragmentId
+            = addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::CONTROL),
+                          Concat2View("../activeX/activeX" + sNumber + ".xml"));
+
+        // The shape of the older kind that the control is found through. A drawing of that kind
+        // numbers its shapes from 1025 upwards.
+        const sal_Int32 nShapeId = 1025 + mnActiveXControls;
+        const awt::Point aPosition = xShape->getPosition();
+        auto toPoints = [](sal_Int32 nMm100) -> OString {
+            return OString::number(nMm100 * 72.0 / 2540.0) + "pt";
+        };
+        pVmlFS->singleElement(
+            FSNS(XML_v, XML_shape), XML_id, "_x0000_s" + OString::number(nShapeId), XML_type,
+            "#_x0000_t201", XML_style,
+            "position:absolute;left:" + toPoints(aPosition.X) + ";top:" + toPoints(aPosition.Y)
+                + ";width:" + toPoints(aShapeSize.Width) + ";height:"
+                + toPoints(aShapeSize.Height));
+
+        // A reader that does not run the control shows the picture below instead, which is also
+        // what says where on the page the control sits.
+        OUString sImageId;
+        if (SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape))
+            sImageId = aDML.writeGraphicToStorage(SdrExchangeView::GetObjGraphic(*pObject));
+
+        pFS->startElementNS(XML_p, XML_control, XML_spid, OString::number(nShapeId), XML_name,
+                            OUStringToOString(rName, RTL_TEXTENCODING_UTF8), FSNS(XML_r, XML_id),
+                            OUStringToOString(sFragmentId, RTL_TEXTENCODING_UTF8), XML_imgW,
+                            OString::number(oox::drawingml::convertHmmToEmu(aShapeSize.Width)),
+                            XML_imgH,
+                            OString::number(oox::drawingml::convertHmmToEmu(aShapeSize.Height)));
+
+        if (!sImageId.isEmpty())
+        {
+            pFS->startElementNS(XML_p, XML_pic);
+            pFS->startElementNS(XML_p, XML_nvPicPr);
+            pFS->singleElementNS(XML_p, XML_cNvPr, XML_id,
+                                 OString::number(aDML.GetNewShapeID(xShape)), XML_name,
+                                 OUStringToOString(rName, RTL_TEXTENCODING_UTF8));
+            pFS->singleElementNS(XML_p, XML_cNvPicPr);
+            pFS->singleElementNS(XML_p, XML_nvPr);
+            pFS->endElementNS(XML_p, XML_nvPicPr);
+
+            pFS->startElementNS(XML_p, XML_blipFill);
+            pFS->singleElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed),
+                                 OUStringToOString(sImageId, RTL_TEXTENCODING_UTF8));
+            pFS->startElementNS(XML_a, XML_stretch);
+            pFS->singleElementNS(XML_a, XML_fillRect);
+            pFS->endElementNS(XML_a, XML_stretch);
+            pFS->endElementNS(XML_p, XML_blipFill);
+
+            pFS->startElementNS(XML_p, XML_spPr);
+            aDML.WriteShapeTransformation(xShape, XML_a);
+            aDML.WritePresetShape("rect"_ostr);
+            pFS->endElementNS(XML_p, XML_spPr);
+            pFS->endElementNS(XML_p, XML_pic);
+        }
+
+        pFS->endElementNS(XML_p, XML_control);
+    }
+
+    pFS->endElementNS(XML_p, XML_controls);
+
+    pVmlFS->setAllowXEscape(true);
+    pVmlFS->endElement(XML_xml);
+    pVmlFS->endDocument();
 }
 
 void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)

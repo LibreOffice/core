@@ -149,6 +149,14 @@ private:
     /** Writes the placeholders a slide master holds that the page standing for it has none of */
     void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
 
+    /// The form controls of the page being written, which go out after its shapes.
+    std::vector<css::uno::Reference<css::drawing::XShape>> maControlShapes;
+    sal_Int32 mnActiveXControls = 0;
+    sal_Int32 mnVmlDrawings = 0;
+
+    /// Writes the form controls collected while the shapes of the page were written.
+    void WriteControls(const ::sax_fastparser::FSHelperPtr& pFS);
+
     /// Writes the text styles a master holds for its title and for the nine outline levels.
     void WriteTextStyles(const ::sax_fastparser::FSHelperPtr& pFS);
 

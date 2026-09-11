@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <test/unoapi_test.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
@@ -258,6 +259,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStyles)
 
     // The level a placeholder has no paragraph for is the one that used to go missing.
     assertXPath(pXmlDoc, "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr", 1);
+}
+
+// A form control on a slide is written with the data that makes it a control, and is read back
+// as one.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)
+{
+    createSdImpressDoc("pptx/activex_checkbox.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:controls/p:control", 3);
+
+    saveAndReload(TestFilter::PPTX);
+
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    std::vector<OUString> aNames;
+    for (sal_Int32 nShape = 0; nShape < xPage->getCount(); ++nShape)
+    {
+        uno::Reference<drawing::XControlShape> xControlShape(xPage->getByIndex(nShape),
+                                                             uno::UNO_QUERY);
+        if (!xControlShape.is())
+            continue;
+        uno::Reference<beans::XPropertySet> xModel(xControlShape->getControl(), uno::UNO_QUERY);
+        OUString aName;
+        xModel->getPropertyValue(u"Name"_ustr) >>= aName;
+        aNames.push_back(aName);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aNames.size());
+    CPPUNIT_ASSERT_EQUAL(u"CheckBox1"_ustr, aNames[0]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
