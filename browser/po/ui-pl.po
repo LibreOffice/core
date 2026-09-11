@@ -13,18 +13,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-01 15:03+0000\n"
+"PO-Revision-Date: 2026-09-12 12:52+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/pl/>\n"
-"Language: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -927,17 +927,19 @@ msgstr "Wyślij rozszerzenie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Zasady bezpieczeństwa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Prześlij zasady bezpieczeństwa SPIF (plik .xml). Określają one klasyfikacje "
+"i kategorie dostępne podczas nadawania dokumentowi etykiety bezpieczeństwa."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Prześlij zasady bezpieczeństwa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -2784,7 +2786,7 @@ msgstr "Znak"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Wyjdź"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3712,7 +3714,7 @@ msgstr "Plik HTML (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Etykieta bezpieczeństwa"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4023,11 +4025,11 @@ msgstr "Rozłóż"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Wstaw slajdy z pliku..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Aktualizuj połączone slajdy..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4488,7 +4490,7 @@ msgstr "Chroń"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Podpis"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -5022,7 +5024,7 @@ msgstr "Śledzenie"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Komentarz przy zmianie"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5184,11 +5186,11 @@ msgstr "Odstępy i kolor"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Importuj slajdy"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Aktualizuj łącza"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5282,7 +5284,7 @@ msgstr "Wyświetl zmiany"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Przełącz na tryb edycji"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5290,9 +5292,8 @@ msgid "Paste"
 msgstr "Wklej"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Pusty slajd"
+msgstr "Usuń połączenie slajdu"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5300,19 +5301,19 @@ msgstr "Dodaj sekcję"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "podgląd strony %1, połączonej z %2 w %3"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Slajd %1, połączony z %2 w %3"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "podgląd strony %1, połączonej z %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Slajd %1, połączony z %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5365,74 +5366,72 @@ msgstr "Wprowadź nową nazwę sekcji:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Zaimportuj slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Brakujący"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Brak dostępu"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Nieudany"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Połączony"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Nie połączony"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Ten plik nie jest dostępny."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "Nie możesz otworzyć tego pliku."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Nie udało się otworzyć tego pliku."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Czytanie slajdów..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "Wstawiono 1 slajd"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "Wstawiono slajdy: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Slajd {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "wstaw %n slajd"
+msgstr "Wstaw 1 slajd"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "Wstaw slajdy: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Wstaw kształty"
+msgstr "Wstaw slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "Slajdów {0}"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5441,98 +5440,100 @@ msgstr "Zaznaczono {0}"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Otwieranie pliku..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Wstawianie slajdów..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Importuj slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "Rozwiń import slajdów"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Zamknij import slajdów"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Dodaj prezentację..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Brak jeszcze prezentacji"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Dodaj prezentację, aby przejrzeć jej slajdy i wstawić je do tego zestawu "
+"slajdów."
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "Niedawno importowano z"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Prezentacje, z których importować"
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Czynność dla {0}"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Znajdź plik"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Ukryj slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Pokaż slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Załaduj ponownie slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Zaznacz wszystkie slajdy"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Zaktualizuj slajdy połączone z tym plikiem"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Usuń z listy"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Przełącz {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Slajdy w {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "Zachowaj oryginalny projekt"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "Łącze do pliku źródłowego"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
-msgstr ""
+msgstr "Połącz slajdy z odpowiednim miejscem w pliku źródłowym"
 
 #: src/control/SlideSectionHeader.tsx:50
 msgid "Toggle section %1"
@@ -5540,78 +5541,83 @@ msgstr "Przełącz sekcję %1"
 
 #: src/slideimport/SlideImportSession.ts:239
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Nie udało się odczytać slajdów źródłowych."
 
 #: src/slideimport/SlideImportSession.ts:290
 #: src/slideimport/SlideImportSession.ts:299
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Wstawianie slajdów zakończyło się niepowodzeniem."
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Importowanie slajdów nie powiodło się."
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Żaden slajd tej prezentacji nie jest połączony z innym plikiem."
 
 #: src/slideimport/SlideLinks.ts:297 src/slideimport/SlideLinks.ts:557
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} nie jest jednym z dokumentów, z którymi ten dokument jest połączony, "
+"więc serwer nie może go odczytać."
 
 #: src/slideimport/SlideLinks.ts:309
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Te slajdy pochodzą z {0}, który jest obecnie niedostępny."
 
 #: src/slideimport/SlideLinks.ts:320
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Nie masz dostępu do {0}, więc jego strony nie mogą zostać odświeżone."
 
 #: src/slideimport/SlideLinks.ts:393
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Nie można zaktualizować slajdów {0}: w źródle brakuje odpowiednich slajdów."
 
 #: src/slideimport/SlideLinks.ts:396 src/slideimport/SlideLinks.ts:563
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Nie udało się wczytać slajdów {0} do tej prezentacji."
 
 #: src/slideimport/SlideLinks.ts:496
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Nie można zaktualizować slajdu {0}: w źródle brakuje odpowiadającego slajdu"
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Aktualizacja slajdów {0} zakończyła się niepowodzeniem."
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Nie zaktualizowano żadnego slajdu {0}."
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 slajd zaktualizowano z {0}."
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} slajdy(-ów) zaktualizowano z {1}."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "Nie udało się odczytać {0}."
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Żaden slajd tej prezentacji nie jest połączony z {0}."
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"Kolejna aktualizacja wciąż trwa. Za chwilę spróbuj ponownie zapytać o {0}."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Zmień rozmiar paneli"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5778,7 +5784,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Dopasuj stronę do szerokości okna."
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5884,11 +5890,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Arkusz przeliczony w %1 ms"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Dokument przeliczony w %1 ms"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5912,13 +5918,12 @@ msgid "Insert connectors"
 msgstr "Wstaw łączniki"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Główny"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Obecnie znajdujesz się w trybie podglądu; naciśnij {0}, aby edytować"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -7320,7 +7325,7 @@ msgstr "Serwer się zamyka"
 
 #: src/docdispatcher.ts:651
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "AI jest skonfigurowana; skontaktuj się z administratorem"
 
 #: src/docdispatcher.ts:918
 msgid "Are you sure you want to delete this slide?"
@@ -7590,9 +7595,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Nie można wyeksportować dokumentu. Spróbuj ponownie."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Slajdy"
+msgstr "Slajd"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -8107,7 +8111,7 @@ msgstr "Nowoczesny list biznesowy (bezszeryfowy)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Nowoczesny list biznesowy"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
