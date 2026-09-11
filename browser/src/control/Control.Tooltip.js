@@ -40,9 +40,9 @@ class Tooltip {
 	beginShow(elem) {
 		if (this._cancel || this._disabled) return;
 
-		let win = this._options.window ? this._options.window : window;
-		win.clearTimeout(this._showTimeout);
-		this._showTimeout = win.setTimeout(
+		app.timerRegistry.clearTimeout(this._showTimeout);
+		this._showTimeout = app.timerRegistry.setTimeout(
+			'tooltip',
 			window.L.bind(this.show, this, elem),
 			this._options.timeout,
 		);
@@ -51,11 +51,11 @@ class Tooltip {
 	beginHide(elem) {
 		if (this._cancel || this._disabled || this._locked) return;
 
-		let win = this._options.window ? this._options.window : window;
-		win.clearTimeout(this._showTimeout);
-		win.clearTimeout(this._hideTimeout);
+		app.timerRegistry.clearTimeout(this._showTimeout);
+		app.timerRegistry.clearTimeout(this._hideTimeout);
 		if (this._current)
-			this._hideTimeout = win.setTimeout(
+			this._hideTimeout = app.timerRegistry.setTimeout(
+				'tooltip',
 				window.L.bind(this.hide, this, elem),
 				this._options.timeout / 2,
 			);
@@ -66,9 +66,8 @@ class Tooltip {
 	// hide and re-runs show() so the icon/label DOM is correct.
 	lock(elem, textContent) {
 		if (this._disabled) return;
-		let win = this._options.window ? this._options.window : window;
-		win.clearTimeout(this._hideTimeout);
-		win.clearTimeout(this._showTimeout);
+		app.timerRegistry.clearTimeout(this._hideTimeout);
+		app.timerRegistry.clearTimeout(this._showTimeout);
 		this._locked = true;
 		this.show(elem, textContent);
 	}
@@ -89,10 +88,9 @@ class Tooltip {
 	// Switch the tooltip subsystem off entirely and hide live tooltip if any.
 	disable() {
 		if (this._disabled) return;
-		let win = this._options.window ? this._options.window : window;
 		this._disabled = true;
-		win.clearTimeout(this._showTimeout);
-		win.clearTimeout(this._hideTimeout);
+		app.timerRegistry.clearTimeout(this._showTimeout);
+		app.timerRegistry.clearTimeout(this._hideTimeout);
 		this._container.style.visibility = 'hidden';
 		this._current = null;
 		this._cancel = false;
@@ -216,10 +214,9 @@ class Tooltip {
 	mouseEnter() {
 		if (this._disabled) return;
 		if (this._current) {
-			let win = this._options.window ? this._options.window : window;
 			this._cancel = true;
-			win.clearTimeout(this._hideTimeout);
-			win.clearTimeout(this._showTimeout);
+			app.timerRegistry.clearTimeout(this._hideTimeout);
+			app.timerRegistry.clearTimeout(this._showTimeout);
 		}
 	}
 

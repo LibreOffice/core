@@ -1437,6 +1437,7 @@ class PresenterConsole {
 		this._proxyPresenter.removeEventListener('resize', this._boundOnResize);
 		this._proxyPresenter.removeEventListener('keydown', this._boundOnKeyDown);
 		this._proxyPresenter.clearInterval(this._timer);
+		if (this._tooltip) this._tooltip.disable();
 		this._proxyPresenter.close();
 		this._active = false;
 		app.map.slideShowPresenter._presentToAllInProgress = false;
