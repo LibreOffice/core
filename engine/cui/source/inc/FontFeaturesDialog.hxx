@@ -25,7 +25,7 @@ struct FontFeatureItem
         , m_aFeatureCode(0)
         , m_nDefault(-1)
         , m_xBuilder(Application::CreateBuilder(pParentGrid, u"cui/ui/fontfragment.ui"_ustr))
-        , m_xContainer(m_xBuilder->weld_widget(u"fontentry"_ustr))
+        , m_xContainer(m_xBuilder->weld_container(u"fontentry"_ustr))
         , m_xText(m_xBuilder->weld_label(u"label"_ustr))
         , m_xCombo(m_xBuilder->weld_combo_box(u"combo"_ustr))
         , m_xCheck(m_xBuilder->weld_check_button(u"check"_ustr))
@@ -39,7 +39,7 @@ struct FontFeatureItem
     weld::TriStateEnabled m_aTriStateEnabled;
     Link<weld::Toggleable&, void> m_aToggleHdl;
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Widget> m_xContainer;
+    std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Label> m_xText;
     std::unique_ptr<weld::ComboBox> m_xCombo;
     std::unique_ptr<weld::CheckButton> m_xCheck;
