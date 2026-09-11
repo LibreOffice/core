@@ -372,31 +372,11 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
         if( !aThemeFragmentPath.isEmpty() )
         {
-            std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
-            std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
-            if( aIter2 == rThemes.end() )
-            {
-                oox::drawingml::ThemePtr pThemePtr = std::make_shared<oox::drawingml::Theme>();
-                pMasterPersistPtr->setTheme( pThemePtr );
-                Reference<xml::dom::XDocument> xDoc=
-                    rFilter.importFragment(aThemeFragmentPath);
-
-                auto pTheme = std::make_shared<model::Theme>();
-                pThemePtr->setTheme(pTheme);
-
-                rFilter.importFragment(
-                    new ThemeFragmentHandler(rFilter, aThemeFragmentPath, *pThemePtr, *pTheme),
-                    Reference<xml::sax::XFastSAXSerializable>(
-                        xDoc,
-                        UNO_QUERY_THROW));
-                rThemes[ aThemeFragmentPath ] = pThemePtr;
-                pThemePtr->setFragment(xDoc);
+            bool bRead = false;
+            oox::drawingml::ThemePtr pThemePtr = rFilter.importTheme(aThemeFragmentPath, bRead);
+            pMasterPersistPtr->setTheme(pThemePtr);
+            if (bRead)
                 saveThemeToGrabBag(pThemePtr, nIndex + 1);
-            }
-            else
-            {
-                pMasterPersistPtr->setTheme( (*aIter2).second );
-            }
         }
         importSlide( xMasterFragmentHandler, pMasterPersistPtr );
 

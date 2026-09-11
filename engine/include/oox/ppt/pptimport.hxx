@@ -60,6 +60,14 @@ public:
     const SlidePersistPtr&                                  getActualSlidePersist() const { return mpActualSlidePersist; };
     void                                                    setActualSlidePersist(const SlidePersistPtr& pActualSlidePersist) { mpActualSlidePersist = pActualSlidePersist; };
     std::map< OUString, oox::drawingml::ThemePtr >&         getThemes(){ return maThemes; };
+
+    /** Returns the theme that the given fragment holds.
+
+        A theme is read once and then given out again to everything that names the same
+        fragment, which rbRead tells apart: it is true only for the call that did the reading.
+     */
+    oox::drawingml::ThemePtr importTheme(const OUString& rFragmentPath, bool& rbRead);
+
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };

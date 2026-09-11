@@ -128,9 +128,26 @@ SlideFragmentHandler::~SlideFragmentHandler()
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );
             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );
+
+            // A notes master names a theme of its own, which is where the colors of a notes page
+            // come from.
+            OUString aThemeFragmentPath
+                = xMasterFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
+            if( !aThemeFragmentPath.isEmpty() )
+            {
+                bool bRead = false;
+                pMasterPersistPtr->setTheme( rFilter.importTheme( aThemeFragmentPath, bRead ) );
+            }
+
             rFilter.importFragment( xMasterFragmentHandler );
             mpSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
         }
+
+        // The colors of the notes page are read through the persist of the page itself, so it
+        // needs the theme its master holds.
+        if( SlidePersistPtr pNotesMaster = mpSlidePersistPtr->getMasterPersist() )
+            mpSlidePersistPtr->setTheme( pNotesMaster->getTheme() );
+
         return this;
     }
     case PPT_TOKEN( notesMaster ):      // CT_NotesMaster

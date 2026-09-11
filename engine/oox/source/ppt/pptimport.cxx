@@ -27,6 +27,8 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/svapp.hxx>
@@ -39,6 +41,7 @@
 #include <oox/ppt/pptimport.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
 #include <oox/dump/pptxdumper.hxx>
 #include <drawingml/table/tablestylelistfragmenthandler.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -199,6 +202,31 @@ void PowerPointImport::getSchemeColorToken(sal_Int32& nToken) const
         }
     }
     return nColor;
+}
+
+::oox::drawingml::ThemePtr PowerPointImport::importTheme(const OUString& rFragmentPath,
+                                                        bool& rbRead)
+{
+    std::map<OUString, ::oox::drawingml::ThemePtr>::iterator aIter(maThemes.find(rFragmentPath));
+    if (aIter != maThemes.end())
+    {
+        rbRead = false;
+        return aIter->second;
+    }
+
+    ::oox::drawingml::ThemePtr pOoxTheme = std::make_shared<::oox::drawingml::Theme>();
+    auto pTheme = std::make_shared<model::Theme>();
+    pOoxTheme->setTheme(pTheme);
+
+    Reference<xml::dom::XDocument> xDoc = importFragment(rFragmentPath);
+    importFragment(
+        new ::oox::drawingml::ThemeFragmentHandler(*this, rFragmentPath, *pOoxTheme, *pTheme),
+        Reference<xml::sax::XFastSAXSerializable>(xDoc, UNO_QUERY_THROW));
+    pOoxTheme->setFragment(xDoc);
+    maThemes[rFragmentPath] = pOoxTheme;
+
+    rbRead = true;
+    return pOoxTheme;
 }
 
 const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const

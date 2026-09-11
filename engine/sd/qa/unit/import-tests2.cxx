@@ -1083,6 +1083,42 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89064)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xNotesPage->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testNotesPageTheme)
+{
+    // The notes master of this document names a theme of its own.
+    createSdImpressDoc("pptx/tdf104788.pptx");
+    uno::Reference<presentation::XPresentationPage> xPage(getPage(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xNotesPage(xPage->getNotesPage(), uno::UNO_SET_THROW);
+    for (sal_Int32 nShape = 0; nShape < xNotesPage->getCount(); ++nShape)
+    {
+        uno::Reference<text::XText> xText(xNotesPage->getByIndex(nShape), uno::UNO_QUERY);
+        if (!xText.is())
+            continue;
+        uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumeration> xEnum(xParagraphs->createEnumeration());
+        while (xEnum->hasMoreElements())
+        {
+            uno::Reference<container::XEnumerationAccess> xPortions(xEnum->nextElement(),
+                                                                    uno::UNO_QUERY);
+            if (!xPortions.is())
+                continue;
+            uno::Reference<container::XEnumeration> xPortionEnum(xPortions->createEnumeration());
+            while (xPortionEnum->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(),
+                                                             uno::UNO_QUERY);
+                if (!xPortion.is())
+                    continue;
+                OUString aFontName;
+                xPortion->getPropertyValue(u"CharFontName"_ustr) >>= aFontName;
+                // The text takes the font the theme names, not the name of the slot it sits in.
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("unresolved theme font on a notes page", false,
+                                             aFontName.startsWith("+"));
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf108925)
 {
     // Test document contains bulleting with too small bullet size (1%) which breaks the lower constraint
