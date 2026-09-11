@@ -154,6 +154,10 @@ interface ViewShellBaseView
     ]
     SID_INSERT_DRAW
     []
+    SID_PRESENTATION_CLEANUP
+    [
+        ExecMethod = Execute;
+    ]
 }
 
 shell ViewShellBase

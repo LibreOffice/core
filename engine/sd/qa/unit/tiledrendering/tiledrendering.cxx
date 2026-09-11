@@ -16,6 +16,7 @@
 #include <test/JsonTestTools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <functional>
+#include <optional>
 #include <set>
 #include <string_view>
 #include <vector>
@@ -42,6 +43,7 @@
 #include <osl/thread.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/lstner.hxx>
@@ -5655,6 +5657,690 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenEditRaisesTheVectorVersion)
     pView->SdrEndTextEdit();
 
     CPPUNIT_ASSERT_GREATER(nAfterFirst, nAfterSecond);
+}
+
+namespace
+{
+/** Sends one request to the cleanup command of the view that is current, and comes back once the
+    session has dealt with it. No turn of the scheduler is run here, so a run the request set going
+    is still under way when this returns. */
+void requestCleanup(const OUString& rRequestJson)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+
+    SfxStringItem aRequest(FN_PARAM_1, rRequestJson);
+    pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(SID_PRESENTATION_CLEANUP,
+                                                            SfxCallMode::SYNCHRON, { &aRequest });
+}
+
+/** Every message of the given kind the cleanup command sent to the view, in the order they
+    arrived, counting from the nFrom-th result the view has seen. */
+std::vector<boost::property_tree::ptree>
+cleanupEvents(const SdTestViewCallback& rView, std::string_view aEvent, std::size_t nFrom = 0)
+{
+    std::vector<boost::property_tree::ptree> aFound;
+    for (std::size_t nResult = nFrom; nResult < rView.m_aCommandResults.size(); ++nResult)
+    {
+        const boost::property_tree::ptree& rResult = rView.m_aCommandResults[nResult];
+        if (rResult.get("commandName", std::string()) != ".uno:PresentationCleanup")
+            continue;
+
+        const auto oPayload = rResult.get_child_optional("result");
+        if (oPayload && oPayload->get("event", std::string()) == aEvent)
+            aFound.push_back(*oPayload);
+    }
+
+    return aFound;
+}
+
+/** The first such message, or nothing when none of that kind arrived. */
+std::optional<boost::property_tree::ptree>
+firstCleanupEvent(const SdTestViewCallback& rView, std::string_view aEvent, std::size_t nFrom = 0)
+{
+    const std::vector<boost::property_tree::ptree> aFound = cleanupEvents(rView, aEvent, nFrom);
+    if (aFound.empty())
+        return std::nullopt;
+
+    return aFound.front();
+}
+
+/** The reply the request that went out under the given number was answered with. */
+std::optional<boost::property_tree::ptree> cleanupReply(const SdTestViewCallback& rView,
+                                                        int nRequestId)
+{
+    for (const boost::property_tree::ptree& rReply : cleanupEvents(rView, "reply"))
+    {
+        if (rReply.get("request", 0) == nRequestId)
+            return rReply;
+    }
+
+    return std::nullopt;
+}
+
+/** Reads the reason a reply gives, which is empty for a request that was accepted. */
+std::string cleanupReplyReason(const SdTestViewCallback& rView, int nRequestId)
+{
+    const auto oReply = cleanupReply(rView, nRequestId);
+    CPPUNIT_ASSERT(oReply);
+    return oReply->get("reason", std::string());
+}
+
+/** The number the client knows the first row of the given kind by, or -1 when the list holds no
+    such row. */
+int cleanupRowId(const boost::property_tree::ptree& rList, std::string_view aCategory)
+{
+    for (const auto& rRow : rList.get_child("rows"))
+    {
+        if (rRow.second.get("category", std::string()) == aCategory)
+            return rRow.second.get("id", 0);
+    }
+
+    return -1;
+}
+
+/** Answers whether a message of the given kind has arrived. Everything that produces one runs on
+    this thread, so the run is driven to its end by the turns of the scheduler this loop takes. The
+    short pause between rounds leaves the machine free between turns of the scheduler, and the
+    ceiling is far above what the work takes on a machine that is busy with something else. */
+bool waitForCleanupEvent(const SdTestViewCallback& rView, std::string_view aEvent,
+                         std::size_t nFrom = 0)
+{
+    const auto aDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(10);
+    while (std::chrono::steady_clock::now() < aDeadline)
+    {
+        if (!cleanupEvents(rView, aEvent, nFrom).empty())
+            return true;
+
+        Scheduler::ProcessEventsToIdle();
+
+        const TimeValue aPause{ 0, 5 * 1000 * 1000 };
+        osl::Thread::wait(aPause);
+    }
+
+    return !cleanupEvents(rView, aEvent, nFrom).empty();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupScan)
+{
+    // A scan asked for over the cleanup command answers the request that asked for it, sends the
+    // list of what it found, and says when the run has settled.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"DataJson"_ustr,
+                                      u"{\"action\":\"scan\",\"request\":7}"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:PresentationCleanup"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oReply = cleanupReply(aView, 7);
+    CPPUNIT_ASSERT(oReply);
+    CPPUNIT_ASSERT(oReply->get("ok", false));
+
+    // The list names the oversized images of the deck, its hidden slide and the master slide no
+    // slide uses. The speaker notes and the embedded objects are only reported for a deck that is
+    // being prepared to hand out, which this scan did not ask for.
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(std::string("scan"), oList->get("reason", std::string()));
+    CPPUNIT_ASSERT_EQUAL(1, oList->get("run", 0));
+
+    std::multiset<std::string> aCategories;
+    for (const auto& rRow : oList->get_child("rows"))
+        aCategories.insert(rRow.second.get("category", std::string()));
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aCategories.count("image"));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCategories.count("hiddenSlide"));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCategories.count("unusedMaster"));
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aCategories.size());
+
+    // A row carries the figures it is described by rather than a sentence, so the client writes
+    // the row in the language of its own view. The two images of the first slide are told apart
+    // by their number and each says what it is stored at.
+    std::multiset<int> aImageNumbers;
+    for (const auto& rRow : oList->get_child("rows"))
+    {
+        if (rRow.second.get("category", std::string()) != "image")
+            continue;
+
+        aImageNumbers.insert(rRow.second.get("imageNumber", 0));
+        CPPUNIT_ASSERT_GREATER(0, rRow.second.get("dpi", 0));
+        CPPUNIT_ASSERT_EQUAL(std::string(), rRow.second.get("text", std::string()));
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImageNumbers.count(1));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImageNumbers.count(2));
+
+    // A master slide no slide builds on is named, since its row says which one it is.
+    for (const auto& rRow : oList->get_child("rows"))
+    {
+        if (rRow.second.get("category", std::string()) != "unusedMaster")
+            continue;
+
+        CPPUNIT_ASSERT(!rRow.second.get("name", std::string()).empty());
+    }
+
+    // Encoding the smaller of the two images again would free up a few kilobytes, which is under
+    // the floor the list keeps, so the measurement takes that row off the list before the run ends.
+    const auto oFinished = firstCleanupEvent(aView, "finished");
+    CPPUNIT_ASSERT(oFinished);
+    CPPUNIT_ASSERT(!oFinished->get("stopped", true));
+    CPPUNIT_ASSERT_EQUAL(3, oFinished->get_child("total").get("count", 0));
+
+    // The totals say how big the file the document was loaded from is, so the client can tell
+    // what fraction of the whole file the estimate stands for.
+    CPPUNIT_ASSERT_GREATER(sal_Int64(0),
+                           oFinished->get_child("total").get("documentBytes", sal_Int64(0)));
+
+    // The scan settles once, however many rounds of measurement it took to get there.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), cleanupEvents(aView, "finished").size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupStopLeavesTheRowsUnmeasured)
+{
+    // Stopping a scan that is under way settles the run at once and says it was stopped. The rows
+    // whose figure had not been worked out stay on the list carrying no figure.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+
+    // The turn that measures the images of the deck has not come round yet, so the run is still
+    // going when the request to stop it arrives.
+    CPPUNIT_ASSERT(cleanupEvents(aView, "finished").empty());
+
+    requestCleanup(u"{\"action\":\"stop\",\"request\":2}"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 2));
+
+    const auto oFinished = firstCleanupEvent(aView, "finished");
+    CPPUNIT_ASSERT(oFinished);
+    CPPUNIT_ASSERT(oFinished->get("stopped", false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0),
+                         oFinished->get_child("total").get("estimated", sal_Int64(0)));
+
+    // The rows the scan listed are all still there, and every image row says it carries no figure.
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"list\",\"request\":3}"_ustr);
+
+    const auto oList = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(std::string("request"), oList->get("reason", std::string()));
+    CPPUNIT_ASSERT_EQUAL(4, oList->get_child("total").get("count", 0));
+
+    int nImageRows = 0;
+    for (const auto& rRow : oList->get_child("rows"))
+    {
+        if (rRow.second.get("category", std::string()) != "image")
+            continue;
+
+        ++nImageRows;
+        CPPUNIT_ASSERT(!rRow.second.get("measured", true));
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rRow.second.get("saving", sal_Int64(0)));
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nImageRows);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupListBeforeAnyScanIsEmpty)
+{
+    // Asking for the list before anything has been scanned answers with the list of a session that
+    // has found nothing: no rows, and the number that names no list at all.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"list\",\"request\":1}"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 1));
+
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(0, oList->get("run", -1));
+    CPPUNIT_ASSERT_EQUAL(std::string("request"), oList->get("reason", std::string()));
+    CPPUNIT_ASSERT_EQUAL(std::string("idle"), oList->get("status", std::string()));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), oList->get_child("rows").size());
+    CPPUNIT_ASSERT_EQUAL(0, oList->get_child("total").get("count", -1));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupReleaseStartsAnEmptySession)
+{
+    // Letting the session go takes the list with it, so the next request is answered by a session
+    // that has found nothing yet.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oScanned = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oScanned);
+    CPPUNIT_ASSERT_EQUAL(1, oScanned->get("run", 0));
+    CPPUNIT_ASSERT(oScanned->get_child("rows").size() > 0);
+
+    requestCleanup(u"{\"action\":\"release\",\"request\":2}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 2));
+
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"list\",\"request\":3}"_ustr);
+
+    const auto oList = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(0, oList->get("run", -1));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), oList->get_child("rows").size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupGoToMovesTheViewDuringARun)
+{
+    // Asking to be taken to a row shows the slide that row is about, and the request is taken
+    // while the scan that listed the row is still going.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+
+    // The row about the hidden slide names the second slide of the deck.
+    const int nRowId = cleanupRowId(*oList, "hiddenSlide");
+    CPPUNIT_ASSERT(nRowId > 0);
+
+    CPPUNIT_ASSERT(cleanupEvents(aView, "finished").empty());
+
+    requestCleanup(u"{\"action\":\"goTo\",\"request\":2,\"run\":1,\"row\":"
+                   + OUString::number(nRowId) + "}");
+
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 2));
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getPart());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesARequestItCannotRead)
+{
+    // A request that is not readable JSON, one that names no action the session knows, and one
+    // that leaves out the list or the row it is about are each answered as a bad request.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    // A request that cannot be read carries no number of its own, so its refusal goes out under
+    // the number nothing the client sends can carry.
+    requestCleanup(u"{\"action\":"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("badRequest"), cleanupReplyReason(aView, 0));
+
+    requestCleanup(u"{\"action\":\"polish\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("badRequest"), cleanupReplyReason(aView, 1));
+
+    requestCleanup(u"{\"action\":\"fix\",\"request\":2,\"row\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("badRequest"), cleanupReplyReason(aView, 2));
+
+    requestCleanup(u"{\"action\":\"fix\",\"request\":3,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("badRequest"), cleanupReplyReason(aView, 3));
+
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":4}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("badRequest"), cleanupReplyReason(aView, 4));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesARowOfAnOlderList)
+{
+    // The numbers of one list mean nothing in another, so a request that names a list the session
+    // has moved on from is refused as stale.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(1, oList->get("run", 0));
+
+    const int nRowId = cleanupRowId(*oList, "hiddenSlide");
+    CPPUNIT_ASSERT(nRowId > 0);
+
+    // A second scan sends a list of its own, and the numbers of the first one are refused from
+    // then on.
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"scan\",\"request\":2}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the second scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished", nSeen));
+
+    const auto oSecondList = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oSecondList);
+    CPPUNIT_ASSERT_EQUAL(2, oSecondList->get("run", 0));
+
+    requestCleanup(u"{\"action\":\"fix\",\"request\":3,\"run\":1,\"row\":"
+                   + OUString::number(nRowId) + "}");
+    CPPUNIT_ASSERT_EQUAL(std::string("stale"), cleanupReplyReason(aView, 3));
+
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":4,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("stale"), cleanupReplyReason(aView, 4));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesARowThatIsGone)
+{
+    // The measurement takes off the list every row that turns out not to be worth reading, and a
+    // request about one of those rows is answered that it is gone.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    // Encoding the smaller image of the deck again would free up too little to be worth a row, so
+    // the measurement dropped it and said which number went. The measurement works through the
+    // images in slices of the time it is given, and each slice reports what it worked out, so the
+    // number that went is looked for over all of them.
+    std::vector<int> aDropped;
+    for (const auto& rMeasured : cleanupEvents(aView, "measured"))
+    {
+        for (const auto& rEntry : rMeasured.get_child("dropped"))
+            aDropped.push_back(rEntry.second.get_value<int>());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDropped.size());
+
+    requestCleanup(u"{\"action\":\"fix\",\"request\":2,\"run\":1,\"row\":"
+                   + OUString::number(aDropped[0]) + "}");
+    CPPUNIT_ASSERT_EQUAL(std::string("gone"), cleanupReplyReason(aView, 2));
+
+    requestCleanup(u"{\"action\":\"goTo\",\"request\":3,\"run\":1,\"row\":"
+                   + OUString::number(aDropped[0]) + "}");
+    CPPUNIT_ASSERT_EQUAL(std::string("gone"), cleanupReplyReason(aView, 3));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesASecondScanWhileOneRuns)
+{
+    // One run of a session at a time, so a scan asked for while a scan is going is refused as busy
+    // and the run that is going is left alone.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT(cleanupEvents(aView, "finished").empty());
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":2}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("busy"), cleanupReplyReason(aView, 2));
+
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":3,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("busy"), cleanupReplyReason(aView, 3));
+
+    // The refused requests left the scan that was going to settle on its own, under the one list
+    // it was gathering.
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), cleanupEvents(aView, "list").size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesAScanForAReadOnlyView)
+{
+    // A scan asked for by a view that holds the document read-only is refused with readOnly and
+    // gathers no list. A request that only reads is still answered, and the same view once it may
+    // write again gathers a list as usual.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->SetKitReadOnlyView(true);
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+
+    const auto oRefused = cleanupReply(aView, 1);
+    CPPUNIT_ASSERT(oRefused);
+    CPPUNIT_ASSERT(!oRefused->get("ok", true));
+    CPPUNIT_ASSERT_EQUAL(std::string("readOnly"), oRefused->get("reason", std::string()));
+    CPPUNIT_ASSERT(cleanupEvents(aView, "list").empty());
+
+    // Asking for the list reads the document and changes nothing, so the read-only view is served.
+    requestCleanup(u"{\"action\":\"list\",\"request\":2}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 2));
+
+    const auto oEmptyList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oEmptyList);
+    CPPUNIT_ASSERT_EQUAL(0, oEmptyList->get_child("total").get("count", -1));
+
+    pViewShell->SetKitReadOnlyView(false);
+
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"scan\",\"request\":3}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished", nSeen));
+
+    const auto oList = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(1, oList->get("run", 0));
+    CPPUNIT_ASSERT(oList->get_child("rows").size() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesAFixForAReadOnlyView)
+{
+    // A list gathered while the view could write stands once the view holds the document
+    // read-only, and a cleanup asked for from then on is refused with readOnly. The deck keeps
+    // every slide and every master slide it had.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oScannedList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oScannedList);
+
+    const int nRowId = cleanupRowId(*oScannedList, "hiddenSlide");
+    CPPUNIT_ASSERT(nRowId > 0);
+
+    const sal_uInt16 nPageCount = pDocument->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nMasterCount = pDocument->GetMasterSdPageCount(PageKind::Standard);
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->SetKitReadOnlyView(true);
+
+    requestCleanup(u"{\"action\":\"fix\",\"request\":2,\"run\":1,\"row\":"
+                   + OUString::number(nRowId) + "}");
+    CPPUNIT_ASSERT_EQUAL(std::string("readOnly"), cleanupReplyReason(aView, 2));
+
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":3,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("readOnly"), cleanupReplyReason(aView, 3));
+
+    CPPUNIT_ASSERT_EQUAL(nPageCount, pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDocument->GetMasterSdPageCount(PageKind::Standard));
+
+    pViewShell->SetKitReadOnlyView(false);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupUndoDuringARunWaitsForTheRun)
+{
+    // Taking a cleanup back while another cleanup is working out what it needs asks for the list
+    // afresh. That list is gathered once the cleanup that was going has made its changes, so it
+    // tells of the document the undo left behind.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oFirstList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oFirstList);
+
+    const int nHiddenRowId = cleanupRowId(*oFirstList, "hiddenSlide");
+    CPPUNIT_ASSERT(nHiddenRowId > 0);
+
+    // Taking the hidden slide out reaches the rows around it, so the list is gathered again and
+    // one undo entry is left behind for the undo below to take back.
+    std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"fix\",\"request\":2,\"run\":1,\"row\":"
+                   + OUString::number(nHiddenRowId) + "}");
+    CPPUNIT_ASSERT_MESSAGE("the cleanup never reported ending",
+                           waitForCleanupEvent(aView, "fixed", nSeen));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
+
+    const auto oSecondList = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oSecondList);
+    CPPUNIT_ASSERT_EQUAL(2, oSecondList->get("run", 0));
+
+    const int nImageRowId = cleanupRowId(*oSecondList, "image");
+    CPPUNIT_ASSERT(nImageRowId > 0);
+
+    // The turn that works out what the image of the deck needs has not come round yet, so this
+    // cleanup is still working that out when the undo arrives.
+    nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"fix\",\"request\":3,\"run\":2,\"row\":"
+                   + OUString::number(nImageRowId) + "}");
+    CPPUNIT_ASSERT(cleanupEvents(aView, "fixed", nSeen).empty());
+
+    pUndoManager->Undo();
+
+    // Nothing was gathered while the cleanup was going.
+    CPPUNIT_ASSERT(cleanupEvents(aView, "list", nSeen).empty());
+
+    CPPUNIT_ASSERT_MESSAGE("the cleanup never reported ending",
+                           waitForCleanupEvent(aView, "fixed", nSeen));
+    CPPUNIT_ASSERT_MESSAGE("the list the undo asked for never arrived",
+                           waitForCleanupEvent(aView, "list", nSeen));
+
+    // The cleanup made its changes and only then was the list gathered, under the reason that says
+    // a cleanup was taken back.
+    const std::vector<boost::property_tree::ptree> aFixed = cleanupEvents(aView, "fixed", nSeen);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFixed.size());
+    CPPUNIT_ASSERT(!aFixed[0].get("cancelled", true));
+
+    const std::vector<boost::property_tree::ptree> aLists = cleanupEvents(aView, "list", nSeen);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aLists.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("undo"), aLists[0].get("reason", std::string()));
+    CPPUNIT_ASSERT_EQUAL(3, aLists[0].get("run", 0));
+
+    // The undo put the hidden slide back, and the list gathered afterwards names it again.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(cleanupRowId(aLists[0], "hiddenSlide") > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupRefusesAScanWhileACleanupRuns)
+{
+    // A cleanup that is working out what it needs is left to finish, so a scan asked for in the
+    // middle of it is refused as busy and the cleanup goes on to make its changes.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const sal_uInt16 nPageCount = pDocument->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nMasterCount = pDocument->GetMasterSdPageCount(PageKind::Standard);
+
+    // The turn that works out what the image of the deck needs has not come round yet, so the
+    // cleanup has changed nothing.
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":2,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT(cleanupEvents(aView, "fixed", nSeen).empty());
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":3}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string("busy"), cleanupReplyReason(aView, 3));
+
+    CPPUNIT_ASSERT_MESSAGE("the cleanup never reported ending",
+                           waitForCleanupEvent(aView, "fixed", nSeen));
+
+    const std::vector<boost::property_tree::ptree> aFixed = cleanupEvents(aView, "fixed", nSeen);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFixed.size());
+    CPPUNIT_ASSERT(!aFixed[0].get("cancelled", true));
+    CPPUNIT_ASSERT_EQUAL(2, aFixed[0].get("request", 0));
+
+    // The cleanup the scan did not disturb took the hidden slide and the unused master out.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nPageCount - 1), pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDocument->GetMasterSdPageCount(PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupOfAnEmptyListEndsAtOnce)
+{
+    // A deck with nothing to clean up gathers an empty list, and a cleanup of that list ends where
+    // it began. The session takes the next request straight away.
+    createDoc("dummy.odp");
+    SdTestViewCallback aView;
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+    CPPUNIT_ASSERT_EQUAL(1, oList->get("run", 0));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), oList->get_child("rows").size());
+    CPPUNIT_ASSERT_EQUAL(0, oList->get_child("total").get("count", -1));
+
+    requestCleanup(u"{\"action\":\"fixAll\",\"request\":2,\"run\":1}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 2));
+
+    const auto oFixed = firstCleanupEvent(aView, "fixed");
+    CPPUNIT_ASSERT(oFixed);
+    CPPUNIT_ASSERT_EQUAL(2, oFixed->get("request", 0));
+    CPPUNIT_ASSERT(!oFixed->get("cancelled", true));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), oFixed->get_child("removed").size());
+
+    // The session is ready for what comes next rather than sitting on the cleanup that ended.
+    requestCleanup(u"{\"action\":\"scan\",\"request\":3}"_ustr);
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 3));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

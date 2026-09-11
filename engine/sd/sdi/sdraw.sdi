@@ -1656,6 +1656,26 @@ SfxVoidItem TransformDocumentStructure FN_TRANSFORM_DOCUMENT_STRUCTURE
     GroupId = SfxGroupId::Edit;
 ]
 
+// The one command the presentation cleanup speaks over carries every request, including the ones
+// a read-only view still serves, such as asking for the list and moving the view. So the session
+// answers each request itself.
+SfxVoidItem PresentationCleanup SID_PRESENTATION_CLEANUP
+(SfxStringItem DataJson FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem InsertPage SID_INSERTPAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ,SfxUInt16Item InsertPos ID_INSERT_POS)
 [

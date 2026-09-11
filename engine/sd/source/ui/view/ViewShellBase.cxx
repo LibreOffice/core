@@ -51,6 +51,7 @@
 #include <DocumentRenderer.hxx>
 #include <optsitem.hxx>
 #include <sdmod.hxx>
+#include <tools/PresentationLintSession.hxx>
 
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -66,6 +67,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -149,6 +151,11 @@ public:
     std::shared_ptr<ViewShellManager> mpViewShellManager;
     std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
     std::unique_ptr<FormShellManager> mpFormShellManager;
+
+    /** The cleanup run of this view, made when the client first asks for something and gone once
+        the client asks for it to go or the view itself does.
+    */
+    std::unique_ptr<lint::LintSession> mpLintSession;
 
     explicit Implementation (ViewShellBase& rBase);
     ~Implementation();
@@ -658,6 +665,26 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
         case SID_RESTORE_EDITING_VIEW:
             mpImpl->ProcessRestoreEditingViewSlot();
             break;
+
+        case SID_PRESENTATION_CLEANUP:
+        {
+            OUString sRequestJson;
+            if (const SfxStringItem* pDataJson = rRequest.GetArg<SfxStringItem>(FN_PARAM_1))
+                sRequestJson = pDataJson->GetValue();
+
+            if (!mpImpl->mpLintSession)
+                mpImpl->mpLintSession = std::make_unique<lint::LintSession>(*this);
+
+            // The session answers the request from inside this call where it can, and waits for a
+            // turn of the scheduler where it has more work to do. A request that asks for the
+            // session to go leaves its answer behind, and the session is released here.
+            if (mpImpl->mpLintSession->handleRequest(sRequestJson)
+                == lint::LintSession::Outcome::Release)
+                mpImpl->mpLintSession.reset();
+
+            rRequest.Done();
+        }
+        break;
 
         case SID_PROTECTPOS:
         case SID_PROTECTSIZE:

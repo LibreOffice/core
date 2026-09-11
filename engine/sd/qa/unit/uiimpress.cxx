@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -96,7 +97,21 @@
 #include <sdmod.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <unotools/lingucfg.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
+#include <set>
+#include <vector>
+
+#include <tools/color.hxx>
+#include <tools/stream.hxx>
+#include <vcl/BinaryDataContainer.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/BitmapTools.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <tools/LintImageCompressor.hxx>
+#include <tools/LintMeasureCache.hxx>
+#include <tools/PresentationLint.hxx>
+#include <vcl/gfxlink.hxx>
 #include <xmloff/autolayout.hxx>
 
 using namespace ::com::sun::star;
@@ -4149,6 +4164,1245 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_anEditElsewhereIsLeftAlone)
     CPPUNIT_ASSERT_EQUAL(pEdited, pEditedPage->GetObj(0));
     if (pView->IsTextEdit())
         pView->SdrEndTextEdit();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintScan)
+{
+    // The lint scan lists an image stored at a far higher resolution than it is drawn at, a hidden
+    // slide and a master slide no slide uses, and keeps the speaker notes out of the list until the
+    // deck is being prepared to hand out.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    auto scanFor = [pDoc](const sd::lint::LintOptions& rOptions, sd::lint::LintCategory eCategory) {
+        sd::lint::PresentationLint aLint(*pDoc, rOptions);
+        aLint.scan();
+
+        std::vector<std::shared_ptr<sd::lint::LintFinding>> aMatches;
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (rpFinding->getCategory() == eCategory)
+                aMatches.push_back(rpFinding);
+        }
+        return aMatches;
+    };
+
+    sd::lint::LintOptions aOptions;
+
+    // The first slide carries two images: the large JPEG the deck draws twice, and a small one
+    // that is also stored at far more pixels than it is drawn at.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSdPage(0, PageKind::Standard)->GetObjCount());
+
+    // The deck draws one JPEG twice, on the first slide at 4 cm across and on the third at 8 cm.
+    // The two drawings share a single row, which speaks for the 4 cm drawing because that is the
+    // more oversized of the two. Re-encoding the small image would free up a few kilobytes, which
+    // is under the floor the scan lists, so it gets no row.
+    auto aLargeImages = scanFor(aOptions, sd::lint::LintCategory::LargeImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aLargeImages.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLargeImages[0]->getSlideIndex());
+    // The document still holds the encoded JPEG the slide was loaded from, so the row quotes
+    // its size.
+    CPPUNIT_ASSERT(aLargeImages[0]->getCurrentBytes() > 0);
+
+    // The row carries no image number, because it is the only image the first slide has a row
+    // for, and it says what the image is stored at so the client can write that under the line.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLargeImages[0]->getFacts().mnImageNumber);
+    CPPUNIT_ASSERT(aLargeImages[0]->getFacts().mnEffectiveDPI > 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLargeImages[0]->getFacts().mnHiddenPercent);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), scanFor(aOptions, sd::lint::LintCategory::HiddenSlide).size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), scanFor(aOptions, sd::lint::LintCategory::UnusedMaster).size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), scanFor(aOptions, sd::lint::LintCategory::NotesContent).size());
+
+    // Preparing the deck to hand out brings in the speaker notes of the third slide.
+    aOptions.mbForPublication = true;
+    auto aNotes = scanFor(aOptions, sd::lint::LintCategory::NotesContent);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aNotes.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNotes[0]->getSlideIndex());
+
+    // At a target of 300 DPI the 8 cm drawing wants about as many pixels as the JPEG already
+    // holds, so the image is left alone rather than encoded again for a fraction of its detail.
+    aOptions.mnImageResolution = 300;
+    CPPUNIT_ASSERT_EQUAL(size_t(0), scanFor(aOptions, sd::lint::LintCategory::LargeImage).size());
+
+    // A target resolution of zero leaves every image alone whatever it is stored at.
+    aOptions.mnImageResolution = 0;
+    CPPUNIT_ASSERT_EQUAL(size_t(0), scanFor(aOptions, sd::lint::LintCategory::LargeImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintScanReportsProgressAsItRuns)
+{
+    // The scan lists what it found before it has worked out a single saving, and the measurement
+    // that fills the figures in afterwards runs one finding at a time.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    auto imagesOf = [](const sd::lint::PresentationLint& rLint) {
+        std::vector<std::shared_ptr<sd::lint::LintFinding>> aMatches;
+        for (const auto& rpFinding : rLint.getFindings())
+        {
+            if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+                aMatches.push_back(rpFinding);
+        }
+        return aMatches;
+    };
+
+    const sd::lint::LintOptions aOptions;
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scanStructure();
+
+    // Both images of the first slide are listed straight away, told apart by their number, because
+    // nothing has yet found out that one of them has too little to offer.
+    auto aListed = imagesOf(aLint);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aListed.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aListed[0]->getFacts().mnImageNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aListed[1]->getFacts().mnImageNumber);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLint.getMeasureCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aLint.getMeasuredCount());
+
+    auto sumOfListedSavings = [&aLint] {
+        sal_uInt64 nSum = 0;
+        for (const auto& rpFinding : aLint.getFindings())
+            nSum += rpFinding->getSavingBytes();
+        return nSum;
+    };
+
+    // Every step leaves the running total equal to a fresh sum over the list. The figures tracked
+    // here are the saving each finding is counted at, and the sum of those figures.
+    std::vector<std::pair<const sd::lint::LintFinding*, sal_uInt64>> aCountedSavings;
+    sal_uInt64 nRunningTotal = 0;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        aCountedSavings.emplace_back(rpFinding.get(), rpFinding->getSavingBytes());
+        nRunningTotal += rpFinding->getSavingBytes();
+    }
+
+    // Every step measures exactly one finding, and the step that meets the image with too little to
+    // offer says that the row is gone.
+    size_t nSteps = 0;
+    size_t nDropped = 0;
+    while (aLint.hasPendingMeasurement())
+    {
+        const sd::lint::LintMeasureStep aStep = aLint.measureNextFinding();
+        CPPUNIT_ASSERT(aStep.mpFinding);
+        ++nSteps;
+        if (aStep.mbDropped)
+            ++nDropped;
+
+        CPPUNIT_ASSERT_EQUAL(nSteps, aLint.getMeasuredCount());
+
+        // The figure the finding was counted at is replaced by the one it carries now, and a
+        // finding the step took off the list counts for nothing from here on.
+        for (auto& rCounted : aCountedSavings)
+        {
+            if (rCounted.first != aStep.mpFinding.get())
+                continue;
+
+            nRunningTotal -= rCounted.second;
+            rCounted.second = aStep.mbDropped ? 0 : aStep.mpFinding->getSavingBytes();
+            nRunningTotal += rCounted.second;
+        }
+
+        CPPUNIT_ASSERT_EQUAL(sumOfListedSavings(), nRunningTotal);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), nSteps);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nDropped);
+
+    aLint.finishMeasurement();
+
+    // What stepping through the measurement leaves behind is what a scan in one go produces: the
+    // one image worth a row, with its figure, and with no number now that it stands alone for its
+    // slide.
+    sd::lint::PresentationLint aWholeLint(*pDoc, aOptions);
+    aWholeLint.scan();
+
+    auto aStepped = imagesOf(aLint);
+    auto aWhole = imagesOf(aWholeLint);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aWhole.size());
+    CPPUNIT_ASSERT_EQUAL(aWhole.size(), aStepped.size());
+    CPPUNIT_ASSERT_EQUAL(aWhole[0]->getFacts().mnImageNumber,
+                         aStepped[0]->getFacts().mnImageNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aStepped[0]->getFacts().mnImageNumber);
+    CPPUNIT_ASSERT_EQUAL(aWhole[0]->getFacts().mnEffectiveDPI,
+                         aStepped[0]->getFacts().mnEffectiveDPI);
+    CPPUNIT_ASSERT(aStepped[0]->getSavingBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(aWhole[0]->getSavingBytes(), aStepped[0]->getSavingBytes());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintRescanKeepsWhatItMeasured)
+{
+    // A deck scanned a second time at the same settings reports the savings the first scan
+    // reported, out of the encodings the first scan kept.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    auto imagesOf = [](const sd::lint::PresentationLint& rLint) {
+        std::vector<std::shared_ptr<sd::lint::LintFinding>> aMatches;
+        for (const auto& rpFinding : rLint.getFindings())
+        {
+            if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+                aMatches.push_back(rpFinding);
+        }
+        return aMatches;
+    };
+
+    const sd::lint::LintOptions aOptions;
+    auto pCache = std::make_shared<sd::lint::LintMeasureCache>();
+
+    // The cache starts out with nothing in it, so the first scan has no measurement to work from
+    // and both images of the deck are encoded.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pCache->getCount());
+
+    sd::lint::PresentationLint aFirstLint(*pDoc, aOptions, pCache);
+    aFirstLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFirstLint.getMeasureCount());
+
+    while (aFirstLint.hasPendingMeasurement())
+        CPPUNIT_ASSERT(aFirstLint.measureNextFinding().mpFinding);
+
+    aFirstLint.finishMeasurement();
+
+    // What the first scan encoded is in the cache, ready for a second scan to read.
+    const size_t nCachedAfterFirst = pCache->getCount();
+    CPPUNIT_ASSERT(nCachedAfterFirst > 0);
+
+    // The second scan lines the same two images up and finds every figure among the encodings the
+    // first scan left behind.
+    sd::lint::PresentationLint aSecondLint(*pDoc, aOptions, pCache);
+    aSecondLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aSecondLint.getMeasureCount());
+
+    while (aSecondLint.hasPendingMeasurement())
+        CPPUNIT_ASSERT(aSecondLint.measureNextFinding().mpFinding);
+
+    aSecondLint.finishMeasurement();
+
+    // The second scan read the figures it reports and put no encoding of its own in the cache.
+    CPPUNIT_ASSERT_EQUAL(nCachedAfterFirst, pCache->getCount());
+
+    auto aFirst = imagesOf(aFirstLint);
+    auto aSecond = imagesOf(aSecondLint);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFirst.size());
+    CPPUNIT_ASSERT_EQUAL(aFirst.size(), aSecond.size());
+    CPPUNIT_ASSERT(aSecond[0]->getSavingBytes() > 0);
+    CPPUNIT_ASSERT_EQUAL(aFirst[0]->getSavingBytes(), aSecond[0]->getSavingBytes());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFix)
+{
+    // Every cleanup the scan offers changes the document and can be taken back again with a single
+    // undo, under the name of the cleanup.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    auto scanFor = [pDoc](sd::lint::LintCategory eCategory, bool bForPublication = false) {
+        sd::lint::LintOptions aOptions;
+        aOptions.mbForPublication = bForPublication;
+
+        sd::lint::PresentationLint aLint(*pDoc, aOptions);
+        aLint.scan();
+
+        std::vector<std::shared_ptr<sd::lint::LintFinding>> aMatches;
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (rpFinding->getCategory() == eCategory)
+                aMatches.push_back(rpFinding);
+        }
+        return aMatches;
+    };
+
+    auto applyFix = [&rBase](const std::shared_ptr<sd::lint::LintFinding>& rpFinding) {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, rpFinding->getUndoLabel());
+        rpFinding->fix(rBase);
+    };
+
+    auto getGraphicOf = [](const SdrObject* pObject) -> const Graphic& {
+        auto* pGraphicObject = dynamic_cast<const SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+        const Graphic& rGraphic = pGraphicObject->GetGraphic();
+        CPPUNIT_ASSERT(rGraphic.IsGfxLink());
+        return rGraphic;
+    };
+
+    auto getGraphicBytes = [&getGraphicOf](const SdrObject* pObject) {
+        return sal_uInt64(getGraphicOf(pObject).GetGfxLink().GetDataSize());
+    };
+
+    // The first slide draws the JPEG at 4 cm across and the third draws the very same JPEG at 8 cm.
+    // The second object of the first slide is the small image, which the scan leaves alone.
+    SdPage* pFirstSlide = pDoc->GetSdPage(0, PageKind::Standard);
+    SdPage* pThirdSlide = pDoc->GetSdPage(2, PageKind::Standard);
+    CPPUNIT_ASSERT(pFirstSlide);
+    CPPUNIT_ASSERT(pThirdSlide);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pFirstSlide->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pThirdSlide->GetObjCount());
+
+    const sal_uInt64 nImageBytes = getGraphicBytes(pFirstSlide->GetObj(0));
+    const BitmapChecksum nImageChecksum = getGraphicOf(pFirstSlide->GetObj(0)).GetChecksum();
+    CPPUNIT_ASSERT_EQUAL(nImageBytes, getGraphicBytes(pThirdSlide->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(nImageChecksum, getGraphicOf(pThirdSlide->GetObj(0)).GetChecksum());
+
+    // One row stands for both drawings of the image, so a single cleanup deals with the two of
+    // them and the document keeps one encoding of that image throughout.
+    auto aLargeImages = scanFor(sd::lint::LintCategory::LargeImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aLargeImages.size());
+    CPPUNIT_ASSERT(aLargeImages[0]->canFix());
+    applyFix(aLargeImages[0]);
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_COMPRESS_IMAGE),
+                         pUndoManager->GetUndoActionComment(0));
+
+    const sal_uInt64 nFixedBytes = getGraphicBytes(pFirstSlide->GetObj(0));
+    CPPUNIT_ASSERT(nFixedBytes < nImageBytes);
+    CPPUNIT_ASSERT_EQUAL(nFixedBytes, getGraphicBytes(pThirdSlide->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(getGraphicOf(pFirstSlide->GetObj(0)).GetChecksum(),
+                         getGraphicOf(pThirdSlide->GetObj(0)).GetChecksum());
+
+    // Eight centimetres at the target of 150 DPI comes to 472 pixels across.
+    CPPUNIT_ASSERT_EQUAL(tools::Long(472),
+                         getGraphicOf(pFirstSlide->GetObj(0)).GetSizePixel().Width());
+
+    // The image now holds the pixels the 8 cm drawing asks for, so a fresh scan does not offer it
+    // again. The 4 cm drawing shows those same pixels at twice the target resolution, which is not
+    // what decides whether an image is worth a row.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), scanFor(sd::lint::LintCategory::LargeImage).size());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nImageBytes, getGraphicBytes(pFirstSlide->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(nImageBytes, getGraphicBytes(pThirdSlide->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(nImageChecksum, getGraphicOf(pFirstSlide->GetObj(0)).GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(nImageChecksum, getGraphicOf(pThirdSlide->GetObj(0)).GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), scanFor(sd::lint::LintCategory::LargeImage).size());
+
+    auto aHiddenSlides = scanFor(sd::lint::LintCategory::HiddenSlide);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aHiddenSlides.size());
+    applyFix(aHiddenSlides[0]);
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_DELETE_HIDDEN_SLIDE),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(pDoc->GetSdPage(1, PageKind::Standard)->IsExcluded());
+
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    auto aUnusedMasters = scanFor(sd::lint::LintCategory::UnusedMaster);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aUnusedMasters.size());
+    applyFix(aUnusedMasters[0]);
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_DELETE_UNUSED_MASTER),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    // The speaker notes of the third slide only come up when the deck is being prepared to hand
+    // out, and clearing them leaves the placeholder waiting to be typed into again.
+    auto aNotes = scanFor(sd::lint::LintCategory::NotesContent, true);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aNotes.size());
+    applyFix(aNotes[0]);
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_CLEAR_NOTES),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), scanFor(sd::lint::LintCategory::NotesContent, true).size());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), scanFor(sd::lint::LintCategory::NotesContent, true).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixAll)
+{
+    // Dealing with every finding in one go leaves a single undo entry, and taking that one entry
+    // back restores the whole document.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    auto countNotesFindings = [pDoc] {
+        sd::lint::LintOptions aOptions;
+        aOptions.mbForPublication = true;
+
+        sd::lint::PresentationLint aLint(*pDoc, aOptions);
+        aLint.scan();
+
+        size_t nCount = 0;
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (rpFinding->getCategory() == sd::lint::LintCategory::NotesContent)
+                ++nCount;
+        }
+        return nCount;
+    };
+
+    auto getImageBytes = [pDoc] {
+        SdPage* pSlide = pDoc->GetSdPage(0, PageKind::Standard);
+        CPPUNIT_ASSERT(pSlide);
+        auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(pSlide->GetObj(0));
+        CPPUNIT_ASSERT(pGraphicObject);
+        const Graphic& rGraphic = pGraphicObject->GetGraphic();
+        CPPUNIT_ASSERT(rGraphic.IsGfxLink());
+        return sal_uInt64(rGraphic.GetGfxLink().GetDataSize());
+    };
+
+    const sal_uInt16 nPageCount = pDoc->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    const sal_uInt64 nImageBytes = getImageBytes();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), countNotesFindings());
+
+    sd::lint::LintOptions aOptions;
+    aOptions.mbForPublication = true;
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    // The scan measures what encoding the image again would free up, which is the figure the row
+    // carries.
+    sal_uInt64 nEstimatedBytes = 0;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+            nEstimatedBytes += rpFinding->getSavingBytes();
+    }
+    CPPUNIT_ASSERT(nEstimatedBytes > 0);
+
+    sal_uInt64 nSavedBytes = 0;
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, SdResId(STR_LINT_UNDO_FIX_ALL));
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (!rpFinding->canFix())
+                continue;
+
+            rpFinding->fix(rBase);
+            nSavedBytes += rpFinding->getRealizedSavingBytes();
+        }
+    }
+
+    // The image is stored once however many slides draw it, so the batch reports the estimate for
+    // that one image rather than a multiple of it.
+    CPPUNIT_ASSERT_EQUAL(nEstimatedBytes, nSavedBytes);
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_FIX_ALL),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nPageCount - 1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(getImageBytes() < nImageBytes);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), countNotesFindings());
+
+    pUndoManager->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nPageCount, pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nImageBytes, getImageBytes());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), countNotesFindings());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixAllPrepared)
+{
+    // Working every cleanup out before any of them changes anything is what keeps the document
+    // usable while a cleanup is prepared. Preparing first leaves the same single undo entry, frees
+    // up the same bytes and leaves the document in the same state as dealing with the findings one
+    // after another does.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    const sal_uInt16 nPageCount = pDoc->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+
+    sd::lint::LintOptions aOptions;
+    aOptions.mbForPublication = true;
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    sal_uInt64 nEstimatedBytes = 0;
+    std::vector<std::shared_ptr<sd::lint::LintFinding>> aFixable;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        if (!rpFinding->canFix())
+            continue;
+
+        aFixable.push_back(rpFinding);
+        if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+            nEstimatedBytes += rpFinding->getSavingBytes();
+    }
+    CPPUNIT_ASSERT(!aFixable.empty());
+    CPPUNIT_ASSERT(nEstimatedBytes > 0);
+
+    // Every cleanup is worked out first. The document is untouched by this, so the undo stack is
+    // still empty afterwards and a cleanup cancelled here leaves no trace.
+    for (const auto& rpFinding : aFixable)
+        rpFinding->prepareFix();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(nPageCount, pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    sal_uInt64 nSavedBytes = 0;
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, SdResId(STR_LINT_UNDO_FIX_ALL));
+        for (const auto& rpFinding : aFixable)
+        {
+            rpFinding->fix(rBase);
+            nSavedBytes += rpFinding->getRealizedSavingBytes();
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(nEstimatedBytes, nSavedBytes);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_FIX_ALL),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nPageCount - 1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    pUndoManager->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nPageCount, pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixKeepsList)
+{
+    // A cleanup that stays within the finding it is about leaves the rest of the list standing, so
+    // the one finding can be taken off the list rather than the whole deck being scanned again.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    // Preparing the deck to hand out brings in the speaker notes as well, so the scan finds
+    // something of every kind the deck holds.
+    sd::lint::LintOptions aOptions;
+    aOptions.mbForPublication = true;
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    auto findingOf = [&aLint](sd::lint::LintCategory eCategory) {
+        std::shared_ptr<sd::lint::LintFinding> pMatch;
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (rpFinding->getCategory() == eCategory)
+            {
+                pMatch = rpFinding;
+                break;
+            }
+        }
+        CPPUNIT_ASSERT(pMatch);
+        return pMatch;
+    };
+
+    // Encoding an image again reaches the objects that draw that one bitmap, and clearing the
+    // speaker notes reaches one placeholder. Taking a slide or a master out of the document moves
+    // what the findings around it are about.
+    const std::shared_ptr<sd::lint::LintFinding> pImage
+        = findingOf(sd::lint::LintCategory::LargeImage);
+    CPPUNIT_ASSERT(!pImage->invalidatesOtherFindings());
+    CPPUNIT_ASSERT(!findingOf(sd::lint::LintCategory::NotesContent)->invalidatesOtherFindings());
+    CPPUNIT_ASSERT(findingOf(sd::lint::LintCategory::HiddenSlide)->invalidatesOtherFindings());
+    CPPUNIT_ASSERT(findingOf(sd::lint::LintCategory::UnusedMaster)->invalidatesOtherFindings());
+
+    // A finding that goes before its saving has been worked out leaves the measurement owing
+    // nothing for it, so the steps that follow never meet it again.
+    sd::lint::PresentationLint aStepLint(*pDoc, aOptions);
+    aStepLint.scanStructure();
+
+    std::shared_ptr<sd::lint::LintFinding> pUnmeasured;
+    for (const auto& rpFinding : aStepLint.getFindings())
+    {
+        if (rpFinding->needsMeasuring())
+        {
+            pUnmeasured = rpFinding;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pUnmeasured);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aStepLint.getMeasuredCount());
+
+    aStepLint.dropFinding(pUnmeasured);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aStepLint.getMeasuredCount());
+
+    // Each finding is handed out for its figure once, and the one that went out of order is not
+    // handed out at all.
+    std::vector<const sd::lint::LintFinding*> aHandedOut;
+    while (aStepLint.hasPendingMeasurement())
+    {
+        const sd::lint::LintMeasureStep aStep = aStepLint.measureNextFinding();
+        CPPUNIT_ASSERT(aStep.mpFinding);
+        CPPUNIT_ASSERT(aStep.mpFinding != pUnmeasured);
+
+        for (const auto* pSeen : aHandedOut)
+            CPPUNIT_ASSERT(pSeen != aStep.mpFinding.get());
+
+        aHandedOut.push_back(aStep.mpFinding.get());
+    }
+
+    // Every finding the scan lined up is accounted for: the one that went out of order, and the
+    // ones the steps handed out.
+    CPPUNIT_ASSERT_EQUAL(aStepLint.getMeasureCount(), aHandedOut.size() + 1);
+
+    std::vector<std::pair<sal_Int32, sal_Int32>> aOtherRows;
+    sal_uInt64 nOtherSaving = 0;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        if (rpFinding == pImage)
+            continue;
+
+        aOtherRows.emplace_back(rpFinding->getFacts().mnImageNumber,
+                                rpFinding->getSlideIndex());
+        nOtherSaving += rpFinding->getSavingBytes();
+    }
+
+    const sal_uInt64 nTotalSaving = nOtherSaving + pImage->getSavingBytes();
+    CPPUNIT_ASSERT(pImage->getSavingBytes() > 0);
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, pImage->getUndoLabel());
+        pImage->fix(rBase);
+    }
+
+    aLint.dropFinding(pImage);
+
+    // What is left reads exactly as it did, figures and all, so no row has to be measured again.
+    CPPUNIT_ASSERT_EQUAL(aOtherRows.size(), aLint.getFindings().size());
+
+    size_t nRow = 0;
+    sal_uInt64 nSavingLeft = 0;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        CPPUNIT_ASSERT(rpFinding != pImage);
+        CPPUNIT_ASSERT_EQUAL(aOtherRows[nRow].first, rpFinding->getFacts().mnImageNumber);
+        CPPUNIT_ASSERT_EQUAL(aOtherRows[nRow].second, rpFinding->getSlideIndex());
+        ++nRow;
+        nSavingLeft += rpFinding->getSavingBytes();
+    }
+
+    // The rows that are left stand for a hidden slide, an unused master slide and the speaker
+    // notes, and none of those carries a byte figure. So the image was the whole of what the list
+    // offered, and dealing with it leaves the list offering nothing.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), nOtherSaving);
+    CPPUNIT_ASSERT_EQUAL(nOtherSaving, nSavingLeft);
+    CPPUNIT_ASSERT(nSavingLeft < nTotalSaving);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintUndoAsksForList)
+{
+    // Taking a cleanup back puts what it dealt with into the document again, so whoever started it
+    // is asked for the list afresh. Making the cleanup again asks once more.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    auto countImageFindings = [pDoc] {
+        sd::lint::PresentationLint aLint(*pDoc, sd::lint::LintOptions());
+        aLint.scan();
+
+        size_t nCount = 0;
+        for (const auto& rpFinding : aLint.getFindings())
+        {
+            if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+                ++nCount;
+        }
+        return nCount;
+    };
+
+    int nListRequests = 0;
+    auto pNotifier
+        = std::make_shared<sd::lint::LintUndoNotifier>([&nListRequests] { ++nListRequests; });
+
+    sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    std::shared_ptr<sd::lint::LintFinding> pImage;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        if (rpFinding->getCategory() == sd::lint::LintCategory::LargeImage)
+            pImage = rpFinding;
+    }
+    CPPUNIT_ASSERT(pImage);
+
+    const size_t nUndoCountBefore = pUndoManager->GetUndoActionCount();
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, pImage->getUndoLabel(), pNotifier);
+        pImage->fix(rBase);
+    }
+
+    // The list is asked for when a cleanup is taken back or made again, and the request travels
+    // inside the one entry the cleanup leaves behind rather than adding an entry of its own.
+    CPPUNIT_ASSERT_EQUAL(0, nListRequests);
+    CPPUNIT_ASSERT_EQUAL(nUndoCountBefore + 1, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_COMPRESS_IMAGE),
+                         pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), countImageFindings());
+
+    // A cleanup that changes nothing is dropped off the undo stack, and the request for the list
+    // that goes with it is dropped along with it.
+    {
+        sd::lint::LintUndoGroup aEmptyGroup(rBase, u"nothing to take back"_ustr, pNotifier);
+    }
+    CPPUNIT_ASSERT_EQUAL(nUndoCountBefore + 1, pUndoManager->GetUndoActionCount());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(1, nListRequests);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), countImageFindings());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(2, nListRequests);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), countImageFindings());
+
+    // The undo stack outlives whoever filled it, and an entry left over from a holder that has
+    // gone asks nobody for anything.
+    pNotifier.reset();
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(2, nListRequests);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), countImageFindings());
+}
+
+namespace
+{
+/** The encoded bytes of the given bitmap, the way an image read from a document carries them. */
+BinaryDataContainer encodeTestImage(const Bitmap& rBitmap)
+{
+    SvMemoryStream aStream;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    const sal_uInt16 nFormat = rFilter.GetExportFormatNumberForShortName(u"jpg");
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         rFilter.ExportGraphic(Graphic(rBitmap), u"none", aStream, nFormat));
+
+    const sal_uInt64 nBytes = aStream.TellEnd();
+    CPPUNIT_ASSERT(nBytes > 0);
+
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    return BinaryDataContainer(aStream, std::size_t(nBytes));
+}
+
+/** The encoded bytes of a plain bitmap of the given size in the given colour. */
+BinaryDataContainer encodePlainImage(const Size& rPixelSize, Color aColour)
+{
+    Bitmap aBitmap(rPixelSize, vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(aColour);
+
+    return encodeTestImage(aBitmap);
+}
+
+/** A graphic read back from encoded bytes, which holds those bytes alongside its pixels. */
+Graphic importTestImage(const BinaryDataContainer& rData)
+{
+    SvMemoryStream aStream(const_cast<sal_uInt8*>(rData.getData()), rData.getSize(),
+                           StreamMode::READ);
+
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, rFilter.ImportGraphic(aGraphic, u"", aStream));
+    return aGraphic;
+}
+
+/** A bitmap of scattered colours, which no encoding shrinks to very little, so an image made from
+    it is worth a row of its own. The number picks the pattern, so two bitmaps made under different
+    numbers hold different pixels. */
+Bitmap makeNoisyBitmap(const Size& rPixelSize, sal_Int32 nPattern)
+{
+    const sal_Int32 nWidth = rPixelSize.Width();
+    const sal_Int32 nHeight = rPixelSize.Height();
+    std::vector<sal_uInt8> aPixels(std::size_t(nWidth) * std::size_t(nHeight) * 3);
+
+    // A run of numbers that jumps about within the byte range, so neighbouring pixels have little
+    // in common and the encoded image stays large.
+    sal_uInt32 nValue = sal_uInt32(nPattern) * 7919 + 12345;
+    for (sal_uInt8& rByte : aPixels)
+    {
+        nValue = nValue * 1103515245 + 12345;
+        rByte = sal_uInt8((nValue >> 16) & 0xFF);
+    }
+
+    return vcl::bitmap::CreateFromData(aPixels.data(), nWidth, nHeight, nWidth * 3, 24);
+}
+
+/** A graphic of its own, told from every other by the pixels the number picks, holding the bytes it
+    was read from the way an image of a document does. */
+Graphic makeLinkedTestImage(sal_Int32 nPattern)
+{
+    return importTestImage(encodeTestImage(makeNoisyBitmap(Size(900, 900), nPattern)));
+}
+
+/** Draws the graphic on the given slide of the deck, 2 cm across, which is small enough for the
+    scan to find an 800 pixel image stored at more pixels than the deck needs. Answers the object
+    that draws it. */
+SdrGrafObj& addImageToSlide(SdDrawDocument& rDoc, sal_uInt16 nSlide, const Graphic& rGraphic,
+                            sal_Int32 nIndex)
+{
+    SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    const tools::Rectangle aRectangle(Point(500 + nIndex * 200, 8000), Size(2000, 2000));
+    rtl::Reference<SdrGrafObj> pObject = new SdrGrafObj(rDoc, rGraphic, aRectangle);
+    pPage->InsertObject(pObject.get());
+
+    return *pObject;
+}
+
+/** The same, on the first slide of the deck. */
+SdrGrafObj& addImageToFirstSlide(SdDrawDocument& rDoc, const Graphic& rGraphic, sal_Int32 nIndex)
+{
+    return addImageToSlide(rDoc, 0, rGraphic, nIndex);
+}
+
+/** The findings of the given kind, in the order the list holds them. */
+std::vector<std::shared_ptr<sd::lint::LintFinding>>
+findingsOfCategory(const sd::lint::PresentationLint& rLint, sd::lint::LintCategory eCategory)
+{
+    std::vector<std::shared_ptr<sd::lint::LintFinding>> aMatches;
+    for (const auto& rpFinding : rLint.getFindings())
+    {
+        if (rpFinding->getCategory() == eCategory)
+            aMatches.push_back(rpFinding);
+    }
+
+    return aMatches;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintEncodesATransparentImageAsPng)
+{
+    // JPEG has no way to hold transparency, so a bitmap that carries any comes back as PNG.
+    createSdImpressDoc();
+
+    Bitmap aBitmap(Size(600, 600), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_LIGHTRED);
+
+    sal_uInt8 nAlphaValue = 0x80;
+    AlphaMask aAlphaMask(Size(600, 600), &nAlphaValue);
+    const Graphic aGraphic(Bitmap(aBitmap, aAlphaMask));
+
+    const sd::lint::LintCompressedImage aCompressed = sd::lint::compressGraphic(
+        aGraphic, sal_uInt64(aGraphic.GetSizeBytes()), Size(2000, 2000), 150, 80);
+
+    CPPUNIT_ASSERT(aCompressed.getByteCount() > 8);
+
+    // The first eight bytes of a PNG are the signature the format begins with.
+    const sal_uInt8 aPngSignature[] = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+    for (std::size_t nByte = 0; nByte < 8; ++nByte)
+        CPPUNIT_ASSERT_EQUAL(aPngSignature[nByte], aCompressed.maData.getData()[nByte]);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testLintMeasureCacheKeepsWhatFitsAndDropsTheOldest)
+{
+    // The cache answers with the encoding it was given for a key, keeps the first encoding stored
+    // under a key it already holds, and lets the oldest go once the kept bytes are over its limit.
+    createSdImpressDoc();
+
+    sd::lint::LintMeasureCache aCache;
+
+    const sd::lint::LintMeasureKey aFirstKey{ 111, 2000, 2000, 150, 80 };
+    const sd::lint::LintMeasureKey aSecondKey{ 222, 2000, 2000, 150, 80 };
+
+    sd::lint::LintCompressedImage aSmall;
+    aSmall.maData = encodePlainImage(Size(200, 200), COL_LIGHTRED);
+    CPPUNIT_ASSERT(!aSmall.maData.isEmpty());
+
+    aCache.store(aFirstKey, aSmall);
+
+    const auto oFound = aCache.find(aFirstKey, aSmall.getByteCount() * 4);
+    CPPUNIT_ASSERT(oFound);
+    CPPUNIT_ASSERT_EQUAL(aSmall.getByteCount(), oFound->getByteCount());
+
+    // Whether the encoding is smaller is about the image that was asked after, so the same bytes
+    // answer differently for a document that spends less on the image than they take.
+    CPPUNIT_ASSERT(oFound->mbSmaller);
+    CPPUNIT_ASSERT(!aCache.find(aFirstKey, 1)->mbSmaller);
+
+    // A key that is already there keeps the bytes it has.
+    sd::lint::LintCompressedImage aOther;
+    aOther.maData = encodePlainImage(Size(300, 300), COL_LIGHTBLUE);
+    CPPUNIT_ASSERT(aOther.getByteCount() != aSmall.getByteCount());
+
+    aCache.store(aFirstKey, aOther);
+    CPPUNIT_ASSERT_EQUAL(aSmall.getByteCount(), aCache.find(aFirstKey, 1)->getByteCount());
+
+    // Two encodings of seventeen megabytes each are over the limit the cache keeps, so the one
+    // that went in first goes and the one that has just gone in stays.
+    constexpr std::size_t nHugeBytes = 17u * 1024 * 1024;
+    SvMemoryStream aHugeStream;
+    const std::vector<sal_uInt8> aHugeBlock(nHugeBytes, 0x5A);
+    aHugeStream.WriteBytes(aHugeBlock.data(), nHugeBytes);
+    aHugeStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    sd::lint::LintCompressedImage aHuge;
+    aHuge.maData = BinaryDataContainer(aHugeStream, nHugeBytes);
+
+    aCache.store(aSecondKey, aHuge);
+
+    const sd::lint::LintMeasureKey aThirdKey{ 333, 2000, 2000, 150, 80 };
+    aCache.store(aThirdKey, aHuge);
+
+    CPPUNIT_ASSERT(!aCache.find(aFirstKey, 1));
+    CPPUNIT_ASSERT(!aCache.find(aSecondKey, 1));
+    CPPUNIT_ASSERT(aCache.find(aThirdKey, 1));
+
+    // Everything goes when the cache is emptied.
+    aCache.clear();
+    CPPUNIT_ASSERT(!aCache.find(aThirdKey, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintListsTheCostliestImageOfAGroupFirst)
+{
+    // The list groups the findings by the kind of problem they describe, and inside a group the
+    // one the document spends the most bytes on comes first.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // A third image, larger than the small one of the deck and smaller than its large one.
+    addImageToFirstSlide(*pDoc, makeLinkedTestImage(3), 0);
+
+    sd::lint::LintOptions aOptions;
+    aOptions.mbForPublication = true;
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scanStructure();
+
+    std::vector<sd::lint::LintCategory> aCategoryOrder;
+    for (const auto& rpFinding : aLint.getFindings())
+    {
+        if (aCategoryOrder.empty() || aCategoryOrder.back() != rpFinding->getCategory())
+            aCategoryOrder.push_back(rpFinding->getCategory());
+    }
+
+    // Every finding of one kind stands together, so no kind turns up twice in the list.
+    std::set<sd::lint::LintCategory> aSeenCategories(aCategoryOrder.begin(), aCategoryOrder.end());
+    CPPUNIT_ASSERT_EQUAL(aCategoryOrder.size(), aSeenCategories.size());
+    CPPUNIT_ASSERT_EQUAL(sd::lint::LintCategory::LargeImage, aCategoryOrder.front());
+
+    const auto aImages = findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aImages.size());
+    CPPUNIT_ASSERT(aImages[0]->getCurrentBytes() > aImages[1]->getCurrentBytes());
+    CPPUNIT_ASSERT(aImages[1]->getCurrentBytes() > aImages[2]->getCurrentBytes());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesAnAnimatedImageAlone)
+{
+    // An animation is a series of frames, and the size in pixels of one frame says nothing about
+    // what the whole of it takes, so an animated image gets no row.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aBeforeLint(*pDoc, aOptions);
+    aBeforeLint.scanStructure();
+    const size_t nImagesBefore
+        = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
+
+    SvFileStream aFileStream(m_directories.getURLFromSrc(u"/sd/qa/unit/data/") + "animated.gif",
+                             StreamMode::READ);
+    Graphic aAnimation;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, rFilter.ImportGraphic(aAnimation, u"", aFileStream));
+    CPPUNIT_ASSERT(aAnimation.IsAnimated());
+
+    // Drawn at one centimetre the animation carries far more pixels than the deck needs, so only
+    // its being an animation keeps it off the list.
+    SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    rtl::Reference<SdrGrafObj> pObject
+        = new SdrGrafObj(*pDoc, aAnimation, tools::Rectangle(Point(500, 11000), Size(1000, 1000)));
+    pPage->InsertObject(pObject.get());
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scanStructure();
+
+    CPPUNIT_ASSERT_EQUAL(nImagesBefore,
+                         findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesACroppedImageAlone)
+{
+    // A crop shows only part of the bitmap, so the pixels that drawing needs cannot be worked out
+    // from the size it takes on the slide, and the image gets no row.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aBeforeLint(*pDoc, aOptions);
+    aBeforeLint.scanStructure();
+    const size_t nImagesBefore
+        = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
+
+    SdrGrafObj& rObject = addImageToFirstSlide(*pDoc, makeLinkedTestImage(2), 0);
+
+    sd::lint::PresentationLint aListedLint(*pDoc, aOptions);
+    aListedLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(
+        nImagesBefore + 1,
+        findingsOfCategory(aListedLint, sd::lint::LintCategory::LargeImage).size());
+
+    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    xShape->setPropertyValue(u"GraphicCrop"_ustr,
+                             cpo::uno::Any(text::GraphicCrop(100, 100, 100, 100)));
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(nImagesBefore,
+                         findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixOfAnImageOnADeletedSlideChangesNothing)
+{
+    // A slide that goes between the scan and the cleanup takes its images with it, so the cleanup
+    // finds nothing left to replace, frees nothing up and leaves no undo entry behind.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // The hidden slide of the deck carries nothing, so an image of its own goes on it and goes
+    // with it when the slide is taken out.
+    const Graphic aGraphic = makeLinkedTestImage(4);
+    SdrGrafObj& rObject = addImageToSlide(*pDoc, 1, aGraphic, 0);
+    const BitmapChecksum nChecksum = aGraphic.GetChecksum();
+
+    sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    std::shared_ptr<sd::lint::LintFinding> pImage;
+    for (const auto& rpFinding : findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage))
+    {
+        if (rpFinding->getSlideIndex() == 1)
+            pImage = rpFinding;
+    }
+    CPPUNIT_ASSERT(pImage);
+    CPPUNIT_ASSERT(pImage->getSavingBytes() > 0);
+
+    const auto aHiddenSlides = findingsOfCategory(aLint, sd::lint::LintCategory::HiddenSlide);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aHiddenSlides.size());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aHiddenSlides[0]->getUndoLabel());
+        aHiddenSlides[0]->fix(rBase);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    const size_t nUndoCountBefore = pUndoManager->GetUndoActionCount();
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, pImage->getUndoLabel());
+        pImage->fix(rBase);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), pImage->getRealizedSavingBytes());
+    CPPUNIT_ASSERT_EQUAL(nUndoCountBefore, pUndoManager->GetUndoActionCount());
+
+    // The image the slide took with it is the one it was.
+    CPPUNIT_ASSERT_EQUAL(nChecksum, rObject.GetGraphic().GetChecksum());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintUndoMakesAMasterPreciousAgain)
+{
+    // Every master a document is loaded with is marked precious, which is what keeps it from being
+    // dropped automatically. Taking the cleanup back puts that mark on again, and making the
+    // cleanup again takes it off.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    const auto aMasters = findingsOfCategory(aLint, sd::lint::LintCategory::UnusedMaster);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aMasters.size());
+
+    // Every slide of the deck builds on the one master, so the other master is the unused one.
+    const SdrPage& rUsedMaster = pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage();
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    rtl::Reference<SdPage> xMaster;
+    for (sal_uInt16 nMaster = 0; nMaster < nMasterCount; ++nMaster)
+    {
+        SdPage* pMaster = pDoc->GetMasterSdPage(nMaster, PageKind::Standard);
+        if (pMaster && pMaster != &rUsedMaster)
+            xMaster = pMaster;
+    }
+    CPPUNIT_ASSERT(xMaster.is());
+    CPPUNIT_ASSERT(xMaster->IsPrecious());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aMasters[0]->getUndoLabel());
+        aMasters[0]->fix(rBase);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(!xMaster->IsPrecious());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(xMaster->IsPrecious());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(!xMaster->IsPrecious());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT(xMaster->IsPrecious());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintUndoLeavesAnUnmarkedMasterUnmarked)
+{
+    // A master made during the session carries no precious mark. Taking the cleanup back brings the
+    // master back the way it was, still without the mark.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Every slide of the deck builds on the one master, so the other master is the unused one.
+    const SdrPage& rUsedMaster = pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage();
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    rtl::Reference<SdPage> xMaster;
+    for (sal_uInt16 nMaster = 0; nMaster < nMasterCount; ++nMaster)
+    {
+        SdPage* pMaster = pDoc->GetMasterSdPage(nMaster, PageKind::Standard);
+        if (pMaster && pMaster != &rUsedMaster)
+            xMaster = pMaster;
+    }
+    CPPUNIT_ASSERT(xMaster.is());
+
+    // A master the document was loaded with comes in marked, so the mark comes off to stand for a
+    // master that was made while the document was open.
+    xMaster->SetPrecious(false);
+
+    sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    const auto aMasters = findingsOfCategory(aLint, sd::lint::LintCategory::UnusedMaster);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aMasters.size());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aMasters[0]->getUndoLabel());
+        aMasters[0]->fix(rBase);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(!xMaster->IsPrecious());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -360,6 +360,17 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
                 ++m_aJSDialogSelectCounts[itControlId->second.get_value<std::string>()];
         }
         break;
+        case COKitCallbackType::UNO_COMMAND_RESULT:
+        {
+            std::stringstream aStream(pPayload);
+            if (!aStream.str().starts_with("{"))
+                break;
+
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_aCommandResults.push_back(aTree);
+        }
+        break;
         default:
         break;
     }

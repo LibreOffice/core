@@ -390,7 +390,7 @@ public:
 
     /** Set the "precious" flag to the given value.
     */
-    void SetPrecious (const bool bIsPrecious);
+    SD_DLLPUBLIC void SetPrecious (const bool bIsPrecious);
 
     /** The "precious" flag is used for master pages to prevent some unused
         master pages from being deleted automatically.  For pages
