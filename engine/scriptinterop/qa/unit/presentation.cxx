@@ -33,6 +33,7 @@
 #include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <scriptinterop/PageElementType.hpp>
+#include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/XAffineTransform.hpp>
@@ -479,6 +480,44 @@ CPPUNIT_TEST_FIXTURE(Test, testPageElementsAndTheirTypes)
                          xSlide->getPageElements()[2]->getPageElementType());
     xSlide->getPageElements()[2]->remove();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPageElements().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPlaceholders)
+{
+    auto const xPresentation = loadPresentation();
+    // A title-and-body slide carries a title placeholder and a body placeholder.
+    auto const xSlide = xPresentation->appendSlideFrom(
+        cpo::uno::Any(scriptinterop::PredefinedLayout_TITLE_AND_BODY));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPlaceholders().getLength());
+    auto const xTitle = getValue(xSlide->getPlaceholder(scriptinterop::PlaceholderType_TITLE));
+    CPPUNIT_ASSERT(xTitle.is());
+    cpo::uno::Reference<css::drawing::XShape> const xTitleShape(xTitle->getuno(),
+                                                                cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.TitleTextShape"_ustr,
+                         xTitleShape->getShapeType());
+    CPPUNIT_ASSERT(xSlide->getPlaceholder(scriptinterop::PlaceholderType_BODY).IsPresent);
+    // A placeholder kind the slide does not carry gives back null rather than an error.
+    CPPUNIT_ASSERT(!xSlide->getPlaceholder(scriptinterop::PlaceholderType_SUBTITLE).IsPresent);
+    // The indexed lookup counts placeholders of one kind from zero.
+    CPPUNIT_ASSERT(
+        xSlide->getPlaceholderByIndex(scriptinterop::PlaceholderType_TITLE, 0).IsPresent);
+    CPPUNIT_ASSERT(
+        !xSlide->getPlaceholderByIndex(scriptinterop::PlaceholderType_TITLE, 1).IsPresent);
+    CPPUNIT_ASSERT_THROW(xSlide->getPlaceholderByIndex(scriptinterop::PlaceholderType_TITLE, -1),
+                         cpo::uno::RuntimeException);
+    // A plain text box is not a placeholder.
+    xSlide->insertTextBox(u"x"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPlaceholders().getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSlide->getShapes().getLength());
+    // On the title layout the title is the centered title, and the second placeholder is the
+    // subtitle.
+    auto const xTitleSlide
+        = xPresentation->appendSlideFrom(cpo::uno::Any(scriptinterop::PredefinedLayout_TITLE));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTitleSlide->getPlaceholders().getLength());
+    CPPUNIT_ASSERT(
+        xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_CENTERED_TITLE).IsPresent);
+    CPPUNIT_ASSERT(!xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_TITLE).IsPresent);
+    CPPUNIT_ASSERT(xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_SUBTITLE).IsPresent);
 }
 }
 

@@ -238,6 +238,90 @@ pageElementType(cpo::uno::Reference<css::drawing::XShape> const& shape)
     return scriptinterop::PageElementType_SHAPE;
 }
 
+// Reads the page's automatic layout.  A page without the Layout property has none.
+AutoLayout pageAutoLayout(cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+{
+    cpo::uno::Reference<css::beans::XPropertySet> const props(page, cpo::uno::UNO_QUERY);
+    if (!props.is() || !props->getPropertySetInfo()->hasPropertyByName(u"Layout"_ustr))
+    {
+        return AUTOLAYOUT_NONE;
+    }
+    sal_Int16 layout = AUTOLAYOUT_NONE;
+    props->getPropertyValue(u"Layout"_ustr) >>= layout;
+    return static_cast<AutoLayout>(layout);
+}
+
+// Maps a presentation placeholder service to the API's placeholder kind.  A shape from a plain
+// drawing service is not a placeholder and reports NONE.  The title of a page on the title layout
+// is CENTERED_TITLE, on every other layout it is TITLE.  Handout placeholders have no counterpart
+// in the API.
+scriptinterop::PlaceholderType
+placeholderType(cpo::uno::Reference<css::drawing::XShape> const& shape, AutoLayout pageLayout)
+{
+    auto const type = shape->getShapeType();
+    if (type == "com.sun.star.presentation.TitleTextShape")
+    {
+        return pageLayout == AUTOLAYOUT_TITLE ? scriptinterop::PlaceholderType_CENTERED_TITLE
+                                              : scriptinterop::PlaceholderType_TITLE;
+    }
+    if (type == "com.sun.star.presentation.OutlinerShape"
+        || type == "com.sun.star.presentation.NotesShape")
+    {
+        return scriptinterop::PlaceholderType_BODY;
+    }
+    if (type == "com.sun.star.presentation.SubtitleShape")
+    {
+        return scriptinterop::PlaceholderType_SUBTITLE;
+    }
+    if (type == "com.sun.star.presentation.GraphicObjectShape")
+    {
+        return scriptinterop::PlaceholderType_PICTURE;
+    }
+    if (type == "com.sun.star.presentation.ChartShape")
+    {
+        return scriptinterop::PlaceholderType_CHART;
+    }
+    if (type == "com.sun.star.presentation.TableShape")
+    {
+        return scriptinterop::PlaceholderType_TABLE;
+    }
+    if (type == "com.sun.star.presentation.PageShape")
+    {
+        return scriptinterop::PlaceholderType_SLIDE_IMAGE;
+    }
+    if (type == "com.sun.star.presentation.HeaderShape")
+    {
+        return scriptinterop::PlaceholderType_HEADER;
+    }
+    if (type == "com.sun.star.presentation.FooterShape")
+    {
+        return scriptinterop::PlaceholderType_FOOTER;
+    }
+    if (type == "com.sun.star.presentation.SlideNumberShape")
+    {
+        return scriptinterop::PlaceholderType_SLIDE_NUMBER;
+    }
+    if (type == "com.sun.star.presentation.DateTimeShape")
+    {
+        return scriptinterop::PlaceholderType_DATE_AND_TIME;
+    }
+    if (type == "com.sun.star.presentation.MediaShape")
+    {
+        return scriptinterop::PlaceholderType_MEDIA;
+    }
+    if (type == "com.sun.star.presentation.OLE2Shape"
+        || type == "com.sun.star.presentation.CalcShape"
+        || type == "com.sun.star.presentation.OrgChartShape")
+    {
+        return scriptinterop::PlaceholderType_OBJECT;
+    }
+    if (type == "com.sun.star.presentation.HandoutShape")
+    {
+        return scriptinterop::PlaceholderType_UNSUPPORTED;
+    }
+    return scriptinterop::PlaceholderType_NONE;
+}
+
 // Throwing defaults for the shared page element surface.  A leaf implementation class derives
 // from this template with its own interface and overrides the methods it implements; the rest
 // keep throwing until an implementation is added.
@@ -1243,21 +1327,54 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
-        SAL_CALL getPlaceholder(scriptinterop::PlaceholderType) override
+        getPlaceholder(scriptinterop::PlaceholderType wanted) override
     {
-        throw cpo::uno::RuntimeException(u"getPlaceholder: not implemented"_ustr);
+        return getPlaceholderByIndex(wanted, 0);
     }
 
+    // Hands back the index-th placeholder of the given kind in drawing order, or null when the
+    // page has fewer of that kind.
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
-        SAL_CALL getPlaceholderByIndex(scriptinterop::PlaceholderType, sal_Int32) override
+        getPlaceholderByIndex(scriptinterop::PlaceholderType wanted,
+                              sal_Int32 placeholderIndex) override
     {
-        throw cpo::uno::RuntimeException(u"getPlaceholderByIndex: not implemented"_ustr);
+        if (placeholderIndex < 0)
+        {
+            throw cpo::uno::RuntimeException(
+                u"getPlaceholder: expected a non-negative index, got "_ustr
+                + OUString::number(placeholderIndex));
+        }
+        auto const layout = pageAutoLayout(page_);
+        sal_Int32 seen = 0;
+        for (auto const& shape : shapes())
+        {
+            if (placeholderType(shape, layout) != wanted)
+            {
+                continue;
+            }
+            if (seen == placeholderIndex)
+            {
+                return {true, new PageElementImpl(page_, shape)};
+            }
+            ++seen;
+        }
+        return {false, {}};
     }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>
     getPlaceholders() override
     {
-        throw cpo::uno::RuntimeException(u"getPlaceholders: not implemented"_ustr);
+        std::vector<cpo::uno::Reference<scriptinterop::XPageElement>> elements;
+        auto const layout = pageAutoLayout(page_);
+        for (auto const& shape : shapes())
+        {
+            if (placeholderType(shape, layout) != scriptinterop::PlaceholderType_NONE)
+            {
+                elements.emplace_back(new PageElementImpl(page_, shape));
+            }
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPageElement>>(
+            elements.data(), elements.size());
     }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlideTable>>
