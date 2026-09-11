@@ -37,6 +37,8 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
 {
     switch (getBaseToken(nElementToken))
     {
+        case XML_lockedCanvas: // the element this context was made for
+            return this;
         case XML_nvGrpSpPr: // CT_GvmlGroupShapeNonVisual, child see at end
             return this;
         case XML_grpSpPr: // CT_GroupShapeProperties
