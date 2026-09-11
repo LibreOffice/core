@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_feature_desktop.h>
-
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/svdpagv.hxx>
@@ -256,45 +254,9 @@ namespace sdr::contact
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
 
-#if HAVE_FEATURE_DESKTOP || defined( ANDROID )
             // get whole Primitive2DContainer; this will already make use of updated ViewInformation2D
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo, xPrimitiveSequence);
-#else
-            // Hmm, !HAVE_FEATURE_DESKTOP && !ANDROID means iOS,
-            // right? But does it makes sense to use a different code
-            // path for iOS than for Android; both use tiled rendering
-            // etc now.
-
-            // HACK: this only works when we are drawing sdr shapes via
-            // drawinglayer; but it can happen that the hierarchy contains
-            // more than just the shapes, and then it fails.
-            //
-            // This is good enough for the tiled rendering for the moment, but
-            // we need to come up with the real solution shortly.
-
-            // Only get the expensive hierarchy if we can be sure that the
-            // returned sequence won't be empty anyway.
-            bool bGetHierarchy = rRedrawArea.IsEmpty();
-            if (!bGetHierarchy)
-            {
-                // Not empty? Then not doing a full redraw, check if
-                // getPrimitive2DSequenceHierarchy() is still needed.
-                for (const rtl::Reference<SdrObject>& pObject : *GetSdrPage())
-                {
-                    if (rRedrawArea.Overlaps(pObject->GetCurrentBoundRect()))
-                    {
-                        bGetHierarchy = true;
-                        break;
-                    }
-                }
-            }
-
-            if (bGetHierarchy)
-                // get whole Primitive2DContainer; this will already make use of updated ViewInformation2D
-                // and may use the MapMode from the Target OutDev in the DisplayInfo
-                rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo, xPrimitiveSequence);
-#endif
 
             // if there is something to show, use a primitive processor to render it. There
             // is a choice between VCL and Canvas processors currently. The decision is made in
