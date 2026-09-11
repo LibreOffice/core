@@ -33,7 +33,7 @@ WpgContext::WpgContext(FragmentHandler2 const& rParent, const oox::drawingml::Sh
 WpgContext::~WpgContext() = default;
 
 oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken,
-                                                         const oox::AttributeList& /*rAttribs*/)
+                                                         const oox::AttributeList& rAttribs)
 {
     switch (getBaseToken(nElementToken))
     {
@@ -77,6 +77,9 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
                 *this, mpShape,
                 std::make_shared<oox::drawingml::Shape>(u"com.sun.star.drawing.GroupShape"_ustr));
         }
+        case XML_cNvPr:
+            mpShape->setNonVisualProperties(rAttribs);
+            break;
         case XML_graphicFrame:
         {
             auto pShape = std::make_shared<oox::drawingml::Shape>(

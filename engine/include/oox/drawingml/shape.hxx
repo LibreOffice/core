@@ -43,6 +43,8 @@
 
 namespace basegfx { class B2DHomMatrix; }
 
+namespace oox { class AttributeList; }
+
 namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShape; }
@@ -187,6 +189,9 @@ public:
     void                            setFPublished(bool bFPublished) { mbFPublished = bFPublished; }
     void                            setTitle(const OUString& rTitle) { msTitle = rTitle; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
+    /** Reads what the file says about the shape beside how it is drawn: the identifier it is
+        referred to by, its name, the text that stands in for it, and whether it is shown. */
+    void                            setNonVisualProperties( const ::oox::AttributeList& rAttribs );
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }

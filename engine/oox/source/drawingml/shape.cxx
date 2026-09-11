@@ -51,6 +51,7 @@
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
@@ -346,6 +347,18 @@ table::TablePropertiesPtr const & Shape::getTableProperties()
     if ( !mpTablePropertiesPtr )
         mpTablePropertiesPtr = std::make_shared<table::TableProperties>();
     return mpTablePropertiesPtr;
+}
+
+void Shape::setNonVisualProperties( const AttributeList& rAttribs )
+{
+    // A shape that already carries an identifier keeps the one it has.
+    if (msId.isEmpty())
+        msId = rAttribs.getStringDefaulted(XML_id);
+
+    mbHidden = rAttribs.getBool(XML_hidden, false);
+    msName = rAttribs.getStringDefaulted(XML_name);
+    msDescription = rAttribs.getStringDefaulted(XML_descr);
+    msTitle = rAttribs.getStringDefaulted(XML_title);
 }
 
 void Shape::setDefaults(bool bHeight)

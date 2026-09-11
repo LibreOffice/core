@@ -393,6 +393,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120547)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8073), aSizeShape3.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGroupShapeName)
+{
+    // A group shape inside a group shape, each with a name of its own.
+    createSwDoc("tdf118693.docx");
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xInnerGroup(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInnerGroup.is());
+    // Without the fix the name of a group within a group was dropped on import, because the
+    // non-visual properties of such a group were the one thing its reader did not read.
+    CPPUNIT_ASSERT_EQUAL(u"Group 30"_ustr, xInnerGroup->getName());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 {
     createSwDoc("tdf118693.docx");
