@@ -261,9 +261,12 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
         case PPT_TOKEN( pic ):
             mrOleObjectInfo.mbHasPicture = true; // Set true if ole object has picture element.
             return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
+
+        default:
+            SAL_WARN("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
+                                << getBaseToken(nElement));
+        break;
     }
-    SAL_WARN("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
-                        << getBaseToken(nElement));
     return nullptr;
 }
 
