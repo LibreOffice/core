@@ -2481,6 +2481,13 @@ std::string joinPartIdList(const std::vector<std::string>& parts)
     return list.str();
 }
 
+/// Minimal validation of the time field
+bool isRecordableSourceTime(const std::string& time)
+{
+    constexpr std::size_t MaxTimeLength = 128;
+    return time.size() <= MaxTimeLength && !Util::holdsControlCharacter(time);
+}
+
 }
 
 bool ChildSession::exportSlides(const StringVector& tokens)
@@ -2721,6 +2728,13 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
+    // The time is recorded on the pages the insert links, and is written out with them.
+    if (!isRecordableSourceTime(lastModifiedTime))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
     // Pages are linked to the source document the insert names, so a link insert needs one.
     if (link && !haveSource)
     {
@@ -2904,6 +2918,13 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     // A refresh covers the pages of one source document, named by the document
     // name the pages record.
     if (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    // The refreshed pages record the time, and write it out with them.
+    if (!isRecordableSourceTime(lastModifiedTime))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;

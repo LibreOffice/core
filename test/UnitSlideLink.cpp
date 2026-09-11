@@ -396,6 +396,15 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
                                       " source=deck%01.odp",
                                   "slideimport", "syntax", testname);
 
+        // The time is recorded on the pages the insert links and is written out with them, so a
+        // time holding a control character, and one no storage reports, are refused as well.
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0 time=2021-05-05T10%3A00%3A00Z%01"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0 time=" + std::string(200, 'x')),
+                                  "slideimport", "syntax", testname);
+
         // An option is given once, and an insert carries no option of its own.
         helpers::assertErrorReply(socket, insertCommand("slides=0") + " file=other.odp",
                                   "slideimport", "syntax", testname);
@@ -445,6 +454,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         stageSource(socket, documentURL, "staged.odp");
         assertErrorAsWsd(socket, "slidelink update source=deck%2Fsales.odp file=staged.odp",
                          "syntax", " source=deck%2Fsales.odp");
+
+        // A refresh records the time it names on the pages it reads, so a time of that shape is
+        // refused the same way, and the file staged for it goes with the refresh it was staged
+        // for.
+        stageSource(socket, documentURL, "staged.odp");
+        assertErrorAsWsd(socket, std::string("slidelink update source=") + EncodedSourceName +
+                                     " file=staged.odp time=2021-05-05T10%3A00%3A00Z%01",
+                         "syntax", std::string(" source=") + EncodedSourceName);
         assertErrorAsWsd(socket, std::string("slidelink update source=") + EncodedSourceName +
                                      " file=staged.odp",
                          "failed", std::string(" source=") + EncodedSourceName);
