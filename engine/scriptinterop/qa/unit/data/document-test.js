@@ -23,7 +23,7 @@ function documentTest() {
     const body = DocumentApp.getActiveDocument().getBody();
     console.assert(body.getType() === DocumentApp.ElementType.BODY_SECTION);
     console.assert(body.getText().length > 0);
-    console.assert(body.getNumChildren() === 5);
+    console.assert(body.getNumChildren() === 6);
 
     // Paragraph 0 is a bold "Bold", italic "Italic" and plain "Plain" concatenated:
     const p0 = body.getChild(0);
@@ -136,7 +136,7 @@ function documentTest() {
     const appended = body.appendParagraph('Appended');
     console.assert(appended.getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(appended.getText() === 'Appended');
-    console.assert(body.getNumChildren() === 6);
+    console.assert(body.getNumChildren() === 7);
 
     // Exercise the setBold overload group:
     appended.editAsText().setBold(true).setBold(0, 3, false);
@@ -157,30 +157,30 @@ function documentTest() {
     console.assert(listItem.getNestingLevel() === 0);
     console.assert(listItem.getGlyphType() === DocumentApp.GlyphType.NUMBER);
     console.assert(typeof listItem.getListId() === 'string');
-    console.assert(body.getNumChildren() === 7);
+    console.assert(body.getNumChildren() === 8);
 
     // clear empties the paragraph text without removing the paragraph from the body:
     const cleared = body.appendParagraph('Doomed');
-    console.assert(body.getNumChildren() === 8);
+    console.assert(body.getNumChildren() === 9);
     console.assert(cleared.getText() === 'Doomed');
     cleared.clear();
     console.assert(cleared.getText() === '');
-    console.assert(body.getNumChildren() === 8);
+    console.assert(body.getNumChildren() === 9);
 
     // GAS refuses to remove the section's last paragraph, so append a guard first, then remove
     // cleared (which is no longer the last):
     body.appendParagraph('Guard');
-    console.assert(body.getNumChildren() === 9);
+    console.assert(body.getNumChildren() === 10);
     cleared.removeFromParent();
-    console.assert(body.getNumChildren() === 8);
+    console.assert(body.getNumChildren() === 9);
 
     // Removing a whole added paragraph via its Text view works too, again with a guard so what
     // we remove is not the last paragraph:
     const viaText = body.appendParagraph('AlsoDoomed');
     body.appendParagraph('Guard');
-    console.assert(body.getNumChildren() === 10);
+    console.assert(body.getNumChildren() === 11);
     viaText.editAsText().removeFromParent();
-    console.assert(body.getNumChildren() === 9);
+    console.assert(body.getNumChildren() === 10);
 
     // A table cell's clear empties the cell's text:
     const tab = body.getChild(3);
@@ -195,4 +195,13 @@ function documentTest() {
     console.assert(tab.getNumChildren() === 2);
     tab.getChild(0).removeFromParent();
     console.assert(tab.getNumChildren() === 1);
+
+    // Paragraph 5 anchors a 100x60-pixel inline image at child index 1 (child index 0 is the
+    // whole-paragraph Text):
+    const image = body.getChild(5).getChild(1).asInlineImage();
+    console.assert(image !== null);
+    console.assert(image.getWidth() === 100);
+    console.assert(image.getHeight() === 60);
+    console.assert(checkEqual(image.getAltTitle(), ''));
+    console.assert(checkEqual(image.getAltDescription(), ''));
 }

@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -63,6 +64,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -80,6 +82,7 @@
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XElement.hpp>
 #include <scriptinterop/XFootnote.hpp>
+#include <scriptinterop/XInlineImage.hpp>
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XRangeBuilder.hpp>
 #include <scriptinterop/XRangeElement.hpp>
@@ -115,6 +118,10 @@ void removeContent(cpo::uno::Reference<css::text::XTextContent> const & content)
         throw cpo::uno::RuntimeException(u"element has no containing text"_ustr);
     }
     host->removeTextContent(content);
+}
+
+sal_Int32 hundredthMmToPixels(sal_Int32 hundredthMm) {
+    return o3tl::convert(hundredthMm, o3tl::Length::mm100, o3tl::Length::px);
 }
 
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
@@ -308,6 +315,8 @@ public:
         host->insertString(host->createTextCursorByRange(whole->getEnd()), text, false);
         return this;
     }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return nullptr; }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
@@ -625,6 +634,73 @@ private:
     std::vector<cpo::uno::Reference<css::text::XTextRange>> runs_;
 };
 
+class InlineImageImpl: public cppu::WeakImplHelper<scriptinterop::XInlineImage> {
+public:
+    explicit InlineImageImpl(
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextContent> const & content):
+        parent_(parent), content_(content) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return this; }
+
+    // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
+    // element:
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+
+    OUString getAltDescription() override {
+        OUString description;
+        props()->getPropertyValue(u"Description"_ustr) >>= description;
+        return description;
+    }
+
+    OUString getAltTitle() override {
+        OUString title;
+        props()->getPropertyValue(u"Title"_ustr) >>= title;
+        return title;
+    }
+
+    sal_Int32 getHeight() override {
+        sal_Int32 hundredthMm = 0;
+        props()->getPropertyValue(u"Height"_ustr) >>= hundredthMm;
+        return hundredthMmToPixels(hundredthMm);
+    }
+
+    // TODO: siblings within a paragraph would join the paragraph's own child walk once inline
+    // images are placed in reading order alongside their text runs.
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+
+    OUString getText() override { return getAltTitle(); }
+
+    scriptinterop::ElementType getType() override {
+        return scriptinterop::ElementType_INLINE_IMAGE;
+    }
+
+    sal_Int32 getWidth() override {
+        sal_Int32 hundredthMm = 0;
+        props()->getPropertyValue(u"Width"_ustr) >>= hundredthMm;
+        return hundredthMmToPixels(hundredthMm);
+    }
+
+    void removeFromParent() override { removeContent(content_); }
+
+private:
+    cpo::uno::Reference<css::beans::XPropertySet> props() {
+        if (!content_.is()) {
+            throw cpo::uno::RuntimeException(u"InlineImageImpl has no content"_ustr);
+        }
+        return cpo::uno::Reference<css::beans::XPropertySet>(content_, cpo::uno::UNO_QUERY_THROW);
+    }
+
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextContent> content_;
+};
+
 class ParagraphImpl : public cppu::WeakImplHelper<scriptinterop::XParagraph>
 {
 public:
@@ -636,6 +712,8 @@ public:
     }
 
     cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return content_; }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
 
     cpo::uno::Reference<scriptinterop::XText> asText() override {
         return new TextImpl(parent_, content_, getType());
@@ -675,13 +753,18 @@ public:
         }
     }
 
-    // TODO: model inline images, page breaks and horizontal rules as additional children (each of
-    // those splits the surrounding text into more Text children too):
+    // TODO: match GAS's per-portion reading order, where an image splits the surrounding text into
+    // a Text before it and a Text after it:
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
-        if (index != 0) {
-            return nullptr;
+        if (index == 0) {
+            return new TextImpl(this, content_, scriptinterop::ElementType_TEXT);
         }
-        return new TextImpl(this, content_, scriptinterop::ElementType_TEXT);
+        auto const images = enumerateInlineImages();
+        auto const imgIndex = index - 1;
+        if (imgIndex < 0 || imgIndex >= static_cast<sal_Int32>(images.size())) {
+            return {};
+        }
+        return new InlineImageImpl(this, images[imgIndex]);
     }
 
     scriptinterop::GlyphType getGlyphType() override {
@@ -815,7 +898,9 @@ public:
         return siblingContent(content_, parent_, true);
     }
 
-    sal_Int32 getNumChildren() override { return 1; }
+    sal_Int32 getNumChildren() override {
+        return 1 + static_cast<sal_Int32>(enumerateInlineImages().size());
+    }
 
     cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
@@ -859,6 +944,60 @@ public:
     void removeFromParent() override { removeContent(content_); }
 
 private:
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateInlineImages() {
+        std::vector<cpo::uno::Reference<css::text::XTextContent>> images;
+        cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
+            content_, cpo::uno::UNO_QUERY);
+        if (!ea.is()) {
+            return images;
+        }
+        auto const en = ea->createEnumeration();
+        while (en.is() && en->hasMoreElements()) {
+            cpo::uno::Reference<css::beans::XPropertySet> portion;
+            en->nextElement() >>= portion;
+            if (!portion.is()) {
+                continue;
+            }
+            OUString portionType;
+            portion->getPropertyValue(u"TextPortionType"_ustr) >>= portionType;
+            if (portionType != u"Frame") {
+                continue;
+            }
+            cpo::uno::Reference<css::container::XContentEnumerationAccess> const cea(
+                portion, cpo::uno::UNO_QUERY);
+            if (!cea.is()) {
+                continue;
+            }
+            auto const contents
+                = cea->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+            while (contents.is() && contents->hasMoreElements()) {
+                cpo::uno::Reference<css::text::XTextContent> frame;
+                contents->nextElement() >>= frame;
+                if (!frame.is()) {
+                    continue;
+                }
+                cpo::uno::Reference<css::lang::XServiceInfo> const info(
+                    frame, cpo::uno::UNO_QUERY);
+                if (!info.is()
+                    || !info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
+                {
+                    continue;
+                }
+                if (auto const frameProps = cpo::uno::Reference<css::beans::XPropertySet>(
+                        frame, cpo::uno::UNO_QUERY))
+                {
+                    css::text::TextContentAnchorType anchor;
+                    if ((frameProps->getPropertyValue(u"AnchorType"_ustr) >>= anchor)
+                        && anchor == css::text::TextContentAnchorType_AS_CHARACTER)
+                    {
+                        images.push_back(frame);
+                    }
+                }
+            }
+        }
+        return images;
+    }
+
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
 };
@@ -871,6 +1010,8 @@ public:
         parent_(parent), text_(text) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
 
     void clear() override {
         if (!text_.is()) {
@@ -957,6 +1098,8 @@ public:
         }
         return row;
     }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
 
     void clear() override {
         throw cpo::uno::RuntimeException(u"TableRow.clear is not yet implemented"_ustr); // TODO
@@ -1065,6 +1208,8 @@ public:
         parent_(parent), table_(table) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
 
     void clear() override {
         throw cpo::uno::RuntimeException(u"Table.clear is not yet implemented"_ustr); // TODO
@@ -1458,6 +1603,8 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
+
     void clear() override {
         if (!text_.is()) {
             throw cpo::uno::RuntimeException(u"clear: the footnote section has no text"_ustr);
@@ -1512,6 +1659,8 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
+
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
@@ -1561,6 +1710,8 @@ public:
     cpo::uno::Reference<scriptinterop::XParagraph> appendParagraph(OUString const & text) override {
         return appendImpl(text, u""_ustr);
     }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override { return {}; }
 
     void clear() override {
         throw cpo::uno::RuntimeException(u"Body.clear is not yet implemented"_ustr); // TODO

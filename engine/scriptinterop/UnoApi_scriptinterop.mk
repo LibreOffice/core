@@ -42,6 +42,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XElement \
     XFactory \
     XFootnote \
+    XInlineImage \
     XPage \
     XParagraph \
     XPresentation \

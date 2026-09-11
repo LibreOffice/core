@@ -11,27 +11,16 @@
 
 module scriptinterop {
 
-interface XInlineImage;
+interface XInlineImage: XElement {
+    string getAltDescription();
 
-// Common base for the heterogeneous children of a body (paragraphs, tables, etc.):
-interface XElement: XBase {
-    XInlineImage asInlineImage();
+    string getAltTitle();
 
-    XElement copy();
+    long getHeight();
 
-    XElement getNextSibling();
-
-    XElement getParent();
-
-    XElement getPreviousSibling();
-
-    string getText();
-
-    ElementType getType();
-
-    void removeFromParent();
+    long getWidth();
 };
 
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
