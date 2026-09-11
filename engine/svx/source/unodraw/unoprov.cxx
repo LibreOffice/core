@@ -656,6 +656,8 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap(
         { u"Zoom"_ustr, OWN_ATTR_MEDIA_ZOOM, cppu::UnoType<css::media::ZoomLevel>::get(), 0, 0},
         { UNO_NAME_MISC_OBJ_MOVEPROTECT, SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { UNO_NAME_MISC_OBJ_SIZEPROTECT, SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { UNO_NAME_MISC_OBJ_PRINTABLE, SDRATTR_OBJPRINTABLE, cppu::UnoType<bool>::get(),0, 0},
+        { u"Visible"_ustr, SDRATTR_OBJVISIBLE, cppu::UnoType<bool>::get(),0, 0},
         { UNO_NAME_MISC_OBJ_BOUNDRECT, OWN_ATTR_BOUNDRECT, cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"UINameSingular"_ustr,               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0},
         // #i68101#
@@ -686,6 +688,8 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap(
         { u"Transformation"_ustr,               OWN_ATTR_TRANSFORMATION, cppu::UnoType<css::drawing::HomogenMatrix3>::get(), 0, 0 },
         { UNO_NAME_MISC_OBJ_MOVEPROTECT,  SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { UNO_NAME_MISC_OBJ_SIZEPROTECT,  SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
+        { UNO_NAME_MISC_OBJ_PRINTABLE,    SDRATTR_OBJPRINTABLE, cppu::UnoType<bool>::get(),0, 0},
+        { u"Visible"_ustr,                SDRATTR_OBJVISIBLE, cppu::UnoType<bool>::get(),0, 0},
         { UNO_NAME_MISC_OBJ_BOUNDRECT,    OWN_ATTR_BOUNDRECT, cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { UNO_NAME_MISC_OBJ_NAME,         SDRATTR_OBJECTNAME, cppu::UnoType<OUString>::get(),    0,      0},
         { u"UINameSingular"_ustr,               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0},

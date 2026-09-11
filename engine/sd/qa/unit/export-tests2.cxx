@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/table/XTable.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sdtiledrenderingtest.hxx>
@@ -1221,6 +1222,24 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testLegacyAnimationSoundNotFetched)
     CPPUNIT_ASSERT(!xmloff::getSoundAllowed(xAudio->getSource()));
 
     saveAndReload(TestFilter::PPT);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testHiddenTableShape)
+{
+    createSdImpressDoc("pptx/tdf100926_ODP.pptx");
+    uno::Reference<beans::XPropertySet> xTable(getShapeFromPage(0, 0));
+    // The first shape is a table, which carries its own set of properties.
+    CPPUNIT_ASSERT(
+        uno::Reference<table::XTable>(xTable->getPropertyValue(u"Model"_ustr), uno::UNO_QUERY)
+            .is());
+    xTable->setPropertyValue(u"Visible"_ustr, cpo::uno::Any(false));
+
+    saveAndReload(TestFilter::ODP);
+
+    // A table the user hid stays hidden after a save.
+    bool bVisible = true;
+    getShapeFromPage(0, 0)->getPropertyValue(u"Visible"_ustr) >>= bVisible;
+    CPPUNIT_ASSERT_EQUAL(false, bVisible);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
