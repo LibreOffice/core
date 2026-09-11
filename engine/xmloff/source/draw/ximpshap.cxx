@@ -683,7 +683,8 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                 {
                                     OUString aFamily( aStyleName.copy( 0, nPos ) );
 
-                                    xFamilies->getByName( aFamily ) >>= xFamily;
+                                    if( xFamilies->hasByName( aFamily ) )
+                                        xFamilies->getByName( aFamily ) >>= xFamily;
                                     aStyleName = aStyleName.copy( nPos + 1 );
                                 }
                             }
@@ -700,7 +701,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                     aStyleName );
                             }
 
-                            if( xFamily.is() )
+                            // A shape may name a style the file never defines, and then it
+                            // keeps the one it was made with.
+                            if( xFamily.is() && xFamily->hasByName( aStyleName ) )
                                 xFamily->getByName( aStyleName ) >>= xStyle;
                         }
                     }
