@@ -23,6 +23,8 @@ pdfium_patches += system-abseil.diff
 pdfium_patches += system-fast_float.diff
 # https://pdfium-review.googlesource.com/c/pdfium/+/154490
 pdfium_patches += system-icu.patch.1
+# https://pdfium-review.googlesource.com/c/pdfium/+/154690
+pdfium_patches += fix-windows-build.patch.1
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
