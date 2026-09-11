@@ -162,76 +162,6 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 }
 #endif // !STATIC_SAL_INSTANCE
 
-#if UNIX_DESKTOP_DETECT
-
-#if !STATIC_SAL_INSTANCE
-const char* const* autodetect_plugin_list()
-{
-    static const char* const pKDEFallbackList[] =
-    {
-#if ENABLE_GTK3
-        "gtk3",
-#endif
-#if ENABLE_GEN
-        "gen",
-#endif
-        nullptr
-    };
-
-    static const char* const pPlasma6FallbackList[] =
-    {
-#if ENABLE_GTK3
-        "gtk3",
-#endif
-#if ENABLE_GEN
-        "gen",
-#endif
-        nullptr
-    };
-
-    static const char* const pStandardFallbackList[] =
-    {
-#if ENABLE_GTK3
-        "gtk3",
-#endif
-#if ENABLE_GEN
-        "gen",
-#endif
-        nullptr
-    };
-
-#if ENABLE_HEADLESS
-    static const char* const pHeadlessFallbackList[] =
-    {
-        "svp",
-        nullptr
-    };
-#endif
-
-    DesktopType desktop = get_desktop_environment();
-    const char * const * pList = pStandardFallbackList;
-
-#if ENABLE_HEADLESS
-    // no server at all: dummy plugin
-    if ( desktop == DESKTOP_NONE )
-        pList = pHeadlessFallbackList;
-    else
-#endif
-        if ( desktop == DESKTOP_GNOME ||
-              desktop == DESKTOP_UNITY ||
-              desktop == DESKTOP_XFCE  ||
-              desktop == DESKTOP_MATE )
-        pList = pStandardFallbackList;
-    else if (desktop == DESKTOP_PLASMA5 || desktop == DESKTOP_LXQT)
-        pList = pKDEFallbackList;
-    else if (desktop == DESKTOP_PLASMA6)
-        pList = pPlasma6FallbackList;
-
-    return pList;
-}
-#endif // !STATIC_SAL_INSTANCE
-#endif // UNIX_DESKTOP_DETECT
-
 #endif // HAVE_FEATURE_UI
 
 // HACK to obtain Application::IsHeadlessModeEnabled early on, before
@@ -282,17 +212,7 @@ SalInstance *CreateSalInstance()
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 
-#if UNIX_DESKTOP_DETECT
-    const char* const* pPluginList = pInst ? nullptr : autodetect_plugin_list();
-    for (int i = 0; !pInst && pPluginList[i]; ++i)
-    {
-        pInst = tryInstance(OUString::createFromAscii(pPluginList[i]));
-        SAL_INFO_IF(pInst, "vcl.plugadapt", "plugin autodetection: " << pPluginList[i]);
-    }
-#endif
-
-    // fallback, try everything
-    static const char* const pPlugin[] = {
+   static const char* const pPlugin[] = {
 #ifdef _WIN32
         "win",
 #elif defined(MACOSX)
