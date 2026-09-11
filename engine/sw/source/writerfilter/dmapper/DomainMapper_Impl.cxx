@@ -5067,9 +5067,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                     const cpo::uno::Any aProp = GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
                                     if (aProp.hasValue())
                                     {
-                                        if (xFrame)
+                                        // A text frame has no character properties of its own,
+                                        // the text inside it carries them.
+                                        if (xFrame && xFramePropertySet->getPropertySetInfo()
+                                                          ->hasPropertyByName(sPropName))
                                             xFramePropertySet->setPropertyValue(sPropName, aProp);
-                                        else
+                                        else if (!xFrame)
                                             xShapePropertySet->setPropertyValue(sPropName, aProp);
                                     }
                                 }
