@@ -1350,26 +1350,25 @@ void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
 
 void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
 {
+    // tdf#84426 - do not draw anything if there is no extra field
+    if (meExtraType == RulerExtra::DontKnow)
+        return;
+
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aRect = maExtraRect;
-    bool bEraseRect = false;
 
     aRect.AdjustLeft(2 );
     aRect.AdjustTop(2 );
     aRect.AdjustRight( -2 );
     aRect.AdjustBottom( -2 );
 
-    if (mnExtraStyle & RULER_STYLE_HIGHLIGHT)
-    {
-        rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
-        bEraseRect = true;
-    }
-
-    if (bEraseRect)
-    {
-        rRenderContext.SetLineColor();
-        rRenderContext.DrawRect(aRect);
-    }
+    // tdf#84426 - always paint a button face behind the extra field
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.SetFillColor(mnExtraStyle & RULER_STYLE_HIGHLIGHT
+                                    ? rStyleSettings.GetCheckedColor()
+                                    : rStyleSettings.GetFaceColor());
+    rRenderContext.DrawRect(aRect);
 
     // output content
     if (meExtraType == RulerExtra::NullOffset)
