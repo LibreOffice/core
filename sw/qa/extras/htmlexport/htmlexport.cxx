@@ -349,7 +349,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf83890)
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/html/body/ol[2]/ol", "start", u"2");
+    // tdf#135449 - keep nested lists inside a list item (<li>)
+    assertXPath(pDoc, "/html/body/ol[2]/li/ol", "start", u"2");
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExtbChars)

@@ -367,6 +367,34 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
         u"second");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf135449_NestedBulletsHTML)
+{
+    createSwDoc();
+
+    // Create a document containing a bullet list including a nested bullet list
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"ABC"_ustr);
+    pWrtShell->BulletOn();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"DEF"_ustr);
+    pWrtShell->NumUpDown(/*bDown=*/true);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"GHI"_ustr);
+    pWrtShell->NumUpDown(/*bDown=*/false);
+
+    save(TestFilter::HTML_WRITER);
+    xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
+
+    // Without the accompanying fix in place, this test would have failed with a parse error
+    // i.e. the list item (</li>) of the second item was not correctly closed
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/html/body/ul/li", 2);
+    assertXPathContent(pXmlDoc, "/html/body/ul/li[1]/p", u"ABC");
+    assertXPath(pXmlDoc, "/html/body/ul/li[1]/ul/li", 1);
+    assertXPathContent(pXmlDoc, "/html/body/ul/li[1]/ul/li[1]/p", u"DEF");
+    assertXPathContent(pXmlDoc, "/html/body/ul/li[2]/p", u"GHI");
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
 {
     // Given a document with a trailing line-break:

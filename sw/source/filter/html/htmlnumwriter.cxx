@@ -175,7 +175,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
         rWrt.m_aBulletGrfs[i].clear();
         OString sOut = "<" + rWrt.GetNamespace();
-        if (rWrt.mbXHTML && i != nPrevDepth)
+        if (i != nPrevDepth)
         {
             // for all skipped sublevels, add a li
             sOut += OOO_STRING_SVTOOLS_HTML_li "><" + rWrt.GetNamespace();
@@ -323,7 +323,7 @@ SwHTMLWriter& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist ""_ostr;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
-        if (rWrt.mbXHTML && (i != nNextDepth + 1 || (i != 1 && rNextInfo.IsNumbered())))
+        if (i != nNextDepth + 1 || (i != 1 && rNextInfo.IsNumbered()))
         {
             // for all skipped sublevels, close a li
             HTMLOutFuncs::Out_AsciiTag(
