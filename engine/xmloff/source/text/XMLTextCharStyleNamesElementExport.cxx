@@ -48,8 +48,9 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
     if( !(aAny >>= aNames) )
         return;
 
+    // The caller has checked that the property is there, which says nothing about it naming
+    // any style. With no names there is nothing to nest, which the count below takes care of.
     nCount = aNames.getLength();
-    OSL_ENSURE( nCount > 0, "no char style found" );
     if ( bAllStyles ) ++nCount;
     if( nCount > 1 )
     {
