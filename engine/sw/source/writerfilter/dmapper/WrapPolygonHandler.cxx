@@ -182,6 +182,11 @@ void WrapPolygonHandler::lcl_attribute(Id Name, const Value & val)
     case NS_ooxml::LN_CT_Point2D_y:
         mnY = nIntValue;
         break;
+    case NS_ooxml::LN_CT_WrapPath_edited:
+        // Whether the shape of the wrap was drawn by hand or worked out from the picture.
+        // Either way it arrives as the polygon below, and a polygon that came from a file is
+        // never worked out again.
+        break;
     default:
         SAL_WARN("writerfilter", "WrapPolygonHandler::lcl_attribute: unhandled token: " << Name);
         break;
