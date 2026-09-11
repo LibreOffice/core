@@ -19,6 +19,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -33,11 +35,14 @@
 #include <cpo/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 #include <scriptinterop/PageElementType.hpp>
+#include <scriptinterop/PageType.hpp>
 #include <scriptinterop/PlaceholderType.hpp>
 #include <scriptinterop/PredefinedLayout.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
 #include <scriptinterop/XAffineTransform.hpp>
 #include <scriptinterop/XAffineTransformBuilder.hpp>
+#include <scriptinterop/XLayout.hpp>
+#include <scriptinterop/XMaster.hpp>
 #include <scriptinterop/XPageElement.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
@@ -393,8 +398,8 @@ CPPUNIT_TEST_FIXTURE(Test, testUnimplementedMethodReportsItInTheExceptionMessage
     // A method still awaiting an implementation says so plainly in its exception message.
     try
     {
-        xSlide->getLayout();
-        CPPUNIT_FAIL("getLayout: expected an exception");
+        xSlide->getBackground();
+        CPPUNIT_FAIL("getBackground: expected an exception");
     }
     catch (cpo::uno::RuntimeException const& e)
     {
@@ -518,6 +523,61 @@ CPPUNIT_TEST_FIXTURE(Test, testPlaceholders)
         xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_CENTERED_TITLE).IsPresent);
     CPPUNIT_ASSERT(!xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_TITLE).IsPresent);
     CPPUNIT_ASSERT(xTitleSlide->getPlaceholder(scriptinterop::PlaceholderType_SUBTITLE).IsPresent);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLayoutsAndMasters)
+{
+    auto const xPresentation = loadPresentation();
+    // A fresh presentation has one master page.  It serves as both the layout and the master.
+    auto const aLayouts = xPresentation->getLayouts();
+    auto const aMasters = xPresentation->getMasters();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aLayouts.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aMasters.getLength());
+    CPPUNIT_ASSERT_EQUAL(aMasters[0]->getuno(), aLayouts[0]->getuno());
+    auto const xSlide = xPresentation->getSlides()[0];
+    auto const xLayout = getValue(xSlide->getLayout());
+    CPPUNIT_ASSERT_EQUAL(aLayouts[0]->getuno(), xLayout->getuno());
+    CPPUNIT_ASSERT_EQUAL(aMasters[0]->getuno(), xLayout->getMaster()->getuno());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aMasters[0]->getLayouts().getLength());
+    // The layout name is the master page's name.
+    cpo::uno::Reference<css::container::XNamed> const xNamed(xLayout->getuno(),
+                                                             cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xLayout->getLayoutName().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(xNamed->getName(), xLayout->getLayoutName());
+    // Each page kind reports its own type.
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageType_SLIDE, xSlide->getPageType());
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageType_LAYOUT, xLayout->getPageType());
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageType_MASTER, aMasters[0]->getPageType());
+    // The master page lists its own placeholder shapes.
+    CPPUNIT_ASSERT(aMasters[0]->getShapes().getLength() > 0);
+    // A master page that a slide still uses cannot be removed, an unused one can.
+    cpo::uno::Reference<css::drawing::XMasterPagesSupplier> const xSupplier(
+        xPresentation->getuno(), cpo::uno::UNO_QUERY_THROW);
+    xSupplier->getMasterPages()->insertNewByIndex(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPresentation->getMasters().getLength());
+    CPPUNIT_ASSERT_THROW(aMasters[0]->remove(), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPresentation->getMasters().getLength());
+    xPresentation->getMasters()[1]->remove();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPresentation->getMasters().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCurrentPageInMasterView)
+{
+    auto const xPresentation = loadPresentation();
+    // In the master view the current page is a master page, which is also a layout but not a
+    // slide.
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    auto const xPage = getValue(getValue(xPresentation->getSelection())->getCurrentPage());
+    CPPUNIT_ASSERT(xPage.is());
+    CPPUNIT_ASSERT(xPage->asMaster().is());
+    CPPUNIT_ASSERT(xPage->asLayout().is());
+    CPPUNIT_ASSERT_THROW(xPage->asSlide(), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::PageType_MASTER, xPage->getPageType());
+    // Back in the normal view the slide is current, and a slide is not a master.
+    dispatchCommand(mxComponent, u".uno:CloseMasterView"_ustr, {});
+    auto const xSlidePage = getValue(getValue(xPresentation->getSelection())->getCurrentPage());
+    CPPUNIT_ASSERT(xSlidePage->asSlide().is());
+    CPPUNIT_ASSERT_THROW(xSlidePage->asMaster(), cpo::uno::RuntimeException);
 }
 }
 

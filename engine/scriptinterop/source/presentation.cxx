@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <vector>
 
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -20,11 +21,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -137,28 +141,79 @@ cursorProperties(cpo::uno::Reference<css::text::XText> const& text,
     return cpo::uno::Reference<css::beans::XPropertySet>(cursor, cpo::uno::UNO_QUERY_THROW);
 }
 
+// The pages of a page container, in order.
+std::vector<cpo::uno::Reference<css::drawing::XDrawPage>>
+pageList(cpo::uno::Reference<css::drawing::XDrawPages> const& pages)
+{
+    std::vector<cpo::uno::Reference<css::drawing::XDrawPage>> result;
+    auto const n = pages->getCount();
+    for (sal_Int32 i = 0; i != n; ++i)
+    {
+        cpo::uno::Reference<css::drawing::XDrawPage> page;
+        pages->getByIndex(i) >>= page;
+        if (page.is())
+        {
+            result.push_back(page);
+        }
+    }
+    return result;
+}
+
+bool containsPage(cpo::uno::Reference<css::drawing::XDrawPages> const& pages,
+                  cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+{
+    auto const list = pageList(pages);
+    return std::find(list.begin(), list.end(), page) != list.end();
+}
+
 // A page counts as one of the presentation's slides when the model's slide container holds it.
 // Notes, handout and master pages live in other containers, so they do not count.
 bool isSlide(cpo::uno::Reference<css::frame::XModel> const& model,
              cpo::uno::Reference<css::drawing::XDrawPage> const& page)
 {
     cpo::uno::Reference<css::drawing::XDrawPagesSupplier> const sup(model, cpo::uno::UNO_QUERY);
-    if (!sup.is())
+    return sup.is() && containsPage(sup->getDrawPages(), page);
+}
+
+cpo::uno::Reference<css::drawing::XDrawPages>
+masterPages(cpo::uno::Reference<css::frame::XModel> const& model)
+{
+    cpo::uno::Reference<css::drawing::XMasterPagesSupplier> const sup(model,
+                                                                      cpo::uno::UNO_QUERY_THROW);
+    return sup->getMasterPages();
+}
+
+// A page counts as a master page when the model's master page container holds it.
+bool isMasterPage(cpo::uno::Reference<css::frame::XModel> const& model,
+                  cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+{
+    cpo::uno::Reference<css::drawing::XMasterPagesSupplier> const sup(model, cpo::uno::UNO_QUERY);
+    return sup.is() && containsPage(sup->getMasterPages(), page);
+}
+
+// Removes a master page.  The presentation keeps at least one master page, and the drawing layer
+// keeps a master page that a slide still uses, so both cases are errors rather than silent
+// no-ops.
+void removeMasterPage(cpo::uno::Reference<css::frame::XModel> const& model,
+                      cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+{
+    auto const masters = masterPages(model);
+    if (masters->getCount() <= 1)
     {
-        return false;
+        throw cpo::uno::RuntimeException(u"remove: cannot remove the only master page"_ustr);
     }
-    auto const pages = sup->getDrawPages();
-    auto const n = pages->getCount();
-    for (sal_Int32 i = 0; i != n; ++i)
+    cpo::uno::Reference<css::drawing::XDrawPagesSupplier> const sup(model,
+                                                                    cpo::uno::UNO_QUERY_THROW);
+    for (auto const& slide : pageList(sup->getDrawPages()))
     {
-        cpo::uno::Reference<css::drawing::XDrawPage> candidate;
-        pages->getByIndex(i) >>= candidate;
-        if (candidate == page)
+        cpo::uno::Reference<css::drawing::XMasterPageTarget> const target(slide,
+                                                                          cpo::uno::UNO_QUERY);
+        if (target.is() && target->getMasterPage() == page)
         {
-            return true;
+            throw cpo::uno::RuntimeException(u"remove: a slide still uses this master page"_ustr);
         }
     }
-    return false;
+    masters->remove(page);
 }
 
 // A custom shape is word art when its CustomShapeGeometry carries a TextPath group whose TextPath
@@ -1482,9 +1537,19 @@ public:
         throw cpo::uno::RuntimeException(u"getColorScheme: not implemented"_ustr);
     }
 
+    // Slides and master pages have a type of their own.  Notes and handout pages are editable
+    // in the drawing layer but have no type in the API, so they report UNSUPPORTED.
     scriptinterop::PageType SAL_CALL getPageType() override
     {
-        throw cpo::uno::RuntimeException(u"getPageType: not implemented"_ustr);
+        if (isSlide(this->model_, this->page_))
+        {
+            return scriptinterop::PageType_SLIDE;
+        }
+        if (isMasterPage(this->model_, this->page_))
+        {
+            return scriptinterop::PageType_MASTER;
+        }
+        return scriptinterop::PageType_UNSUPPORTED;
     }
 
     cpo::uno::Reference<scriptinterop::XGroup>
@@ -1593,6 +1658,60 @@ public:
     }
 };
 
+class MasterImpl;
+
+// TODO: The drawing layer has no separate layout page between a slide and its master page, so
+// the Layout role is played by the master page itself.  A slide's layout is its master page, the
+// layout's master is that same page, and the layout name is the master page's name.  When the
+// drawing layer gains layout pages, this class should wrap those instead.
+class LayoutImpl : public EditablePageImpl<scriptinterop::XLayout>
+{
+public:
+    LayoutImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+               cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+        : EditablePageImpl(model, page)
+    {
+    }
+
+    OUString getLayoutName() override
+    {
+        cpo::uno::Reference<css::container::XNamed> const named(page_, cpo::uno::UNO_QUERY_THROW);
+        return named->getName();
+    }
+
+    cpo::uno::Reference<scriptinterop::XMaster> getMaster() override;
+
+    scriptinterop::PageType getPageType() override
+    {
+        return scriptinterop::PageType_LAYOUT;
+    }
+
+    void remove() override { removeMasterPage(model_, page_); }
+};
+
+class MasterImpl : public EditablePageImpl<scriptinterop::XMaster>
+{
+public:
+    MasterImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+               cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+        : EditablePageImpl(model, page)
+    {
+    }
+
+    // The master page is its own single layout.
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLayout>> getLayouts() override
+    {
+        return { cpo::uno::Reference<scriptinterop::XLayout>(new LayoutImpl(model_, page_)) };
+    }
+
+    void remove() override { removeMasterPage(model_, page_); }
+};
+
+cpo::uno::Reference<scriptinterop::XMaster> LayoutImpl::getMaster()
+{
+    return new MasterImpl(model_, page_);
+}
+
 class SlideImpl : public EditablePageImpl<scriptinterop::XSlide>
 {
 public:
@@ -1647,7 +1766,9 @@ public:
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayout() override
     {
-        throw cpo::uno::RuntimeException(u"getLayout: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XMasterPageTarget> const target(
+            page_, cpo::uno::UNO_QUERY_THROW);
+        return {true, new LayoutImpl(model_, target->getMasterPage())};
     }
 
     cpo::uno::Reference<scriptinterop::XNotesPage> SAL_CALL getNotesPage() override
@@ -1687,12 +1808,20 @@ public:
 
     cpo::uno::Reference<scriptinterop::XLayout> SAL_CALL asLayout() override
     {
-        throw cpo::uno::RuntimeException(u"asLayout: not implemented"_ustr);
+        if (!isMasterPage(model_, page_))
+        {
+            throw cpo::uno::RuntimeException(u"asLayout: the page is not a layout"_ustr);
+        }
+        return new LayoutImpl(model_, page_);
     }
 
     cpo::uno::Reference<scriptinterop::XMaster> SAL_CALL asMaster() override
     {
-        throw cpo::uno::RuntimeException(u"asMaster: not implemented"_ustr);
+        if (!isMasterPage(model_, page_))
+        {
+            throw cpo::uno::RuntimeException(u"asMaster: the page is not a master page"_ustr);
+        }
+        return new MasterImpl(model_, page_);
     }
 
     cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL asSlide() override
@@ -1813,12 +1942,24 @@ public:
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayouts() override
     {
-        throw cpo::uno::RuntimeException(u"getLayouts: not implemented"_ustr);
+        std::vector<cpo::uno::Reference<scriptinterop::XLayout>> layouts;
+        for (auto const& page : pageList(masterPages(model_)))
+        {
+            layouts.emplace_back(new LayoutImpl(model_, page));
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XLayout>>(layouts.data(),
+                                                                               layouts.size());
     }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XMaster>> SAL_CALL getMasters() override
     {
-        throw cpo::uno::RuntimeException(u"getMasters: not implemented"_ustr);
+        std::vector<cpo::uno::Reference<scriptinterop::XMaster>> masters;
+        for (auto const& page : pageList(masterPages(model_)))
+        {
+            masters.emplace_back(new MasterImpl(model_, page));
+        }
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XMaster>>(masters.data(),
+                                                                               masters.size());
     }
 
     OUString SAL_CALL getName() override
@@ -1866,16 +2007,9 @@ public:
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlide>> SAL_CALL getSlides() override
     {
         std::vector<cpo::uno::Reference<scriptinterop::XSlide>> slides;
-        auto const pages = drawPages();
-        auto const n = pages->getCount();
-        for (sal_Int32 i = 0; i != n; ++i)
+        for (auto const& page : pageList(drawPages()))
         {
-            cpo::uno::Reference<css::drawing::XDrawPage> page;
-            pages->getByIndex(i) >>= page;
-            if (page.is())
-            {
-                slides.emplace_back(new SlideImpl(model_, page));
-            }
+            slides.emplace_back(new SlideImpl(model_, page));
         }
         return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XSlide>>(slides.data(),
                                                                               slides.size());
