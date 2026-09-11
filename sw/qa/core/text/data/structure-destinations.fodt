@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><dc:title>Structure destinations</dc:title></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:font-name-asian="Liberation Serif" style:font-size-asian="12pt" style:font-name-complex="Liberation Serif" style:font-size-complex="12pt"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Standard" style:default-outline-level="1" style:class="text">
+   <style:text-properties fo:font-size="16pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Footnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
+  <style:style style:name="Bibliography_20_1" style:display-name="Bibliography 1" style:family="paragraph" style:parent-style-name="Standard" style:class="index"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark text:name="mark1"/>A heading</text:h>
+   <text:p text:style-name="Standard"><draw:custom-shape draw:style-name="gr1" text:anchor-type="paragraph" svg:width="5cm" svg:height="1cm" svg:x="1cm" svg:y="1cm"><text:p text:style-name="Standard"><text:a xlink:type="simple" xlink:href="#mark1">Jump to the heading</text:a></text:p><draw:enhanced-geometry draw:type="rectangle"/></draw:custom-shape></text:p>
+   <text:p text:style-name="Standard">Body text with a footnote.<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p text:style-name="Footnote">The footnote body.</text:p></text:note-body></text:note></text:p>
+   <text:p text:style-name="Standard">A citation <text:bibliography-mark text:identifier="AAA" text:bibliography-type="book" text:author="An author" text:title="A title" loext:target-type="3">[AAA]</text:bibliography-mark></text:p>
+   <text:bibliography text:name="Bibliography1" text:protected="true">
+    <text:bibliography-source>
+     <text:bibliography-entry-template text:bibliography-type="book" text:style-name="Bibliography_20_1">
+      <text:index-entry-bibliography text:bibliography-data-field="identifier"/>
+     </text:bibliography-entry-template>
+    </text:bibliography-source>
+    <text:index-body>
+     <text:p text:style-name="Bibliography_20_1">AAA</text:p>
+    </text:index-body>
+   </text:bibliography>
+  </office:text>
+ </office:body>
+</office:document>

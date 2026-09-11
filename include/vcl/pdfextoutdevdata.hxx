@@ -296,6 +296,8 @@ public:
         the dest the link shall point to
     */
     void SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
+    /** Name the structure element a destination points at, for ISO 14289-2 8.8 */
+    void SetDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId);
     /** Set the URL for a link
         <p>will change a dest type link to a URL type link if necessary</p>
         @param nLinkId

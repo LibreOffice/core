@@ -41,6 +41,7 @@ class SwEditShell;
 class StringRangeEnumerator;
 class SwTextAttr;
 class SwTextNode;
+struct SwPosition;
 class SwTextPaintInfo;
 class SwTextFrame;
 
@@ -231,6 +232,13 @@ class SwEnhancedPDFExportHelper
 
     /// Exports bibliography entry links.
     void ExportAuthorityEntryLinks();
+
+    /// Creates a destination, and remembers the node it points at, to name it once tagging is done.
+    /// The target is either the node the cursor jumped to since rBeforeJump, or one known outright.
+    sal_Int32 CreateDestination(const SwPageFrame* pCurrPage, const SwRect& rRect,
+                                sal_Int32 nPageNum, const SwPosition& rBeforeJump);
+    sal_Int32 CreateDestination(const SwPageFrame* pCurrPage, const SwRect& rRect,
+                                sal_Int32 nPageNum, const SwTextNode* pTarget);
 
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
     std::vector< sal_Int32 > CalcOutputPageNums( const SwRect& rRect ) const;

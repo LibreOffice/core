@@ -75,6 +75,11 @@ struct SetLinkDest {
     sal_Int32 mnLinkId;
     sal_Int32 mnDestId;
 };
+struct SetDestStructureElement
+{
+    sal_Int32 mnDestId;
+    sal_Int32 mnStructElementId;
+};
 struct SetLinkURL {
     OUString maLinkURL;
     sal_Int32 mnLinkId;
@@ -144,6 +149,7 @@ typedef std::variant<CreateNamedDest,
                     CreateLink,
                     CreateScreen,
                     SetLinkDest,
+                    SetDestStructureElement,
                     SetLinkURL,
                     SetScreenURL,
                     SetScreenStream,
@@ -273,6 +279,11 @@ void GlobalSyncData::PlayGlobalActions( pdf::PDFWriter& rWriter )
             sal_Int32 nLinkId = GetMappedId(rSetLinkDest.mnLinkId);
             sal_Int32 nDestId = GetMappedId(rSetLinkDest.mnDestId);
             rWriter.SetLinkDest( nLinkId, nDestId );
+        }
+        else if (std::holds_alternative<SetDestStructureElement>(action))
+        {
+            const vcl::SetDestStructureElement& rSet = std::get<SetDestStructureElement>(action);
+            rWriter.SetDestStructureElement(GetMappedId(rSet.mnDestId), rSet.mnStructElementId);
         }
         else if (std::holds_alternative<SetLinkURL>(action)) {
             const vcl::SetLinkURL& rSetLinkURL = std::get<SetLinkURL>(action);
@@ -701,6 +712,11 @@ sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect,
         assert(false); // expected?
     }
     return it->second;
+}
+
+void PDFExtOutDevData::SetDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId)
+{
+    mpGlobalSyncData->mActions.push_back(vcl::SetDestStructureElement{ nDestId, nStructElementId });
 }
 
 void PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )

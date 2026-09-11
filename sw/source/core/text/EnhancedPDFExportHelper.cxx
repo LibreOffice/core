@@ -20,6 +20,7 @@
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <algorithm>
+#include <unordered_map>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -151,6 +152,8 @@ struct SwEnhancedPDFState
     NumListIdMap m_NumListIdMap;
     NumListBodyIdMap m_NumListBodyIdMap;
     FrameTagSet m_FrameTagSet;
+    std::unordered_map<sal_Int32, const SwTextNode*> m_DestNodeMap;
+    std::unordered_map<const SwTextNode*, sal_Int32> m_NodeTagIdMap;
 
     LanguageType m_eLanguageDefault;
 
@@ -442,6 +445,22 @@ bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextN
     return bRet;
 }
 
+// a jump that selects an object, or finds nothing, moves the cursor nowhere and names no node
+const SwTextNode* lcl_JumpedToNode(const SwEditShell& rSh, const SwPosition& rBeforeJump)
+{
+    const SwPosition& rPoint = *rSh.GetCursor_()->GetPoint();
+    return rPoint == rBeforeJump ? nullptr : rPoint.GetNode().GetTextNode();
+}
+
+// a destination is made before its target is tagged, so remember the node
+void lcl_RememberDestNode(vcl::PDFExtOutDevData& rPDFExtOutDevData, const SwTextNode* pTextNode,
+                          const sal_Int32 nDestId)
+{
+    SwEnhancedPDFState* pState = rPDFExtOutDevData.GetSwPDFState();
+    if (pState && nDestId >= 0 && pTextNode)
+        pState->m_DestNodeMap.emplace(nDestId, pTextNode);
+}
+
 bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, const SwFormatField& rField)
 {
     // 1. Check if the whole paragraph is hidden
@@ -693,6 +712,16 @@ void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& 
     }
 
     sal_Int32 const nId = BeginTagImpl(pKey, eType, rString);
+
+    // which tag a destination pointing at this node names
+    if (mpFrameInfo && mpFrameInfo->mrFrame.IsTextFrame())
+    {
+        const SwTextFrame& rTextFrame(static_cast<const SwTextFrame&>(mpFrameInfo->mrFrame));
+        if (const SwTextNode* pTextNode = rTextFrame.GetTextNodeFirst())
+        {
+            mpPDFExtOutDevData->GetSwPDFState()->m_NodeTagIdMap.emplace(pTextNode, nId);
+        }
+    }
 
     // Store the id of the current structure element if
     // - it is a list structure element
@@ -2446,6 +2475,27 @@ tools::Rectangle SwEnhancedPDFExportHelper::MapSwRectToPDFRect(const SwPageFrame
     return aRect;
 }
 
+sal_Int32 SwEnhancedPDFExportHelper::CreateDestination(const SwPageFrame* pCurrPage,
+                                                       const SwRect& rRect,
+                                                       const sal_Int32 nPageNum,
+                                                       const SwPosition& rBeforeJump)
+{
+    return CreateDestination(pCurrPage, rRect, nPageNum, lcl_JumpedToNode(mrSh, rBeforeJump));
+}
+
+sal_Int32 SwEnhancedPDFExportHelper::CreateDestination(const SwPageFrame* pCurrPage,
+                                                       const SwRect& rRect,
+                                                       const sal_Int32 nPageNum,
+                                                       const SwTextNode* pTarget)
+{
+    assert(dynamic_cast<vcl::PDFExtOutDevData*>(mrOut.GetExtOutDevData()));
+    auto& rPDFExtOutDevData = *static_cast<vcl::PDFExtOutDevData*>(mrOut.GetExtOutDevData());
+    const sal_Int32 nDestId
+        = rPDFExtOutDevData.CreateDest(SwRectToPDFRect(pCurrPage, rRect.SVRect()), nPageNum);
+    lcl_RememberDestNode(rPDFExtOutDevData, pTarget, nDestId);
+    return nDestId;
+}
+
 void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDefault)
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
@@ -2600,6 +2650,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         aURL = aURL.copy( 1 );
                         mrSh.SwCursorShell::ClearMark();
+                        const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
                         if (! JumpToSwMark( &mrSh, SwMarkName(aURL) ))
                         {
                             continue; // target deleted
@@ -2617,8 +2668,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                         // Destination Export
                         if ( -1 != nDestPageNum )
                         {
-                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                            nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                            nDestId = CreateDestination(pCurrPage, rDestRect, nDestPageNum,
+                                                        aBeforeJump);
                         }
                     }
 
@@ -2688,6 +2739,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     aURL = aURL.copy( 1 );
                     mrSh.SwCursorShell::ClearMark();
+                    const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
                     if (! JumpToSwMark( &mrSh, SwMarkName(aURL) ))
                     {
                         continue; // target deleted
@@ -2704,8 +2756,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // Destination Export
                     if ( -1 != nDestPageNum )
                     {
-                        tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                        nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                        nDestId
+                            = CreateDestination(pCurrPage, rDestRect, nDestPageNum, aBeforeJump);
                     }
                 }
 
@@ -2838,6 +2890,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 // Destination Rectangle
                 const SwGetRefField* pField = static_cast<SwGetRefField*>(pFormatField->GetField());
                 const SwMarkName& rRefName = pField->GetSetRefName();
+                const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
                 mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo(), pField->GetFlags() );
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -2849,8 +2902,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 if ( -1 != nDestPageNum )
                 {
                     // Destination Export
-                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                    const sal_Int32 nDestId
+                        = CreateDestination(pCurrPage, rDestRect, nDestPageNum, aBeforeJump);
 
                     // #i44368# Links in Header/Footer
                     const bool bHeaderFooter = pDoc->IsInHeaderFooter( *pTNd );
@@ -2868,7 +2921,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                         for (sal_Int32 aLinkPageNum : aLinkPageNums)
                         {
                             // Link Export
-                            aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
+                            const tools::Rectangle aRect(
+                                SwRectToPDFRect(pCurrPage, rLinkRect.SVRect()));
                             const sal_Int32 nLinkId =
                                 pPDFExtOutDevData->CreateLink(aRect, rRefName.toString(), aLinkPageNum);
 
@@ -2932,6 +2986,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             const SwRect aLinkRect( aTmp[ 0 ] );
 
             // Goto footnote text:
+            const SwPosition aBeforeFootnote(*mrSh.GetCursor_()->GetPoint());
             if ( mrSh.GotoFootnoteText() )
             {
                 // Destination Rectangle
@@ -2940,8 +2995,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 if ( -1 != nDestPageNum )
                 {
                     const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-                    // Destination PageNum
-                    tools::Rectangle aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
                     // Back link rectangle calculation
                     const SwPageFrame* fnBodyPage = pCurrPage->getRootFrame()->GetPageByPageNum(nDestPageNum+1);
                     SwRect fnSymbolRect;
@@ -2968,16 +3021,19 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // Export back link
                     const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, numStrRef, nDestPageNum);
                     // Destination Export
-                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                    const sal_Int32 nDestId
+                        = CreateDestination(pCurrPage, rDestRect, nDestPageNum, aBeforeFootnote);
+                    const SwPosition aBeforeAnchor(*mrSh.GetCursor_()->GetPoint());
                     mrSh.GotoFootnoteAnchor();
                     // Link PageNums
                     sal_Int32 aLinkPageNum = CalcOutputPageNum( aLinkRect );
                     pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Link Export
-                    aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
+                    const tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                     const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, numStrSymbol, aLinkPageNum);
                     // Back link destination Export
-                    const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
+                    const sal_Int32 nBackDestId
+                        = CreateDestination(pCurrPage, aLinkRect, aLinkPageNum, aBeforeAnchor);
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
                     pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
@@ -3042,6 +3098,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 const sal_Int32 nParent = aOutlineStack.top().second;
 
                 // Destination rectangle
+                const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
                 mrSh.GotoOutline(i);
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -3054,9 +3111,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 if ( -1 != nDestPageNum )
                 {
                     // Destination Export
-                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                    const sal_Int32 nDestId =
-                        pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                    const sal_Int32 nDestId
+                        = CreateDestination(pCurrPage, rDestRect, nDestPageNum, aBeforeJump);
 
                     // Outline entry text
                     const OUString aEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
@@ -3183,7 +3239,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             if ( bInternal )
             {
                 aBookmarkName = aBookmarkName.copy( 1 );
-                JumpToSwMark( &mrSh, SwMarkName(aBookmarkName) );
+                const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
+                const bool bJumped = JumpToSwMark(&mrSh, SwMarkName(aBookmarkName));
 
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
@@ -3196,18 +3253,32 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                 if ( -1 != nDestPageNum )
                 {
-                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     if ( rBookmark.nLinkId != -1 )
                     {
+                        const SwTextNode* pTarget = lcl_JumpedToNode(mrSh, aBeforeJump);
+                        if (!pTarget && bJumped)
+                        {
+                            // this pass can begin with the cursor on the target already, where a
+                            // successful jump shows no move, and the mark names its own node
+                            const IDocumentMarkAccess& rMarks = *pDoc->getIDocumentMarkAccess();
+                            const auto ppMark = rMarks.findMark(SwMarkName(INetURLObject::decode(
+                                aBookmarkName, INetURLObject::DecodeMechanism::WithCharset)));
+                            if (ppMark != rMarks.getAllMarksEnd())
+                                pTarget = (*ppMark)->GetMarkStart().GetNode().GetTextNode();
+                        }
+
                         // Destination Export
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                        const sal_Int32 nDestId
+                            = CreateDestination(pCurrPage, rDestRect, nDestPageNum, pTarget);
 
                         // Connect Link and Destination:
                         pPDFExtOutDevData->SetLinkDest( rBookmark.nLinkId, nDestId );
                     }
                     else
                     {
-                        pPDFExtOutDevData->DescribeRegisteredDest(rBookmark.nDestId, aRect, nDestPageNum);
+                        pPDFExtOutDevData->DescribeRegisteredDest(
+                            rBookmark.nDestId, SwRectToPDFRect(pCurrPage, rDestRect.SVRect()),
+                            nDestPageNum);
                     }
                 }
             }
@@ -3217,6 +3288,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
         rBookmarks.clear();
         assert(pPDFExtOutDevData->GetSwPDFState());
         assert(pPDFExtOutDevData->GetSwPDFState()->m_DeferredTags.empty());
+
+        // everything is tagged now, so each destination can name its element
+        SwEnhancedPDFState& rState(*pPDFExtOutDevData->GetSwPDFState());
+        for (const auto& rDest : rState.m_DestNodeMap)
+        {
+            const auto it(rState.m_NodeTagIdMap.find(rDest.second));
+            if (it != rState.m_NodeTagIdMap.end())
+            {
+                pPDFExtOutDevData->SetDestStructureElement(rDest.first, it->second);
+            }
+        }
+
         delete pPDFExtOutDevData->GetSwPDFState();
         pPDFExtOutDevData->SetSwPDFState(nullptr);
     }
@@ -3265,9 +3348,10 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                         // Destination Export
                         if ( -1 != nDestPageNum )
                         {
-                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                            const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
-                            const OUString* vNodeText = &static_cast<const SwTextNode*>(&rCurrentNode)->GetText();
+                            auto& rTextNode = static_cast<const SwTextNode&>(rCurrentNode);
+                            const sal_Int32 nDestId
+                                = CreateDestination(pCurrPage, rDestRect, nDestPageNum, &rTextNode);
+                            const OUString* vNodeText = &rTextNode.GetText();
                             vDestinations.emplace_back(pIteratedTOX, vNodeText, nDestId);
                         }
                     }

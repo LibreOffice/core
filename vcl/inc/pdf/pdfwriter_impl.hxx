@@ -386,6 +386,8 @@ struct PDFDest
     sal_Int32                   m_nPage;
     PDFWriter::DestAreaType     m_eType;
     tools::Rectangle                   m_aRect;
+    /// index into m_aStructure, -1 when the target is not tagged
+    sal_Int32 m_nStructElement = -1;
 };
 
 //--->i56629
@@ -995,6 +997,10 @@ private:
     sal_Int32 emitResources();
     // appends a dest
     bool appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer );
+    /// ISO 14289-2 requires a GoTo action to name the structure element, not only the page
+    bool appendStructureDest(sal_Int32 nDestID, OStringBuffer& rBuffer);
+    /// writes /Dest, or the GoTo action carrying /SD when the target is tagged
+    void appendDestOrGoTo(sal_Int32 nDestID, OStringBuffer& rBuffer);
     // write all links
     bool emitLinkAnnotations();
     // Write all screen annotations.
@@ -1314,6 +1320,7 @@ public:
     sal_Int32 createDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
+    void setDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId);
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
