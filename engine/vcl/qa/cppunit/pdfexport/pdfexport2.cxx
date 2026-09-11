@@ -2065,9 +2065,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
     loadFromFile(u"StructureNamespaces.fodt");
 
     // Tagged rather than PDF/UA, because the harness validates a PDF/UA export and this document
-    // still fails ISO 14289-2 8.8 (a link destination is not a structure destination, tdf#171022),
-    // 8.2.5.8 (a TOCI needs Ref) and 8.2.5.14 (PDF/UA-2 wants FENote, not Note). TODO: ask for
-    // PDF/UA here once those are fixed. The namespaces below depend on the version alone.
+    // still fails ISO 14289-2 8.2.5.8 (a TOCI needs Ref) and 8.2.5.14 (PDF/UA-2 wants FENote,
+    // not Note). TODO: ask for PDF/UA here once those are fixed. The namespaces below depend on
+    // the version alone.
     cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                     comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                                   sal_Int32(20)) };

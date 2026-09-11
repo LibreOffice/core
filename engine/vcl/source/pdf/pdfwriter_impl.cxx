@@ -2477,8 +2477,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
             // Dest is not required
             if( rItem.m_nDestID >= 0 && o3tl::make_unsigned(rItem.m_nDestID) < m_aDests.size() )
             {
-                aLine.append( "/Dest" );
-                appendDest( rItem.m_nDestID, aLine );
+                appendDestOrGoTo(rItem.m_nDestID, aLine);
             }
             aLine.append( "/Parent "
                 + OString::number( rItem.m_nParentObject )
@@ -2502,6 +2501,47 @@ sal_Int32 PDFWriterImpl::emitOutline()
     }
 
     return m_aOutline[0].m_nObject;
+}
+
+bool PDFWriterImpl::appendStructureDest(sal_Int32 nDestID, OStringBuffer& rBuffer)
+{
+    if (nDestID < 0 || o3tl::make_unsigned(nDestID) >= m_aDests.size())
+        return false;
+
+    const PDFDest& rDest = m_aDests[nDestID];
+    if (rDest.m_nStructElement < 0
+        || o3tl::make_unsigned(rDest.m_nStructElement) >= m_aStructure.size())
+        return false;
+
+    const sal_Int32 nObject(m_aStructure[rDest.m_nStructElement].m_nObject);
+    if (nObject <= 0) // not emitted: NonStruct, or no structure at all
+        return false;
+
+    // same as the page destination, bar the first entry
+    OStringBuffer aPageDest;
+    if (!appendDest(nDestID, aPageDest))
+        return false;
+    const OString aPage(aPageDest.makeStringAndClear());
+    const sal_Int32 nAfterPage(aPage.indexOf(" 0 R") + 4);
+
+    rBuffer.append("[" + OString::number(nObject) + " 0 R" + aPage.subView(nAfterPage));
+    return true;
+}
+
+void PDFWriterImpl::appendDestOrGoTo(sal_Int32 nDestID, OStringBuffer& rBuffer)
+{
+    OStringBuffer aStructure;
+    if (!appendStructureDest(nDestID, aStructure))
+    {
+        rBuffer.append("/Dest");
+        appendDest(nDestID, rBuffer);
+        return;
+    }
+
+    // ISO 14289-2 8.8: a destination inside the document shall be a structure destination
+    rBuffer.append("/A<</Type/Action/S/GoTo/D");
+    appendDest(nDestID, rBuffer);
+    rBuffer.append("/SD" + aStructure.makeStringAndClear() + ">>");
 }
 
 bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
@@ -2751,8 +2791,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
         }
         if( rLink.m_nDest >= 0 )
         {
-            aLine.append( "/Dest" );
-            appendDest( rLink.m_nDest, aLine );
+            appendDestOrGoTo(rLink.m_nDest, aLine);
         }
         else
         {
@@ -9983,6 +10022,14 @@ sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const tools::
 {
     m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
     return m_aDestinationIdTranslation[ nDestId ];
+}
+
+void PDFWriterImpl::setDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId)
+{
+    if (nDestId < 0 || o3tl::make_unsigned(nDestId) >= m_aDests.size())
+        return;
+
+    m_aDests[nDestId].m_nStructElement = nStructElementId;
 }
 
 void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
