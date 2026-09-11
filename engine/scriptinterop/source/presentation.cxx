@@ -34,12 +34,15 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <cpo/uno/Reference.hxx>
+#include <com/sun/star/util/XReplaceDescriptor.hpp>
+#include <com/sun/star/util/XReplaceable.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/Any.hxx>
@@ -375,6 +378,42 @@ placeholderType(cpo::uno::Reference<css::drawing::XShape> const& shape, AutoLayo
         return scriptinterop::PlaceholderType_UNSUPPORTED;
     }
     return scriptinterop::PlaceholderType_NONE;
+}
+
+// Replaces every occurrence of findText in the texts of the page's shapes and returns how many
+// occurrences were replaced.  The match ignores case unless matchCase is set.
+sal_Int32 replaceAllOnPage(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
+                           OUString const& findText, OUString const& replaceText, bool matchCase)
+{
+    if (findText.isEmpty())
+    {
+        throw cpo::uno::RuntimeException(u"replaceAllText: expected a non-empty search text"_ustr);
+    }
+    cpo::uno::Reference<css::util::XReplaceable> const replaceable(page, cpo::uno::UNO_QUERY_THROW);
+    auto const descriptor = replaceable->createReplaceDescriptor();
+    descriptor->setSearchString(findText);
+    descriptor->setReplaceString(replaceText);
+    descriptor->setPropertyValue(u"SearchCaseSensitive"_ustr, cpo::uno::Any(matchCase));
+    return replaceable->replaceAll(descriptor);
+}
+
+// Reads a page's size property.  The drawing layer stores it as a 1/100 mm integer.
+double pageSizePoints(cpo::uno::Reference<css::drawing::XDrawPage> const& page,
+                      OUString const& propertyName)
+{
+    cpo::uno::Reference<css::beans::XPropertySet> const props(page, cpo::uno::UNO_QUERY_THROW);
+    sal_Int32 sizeHundredthMm = 0;
+    props->getPropertyValue(propertyName) >>= sizeHundredthMm;
+    return hundredthMmToPoints(sizeHundredthMm);
+}
+
+// The notes page attached to a slide or to a master page.
+cpo::uno::Reference<css::drawing::XDrawPage>
+notesPageOf(cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+{
+    cpo::uno::Reference<css::presentation::XPresentationPage> const presentationPage(
+        page, cpo::uno::UNO_QUERY_THROW);
+    return presentationPage->getNotesPage();
 }
 
 // Throwing defaults for the shared page element surface.  A leaf implementation class derives
@@ -1658,6 +1697,52 @@ public:
     }
 };
 
+class NotesPageImpl : public PageBaseImpl<scriptinterop::XNotesPage>
+{
+public:
+    NotesPageImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+                  cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+        : PageBaseImpl(model, page)
+    {
+    }
+
+    // The speaker notes live in the page's notes placeholder shape.
+    cpo::uno::Reference<scriptinterop::XShape> getSpeakerNotesShape() override
+    {
+        for (auto const& shape : shapes())
+        {
+            if (shape->getShapeType() == "com.sun.star.presentation.NotesShape")
+            {
+                return new ShapeImpl(page_, shape);
+            }
+        }
+        throw cpo::uno::RuntimeException(
+            u"getSpeakerNotesShape: the notes page has no notes shape"_ustr);
+    }
+
+    sal_Int32 replaceAllText(OUString const& findText,
+                             OUString const& replaceText) override
+    {
+        return replaceAllOnPage(page_, findText, replaceText, false);
+    }
+
+    sal_Int32 replaceAllTextMatchCase(OUString const& findText,
+                                      OUString const& replaceText, bool matchCase) override
+    {
+        return replaceAllOnPage(page_, findText, replaceText, matchCase);
+    }
+};
+
+class NotesMasterImpl : public PageBaseImpl<scriptinterop::XNotesMaster>
+{
+public:
+    NotesMasterImpl(cpo::uno::Reference<css::frame::XModel> const& model,
+                    cpo::uno::Reference<css::drawing::XDrawPage> const& page)
+        : PageBaseImpl(model, page)
+    {
+    }
+};
+
 class MasterImpl;
 
 // TODO: The drawing layer has no separate layout page between a slide and its master page, so
@@ -1773,7 +1858,7 @@ public:
 
     cpo::uno::Reference<scriptinterop::XNotesPage> SAL_CALL getNotesPage() override
     {
-        throw cpo::uno::RuntimeException(u"getNotesPage: not implemented"_ustr);
+        return new NotesPageImpl(model_, notesPageOf(page_));
     }
 
     scriptinterop::SlideLinkingMode SAL_CALL getSlideLinkingMode() override
@@ -1967,19 +2052,22 @@ public:
         throw cpo::uno::RuntimeException(u"getName: not implemented"_ustr);
     }
 
+    // The notes master is the notes page of the first master page.
     cpo::uno::Reference<scriptinterop::XNotesMaster> SAL_CALL getNotesMaster() override
     {
-        throw cpo::uno::RuntimeException(u"getNotesMaster: not implemented"_ustr);
+        cpo::uno::Reference<css::drawing::XDrawPage> master;
+        masterPages(model_)->getByIndex(0) >>= master;
+        return new NotesMasterImpl(model_, notesPageOf(master));
     }
 
     double SAL_CALL getNotesPageHeight() override
     {
-        throw cpo::uno::RuntimeException(u"getNotesPageHeight: not implemented"_ustr);
+        return pageSizePoints(notesPageOf(firstSlide()), u"Height"_ustr);
     }
 
     double SAL_CALL getNotesPageWidth() override
     {
-        throw cpo::uno::RuntimeException(u"getNotesPageWidth: not implemented"_ustr);
+        return pageSizePoints(notesPageOf(firstSlide()), u"Width"_ustr);
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
@@ -1988,9 +2076,12 @@ public:
         throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
     }
 
-    double SAL_CALL getPageHeight() override { return pageSizePoints(u"Height"_ustr); }
+    double getPageHeight() override
+    {
+        return pageSizePoints(firstSlide(), u"Height"_ustr);
+    }
 
-    double SAL_CALL getPageWidth() override { return pageSizePoints(u"Width"_ustr); }
+    double getPageWidth() override { return pageSizePoints(firstSlide(), u"Width"_ustr); }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideSelection>> SAL_CALL
     getSelection() override
@@ -2059,17 +2150,11 @@ private:
         return new SlideImpl(model_, page);
     }
 
-    // Reads the size property of the first slide.  The drawing layer stores it as a 1/100 mm
-    // integer.
-    double pageSizePoints(OUString const& propertyName)
+    cpo::uno::Reference<css::drawing::XDrawPage> firstSlide()
     {
         cpo::uno::Reference<css::drawing::XDrawPage> page;
         drawPages()->getByIndex(0) >>= page;
-        cpo::uno::Reference<css::beans::XPropertySet> const props(page,
-                                                                  cpo::uno::UNO_QUERY_THROW);
-        sal_Int32 sizeHundredthMm = 0;
-        props->getPropertyValue(propertyName) >>= sizeHundredthMm;
-        return hundredthMmToPoints(sizeHundredthMm);
+        return page;
     }
 
     cpo::uno::Reference<css::drawing::XDrawPages> drawPages()

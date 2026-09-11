@@ -43,6 +43,8 @@
 #include <scriptinterop/XAffineTransformBuilder.hpp>
 #include <scriptinterop/XLayout.hpp>
 #include <scriptinterop/XMaster.hpp>
+#include <scriptinterop/XNotesMaster.hpp>
+#include <scriptinterop/XNotesPage.hpp>
 #include <scriptinterop/XPageElement.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
@@ -578,6 +580,32 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageInMasterView)
     auto const xSlidePage = getValue(getValue(xPresentation->getSelection())->getCurrentPage());
     CPPUNIT_ASSERT(xSlidePage->asSlide().is());
     CPPUNIT_ASSERT_THROW(xSlidePage->asMaster(), cpo::uno::RuntimeException);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNotesPage)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSlide = xPresentation->getSlides()[0];
+    auto const xNotes = xSlide->getNotesPage();
+    CPPUNIT_ASSERT(xNotes.is());
+    // The speaker notes shape holds the notes text.
+    auto const xNotesShape = xNotes->getSpeakerNotesShape();
+    xNotesShape->getText()->setText(u"Speaker notes here"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Speaker notes here"_ustr, xNotesShape->getText()->asString());
+    // Replacing counts each replaced occurrence; the default match ignores case.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNotes->replaceAllText(u"here"_ustr, u"there"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Speaker notes there"_ustr, xNotesShape->getText()->asString());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         xNotes->replaceAllTextMatchCase(u"SPEAKER"_ustr, u"x"_ustr, true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNotes->replaceAllTextMatchCase(u"SPEAKER"_ustr,
+                                                                       u"Presenter"_ustr, false));
+    CPPUNIT_ASSERT_EQUAL(u"Presenter notes there"_ustr, xNotesShape->getText()->asString());
+    // An empty search text is rejected.
+    CPPUNIT_ASSERT_THROW(xNotes->replaceAllText(u""_ustr, u"x"_ustr), cpo::uno::RuntimeException);
+    // The notes master exists, and the notes page is taller than it is wide.
+    CPPUNIT_ASSERT(xPresentation->getNotesMaster().is());
+    CPPUNIT_ASSERT(xPresentation->getNotesPageWidth() > 0);
+    CPPUNIT_ASSERT(xPresentation->getNotesPageHeight() > xPresentation->getNotesPageWidth());
 }
 }
 
