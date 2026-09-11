@@ -31,6 +31,8 @@
 #include <rtl/ustring.hxx>
 #include <scriptinterop/PredefinedLayout.hpp>
 #include <scriptinterop/SlideLinkingMode.hpp>
+#include <scriptinterop/XAffineTransform.hpp>
+#include <scriptinterop/XAffineTransformBuilder.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XShape.hpp>
 #include <scriptinterop/XSlide.hpp>
@@ -394,6 +396,40 @@ CPPUNIT_TEST_FIXTURE(Test, testUnimplementedMethodReportsItInTheExceptionMessage
         // wording rather than the exact end of the string.
         CPPUNIT_ASSERT(e.Message.indexOf(u"not implemented") >= 0);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAffineTransformBuilder)
+{
+    auto const xFactory = cool::get(comphelper::getProcessComponentContext());
+    // A fresh builder produces the identity transform.
+    auto const xIdentity = xFactory->newAffineTransformBuilder()->build();
+    CPPUNIT_ASSERT_EQUAL(1.0, xIdentity->getScaleX());
+    CPPUNIT_ASSERT_EQUAL(1.0, xIdentity->getScaleY());
+    CPPUNIT_ASSERT_EQUAL(0.0, xIdentity->getShearX());
+    CPPUNIT_ASSERT_EQUAL(0.0, xIdentity->getShearY());
+    CPPUNIT_ASSERT_EQUAL(0.0, xIdentity->getTranslateX());
+    CPPUNIT_ASSERT_EQUAL(0.0, xIdentity->getTranslateY());
+    // The setters chain, and the built transform carries every coefficient.
+    auto const xTransform = xFactory->newAffineTransformBuilder()
+                                ->setScaleX(2)
+                                ->setScaleY(3)
+                                ->setShearX(0.5)
+                                ->setShearY(-0.5)
+                                ->setTranslateX(10)
+                                ->setTranslateY(20)
+                                ->build();
+    CPPUNIT_ASSERT_EQUAL(2.0, xTransform->getScaleX());
+    CPPUNIT_ASSERT_EQUAL(3.0, xTransform->getScaleY());
+    CPPUNIT_ASSERT_EQUAL(0.5, xTransform->getShearX());
+    CPPUNIT_ASSERT_EQUAL(-0.5, xTransform->getShearY());
+    CPPUNIT_ASSERT_EQUAL(10.0, xTransform->getTranslateX());
+    CPPUNIT_ASSERT_EQUAL(20.0, xTransform->getTranslateY());
+    // toBuilder starts from the transform's coefficients; changing the copy leaves the original
+    // transform as it was.
+    auto const xCopy = xTransform->toBuilder()->setTranslateX(99)->build();
+    CPPUNIT_ASSERT_EQUAL(99.0, xCopy->getTranslateX());
+    CPPUNIT_ASSERT_EQUAL(3.0, xCopy->getScaleY());
+    CPPUNIT_ASSERT_EQUAL(10.0, xTransform->getTranslateX());
 }
 }
 

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_add_exception_objects,scriptinterop,\
     scriptinterop/source/drawing \
     scriptinterop/source/presentation \
     scriptinterop/source/spreadsheet \
+    scriptinterop/source/transform \
 ))
 
 $(eval $(call gb_Library_use_libraries,scriptinterop,\

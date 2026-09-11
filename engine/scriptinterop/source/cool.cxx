@@ -41,6 +41,7 @@
 #include "drawing.hxx"
 #include "presentation.hxx"
 #include "spreadsheet.hxx"
+#include "transform.hxx"
 
 namespace
 {
@@ -110,7 +111,7 @@ public:
     cpo::uno::Reference<scriptinterop::XAffineTransformBuilder> SAL_CALL
     newAffineTransformBuilder() override
     {
-        throw cpo::uno::RuntimeException(u"newAffineTransformBuilder: not implemented"_ustr);
+        return scriptinterop::detail::createAffineTransformBuilder();
     }
 
     cpo::uno::Reference<scriptinterop::XBlob> newBlobBytes(
