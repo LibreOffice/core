@@ -149,6 +149,20 @@ tools::Long lcl_hmm2output(tools::Long value, bool bInEMU)
     return o3tl::convert(value, o3tl::Length::mm100, bInEMU ? o3tl::Length::emu : o3tl::Length::px);
 }
 
+void lcl_SetFromToClamped( sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nColOff, sal_Int32 nRowOff,
+                           bool bInEMU, tools::Rectangle& aFrom )
+{
+    if (nRow <= 0 || nCol <= 0)
+    {
+        SAL_WARN("sc.filter", "Clamping invalid row/column index to 0 while calculating from-to positions row=" << (nRow - 1) << " col=" << (nCol - 1));
+    }
+
+    sal_Int32 nNewCol = (nCol > 0) ? nCol - 1 : 0;
+    sal_Int32 nNewRow = (nRow > 0) ? nRow - 1 : 0;
+    aFrom = tools::Rectangle( nNewCol, lcl_hmm2output( nColOff, bInEMU ),
+                       nNewRow, lcl_hmm2output( nRowOff, bInEMU ) );
+}
+
 void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_Int32 nTab, tools::Rectangle &aFrom, tools::Rectangle &aTo, bool bInEMU = false )
 {
     sal_Int32 nCol = 0, nRow = 0;
@@ -172,15 +186,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
             }
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
-                if (nRow <= 0 || nCol <= 0)
-                {
-                    SAL_WARN("sc.filter", "Clamping invalid row/column index to 0 while calculating from-to positions row=" << (nRow - 1) << " col=" << (nCol-1));
-                }
-
-                sal_Int32 nNewCol = (nCol > 0) ? nCol - 1 : 0;
-                sal_Int32 nNewRow = (nRow > 0) ? nRow - 1 : 0;
-                aFrom = tools::Rectangle( nNewCol, lcl_hmm2output( nColOff, bInEMU ),
-                                   nNewRow, lcl_hmm2output( nRowOff, bInEMU ) );
+                lcl_SetFromToClamped( nRow, nCol, nColOff, nRowOff, bInEMU, aFrom );
                 break;
             }
         }
@@ -202,15 +208,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
             }
             if( r.Left() < aRect.Left() && r.Top() > aRect.Top() )
             {
-                if (nRow <= 0 || nCol <= 0)
-                {
-                    SAL_WARN("sc.filter", "Clamping invalid row/column index to 0 while calculating from-to positions row=" << (nRow - 1) << " col=" << (nCol-1));
-                }
-
-                sal_Int32 nNewCol = (nCol > 0) ? nCol - 1 : 0;
-                sal_Int32 nNewRow = (nRow > 0) ? nRow - 1 : 0;
-                aFrom = tools::Rectangle( nNewCol, lcl_hmm2output( nColOff, bInEMU ),
-                                   nNewRow, lcl_hmm2output( nRowOff, bInEMU ) );
+                lcl_SetFromToClamped( nRow, nCol, nColOff, nRowOff, bInEMU, aFrom );
                 break;
             }
         }
@@ -616,7 +614,7 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
     rStrm.EndRecord();
 }
 
-//delete for exporting OCX
+// Delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
 
 XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape,
@@ -651,7 +649,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // meta file
-    //TODO - needs check
+    // TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
     if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, u"MetaFile"_ustr, false ) )
     {
@@ -823,7 +821,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     if( aCtrlProp.GetProperty( msCtrlName, u"Name"_ustr ) && !msCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, msCtrlName );
 
-    //Export description as alt text
+    // Export description as alt text
     if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
     {
         OUString aAltTxt;
