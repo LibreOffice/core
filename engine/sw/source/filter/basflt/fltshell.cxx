@@ -25,6 +25,7 @@
 #include <cstddef>
 
 #include <hintids.hxx>
+#include <svx/xdef.hxx>
 #include <hints.hxx>
 
 #include <svl/cintitem.hxx>
@@ -334,9 +335,11 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
 
     SwFltPosition aFltPos(rPos);
 
+    // The background of a paragraph is a fill attribute, which sits in a range of its own.
     OSL_ENSURE(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
-        (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
+        (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId) ||
+        (XATTR_FILL_FIRST <= nAttrId && XATTR_FILL_LAST >= nAttrId),
         "Wrong id for attribute");
 
     auto aI = m_Entries.begin();
