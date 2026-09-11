@@ -845,7 +845,10 @@ void ImplEESdrWriter::ImplWritePage(
 
 ImplEESdrWriter::~ImplEESdrWriter()
 {
-    DBG_ASSERT( !mpSolverContainer, "ImplEESdrWriter::~ImplEESdrWriter: unwritten SolverContainer" );
+    // A container is made for every page and every single shape written, and holds only the
+    // connections between shapes, so having one left over matters when it collected any.
+    DBG_ASSERT( !mpSolverContainer || !mpSolverContainer->HasConnectors(),
+                "ImplEESdrWriter::~ImplEESdrWriter: unwritten SolverContainer" );
     if (mXDrawPage.is())
         mXDrawPage->dispose();
 }

@@ -635,6 +635,9 @@ public:
 
     void            WriteSolver( SvStream& );
 
+    /// Whether there is anything for WriteSolver() to write.
+    bool            HasConnectors() const { return !maConnectorList.empty(); }
+
                     EscherSolverContainer();
                     ~EscherSolverContainer();
 
