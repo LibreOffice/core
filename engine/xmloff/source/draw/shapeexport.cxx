@@ -971,6 +971,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeType::DrawAnnotationShape:
+        {
+            // A comment carries its own element, written beside the shapes of the page.
+            break;
+        }
+
         case XmlShapeType::PresOrgChartShape:
         case XmlShapeType::Unknown:
         case XmlShapeType::NotYetSet:
@@ -1201,6 +1207,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
         else if(o3tl::starts_with(aRest, u"GraphicObject")) { eShapeType = XmlShapeType::DrawGraphicObjectShape; }
         else if(o3tl::starts_with(aRest, u"Group")) { eShapeType = XmlShapeType::DrawGroupShape; }
+        else if(o3tl::starts_with(aRest, u"Annotation")) { eShapeType = XmlShapeType::DrawAnnotationShape; }
         else if(o3tl::starts_with(aRest, u"Text")) { eShapeType = XmlShapeType::DrawTextShape; }
         else if(o3tl::starts_with(aRest, u"OLE2"))
         {
