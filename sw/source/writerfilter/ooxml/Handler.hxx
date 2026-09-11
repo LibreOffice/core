@@ -137,6 +137,7 @@ class OOXMLHyperlinkHandler : public Properties
 {
     OOXMLFastContextHandler* mpFastContext;
     OUString mFieldCode;
+    OUString mToolTip;
     OUString mURL;
 
 public:
