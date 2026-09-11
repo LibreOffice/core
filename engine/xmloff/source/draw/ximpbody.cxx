@@ -40,6 +40,7 @@
 #include "layerimp.hxx"
 #include <animationimport.hxx>
 #include <sal/log.hxx>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -238,8 +239,18 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                                          cpo::uno::Any( sSourceModifiedTime ) );
 
             if( !sSourcePageGuid.isEmpty() )
-                xProps->setPropertyValue(u"SourcePageGuid"_ustr,
-                                         cpo::uno::Any( sSourcePageGuid ) );
+            {
+                try
+                {
+                    xProps->setPropertyValue(u"SourcePageGuid"_ustr,
+                                             cpo::uno::Any( sSourcePageGuid ) );
+                }
+                catch( const cpo::uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION("xmloff.draw",
+                                         "while importing the source slide identifier of the page");
+                }
+            }
         }
     }
 

@@ -852,6 +852,13 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( ! ( aValue >>= aSourcePageGuid ) )
                 throw lang::IllegalArgumentException();
 
+            // The value names a slide of the source document, in the braced form a page keeps
+            // its own identifier in, so a value of another shape names no slide at all.
+            if (!aSourcePageGuid.isEmpty()
+                && tools::Guid(OUStringToOString(aSourcePageGuid, RTL_TEXTENCODING_ASCII_US))
+                       .isEmpty())
+                throw lang::IllegalArgumentException();
+
             setSourcePageGuid( aSourcePageGuid );
             break;
         }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
+                 office:version="1.2"
+                 office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:body>
+  <office:presentation>
+   <draw:page xlink:href="vnd.collabora.slide-source:Q3%20deck.odp#"
+              xlink:type="simple" xlink:show="replace" xlink:actuate="onRequest"
+              coext:source-modified-time="2021-01-01T00:00:00Z"
+              coext:source-page-guid="{11111111-1111-1111-1111-111111111111}">
+    <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
+     <draw:text-box><text:p>Linked one</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page xlink:href="vnd.collabora.slide-source:Q3%20deck.odp#"
+              xlink:type="simple" xlink:show="replace" xlink:actuate="onRequest"
+              coext:source-modified-time="2021-01-01T00:00:00Z"
+              coext:source-page-guid="&lt;img src=x onerror=alert(1)&gt;">
+    <draw:frame svg:width="10cm" svg:height="2cm" svg:x="2cm" svg:y="2cm">
+     <draw:text-box><text:p>Linked two</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

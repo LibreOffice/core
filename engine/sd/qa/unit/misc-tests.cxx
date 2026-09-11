@@ -121,6 +121,7 @@ public:
     void testInsertFileAsPageLinkRecordsSource();
     void testInsertFileAsPageLinkWithoutSourceRecordsMedium();
     void testInsertWholeFileAsPagesLinkRecordsSource();
+    void testSlideLinkKeepsOnlyAReadableSourceGuid();
 
 private:
     SdDrawDocument* loadSlideImportDocs();
@@ -167,6 +168,7 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageLinkRecordsSource);
     CPPUNIT_TEST(testInsertFileAsPageLinkWithoutSourceRecordsMedium);
     CPPUNIT_TEST(testInsertWholeFileAsPagesLinkRecordsSource);
+    CPPUNIT_TEST(testSlideLinkKeepsOnlyAReadableSourceGuid);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1754,6 +1756,30 @@ void SdMiscTest::testInsertWholeFileAsPagesLinkRecordsSource()
         CPPUNIT_ASSERT_EQUAL(aSource, pInserted->GetFileName());
         CPPUNIT_ASSERT(!pInserted->GetBookmarkName().isEmpty());
     }
+}
+
+void SdMiscTest::testSlideLinkKeepsOnlyAReadableSourceGuid()
+{
+    // A file names the slide a linked page came from by the identifier of that slide. The file
+    // read here names one slide by an identifier and the next by a value of another shape, which
+    // names no slide: the page is left with none and the presentation opens as any other does.
+    createSdImpressDoc("slide-link-bad-guid.fodp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    SdPage* pRead = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pRead->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"{11111111-1111-1111-1111-111111111111}"_ustr,
+                         pRead->GetSourcePageGuid());
+
+    // The source document the page came from and the time it was last modified are what the file
+    // holds, so the page keeps them whatever the identifier beside them came to.
+    SdPage* pUnread = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pUnread->GetFileName());
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pUnread->GetSourceModifiedTime());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pUnread->GetSourcePageGuid());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
