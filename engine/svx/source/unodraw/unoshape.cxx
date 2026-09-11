@@ -3209,6 +3209,7 @@ constexpr OUString sUNO_service_drawing_PolyPolygonDescriptor = u"com.sun.star.d
 constexpr OUString sUNO_service_drawing_PolyPolygonBezierDescriptor= u"com.sun.star.drawing.PolyPolygonBezierDescriptor"_ustr;
 
 constexpr OUString sUNO_service_drawing_LineShape         = u"com.sun.star.drawing.LineShape"_ustr;
+constexpr OUString sUNO_service_drawing_TableShape        = u"com.sun.star.drawing.TableShape"_ustr;
 constexpr OUString sUNO_service_drawing_Shape             = u"com.sun.star.drawing.Shape"_ustr;
 constexpr OUString sUNO_service_drawing_RectangleShape    = u"com.sun.star.drawing.RectangleShape"_ustr;
 constexpr OUString sUNO_service_drawing_EllipseShape      = u"com.sun.star.drawing.EllipseShape"_ustr;
@@ -3629,6 +3630,15 @@ cpo::uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape };
                 return aSvxShape_MediaServices;
             }
+
+        case SdrObjKind::Table:
+            {
+                static const cpo::uno::Sequence<OUString> aSvxShape_TableServices
+                        = { sUNO_service_drawing_TableShape,
+                            sUNO_service_drawing_Shape,
+                            sUNO_service_drawing_ShadowProperties };
+                return aSvxShape_TableServices;
+            }
         default: ;
         }
     }
@@ -3643,7 +3653,10 @@ cpo::uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
                     sUNO_service_drawing_Shape };
         return aSvxShape_UnoServices;
     }
-    OSL_FAIL( "SvxShape::_getSupportedServiceNames: could not determine object type!" );
+    // A shape that carries no drawing object, because it was never inserted or has been
+    // disposed, stands for nothing and so names no service.
+    SAL_WARN_IF( HasSdrObject(), "svx",
+                 "SvxShape::_getSupportedServiceNames: could not determine object type!" );
     cpo::uno::Sequence< OUString > aSeq;
     return aSeq;
 }

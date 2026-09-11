@@ -24,6 +24,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sdtiledrenderingtest.hxx>
@@ -1222,6 +1223,15 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testLegacyAnimationSoundNotFetched)
     CPPUNIT_ASSERT(!xmloff::getSoundAllowed(xAudio->getSource()));
 
     saveAndReload(TestFilter::PPT);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testTableShapeService)
+{
+    createSdImpressDoc("pptx/tdf100926_ODP.pptx");
+    uno::Reference<lang::XServiceInfo> xTable(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    // A table says what it is, the way every other shape does.
+    CPPUNIT_ASSERT(xTable->supportsService(u"com.sun.star.drawing.TableShape"_ustr));
+    CPPUNIT_ASSERT(xTable->supportsService(u"com.sun.star.drawing.Shape"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest2, testHiddenTableShape)
