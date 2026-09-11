@@ -6188,6 +6188,7 @@ void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
     // extract the relevant properties from the grab bag
     Sequence< PropertyValue > aGrabBag;
     Sequence< PropertyValue > aFillRefProperties, aLnRefProperties, aEffectRefProperties;
+    Sequence< PropertyValue > aFontRefProperties;
     mAny >>= aGrabBag;
     for (const auto& rProp : aGrabBag)
     {
@@ -6197,14 +6198,40 @@ void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
             rProp.Value >>= aLnRefProperties;
         else if( rProp.Name == "StyleEffectRef" )
             rProp.Value >>= aEffectRefProperties;
+        else if( rProp.Name == "StyleFontRef" )
+            rProp.Value >>= aFontRefProperties;
     }
 
     WriteStyleProperties( XML_lnRef, aLnRefProperties );
     WriteStyleProperties( XML_fillRef, aFillRefProperties );
     WriteStyleProperties( XML_effectRef, aEffectRefProperties );
+    WriteFontRefStyle( aFontRefProperties );
+}
 
-    // write mock <a:fontRef>
-    mpFS->singleElementNS(XML_a, XML_fontRef, XML_idx, "minor");
+void DrawingML::WriteFontRefStyle( const Sequence< PropertyValue >& aProperties )
+{
+    OUString sSchemeClr;
+    OUString sIdx(u"minor"_ustr);
+    Sequence< PropertyValue > aTransformations;
+    for( const auto& rProp : aProperties )
+    {
+        if( rProp.Name == "SchemeClr" )
+            rProp.Value >>= sSchemeClr;
+        else if( rProp.Name == "Idx" )
+            rProp.Value >>= sIdx;
+        else if( rProp.Name == "Transformations" )
+            rProp.Value >>= aTransformations;
+    }
+
+    if( sSchemeClr.isEmpty() )
+    {
+        mpFS->singleElementNS(XML_a, XML_fontRef, XML_idx, sIdx.toUtf8());
+        return;
+    }
+
+    mpFS->startElementNS(XML_a, XML_fontRef, XML_idx, sIdx.toUtf8());
+    WriteColor(sSchemeClr, aTransformations);
+    mpFS->endElementNS(XML_a, XML_fontRef);
 }
 
 void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< PropertyValue >& aEffectProps )

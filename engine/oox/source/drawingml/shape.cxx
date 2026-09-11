@@ -1790,6 +1790,19 @@ Reference< XShape > const & Shape::createAndInsert(
                 });
                 putPropertyToGrabBag( u"StyleEffectRef"_ustr, Any( aProperties ) );
             }
+            if( const ShapeStyleRef* pFontRef = getShapeStyleRef( XML_fontRef ) )
+            {
+                // The font reference names one of the two fonts of the theme, major or minor,
+                // and the theme color the text of the shape takes.
+                cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                {
+                    {u"SchemeClr"_ustr, cpo::uno::Any(pFontRef->maPhClr.getSchemeColorName())},
+                    {u"Idx"_ustr, cpo::uno::Any(pFontRef->mnThemedIdx == XML_major
+                                                    ? u"major"_ustr : u"minor"_ustr)},
+                    {u"Transformations"_ustr, cpo::uno::Any(pFontRef->maPhClr.getTransformations())}
+                });
+                putPropertyToGrabBag( u"StyleFontRef"_ustr, Any( aProperties ) );
+            }
         }
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
 

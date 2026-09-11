@@ -354,6 +354,7 @@ protected:
     void WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape);
 
     void WriteStyleProperties( sal_Int32 nTokenId, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
+    void WriteFontRefStyle( const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     OUString GetComponentDir() const;
     OUString GetRelationCompPrefix() const;

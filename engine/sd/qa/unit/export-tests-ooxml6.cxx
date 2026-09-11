@@ -217,6 +217,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)
                 u"lt1");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:ln/a:solidFill/a:schemeClr",
                 "val", u"dk1");
+
+    // The font reference of the style names the theme color the text of the shape takes.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:style/a:fontRef", "idx", u"minor");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:style/a:fontRef/a:schemeClr", "val",
+                u"dk1");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
