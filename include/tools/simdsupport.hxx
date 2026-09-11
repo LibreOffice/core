@@ -75,7 +75,6 @@
 #if defined(__AVX512F__)
 #define LO_AVX512F_AVAILABLE
 #include <immintrin.h>
-#else
 #endif // defined(__AVX512F__)
 
 #endif // end compiler Clang and GCC

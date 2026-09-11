@@ -25,16 +25,12 @@ namespace sc::op
 // Whenever we raise baseline to e.g. AVX, this may get
 // replaced with AVX code (get it from mentioned git commit).
 // Do it similarly with other platforms.
-#if defined(__AVX__)
-#define SC_USE_AVX 1
+#if defined(LO_AVX_AVAILABLE)
 KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent);
 #endif
 
-#if defined(X86_64) || (defined(INTEL) && defined(_WIN32))
-#define SC_USE_SSE2 1
+#if defined(LO_SSE2_AVAILABLE)
 KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
-#else
-#define SC_USE_SSE2 0
 #endif
 }
 
@@ -107,7 +103,7 @@ public:
       */
     inline void add(const KahanSum& fSum)
     {
-#if SC_USE_SSE2
+#if defined(LO_SSE2_AVAILABLE)
         add(fSum.m_fSum + fSum.m_fError);
         add(fSum.m_fMem);
 #else

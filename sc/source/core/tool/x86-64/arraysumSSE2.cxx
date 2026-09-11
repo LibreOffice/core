@@ -13,7 +13,9 @@
 
 #include <stdlib.h>
 
-#if SC_USE_SSE2
+#if defined(LO_SSE2_AVAILABLE)
+
+extern "C" __attribute__((visibility("default"))) const char USE_SSE2[] = "Use SSE2";
 
 namespace sc::op
 {
@@ -42,7 +44,8 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
 
 /** Execute Kahan sum with SSE2.
   */
-KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
+__attribute__((visibility("default"))) KahanSum executeSSE2(size_t& i, size_t nSize,
+                                                            const double* pCurrent)
 {
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.

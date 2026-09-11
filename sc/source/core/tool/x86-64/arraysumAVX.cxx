@@ -13,7 +13,9 @@
 
 #include <stdlib.h>
 
-#if SC_USE_AVX
+#if defined(LO_AVX_AVAILABLE)
+
+extern "C" __attribute__((visibility("default"))) const char USE_AVX[] = "Use AVX";
 
 namespace sc::op
 {
@@ -43,7 +45,8 @@ static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
 
 /** Execute Kahan sum with AVX.
   */
-KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent)
+__attribute__((visibility("default"))) KahanSum executeAVX(size_t& i, size_t nSize,
+                                                           const double* pCurrent)
 {
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
