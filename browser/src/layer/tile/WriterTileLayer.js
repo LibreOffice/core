@@ -166,7 +166,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			app.activeDocument.setActiveViewID(this._viewId);
 		}
 
-		if (statusJSON.partHasComments !== undefined &&  statusJSON.partHasComments !== app.activeDocument.partHasComments) {
+		if (statusJSON.partHasComments !== undefined && statusJSON.partHasComments !== app.activeDocument.partHasComments && !window.mode.isSmallScreenDevice()) {
 			const hadValue = app.activeDocument.partHasComments !== undefined;
 			app.activeDocument.partHasComments = statusJSON.partHasComments;
 			// Only re-fit zoom when comment presence genuinely
