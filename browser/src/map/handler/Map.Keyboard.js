@@ -377,7 +377,16 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return false;
 
 		var preview = docLayer._preview;
-		return !!preview && (preview.partsFocused === true || preview.hasSlideFocus());
+		if (!preview)
+			return false;
+
+		// The slide the sorter marks keeps the keys while the focus rests on it, and it keeps
+		// them as well over a preview the sorter builds again, where the focus falls back to
+		// the body. The document takes them back as soon as its own input holds the focus.
+		if (this._map.hasFocus())
+			return false;
+
+		return preview.partsFocused === true || preview.hasSlideFocus();
 	},
 
 	_isNoModifier: function (ev) {

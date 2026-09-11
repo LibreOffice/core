@@ -68,6 +68,10 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		this._restoringViewMode = false;
 		this._lastReportedViewMode = null;
 
+		// The context last seen that named a view mode, so that a context naming a selection
+		// instead does not lose which mode the view is in.
+		this._lastViewModeContext = null;
+
 		app.events.on('contextchange', this._onContextChange.bind(this));
 	},
 
@@ -80,7 +84,6 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		*/
 
 		const newContext = e.detail.context;
-		const oldContext = e.detail.oldContext;
 		const viewMode = IMPRESS_VIEW_MODES[newContext];
 		const isDrawOrNotesPage = newContext === 'DrawPage' || newContext === 'NotesPage';
 
@@ -106,9 +109,24 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			RenderManager.update();
 		}
 
-		if (newContext === 'MasterPage' || oldContext === 'MasterPage') {
-			app.socket.sendMessage('status');
-			this.invalidatePreviewsUponContextChange = true;
+		/*
+			The master view shows a different page list than the other views, so the parts have to
+			be asked for again when the view goes in or out of it. The context is what tells us,
+			but it names what is selected as well as the view mode: selecting a shape in the master
+			view moves it to TextObject, and from there on no context names the master view any
+			more, so leaving it went unnoticed and the parts of the master view stayed. Only the
+			contexts that name a view mode are looked at, and the last of them is what the view is
+			in.
+		*/
+		if (viewMode) {
+			const wasMasterView = this._lastViewModeContext === 'MasterPage';
+			const isMasterView = newContext === 'MasterPage';
+			this._lastViewModeContext = newContext;
+
+			if (wasMasterView !== isMasterView) {
+				app.socket.sendMessage('status');
+				this.invalidatePreviewsUponContextChange = true;
+			}
 		}
 
 		// Persist/restore the view mode for all three view contexts. Master
