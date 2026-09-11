@@ -645,6 +645,11 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
     {
         WritePageShape(xShape, mePageType, mrExport.GetPresObj());
     }
+    else if (sShapeType == "com.sun.star.drawing.AnnotationShape")
+    {
+        // A comment is a shape on the page, and it goes out as a part of its own beside the
+        // shapes of the slide.
+    }
     else
         SAL_WARN("sd.eppt", "unknown shape not handled: " << sShapeType.toUtf8());
 
