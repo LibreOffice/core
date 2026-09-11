@@ -149,6 +149,9 @@ private:
     /** Writes the placeholders a slide master holds that the page standing for it has none of */
     void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
 
+    /// Writes the text styles a master holds for its title and for the nine outline levels.
+    void WriteTextStyles(const ::sax_fastparser::FSHelperPtr& pFS);
+
     void FindEquivalentMasterPages();
     sal_uInt32 GetEquivalentMasterPage(sal_uInt32 nMasterPage);
     /** How many of a page's leading shapes belong to the slide master of its group

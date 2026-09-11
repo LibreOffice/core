@@ -530,7 +530,7 @@ public:
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                    const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
-    void WriteRunProperties(const css::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
+    OOX_DLLPUBLIC void WriteRunProperties(const css::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
 
     void WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     OOX_DLLPUBLIC void WritePresetShape( const OString& pShape );

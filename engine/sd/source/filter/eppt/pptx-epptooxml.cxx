@@ -2806,6 +2806,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->endElementNS(XML_p, XML_sldLayoutIdLst);
 
+    WriteTextStyles(pFS);
+
     // p:extLst is the last child of p:sldMaster.
     WritePageGuidExtLst(pFS, xMasterPagePropSet);
 
@@ -3033,6 +3035,56 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
     pFS->endElementNS(XML_p, XML_sldLayout);
 
     pFS->endDocument();
+}
+
+void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
+{
+    // The nine outline levels of a master and its title live as presentation styles, named after
+    // the master. A placeholder writes the levels it holds paragraphs for, which leaves the ones
+    // below that with nowhere to go, and text that no placeholder formats with nothing at all.
+    uno::Reference<container::XNamed> xMaster(mXDrawPage, uno::UNO_QUERY);
+    if (!xMaster.is() || !mXModel.is())
+        return;
+
+    uno::Reference<container::XNameAccess> xFamilies(mXModel->getStyleFamilies());
+    if (!xFamilies.is() || !xFamilies->hasByName(xMaster->getName()))
+        return;
+
+    uno::Reference<container::XNameAccess> xStyles(xFamilies->getByName(xMaster->getName()),
+                                                   uno::UNO_QUERY);
+    if (!xStyles.is())
+        return;
+
+    PowerPointShapeExport aDML(pFS, &maShapeMap, this);
+
+    auto writeLevel = [&aDML, &pFS, &xStyles](const OUString& rStyleName, sal_Int32 nElement) {
+        if (!xStyles->hasByName(rStyleName))
+            return;
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(rStyleName), uno::UNO_QUERY);
+        if (!xStyle.is())
+            return;
+        pFS->startElementNS(XML_a, nElement);
+        oox::drawingml::WriteRunInput aInput;
+        aDML.WriteRunProperties(xStyle, XML_defRPr, aInput);
+        pFS->endElementNS(XML_a, nElement);
+    };
+
+    static const sal_Int32 aLevelTokens[]
+        = { XML_lvl1pPr, XML_lvl2pPr, XML_lvl3pPr, XML_lvl4pPr, XML_lvl5pPr,
+            XML_lvl6pPr, XML_lvl7pPr, XML_lvl8pPr, XML_lvl9pPr };
+
+    pFS->startElementNS(XML_p, XML_txStyles);
+
+    pFS->startElementNS(XML_p, XML_titleStyle);
+    writeLevel(u"title"_ustr, XML_lvl1pPr);
+    pFS->endElementNS(XML_p, XML_titleStyle);
+
+    pFS->startElementNS(XML_p, XML_bodyStyle);
+    for (size_t nLevel = 0; nLevel < SAL_N_ELEMENTS(aLevelTokens); ++nLevel)
+        writeLevel("outline" + OUString::number(nLevel + 1), aLevelTokens[nLevel]);
+    pFS->endElementNS(XML_p, XML_bodyStyle);
+
+    pFS->endElementNS(XML_p, XML_txStyles);
 }
 
 void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType, bool bMaster,

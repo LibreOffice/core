@@ -243,6 +243,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellBorderThemeColor)
     assertXPath(pXmlDoc, aCell + "/a:lnT/a:solidFill/a:schemeClr", "val", u"dk1");
 }
 
+// The master holds the text style of its title and of all nine outline levels.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStyles)
+{
+    createSdImpressDoc("pptx/tdf112209.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr/a:defRPr", "sz", u"2600");
+    assertXPath(pXmlDoc, "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr/a:defRPr", "sz", u"2000");
+    assertXPath(pXmlDoc,
+                "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr/a:defRPr/a:solidFill/a:schemeClr",
+                "val", u"accent2");
+
+    // The level a placeholder has no paragraph for is the one that used to go missing.
+    assertXPath(pXmlDoc, "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
