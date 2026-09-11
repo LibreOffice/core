@@ -189,6 +189,9 @@ private:
 
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
+    /// Whether the graphic carries vector graphic data rather than pixels or drawing commands.
+    bool isVectorGraphic() const;
+
     /// Gets the bitmap replacement for a vector graphic.
     // Hide volatile state of maBitmapEx when using maVectorGraphicData into this method
     void updateBitmapFromVectorGraphic(const Size& pixelSize = {}) const;

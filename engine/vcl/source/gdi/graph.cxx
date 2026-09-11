@@ -500,6 +500,11 @@ const std::shared_ptr<VectorGraphicData>& Graphic::getVectorGraphicData() const
     return mxImpGraphic->getVectorGraphicData();
 }
 
+bool Graphic::isVectorGraphic() const
+{
+    return mxImpGraphic->isVectorGraphic();
+}
+
 void Graphic::ensureEncodedDataAvailable() const
 {
     mxImpGraphic->ensureEncodedDataAvailable();

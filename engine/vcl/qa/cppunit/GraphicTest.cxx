@@ -32,6 +32,8 @@
 #include <impgraph.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
 
+#include "KitModeScope.hxx"
+
 #if USE_TLS_NSS
 #include <nss.h>
 #endif
@@ -1183,6 +1185,69 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithoutGfxLin
 
     // Byte size is still the same
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+}
+
+// Asking a swapped out graphic whether it carries vector graphic data leaves the encoded bytes
+// where they are, whatever the answer turns out to be.
+CPPUNIT_TEST_FIXTURE(GraphicTest, testAskingWhetherAGraphicCarriesVectorDataLeavesItSwappedOut)
+{
+    // Only in kit mode do the encoded bytes go out to a temporary file, which is what makes it
+    // visible whether the question read them back.
+    KitModeScope aKitMode;
+
+    auto checkAnswerCameFromTheLinkType
+        = [](std::u16string_view aFilename, bool bCarriesVectorData)
+    {
+        const std::string aFile(OUStringToOString(aFilename, RTL_TEXTENCODING_UTF8));
+
+        Graphic aGraphic = loadGraphic(aFilename);
+        CPPUNIT_ASSERT_MESSAGE(aFile, aGraphic.IsGfxLink());
+
+        CPPUNIT_ASSERT_MESSAGE(aFile, aGraphic.ImplGetImpGraphic()->swapOut());
+        CPPUNIT_ASSERT_MESSAGE(aFile, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+        // Hashing reaches only the bytes that are in memory, so a hash of zero says the encoded
+        // bytes are in the temporary file.
+        const BinaryDataContainer& rContainer = aGraphic.GetSharedGfxLink()->getDataContainer();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFile, size_t(0), rContainer.calculateHash());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFile, bCarriesVectorData, aGraphic.isVectorGraphic());
+
+        // The answer came from the link type, so the image was never decoded and the encoded bytes
+        // were never read back.
+        CPPUNIT_ASSERT_MESSAGE(aFile, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFile, size_t(0), rContainer.calculateHash());
+    };
+
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.gif", false);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.webp", false);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.tif", false);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.bmp", false);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.met", false);
+    checkAnswerCameFromTheLinkType(u"inch-size.pct", false);
+
+    checkAnswerCameFromTheLinkType(u"SimpleExample.svg", true);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.wmf", true);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.emf", true);
+    checkAnswerCameFromTheLinkType(u"TypeDetectionExample.pdf", true);
+}
+
+// An EPS is a drawing that the graphic keeps as a metafile, so it carries no vector graphic data.
+// The encoded PostScript sits in a metafile action of its own rather than in a link of the
+// graphic, so the answer comes from the graphic and not from a link type.
+CPPUNIT_TEST_FIXTURE(GraphicTest, testAnEpsCarriesNoVectorData)
+{
+    Graphic aGraphic = loadGraphic(u"TypeDetectionExample.eps");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isVectorGraphic());
+}
+
+CPPUNIT_TEST_FIXTURE(GraphicTest, testAnSvgInMemoryCarriesVectorData)
+{
+    Graphic aGraphic = importUnloadedGraphic(u"SimpleExample.svg");
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isVectorGraphic());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadMET)

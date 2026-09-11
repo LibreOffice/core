@@ -319,25 +319,73 @@ bool ImpGraphic::operator==( const ImpGraphic& rOther ) const
     return bRet;
 }
 
+namespace
+{
+/// The link types whose data never becomes vector graphic data. A graphic that carries one of
+/// them decodes either to a grid of pixels or to a metafile, so its vector graphic data is empty.
+bool hasNoVectorGraphicData(GfxLinkType eLinkType)
+{
+    switch (eLinkType)
+    {
+        case GfxLinkType::NativeGif:
+        case GfxLinkType::NativeJpg:
+        case GfxLinkType::NativePng:
+        case GfxLinkType::NativeTif:
+        case GfxLinkType::NativeBmp:
+        case GfxLinkType::NativeWebp:
+        case GfxLinkType::EpsBuffer:
+        case GfxLinkType::NativeMet:
+        case GfxLinkType::NativePct:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/// The link types whose data becomes vector graphic data when the graphic is read in. The WMF
+/// type covers EMF too.
+bool hasVectorGraphicData(GfxLinkType eLinkType)
+{
+    switch (eLinkType)
+    {
+        case GfxLinkType::NativeSvg:
+        case GfxLinkType::NativeWmf:
+        case GfxLinkType::NativePdf:
+            return true;
+        default:
+            return false;
+    }
+}
+}
+
 const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() const
 {
-    // If the type is clearly a bitmap, we know the vector graphic data will be empty, no need to
-    // swap in.
-    if (mpGfxLink)
-    {
-        switch (mpGfxLink->GetType())
-        {
-            case GfxLinkType::NativePng:
-            case GfxLinkType::NativeJpg:
-                return maVectorGraphicData;
-            default:
-                break;
-        }
-    }
+    // The link type settles some of the formats on its own. A graphic that carries one of those
+    // keeps its vector graphic data empty, so there is nothing to read the image in for.
+    if (mpGfxLink && hasNoVectorGraphicData(mpGfxLink->GetType()))
+        return maVectorGraphicData;
 
     ensureAvailable();
 
     return maVectorGraphicData;
+}
+
+bool ImpGraphic::isVectorGraphic() const
+{
+    // The graphic is in memory already, so its own data answers the question exactly.
+    if (isAvailable())
+        return bool(maVectorGraphicData);
+
+    // The link type alone settles the common formats, which keeps the graphic swapped out.
+    if (mpGfxLink)
+    {
+        if (hasVectorGraphicData(mpGfxLink->GetType()))
+            return true;
+        if (hasNoVectorGraphicData(mpGfxLink->GetType()))
+            return false;
+    }
+
+    return bool(getVectorGraphicData());
 }
 
 void BitmapContainer::createSwapInfo(SwapInfo& rSwapInfo)

@@ -185,6 +185,12 @@ public:
 
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
+    /** Whether the graphic carries vector graphic data: the drawing of an SVG, of a WMF or EMF
+        metafile, or of a PDF. Every other format answers false, including the ones that decode to
+        a metafile of drawing commands. A graphic that is swapped out answers from its link type
+        where it can, so the formats are told apart without decoding the image. */
+    bool isVectorGraphic() const;
+
     /** Brings the encoded source bytes of the graphic back into memory. Afterwards those bytes
         are in memory and the graphic memory manager counts them, so a reduction can write them
         back out to their temporary file. The image itself is not decoded, so a graphic that was
