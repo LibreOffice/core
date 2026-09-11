@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
@@ -49,6 +51,8 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/textenc.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
@@ -2064,9 +2068,34 @@ public:
                                                                                masters.size());
     }
 
+    // The name is the document title.  Without a title, a saved document is named after its
+    // file, without the directory and the extension.  An unsaved document without a title gets
+    // a default name.
     OUString SAL_CALL getName() override
     {
-        throw cpo::uno::RuntimeException(u"getName: not implemented"_ustr);
+        cpo::uno::Reference<css::document::XDocumentPropertiesSupplier> const sup(
+            model_, cpo::uno::UNO_QUERY);
+        if (sup.is())
+        {
+            auto const title = sup->getDocumentProperties()->getTitle();
+            if (!title.isEmpty())
+            {
+                return title;
+            }
+        }
+        auto const url = model_->getURL();
+        if (!url.isEmpty())
+        {
+            auto const slash = url.lastIndexOf('/');
+            auto fileName = url.copy(slash + 1);
+            auto const dot = fileName.lastIndexOf('.');
+            if (dot > 0)
+            {
+                fileName = fileName.copy(0, dot);
+            }
+            return rtl::Uri::decode(fileName, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+        }
+        return u"Untitled presentation"_ustr;
     }
 
     // The notes master is the notes page of the first master page.

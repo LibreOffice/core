@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -687,6 +688,18 @@ CPPUNIT_TEST_FIXTURE(Test, testDuplicateSkipAndInsertSlide)
     // one is not implemented yet.
     CPPUNIT_ASSERT_THROW(xPresentation->insertSlide(0), cpo::uno::RuntimeException);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xPresentation->getSlides().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPresentationName)
+{
+    auto const xPresentation = loadPresentation();
+    // A presentation that was never saved and has no title gets a default name.
+    CPPUNIT_ASSERT_EQUAL(u"Untitled presentation"_ustr, xPresentation->getName());
+    // The document title, once set, is the name.
+    cpo::uno::Reference<css::document::XDocumentPropertiesSupplier> const xSupplier(
+        xPresentation->getuno(), cpo::uno::UNO_QUERY_THROW);
+    xSupplier->getDocumentProperties()->setTitle(u"Quarterly review"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Quarterly review"_ustr, xPresentation->getName());
 }
 }
 
