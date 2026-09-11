@@ -395,7 +395,10 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
                     // Store properties
                     oox::PropertySet aPropertySet( xCustomLabel );
-                    convertTextProperty( aPropertySet, getFormatter(), mrModel.mxText->mxTextBody );
+                    // A field holds the character formatting alone. How the label is turned and
+                    // whether its text wraps belong to the label as a whole, which is set below.
+                    getFormatter().convertTextFormatting( aPropertySet, mrModel.mxText->mxTextBody,
+                                                          OBJECTTYPE_DATALABEL );
                     pRun->getTextCharacterProperties().pushToPropSet( aPropertySet, getFilter() );
 
                     if (TextField* pField = dynamic_cast<TextField*>(pRun.get()))
