@@ -211,6 +211,10 @@ class RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setHiddenLayers(_layers: unknown): void {}
 
+	isPartDrawable(_part: number, _mode: number): boolean {
+		return false;
+	}
+
 	isLayerVisible(_layer: number): boolean {
 		return true;
 	}

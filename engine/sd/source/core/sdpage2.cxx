@@ -74,6 +74,16 @@ using namespace ::cpo::uno;
 |*
 \************************************************************************/
 
+void SdPage::ChangeMasterPage(SdPage& rMasterPage)
+{
+    // The page draws under another master from here on, which is a change to the page as much
+    // as a new background is. A page that is not in the document yet is still being built.
+    const bool bMasterMoved = !TRG_HasMasterPage() || &TRG_GetMasterPage() != &rMasterPage;
+    TRG_SetMasterPage(rMasterPage);
+    if (bMasterMoved && IsInserted())
+        getSdrModelFromSdrPage().Broadcast(SdrHint(SdrHintKind::PageOrderChange, this));
+}
+
 void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
                                    bool bReplaceStyleSheets,
                                    bool bSetMasterPage,
@@ -127,7 +137,7 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
             pFoundMaster = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetSdPage( 0, mePageKind );
 
         if( pFoundMaster )
-            TRG_SetMasterPage(*pFoundMaster);
+            ChangeMasterPage(*pFoundMaster);
     }
 
     /*********************************************************************

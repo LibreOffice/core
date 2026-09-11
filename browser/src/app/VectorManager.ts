@@ -150,6 +150,40 @@ class VectorManager extends RenderManagerBase {
 		return [0, 0];
 	}
 
+	/// The entry that stands for the page among the given objects, if any.
+	private static _pageEntryOf(
+		objects: cool.SlideObject[],
+	): cool.SlideObject | undefined {
+		return objects.find((object) => object.kind === 'page');
+	}
+
+	/// Take the master reference the page entry carries into the cached part
+	/// and fetch the master, so it is usually cached before the first paint.
+	private _takeMasterReference(
+		data: cool.VectorPrimitivesData,
+		page: cool.SlideObject,
+	): void {
+		data.masterPart = page.masterPart;
+		if (data.masterPart !== undefined)
+			this.requestPart(data.masterPart, cool.VectorMode.MasterPages);
+	}
+
+	/// True when the part and the master it names are both cached. Fetches
+	/// whatever is missing.
+	isPartDrawable(part: number, mode: number): boolean {
+		const data = this.requestPart(part, mode);
+		if (!data) return false;
+		return this._isDrawable(data);
+	}
+
+	private _isDrawable(data: cool.VectorPrimitivesData): boolean {
+		if (data.masterPart === undefined) return true;
+		return (
+			this.requestPart(data.masterPart, cool.VectorMode.MasterPages) !==
+			undefined
+		);
+	}
+
 	/// Render a part's objects in paint order, the page entry first. The
 	/// caller sets up the context transform that maps the part's twips to
 	/// the target pixels. Objects on a hidden layer are skipped.
@@ -167,10 +201,48 @@ class VectorManager extends RenderManagerBase {
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
 				continue;
 			if (obj.kind === 'texteditoverlay' && !textEdits.has(id)) continue;
+			// The slide's copy of a master placeholder is drawn with the master.
+			if (obj.masterContent) continue;
 			if (obj.primitives) {
 				for (const primitive of obj.primitives) {
 					this._renderer.renderPrimitive(context, primitive);
 				}
+			}
+			// The master lies between the page's own background and its objects.
+			if (obj.kind === 'page') this._renderMaster(context, data);
+		}
+	}
+
+	/// Draw the master that a page names under it, in the master's order. A
+	/// shared object comes from the master, a per-slide one from the page's
+	/// own copy, if it has one. The master's page entry is skipped, since the
+	/// page draws its own background. A text edit on a master object is drawn
+	/// from its edit entry, since the object hides its text during the edit.
+	private _renderMaster(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+	): void {
+		if (data.masterPart === undefined) return;
+		const master = this._cache.get(
+			cool.vectorPartId(data.masterPart, cool.VectorMode.MasterPages),
+		);
+		if (!master) return;
+
+		const textEdits = this._textEditEntriesToDraw(master);
+		for (const id of master.order) {
+			const obj = master.objects.get(id);
+			if (!obj || obj.hiddenBehindSlide) continue;
+			if (obj.kind !== undefined) {
+				if (obj.kind !== 'texteditoverlay' || !textEdits.has(id)) continue;
+				const parent = master.objects.get(obj.parent ?? 0);
+				if (parent?.hiddenBehindSlide) continue;
+			}
+			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
+				continue;
+			const drawn = obj.slideDependent ? data.objects.get(id) : obj;
+			if (!drawn?.primitives) continue;
+			for (const primitive of drawn.primitives) {
+				this._renderer.renderPrimitive(context, primitive);
 			}
 		}
 	}
@@ -227,11 +299,13 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		const partId = cool.vectorPartId(part, mode);
 		const cached = this._cache.get(partId);
-		if (cached) {
+		if (cached && this._isDrawable(cached)) {
 			this._renderAndFire(id, part, mode, maxWidth, maxHeight, cached);
 			return;
 		}
 
+		// The part or the master it names is still on its way, so the preview
+		// waits for whichever arrives last.
 		let queue = this._pendingPreviews.get(partId);
 		if (!queue) {
 			queue = [];
@@ -239,7 +313,7 @@ class VectorManager extends RenderManagerBase {
 		}
 		queue.push({ id: id, maxWidth: maxWidth, maxHeight: maxHeight });
 
-		if (!this._inFlightParts.has(partId)) {
+		if (!cached && !this._inFlightParts.has(partId)) {
 			this._inFlightParts.add(partId);
 			this._sendVectorPrimitivesRequest(part, mode);
 		}
@@ -318,15 +392,30 @@ class VectorManager extends RenderManagerBase {
 			// they arrive in is the order they are drawn in.
 			order: values.order || arrived,
 		};
+		const page = VectorManager._pageEntryOf(received);
+		if (page) this._takeMasterReference(data, page);
 		this._cache.set(partId, data);
 
 		this._collectResources(partId, (walker) => {
 			walker.walkObjects(received);
 		});
 
-		this._drainPending(partId, part, mode, data);
+		this._drainDrawable(partId, part, mode);
+		if (mode === cool.VectorMode.MasterPages) this._onMasterArrived(part);
 		this._fireChanged();
 		this.setVisualsReady();
+	}
+
+	/// A master arrived or changed, so every page drawing under it can be
+	/// drawn now, and every preview showing such a page is drawn again. Which
+	/// pages those are is read off the cache.
+	private _onMasterArrived(masterPart: number): void {
+		for (const [partId, data] of this._cache) {
+			if (data.masterPart !== masterPart) continue;
+			const [mode, part] = cool.splitVectorPartId(partId);
+			this._drainDrawable(partId, part, mode);
+			this._redrawRenderedPreviews(partId);
+		}
 	}
 
 	/// Apply a delta to a cached part. The objects it carries replace
@@ -356,12 +445,15 @@ class VectorManager extends RenderManagerBase {
 		}
 
 		// The page rectangle rides on the page entry, so a delta that carries
-		// that entry is also how a resized page reaches the client.
+		// that entry is also how a resized page reaches the client. So does the
+		// master the page draws under itself and the page's copies of its objects.
 		const [nWidth, nHeight] = VectorManager.pageBoundsOf(carried);
 		if (nWidth > 0 && nHeight > 0) {
 			cached.slideWidth = nWidth;
 			cached.slideHeight = nHeight;
 		}
+		const page = VectorManager._pageEntryOf(carried);
+		if (page) this._takeMasterReference(cached, page);
 
 		// The order travels only when the object set or its order changed.
 		// When it does it names the whole live set, so anything missing from
@@ -389,6 +481,7 @@ class VectorManager extends RenderManagerBase {
 		});
 
 		this._redrawRenderedPreviews(partId);
+		if (mode === cool.VectorMode.MasterPages) this._onMasterArrived(part);
 		this._fireChanged();
 	}
 
@@ -557,6 +650,18 @@ class VectorManager extends RenderManagerBase {
 			(document as unknown as { fonts: Set<FontFace> }).fonts.delete(face);
 		this._fonts.clear();
 		this._fireChanged();
+	}
+
+	/// Draw the previews waiting for a part once the part and the master it
+	/// names are both cached.
+	private _drainDrawable(
+		partId: cool.VectorPartId,
+		part: number,
+		mode: number,
+	): void {
+		const data = this._cache.get(partId);
+		if (!data || !this._isDrawable(data)) return;
+		this._drainPending(partId, part, mode, data);
 	}
 
 	private _drainPending(

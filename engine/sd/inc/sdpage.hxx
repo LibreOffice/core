@@ -306,6 +306,10 @@ public:
                                   bool bReplaceStyleSheets = true,
                                   bool bSetMasterPage = true,
                                   bool bReverseOrder = false);
+    /// Puts the page under the given master. When that is another master than before, and the
+    /// page is in the document, the model announces it the way it announces a change to the
+    /// page's own properties.
+    void ChangeMasterPage(SdPage& rMasterPage);
     void            EndListenOutlineText();
 
     void    SetPaperBin(sal_uInt16 nBin) { mnPaperBin = nBin; }

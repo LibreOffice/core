@@ -2389,10 +2389,8 @@ void SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& xMasterPa
     if( !(pMasterPage && pMasterPage->isValid()) )
         return;
 
-    SvxDrawPage::mpPage->TRG_ClearMasterPage();
-
     SdPage* pSdPage = static_cast<SdPage*>(pMasterPage->GetSdrPage());
-    SvxDrawPage::mpPage->TRG_SetMasterPage(*pSdPage);
+    static_cast<SdPage*>(SvxDrawPage::mpPage)->ChangeMasterPage(*pSdPage);
 
     SvxDrawPage::mpPage->SetBorder(pSdPage->GetLeftBorder(),pSdPage->GetUpperBorder(),
                       pSdPage->GetRightBorder(),pSdPage->GetLowerBorder() );

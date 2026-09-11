@@ -5587,7 +5587,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
 
     auto oMasterPrimitives = aJson.at("/objects/0/primitives");
     CPPUNIT_ASSERT(oMasterPrimitives.has_value());
-    // The page: backgroundcolor + white fill + gradient background + 2 placeholder SdrRects.
+    // The page carries what lies behind the objects and is its own: the background color, the
+    // white page fill and the gradient the master defines. The master's placeholders this slide
+    // fills in are objects of the slide rather than part of the page.
     size_t nNumberOfMasterPrimitives = 0;
     bool bHasBackgroundColor = false;
     bool bHasWhiteFill = false;
@@ -5615,7 +5617,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
             CPPUNIT_ASSERT(aPrimitive.has("gradient/colorStops"));
         }
     }
-    CPPUNIT_ASSERT_EQUAL(size_t(5), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), nNumberOfMasterPrimitives);
     CPPUNIT_ASSERT_MESSAGE("Expecting page background color", bHasBackgroundColor);
     CPPUNIT_ASSERT_MESSAGE("Expecting white page fill", bHasWhiteFill);
     CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
@@ -5630,8 +5632,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
         CPPUNIT_ASSERT(aObject.has("primitives"));
     }
 
-    // Check number of objects is what we expect: the page and the ten it holds.
-    CPPUNIT_ASSERT_EQUAL(size_t(11), aJson.getSize("/objects").value_or(0));
+    // Check number of objects is what we expect: the page, the footer this slide fills in, and
+    // the ten objects it holds of its own. The slide number is turned off on this slide, so it
+    // gets no copy, and the text box the master carries is the master's to send.
+    CPPUNIT_ASSERT_EQUAL(size_t(12), aJson.getSize("/objects").value_or(0));
+
+    // A copy of a master placeholder says whose it is, so a reader draws it with the master
+    // rather than with the objects of the slide.
+    size_t nMasterContent = 0;
+    for (const auto& rObject : oObjects->tree())
+    {
+        if (oObjects->sub(rObject.second).getBool("masterContent").value_or(false))
+            ++nMasterContent;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nMasterContent);
 
     // Collect all primitive types in the JSON tree.
     std::set<OString> aTypes = collectPrimitiveTypes(aJson);

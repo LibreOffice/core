@@ -41,6 +41,19 @@ namespace cool {
 		layer?: number;
 		/// True for a placeholder that holds no content of its own yet.
 		emptyPlaceholder?: boolean;
+		/// On the entry of kind "page" of a slide: the index of the master
+		/// part the slide draws under itself. Absent when the page carries
+		/// its master content inline.
+		masterPart?: number;
+		/// On an object of a slide: it is the slide's own copy of a master
+		/// placeholder, rendered for this slide.
+		masterContent?: boolean;
+		/// On a master object: it is a layout prototype, or an empty
+		/// placeholder with neither fill nor line.
+		hiddenBehindSlide?: boolean;
+		/// On a master object: its content differs per slide. Each slide
+		/// carries its own copy of it, under this object's id.
+		slideDependent?: boolean;
 		/// True while a text edit is running on the object. It shows none of
 		/// its own text then, and the entry of kind "texteditoverlay"
 		/// carries what has been typed.

@@ -24,4 +24,10 @@ namespace cool {
 	export function vectorPartId(part: number, mode: number): VectorPartId {
 		return String(mode) + ':' + String(part);
 	}
+
+	/// The mode and part a part id was made from, in that order.
+	export function splitVectorPartId(id: VectorPartId): [number, number] {
+		const [mode, part] = id.split(':');
+		return [Number(mode), Number(part)];
+	}
 }

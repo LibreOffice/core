@@ -26,5 +26,8 @@ namespace cool {
 		/// The ids in paint order, the page entry first and the members of
 		/// a group right after it.
 		order: number[];
+		/// Index of the master part the page draws under itself, or
+		/// undefined when the page carries its master content inline.
+		masterPart?: number;
 	}
 }

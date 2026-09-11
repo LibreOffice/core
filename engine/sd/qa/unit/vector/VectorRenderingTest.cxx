@@ -16,6 +16,10 @@
 #include <tools/degree.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vcl/metric.hxx>
@@ -23,9 +27,11 @@
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 
 #include <svx/svdobjkind.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
@@ -57,7 +63,7 @@
 #include <string_view>
 
 using namespace css;
-using namespace ::cpo::uno;
+using namespace ::cpo;
 
 namespace
 {
@@ -492,28 +498,79 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnObjectChange)
     CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideNamesItsMaster)
 {
-    // Changing an object on a slide master must raise the reported
-    // content version of the slide that uses that master.
+    // A slide draws under itself the master it names rather than carrying a
+    // copy of it. The master's own content travels once, as the master part,
+    // and each master object there says how it behaves behind a slide. The
+    // objects that differ per slide are objects of the slide, rendered for it,
+    // and a placeholder the slide has turned off is not among them.
     createBlankDoc();
-    CPPUNIT_ASSERT(page(1)->TRG_HasMasterPage());
-
-    const sal_Int64 nBefore
-        = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
-
-    // Put a rectangle on the master of the first slide and fire the
-    // object change the model would send on a real edit.
-    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    SdPage* pMasterPage = createMasterPlaceholders();
     rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
-        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
-    rMasterPage.NbcInsertObject(pRect.get());
-    pRect->BroadcastObjectChange();
+        pMasterPage->getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pRect->SetMergedItem(XFillColorItem(OUString(), Color(0xc00000)));
+    pMasterPage->NbcInsertObject(pRect.get());
+    SdrObject* pTitle = pMasterPage->GetPresObj(PresObjKind::Title);
+    SdrObject* pFooter = pMasterPage->GetPresObj(PresObjKind::Footer);
+    SdrObject* pNumber = pMasterPage->GetPresObj(PresObjKind::SlideNumber);
+    CPPUNIT_ASSERT(pTitle);
+    CPPUNIT_ASSERT(pFooter);
+    CPPUNIT_ASSERT(pNumber);
 
-    const sal_Int64 nAfter
-        = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
+    auto aSlide = getVectorPrimitives(u"testSlideMasterReference");
+    const auto oPage = aSlide.at("/objects/0");
+    CPPUNIT_ASSERT(oPage.has_value());
+    assertJsonPath(*oPage, "kind", "page");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), oPage->getInt("masterPart").value_or(-1));
+    // The rectangle is the master's to carry, so the slide's own content has none of it.
+    CPPUNIT_ASSERT(!hasNodeWithColor(*oPage, "polyPolygonColor"_ostr, "#c00000"_ostr));
 
-    CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
+    // The footer is shown and differs per slide, so the slide has its own copy of it, marked
+    // as the master's content and carrying what the footer reads on this slide. The slide
+    // number is turned off on a new slide, so there is no copy of it.
+    const auto oFooterCopy = findEntryOfObject(aSlide, pFooter->GetUniqueID());
+    CPPUNIT_ASSERT_MESSAGE("the slide has no copy of the footer", oFooterCopy.has_value());
+    CPPUNIT_ASSERT_EQUAL(true, oFooterCopy->getBool("masterContent").value_or(false));
+    CPPUNIT_ASSERT(oFooterCopy->has("primitives"));
+    CPPUNIT_ASSERT(oFooterCopy->has("transform"));
+    // The aids that mark out a placeholder belong to the page it lives on, the master, so the
+    // copy brings none of them onto the slide.
+    CPPUNIT_ASSERT_MESSAGE("the copy carries the placeholder aids", !oFooterCopy->has("aids"));
+    CPPUNIT_ASSERT(!findEntryOfObject(aSlide, pNumber->GetUniqueID()).has_value());
+
+    // Putting an object on the slide moves its object set, so the delta that follows carries the
+    // whole order. The copy is part of it, since it is an object of the slide like any other.
+    const sal_Int64 nVersion = aSlide.getInt("/version").value_or(-1);
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(2000, 1000)), Color(0x4472c4),
+                 COL_BLACK);
+
+    auto aDelta = getVectorPrimitives(u"testSlideMasterReferenceDelta", nVersion);
+    bool bOrdered = false;
+    const size_t nOrderCount = aDelta.getSize("/order").value_or(0);
+    for (size_t nIndex = 0; nIndex < nOrderCount; ++nIndex)
+    {
+        if (aDelta.getInt(rtl::Concat2View("/order/" + OString::number(sal_Int32(nIndex))))
+                .value_or(0)
+            == sal_Int64(pFooter->GetUniqueID()))
+            bOrdered = true;
+    }
+    CPPUNIT_ASSERT_MESSAGE("the order does not name the copy", bOrdered);
+
+    // The master part carries the rectangle and says how each object behaves behind a slide.
+    auto aMaster = getVectorPrimitives(u"testSlideMasterReferenceMaster", -1, 1);
+    const auto oRect = findEntryOfObject(aMaster, pRect->GetUniqueID());
+    CPPUNIT_ASSERT(oRect.has_value());
+    CPPUNIT_ASSERT(hasNodeWithColor(*oRect, "polyPolygonColor"_ostr, "#c00000"_ostr));
+    CPPUNIT_ASSERT(!oRect->has("hiddenBehindSlide"));
+    CPPUNIT_ASSERT(!oRect->has("slideDependent"));
+    const auto oTitle = findEntryOfObject(aMaster, pTitle->GetUniqueID());
+    CPPUNIT_ASSERT(oTitle.has_value());
+    CPPUNIT_ASSERT_EQUAL(true, oTitle->getBool("hiddenBehindSlide").value_or(false));
+    const auto oFooter = findEntryOfObject(aMaster, pFooter->GetUniqueID());
+    CPPUNIT_ASSERT(oFooter.has_value());
+    CPPUNIT_ASSERT_EQUAL(true, oFooter->getBool("slideDependent").value_or(false));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewCarriesTheMasterObjects)
@@ -551,17 +608,13 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewCarriesTheMasterObjects)
     assertJsonPath(aSlide, "/objects/0/kind", "page");
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditRaisesBothVersions)
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditReachesTheSlideThroughTheMaster)
 {
-    // An edit on a master shows in master view and on every slide that uses
-    // the master, so both parts report a higher version.
+    // A slide draws its master from the master part, so an edit on a master object shows in
+    // master view and, through that part, on every slide that uses the master. The slide's own
+    // part does not move for it, and a delta for the slide has nothing to say.
     createBlankDoc();
     CPPUNIT_ASSERT(page(1)->TRG_HasMasterPage());
-
-    const sal_Int64 nMasterBefore
-        = getVectorPrimitives(u"testMasterPartVersion", -1, 1).getInt("/version").value_or(-1);
-    const sal_Int64 nSlideBefore
-        = getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1);
 
     SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
     rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
@@ -569,12 +622,23 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditRaisesBothVersions)
     rMasterPage.NbcInsertObject(pRect.get());
     pRect->BroadcastObjectChange();
 
-    CPPUNIT_ASSERT_GREATER(
-        nMasterBefore,
-        getVectorPrimitives(u"testMasterPartVersion", -1, 1).getInt("/version").value_or(-1));
-    CPPUNIT_ASSERT_GREATER(
+    const sal_Int64 nMasterBefore
+        = getVectorPrimitives(u"testMasterPartVersion", -1, 1).getInt("/version").value_or(-1);
+    const sal_Int64 nSlideBefore
+        = getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1);
+
+    moveObject(pRect.get(), Size(500, 500));
+
+    auto aMasterDelta = getVectorPrimitives(u"testMasterPartVersionDelta", nMasterBefore, 1);
+    assertJsonPath(aMasterDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT(carriesObject(aMasterDelta, pRect->GetUniqueID()));
+
+    // The slide neither carries the rectangle nor moved its version for it.
+    CPPUNIT_ASSERT_EQUAL(
         nSlideBefore,
         getVectorPrimitives(u"testMasterPartVersionSlide").getInt("/version").value_or(-1));
+    auto aSlideDelta = getVectorPrimitives(u"testMasterPartVersionSlideDelta", nSlideBefore);
+    CPPUNIT_ASSERT(!aSlideDelta.has("/type"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesEditRaisesTheNotesVersion)
@@ -896,6 +960,36 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewIsFramed)
     CPPUNIT_ASSERT(findNodeOfType(*oEntry, "polygonHairline"_ostr).has_value());
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewReadsFieldsFromTheSlide)
+{
+    // The footer inside the slide preview of a notes page reads what the slide's own settings
+    // say, not what the notes page's do, the way the office draws the preview.
+    createBlankDoc();
+    createMasterPlaceholders();
+    SdPage* pSlide = static_cast<SdPage*>(page(1));
+    SdPage* pNotesPage = static_cast<SdPage*>(page(2));
+    CPPUNIT_ASSERT(pSlide);
+    CPPUNIT_ASSERT(pNotesPage);
+
+    sd::HeaderFooterSettings aSlideSettings = pSlide->getHeaderFooterSettings();
+    aSlideSettings.mbFooterVisible = true;
+    aSlideSettings.maFooterText = u"SlideFooter"_ustr;
+    pSlide->setHeaderFooterSettings(aSlideSettings);
+
+    sd::HeaderFooterSettings aNotesSettings = pNotesPage->getHeaderFooterSettings();
+    aNotesSettings.mbFooterVisible = true;
+    aNotesSettings.maFooterText = u"NotesFooter"_ustr;
+    pNotesPage->setHeaderFooterSettings(aNotesSettings);
+
+    auto aNotes = getVectorPrimitives(u"testNotesPreviewFields", -1, 2);
+    const SdrObject* pPreview = pNotesPage->GetPresObj(PresObjKind::Page);
+    CPPUNIT_ASSERT(pPreview);
+    const auto oEntry = findEntryOfObject(aNotes, pPreview->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT(findTextPortionUnder(*oEntry, "SlideFooter"_ostr).has_value());
+    CPPUNIT_ASSERT(!findTextPortionUnder(*oEntry, "NotesFooter"_ostr).has_value());
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryParentNamesAReportedObject)
 {
     // A member names the group it sits in, and a client resolves that name
@@ -982,6 +1076,90 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMissingPageStillAnswers)
     // No page means no content, so nothing describes one.
     CPPUNIT_ASSERT(!oJson->has("/order"));
     CPPUNIT_ASSERT(!oJson->has("/objects"));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideCarriesTheMembersOfAMasterGroupWithAField)
+{
+    // A group on the master that holds a field reads differently on each slide, so the slide
+    // supplies it. A group has no primitives of its own, its members draw it, so the slide
+    // carries every member as well, each naming the group as its parent.
+    createBlankDoc();
+    SdPage* pMasterPage = static_cast<SdPage*>(&page(1)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT(pMasterPage);
+    SdDrawDocument* pDrawDoc = getSdDocShell()->GetDoc();
+
+    rtl::Reference<SdrRectObj> pLogo = new SdrRectObj(
+        *pDrawDoc, tools::Rectangle(Point(1000, 1000), Size(2000, 2000)));
+    pLogo->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pLogo->SetMergedItem(XFillColorItem(OUString(), Color(0xc00000)));
+
+    rtl::Reference<SdrRectObj> pNumber = new SdrRectObj(
+        *pDrawDoc, tools::Rectangle(Point(4000, 1000), Size(4000, 2000)), SdrObjKind::Text);
+    SdrOutliner& rOutliner = pDrawDoc->GetDrawOutliner();
+    rOutliner.Clear();
+    rOutliner.QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection());
+    pNumber->SetOutlinerParaObject(rOutliner.CreateParaObject());
+
+    rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(*pDrawDoc);
+    pGroup->GetSubList()->NbcInsertObject(pLogo.get());
+    pGroup->GetSubList()->NbcInsertObject(pNumber.get());
+    pMasterPage->NbcInsertObject(pGroup.get());
+
+    auto aMaster = getVectorPrimitives(u"testMasterGroupWithField", -1, 1);
+    const auto oMasterGroup = findEntryOfObject(aMaster, pGroup->GetUniqueID());
+    CPPUNIT_ASSERT(oMasterGroup.has_value());
+    assertJsonPathBool(*oMasterGroup, "slideDependent", true);
+
+    auto aSlide = getVectorPrimitives(u"testMasterGroupWithFieldSlide");
+    for (const SdrObject* pObject :
+         { static_cast<const SdrObject*>(pGroup.get()), static_cast<const SdrObject*>(pLogo.get()),
+           static_cast<const SdrObject*>(pNumber.get()) })
+    {
+        const auto oEntry = findEntryOfObject(aSlide, pObject->GetUniqueID());
+        CPPUNIT_ASSERT_MESSAGE("the slide carries no entry for a master group member",
+                               oEntry.has_value());
+        assertJsonPathBool(*oEntry, "masterContent", true);
+    }
+    const auto oNumber = findEntryOfObject(aSlide, pNumber->GetUniqueID());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
+                         oNumber->getInt("parent").value_or(-1));
+    CPPUNIT_ASSERT(oNumber->getSize("primitives").value_or(0) > 0);
+    CPPUNIT_ASSERT(everyParentResolves(aSlide));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGivingASlideAnotherMasterMovesItsVersion)
+{
+    // A slide names the master it draws under, so giving it another master changes what its
+    // page entry says, and a delta after that carries the entry with the new master's id.
+    createBlankDoc();
+    SdDrawDocument* pDrawDoc = getSdDocShell()->GetDoc();
+    SdPage* pSlide = pDrawDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pSlide);
+    CPPUNIT_ASSERT(pSlide->TRG_HasMasterPage());
+    const SdPage* pOldMaster = static_cast<const SdPage*>(&pSlide->TRG_GetMasterPage());
+    CPPUNIT_ASSERT(pOldMaster);
+
+    uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasters = xSupplier->getMasterPages();
+    uno::Reference<drawing::XDrawPage> xNewMaster = xMasters->insertNewByIndex(1);
+    const SdPage* pNewMaster = pDrawDoc->GetMasterSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pNewMaster);
+    CPPUNIT_ASSERT(pNewMaster != pOldMaster);
+
+    auto aFull = getVectorPrimitives(u"testMasterSwapFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFull.getInt("/objects/0/masterPart").value_or(-1));
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XMasterPageTarget> xTarget(
+        xPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    xTarget->setMasterPage(xNewMaster);
+
+    auto aDelta = getVectorPrimitives(u"testMasterSwapDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    const auto oPage = findEntryOfKind(aDelta, "page"_ostr);
+    CPPUNIT_ASSERT(oPage.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oPage->getInt("masterPart").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
@@ -1371,31 +1549,28 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)
     assertJsonPath(*oDark, "fontcolor", "#ffffff");
 }
 
-// A master-page change is not an object on the slide, so a delta whose
-// baseline predates it must carry the master page content.
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedMasterPage)
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesAutoColorTextOnBackgroundChange)
 {
+    // Text in the automatic color is drawn against the page background, so a background change
+    // changes how the text draws without touching the text object. A delta after the change
+    // carries the object with the color it now resolves to.
     createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
-    page(1)->GetObj(0)->BroadcastObjectChange();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), u"Hello"_ustr);
+    const SdrObject* pText = page(1)->GetObj(0);
 
-    auto aFull = getVectorPrimitives(u"testMasterDeltaFull");
+    auto aFull = getVectorPrimitives(u"testAutoColorDeltaFull");
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
 
-    // Put a rectangle on the master after that version and fire the
-    // object change the model would send on a real edit.
-    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
-    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
-        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
-    rMasterPage.NbcInsertObject(pRect.get());
-    pRect->BroadcastObjectChange();
+    SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), COL_BLACK));
 
-    auto aDelta = getVectorPrimitives(u"testMasterDelta", nVersion);
+    auto aDelta = getVectorPrimitives(u"testAutoColorDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The slide object itself is unchanged, so the only entry is the page,
-    // whose master page content changed.
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(SIZE_MAX));
-    assertJsonPath(aDelta, "/objects/0/kind", "page");
+    CPPUNIT_ASSERT(carriesObject(aDelta, pText->GetUniqueID()));
+    auto oPortion = findTextPortion("Hello"_ostr);
+    CPPUNIT_ASSERT(oPortion.has_value());
+    assertJsonPath(*oPortion, "fontcolor", "#ffffff");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedBackground)

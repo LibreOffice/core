@@ -120,6 +120,7 @@
 #include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdopage.hxx>
+#include <svx/svdtext.hxx>
 #include <svtools/colorcfg.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
@@ -136,6 +137,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <PlaceholderDecoration.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
@@ -2395,6 +2397,89 @@ sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPa
     return -1;
 }
 
+/// True when the master object is not painted behind a slide: a layout prototype such as the
+/// title or outline placeholder, or an empty presentation object with neither fill nor line.
+/// Both hold for every slide that uses the master.
+bool isHiddenBehindSlide(const SdrObject& rObject)
+{
+    if (rObject.IsNotVisibleAsMaster())
+        return true;
+    // A page object on a master shows a page in the master's own view only, which is what the
+    // office does with it as well.
+    if (dynamic_cast<const SdrPageObj*>(&rObject))
+        return true;
+    if (rObject.IsEmptyPresObj() && !(rObject.HasFillStyle() || rObject.HasLineStyle()))
+        return true;
+    // A member of a group that is hidden is hidden with it.
+    const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+    return pParent && isHiddenBehindSlide(*pParent);
+}
+
+/// True when the object, or a member of it when it is a group, holds text with a field. A field
+/// resolves against the page being drawn, so the object looks different behind each slide.
+bool hasTextField(const SdrObject& rObject)
+{
+    if (const SdrTextObj* pTextObject = DynCastSdrTextObj(&rObject))
+    {
+        // A table holds one text per cell, so every text of the object is asked.
+        for (sal_Int32 nText = 0; nText < pTextObject->getTextCount(); ++nText)
+        {
+            const SdrText* pText = pTextObject->getText(nText);
+            const OutlinerParaObject* pParaObject
+                = pText ? pText->GetOutlinerParaObject() : nullptr;
+            if (pParaObject && pParaObject->GetTextObject().HasField())
+                return true;
+        }
+    }
+    if (const SdrObjList* pChildren = rObject.GetSubList())
+    {
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+        {
+            const SdrObject* pChild = pChildren->GetObj(i);
+            if (pChild && hasTextField(*pChild))
+                return true;
+        }
+    }
+    return false;
+}
+
+/// True when the master object looks different behind each slide, so each slide carries its
+/// own copy of it: the header, footer, date and slide number placeholders, and any object whose
+/// text holds a field.
+bool isSlideDependent(const SdPage& rMasterPage, SdrObject& rObject)
+{
+    switch (rMasterPage.GetPresObjKind(&rObject))
+    {
+        case PresObjKind::Header:
+        case PresObjKind::Footer:
+        case PresObjKind::DateTime:
+        case PresObjKind::SlideNumber:
+            return true;
+        default:
+            return hasTextField(rObject);
+    }
+}
+
+/// True when the slide shows the master placeholder of that kind. The header, footer, date and
+/// slide number are turned on and off per slide.
+bool slideShowsPlaceholder(const SdPage& rPage, PresObjKind eKind)
+{
+    const sd::HeaderFooterSettings& rSettings = rPage.getHeaderFooterSettings();
+    switch (eKind)
+    {
+        case PresObjKind::Header:
+            return rSettings.mbHeaderVisible;
+        case PresObjKind::Footer:
+            return rSettings.mbFooterVisible;
+        case PresObjKind::DateTime:
+            return rSettings.mbDateTimeVisible;
+        case PresObjKind::SlideNumber:
+            return rSettings.mbSlideNumberVisible;
+        default:
+            return true;
+    }
+}
+
 /// The part and mode a request names the page by, or nothing for a page vector rendering does
 /// not serve. A slide and its notes page sit next to each other in the document's own list, so
 /// one index names either in its own list. A master page is named by its place in the master
@@ -2578,7 +2663,7 @@ void bumpMasterChangeForUsers(
     SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
     std::unordered_map<SdXImpressDocument::VectorPartKey, SdXImpressDocument::VectorPartState,
                        SdXImpressDocument::VectorPartKey::Hash>& rVectorParts,
-    const SdPage* pMasterPage)
+    const SdPage* pMasterPage, const SdrObject* pChangedObject = nullptr)
 {
     const PageKind ePageKind = pMasterPage->GetPageKind();
     if (ePageKind != PageKind::Standard && ePageKind != PageKind::Notes)
@@ -2594,10 +2679,26 @@ void bumpMasterChangeForUsers(
             && &pUserPage->TRG_GetMasterPage() == pMasterPage)
         {
             SdXImpressDocument::VectorPartState& rState = rVectorParts[{ nPage, nMode }];
-            recordMasterChange(rState);
-            // The master's background is what the automatic color of the page's objects
-            // resolves against when the page defines none of its own.
-            markPageObjectsDirty(rState, *pUserPage);
+            if (pChangedObject)
+            {
+                // A slide draws its master from the master part, so a changed master object
+                // reaches it through that part. What the slide carries of the master is its
+                // own copy of each placeholder that reads differently on each slide, so the
+                // changed object is looked at again on the slide and the version moves only
+                // when such a copy changed. A notes page still carries its master inline, so
+                // its version moves outright.
+                if (nMode != constVectorModeSlides)
+                    recordMasterChange(rState);
+                markSubtreeDirty(rState, pChangedObject);
+            }
+            else
+            {
+                // The master's own properties changed. Its background travels with the page
+                // entry of every page that uses it, and the automatic color resolves against
+                // that background.
+                recordMasterChange(rState);
+                markPageObjectsDirty(rState, *pUserPage);
+            }
             notifyViewsVectorPartChanged(pDocShell, nPage, nMode);
             if (nMode == constVectorModeSlides)
                 recordSlidePreviewChange(rDocument, pDocShell, rVectorParts, nPage);
@@ -2657,7 +2758,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // The master shows on every page that uses it, and a
                         // slide master is a part of its own in master view.
-                        bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+                        bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage,
+                                                 pObject);
 
                         const sal_Int32 nMasterPart = findMasterPageIndex(*mpDoc, pPage);
                         if (nMasterPart >= 0)
@@ -2956,8 +3058,13 @@ private:
     }
 
     /// The entry that stands for the page itself. It is drawn first and holds what lies
-    /// behind the objects: the background, the page fill and the master page content. Its
-    /// id is zero, which no object takes, and its box is the page.
+    /// behind the objects. Its id is zero, which no object takes, and its box is the page.
+    ///
+    /// A slide carries its own background and page fill and names the master part it draws
+    /// under itself, so the master travels once rather than as a copy on every slide. The
+    /// master objects that look different behind each slide, the header, footer, date and slide
+    /// number and anything holding a field, are objects of the slide, rendered for it. Any other
+    /// page carries the master content inline, since its master is not served as a part.
     void writePageEntry(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         auto pPageNode = rWriter.startStruct();
@@ -2983,17 +3090,49 @@ private:
             rWriter.putSimpleValue(0.0);
             rWriter.putSimpleValue(0.0);
         }
-        auto aPrimArray = rWriter.startArray("primitives");
+
         drawinglayer::primitive2d::Primitive2DContainer aContent;
-        pageContentPrimitives(pPage, aContent);
+        const sal_Int32 nMasterPart = servedMasterPartOf(pPage);
+        if (nMasterPart >= 0)
+        {
+            pageOwnPrimitives(pPage, aContent);
+            rWriter.put("masterPart", nMasterPart);
+        }
+        else
+            pageContentPrimitives(pPage, aContent);
+
+        auto aPrimArray = rWriter.startArray("primitives");
         if (!aContent.empty())
             maProcessor->decomposeAndWrite(aContent);
     }
 
-    /// What lies behind the objects of a page, in paint order: the background, the page fill
-    /// and the master content, without the master placeholders the page does not show.
-    static void pageContentPrimitives(SdPage* pPage,
-                                      drawinglayer::primitive2d::Primitive2DContainer& rContent)
+    /// True when the object is drawn behind the page the part stands for rather than being an
+    /// object of that page. A slide's copy of a master placeholder is such an object: it lives
+    /// on the master and the slide fills it in.
+    bool isBehindThePage(const SdrObject& rObject) const
+    {
+        if (mnMode == constVectorModeMasterPages)
+            return false;
+        const SdPage* pObjectPage
+            = dynamic_cast<const SdPage*>(rObject.getSdrPageFromSdrObject());
+        return pObjectPage && pObjectPage->IsMasterPage();
+    }
+
+    /// The index of the master part a slide draws under itself, or -1 for a page whose master
+    /// is not served as a part: a master page, a notes page, or a page without a master.
+    sal_Int32 servedMasterPartOf(SdPage* pPage) const
+    {
+        if (pPage->IsMasterPage() || pPage->GetPageKind() != PageKind::Standard
+            || !pPage->TRG_HasMasterPage())
+            return -1;
+        SdPage* pMasterPage = dynamic_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+        return pMasterPage ? findMasterPageIndex(*mpDocument, pMasterPage) : -1;
+    }
+
+    /// The parts of the page that belong to it and lie behind its objects, in paint order: the
+    /// background, the page fill and the background the master defines.
+    static void pageOwnPrimitives(SdPage* pPage,
+                                  drawinglayer::primitive2d::Primitive2DContainer& rContent)
     {
         // ViewContactOfSdrPage fixed child order:
         //   0=Background, 1=Shadow, 2=Fill, 3=MasterPage
@@ -3006,43 +3145,31 @@ private:
         // PageFill: always produces a solid fill for the slide background
         pPage->GetViewContact().GetViewContact(2).getViewIndependentPrimitive2DContainer(rContent);
 
+        // MasterPageDescriptor: adds a background fill if the master page defines one.
+        if (pPage->TRG_HasMasterPage())
+            pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(
+                rContent);
+    }
+
+    /// What lies behind the objects of a page, in paint order: the background, the page fill
+    /// and the master page content, with the master placeholders the page does not show left
+    /// out.
+    static void pageContentPrimitives(SdPage* pPage,
+                                      drawinglayer::primitive2d::Primitive2DContainer& rContent)
+    {
+        pageOwnPrimitives(pPage, rContent);
         if (!pPage->TRG_HasMasterPage())
             return;
 
-        // MasterPageDescriptor: adds a background fill if the master page defines one.
-        pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(rContent);
-
-        // Master page objects: objects on the master page.
-        // We need to filter out (header, footer, datetime, slidenumber) placeholders
-        // depending on the current page's settings.
         SdPage* pMasterPage = dynamic_cast<SdPage*>(&pPage->TRG_GetMasterPage());
         if (!pMasterPage)
             return;
 
-        const sd::HeaderFooterSettings& rSettings = pPage->getHeaderFooterSettings();
-
         for (size_t i = 0; i < pMasterPage->GetObjCount(); ++i)
         {
             SdrObject* pObject = pMasterPage->GetObj(i);
-            if (!pObject)
-                continue;
-
-            // Filter objects not visible as master page objects (Title, Outline,
-            // Notes placeholders).
-            if (pObject->IsNotVisibleAsMaster())
-                continue;
-
-            // Filter empty presentation objects.
-            if (pObject->IsEmptyPresObj()
-                && !(pObject->HasFillStyle() || pObject->HasLineStyle()))
-                continue;
-
-            // Filter hidden header/footer placeholders based on per-slide settings.
-            PresObjKind eKind = pMasterPage->GetPresObjKind(pObject);
-            if ((eKind == PresObjKind::Header && !rSettings.mbHeaderVisible)
-                || (eKind == PresObjKind::Footer && !rSettings.mbFooterVisible)
-                || (eKind == PresObjKind::DateTime && !rSettings.mbDateTimeVisible)
-                || (eKind == PresObjKind::SlideNumber && !rSettings.mbSlideNumberVisible))
+            if (!pObject || isHiddenBehindSlide(*pObject)
+                || !slideShowsPlaceholder(*pPage, pMasterPage->GetPresObjKind(pObject)))
                 continue;
 
             pObject->GetViewContact().getViewIndependentPrimitive2DContainer(rContent);
@@ -3108,13 +3235,41 @@ private:
         }
     }
 
+    /// Every object the part paints, in paint order. A slide that names a master part paints
+    /// the master's placeholders it fills in, the header, the footer, the date and the slide
+    /// number, so those come first as objects of the slide, rendered for it. Any other page
+    /// paints its own objects alone.
+    void collectPartObjects(SdPage* pPage, std::vector<SdrObject*>& rObjects)
+    {
+        if (servedMasterPartOf(pPage) >= 0)
+        {
+            SdPage* pMasterPage = dynamic_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+            for (size_t i = 0; pMasterPage && i < pMasterPage->GetObjCount(); ++i)
+            {
+                SdrObject* pObject = pMasterPage->GetObj(i);
+                if (!pObject || isHiddenBehindSlide(*pObject)
+                    || !isSlideDependent(*pMasterPage, *pObject)
+                    || !slideShowsPlaceholder(*pPage, pMasterPage->GetPresObjKind(pObject)))
+                    continue;
+                // A group is slide dependent through a member that holds a field, and the
+                // master names every member of such a group as the slide's to supply, so the
+                // slide carries the members along with the group.
+                rObjects.push_back(pObject);
+                if (const SdrObjList* pChildren = pObject->GetSubList())
+                    collectPaintedObjects(*pChildren, rObjects);
+            }
+        }
+
+        collectPaintedObjects(*pPage, rObjects);
+    }
+
     /// The order array lists every live object id on the page in paint order: the page entry
     /// first, then each object with the objects inside a group right after the group. It is
     /// the authoritative object set and ordering for the part.
     void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         std::vector<SdrObject*> aObjects;
-        collectPaintedObjects(*pPage, aObjects);
+        collectPartObjects(pPage, aObjects);
 
         auto aOrderArray = rWriter.startArray("order");
         rWriter.putSimpleValue(constPageEntryId);
@@ -3226,8 +3381,11 @@ private:
             // The aids that mark out a placeholder, its dashed boundary and the name of the
             // area, travel in an array of their own. A master page is only ever looked at as
             // a page being worked on, so its thumbnail draws the prompt text of an empty
-            // placeholder while leaving the aids to the view that edits the page.
-            aContent.maAids = sd::createPlaceholderDecoration(rObject, false);
+            // placeholder while leaving the aids to the view that edits the page. An object
+            // drawn behind the page rather than on it is marked out where it lives, on the
+            // master, so it brings none of them here.
+            aContent.maAids
+                = sd::createPlaceholderDecoration(rObject, isBehindThePage(rObject));
 
             for (const auto& rPrimitive : aContent.maPrimitives)
             {
@@ -3274,7 +3432,7 @@ private:
             = mpModel->takeVectorDirtyObjects(mnResolvedPage, mnMode);
 
         std::vector<SdrObject*> aObjects;
-        collectPaintedObjects(*pPage, aObjects);
+        collectPartObjects(pPage, aObjects);
 
         // The paint order is compared as a whole. Raising an object above another announces a
         // change on that object alone and its own content stands still, so the order is the
@@ -3337,7 +3495,7 @@ private:
         }
 
         std::vector<SdrObject*> aObjects;
-        collectPaintedObjects(*pPage, aObjects);
+        collectPartObjects(pPage, aObjects);
 
         for (const SdrObject* pObject : aObjects)
         {
@@ -3455,7 +3613,7 @@ private:
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         std::vector<SdrObject*> aObjects;
-        collectPaintedObjects(*pPage, aObjects);
+        collectPartObjects(pPage, aObjects);
 
         for (SdrObject* pObject : aObjects)
         {
@@ -3542,6 +3700,23 @@ private:
         // entry for the edit carries what has been typed.
         if (rContent.mbTextEdit)
             rWriter.put("textEdit", true);
+
+        const SdPage* pObjectPage = dynamic_cast<const SdPage*>(rObject.getSdrPageFromSdrObject());
+        if (mnMode == constVectorModeMasterPages && pObjectPage)
+        {
+            // In master view the master is the page itself, so its entries say what a slide
+            // does with them: left out, taken from the slide's own copy, or drawn as the
+            // master carries it when neither is set.
+            if (isHiddenBehindSlide(rObject))
+                rWriter.put("hiddenBehindSlide", true);
+            else if (isSlideDependent(*pObjectPage, const_cast<SdrObject&>(rObject)))
+                rWriter.put("slideDependent", true);
+        }
+        else if (isBehindThePage(rObject))
+        {
+            // The slide's copy of a master placeholder.
+            rWriter.put("masterContent", true);
+        }
 
         writeEntryGeometry(rWriter, rContent);
     }

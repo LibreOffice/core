@@ -90,7 +90,10 @@ namespace cool {
 			// switch to master view draws the master page at that index.
 			const mode = app.activeDocument.activeModes[0];
 			const partId = cool.vectorPartId(part, mode);
-			const cached = RenderManager.requestPart(part, mode);
+			// A page is drawn only once the master it names has arrived too.
+			const cached = RenderManager.isPartDrawable(part, mode)
+				? RenderManager.requestPart(part, mode)
+				: undefined;
 			if (partId !== this._reportedPartId) {
 				this._reportedPartId = partId;
 				window.app.console.log(

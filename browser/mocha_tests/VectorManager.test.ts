@@ -321,6 +321,170 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
 	});
 
+	// A slide names the master it draws under itself. The master is painted
+	// between the slide's own background and its objects, in the master's
+	// order. A shared object is drawn as the master carries it. An object
+	// that differs per slide is drawn from the slide's own copy, and is left
+	// out when the slide has no copy. An object the master hides behind
+	// slides is never drawn.
+	it('paints the master a page names under the page', function () {
+		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					primitives: [hairline('M0 0 L9 9')],
+				},
+				{ id: 1, hiddenBehindSlide: true, primitives: [hairline('M0 0 L1 1')] },
+				{ id: 2, primitives: [hairline('M0 0 L2 2')] },
+				{ id: 3, slideDependent: true, primitives: [hairline('M0 0 L3 3')] },
+				{ id: 4, slideDependent: true, primitives: [hairline('M0 0 L4 4')] },
+			],
+		});
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					masterPart: 0,
+					primitives: [hairline('M0 0 L6 6')],
+				},
+				{ id: 3, masterContent: true, primitives: [hairline('M0 0 L5 5')] },
+				{ id: 9, primitives: [hairline('M0 0 L7 7')] },
+			],
+		});
+
+		const slide: any = manager.requestPart(0, cool.VectorMode.Slides);
+		nodeassert.strictEqual(slide.masterPart, 0);
+		nodeassert.strictEqual(
+			manager.isPartDrawable(0, cool.VectorMode.Slides),
+			true,
+		);
+
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, slide);
+		// The slide's background, the shared master object, the slide's copy
+		// of the per-slide one, then the slide's own object. The hidden master
+		// object and the copy-less one are left out.
+		nodeassert.deepStrictEqual(
+			recorder.calls
+				.filter((call: any) => call.method === 'stroke')
+				.map((call: any) => (call.args[0] as any).path),
+			['M0 0 L6 6', 'M0 0 L2 2', 'M0 0 L5 5', 'M0 0 L7 7'],
+		);
+	});
+
+	// An edit running on a master object hides the object's own text, and the
+	// entry that carries what is typed is on the master part. A slide drawing
+	// under that master draws the entry, so the typed text shows on the slide.
+	it('draws a master edit on the slides under the master', function () {
+		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 100, height: 100, primitives: [] },
+				{ id: 2, textEdit: true, primitives: [] },
+				{
+					id: -2,
+					kind: 'texteditoverlay',
+					parent: 2,
+					viewId: 1,
+					primitives: [hairline('M0 0 L4 4')],
+				},
+			],
+		});
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					masterPart: 0,
+					primitives: [],
+				},
+			],
+		});
+
+		const slide: any = manager.requestPart(0, cool.VectorMode.Slides);
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, slide);
+		nodeassert.deepStrictEqual(
+			recorder.calls
+				.filter((call: any) => call.method === 'stroke')
+				.map((call: any) => (call.args[0] as any).path),
+			['M0 0 L4 4'],
+		);
+	});
+
+	// A slide that names a master it does not have yet is not drawable, and
+	// the master is asked for. It becomes drawable once the master arrives.
+	it('waits for the master a page names before drawing it', function () {
+		const sent: string[] = [];
+		(app as any).socket.sendMessage = function (message: string) {
+			sent.push(message);
+		};
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 2,
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					masterPart: 1,
+					primitives: [],
+				},
+			],
+		});
+		nodeassert.strictEqual(
+			manager.isPartDrawable(2, cool.VectorMode.Slides),
+			false,
+		);
+		nodeassert.ok(
+			sent.some(
+				(message) =>
+					message.indexOf('.uno:VectorPrimitives?part=1&mode=1') >= 0,
+			),
+			'the master the page names is fetched',
+		);
+
+		manager.handleVectorPrimitivesResponse({
+			part: 1,
+			mode: cool.VectorMode.MasterPages,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 100, height: 100, primitives: [] },
+			],
+		});
+		nodeassert.strictEqual(
+			manager.isPartDrawable(2, cool.VectorMode.Slides),
+			true,
+		);
+		(app as any).socket.sendMessage = function () {};
+	});
+
 	// The engine reports the layers a view hides as a state change. The
 	// manager takes the list as it is, and a list that is not one hides
 	// nothing. A new list changes what the slide shows, so the views

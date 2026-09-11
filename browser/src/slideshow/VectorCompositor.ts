@@ -116,7 +116,7 @@ class VectorCompositor extends SlideCompositor {
 		const part = this._partForSlide(slideNumber);
 		if (
 			part !== null &&
-			RenderManager.requestPart(part, cool.VectorMode.Slides)
+			RenderManager.isPartDrawable(part, cool.VectorMode.Slides)
 		) {
 			ready();
 			return;
@@ -132,7 +132,7 @@ class VectorCompositor extends SlideCompositor {
 		const part = this._partForSlide(this.pendingSlideNumber);
 		if (
 			part === null ||
-			!RenderManager.requestPart(part, cool.VectorMode.Slides)
+			!RenderManager.isPartDrawable(part, cool.VectorMode.Slides)
 		)
 			return;
 
