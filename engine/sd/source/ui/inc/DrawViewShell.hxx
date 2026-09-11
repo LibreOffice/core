@@ -252,6 +252,7 @@ public:
 
     void            ResetActualPage();
     void            ResetActualLayer();
+    SD_DLLPUBLIC void NotifyHiddenLayers();
     SD_DLLPUBLIC bool SwitchPage(sal_uInt16 nPage, bool bAllowChangeFocus = true,
                                  bool bUpdateScrollbars = true);
     bool            IsSwitchPageAllowed() const;

@@ -111,13 +111,29 @@ class VectorManager extends RenderManagerBase {
 		return undefined;
 	}
 
-	/// Show or hide a layer in this view. Objects on a hidden layer stay
-	/// cached and are skipped when drawing.
-	setLayerVisible(layer: number, visible: boolean): void {
-		const changed = visible
-			? this._hiddenLayers.delete(layer)
-			: !this._hiddenLayers.has(layer) && !!this._hiddenLayers.add(layer);
-		if (changed) this._fireChanged();
+	/// Listen for the layers this view hides. The engine reports them as a
+	/// state change whenever the view's layer state is rebuilt.
+	initialize(): void {
+		app.map.on('commandstatechanged', (event: any) => {
+			if (event.commandName === '.uno:LayerVisibility')
+				this.setHiddenLayers(event.state);
+		});
+	}
+
+	/// The layers this view hides, given as their ids. Objects on them stay
+	/// cached and are skipped when drawing. Anything that is not a list
+	/// hides nothing.
+	setHiddenLayers(layers: unknown): void {
+		const ids = Array.isArray(layers)
+			? layers.filter((id): id is number => typeof id === 'number')
+			: [];
+		const next = new Set<number>(ids);
+		const same =
+			next.size === this._hiddenLayers.size &&
+			ids.every((id) => this._hiddenLayers.has(id));
+		if (same) return;
+		this._hiddenLayers = next;
+		this._fireChanged();
 	}
 
 	isLayerVisible(layer: number): boolean {

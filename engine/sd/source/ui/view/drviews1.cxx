@@ -70,6 +70,7 @@
 #include <controller/SlsPageSelector.hxx>
 
 #include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
 #include <COKit/COKit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
@@ -1346,8 +1347,39 @@ bool DrawViewShell::IsSwitchPageAllowed() const
  * Select new refreshed page, in case of a page order change (eg. by undo)
  */
 
+/// Tells this view which layers it hides, as a state change carrying their ids. A view drawn
+/// from the model rather than from tiles has no other way to know, since the layer set lives in
+/// the page view and the payload it draws from is shared by every view of the page.
+void DrawViewShell::NotifyHiddenLayers()
+{
+    if (!comphelper::COKit::isActive() || !mpDrawView)
+        return;
+
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+    if (!pPageView)
+        return;
+
+    ::tools::JsonWriter aWriter;
+    aWriter.put("commandName", ".uno:LayerVisibility");
+    {
+        auto aHidden = aWriter.startArray("state");
+        const SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+        const SdrLayerIDSet& rVisible = pPageView->GetVisibleLayers();
+        for (sal_uInt16 nLayerPos = 0; nLayerPos < rLayerAdmin.GetLayerCount(); ++nLayerPos)
+        {
+            const SdrLayerID nId = rLayerAdmin.GetLayer(nLayerPos)->GetID();
+            if (!rVisible.IsSet(nId))
+                aWriter.putSimpleValue(sal_Int64(nId.get()));
+        }
+    }
+    GetViewShellBase().viewCallback(COKitCallbackType::STATE_CHANGED,
+                                    aWriter.finishAndGetAsOString());
+}
+
 void DrawViewShell::ResetActualLayer()
 {
+    NotifyHiddenLayers();
+
     LayerTabBar* pLayerBar = GetLayerTabControl();
     if (pLayerBar == nullptr)
         return;

@@ -209,7 +209,7 @@ class RenderManagerBase {
 	): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	setLayerVisible(_layer: number, _visible: boolean): void {}
+	setHiddenLayers(_layers: unknown): void {}
 
 	isLayerVisible(_layer: number): boolean {
 		return true;

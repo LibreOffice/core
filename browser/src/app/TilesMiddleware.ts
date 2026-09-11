@@ -256,8 +256,8 @@ class RenderManager {
 		RenderManager.ensureInstance().renderPlaceholderAids(context, data);
 	}
 
-	static setLayerVisible(layer: number, visible: boolean): void {
-		RenderManager.ensureInstance().setLayerVisible(layer, visible);
+	static setHiddenLayers(layers: unknown): void {
+		RenderManager.ensureInstance().setHiddenLayers(layers);
 	}
 
 	static isLayerVisible(layer: number): boolean {

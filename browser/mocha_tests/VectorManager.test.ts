@@ -310,29 +310,39 @@ describe('VectorManager', function () {
 		});
 		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 
-		manager.setLayerVisible(5, false);
+		manager.setHiddenLayers([5]);
 		let recorder = new CanvasRecorder();
 		manager.renderInto(recorder as any, data);
 		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
 
-		manager.setLayerVisible(5, true);
+		manager.setHiddenLayers([]);
 		recorder = new CanvasRecorder();
 		manager.renderInto(recorder as any, data);
 		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
 	});
 
-	// Hiding a layer changes what the slide shows, so the views draw again.
-	it('redraws the views when a layer is hidden', function () {
+	// The engine reports the layers a view hides as a state change. The
+	// manager takes the list as it is, and a list that is not one hides
+	// nothing. A new list changes what the slide shows, so the views
+	// listening for vector changes redraw.
+	it('takes the hidden layers from the layer visibility state', function () {
 		const manager = new VectorManager();
 		let notified = 0;
 		manager.onVectorChanged(() => notified++);
 
-		manager.setLayerVisible(3, false);
+		manager.setHiddenLayers([3, 7]);
+		nodeassert.strictEqual(manager.isLayerVisible(3), false);
+		nodeassert.strictEqual(manager.isLayerVisible(7), false);
+		nodeassert.strictEqual(manager.isLayerVisible(4), true);
 		nodeassert.strictEqual(notified, 1);
 
-		// Hiding a layer that is already hidden changes nothing.
-		manager.setLayerVisible(3, false);
+		// The same list again changes nothing.
+		manager.setHiddenLayers([7, 3]);
 		nodeassert.strictEqual(notified, 1);
+
+		manager.setHiddenLayers('nonsense');
+		nodeassert.strictEqual(manager.isLayerVisible(3), true);
+		nodeassert.strictEqual(notified, 2);
 	});
 
 	// A placeholder that holds no content yet carries its prompt text inside
@@ -759,7 +769,7 @@ describe('VectorManager', function () {
 			manager.requestThumbnail(0, 0, cool.VectorMode.MasterPages, 100, 100);
 			manager.handleVectorPrimitivesResponse(
 				page(0, cool.VectorMode.MasterPages, [
-					{ id: 1, emptyPresObj: true, primitives: [prompt] },
+					{ id: 1, emptyPlaceholder: true, primitives: [prompt] },
 				]),
 			);
 
@@ -798,7 +808,7 @@ describe('VectorManager', function () {
 			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
 			manager.handleVectorPrimitivesResponse(
 				page(0, cool.VectorMode.Slides, [
-					{ id: 1, emptyPresObj: true, primitives: [prompt] },
+					{ id: 1, emptyPlaceholder: true, primitives: [prompt] },
 				]),
 			);
 

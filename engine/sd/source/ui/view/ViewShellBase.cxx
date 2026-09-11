@@ -1169,6 +1169,11 @@ void ViewShellBase::afterCallbackRegistered()
         svx::theme::notifyKit(pThemeColors, aDocumentColors);
     }
 
+    // A view drawn from the model has no page view to ask which layers are hidden, so a view
+    // that has just started listening is told at once, before any layer changes.
+    if (auto* pDrawViewShell = dynamic_cast<DrawViewShell*>(GetMainViewShell().get()))
+        pDrawViewShell->NotifyHiddenLayers();
+
     if (comphelper::COKit::isActive() && mpDocument && mpDocument->GetStartWithPresentation())
     {
         // Be consistent with SidebarController, emit JSON.

@@ -15,6 +15,7 @@
 #include <tools/json_writer.hxx>
 #include <test/JsonTestTools.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <svx/svdlayer.hxx>
 #include <functional>
 #include <optional>
 #include <set>
@@ -65,6 +66,8 @@
 #include <TransitionPreset.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <svx/svdpagv.hxx>
 #include <SlideshowLayerRenderer.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
@@ -3456,6 +3459,53 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEndTextEditAfterShapeDeleted)
     KitHelper::setView(nView1);
     CPPUNIT_ASSERT(!pView1->IsTextEdit());
     CPPUNIT_ASSERT(!pView1->getViewLocalUndoManager());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testHiddenLayersReachANewView)
+{
+    // A view that starts listening is told which layers it hides at once, so a client that
+    // joins or comes back hides the right layers from the start.
+    createDoc("dummy.odg");
+    SdTestViewCallback aView;
+    auto it = aView.m_aStateChanges.find(".uno:LayerVisibility");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    CPPUNIT_ASSERT(it->second.get_child("state").empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testHiddenLayersReachTheView)
+{
+    // A view drawn from the model has no page view of its own to ask which layers are hidden,
+    // so the view is told, as a state change listing the ids of the layers it hides.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odg");
+    SdTestViewCallback aView;
+    auto* pDrawViewShell
+        = dynamic_cast<sd::DrawViewShell*>(pXImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pDrawViewShell);
+    SdrPageView* pPageView = pDrawViewShell->GetView()->GetSdrPageView();
+    CPPUNIT_ASSERT(pPageView);
+    const SdrLayerAdmin& rLayerAdmin = pXImpressDocument->GetDoc()->GetLayerAdmin();
+    const SdrLayer* pControls = rLayerAdmin.GetLayer(u"controls"_ustr);
+    CPPUNIT_ASSERT(pControls);
+
+    pPageView->SetLayerVisible(u"controls"_ustr, false);
+    aView.m_aStateChanges.clear();
+    pDrawViewShell->NotifyHiddenLayers();
+
+    auto it = aView.m_aStateChanges.find(".uno:LayerVisibility");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    std::vector<sal_Int32> aHidden;
+    for (const auto& rId : it->second.get_child("state"))
+        aHidden.push_back(rId.second.get_value<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aHidden.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pControls->GetID().get()), aHidden[0]);
+
+    // Showing the layer again empties the list.
+    pPageView->SetLayerVisible(u"controls"_ustr, true);
+    aView.m_aStateChanges.clear();
+    pDrawViewShell->NotifyHiddenLayers();
+    it = aView.m_aStateChanges.find(".uno:LayerVisibility");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    CPPUNIT_ASSERT(it->second.get_child("state").empty());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
