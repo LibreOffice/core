@@ -138,6 +138,7 @@ struct FrameSelectorImpl
     bool                mbFullRepaint;  /// Used for repainting (false = only copy virtual device).
     bool                mbAutoSelect;   /// true = Auto select a frame border, if focus reaches control.
     bool                mbHCMode;       /// true = High contrast mode.
+    bool                mbHasFocus;     /// true = Widget currently has keyboard focus.
 
     std::vector<rtl::Reference<a11y::AccFrameSelectorChild>>
                         maChildVec;     /// Pointers to accessibility objects for frame borders.

@@ -398,6 +398,16 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     return true;
                 }
+                else if (sAction == "focus_in")
+                {
+                    KitTrigger::trigger_focus_in(*pArea);
+                    return true;
+                }
+                else if (sAction == "focus_out")
+                {
+                    KitTrigger::trigger_focus_out(*pArea);
+                    return true;
+                }
                 else if (sAction == "keypress")
                 {
                     sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();

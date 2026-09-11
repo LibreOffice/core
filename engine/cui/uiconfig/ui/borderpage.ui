@@ -123,7 +123,7 @@
             <child>
               <object class="GtkScrolledWindow" id="frameselwin">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="vscrollbar-policy">never</property>
                 <property name="shadow-type">in</property>

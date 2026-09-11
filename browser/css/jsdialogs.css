@@ -3429,6 +3429,12 @@ button.has-img img {
 	margin: auto;
 }
 
+.ui-drawing-area:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+	border-radius: var(--border-radius);
+}
+
 /* Writer - Insert - Page Number - page preview image */
 [data-theme='dark'] #PageNumberDialog #previewImage {
 	filter: invert(.95)

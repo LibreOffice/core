@@ -140,6 +140,22 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			_setDescription(wrapper, data, imageId);
 		}
 
+		// Rebuilding the widget moves the focus, and the element the events
+		// carry is gone by the time they arrive. There is nothing to tell the
+		// engine about then.
+		var sendFocusEvent = function (eventType) {
+			var current = container.getCurrent();
+			if (current)
+				builder.callback('drawingarea', eventType, current, '', builder);
+		};
+
+		wrapper.addEventListener('focus', function() {
+			sendFocusEvent('focus_in');
+		});
+		wrapper.addEventListener('blur', function() {
+			sendFocusEvent('focus_out');
+		});
+
 		var activeBorderId = null;
 		for (var i = 0; i < data.borders.length; i++) {
 			var border = data.borders[i];
@@ -251,11 +267,12 @@ function _createDrawingAreaWrapper(container, data, builder, imageId, isDecorati
 
 function _setupDrawingAreaMouseEvents (imageElement, container, builder) {
 	var getCoordinatesFromEvent = function (e) {
-		var boundingBox = imageElement.getBoundingClientRect();
+		var currentElement = container.getCurrent().querySelector('img') || imageElement;
+		var boundingBox = currentElement.getBoundingClientRect();
 		var ret = [e.x - boundingBox.left, e.y - boundingBox.top];
 
-		ret[0] = ret[0] / imageElement.offsetWidth;
-		ret[1] = ret[1] / imageElement.offsetHeight;
+		ret[0] = ret[0] / currentElement.offsetWidth;
+		ret[1] = ret[1] / currentElement.offsetHeight;
 
 		return ret;
 	};

@@ -19,6 +19,10 @@ class KitTrigger
 public:
     static void trigger_changed(weld::TextView& rView) { rView.signal_changed(); }
 
+    static void trigger_focus_in(weld::Widget& rWidget) { rWidget.signal_focus_in(); }
+
+    static void trigger_focus_out(weld::Widget& rWidget) { rWidget.signal_focus_out(); }
+
     static void trigger_changed(weld::Entry& rEdit) { rEdit.signal_changed(); }
 
     static void trigger_activated(weld::Entry& rEdit) { rEdit.signal_activated(); }
