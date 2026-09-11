@@ -947,7 +947,7 @@ Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry*
 {
     Any aAny( SvxItemPropertySet_getPropertyValue( pMap, aSet ) );
 
-    if( pMap->aType != aAny.getValueType() )
+    if( aAny.hasValue() && pMap->aType != aAny.getValueType() )
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
         if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
