@@ -224,6 +224,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)
                 u"dk1");
 }
 
+// The border of a table cell whose color comes from the theme keeps naming the theme.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellBorderThemeColor)
+{
+    createSdImpressDoc("pptx/tablescale.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString aCell
+        = "/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl/a:tr[1]/a:tc[1]/"
+          "a:tcPr"_ostr;
+    assertXPath(pXmlDoc, aCell + "/a:lnL/a:solidFill/a:schemeClr", "val", u"dk1");
+    assertXPath(pXmlDoc, aCell + "/a:lnT/a:solidFill/a:schemeClr", "val", u"dk1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

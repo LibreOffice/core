@@ -193,7 +193,9 @@ public:
 
     void WriteTableCellProperties(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
-    void WriteBorderLine(const sal_Int32 XML_line, const css::table::BorderLine2& rBorderLine);
+    void WriteBorderLine(const sal_Int32 XML_line, const css::table::BorderLine2& rBorderLine,
+                         const OUString& rComplexColorProperty,
+                         const css::uno::Reference<css::beans::XPropertySet>& xCellPropSet);
     void WriteTableCellBorders(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 
     sal_Int32 GetNewShapeID( const css::uno::Reference< css::drawing::XShape >& rShape );

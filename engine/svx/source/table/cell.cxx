@@ -100,6 +100,10 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { u"BottomBorder"_ustr,                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
         { u"LeftBorder"_ustr,                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { u"RightBorder"_ustr,                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { u"TopBorderComplexColor"_ustr,        SDRATTR_TABLE_BORDER,           cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BORDER_TOP_COLOR },
+        { u"BottomBorderComplexColor"_ustr,     SDRATTR_TABLE_BORDER,           cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BORDER_BOTTOM_COLOR },
+        { u"LeftBorderComplexColor"_ustr,       SDRATTR_TABLE_BORDER,           cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BORDER_LEFT_COLOR },
+        { u"RightBorderComplexColor"_ustr,      SDRATTR_TABLE_BORDER,           cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_BORDER_RIGHT_COLOR },
         { u"RotateAngle"_ustr,                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { u"CellInteropGrabBag"_ustr,           SDRATTR_TABLE_CELL_GRABBAG,     cppu::UnoType<cpo::uno::Sequence<css::beans::PropertyValue>>::get(), 0, 0 },
 

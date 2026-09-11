@@ -2618,7 +2618,9 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     mpFS->endElementNS( XML_a, XML_tcPr );
 }
 
-void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const BorderLine2& rBorderLine)
+void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const BorderLine2& rBorderLine,
+                                 const OUString& rComplexColorProperty,
+                                 const Reference<XPropertySet>& xCellPropSet)
 {
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
 // To get original value of LineWidth need to multiple by 2.
@@ -2631,7 +2633,8 @@ void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const Border
         mpFS->startElementNS(XML_a, xml_line_element, XML_w, OString::number(nBorderWidth));
         if ( rBorderLine.Color == sal_Int32( COL_AUTO ) )
             mpFS->singleElementNS(XML_a, XML_noFill);
-        else
+        // A border color that names a theme color goes out as the theme color it is.
+        else if (!DrawingML::WriteSchemeColor(rComplexColorProperty, xCellPropSet))
         {
             ::Color nColor(ColorTransparency, rBorderLine.Color);
             if (nColor.IsTransparent())
@@ -2684,19 +2687,19 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
 
 // lnL - Left Border Line Properties of table cell
     xCellPropSet->getPropertyValue(u"LeftBorder"_ustr) >>= aBorderLine;
-    WriteBorderLine( XML_lnL, aBorderLine );
+    WriteBorderLine( XML_lnL, aBorderLine, u"LeftBorderComplexColor"_ustr, xCellPropSet );
 
 // lnR - Right Border Line Properties of table cell
     xCellPropSet->getPropertyValue(u"RightBorder"_ustr) >>= aBorderLine;
-    WriteBorderLine( XML_lnR, aBorderLine );
+    WriteBorderLine( XML_lnR, aBorderLine, u"RightBorderComplexColor"_ustr, xCellPropSet );
 
 // lnT - Top Border Line Properties of table cell
     xCellPropSet->getPropertyValue(u"TopBorder"_ustr) >>= aBorderLine;
-    WriteBorderLine( XML_lnT, aBorderLine );
+    WriteBorderLine( XML_lnT, aBorderLine, u"TopBorderComplexColor"_ustr, xCellPropSet );
 
 // lnB - Bottom Border Line Properties of table cell
     xCellPropSet->getPropertyValue(u"BottomBorder"_ustr) >>= aBorderLine;
-    WriteBorderLine( XML_lnB, aBorderLine );
+    WriteBorderLine( XML_lnB, aBorderLine, u"BottomBorderComplexColor"_ustr, xCellPropSet );
 }
 
 ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
