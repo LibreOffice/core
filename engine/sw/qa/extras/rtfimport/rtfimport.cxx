@@ -1162,6 +1162,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167714)
                          getXPath(pXmlDoc, sRule9, "left").toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDefaultLanguage)
+{
+    // The file says its default language is French.
+    createSwDoc("tdf-deflang.rtf");
+
+    lang::Locale aLocale(
+        getProperty<lang::Locale>(getRun(getParagraph(1), 1), u"CharLocale"_ustr));
+    // Without the fix the language was dropped on the way in, and the text came out in
+    // whatever language the machine doing the import runs in.
+    CPPUNIT_ASSERT_EQUAL(u"fr"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"FR"_ustr, aLocale.Country);
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

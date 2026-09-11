@@ -899,10 +899,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
             auto pValue = new RTFValue(aTag.getBcp47());
-            putNestedAttribute(m_aStates.top().getCharacterSprms(),
-                               (nKeyword == RTFKeyword::DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang
+            putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_lang,
+                               (nKeyword == RTFKeyword::DEFLANG ? NS_ooxml::LN_CT_Language_val
                                                                 : NS_ooxml::LN_CT_Language_bidi),
-                               nSprm, pValue);
+                               pValue);
         }
         break;
         case RTFKeyword::CHCBPAT:
