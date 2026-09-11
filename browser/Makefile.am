@@ -288,6 +288,7 @@ COOL_CSS =\
 	$(srcdir)/css/jssidebar.css \
 	$(srcdir)/css/forced-colors.css \
 	$(srcdir)/css/aichat-sidebar.css \
+	$(srcdir)/css/cleanup-sidebar.css \
 	$(srcdir)/css/extension-sidebar.css \
 	$(srcdir)/css/slideimport.css \
 	$(srcdir)/css/override-smartmenus.css \
@@ -758,6 +759,7 @@ COOL_JS_LST =\
 	src/control/Notebookbar.ImpressTableDesignTab.ts \
 	src/control/Notebookbar.ImpressTransitionTab.ts \
 	src/control/Sidebar.FromNotebookbarPanel.ts \
+	src/control/Control.CleanupSidebar.ts \
 	src/control/Control.NavigatorPanel.ts \
 	src/control/Control.QuickFindPanel.ts \
 	src/control/Control.NotesPanel.ts \
@@ -1608,6 +1610,7 @@ pot:
 		src/control/Control.AboutDialog.ts \
 		src/control/Control.AddressInputField.ts \
 		src/control/Control.AIChatSidebar.ts \
+		src/control/Control.CleanupSidebar.ts \
 		src/control/Control.AlertDialog.js \
 		src/control/Control.BackstageView.ts \
 		src/control/backstage/CloudProviderKinds.ts \

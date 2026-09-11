@@ -73,6 +73,11 @@ function getToggleButtons() {
 		'viewchanges',
 		'showannotations',
 		'toggledarktheme',
+		// The three presentation decks that live in the notebookbar rather than in the engine.
+		// Each carries a command state of true or false that follows the deck in the dock.
+		'animationdeck',
+		'cleanupdeck',
+		'transitiondeck',
 	];
 }
 

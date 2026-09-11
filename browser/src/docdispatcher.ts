@@ -1072,6 +1072,10 @@ class Dispatcher {
 		this.actionsMap['transitiondeck'] = () => {
 			app.map.sidebarFromNotebookbar.toggleTransitionsSidebar();
 		};
+
+		this.actionsMap['cleanupdeck'] = () => {
+			app.map.cleanupSidebar.toggle();
+		};
 	}
 
 	private addZoteroCommands() {

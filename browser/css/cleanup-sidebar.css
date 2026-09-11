@@ -1,0 +1,28 @@
+/* -*- Mode: CSS; tab-width: 8; indent-tabs-mode: t; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Online contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* The Cleanup deck. The chrome around the panel is the sidebar's own, and everything below is
+   the panel's markup, so every rule here names one of the panel's classes. */
+
+/* The panel stands under the heading row of the deck and lays itself out inside the width its
+   parent leaves it. Its inline padding is the padding of that heading row, so the rows line up
+   with the title over them. The panel reads at the size the rest of the client reads at, so a
+   piece of text that names no size of its own still comes out at the size of the row text
+   beside it. */
+.cleanup-sidebar {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: 0;
+	padding-inline: var(--spacing-xl);
+	font-size: var(--default-font-size);
+	line-height: normal;
+}

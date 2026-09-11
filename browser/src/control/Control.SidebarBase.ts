@@ -21,6 +21,14 @@ enum SidebarType {
 	Navigator = 'navigator', // core
 	QuickFind = 'quickfind', // core
 	Notebookbar = 'notebookbar', // online side panel, which sens messages to NB in core
+	Cleanup = 'cleanup', // online side panel built and driven in the browser
+}
+
+/// What a dock now holds: the element the dock hangs on, and the JSON type of the component
+/// whose content fills it, or null once the dock is closed.
+interface DockContentEvent {
+	wrapper: HTMLElement;
+	jsontype: string | null;
 }
 
 abstract class SidebarBase extends JSDialogComponent {
@@ -106,6 +114,14 @@ abstract class SidebarBase extends JSDialogComponent {
 
 		const upperCaseType = this.type[0].toUpperCase() + this.type.slice(1);
 		this.map.uiManager.setDocTypePref('Show' + upperCaseType, show);
+
+		// Several components share one dock, and only the one that opened or closed it knows
+		// that the content changed hands. The word goes out from here, the single place a dock
+		// is shown and hidden, so a component that shares a dock is told rather than asking.
+		this.map.fire('dockcontent', {
+			wrapper: this.wrapper,
+			jsontype: show ? this.allowedJsonType : null,
+		} as DockContentEvent);
 	}
 
 	closeSidebar() {
@@ -156,15 +172,17 @@ abstract class SidebarBase extends JSDialogComponent {
 
 	/// The presentation sidebar/panel toolbar buttons are mutually exclusive, so
 	/// only the button of the active deck stays highlighted. Core reports the
-	/// state of its own decks, but the transitions and animations panels live in
-	/// the notebookbar and core is never told they took over the sidebar. Their
-	/// highlight, and clearing the core deck button they replace, is driven here.
+	/// state of its own decks, but the decks the browser builds itself are opened
+	/// from the notebookbar and core is never told they took over the sidebar.
+	/// Their highlight, and clearing the core deck button they replace, is
+	/// driven here.
 	updatePresentationDeckHighlight(currentDeck: string) {
 		if (this.map.getDocType() !== 'presentation') return;
 
 		const panelCommandForDeck: { [key: string]: string } = {
 			'transitions-deck': 'transitiondeck',
 			'animations-deck': 'animationdeck',
+			'cleanup-deck': 'cleanupdeck',
 		};
 		const coreDeckCommands = [
 			'.uno:SidebarDeck.PropertyDeck',

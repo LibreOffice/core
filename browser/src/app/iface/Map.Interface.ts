@@ -250,6 +250,7 @@ interface MapInterface extends Evented {
 	hideSlide(): void;
 	showSlide(): void;
 	sidebarFromNotebookbar: SidebarFromNotebookbarPanel;
+	cleanupSidebar: CleanupSidebar;
 	mobileTopBar?: MobileTopBar;
 
 	// TODO: window.L.control.lokDialog

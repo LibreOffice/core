@@ -654,6 +654,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
+				{name: _('Clean Up'), unoid: '.uno:PresentationCleanup', id: 'cleanupdeck', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 
@@ -2364,10 +2365,10 @@ class Menubar extends window.L.Control {
 						itemState = app.map.uiManager.getHighlightMode();
 						if (itemState) $(aItem).addClass(constChecked);
 						else $(aItem).removeClass(constChecked);
-					} else if (id === 'transitiondeck') {
+					} else if (id === 'transitiondeck' || id === 'cleanupdeck') {
 						// notebookbar-based panel, highlighted from the command
 						// state set in Sidebar.updatePresentationDeckHighlight
-						itemState = this._map['stateChangeHandler'].getItemValue('transitiondeck');
+						itemState = this._map['stateChangeHandler'].getItemValue(id);
 						if (itemState === 'true') $(aItem).addClass(constChecked);
 						else $(aItem).removeClass(constChecked);
 					} else if (id === 'presentation-in-console') {
@@ -2646,6 +2647,7 @@ class Menubar extends window.L.Control {
 			|| id === 'serveraudit'
 			|| id === 'animationdeck'
 			|| id === 'transitiondeck'
+			|| id === 'cleanupdeck'
 			|| id.startsWith('extension-toggle-')
 			|| id.startsWith('ext:')
 			|| id === 'importslides'

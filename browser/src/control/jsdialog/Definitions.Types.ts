@@ -372,10 +372,12 @@ interface ToolItemWidgetJSON extends WidgetJSON {
 
 interface DeckWidgetJSON extends WidgetJSON {
 	headerText?: string; // title shown in a heading row above the deck's panels
+	name?: string; // legacy deck id
 }
 
 interface PanelWidgetJSON extends WidgetJSON {
 	hidden: boolean; // is hidden
+	expanded?: boolean; // true when the section starts open
 	command: string; // command to trigger options for a panel
 	text: string; // panel title
 	name?: string; // legacy panel id

@@ -2176,6 +2176,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 					}
 				]
 			},
+			{ type: 'separator', id: 'review-comments-break', orientation: 'vertical' },
+			{
+				'id': 'review-cleanup',
+				'class': 'unoCleanup',
+				'type': 'bigcustomtoolitem',
+				'text': _('Clean Up'),
+				'tooltip': _('Clean Up'),
+				'command': 'cleanupdeck',
+				'accessibility': { focusBack: false, combination: 'CL', de: null }
+			},
 		];
 
 		return this.getTabPage('Review', content);
