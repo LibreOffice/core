@@ -112,4 +112,5 @@
     <string name="pref_user_name_guest">Użytkownik-gość</string>
     <string name="pref_user_name_info">Używana podczas dodawania komentarza</string>
     <string name="pref_user_name">Nazwa użytkownika</string>
+    <string name="app_version_and_hash">Wersja: %1$s\ngit-hash: %2$s</string>
 </resources>
