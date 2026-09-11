@@ -1,0 +1,44 @@
+From 3abda657c073f89dc6b39bbad8f7dfe2fbf17fd4 Mon Sep 17 00:00:00 2001
+Date: Mon, 10 Aug 2026 11:59:46 -0700
+Subject: [PATCH] fxge: fix missing windows include in cfx_renderdevice.h
+
+This resulted in a build failure here:
+In file included from .../pdfium/core/fxge/cfx_drawutils.cpp:13:
+.../core/fxge/cfx_renderdevice.h(74,7): error: unknown type name 'HDC'
+   74 |       HDC hdc,
+      |       ^
+
+It seems this started after commit
+fc790866bf26d977b2ea3a0c3938bb52895309ea (Consolidate CFX_RenderDevice
+and remove CPDF_WindowsRenderDevice, 2026-06-29): the Windows-DC code
+was moved from cpdf_windowsrenderdevice.h to cfx_renderdevice.h but the
+windows.h include wasn't moved.
+
+Given that it looks like every other pdfium header that uses HDC
+includes <windows.h> directly (core/fxge/win32/cpsoutput.h etc.), just
+add the missing include here as well, conditionally.
+
+Change-Id: Ie9920b2031148f7781862502905d999ce045b014
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/154690
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+---
+ core/fxge/cfx_renderdevice.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/core/fxge/cfx_renderdevice.h b/core/fxge/cfx_renderdevice.h
+index 8f427ce01..4114b9884 100644
+--- a/core/fxge/cfx_renderdevice.h
++++ b/core/fxge/cfx_renderdevice.h
+@@ -19,6 +19,10 @@
+ #include "core/fxge/dib/fx_dib.h"
+ #include "core/fxge/renderdevicedriver_iface.h"
+ 
++#if BUILDFLAG(IS_WIN)
++#include <windows.h>
++#endif
++
+ class CFX_DIBBase;
+ class CFX_DIBitmap;
+ class CFX_Font;
