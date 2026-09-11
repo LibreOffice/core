@@ -67,6 +67,7 @@ namespace BackstageTemplates {
       writer: 'images/filetype/writer.svg',
       calc: 'images/filetype/calc.svg',
       impress: 'images/filetype/impress.svg',
+      draw: 'images/filetype/draw.svg',
     };
     return previews[type] || 'images/filetype/document.svg';
   }

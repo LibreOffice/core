@@ -745,6 +745,7 @@ class BackstageView extends window.L.Class {
 			this.getBlankTemplate('writer'),
 			this.getBlankTemplate('calc'),
 			this.getBlankTemplate('impress'),
+			this.getBlankTemplate('draw'),
 		].filter((t): t is TemplateData => t !== null);
 
 		const query = this.templateSearchQuery.trim().toLowerCase();
@@ -919,11 +920,12 @@ class BackstageView extends window.L.Class {
 			});
 		});
 
-		// Sort by type first (writer, calc, impress), then alphabetically by name
+		// Sort by type first (writer, calc, impress, draw), then alphabetically by name
 		const typeOrder: Record<TemplateType, number> = {
 			writer: 1,
 			calc: 2,
 			impress: 3,
+			draw: 4,
 		};
 
 		return templates.sort((a, b) => {
@@ -1023,6 +1025,10 @@ class BackstageView extends window.L.Class {
 				name = _('Blank Presentation');
 				previewPath = 'images/templates/preview/blank_presentation.png';
 				break;
+			case 'draw':
+				name = _('Blank Drawing');
+				previewPath = 'images/templates/preview/blank_drawing.png';
+				break;
 			case 'writer':
 			default:
 				name = _('Blank Document');
@@ -1047,6 +1053,7 @@ class BackstageView extends window.L.Class {
 			otm: 'writer',
 			ots: 'calc',
 			otp: 'impress',
+			otg: 'draw',
 		};
 		return map[extension] || null;
 	}
@@ -1059,7 +1066,8 @@ class BackstageView extends window.L.Class {
 		if (
 			normalized === 'writer' ||
 			normalized === 'calc' ||
-			normalized === 'impress'
+			normalized === 'impress' ||
+			normalized === 'draw'
 		)
 			return normalized as TemplateType;
 		return this.detectTypeFromPath(templatePath);
@@ -1302,8 +1310,9 @@ class BackstageView extends window.L.Class {
 			case 'spreadsheet':
 				return 'calc';
 			case 'presentation':
-			case 'drawing':
 				return 'impress';
+			case 'drawing':
+				return 'draw';
 			default:
 				return 'writer';
 		}

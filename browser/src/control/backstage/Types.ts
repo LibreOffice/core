@@ -42,6 +42,7 @@ interface TemplateTypeMap {
 	writer: 'writer';
 	calc: 'calc';
 	impress: 'impress';
+	draw: 'draw';
 }
 
 type TemplateType = TemplateTypeMap[keyof TemplateTypeMap];

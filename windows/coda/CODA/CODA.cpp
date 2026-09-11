@@ -77,6 +77,7 @@ enum class DocumentType
     TEXT,
     SPREADSHEET,
     PRESENTATION,
+    DRAWING,
 };
 
 enum class DocumentMode { EDIT, NEW, WELCOME, STARTER };
@@ -288,6 +289,10 @@ static std::wstring new_document(DocumentType type,
             case DocumentType::PRESENTATION:
                 templateBasename = L"Presentation";
                 templateExtension = L"odp";
+                break;
+            case DocumentType::DRAWING:
+                templateBasename = L"Drawing";
+                templateExtension = L"odg";
                 break;
             default:
                 fatal("Unexpected case in new_document()");
@@ -3632,6 +3637,8 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
                 type = DocumentType::SPREADSHEET;
             else if (typeToken == "impress")
                 type = DocumentType::PRESENTATION;
+            else if (typeToken == "draw")
+                type = DocumentType::DRAWING;
             else
                 fatal("Unexpected type in newdoc message");
 

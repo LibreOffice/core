@@ -235,7 +235,7 @@ final class DocumentController: NSDocumentController {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    enum NewKind { case text, spreadsheet, presentation }
+    enum NewKind { case text, spreadsheet, presentation, drawing }
 
     /**
      * Copy content of the template (based on "kind") to NSDocument and trigger its editing.
@@ -308,6 +308,7 @@ final class DocumentController: NSDocumentController {
         case .text:         return ("TextDocument", "odt")
         case .spreadsheet:  return ("Spreadsheet", "ods")
         case .presentation: return ("Presentation", "odp")
+        case .drawing:      return ("Drawing", "odg")
         }
     }
 

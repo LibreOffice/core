@@ -758,6 +758,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 switch type {
                     case "calc": kind = .spreadsheet
                     case "impress": kind = .presentation
+                    case "draw": kind = .drawing
                     default : kind = .text
                 }
 
