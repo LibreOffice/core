@@ -769,6 +769,15 @@ void XMLPageNumberImportContext::ProcessAttribute(
             }
             break;
         }
+        case XML_ELEMENT(TEXT, XML_FIXED):
+        {
+            // The field always shows the page it sits on, so a number held at the value it had
+            // when it was inserted is the one case worth a word.
+            bool bFixed = false;
+            SAL_WARN_IF(::sax::Converter::convertBool(bFixed, sAttrValue) && bFixed, "xmloff",
+                        "a page number kept from insertion time is read as a live one");
+            break;
+        }
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
@@ -2874,6 +2883,9 @@ void XMLUrlFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(OFFICE, XML_NAME):
             sName = OUString::fromUtf8(sAttrValue);
             bNameOK = true;
+            break;
+        case XML_ELEMENT(XLINK, XML_TYPE):
+            // The link is a simple one, which is the only kind ODF has here.
             break;
         default:
             // ignore
