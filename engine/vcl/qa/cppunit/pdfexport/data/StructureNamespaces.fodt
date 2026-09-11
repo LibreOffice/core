@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><dc:title>A table of contents</dc:title></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US" style:font-name-asian="Liberation Serif" style:font-size-asian="12pt" style:font-name-complex="Liberation Serif" style:font-size-complex="12pt"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Standard" style:default-outline-level="1" style:class="text">
+   <style:text-properties fo:font-size="16pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Contents_20_Heading" style:display-name="Contents Heading" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Contents_20_1" style:display-name="Contents 1" style:family="paragraph" style:parent-style-name="Standard" style:class="index"/>
+  <style:style style:name="Index_20_Heading" style:display-name="Index Heading" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Index_20_1" style:display-name="Index 1" style:family="paragraph" style:parent-style-name="Standard" style:class="index"/>
+  <style:style style:name="Quotations" style:family="paragraph" style:parent-style-name="Standard" style:class="html"/>
+  <style:style style:name="Footnote" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
+  <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
+   <style:text-properties fo:color="#000080" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="Quotation" style:family="text">
+   <style:text-properties fo:font-style="italic"/>
+  </style:style>
+  <style:style style:name="Source_20_Text" style:display-name="Source Text" style:family="text">
+   <style:text-properties style:font-name="Liberation Serif"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Sect1" style:family="section"/>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:table-of-content text:style-name="Sect1" text:protected="true" text:name="Table of Contents1">
+    <text:table-of-content-source text:outline-level="10" text:use-outline-level="true"/>
+    <text:index-body>
+     <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head"><text:p text:style-name="Contents_20_Heading">Table of Contents</text:p></text:index-title>
+     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc1|outline" text:style-name="Internet_20_link">First heading<text:tab/>1</text:a></text:p>
+     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2|outline" text:style-name="Internet_20_link">Second heading<text:tab/>1</text:a></text:p>
+    </text:index-body>
+   </text:table-of-content>
+   <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc1"/>First heading<text:bookmark-end text:name="__RefHeading___Toc1"/></text:h>
+   <text:p text:style-name="Standard">Body under the first heading.<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p text:style-name="Footnote">The footnote body.</text:p></text:note-body></text:note></text:p>
+   <text:p text:style-name="Quotations">A quoted paragraph.</text:p>
+   <text:p text:style-name="Standard">A run in <text:span text:style-name="Quotation">quotation style</text:span>, a run in <text:span text:style-name="Source_20_Text">source text style</text:span>, and a citation <text:bibliography-mark text:identifier="Ref1" text:bibliography-type="book" text:author="An author" text:title="A title">[Ref1]</text:bibliography-mark>.</text:p>
+   <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc2"/>Second heading<text:bookmark-end text:name="__RefHeading___Toc2"/></text:h>
+   <text:p text:style-name="Standard">Body under the second heading, with <text:alphabetical-index-mark text:string-value="a term"/>a term.</text:p>
+   <text:alphabetical-index text:style-name="Sect1" text:protected="true" text:name="Alphabetical Index1">
+    <text:alphabetical-index-source text:sort-algorithm="alphanumeric" fo:language="en" fo:country="US"/>
+    <text:index-body>
+     <text:index-title text:style-name="Sect1" text:name="Alphabetical Index1_Head"><text:p text:style-name="Index_20_Heading">Index</text:p></text:index-title>
+     <text:p text:style-name="Index_20_1">a term<text:tab/>1</text:p>
+    </text:index-body>
+   </text:alphabetical-index>
+  </office:text>
+ </office:body>
+</office:document>

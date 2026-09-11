@@ -39,11 +39,13 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/XmlWalker.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -2056,6 +2058,123 @@ OString GetCellType(vcl::filter::PDFElement* pElement)
     auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pCell->Lookup("S"_ostr));
     CPPUNIT_ASSERT(pS);
     return pS->GetValue();
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
+{
+    loadFromFile(u"StructureNamespaces.fodt");
+
+    // Tagged rather than PDF/UA, because the harness validates a PDF/UA export and this document
+    // still fails ISO 14289-2 8.8 (a link destination is not a structure destination, tdf#171022),
+    // 8.2.5.8 (a TOCI needs Ref) and 8.2.5.14 (PDF/UA-2 wants FENote, not Note). TODO: ask for
+    // PDF/UA here once those are fixed. The namespaces below depend on the version alone.
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                                    comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
+                                                                  sal_Int32(20)) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    static constexpr OString aPDF17("http://iso.org/pdf/ssn"_ostr);
+    static constexpr OString aPDF20("http://iso.org/pdf2/ssn"_ostr);
+
+    // the namespace each element points at, by object
+    std::unordered_map<vcl::filter::PDFObjectElement*, OString> aNamespaceOf;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "Namespace")
+            continue;
+        auto pURI = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("NS"_ostr));
+        CPPUNIT_ASSERT(pURI);
+        aNamespaceOf[pObject] = pURI->GetValue();
+
+        // the 1.7 namespace needs none: for it the structure tree root's RoleMap is the fallback
+        auto pMap
+            = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("RoleMapNS"_ostr));
+        if (pURI->GetValue() == aPDF17)
+            CPPUNIT_ASSERT_MESSAGE("the 1.7 namespace maps nothing", !pMap);
+        else
+            CPPUNIT_ASSERT(pMap);
+    }
+    // one for PDF 2.0 and one for the types it dropped
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aNamespaceOf.size());
+
+    CPPUNIT_ASSERT(aDocument.GetCatalog());
+    auto pRootRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
+        aDocument.GetCatalog()->Lookup("StructTreeRoot"_ostr));
+    CPPUNIT_ASSERT(pRootRef);
+    CPPUNIT_ASSERT(pRootRef->LookupObject());
+    auto pNamespaces = dynamic_cast<vcl::filter::PDFArrayElement*>(
+        pRootRef->LookupObject()->Lookup("Namespaces"_ostr));
+    CPPUNIT_ASSERT(pNamespaces);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pNamespaces->GetElements().size());
+    for (const auto pElement : pNamespaces->GetElements())
+    {
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pRef);
+        CPPUNIT_ASSERT_MESSAGE("the root names a namespace object",
+                               aNamespaceOf.contains(pRef->LookupObject()));
+    }
+
+    // The references have to be separated in the file itself: "1 0 R2 0 R" is not two
+    // references, and this parser reads it as though it were, so check the bytes. veraPDF is
+    // stricter - it fails to parse such a file and reports nothing, which reads as a pass.
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    pStream->Seek(0);
+    const OString aFile(read_uInt8s_ToOString(*pStream, pStream->remainingSize()));
+    const sal_Int32 nStart(aFile.indexOf("/Namespaces ["));
+    CPPUNIT_ASSERT_GREATER(sal_Int32(-1), nStart);
+    const sal_Int32 nEnd(aFile.indexOf("]", nStart));
+    CPPUNIT_ASSERT_GREATER(nStart, nEnd);
+    const std::string_view aArray(aFile.subView(nStart, nEnd - nStart));
+    for (size_t nR = aArray.find('R'); nR != std::string_view::npos; nR = aArray.find('R', nR + 1))
+    {
+        const bool bSeparated(nR + 1 == aArray.size()
+                              || !rtl::isAsciiDigit(static_cast<unsigned char>(aArray[nR + 1])));
+        CPPUNIT_ASSERT_MESSAGE(
+            OString(OString::Concat("unseparated references in ") + aArray).getStr(), bSeparated);
+    }
+
+    // the namespace each structure type landed in
+    std::unordered_map<OString, OString> aNamespaceOfType;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "StructElem")
+            continue;
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS)
+            continue;
+        auto pNS = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("NS"_ostr));
+        CPPUNIT_ASSERT_MESSAGE("every element in a PDF 2.0 file names its namespace", pNS);
+        const OString aURI(aNamespaceOf[pNS->LookupObject()]);
+        const auto aEntry(aNamespaceOfType.emplace(pS->GetValue(), aURI));
+        if (!aEntry.second)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("one type, two namespaces", aEntry.first->second, aURI);
+    }
+
+    // the types PDF 2.0 dropped, which ISO 14289-2 8.2.4 accepts only in the 1.7 namespace
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["TOC"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["TOCI"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Index"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["BlockQuote"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Quote"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Code"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Note"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["BibEntry"_ostr]);
+    // and the ones it kept
+    CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["Document"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["H1"_ostr]);
+    CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["Link"_ostr]);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166963)

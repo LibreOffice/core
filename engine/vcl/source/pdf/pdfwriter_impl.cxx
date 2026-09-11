@@ -120,6 +120,27 @@ namespace
 
 void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
 
+// the types ISO 32000-2 14.8.6 left out of the PDF 2.0 standard structure namespace
+bool isPDF17OnlyType(StructElement eType)
+{
+    switch (eType)
+    {
+        case StructElement::Article:
+        case StructElement::BlockQuote:
+        case StructElement::TOC:
+        case StructElement::TOCI:
+        case StructElement::Index:
+        case StructElement::Quote:
+        case StructElement::Note:
+        case StructElement::Reference:
+        case StructElement::BibEntry:
+        case StructElement::Code:
+            return true;
+        default:
+            return false;
+    }
+}
+
 } // end anonymous namespace
 
 void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWriter::AnyWidget& i_rControl )
@@ -416,6 +437,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     if (m_aContext.Version == PDFWriter::PDFVersion::PDF_2_0)
     {
         m_aNamespacesMap.emplace(constNamespacePDF2, createObject());
+        // some types exist only in the PDF 1.7 namespace
+        m_aNamespacesMap.emplace(constNamespacePDF17, createObject());
     }
 
     if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
@@ -1014,7 +1037,8 @@ void PDFWriterImpl::emitNamespaces()
         aWriter.startDict();
         aWriter.write("/Type", "/Namespace");
         aWriter.writeKeyAndLiteral("/NS", sNamespace);
-        if( ! m_aRoleMap.empty() )
+        // the 1.7 namespace needs none: for it the structure tree root's RoleMap is the fallback
+        if (sNamespace == constNamespacePDF2 && !m_aRoleMap.empty())
         {
             aLine.append( "/RoleMapNS<<" );
             for (auto const& role : m_aRoleMap)
@@ -1080,17 +1104,21 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         aLine.append("/StructTreeRoot\n");
         aWriter.writeKeyAndReference("/ParentTree", nParentTree);
 
-        // Write the reference to the PDF 2.0 namespace
-        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
+        // Write the references to the namespaces the elements below use
+        OStringBuffer aNamespaces;
+        // m_aNamespacesMap is unordered, so name them rather than iterate it
+        for (auto const& rURI : { constNamespacePDF2, constNamespacePDF17 })
         {
-            auto iterator = m_aNamespacesMap.find(constNamespacePDF2);
+            auto iterator = m_aNamespacesMap.find(rURI);
             if (iterator != m_aNamespacesMap.end())
             {
-                aLine.append("/Namespaces [");
-                aWriter.writeReference(iterator->second);
-                aLine.append("]");
+                if (!aNamespaces.isEmpty())
+                    aNamespaces.append(" ");
+                appendObjectReference(iterator->second, aNamespaces);
             }
         }
+        if (!aNamespaces.isEmpty())
+            aLine.append("/Namespaces [" + aNamespaces + "]");
 
         if( ! m_aRoleMap.empty() )
         {
@@ -1113,13 +1141,12 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     {
         aLine.append("/StructElem");
 
-        // Write the reference to the PDF 2.0 namespace
-        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
-        {
-            auto iterator = m_aNamespacesMap.find(constNamespacePDF2);
-            if (iterator != m_aNamespacesMap.end())
-                aWriter.writeKeyAndReference("/NS", iterator->second);
-        }
+        // tdf#173162 a type PDF 2.0 dropped stays in the 1.7 namespace, which ISO 14289-2
+        // 8.2.4 allows alongside it
+        auto iterator = m_aNamespacesMap.find(
+            isPDF17OnlyType(*rEle.m_oType) ? constNamespacePDF17 : constNamespacePDF2);
+        if (iterator != m_aNamespacesMap.end())
+            aWriter.writeKeyAndReference("/NS", iterator->second);
         aLine.append("/S/");
         if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
