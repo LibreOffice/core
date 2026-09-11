@@ -833,7 +833,10 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         }
     }
 
-    SAL_WARN_IF(!xParser.is(), "oox", "creating formula parser failed");
+    // The formula parser is a spreadsheet service, so a chart in a text or a presentation
+    // document has none and takes the simple conversion below.
+    SAL_WARN_IF(!xParser.is() && GetDocumentType() == DOCUMENT_XLSX, "oox",
+                "creating formula parser failed");
 
     if( xParser.is() )
     {
