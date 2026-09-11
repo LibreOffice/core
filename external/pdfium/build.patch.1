@@ -155,19 +155,3 @@ index bad07b723..b960f90b4 100644
    friend constexpr auto operator<=>(
        span lhs,
        span<OtherElementType, OtherExtent, OtherInternalPtrType> rhs) {
-diff --git a/core/fxge/cfx_renderdevice.h b/core/fxge/cfx_renderdevice.h
-index 8f427ce01..1251e2bbb 100644
---- a/core/fxge/cfx_renderdevice.h
-+++ b/core/fxge/cfx_renderdevice.h
-@@ -11,6 +11,11 @@
- #include <vector>
- 
- #include "build/build_config.h"
-+
-+#if BUILDFLAG(IS_WIN)
-+#include <windows.h>
-+#endif
-+
- #include "core/fxcrt/fx_coordinates.h"
- #include "core/fxcrt/retain_ptr.h"
- #include "core/fxcrt/span.h"
