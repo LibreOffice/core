@@ -1391,7 +1391,8 @@ export class CommentSection extends CanvasSectionObject {
 				this.sectionProperties.selectedComment?.setContainerPos(true, this.sectionProperties.canvasContainerBounds);
 			}
 
-			if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing')
+			if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing'
+				|| app.map._docLayer._docType === 'text')
 				this.listenForClickOutsideComment(true);
 
 			this.update();
@@ -1581,6 +1582,22 @@ export class CommentSection extends CanvasSectionObject {
 		document.addEventListener('keydown', this.escapeListener);
 	}
 
+	// Whether a card of the thread that starts at rootIndex is in edit mode.
+	private threadInEditMode (rootIndex: number): boolean {
+		const commentList = this.sectionProperties.commentList;
+		if (rootIndex < 0)
+			return false;
+
+		for (let i = rootIndex; i < commentList.length; i++) {
+			// A comment with no parent is the root of the next thread.
+			if (i > rootIndex && commentList[i].sectionProperties.data.parent === '0')
+				break;
+			if (commentList[i].isEdit())
+				return true;
+		}
+		return false;
+	}
+
 	// In Impress and Draw a comment is opened by clicking its avatar and stays
 	// open until the user clicks away onto the slide or the grey area around it.
 	// The whole document view, slide and grey area alike, is painted on the
@@ -1594,8 +1611,21 @@ export class CommentSection extends CanvasSectionObject {
 			return;
 
 		const selected = this.sectionProperties.selectedComment;
-		if (selected && !selected.isEdit())
-			this.unselect();
+		if (!selected)
+			return;
+
+		// A reply pane can be open on any card of the thread, not only on its root.
+		if (this.threadInEditMode(this.getRootIndexOf(selected.sectionProperties.data.id)))
+			return;
+
+		// A click that leaves the text cursor where it was sends no new position, so
+		// ask the open comment again with the position as it stands.
+		if (app.map._docLayer._docType === 'text') {
+			selected.onCursorPositionChanged(app.file.textCursor.rectangle.clone());
+			return;
+		}
+
+		this.unselect();
 	};
 
 	// The listener lives only while a comment is open, attached on select and
