@@ -554,9 +554,11 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     }
     else
     {
-        // the shape had a custom color and the user didn't change it
+        // The shape kept the color it was read with. That color may name a theme color, and
+        // saying so keeps the shape following the theme.
         // tdf#124013
-        WriteSolidFill( ::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha );
+        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet))
+            WriteSolidFill( ::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha );
     }
 }
 
@@ -1128,7 +1130,9 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
         else
         {
-            WriteSolidFill( nColor, nColorAlpha );
+            // The line kept the color it was read with, which may name a theme color.
+            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet))
+                WriteSolidFill( nColor, nColorAlpha );
         }
     }
 

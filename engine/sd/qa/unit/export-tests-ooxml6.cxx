@@ -205,6 +205,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidPPTX)
                          pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
 }
 
+// A shape that takes its fill and its line from the theme keeps naming the theme, so that
+// changing the theme still recolours it.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)
+{
+    createSdImpressDoc("pptx/connectors.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val",
+                u"lt1");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:ln/a:solidFill/a:schemeClr",
+                "val", u"dk1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
