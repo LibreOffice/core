@@ -51,23 +51,31 @@ void BgSaveWhiteBoxTests::testQuickFindDoesNotFailSave()
 void BgSaveWhiteBoxTests::testToolbarNotificationsDoNotFailSave()
 {
     constexpr std::string_view testname = __func__;
-    LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
-                               "{ \"jsontype\": \"notebookbar\"}"));
-    LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
-                               "{ \"jsontype\": \"sidebar\"}"));
-    LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
-                               "{ \"jsontype\": \"formulabar\"}"));
+    for (const auto& jsontype : { "notebookbar", "sidebar", "formulabar", "addressinputfield",
+                                  "navigator", "popup", "menu" })
+    {
+        const std::string payload = std::string("{ \"jsontype\": \"") + jsontype + "\"}";
+        LOK_ASSERT_EQUAL_MESSAGE(
+            payload, true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(payload));
+    }
+
     LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
                                "{ \"jsontype\": \"dialog\", \"action\": \"close\"}"));
 }
 
 // A dialog that opens is a real interactive prompt during the save, so it must
-// still fail the background save. Unparseable payloads fail it too.
+// still fail the background save. A window the engine could not name may be one
+// of those dialogs. Payloads with no type and unparseable payloads fail it too.
 void BgSaveWhiteBoxTests::testInteractiveDialogFailsSave()
 {
     constexpr std::string_view testname = __func__;
     LOK_ASSERT_EQUAL(false, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
                                 "{ \"jsontype\": \"dialog\", \"action\": \"show\"}"));
+    LOK_ASSERT_EQUAL(false, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
+                                "{ \"jsontype\": \"dialog\"}"));
+    LOK_ASSERT_EQUAL(false, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
+                                "{ \"jsontype\": \"unknown\"}"));
+    LOK_ASSERT_EQUAL(false, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog("{ \"id\": 0}"));
     LOK_ASSERT_EQUAL(false,
                      BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog("not json"));
 }

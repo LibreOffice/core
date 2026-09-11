@@ -343,29 +343,19 @@ bool BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(const std::string& jsd
     if (!JsonUtil::parseJSON(jsdialogPayload, object))
         return false;
 
-    const std::string jsontype = object->get("jsontype").toString();
+    std::string jsontype;
+    if (!JsonUtil::findJSONValue(object, "jsontype", jsontype))
+        return false;
 
-    std::string action;
-    const bool bClosing =
-        (jsontype == "dialog" || jsontype == "navigator") &&
-        JsonUtil::findJSONValue(object, "action", action) && action == "close";
-
-    bool bDismissedMenu = false;
-    if (jsontype == "popup")
+    // Every other type is a bar, a panel, a picker or a context menu, which the engine only
+    // builds when somebody clicks one.
+    if (jsontype == "dialog")
     {
-        Poco::JSON::Object::Ptr dataObject = object->getObject("data");
-        std::string actionType, position;
-        bDismissedMenu = dataObject &&
-            JsonUtil::findJSONValue(dataObject, "action_type", actionType) &&
-            actionType == "select" &&
-            JsonUtil::findJSONValue(dataObject, "position", position) &&
-            position == "-1";
+        std::string action;
+        return JsonUtil::findJSONValue(object, "action", action) && action == "close";
     }
 
-    // allow-list of jsdialog messages in bgsave
-    return jsontype == "notebookbar" || jsontype == "sidebar" ||
-           jsontype == "formulabar" || jsontype == "addressinputfield" ||
-           jsontype == "quickfind" || bClosing || bDismissedMenu;
+    return jsontype != "unknown";
 }
 
 void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
