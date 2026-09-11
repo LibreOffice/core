@@ -222,6 +222,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testShapeStyleThemeColor)
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:style/a:fontRef", "idx", u"minor");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:style/a:fontRef/a:schemeClr", "val",
                 u"dk1");
+
+    // A connector carries the style the same way.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp[1]/p:style/a:lnRef", "idx", u"1");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp[1]/p:style/a:lnRef/a:schemeClr", "val",
+                u"accent1");
 }
 
 // The border of a table cell whose color comes from the theme keeps naming the theme.

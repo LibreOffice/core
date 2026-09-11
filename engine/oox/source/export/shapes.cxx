@@ -2055,6 +2055,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
+    // A connector carries the style that names the theme its colors come from, the same way
+    // every other shape does.
+    pFS->startElementNS(mnXmlNamespace, XML_style);
+    WriteShapeStyle( rXPropSet );
+    pFS->endElementNS( mnXmlNamespace, XML_style );
+
     // connector shape (cxnSp) cannot contain text (txBody) (according to schema)
     if( nShapeNode != XML_cxnSp )
     {
