@@ -501,6 +501,43 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf166862)
     CPPUNIT_ASSERT_EQUAL(sal_Int64(43886), aPic->getPropertyValue(u"Size"_ustr).get<sal_Int64>());
 }
 
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testMetaInfManifestDeclaredMember)
+{
+    // META-INF members other than manifest.xml or names containing "signatures" used to be
+    // rejected even when explicitly declared in META-INF/manifest.xml, contradicting the ODF
+    // Extended Package class (ODF 1.3 Part 2, 2.2.2), which permits such members, and making
+    // it impossible to embed e.g. a C2PA Manifest Store at the location required by the C2PA
+    // specification (META-INF/content_credential.c2pa) in an OpenDocument package.
+    auto const url(
+        m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf-metainf-manifest-declared.odt"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    // this should load successfully: the extra META-INF member is declared in manifest.xml.
+    // (META-INF itself is removed from the exposed tree for ODF1.2+ documents regardless,
+    // see ZipPackage::parseManifest; the point of this test is that loading must not throw)
+    m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args,
+                                                                           m_xContext);
+}
+
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testMetaInfManifestUndeclaredMember)
+{
+    // the same package, but the extra META-INF member is not declared in manifest.xml:
+    // it must still be rejected as an unexpected stream
+    auto const url(m_directories.getURLFromSrc(
+        u"/package/qa/cppunit/data/tdf-metainf-manifest-undeclared.odt"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    CPPUNIT_ASSERT_THROW(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                             ZipPackage, args, m_xContext),
+                         css::packages::zip::ZipIOException);
+}
+
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
 //CPPUNIT_PLUGIN_IMPLEMENT();
 

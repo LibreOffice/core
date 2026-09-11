@@ -93,13 +93,19 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams(
             if ( aPath == u"META-INF/" )
             {
                 if ( rShortName != "manifest.xml"
-                  && rShortName.indexOf( "signatures" ) == -1 )
+                  && rShortName.indexOf( "signatures" ) == -1
+                  && !rInfo.pStream->IsFromManifest() )
                 {
                     // a stream from META-INF with unexpected name
                     bHasUnexpected = true;
                 }
 
-                // streams from META-INF with expected names are allowed not to be registered in manifest.xml
+                // streams from META-INF with expected names (manifest.xml, or containing
+                // "signatures", e.g. documentsignatures.xml) are allowed not to be registered
+                // in manifest.xml; any other stream in META-INF is allowed as long as it is
+                // explicitly registered in manifest.xml, matching the ODF Extended Package
+                // class (ODF 1.3 Part 2, 2.2.2), which permits additional META-INF members
+                // beyond those in the ordinary Package class (2.2.1(E))
             }
             else if (isWholesomeEncryption && rShortName != "mimetype" && rShortName != "encrypted-package")
             {
