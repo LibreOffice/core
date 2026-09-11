@@ -2957,14 +2957,19 @@ export class CommentSection extends CanvasSectionObject {
 			- 2 * this.sectionProperties.marginY / app.dpiScale;
 	}
 
-	// reset theis size to default (100px text)
+	// Give each comment its default text height, capped to what fits in view.
 	private resetCommentsSize (): void {
 		if (app.map._docLayer._docType === 'text') {
 			for (var i = 0; i < this.sectionProperties.commentList.length;i++) {
-				if (this.sectionProperties.commentList[i].sectionProperties.contentNode.style.display !== 'none') {
-					const maxHeight = (this.sectionProperties.commentList[i] === this.sectionProperties.selectedComment) ?
+				const comment = this.sectionProperties.commentList[i];
+				if (comment.sectionProperties.contentNode.style.display !== 'none') {
+					const maxHeight = (comment === this.sectionProperties.selectedComment) ?
 						this.annotationMaxSize : this.annotationMinSize;
-					this.sectionProperties.commentList[i].sectionProperties.contentNode.style.maxHeight = maxHeight + 'px';
+					// A comment in reply or edit state keeps this ceiling for as long
+					// as it stays open, so cap it to the visible area here.
+					const fits = Math.max(this.maxContentHeightInView(comment), this.annotationMinSize);
+					comment.sectionProperties.contentNode.style.maxHeight =
+						Math.round(Math.min(maxHeight, fits)) + 'px';
 				}
 			}
 		}

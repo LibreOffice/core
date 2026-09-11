@@ -848,6 +848,28 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-reply-' + id).click();
 	}
 
+	it('Reply box stays in view when the comment is long', function () {
+		// Long enough that the card would run past the bottom of the view once the
+		// reply pane is added to it. The text has no trailing space, which would not
+		// survive being typed into the comment.
+		desktopHelper.insertComment('lorem ipsum dolor sit amet.'.repeat(25));
+
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-1').should('have.focus');
+
+		cy.cGet('#document-container').then(function (container) {
+			const view = container[0].getBoundingClientRect();
+
+			cy.cGet('#annotation-reply-textarea-1').should(function (textarea) {
+				expect(textarea[0].getBoundingClientRect().top).to.be.at.least(view.top);
+			});
+			cy.cGet('#annotation-reply-1').should(function (button) {
+				expect(button[0].getBoundingClientRect().bottom).to.be.at.most(view.bottom);
+			});
+		});
+	});
+
 	it('Modify focuses the modify textbox', function () {
 		desktopHelper.insertComment();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
