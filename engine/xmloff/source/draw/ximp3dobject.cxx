@@ -62,7 +62,10 @@ SdXML3DObjectContext::SdXML3DObjectContext(
                 break;
             }
             default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                // The name, the layer and the place in the z order arrive here the way they do
+                // on every other shape, so the reader for those gets them first.
+                if( !SdXMLShapeContext::processAttribute( aIter ) )
+                    XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -120,7 +123,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 break;
             }
             default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                // Everything else has been read by the reader this one is built on.
+                break;
         }
     }
 }
@@ -197,7 +201,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 break;
             }
             default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                // Everything else has been read by the reader this one is built on.
+                break;
         }
     }
 }
@@ -265,7 +270,8 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
                 break;
             }
             default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                // Everything else has been read by the reader this one is built on.
+                break;
         }
     }
 }
