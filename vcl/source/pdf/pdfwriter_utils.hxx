@@ -36,6 +36,7 @@ namespace vcl::pdf
 struct PDFStructureElement;
 
 constexpr std::string_view constNamespacePDF2("http://iso.org/pdf2/ssn");
+constexpr std::string_view constNamespacePDF17("http://iso.org/pdf/ssn");
 
 constexpr sal_Int32 nLog10Divisor = 3;
 constexpr double fDivisor = 1000.0;
