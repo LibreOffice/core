@@ -778,10 +778,12 @@ namespace xmloff
         #endif
         }
 
+    #if OSL_DEBUG_LEVEL > 0
+        // Every bit that was handled has been removed from the mask above, and that only
+        // happens in this build, so the check belongs with it.
         OSL_ENSURE(CCAFlags::NONE == m_nIncludeCommon,
             "OControlExport::exportCommonControlAttributes: forgot some flags!");
-            // in the dbg_util version, we should have removed every bit we handled from the mask, so it should
-            // be 0 now ...
+    #endif
     }
 
     void OControlExport::exportDatabaseAttributes()
@@ -1191,10 +1193,12 @@ namespace xmloff
             RESET_BIT( m_nIncludeSpecial, SCAFlags::ImagePosition );
         }
 
+    #if OSL_DEBUG_LEVEL > 0
+        // Every bit that was handled has been removed from the mask above, so nothing should
+        // be left. That bookkeeping only happens here, so the check belongs here too.
         OSL_ENSURE(SCAFlags::NONE == m_nIncludeSpecial,
             "OControlExport::exportSpecialAttributes: forgot some flags!");
-            // in the dbg_util version, we should have removed every bit we handled from the mask, so it should
-            // be 0 now ...
+    #endif
     }
 
     OUString OControlExport::getScalarListSourceValue() const
