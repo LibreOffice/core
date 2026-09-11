@@ -238,6 +238,10 @@ export class CommentSection extends CanvasSectionObject {
 		calcCommandStateChanged: boolean;
 		commentList: Array<Comment>;
 		selectedComment: Comment | null;
+		// The comment whose text is shown at its full height, which is the one the user last
+		// acted on. It is null while no comment is selected. A thread has one root and many
+		// replies, and any of them can be this one.
+		expandedComment: Comment | null;
 		calcCurrentComment: Comment | null;
 		marginY: number;
 		offset: number;
@@ -303,6 +307,7 @@ export class CommentSection extends CanvasSectionObject {
 		this.sectionProperties.doNotHideCommentTimer = null; // For _goToCalcComment, where comment needs to show, despite async events trying to hide it
 		this.sectionProperties.commentList = new Array(0);
 		this.sectionProperties.selectedComment = null;
+		this.sectionProperties.expandedComment = null;
 		this.sectionProperties.arrow = null;
 		this.sectionProperties.show = null;
 		this.sectionProperties.showResolved = false;
@@ -1350,6 +1355,10 @@ export class CommentSection extends CanvasSectionObject {
 			// Select the root comment
 			var idx = this.getRootIndexOf(annotation.sectionProperties.data.id);
 
+			// Selection covers a whole thread, so clicking a reply selects its root.
+			// This is the card the click landed on, and the one shown in full.
+			this.sectionProperties.expandedComment = annotation;
+
 			// no need to reselect comment, it will cause to scroll to root comment unnecessarily
 			if (this.sectionProperties.selectedComment === this.sectionProperties.commentList[idx]) {
 				this.update();
@@ -1551,6 +1560,7 @@ export class CommentSection extends CanvasSectionObject {
 
 			const previouslySelectedComment = this.sectionProperties.selectedComment;
 			this.sectionProperties.selectedComment = null;
+			this.sectionProperties.expandedComment = null;
 			if (app.map._docLayer._docType !== 'spreadsheet') {
 				previouslySelectedComment.setContainerPos(true, this.sectionProperties.canvasContainerBounds); // Must be done after we clear the selection since as it resets the z-index based on this...
 			}
@@ -2211,6 +2221,8 @@ export class CommentSection extends CanvasSectionObject {
 			var removed = this.getComment(id);
 			if (removed) {
 				this.adjustParentRemove(removed);
+				if (this.sectionProperties.expandedComment === removed)
+					this.sectionProperties.expandedComment = this.sectionProperties.selectedComment;
 				if (this.sectionProperties.selectedComment === removed) {
 					this.unselect();
 					this.removeItem(id);
@@ -2963,7 +2975,7 @@ export class CommentSection extends CanvasSectionObject {
 			for (var i = 0; i < this.sectionProperties.commentList.length;i++) {
 				const comment = this.sectionProperties.commentList[i];
 				if (comment.sectionProperties.contentNode.style.display !== 'none') {
-					const maxHeight = (comment === this.sectionProperties.selectedComment) ?
+					const maxHeight = (comment === this.sectionProperties.expandedComment) ?
 						this.annotationMaxSize : this.annotationMinSize;
 					// A comment in reply or edit state keeps this ceiling for as long
 					// as it stays open, so cap it to the visible area here.
@@ -3336,6 +3348,7 @@ export class CommentSection extends CanvasSectionObject {
 		this.containerObject.resumeDrawing();
 
 		this.sectionProperties.selectedComment = null;
+		this.sectionProperties.expandedComment = null;
 		this.checkSize();
 	}
 
@@ -3357,6 +3370,7 @@ export class CommentSection extends CanvasSectionObject {
 		this.containerObject.resumeDrawing();
 
 		this.sectionProperties.selectedComment = null;
+		this.sectionProperties.expandedComment = null;
 		this.checkSize();
 		this.clearAutoSaveStatus();
 	}
