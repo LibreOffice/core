@@ -542,6 +542,12 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
             case XML_ELEMENT(NUMBER, XML_TEXTUAL):
                 mbTextual = IsXMLToken( aIter, XML_TRUE );
                 break;
+            case XML_ELEMENT(NUMBER, XML_CALENDAR):
+                // The formats built below all count in the Gregorian calendar, so only another
+                // one would say anything new here.
+                SAL_WARN_IF( aIter.toString() != u"gregorian", "xmloff",
+                             "date or time in an unsupported calendar: " << aIter.toString() );
+                break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
