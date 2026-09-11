@@ -3272,7 +3272,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if (mpBottomBorderLine)
                 return mpBottomBorderLine->setComplexColorFromAny(rVal);
-            else
+            else if (rVal.hasValue())
             {
                 css::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
@@ -3287,7 +3287,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if (mpLeftBorderLine)
                 return mpLeftBorderLine->setComplexColorFromAny(rVal);
-            else
+            else if (rVal.hasValue())
             {
                 css::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
@@ -3302,7 +3302,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if (mpRightBorderLine)
                 return mpRightBorderLine->setComplexColorFromAny(rVal);
-            else
+            else if (rVal.hasValue())
             {
                 css::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
@@ -3317,7 +3317,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if (mpTopBorderLine)
                 return mpTopBorderLine->setComplexColorFromAny(rVal);
-            else
+            else if (rVal.hasValue())
             {
                 css::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
