@@ -106,11 +106,22 @@ protected:
             + sources + "], libraries: [" + libraries + "]}";
     }
 
-    void loadActiveDocument(std::u16string_view filename) {
-        loadFromURL(createFileURL(filename));
+    // Makes the frame of the loaded document the active one, which is what getActiveDocument and
+    // getActivePresentation resolve against:
+    void makeActive() {
         css::frame::Desktop::create(comphelper::getProcessComponentContext())->setActiveFrame(
             cpo::uno::Reference<css::frame::XModel>(mxComponent, cpo::uno::UNO_QUERY_THROW)->
             getCurrentController()->getFrame());
+    }
+
+    void loadActiveDocument(std::u16string_view filename) {
+        loadFromURL(createFileURL(filename));
+        makeActive();
+    }
+
+    void loadActivePresentation() {
+        mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
+        makeActive();
     }
 
     // The libraries are the elements of the runner's libraries argument, as made by library and
@@ -408,6 +419,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSession) {
     comphelper::ScopeGuard const restore(
         [&language] { comphelper::COKit::setLanguageTag(language); });
     runScript(createFileURL(u"session-test.js"), {}, u"");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSlidesApp) {
+    loadActivePresentation();
+    runScript(createFileURL(u"slidesapp-test.js"), {}, u"");
 }
 
 }

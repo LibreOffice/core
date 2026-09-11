@@ -334,6 +334,45 @@ globalThis.__gasKitRunner = function(
             getUi: function() { return uiStub; }
         };
 
+        function activePresentation() { return cool.getActivePresentation(); }
+
+        // The enums round-trip as the same enum objects scriptinterop hands back, so a strict ===
+        // comparison with a getter's result matches:
+        globalThis.SlidesApp = {
+            getActivePresentation: activePresentation,
+            newAffineTransformBuilder: function() { return cool.newAffineTransformBuilder(); },
+            getUi: function() { return uiStub; },
+            AlignmentPosition: uno.idl.scriptinterop.AlignmentPosition,
+            ArrowStyle: uno.idl.scriptinterop.ArrowStyle,
+            AutofitType: uno.idl.scriptinterop.AutofitType,
+            AutoTextType: uno.idl.scriptinterop.AutoTextType,
+            CellMergeState: uno.idl.scriptinterop.CellMergeState,
+            ColorType: uno.idl.scriptinterop.ColorType,
+            ContentAlignment: uno.idl.scriptinterop.ContentAlignment,
+            DashStyle: uno.idl.scriptinterop.DashStyle,
+            FillType: uno.idl.scriptinterop.FillType,
+            LineCategory: uno.idl.scriptinterop.LineCategory,
+            LineFillType: uno.idl.scriptinterop.LineFillType,
+            LineType: uno.idl.scriptinterop.LineType,
+            LinkType: uno.idl.scriptinterop.LinkType,
+            ListPreset: uno.idl.scriptinterop.ListPreset,
+            PageBackgroundType: uno.idl.scriptinterop.PageBackgroundType,
+            PageElementType: uno.idl.scriptinterop.PageElementType,
+            PageType: uno.idl.scriptinterop.PageType,
+            ParagraphAlignment: uno.idl.scriptinterop.ParagraphAlignment,
+            PlaceholderType: uno.idl.scriptinterop.PlaceholderType,
+            PredefinedLayout: uno.idl.scriptinterop.PredefinedLayout,
+            SelectionType: uno.idl.scriptinterop.SelectionType,
+            ShapeType: uno.idl.scriptinterop.ShapeType,
+            SlideLinkingMode: uno.idl.scriptinterop.SlideLinkingMode,
+            SlidePosition: uno.idl.scriptinterop.SlidePosition,
+            SpacingMode: uno.idl.scriptinterop.SpacingMode,
+            TextBaselineOffset: uno.idl.scriptinterop.TextBaselineOffset,
+            TextDirection: uno.idl.scriptinterop.TextDirection,
+            ThemeColorType: uno.idl.scriptinterop.ThemeColorType,
+            VideoSourceType: uno.idl.scriptinterop.VideoSourceType
+        };
+
         function makeHtmlOutput(fileName, templateValues) {
             const o = {
                 __gasSourceFile: fileName,
