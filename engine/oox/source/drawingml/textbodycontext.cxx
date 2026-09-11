@@ -114,7 +114,8 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
             mrParagraph.addRun(pRun);
             // parse hyperlink attributes: use HyperLinkContext for that
             rtl::Reference<HyperLinkContext> pContext(new HyperLinkContext(
-                *this, rAttribs, pRun->getTextCharacterProperties().maHyperlinkPropertyMap));
+                *this, rAttribs, pRun->getTextCharacterProperties().maHyperlinkPropertyMap,
+                /*bTextRun=*/true));
             // but create text run context because HyperLinkContext can't process internal w:r, w:t, etc
             return new RegularTextRunContext(*this, std::move(pRun));
         }

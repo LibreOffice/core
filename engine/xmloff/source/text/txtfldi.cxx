@@ -2852,7 +2852,8 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, sAPI_url),
-        bFrameOK(false)
+        bFrameOK(false),
+        bNameOK(false)
 {
 }
 
@@ -2870,6 +2871,10 @@ void XMLUrlFieldImportContext::ProcessAttribute(
             sFrame = OUString::fromUtf8(sAttrValue);
             bFrameOK = true;
             break;
+        case XML_ELEMENT(OFFICE, XML_NAME):
+            sName = OUString::fromUtf8(sAttrValue);
+            bNameOK = true;
+            break;
         default:
             // ignore
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2885,6 +2890,12 @@ void XMLUrlFieldImportContext::PrepareField(
     if (bFrameOK)
     {
         xPropertySet->setPropertyValue(u"TargetFrame"_ustr, Any(sFrame));
+    }
+
+    // Calc's own URL field has no name, and this runs outside the try around InsertTextContent
+    if (bNameOK && xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Name"_ustr))
+    {
+        xPropertySet->setPropertyValue(u"Name"_ustr, Any(sName));
     }
 
     xPropertySet->setPropertyValue(u"Representation"_ustr, Any(GetContent()));
