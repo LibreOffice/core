@@ -2948,6 +2948,13 @@ export class CommentSection extends CanvasSectionObject {
 		this.updateIdIndexMap();
 	}
 
+	// How tall the text can be for the whole card to fit the view.
+	private maxContentHeightInView (comment: Comment, contentHeight: number): number {
+		const rest = comment.getCommentHeight(false) - contentHeight;
+		return this.sectionProperties.canvasContainerBounds.height - rest
+			- 2 * this.sectionProperties.marginY / app.dpiScale;
+	}
+
 	// reset theis size to default (100px text)
 	private resetCommentsSize (): void {
 		if (app.map._docLayer._docType === 'text') {
@@ -3030,9 +3037,7 @@ export class CommentSection extends CanvasSectionObject {
 							const oldContent = Math.min(actHeight, oldMaxHeight);
 
 							// Don't let a comment grow past the visible area; its text scrolls instead.
-							// Reserve marginY at both the top and bottom (setContainerPos leaves a gap there).
-							const chrome = comment.getCommentHeight(false) - oldContent;
-							maxSize = Math.min(maxSize, this.sectionProperties.canvasContainerBounds.height - chrome - 2 * this.sectionProperties.marginY / app.dpiScale);
+							maxSize = Math.min(maxSize, this.maxContentHeightInView(comment, oldContent));
 							contentNode.style.maxHeight = Math.round(maxSize) + 'px';
 
 							// Without this, a later layout(false) would reuse a stale value.
