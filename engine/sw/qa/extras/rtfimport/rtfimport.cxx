@@ -646,6 +646,14 @@ CPPUNIT_TEST_FIXTURE(Test, testPoshLeftRight)
                          getProperty<sal_Int16>(getShape(2), u"HoriOrient"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testShapeWrapSide)
+{
+    createSwDoc("shape-wrap-side.rtf");
+    // A square wrap that names one side keeps the text off the other side.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_LEFT,
+                         getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf96326)
 {
     createSwDoc("tdf96326.rtf");

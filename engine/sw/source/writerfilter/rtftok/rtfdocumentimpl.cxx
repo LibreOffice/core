@@ -1218,11 +1218,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             NS_ooxml::LN_CT_Anchor_behindDoc,
             new RTFValue((m_aStates.top().getShape().getInBackground()) ? 1 : 0));
         RTFSprms aAnchorSprms;
-        for (const auto& rCharacterAttribute : m_aStates.top().getCharacterAttributes())
-        {
-            if (rCharacterAttribute.first == NS_ooxml::LN_CT_WrapSquare_wrapText)
-                aAnchorWrapAttributes.set(rCharacterAttribute.first, rCharacterAttribute.second);
-        }
+        if (sal_uInt32 nWrapSide = m_aStates.top().getShape().getWrapSide())
+            aAnchorWrapAttributes.set(NS_ooxml::LN_CT_WrapSquare_wrapText, new RTFValue(nWrapSide));
         sal_Int32 nWrap = -1;
         for (auto& rCharacterSprm : m_aStates.top().getCharacterSprms())
         {

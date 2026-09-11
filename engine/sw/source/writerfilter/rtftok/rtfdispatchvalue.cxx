@@ -1215,8 +1215,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (pTight)
                 pTight->getAttributes().set(NS_ooxml::LN_CT_WrapTight_wrapText, pValue);
             else
-                m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_WrapSquare_wrapText,
-                                                             pValue);
+                m_aStates.top().getShape().setWrapSide(nValue);
         }
         break;
         case RTFKeyword::SHPWR:

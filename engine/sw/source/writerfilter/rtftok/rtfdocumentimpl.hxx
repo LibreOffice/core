@@ -258,6 +258,10 @@ public:
 
     css::text::WrapTextMode getWrap() const { return m_nWrap; }
 
+    void setWrapSide(sal_uInt32 nWrapSide) { m_nWrapSide = nWrapSide; }
+
+    sal_uInt32 getWrapSide() const { return m_nWrapSide; }
+
     void setInBackground(bool bInBackground) { m_bInBackground = bInBackground; }
 
     bool getInBackground() const { return m_bInBackground; }
@@ -283,6 +287,9 @@ private:
     sal_uInt32 m_nHoriOrientRelationToken = 0; ///< Horizontal dmapper token for Writer pictures.
     sal_uInt32 m_nVertOrientRelationToken = 0; ///< Vertical dmapper token for Writer pictures.
     css::text::WrapTextMode m_nWrap = css::text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE;
+    /// Which side of the shape the text runs down, as an ST_WrapText token. Zero when the file
+    /// does not say, which leaves the text on both sides.
+    sal_uInt32 m_nWrapSide = 0;
     /// If shape is below text (true) or text is below shape (false).
     bool m_bInBackground = false;
     /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
