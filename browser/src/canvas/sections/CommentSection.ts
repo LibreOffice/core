@@ -67,6 +67,9 @@ export class Comment extends CanvasSectionObject {
 	containerPosY: number = 0;
 	// Final top after clamping (canvas-relative CSS px), so children can follow a clamped parent.
 	renderedPosY: number = 0;
+	// Height the card had when its position was last worked out, or null while no clamped
+	// position has been worked out yet.
+	positionedHeight: number | null = null;
 	canvasContainerBounds: DOMRect = new DOMRect();
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -441,17 +444,26 @@ export class Comment extends CanvasSectionObject {
 			top = this.containerPosY;
 		}
 
+		// A selected or edited card is held inside the view by the clamp below, so where it
+		// ends up depends on how tall it is. Its text is capped after the layout places it,
+		// which changes that height while the layout asks for the same place. So the height
+		// is part of what makes a position out of date, along with the place and the bounds.
+		const clamped = this.isSelected() || this.isEdit();
+		const height = clamped ? this.getCommentHeight() : null;
+
 		if (this.containerPosX === left
 				&& this.containerPosY === top
 				&& this.canvasContainerBounds.left === canvasContainerBounds.left
 				&& this.canvasContainerBounds.right === canvasContainerBounds.right
 				&& this.canvasContainerBounds.top === canvasContainerBounds.top
 				&& this.canvasContainerBounds.bottom === canvasContainerBounds.bottom
+				&& this.positionedHeight === height
 				&& !forceUpdate
 		) {
 			return this.renderedPosY;
 		}
 
+		this.positionedHeight = height;
 		this.containerPosX = left;
 		this.containerPosY = top;
 		this.canvasContainerBounds = canvasContainerBounds;
@@ -476,7 +488,6 @@ export class Comment extends CanvasSectionObject {
 				left = canvasContainerBounds.right - width;
 			}
 
-			const height = this.getCommentHeight();
 			if (top + height > canvasContainerBounds.bottom - margin) {
 				top = canvasContainerBounds.bottom - height - margin;
 			}

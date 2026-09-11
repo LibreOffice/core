@@ -870,6 +870,29 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		});
 	});
 
+	// The card and the line drawn to the text it points at, in viewport pixels. The check is
+	// retried until it holds, because the layout runs after the click that asks for it.
+	function cardAndConnector(id, check) {
+		cy.cGet('#comment-arrow-container line').should('exist');
+		cy.cGet('#comment-container-' + id).should(function (card) {
+			const line = card[0].ownerDocument.querySelector('#comment-arrow-container line');
+			check(card[0].getBoundingClientRect(), line.getBoundingClientRect());
+		});
+	}
+
+	it('A selected comment sits level with the text it points at', function () {
+		// Long enough that the card used to be moved up the view and away from its text.
+		// The card is taller than the view, so its middle is off screen, and its author
+		// row is the part of it that stays in view.
+		desktopHelper.insertComment('lorem ipsum dolor sit amet.'.repeat(25));
+		cy.cGet('#comment-container-1 .cool-annotation-author-header').click();
+
+		cardAndConnector(1, function (card, connector) {
+			expect(card.top, 'card top against the line to its text')
+				.to.be.closeTo(connector.top, 40);
+		});
+	});
+
 	it('Modify focuses the modify textbox', function () {
 		desktopHelper.insertComment();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
