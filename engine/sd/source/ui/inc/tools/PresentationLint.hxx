@@ -39,6 +39,7 @@ class LintMeasureCache;
 enum class LintCategory
 {
     LargeImage,
+    CroppedImage,
     HiddenSlide,
     UnusedMaster,
     NotesContent,
@@ -362,8 +363,9 @@ namespace detail
 sal_Int32 getSlideIndexOfPage(SdDrawDocument& rDoc, const SdrPage* pPage);
 
 /** Collects the findings about the drawing objects: the images that carry more pixels than the deck
-    needs, and, for a deck that is being prepared for readers, the embedded objects. Both rules read
-    the same objects, and one walk over the document serves them together. */
+    needs or keep pixels a crop hides, and, for a deck that is being prepared for readers, the
+    embedded objects. Both rules read the same objects, and one walk over the document serves them
+    together. */
 void collectObjectFindings(SdDrawDocument& rDoc, const LintOptions& rOptions,
                            const std::shared_ptr<LintMeasureCache>& rpMeasureCache,
                            std::vector<std::shared_ptr<LintFinding>>& rFindings);

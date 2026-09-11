@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
+var impressHelper = require('../../common/impress_helper');
 var a11yHelper = require('../../common/a11y_helper');
 
 describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolation: false }, function () {
@@ -235,6 +236,68 @@ describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolati
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
 			helper.processToIdle(win);
 		});
+	});
+
+	it('Cleanup deck', function () {
+		// The loaded presentation has nothing to clean up. A deck of one slide
+		// has no slide to spare, so a second one is added and hidden to give
+		// the scan a finding to list.
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:InsertPage');
+		});
+
+		impressHelper.assertSlidePreviewCountAfterIdle(win, 2);
+
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:HideSlide');
+			helper.processToIdle(win);
+		});
+
+		cy.then(() => {
+			win.app.dispatcher.dispatch('cleanupdeck');
+		});
+
+		helper.processToIdle(win);
+
+		// The deck offers the scan options and a button that starts the scan
+		cy.cGet('#cleanup-deck #cleanup-options').should('exist');
+
+		cy.cGet('#cleanup-deck #cleanup-scan-button')
+			.should('be.visible').and('not.be.disabled').click();
+
+		helper.processToIdle(win);
+
+		// The scan found the hidden slide and listed it as a finding that jumps
+		// to that slide, so the run did its work.
+		cy.cGet('#cleanup-deck .cleanup-row-text').should('exist');
+
+		// The panel is validated as the reader sees it once the run has
+		// settled: the status line is out of sight and the button that starts a
+		// run stands in its place again.
+		cy.cGet('#cleanup-deck #cleanup-status').should('not.be.visible');
+		cy.cGet('#cleanup-deck #cleanup-scan-button')
+			.should('be.visible').and('not.be.disabled');
+
+		runA11yValidation(win);
+
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
+			helper.processToIdle(win);
+		});
+
+		// The tests of this file share one document, so the slide this one
+		// added and hid goes again, leaving the deck as the next test finds it.
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:Undo');
+			helper.processToIdle(win);
+		});
+
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:Undo');
+			helper.processToIdle(win);
+		});
+
+		impressHelper.assertSlidePreviewCountAfterIdle(win, 1);
 	});
 
 	function runA11yValidation(win) {

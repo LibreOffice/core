@@ -27,9 +27,9 @@
 
 namespace sd::lint
 {
-/** What one measurement was worked out from: the bitmap the encoding started from, the size that
-    bitmap is drawn at, and the settings the encoding ran with. Two measurements that agree on all
-    of these produce the same encoded bytes.
+/** What one measurement was worked out from: the bitmap the encoding started from, the part of it
+    that is shown, the size that part is drawn at, and the settings the encoding ran with. Two
+    measurements that agree on all of these produce the same encoded bytes.
 
     The settings are part of the key, so a measurement taken for one target resolution or one
     quality is never read for another one, and a reader who changes either setting simply asks
@@ -49,11 +49,20 @@ struct LintMeasureKey
     /** JPEG quality from 1 to 100. */
     sal_Int32 mnJPEGQuality = 0;
 
+    /** How much of the original picture is cut off at each edge before it is encoded, in
+        hundredths of a millimetre. All four are zero when the whole picture is encoded. */
+    tools::Long mnCropLeft = 0;
+    tools::Long mnCropTop = 0;
+    tools::Long mnCropRight = 0;
+    tools::Long mnCropBottom = 0;
+
     bool operator==(const LintMeasureKey& rOther) const
     {
         return mnChecksum == rOther.mnChecksum && mnLogicWidth == rOther.mnLogicWidth
                && mnLogicHeight == rOther.mnLogicHeight && mnTargetDPI == rOther.mnTargetDPI
-               && mnJPEGQuality == rOther.mnJPEGQuality;
+               && mnJPEGQuality == rOther.mnJPEGQuality && mnCropLeft == rOther.mnCropLeft
+               && mnCropTop == rOther.mnCropTop && mnCropRight == rOther.mnCropRight
+               && mnCropBottom == rOther.mnCropBottom;
     }
 };
 

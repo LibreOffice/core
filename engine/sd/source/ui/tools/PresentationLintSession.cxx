@@ -56,6 +56,8 @@ std::string_view getCategoryName(LintCategory eCategory)
 {
     switch (eCategory)
     {
+        case LintCategory::CroppedImage:
+            return "croppedImage";
         case LintCategory::HiddenSlide:
             return "hiddenSlide";
         case LintCategory::UnusedMaster:

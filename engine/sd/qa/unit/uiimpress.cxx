@@ -97,6 +97,7 @@
 #include <sdmod.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <unotools/lingucfg.hxx>
+#include <svx/sdgcpitm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
 #include <set>
@@ -112,6 +113,7 @@
 #include <tools/LintMeasureCache.hxx>
 #include <tools/PresentationLint.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/mapmod.hxx>
 #include <xmloff/autolayout.hxx>
 
 using namespace ::com::sun::star;
@@ -5032,6 +5034,148 @@ findingsOfCategory(const sd::lint::PresentationLint& rLint, sd::lint::LintCatego
 
     return aMatches;
 }
+
+/** Which of the red, green and blue channels are strong in each quarter of a quadrant picture: red
+    at the top left, green at the top right, blue at the bottom left and yellow at the bottom
+    right. */
+constexpr bool gaQuadrantChannels[4][3] = {
+    { true, false, false }, { false, true, false }, { false, false, true }, { true, true, false }
+};
+
+/** The quarter of a quadrant picture a colour belongs to, or -1 for a colour none of them holds. */
+sal_Int32 quadrantOfColour(const Color& rColour)
+{
+    for (sal_Int32 nQuadrant = 0; nQuadrant < 4; ++nQuadrant)
+    {
+        if (gaQuadrantChannels[nQuadrant][0] == (rColour.GetRed() >= 128)
+            && gaQuadrantChannels[nQuadrant][1] == (rColour.GetGreen() >= 128)
+            && gaQuadrantChannels[nQuadrant][2] == (rColour.GetBlue() >= 128))
+            return nQuadrant;
+    }
+
+    return -1;
+}
+
+/** A bitmap whose four quarters each carry one of the quadrant colours, with every channel jumping
+    about within its own end of the range. The noise keeps the encoded picture large, so trimming
+    the picture down frees up real bytes, and every channel still reads as strong or weak wherever
+    a pixel is taken from. The number picks the run of noise, so two bitmaps made under different
+    numbers hold different pixels. */
+Bitmap makeQuadrantBitmap(const Size& rPixelSize, sal_Int32 nPattern)
+{
+    const sal_Int32 nWidth = rPixelSize.Width();
+    const sal_Int32 nHeight = rPixelSize.Height();
+    std::vector<sal_uInt8> aPixels(std::size_t(nWidth) * std::size_t(nHeight) * 3);
+
+    sal_uInt32 nValue = sal_uInt32(nPattern) * 7919 + 12345;
+    for (sal_Int32 nRow = 0; nRow < nHeight; ++nRow)
+    {
+        for (sal_Int32 nColumn = 0; nColumn < nWidth; ++nColumn)
+        {
+            const sal_Int32 nQuadrant
+                = (nRow < nHeight / 2 ? 0 : 2) + (nColumn < nWidth / 2 ? 0 : 1);
+            sal_uInt8* pPixel = aPixels.data() + (std::size_t(nRow) * nWidth + nColumn) * 3;
+
+            for (sal_Int32 nChannel = 0; nChannel < 3; ++nChannel)
+            {
+                nValue = nValue * 1103515245 + 12345;
+
+                // A quarter of the range keeps every value clear of the middle, so an encoding
+                // that shifts the colours a little still leaves each channel on its own side.
+                const sal_uInt8 nNoise = sal_uInt8((nValue >> 16) % 64);
+                pPixel[nChannel] = gaQuadrantChannels[nQuadrant][nChannel] ? 255 - nNoise : nNoise;
+            }
+        }
+    }
+
+    return vcl::bitmap::CreateFromData(aPixels.data(), nWidth, nHeight, nWidth * 3, 24);
+}
+
+/** A quadrant picture of its own, holding the bytes it was read from the way an image of a document
+    does. It carries enough pixels that hiding part of it is worth well over the few kilobytes the
+    list keeps as its floor. */
+Graphic makeQuadrantImage(sal_Int32 nPattern)
+{
+    return importTestImage(encodeTestImage(makeQuadrantBitmap(Size(1200, 1200), nPattern)));
+}
+
+/** The size of the whole picture in hundredths of a millimetre, which is the unit a crop is written
+    in. A picture read back from encoded bytes carries the resolution it was written at, so it
+    already knows itself in that unit. */
+Size pictureLogicSize(const Graphic& rGraphic)
+{
+    CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, rGraphic.GetPrefMapMode().GetMapUnit());
+
+    return rGraphic.GetPrefSize();
+}
+
+/** Keeps the given share of the picture off each edge of the object, the way the crop of a picture
+    on a slide does. A negative share pads the picture out instead of trimming it. */
+void setCropShares(SdrGrafObj& rObject, double fLeft, double fTop, double fRight, double fBottom)
+{
+    const Size aLogicSize = pictureLogicSize(rObject.GetGraphic());
+    const text::GraphicCrop aCrop(
+        sal_Int32(aLogicSize.Height() * fTop), sal_Int32(aLogicSize.Height() * fBottom),
+        sal_Int32(aLogicSize.Width() * fLeft), sal_Int32(aLogicSize.Width() * fRight));
+
+    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    xShape->setPropertyValue(u"GraphicCrop"_ustr, cpo::uno::Any(aCrop));
+}
+
+/** The crop the object carries, in hundredths of a millimetre. */
+const SdrGrafCropItem& cropOf(const SdrGrafObj& rObject)
+{
+    return rObject.GetMergedItem(SDRATTR_GRAFCROP);
+}
+
+/** Draws the graphic on the first slide of the deck as a square of the given side in hundredths of
+    a millimetre. Answers the object that draws it. */
+SdrGrafObj& addSquareImageToFirstSlide(SdDrawDocument& rDoc, const Graphic& rGraphic,
+                                       tools::Long nSide)
+{
+    SdPage* pPage = rDoc.GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    rtl::Reference<SdrGrafObj> pObject
+        = new SdrGrafObj(rDoc, rGraphic, tools::Rectangle(Point(500, 500), Size(nSide, nSide)));
+    pPage->InsertObject(pObject.get());
+
+    return *pObject;
+}
+
+/** The image the first slide of the deck holds at the given place in its object list. A cleanup
+    puts a new object in the place of the one it changes, so the object is looked up again after
+    every step. */
+SdrGrafObj& imageOnFirstSlide(SdDrawDocument& rDoc, sal_uInt32 nIndex)
+{
+    SdPage* pPage = rDoc.GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    auto* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(nIndex));
+    CPPUNIT_ASSERT(pObject);
+
+    return *pObject;
+}
+
+/** The colour of the picture the object draws, at the given share of its width and height. */
+Color colourAtShare(const SdrGrafObj& rObject, double fX, double fY)
+{
+    Bitmap aBitmap = rObject.GetGraphic().GetBitmap();
+    const Size aPixelSize = aBitmap.GetSizePixel();
+
+    return aBitmap.GetPixelColor(sal_Int32(aPixelSize.Width() * fX),
+                                 sal_Int32(aPixelSize.Height() * fY));
+}
+
+/** How many bytes the document spends on the picture the object draws. */
+sal_uInt64 storedBytesOf(const SdrGrafObj& rObject)
+{
+    const Graphic& rGraphic = rObject.GetGraphic();
+    CPPUNIT_ASSERT(rGraphic.IsGfxLink());
+
+    return sal_uInt64(rGraphic.GetGfxLink().GetDataSize());
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintEncodesATransparentImageAsPng)
@@ -5193,10 +5337,169 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesAnAnimatedImageA
                          findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
 }
 
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesACroppedImageAlone)
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintListsAHeavilyCroppedImage)
 {
-    // A crop shows only part of the bitmap, so the pixels that drawing needs cannot be worked out
-    // from the size it takes on the slide, and the image gets no row.
+    // An image most of which a crop keeps off the slide is listed as a cropped image, whatever
+    // resolution the part that is shown is stored at.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aBeforeLint(*pDoc, aOptions);
+    aBeforeLint.scan();
+    const size_t nImagesBefore
+        = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
+
+    // Twelve centimetres across is wide enough for the quarter that is left to carry no more
+    // pixels than the target resolution asks for, so the crop alone is what earns the row.
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 12000);
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    CPPUNIT_ASSERT_EQUAL(nImagesBefore,
+                         findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
+
+    const auto aCropped = findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCropped.size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aCropped[0]->getSlideIndex());
+    CPPUNIT_ASSERT(aCropped[0]->getSavingBytes() > 0);
+
+    // Half the width and half the height are kept off, which leaves three quarters of the area
+    // hidden. The row says that share and what the document spends on the whole picture.
+    CPPUNIT_ASSERT_EQUAL(storedBytesOf(rObject), aCropped[0]->getCurrentBytes());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(75), aCropped[0]->getFacts().mnHiddenPercent);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixBakesTheCrop)
+{
+    // Cleaning up a cropped image leaves the slide showing the same picture out of a bitmap that
+    // holds only the part of it that is shown.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 12000);
+    const sal_uInt32 nIndex = rObject.GetOrdNum();
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    const tools::Rectangle aRectangleBefore = rObject.GetLogicRect();
+    const sal_uInt64 nBytesBefore = storedBytesOf(rObject);
+    const Size aPixelsBefore = rObject.GetGraphic().GetSizePixel();
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    const auto aCropped = findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCropped.size());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aCropped[0]->getUndoLabel());
+        aCropped[0]->fix(rBase);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_TRIM_IMAGE), pUndoManager->GetUndoActionComment(0));
+    CPPUNIT_ASSERT(aCropped[0]->getRealizedSavingBytes() > 0);
+
+    const SdrGrafObj& rFixed = imageOnFirstSlide(*pDoc, nIndex);
+
+    // Nothing is kept off the picture any more, and the slide gives it the room it already had.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetLeft());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetTop());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetRight());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetBottom());
+    CPPUNIT_ASSERT_EQUAL(aRectangleBefore, rFixed.GetLogicRect());
+
+    // Only the quarter the crop left showing is still there. Trimming a bitmap takes the row and
+    // the column the crop lands on as well, so the result can come out a pixel longer per side.
+    const Size aPixelsAfter = rFixed.GetGraphic().GetSizePixel();
+    CPPUNIT_ASSERT(aPixelsAfter.Width() >= aPixelsBefore.Width() / 2);
+    CPPUNIT_ASSERT(aPixelsAfter.Width() <= aPixelsBefore.Width() / 2 + 1);
+    CPPUNIT_ASSERT(aPixelsAfter.Height() >= aPixelsBefore.Height() / 2);
+    CPPUNIT_ASSERT(aPixelsAfter.Height() <= aPixelsBefore.Height() / 2 + 1);
+
+    // The crop kept the top left quarter, which is the red one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), quadrantOfColour(colourAtShare(rFixed, 0.5, 0.5)));
+
+    CPPUNIT_ASSERT(storedBytesOf(rFixed) < nBytesBefore);
+
+    // The picture now holds what the slide shows, so a fresh scan offers it under neither kind.
+    sd::lint::PresentationLint aAfterLint(*pDoc, aOptions);
+    aAfterLint.scan();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(0), findingsOfCategory(aAfterLint, sd::lint::LintCategory::CroppedImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintUndoRestoresTheCrop)
+{
+    // Taking back the cleanup of a cropped image brings the whole picture and its crop back, and
+    // making the cleanup again trims the picture once more.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SfxUndoManager* pUndoManager = pImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 12000);
+    const sal_uInt32 nIndex = rObject.GetOrdNum();
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    const sal_Int32 nCropRightBefore = cropOf(rObject).GetRight();
+    const sal_uInt64 nBytesBefore = storedBytesOf(rObject);
+    CPPUNIT_ASSERT(nCropRightBefore > 0);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    const auto aCropped = findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCropped.size());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aCropped[0]->getUndoLabel());
+        aCropped[0]->fix(rBase);
+    }
+
+    const sal_uInt64 nBytesFixed = storedBytesOf(imageOnFirstSlide(*pDoc, nIndex));
+    CPPUNIT_ASSERT(nBytesFixed < nBytesBefore);
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(nCropRightBefore, cropOf(imageOnFirstSlide(*pDoc, nIndex)).GetRight());
+    CPPUNIT_ASSERT_EQUAL(nBytesBefore, storedBytesOf(imageOnFirstSlide(*pDoc, nIndex)));
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(imageOnFirstSlide(*pDoc, nIndex)).GetRight());
+    CPPUNIT_ASSERT_EQUAL(nBytesFixed, storedBytesOf(imageOnFirstSlide(*pDoc, nIndex)));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesAMixedCropImageAlone)
+{
+    // The document keeps one copy of a bitmap however many slides draw it, so a bitmap whose users
+    // show different parts of it gets no row: trimming it would need a copy per user.
     createSdImpressDoc("presentation-lint.fodp");
 
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -5210,7 +5513,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesACroppedImageAlo
     const size_t nImagesBefore
         = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
 
-    SdrGrafObj& rObject = addImageToFirstSlide(*pDoc, makeLinkedTestImage(2), 0);
+    const Graphic aGraphic = makeQuadrantImage(5);
+    SdrGrafObj& rFirstObject = addSquareImageToFirstSlide(*pDoc, aGraphic, 2000);
+    SdrGrafObj& rSecondObject = addSquareImageToFirstSlide(*pDoc, aGraphic, 2000);
 
     sd::lint::PresentationLint aListedLint(*pDoc, aOptions);
     aListedLint.scanStructure();
@@ -5218,15 +5523,216 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesACroppedImageAlo
         nImagesBefore + 1,
         findingsOfCategory(aListedLint, sd::lint::LintCategory::LargeImage).size());
 
-    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xShape.is());
-    xShape->setPropertyValue(u"GraphicCrop"_ustr,
-                             cpo::uno::Any(text::GraphicCrop(100, 100, 100, 100)));
+    // One slide shows the left half of the picture and the other the right half.
+    setCropShares(rFirstObject, 0.0, 0.0, 0.5, 0.0);
+    setCropShares(rSecondObject, 0.5, 0.0, 0.0, 0.0);
 
     sd::lint::PresentationLint aLint(*pDoc, aOptions);
     aLint.scanStructure();
     CPPUNIT_ASSERT_EQUAL(nImagesBefore,
                          findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0),
+                         findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesANegativeCropImageAlone)
+{
+    // A negative crop pads the picture out rather than trimming it, so there is nothing to bake in
+    // and the image gets no row.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aBeforeLint(*pDoc, aOptions);
+    aBeforeLint.scanStructure();
+    const size_t nImagesBefore
+        = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
+
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 2000);
+
+    sd::lint::PresentationLint aListedLint(*pDoc, aOptions);
+    aListedLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(
+        nImagesBefore + 1,
+        findingsOfCategory(aListedLint, sd::lint::LintCategory::LargeImage).size());
+
+    setCropShares(rObject, -0.2, 0.0, 0.0, 0.0);
+
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(nImagesBefore,
+                         findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage).size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0),
+                         findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintBakesTheCropOfAMirroredImage)
+{
+    // A crop names a part of the picture as the picture itself is stored, before the slide flips
+    // it, so trimming a mirrored image keeps the part the crop names and the flip along with it.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 12000);
+    const sal_uInt32 nIndex = rObject.GetOrdNum();
+
+    const tools::Rectangle aRectangle = rObject.GetLogicRect();
+    const tools::Long nCentreX = aRectangle.Left() + aRectangle.GetWidth() / 2;
+    rObject.Mirror(Point(nCentreX, aRectangle.Top()), Point(nCentreX, aRectangle.Bottom()));
+    CPPUNIT_ASSERT(rObject.IsMirrored());
+
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    const auto aCropped = findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aCropped.size());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, aCropped[0]->getUndoLabel());
+        aCropped[0]->fix(rBase);
+    }
+
+    const SdrGrafObj& rFixed = imageOnFirstSlide(*pDoc, nIndex);
+
+    // The crop kept the top left quarter of the stored picture, which is the red one, and the
+    // slide goes on showing that quarter the other way round.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), quadrantOfColour(colourAtShare(rFixed, 0.5, 0.5)));
+    CPPUNIT_ASSERT(rFixed.IsMirrored());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetRight());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintLeavesASmallCropAlone)
+{
+    // Trimming a sliver off a picture frees up too little to be worth reading, so a small crop
+    // earns no row of its own.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aBeforeLint(*pDoc, aOptions);
+    aBeforeLint.scanStructure();
+    const size_t nImagesBefore
+        = findingsOfCategory(aBeforeLint, sd::lint::LintCategory::LargeImage).size();
+
+    // Fourteen centimetres across is wide enough for the picture to carry no more pixels than the
+    // target resolution asks for, so the crop is the only thing that could earn it a row.
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 14000);
+    setCropShares(rObject, 0.0, 0.0, 0.02, 0.02);
+
+    sd::lint::PresentationLint aSmallCropLint(*pDoc, aOptions);
+    aSmallCropLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(
+        nImagesBefore,
+        findingsOfCategory(aSmallCropLint, sd::lint::LintCategory::LargeImage).size());
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(0), findingsOfCategory(aSmallCropLint, sd::lint::LintCategory::CroppedImage).size());
+
+    // Hiding three quarters of the same picture is worth a row.
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    sd::lint::PresentationLint aLargeCropLint(*pDoc, aOptions);
+    aLargeCropLint.scanStructure();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1), findingsOfCategory(aLargeCropLint, sd::lint::LintCategory::CroppedImage).size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintBakesTheCropOfALargeImageRow)
+{
+    // An image that keeps a sliver off and is stored at far more pixels than it is drawn at is
+    // listed for its pixels, and its cleanup trims the sliver away as it encodes the image again.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    sd::ViewShellBase& rBase = pViewShell->GetViewShellBase();
+
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 2000);
+    const sal_uInt32 nIndex = rObject.GetOrdNum();
+    setCropShares(rObject, 0.02, 0.02, 0.02, 0.02);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aLint(*pDoc, aOptions);
+    aLint.scan();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0),
+                         findingsOfCategory(aLint, sd::lint::LintCategory::CroppedImage).size());
+
+    std::shared_ptr<sd::lint::LintFinding> pImage;
+    for (const auto& rpFinding : findingsOfCategory(aLint, sd::lint::LintCategory::LargeImage))
+    {
+        if (rpFinding->getCurrentBytes() == storedBytesOf(rObject))
+            pImage = rpFinding;
+    }
+    CPPUNIT_ASSERT(pImage);
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_LINT_UNDO_COMPRESS_IMAGE), pImage->getUndoLabel());
+
+    {
+        sd::lint::LintUndoGroup aUndoGroup(rBase, pImage->getUndoLabel());
+        pImage->fix(rBase);
+    }
+
+    const SdrGrafObj& rFixed = imageOnFirstSlide(*pDoc, nIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetLeft());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), cropOf(rFixed).GetBottom());
+
+    // All four quarters of the picture survive the cleanup, each where it was.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), quadrantOfColour(colourAtShare(rFixed, 0.25, 0.25)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), quadrantOfColour(colourAtShare(rFixed, 0.75, 0.25)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), quadrantOfColour(colourAtShare(rFixed, 0.25, 0.75)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), quadrantOfColour(colourAtShare(rFixed, 0.75, 0.75)));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintMeasuresTheCropOfItsOwn)
+{
+    // What an encoding comes to depends on the part of the picture that is shown, so a measurement
+    // taken of the whole picture is never read for a crop of it.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    auto pCache = std::make_shared<sd::lint::LintMeasureCache>();
+    SdrGrafObj& rObject = addSquareImageToFirstSlide(*pDoc, makeQuadrantImage(5), 12000);
+
+    const sd::lint::LintOptions aOptions;
+    sd::lint::PresentationLint aWholeLint(*pDoc, aOptions, pCache);
+    aWholeLint.scan();
+
+    const std::size_t nKeysOfWholePicture = pCache->getCount();
+    CPPUNIT_ASSERT(nKeysOfWholePicture > 0);
+
+    setCropShares(rObject, 0.0, 0.0, 0.5, 0.5);
+
+    sd::lint::PresentationLint aCroppedLint(*pDoc, aOptions, pCache);
+    aCroppedLint.scan();
+
+    CPPUNIT_ASSERT_EQUAL(nKeysOfWholePicture + 1, pCache->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFixOfAnImageOnADeletedSlideChangesNothing)

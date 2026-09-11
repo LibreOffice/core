@@ -490,11 +490,13 @@
 // the image sits and, where one slide has more than one image to report, which of them it is. The
 // detail under it says how many bytes the stored image data takes and the resolution the image is
 // stored at, and falls back to the resolution alone for an image the document keeps no encoded
-// data for.
+// data for. A row about a cropped image says instead how much of the picture is cropped away, and
+// falls back to that share alone in the same way.
 
 // The names the undo stack shows for the cleanups the presentation cleanup session carries out.
 #define STR_LINT_UNDO_FIX_ALL                           NC_("STR_LINT_UNDO_FIX_ALL", "Presentation cleanup")
 #define STR_LINT_UNDO_COMPRESS_IMAGE                    NC_("STR_LINT_UNDO_COMPRESS_IMAGE", "Compress image")
+#define STR_LINT_UNDO_TRIM_IMAGE                        NC_("STR_LINT_UNDO_TRIM_IMAGE", "Trim cropped image")
 #define STR_LINT_UNDO_DELETE_HIDDEN_SLIDE               NC_("STR_LINT_UNDO_DELETE_HIDDEN_SLIDE", "Delete hidden slide")
 #define STR_LINT_UNDO_DELETE_UNUSED_MASTER              NC_("STR_LINT_UNDO_DELETE_UNUSED_MASTER", "Delete unused master slide")
 #define STR_LINT_UNDO_CLEAR_NOTES                       NC_("STR_LINT_UNDO_CLEAR_NOTES", "Clear speaker notes")

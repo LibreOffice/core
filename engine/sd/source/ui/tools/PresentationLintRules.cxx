@@ -12,6 +12,7 @@
 #include <tools/PresentationLint.hxx>
 
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include <optional>
 #include <unordered_map>
@@ -32,8 +33,13 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <unotools/weakref.hxx>
+#include <vcl/GraphicAttributes.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <DrawViewShell.hxx>
 #include <ModelTraverser.hxx>
@@ -53,6 +59,10 @@ namespace
 /** An image counts as too big only once it carries half again the pixels the largest drawing of it
     needs, so that an image a little over the target does not earn a row of its own. */
 constexpr double gfPixelTolerance = 1.5;
+
+/** An image counts as heavily cropped once a crop hides at least this share of its area, so that
+    trimming off a thin edge does not earn a row of its own. */
+constexpr double gfCroppedAreaThreshold = 0.10;
 
 /** Zero-based slide number of every standard page and of every notes page of the document. Master
     pages are not in it. */
@@ -234,15 +244,100 @@ struct LargeImageCandidate
     /** Zero-based number of the slide that object sits on, or -1 for a master slide. */
     sal_Int32 mnWorstSlideIndex = -1;
 
-    /** True when at least one object shows only part of the bitmap. */
-    bool mbCropped = false;
+    /** Size of the whole bitmap in hundredths of a millimetre, which is the size the crop values
+        are measured against. */
+    Size maBitmapLogicSize{ 0, 0 };
+
+    /** How much of the bitmap the objects cut off at each edge, in hundredths of a millimetre. All
+        four are zero for a bitmap every object shows whole. */
+    tools::Long mnCropLeft = 0;
+    tools::Long mnCropTop = 0;
+    tools::Long mnCropRight = 0;
+    tools::Long mnCropBottom = 0;
+
+    /** True when the objects disagree about which part of the bitmap they show, or when one of them
+        carries a negative crop value, which pads the picture out rather than trimming it. */
+    bool mbMixedCrop = false;
 
     /** True when at least one object is drawn at a size that gives no resolution to work from. */
     bool mbUnmeasured = false;
 };
 
-/** True when the bitmap holds more pixels than the largest drawing of it asks for at the target
-    resolution, by enough of a margin to be worth a row. */
+/** Size of the whole bitmap in hundredths of a millimetre, which is the unit the crop values are
+    written in. A bitmap that knows itself in pixels is measured on the default device, and one that
+    knows itself in a logic unit is converted from that unit. */
+Size getBitmapLogicSize(const Graphic& rGraphic)
+{
+    const MapMode aMap100(MapUnit::Map100thMM);
+    const MapMode aPrefMapMode = rGraphic.GetPrefMapMode();
+    const Size aPrefSize = rGraphic.GetPrefSize();
+
+    if (aPrefMapMode.GetMapUnit() == MapUnit::MapPixel)
+        return Application::GetDefaultDevice()->PixelToLogic(aPrefSize, aMap100);
+
+    return OutputDevice::LogicToLogic(aPrefSize, aPrefMapMode, aMap100);
+}
+
+/** The share of one dimension of the bitmap the crop leaves showing, from just above zero up to
+    one. A crop of nothing leaves the whole of it, and a crop that would leave nothing is held just
+    above zero so that the figures worked out from it stay usable. */
+double getVisibleFraction(tools::Long nLogicLength, tools::Long nStartCrop, tools::Long nEndCrop)
+{
+    if (nLogicLength <= 0)
+        return 1.0;
+
+    const double fVisible = double(nLogicLength - nStartCrop - nEndCrop) / double(nLogicLength);
+    return std::clamp(fVisible, 0.001, 1.0);
+}
+
+double getVisibleWidthFraction(const LargeImageCandidate& rCandidate)
+{
+    return getVisibleFraction(rCandidate.maBitmapLogicSize.Width(), rCandidate.mnCropLeft,
+                              rCandidate.mnCropRight);
+}
+
+double getVisibleHeightFraction(const LargeImageCandidate& rCandidate)
+{
+    return getVisibleFraction(rCandidate.maBitmapLogicSize.Height(), rCandidate.mnCropTop,
+                              rCandidate.mnCropBottom);
+}
+
+/** The share of the area of the bitmap the crop hides, from zero for a bitmap that is shown whole
+    up to just under one. */
+double getHiddenAreaShare(const LargeImageCandidate& rCandidate)
+{
+    return 1.0 - getVisibleWidthFraction(rCandidate) * getVisibleHeightFraction(rCandidate);
+}
+
+/** Takes in the crop of one more object that draws the bitmap. The first object says which part of
+    the bitmap the entry is about, and an object that shows a different part, or one that pads the
+    picture out with a negative value, marks the entry as one to leave alone. */
+void recordCrop(LargeImageCandidate& rCandidate, const SdrGrafCropItem& rCrop, bool bFirstObject)
+{
+    if (rCrop.GetLeft() < 0 || rCrop.GetTop() < 0 || rCrop.GetRight() < 0 || rCrop.GetBottom() < 0)
+    {
+        rCandidate.mbMixedCrop = true;
+        return;
+    }
+
+    if (bFirstObject)
+    {
+        rCandidate.mnCropLeft = rCrop.GetLeft();
+        rCandidate.mnCropTop = rCrop.GetTop();
+        rCandidate.mnCropRight = rCrop.GetRight();
+        rCandidate.mnCropBottom = rCrop.GetBottom();
+        return;
+    }
+
+    if (rCandidate.mnCropLeft != rCrop.GetLeft() || rCandidate.mnCropTop != rCrop.GetTop()
+        || rCandidate.mnCropRight != rCrop.GetRight()
+        || rCandidate.mnCropBottom != rCrop.GetBottom())
+        rCandidate.mbMixedCrop = true;
+}
+
+/** True when the part of the bitmap that is shown holds more pixels than the largest drawing of it
+    asks for at the target resolution, by enough of a margin to be worth a row. The pixels a crop
+    hides are not drawn at all, so they are left out of the comparison. */
 bool isOverTarget(const LargeImageCandidate& rCandidate, sal_Int32 nTargetDPI)
 {
     const tools::Long nTargetWidth
@@ -253,8 +348,12 @@ bool isOverTarget(const LargeImageCandidate& rCandidate, sal_Int32 nTargetDPI)
         return false;
 
     const Size aPixelSize = rCandidate.maGraphic.GetSizePixel();
-    return double(aPixelSize.Width()) > gfPixelTolerance * double(nTargetWidth)
-           || double(aPixelSize.Height()) > gfPixelTolerance * double(nTargetHeight);
+    const double fVisibleWidth = double(aPixelSize.Width()) * getVisibleWidthFraction(rCandidate);
+    const double fVisibleHeight
+        = double(aPixelSize.Height()) * getVisibleHeightFraction(rCandidate);
+
+    return fVisibleWidth > gfPixelTolerance * double(nTargetWidth)
+           || fVisibleHeight > gfPixelTolerance * double(nTargetHeight);
 }
 
 /** A finding about one standard page as a whole. */
@@ -483,14 +582,15 @@ protected:
     std::vector<unotools::WeakReference<SdrObject>> maObjects;
 };
 
-/** An image stored at a higher resolution than it is drawn at, which the fix encodes again at the
-    target resolution. */
-class LargeImageFinding final : public ObjectFinding
+/** An image the document keeps more of than it shows: either more pixels than it is drawn at, or
+    pixels a crop hides. The fix encodes what is shown of it again at the target resolution. */
+class ImageFinding final : public ObjectFinding
 {
 public:
-    LargeImageFinding(SdDrawDocument& rDoc, const LargeImageCandidate& rCandidate,
-                      const LintOptions& rOptions, std::shared_ptr<LintMeasureCache> pMeasureCache)
-        : ObjectFinding(rDoc, LintCategory::LargeImage, rCandidate.mnCurrentBytes,
+    ImageFinding(SdDrawDocument& rDoc, LintCategory eCategory,
+                 const LargeImageCandidate& rCandidate, const LintOptions& rOptions,
+                 std::shared_ptr<LintMeasureCache> pMeasureCache)
+        : ObjectFinding(rDoc, eCategory, rCandidate.mnCurrentBytes,
                         rCandidate.mnWorstSlideIndex, rCandidate.maObjects)
         , maGraphic(rCandidate.maGraphic)
         , maLogicSize(rCandidate.maMaxLogicSize)
@@ -498,9 +598,17 @@ public:
         , mnTargetDPI(rOptions.mnImageResolution)
         , mnJPEGQuality(rOptions.mnJPEGQuality)
         , mnChecksum(rCandidate.mnChecksum)
+        , mnCropLeft(rCandidate.mnCropLeft)
+        , mnCropTop(rCandidate.mnCropTop)
+        , mnCropRight(rCandidate.mnCropRight)
+        , mnCropBottom(rCandidate.mnCropBottom)
         , mpMeasureCache(std::move(pMeasureCache))
     {
-        maFacts.mnEffectiveDPI = rCandidate.mnMaxEffectiveDPI;
+        if (eCategory == LintCategory::CroppedImage)
+            maFacts.mnHiddenPercent
+                = sal_Int32(std::lround(getHiddenAreaShare(rCandidate) * 100.0));
+        else
+            maFacts.mnEffectiveDPI = rCandidate.mnMaxEffectiveDPI;
     }
 
     /** Carries the number that tells two images of one place apart. The figures the detail line
@@ -583,6 +691,15 @@ public:
                 continue;
 
             pNewGraphicObject->SetGraphic(maCompressedGraphic);
+
+            // The new encoding holds only the pixels the crop left showing, so the object shows
+            // the whole of what it is now given. Dropping the crop attribute leaves it at the
+            // value a picture nothing is cropped off carries, which is zero on every edge. The
+            // size the object takes on the slide is the size the crop already left it at, and
+            // handing it a graphic does not change that.
+            if (isCropped())
+                pNewGraphicObject->ClearMergedItem(SDRATTR_GRAFCROP);
+
             replaceObject(*xOldObject, *pNewObject);
             ++nReplaced;
         }
@@ -607,14 +724,38 @@ private:
     {
         if (!moCompressed && !takeFromCache())
         {
-            moCompressed = compressGraphic(maGraphic, getSourceBytes(), maLogicSize, mnTargetDPI,
-                                           mnJPEGQuality);
+            // The crop is baked in here rather than when the row was written, so an image whose
+            // measurement the cache already holds never pays for it.
+            moCompressed = compressGraphic(croppedGraphic(), getSourceBytes(), maLogicSize,
+                                           mnTargetDPI, mnJPEGQuality);
             storeInCache();
         }
 
         // An encoding that comes out no smaller than the data the document already holds would cost
         // quality for nothing, so there is no saving to report and nothing worth doing.
         return moCompressed->mbSmaller;
+    }
+
+    /** True when a crop keeps part of the image off the slide. */
+    bool isCropped() const
+    {
+        return mnCropLeft != 0 || mnCropTop != 0 || mnCropRight != 0 || mnCropBottom != 0;
+    }
+
+    /** The part of the image the slide shows, as a picture in its own right. An image nothing is
+        cropped off comes back as it is. */
+    Graphic croppedGraphic() const
+    {
+        if (!isCropped())
+            return maGraphic;
+
+        // The attribute carries the crop and nothing else, so the picture is trimmed to what is
+        // shown and every pixel that is left keeps the colour it had.
+        GraphicAttr aAttr;
+        aAttr.SetCrop(mnCropLeft, mnCropTop, mnCropRight, mnCropBottom);
+
+        return GraphicObject(maGraphic).GetTransformedGraphic(maLogicSize,
+                                                              MapMode(MapUnit::Map100thMM), aAttr);
     }
 
     /** How many bytes the document spends on the image, which is the figure a new encoding is
@@ -629,8 +770,8 @@ private:
     /** What the measurement of this image is worked out from. */
     LintMeasureKey getMeasureKey() const
     {
-        return { mnChecksum, maLogicSize.Width(), maLogicSize.Height(), mnTargetDPI,
-                 mnJPEGQuality };
+        return { mnChecksum, maLogicSize.Width(), maLogicSize.Height(), mnTargetDPI, mnJPEGQuality,
+                 mnCropLeft, mnCropTop,           mnCropRight,          mnCropBottom };
     }
 
     /** Takes up the encoding an earlier measurement of this bitmap at this size and these settings
@@ -668,6 +809,13 @@ private:
 
     /** Checksum of the bitmap, which is what tells one bitmap from another. */
     BitmapChecksum mnChecksum;
+
+    /** How much of the image the slide keeps off at each edge, in hundredths of a millimetre. All
+        four are zero for an image that is shown whole. */
+    tools::Long mnCropLeft;
+    tools::Long mnCropTop;
+    tools::Long mnCropRight;
+    tools::Long mnCropBottom;
 
     /** Where the encodings of measurements are kept, or an empty pointer when they are not kept at
         all. */
@@ -763,7 +911,12 @@ public:
         // Every object drawing the bitmap joins the entry, whether or not this one is drawn too
         // large, because the decision is about the bitmap and reaches all of its users at once.
         LargeImageCandidate& rCandidate = getCandidate(rGraphic);
+        const bool bFirstObject = rCandidate.maObjects.empty();
         rCandidate.maObjects.push_back(pGraphicObject);
+
+        // The crop of every object is taken in, including that of an object whose drawing size
+        // gives nothing to work from, because the row stands for the bitmap and all of them.
+        recordCrop(rCandidate, pGraphicObject->GetMergedItem(SDRATTR_GRAFCROP), bFirstObject);
 
         const Size aPixelSize = rGraphic.GetSizePixel();
         const Size aLogicSize = pGraphicObject->GetLogicRect().GetSize();
@@ -775,24 +928,23 @@ public:
         }
 
         // The drawing size is in hundredths of a millimetre. Converting it to inches gives the
-        // resolution the image is drawn at without asking any output device about itself.
+        // resolution the image is drawn at without asking any output device about itself. The
+        // pixels a crop hides are not drawn, so the resolution counts the pixels that are.
         const double fWidthInInches
             = o3tl::convert(double(aLogicSize.Width()), o3tl::Length::mm100, o3tl::Length::in);
         const double fHeightInInches
             = o3tl::convert(double(aLogicSize.Height()), o3tl::Length::mm100, o3tl::Length::in);
-        const sal_Int32 nEffectiveDPI
-            = std::max(sal_Int32(double(aPixelSize.Width()) / fWidthInInches),
-                       sal_Int32(double(aPixelSize.Height()) / fHeightInInches));
+        const double fVisibleWidth
+            = double(aPixelSize.Width()) * getVisibleWidthFraction(rCandidate);
+        const double fVisibleHeight
+            = double(aPixelSize.Height()) * getVisibleHeightFraction(rCandidate);
+        const sal_Int32 nEffectiveDPI = std::max(sal_Int32(fVisibleWidth / fWidthInInches),
+                                                 sal_Int32(fVisibleHeight / fHeightInInches));
 
         rCandidate.maMaxLogicSize.setWidth(
             std::max(rCandidate.maMaxLogicSize.Width(), aLogicSize.Width()));
         rCandidate.maMaxLogicSize.setHeight(
             std::max(rCandidate.maMaxLogicSize.Height(), aLogicSize.Height()));
-
-        const SdrGrafCropItem& rCrop = pGraphicObject->GetMergedItem(SDRATTR_GRAFCROP);
-        if (rCrop.GetLeft() != 0 || rCrop.GetTop() != 0 || rCrop.GetRight() != 0
-            || rCrop.GetBottom() != 0)
-            rCandidate.mbCropped = true;
 
         if (nEffectiveDPI > rCandidate.mnMaxEffectiveDPI)
         {
@@ -821,6 +973,7 @@ private:
         LargeImageCandidate& rCandidate = maCandidates.emplace_back();
         rCandidate.maGraphic = rGraphic;
         rCandidate.mnChecksum = nChecksum;
+        rCandidate.maBitmapLogicSize = getBitmapLogicSize(rGraphic);
 
         // The document only knows how many bytes an image takes when it kept the encoded data it
         // was loaded from. Without that the row leaves the size out. Sharing the link reads the
@@ -877,27 +1030,35 @@ private:
     std::vector<std::shared_ptr<LintFinding>> maFindings;
 };
 
-/** Picks out the bitmaps that carry more pixels than the deck needs and writes a row for each of
+/** Picks out the bitmaps the document keeps more of than it shows and writes a row for each of
     them. Which bitmaps those are can only be told once every user of every bitmap is known. */
-void appendLargeImageFindings(SdDrawDocument& rDoc, const LintOptions& rOptions,
-                              const std::shared_ptr<LintMeasureCache>& rpMeasureCache,
-                              const std::vector<LargeImageCandidate>& rCandidates,
-                              std::vector<std::shared_ptr<LintFinding>>& rFindings)
+void appendImageFindings(SdDrawDocument& rDoc, const LintOptions& rOptions,
+                         const std::shared_ptr<LintMeasureCache>& rpMeasureCache,
+                         const std::vector<LargeImageCandidate>& rCandidates,
+                         std::vector<std::shared_ptr<LintFinding>>& rFindings)
 {
     for (const LargeImageCandidate& rCandidate : rCandidates)
     {
-        // A crop shows only part of the bitmap, so the pixels that a user needs cannot be worked
-        // out from the size it is drawn at, and neither can they for a user whose drawing size came
-        // out unusable. An image with any cropped or unmeasured user is left alone altogether, so
-        // the document keeps one encoding for the bitmap.
-        if (rCandidate.mbCropped || rCandidate.mbUnmeasured)
+        // The document keeps one encoding of a bitmap however many objects draw it, and one row
+        // stands for all of them. So a row is written for a bitmap whose users agree about which
+        // part of it is shown and each of whom is drawn at a size that gives a resolution to work
+        // from. Users that disagree about the crop would each need an encoding of their own, which
+        // can leave the document larger than it is now, so such a bitmap is left alone.
+        if (rCandidate.mbMixedCrop || rCandidate.mbUnmeasured)
             continue;
 
-        if (!isOverTarget(rCandidate, rOptions.mnImageResolution))
+        // A crop that hides a good part of the picture is worth a row on its own account, whatever
+        // resolution what is left is stored at. Below that share the row is about the pixels alone,
+        // and its cleanup bakes in the little that is cropped as it encodes the image again.
+        const bool bHeavilyCropped = getHiddenAreaShare(rCandidate) >= gfCroppedAreaThreshold;
+        if (!bHeavilyCropped && !isOverTarget(rCandidate, rOptions.mnImageResolution))
             continue;
 
-        rFindings.push_back(
-            std::make_shared<LargeImageFinding>(rDoc, rCandidate, rOptions, rpMeasureCache));
+        const LintCategory eCategory
+            = bHeavilyCropped ? LintCategory::CroppedImage : LintCategory::LargeImage;
+
+        rFindings.push_back(std::make_shared<ImageFinding>(rDoc, eCategory, rCandidate, rOptions,
+                                                          rpMeasureCache));
     }
 }
 
@@ -963,8 +1124,8 @@ void collectObjectFindings(SdDrawDocument& rDoc, const LintOptions& rOptions,
     aModelTraverser.traverse();
 
     if (pImageHandler)
-        appendLargeImageFindings(rDoc, rOptions, rpMeasureCache, pImageHandler->getCandidates(),
-                                 rFindings);
+        appendImageFindings(rDoc, rOptions, rpMeasureCache, pImageHandler->getCandidates(),
+                            rFindings);
 
     // The rows about the embedded objects follow the rows about the images.
     if (pOleHandler)

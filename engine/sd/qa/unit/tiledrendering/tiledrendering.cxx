@@ -47,7 +47,9 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/lstner.hxx>
+#include <svx/sdgcpitm.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
@@ -82,6 +84,10 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -5760,6 +5766,38 @@ bool waitForCleanupEvent(const SdTestViewCallback& rView, std::string_view aEven
 
     return !cleanupEvents(rView, aEvent, nFrom).empty();
 }
+
+/** The image the given slide of the deck holds at the given place in its object list. */
+SdrGrafObj& imageOnSlide(SdDrawDocument& rDocument, sal_uInt16 nSlide, sal_uInt32 nIndex)
+{
+    SdPage* pPage = rDocument.GetSdPage(nSlide, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    auto* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(nIndex));
+    CPPUNIT_ASSERT(pObject);
+
+    return *pObject;
+}
+
+/** Keeps the right half and the bottom half of the picture the object draws off the slide. A crop
+    is written in hundredths of a millimetre against the size of the whole picture, and a picture
+    that knows itself in pixels is measured on the default device to get there. */
+void cropAwayThreeQuarters(SdrGrafObj& rObject)
+{
+    const Graphic& rGraphic = rObject.GetGraphic();
+    const MapMode aMap100(MapUnit::Map100thMM);
+    const Size aPictureSize
+        = rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel
+              ? Application::GetDefaultDevice()->PixelToLogic(rGraphic.GetPrefSize(), aMap100)
+              : OutputDevice::LogicToLogic(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(),
+                                           aMap100);
+
+    const text::GraphicCrop aCrop(0, aPictureSize.Height() / 2, 0, aPictureSize.Width() / 2);
+
+    uno::Reference<beans::XPropertySet> xShape(rObject.getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    xShape->setPropertyValue(u"GraphicCrop"_ustr, cpo::uno::Any(aCrop));
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupScan)
@@ -6341,6 +6379,57 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupOfAnEmptyListE
     // The session is ready for what comes next rather than sitting on the cleanup that ended.
     requestCleanup(u"{\"action\":\"scan\",\"request\":3}"_ustr);
     CPPUNIT_ASSERT_EQUAL(std::string(), cleanupReplyReason(aView, 3));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupTrimsACroppedImage)
+{
+    // An image most of which a crop keeps off the slide reaches the client under its own kind, and
+    // cleaning up that row trims the picture down to what the slides show.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    // The first and the third slide draw one and the same picture, and both are made to show the
+    // same quarter of it, so the one copy the document holds stands for what all of them show.
+    cropAwayThreeQuarters(imageOnSlide(*pDocument, 0, 0));
+    cropAwayThreeQuarters(imageOnSlide(*pDocument, 2, 0));
+
+    requestCleanup(u"{\"action\":\"scan\",\"request\":1}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished"));
+
+    const auto oList = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oList);
+
+    const int nRowId = cleanupRowId(*oList, "croppedImage");
+    CPPUNIT_ASSERT(nRowId > 0);
+
+    const std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"fix\",\"request\":2,\"run\":1,\"row\":"
+                   + OUString::number(nRowId) + "}");
+    CPPUNIT_ASSERT_MESSAGE("the cleanup never reported ending",
+                           waitForCleanupEvent(aView, "fixed", nSeen));
+
+    const auto oFixed = firstCleanupEvent(aView, "fixed", nSeen);
+    CPPUNIT_ASSERT(oFixed);
+    CPPUNIT_ASSERT(!oFixed->get("cancelled", true));
+
+    // The row is off the list because the picture now holds no more than the slides show.
+    std::set<int> aRemoved;
+    for (const auto& rEntry : oFixed->get_child("removed"))
+        aRemoved.insert(rEntry.second.get_value<int>());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRemoved.count(nRowId));
+
+    const SdrGrafObj& rFirstImage = imageOnSlide(*pDocument, 0, 0);
+    const SdrGrafCropItem& rCrop = rFirstImage.GetMergedItem(SDRATTR_GRAFCROP);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rCrop.GetRight());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rCrop.GetBottom());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -57,6 +57,14 @@ private:
     std::weak_ptr<LintUndoNotifier> mpNotifier;
 };
 
+/** The kind a finding counts under while the rows of one slide are numbered. Both kinds of image
+    row count as one kind, so a picture keeps the number it reads under whichever of the two groups
+    its row sits in. */
+LintCategory getNumberingCategory(LintCategory eCategory)
+{
+    return eCategory == LintCategory::CroppedImage ? LintCategory::LargeImage : eCategory;
+}
+
 } // end of anonymous namespace
 
 LintFinding::LintFinding(SdDrawDocument& rDoc, LintCategory eCategory, sal_uInt64 nCurrentBytes,
@@ -84,6 +92,8 @@ OUString LintFinding::getUndoLabel() const
     {
         case LintCategory::LargeImage:
             return SdResId(STR_LINT_UNDO_COMPRESS_IMAGE);
+        case LintCategory::CroppedImage:
+            return SdResId(STR_LINT_UNDO_TRIM_IMAGE);
         case LintCategory::HiddenSlide:
             return SdResId(STR_LINT_UNDO_DELETE_HIDDEN_SLIDE);
         case LintCategory::UnusedMaster:
@@ -378,18 +388,22 @@ void PresentationLint::sortForDisplay()
 void PresentationLint::numberRows()
 {
     // Two findings of one kind about one slide come out as rows that read alike, so each is handed
-    // its place among them. The count is taken over the findings that are on the list right now, so
-    // a finding the measurement dropped leaves no gap in the numbers, and a finding that is left
-    // alone for its slide is told so and drops the number it had.
+    // its place among them. The images of a slide are counted together, so "Slide 3, image 2" names
+    // the one picture whether its row is about the pixels it carries or about the crop that hides
+    // them. The count is taken over the findings that are on the list right now, so a finding the
+    // measurement dropped leaves no gap in the numbers, and a finding that is left alone for its
+    // slide is told so and drops the number it had.
     std::map<std::pair<LintCategory, sal_Int32>, sal_Int32> aCountPerSlide;
     for (const std::shared_ptr<LintFinding>& rpFinding : maFindings)
-        ++aCountPerSlide[{ rpFinding->getCategory(), rpFinding->getSlideIndex() }];
+        ++aCountPerSlide[{ getNumberingCategory(rpFinding->getCategory()),
+                           rpFinding->getSlideIndex() }];
 
     std::map<std::pair<LintCategory, sal_Int32>, sal_Int32> aNumberPerSlide;
     for (const std::shared_ptr<LintFinding>& rpFinding : maFindings)
     {
-        const std::pair<LintCategory, sal_Int32> aKey{ rpFinding->getCategory(),
-                                                       rpFinding->getSlideIndex() };
+        const std::pair<LintCategory, sal_Int32> aKey{
+            getNumberingCategory(rpFinding->getCategory()), rpFinding->getSlideIndex()
+        };
         const sal_Int32 nRowNumber = ++aNumberPerSlide[aKey];
         rpFinding->setRowNumber(aCountPerSlide[aKey] > 1 ? nRowNumber : 0);
     }

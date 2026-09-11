@@ -35,6 +35,10 @@ std::size_t LintMeasureKeyHash::operator()(const LintMeasureKey& rKey) const
     o3tl::hash_combine(nSeed, rKey.mnLogicHeight);
     o3tl::hash_combine(nSeed, rKey.mnTargetDPI);
     o3tl::hash_combine(nSeed, rKey.mnJPEGQuality);
+    o3tl::hash_combine(nSeed, rKey.mnCropLeft);
+    o3tl::hash_combine(nSeed, rKey.mnCropTop);
+    o3tl::hash_combine(nSeed, rKey.mnCropRight);
+    o3tl::hash_combine(nSeed, rKey.mnCropBottom);
     return nSeed;
 }
 
