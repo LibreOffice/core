@@ -4203,28 +4203,23 @@ void SbRtl_DumpAllObjects(StarBASIC * pBasic, SbxArray & rPar, bool)
 {
     const sal_uInt32 nArgCount = rPar.Count();
     if( nArgCount < 2 || nArgCount > 3 )
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    if( !pBasic )
+        return StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
+
+    SbxObject* p = pBasic;
+    while( p->GetParent() )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        p = p->GetParent();
     }
-    else if( !pBasic )
+    SvFileStream aStrm(rPar.Get(1)->GetOUString(),
+                        StreamMode::WRITE | StreamMode::TRUNC );
+    p->Dump(aStrm, rPar.Get(2)->GetBool());
+    aStrm.Close();
+    if( aStrm.GetError() != ERRCODE_NONE )
     {
-        StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
-    }
-    else
-    {
-        SbxObject* p = pBasic;
-        while( p->GetParent() )
-        {
-            p = p->GetParent();
-        }
-        SvFileStream aStrm(rPar.Get(1)->GetOUString(),
-                            StreamMode::WRITE | StreamMode::TRUNC );
-        p->Dump(aStrm, rPar.Get(2)->GetBool());
-        aStrm.Close();
-        if( aStrm.GetError() != ERRCODE_NONE )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
-        }
+        StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
     }
 }
 
