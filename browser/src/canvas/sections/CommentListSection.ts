@@ -2949,8 +2949,10 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	// How tall the text can be for the whole card to fit the view.
-	private maxContentHeightInView (comment: Comment, contentHeight: number): number {
-		const rest = comment.getCommentHeight(false) - contentHeight;
+	// The rest of the card is measured from the page.
+	private maxContentHeightInView (comment: Comment): number {
+		const contentHeight = comment.sectionProperties.contentNode.getBoundingClientRect().height;
+		const rest = comment.getCommentHeight(true) - contentHeight;
 		return this.sectionProperties.canvasContainerBounds.height - rest
 			- 2 * this.sectionProperties.marginY / app.dpiScale;
 	}
@@ -3037,7 +3039,7 @@ export class CommentSection extends CanvasSectionObject {
 							const oldContent = Math.min(actHeight, oldMaxHeight);
 
 							// Don't let a comment grow past the visible area; its text scrolls instead.
-							maxSize = Math.min(maxSize, this.maxContentHeightInView(comment, oldContent));
+							maxSize = Math.min(maxSize, this.maxContentHeightInView(comment));
 							contentNode.style.maxHeight = Math.round(maxSize) + 'px';
 
 							// Without this, a later layout(false) would reuse a stale value.
