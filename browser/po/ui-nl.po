@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-03 05:51+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-09-12 12:51+0000\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -922,17 +922,20 @@ msgstr "Extensie uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Beveiligingsbeleid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Upload SPIF-beveiligingsbeleid (.xml). Hiermee worden de classificaties en "
+"categorieën gedefinieerd die beschikbaar zijn bij het toepassen van een "
+"beveiligingslabel op een document."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Upload beveiligingsbeleid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -2787,7 +2790,7 @@ msgstr "Ondertekenen"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Stopped"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3716,7 +3719,7 @@ msgstr "HTML bestand (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Beveiligingslabel"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4027,11 +4030,11 @@ msgstr "Verdelen"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Dia's uit bestand invoegen..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Gekoppelde dia's bijwerken..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4493,7 +4496,7 @@ msgstr "Beveiligen"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Ondertiteling"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -5028,7 +5031,7 @@ msgstr "Wijzigingen bijhouden"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Opmerking over wijziging"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5189,11 +5192,11 @@ msgstr "Spatiëring & kleur"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Dia's importeren"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Links bijwerken"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5287,7 +5290,7 @@ msgstr "Wijzigingen weergeven"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Overschakelen naar bewerken"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5295,9 +5298,8 @@ msgid "Paste"
 msgstr "Plakken"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Blanco dia"
+msgstr "Koppeling dia verbreken"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5305,19 +5307,19 @@ msgstr "Sectie toevoegen"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "voorbeeld van pagina %1, gekoppeld aan %2 in %3"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Dia %1, gekoppeld aan %2 in %3"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "voorbeeld van pagina %1, gekoppeld aan %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Dia %1, gekoppeld aan %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5368,74 +5370,72 @@ msgstr "Voer een nieuwe sectienaam in:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Importeer uw dia's"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Ontbrekende"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Geen toegang"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Gekoppeld"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Niet gekoppeld"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Dit bestand is niet beschikbaar."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "U kunt dit bestand niet openen."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Dit bestand kon niet worden geopend."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Dia's lezen..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 dia ingevoegd"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} dia's ingevoegd"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Dia {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "%n dia invoegen"
+msgstr "1 dia invoegen"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "Voeg {0} dia's in"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Vormen invoegen"
+msgstr "Dia's invoegen"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} dia's"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5444,98 +5444,100 @@ msgstr "{0} geselecteerd"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Bestand openen..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Dia's invoegen..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Dia's importeren"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "Dia-import uitvouwen"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Dia-import sluiten"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Presentatie toevoegen..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Nog geen presentaties"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Voeg een presentatie toe om de dia's ervan te bekijken en in deze "
+"presentatie in te voegen."
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "Recentelijk geïmporteerd uit"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Presentaties om vanuit te importeren"
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Acties voor {0}"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Bestand zoeken"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Dia's verbergen"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Dia's weergeven"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Dia's opnieuw laden"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Dia's opnieuw laden"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Werk de dia's bij die aan dit bestand zijn gekoppeld"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Verwijderen van lijst"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Schakel {0} in/uit"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Dia's in {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "Behoud het oorspronkelijke ontwerp"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "Link naar het bronbestand"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
-msgstr ""
+msgstr "Koppel dia's aan de positie in een bronbestand"
 
 #: src/control/SlideSectionHeader.tsx:50
 msgid "Toggle section %1"
@@ -5543,78 +5545,86 @@ msgstr "Wissel sectie %1"
 
 #: src/slideimport/SlideImportSession.ts:239
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "De dia's van de bron konden niet worden gelezen."
 
 #: src/slideimport/SlideImportSession.ts:290
 #: src/slideimport/SlideImportSession.ts:299
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Het invoegen van de dia's is mislukt."
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Het importeren van dia's is mislukt."
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
 msgstr ""
+"Geen enkele dia van deze presentatie is gekoppeld aan een ander bestand."
 
 #: src/slideimport/SlideLinks.ts:297 src/slideimport/SlideLinks.ts:557
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} is niet een van de documenten waarmee dit document verband houdt, dus de "
+"server kan het niet lezen."
 
 #: src/slideimport/SlideLinks.ts:309
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Deze dia's zijn afkomstig uit {0}, dat momenteel niet toegankelijk is."
 
 #: src/slideimport/SlideLinks.ts:320
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
 msgstr ""
+"Je hebt geen toegang tot {0}, dus de pagina's ervan kunnen niet worden "
+"vernieuwd."
 
 #: src/slideimport/SlideLinks.ts:393
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
-msgstr ""
+msgstr "Kan de dia's van {0} niet bijwerken: de bron mist de bijbehorende dia's"
 
 #: src/slideimport/SlideLinks.ts:396 src/slideimport/SlideLinks.ts:563
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "De dia's van {0} konden niet in deze presentatie worden ingelezen."
 
 #: src/slideimport/SlideLinks.ts:496
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Dia {0} kan niet worden bijgewerkt: de bron bevat geen overeenkomende dia"
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Het bijwerken van de dia's van {0} is mislukt."
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Er is geen dia van {0} bijgewerkt."
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 dia bijgewerkt vanuit {0}."
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} dia's bijgewerkt vanuit {1}."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "{0} kon niet worden gelezen."
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Geen enkele dia van deze presentatie is gekoppeld aan {0}."
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"Er wordt nog een andere update uitgevoerd. Vraag {0} over een ogenblik "
+"opnieuw aan."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Panelen van grootte wijzigen"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5781,7 +5791,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Pas de pagina aan de breedte van het venster aan."
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5886,11 +5896,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Blad opnieuw berekend in %1 ms"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Document opnieuw berekend in %1 ms"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5914,13 +5924,13 @@ msgid "Insert connectors"
 msgstr "Verbindingspunten toevoegen"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Hoofd"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
 msgstr ""
+"U bevindt zich momenteel in de weergavemodus; druk op {0} om te bewerken"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -7323,7 +7333,7 @@ msgstr "Server wordt afgesloten"
 
 #: src/docdispatcher.ts:651
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "AI is niet geconfigureerd; neem contact op met uw beheerder"
 
 #: src/docdispatcher.ts:918
 msgid "Are you sure you want to delete this slide?"
@@ -7598,9 +7608,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Document kan niet worden geëxporteerd. Probeer het opnieuw."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Dia's"
+msgstr "Dia"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -8116,7 +8125,7 @@ msgstr "Moderne zakelijke brief (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Moderne zakelijke brief"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
