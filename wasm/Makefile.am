@@ -57,6 +57,7 @@ online_SOURCES = \
 	../common/Util.cpp \
 	../common/Util-mobile.cpp \
 	../common/Util-unix.cpp \
+	../common/Watchdog-unix.cpp \
 	../kit/ChildSession.cpp \
 	../kit/Kit.cpp \
 	../kit/KitQueue.cpp \

@@ -226,6 +226,7 @@
     <ClCompile Include="..\..\..\kit\KitQueue.cpp" />
     <ClCompile Include="..\..\..\kit\KitWebSocket.cpp" />
     <ClCompile Include="..\..\..\kit\LogUI.cpp" />
+    <ClCompile Include="..\..\..\common\Watchdog-windows.cpp" />
     <ClCompile Include="..\..\..\net\FakeSocket.cpp" />
     <ClCompile Include="..\..\..\net\Socket-windows.cpp" />
     <ClCompile Include="..\..\..\net\Socket.cpp" />

@@ -31,6 +31,7 @@ add_library(androidapp SHARED
             ../../../../../common/Util-mobile.cpp
             ../../../../../common/Util-unix.cpp
             ../../../../../common/Uri.cpp
+            ../../../../../common/Watchdog-unix.cpp
             ../../../../../kit/ChildSession.cpp
             ../../../../../kit/DeltaSimd.c
             ../../../../../kit/Kit.cpp

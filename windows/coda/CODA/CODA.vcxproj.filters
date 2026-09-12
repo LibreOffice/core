@@ -107,6 +107,9 @@
     <ClCompile Include="..\..\..\kit\LogUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\Watchdog-windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\net\FakeSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

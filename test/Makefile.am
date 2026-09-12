@@ -254,6 +254,7 @@ common_sources = \
 	../common/Util-server.cpp \
 	../common/Util-unix.cpp \
 	../common/Util.cpp \
+	../common/Watchdog-unix.cpp \
 	../kit/KitQueue.cpp \
 	../kit/LogUI.cpp \
 	../net/FakeSocket-stub.cpp \

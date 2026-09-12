@@ -76,6 +76,7 @@
 		BE74B1F42D3F963F009786DF /* Util-mobile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-mobile.cpp"; path = "../../../common/Util-mobile.cpp"; sourceTree = "<group>"; };
 		BE74B1F52D3F963F009786DF /* Util-server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-server.cpp"; path = "../../../common/Util-server.cpp"; sourceTree = "<group>"; };
 		BE74B1F62D3F963F009786DF /* Util-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-unix.cpp"; path = "../../../common/Util-unix.cpp"; sourceTree = "<group>"; };
+		BE5C4E032F13A000009786DF /* Watchdog-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Watchdog-unix.cpp"; path = "../../../common/Watchdog-unix.cpp"; sourceTree = "<group>"; };
 		BE74B1F72D3F963F009786DF /* Util-windows.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Util-windows.cpp"; path = "../../../common/Util-windows.cpp"; sourceTree = "<group>"; };
 		BE74B1F82D3F963F009786DF /* Watchdog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Watchdog.hpp; path = ../../../common/Watchdog.hpp; sourceTree = "<group>"; };
 		BE74B1F92D3F96CB009786DF /* Delta.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Delta.hpp; path = ../../../kit/Delta.hpp; sourceTree = "<group>"; };
@@ -257,6 +258,7 @@
 				BE74B1F42D3F963F009786DF /* Util-mobile.cpp */,
 				BE74B1F52D3F963F009786DF /* Util-server.cpp */,
 				BE74B1F62D3F963F009786DF /* Util-unix.cpp */,
+				BE5C4E032F13A000009786DF /* Watchdog-unix.cpp */,
 				BE74B1F72D3F963F009786DF /* Util-windows.cpp */,
 				BE74B1F82D3F963F009786DF /* Watchdog.hpp */,
 			);

@@ -75,6 +75,7 @@
 		BE8D85D5214055F3009F1860 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85C7214055F3009F1860 /* unorc */; };
 		BE8D85D6214055F3009F1860 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85C8214055F3009F1860 /* rc */; };
 		BE980C532CE3499900FED7BC /* Util-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE980C522CE3499900FED7BC /* Util-unix.cpp */; };
+		BE5C4E042F13A00000848631 /* Watchdog-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */; };
 		526FD8C8FA21BFF3FAB03499 /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */; };
 		BE980C552CE5EDE800FED7BC /* FileUtil-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE980C542CE5EDE800FED7BC /* FileUtil-unix.cpp */; };
 		BE980C592CEB557A00FED7BC /* FileUtil-apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE980C582CEB557A00FED7BC /* FileUtil-apple.mm */; };
@@ -1109,6 +1110,7 @@
 		2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProcUtil.cpp; sourceTree = "<group>"; };
 		C4F52A830C61CCDD874F0E92 /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProcUtil.hpp; sourceTree = "<group>"; };
 		BE980C522CE3499900FED7BC /* Util-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Util-unix.cpp"; sourceTree = "<group>"; };
+		BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Watchdog-unix.cpp"; sourceTree = "<group>"; };
 		BE980C542CE5EDE800FED7BC /* FileUtil-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "FileUtil-unix.cpp"; sourceTree = "<group>"; };
 		BE980C582CEB557A00FED7BC /* FileUtil-apple.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "FileUtil-apple.mm"; sourceTree = "<group>"; };
 		BE9ADE3D265D046600BC034A /* TraceEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TraceEvent.cpp; sourceTree = "<group>"; };
@@ -2327,6 +2329,7 @@
 				BE5EB5BC213FE29900E0826C /* Util.cpp */,
 				1F957DC12BA82296006C9E78 /* Util-mobile.cpp */,
 				BE980C522CE3499900FED7BC /* Util-unix.cpp */,
+				BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -3907,6 +3910,7 @@
 				BEA2835621467FDD00848631 /* Kit.cpp in Sources */,
 				BEA2835621467F0D00848631 /* KitWebSocket.cpp in Sources */,
 				BE980C532CE3499900FED7BC /* Util-unix.cpp in Sources */,
+				BE5C4E042F13A00000848631 /* Watchdog-unix.cpp in Sources */,
 				526FD8C8FA21BFF3FAB03499 /* ProcUtil.cpp in Sources */,
 				BE8D77322136762500AC58EA /* DocumentViewController.mm in Sources */,
 				BE8D772C2136762500AC58EA /* AppDelegate.mm in Sources */,

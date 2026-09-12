@@ -56,6 +56,7 @@ cmake_list= \
             ../common/Util-unix.cpp \
             ../common/Uri.cpp \
             ../common/RecentFiles.cpp \
+            ../common/Watchdog-unix.cpp \
             ../kit/ChildSession.cpp \
             ../kit/DeltaSimd.c \
             ../kit/Kit.cpp \
