@@ -519,6 +519,8 @@ public:
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();
+    // tdf#43959 - updates the ruler state immediately instead of running it asynchronous
+    void            UpdateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
     void            GetHRulerMetric(FieldUnit& rToFill) const;
 

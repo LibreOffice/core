@@ -82,6 +82,10 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
         m_pWrtShell->SetBrowseBorder(Size(GetWindow()->LogicToPixel(Size(375, 0)).Width(),
                                           m_pWrtShell->GetBrowseBorder().Height()));
 
+    // tdf#43959 - resync rulers when no outer action is open after SetZoom_() re-centred pages
+    if (!m_pWrtShell->ActionPend())
+        UpdateRulerPos();
+
     Invalidate(SID_ZOOM_IN);
     Invalidate(SID_ZOOM_OUT);
 

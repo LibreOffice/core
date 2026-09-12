@@ -104,9 +104,9 @@ static void lcl_GetPos(SwView const * pView,
 
 // Set zero ruler
 
-void SwView::InvalidateRulerPos()
+namespace
 {
-    static const sal_uInt16 aInval[] =
+    const sal_uInt16 aRulerInval[] =
     {
         SID_ATTR_PARA_LRSPACE, SID_RULER_BORDERS, SID_RULER_PAGE_POS,
         SID_RULER_LR_MIN_MAX, SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
@@ -116,9 +116,26 @@ void SwView::InvalidateRulerPos()
         SID_RULER_ROWS, SID_RULER_ROWS_VERTICAL, FN_STAT_PAGE,
         0
     };
+}
 
-    GetViewFrame().GetBindings().Invalidate(aInval);
+void SwView::InvalidateRulerPos()
+{
+    GetViewFrame().GetBindings().Invalidate(aRulerInval);
 
+    assert(m_pHRuler && "Why is the ruler not there?");
+    m_pHRuler->ForceUpdate();
+    m_pVRuler->ForceUpdate();
+}
+
+void SwView::UpdateRulerPos()
+{
+    // tdf#43959 - invalidate ruler slots and postpone redraw until the page position is correct
+    GetViewFrame().GetBindings().Invalidate(aRulerInval);
+
+    // tdf#43959 - refetch the page position since the idle refresh won't run while zooming
+    GetViewFrame().GetBindings().Update(SID_RULER_PAGE_POS);
+
+    // tdf#43959 - update rulers explicitly after refetching the page position
     assert(m_pHRuler && "Why is the ruler not there?");
     m_pHRuler->ForceUpdate();
     m_pVRuler->ForceUpdate();
