@@ -89,7 +89,11 @@ namespace sdr::contact
                 if (!bHideBackground && !GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
                 {
                     // if visible, create the default background primitive sequence
-                    static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DContainer(rVisitor);
+                    drawinglayer::primitive2d::Primitive2DContainer aBackground;
+                    static_cast<ViewContactOfMasterPageDescriptor&>(GetViewContact())
+                        .getViewIndependentPrimitive2DContainer(aBackground);
+                    createStructureTag(aBackground); // decoration, not content
+                    rVisitor.visit(std::move(aBackground));
                 }
             }
 

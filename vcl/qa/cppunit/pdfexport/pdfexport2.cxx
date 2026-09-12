@@ -3812,6 +3812,80 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, cool16122BadPantoneElement)
     CPPUNIT_ASSERT(bFound);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)
+{
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"master-background-artifact.fodp");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // an operator shares its line with its operands, and sometimes with another operator
+    auto isPaintingOperator = [](const std::string_view line) {
+        for (size_t nPos = 0; nPos != std::string_view::npos;)
+        {
+            const size_t nStart = line.find_first_not_of(' ', nPos);
+            if (nStart == std::string_view::npos)
+                break;
+            nPos = line.find(' ', nStart);
+            const std::string_view aToken(
+                line.substr(nStart, nPos == std::string_view::npos ? nPos : nPos - nStart));
+            for (const auto op :
+                 { "f", "f*", "F", "S", "s", "B", "B*", "b", "b*", "Do", "TJ", "Tj" })
+            {
+                if (aToken == op)
+                    return true;
+            }
+        }
+        return false;
+    };
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+    int nOpenMarks(0);
+    int nArtifacts(0);
+    OStringBuffer aUntagged;
+    // ISO 14289-1 7.1: content is either tagged or marked as an artifact
+    while (pStart != pEnd)
+    {
+        const auto pLineEnd = std::find(pStart, pEnd, '\n');
+        const std::string_view line(pStart, pLineEnd - pStart);
+        pStart = pLineEnd == pEnd ? pEnd : pLineEnd + 1;
+
+        if (line == "EMC")
+            --nOpenMarks;
+        else if (o3tl::ends_with(line, "BMC") || o3tl::ends_with(line, "BDC"))
+        {
+            ++nOpenMarks;
+            if (o3tl::starts_with(line, "/Artifact"))
+                ++nArtifacts;
+        }
+        else if (nOpenMarks == 0 && isPaintingOperator(line))
+            aUntagged.append(OString::Concat(line) + " ");
+    }
+
+    // without the fix the background was painted outside every marked-content section
+    CPPUNIT_ASSERT_MESSAGE(aUntagged.toString().getStr(), aUntagged.isEmpty());
+    // the page decoration, and the background the slide takes from its master page
+    CPPUNIT_ASSERT_EQUAL(2, nArtifacts);
+    CPPUNIT_ASSERT_EQUAL(0, nOpenMarks);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
