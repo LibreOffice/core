@@ -109,4 +109,5 @@
     <string name="theme_system_default">Réamhshocrú córas</string>
     <string name="theme_dark">Dorcha</string>
     <string name="theme_light">Solas</string>
+    <string name="app_version_and_hash">Leagan: %1$s\nhais git: %2$s</string>
 </resources>
