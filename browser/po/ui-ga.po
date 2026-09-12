@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-03 05:51+0000\n"
+"PO-Revision-Date: 2026-09-13 08:15+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -920,17 +920,20 @@ msgstr "Síneadh Uaslódála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Polasaithe slándála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Uaslódáil polasaithe slándála SPIF (.xml). Sainmhíníonn siad seo na "
+"haicmithe agus na catagóirí atá ar fáil agus lipéad slándála á chur le "
+"doiciméad."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Polasaí Slándála Uaslódála"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -2806,7 +2809,7 @@ msgstr "Sínigh"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Scoir"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3741,7 +3744,7 @@ msgstr "Comhad HTML (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Lipéad slándála"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4052,11 +4055,11 @@ msgstr "Dáileadh"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Cuir Sleamhnáin isteach ó Chomhad..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Nuashonraigh na Sleamhnáin Nasctha..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4516,7 +4519,7 @@ msgstr "Cosain"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Fotheideal"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -5051,7 +5054,7 @@ msgstr "Rianú"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Trácht ar an Athrú"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5212,11 +5215,11 @@ msgstr "Spásáil & Dath"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Iompórtáil Sleamhnáin"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Nuashonraigh na naisc"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5310,7 +5313,7 @@ msgstr "Féach ar Athruithe"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Athraigh go dtí an modh eagarthóireachta"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5318,9 +5321,8 @@ msgid "Paste"
 msgstr "Greamaigh"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Sleamhnán Bán"
+msgstr "Dínasc an Sleamhnán"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5328,19 +5330,19 @@ msgstr "Cuir Roinn leis"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "Réamhamharc ar leathanach %1, nasctha le %2 i %3"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Sleamhnán %1, nasctha le %2 i %3"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "Réamhamharc ar leathanach %1, nasctha le %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Sleamhnán %1, nasctha le %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5394,74 +5396,72 @@ msgstr "Cuir isteach ainm nua na rannóige:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Iompórtáil do shleamhnáin"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Ar iarraidh"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Gan rochtain"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Teipte"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Nasctha"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Gan nasc"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Níl an comhad seo ar fáil."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "Ní féidir leat an comhad seo a oscailt."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Níorbh fhéidir an comhad seo a oscailt."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Ag léamh na sleamhnán..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "Sleamhnán amháin curtha isteach"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} sleamhnán curtha isteach"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Sleamhnán {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "cuir %n sleamhnán isteach"
+msgstr "Cuir isteach sleamhnán amháin"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "Cuir isteach {0} sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Ionsáigh cruthanna"
+msgstr "Cuir sleamhnáin isteach"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5470,98 +5470,100 @@ msgstr "{0} roghnaithe"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Ag oscailt comhaid..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Ag cur sleamhnán isteach..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Iompórtáil sleamhnáin"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "Leathnaigh allmhairiú sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Dún an t-allmhairiú sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Cuir cur i láthair leis..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Níl aon chur i láthair ann go fóill"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Cuir cur i láthair leis chun na sleamhnáin ann a bhrabhsáil agus iad a chur "
+"isteach sa tacar sleamhnán seo."
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "Iompórtáilte le déanaí ó"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Cur i láthair le hiompórtáil uathu"
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Gníomhartha do {0}"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Aimsigh comhad"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Folaigh na sleamhnáin"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Taispeáin na sleamhnáin"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Athluchtaigh na sleamhnáin"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Roghnaigh gach sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Déan na sleamhnáin atá nasctha leis an gcomhad seo a nuashonrú"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Bain den liosta"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Scoránaigh {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Sleamhnáin i {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "Coinnigh an dearadh bunaidh"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "Nasc chuig an mbunchomhad"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
-msgstr ""
+msgstr "Nascann sé sleamhnáin leis an suíomh i gcomhad foinse"
 
 #: src/control/SlideSectionHeader.tsx:50
 msgid "Toggle section %1"
@@ -5569,78 +5571,84 @@ msgstr "Scoraigh an roinn %1"
 
 #: src/slideimport/SlideImportSession.ts:239
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Níorbh fhéidir sleamhnáin na foinse a léamh."
 
 #: src/slideimport/SlideImportSession.ts:290
 #: src/slideimport/SlideImportSession.ts:299
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Theip ar chur isteach na sleamhnán."
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Theip ar allmhairiú na sleamhnán."
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Níl aon sleamhnán den chur i láthair seo nasctha le comhad eile."
 
 #: src/slideimport/SlideLinks.ts:297 src/slideimport/SlideLinks.ts:557
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"Ní ceann de na doiciméid a bhfuil baint ag an gceann seo leo é {0}, mar sin "
+"ní féidir leis an bhfreastalaí é a léamh."
 
 #: src/slideimport/SlideLinks.ts:309
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Tagann na sleamhnáin seo ó {0}, nach bhfuil inrochtana faoi láthair."
 
 #: src/slideimport/SlideLinks.ts:320
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Níl rochtain agat ar {0}, mar sin ní féidir a leathanaigh a athnuachan."
 
 #: src/slideimport/SlideLinks.ts:393
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Ní féidir sleamhnáin {0} a nuashonrú: tá na sleamhnáin chomhfhreagracha ar "
+"iarraidh ón bhfoinse"
 
 #: src/slideimport/SlideLinks.ts:396 src/slideimport/SlideLinks.ts:563
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Níorbh fhéidir sleamhnáin {0} a léamh isteach sa chur i láthair seo."
 
 #: src/slideimport/SlideLinks.ts:496
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Ní féidir an sleamhnán {0} a nuashonrú: níl sleamhnán comhfhreagrach ag an "
+"bhfoinse"
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Theip ar nuashonrú na sleamhnán de {0}."
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Níor nuashonraíodh aon sleamhnán de {0}."
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 shleamhnán nuashonraithe ó {0}."
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} sleamhnáin nuashonraithe ó {1}."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "Níorbh fhéidir {0} a léamh."
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Níl aon sleamhnán den chur i láthair seo nasctha le {0}."
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
-msgstr ""
+msgstr "Tá nuashonrú eile ar siúl fós. Iarr {0} arís i gceann nóiméid."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Athraigh méid na bpainéal"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5809,7 +5817,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Cuir an leathanach i bhfeistiú ar leithead na fuinneoige."
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5915,11 +5923,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Athríomhadh an bhileog i %1 ms"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Athríomhadh an doiciméad i %1 ms"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5943,13 +5951,14 @@ msgid "Insert connectors"
 msgstr "Ionsáigh nascóirí"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Príomh"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
 msgstr ""
+"Tá tú sa mhód féachana faoi láthair; brúigh {0} chun eagarthóireacht a "
+"dhéanamh"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -7363,7 +7372,7 @@ msgstr "Tá an freastalaí ag múchadh"
 
 #: src/docdispatcher.ts:651
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "Níl an AI cumraithe; déan teagmháil le do riarthóir"
 
 #: src/docdispatcher.ts:918
 msgid "Are you sure you want to delete this slide?"
@@ -7639,9 +7648,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Ní féidir an doiciméad a easpórtáil. Bain triail eile as."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Sleamhnáin"
+msgstr "Sleamhnán"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -8169,7 +8177,7 @@ msgstr "Litir Ghnó Nua-Aimseartha (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Litir Ghnó Nua-Aimseartha"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
