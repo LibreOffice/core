@@ -235,11 +235,6 @@ sub setglobalvariables
     if ( $installer::globals::os eq 'MACOSX' )
     {
         $installer::globals::ismacbuild = 1;
-
-        if ( $installer::globals::packageformat eq "dmg" )
-        {
-            $installer::globals::ismacdmgbuild = 1;
-        }
     }
 
     if ( $installer::globals::os eq 'OPENBSD')

@@ -32,7 +32,7 @@ BEGIN
     $parfilelistorig = "";
     $parfilelist = "";
 
-    @allitems = ("Installation", "ScpAction", "Directory", "File",
+    @allitems = ("Installation", "Directory", "File",
                  "Shortcut", "Unixlink", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "FolderItemProperty", "RegistryItem",
                  "WindowsCustomAction", "MergeModule");

@@ -258,7 +258,6 @@ sub run {
     if (( ! $installer::globals::isrpmbuild ) &&
         ( ! $installer::globals::isdebbuild ) &&
         ( $installer::globals::packageformat ne "installed" ) &&
-        ( $installer::globals::packageformat ne "dmg" ) &&
         ( $installer::globals::packageformat ne "archive" ))
         { installer::control::check_oxtfiles($filesinproductarrayref); }
 
@@ -271,15 +270,6 @@ sub run {
     {
         $filesinproductarrayref = installer::scriptitems::remove_Helppacklibraries_from_Installset($filesinproductarrayref);
     }
-
-    installer::logger::print_message( "... analyzing scpactions ... \n" );
-
-    my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
-
-    if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
-    elsif ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
-
-    installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
 
     installer::logger::print_message( "... analyzing shortcuts ... \n" );
 
@@ -346,13 +336,11 @@ sub run {
 
         if ( $installer::globals::languagepack )
         {
-            $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
         }
 
         if ( $installer::globals::helppack )
         {
-            $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
             @setuplanguagesarray = grep { $_ ne "en-US" } @setuplanguagesarray;
             unshift(@setuplanguagesarray, "en-US");
@@ -502,20 +490,6 @@ sub run {
         my $directoriesforepmarrayref = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
 
         #########################################################
-        # language dependent scpactions part
-        #########################################################
-
-        my $scpactionsinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($scpactionsinproductarrayref, $languagesarrayref);
-
-        installer::scriptitems::changing_name_of_language_dependent_keys($scpactionsinproductlanguageresolvedarrayref);
-
-        installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($scpactionsinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "ScpActions", $allvariableshashref);
-
-        # Editing scpactions with flag SCPZIP_REPLACE.
-
-        installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
-
-        #########################################################
         # language dependent links part
         #########################################################
 
@@ -602,14 +576,13 @@ sub run {
 
         }
 
-        # Copy-only projects can now start to copy all items File and ScpAction
-        if ( $installer::globals::is_copy_only_project ) { installer::copyproject::copy_project($filesinproductlanguageresolvedarrayref, $scpactionsinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref); }
+        # Copy-only projects can now start to copy all File items
+        if ( $installer::globals::is_copy_only_project ) { installer::copyproject::copy_project($filesinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref); }
 
         # Language pack projects can now start to select the required information
         if ( $installer::globals::languagepack )
         {
             $filesinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($filesinproductlanguageresolvedarrayref, $languagesarrayref, "File");
-            $scpactionsinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($scpactionsinproductlanguageresolvedarrayref, $languagesarrayref, "ScpAction");
             $linksinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($linksinproductlanguageresolvedarrayref, $languagesarrayref, "Shortcut");
             $unixlinksinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($unixlinksinproductlanguageresolvedarrayref, $languagesarrayref, "Unixlink");
             @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
@@ -625,7 +598,6 @@ sub run {
         if ( $installer::globals::helppack )
         {
             $filesinproductlanguageresolvedarrayref = installer::helppack::select_help_items($filesinproductlanguageresolvedarrayref, $languagesarrayref, "File");
-            $scpactionsinproductlanguageresolvedarrayref = installer::helppack::select_help_items($scpactionsinproductlanguageresolvedarrayref, $languagesarrayref, "ScpAction");
             $linksinproductlanguageresolvedarrayref = installer::helppack::select_help_items($linksinproductlanguageresolvedarrayref, $languagesarrayref, "Shortcut");
             $unixlinksinproductlanguageresolvedarrayref = installer::helppack::select_help_items($unixlinksinproductlanguageresolvedarrayref, $languagesarrayref, "Unixlink");
             @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in helppacks
@@ -637,22 +609,15 @@ sub run {
 
         }
 
-        #########################################################
-        # Collecting all scp actions
-        #########################################################
-
-        installer::worker::collect_scpactions($scpactionsinproductlanguageresolvedarrayref);
-
         ###########################################################
         # Simple package projects can now start to create the
         # installation structure by creating Directories, Files
-        # Links and ScpActions. This is the last platform
-        # independent part.
+        # and Links. This is the last platform independent part.
         ###########################################################
 
         if ( $installer::globals::is_simple_packager_project )
         {
-            installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref);
+            installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $linksinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref);
             next; # ! leaving the current loop, because no further packaging required.
         }
 
@@ -1027,9 +992,6 @@ sub run {
 
             chdir($installdir);
 
-            # Adding license into installation set
-            if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
-
             # Adding license file into setup
             if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
 
@@ -1050,9 +1012,6 @@ sub run {
 
             # determine the destination directory
             my $newepmdir = installer::epmfile::determine_installdir_ooo();
-
-            # Adding license into installation set
-            if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Adding license file into setup
             if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }

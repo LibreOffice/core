@@ -31,7 +31,7 @@ BEGIN
     $parfilename = "";
     $langfilename = "";
 
-    @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
+    @allitems = ("Installation", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
                  "Shortcut", "Custom", "Unixlink", "Procedure", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "FolderItemProperty", "RegistryItem", "StarRegistryItem",
                  "WindowsCustomAction", "MergeModule");

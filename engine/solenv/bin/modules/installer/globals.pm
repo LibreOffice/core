@@ -51,7 +51,6 @@ BEGIN
     $installer::globals::isrpmbuild = 0;
     $installer::globals::isdebbuild = 0;
     $installer::globals::ismacbuild = 0;
-    $installer::globals::ismacdmgbuild = 0;
     $installer::globals::unpackpath = "";
     $installer::globals::workpath = ""; # installation working dir; some helper scripts are
     # placed here by gbuild
@@ -133,10 +132,8 @@ BEGIN
     $installer::globals::lastcabfilename = "";
 
     $installer::globals::defaultlanguage = "";
-    $installer::globals::addlicensefile = 1;
     $installer::globals::makedownload = 1;
     @installer::globals::binarytableonlyfiles = ();
-    @installer::globals::allscpactions = ();
     $installer::globals::languagepackaddon = "LanguagePack";
     $installer::globals::helppackaddon = "HelpPack";
     $installer::globals::ooodownloadfilename = "";
@@ -186,7 +183,6 @@ BEGIN
 
     @installer::globals::packagelistitems = ("module", "packagename", "copyright", "vendor", "description" );
     @installer::globals::featurecollector =();
-    $installer::globals::macinstallfilename = $ENV{'WORKDIR'} . "/CustomTarget/setup_native/mac/macinstall.ulf";
     $installer::globals::extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @installer::globals::languagenames = ();
     %installer::globals::componentcondition = ();

@@ -61,7 +61,7 @@ sub replace_all_ziplistvariables_in_rtffile
 
 #########################################################
 # Analyzing files with flag SCPZIP_REPLACE
-# $item can be "File" or "ScpAction"
+# $item is "File"
 #########################################################
 
 sub resolving_scpzip_replace_flag

@@ -437,36 +437,6 @@ sub get_children
 }
 
 ################################################################################
-# Using langpack copy action for language packs
-################################################################################
-
-sub use_langpack_copy_scpaction
-{
-    my ($scpactionsref) = @_;
-
-    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
-    {
-        my $onescpaction = ${$scpactionsref}[$i];
-        if (( $onescpaction->{'LangPackCopy'} ) && ( $onescpaction->{'LangPackCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'LangPackCopy'}; }
-    }
-}
-
-################################################################################
-# Using dev copy patch action for developer snapshot builds
-################################################################################
-
-sub use_devversion_copy_scpaction
-{
-    my ($scpactionsref) = @_;
-
-    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
-    {
-        my $onescpaction = ${$scpactionsref}[$i];
-        if (( $onescpaction->{'DevVersionCopy'} ) && ( $onescpaction->{'DevVersionCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'DevVersionCopy'}; }
-    }
-}
-
-################################################################################
 # Shifting parent directories of URE and Basis layer, so that
 # these directories are located below the Brand layer.
 # Style: SHIFT_BASIS_INTO_BRAND_LAYER
@@ -936,7 +906,7 @@ sub get_sourcepath_from_filename_and_includepath
 
 ##############################################################
 # Getting all source paths for all files to be packed
-# $item can be "Files" or "ScpActions"
+# $item is "Files"
 ##############################################################
 
 sub get_Source_Directory_For_Files_From_Includepathlist
@@ -957,7 +927,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         if ( ! $onefile->{'Name'} ) { installer::exiter::exit_program("ERROR: $item without name ! GID: $onefile->{'gid'} ! Language: $onelanguage", "get_Source_Directory_For_Files_From_Includepathlist"); }
 
         my $onefilename = $onefile->{'Name'};
-        if ( $item eq "ScpActions" ) { $onefilename =~ s/\//$installer::globals::separator/g; }
         $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
 
         my $styles = "";
@@ -1307,49 +1276,6 @@ sub make_filename_language_specific
                 push( @installer::globals::logfileinfo, $infoline);
                 $infoline = "Changing destination from $olddestination to $onefile->{'destination'} !\n";
                 push( @installer::globals::logfileinfo, $infoline);
-            }
-        }
-    }
-}
-
-############################################################################
-# Because of the item "File" the source name must be "Name". Therefore
-# "Copy" is changed to "Name" and "Name" is changed to "DestinationName".
-############################################################################
-
-sub change_keys_of_scpactions
-{
-    my ($itemsarrayref) = @_;
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-
-        my $key;
-
-        # First Name to DestinationName, then deleting Name
-        foreach $key (keys %{$oneitem})
-        {
-            if ( $key =~ /\bName\b/ )
-            {
-                my $value = $oneitem->{$key};
-                my $oldkey = $key;
-                $key =~ s/Name/DestinationName/;
-                $oneitem->{$key} = $value;
-                delete($oneitem->{$oldkey});
-            }
-        }
-
-        # Second Copy to Name, then deleting Copy
-        foreach $key (keys %{$oneitem})
-        {
-            if ( $key =~ /\bCopy\b/ )
-            {
-                my $value = $oneitem->{$key};
-                my $oldkey = $key;
-                $key =~ s/Copy/Name/;
-                $oneitem->{$key} = $value;
-                delete($oneitem->{$oldkey});
             }
         }
     }

@@ -35,7 +35,7 @@ use installer::worker;
 
 sub copy_project
 {
-    my ( $filesref, $scpactionsref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref ) = @_;
+    my ( $filesref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref ) = @_;
 
     # Creating directories
 
@@ -47,7 +47,7 @@ sub copy_project
 
     my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
 
-    # Copy files and ScpActions
+    # Copy files
 
     installer::logger::include_header_into_logfile("Copying files:");
 
@@ -59,27 +59,6 @@ sub copy_project
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
-
-        installer::systemactions::copy_one_file($source, $destination);
-
-        if ( $onefile->{'UnixRights'} )
-        {
-            chmod oct($onefile->{'UnixRights'}), $destination;
-        }
-        elsif ( $destination =~ /install\s*$/ )
-        {
-            chmod 0775, $destination;
-        }
-    }
-
-    # copy ScpActions
-
-    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
-    {
-        my $onefile = ${$scpactionsref}[$i];
-
-        my $source = $onefile->{'sourcepath'};
-        my $destination = $installdir . $installer::globals::separator . $onefile->{'DestinationName'};
 
         installer::systemactions::copy_one_file($source, $destination);
 
