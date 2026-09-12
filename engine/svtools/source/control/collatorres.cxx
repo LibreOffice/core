@@ -24,18 +24,20 @@
 //  implementation of the collator-algorithm-name translation
 CollatorResource::CollatorResource()
 {
-    m_aData.emplace_back("alphanumeric", SvtResId(STR_SVT_COLLATE_ALPHANUMERIC));
-    m_aData.emplace_back("charset", SvtResId(STR_SVT_COLLATE_CHARSET));
-    m_aData.emplace_back("dict", SvtResId(STR_SVT_COLLATE_DICTIONARY));
-    m_aData.emplace_back("normal", SvtResId(STR_SVT_COLLATE_NORMAL));
-    m_aData.emplace_back("pinyin", SvtResId(STR_SVT_COLLATE_PINYIN));
-    m_aData.emplace_back("radical", SvtResId(STR_SVT_COLLATE_RADICAL));
-    m_aData.emplace_back("stroke", SvtResId(STR_SVT_COLLATE_STROKE));
-    m_aData.emplace_back("unicode", SvtResId(STR_SVT_COLLATE_UNICODE));
-    m_aData.emplace_back("zhuyin", SvtResId(STR_SVT_COLLATE_ZHUYIN));
-    m_aData.emplace_back("phonebook", SvtResId(STR_SVT_COLLATE_PHONEBOOK));
-    m_aData.emplace_back("phonetic (alphanumeric first)", SvtResId(STR_SVT_COLLATE_PHONETIC_F));
-    m_aData.emplace_back("phonetic (alphanumeric last)", SvtResId(STR_SVT_COLLATE_PHONETIC_L));
+    m_aData.emplace_back(u"alphanumeric"_ustr, SvtResId(STR_SVT_COLLATE_ALPHANUMERIC));
+    m_aData.emplace_back(u"charset"_ustr, SvtResId(STR_SVT_COLLATE_CHARSET));
+    m_aData.emplace_back(u"dict"_ustr, SvtResId(STR_SVT_COLLATE_DICTIONARY));
+    m_aData.emplace_back(u"normal"_ustr, SvtResId(STR_SVT_COLLATE_NORMAL));
+    m_aData.emplace_back(u"pinyin"_ustr, SvtResId(STR_SVT_COLLATE_PINYIN));
+    m_aData.emplace_back(u"radical"_ustr, SvtResId(STR_SVT_COLLATE_RADICAL));
+    m_aData.emplace_back(u"stroke"_ustr, SvtResId(STR_SVT_COLLATE_STROKE));
+    m_aData.emplace_back(u"unicode"_ustr, SvtResId(STR_SVT_COLLATE_UNICODE));
+    m_aData.emplace_back(u"zhuyin"_ustr, SvtResId(STR_SVT_COLLATE_ZHUYIN));
+    m_aData.emplace_back(u"phonebook"_ustr, SvtResId(STR_SVT_COLLATE_PHONEBOOK));
+    m_aData.emplace_back(u"phonetic (alphanumeric first)"_ustr,
+                         SvtResId(STR_SVT_COLLATE_PHONETIC_F));
+    m_aData.emplace_back(u"phonetic (alphanumeric last)"_ustr,
+                         SvtResId(STR_SVT_COLLATE_PHONETIC_L));
 }
 
 const OUString& CollatorResource::GetTranslation(const OUString& r_Algorithm)

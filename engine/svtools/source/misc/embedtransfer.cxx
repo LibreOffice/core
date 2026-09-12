@@ -111,8 +111,8 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             bool bDeleteStream = false;
                             cpo::uno::Sequence < beans::PropertyValue > aEmpty;
                             cpo::uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
-                                    { "SourceShellID", cpo::uno::Any(maParentShellID) },
-                                    { "DestinationShellID", cpo::uno::Any(rDestDoc) }
+                                    { u"SourceShellID"_ustr, cpo::uno::Any(maParentShellID) },
+                                    { u"DestinationShellID"_ustr, cpo::uno::Any(rDestDoc) }
                                 }));
                             xPers->storeToEntry(xStg, aName, aEmpty, aObjArgs);
                             if ( xStg->isStreamElement( aName ) )

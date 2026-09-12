@@ -55,7 +55,7 @@ void collectUIInformation( const OUString& aID , const OUString& aParentID , con
 {
     EventDescription aDescription;
     aDescription.aID = aID ;
-    aDescription.aParameters = {{"POS", aPos }};
+    aDescription.aParameters = {{u"POS"_ustr, aPos }};
     aDescription.aAction = u"SELECT"_ustr;
     aDescription.aKeyWord = u"ValueSet"_ustr;
     aDescription.aParent = aParentID;

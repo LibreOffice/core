@@ -149,11 +149,11 @@ using namespace cpo::uno;
                 // convert the parameters for creating the dialog to PropertyValues
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {"ParentWindow", Any(xParentWindow)},
-                    {"DataSource", Any(xDataSource)},
-                    {"DataSourceName", Any(sDataSourceName)},
-                    {"Command", Any(sCommand)}, // the table to use
-                    {"Title", Any(sTitle)}
+                    {u"ParentWindow"_ustr, Any(xParentWindow)},
+                    {u"DataSource"_ustr, Any(xDataSource)},
+                    {u"DataSourceName"_ustr, Any(sDataSourceName)},
+                    {u"Command"_ustr, Any(sCommand)}, // the table to use
+                    {u"Title"_ustr, Any(sTitle)}
                 }));
                 OGenericUnoDialog::initialize(aArguments);
                 return;
