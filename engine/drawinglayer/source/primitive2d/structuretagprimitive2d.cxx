@@ -53,24 +53,25 @@ namespace drawinglayer::primitive2d
             {
                 const StructureTagPrimitive2D& rCompare = static_cast<const StructureTagPrimitive2D&>(rPrimitive);
 
-                return (isBackground() == rCompare.isBackground() &&
-                        isImage() == rCompare.isImage());
+                return (getStructureElement() == rCompare.getStructureElement()
+                        && isBackground() == rCompare.isBackground()
+                        && isImage() == rCompare.isImage()
+                        && isDecorative() == rCompare.isDecorative());
             }
 
             return false;
+        }
+
+        bool StructureTagPrimitive2D::opensStructureElement() const
+        {
+            return !isDecorative() && !isBackground()
+                   && vcl::pdf::StructElement::NonStructElement != getStructureElement();
         }
 
         // provide unique ID
         sal_uInt32 StructureTagPrimitive2D::getPrimitive2DID() const
         {
             return PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D;
-        }
-
-        bool StructureTagPrimitive2D::isTaggedSdrObject() const
-        {
-            // note at the moment *all* StructureTagPrimitive2D are created for
-            // SdrObjects - if that ever changes, need another condition here
-            return !isBackground() || isImage();
         }
 
 } // end of namespace
