@@ -359,7 +359,7 @@ void DescriptionInfoset::checkDenylist() const
 
     cpo::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
     {
-        {"nodepath", cpo::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
+        {u"nodepath"_ustr, cpo::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
     }));
     css::uno::Reference< css::container::XNameAccess > denylist(
         (css::configuration::theDefaultProvider::get(m_context)

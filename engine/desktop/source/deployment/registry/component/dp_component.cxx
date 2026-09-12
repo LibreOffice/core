@@ -1060,7 +1060,7 @@ Reference<XComponentContext> raise_uno_process(
 
     std::vector<OUString> args{
 #if OSL_DEBUG_LEVEL == 0
-        "--quiet",
+        u"--quiet"_ustr,
 #endif
         u"--singleaccept"_ustr,
         u"-u"_ustr,

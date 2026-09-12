@@ -7761,10 +7761,10 @@ static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* p
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
-        {"IgnoreComments", cpo::uno::Any(true)},
+        {u"AnchorType"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
+        {u"IgnoreComments"_ustr, cpo::uno::Any(true)},
         // The MIME type is specified explicitly, don't guess.
-        {"SkipDetection", cpo::uno::Any(true)},
+        {u"SkipDetection"_ustr, cpo::uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {

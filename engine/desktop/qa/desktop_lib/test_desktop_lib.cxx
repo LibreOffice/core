@@ -634,9 +634,9 @@ void DesktopKitTest::testSearchCalc()
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
-        {"SearchItem.Backward", cpo::uno::Any(false)},
-        {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"foo"_ustr)},
+        {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
+        {u"SearchItem.Command"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
@@ -664,9 +664,9 @@ void DesktopKitTest::testSearchAllNotificationsCalc()
 
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
-        {"SearchItem.Backward", cpo::uno::Any(false)},
-        {"SearchItem.Command", cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {u"SearchItem.SearchString"_ustr, cpo::uno::Any(u"foo"_ustr)},
+        {u"SearchItem.Backward"_ustr, cpo::uno::Any(false)},
+        {u"SearchItem.Command"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
 
@@ -898,7 +898,7 @@ void DesktopKitTest::testPasteWriterJPEG()
     uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
+        {u"AnchorType"_ustr, cpo::uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, aPropertyValues);
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -2703,7 +2703,7 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
     {
         cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-                { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
+                { u"NewTheme"_ustr, cpo::uno::Any(u"Dark"_ustr) },
             }
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);

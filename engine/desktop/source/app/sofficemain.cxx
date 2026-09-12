@@ -62,7 +62,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
 #if defined ANDROID
     try {
-        rtl::Bootstrap::setIniFilename("file:///assets/program/lofficerc");
+        rtl::Bootstrap::setIniFilename(u"file:///assets/program/lofficerc"_ustr);
 #endif
     tools::extendApplicationEnvironment();
 
