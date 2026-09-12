@@ -957,10 +957,8 @@ void VclMetafileProcessor2D::processObjectInfoPrimitive2D(
     // tdf#154982 process content first, so this object overrides any nested one
     process(rObjectInfoPrimitive2D.getChildren());
 
-    // currently StructureTagPrimitive2D is only used for SdrObjects - have to
-    // avoid adding Alt text if the SdrObject is not actually tagged, as it
-    // would then end up on an unrelated structure element.
-    if (mpCurrentStructureTag && mpCurrentStructureTag->isTaggedSdrObject())
+    // alt text belongs to the element this tag opens
+    if (mpCurrentStructureTag && mpCurrentStructureTag->opensStructureElement())
     {
         // Create image alternative description from ObjectInfoPrimitive2D info
         // for PDF export, for the currently active SdrObject's structure element
@@ -2754,20 +2752,20 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     ::comphelper::ValueRestorationGuard const g(mpCurrentStructureTag, &rStructureTagCandidate);
 
     // structured tag primitive
-    const vcl::pdf::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
-    bool bTagUsed((vcl::pdf::StructElement::NonStructElement != rTagElement));
+    const bool bArtifact(
+        rStructureTagCandidate.isDecorative()
+        || (rStructureTagCandidate.isBackground() && rStructureTagCandidate.isImage()));
+    // a plain background object is neither, and goes out untagged
+    const bool bTagUsed(bArtifact || rStructureTagCandidate.opensStructureElement());
     ::std::optional<sal_Int32> oAnchorParent;
-
-    if (!rStructureTagCandidate.isTaggedSdrObject())
-    {
-        bTagUsed = false;
-    }
 
     if (mpPDFExtOutDevData && bTagUsed)
     {
         // foreground object: tag as regular structure element
-        if (!rStructureTagCandidate.isBackground())
+        if (!bArtifact)
         {
+            const vcl::pdf::StructElement& rTagElement(
+                rStructureTagCandidate.getStructureElement());
             if (rStructureTagCandidate.GetAnchorStructureElementKey() != nullptr)
             {
                 sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(
@@ -2834,16 +2832,10 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                                                           vcl::pdf::PDFWriter::Column);
             }
         }
-        // background object
         else
         {
-            // background image: tag as artifact
-            if (rStructureTagCandidate.isImage())
-                mpPDFExtOutDevData->WrapBeginStructureElement(
-                    vcl::pdf::StructElement::NonStructElement);
-            // any other background object: do not tag
-            else
-                assert(false);
+            mpPDFExtOutDevData->WrapBeginStructureElement(
+                vcl::pdf::StructElement::NonStructElement);
         }
     }
 

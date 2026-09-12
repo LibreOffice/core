@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
             bool                                    mbBackground;
             /// flag for image (OBJ_GRAF)
             bool                                    mbIsImage;
-            /// flag for form control object
+            /// flag for decoration, which goes out as an artifact
             bool                                    mbIsDecorative;
             /// anchor structure element (Writer)
             void const* m_pAnchorStructureElementKey;
@@ -72,7 +72,8 @@ namespace drawinglayer::primitive2d
             bool isBackground() const { return mbBackground; }
             bool isImage() const { return mbIsImage; }
             bool isDecorative() const { return mbIsDecorative; }
-            bool isTaggedSdrObject() const;
+            /// whether this opens a structure element, rather than an artifact or nothing
+            bool opensStructureElement() const;
             void const* GetAnchorStructureElementKey() const { return m_pAnchorStructureElementKey; }
             const ::std::vector<sal_Int32> & GetAnnotIds() const { return m_AnnotIds; }
 

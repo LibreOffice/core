@@ -452,16 +452,15 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
         }
         else
         {
-            // page backgrounds etc should be tagged as artifacts:
-            rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
-                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                        // lies to force silly VclMetafileProcessor2D to emit NonStructElement
-                        vcl::pdf::StructElement::Division,
-                        true,
-                        true,
-                        true, // Decorative
-                        std::move(rNewPrimitiveSequence))
-                };
+            // page decoration, and anything the user marked decorative, is an artifact
+            rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer{
+                new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                    vcl::pdf::StructElement::NonStructElement,
+                    nullptr == pSdrObj, // Background
+                    false, // Image
+                    true, // Decorative
+                    std::move(rNewPrimitiveSequence))
+            };
         }
     }
 }
