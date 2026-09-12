@@ -1279,8 +1279,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     bool bRet = false;
 
     // Only compare textnodes
-    if( SwNodeType::Text == m_pNode->GetNodeType() &&
-        SwNodeType::Text == rLine.GetNode().GetNodeType() )
+    if (m_pNode->IsTextNode() && rLine.GetNode().IsTextNode())
     {
         SwTextNode& rDstNd = *const_cast<SwTextNode*>(m_pNode->GetTextNode());
         const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();

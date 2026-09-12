@@ -490,7 +490,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
                             vFieldText = pField->GetAuthority(GetLayout(), &pIteratedTOX->GetTOXForm());
 
                         if (const SwNode& rCurrentNode = GetCursor()->GetPoint()->GetNode();
-                            rCurrentNode.GetNodeType() == SwNodeType::Text
+                            rCurrentNode.IsTextNode()
                             && (GetCursor()->GetPoint()->GetNode().FindSectionNode()->GetSection().GetType()
                                 == SectionType::ToxContent) // this checks it's not a heading
                             && static_cast<const SwTextNode*>(&rCurrentNode)->GetText() == vFieldText)
