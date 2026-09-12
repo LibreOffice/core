@@ -112,4 +112,5 @@
     <string name="pref_user_name_guest">Gast-gebruiker</string>
     <string name="pref_user_name_info">Gebruikt bij het maken van notities</string>
     <string name="pref_user_name">Gebruikersnaam</string>
+    <string name="app_version_and_hash">Versie: %1$s\ngit-hash: %2$s</string>
 </resources>
