@@ -341,7 +341,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
             break;
         }
         default:
-            throw cpo::uno::RuntimeException("no member description found!",
+            throw cpo::uno::RuntimeException(u"no member description found!"_ustr,
                                              static_cast<cpo::uno::XInterface*>(pThis));
     }
 

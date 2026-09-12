@@ -332,7 +332,7 @@ int msvc_filterCppException(EXCEPTION_POINTERS* pPointers, uno_Any* pUnoExc, uno
 
     // though this unknown exception leaks now, no user-defined exception
     // is ever thrown through the binary C-UNO dispatcher call stack.
-    cpo::uno::RuntimeException exc("[mscx_uno bridge error] unexpected C++ exception occurred!");
+    cpo::uno::RuntimeException exc(u"[mscx_uno bridge error] unexpected C++ exception occurred!"_ustr);
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), pCpp2Uno);
     return EXCEPTION_EXECUTE_HANDLER;

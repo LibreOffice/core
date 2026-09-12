@@ -243,7 +243,7 @@ static void cpp_call(
                 "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name())
                 + ": " + o3tl::runtimeToOUString(e.what()));
         } catch (...) {
-            throw RuntimeException("C++ code threw unknown exception");
+            throw RuntimeException(u"C++ code threw unknown exception"_ustr);
         }
 
         *ppUnoExc = nullptr;
@@ -428,7 +428,7 @@ void unoInterfaceProxyDispatch(
     default:
     {
         ::cpo::uno::RuntimeException aExc(
-            "illegal member type description!",
+            u"illegal member type description!"_ustr,
             ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >() );
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();

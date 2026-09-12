@@ -401,7 +401,7 @@ int cpp_vtable_call(
         }
         default:
         {
-            throw RuntimeException("no member description found!",
+            throw RuntimeException(u"no member description found!"_ustr,
                                     reinterpret_cast<XInterface *>( pCppI ) );
         }
     }

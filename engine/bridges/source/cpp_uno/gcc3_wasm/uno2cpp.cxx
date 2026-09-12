@@ -215,7 +215,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
         }
         catch (...)
         {
-            throw cpo::uno::RuntimeException("C++ code threw unknown exception");
+            throw cpo::uno::RuntimeException(u"C++ code threw unknown exception"_ustr);
         }
     }
     catch (cpo::uno::Exception&)
@@ -344,7 +344,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
         default:
         {
             ::cpo::uno::RuntimeException aExc(
-                "illegal member type description!",
+                u"illegal member type description!"_ustr,
                 ::com::sun::star::uno::Reference<::cpo::uno::XInterface>());
 
             cpo::uno::Type const& rExcType = cppu::UnoType<decltype(aExc)>::get();

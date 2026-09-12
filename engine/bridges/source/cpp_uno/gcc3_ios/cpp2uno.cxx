@@ -319,7 +319,7 @@ namespace
 
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
-            throw RuntimeException( "illegal vtable index!", (XInterface *)pCppI );
+            throw RuntimeException( u"illegal vtable index!"_ustr, (XInterface *)pCppI );
         }
 
         sal_Int32 nMemberPos =
@@ -413,7 +413,7 @@ namespace
         }
         default:
         {
-            throw RuntimeException( "no member description found!", (XInterface *)pCppI );
+            throw RuntimeException( u"no member description found!"_ustr, (XInterface *)pCppI );
         }
         }
 
