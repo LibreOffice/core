@@ -113,6 +113,7 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int64 nIndex );
 
+    rtl::Reference<comphelper::OAccessible> getAccessibleParentImpl() const;
     rtl::Reference<::accessibility::AccessibleShape> getAccessible(const SdrObject* pObj);
 
     /** Description of this object.  This is not a constant because it can

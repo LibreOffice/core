@@ -203,14 +203,20 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleCh
     return getAccessible( getSdrObject( nIndex ) );
 }
 
-Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent()
+rtl::Reference<comphelper::OAccessible>
+SvxGraphCtrlAccessibleContext::getAccessibleParentImpl() const
 {
-    ::SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( nullptr == mpControl )
         throw DisposedException();
 
     return mpControl->GetDrawingArea()->get_accessible_parent();
+}
+
+Reference<XAccessible> SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleParent()
+{
+    return getAccessibleParentImpl();
 }
 
 sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole()
@@ -270,13 +276,9 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale()
 {
     ::SolarMutexGuard aGuard;
 
-    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
-    if (xParent.is())
-    {
-        Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-        if( xParentContext.is() )
-            return xParentContext->getLocale();
-    }
+    rtl::Reference<comphelper::OAccessible> pParent = getAccessibleParentImpl();
+    if (pParent.is())
+        return pParent->getLocale();
 
     //  No parent.  Therefore throw exception to indicate this cluelessness.
     throw IllegalAccessibleComponentStateException();
