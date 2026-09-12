@@ -1139,7 +1139,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
                 return pFoundData;
         }
 
-        if (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD))
+        if (nTokenPos == -1 && mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD))
         {
             rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maSearchName);
         }
