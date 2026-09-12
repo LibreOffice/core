@@ -20,6 +20,8 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/OAccessible.hxx>
+#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
 namespace com::sun::star {
@@ -76,11 +78,8 @@ public:
     /** Copy the given values into the members described above.
         The accessible parent implementation object is set to NULL.
     */
-    AccessibleShapeInfo (
-        css::uno::Reference<
-            css::drawing::XShape> xShape,
-        css::uno::Reference<
-            css::accessibility::XAccessible> xParent);
+    AccessibleShapeInfo(css::uno::Reference<css::drawing::XShape> xShape,
+                        const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     ~AccessibleShapeInfo();
 
