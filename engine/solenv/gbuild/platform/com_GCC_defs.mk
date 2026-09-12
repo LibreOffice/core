@@ -339,4 +339,10 @@ ifneq ($(gb_ENABLE_PCH),)
 gb_COMPILER_SETUP += CCACHE_PCH_EXTSUM=1
 endif
 
+# Favor noticeably faster dash, when available
+gb_DASH := $(shell command -v dash 2>/dev/null)
+ifneq ($(gb_DASH),)
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(gb_DASH)
+endif
+
 # vim: set noet sw=4:
