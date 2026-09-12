@@ -6583,6 +6583,24 @@ SfxVoidItem InsertCalcTable SID_INSERT_CALCTABLE
 ]
 
 
+SfxVoidItem SetCalcTableRange SID_SET_CALC_TABLE_RANGE
+(SfxStringItem CellRange SID_SET_CALC_TABLE_RANGE)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 SfxVoidItem RemoveCalcTable SID_REMOVE_CALCTABLE
 ()
 [

@@ -654,13 +654,16 @@ void ScInputHandler::UpdateKitReferenceMarks()
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScRangeFindList* pRangeFinder = GetRangeFindList();
 
-    if ( !pRangeFinder && !rViewData.IsRefMode() )
+    // A fill drag reports its range as a cell marker of its own.
+    const bool bRefMark = rViewData.IsRefMode() && rViewData.GetRefType() != SC_REFTYPE_FILL;
+
+    if (!pRangeFinder && !bRefMark)
         return;
 
     sal_uInt16 nAdditionalMarks = 0;
     std::vector<ReferenceMark> aReferenceMarks( 1 );
 
-    if ( rViewData.IsRefMode() )
+    if (bRefMark)
     {
         nAdditionalMarks = 1;
 

@@ -149,6 +149,7 @@
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sfx2/kit/helper.hxx>
 
+#include <CellRangeMarker.hxx>
 #include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 
@@ -6703,79 +6704,17 @@ void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & r
         pViewShell->viewCallback(COKitCallbackType::CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
-void updateCOKitTableHandles(const ScViewData& rViewData,
-                             const std::vector<std::pair<tools::Rectangle, ScAddress>>& rHandles)
+// The styled tables of the sheet, each with a drag handle on the corner of its last cell. An
+// empty list takes the handles away.
+void notifyTableRangeMarkers(const ScViewData& rViewData, std::vector<ScRange> aTableRanges,
+                             SCTAB nPart)
 {
-    if (!comphelper::COKit::isActive())
-        return;
-
-    ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    if (!pViewShell)
-        return;
-
-    const double nPPTX = rViewData.GetPPTX();
-    const double nPPTY = rViewData.GetPPTY();
-
-    tools::JsonWriter writer;
-    writer.put("commandName", "TableAutoFillInfo");
-    {
-        const auto aState = writer.startNode("state");
-        const auto aMarks = writer.startArray("marks");
-        for (const auto& rHandle : rHandles)
-        {
-            const tools::Rectangle& rRect = rHandle.first;
-            const auto aMark = writer.startStruct();
-            tools::Rectangle aLogicRectangle(
-                    rRect.Left()  / nPPTX, rRect.Top() / nPPTY,
-                    rRect.Right() / nPPTX, rRect.Bottom() / nPPTY);
-            writer.put("rectangle", aLogicRectangle.toString());
-        }
-    }
-    pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, writer.finishAndGetAsOString());
-}
-
-// One kind of cell marker: its name, the ranges it marks out on the sheet nPart, and how they
-// are drawn. A fFillOpacity fills the ranges with the color, otherwise they get a border in it.
-struct CellRangeMarkerOptions
-{
-    OString aName;
-    std::vector<ScRange> aCellRanges;
-    SCTAB nPart = 0;
-    Color aColor = COL_AUTO;
-    bool bDashed = false;
-    double fFillOpacity = 0.0;
-};
-
-// Send a marker to the client. It replaces the ranges under its name, and none clears the kind.
-void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOptions& rOptions)
-{
-    ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    if (!pViewShell)
-        return;
-
-    tools::JsonWriter aWriter;
-    aWriter.put("commandName", "CellRangeMarker");
-    {
-        const auto aStateNode = aWriter.startNode("state");
-        aWriter.put("name", rOptions.aName);
-        aWriter.put("part", static_cast<sal_Int32>(rOptions.nPart));
-        if (rOptions.aColor != COL_AUTO)
-            aWriter.put("color", rOptions.aColor.AsRGBHexString());
-        if (rOptions.bDashed)
-            aWriter.put("dashed", true);
-        if (rOptions.fFillOpacity > 0.0)
-            aWriter.put("fillOpacity", rOptions.fFillOpacity);
-        const auto aRangesArray = aWriter.startArray("cellRanges");
-        for (auto const& rCellRange : rOptions.aCellRanges)
-        {
-            const OUString aCells = OUString::number(rCellRange.aStart.Col()) + ", "
-                                    + OUString::number(rCellRange.aStart.Row()) + ", "
-                                    + OUString::number(rCellRange.aEnd.Col()) + ", "
-                                    + OUString::number(rCellRange.aEnd.Row());
-            aWriter.putSimpleValue(aCells);
-        }
-    }
-    pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aWriter.finishAndGetAsOString());
+    sc::CellRangeMarkerOptions aOptions;
+    aOptions.aName = "TableRange"_ostr;
+    aOptions.aCellRanges = std::move(aTableRanges);
+    aOptions.nPart = nPart;
+    aOptions.aHandleCommand = ".uno:SetCalcTableRange"_ostr;
+    sc::notifyCellRangeMarker(rViewData, aOptions);
 }
 
 } //end anonymous namespace
@@ -7113,7 +7052,7 @@ void ScGridWindow::DeleteDatabaseOverlay()
     maDBExpandHandles.clear();
     mpOODatabase.reset();
     if (comphelper::COKit::isActive()) // clear the client's markers
-        updateCOKitTableHandles(mrViewData, {});
+        notifyTableRangeMarkers(mrViewData, {}, mrViewData.GetTabNumber());
 }
 
 void ScGridWindow::UpdateDatabaseOverlay()
@@ -7137,6 +7076,7 @@ void ScGridWindow::UpdateDatabaseOverlay()
     ScDocument& rDocument = mrViewData.GetDocument();
     ScDBCollection* pDBs = rDocument.GetDBCollection();
     const SCTAB nTab = mrViewData.GetTabNumber();
+    std::vector<ScRange> aTableRanges;
 
     if (pDBs)
     {
@@ -7166,14 +7106,21 @@ void ScGridWindow::UpdateDatabaseOverlay()
             if (!bEditable)
                 continue;
 
-            tools::Rectangle aFillRect = ComputeFillHandleRect(aRange.aEnd.Col(), aRange.aEnd.Row(), true);
-            maDBExpandHandles.emplace_back(aFillRect, aRange.aEnd);
+            // The rectangle on screen is what the native overlay draws and what a press on it
+            // is tested against, both of which only the desktop does.
+            if (!comphelper::COKit::isActive())
+            {
+                tools::Rectangle aFillRect
+                    = ComputeFillHandleRect(aRange.aEnd.Col(), aRange.aEnd.Row(), true);
+                maDBExpandHandles.emplace_back(aFillRect, aRange.aEnd);
+            }
+            aTableRanges.push_back(aRange);
         }
     }
 
     if (comphelper::COKit::isActive())
     {
-        updateCOKitTableHandles(mrViewData, maDBExpandHandles);
+        notifyTableRangeMarkers(mrViewData, aTableRanges, nTab);
         return;
     }
 
@@ -7706,7 +7653,7 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
         // The native overlay is not visible to the client, so send the cells of the sparkline
         // group and let it draw the highlight. An empty list of cell ranges clears the
         // highlight when the cursor leaves a sparkline cell.
-        CellRangeMarkerOptions aOptions;
+        sc::CellRangeMarkerOptions aOptions;
         aOptions.aName = "SparklineGroup"_ostr;
         aOptions.nPart = aCurrentAddress.Tab();
         aOptions.aColor = SvtOptionsDrawinglayer::getHilightColor();
@@ -7730,7 +7677,7 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
             }
         }
 
-        notifyCellRangeMarker(mrViewData, aOptions);
+        sc::notifyCellRangeMarker(mrViewData, aOptions);
         return;
     }
 
@@ -7793,7 +7740,7 @@ void ScGridWindow::NotifyDynamicArrayBorder()
 
     const ScAddress aCursor = mrViewData.GetCurPos();
 
-    CellRangeMarkerOptions aOptions;
+    sc::CellRangeMarkerOptions aOptions;
     aOptions.aName = "DynamicArray"_ostr;
     aOptions.nPart = aCursor.Tab();
     aOptions.aColor = Color(0x2A, 0x7A, 0xE4);
@@ -7804,7 +7751,7 @@ void ScGridWindow::NotifyDynamicArrayBorder()
         aOptions.aCellRanges.push_back(aCellRange);
     aOptions.bDashed = bBlocked;
 
-    notifyCellRangeMarker(mrViewData, aOptions);
+    sc::notifyCellRangeMarker(mrViewData, aOptions);
 }
 
 // #i70788# central method to get the OverlayManager safely

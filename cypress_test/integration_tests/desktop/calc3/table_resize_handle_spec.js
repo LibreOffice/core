@@ -20,9 +20,9 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 
 		// Two visible tables -> exactly two handle sections, indexes 0 and 1
 		// (one per table), and no third.
-		cy.cGet('[id="test-div-table range handle 0"]').should('exist');
-		cy.cGet('[id="test-div-table range handle 1"]').should('exist');
-		cy.cGet('[id="test-div-table range handle 2"]').should('not.exist');
+		cy.cGet('[id="test-div-TableRange handle 0"]').should('exist');
+		cy.cGet('[id="test-div-TableRange handle 1"]').should('exist');
+		cy.cGet('[id="test-div-TableRange handle 2"]').should('not.exist');
 	});
 
 	// Both tables have empty rows below, so the grow can't be refused. Drag with a
@@ -31,15 +31,15 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 		var win = this.win;
 
 		calcHelper.clickOnFirstCell();
-		cy.cGet('[id="test-div-table range handle 0"]').should('exist');
+		cy.cGet('[id="test-div-TableRange handle 0"]').should('exist');
 
 		// Mouse-control drops moves while the click timer is pending.
 		helper.waitForTimers(win, 'clicktimer');
 		helper.processToIdle(win);
 
 		var startY;
-		cy.cGet('[id="test-div-table range handle 0"]').then(function($handle) {
-			var handle = win.app.sectionContainer.getSectionWithName('table range handle 0');
+		cy.cGet('[id="test-div-TableRange handle 0"]').then(function($handle) {
+			var handle = win.app.sectionContainer.getSectionWithName('TableRange handle 0');
 			expect(handle, 'table resize handle section').to.exist;
 			startY = handle.position[1];
 
@@ -57,7 +57,7 @@ describe(['tagdesktop'], 'Calc styled table resize handle.', function() {
 		helper.processToIdle(win);
 
 		cy.getFrameWindow().then(function(win) {
-			var handle = win.app.sectionContainer.getSectionWithName('table range handle 0');
+			var handle = win.app.sectionContainer.getSectionWithName('TableRange handle 0');
 			expect(handle, 'table resize handle section').to.exist;
 			expect(handle.position[1], 'handle moved down after grow').to.be.greaterThan(startY);
 		});
@@ -75,12 +75,12 @@ describe(['tagdesktop'], 'Calc styled table resize handle below the fold.', func
 	// An off screen section has no test div, so ask the section container rather than the DOM.
 	it('shows a handle for every table of the sheet, not only the ones on screen', function() {
 		cy.getFrameWindow().should(function(win) {
-			expect(win.app.sectionContainer.getSectionWithName('table range handle 11'),
+			expect(win.app.sectionContainer.getSectionWithName('TableRange handle 11'),
 				'handle of the 12th table').to.exist;
 		});
 
 		cy.getFrameWindow().then(function(win) {
-			expect(win.app.sectionContainer.getSectionWithName('table range handle 12'),
+			expect(win.app.sectionContainer.getSectionWithName('TableRange handle 12'),
 				'no handle past the 12 tables').to.not.exist;
 		});
 	});

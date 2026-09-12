@@ -211,6 +211,7 @@ private:
     bool                bBlockCols:1;             // are whole columns selected?
     bool                bBlockRows:1;             // are whole rows selected?
     bool                mbInlineWithScrollbar:1;  // should inline with scrollbar?
+    bool mbFillRangeMarked:1; // the client holds a fill range marker
 
     double              mfLastZoomScale = 0;
     double              mfAccumulatedZoom = 0;
@@ -500,6 +501,7 @@ public:
     void            UpdateCopySourceOverlay();
     void            UpdateSelectionOverlay();
     void            UpdateShrinkOverlay();
+    void NotifyFillRangeMarker();
     void            UpdateAllOverlays();
 
     void            UpdateFormulas( SCCOL nStartCol = -1, SCROW nStartRow = -1, SCCOL nEndCol = -1, SCROW nEndRow = -1 );

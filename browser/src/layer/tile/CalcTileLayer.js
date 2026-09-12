@@ -1011,9 +1011,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		else if (e.commandName === 'PivotTableFilterInfo') {
 			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
-		else if (e.commandName === 'TableAutoFillInfo') {
-			this._onTableRangeHandleStateChanged(e.state.marks);
-		}
 		else if (e.commandName === 'CellRangeMarker') {
 			this._onCellRangeMarkerMsg(e.state);
 		}
@@ -1038,47 +1035,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}, this);
 
 		this._cellRangeMarkerSection.setMarkers(state.name, cellRanges, state.part, {
-			color: '#' + state.color,
+			color: state.color ? '#' + state.color : undefined,
 			dashed: state.dashed,
-			fillOpacity: state.fillOpacity });
-	},
-
-	// One handle per mark (one per visible styled table), pooled by name so we
-	// grow/shrink and reposition rather than recreating them each message.
-	_onTableRangeHandleStateChanged: function (marks) {
-		if (!Array.isArray(marks))
-			marks = [];
-
-		var baseName = app.CSections.TableRangeHandle.name;
-		var count = this._map.isEditMode() ? marks.length : 0;
-
-		for (var i = 0; i < count; i++) {
-			var name = baseName + ' ' + i;
-			var section = app.sectionContainer.getSectionWithName(name);
-			if (!section) {
-				section = new app.definitions.TableRangeHandleSection(name);
-				app.sectionContainer.addSection(section);
-			}
-
-			var strTwips = String(marks[i].rectangle).match(/\d+/g);
-			if (!strTwips)
-				continue;
-			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
-			var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
-			var topLeftPixels = this._twipsToCorePixels(topLeftTwips);
-			var offsetPixels = this._twipsToCorePixels(offset);
-			section.calculatePositionViaCellCursor([topLeftPixels.x + offsetPixels.x, topLeftPixels.y + offsetPixels.y]);
-		}
-
-		var prev = this._tableRangeHandleCount || 0;
-		for (var j = count; j < prev; j++) {
-			if (app.sectionContainer.getSectionWithName(baseName + ' ' + j))
-				app.sectionContainer.removeSection(baseName + ' ' + j);
-		}
-		this._tableRangeHandleCount = count;
-		this._tableRangeHandlesVisible = count > 0;
-
-		app.sectionContainer.requestReDraw();
+			fillOpacity: state.fillOpacity,
+			handleCommand: state.handleCommand });
 	},
 
 	_onSplitStateChanged: function (e, isSplitCol) {

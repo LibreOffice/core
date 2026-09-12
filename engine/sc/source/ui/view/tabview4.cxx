@@ -31,6 +31,7 @@
 #include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 #include <output.hxx>
+#include <CellRangeMarker.hxx>
 
 // --- Reference input / Fill-Cursor
 
@@ -121,6 +122,7 @@ void ScTabView::StopRefMode()
 
         HideTip();
         UpdateShrinkOverlay();
+        NotifyFillRangeMarker();
 
         if ( aViewData.CurrentTabForData() >= aViewData.GetRefStartZ() &&
                 aViewData.CurrentTabForData() <= aViewData.GetRefEndZ() )
@@ -170,6 +172,7 @@ void ScTabView::DoneRefMode( bool bContinue )
 
     HideTip();
     UpdateShrinkOverlay();
+    NotifyFillRangeMarker();
 
     //  Paint:
     if ( bWasRef && aViewData.CurrentTabForData() >= aViewData.GetRefStartZ() &&
@@ -184,6 +187,36 @@ void ScTabView::DoneRefMode( bool bContinue )
 
         PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
     }
+}
+
+// The range a fill drag is heading for, reported on every change so the drag shows where it
+// lands without a repaint of the grid. An empty range takes the marker away when it is over.
+void ScTabView::NotifyFillRangeMarker()
+{
+    sc::CellRangeMarkerOptions aOptions;
+    aOptions.aName = "FillRange"_ostr;
+    aOptions.nPart = aViewData.CurrentTabForData();
+    aOptions.aColor
+        = ScModule::get()->GetColorConfig().GetColorValue(svtools::CALCREFERENCE).nColor;
+
+    if (aViewData.IsRefMode() && aViewData.GetRefType() == SC_REFTYPE_FILL)
+    {
+        SCCOL nStartX = aViewData.GetRefStartX();
+        SCROW nStartY = aViewData.GetRefStartY();
+        SCCOL nEndX = aViewData.GetRefEndX();
+        SCROW nEndY = aViewData.GetRefEndY();
+        PutInOrder(nStartX, nEndX);
+        PutInOrder(nStartY, nEndY);
+        const SCTAB nTab = aViewData.GetRefStartZ();
+        aOptions.aCellRanges.emplace_back(nStartX, nStartY, nTab, nEndX, nEndY, nTab);
+    }
+
+    // Nothing to say while no drag is running and the client holds no marker of ours.
+    if (aOptions.aCellRanges.empty() && !mbFillRangeMarked)
+        return;
+    mbFillRangeMarked = !aOptions.aCellRanges.empty();
+
+    sc::notifyCellRangeMarker(aViewData, aOptions);
 }
 
 void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
@@ -264,6 +297,8 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         {
             pInputHandler->UpdateKitReferenceMarks();
         }
+
+        NotifyFillRangeMarker();
     }
 
     //  autocomplete for Auto-Fill

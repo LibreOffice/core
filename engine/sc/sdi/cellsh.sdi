@@ -66,6 +66,7 @@ interface CellSelection
     SID_TEXT_TO_COLUMNS     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_CLEAR_AUTO_FILTER   [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_INSERT_CALCTABLE    [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SET_CALC_TABLE_RANGE [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
 
     // } database operations
 
