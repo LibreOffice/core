@@ -32,6 +32,12 @@
     <property name="icon-name">go-last</property>
     <property name="icon_size">1</property>
   </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">open-menu-symbolic</property>
+    <property name="icon_size">1</property>
+  </object>
   <object class="GtkBox" id="TabButtons">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -39,6 +45,25 @@
     <property name="margin-end">6</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <child>
+      <object class="GtkButton" id="list">
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="no-show-all">True</property>
+        <property name="image">image6</property>
+        <property name="relief">none</property>
+        <property name="always-show-image">True</property>
+        <style>
+          <class name="small-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
     <child>
       <object class="GtkButton" id="first">
         <property name="can-focus">True</property>
@@ -55,7 +80,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
@@ -74,7 +99,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child>
@@ -93,7 +118,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
@@ -112,7 +137,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -132,7 +157,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>

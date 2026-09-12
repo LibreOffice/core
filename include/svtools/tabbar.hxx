@@ -366,6 +366,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(ImplClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ImplAddClickHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ImplListClickHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_DLLPRIVATE_LINK(ContextMenuHdl, const CommandEvent&, void);
 
