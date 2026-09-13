@@ -28,43 +28,19 @@ AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl ${PNG_LIBS} $(ZSTD_LIBS) $(POCO_LIBS) $(Z
 # Android's CMakefile list re-worked:
 
 cmake_list= \
-            ../common/AIHttpTransport.cpp \
-            ../common/Authorization.cpp \
-            ../common/ConfigUtil.cpp \
             ../common/SettingsStorage.cpp \
-            ../common/CommandControl.cpp \
             ../common/Crypto-stub.cpp \
-            ../common/FileUtil.cpp \
-            ../common/FileUtil-unix.cpp \
-            ../common/Log-common.cpp \
-            ../common/Log-poco.cpp \
             ../common/MobileApp.cpp \
             ../common/Prefs.cpp \
-            ../common/TraceEvent.cpp \
-            ../common/ProcUtil.cpp \
-            ../common/Protocol.cpp \
-            ../common/RegexUtil.cpp \
-            ../common/Simd.cpp \
-            ../common/StringVector.cpp \
-            ../common/Session.cpp \
             ../common/SigUtil-mobile.cpp \
-            ../common/SpookyV2.cpp \
-            ../common/Unit.cpp \
             ../common/Unit-mobile.cpp \
-            ../common/Util.cpp \
             ../common/Util-mobile.cpp \
-            ../common/Util-unix.cpp \
-            ../common/Uri.cpp \
             ../common/RecentFiles.cpp \
-            ../common/Watchdog-unix.cpp \
             ../kit/ChildSession.cpp \
             ../kit/DeltaSimd.c \
             ../kit/Kit.cpp \
-            ../kit/KitQueue.cpp \
-            ../kit/LogUI.cpp \
             ../kit/KitWebSocket.cpp \
             ../net/FakeSocket.cpp \
-            ../net/Socket-unix.cpp \
             ../net/Socket.cpp \
             ../wsd/AIChatSession.cpp \
             ../wsd/AIUtil.cpp \
@@ -114,11 +90,12 @@ coda_qt_CFLAGS = $(AM_CFLAGS) $(SIMD_CFLAGS)
 coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp CODocumentBroker.cpp CoolUrlSchemeHandler.cpp CursorFix.cpp QtClipboard.cpp DocumentOperations.cpp WebView.cpp DBusService.cpp Document.cpp QtFileManager.cpp IntegratorFilePicker.cpp RemoteOpen.cpp StandaloneWindow.cpp TabbedWindow.cpp TabManager.cpp TabShellBridge.cpp WindowUtils.cpp $(cmake_list)
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
-# SSL is on tree-wide in the combined build, so the shared net sources here
-# reference ssl::Manager and SslContext.
+GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
+coda_qt_LDADD = $(GBUILD_SHARED_LIB)
+EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+
 if ENABLE_SSL
-coda_qt_SOURCES += ../net/Ssl.cpp
-coda_qt_LDADD = $(OPENSSL_LIBS)
+coda_qt_LDADD += $(OPENSSL_LIBS)
 endif
 
 metainfodir = $(datadir)/metainfo
