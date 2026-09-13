@@ -371,8 +371,6 @@ namespace FileUtil
 
 } // namespace FileUtil
 
-#if !MOBILEAPP
-
 namespace
 {
 
@@ -405,11 +403,8 @@ namespace
 
 } // anonymous namespace
 
-#endif
-
 namespace FileUtil
 {
-#if !MOBILEAPP
     void registerFileSystemForDiskSpaceChecks(const std::string& path)
     {
         const std::string::size_type lastSlash = path.rfind('/');
@@ -422,7 +417,7 @@ namespace FileUtil
             std::lock_guard<std::mutex> lock(fsmutex);
 
             struct stat s;
-            if (stat(dirPath.c_str(), &s) == 0)
+            if (getStatOfFile(dirPath, s) == 0)
             {
                 filesystems.insert(fs(dirPath, s.st_dev));
             }
@@ -460,7 +455,6 @@ namespace FileUtil
             lastResult = std::string();
         return std::string();
     }
-#endif
 
     bool checkDiskSpace(const std::string& path)
     {
