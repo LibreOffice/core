@@ -32,7 +32,7 @@ import struct
 import sys
 
 LPR_MAGIC = b"LPROOF\0\0"
-LPR_VERSION = 1
+LPR_VERSION = 2
 
 # Opcodes.  The numbering is part of the file format: append, never reorder.
 OP_END = 0
@@ -131,6 +131,44 @@ def read_module_assignments(path, names):
     return found
 
 
+def read_data_tables(path):
+    """The module-level tables the rule conditions look words up in.
+
+    Recognises the three shapes the packages use: set([...]) for word sets,
+    a dict literal for lookup tables, and re.compile(...) for the auxiliary
+    patterns. Nothing is imported or executed.
+    """
+    tree = ast.parse(open(path, encoding="utf-8").read())
+    tables = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign) or not isinstance(node.targets[0], ast.Name):
+            continue
+        name = node.targets[0].id
+        value = node.value
+        if isinstance(value, ast.Call) and isinstance(value.func, ast.Name) \
+                and value.func.id == "set" and len(value.args) == 1:
+            try:
+                tables[name] = ("set", sorted(set(ast.literal_eval(value.args[0]))))
+            except ValueError:
+                pass
+        elif isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute) \
+                and value.func.attr == "compile" and value.args:
+            try:
+                tables[name] = ("regex", ast.literal_eval(value.args[0]))
+            except ValueError:
+                pass
+        elif isinstance(value, (ast.Dict, ast.List, ast.Set)):
+            try:
+                literal = ast.literal_eval(value)
+            except ValueError:
+                continue
+            if isinstance(literal, dict):
+                tables[name] = ("map", sorted(literal.items()))
+            else:
+                tables[name] = ("set", sorted(set(literal)))
+    return tables
+
+
 def read_licence(dictdir, pkg):
     """The package licence notice, which the .lpr carries into the product."""
     for name in ("README_Lightproof_%s.txt" % pkg, "README_lightproof_%s.txt" % pkg):
@@ -170,15 +208,28 @@ def translate_regex(pattern):
             continue
         if c == "[":
             j = i + 1
+            body = []
             if j < n and pattern[j] == "^":
+                body.append("^")
                 j += 1
             if j < n and pattern[j] == "]":
+                body.append("\\]")
                 j += 1
             while j < n and pattern[j] != "]":
-                j += 2 if pattern[j] == "\\" else 1
+                if pattern[j] == "\\":
+                    body.append(pattern[j:j + 2])
+                    j += 2
+                    continue
+                # ICU reads a nested set, a set intersection and a string in
+                # a set where Python re has three plain characters.
+                if pattern[j] in "[&{":
+                    body.append("\\" + pattern[j])
+                else:
+                    body.append(pattern[j])
+                j += 1
             if j >= n:
                 raise Unsupported("unterminated character class")
-            out.append(pattern[i:j + 1])
+            out.append("[" + "".join(body) + "]")
             i = j + 1
             continue
         if c == "(":
@@ -217,8 +268,13 @@ class Lowerer:
     rule that silently never fires.
     """
 
-    def __init__(self, writer):
+    # Stands in for a missing slice bound, which Python writes as nothing.
+    SLICE_OPEN = -0x80000000
+
+    def __init__(self, writer, tables=None, group_names=None):
         self.w = writer
+        self.tables = tables or {}
+        self.group_names = group_names or {}
         self.code = bytearray()
 
     def emit(self, opcode, *operands):
@@ -258,8 +314,75 @@ class Lowerer:
             self.emit(OP_LOAD_TEXT)
         elif node.id == "s":
             self.emit(OP_LOAD_SENTENCE)
+        elif node.id in self.tables:
+            self.emit(OP_PUSH_CONST, self.w.const_for_table(node.id, self.tables[node.id]))
         else:
             raise Unsupported("name %s" % node.id)
+
+    def v_List(self, node):
+        try:
+            values = [ast.literal_eval(element) for element in node.elts]
+        except ValueError:
+            raise Unsupported("list of non-literals")
+        if not all(isinstance(value, str) for value in values):
+            raise Unsupported("list of non-strings")
+        self.emit(OP_PUSH_CONST, self.w.const_set(values))
+
+    def v_Tuple(self, node):
+        self.v_List(node)
+
+    def v_BinOp(self, node):
+        if not isinstance(node.op, ast.Add):
+            raise Unsupported("binary %s" % type(node.op).__name__)
+        self.visit(node.left)
+        self.visit(node.right)
+        self.emit(OP_CONCAT)
+
+    def v_Compare(self, node):
+        if len(node.ops) != 1:
+            raise Unsupported("chained comparison")
+        opcodes = { ast.In: OP_IN, ast.NotIn: OP_NOT_IN, ast.Eq: OP_EQ, ast.NotEq: OP_NE }
+        opcode = opcodes.get(type(node.ops[0]))
+        if opcode is None:
+            raise Unsupported("comparison %s" % type(node.ops[0]).__name__)
+        self.visit(node.left)
+        self.visit(node.comparators[0])
+        self.emit(opcode)
+
+    def v_Subscript(self, node):
+        if isinstance(node.slice, ast.Slice):
+            if node.slice.step is not None:
+                raise Unsupported("slice with a step")
+            self.visit(node.value)
+            self.emit(OP_SLICE, self.bound(node.slice.lower), self.bound(node.slice.upper))
+            return
+        self.visit(node.value)
+        self.visit(node.slice)
+        self.emit(OP_INDEX)
+
+    def bound(self, node):
+        if node is None:
+            return self.SLICE_OPEN
+        try:
+            value = ast.literal_eval(node)
+        except ValueError:
+            raise Unsupported("slice bound is not a literal")
+        if not isinstance(value, int):
+            raise Unsupported("slice bound is not an integer")
+        return value
+
+    def group_index(self, node):
+        """The capture group a m.group()/start()/end() argument names."""
+        try:
+            value = ast.literal_eval(node)
+        except ValueError:
+            raise Unsupported("dynamic group reference")
+        if isinstance(value, int):
+            return value
+        index = self.group_names.get(value)
+        if index is None:
+            raise Unsupported("unknown group name %s" % value)
+        return index
 
     def v_Attribute(self, node):
         if isinstance(node.value, ast.Name) and node.value.id == "LOCALE":
@@ -272,10 +395,20 @@ class Lowerer:
         raise Unsupported("attribute .%s" % node.attr)
 
     def v_UnaryOp(self, node):
-        if not isinstance(node.op, ast.Not):
-            raise Unsupported("unary %s" % type(node.op).__name__)
-        self.visit(node.operand)
-        self.emit(OP_NOT)
+        if isinstance(node.op, ast.Not):
+            self.visit(node.operand)
+            self.emit(OP_NOT)
+            return
+        if isinstance(node.op, (ast.USub, ast.UAdd)):
+            try:
+                value = ast.literal_eval(node)
+            except ValueError:
+                raise Unsupported("sign on a computed value")
+            if not isinstance(value, int):
+                raise Unsupported("sign on a non-integer")
+            self.emit(OP_PUSH_INT, value)
+            return
+        raise Unsupported("unary %s" % type(node.op).__name__)
 
     def v_BoolOp(self, node):
         # Python semantics: the operand value is the result, not a boolean.
@@ -291,9 +424,17 @@ class Lowerer:
         for site in patches:
             struct.pack_into("<I", self.code, site + 1, len(self.code))
 
+    # Method calls the rules make on a match, on a string, or on one of the
+    # module-level patterns.
+    STRING_METHODS = { "lower": OP_LOWER, "upper": OP_UPPER, "capitalize": OP_CAPITALIZE }
+    REGEX_METHODS = { "search": OP_RE_SEARCH, "match": OP_RE_MATCH }
+
     def v_Call(self, node):
+        if isinstance(node.func, ast.Attribute):
+            self.lower_method(node)
+            return
         if not isinstance(node.func, ast.Name):
-            raise Unsupported("method call")
+            raise Unsupported("call of a computed value")
         entry = HOST_FUNCS.get(node.func.id)
         if entry is None:
             raise Unsupported("call to %s" % node.func.id)
@@ -306,14 +447,106 @@ class Lowerer:
         self.code.append(func_id)
         self.code.append(len(node.args))
 
+    def lower_method(self, node):
+        method = node.func.attr
+        receiver = node.func.value
+
+        if isinstance(receiver, ast.Name) and receiver.id == "m":
+            if method not in ("group", "start", "end") or len(node.args) != 1:
+                raise Unsupported("m.%s()" % method)
+            opcode = { "group": OP_GROUP, "start": OP_MSTART, "end": OP_MEND }[method]
+            self.emit(opcode, self.group_index(node.args[0]))
+            return
+
+        if method in self.STRING_METHODS:
+            if node.args:
+                raise Unsupported("%s() with arguments" % method)
+            self.visit(receiver)
+            self.emit(self.STRING_METHODS[method])
+            return
+
+        if method in self.REGEX_METHODS:
+            if not isinstance(receiver, ast.Name) or receiver.id not in self.tables:
+                raise Unsupported("%s() on a computed pattern" % method)
+            if len(node.args) != 1:
+                raise Unsupported("%s() with %d arguments" % (method, len(node.args)))
+            self.visit(node.args[0])
+            self.emit(self.REGEX_METHODS[method],
+                      self.w.const_for_table(receiver.id, self.tables[receiver.id]))
+            return
+
+        raise Unsupported("method .%s()" % method)
+
 
 # ---------------------------------------------------------------- writing
+
+CONST_SET = 0
+CONST_MAP = 1
+CONST_REGEX = 2
+
 
 class Writer:
     def __init__(self):
         self.strings = bytearray(b"\0")
         self.string_offsets = {"": 0}
         self.code = bytearray()
+        # Each entry is (type, count, data, flags); data points into
+        # const_data for sets and maps, and into the string blob for regexes.
+        self.consts = []
+        self.const_data = bytearray()
+        self.const_ids = {}
+
+    def const_set(self, values, key=None):
+        """A sorted string set, searched by UTF-8 byte order at run time.
+
+        Python sorts strings by code point and UTF-8 preserves that order, so
+        the runtime can binary-search the encoded bytes directly.
+        """
+        values = sorted(set(values))
+        if key is None:
+            key = ("set",) + tuple(values)
+        if key in self.const_ids:
+            return self.const_ids[key]
+        offset = len(self.const_data)
+        for value in values:
+            self.const_data += struct.pack("<I", self.string(value))
+        index = len(self.consts)
+        self.consts.append((CONST_SET, len(values), offset, 0))
+        self.const_ids[key] = index
+        return index
+
+    def const_map(self, items, key=None):
+        items = sorted(items)
+        if key is None:
+            key = ("map",) + tuple(items)
+        if key in self.const_ids:
+            return self.const_ids[key]
+        offset = len(self.const_data)
+        for name, value in items:
+            self.const_data += struct.pack("<II", self.string(name), self.string(value))
+        index = len(self.consts)
+        self.consts.append((CONST_MAP, len(items), offset, 0))
+        self.const_ids[key] = index
+        return index
+
+    def const_regex(self, pattern, key=None):
+        if key is None:
+            key = ("regex", pattern)
+        if key in self.const_ids:
+            return self.const_ids[key]
+        icu_pattern, flags, _names = translate_regex(pattern)
+        index = len(self.consts)
+        self.consts.append((CONST_REGEX, 0, self.string(icu_pattern), flags))
+        self.const_ids[key] = index
+        return index
+
+    def const_for_table(self, name, table):
+        kind, value = table
+        if kind == "set":
+            return self.const_set(value, key=("named", name))
+        if kind == "map":
+            return self.const_map(value, key=("named", name))
+        return self.const_regex(value, key=("named", name))
 
     def string(self, value):
         offset = self.string_offsets.get(value)
@@ -345,6 +578,8 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     opts = read_module_assignments(
         os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
         {"lopts", "lopts_default"})
+    tables = read_data_tables(
+        os.path.join(dictdir, "pythonpath", "lightproof_impl_%s.py" % pkg))
 
     locales = sorted(impl.get("locales", {}).keys())
     if not locales:
@@ -368,7 +603,7 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
             continue
 
         def lower_or_die(source, what):
-            lowerer = Lowerer(writer)
+            lowerer = Lowerer(writer, tables, names)
             try:
                 return writer.bytecode(lowerer.lower(source))
             except (Unsupported, SyntaxError) as error:
@@ -411,6 +646,7 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     if dropped:
         sys.stderr.write("lpcompile: %s: %d rule(s) dropped\n" % (pkg, dropped))
 
+    const_records = [struct.pack("<4I", *entry) for entry in writer.consts]
     option_records = [(writer.string(name), 1 if name in option_defaults else 0)
                       for name in option_names]
     locale_offsets = [writer.string(tag) for tag in locales]
@@ -419,7 +655,7 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     licence_off = writer.string(read_licence(dictdir, pkg))
 
     # Header: magic, version, then offset/count pairs for each section.
-    header_size = 8 + 4 * 19
+    header_size = 8 + 4 * 20
     sections = []
     cursor = header_size
 
@@ -436,10 +672,12 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     rules_off = place(b"".join(struct.pack("<10I", *r) for r in rule_records))
     groups_off = place(b"".join(struct.pack("<II", *g) for g in group_name_table))
     code_off = place(bytes(writer.code))
+    consts_off = place(b"".join(const_records))
+    const_data_off = place(bytes(writer.const_data))
     strings_off = place(bytes(writer.strings))
 
     header = LPR_MAGIC + struct.pack(
-        "<19I",
+        "<20I",
         LPR_VERSION, 0,
         pkg_off, name_off, licence_off,
         len(locale_offsets), locales_off,
@@ -447,8 +685,9 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
         len(rule_records), rules_off,
         len(group_name_table), groups_off,
         code_off, len(writer.code),
-        0, 0,
-        strings_off, len(writer.strings))
+        len(writer.consts), consts_off,
+        strings_off, len(writer.strings),
+        const_data_off)
 
     with open(out_path, "wb") as out:
         out.write(header)
@@ -458,8 +697,8 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     # Only when asked: the build announces the file it is making already,
     # and a line per package on every build is noise in a silent make.
     if verbose:
-        sys.stderr.write("lpcompile: %s: %d rules, %d options, %d bytes\n"
-                         % (pkg, len(rule_records), len(option_records), cursor))
+        sys.stderr.write("lpcompile: %s: %d rules, %d options, %d constants, %d bytes\n"
+                         % (pkg, len(rule_records), len(option_records), len(writer.consts), cursor))
 
 
 def read_option_labels(dictdir, pkg):
@@ -471,7 +710,9 @@ def read_option_labels(dictdir, pkg):
     for line in open(path, encoding="utf-8"):
         if "=" in line and not line.startswith("#"):
             name, _, label = line.partition("=")
-            labels[name.strip()] = label.strip()
+            # The dialog properties are Java-style, with \uXXXX escapes.
+            labels[name.strip()] = label.strip().encode("ascii", "backslashreplace") \
+                .decode("unicode_escape")
     return labels
 
 
@@ -483,6 +724,8 @@ def emit_schema(dictdir, pkg):
     opts = read_module_assignments(
         os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
         {"lopts", "lopts_default"})
+    tables = read_data_tables(
+        os.path.join(dictdir, "pythonpath", "lightproof_impl_%s.py" % pkg))
     names = opts.get("lopts", {}).get(pkg, [])
     defaults = set(opts.get("lopts_default", {}).get(pkg, []))
     labels = read_option_labels(dictdir, pkg)
@@ -509,8 +752,11 @@ def emit_labels(dictdir, pkg):
         os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
         {"lopts"})
     labels = read_option_labels(dictdir, pkg)
+    # The key is the package and the option, because packages share option
+    # names and the dialog's label map is flat.
+    print("\t\t// %s" % pkg)
     for name in opts.get("lopts", {}).get(pkg, []):
-        print("\t\t%s: _('%s')," % (name, labels.get(name, name).replace("'", "\\'")))
+        print("\t\t'%s-%s': _('%s')," % (pkg, name, labels.get(name, name).replace("'", "\\'")))
 
 
 def main():

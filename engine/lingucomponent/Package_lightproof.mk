@@ -10,6 +10,7 @@
 $(eval $(call gb_Package_Package,lingucomponent_lightproof,$(gb_CustomTarget_workdir)/lingucomponent/lightproof))
 
 $(eval $(call gb_Package_add_files,lingucomponent_lightproof,$(LIBO_SHARE_FOLDER)/lightproof,\
+	en.lpr \
 	ru_RU.lpr \
 ))
 

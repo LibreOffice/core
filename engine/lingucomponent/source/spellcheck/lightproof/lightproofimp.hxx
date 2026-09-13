@@ -15,6 +15,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -22,11 +23,13 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include <unicode/regex.h>
 
 #include "lprfile.hxx"
+#include "lpvm.hxx"
 
 namespace lightproof
 {
@@ -48,6 +51,8 @@ struct Package
     std::shared_ptr<const RuleFile> pFile;
     std::vector<bool> aOptions;
     std::vector<CompiledRule> aRules;
+    // Matchers for the package's pattern constants, in constant-pool order.
+    std::vector<std::unique_ptr<icu::RegexMatcher>> aConstantMatchers;
 };
 
 // XProofreader already derives from XSupportedLocales, so it must not be
@@ -55,7 +60,8 @@ struct Package
 class Lightproof final
     : public cppu::WeakImplHelper<css::linguistic2::XProofreader,
                                   css::linguistic2::XLinguServiceEventBroadcaster,
-                                  css::lang::XServiceDisplayName, css::lang::XServiceInfo>
+                                  css::lang::XServiceDisplayName, css::lang::XServiceInfo>,
+      public Host
 {
 public:
     Lightproof();
@@ -89,6 +95,15 @@ public:
     // XServiceDisplayName
     OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
+    // Host
+    bool spell(const css::lang::Locale& rLocale, const OUString& rWord) override;
+    OUString morph(const css::lang::Locale& rLocale, const OUString& rWord,
+                   const OUString& rPattern, bool bAll, bool bOnlyAffix) override;
+    OUString measurement(const OUString& rNumber, const OUString& rFrom, const OUString& rTo,
+                         const OUString& rSuffix, const OUString& rDecimal,
+                         const OUString& rRemove) override;
+    icu::RegexMatcher* getConstantMatcher(sal_uInt32 nConstantIndex) override;
+
     // XServiceInfo
     OUString getImplementationName() override;
     bool supportsService(const OUString& rServiceName) override;
@@ -105,6 +120,22 @@ private:
     void loadOptions(Package& rPackage);
     // Rereads every loaded package's options and asks for a re-check.
     void reloadOptions();
+
+    // The morphological analyses a word has already been asked about, kept
+    // for the life of the checker the way the rules expect.
+    const std::vector<OUString>& getAnalyses(const css::lang::Locale& rLocale,
+                                             const OUString& rWord);
+    icu::RegexMatcher* getMorphMatcher(const OUString& rPattern);
+
+    // The package whose rules are running, which owns the pattern constants
+    // the expressions reach for.
+    Package* m_pRunningPackage = nullptr;
+    cpo::uno::Reference<css::linguistic2::XSpellChecker> m_xSpellChecker;
+    bool m_bSpellCheckerTried = false;
+    // The morphological analysis of a word is the answer for one language,
+    // so the language it was asked for is part of the key.
+    std::map<std::pair<OUString, OUString>, std::vector<OUString>> m_aAnalyses;
+    std::map<OUString, std::unique_ptr<icu::RegexMatcher>> m_aMorphMatchers;
 
     cpo::uno::Reference<css::container::XNameAccess> m_xConfigNode;
     cpo::uno::Reference<css::util::XChangesListener> m_xConfigListener;

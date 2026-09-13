@@ -421,6 +421,130 @@
           lingucomponent/source/spellcheck/lightproof/tools/lpcompile.py
           --emit-schema.</desc>
         </info>
+        <group oor:name="en">
+          <info>
+            <desc>Sentence checking options for the en rules.</desc>
+          </info>
+          <prop oor:name="grammar" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Possible mistakes</desc>
+              <label>Possible mistakes</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="cap" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Capitalization</desc>
+              <label>Capitalization</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="dup" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Word duplication</desc>
+              <label>Word duplication</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="pair" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Parentheses</desc>
+              <label>Parentheses</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="spaces" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Word spacing</desc>
+              <label>Word spacing</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="mdash" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Em dash</desc>
+              <label>Em dash</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="quotation" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Quotation marks</desc>
+              <label>Quotation marks</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="times" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Multiplication sign</desc>
+              <label>Multiplication sign</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="spaces2" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Sentence spacing</desc>
+              <label>Sentence spacing</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="ndash" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>En dash</desc>
+              <label>En dash</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="apostrophe" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Apostrophe</desc>
+              <label>Apostrophe</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="ellipsis" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Ellipsis</desc>
+              <label>Ellipsis</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="spaces3" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>More spaces</desc>
+              <label>More spaces</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="minus" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Minus sign</desc>
+              <label>Minus sign</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="metric" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Convert to metric (°C, km/h, m, kg, l)</desc>
+              <label>Convert to metric (°C, km/h, m, kg, l)</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="numsep" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Thousand separation of large numbers</desc>
+              <label>Thousand separation of large numbers</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="nonmetric" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Convert to non-metric (°F, mph, ft, lb, gal)</desc>
+              <label>Convert to non-metric (°F, mph, ft, lb, gal)</label>
+            </info>
+            <value>false</value>
+          </prop>
+        </group>
         <group oor:name="ru_RU">
           <info>
             <desc>Sentence checking options for the ru_RU rules.</desc>

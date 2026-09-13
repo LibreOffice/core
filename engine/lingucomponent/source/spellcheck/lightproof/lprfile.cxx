@@ -20,8 +20,9 @@ namespace lightproof
 namespace
 {
 constexpr char LPR_MAGIC[8] = { 'L', 'P', 'R', 'O', 'O', 'F', '\0', '\0' };
-constexpr sal_uInt32 LPR_VERSION = 1;
-constexpr sal_uInt32 LPR_HEADER_SIZE = 8 + 4 * 19;
+constexpr sal_uInt32 LPR_VERSION = 2;
+constexpr sal_uInt32 LPR_HEADER_WORDS = 20;
+constexpr sal_uInt32 LPR_HEADER_SIZE = 8 + 4 * LPR_HEADER_WORDS;
 
 sal_uInt32 readU32(const sal_uInt8* pAt)
 {
@@ -76,8 +77,8 @@ bool RuleFile::parse()
     if (std::memcmp(pBase, LPR_MAGIC, sizeof(LPR_MAGIC)) != 0)
         return false;
 
-    sal_uInt32 aHeader[19];
-    for (int i = 0; i < 19; ++i)
+    sal_uInt32 aHeader[LPR_HEADER_WORDS];
+    for (sal_uInt32 i = 0; i < LPR_HEADER_WORDS; ++i)
         aHeader[i] = readU32(pBase + 8 + 4 * i);
 
     if (aHeader[0] != LPR_VERSION)
@@ -96,8 +97,14 @@ bool RuleFile::parse()
     const sal_uInt32 nGroupNameOffset = aHeader[12];
     const sal_uInt32 nCodeOffset = aHeader[13];
     m_nCodeSize = aHeader[14];
+    m_nConstantCount = aHeader[15];
+    const sal_uInt32 nConstantOffset = aHeader[16];
     const sal_uInt32 nStringsOffset = aHeader[17];
     m_nStringsSize = aHeader[18];
+    const sal_uInt32 nConstantDataOffset = aHeader[19];
+    m_nConstantDataSize = nStringsOffset > nConstantDataOffset
+                              ? nStringsOffset - nConstantDataOffset
+                              : 0;
 
     // Every section must lie inside the file, and the sizes must not overflow
     // while we check that.
@@ -112,6 +119,8 @@ bool RuleFile::parse()
         { nRuleOffset, sal_uInt64(m_nRuleCount) * sizeof(Rule) },
         { nGroupNameOffset, sal_uInt64(m_nGroupNameCount) * sizeof(GroupName) },
         { nCodeOffset, m_nCodeSize },
+        { nConstantOffset, sal_uInt64(m_nConstantCount) * sizeof(Constant) },
+        { nConstantDataOffset, m_nConstantDataSize },
         { nStringsOffset, m_nStringsSize },
     };
     for (const Span& rSpan : aSpans)
@@ -129,6 +138,8 @@ bool RuleFile::parse()
     m_pRules = reinterpret_cast<const Rule*>(pBase + nRuleOffset);
     m_pOptions = reinterpret_cast<const Option*>(pBase + nOptionOffset);
     m_pGroupNames = reinterpret_cast<const GroupName*>(pBase + nGroupNameOffset);
+    m_pConstants = reinterpret_cast<const Constant*>(pBase + nConstantOffset);
+    m_pConstantData = pBase + nConstantDataOffset;
     m_pCode = pBase + nCodeOffset;
 
     m_aPackage = getString(nPackage);
@@ -137,10 +148,40 @@ bool RuleFile::parse()
     m_aLocales.reserve(nLocaleCount);
     for (sal_uInt32 i = 0; i < nLocaleCount; ++i)
         m_aLocales.push_back(getString(readU32(pBase + nLocaleOffset + 4 * i)));
+    // The constant blob is data like the rest of the file: every set and map
+    // must hold its entries inside it, and a pattern must name a string that
+    // is there, or this is not a package this build can run.
+    for (sal_uInt32 i = 0; i < m_nConstantCount; ++i)
+    {
+        const Constant& rConstant = m_pConstants[i];
+        if (rConstant.nType == Constant::Regex)
+        {
+            if (rConstant.nData >= m_nStringsSize)
+                return false;
+            continue;
+        }
+
+        const sal_uInt64 nBytes
+            = sal_uInt64(rConstant.nCount) * (rConstant.nType == Constant::Map ? 8 : 4);
+        if (rConstant.nData > m_nConstantDataSize
+            || nBytes > m_nConstantDataSize - rConstant.nData)
+            return false;
+    }
+
     for (sal_uInt32 i = 0; i < m_nOptionCount; ++i)
         m_aOptionIndex.emplace(getString(m_pOptions[i].nName), static_cast<sal_Int32>(i));
 
     return !m_aPackage.isEmpty() && m_nRuleCount != 0;
+}
+
+const char* RuleFile::getCString(sal_uInt32 nOffset) const
+{
+    // An offset read out of the constant blob names a string the same way a
+    // rule does, so one that is not in the string blob answers with nothing
+    // rather than with whatever follows it.
+    if (nOffset >= m_nStringsSize)
+        return "";
+    return m_pStrings + nOffset;
 }
 
 OUString RuleFile::getString(sal_uInt32 nOffset) const
@@ -185,6 +226,74 @@ sal_Int32 RuleFile::findOption(std::u16string_view rName) const
 {
     std::map<OUString, sal_Int32>::const_iterator aFound = m_aOptionIndex.find(OUString(rName));
     return aFound == m_aOptionIndex.end() ? -1 : aFound->second;
+}
+
+const Constant& RuleFile::getConstant(sal_uInt32 nIndex) const
+{
+    assert(nIndex < m_nConstantCount);
+    return m_pConstants[nIndex];
+}
+
+namespace
+{
+// Entries are sorted by code point, which for UTF-8 is byte order, so the
+// encoded needle can be compared without decoding anything.
+sal_Int32 compareEntry(const char* pEntry, const OString& rNeedle)
+{
+    return rtl_str_compare(pEntry, rNeedle.getStr());
+}
+}
+
+bool RuleFile::constantContains(sal_uInt32 nIndex, const OString& rUtf8Needle) const
+{
+    if (nIndex >= m_nConstantCount)
+        return false;
+    const Constant& rConstant = m_pConstants[nIndex];
+    const sal_uInt32 nStride = rConstant.nType == Constant::Map ? 2 : 1;
+    if (rConstant.nType == Constant::Regex)
+        return false;
+
+    sal_uInt32 nLow = 0;
+    sal_uInt32 nHigh = rConstant.nCount;
+    while (nLow < nHigh)
+    {
+        const sal_uInt32 nMid = nLow + (nHigh - nLow) / 2;
+        const sal_uInt32 nEntry
+            = readU32(m_pConstantData + rConstant.nData + 4 * nStride * nMid);
+        const sal_Int32 nOrder = compareEntry(getCString(nEntry), rUtf8Needle);
+        if (nOrder == 0)
+            return true;
+        if (nOrder < 0)
+            nLow = nMid + 1;
+        else
+            nHigh = nMid;
+    }
+    return false;
+}
+
+std::optional<OUString> RuleFile::constantLookup(sal_uInt32 nIndex, const OString& rUtf8Key) const
+{
+    if (nIndex >= m_nConstantCount)
+        return std::nullopt;
+    const Constant& rConstant = m_pConstants[nIndex];
+    if (rConstant.nType != Constant::Map)
+        return std::nullopt;
+
+    sal_uInt32 nLow = 0;
+    sal_uInt32 nHigh = rConstant.nCount;
+    while (nLow < nHigh)
+    {
+        const sal_uInt32 nMid = nLow + (nHigh - nLow) / 2;
+        const sal_uInt8* pPair = m_pConstantData + rConstant.nData + 8 * nMid;
+        const sal_Int32 nOrder = compareEntry(getCString(readU32(pPair)), rUtf8Key);
+        if (nOrder == 0)
+            return getString(readU32(pPair + 4));
+        if (nOrder < 0)
+            nLow = nMid + 1;
+        else
+            nHigh = nMid;
+    }
+    return std::nullopt;
 }
 
 const sal_uInt8* RuleFile::getCode(sal_uInt32 nBiasedOffset) const

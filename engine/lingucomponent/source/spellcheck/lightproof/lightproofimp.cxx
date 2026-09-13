@@ -30,7 +30,9 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <linguistic/misc.hxx>
 #include <osl/file.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -485,7 +487,8 @@ ProofreadingResult Lightproof::doProofreading(
 
     const RuleFile& rFile = *pPackage->pFile;
     const icu::UnicodeString aInput = toIcu(aText);
-    const Context aContext{ rFile, aLocale, aText, pPackage->aOptions };
+    m_pRunningPackage = pPackage;
+    Context aContext{ rFile, aLocale, aText, pPackage->aOptions, nullptr, *this };
 
     std::vector<SingleProofreadingError> aErrors;
     for (sal_uInt32 nRuleIndex = 0; nRuleIndex < rFile.getRuleCount(); ++nRuleIndex)
@@ -522,6 +525,7 @@ ProofreadingResult Lightproof::doProofreading(
 
         icu::RegexMatcher& rMatcher = *rCompiled.pMatcher;
         rMatcher.reset(aInput);
+        aContext.pMatcher = &rMatcher;
 
         UErrorCode nStatus = U_ZERO_ERROR;
         while (rMatcher.find(nStatus) && U_SUCCESS(nStatus))
@@ -584,6 +588,7 @@ ProofreadingResult Lightproof::doProofreading(
         }
     }
 
+    m_pRunningPackage = nullptr;
     aResult.aErrors = comphelper::containerToSequence(aErrors);
     return aResult;
 }
@@ -598,6 +603,371 @@ void Lightproof::resetIgnoreRules()
 {
     osl::MutexGuard aGuard(linguistic::GetLinguMutex());
     m_aIgnoredRules.clear();
+}
+
+bool Lightproof::spell(const lang::Locale& rLocale, const OUString& rWord)
+{
+    if (rWord.isEmpty())
+        return false;
+    if (!m_bSpellCheckerTried)
+    {
+        m_bSpellCheckerTried = true;
+        try
+        {
+            const uno::Reference<cpo::uno::XComponentContext>& xContext(
+                comphelper::getProcessComponentContext());
+            m_xSpellChecker.set(xContext->getServiceManager()->createInstanceWithContext(
+                                    u"com.sun.star.linguistic2.SpellChecker"_ustr, xContext),
+                                uno::UNO_QUERY);
+        }
+        catch (const cpo::uno::Exception&)
+        {
+        }
+    }
+    if (!m_xSpellChecker)
+        return false;
+    try
+    {
+        return m_xSpellChecker->isValid(rWord, rLocale, {});
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        return false;
+    }
+}
+
+const std::vector<OUString>& Lightproof::getAnalyses(const lang::Locale& rLocale,
+                                                     const OUString& rWord)
+{
+    static const std::vector<OUString> aNone;
+
+    const std::pair<OUString, OUString> aKey(LanguageTag(rLocale).getBcp47(), rWord);
+    std::map<std::pair<OUString, OUString>, std::vector<OUString>>::const_iterator aFound
+        = m_aAnalyses.find(aKey);
+    if (aFound != m_aAnalyses.end())
+        return aFound->second;
+
+    // Make sure the dispatcher exists before the SPELLML query goes through it.
+    spell(rLocale, u"a"_ustr);
+    if (!m_xSpellChecker)
+        return aNone;
+
+    std::vector<OUString> aResult;
+    try
+    {
+        const uno::Reference<linguistic2::XSpellAlternatives> xAlternatives
+            = m_xSpellChecker->spell(u"<?xml?><query type=\'analyze\'><word>"_ustr + rWord
+                                         + u"</word></query>"_ustr,
+                                     rLocale, {});
+        if (xAlternatives)
+        {
+            const cpo::uno::Sequence<OUString> aWords(xAlternatives->getAlternatives());
+            if (aWords.hasElements())
+            {
+                // The analyses come back in one string, each closed by </a>.
+                sal_Int32 nIndex = 0;
+                const OUString& rPacked = aWords[0];
+                while (nIndex >= 0 && nIndex < rPacked.getLength())
+                {
+                    const sal_Int32 nEnd = rPacked.indexOf(u"</a>", nIndex);
+                    if (nEnd < 0)
+                        break;
+                    aResult.push_back(rPacked.copy(nIndex, nEnd - nIndex));
+                    nIndex = nEnd + 4;
+                }
+            }
+        }
+    }
+    catch (const cpo::uno::Exception&)
+    {
+    }
+
+    return m_aAnalyses.emplace(aKey, std::move(aResult)).first->second;
+}
+
+icu::RegexMatcher* Lightproof::getMorphMatcher(const OUString& rPattern)
+{
+    std::map<OUString, std::unique_ptr<icu::RegexMatcher>>::const_iterator aFound
+        = m_aMorphMatchers.find(rPattern);
+    if (aFound != m_aMorphMatchers.end())
+        return aFound->second.get();
+
+    std::unique_ptr<icu::RegexMatcher> pMatcher;
+    UErrorCode nStatus = U_ZERO_ERROR;
+    pMatcher.reset(new icu::RegexMatcher(toIcu(rPattern), 0, nStatus));
+    if (U_FAILURE(nStatus))
+        pMatcher.reset();
+    return m_aMorphMatchers.emplace(rPattern, std::move(pMatcher)).first->second.get();
+}
+
+OUString Lightproof::morph(const lang::Locale& rLocale, const OUString& rWord,
+                           const OUString& rPattern, bool bAll, bool bOnlyAffix)
+{
+    if (rWord.isEmpty())
+        return OUString();
+    if (bOnlyAffix)
+    {
+        SAL_WARN("lingucomponent.lightproof", "affix() is not implemented");
+        return OUString();
+    }
+
+    icu::RegexMatcher* pMatcher = getMorphMatcher(rPattern);
+    if (pMatcher == nullptr)
+        return OUString();
+
+    OUString aResult;
+    for (const OUString& rAnalysis : getAnalyses(rLocale, rWord))
+    {
+        const icu::UnicodeString aSubject = toIcu(rAnalysis);
+        pMatcher->reset(aSubject);
+        UErrorCode nStatus = U_ZERO_ERROR;
+        if (pMatcher->find(nStatus) && U_SUCCESS(nStatus))
+        {
+            UErrorCode nGroupStatus = U_ZERO_ERROR;
+            aResult = fromIcu(pMatcher->group(0, nGroupStatus));
+            if (!bAll)
+                return aResult;
+        }
+        else if (bAll)
+        {
+            // "all" asks that every analysis match.
+            return OUString();
+        }
+    }
+    return aResult;
+}
+
+namespace
+{
+// The rules build the number to convert by concatenation, so it can be an
+// expression as well as a literal: "5" or "5*12+3". Products bind tighter
+// than sums, which is all the rules use.
+bool evaluateNumber(const OUString& rText, double& rResult)
+{
+    const sal_Int32 nLength = rText.getLength();
+    sal_Int32 nAt = 0;
+    double nSum = 0.0;
+    bool bAny = false;
+
+    while (nAt < nLength)
+    {
+        double nProduct = 1.0;
+        bool bFactor = false;
+        for (;;)
+        {
+            rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+            sal_Int32 nParsedEnd = 0;
+            const double nValue = rtl::math::stringToDouble(rText.subView(nAt), '.', 0, &eStatus,
+                                                            &nParsedEnd);
+            if (eStatus != rtl_math_ConversionStatus_Ok || nParsedEnd == 0)
+                return false;
+            nAt += nParsedEnd;
+            nProduct *= nValue;
+            bFactor = true;
+            if (nAt < nLength && rText[nAt] == '*')
+            {
+                ++nAt;
+                continue;
+            }
+            break;
+        }
+        if (!bFactor)
+            return false;
+        nSum += nProduct;
+        bAny = true;
+        if (nAt < nLength && rText[nAt] == '+')
+        {
+            ++nAt;
+            continue;
+        }
+        break;
+    }
+
+    if (!bAny || nAt != nLength)
+        return false;
+    rResult = nSum;
+    return true;
+}
+
+// The units the measurement rules convert between, with the factors Calc's
+// CONVERT uses (scaddins/source/analysis/analysishelper.cxx). Doing this here
+// rather than through FunctionAccess keeps the checker off the SolarMutex,
+// which it must not take: it runs on the grammar checking thread while the
+// main thread can be waiting on it.
+struct Unit
+{
+    const char* pName;
+    // What one base unit is worth in this unit.
+    double fFactor;
+    // Zero for everything but temperature, which needs an offset from the
+    // base as well as a factor.
+    double fOffset;
+    char cClass;
+    // The decimal exponent of an SI prefix already folded into the name.
+    sal_Int16 nLevel;
+};
+
+constexpr Unit UNITS[] = {
+    { "g", 1.0, 0.0, 'm', 0 },
+    { "kg", 1.0, 0.0, 'm', 3 },
+    { "lbm", 2.2046229146913400E-03, 0.0, 'm', 0 },
+
+    { "m", 1.0, 0.0, 'l', 0 },
+    { "mm", 1.0, 0.0, 'l', -3 },
+    { "cm", 1.0, 0.0, 'l', -2 },
+    { "km", 1.0, 0.0, 'l', 3 },
+    { "mi", 6.2137119223733397E-04, 0.0, 'l', 0 },
+    { "in", 3.9370078740157480E01, 0.0, 'l', 0 },
+    { "ft", 3.2808398950131234E00, 0.0, 'l', 0 },
+    { "yd", 1.0936132983377078E00, 0.0, 'l', 0 },
+
+    { "l", 1.0, 0.0, 'v', 0 },
+    { "dl", 1.0, 0.0, 'v', -1 },
+    { "pt", 2.1133764188651873E00, 0.0, 'v', 0 },
+    { "uk_pt", 1.7597539863927023E00, 0.0, 'v', 0 },
+    { "gal", 2.6417205235814842E-01, 0.0, 'v', 0 },
+    { "uk_gal", 2.1996924829908779E-01, 0.0, 'v', 0 },
+
+    { "m/s", 1.0, 0.0, 's', 0 },
+    { "m/h", 3.6000000000000000E03, 0.0, 's', 0 },
+    { "km/h", 3.6000000000000000E03, 0.0, 's', 3 },
+    { "mph", 2.2369362920544023E00, 0.0, 's', 0 },
+
+    { "K", 1.0, 0.0, 't', 0 },
+    { "C", 1.0, -2.7315000000000000E02, 't', 0 },
+    { "F", 1.8000000000000000E00, -2.5537222222222222E02, 't', 0 },
+};
+
+const Unit* findUnit(std::u16string_view rName)
+{
+    for (const Unit& rUnit : UNITS)
+    {
+        if (o3tl::equalsAscii(rName, rUnit.pName))
+            return &rUnit;
+    }
+    return nullptr;
+}
+
+// Calc's CONVERT for the units above: a factor and a prefix exponent, with
+// temperature going through the base with its offset.
+bool convertUnit(double fValue, std::u16string_view rFrom, std::u16string_view rTo, double& rResult)
+{
+    const Unit* pFrom = findUnit(rFrom);
+    const Unit* pTo = findUnit(rTo);
+    if (pFrom == nullptr || pTo == nullptr || pFrom->cClass != pTo->cClass)
+        return false;
+
+    if (pFrom->cClass == 't')
+    {
+        const double fBase = rtl::math::pow10Exp(fValue, pFrom->nLevel) / pFrom->fFactor
+                             - pFrom->fOffset;
+        rResult = rtl::math::pow10Exp((fBase + pTo->fOffset) * pTo->fFactor, -pTo->nLevel);
+        return true;
+    }
+
+    rResult = rtl::math::pow10Exp(fValue * pTo->fFactor / pFrom->fFactor,
+                                  pFrom->nLevel - pTo->nLevel);
+    return true;
+}
+
+// Python's str() of a float, which always shows a decimal point.
+OUString formatLikePython(double nValue)
+{
+    OUString aText = rtl::math::doubleToUString(nValue, rtl_math_StringFormat_Automatic,
+                                                rtl_math_DecimalPlaces_Max, '.', true);
+    if (aText.indexOf('.') < 0 && aText.indexOf('e') < 0 && aText.indexOf('E') < 0)
+        aText += ".0";
+    return aText;
+}
+}
+
+OUString Lightproof::measurement(const OUString& rNumber, const OUString& rFrom,
+                                 const OUString& rTo, const OUString& rSuffix,
+                                 const OUString& rDecimal, const OUString& rRemove)
+{
+    OUString aNumber = rNumber;
+    if (rFrom == "ft" || rFrom == "in" || rFrom == "mi")
+    {
+        aNumber = aNumber.replaceAll(u" 1/2"_ustr, u".5"_ustr)
+                      .replaceAll(u" \u00BD"_ustr, u".5"_ustr)
+                      .replaceAll(u"\u00BD"_ustr, u".5"_ustr);
+    }
+    if (!rRemove.isEmpty())
+        aNumber = aNumber.replaceAll(rRemove, u""_ustr);
+    if (!rDecimal.isEmpty())
+        aNumber = aNumber.replaceAll(rDecimal, u"."_ustr);
+    aNumber = aNumber.replaceAll(u"\u2212"_ustr, u"-"_ustr);
+
+    double nValue = 0.0;
+    if (!evaluateNumber(aNumber, nValue))
+        return OUString();
+
+    double nConverted = 0.0;
+    if (!convertUnit(nValue, rFrom, rTo, nConverted))
+    {
+        SAL_WARN("lingucomponent.lightproof",
+                 "no conversion from " << rFrom << " to " << rTo);
+        return OUString();
+    }
+
+    // The same rounded forms the rules offer, shortest first and without
+    // repeats.
+    std::vector<OUString> aCandidates{
+        rtl::math::doubleToUString(rtl::math::round(nConverted, 0), rtl_math_StringFormat_F, 0,
+                                   '.', true),
+        formatLikePython(rtl::math::round(nConverted, 1)),
+        formatLikePython(rtl::math::round(nConverted, 2)),
+        formatLikePython(nConverted)
+    };
+    std::vector<OUString> aUnique;
+    for (const OUString& rCandidate : aCandidates)
+    {
+        if (std::find(aUnique.begin(), aUnique.end(), rCandidate) == aUnique.end())
+            aUnique.push_back(rCandidate);
+    }
+    std::stable_sort(aUnique.begin(), aUnique.end(),
+                     [](const OUString& rLeft, const OUString& rRight) {
+                         return rLeft.getLength() < rRight.getLength();
+                     });
+
+    OUStringBuffer aResult;
+    for (size_t i = 0; i < aUnique.size(); ++i)
+    {
+        if (i)
+            aResult.append(rSuffix + "\n");
+        aResult.append(aUnique[i]);
+    }
+    return aResult.makeStringAndClear()
+               .replaceAll(u"."_ustr, rDecimal)
+               .replaceAll(u"-"_ustr, u"\u2212"_ustr)
+           + rSuffix;
+}
+
+icu::RegexMatcher* Lightproof::getConstantMatcher(sal_uInt32 nConstantIndex)
+{
+    if (m_pRunningPackage == nullptr)
+        return nullptr;
+    Package& rPackage = *m_pRunningPackage;
+    const RuleFile& rFile = *rPackage.pFile;
+    if (nConstantIndex >= rFile.getConstantCount())
+        return nullptr;
+
+    if (rPackage.aConstantMatchers.size() != rFile.getConstantCount())
+        rPackage.aConstantMatchers.resize(rFile.getConstantCount());
+
+    std::unique_ptr<icu::RegexMatcher>& rMatcher = rPackage.aConstantMatchers[nConstantIndex];
+    if (!rMatcher)
+    {
+        const Constant& rConstant = rFile.getConstant(nConstantIndex);
+        if (rConstant.nType != Constant::Regex)
+            return nullptr;
+        UErrorCode nStatus = U_ZERO_ERROR;
+        rMatcher.reset(new icu::RegexMatcher(toIcu(rFile.getString(rConstant.nData)),
+                                             rConstant.nFlags, nStatus));
+        if (U_FAILURE(nStatus))
+            rMatcher.reset();
+    }
+    return rMatcher.get();
 }
 
 OUString Lightproof::getServiceDisplayName(const lang::Locale& rLocale)

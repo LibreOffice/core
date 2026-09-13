@@ -11,6 +11,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
 
+#include <unicode/regex.h>
+
 #include <vector>
 
 namespace lightproof
@@ -87,7 +89,10 @@ public:
         Null,
         Bool,
         Int,
-        Str
+        Str,
+        // An index into the rule file's constant pool: a word set, a lookup
+        // map or one of the module-level patterns.
+        Constant
     };
 
     Value()
@@ -97,17 +102,42 @@ public:
     static Value boolean(bool b);
     static Value integer(sal_Int32 n);
     static Value string(OUString aValue);
+    static Value constant(sal_uInt32 nIndex);
 
     Type getType() const { return m_eType; }
     bool isTrue() const;
     const OUString& getString() const { return m_aString; }
     sal_Int32 getInt() const { return m_nInt; }
+    sal_uInt32 getConstant() const { return static_cast<sal_uInt32>(m_nInt); }
 
 private:
     Type m_eType;
     bool m_bBool = false;
     sal_Int32 m_nInt = 0;
     OUString m_aString;
+};
+
+// The parts of a running check that live outside the expression: the current
+// match, the dictionaries, and the unit conversion. Implemented by the
+// checker, which owns all three.
+class Host
+{
+public:
+    virtual ~Host() = default;
+
+    // The spelling of a word, and the last morphological analysis of it that
+    // the pattern matches, which is empty when it matches none.
+    virtual bool spell(const css::lang::Locale& rLocale, const OUString& rWord) = 0;
+    virtual OUString morph(const css::lang::Locale& rLocale, const OUString& rWord,
+                           const OUString& rPattern, bool bAll, bool bOnlyAffix)
+        = 0;
+    virtual OUString measurement(const OUString& rNumber, const OUString& rFrom,
+                                 const OUString& rTo, const OUString& rSuffix,
+                                 const OUString& rDecimal, const OUString& rRemove)
+        = 0;
+    // A matcher for one of the rule file's pattern constants, built on first
+    // use and owned by the caller's package.
+    virtual icu::RegexMatcher* getConstantMatcher(sal_uInt32 nConstantIndex) = 0;
 };
 
 // What a running expression can reach outside its own stack. Options are
@@ -118,6 +148,10 @@ struct Context
     const css::lang::Locale& rLocale;
     const OUString& rText;
     const std::vector<bool>& rOptions;
+    // The match the expression is being evaluated for, and the group numbers
+    // its rule gave its named groups.
+    icu::RegexMatcher* pMatcher;
+    Host& rHost;
 };
 
 // Runs one expression. Returns a null Value if the bytecode is malformed,

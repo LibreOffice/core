@@ -13,6 +13,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace lightproof
@@ -46,6 +47,25 @@ struct GroupName
     sal_uInt32 nIndex;
 };
 
+// A constant the rule conditions look things up in: a sorted word set, a
+// sorted string-to-string map, or one of the module-level patterns.
+struct Constant
+{
+    enum Type
+    {
+        Set = 0,
+        Map = 1,
+        Regex = 2
+    };
+
+    sal_uInt32 nType;
+    sal_uInt32 nCount;
+    // For Set and Map an offset into the constant blob, for Regex the
+    // pattern's offset into the string blob.
+    sal_uInt32 nData;
+    sal_uInt32 nFlags;
+};
+
 // A rule package as produced by lpcompile.py. Immutable once loaded, and
 // shared between every document the checker serves.
 class RuleFile
@@ -74,6 +94,14 @@ public:
 
     const GroupName& getGroupName(sal_uInt32 nIndex) const;
 
+    sal_uInt32 getConstantCount() const { return m_nConstantCount; }
+    const Constant& getConstant(sal_uInt32 nIndex) const;
+    // True if the set or map constant holds the string as a member or key.
+    bool constantContains(sal_uInt32 nIndex, const OString& rUtf8Needle) const;
+    // The value the map constant gives the key, or an empty optional when it
+    // holds no such key.
+    std::optional<OUString> constantLookup(sal_uInt32 nIndex, const OString& rUtf8Key) const;
+
     const sal_uInt8* getCode(sal_uInt32 nBiasedOffset) const;
     // One past the last byte of the code, so a running expression knows where
     // it has to stop.
@@ -85,6 +113,9 @@ public:
 private:
     RuleFile() = default;
     bool parse();
+    // The string at an offset that came out of the constant blob, empty when
+    // the offset is not one the string blob holds.
+    const char* getCString(sal_uInt32 nOffset) const;
 
     std::vector<sal_uInt8> m_aData;
     OUString m_aPackage;
@@ -99,6 +130,10 @@ private:
     sal_uInt32 m_nOptionCount = 0;
     const GroupName* m_pGroupNames = nullptr;
     sal_uInt32 m_nGroupNameCount = 0;
+    const Constant* m_pConstants = nullptr;
+    sal_uInt32 m_nConstantCount = 0;
+    const sal_uInt8* m_pConstantData = nullptr;
+    sal_uInt32 m_nConstantDataSize = 0;
     const sal_uInt8* m_pCode = nullptr;
     sal_uInt32 m_nCodeSize = 0;
     const char* m_pStrings = nullptr;

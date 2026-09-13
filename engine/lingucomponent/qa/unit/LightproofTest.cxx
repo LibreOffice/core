@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -43,6 +44,11 @@ protected:
     Sequence<linguistic2::SingleProofreadingError> check(const OUString& rText);
 
     static lang::Locale russian() { return lang::Locale(u"ru"_ustr, u"RU"_ustr, OUString()); }
+    static lang::Locale english() { return lang::Locale(u"en"_ustr, u"US"_ustr, OUString()); }
+
+    // The errors reported for a paragraph checked in English.
+    Sequence<linguistic2::SingleProofreadingError> checkEnglish(const OUString& rText);
+    void setEnglishOption(const OUString& rName, bool bValue);
 
     // Writes one Russian option flag and commits, the way the Options dialog
     // does through the per-user xcu.
@@ -64,6 +70,29 @@ void LightproofTest::setOption(const OUString& rName, bool bValue)
     uno::Reference<util::XChangesBatch>(xGroup, uno::UNO_QUERY_THROW)->commitChanges();
 }
 
+void LightproofTest::setEnglishOption(const OUString& rName, bool bValue)
+{
+    uno::Reference<lang::XMultiServiceFactory> xProvider(
+        css::configuration::theDefaultProvider::get(m_xContext));
+    Any aNodePath(css::beans::NamedValue(
+        u"nodepath"_ustr,
+        Any(u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/en"_ustr)));
+    uno::Reference<beans::XPropertySet> xGroup(
+        xProvider->createInstanceWithArguments(
+            u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, { aNodePath }),
+        uno::UNO_QUERY_THROW);
+    xGroup->setPropertyValue(rName, Any(bValue));
+    uno::Reference<util::XChangesBatch>(xGroup, uno::UNO_QUERY_THROW)->commitChanges();
+}
+
+Sequence<linguistic2::SingleProofreadingError>
+LightproofTest::checkEnglish(const OUString& rText)
+{
+    return getProofreader()
+        ->doProofreading(u"doc"_ustr, rText, english(), 0, rText.getLength(), {})
+        .aErrors;
+}
+
 uno::Reference<linguistic2::XProofreader> LightproofTest::getProofreader()
 {
     return uno::Reference<linguistic2::XProofreader>(
@@ -81,7 +110,8 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testSupportedLocales)
 {
     uno::Reference<linguistic2::XProofreader> xProofreader(getProofreader());
     CPPUNIT_ASSERT(xProofreader->hasLocale(russian()));
-    CPPUNIT_ASSERT(!xProofreader->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())));
+    CPPUNIT_ASSERT(xProofreader->hasLocale(english()));
+    CPPUNIT_ASSERT(!xProofreader->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())));
     CPPUNIT_ASSERT(!xProofreader->isSpellChecker());
 
     uno::Reference<lang::XServiceDisplayName> xDisplayName(xProofreader, uno::UNO_QUERY_THROW);
@@ -245,9 +275,95 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testIgnoreRule)
 CPPUNIT_TEST_FIXTURE(LightproofTest, testUnknownLocale)
 {
     const linguistic2::ProofreadingResult aResult = getProofreader()->doProofreading(
-        u"doc"_ustr, u"Here foo is."_ustr, lang::Locale(u"en"_ustr, u"US"_ustr, OUString()), 0, 12,
+        u"doc"_ustr, u"Here foo is."_ustr, lang::Locale(u"de"_ustr, u"DE"_ustr, OUString()), 0, 12,
         {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aResult.aErrors.getLength());
+}
+
+// A message built by looking a punctuation mark up in the package's table and
+// joining the pieces.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishMessageFromTable)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkEnglish(u"This is a test ,and more."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"Reversed space and punctuation?"_ustr, aErrors[0].aShortComment);
+    CPPUNIT_ASSERT_EQUAL(u", "_ustr, aErrors[0].aSuggestions[0]);
+
+    CPPUNIT_ASSERT_EQUAL(u"Extra space before the comma?"_ustr, aErrors[1].aShortComment);
+    CPPUNIT_ASSERT_EQUAL(u","_ustr, aErrors[1].aSuggestions[0]);
+}
+
+// A condition that looks the matched word up in one of the package's word
+// sets, and a message whose long form is a URL.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishWordSet)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkEnglish(u"I saw an eucalyptus tree."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"a eucalyptus"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Did you mean:"_ustr, aErrors[0].aShortComment);
+
+    // A comment holding a link is offered as a property, and the long form
+    // falls back to the short one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors[0].aProperties.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"FullCommentURL"_ustr, aErrors[0].aProperties[0].Name);
+    CPPUNIT_ASSERT_EQUAL(aErrors[0].aShortComment, aErrors[0].aFullComment);
+}
+
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishWordSetForAn)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkEnglish(u"It took an hour and a hour."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(u"an hour"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// A pattern whose character class holds an opening bracket, which ICU reads
+// as a nested set where Python re reads a plain character. The rule is
+// dropped outright if the class is not escaped on the way in.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishBracketInCharacterClass)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkEnglish(u"I used ( x ) here."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Extra space before the closing parenthesis?"_ustr,
+                         aErrors[0].aShortComment);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aErrors[1].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(u"Extra space after the opening parenthesis?"_ustr,
+                         aErrors[1].aShortComment);
+    CPPUNIT_ASSERT_EQUAL(u"("_ustr, aErrors[1].aSuggestions[0]);
+}
+
+// A condition that asks the spelling dictionary about the matched word.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishSpellCondition)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkEnglish(u"a apple a day"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"an apple"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// Unit conversion, which is behind an option that is off by default.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishMeasurement)
+{
+    const OUString aText(u"Give me 5 lb of it."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), checkEnglish(aText).getLength());
+
+    setEnglishOption(u"metric"_ustr, true);
+    const Sequence<linguistic2::SingleProofreadingError> aErrors = checkEnglish(aText);
+    setEnglishOption(u"metric"_ustr, false);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Convert to metric:"_ustr, aErrors[0].aShortComment);
+    CPPUNIT_ASSERT(aErrors[0].aSuggestions.hasElements());
+    CPPUNIT_ASSERT_EQUAL(u"2 kg"_ustr, aErrors[0].aSuggestions[0]);
 }
 }
 
