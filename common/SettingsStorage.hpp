@@ -39,6 +39,11 @@ namespace Desktop
 
     void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileCallback);
 
+    // The configuration the engine reads: the directory the dialog writes its
+    // groups into, in the user's own profile. An app has no jail, so nothing
+    // is staged anywhere and the engine is pointed straight at it.
+    Poco::Path getUserConfigRoot();
+
     // Native-owned per-user UI preferences (preferences.json in the config dir).
     // getDarkMode() returns nullopt when the user has not chosen yet.
     std::optional<bool> getDarkMode();

@@ -18,6 +18,12 @@
 
 #include "ChildSession.hpp"
 
+#include <common/Common.hpp>
+
+#if APP_HAS_SETTINGS_STORE
+#include <common/SettingsStorage.hpp>
+#endif
+
 #include <common/Anonymizer.hpp>
 #include <common/Clipboard.hpp>
 #include <common/CommandControl.hpp>
@@ -563,7 +569,14 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "addconfig"))
     {
+#if APP_HAS_SETTINGS_STORE
+        // No jail to stage into, and no need of one: the engine reads the
+        // configuration out of the user's own profile, which is where the
+        // settings dialog writes it.
+        const Poco::Path presetsPath(Desktop::getUserConfigRoot());
+#else
         const Poco::Path presetsPath(getJailRoot() + JAILED_CONFIG_ROOT);
+#endif
         getLOKit()->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
     }
     else if (tokens.equals(0, "userpersistence"))

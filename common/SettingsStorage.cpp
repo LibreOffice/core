@@ -220,6 +220,17 @@ void syncSettings(const std::function<void(const std::vector<char>&)>& sendFileC
     }
 }
 
+Poco::Path getUserConfigRoot()
+{
+    // The dialog writes through uploadSettings(), which puts a group under
+    // settings/<config type>/. The apps have no admin iframe, so the type is
+    // always userconfig.
+    Poco::Path root = getConfigPath();
+    root.append("settings").append("userconfig");
+    root.makeDirectory();
+    return root;
+}
+
 static Poco::Path preferencesPath()
 {
     Poco::Path path = getConfigPath();

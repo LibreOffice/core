@@ -17,6 +17,7 @@
 #include <config.h>
 
 #include "DocumentBroker.hpp"
+#include "SettingsStorage.hpp"
 
 #include <common/Anonymizer.hpp>
 #include <common/Authorization.hpp>
@@ -4685,6 +4686,15 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
                          << _mobileAppDocId << "] to have " << count << " sessions.");
 
         UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerAddSession(_docKey, session));
+
+#if APP_HAS_SETTINGS_STORE
+        // The desktop apps have no settings host to fetch presets from, and no
+        // jail to stage them into: the engine reads the user's own profile,
+        // which is where the dialog writes. Send the same message the online
+        // build sends once a view is there to carry it.
+        if (count == 1 && Poco::File(Desktop::getUserConfigRoot()).exists())
+            forwardToChild(session, "addconfig");
+#endif
 
         // Sent unconditionally - anonymous sessions explicitly say "false"
         // rather than relying on signal absence.
