@@ -168,6 +168,20 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testUnconditionalRule)
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, aErrors[0].aShortComment);
 }
 
+// The ellipsis rule, whose message was corrected in the table in 2021 and in
+// the rule source only now.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testRussianEllipsis)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = check(u"Вот так ... и всё."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"…"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Символ многоточия."_ustr,
+                         aErrors[0].aShortComment);
+}
+
 // A rule whose condition is an option that defaults on fires.
 CPPUNIT_TEST_FIXTURE(LightproofTest, testRuleEnabledByDefault)
 {

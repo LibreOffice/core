@@ -1,0 +1,99 @@
+# Options and title texts for the Settings and conditional rules
+#
+# The Lightproof dialogs contain only grouped checkboxes.
+#
+# Format of the dialog definition:
+#
+# GroupID: OptionID, OptionID ...
+# Group2ID: OptionID, OptionID ...
+# ...
+# [Language_code=title of the window]
+# OptionID=title of the option
+# Option2ID=title of the option
+#
+# The first language is the default language for other locales
+# (use en_US or the common language of your country)
+#
+# The OptionIDs declared here are used in the rules, too. For example:
+#
+# foo <- option("style") -> bar # bar is far better
+#
+# this rule depends from the state of the "style" checkbox.
+
+# options (starred options are default checked ones)
+
+spelling: cap par, quot wordpart, *dash comma, numpart grammar
+proofreading: style *dup0, compound dup, allcompound dup2, *money dup3, SI hyphen
+typography: *apost *spaces frac ligature, elli spaces2 thin noligature, idx minus - -
+
+# titles
+
+[en_US=Hungarian sentence checking]
+
+spelling=Spelling
+cap=Capitalization
+par=Parentheses
+wordpart=Word parts of compounds
+comma=Comma usage
+proofreading=Proofreading
+style=Style checking
+compound=Underline typo-like compound words
+allcompound=Underline all generated compound words
+grammar=Possible mistakes
+money=Consistency of money amounts
+duplication=Word duplication
+dup0=Word duplication
+dup=Duplication within clauses
+dup2=Duplication within sentences
+dup3=Allow previous checkings with affixes
+numpart=Thousand separation of numbers
+typography=Typography
+quot=Quotation marks
+apost=Apostrophe
+dash=En dash
+elli=Ellipsis
+ligature=Ligature suggestion
+noligature=Underline ligatures
+frac=Fractions
+thin=Thin space
+spaces=Double spaces
+spaces2=More spaces
+idx=Indices
+minus=Minus
+SI=Measurements
+hyphen=Hyphenation of ambiguous words
+
+[hu_HU=Magyar mondatellenőrzés]
+
+spelling=Helyesírás
+cap=Nagy kezdőbetű\nMondatok nagy kezdőbetűjének ellenőrzése.
+par=Zárójelek\nZárójelpárok ellenőrzése.
+wordpart=Egybe- és különírási javaslatok 
+comma=Vesszőhasználatra vonatkozó javaslatok\nA valószínűleg hiányzó és felesleges vesszők jelzése.
+numpart=Nagy számok tagolása szóközökkel\nEzrestagolás nem-törő szóközökkel (10000 → 10 000).
+proofreading=Korrektúra
+style=Stílusellenőrzés
+compound=Egyszerű nem szótári összetett szavak\nRövid, vagy rövid tagot tartalmazó, szóösszetételi szabályok alapján gyakran hibásan elfogadott alakok aláhúzása.
+allcompound=Minden nem szótári összetett szó\nMinden szóösszetételi szabály alapján elfogadott alak aláhúzása.
+grammar=Javaslat kevésbé egyértelmű esetben is
+dup0=Szóismétlés\nSzóismétlés egymást közvetlenül követő szavak esetében.
+dup=Szóismétlés tagmondaton belül
+dup2=Szóismétlés mondaton belül
+dup3=Szóismétlés eltérő toldalékok esetén is
+money=Számok és átírásuk\nA számmal és számnévvel is leírt mennyiség megegyezik-e? (Pl. 10, azaz tíz Ft.)
+typography=Tipográfia
+quot=Idézőjelek\nA magyar „külső” és »belső« idézőjelek ellenőrzése.
+apost=Aposztróf\nAz írógépes aposztróf cseréje a tipográfiailag megfelelőre (' → ’).
+dash=Nagykötőjel és gondolatjel\nA kiskötőjel cseréje a nagykötőjelre (- → –).
+elli=Három pont\nHárom pont cseréje az egalizált három pont karakterre (...→…).
+frac=Törtek\nPerjellel elválasztott törtek cseréje Unicode karakterre (1/2 → ½).
+thin=Keskeny szóköz\nKeskeny szóköz (spácium) használata ezrestagoláshoz és más esetekben.
+ligature=f-ligatúra javaslata\nCsere Unicode f-ligatúrára.
+noligature=f-ligatúra tiltása\nUnicode f-ligatúra cseréje különálló betűkre.
+spaces=Dupla szóköz\nKét vagy három ismétlődő szóköz cseréje egyre.
+spaces2=Sok szóköz\nNégy vagy több ismétlődő szóköz cseréje egy tabulátorra.
+idx=Indexek\nSzámok cseréje mértékegységekben és kémiai képletekben valódi indexekre (m2 → m²).
+minus=Mínuszjel\nKötőjelek cseréje Unicode mínuszjelre a számok előtt.
+SI=Mértékegységek\nNem SI mértékegységek átalakítása (°F, mérföld, yard, láb, hüvelyk, gallon, pint, font súlyú).
+hyphen=Hiányzó elválasztás megadása\nNem egyértelműen elválasztható szóalakok elválasztásának megadása (pl. megint, fölül).
+

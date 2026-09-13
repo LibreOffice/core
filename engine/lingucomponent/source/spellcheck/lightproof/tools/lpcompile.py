@@ -943,17 +943,29 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
 
 
 def read_option_labels(dictdir, pkg):
-    """The English option labels from the package's own dialog properties."""
+    """The English option labels, from the package's rule source.
+
+    A title in a .dlg is "id=label", optionally followed by a line of help
+    after a literal \\n. Only the label is wanted here.
+    """
     labels = {}
-    path = os.path.join(dictdir, "dialog", "%s_en_US.properties" % pkg)
+    path = os.path.join(dictdir, "lightproof", "%s.dlg" % pkg)
     if not os.path.exists(path):
         return labels
+    # A .dlg carries one block of titles per language, headed [locale=...].
+    # The English one is what the dialog is written in; the rest are the
+    # package's own translations, which the browser gets through its po files
+    # instead.
+    in_english = False
     for line in open(path, encoding="utf-8"):
-        if "=" in line and not line.startswith("#"):
-            name, _, label = line.partition("=")
-            # The dialog properties are Java-style, with \uXXXX escapes.
-            labels[name.strip()] = label.strip().encode("ascii", "backslashreplace") \
-                .decode("unicode_escape")
+        line = line.strip()
+        if line.startswith("["):
+            in_english = line.startswith("[en_US=") or line.startswith("[en=")
+            continue
+        if not in_english or not line or line.startswith("#") or "=" not in line:
+            continue
+        name, _, label = line.partition("=")
+        labels[name.strip()] = label.split("\\n")[0].strip()
     return labels
 
 

@@ -1,4 +1,4 @@
 lopts = {}
 lopts_default = {}
-lopts['hu_HU'] = [u'cap', u'par', u'quot', u'wordpart', u'dash', u'comma', u'numpart', u'grammar', u'style', u'dup0', u'compound', u'dup', u'allcompound', u'dup2', u'money', u'dup3', u'SI', u'hyphen', u'apost', u'spaces', u'frac', u'ligature', u'elli', u'spaces2', u'thin', u'noligature', u'idx', u'minus']
-lopts_default['hu_HU'] = [u'dash', u'dup0', u'money', u'apost', u'spaces']
+lopts['hu_HU'] = ['cap', 'par', 'quot', 'wordpart', 'dash', 'comma', 'numpart', 'grammar', 'style', 'dup0', 'compound', 'dup', 'allcompound', 'dup2', 'money', 'dup3', 'SI', 'hyphen', 'apost', 'spaces', 'frac', 'ligature', 'elli', 'spaces2', 'thin', 'noligature', 'idx', 'minus']
+lopts_default['hu_HU'] = ['dash', 'dup0', 'money', 'apost', 'spaces']

@@ -1,0 +1,64 @@
+# Options and title texts for the Settings and conditional rules
+# for Russian (translated by Yakov Reztsov  2011)
+# The Lightproof dialogs contain only grouped checkboxes.
+#
+# Format of the dialog definition:
+#
+# GroupID: OptionID, OptionID ...
+# Group2ID: OptionID, OptionID ...
+# ...
+# [Language_code=title of the window]
+# OptionID=title of the option
+# Option2ID=title of the option
+#
+# The first language is the default language for other locales
+# (use en_US or the common language of your country)
+#
+# The OptionIDs declared here are used in the rules, too. For example:
+#
+# foo <- option("style") -> bar # bar is far better
+#
+# this rule depends from the state of the "style" checkbox.
+
+# options (starred options are checked)
+
+grammar: *hyphen *comma, *multiword *together
+proofreading:  *common *space, *abbreviation *dup 
+others: numsep, *typographica, quotation
+
+# titles
+
+[en_US=Russian sentence checking]
+
+abbreviation=Abbreviation
+grammar=Grammar
+hyphen=Compound words with hyphen
+comma=Comma usage
+common=General error
+multiword=Multiword expressions
+together=Together/separately
+proofreading=Proofreading
+space=Space mistake
+typographica=Typographical
+dup=Word duplication
+others=Others
+numsep=Separation of large numbers (ISO)
+quotation=Quotation
+
+[ru_RU=Проверка грамматики (Русский язык)]
+
+abbreviation=Аббревиатуры \n Аббревиатуры, сокращения и знаки пунктуации.
+grammar=Грамматика
+hyphen=Дефис \n Правописание слов через дефис, слитно или раздельно.
+comma=Пунктуация \n Поиск ошибок в расстановке знаков препинания.
+common=Общие ошибки \n Поиск прочих ошибок 
+multiword=Словосочетания \n Правописание словосочетаний и устойчивых оборотов.
+together=Слитно/раздельно \n Правописание слов слитно или раздельно.
+proofreading=Стилистика
+space=Пробел \n Поиск ошибок с пробелом: двойной пробел, пробел перед знаками пунктуации.
+typographica=Типографика \n Предлагать замену сочетаний знаков на специальные символы.
+dup=Повтор слов \n Поиск повторяющихся слов
+others=Прочее
+numsep=Разделители групп разрядов (ISO) для чисел \n Разделители групп разрядов (ISO) для больших чисел
+quotation=Кавычки \n Предлагать замену кавычек на кавычки-«ёлочки» или парные кавычки.
+

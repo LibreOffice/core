@@ -1,0 +1,365 @@
+# Proofreading rules for Russian (by Yakov Reztsov 2009-2012,2014)
+
+
+
+# test
+\bfoo\b -> bar 		# test
+# foo -> bar
+
+
+# punctuation
+
+" ([.?!,:;)”]($| ))" <- option("space") -> \1	# Лишний пробел перед знаком пунктуации.
+"([(“]) " <- option("space") -> \1	         	# Лишний пробел после знака пунктуации.
+# ( item ) -> (item)
+
+
+[word]
+
+abbr руб|коп|грн|тыс|ул|кв|пос|ст|пр|просп|ед|экз|тел|исп
+
+novvod авось|буквально|будто|вдобавок|вдруг|ведь|вот|даже|исключительно|именно|небось|приблизительно|примерно|притом|почти|поэтому|просто|решительно|словно|якобы|в довершение|в конечном счете|в конечном счёте|вряд ли|все-таки|как будто|как бы|как раз|к тому же|между тем|по предложению|по постановлению|по решению
+
+vvod итак|следовательно|во-первых|во-вторых|в-третьих|в-четвертых|в-четвёртых|в-пятых|пожалуйста|как нарочно|как исключение|как правило
+
+adv1 кто|что|где|зачем|кое
+
+
+
+[Word]
+
+
+# definitions
+abc [a-zа-я][a-zа-я]+
+ABC [A-ZА-Я][a-zа-я]+
+Abc [a-zA-Zа-яА-Я][a-zA-Zа-яА-Я]+
+punct [?!,:;%‰‱˚“”‘„]
+w \w*
+W \W*
+
+
+
+{Abc}{punct}{Abc} <- option("space") -> {Abc}{punct} {Abc}	# Пропущен пробел?
+{Abc}[.]{ABC} <- option("space") -> {Abc}. {ABC}	# Пропущен пробел?
+# missing,space -> missing, space
+# missing.Space -> missing. Space
+
+[word]
+
+
+# typography
+"[.]{3}" <- option("typographica") -> "…"			# Символ многоточия.
+(\d+)x(\d+) <- option("typographica") -> \1×\2 		# Знак умножения.
+"^[-—] " <- option("typographica") -> "– "		# Заменить на тире (n-dash)?
+" [-—]([ ,;])" <- option("typographica") -> " –\1"	# Заменить на тире (n-dash)?
+
+# 800x600 -> 800×600
+# End... -> End…
+# A small - but reliable - example. -> A small – but reliable – example.
+
+"[,]{2}" <- option("comma") -> ","         	# Две запятые подряд.
+[ ]{abbr}[ ] <- option("abbreviation") -> " {abbr}. "         # Точка после сокращений.
+(^|\b|{punct}|[.]) {2,3}(\b|$) <- option("space") -> "\1 " # Лишний пробел.
+# Extra  space -> Extra space
+# " коп " -> " коп. "
+
+# quotation
+
+\"(\w[^\"“”]*[\w.?!,])\" <- option("quotation") -> «\1»	# Кавычки.
+\B'(\w[^']*[\w.?!,])'\B <- option("quotation") -> ‘\1’	# Кавычки.
+# "The 'old' boy"  -> «The ‘old’ boy»
+
+# apostrophe
+
+w \w*
+(?i){Abc}'{w} <- option("quotation") -> {Abc}’{w}	# Апостроф.
+# o'clock -> o’clock
+# singers' voices -> singers’ voices
+
+# words
+
+
+# punctuation
+
+{abc}[ ]а[ ] <- option("comma") ->	"{abc}, а "		# Пропущена запятая перед а.
+{abc}[ ]но[ ] <- option("comma") ->	"{abc}, но "		# Пропущена запятая перед но.
+
+
+# nopunctuation
+
+"{abc}, {novvod}," <- option("comma") -> "{abc} {novvod}"	# Слова, не являющиеся вводными.
+# думали, авось, ->  думали авось
+
+
+
+# vvodpunctuation
+
+{abc} {vvod}   <- option("comma") -> {abc}, {vvod},  	# Слова, являющиеся вводными, выделяются запятыми.
+# дому следовательно   ->  дому, следовательно, 
+
+
+
+# frequent mistakes
+
+\bложить\b <- option("common") ->  класть		# Общие ошибки
+\bляжь\b <- option("common") -> ляг		# Общие ошибки
+\bехай\b <- option("common") -> поезжай		# Общие ошибки
+
+\bихн{abc}\b <- option("common") -> их	# Притяжательное местоимение не склоняется
+
+
+
+
+# common rules
+жы   <- option("common") -> жи  	# Через "и"
+шы   <- option("common") -> ши  	# Через "и"
+
+# жыр   ->  жир
+
+
+
+# multiword expressions
+
+
+\bнорд ост\b <- option("hyphen") -> норд-ост # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# норд ост -> норд-ост # Suggestions separated by new lines (\n)
+
+\bнорд вест\b <- option("hyphen") -> норд-вест # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# норд вест -> норд-вест # Suggestions separated by new lines (\n)
+
+\bзюйд ост\b <- option("hyphen") -> зюйд-ост # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# зюйд ост -> зюйд-ост # Suggestions separated by new lines (\n)
+
+\bзюйд вест\b <- option("hyphen") -> зюйд-вест # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# зюйд вест -> зюйд-вест # Suggestions separated by new lines (\n)
+
+
+
+
+\bсеверо западн{abc}\b <- option("hyphen") -> северо-западн{abc} # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# северо западный -> северо-западный # Suggestions separated by new lines (\n)
+
+
+\bюго западн{abc}\b <- option("hyphen") -> юго-западн{abc} # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# юго западный -> юго-западный # Suggestions separated by new lines (\n)
+
+\bсеверо восточн{abc}\b <- option("hyphen") -> северо-восточн{abc} # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# северо восточный -> северо-восточный # Suggestions separated by new lines (\n)
+
+\bюго восточн{abc}\b <- option("hyphen") -> юго-восточн{abc} # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# юго восточный -> юго-восточный # Suggestions separated by new lines (\n)
+
+
+\b{adv1} нибудь\b <- option("hyphen") -> {adv1}-нибудь # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# что нибудь -> что-нибудь # Suggestions separated by new lines (\n)
+
+\b{adv1} либо\b <- option("hyphen") -> {adv1}-либо # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# что либо -> что-либо # Suggestions separated by new lines (\n)
+
+\b{adv1} то\b <- option("hyphen") -> {adv1}-то # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# кто то -> кто-то # Suggestions separated by new lines (\n)
+
+\bточь в точь\b <- option("hyphen") -> точь-в-точь # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# точь в точь -> точь-в-точь # Suggestions separated by new lines (\n)
+
+\bиз за\b <- option("hyphen") -> из-за # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# из за -> из-за # Suggestions separated by new lines (\n)
+
+\bвсё таки\b <- option("hyphen") -> всё-таки # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# всё таки -> всё-таки # Suggestions separated by new lines (\n)
+
+\bкое кто\b <- option("hyphen") -> кое-кто # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# кое кто -> кое-кто # Suggestions separated by new lines (\n)
+
+\bкое что\b <- option("hyphen") -> кое-что # Дефис?  \n http://ru.wikipedia.org/wiki/%D0%94%D0%B5%D1%84%D0%B8%D1%81
+# кое что ->  кое-что # Suggestions separated by new lines (\n)
+
+\bво что бы то нe стало\b <- option("multiword") -> во что бы то ни стало #  Оборот
+\bво чтобы то нe стало\b <- option("multiword") -> во что бы то ни стало #  Оборот
+\bво чтобы то ни стало\b <- option("multiword") -> во что бы то ни стало #  Оборот
+
+
+\bтакже как и\b <- option("multiword") -> так же как и # Сложный союз.
+
+\bво избежании\b<- option("multiword") -> во избежание # Сложный предлог.
+
+\bравноправны друг другу\b<- option("multiword") -> равноправны друг c другом # Равноправны друг c другом.
+
+\bни кто иной как\b<- option("multiword") -> не кто иной, как # Оборот.
+\bни что иное как\b<- option("multiword") -> не что иное, как # Оборот.
+\bне кто иной как\b<- option("multiword") -> не кто иной, как # Оборот.
+\bне что иное как\b<- option("multiword") -> не что иное, как # Оборот.
+
+
+
+\bникто иной, не\b<- option("multiword") -> никто иной не # Оборот.
+\bничто иное, не\b<- option("multiword") -> ничто иное не # Оборот.
+
+\bнекто иной, не\b<- option("multiword") -> никто иной не # Оборот.
+\bнечто иное, не\b<- option("multiword") -> ничто иное не # Оборот.
+
+
+\bнекто иной не\b<- option("multiword") -> никто иной не # Оборот.
+\bнечто иное не\b<- option("multiword") -> ничто иное не # Оборот.
+
+
+\bне кто иной, не\b<- option("multiword") -> никто иной не # Оборот.
+\bне что иное, не\b<- option("multiword") -> ничто иное не # Оборот.
+
+
+\bне кто иной не\b<- option("multiword") -> никто иной не # Оборот.
+\bне что иное не\b<- option("multiword") -> ничто иное не # Оборот.
+
+
+\bникто иной, не\b<- option("multiword") -> никто иной не # Оборот.
+\bничто иное, не\b<- option("multiword") -> ничто иное не # Оборот.
+
+\bни кто иной, не\b<- option("multiword") -> никто иной не # Оборот.
+\bни что иное, не\b<- option("multiword") -> ничто иное не # Оборот.
+
+
+
+(в) (течение) (реки|потока|воды|ручья) <- option("multiword") -> \1 течении \3 # Грамматическая ошибка 
+(в) (течении) (часа|минуты|промежутка|секунды|дня|времени|недели|месяца|года|столетия|тысячелетия) <- option("multiword") -> \1 течение \3 #  Грамматическая ошибка 
+(в) (продолжении) (часа|минуты|промежутка|секунды|дня|времени|недели|месяца|года|столетия|тысячелетия|разговора|беседы) <- option("multiword") -> \1 продолжение \3 #  Грамматическая ошибка 
+
+
+
+\bкакбудто<- option("together") -> как будто # Составная частица
+
+\bпо мимо\b <- option("together") -> помимо # Пишется слитно
+
+
+
+\bна кануне\b<- option("together") -> накануне # Слитно
+\bна подобие\b<- option("together") -> наподобие # Слитно
+\bна против\b<- option("together") -> напротив # Слитно
+\bв низу\b<- option("together") -> внизу # Слитно
+\bс низу\b<- option("together") -> снизу # Слитно
+\bна верху\b<- option("together") -> наверху # Слитно
+\bв верху\b<- option("together") -> вверху # Слитно
+\bс верху\b<- option("together") -> сверху # Слитно
+\bс верх\b<- option("together") -> сверх # Слитно
+\bс выше\b<- option("together") -> свыше # Слитно
+\bсо гласно\b<- option("together") -> согласно # Слитно
+\bв глубь\b<- option("together") -> вглубь # Слитно
+\bв доль\b<- option("together") -> вдоль # Слитно
+\bв замен\b<- option("together") -> взамен # Слитно
+
+\bв место\b<- option("together") -> вместо # Слитно
+\bза место\b<- option("together") -> заместо # Слитно
+\bни же\b<- option("together") -> ниже # Слитно
+\bпо середине\b<- option("together") -> посередине # Слитно
+
+
+# formats
+
+# Thousand separators: 10000 -> 10,000  (common) or 10 000 (ISO standard)
+
+# definitions
+d	\d\d\d		# name definition: 3 digits
+d2	\d\d		# 2 digits
+D	\d|\d\d|\d\d\d	# 1, 2 or 3 digits
+
+# ISO thousand separatos: space, here: no-break space (U+00A0)
+\b{d2}{d}\b 	  <- option("numsep") ->	 {d2} {d}			# Добавить разделитель разрядов (ISO)?
+\b{D}{d}{d}\b 	  <- option("numsep") ->	 {D} {d} {d}                 # Добавить разделитель разрядов (ISO)?
+\b{D}{d}{d}{d}\b  <- option("numsep") ->	 {D} {d} {d} {d}             # Добавить разделитель разрядов (ISO)?
+# 1234567890 -> 1 234 567 890
+
+
+
+\bблизкий свет\b	<- option("multiword") ->	ближний свет	#  Опечатка?
+
+
+\bближний друг\b	<- option("multiword") ->	близкий друг	#  Опечатка?
+
+
+\bщекотливая дилемма\b	<- option("multiword") ->	 щекотливый вопрос	#  Фразеологизм.
+\bпоёт в одну дуду\b 	<- option("multiword") ->	 поёт в один голос	#  Фразеологизм.
+\bпоет в одну дуду\b 	<- option("multiword") ->	 поёт в один голос	#  Фразеологизм.
+\bне упасть лицом в грязь\b 	<- option("multiword") ->	не ударить лицом в грязь	#  Фразеологизм.
+\bотдал руку и сердце\b 	<- option("multiword") ->	 предложил руку и сердце	#  Фразеологизм.
+\bизбиение грешников\b 	<- option("multiword") ->	 избиение младенцев	#  Фразеологизм.
+\bзакадычная подруга\b 	<- option("multiword") ->	 лучшая подруга	#  Фразеологизм.
+\bпромокли до костей\b 	<- option("multiword") ->	 промокли до нитки	#  Фразеологизм.
+\bпромёрзли до нитки\b 	<- option("multiword") ->	 промёрзли до костей	# Фразеологизм.
+\bпромерзли до нитки\b 	<- option("multiword") ->	 промёрзли до костей	# Фразеологизм.
+
+\bзамёрзли до нитки\b 	<- option("multiword") ->	 замёрзли до костей	# Фразеологизм.
+\bзамерзли до нитки\b 	<- option("multiword") ->	 замёрзли до костей	# Фразеологизм.
+
+\bглас, вопиющий в пустыне\b 	<- option("multiword") ->	 глас вопиющего в пустыне	#  Фразеологизм.
+
+\bни кто иной, как\b <- option("multiword") ->не кто иной, как	# Оборот.
+
+\bрешит эту затянувшуюся проблему\b <- option("multiword") -> ускорит затянувшееся решение проблемы	# Логическая ошибка.
+\bрешит затянувшуюся проблему\b <- option("multiword") -> ускорит затянувшееся решение проблемы	# Логическая ошибка.
+
+\bподорожали цены\b <- option("multiword") -> цены выросли	# Логическая ошибка.
+
+\bподнял тост\b <- option("multiword") -> произнёс тост	 # Логическая ошибка.
+
+\bулучшение отмеченных недостатков\b <- option("multiword") -> устранение отмеченных недостатков	# Логическая ошибка.
+
+\bв этой связи\b <- option("multiword") ->	в связи с этим	# Логическая ошибка.
+
+
+\bодел рубашку\b	<- option("multiword") ->	   надел рубашку	# Логическая ошибка
+\bодеть рубашку\b	<- option("multiword") ->	   надеть рубашку	# Логическая ошибка
+\bодела платье\b	<- option("multiword") ->	   надела платье	# Логическая ошибка
+\bодеть платье\b	<- option("multiword") ->	   надеть платье	# Логическая ошибка
+\bодела юбку\b	<- option("multiword") ->	   надела юбку	# Логическая ошибка
+\bодеть юбку\b	<- option("multiword") ->	   надеть юбку	# Логическая ошибка
+\bодел куртку\b	<- option("multiword") ->	   надел куртку	# Логическая ошибка
+\bодела куртку\b	<- option("multiword") ->	   надела куртку	# Логическая ошибка
+\bодеть куртку\b	<- option("multiword") ->	   надеть куртку	# Логическая ошибка
+\bодел пальто\b	<-  option("multiword") ->	   надел пальто	# Логическая ошибка
+\bодела пальто\b	<- option("multiword") ->	   надела пальто	# Логическая ошибка
+\bодеть пальто\b	<- option("multiword") ->	   надеть пальто	# Логическая ошибка
+
+
+
+\bхрабрая идея\b	<- option("multiword") ->	   смелая идея	# Логическая ошибка
+\bхрабрая мысль\b	<- option("multiword") ->	   смелая мысль	# Логическая ошибка
+\bхрабрая решение\b	<- option("multiword") ->	   смелая решение	# Логическая ошибка
+
+
+", что угодно"	<- option("multiword") ->	" что угодно"	# Запятая не нужна
+", как попало"	<- option("multiword") ->	" как попало"	# Запятая не нужна
+
+
+(не|совсем|совершенно|почти|именно), как	<- option("multiword") ->	\1 как	# Запятая не нужна
+
+
+и то, и се	<- option("multiword") ->	и то и се	# Запятая не нужна
+и то, и сё	<- option("multiword") ->	и то и сё	# Запятая не нужна
+ни то, ни се	<- option("multiword") ->	ни то ни се	# Запятая не нужна
+ни то, ни сё	<- option("multiword") ->	ни то ни сё	# Запятая не нужна
+ни свет, ни заря	<- option("multiword") ->	ни свет ни заря	# Запятая не нужна
+и так, и сяк	<- option("multiword") ->	и так и сяк	# Запятая не нужна
+и туда, и сюда	<- option("multiword") ->	и туда и сюда	# Запятая не нужна
+ни рыба, ни мясо	<- option("multiword") ->	ни рыба ни мясо	# Запятая не нужна
+ни жив, ни мертв	<- option("multiword") ->	ни жив ни мертв	# Запятая не нужна
+ни жив, ни мёртв	<- option("multiword") ->	ни жив ни мёртв	# Запятая не нужна
+
+
+
+# word duplication
+
+[Word]
+
+W [-\w]{3,}
+
+# within clauses
+
+{W} \1 <- option("dup") -> {W} #  Повтор слова?
+
+
+"кВт/ч"	<- option("common") ->	"кВт⋅ч"	#  Опечатка?
+
+"мА/ч"	<- option("common") ->	"мА⋅ч"	# Опечатка?
+
+"А/ч"	<- option("common") ->	"А⋅ч"	# Опечатка?
+
+
