@@ -1483,7 +1483,9 @@ dic = [['(?u)(?<![-\\w–.,\xad])(assim|lhe|lhes|me|não|nos|que|te|vezes|vos) d
  ['(?u)(?<![-\\w–.,\xad])excessivamente exagerad(a|as|o|os)(?![-\\w–\xad])', 'exagerad\\1', 'Pleonasmo. Você quis dizer:', 'option(LOCALE,"metric")'],
  ['(?u)(?<![-\\w–.,\xad])exageradamente excessivo(a|as|o|os)(?![-\\w–\xad])', 'excessiv\\1', 'Pleonasmo. Você quis dizer:', 'option(LOCALE,"metric")'],
  ['(?u)(?<![-\\w–.,\xad])futuro daqui pra frente(?![-\\w–\xad])', 'futuro', 'Pleonasmo. Você quis dizer:', 'option(LOCALE,"metric")'],
-# -*- Fim Pleonasmos -*-
+ ['(?u)(?<![-\\w–.,\xad])([Pp])rimeira prioridade(?![-\\w–\xad])', '\\1rioridade', 'Pleonasmo. Você quis dizer:', 'option(LOCALE,"metric")'],
+ ['(?u)(?<![-\\w–.,\xad])([Cc])omo por exemplo(?![-\\w–\xad])', 'por exemplo\\nPor exemplo\\n\\1omo', 'Pleonasmo. Você quis dizer:', 'option(LOCALE,"metric")'],
+ # -*- Fim Pleonasmos -*-
 # -*- Crase -*-
 # Igual a
  ['(?u)(?<![-\\w–.,\xad])([Ii])gual a (?P<Msgal_2>[a-zA-Záâãçéêíóôú]+[a])(?![-\\w–\xad])', '\\1gual à \\2', 'Faltou a crase. Você quis dizer:', 'm.group("Msgal_2").lower() in plvrFema and option(LOCALE,"grammar")'],

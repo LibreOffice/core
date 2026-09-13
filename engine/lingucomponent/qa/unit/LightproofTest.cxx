@@ -483,6 +483,19 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianInlineSubstitution)
                          aErrors[0].aSuggestions[1]);
 }
 
+// One of the two pleonasm rules taken from upstream, which gate on the option
+// the whole pleonasm block uses.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianPleonasm)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"Essa e a primeira prioridade dele."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"prioridade"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Pleonasmo. Você quis dizer:"_ustr, aErrors[0].aShortComment);
+}
+
 // A rule with no condition at all, from the largest package.
 CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianPlainRule)
 {
