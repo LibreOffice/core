@@ -11,9 +11,19 @@
 # Python to use the result.
 #
 # Usage: lpcompile.py <dictionaries-dir> <package> <output.lpr>
+#        lpcompile.py --emit-schema <dictionaries-dir> <package>
 #
 #   <package> is the Lightproof package name, which is the name used in the
 #   lightproof_<pkg>.py file names: en, hu_HU, pt_BR, ru_RU.
+#
+# --emit-schema prints the officecfg group for the package's options, for
+# pasting under GrammarChecking/SentenceChecking in
+# officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs. The schema
+# is committed rather than generated because integrators set these keys, so
+# the node names are an interface and should not move under anyone's feet.
+#
+# --emit-labels prints the same options as settingLabels entries for
+# browser/admin/src/integrator/AdminIntegratorSettings.ts.
 
 import argparse
 import ast
@@ -452,15 +462,78 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
                          % (pkg, len(rule_records), len(option_records), cursor))
 
 
+def read_option_labels(dictdir, pkg):
+    """The English option labels from the package's own dialog properties."""
+    labels = {}
+    path = os.path.join(dictdir, "dialog", "%s_en_US.properties" % pkg)
+    if not os.path.exists(path):
+        return labels
+    for line in open(path, encoding="utf-8"):
+        if "=" in line and not line.startswith("#"):
+            name, _, label = line.partition("=")
+            labels[name.strip()] = label.strip()
+    return labels
+
+
+def escape(text):
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def emit_schema(dictdir, pkg):
+    opts = read_module_assignments(
+        os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
+        {"lopts", "lopts_default"})
+    names = opts.get("lopts", {}).get(pkg, [])
+    defaults = set(opts.get("lopts_default", {}).get(pkg, []))
+    labels = read_option_labels(dictdir, pkg)
+
+    out = ['        <group oor:name="%s">' % pkg,
+           "          <info>",
+           "            <desc>Sentence checking options for the %s rules.</desc>" % pkg,
+           "          </info>"]
+    for name in names:
+        label = labels.get(name, name)
+        out += ['          <prop oor:name="%s" oor:type="xs:boolean" oor:nillable="false">' % name,
+                "            <info>",
+                "              <desc>%s</desc>" % escape(label),
+                "              <label>%s</label>" % escape(label),
+                "            </info>",
+                "            <value>%s</value>" % ("true" if name in defaults else "false"),
+                "          </prop>"]
+    out.append("        </group>")
+    print("\n".join(out))
+
+
+def emit_labels(dictdir, pkg):
+    opts = read_module_assignments(
+        os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
+        {"lopts"})
+    labels = read_option_labels(dictdir, pkg)
+    for name in opts.get("lopts", {}).get(pkg, []):
+        print("\t\t%s: _('%s')," % (name, labels.get(name, name).replace("'", "\\'")))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Compile a Lightproof rule package")
+    parser.add_argument("--emit-schema", action="store_true",
+                        help="print the officecfg option group instead of compiling")
+    parser.add_argument("--emit-labels", action="store_true",
+                        help="print the option labels for the browser settings dialog")
     parser.add_argument("--verbose", action="store_true",
                         help="report what was compiled; warnings are printed either way")
     parser.add_argument("dictdir", help="the package's directory under dictionaries/")
     parser.add_argument("package", help="package name, e.g. ru_RU")
-    parser.add_argument("output", help="the .lpr file to write")
+    parser.add_argument("output", nargs="?", help="the .lpr file to write")
     args = parser.parse_args()
-    compile_package(args.dictdir, args.package, args.output)
+
+    if args.emit_schema:
+        emit_schema(args.dictdir, args.package)
+    elif args.emit_labels:
+        emit_labels(args.dictdir, args.package)
+    elif args.output:
+        compile_package(args.dictdir, args.package, args.output, args.verbose)
+    else:
+        parser.error("an output file is required when compiling")
 
 
 if __name__ == "__main__":

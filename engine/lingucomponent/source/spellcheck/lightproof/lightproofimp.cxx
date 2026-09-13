@@ -10,13 +10,21 @@
 #include "lightproofimp.hxx"
 #include "lpvm.hxx"
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
+#include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 #include <config_folders.h>
 
 #include <comphelper/kit.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -29,6 +37,8 @@
 #include <unicode/regex.h>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
+
+#include <algorithm>
 
 using namespace css;
 using namespace cpo;
@@ -184,8 +194,165 @@ std::vector<OUString> splitAlternatives(const OUString& rText)
 }
 }
 
+// Watches the option node so a change made in the Options dialog reaches a
+// document without reloading it. Holds the checker weakly, by raw pointer,
+// which ~Lightproof clears before it removes the listener.
+class ConfigurationListener final : public cppu::WeakImplHelper<css::util::XChangesListener>
+{
+public:
+    explicit ConfigurationListener(Lightproof* pOwner)
+        : m_pOwner(pOwner)
+    {
+    }
+
+    void detach() { m_pOwner = nullptr; }
+
+    void changesOccurred(const css::util::ChangesEvent&) override
+    {
+        osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+        if (m_pOwner)
+            m_pOwner->reloadOptions();
+    }
+
+    void disposing(const lang::EventObject&) override
+    {
+        osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+        m_pOwner = nullptr;
+    }
+
+private:
+    Lightproof* m_pOwner;
+};
+
 Lightproof::Lightproof() = default;
-Lightproof::~Lightproof() = default;
+
+Lightproof::~Lightproof()
+{
+    if (!m_xConfigListener)
+        return;
+    static_cast<ConfigurationListener*>(m_xConfigListener.get())->detach();
+    try
+    {
+        uno::Reference<util::XChangesNotifier> xNotifier(m_xConfigNode, uno::UNO_QUERY);
+        if (xNotifier)
+            xNotifier->removeChangesListener(m_xConfigListener);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+    }
+}
+
+void Lightproof::loadOptions(Package& rPackage)
+{
+    const RuleFile& rFile = *rPackage.pFile;
+
+    rPackage.aOptions.clear();
+    rPackage.aOptions.reserve(rFile.getOptionCount());
+    for (sal_uInt32 i = 0; i < rFile.getOptionCount(); ++i)
+        rPackage.aOptions.push_back(rFile.getOption(i).nDefault != 0);
+
+    if (!m_xConfigNode)
+    {
+        try
+        {
+            uno::Reference<lang::XMultiServiceFactory> xProvider(
+                css::configuration::theDefaultProvider::get(
+                    comphelper::getProcessComponentContext()));
+            // The configuration node holding one group of option flags per
+            // rule package.
+            const beans::NamedValue aPath(
+                u"nodepath"_ustr,
+                cpo::uno::Any(
+                    u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking"_ustr));
+            m_xConfigNode.set(xProvider->createInstanceWithArguments(
+                                  u"com.sun.star.configuration.ConfigurationAccess"_ustr,
+                                  { cpo::uno::Any(aPath) }),
+                              uno::UNO_QUERY);
+
+            uno::Reference<util::XChangesNotifier> xNotifier(m_xConfigNode, uno::UNO_QUERY);
+            if (xNotifier)
+            {
+                m_xConfigListener.set(new ConfigurationListener(this));
+                xNotifier->addChangesListener(m_xConfigListener);
+            }
+        }
+        catch (const cpo::uno::Exception&)
+        {
+            SAL_INFO("lingucomponent.lightproof", "no option configuration, using defaults");
+        }
+    }
+
+    if (!m_xConfigNode)
+        return;
+
+    try
+    {
+        if (!m_xConfigNode->hasByName(rFile.getPackage()))
+            return;
+        uno::Reference<container::XNameAccess> xGroup(
+            m_xConfigNode->getByName(rFile.getPackage()), uno::UNO_QUERY);
+        if (!xGroup)
+            return;
+        for (sal_uInt32 i = 0; i < rFile.getOptionCount(); ++i)
+        {
+            const OUString aName = rFile.getString(rFile.getOption(i).nName);
+            bool bValue = false;
+            if (xGroup->hasByName(aName) && (xGroup->getByName(aName) >>= bValue))
+                rPackage.aOptions[i] = bValue;
+        }
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        SAL_WARN("lingucomponent.lightproof",
+                 "cannot read options for " << rFile.getPackage() << ", using defaults");
+    }
+}
+
+void Lightproof::reloadOptions()
+{
+    for (const std::pair<const OUString, std::unique_ptr<Package>>& rEntry : m_aPackages)
+        loadOptions(*rEntry.second);
+
+    const linguistic2::LinguServiceEvent aEvent(
+        static_cast<cppu::OWeakObject*>(this), linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN);
+    const std::vector<uno::Reference<linguistic2::XLinguServiceEventListener>> aListeners(
+        m_aEventListeners);
+    for (const uno::Reference<linguistic2::XLinguServiceEventListener>& rListener : aListeners)
+    {
+        try
+        {
+            rListener->processLinguServiceEvent(aEvent);
+        }
+        catch (const cpo::uno::Exception&)
+        {
+        }
+    }
+}
+
+bool Lightproof::addLinguServiceEventListener(
+    const uno::Reference<linguistic2::XLinguServiceEventListener>& xListener)
+{
+    osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+    if (!xListener)
+        return false;
+    if (std::find(m_aEventListeners.begin(), m_aEventListeners.end(), xListener)
+        != m_aEventListeners.end())
+        return false;
+    m_aEventListeners.push_back(xListener);
+    return true;
+}
+
+bool Lightproof::removeLinguServiceEventListener(
+    const uno::Reference<linguistic2::XLinguServiceEventListener>& xListener)
+{
+    osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+    const std::vector<uno::Reference<linguistic2::XLinguServiceEventListener>>::iterator aFound
+        = std::find(m_aEventListeners.begin(), m_aEventListeners.end(), xListener);
+    if (aFound == m_aEventListeners.end())
+        return false;
+    m_aEventListeners.erase(aFound);
+    return true;
+}
 
 void Lightproof::discoverPackages()
 {
@@ -263,11 +430,9 @@ Package* Lightproof::getPackage(const lang::Locale& rLocale)
     std::unique_ptr<Package> pPackage(new Package);
     pPackage->pFile = pFile;
     pPackage->aRules.resize(pFile->getRuleCount());
-    pPackage->aOptions.reserve(pFile->getOptionCount());
-    for (sal_uInt32 i = 0; i < pFile->getOptionCount(); ++i)
-        pPackage->aOptions.push_back(pFile->getOption(i).nDefault != 0);
 
     Package* pResult = pPackage.get();
+    loadOptions(*pResult);
     m_aPackages.emplace(aLocation->second, std::move(pPackage));
     return pResult;
 }

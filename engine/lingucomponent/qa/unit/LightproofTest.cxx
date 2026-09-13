@@ -16,9 +16,15 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
+#include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
+#include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -37,7 +43,26 @@ protected:
     Sequence<linguistic2::SingleProofreadingError> check(const OUString& rText);
 
     static lang::Locale russian() { return lang::Locale(u"ru"_ustr, u"RU"_ustr, OUString()); }
+
+    // Writes one Russian option flag and commits, the way the Options dialog
+    // does through the per-user xcu.
+    void setOption(const OUString& rName, bool bValue);
 };
+
+void LightproofTest::setOption(const OUString& rName, bool bValue)
+{
+    uno::Reference<lang::XMultiServiceFactory> xProvider(
+        css::configuration::theDefaultProvider::get(m_xContext));
+    Any aNodePath(css::beans::NamedValue(
+        u"nodepath"_ustr,
+        Any(u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/ru_RU"_ustr)));
+    uno::Reference<beans::XPropertySet> xGroup(
+        xProvider->createInstanceWithArguments(
+            u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, { aNodePath }),
+        uno::UNO_QUERY_THROW);
+    xGroup->setPropertyValue(rName, Any(bValue));
+    uno::Reference<util::XChangesBatch>(xGroup, uno::UNO_QUERY_THROW)->commitChanges();
+}
 
 uno::Reference<linguistic2::XProofreader> LightproofTest::getProofreader()
 {
@@ -116,6 +141,63 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testRuleDisabledByDefault)
         check(u"Он сказал "
               u"\"привет\" мне."_ustr)
             .getLength());
+}
+
+// Turning an option on in the configuration makes its rules fire, and the
+// running checker picks the change up without being recreated.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testOptionTurnedOn)
+{
+    const OUString aText(u"Число 12345 тут."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), check(aText).getLength());
+
+    setOption(u"numsep"_ustr, true);
+    const Sequence<linguistic2::SingleProofreadingError> aErrors = check(aText);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aErrors[0].nErrorLength);
+
+    setOption(u"numsep"_ustr, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), check(aText).getLength());
+}
+
+// Turning an option off silences its rules.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testOptionTurnedOff)
+{
+    const OUString aText(u"Он какбудто ушёл."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), check(aText).getLength());
+
+    setOption(u"together"_ustr, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), check(aText).getLength());
+
+    setOption(u"together"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), check(aText).getLength());
+}
+
+// A configuration change asks the caller to check the document again.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testOptionChangeAsksForRecheck)
+{
+    class Listener : public cppu::WeakImplHelper<linguistic2::XLinguServiceEventListener>
+    {
+    public:
+        sal_Int32 nProofreadAgain = 0;
+        void processLinguServiceEvent(const linguistic2::LinguServiceEvent& rEvent) override
+        {
+            if (rEvent.nEvent & linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN)
+                ++nProofreadAgain;
+        }
+        void disposing(const lang::EventObject&) override {}
+    };
+
+    uno::Reference<linguistic2::XLinguServiceEventBroadcaster> xBroadcaster(getProofreader(),
+                                                                           uno::UNO_QUERY_THROW);
+    rtl::Reference<Listener> pListener(new Listener);
+    CPPUNIT_ASSERT(xBroadcaster->addLinguServiceEventListener(pListener));
+
+    setOption(u"numsep"_ustr, true);
+    CPPUNIT_ASSERT(pListener->nProofreadAgain > 0);
+    setOption(u"numsep"_ustr, false);
+
+    CPPUNIT_ASSERT(xBroadcaster->removeLinguServiceEventListener(pListener));
 }
 
 // Only the request that starts at the beginning of the paragraph reports

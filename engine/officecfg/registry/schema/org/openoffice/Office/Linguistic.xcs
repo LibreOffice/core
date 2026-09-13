@@ -413,6 +413,97 @@
             </info>
           </prop>
       </group>
+      <group oor:name="SentenceChecking">
+        <info>
+          <desc>Per-language options for the built-in sentence checker. One
+          group per rule package, holding one flag per rule category. The
+          node and property names are generated from the rule package by
+          lingucomponent/source/spellcheck/lightproof/tools/lpcompile.py
+          --emit-schema.</desc>
+        </info>
+        <group oor:name="ru_RU">
+          <info>
+            <desc>Sentence checking options for the ru_RU rules.</desc>
+          </info>
+          <prop oor:name="hyphen" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Compound words with hyphen</desc>
+              <label>Compound words with hyphen</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="comma" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Comma usage</desc>
+              <label>Comma usage</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="multiword" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Multiword expressions</desc>
+              <label>Multiword expressions</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="together" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Together/separately</desc>
+              <label>Together/separately</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="common" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>General error</desc>
+              <label>General error</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="space" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Space mistake</desc>
+              <label>Space mistake</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="abbreviation" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Abbreviation</desc>
+              <label>Abbreviation</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="dup" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Word duplication</desc>
+              <label>Word duplication</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="numsep" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Separation of large numbers (ISO)</desc>
+              <label>Separation of large numbers (ISO)</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="typographica" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Typographical</desc>
+              <label>Typographical</label>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="quotation" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Quotation</desc>
+              <label>Quotation</label>
+            </info>
+            <value>false</value>
+          </prop>
+        </group>
+      </group>
     </group>
     <group oor:name="Translation">
       <info>

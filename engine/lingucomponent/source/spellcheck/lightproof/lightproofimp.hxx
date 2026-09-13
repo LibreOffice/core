@@ -8,12 +8,15 @@
  */
 #pragma once
 
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <map>
@@ -50,8 +53,9 @@ struct Package
 // XProofreader already derives from XSupportedLocales, so it must not be
 // listed again here.
 class Lightproof final
-    : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XServiceDisplayName,
-                                  css::lang::XServiceInfo>
+    : public cppu::WeakImplHelper<css::linguistic2::XProofreader,
+                                  css::linguistic2::XLinguServiceEventBroadcaster,
+                                  css::lang::XServiceDisplayName, css::lang::XServiceInfo>
 {
 public:
     Lightproof();
@@ -74,6 +78,14 @@ public:
     void ignoreRule(const OUString& aRuleIdentifier, const css::lang::Locale& aLocale) override;
     void resetIgnoreRules() override;
 
+    // XLinguServiceEventBroadcaster
+    bool addLinguServiceEventListener(
+        const cpo::uno::Reference<css::linguistic2::XLinguServiceEventListener>& xListener)
+        override;
+    bool removeLinguServiceEventListener(
+        const cpo::uno::Reference<css::linguistic2::XLinguServiceEventListener>& xListener)
+        override;
+
     // XServiceDisplayName
     OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
@@ -88,6 +100,16 @@ private:
     void discoverPackages();
     // The package serving a locale, loading it if this is its first use.
     Package* getPackage(const css::lang::Locale& rLocale);
+    // Takes the package's option flags from the configuration, falling back
+    // to the defaults the rule file carries for anything it does not answer.
+    void loadOptions(Package& rPackage);
+    // Rereads every loaded package's options and asks for a re-check.
+    void reloadOptions();
+
+    cpo::uno::Reference<css::container::XNameAccess> m_xConfigNode;
+    cpo::uno::Reference<css::util::XChangesListener> m_xConfigListener;
+    std::vector<cpo::uno::Reference<css::linguistic2::XLinguServiceEventListener>>
+        m_aEventListeners;
 
     bool m_bDiscovered = false;
     // BCP 47 tag to rule file URL, from the configuration.
@@ -97,6 +119,8 @@ private:
     // its compiled patterns.
     std::map<OUString, std::unique_ptr<Package>> m_aPackages;
     std::set<OUString> m_aIgnoredRules;
+
+    friend class ConfigurationListener;
 };
 }
 
