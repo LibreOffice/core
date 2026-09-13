@@ -7473,6 +7473,11 @@ plvrMfel = set(["cru", "fi", "infi", "isab", "isra", "nob", "no"])
 plvrFemel = set(["cascav"])
 
 # excplMascu - excecao preposicao A - palavras masculinas terminadas em -u- - Ex.: A meu, A seu, A teu
+# Words ending in -es that "A" may correctly precede, so the rule that turns
+# "A" into "O" before a masculine noun leaves them alone. "res" is feminine,
+# a head of cattle; the other four are the adjectives of this ending that keep
+# one form for both genders, as in "cabra montes" and "galinha pedres".
+excplMasces = set(["r", "cort", "descort", "mont", "pedr"])
 excplMascu = set(["me", "se", "te"])
 
 # plvrMascu - palavras masculinas terminadas em -u-

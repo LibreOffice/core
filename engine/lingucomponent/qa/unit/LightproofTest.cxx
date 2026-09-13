@@ -496,6 +496,32 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianPleonasm)
     CPPUNIT_ASSERT_EQUAL(u"Pleonasmo. Você quis dizer:"_ustr, aErrors[0].aShortComment);
 }
 
+// A rule that could never run until its condition was repaired: it asked for
+// a word list whose name had lost its last letter. There were 172 like it.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianRepairedRule)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"Onde a bantus estavam."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Onde as bantus"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// The last of the rules that could never run. It turns "A" into "O" before a
+// masculine noun, and wanted an exception list that did not exist.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianArticleBeforeMasculine)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"A inglês chegou cedo."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"O inglês"_ustr, aErrors[0].aSuggestions[0]);
+
+    // "cortês" keeps one form for both genders, so the article is right here.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         checkBrazilian(u"A cortês resposta chegou."_ustr).getLength());
+    // "rês" is feminine.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), checkBrazilian(u"A rês foi abatida."_ustr).getLength());
+}
+
 // A rule with no condition at all, from the largest package.
 CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianPlainRule)
 {
