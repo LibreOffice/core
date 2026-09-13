@@ -1279,6 +1279,20 @@
         the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>
     </div>
+    <h2>Lightproof rule compiler</h2>
+    <!-- Name: lightproof, Vendor:, Source: lingucomponent/source/spellcheck/lightproof/generator, URL: https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/freedesktop/libreoffice-lightproof, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1, Concluded: MPL-2.0 -->
+    <p>The following software may be included in this product: the Lightproof rule compiler, and the sentence checker
+    rule sources under dictionaries/en, dictionaries/hu_HU and dictionaries/ru_RU. Use of any of this software is
+    governed by the terms of the license below:</p>
+    <p>Copyright (c) László Németh</p>
+    <p>GPL 2.0/LGPL 2.1/MPL 1.1 tri-license</p>
+    <p>The contents of this software may be used under the terms of the GNU General Public License Version 2 or later
+    (the "GPL"), or the GNU Lesser General Public License Version 2.1 or later (the "LGPL") or the Mozilla Public
+    License Version 1.1 or later (the "MPL").</p>
+    <p>Software distributed under these licenses is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND,
+    either express or implied. See the licenses for the specific language governing rights and limitations under the
+    licenses.</p>
+    <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
     <div class="LCMS2">
         <h2>Little CMS (lcms2)</h2>
         <!-- Name: little_cms_color_engine, Vendor: littlecms, Source: LCMS2_TARBALL, URL: https://www.littlecms.com/color-engine/, Declared: MIT, Concluded: MPL-2.0 -->
@@ -3496,7 +3510,7 @@
         <!-- Name: dict-hu-grammar, Vendor:, Source: hu_HU, URL:, Declared: GPL-3.0 OR LGPL-3.0 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Hungarian sentence checker. Use of any of this
         software is governed by the terms of the license below:</p>
-        <p>2009-2012 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+</p>
+        <p>2009-2018 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+</p>
         <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
@@ -3893,7 +3907,10 @@
         <!-- Name: dict-ru-grammar, Vendor:, Source: ru_RU, URL:, Declared: GPL-2.0 OR LGPL-2.1 OR MPL-1.1, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Russian grammar checker. Use of any of this software
         is governed by the terms of the license below:</p>
-        <p>2009, 2011, 2012 (c) Yakov Reztsov &lt;yr at myooo dot ru&gt;, license: MPL 1.1 / GPL / LGPL</p>
+        <p>2009, 2011, 2012, 2014 (c) Yakov Reztsov &lt;yr at myooo dot ru&gt;, license: MPL 1.1 / GPL / LGPL</p>
+        <p><a href="#a__GPL_version_3">Jump to GPL Version 3</a></p>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+        <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Scottish Gaelic</h2>
         <h3>Spelling dictionary</h3>
         <!-- Name: dict-gd-spell, Vendor:, Source: gd_GB, URL:, Declared: GPL-3.0, Concluded: GPL-3.0 -->
