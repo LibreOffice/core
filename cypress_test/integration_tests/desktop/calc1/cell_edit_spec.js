@@ -30,6 +30,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 
 	function checkVisualContent(win, expected) {
 		helper.processToIdle(win);
+		helper.waitForCanvasAnimation(win);
 		cy.cGet('#document-container').compareSnapshot(expected, 0.1);
 	}
 

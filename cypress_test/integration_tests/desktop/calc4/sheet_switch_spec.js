@@ -8,6 +8,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/calc-zoomed.fods');
 		cy.viewport(1920,1080);
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	/* calc-zoomed.fods opens with the cell selection in the bottom right corner
@@ -37,6 +40,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 		// Step1: Go to B1 and type something
 		helper.typeIntoDocument('{rightArrow}Text');
 		cy.wait(500);
+		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step1', 0.1);
 
 		// Step2: Hide rows and still see text
@@ -48,11 +52,13 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 		calcHelper.hideSelectedRows();
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1');
 		cy.wait(500);
+		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step2', 0.05);
 
 		// Step3: type and still see text
 		helper.typeIntoDocument('Calc is Cool{enter}');
 		cy.wait(500);
+		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step3', 0.05);
 	});
 });
