@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,lingucomponent_lightproof,$(gb_CustomTarget_wor
 $(eval $(call gb_Package_add_files,lingucomponent_lightproof,$(LIBO_SHARE_FOLDER)/lightproof,\
 	en.lpr \
 	hu_HU.lpr \
+	pt_BR.lpr \
 	ru_RU.lpr \
 ))
 

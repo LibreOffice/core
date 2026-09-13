@@ -32,7 +32,7 @@ import struct
 import sys
 
 LPR_MAGIC = b"LPROOF\0\0"
-LPR_VERSION = 2
+LPR_VERSION = 3
 
 # Opcodes.  The numbering is part of the file format: append, never reorder.
 OP_END = 0
@@ -93,7 +93,20 @@ LPR_CASE_INSENSITIVE = 0x0002
 
 
 class Unsupported(Exception):
-    """A construct this compiler does not lower yet."""
+    """A construct this compiler does not lower yet.
+
+    This fails the build: the rule is fine and the compiler needs work.
+    """
+
+
+class BrokenRule(Exception):
+    """A rule that cannot run at all, in Python either.
+
+    Conditions that name something undefined, reference a group their own
+    pattern does not have, or apply a sign to a string raise as soon as they
+    are reached, so the rule has never fired. They are dropped with a warning
+    rather than failing the build.
+    """
 
 
 # ---------------------------------------------------------------- reading
@@ -220,9 +233,10 @@ def translate_regex(pattern):
                     body.append(pattern[j:j + 2])
                     j += 2
                     continue
-                # ICU reads a nested set, a set intersection and a string in
-                # a set where Python re has three plain characters.
-                if pattern[j] in "[&{":
+                # ICU reads a nested set, a set intersection, a string in a
+                # set and a POSIX class opener where Python re has four plain
+                # characters.
+                if pattern[j] in "[&{:":
                     body.append("\\" + pattern[j])
                 else:
                     body.append(pattern[j])
@@ -255,7 +269,128 @@ def translate_regex(pattern):
         out.append(c)
         i += 1
 
-    return "".join(out), flags, names
+    icu_pattern = "".join(out)
+    check_icu_classes(icu_pattern)
+    return icu_pattern, flags, names
+
+
+def check_icu_classes(pattern):
+    """Guards against an ICU set metacharacter left unescaped.
+
+    ICU gives "[", "&", "{" and ":" meanings inside a character class that
+    Python re does not, and a pattern that keeps one is rejected outright at
+    run time, taking its rule with it. This has caught three separate cases,
+    so it fails the build rather than relying on a warning nobody reads.
+    """
+    i = 0
+    n = len(pattern)
+    while i < n:
+        if pattern[i] == "\\":
+            i += 2
+            continue
+        if pattern[i] != "[":
+            i += 1
+            continue
+        j = i + 1
+        if j < n and pattern[j] == "^":
+            j += 1
+        first = True
+        while j < n and pattern[j] != "]":
+            if pattern[j] == "\\":
+                j += 2
+                first = False
+                continue
+            if pattern[j] in "[&{" or (pattern[j] == ":" and first):
+                raise Unsupported("unescaped %r inside a character class" % pattern[j])
+            first = False
+            j += 1
+        i = j + 1
+
+
+def mandatory_literals(pattern):
+    """The literal runs an ICU pattern must contain wherever it matches.
+
+    Only text outside every group counts. Text inside one may sit in a branch
+    of an alternation and so need not appear at all, and telling the two apart
+    is not worth the risk: a literal wrongly called mandatory would make the
+    runtime skip a rule that could have matched.
+    """
+    out = []
+    run = []
+    depth = 0
+    i = 0
+    n = len(pattern)
+
+    def flush():
+        text = "".join(run).strip().lower()
+        if len(text) >= 3:
+            out.append(text)
+        run.clear()
+
+    while i < n:
+        c = pattern[i]
+        following = pattern[i + 1] if i + 1 < n else ""
+        if c == "\\":
+            flush()
+            i += 2
+            continue
+        if c == "[":
+            flush()
+            j = i + 1
+            if j < n and pattern[j] == "^":
+                j += 1
+            if j < n and pattern[j] == "]":
+                j += 1
+            while j < n and pattern[j] != "]":
+                j += 2 if pattern[j] == "\\" else 1
+            i = j + 1
+            continue
+        if c == "(":
+            flush()
+            depth += 1
+            i += 1
+            continue
+        if c == ")":
+            flush()
+            depth -= 1
+            i += 1
+            continue
+        if depth > 0:
+            i += 1
+            continue
+        if c in "|*+?{}^$.":
+            # A quantifier makes the character before it optional.
+            if c in "*?" and run:
+                run.pop()
+            flush()
+            i += 1
+            continue
+        if following in "*?{":
+            flush()
+            i += 1
+            continue
+        run.append(c)
+        i += 1
+
+    flush()
+    return out
+
+
+def filter_key(pattern):
+    """A rule's paragraph filter: a hash of its most selective literal.
+
+    Zero means the rule has no literal to go on and always runs.
+    """
+    literals = mandatory_literals(pattern)
+    if not literals:
+        return 0
+    longest = max(literals, key=len)
+    # Only the first three characters are hashed, because that is what the
+    # runtime can index a paragraph by in one pass.
+    key = 0
+    for character in longest[:3]:
+        key = (key * 131 + ord(character)) & 0xFFFFFFFF
+    return (key % 8191) + 1
 
 
 # ---------------------------------------------------------------- lowering
@@ -314,7 +449,7 @@ class Lowerer:
         elif node.id in self.tables:
             self.emit(OP_PUSH_CONST, self.w.const_for_table(node.id, self.tables[node.id]))
         else:
-            raise Unsupported("name %s" % node.id)
+            raise BrokenRule("%s is not defined" % node.id)
 
     def v_List(self, node):
         try:
@@ -335,16 +470,28 @@ class Lowerer:
         self.visit(node.right)
         self.emit(OP_CONCAT)
 
+    COMPARISONS = { ast.In: OP_IN, ast.NotIn: OP_NOT_IN, ast.Eq: OP_EQ, ast.NotEq: OP_NE }
+
     def v_Compare(self, node):
-        if len(node.ops) != 1:
-            raise Unsupported("chained comparison")
-        opcodes = { ast.In: OP_IN, ast.NotIn: OP_NOT_IN, ast.Eq: OP_EQ, ast.NotEq: OP_NE }
-        opcode = opcodes.get(type(node.ops[0]))
-        if opcode is None:
-            raise Unsupported("comparison %s" % type(node.ops[0]).__name__)
-        self.visit(node.left)
-        self.visit(node.comparators[0])
-        self.emit(opcode)
+        # "a in b in c" means "(a in b) and (b in c)", which is what the few
+        # rules that write it get.
+        patches = []
+        left = node.left
+        for position, (op, right) in enumerate(zip(node.ops, node.comparators)):
+            opcode = self.COMPARISONS.get(type(op))
+            if opcode is None:
+                raise Unsupported("comparison %s" % type(op).__name__)
+            if position:
+                self.emit(OP_POP)
+            self.visit(left)
+            self.visit(right)
+            self.emit(opcode)
+            if position < len(node.ops) - 1:
+                patches.append(len(self.code))
+                self.emit(OP_JMP_IF_FALSE_KEEP, 0)
+            left = right
+        for site in patches:
+            struct.pack_into("<I", self.code, site + 1, len(self.code))
 
     def v_Subscript(self, node):
         if isinstance(node.slice, ast.Slice):
@@ -376,7 +523,7 @@ class Lowerer:
             return value
         index = self.group_names.get(value)
         if index is None:
-            raise Unsupported("unknown group name %s" % value)
+            raise BrokenRule("the pattern has no group named %s" % value)
         return index
 
     def v_Attribute(self, node):
@@ -398,9 +545,9 @@ class Lowerer:
             try:
                 value = ast.literal_eval(node)
             except ValueError:
-                raise Unsupported("sign on a computed value")
+                raise BrokenRule("a sign applied to a computed value")
             if not isinstance(value, int):
-                raise Unsupported("sign on a non-integer")
+                raise BrokenRule("a sign applied to a string")
             self.emit(OP_PUSH_INT, value)
             return
         raise Unsupported("unary %s" % type(node.op).__name__)
@@ -514,8 +661,10 @@ class Lowerer:
             return
 
         if method in self.REGEX_METHODS:
-            if not isinstance(receiver, ast.Name) or receiver.id not in self.tables:
+            if not isinstance(receiver, ast.Name):
                 raise Unsupported("%s() on a computed pattern" % method)
+            if receiver.id not in self.tables:
+                raise BrokenRule("%s is not defined" % receiver.id)
             if len(node.args) != 1:
                 raise Unsupported("%s() with %d arguments" % (method, len(node.args)))
             self.visit(node.args[0])
@@ -639,6 +788,29 @@ def align4(blob):
     return blob
 
 
+def lower_rule(lower, writer, condition, replacement, message):
+    """Lowers a rule's condition, replacement and message."""
+    condition_code = 0
+    if isinstance(condition, str) and condition.strip():
+        condition_code = lower(condition, "condition")
+
+    replacement_code = 0
+    replacement_off = 0
+    if isinstance(replacement, str) and replacement.startswith("="):
+        replacement_code = lower(replacement[1:], "replacement")
+    else:
+        replacement_off = writer.string(replacement)
+
+    message_code = 0
+    message_off = 0
+    if isinstance(message, str) and message.startswith("="):
+        message_code = lower(message[1:], "message")
+    else:
+        message_off = writer.string(message)
+
+    return condition_code, replacement_code, replacement_off, message_code, message_off
+
+
 def compile_package(dictdir, pkg, out_path, verbose=False):
     rules = read_rule_table(os.path.join(dictdir, "pythonpath", "lightproof_%s.py" % pkg))
     impl = read_module_assignments(
@@ -660,9 +832,19 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
     group_name_table = []
     rule_records = []
     dropped = 0
+    broken = 0
 
     for index, rule in enumerate(rules):
-        pattern, replacement, message, condition, ngroup = rule[:5]
+        pattern, replacement, message, condition = rule[:4]
+        if len(rule) > 4:
+            ngroup = rule[4]
+        else:
+            # Brazilian Portuguese ships rules without the group field. The
+            # Python then reads the case-sensitivity flag its rule compiler
+            # appends in its place, so a case-insensitive rule marks group 1
+            # and every other rule marks the whole match. Carried over as it
+            # behaves; changing it is a rule-data change.
+            ngroup = 1 if pattern.startswith("(?iu)") else 0
         try:
             icu_pattern, flags, names = translate_regex(pattern)
         except Unsupported as error:
@@ -675,45 +857,35 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
             lowerer = Lowerer(writer, tables, names)
             try:
                 return writer.bytecode(lowerer.lower(source))
-            except (Unsupported, SyntaxError) as error:
+            except SyntaxError as error:
+                raise BrokenRule("%s is not valid Python: %s" % (what, error))
+            except Unsupported as error:
                 sys.exit("lpcompile: %s rule %d: %s: %s" % (pkg, index, what, error))
 
-        condition_code = 0
-        if isinstance(condition, str) and condition.strip():
-            condition_code = lower_or_die(condition, "condition")
-        elif condition is False or condition is None:
-            condition_code = 0
-        elif condition is not True and not isinstance(condition, str):
-            sys.exit("lpcompile: %s rule %d: unexpected condition %r" % (pkg, index, condition))
-
-        replacement_code = 0
-        replacement_off = 0
-        if isinstance(replacement, str) and replacement.startswith("="):
-            replacement_code = lower_or_die(replacement[1:], "replacement")
-        else:
-            replacement_off = writer.string(replacement)
-
-        message_code = 0
-        message_off = 0
-        if isinstance(message, str) and message.startswith("="):
-            message_code = lower_or_die(message[1:], "message")
-        else:
-            message_off = writer.string(message)
+        try:
+            condition_code, replacement_code, replacement_off, message_code, message_off \
+                = lower_rule(lower_or_die, writer, condition, replacement, message)
+        except BrokenRule as error:
+            sys.stderr.write("lpcompile: %s rule %d cannot run (%s), dropped\n"
+                             % (pkg, index, error))
+            broken += 1
+            continue
 
         group_first = len(group_name_table)
         for name in sorted(names):
             group_name_table.append((writer.string(name), names[name]))
 
         rule_records.append((
-            writer.string(icu_pattern), flags,
+            writer.string(icu_pattern), flags, filter_key(icu_pattern),
             replacement_off, replacement_code,
             message_off, message_code,
             condition_code, ngroup,
             group_first, len(names),
         ))
 
-    if dropped:
-        sys.stderr.write("lpcompile: %s: %d rule(s) dropped\n" % (pkg, dropped))
+    if dropped or broken:
+        sys.stderr.write("lpcompile: %s: %d rule(s) with a bad pattern, %d that cannot run\n"
+                         % (pkg, dropped, broken))
 
     const_records = [struct.pack("<4I", *entry) for entry in writer.consts]
     option_records = [(writer.string(name), 1 if name in option_defaults else 0)
@@ -738,7 +910,7 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
 
     locales_off = place(b"".join(struct.pack("<I", o) for o in locale_offsets))
     options_off = place(b"".join(struct.pack("<II", *o) for o in option_records))
-    rules_off = place(b"".join(struct.pack("<10I", *r) for r in rule_records))
+    rules_off = place(b"".join(struct.pack("<11I", *r) for r in rule_records))
     groups_off = place(b"".join(struct.pack("<II", *g) for g in group_name_table))
     code_off = place(bytes(writer.code))
     consts_off = place(b"".join(const_records))

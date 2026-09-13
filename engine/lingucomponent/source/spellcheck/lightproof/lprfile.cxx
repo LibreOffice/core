@@ -20,7 +20,7 @@ namespace lightproof
 namespace
 {
 constexpr char LPR_MAGIC[8] = { 'L', 'P', 'R', 'O', 'O', 'F', '\0', '\0' };
-constexpr sal_uInt32 LPR_VERSION = 2;
+constexpr sal_uInt32 LPR_VERSION = 3;
 constexpr sal_uInt32 LPR_HEADER_WORDS = 20;
 constexpr sal_uInt32 LPR_HEADER_SIZE = 8 + 4 * LPR_HEADER_WORDS;
 
@@ -31,29 +31,39 @@ sal_uInt32 readU32(const sal_uInt8* pAt)
 }
 }
 
+RuleFile::~RuleFile()
+{
+    if (m_pMapping)
+        osl_unmapMappedFile(m_hFile, m_pMapping, m_nMappingSize);
+    if (m_hFile)
+        osl_closeFile(m_hFile);
+}
+
 std::shared_ptr<const RuleFile> RuleFile::load(const OUString& rFileUrl)
 {
-    osl::File aFile(rFileUrl);
-    if (aFile.open(osl_File_OpenFlag_Read) != osl::FileBase::E_None)
+    std::shared_ptr<RuleFile> pFile(new RuleFile);
+
+    if (osl_openFile(rFileUrl.pData, &pFile->m_hFile, osl_File_OpenFlag_Read)
+        != osl_File_E_None)
     {
         SAL_WARN("lingucomponent.lightproof", "cannot open <" << rFileUrl << ">");
+        pFile->m_hFile = nullptr;
         return nullptr;
     }
 
-    sal_uInt64 nSize = 0;
-    if (aFile.getSize(nSize) != osl::FileBase::E_None || nSize < LPR_HEADER_SIZE
-        || nSize > SAL_MAX_UINT32)
+    if (osl_getFileSize(pFile->m_hFile, &pFile->m_nMappingSize) != osl_File_E_None
+        || pFile->m_nMappingSize < LPR_HEADER_SIZE || pFile->m_nMappingSize > SAL_MAX_UINT32)
     {
         SAL_WARN("lingucomponent.lightproof", "bad size for <" << rFileUrl << ">");
         return nullptr;
     }
 
-    std::shared_ptr<RuleFile> pFile(new RuleFile);
-    pFile->m_aData.resize(static_cast<size_t>(nSize));
-    sal_uInt64 nRead = 0;
-    if (aFile.read(pFile->m_aData.data(), nSize, nRead) != osl::FileBase::E_None || nRead != nSize)
+    if (osl_mapFile(pFile->m_hFile, &pFile->m_pMapping, pFile->m_nMappingSize, 0,
+                    osl_File_MapFlag_RandomAccess)
+        != osl_File_E_None)
     {
-        SAL_WARN("lingucomponent.lightproof", "short read on <" << rFileUrl << ">");
+        SAL_WARN("lingucomponent.lightproof", "cannot map <" << rFileUrl << ">");
+        pFile->m_pMapping = nullptr;
         return nullptr;
     }
 
@@ -71,8 +81,8 @@ std::shared_ptr<const RuleFile> RuleFile::load(const OUString& rFileUrl)
 
 bool RuleFile::parse()
 {
-    const sal_uInt8* pBase = m_aData.data();
-    const sal_uInt32 nTotal = static_cast<sal_uInt32>(m_aData.size());
+    const sal_uInt8* pBase = static_cast<const sal_uInt8*>(m_pMapping);
+    const sal_uInt32 nTotal = static_cast<sal_uInt32>(m_nMappingSize);
 
     if (std::memcmp(pBase, LPR_MAGIC, sizeof(LPR_MAGIC)) != 0)
         return false;
@@ -165,6 +175,14 @@ bool RuleFile::parse()
             = sal_uInt64(rConstant.nCount) * (rConstant.nType == Constant::Map ? 8 : 4);
         if (rConstant.nData > m_nConstantDataSize
             || nBytes > m_nConstantDataSize - rConstant.nData)
+            return false;
+    }
+
+    // A rule names the paragraph filter bucket its literal falls in, and the
+    // checker indexes a vector of that many buckets with it.
+    for (sal_uInt32 i = 0; i < m_nRuleCount; ++i)
+    {
+        if (m_pRules[i].nFilter > FILTER_BUCKETS)
             return false;
     }
 

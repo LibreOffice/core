@@ -51,6 +51,8 @@ protected:
     void setEnglishOption(const OUString& rName, bool bValue);
 
     static lang::Locale hungarian() { return lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()); }
+    static lang::Locale brazilian() { return lang::Locale(u"pt"_ustr, u"BR"_ustr, OUString()); }
+    Sequence<linguistic2::SingleProofreadingError> checkBrazilian(const OUString& rText);
     Sequence<linguistic2::SingleProofreadingError> checkHungarian(const OUString& rText);
     void setHungarianOption(const OUString& rName, bool bValue);
 
@@ -117,6 +119,14 @@ LightproofTest::checkHungarian(const OUString& rText)
 {
     return getProofreader()
         ->doProofreading(u"doc"_ustr, rText, hungarian(), 0, rText.getLength(), {})
+        .aErrors;
+}
+
+Sequence<linguistic2::SingleProofreadingError>
+LightproofTest::checkBrazilian(const OUString& rText)
+{
+    return getProofreader()
+        ->doProofreading(u"doc"_ustr, rText, brazilian(), 0, rText.getLength(), {})
         .aErrors;
 }
 
@@ -457,6 +467,55 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianInlineSubstitution)
     // The second offers the same letters separated by narrow no-break spaces.
     CPPUNIT_ASSERT_EQUAL(u"r\u202Fi\u202Ft\u202Fk\u202Fí\u202Ft\u202Fo\u202Ft\u202Ft"_ustr,
                          aErrors[0].aSuggestions[1]);
+}
+
+// A rule with no condition at all, from the largest package.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianPlainRule)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"Ele tem em celebro humano."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"em cérebro"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// An agreement rule, which is the shape most of the package's rules take: a
+// condition looking the matched words up in the package's word lists. The
+// pattern starts with an alternation, so it also guards against the
+// paragraph filter treating one branch's text as required.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianAgreement)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"Havia dezenas de indicativo aqui."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"dezenas de indicativos"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// Two rules answering for the same phrase, each offering both readings.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianTwoSuggestions)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"Comprei uma casas novas."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors[0].aSuggestions.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"uma casa"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"umas casas"_ustr, aErrors[0].aSuggestions[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Comprei uma casa"_ustr, aErrors[1].aSuggestions[0]);
+}
+
+// A replacement offering two whole phrases, which the rules separate with a
+// newline.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testBrazilianMultipleSuggestions)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkBrazilian(u"As pessoas já foram comunicadas ontem."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors[0].aSuggestions.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"pessoas já foram informadas"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"pessoas já foram avisadas"_ustr, aErrors[0].aSuggestions[1]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

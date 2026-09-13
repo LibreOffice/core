@@ -23,6 +23,7 @@ lightproof_PYTHON := $(call gb_ExternalExecutable_get_command,python)
 # so map the one to the other here.
 lightproof_DIR_en := en
 lightproof_DIR_hu_HU := hu_HU
+lightproof_DIR_pt_BR := pt_BR
 lightproof_DIR_ru_RU := ru_RU
 
 define lightproof_rules
@@ -42,6 +43,7 @@ endef
 
 $(eval $(call lightproof_rules,en))
 $(eval $(call lightproof_rules,hu_HU))
+$(eval $(call lightproof_rules,pt_BR))
 $(eval $(call lightproof_rules,ru_RU))
 
 # vim: set noet sw=4 ts=4:

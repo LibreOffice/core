@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <osl/file.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -18,6 +19,12 @@
 
 namespace lightproof
 {
+// The paragraph filter: one bit per hashed three-character sequence, which a
+// rule's literal has to be among for the rule to be worth trying. Sized so
+// that a paragraph sets far fewer bits than there are buckets. lpcompile.py
+// hashes into the same range.
+constexpr sal_uInt32 FILTER_BUCKETS = 8191;
+
 // One compiled rule. All members but nFlags, nGroup and the group-name range
 // are offsets: into the string blob for text, into the bytecode blob (biased
 // by one, so zero means "no expression") for code.
@@ -25,6 +32,9 @@ struct Rule
 {
     sal_uInt32 nPattern;
     sal_uInt32 nFlags;
+    // A hash of the rule's most selective literal, or zero when it has none
+    // and must always be tried. See the paragraph filter in lightproofimp.
+    sal_uInt32 nFilter;
     sal_uInt32 nReplacement;
     sal_uInt32 nReplacementCode;
     sal_uInt32 nMessage;
@@ -71,6 +81,8 @@ struct Constant
 class RuleFile
 {
 public:
+    ~RuleFile();
+
     // Returns nullptr when the file is missing, truncated, or not a rule
     // package this build understands.
     static std::shared_ptr<const RuleFile> load(const OUString& rFileUrl);
@@ -120,7 +132,12 @@ private:
     // the offset is not one the string blob holds.
     const char* getCString(sal_uInt32 nOffset) const;
 
-    std::vector<sal_uInt8> m_aData;
+    // The file is mapped rather than read, so forked processes checking the
+    // same language share its pages instead of each holding a copy. The
+    // largest package is four megabytes.
+    oslFileHandle m_hFile = nullptr;
+    void* m_pMapping = nullptr;
+    sal_uInt64 m_nMappingSize = 0;
     OUString m_aPackage;
     OUString m_aDisplayName;
     OUString m_aLicence;

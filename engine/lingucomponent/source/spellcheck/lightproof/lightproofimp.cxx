@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
+#include <unicode/locid.h>
 #include <unicode/regex.h>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
@@ -65,6 +66,42 @@ OUString fromIcu(const icu::UnicodeString& rString)
     return OUString(reinterpret_cast<const sal_Unicode*>(rString.getBuffer()), rString.length());
 }
 
+OUString changeCase(const OUString& rString, bool bUpper)
+{
+    if (rString.isEmpty())
+        return rString;
+    icu::UnicodeString aText(toIcu(rString));
+    // The paragraph filter is hashed from the lower case of the text, and
+    // lpcompile.py hashes the rules with Python's lower(), which is the same
+    // everywhere. Naming the root locale keeps the process locale from
+    // deciding that I lowers to a dotless i and no rule matches again.
+    if (bUpper)
+        aText.toUpper(icu::Locale::getRoot());
+    else
+        aText.toLower(icu::Locale::getRoot());
+    return fromIcu(aText);
+}
+
+// Must hash the same way lpcompile.py does.
+sal_uInt32 filterHash(sal_Unicode a, sal_Unicode b, sal_Unicode c)
+{
+    sal_uInt32 nKey = 0;
+    nKey = nKey * 131 + a;
+    nKey = nKey * 131 + b;
+    nKey = nKey * 131 + c;
+    return (nKey % FILTER_BUCKETS) + 1;
+}
+
+// One bit per three-character sequence the paragraph contains.
+std::vector<bool> buildParagraphFilter(const OUString& rText)
+{
+    std::vector<bool> aFilter(FILTER_BUCKETS + 1, false);
+    const OUString aLower = changeCase(rText, false);
+    for (sal_Int32 i = 0; i + 2 < aLower.getLength(); ++i)
+        aFilter[filterHash(aLower[i], aLower[i + 1], aLower[i + 2])] = true;
+    return aFilter;
+}
+
 // The capitalisation the rules apply to a suggestion when the match itself
 // was capitalised: Python's str.capitalize(), with the dotted capital I for
 // Turkish and Azerbaijani and the IJ digraph for Dutch.
@@ -86,11 +123,7 @@ OUString capitaliseSuggestion(const OUString& rString, const lang::Locale& rLoca
     // source has to stay alive for as long as the UnicodeString does.
     const OUString aHead = rString.copy(0, 1);
     const OUString aTail = rString.copy(1);
-    icu::UnicodeString aFirst(toIcu(aHead));
-    icu::UnicodeString aRest(toIcu(aTail));
-    aFirst.toUpper();
-    aRest.toLower();
-    return fromIcu(aFirst) + fromIcu(aRest);
+    return changeCase(aHead, true) + changeCase(aTail, false);
 }
 
 // Expands a rule's replacement or message template against a match, the way
@@ -487,6 +520,7 @@ ProofreadingResult Lightproof::doProofreading(
 
     const RuleFile& rFile = *pPackage->pFile;
     const icu::UnicodeString aInput = toIcu(aText);
+    const std::vector<bool> aFilter = buildParagraphFilter(aText);
     m_pRunningPackage = pPackage;
     Context aContext{ rFile, aLocale, aText, pPackage->aOptions, nullptr, *this };
 
@@ -494,6 +528,11 @@ ProofreadingResult Lightproof::doProofreading(
     for (sal_uInt32 nRuleIndex = 0; nRuleIndex < rFile.getRuleCount(); ++nRuleIndex)
     {
         const Rule& rRule = rFile.getRule(nRuleIndex);
+        // Most rules name a word that has to be in the paragraph, so most of
+        // them can be dismissed before their pattern is even built.
+        if (rRule.nFilter != 0 && !aFilter[rRule.nFilter])
+            continue;
+
         CompiledRule& rCompiled = pPackage->aRules[nRuleIndex];
 
         if (!rCompiled.bCompiled)
