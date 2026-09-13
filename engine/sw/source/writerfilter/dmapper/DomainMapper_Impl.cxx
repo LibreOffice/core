@@ -3068,6 +3068,8 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                     // table style has got bigger precedence than docDefault style
                     // collect these pending paragraph properties to process in endTable()
                     rtl::Reference<SwXTextCursor> xCur = dynamic_cast<SwXTextCursor*>(xTextRange->getText( )->createTextCursor().get());
+                    if (!xCur)
+                        throw cpo::uno::RuntimeException();
                     xCur->gotoEnd(false);
                     xCur->goLeft(1, false);
                     rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
