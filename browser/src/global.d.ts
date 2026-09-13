@@ -231,6 +231,8 @@ interface AppInterface {
 	updateExportFormatsVisibility: () => void;
 	isExportEntryVisible: (id: string) => boolean;
 	languages: Array<{ translated: string; neutral: string; iso: string }>;
+	// The sentence checking rule packages the engine reports as installed.
+	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;
 	impressTableStyles: ImpressTableStylesService;

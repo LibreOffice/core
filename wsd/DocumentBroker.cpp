@@ -2073,6 +2073,11 @@ const std::vector<std::string>& getUploadableXcuPaths()
 
         "/org.openoffice.Office.Common/BulletsNumbering",
         "/org.openoffice.Office.Common/I18N/CTL",
+
+        // Only the sentence-checking subtree: its sibling
+        // GrammarChecking/LanguageTool holds an API key and a user name,
+        // which must not round-trip to the host.
+        "/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking",
     };
     return sPaths;
 }

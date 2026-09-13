@@ -100,6 +100,102 @@ const defaultXcuObj: Record<string, any> = {
 			},
 		},
 	},
+	Linguistic: {
+		GrammarChecking: {
+			SentenceChecking: {
+				en: {
+					grammar: false,
+					cap: false,
+					dup: false,
+					pair: false,
+					spaces: true,
+					mdash: false,
+					quotation: false,
+					times: true,
+					spaces2: false,
+					ndash: false,
+					apostrophe: false,
+					ellipsis: false,
+					spaces3: false,
+					minus: false,
+					metric: false,
+					numsep: false,
+					nonmetric: false,
+				},
+				hu_HU: {
+					cap: false,
+					par: false,
+					quot: false,
+					wordpart: false,
+					dash: true,
+					comma: false,
+					numpart: false,
+					grammar: false,
+					style: false,
+					dup0: true,
+					compound: false,
+					dup: false,
+					allcompound: false,
+					dup2: false,
+					money: true,
+					dup3: false,
+					SI: false,
+					hyphen: false,
+					apost: true,
+					spaces: true,
+					frac: false,
+					ligature: false,
+					elli: false,
+					spaces2: false,
+					thin: false,
+					noligature: false,
+					idx: false,
+					minus: false,
+				},
+				pt_BR: {
+					grammar: true,
+					cap: true,
+					dup: true,
+					pair: true,
+					spaces: true,
+					mdash: true,
+					quotation: true,
+					times: false,
+					spaces2: true,
+					ndash: true,
+					apostrophe: true,
+					ellipsis: true,
+					spaces3: true,
+					minus: false,
+					metric: true,
+					gerund: true,
+					nonmetric: true,
+					paronimo: true,
+					composto: true,
+					malmau: true,
+					aha: true,
+					meiameio: true,
+					verbo: true,
+					pronominal: true,
+					pronome: true,
+					porque: true,
+				},
+				ru_RU: {
+					hyphen: true,
+					comma: true,
+					multiword: true,
+					together: true,
+					common: true,
+					space: true,
+					abbreviation: true,
+					dup: true,
+					numsep: false,
+					typographica: true,
+					quotation: false,
+				},
+			},
+		},
+	},
 	Writer: {
 		Grid: {
 			ShowGrid: false,
@@ -136,6 +232,9 @@ const defaultXcuObj: Record<string, any> = {
 	},
 };
 
+// The sentence checking options live in the same xcu the document settings
+// use, so the Writing Aids section reaches them through this object rather
+// than keeping a tree of its own.
 class Xcu {
 	private xcuDataObj: XcuObject = {};
 	private fileId: string | null = null;
@@ -327,6 +426,14 @@ class Xcu {
 		return xcuXml;
 	}
 
+	// The option group of one rule package, or null when the xcu has none.
+	public getSentenceCheckingGroup(packageId: string): any {
+		const linguistic = this.xcuDataObj ? this.xcuDataObj['Linguistic'] : null;
+		const grammar = linguistic ? linguistic['GrammarChecking'] : null;
+		const sentence = grammar ? grammar['SentenceChecking'] : null;
+		return sentence ? sentence[packageId] || null : null;
+	}
+
 	public createXcuEditorUI(container: HTMLElement): HTMLElement {
 		const heading = document.createElement('h3');
 		heading.textContent = _('Document Settings');
@@ -372,7 +479,9 @@ class Xcu {
 					renderedTree.classList.add('xcu-settings-grid');
 					contentsContainer.appendChild(renderedTree);
 				} else {
-					contentsContainer.textContent = `No settings available for ${tab.label}`;
+					contentsContainer.textContent = _(
+						'No settings available for {0}',
+					).replace('{0}', tab.label);
 				}
 			});
 			navContainer.appendChild(btn);

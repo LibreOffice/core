@@ -81,6 +81,8 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
+#include <config_folders.h>
+
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -6319,7 +6321,12 @@ static void updateConfig(const OUString& rConfigPath)
                     u"/org.openoffice.Office.Writer/Content/Display/ShowBoundaries"_ustr,
                     u"/org.openoffice.Office.Writer/Content/NonprintingCharacter"_ustr,
                     u"/org.openoffice.Office.Common/BulletsNumbering"_ustr,
-                    u"/org.openoffice.Office.Common/I18N/CTL"_ustr
+                    u"/org.openoffice.Office.Common/I18N/CTL"_ustr,
+
+                    // Only the sentence-checking subtree: its sibling
+                    // GrammarChecking/LanguageTool holds an API key and a
+                    // user name, which must not round-trip to the host.
+                    u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking"_ustr
                 };
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }
@@ -7832,6 +7839,79 @@ static void doc_resetSelection(COKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+// The sentence checking rule packages that are installed, so the Options
+// dialog can offer a panel for each of them and none for the rest. Each
+// package's id is its rule file's name, which is also the name of its group
+// in the configuration.
+static std::string getSentenceCheckingPackages()
+{
+    // Which languages the checker will actually serve. It applies the kit's
+    // language allowlist, so a package whose language is missing here is one
+    // whose options would do nothing, and is not worth a panel.
+    std::set<OUString> aLanguages;
+    try
+    {
+        cpo::uno::Reference<linguistic2::XSupportedLocales> xChecker(
+            comphelper::getProcessServiceFactory()->createInstance(
+                u"cpo.lingu.Lightproof"_ustr),
+            uno::UNO_QUERY);
+        if (xChecker.is())
+            for (const lang::Locale& rLocale : xChecker->getLocales())
+                aLanguages.insert(rLocale.Language);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("kit", "cannot ask the sentence checker for its locales");
+    }
+
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:SentenceCheckingPackages");
+    std::vector<OUString> aIds;
+
+    OUString aDir(u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/lightproof"_ustr);
+    rtl::Bootstrap::expandMacros(aDir);
+
+    osl::Directory aRules(aDir);
+    if (aRules.open() == osl::FileBase::E_None)
+    {
+        osl::DirectoryItem aItem;
+        while (aRules.getNextItem(aItem) == osl::FileBase::E_None)
+        {
+            osl::FileStatus aStatus(osl_FileStatus_Mask_FileName);
+            if (aItem.getFileStatus(aStatus) != osl::FileBase::E_None)
+                continue;
+            const OUString aName = aStatus.getFileName();
+            if (!aName.endsWithIgnoreAsciiCase(u".lpr"))
+                continue;
+
+            const OUString aId = aName.copy(0, aName.getLength() - 4);
+            // The id is the package name, "en" or "pt_BR", so the part in
+            // front of the underscore is the language it checks.
+            const OUString aLanguage = aId.getToken(0, '_');
+            if (aLanguages.find(aLanguage) == aLanguages.end())
+                continue;
+
+            aIds.push_back(aId);
+        }
+    }
+
+    // A directory is read back in whatever order it happens to be in, so say
+    // the same thing every time instead. The dialog puts its panels in the
+    // order the reader's own language names sort in, which this is not, but a
+    // stable answer is one less thing that differs between two machines.
+    std::sort(aIds.begin(), aIds.end());
+
+    {
+        auto aPackages = aJson.startArray("commandValues");
+        for (const OUString& rId : aIds)
+        {
+            auto aPackage = aJson.startStruct();
+            aJson.put("id", rId);
+        }
+    }
+    return aJson.finishAndGetAsStdString();
+}
+
 static std::string getDocReadOnly(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
@@ -8488,6 +8568,10 @@ static std::string doc_getCommandValues(COKitDocument* pThis, const char* pComma
     if (aCommand == ".uno:ReadOnly")
     {
         return getDocReadOnly(pThis);
+    }
+    else if (aCommand == ".uno:SentenceCheckingPackages")
+    {
+        return getSentenceCheckingPackages();
     }
     else if (aCommand == ".uno:HasPasswordToModify")
     {

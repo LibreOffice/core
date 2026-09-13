@@ -26,6 +26,8 @@ window.L.Map.mergeOptions({
 window.L.Map.Settings = window.L.Handler.extend({
 	_iframeDialog: null as IFrameDialog | null,
 	_url: '',
+	_sentenceCheckingAsked: null as Promise<void> | null,
+	_resolveSentenceChecking: null as (() => void) | null,
 
 	_getLocalSettingsUrl: function (): string {
 		const settingsLocation: string = app.LOUtil.getURL(
@@ -42,10 +44,50 @@ window.L.Map.Settings = window.L.Handler.extend({
 
 	addHooks: function (): void {
 		window.L.DomEvent.on(window, 'message', this.onMessage, this);
+		this._map.on('commandvalues', this.onCommandValues, this);
+		// Asked for once the document is up, so the answer is in hand by the
+		// time anyone opens the dialog.
+		this._map.on('doclayerinit', this.askForSentenceChecking, this);
 	},
 
 	removeHooks: function (): void {
 		window.L.DomEvent.off(window, 'message', this.onMessage, this);
+		this._map.off('commandvalues', this.onCommandValues, this);
+		this._map.off('doclayerinit', this.askForSentenceChecking, this);
+	},
+
+	// Resolves when the engine answers, so the dialog can wait for a late
+	// reply rather than opening with an empty list.
+	askForSentenceChecking: function (): Promise<void> {
+		if (this._sentenceCheckingAsked) return this._sentenceCheckingAsked;
+		this._sentenceCheckingAsked = new Promise<void>((resolve) => {
+			this._resolveSentenceChecking = resolve;
+			app.socket.sendMessage(
+				'commandvalues command=.uno:SentenceCheckingPackages',
+			);
+			// The answer may never come. Give up rather than hold the dialog
+			// shut.
+			setTimeout(() => {
+				if (!this._resolveSentenceChecking) return; // answered in time
+				this._resolveSentenceChecking = null;
+				this._sentenceCheckingAsked = null;
+				resolve();
+			}, 2000);
+		});
+		return this._sentenceCheckingAsked;
+	},
+
+	// Which sentence checking rule packages the engine has. A language with no
+	// package installed gets no panel in the dialog.
+	onCommandValues: function (e: any): void {
+		if (e.commandName !== '.uno:SentenceCheckingPackages') return;
+		app.sentenceCheckingPackages = Array.isArray(e.commandValues)
+			? e.commandValues
+			: [];
+		if (this._resolveSentenceChecking) {
+			this._resolveSentenceChecking();
+			this._resolveSentenceChecking = null;
+		}
 	},
 
 	removeIframe: function (): void {
@@ -55,7 +97,12 @@ window.L.Map.Settings = window.L.Handler.extend({
 	/**
 	 * target: id of the element to scroll into the view when the dialog shows up
 	 */
-	showSettingsDialog: function (target: string): void {
+	showSettingsDialog: async function (target: string): Promise<void> {
+		// Normally answered long before anyone opens this. An answer that
+		// never came is asked for again here, rather than leaving the
+		// sentence checker out of the dialog for the rest of the session.
+		if (!app.sentenceCheckingPackages) await this.askForSentenceChecking();
+
 		if (this._iframeDialog && this._iframeDialog.hasLoaded())
 			this.removeIframe();
 
@@ -77,6 +124,11 @@ window.L.Map.Settings = window.L.Handler.extend({
 			{ disable_ai_settings: this._map.wopi.DisableAISettings },
 			{ show_left_nav: true },
 			{ scroll_target: target },
+			// Which sentence checking rule packages the engine has, so the
+			// dialog offers a panel for each and none for the rest.
+			{
+				sentence_checking: JSON.stringify(app.sentenceCheckingPackages || []),
+			},
 		];
 
 		const options = {

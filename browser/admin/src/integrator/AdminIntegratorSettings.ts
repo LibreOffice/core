@@ -28,6 +28,7 @@ interface Window {
 	enableDebug?: boolean;
 	disableAISettings?: boolean;
 	wopiSettingBaseUrl?: string;
+	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
 	iframeType?: string;
 	cssVars?: string;
 	serviceRoot?: string;
@@ -708,7 +709,298 @@ class SettingIframe {
 		RightPage: _('Right pages'),
 		Brochure: _('Brochure'),
 		BrochureRightToLeft: _('Brochure Right to Left'),
+
+		// The sentence checker panels are titled by the language they check.
+		// The names of the languages are translated; what is inside a panel
+		// is not, see settingTitles below.
+		en: _('English'),
+		hu_HU: _('Hungarian'),
+		pt_BR: _('Portuguese (Brazil)'),
+		ru_RU: _('Russian'),
 		// Add more as needed
+	};
+
+	/**!
+	 * The sentence checker options, as [label, help].
+	 *
+	 * Not translated, and deliberately so: each option names a notion of the
+	 * grammar of one language, and whoever has reason to set it is reading
+	 * that language already. Rendering the Hungarian options in Japanese
+	 * would mean inventing terms for notions the target language may not
+	 * have. The text is the rule package's own, printed by
+	 * lpcompile.py --emit-titles.
+	 *
+	 * Where a package gives an option no help of its own the label stands in
+	 * for both, which still says more than nothing when a narrow panel has
+	 * cut the label short.
+	 */
+	private readonly settingTitles: Record<string, [string, string]> = {
+		// en
+		'en-grammar': ['Possible mistakes', 'Check more grammar errors.'],
+		'en-cap': ['Capitalization', 'Check missing capitalization of sentences.'],
+		'en-dup': ['Word duplication', 'Check repeated words.'],
+		'en-pair': [
+			'Parentheses',
+			'Check missing or extra parentheses and quotation marks.',
+		],
+		'en-spaces': ['Word spacing', 'Check single spaces between words.'],
+		'en-mdash': [
+			'Em dash',
+			'Force unspaced em dash instead of spaced en dash.',
+		],
+		'en-quotation': [
+			'Quotation marks',
+			'Check double quotation marks: "x" → “x”',
+		],
+		'en-times': [
+			'Multiplication sign',
+			'Check true multipliction sign: 5x5 → 5×5',
+		],
+		'en-spaces2': [
+			'Sentence spacing',
+			'Check single spaces between sentences.',
+		],
+		'en-ndash': [
+			'En dash',
+			'Force spaced en dash instead of unspaced em dash.',
+		],
+		'en-apostrophe': [
+			'Apostrophe',
+			'Change typewriter apostrophe, single quotation marks and correct double primes.',
+		],
+		'en-ellipsis': ['Ellipsis', 'Change three dots with ellipsis.'],
+		'en-spaces3': [
+			'More spaces',
+			'Check more than two extra space characters between words and sentences.',
+		],
+		'en-minus': ['Minus sign', 'Change hyphen characters to real minus signs.'],
+		'en-metric': [
+			'Convert to metric (°C, km/h, m, kg, l)',
+			'Measurement conversion from °F, mph, ft, in, lb, gal and miles.',
+		],
+		'en-numsep': [
+			'Thousand separation of large numbers',
+			'Common (1000000 → 1,000,000) or ISO (1000000 → 1 000 000).',
+		],
+		'en-nonmetric': [
+			'Convert to non-metric (°F, mph, ft, lb, gal)',
+			'Measurement conversion from °C; km/h; cm, m, km; kg; l.',
+		],
+		// hu_HU
+		'hu_HU-cap': [
+			'Nagy kezdőbetű',
+			'Mondatok nagy kezdőbetűjének ellenőrzése.',
+		],
+		'hu_HU-par': ['Zárójelek', 'Zárójelpárok ellenőrzése.'],
+		'hu_HU-quot': [
+			'Idézőjelek',
+			'A magyar „külső” és »belső« idézőjelek ellenőrzése.',
+		],
+		'hu_HU-wordpart': [
+			'Egybe- és különírási javaslatok',
+			'Egybe- és különírási javaslatok',
+		],
+		'hu_HU-dash': [
+			'Nagykötőjel és gondolatjel',
+			'A kiskötőjel cseréje a nagykötőjelre (- → –).',
+		],
+		'hu_HU-comma': [
+			'Vesszőhasználatra vonatkozó javaslatok',
+			'A valószínűleg hiányzó és felesleges vesszők jelzése.',
+		],
+		'hu_HU-numpart': [
+			'Nagy számok tagolása szóközökkel',
+			'Ezrestagolás nem-törő szóközökkel (10000 → 10 000).',
+		],
+		'hu_HU-grammar': [
+			'Javaslat kevésbé egyértelmű esetben is',
+			'Javaslat kevésbé egyértelmű esetben is',
+		],
+		'hu_HU-style': ['Stílusellenőrzés', 'Stílusellenőrzés'],
+		'hu_HU-dup0': [
+			'Szóismétlés',
+			'Szóismétlés egymást közvetlenül követő szavak esetében.',
+		],
+		'hu_HU-compound': [
+			'Egyszerű nem szótári összetett szavak',
+			'Rövid, vagy rövid tagot tartalmazó, szóösszetételi szabályok alapján gyakran hibásan elfogadott alakok aláhúzása.',
+		],
+		'hu_HU-dup': [
+			'Szóismétlés tagmondaton belül',
+			'Szóismétlés tagmondaton belül',
+		],
+		'hu_HU-allcompound': [
+			'Minden nem szótári összetett szó',
+			'Minden szóösszetételi szabály alapján elfogadott alak aláhúzása.',
+		],
+		'hu_HU-dup2': ['Szóismétlés mondaton belül', 'Szóismétlés mondaton belül'],
+		'hu_HU-money': [
+			'Számok és átírásuk',
+			'A számmal és számnévvel is leírt mennyiség megegyezik-e? (Pl. 10, azaz tíz Ft.)',
+		],
+		'hu_HU-dup3': [
+			'Szóismétlés eltérő toldalékok esetén is',
+			'Szóismétlés eltérő toldalékok esetén is',
+		],
+		'hu_HU-SI': [
+			'Mértékegységek',
+			'Nem SI mértékegységek átalakítása (°F, mérföld, yard, láb, hüvelyk, gallon, pint, font súlyú).',
+		],
+		'hu_HU-hyphen': [
+			'Hiányzó elválasztás megadása',
+			'Nem egyértelműen elválasztható szóalakok elválasztásának megadása (pl. megint, fölül).',
+		],
+		'hu_HU-apost': [
+			'Aposztróf',
+			"Az írógépes aposztróf cseréje a tipográfiailag megfelelőre (' → ’).",
+		],
+		'hu_HU-spaces': [
+			'Dupla szóköz',
+			'Két vagy három ismétlődő szóköz cseréje egyre.',
+		],
+		'hu_HU-frac': [
+			'Törtek',
+			'Perjellel elválasztott törtek cseréje Unicode karakterre (1/2 → ½).',
+		],
+		'hu_HU-ligature': ['f-ligatúra javaslata', 'Csere Unicode f-ligatúrára.'],
+		'hu_HU-elli': [
+			'Három pont',
+			'Három pont cseréje az egalizált három pont karakterre (...→…).',
+		],
+		'hu_HU-spaces2': [
+			'Sok szóköz',
+			'Négy vagy több ismétlődő szóköz cseréje egy tabulátorra.',
+		],
+		'hu_HU-thin': [
+			'Keskeny szóköz',
+			'Keskeny szóköz (spácium) használata ezrestagoláshoz és más esetekben.',
+		],
+		'hu_HU-noligature': [
+			'f-ligatúra tiltása',
+			'Unicode f-ligatúra cseréje különálló betűkre.',
+		],
+		'hu_HU-idx': [
+			'Indexek',
+			'Számok cseréje mértékegységekben és kémiai képletekben valódi indexekre (m2 → m²).',
+		],
+		'hu_HU-minus': [
+			'Mínuszjel',
+			'Kötőjelek cseréje Unicode mínuszjelre a számok előtt.',
+		],
+		// ru_RU
+		'ru_RU-hyphen': [
+			'Дефис',
+			'Правописание слов через дефис, слитно или раздельно.',
+		],
+		'ru_RU-comma': [
+			'Пунктуация',
+			'Поиск ошибок в расстановке знаков препинания.',
+		],
+		'ru_RU-multiword': [
+			'Словосочетания',
+			'Правописание словосочетаний и устойчивых оборотов.',
+		],
+		'ru_RU-together': [
+			'Слитно/раздельно',
+			'Правописание слов слитно или раздельно.',
+		],
+		'ru_RU-common': ['Общие ошибки', 'Поиск прочих ошибок'],
+		'ru_RU-space': [
+			'Пробел',
+			'Поиск ошибок с пробелом: двойной пробел, пробел перед знаками пунктуации.',
+		],
+		'ru_RU-abbreviation': [
+			'Аббревиатуры',
+			'Аббревиатуры, сокращения и знаки пунктуации.',
+		],
+		'ru_RU-dup': ['Повтор слов', 'Поиск повторяющихся слов'],
+		'ru_RU-numsep': [
+			'Разделители групп разрядов (ISO) для чисел',
+			'Разделители групп разрядов (ISO) для больших чисел',
+		],
+		'ru_RU-typographica': [
+			'Типографика',
+			'Предлагать замену сочетаний знаков на специальные символы.',
+		],
+		'ru_RU-quotation': [
+			'Кавычки',
+			'Предлагать замену кавычек на кавычки-«ёлочки» или парные кавычки.',
+		],
+		// pt_BR
+		'pt_BR-grammar': ['Crase', 'Identificar o uso de crase.'],
+		'pt_BR-cap': [
+			'Maiúsculas',
+			'Procurar pela falta de letra maiúscula no inicio das frases.',
+		],
+		'pt_BR-dup': ['Palavras duplicadas', 'Procurar palavras repetidas.'],
+		'pt_BR-pair': [
+			'Parênteses',
+			'Procurar parênteses ou aspas a mais ou a menos.',
+		],
+		'pt_BR-spaces': [
+			'Espaço entre palavras',
+			'Verificar espaços entre palavras.',
+		],
+		'pt_BR-mdash': [
+			'Travessão',
+			'Forçar travessão não espaçado em vez de meio-traço espaçado.',
+		],
+		'pt_BR-quotation': ['Aspas Duplas', 'Verificar aspas duplas: "x" → “x”'],
+		'pt_BR-times': [
+			'Sinal de multiplicação',
+			'Verificar verdadeiro sinal de multiplicação: 5x5 → 5×5',
+		],
+		'pt_BR-spaces2': ['Espaço entre frases', 'Verificar espaços entre frases.'],
+		'pt_BR-ndash': [
+			'Meio-traço',
+			'Forçar meio-traço espaçado em vez de travessão não espaçado.',
+		],
+		'pt_BR-apostrophe': [
+			'Aspas simples',
+			'Alterar apóstrofo de máquina de escrever, aspas simples e corrigir primos duplos.',
+		],
+		'pt_BR-ellipsis': [
+			'Reticências',
+			'Alterar três pontos seguidos por reticências.',
+		],
+		'pt_BR-spaces3': [
+			'Espaços adicionais',
+			'Verificar por mais de dois espaços em branco entre palavras e frases.',
+		],
+		'pt_BR-minus': [
+			'Sinal de menos',
+			'Trocar hífen pelo verdadeiro sinal de menos.',
+		],
+		'pt_BR-metric': [
+			'Pleonasmos',
+			'Identificação de redundância de termos: Subir pra cima, encarar de frente, regra geral.',
+		],
+		'pt_BR-gerund': [
+			'Gerundismos',
+			'Emprego inapropriado do gerúndio: estarei trabalhando, vou estar fazendo.',
+		],
+		'pt_BR-nonmetric': ['Cacofonias', 'Som feio ou desagradável: por cada.'],
+		'pt_BR-paronimo': [
+			'Parônimos',
+			'Palavras parecidas na grafia ou na pronúncia, mas com significados diferentes.',
+		],
+		'pt_BR-composto': [
+			'Termos compostos',
+			'Identifica termos compostos escritos separados. Ex.: auto escola, sub contratado.',
+		],
+		'pt_BR-malmau': ['Mal ou Mau', 'Emprego de mal ou mau.'],
+		'pt_BR-aha': ['Há ou a', 'Emprego de há ou a.'],
+		'pt_BR-meiameio': ['Meia ou meio', 'Emprego de meia ou meio.'],
+		'pt_BR-verbo': ['Concordância verbal', 'Verifica a concordância verbal.'],
+		'pt_BR-pronominal': [
+			'Colocação Pronominal',
+			'Posição que os pronomes pessoais ocupam em relação ao verbo.',
+		],
+		'pt_BR-pronome': ['Uso de pronome', 'Emprego de pronome.'],
+		'pt_BR-porque': [
+			'Emprego do porquê',
+			'Identifica uso de porque, por que, porquê e por quê.',
+		],
 	};
 
 	// SVG templates for icons that are small and always present (no async load needed)
@@ -728,6 +1020,7 @@ class SettingIframe {
 	private _browserSettingSection: HTMLElement | null = null;
 	private _zoomSection: HTMLElement | null = null;
 	private _xcuSection: HTMLElement | null = null;
+	private _sentenceCheckerSection: HTMLElement | null = null;
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
 	private _zoteroSection: HTMLElement | null = null;
@@ -911,6 +1204,13 @@ class SettingIframe {
 			read('disableAiSettings', 'disable_ai_settings') === 'true';
 		window.showLeftNav = read('showLeftNav', 'show_left_nav') === 'true';
 		window.scrollTarget = read('scrollTarget', 'scroll_target');
+		try {
+			window.sentenceCheckingPackages = JSON.parse(
+				read('sentenceChecking', 'sentence_checking') || '[]',
+			);
+		} catch {
+			window.sentenceCheckingPackages = [];
+		}
 		window.wopiSettingBaseUrl = read(
 			'wopiSettingBaseUrl',
 			'wopi_setting_base_url',
@@ -1862,7 +2162,8 @@ class SettingIframe {
 			fieldset.classList.add('grid-options-fieldset');
 		}
 		const legend = document.createElement('legend');
-		legend.textContent = this.settingLabels[key] || key;
+		legend.textContent =
+			this.settingLabels[uniqueId] || this.settingLabels[key] || key;
 		fieldset.appendChild(legend);
 		const childContent = this.renderSettingsOption(value, uniqueId);
 		fieldset.appendChild(childContent);
@@ -1894,11 +2195,15 @@ class SettingIframe {
 		) => void,
 		isDisabled: boolean = false,
 		warningText: string | null = null,
+		helpText: string | null = null,
 	): HTMLSpanElement {
 		const checkboxWrapper = document.createElement('span');
 		checkboxWrapper.className = `checkbox-radio-switch checkbox-radio-switch-checkbox ${isChecked ? '' : 'checkbox-radio-switch--checked'} checkbox-wrapper`;
 		id = id.replace(/\s/g, '');
 		checkboxWrapper.id = id + '-container';
+		// On the row rather than the label, so the box answers to the pointer
+		// as well as the words beside it.
+		if (helpText) checkboxWrapper.title = helpText;
 
 		// Use the new helper here
 		const inputCheckbox = this.createCheckboxInput(id, isChecked, isDisabled);
@@ -1964,7 +2269,13 @@ class SettingIframe {
 		uniqueId: string,
 		data: any,
 	): HTMLSpanElement {
-		const labelText = this.settingLabels[key] || key;
+		const title = this.settingTitles[uniqueId];
+		const labelText =
+			(title && title[0]) ||
+			this.settingLabels[uniqueId] ||
+			this.settingLabels[key] ||
+			key;
+		const helpText = title ? title[1] : null;
 		let isDisabled = false;
 		let warningText: string | null = null;
 
@@ -1990,6 +2301,7 @@ class SettingIframe {
 			},
 			isDisabled,
 			warningText,
+			helpText,
 		);
 	}
 
@@ -3504,6 +3816,74 @@ class SettingIframe {
 	// sections (heading only) so the left navbar can be built straight away,
 	// then with the real data to fill each section in. The headings are there
 	// from the start, so the navbar doesn't change as each section loads.
+	/**!
+	 * One panel per installed rule package. A package the engine does not have
+	 * gets no panel, which is why the list comes from the engine rather than
+	 * from the option table the labels live in.
+	 *
+	 * Named for the checker rather than for the job, because it is not the
+	 * only sentence checker the dialog will carry: the remote ones get
+	 * sections of their own.
+	 */
+	private createSentenceCheckerSection(): HTMLElement | null {
+		if (!this.xcuEditor) return null;
+
+		// The engine answers with the packages it has, in an order that means
+		// nothing to a reader. Sort by the name each one is shown under, in
+		// the reader's own language, so the list reads the way they expect
+		// rather than the way a directory happened to be read back.
+		const packages = (window.sentenceCheckingPackages || [])
+			.slice()
+			.sort((a, b) =>
+				(this.settingLabels[a.id] || a.id).localeCompare(
+					this.settingLabels[b.id] || b.id,
+				),
+			);
+
+		const panels: HTMLElement[] = [];
+		for (const entry of packages) {
+			const group = this.xcuEditor.getSentenceCheckingGroup(entry.id);
+			if (!group) continue;
+			const rendered = this.renderSettingsOption(group, entry.id);
+			rendered.classList.add('xcu-settings-grid');
+			panels.push(
+				this.createFieldsetFor(
+					this.settingLabels[entry.id] || entry.id,
+					rendered,
+				),
+			);
+		}
+
+		// A heading over nothing is worse than no heading: with no rule
+		// package installed there is nothing here to choose.
+		if (!panels.length) return null;
+
+		const section = document.createElement('div');
+		section.id = 'lightproof';
+		section.className = 'section';
+		section.appendChild(this.createHeading(_('Lightproof Sentence Checker')));
+		section.appendChild(
+			this.createParagraph(
+				_('Choose what the sentence checker looks for as you type.'),
+			),
+		);
+		for (const panel of panels) section.appendChild(panel);
+		return section;
+	}
+
+	private createFieldsetFor(
+		legendText: string,
+		content: HTMLElement,
+	): HTMLElement {
+		const fieldset = document.createElement('fieldset');
+		fieldset.classList.add('xcu-settings-fieldset');
+		const legend = document.createElement('legend');
+		legend.textContent = legendText;
+		fieldset.appendChild(legend);
+		fieldset.appendChild(content);
+		return fieldset;
+	}
+
 	private async populateSharedConfigUI(data: ConfigData | null): Promise<void> {
 		const settingsContainer = this._allConfigSection;
 		if (!settingsContainer) return;
@@ -3558,54 +3938,81 @@ class SettingIframe {
 			}
 		}
 
-		// Document settings (xcu)
-		if (!isCODesktop) {
+		// Document settings (xcu), and the sentence checker options, which are
+		// kept in the same file. The apps show the second but not the first:
+		// their document settings are reached from the menus instead.
+		{
 			if (!data) {
-				this._xcuSection = this.createEmptySection(
-					this._xcuSection,
-					'xcu-section',
-					_('Document Settings'),
-				);
-			} else if (data.xcu && data.xcu.length > 0) {
-				const xcuFileContent = await this.settingsStorage.fetchSettingFile(
-					data.xcu[0].uri,
-				);
-				this.xcuEditor = new window.Xcu(
-					this.getFilename(data.xcu[0].uri, false),
-					xcuFileContent,
-				);
-
-				const xcuContainer = document.createElement('div');
-				xcuContainer.id = 'xcu-section';
-				xcuContainer.classList.add('section');
-				const xcuSection = this.xcuEditor.createXcuEditorUI(xcuContainer);
-				this.appendXcuDebugUploadControls(xcuContainer, data);
-
-				this._xcuSection = this.mountConfigSection(
-					settingsContainer,
-					this._xcuSection,
-					xcuSection,
-				);
+				if (!isCODesktop)
+					this._xcuSection = this.createEmptySection(
+						this._xcuSection,
+						'xcu-section',
+						_('Document Settings'),
+					);
 			} else {
-				// If user doesn't have any xcu file, we generate with default settings...
-				try {
-					if (!this.xcuInitializationAttempted) {
-						this.xcuInitializationAttempted = true;
-						this.xcuEditor = new window.Xcu('documentView.xcu', null);
-						await this.xcuEditor.generateXcuAndUpload();
-						return await this.fetchAndPopulateSharedConfigs();
-					} else {
+				if (data.xcu && data.xcu.length > 0) {
+					const xcuFileContent = await this.settingsStorage.fetchSettingFile(
+						data.xcu[0].uri,
+					);
+					this.xcuEditor = new window.Xcu(
+						this.getFilename(data.xcu[0].uri, false),
+						xcuFileContent,
+					);
+
+					if (!isCODesktop) {
+						const xcuContainer = document.createElement('div');
+						xcuContainer.id = 'xcu-section';
+						xcuContainer.classList.add('section');
+						const xcuSection = this.xcuEditor.createXcuEditorUI(xcuContainer);
+						this.appendXcuDebugUploadControls(xcuContainer, data);
+
+						this._xcuSection = this.mountConfigSection(
+							settingsContainer,
+							this._xcuSection,
+							xcuSection,
+						);
+					}
+				} else if (!isCODesktop) {
+					// If user doesn't have any xcu file, we generate with default settings...
+					try {
+						if (!this.xcuInitializationAttempted) {
+							this.xcuInitializationAttempted = true;
+							this.xcuEditor = new window.Xcu('documentView.xcu', null);
+							await this.xcuEditor.generateXcuAndUpload();
+							return await this.fetchAndPopulateSharedConfigs();
+						} else {
+							this._xcuSection?.remove();
+							this._xcuSection = null;
+							console.warn('XCU file not found and automatic creation failed.');
+						}
+					} catch (error) {
+						console.error(
+							'Something went wrong while generating or uploading xcu file:',
+							error,
+						);
 						this._xcuSection?.remove();
 						this._xcuSection = null;
-						console.warn('XCU file not found and automatic creation failed.');
 					}
-				} catch (error) {
-					console.error(
-						'Something went wrong while generating or uploading xcu file:',
-						error,
+				} else {
+					// The apps have no xcu until something writes one, and their
+					// upload is a one-way message to the shell, so writing one
+					// here and reloading would race it. Edit in memory instead;
+					// saving writes the file through the same message.
+					this.xcuEditor = new window.Xcu('documentView.xcu', null);
+				}
+
+				// The sentence checker options do not need the file to exist:
+				// an option nobody has set yet falls back to its schema default.
+				const sentenceChecker = this.createSentenceCheckerSection();
+				if (sentenceChecker) {
+					this._sentenceCheckerSection = this.mountConfigSection(
+						settingsContainer,
+						this._sentenceCheckerSection,
+						sentenceChecker,
 					);
-					this._xcuSection?.remove();
-					this._xcuSection = null;
+				} else {
+					this._sentenceCheckerSection?.remove();
+					this._sentenceCheckerSection = null;
 				}
 			}
 		}
