@@ -43,20 +43,16 @@ cmake_list= \
             ../net/FakeSocket.cpp \
             ../net/Socket.cpp \
             ../wsd/AIChatSession.cpp \
-            ../wsd/AIUtil.cpp \
             ../wsd/ClientSession.cpp \
-            ../wsd/DeckSpec.cpp \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
             ../wsd/ClientRequestDispatcher.cpp \
             ../wsd/RequestDetails.cpp \
             ../wsd/RequestVettingStation.cpp \
-            ../wsd/SlideCache.cpp \
             ../wsd/Storage.cpp \
             ../wsd/TileCache.cpp \
             ../wsd/WSDGlobals.cpp \
-            ../wsd/coolwsd-fork.cpp \
-            ../wsd/dumpWsdState.cpp
+            ../wsd/coolwsd-fork.cpp
 
 
 # Sources that will be created by Qt's MOC
@@ -91,8 +87,9 @@ coda_qt_SOURCES = coda-qt.cpp Application.cpp AIHttpTransport.cpp Bridge.cpp COD
 nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
-coda_qt_LDADD = $(GBUILD_SHARED_LIB)
-EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_SHARED_LIB)
+GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
+coda_qt_LDADD = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
+EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
 
 if ENABLE_SSL
 coda_qt_LDADD += $(OPENSSL_LIBS)
