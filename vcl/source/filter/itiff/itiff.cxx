@@ -132,10 +132,19 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     });
 
     Context aContext(rTIFF);
-    TIFF* tif = TIFFClientOpen("libtiff-svstream", "r", &aContext,
-                               tiff_read, tiff_write,
-                               tiff_seek, tiff_close,
-                               tiff_size, nullptr, nullptr);
+
+    TIFFOpenOptions* pOptions = TIFFOpenOptionsAlloc();
+    if (pOptions)
+    {
+        // Matches the largest strip accepted below, so a geometry that needs more than that
+        // fails inside libtiff rather than asking the system for the memory.
+        TIFFOpenOptionsSetMaxSingleMemAlloc(pOptions, SAL_MAX_INT32);
+    }
+    TIFF* tif = TIFFClientOpenExt("libtiff-svstream", "r", &aContext,
+                                  tiff_read, tiff_write,
+                                  tiff_seek, tiff_close,
+                                  tiff_size, nullptr, nullptr, pOptions);
+    TIFFOpenOptionsFree(pOptions);
 
     if (!tif)
         return false;
@@ -242,8 +251,10 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         // parser that this replaced. But don't allow that for:
         // a) new compression variations that the old parser didn't handle
         // b) complicated pixel layout variations that the old parser didn't handle
+        // c) tiled images, which the old parser didn't handle
         // so we don't take libtiff into uncharted territory.
-        aContext.bAllowOneShortRead = !bNewCodec && PhotometricInterpretation != PHOTOMETRIC_YCBCR;
+        aContext.bAllowOneShortRead = !bNewCodec && PhotometricInterpretation != PHOTOMETRIC_YCBCR
+                                      && !TIFFIsTiled(tif);
 
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
