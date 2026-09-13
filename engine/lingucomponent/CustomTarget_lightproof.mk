@@ -22,6 +22,7 @@ lightproof_PYTHON := $(call gb_ExternalExecutable_get_command,python)
 # The package directory under dictionaries/ is not always the package name,
 # so map the one to the other here.
 lightproof_DIR_en := en
+lightproof_DIR_hu_HU := hu_HU
 lightproof_DIR_ru_RU := ru_RU
 
 define lightproof_rules
@@ -40,6 +41,7 @@ $(lightproof_DIR)/$(1).lpr : \
 endef
 
 $(eval $(call lightproof_rules,en))
+$(eval $(call lightproof_rules,hu_HU))
 $(eval $(call lightproof_rules,ru_RU))
 
 # vim: set noet sw=4 ts=4:

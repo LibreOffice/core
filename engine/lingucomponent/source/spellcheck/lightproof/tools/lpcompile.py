@@ -76,8 +76,8 @@ OP_TRUTHY = 35
 HOST_FUNCS = {
     "option": (0, 2),
     "spell": (1, 2),
-    "morph": (2, 3),
-    "affix": (3, 3),
+    "morph": (2, 4),
+    "affix": (3, 4),
     "stem": (4, 2),
     "generate": (5, 3),
     "suggest": (6, 2),
@@ -111,7 +111,7 @@ def read_module_assignments(path, names):
     files use.  Only literals are evaluated, so the rule implementation is
     never imported or executed.
     """
-    tree = ast.parse(open(path, encoding="utf-8").read())
+    tree = ast.parse(open(path, encoding="utf-8-sig").read())
     found = {}
     for node in tree.body:
         if not isinstance(node, ast.Assign):
@@ -268,9 +268,6 @@ class Lowerer:
     rule that silently never fires.
     """
 
-    # Stands in for a missing slice bound, which Python writes as nothing.
-    SLICE_OPEN = -0x80000000
-
     def __init__(self, writer, tables=None, group_names=None):
         self.w = writer
         self.tables = tables or {}
@@ -354,22 +351,20 @@ class Lowerer:
             if node.slice.step is not None:
                 raise Unsupported("slice with a step")
             self.visit(node.value)
-            self.emit(OP_SLICE, self.bound(node.slice.lower), self.bound(node.slice.upper))
+            self.bound(node.slice.lower)
+            self.bound(node.slice.upper)
+            self.emit(OP_SLICE)
             return
         self.visit(node.value)
         self.visit(node.slice)
         self.emit(OP_INDEX)
 
     def bound(self, node):
+        """A slice bound, with null standing in for one the rule left out."""
         if node is None:
-            return self.SLICE_OPEN
-        try:
-            value = ast.literal_eval(node)
-        except ValueError:
-            raise Unsupported("slice bound is not a literal")
-        if not isinstance(value, int):
-            raise Unsupported("slice bound is not an integer")
-        return value
+            self.emit(OP_PUSH_NULL)
+        else:
+            self.visit(node)
 
     def group_index(self, node):
         """The capture group a m.group()/start()/end() argument names."""
@@ -439,6 +434,29 @@ class Lowerer:
         if entry is None:
             raise Unsupported("call to %s" % node.func.id)
         func_id, max_args = entry
+
+        if node.func.id == "suggest_foreign":
+            # The Python closes over the module's phrase list, so it is
+            # handed over explicitly here.
+            if len(node.args) != 1 or "foreign" not in self.tables:
+                raise Unsupported("suggest_foreign() without a phrase list")
+            self.visit(node.args[0])
+            self.emit(OP_PUSH_CONST, self.w.const_for_table("foreign", self.tables["foreign"]))
+            self.code.append(OP_CALL)
+            self.code.append(func_id)
+            self.code.append(2)
+            return
+
+        if node.func.id == "calc":
+            if len(node.args) != 2 or not isinstance(node.args[1], ast.Tuple):
+                raise Unsupported("calc() without an argument tuple")
+            self.visit(node.args[0])
+            for element in node.args[1].elts:
+                self.visit(element)
+            self.code.append(OP_CALL)
+            self.code.append(func_id)
+            self.code.append(1 + len(node.args[1].elts))
+            return
         if node.keywords or len(node.args) > max_args:
             raise Unsupported("call shape of %s" % node.func.id)
         for arg in node.args:
@@ -452,10 +470,10 @@ class Lowerer:
         receiver = node.func.value
 
         if isinstance(receiver, ast.Name) and receiver.id == "m":
-            if method not in ("group", "start", "end") or len(node.args) != 1:
+            if method not in ("group", "start", "end") or len(node.args) > 1:
                 raise Unsupported("m.%s()" % method)
             opcode = { "group": OP_GROUP, "start": OP_MSTART, "end": OP_MEND }[method]
-            self.emit(opcode, self.group_index(node.args[0]))
+            self.emit(opcode, self.group_index(node.args[0]) if node.args else 0)
             return
 
         if method in self.STRING_METHODS:
@@ -463,6 +481,36 @@ class Lowerer:
                 raise Unsupported("%s() with arguments" % method)
             self.visit(receiver)
             self.emit(self.STRING_METHODS[method])
+            return
+
+        if method == "replace":
+            if len(node.args) not in (2, 3):
+                raise Unsupported("replace() with %d arguments" % len(node.args))
+            self.visit(receiver)
+            self.visit(node.args[0])
+            self.visit(node.args[1])
+            if len(node.args) == 3:
+                self.visit(node.args[2])
+            else:
+                self.emit(OP_PUSH_NULL)
+            self.emit(OP_REPLACE)
+            return
+
+        if method == "translate":
+            # The rules only ever build the table inline, one character
+            # mapped to one character.
+            table = node.args[0] if len(node.args) == 1 else None
+            if not (isinstance(table, ast.Call) and isinstance(table.func, ast.Attribute)
+                    and table.func.attr == "maketrans" and len(table.args) == 2):
+                raise Unsupported("translate() with a computed table")
+            self.visit(receiver)
+            self.visit(table.args[0])
+            self.visit(table.args[1])
+            self.emit(OP_TRANSLATE)
+            return
+
+        if isinstance(receiver, ast.Name) and receiver.id == "re":
+            self.lower_re_call(method, node.args)
             return
 
         if method in self.REGEX_METHODS:
@@ -476,6 +524,27 @@ class Lowerer:
             return
 
         raise Unsupported("method .%s()" % method)
+
+    def lower_re_call(self, method, args):
+        """re.match/search/sub with the pattern written out in the rule."""
+        opcodes = { "match": OP_RE_MATCH, "search": OP_RE_SEARCH, "sub": OP_RE_SUB }
+        opcode = opcodes.get(method)
+        if opcode is None:
+            raise Unsupported("re.%s()" % method)
+        expected = 3 if method == "sub" else 2
+        if len(args) != expected:
+            raise Unsupported("re.%s() with %d arguments" % (method, len(args)))
+        try:
+            pattern = ast.literal_eval(args[0])
+        except ValueError:
+            raise Unsupported("re.%s() with a computed pattern" % method)
+
+        if method == "sub":
+            self.visit(args[2])
+            self.visit(args[1])
+        else:
+            self.visit(args[1])
+        self.emit(opcode, self.w.const_regex(pattern))
 
 
 # ---------------------------------------------------------------- writing

@@ -502,8 +502,15 @@ ProofreadingResult Lightproof::doProofreading(
             rCompiled.aIdentifier = rFile.getString(rRule.nPattern);
             UErrorCode nStatus = U_ZERO_ERROR;
             UParseError aParseError;
+            // A rule written "(?iu)" had the i taken out of it before the
+            // pattern was compiled, and the patterns are written to match
+            // both cases themselves ("[Aa] [Aa]"). The flag stays on the rule
+            // because the suggestion for such a rule is capitalised to match
+            // what was found, which is the only thing it ever meant.
+            const sal_uInt32 nPatternFlags
+                = rRule.nFlags & ~static_cast<sal_uInt32>(UREGEX_CASE_INSENSITIVE);
             rCompiled.pPattern.reset(icu::RegexPattern::compile(
-                toIcu(rCompiled.aIdentifier), rRule.nFlags, aParseError, nStatus));
+                toIcu(rCompiled.aIdentifier), nPatternFlags, aParseError, nStatus));
             if (U_FAILURE(nStatus))
             {
                 SAL_WARN("lingucomponent.lightproof", "rule " << nRuleIndex << " of "
@@ -636,53 +643,152 @@ bool Lightproof::spell(const lang::Locale& rLocale, const OUString& rWord)
     }
 }
 
+std::vector<OUString> Lightproof::query(const lang::Locale& rLocale, const OUString& rQuery)
+{
+    // Make sure the dispatcher exists before the SPELLML query goes through it.
+    spell(rLocale, u"a"_ustr);
+    if (!m_xSpellChecker)
+        return {};
+
+    try
+    {
+        const uno::Reference<linguistic2::XSpellAlternatives> xAlternatives
+            = m_xSpellChecker->spell(rQuery, rLocale, {});
+        if (!xAlternatives)
+            return {};
+        const cpo::uno::Sequence<OUString> aWords(xAlternatives->getAlternatives());
+        return std::vector<OUString>(aWords.begin(), aWords.end());
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        return {};
+    }
+}
+
 const std::vector<OUString>& Lightproof::getAnalyses(const lang::Locale& rLocale,
                                                      const OUString& rWord)
 {
-    static const std::vector<OUString> aNone;
-
     const std::pair<OUString, OUString> aKey(LanguageTag(rLocale).getBcp47(), rWord);
     std::map<std::pair<OUString, OUString>, std::vector<OUString>>::const_iterator aFound
         = m_aAnalyses.find(aKey);
     if (aFound != m_aAnalyses.end())
         return aFound->second;
 
-    // Make sure the dispatcher exists before the SPELLML query goes through it.
-    spell(rLocale, u"a"_ustr);
-    if (!m_xSpellChecker)
-        return aNone;
-
     std::vector<OUString> aResult;
-    try
+    const std::vector<OUString> aAnswer
+        = query(rLocale, u"<?xml?><query type='analyze'><word>"_ustr + rWord
+                             + u"</word></query>"_ustr);
+    if (!aAnswer.empty())
     {
-        const uno::Reference<linguistic2::XSpellAlternatives> xAlternatives
-            = m_xSpellChecker->spell(u"<?xml?><query type=\'analyze\'><word>"_ustr + rWord
-                                         + u"</word></query>"_ustr,
-                                     rLocale, {});
-        if (xAlternatives)
+        // The analyses come back in one string, each closed by </a>.
+        sal_Int32 nIndex = 0;
+        const OUString& rPacked = aAnswer[0];
+        while (nIndex < rPacked.getLength())
         {
-            const cpo::uno::Sequence<OUString> aWords(xAlternatives->getAlternatives());
-            if (aWords.hasElements())
-            {
-                // The analyses come back in one string, each closed by </a>.
-                sal_Int32 nIndex = 0;
-                const OUString& rPacked = aWords[0];
-                while (nIndex >= 0 && nIndex < rPacked.getLength())
-                {
-                    const sal_Int32 nEnd = rPacked.indexOf(u"</a>", nIndex);
-                    if (nEnd < 0)
-                        break;
-                    aResult.push_back(rPacked.copy(nIndex, nEnd - nIndex));
-                    nIndex = nEnd + 4;
-                }
-            }
+            const sal_Int32 nEnd = rPacked.indexOf(u"</a>", nIndex);
+            if (nEnd < 0)
+                break;
+            aResult.push_back(rPacked.copy(nIndex, nEnd - nIndex));
+            nIndex = nEnd + 4;
         }
-    }
-    catch (const cpo::uno::Exception&)
-    {
     }
 
     return m_aAnalyses.emplace(aKey, std::move(aResult)).first->second;
+}
+
+std::vector<OUString> Lightproof::stem(const lang::Locale& rLocale, const OUString& rWord)
+{
+    if (rWord.isEmpty())
+        return {};
+    const std::pair<OUString, OUString> aKey(LanguageTag(rLocale).getBcp47(), rWord);
+    std::map<std::pair<OUString, OUString>, std::vector<OUString>>::const_iterator aFound
+        = m_aStems.find(aKey);
+    if (aFound != m_aStems.end())
+        return aFound->second;
+    return m_aStems
+        .emplace(aKey, query(rLocale, u"<?xml?><query type='stem'><word>"_ustr + rWord
+                                          + u"</word></query>"_ustr))
+        .first->second;
+}
+
+std::vector<OUString> Lightproof::generate(const lang::Locale& rLocale, const OUString& rWord,
+                                           const OUString& rExample)
+{
+    if (rWord.isEmpty())
+        return {};
+    return query(rLocale, u"<?xml?><query type='generate'><word>"_ustr + rWord
+                              + u"</word><word>"_ustr + rExample + u"</word></query>"_ustr);
+}
+
+OUString Lightproof::suggest(const lang::Locale& rLocale, const OUString& rWord)
+{
+    if (rWord.isEmpty())
+        return rWord;
+    const std::pair<OUString, OUString> aKey(LanguageTag(rLocale).getBcp47(), rWord);
+    std::map<std::pair<OUString, OUString>, OUString>::const_iterator aFound
+        = m_aSuggestions.find(aKey);
+    if (aFound != m_aSuggestions.end())
+        return aFound->second;
+
+    // The leading underscore is how the rules ask for suggestions for a word
+    // the dictionary would otherwise accept.
+    const std::vector<OUString> aAnswer = query(rLocale, u"_"_ustr + rWord);
+    OUStringBuffer aJoined;
+    for (const OUString& rAlternative : aAnswer)
+    {
+        if (!aJoined.isEmpty())
+            aJoined.append('\n');
+        aJoined.append(rAlternative);
+    }
+    return m_aSuggestions.emplace(aKey, aJoined.makeStringAndClear()).first->second;
+}
+
+OUString Lightproof::numberText(const OUString& rNumber, const OUString& rLanguage)
+{
+    if (!m_bNumberTextTried)
+    {
+        m_bNumberTextTried = true;
+        try
+        {
+            const uno::Reference<cpo::uno::XComponentContext>& xContext(
+                comphelper::getProcessComponentContext());
+            m_xNumberText.set(xContext->getServiceManager()->createInstanceWithContext(
+                                  u"com.sun.star.linguistic2.NumberText"_ustr, xContext),
+                              uno::UNO_QUERY);
+        }
+        catch (const cpo::uno::Exception&)
+        {
+        }
+    }
+    if (!m_xNumberText)
+        return OUString();
+    try
+    {
+        return m_xNumberText->getNumberText(rNumber, LanguageTag::convertToLocale(rLanguage));
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        return OUString();
+    }
+}
+
+namespace
+{
+// What the packages' onlymorph() does, which is not what it reads as: two of
+// its three substitutions are double-escaped and match nothing, so all it
+// does is cut everything up to the last st: or po: field and put a literal
+// backslash-one in its place. Reproduced rather than corrected, so the rules
+// keep behaving as they have; fixing it is a rule-data change.
+OUString onlyMorph(const OUString& rAnalysis)
+{
+    const sal_Int32 nStem = rAnalysis.lastIndexOf(u"st:");
+    const sal_Int32 nPart = rAnalysis.lastIndexOf(u"po:");
+    const sal_Int32 nAt = std::max(nStem, nPart);
+    if (nAt < 0)
+        return rAnalysis;
+    const OUString aTail = u"\\1"_ustr + rAnalysis.subView(nAt + 3);
+    return aTail.trim();
+}
 }
 
 icu::RegexMatcher* Lightproof::getMorphMatcher(const OUString& rPattern)
@@ -705,11 +811,6 @@ OUString Lightproof::morph(const lang::Locale& rLocale, const OUString& rWord,
 {
     if (rWord.isEmpty())
         return OUString();
-    if (bOnlyAffix)
-    {
-        SAL_WARN("lingucomponent.lightproof", "affix() is not implemented");
-        return OUString();
-    }
 
     icu::RegexMatcher* pMatcher = getMorphMatcher(rPattern);
     if (pMatcher == nullptr)
@@ -718,7 +819,8 @@ OUString Lightproof::morph(const lang::Locale& rLocale, const OUString& rWord,
     OUString aResult;
     for (const OUString& rAnalysis : getAnalyses(rLocale, rWord))
     {
-        const icu::UnicodeString aSubject = toIcu(rAnalysis);
+        const OUString aText = bOnlyAffix ? onlyMorph(rAnalysis) : rAnalysis;
+        const icu::UnicodeString aSubject = toIcu(aText);
         pMatcher->reset(aSubject);
         UErrorCode nStatus = U_ZERO_ERROR;
         if (pMatcher->find(nStatus) && U_SUCCESS(nStatus))
@@ -883,10 +985,11 @@ OUString formatLikePython(double nValue)
 
 OUString Lightproof::measurement(const OUString& rNumber, const OUString& rFrom,
                                  const OUString& rTo, const OUString& rSuffix,
-                                 const OUString& rDecimal, const OUString& rRemove)
+                                 const OUString& rDecimal, const OUString& rRemove,
+                                 bool bLongForm)
 {
     OUString aNumber = rNumber;
-    if (rFrom == "ft" || rFrom == "in" || rFrom == "mi")
+    if (bLongForm && (rFrom == "ft" || rFrom == "in" || rFrom == "mi"))
     {
         aNumber = aNumber.replaceAll(u" 1/2"_ustr, u".5"_ustr)
                       .replaceAll(u" \u00BD"_ustr, u".5"_ustr)

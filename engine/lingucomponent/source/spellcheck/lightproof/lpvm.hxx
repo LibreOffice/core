@@ -90,6 +90,8 @@ public:
         Bool,
         Int,
         Str,
+        // Several strings, which is what stem() and generate() answer with.
+        List,
         // An index into the rule file's constant pool: a word set, a lookup
         // map or one of the module-level patterns.
         Constant
@@ -103,18 +105,21 @@ public:
     static Value integer(sal_Int32 n);
     static Value string(OUString aValue);
     static Value constant(sal_uInt32 nIndex);
+    static Value list(std::vector<OUString> aValues);
 
     Type getType() const { return m_eType; }
     bool isTrue() const;
     const OUString& getString() const { return m_aString; }
     sal_Int32 getInt() const { return m_nInt; }
     sal_uInt32 getConstant() const { return static_cast<sal_uInt32>(m_nInt); }
+    const std::vector<OUString>& getList() const { return m_aList; }
 
 private:
     Type m_eType;
     bool m_bBool = false;
     sal_Int32 m_nInt = 0;
     OUString m_aString;
+    std::vector<OUString> m_aList;
 };
 
 // The parts of a running check that live outside the expression: the current
@@ -131,10 +136,19 @@ public:
     virtual OUString morph(const css::lang::Locale& rLocale, const OUString& rWord,
                            const OUString& rPattern, bool bAll, bool bOnlyAffix)
         = 0;
+    // The four-argument form the Hungarian rules use fixes the decimal mark
+    // and drops the fraction handling, so it is told apart here.
     virtual OUString measurement(const OUString& rNumber, const OUString& rFrom,
                                  const OUString& rTo, const OUString& rSuffix,
-                                 const OUString& rDecimal, const OUString& rRemove)
+                                 const OUString& rDecimal, const OUString& rRemove,
+                                 bool bLongForm)
         = 0;
+    virtual std::vector<OUString> stem(const css::lang::Locale& rLocale, const OUString& rWord) = 0;
+    virtual std::vector<OUString> generate(const css::lang::Locale& rLocale, const OUString& rWord,
+                                           const OUString& rExample)
+        = 0;
+    virtual OUString suggest(const css::lang::Locale& rLocale, const OUString& rWord) = 0;
+    virtual OUString numberText(const OUString& rNumber, const OUString& rLanguage) = 0;
     // A matcher for one of the rule file's pattern constants, built on first
     // use and owned by the caller's package.
     virtual icu::RegexMatcher* getConstantMatcher(sal_uInt32 nConstantIndex) = 0;

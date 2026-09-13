@@ -12,12 +12,15 @@
 #include <o3tl/safeint.hxx>
 #include "lprfile.hxx"
 
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <unicode/locid.h>
+#include <unicode/uchar.h>
 #include <unicode/unistr.h>
 
 #include <algorithm>
+#include <string_view>
 
 namespace lightproof
 {
@@ -45,6 +48,14 @@ Value Value::string(OUString aString)
     return aValue;
 }
 
+Value Value::list(std::vector<OUString> aValues)
+{
+    Value aValue;
+    aValue.m_eType = Type::List;
+    aValue.m_aList = std::move(aValues);
+    return aValue;
+}
+
 Value Value::constant(sal_uInt32 nIndex)
 {
     Value aValue;
@@ -65,6 +76,8 @@ bool Value::isTrue() const
             return m_nInt != 0;
         case Type::Str:
             return !m_aString.isEmpty();
+        case Type::List:
+            return !m_aList.empty();
         case Type::Constant:
             return true;
     }
@@ -173,6 +186,18 @@ Value index(const Context& rContext, const Value& rReceiver, const Value& rKey)
             OUStringToOString(rKey.getString(), RTL_TEXTENCODING_UTF8));
         return aFound ? Value::string(*aFound) : Value();
     }
+    if (rReceiver.getType() == Value::Type::List)
+    {
+        if (rKey.getType() != Value::Type::Int)
+            return Value();
+        const std::vector<OUString>& rList = rReceiver.getList();
+        sal_Int32 nAt = rKey.getInt();
+        if (nAt < 0)
+            nAt += static_cast<sal_Int32>(rList.size());
+        if (nAt < 0 || nAt >= static_cast<sal_Int32>(rList.size()))
+            return Value();
+        return Value::string(rList[nAt]);
+    }
     if (rReceiver.getType() != Value::Type::Str || rKey.getType() != Value::Type::Int)
         return Value();
     const OUString& rString = rReceiver.getString();
@@ -184,18 +209,16 @@ Value index(const Context& rContext, const Value& rReceiver, const Value& rKey)
     return Value::string(OUString(rString[nAt]));
 }
 
-// Python slicing, with the compiler's sentinel standing in for a bound the
-// rule left out.
-Value slice(const Value& rReceiver, sal_Int32 nLower, sal_Int32 nUpper)
+// Python slicing, with a null bound standing for one the rule left out.
+Value slice(const Value& rReceiver, const Value& rLower, const Value& rUpper)
 {
     if (rReceiver.getType() != Value::Type::Str)
         return Value();
     const OUString& rString = rReceiver.getString();
     const sal_Int32 nLength = rString.getLength();
-    const sal_Int32 nOpen = SAL_MIN_INT32;
 
-    sal_Int32 nStart = nLower == nOpen ? 0 : nLower;
-    sal_Int32 nEnd = nUpper == nOpen ? nLength : nUpper;
+    sal_Int32 nStart = rLower.getType() == Value::Type::Int ? rLower.getInt() : 0;
+    sal_Int32 nEnd = rUpper.getType() == Value::Type::Int ? rUpper.getInt() : nLength;
     if (nStart < 0)
         nStart += nLength;
     if (nEnd < 0)
@@ -205,6 +228,98 @@ Value slice(const Value& rReceiver, sal_Int32 nLower, sal_Int32 nUpper)
     if (nEnd <= nStart)
         return Value::string(OUString());
     return Value::string(rString.copy(nStart, nEnd - nStart));
+}
+
+OUString translate(const OUString& rString, std::u16string_view rFrom, std::u16string_view rTo)
+{
+    OUStringBuffer aResult(rString.getLength());
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+    {
+        const size_t nAt = rFrom.find(rString[i]);
+        aResult.append(nAt != std::u16string_view::npos && nAt < rTo.size() ? rTo[nAt]
+                                                                           : rString[i]);
+    }
+    return aResult.makeStringAndClear();
+}
+
+OUString replaceConstantPattern(const Context& rContext, sal_uInt32 nConstant,
+                                const OUString& rSubject, const OUString& rReplacement)
+{
+    icu::RegexMatcher* pMatcher = rContext.rHost.getConstantMatcher(nConstant);
+    if (pMatcher == nullptr)
+        return rSubject;
+    const icu::UnicodeString aSubject = toIcu(rSubject);
+    pMatcher->reset(aSubject);
+    UErrorCode nStatus = U_ZERO_ERROR;
+    const icu::UnicodeString aResult
+        = pMatcher->replaceAll(toIcu(rReplacement), nStatus);
+    return U_SUCCESS(nStatus) ? fromIcu(aResult) : rSubject;
+}
+
+// The character class the word helpers scan with, which is Python's \w plus
+// the three punctuation marks the rules allow inside a word.
+bool isWordCharacter(sal_Unicode c)
+{
+    return u_isalnum(c) || c == '_' || c == '-' || c == '.' || c == '%';
+}
+
+// word(s, n): the nth space-introduced word of the string, without its space.
+OUString nthWord(const OUString& rText, sal_Int32 nWhich)
+{
+    sal_Int32 nAt = 0;
+    OUString aWord;
+    for (sal_Int32 i = 0; i < nWhich; ++i)
+    {
+        if (nAt >= rText.getLength() || rText[nAt] != ' ')
+            return OUString();
+        const sal_Int32 nStart = ++nAt;
+        while (nAt < rText.getLength() && isWordCharacter(rText[nAt]))
+            ++nAt;
+        if (nAt == nStart)
+            return OUString();
+        aWord = rText.copy(nStart, nAt - nStart);
+    }
+    return aWord;
+}
+
+// wordmin(s, n): the nth word counting back from the end, where every word
+// counted is followed by a space.
+OUString nthWordFromEnd(const OUString& rText, sal_Int32 nWhich)
+{
+    sal_Int32 nAt = rText.getLength();
+    OUString aWord;
+    for (sal_Int32 i = 0; i < nWhich; ++i)
+    {
+        if (nAt == 0 || rText[nAt - 1] != ' ')
+            return OUString();
+        const sal_Int32 nEnd = --nAt;
+        while (nAt > 0 && isWordCharacter(rText[nAt - 1]))
+            --nAt;
+        if (nAt == nEnd)
+            return OUString();
+        aWord = rText.copy(nAt, nEnd - nAt);
+    }
+    return aWord;
+}
+
+// The foreign phrases whose first word is the one that matched.
+OUString suggestForeign(const Context& rContext, const Value& rTable, const OUString& rWord)
+{
+    if (rTable.getType() != Value::Type::Constant || rWord.isEmpty())
+        return OUString();
+    const sal_uInt32 nCount = rContext.rFile.constantEntryCount(rTable.getConstant());
+    OUStringBuffer aResult;
+    for (sal_uInt32 i = 0; i < nCount; ++i)
+    {
+        const OUString aEntry = rContext.rFile.constantEntry(rTable.getConstant(), i);
+        const sal_Int32 nSpace = aEntry.indexOf(' ');
+        if ((nSpace < 0 ? aEntry : aEntry.copy(0, nSpace)) != rWord)
+            continue;
+        if (!aResult.isEmpty())
+            aResult.append('\n');
+        aResult.append(aEntry);
+    }
+    return aResult.makeStringAndClear();
 }
 
 bool runConstantPattern(const Context& rContext, sal_uInt32 nConstant, const OUString& rSubject,
@@ -383,10 +498,52 @@ Value run(const Context& rContext, const sal_uInt8* pCode)
 
             case OP_SLICE:
             {
-                const sal_Int32 nLower = readS32(pAt);
-                const sal_Int32 nUpper = readS32(pAt + 4);
-                pAt += 8;
-                aStack.push_back(slice(pop(), nLower, nUpper));
+                const Value aUpper = pop();
+                const Value aLower = pop();
+                aStack.push_back(slice(pop(), aLower, aUpper));
+                break;
+            }
+
+            case OP_REPLACE:
+            {
+                const Value aCount = pop();
+                const OUString aNew = pop().getString();
+                const OUString aOld = pop().getString();
+                const OUString aSubject = pop().getString();
+                if (aCount.getType() == Value::Type::Int)
+                {
+                    OUString aText = aSubject;
+                    for (sal_Int32 i = 0; i < aCount.getInt(); ++i)
+                    {
+                        const sal_Int32 nAt = aText.indexOf(aOld);
+                        if (nAt < 0)
+                            break;
+                        aText = aText.replaceAt(nAt, aOld.getLength(), aNew);
+                    }
+                    aStack.push_back(Value::string(aText));
+                }
+                else
+                {
+                    aStack.push_back(Value::string(aSubject.replaceAll(aOld, aNew)));
+                }
+                break;
+            }
+
+            case OP_TRANSLATE:
+            {
+                const OUString aTo = pop().getString();
+                const OUString aFrom = pop().getString();
+                aStack.push_back(Value::string(translate(pop().getString(), aFrom, aTo)));
+                break;
+            }
+
+            case OP_RE_SUB:
+            {
+                const sal_uInt32 nConstant = readOperand();
+                const OUString aReplacement = pop().getString();
+                aStack.push_back(Value::string(
+                    replaceConstantPattern(rContext, nConstant, pop().getString(),
+                                           aReplacement)));
                 break;
             }
 
@@ -489,8 +646,57 @@ Value run(const Context& rContext, const sal_uInt8* pCode)
                     }
 
                     case FN_MEASUREMENT:
+                    {
+                        // Four arguments is the Hungarian form, which fixes
+                        // the decimal mark and removes nothing.
+                        const bool bLongForm = nArgc >= 6;
                         aStack.push_back(Value::string(rContext.rHost.measurement(
-                            arg(0), arg(1), arg(2), arg(3), arg(4), arg(5))));
+                            arg(0), arg(1), arg(2), arg(3),
+                            bLongForm ? arg(4) : u","_ustr, bLongForm ? arg(5) : OUString(),
+                            bLongForm)));
+                        break;
+                    }
+
+                    case FN_STEM:
+                        aStack.push_back(Value::list(rContext.rHost.stem(rContext.rLocale, arg(1))));
+                        break;
+
+                    case FN_GENERATE:
+                        aStack.push_back(Value::list(
+                            rContext.rHost.generate(rContext.rLocale, arg(1), arg(2))));
+                        break;
+
+                    case FN_SUGGEST:
+                        aStack.push_back(
+                            Value::string(rContext.rHost.suggest(rContext.rLocale, arg(1))));
+                        break;
+
+                    case FN_WORD:
+                    case FN_WORDMIN:
+                    {
+                        const sal_Int32 nWhich
+                            = aArgs.size() > 1 && aArgs[1].getType() == Value::Type::Int
+                                  ? aArgs[1].getInt()
+                                  : 1;
+                        aStack.push_back(Value::string(
+                            nFunc == FN_WORD ? nthWord(arg(0), nWhich)
+                                             : nthWordFromEnd(arg(0), nWhich)));
+                        break;
+                    }
+
+                    case FN_CALC:
+                        // NUMBERTEXT is the only spreadsheet function the
+                        // rules reach for.
+                        if (arg(0) == "NUMBERTEXT")
+                            aStack.push_back(
+                                Value::string(rContext.rHost.numberText(arg(1), arg(2))));
+                        else
+                            aStack.emplace_back();
+                        break;
+
+                    case FN_SUGGEST_FOREIGN:
+                        aStack.push_back(Value::string(suggestForeign(
+                            rContext, aArgs.size() > 1 ? aArgs[1] : Value(), arg(0))));
                         break;
 
                     default:

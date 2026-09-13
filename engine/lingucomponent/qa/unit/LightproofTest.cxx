@@ -50,6 +50,10 @@ protected:
     Sequence<linguistic2::SingleProofreadingError> checkEnglish(const OUString& rText);
     void setEnglishOption(const OUString& rName, bool bValue);
 
+    static lang::Locale hungarian() { return lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString()); }
+    Sequence<linguistic2::SingleProofreadingError> checkHungarian(const OUString& rText);
+    void setHungarianOption(const OUString& rName, bool bValue);
+
     // Writes one Russian option flag and commits, the way the Options dialog
     // does through the per-user xcu.
     void setOption(const OUString& rName, bool bValue);
@@ -90,6 +94,29 @@ LightproofTest::checkEnglish(const OUString& rText)
 {
     return getProofreader()
         ->doProofreading(u"doc"_ustr, rText, english(), 0, rText.getLength(), {})
+        .aErrors;
+}
+
+void LightproofTest::setHungarianOption(const OUString& rName, bool bValue)
+{
+    uno::Reference<lang::XMultiServiceFactory> xProvider(
+        css::configuration::theDefaultProvider::get(m_xContext));
+    Any aNodePath(css::beans::NamedValue(
+        u"nodepath"_ustr,
+        Any(u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/hu_HU"_ustr)));
+    uno::Reference<beans::XPropertySet> xGroup(
+        xProvider->createInstanceWithArguments(
+            u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, { aNodePath }),
+        uno::UNO_QUERY_THROW);
+    xGroup->setPropertyValue(rName, Any(bValue));
+    uno::Reference<util::XChangesBatch>(xGroup, uno::UNO_QUERY_THROW)->commitChanges();
+}
+
+Sequence<linguistic2::SingleProofreadingError>
+LightproofTest::checkHungarian(const OUString& rText)
+{
+    return getProofreader()
+        ->doProofreading(u"doc"_ustr, rText, hungarian(), 0, rText.getLength(), {})
         .aErrors;
 }
 
@@ -365,6 +392,71 @@ CPPUNIT_TEST_FIXTURE(LightproofTest, testEnglishMeasurement)
     CPPUNIT_ASSERT(aErrors[0].aSuggestions.hasElements());
     CPPUNIT_ASSERT_EQUAL(u"2 kg"_ustr, aErrors[0].aSuggestions[0]);
 }
+}
+
+// A replacement built with str.replace(), gated on a slice compared against
+// a literal. The same phrase is also a foreign expression, so the package's
+// phrase list answers for it as well.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianStringReplace)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkHungarian(u"Ez vis major eset."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"vis maior"_ustr, aErrors[0].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Helyesen vis maior."_ustr, aErrors[0].aShortComment);
+
+    CPPUNIT_ASSERT_EQUAL(u"vis maior"_ustr, aErrors[1].aSuggestions[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Idegen eredetű kifejezés?"_ustr, aErrors[1].aShortComment);
+}
+
+// A condition that looks at the word before the match, which needs a slice
+// whose bound is the match position rather than a literal.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianPrecedingWord)
+{
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkHungarian(u"Ez nagyon figyelemreméltó dolog."_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(u"figyelemre méltó"_ustr, aErrors[0].aSuggestions[0]);
+
+    // The same phrase after "igen" is correct, and the rule says so.
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0), checkHungarian(u"Ez igen figyelemreméltó dolog."_ustr).getLength());
+}
+
+// A condition that runs a pattern written out in the rule itself.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianInlinePattern)
+{
+    setHungarianOption(u"comma"_ustr, true);
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkHungarian(u"Tudtam amit hogy kell."_ustr);
+    setHungarianOption(u"comma"_ustr, false);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(u"amit, hogy"_ustr, aErrors[0].aSuggestions[0]);
+}
+
+// A suggestion built by substituting with a pattern written out in the rule.
+CPPUNIT_TEST_FIXTURE(LightproofTest, testHungarianInlineSubstitution)
+{
+    setHungarianOption(u"thin"_ustr, true);
+    const Sequence<linguistic2::SingleProofreadingError> aErrors
+        = checkHungarian(u"Ez r i t k í t o t t szöveg."_ustr);
+    setHungarianOption(u"thin"_ustr, false);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17), aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aErrors[0].aSuggestions.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"ritkított"_ustr, aErrors[0].aSuggestions[0]);
+    // The second offers the same letters separated by narrow no-break spaces.
+    CPPUNIT_ASSERT_EQUAL(u"r\u202Fi\u202Ft\u202Fk\u202Fí\u202Ft\u202Fo\u202Ft\u202Ft"_ustr,
+                         aErrors[0].aSuggestions[1]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

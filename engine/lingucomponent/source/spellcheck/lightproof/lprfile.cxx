@@ -296,6 +296,20 @@ std::optional<OUString> RuleFile::constantLookup(sal_uInt32 nIndex, const OStrin
     return std::nullopt;
 }
 
+sal_uInt32 RuleFile::constantEntryCount(sal_uInt32 nIndex) const
+{
+    if (nIndex >= m_nConstantCount || m_pConstants[nIndex].nType != Constant::Set)
+        return 0;
+    return m_pConstants[nIndex].nCount;
+}
+
+OUString RuleFile::constantEntry(sal_uInt32 nIndex, sal_uInt32 nEntry) const
+{
+    if (nEntry >= constantEntryCount(nIndex))
+        return OUString();
+    return getString(readU32(m_pConstantData + m_pConstants[nIndex].nData + 4 * nEntry));
+}
+
 const sal_uInt8* RuleFile::getCode(sal_uInt32 nBiasedOffset) const
 {
     if (nBiasedOffset == 0 || nBiasedOffset - 1 >= m_nCodeSize)

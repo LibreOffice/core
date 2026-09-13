@@ -5,7 +5,7 @@
         <node oor:name="ServiceManager">
 
                 <node oor:name="GrammarCheckers">
-                        <node oor:name="org.libreoffice.comp.pyuno.Lightproof.hu_HU"
+                        <node oor:name="cpo.lingu.Lightproof"
                                 oor:op="fuse">
                                 <prop oor:name="Locales" oor:type="oor:string-list">
                                         <value>hu-HU</value>

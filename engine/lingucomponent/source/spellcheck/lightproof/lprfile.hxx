@@ -101,6 +101,9 @@ public:
     // The value the map constant gives the key, or an empty optional when it
     // holds no such key.
     std::optional<OUString> constantLookup(sal_uInt32 nIndex, const OString& rUtf8Key) const;
+    // The members of a set constant, in order.
+    sal_uInt32 constantEntryCount(sal_uInt32 nIndex) const;
+    OUString constantEntry(sal_uInt32 nIndex, sal_uInt32 nEntry) const;
 
     const sal_uInt8* getCode(sal_uInt32 nBiasedOffset) const;
     // One past the last byte of the code, so a running expression knows where
