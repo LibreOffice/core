@@ -61,7 +61,7 @@ endef
 # itself: what describes it to the linguistic services is generated into
 # a configuration layer by CustomTarget_registry.
 
-gb_Dictionary_INSTDIR := $(LIBO_SHARE_FOLDER)/extensions
+gb_Dictionary_INSTDIR := $(LIBO_SHARE_FOLDER)/dictionaries
 
 $(dir $(call gb_Dictionary_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))

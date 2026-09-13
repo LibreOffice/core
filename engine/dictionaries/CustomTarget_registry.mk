@@ -17,6 +17,8 @@ dictionaries_REGISTRY_MAKER := $(SRCDIR)/dictionaries/util/mkregistry.py
 # when the recipe runs, and that is only the ones this configuration builds.
 $(dictionaries_REGISTRY_DIR)/dictionaries.xcd : \
 		$(dictionaries_REGISTRY_MAKER) \
+		$(SRCDIR)/dictionaries/CustomTarget_registry.mk \
+		$(SRCDIR)/solenv/gbuild/Dictionary.mk \
 		$(wildcard $(SRCDIR)/dictionaries/*/dictionaries.xcu) \
 		$(wildcard $(SRCDIR)/dictionaries/*/Linguistic.xcu) \
 		| $(dictionaries_REGISTRY_DIR)/.dir \
