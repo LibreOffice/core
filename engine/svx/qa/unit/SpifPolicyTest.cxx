@@ -489,14 +489,18 @@ void SpifPolicyTest::testWantsWatermark()
 void SpifPolicyTest::testMarkingModifiers()
 {
     // markingData display codes: noNameDisplay (show phrase) on a classification and
-    // a category, and suppressClassName (drop the classification from the marking).
+    // a category, and suppressClassName (drop the classification from the marking). The
+    // first <code> is whitespace-padded (as a pretty-printed policy would be) to guard the
+    // trim that keeps the directive from being missed.
     static const OString aSpif(
         R"xml(<?xml version="1.0" encoding="utf-8"?>
 <spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
   <spif:securityPolicyId name="T" id="1.2.3" />
   <spif:securityClassifications>
     <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4">
-      <spif:markingData phrase="S"><spif:code>noNameDisplay</spif:code></spif:markingData>
+      <spif:markingData phrase="S"><spif:code>
+        noNameDisplay
+      </spif:code></spif:markingData>
     </spif:securityClassification>
     <spif:securityClassification name="TOPSECRET" color="red" lacv="5" hierarchy="5">
       <spif:markingData><spif:code>suppressClassName</spif:code></spif:markingData>

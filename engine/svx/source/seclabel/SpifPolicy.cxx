@@ -78,7 +78,9 @@ MarkingData parseMarkingData(tools::XmlWalker& rWalker)
     {
         if (rWalker.name() == "code")
         {
-            const OString aCode = rWalker.content();
+            // Trim as excludedClass does: indented/whitespaced content would else miss.
+            const OString aContent = rWalker.content();
+            const std::string_view aCode = o3tl::trim(aContent);
             if (aCode == "noNameDisplay")
                 aData.bNoNameDisplay = true;
             else if (aCode == "suppressClassName")
