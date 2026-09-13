@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-09 13:51+0000\n"
-"Last-Translator: WatsonTree <215242942+watson-tree@users.noreply.github.com>"
+"PO-Revision-Date: 2026-09-13 08:15+0000\n"
+"Last-Translator: Nobody 12345 <nobody_12345@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hans/>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -497,6 +497,8 @@ msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"此 AI 主机不在服务器的允许主机列表 (lok_allow.host) 中。请联系管理员予以授权"
+"。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
@@ -899,17 +901,19 @@ msgstr "上传扩展"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "安全策略"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"上传 SPIF 安全策略 (.xml)。这些策略定义了在为文档应用安全标签时可用的分类和类"
+"别。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "上传安全策略"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -1338,7 +1342,7 @@ msgstr "设为默认"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "复制样式"
 
 #: src/canvas/sections/CommentListSection.ts:2029
 #: src/canvas/sections/CommentListSection.ts:2042
@@ -1966,177 +1970,179 @@ msgstr "请求被新请求替代"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "未提供消息"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "消息过长"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "管理员已禁用 AI 功能"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "访客无法使用 AI 功能"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "此文档已禁用 AI 功能"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "未配置 AI 设置"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "AI 提供商 URL 无效，请检查 AI 设置"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "AI 图像提供商 URL 无效，请检查 AI 设置"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
-msgstr ""
+msgstr "主机“{0}”不在允许的主机列表中，请联系管理员"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "网络错误 - 请检查您的连接"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "无法连接到 AI 提供商"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "AI 无响应"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "AI 调用的工具步骤过多"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
-msgstr ""
+msgstr "模型在生成输出前耗尽了 Token。请尝试缩短输入内容，或使用输出预算更大的模型。"
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"模型返回了空响应（未生成任何 Token）。这通常是提供商的临时问题 - 请重试，或尝"
+"试使用其他模型。"
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "图像生成失败：模型未提供提示词"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "文档不可用"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "编辑的大纲无效：{0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "无法从大纲生成任何幻灯片。请重试。"
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "未配置 AI 图像设置"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "未配置图像生成模型"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "图像生成失败：{0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "未生成图像"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "解析 AI 响应失败"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "AI 提供商以无效为由拒绝了该请求"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API 错误 ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "正在提取链接目标..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "正在计算公式..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "正在加载函数库..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "正在思考..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "正在处理..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "正在设置公式..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "正在生成幻灯片 {0} / {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "正在跳过幻灯片 {0}..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "正在生成图像 {0} / {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
-msgstr ""
+msgstr "此文档过大，无法完整读取。请指定要分析的部分："
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
-msgstr ""
+msgstr "此工作表过大，无法完整读取。要缩小范围，您可以："
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "在工作表中选择一个单元格区域，然后重新提问"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "回复需要分析的单元格，例如 `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "您的演示文稿已准备就绪：已根据批准的大纲生成了 {0} 张幻灯片。"
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "有 {0} 张幻灯片无法生成，已被跳过。"
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
-msgstr ""
+msgstr "有 {0} 张图像无法生成，已显示占位符。"
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -2659,7 +2665,7 @@ msgstr "签名"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3585,7 +3591,7 @@ msgstr "HTML 文件（.html）"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "安全标签"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -3896,11 +3902,11 @@ msgstr "分布"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "从文件插入幻灯片..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "更新链接的幻灯片..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4169,7 +4175,7 @@ msgstr "表格设计"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "工具"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4360,36 +4366,35 @@ msgstr "保护"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "题注"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
 msgstr "动画"
 
 #: src/control/Control.Notebookbar.js:582
-#, fuzzy
 msgid "Start:"
-msgstr "开始"
+msgstr "开始："
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
-msgstr ""
+msgstr "终点："
 
 #: src/control/Control.Notebookbar.js:595
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "起点箭头样式"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "End arrowhead style"
-msgstr ""
+msgstr "终点箭头样式"
 
 #: src/control/Control.Notebookbar.js:670
 msgid "Line Width"
-msgstr ""
+msgstr "线宽"
 
 #: src/control/Control.Notebookbar.js:695
 msgid "Line Transparency:"
-msgstr ""
+msgstr "线条透明度："
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:783
@@ -4893,7 +4898,7 @@ msgstr "修订"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "对更改添加批注"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5053,11 +5058,11 @@ msgstr "间距和颜色"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "导入幻灯片"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "更新链接"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5151,7 +5156,7 @@ msgstr "查看更改"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "切换到编辑模式"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5159,9 +5164,8 @@ msgid "Paste"
 msgstr "粘贴"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "空白幻灯片"
+msgstr "取消链接幻灯片"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5169,19 +5173,19 @@ msgstr "添加节"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "页面 %1 的预览，已链接到 %3 中的 %2"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "幻灯片 %1，已链接到 %3 中的 %2"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "页面 %1 的预览，已链接到 %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "幻灯片 %1，已链接到 %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5231,74 +5235,72 @@ msgstr "输入新节名称："
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "导入您的幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "缺失"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "无访问权限"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "失败"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "已链接"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "未链接"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "此文件不可用。"
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "您无法打开此文件。"
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "无法打开此文件。"
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "正在读取幻灯片..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "已插入 1 张幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "已插入 {0} 张幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "幻灯片 {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
 msgstr "插入%n张幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "插入 {0} 张幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "插入形状"
+msgstr "插入幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} 张幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5307,98 +5309,98 @@ msgstr "已选择{0}个"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "正在打开文件..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "正在插入幻灯片..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "导入幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "展开幻灯片导入面板"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "关闭幻灯片导入面板"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "添加演示文稿..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "暂无演示文稿"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
-msgstr ""
+msgstr "添加演示文稿以浏览其幻灯片并将它们插入到当前演示文稿中。"
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "最近导入自"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
-msgstr ""
+msgstr "可从中导入的演示文稿"
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "{0} 的操作"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "定位文件"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "隐藏幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "显示幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "重新加载幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "选择所有幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "更新链接到此文件的幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "从列表中移除"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "切换 {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "{0} 中的幻灯片"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "保留原始设计"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "链接到源文件"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
-msgstr ""
+msgstr "将幻灯片链接到源文件中的位置"
 
 #: src/control/SlideSectionHeader.tsx:50
 msgid "Toggle section %1"
@@ -5406,78 +5408,78 @@ msgstr "切换节 %1"
 
 #: src/slideimport/SlideImportSession.ts:239
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "无法读取源文件的幻灯片。"
 
 #: src/slideimport/SlideImportSession.ts:290
 #: src/slideimport/SlideImportSession.ts:299
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "插入幻灯片失败。"
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "导入幻灯片失败。"
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "此演示文稿中没有幻灯片链接到其他文件。"
 
 #: src/slideimport/SlideLinks.ts:297 src/slideimport/SlideLinks.ts:557
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
-msgstr ""
+msgstr "{0} 不是此文档关联的文档之一，因此服务器无法读取它。"
 
 #: src/slideimport/SlideLinks.ts:309
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "这些幻灯片来自 {0}，该文件当前无法访问。"
 
 #: src/slideimport/SlideLinks.ts:320
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "您没有 {0} 的访问权限，因此无法刷新其页面。"
 
 #: src/slideimport/SlideLinks.ts:393
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
-msgstr ""
+msgstr "无法更新 {0} 的幻灯片：源文件缺少匹配的幻灯片"
 
 #: src/slideimport/SlideLinks.ts:396 src/slideimport/SlideLinks.ts:563
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "无法将 {0} 的幻灯片读取到此演示文稿中。"
 
 #: src/slideimport/SlideLinks.ts:496
 msgid "Cannot update slide {0}: the source lacks matching slide"
-msgstr ""
+msgstr "无法更新幻灯片 {0}：源文件缺少匹配的幻灯片"
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "更新 {0} 的幻灯片失败。"
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "{0} 中的幻灯片无需更新。"
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "已从 {0} 更新 1 张幻灯片。"
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "已从 {1} 更新 {0} 张幻灯片。"
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "无法读取 {0}。"
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "此演示文稿中没有幻灯片链接到 {0}。"
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
-msgstr ""
+msgstr "另一项更新仍在进行中。请稍后再尝试更新 {0}。"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "调整面板大小"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5639,7 +5641,7 @@ msgstr "将页面适配到窗口宽度。打开时的智能缩放可在“文件
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "使页面适合窗口宽度。"
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5717,19 +5719,19 @@ msgstr "输入新的工作表名"
 
 #: src/control/Control.Tabs.js:753
 msgid "Protect Sheet"
-msgstr ""
+msgstr "保护工作表"
 
 #: src/control/Control.Tabs.js:753
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "输入密码以保护工作表"
 
 #: src/control/Control.Tabs.js:757
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "取消保护工作表"
 
 #: src/control/Control.Tabs.js:757
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "输入密码以取消保护工作表"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5739,11 +5741,11 @@ msgstr "多个用户之间的“撤销”/“恢复”操作发生冲突。请�
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "工作表重算完成，耗时 %1 毫秒"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "文档重算完成，耗时 %1 毫秒"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5773,7 +5775,7 @@ msgstr "最小值"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "您目前处于查看模式，按 {0} 进行编辑"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -5795,11 +5797,11 @@ msgstr "嵌入式脚本使用了旧版 com.sun.star UNO API，该 API 可能会�
 
 #: src/control/Control.UIManager.ts:2805
 msgid "Confirm password"
-msgstr ""
+msgstr "确认密码"
 
 #: src/control/Control.UIManager.ts:2851
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "确认密码与输入的密码不匹配"
 
 #: src/control/Control.UIManager.ts:3069
 msgid "Copy error details"
@@ -6069,9 +6071,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "密码错误。请重试。"
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "文档需要密码才能查看。"
+msgstr "文档需要密码才能编辑。"
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6698,59 +6699,59 @@ msgstr "插入批注"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "深色 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "浅色 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "深色 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "浅色 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "强调色 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "强调色 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "强调色 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "强调色 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "强调色 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "强调色 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "超链接"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "已访问的超链接"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1，浅 %2%"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1，深 %2%"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -6941,11 +6942,11 @@ msgstr "单元格边框"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "新建表格样式..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "清除样式"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -7114,11 +7115,11 @@ msgstr "只有文档作者可以修改密码。"
 
 #: src/app/Socket.ts:2627
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "您没有编辑此文档的权限。"
 
 #: src/app/Socket.ts:2628
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "无法将此文档设为可编辑。"
 
 #: src/app/Socket.ts:2696 src/app/Socket.ts:2707
 msgid "Missing Fonts"
@@ -7150,7 +7151,7 @@ msgstr "服务器正在关闭"
 
 #: src/docdispatcher.ts:651
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "未配置 AI，请联系管理员"
 
 #: src/docdispatcher.ts:918
 msgid "Are you sure you want to delete this slide?"
@@ -7236,13 +7237,13 @@ msgstr "错误或缺少 WOPISrc 参数，请联系支持。"
 
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "您的会话将在 {time} 后结束。刷新页面以继续。"
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
-msgstr ""
+msgstr "您的会话已结束。对文档的进一步更改可能无法保存。刷新页面以继续。"
 
 #: src/errormessages.ts:45
 msgid ""
@@ -7381,7 +7382,6 @@ msgid "Document cannot be exported. Please try again."
 msgstr "文档无法导出。请重试。"
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
 msgstr "幻灯片"
 
@@ -7741,26 +7741,24 @@ msgid "End Show"
 msgstr "结束放映"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
 msgstr "暂停"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
 msgstr "继续"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "动画：{0}，{1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "动画：{0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "切换：{0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7870,7 +7868,7 @@ msgstr "停止跟随"
 
 #: src/control/Control.Extension.ts:490
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "扩展命令失败：%1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -7878,7 +7876,7 @@ msgstr "现代商务信函（无衬线）"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "现代商务信函"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
