@@ -16,8 +16,4 @@ $(eval $(call gb_Dictionary_add_root_files,dict-ckb,\
 ))
 
 
-$(eval $(call gb_Dictionary_add_files,dict-ckb,description,\
-    dictionaries/ckb/description/desc_en_US.txt \
-))
-
 # vim: set noet sw=4 ts=4:

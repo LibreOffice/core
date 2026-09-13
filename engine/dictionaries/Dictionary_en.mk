@@ -26,7 +26,6 @@ $(eval $(call gb_Dictionary_add_root_files,dict-en,\
 	dictionaries/en/hyph_en_GB.dic \
 	dictionaries/en/hyph_en_US.dic \
 	dictionaries/en/license.txt \
-	dictionaries/en/Linguistic.xcu \
 	dictionaries/en/package-description.txt \
 	dictionaries/en/README_en_AU.txt \
 	dictionaries/en/README_en_CA.txt \

@@ -51,7 +51,6 @@ gb_CustomPackage_get_target = $(WORKDIR)/CustomPackage/$(1).filelist
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done
 gb_CustomTarget_get_workdir = $(error please use plain gb_CustomTarget_workdir instead)
 gb_CustomTarget_workdir := $(WORKDIR)/CustomTarget
-gb_DescriptionTranslateTarget_get_target = $(WORKDIR)/DescriptionTranslateTarget/$(1).xml
 gb_Dictionary_get_target = $(WORKDIR)/Dictionary/$(1).done
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_CxxObject_get_dwo_target = $(WORKDIR)/CxxObject/$(1).dwo
@@ -168,7 +167,6 @@ gb_PrecompiledHeader_get_dep_target_tmp = $(call gb_PrecompiledHeader_get_dep_ta
 gb_PrecompiledHeader_get_flags_file = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).flags
 gb_PrecompiledHeader_get_for_reuse_target = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT).reuse
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(call gb_PrecompiledHeader__get_debugdir,$(2))/$(1).hxx$(gb_PrecompiledHeader_EXT)
-gb_PropertiesTranslateTarget_get_target = $(WORKDIR)/PropertiesTranslateTarget/$(1).properties
 gb_Pyuno_get_final_target = $(WORKDIR)/Pyuno/$(1).final
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).done
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
@@ -253,7 +251,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CompilerTest \
 	ComponentTarget \
 	CustomPackage \
-	DescriptionTranslateTarget \
 	Dictionary \
 	DotnetLibrary \
 	DotnetTest \
@@ -286,7 +283,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Pagein \
 	Postprocess \
 	PrecompiledHeader \
-	PropertiesTranslateTarget \
 	Pyuno \
 	PythonTest \
 	Rdb \

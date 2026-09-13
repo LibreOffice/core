@@ -16,12 +16,6 @@ $(eval $(call gb_Dictionary_add_root_files,dict-gug,\
 ))
 
 
-$(eval $(call gb_Dictionary_add_files,dict-gug,description,\
-    dictionaries/gug/description/desc_en_US.txt \
-    dictionaries/gug/description/desc_es_ES.txt \
-    dictionaries/gug/description/desc_gug_PY.txt \
-))
-
 $(eval $(call gb_Dictionary_add_files,dict-gug,images,\
     dictionaries/gug/images/gug-PY.png \
 ))

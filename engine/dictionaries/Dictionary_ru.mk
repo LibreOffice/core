@@ -11,7 +11,6 @@ $(eval $(call gb_Dictionary_Dictionary,dict-ru,dictionaries/ru_RU))
 
 $(eval $(call gb_Dictionary_add_root_files,dict-ru,\
 	dictionaries/ru_RU/hyph_ru_RU.dic \
-	dictionaries/ru_RU/Linguistic.xcu \
 	dictionaries/ru_RU/README_Lightproof_ru_RU.txt \
 	dictionaries/ru_RU/README_ru_RU.txt \
 	dictionaries/ru_RU/README_thes_ru_RU_M_aot_and_v2.txt \
