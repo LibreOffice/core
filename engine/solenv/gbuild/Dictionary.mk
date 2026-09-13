@@ -212,10 +212,18 @@ $(call gb_Dictionary_get_clean_target,%) :
 gb_Dictionary_get_packagename = Dictionary/$(1)
 gb_Dictionary_get_packagesetname = Dictionary/$(1)
 
-# Creates a dictionary extension
+# Every dictionary that is actually built, as "installed name=source dir".
+# The registry layer is generated from this, so it lists what a given
+# configuration ships and nothing else. Recipes expand late, so a rule may
+# read it even though the Dictionary makefiles are included after the one
+# that builds the registry.
+gb_Dictionary_ALL :=
+
+# Creates a dictionary
 #
 # gb_Dictionary_Dictionary dictionary srcdir
 define gb_Dictionary_Dictionary
+gb_Dictionary_ALL += $(1)=$(2)
 $(call gb_Package_Package_internal,$(call gb_Dictionary_get_packagename,$(1)),$(SRCDIR))
 $(call gb_Package_Package_internal,$(call gb_Dictionary_get_packagename,$(1)_generated),$(WORKDIR))
 $(call gb_PackageSet_PackageSet_internal,$(call gb_Dictionary_get_packagesetname,$(1)))

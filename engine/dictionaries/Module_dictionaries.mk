@@ -10,6 +10,8 @@
 $(eval $(call gb_Module_Module,dictionaries))
 
 $(eval $(call gb_Module_add_targets,dictionaries,\
+	CustomTarget_registry \
+	Package_config \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,dictionaries,\

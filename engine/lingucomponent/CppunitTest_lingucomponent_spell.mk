@@ -30,6 +30,13 @@ $(eval $(call gb_CppunitTest_use_api,lingucomponent_spell,\
     offapi \
 ))
 
+# The bundled dictionaries are registered by a layer installed with them.
+# A build configured without them has no layer and nothing to find.
+ifneq ($(filter DICTIONARIES,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,lingucomponent_spell,dictionaries_config))
+$(eval $(call gb_CppunitTest_add_defs,lingucomponent_spell,-DHAVE_BUNDLED_DICTIONARIES))
+endif
+
 $(eval $(call gb_CppunitTest_use_configuration,lingucomponent_spell))
 
 $(eval $(call gb_CppunitTest_use_ure,lingucomponent_spell))
