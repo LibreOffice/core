@@ -117,6 +117,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 	});
 
 	it('Check selected text visual.', function() {
+		cy.viewport(1000, helper.maxScreenshotableViewportHeight);
+
 		cy.cGet('#insertsheet-button').click();
 
 		helper.processToIdle(this.win);
@@ -333,6 +335,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test triple click content 
 	});
 
 	it('Triple click should select the cell content.', function() {
+		cy.viewport(1000, helper.maxScreenshotableViewportHeight);
+
 		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
 
 		// Triple click on second first in second row
