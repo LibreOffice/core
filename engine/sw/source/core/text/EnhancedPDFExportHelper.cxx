@@ -1792,9 +1792,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                             break;
                     }
 
-                    // PDF/UA allows unlimited headings, but PDF only up to H6
-                    // ... and apparently the extra H7.. must be declared in
-                    // RoleMap, or veraPDF complains.
+                    // PDF/UA allows unlimited headings, but PDF 1.7 only up to H6, so the
+                    // extra H7.. are declared in RoleMap there; PDF 2.0 has them itself.
                     nRealLevel = std::min(nRealLevel, 5);
                     nPDFType =  o3tl::narrowing<sal_uInt16>(sal_uInt16(vcl::pdf::StructElement::H1) + nRealLevel);
                 }
