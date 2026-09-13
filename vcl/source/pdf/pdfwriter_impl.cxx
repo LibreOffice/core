@@ -53,6 +53,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/uri.hxx>
@@ -145,6 +146,76 @@ bool isPDF17OnlyType(StructElement eType)
         default:
             return false;
     }
+}
+
+constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const char*>({
+    { StructElement::NonStructElement, "NonStruct" },
+    { StructElement::Document, "Document" },
+    { StructElement::Part, "Part" },
+    { StructElement::Article, "Art" },
+    { StructElement::Section, "Sect" },
+    { StructElement::Division, "Div" },
+    { StructElement::BlockQuote, "BlockQuote" },
+    { StructElement::Caption, "Caption" },
+    { StructElement::TOC, "TOC" },
+    { StructElement::TOCI, "TOCI" },
+    { StructElement::Index, "Index" },
+    { StructElement::Paragraph, "P" },
+    { StructElement::Heading, "H" },
+    { StructElement::H1, "H1" },
+    { StructElement::H2, "H2" },
+    { StructElement::H3, "H3" },
+    { StructElement::H4, "H4" },
+    { StructElement::H5, "H5" },
+    { StructElement::H6, "H6" },
+    { StructElement::List, "L" },
+    { StructElement::ListItem, "LI" },
+    { StructElement::LILabel, "Lbl" },
+    { StructElement::LIBody, "LBody" },
+    { StructElement::Table, "Table" },
+    { StructElement::TableRow, "TR" },
+    { StructElement::TableHeader, "TH" },
+    { StructElement::TableData, "TD" },
+    { StructElement::Span, "Span" },
+    { StructElement::Quote, "Quote" },
+    { StructElement::Note, "Note" },
+    { StructElement::Reference, "Reference" },
+    { StructElement::BibEntry, "BibEntry" },
+    { StructElement::Code, "Code" },
+    { StructElement::Link, "Link" },
+    { StructElement::Annot, "Annot" },
+    { StructElement::Ruby, "Ruby" },
+    { StructElement::RB, "RB" },
+    { StructElement::RT, "RT" },
+    { StructElement::RP, "RP" },
+    { StructElement::Warichu, "Warichu" },
+    { StructElement::WT, "WT" },
+    { StructElement::WP, "WP" },
+    { StructElement::Figure, "Figure" },
+    { StructElement::Formula, "Formula" },
+    { StructElement::Form, "Form" },
+    { StructElement::Title, "Title" },
+    { StructElement::Emphasis, "Em" },
+    { StructElement::Strong, "Strong" },
+});
+
+// standard structure types getStructureTag never returns, so the table above lacks them:
+// ISO 32000-1 14.8.4, and the ones ISO 32000-2 adds
+// Annot is standard from PDF 1.5, and below that getStructureTag answers Figure for it
+constexpr std::string_view constUnusedTagStrings[]{ "Annot", "Artifact", "Private",
+                                                    "THead", "TBody",    "TFoot" };
+constexpr std::string_view constUnusedTagStrings20[]{ "Aside", "DocumentFragment", "FENote",
+                                                      "Sub" };
+
+// PDF 2.0 has heading levels without a limit, so H7 and up are standard there as well;
+// H1 to H6 are the table's, and must not answer here, or the level could be claimed wrong
+bool isDeepHeading(std::string_view aName)
+{
+    return aName.size() > 1 && aName[0] == 'H' && aName[1] != '0'
+           && std::ranges::all_of(
+                  aName.substr(1),
+                  [](char c) { return rtl::isAsciiDigit(static_cast<sal_uInt8>(c)); })
+           && o3tl::toInt32(aName.substr(1)) > 6;
 }
 
 } // end anonymous namespace
@@ -1040,7 +1111,7 @@ void PDFWriterImpl::emitNamespaces()
             aLine.append( "/RoleMapNS<<" );
             for (auto const& role : m_aRoleMap)
             {
-                aLine.append( "/" + role.first + "/" + role.second + "\n" );
+                aLine.append("/" + role.first + "/" + role.second.m_aTag + "\n");
             }
             aLine.append( ">>\n" );
         }
@@ -1122,7 +1193,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( "/RoleMap<<" );
             for (auto const& role : m_aRoleMap)
             {
-                aLine.append( "/" + role.first + "/" + role.second + "\n" );
+                aLine.append("/" + role.first + "/" + role.second.m_aTag + "\n");
             }
             aLine.append( ">>\n" );
         }
@@ -10080,59 +10151,6 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 
 const char* PDFWriterImpl::getStructureTag(StructElement eType)
 {
-    using namespace vcl::pdf;
-
-    static constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const char*>({
-        { StructElement::NonStructElement, "NonStruct" },
-        { StructElement::Document,    "Document" },
-        { StructElement::Part,        "Part" },
-        { StructElement::Article,     "Art" },
-        { StructElement::Section,     "Sect" },
-        { StructElement::Division,    "Div" },
-        { StructElement::BlockQuote,  "BlockQuote" },
-        { StructElement::Caption,     "Caption" },
-        { StructElement::TOC,         "TOC" },
-        { StructElement::TOCI,        "TOCI" },
-        { StructElement::Index,       "Index" },
-        { StructElement::Paragraph,   "P" },
-        { StructElement::Heading,     "H" },
-        { StructElement::H1,          "H1" },
-        { StructElement::H2,          "H2" },
-        { StructElement::H3,          "H3" },
-        { StructElement::H4,          "H4" },
-        { StructElement::H5,          "H5" },
-        { StructElement::H6,          "H6" },
-        { StructElement::List,        "L" },
-        { StructElement::ListItem,    "LI" },
-        { StructElement::LILabel,     "Lbl" },
-        { StructElement::LIBody,      "LBody" },
-        { StructElement::Table,       "Table" },
-        { StructElement::TableRow,    "TR" },
-        { StructElement::TableHeader, "TH" },
-        { StructElement::TableData,   "TD" },
-        { StructElement::Span,        "Span" },
-        { StructElement::Quote,       "Quote" },
-        { StructElement::Note,        "Note" },
-        { StructElement::Reference,   "Reference" },
-        { StructElement::BibEntry,    "BibEntry" },
-        { StructElement::Code,        "Code" },
-        { StructElement::Link,        "Link" },
-        { StructElement::Annot,       "Annot" },
-        { StructElement::Ruby,        "Ruby" },
-        { StructElement::RB,          "RB" },
-        { StructElement::RT,          "RT" },
-        { StructElement::RP,          "RP" },
-        { StructElement::Warichu,     "Warichu" },
-        { StructElement::WT,          "WT" },
-        { StructElement::WP,          "WP" },
-        { StructElement::Figure,      "Figure" },
-        { StructElement::Formula,     "Formula"},
-        { StructElement::Form,        "Form" },
-        { StructElement::Title, "Title" },
-        { StructElement::Emphasis, "Em" },
-        { StructElement::Strong, "Strong" },
-    });
-
     // First handle fallbacks for elements that were added in a certain PDF version
 
     // PDF 1.5 fallbacks
@@ -10163,13 +10181,53 @@ const char* PDFWriterImpl::getStructureTag(StructElement eType)
     return iterator->second;
 }
 
-void PDFWriterImpl::addRoleMap(const OString& aAlias, StructElement eType)
+bool PDFWriterImpl::isStandardStructureName(std::string_view aName)
 {
-    OString aTag = getStructureTag(eType);
+    // below 2.0 getStructureTag returns P for Title, so a style may take that name
+    const auto it(std::ranges::find_if(constTagStrings,
+                                       [aName](const auto& rTag) { return aName == rTag.second; }));
+    if ((it != constTagStrings.end() && aName == getStructureTag(it->first))
+        || std::ranges::find(constUnusedTagStrings, aName) != std::end(constUnusedTagStrings))
+        return true;
+
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+        return false;
+
+    return isDeepHeading(aName)
+           || std::ranges::find(constUnusedTagStrings20, aName)
+                  != std::end(constUnusedTagStrings20);
+}
+
+OString PDFWriterImpl::claimRoleName(const OString& rAlias, StructElement eType)
+{
+    const OString aTag(getStructureTag(eType));
     // For PDF/UA it's not allowed to map an alias with the same name.
     // Not aware of a reason for doing it in any case, so just don't do it.
-    if (aAlias != aTag)
-        m_aRoleMap[aAlias] = aTag;
+    if (rAlias == aTag)
+        return rAlias;
+
+    // a heading deeper than the six this writer emits: PDF 2.0 knows the name, so the element
+    // says the level it is and needs no entry
+    if (isDeepHeading(rAlias) && StructElement::H1 <= eType && eType <= StructElement::H6
+        && PDFWriter::PDFVersion::PDF_2_0 <= m_aContext.Version)
+        return rAlias;
+
+    OString aName(rAlias);
+    for (sal_Int32 nIndex(1);; ++nIndex)
+    {
+        // a standard type's name cannot be made to mean another type
+        if (!isStandardStructureName(aName))
+        {
+            // any other name belongs to the alias that asked for it first
+            const auto[it, bInserted](
+                m_aRoleMap.emplace(aName, RoleMapEntry{ .m_aTag = aTag, .m_aAsked = rAlias }));
+            if (bInserted || (it->second.m_aTag == aTag && it->second.m_aAsked == rAlias))
+                return aName;
+        }
+
+        // name taken, try the next index
+        aName = rAlias + "-" + OString::number(nIndex);
+    }
 }
 
 void PDFWriterImpl::beginStructureElementMCSeq()
@@ -10338,8 +10396,7 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
         OStringBuffer aNameBuf( rAlias.size() );
         COSWriter::appendName( rAlias, aNameBuf );
         OString aAliasName( aNameBuf.makeStringAndClear() );
-        rEle.m_aAlias = aAliasName;
-        addRoleMap(aAliasName, eType);
+        rEle.m_aAlias = claimRoleName(aAliasName, eType);
     }
 
     if (m_bEmitStructure && eType != StructElement::NonStructElement) // don't create nonexistent objects
@@ -10543,10 +10600,6 @@ void PDFWriterImpl::addInternalStructureContainer(const sal_Int32 nEle)
     std::list<PDFStructureElementKid> aNewKids;
     std::vector<sal_Int32> aNewChildren;
 
-    // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
-    OString aAliasName("Div"_ostr);
-    addRoleMap(aAliasName, StructElement::Division);
-
     while (m_aStructure[nEle].m_aKids.size() > ncMaxPDFArraySize)
     {
         const sal_Int32 nNewId = sal_Int32(m_aStructure.size());
@@ -10555,7 +10608,6 @@ void PDFWriterImpl::addInternalStructureContainer(const sal_Int32 nEle)
             const sal_Int32 nPage(
                 m_aStructure[m_aStructure[nEle].m_aChildren.front()].m_nFirstPageObject);
             PDFStructureElement aNew(nNewId, nEle, nPage);
-            aNew.m_aAlias = aAliasName;
             aNew.m_oType.emplace(StructElement::Division); // a new Div type container
             aNew.m_nObject = createObject(); //assign a PDF object number
             m_aStructure.push_back(std::move(aNew));

@@ -1154,8 +1154,9 @@ public:
     denotes what kind of element to begin (e.g. a heading or paragraph)
 
     @param rAlias
-    the specified alias will be used as structure tag. Also an entry in the PDF's
-    role map will be created mapping alias to regular structure type.
+    the alias is used as the structure tag. Unless it is a standard type's name, the
+    PDF's role map gets an entry giving the type it stands for; and if another alias has
+    the name already, an indexed name beside it is used instead.
 
     @returns
     the new structure element's id for use in SetCurrentStructureElement

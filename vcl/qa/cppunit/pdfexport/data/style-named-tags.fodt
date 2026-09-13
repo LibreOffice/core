@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="US"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Étude" style:family="paragraph" style:parent-style-name="Standard" style:class="text"/>
+  <style:style style:name="Code" style:family="paragraph" style:parent-style-name="Standard" style:class="text"/>
+  <style:style style:name="Code" style:family="text"/>
+  <style:style style:name="Source_20_Text" style:display-name="Source Text" style:family="text"/>
+  <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Code1" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="H" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="THead" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="H7" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Sub" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Artifact" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Code-1" style:family="paragraph" style:parent-style-name="Standard"/>
+  <style:style style:name="Heading_20_7" style:display-name="Heading 7" style:family="paragraph" style:parent-style-name="Standard" style:default-outline-level="7"/>
+  <style:style style:name="Étude" style:family="text"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="Table1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Étude">A cell</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p text:style-name="Étude">Another cell</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="Code">A paragraph in the Code paragraph style.</text:p>
+   <text:p text:style-name="Title">A paragraph in the Title style.</text:p>
+   <text:p text:style-name="Index">A paragraph in the built-in Index style.</text:p>
+   <text:p text:style-name="Code1">A paragraph in a style really called Code1.</text:p>
+   <text:p text:style-name="H">A paragraph in a style called H.</text:p>
+   <text:p text:style-name="THead">A paragraph in a style called THead.</text:p>
+   <text:p text:style-name="H7">A paragraph in a style called H7.</text:p>
+   <text:p text:style-name="Sub">A paragraph in a style called Sub.</text:p>
+   <text:p text:style-name="Artifact">A paragraph in a style called Artifact.</text:p>
+   <text:p text:style-name="Code-1">A paragraph in a style called Code-1.</text:p>
+   <text:h text:style-name="Heading_20_7" text:outline-level="7">A heading at level 7.</text:h>
+   <text:p text:style-name="Standard">Body text with <text:span text:style-name="Code">a run in the Code character style</text:span> and <text:span text:style-name="Source_20_Text">a run in Source Text</text:span> and <text:span text:style-name="Étude">a run in the character style of that name</text:span>.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
