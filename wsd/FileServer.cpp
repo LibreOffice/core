@@ -2965,25 +2965,8 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
         return;
     }
 
-    bool bad =
-        !filePath.starts_with('/')
-        || filePath.find("/./") != std::string::npos
-        || filePath.find("/../") != std::string::npos
-        || filePath.ends_with("/.")
-        || filePath.ends_with("/..");
-    if (!bad) {
-        std::string normalized;
-        normalized.reserve(filePath.size());
-        for (auto const c: filePath) {
-            if (c != '/' || normalized.empty() || normalized.back() != '/') {
-                normalized.push_back(c);
-            }
-        }
-        if (normalized.starts_with("/settings/userconfig/extensions/")) {
-            bad = true;
-        }
-    }
-    if (bad) {
+    std::string fileId;
+    if (!buildSettingsUploadFileId(filePath, fileName, fileId)) {
         LOG_WRN(
             "Rejected upload to per-user extensions filePath ["
             << Anonymizer::anonymizeUrl(filePath) << ']');
@@ -3003,8 +2986,6 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
                   "Target host is not in the allowed WOPI host list");
         return;
     }
-
-    const std::string fileId = filePath + fileName;
 
     auto uploadedFileOwnership = partHandler.getFileOwnership();
 

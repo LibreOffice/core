@@ -156,6 +156,14 @@ private:
                                        std::istream& message,
                                        const std::shared_ptr<StreamSocket>& socket);
 
+    /// Validate the target filePath of a settings-upload forward and, when valid, build the
+    /// fileId (filePath + fileName) posted on to the host. Rejects a path that is not absolute,
+    /// tries to traverse ("/./" or "/../", or a trailing "/." or "/.."), or targets the disabled
+    /// per-user extensions directory (duplicate slashes are collapsed first). Returns false and
+    /// leaves fileId untouched when the path is rejected.
+    static bool buildSettingsUploadFileId(const std::string& filePath, const std::string& fileName,
+                                          std::string& fileId);
+
     /// Persist a viewsetting.json upload. Secrets the browser asked to keep are
     /// restored from the currently stored file (fetched from currentFileUrl)
     /// before the merged body is written back, so the browser never has to hold

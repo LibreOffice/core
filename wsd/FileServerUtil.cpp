@@ -429,4 +429,33 @@ std::string FileServerRequestHandler::cssVarsToStyle(const std::string& cssVars)
     return previousStyle;
 }
 
+bool FileServerRequestHandler::buildSettingsUploadFileId(const std::string& filePath,
+                                                         const std::string& fileName,
+                                                         std::string& fileId)
+{
+    bool bad =
+        !filePath.starts_with('/')
+        || filePath.find("/./") != std::string::npos
+        || filePath.find("/../") != std::string::npos
+        || filePath.ends_with("/.")
+        || filePath.ends_with("/..");
+    if (!bad) {
+        std::string normalized;
+        normalized.reserve(filePath.size());
+        for (auto const c: filePath) {
+            if (c != '/' || normalized.empty() || normalized.back() != '/') {
+                normalized.push_back(c);
+            }
+        }
+        if (normalized.starts_with("/settings/userconfig/extensions/")) {
+            bad = true;
+        }
+    }
+    if (bad)
+        return false;
+
+    fileId = filePath + fileName;
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

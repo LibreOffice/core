@@ -41,6 +41,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testPreProcessedFileSubstitution);
     CPPUNIT_TEST(testCSPMergeNewlines);
     CPPUNIT_TEST(testCSPKeepsOutBadSources);
+    CPPUNIT_TEST(testSettingsUploadFileId);
     CPPUNIT_TEST_SUITE_END();
 
     void testUIDefaults();
@@ -50,6 +51,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testPreProcessedFileSubstitution();
     void testCSPMergeNewlines();
     void testCSPKeepsOutBadSources();
+    void testSettingsUploadFileId();
 
     void preProcessedFileSubstitution(const std::string_view testname,
                                       const Util::UnorderedStringMap<std::string>& variables);
@@ -539,6 +541,62 @@ void FileServeTests::testCSPKeepsOutBadSources()
         csp.appendDirective("frame-ancestors", "example.com:* evil.example.com\r\n:*");
         LOK_ASSERT_EQUAL_STR("", csp.getDirective("frame-ancestors"));
     }
+}
+
+// The settings-upload forward path: coolwsd receives a settings file from the browser and
+// forwards it to the WOPI host, deriving the host-side fileId from the form's filePath + the
+// uploaded file's name. Guards the path validation (traversal, absolute, disabled per-user
+// extensions) and the fileId construction that feed that forward.
+void FileServeTests::testSettingsUploadFileId()
+{
+    constexpr std::string_view testname = __func__;
+
+    std::string fileId;
+
+    // A shared (systemconfig) SPIF policy: accepted, fileId = filePath + fileName.
+    fileId.clear();
+    LOK_ASSERT(FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/systemconfig/spif/", "spif-nato.xml", fileId));
+    LOK_ASSERT_EQUAL_STR("/settings/systemconfig/spif/spif-nato.xml", fileId);
+
+    // A per-user (userconfig) SPIF policy: accepted.
+    fileId.clear();
+    LOK_ASSERT(FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", "mine.xml", fileId));
+    LOK_ASSERT_EQUAL_STR("/settings/userconfig/spif/mine.xml", fileId);
+
+    // Another round-trip group is equally fine.
+    fileId.clear();
+    LOK_ASSERT(FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/wordbook/", "en_US.dic", fileId));
+    LOK_ASSERT_EQUAL_STR("/settings/userconfig/wordbook/en_US.dic", fileId);
+
+    // Per-user extension installation is disabled: rejected, fileId untouched.
+    fileId = "sentinel";
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/extensions/", "evil.zip", fileId));
+    LOK_ASSERT_EQUAL_STR("sentinel", fileId);
+
+    // Duplicate slashes must not smuggle a path past the extensions check.
+    fileId.clear();
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings//userconfig/extensions/", "evil.zip", fileId));
+
+    // A path must be absolute.
+    fileId.clear();
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "settings/userconfig/spif/", "x.xml", fileId));
+
+    // No traversal: "/../", "/./", or a trailing "/.." / "/.".
+    fileId.clear();
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/../etc/", "passwd", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/./spif/", "x.xml", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/spif/..", "x.xml", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/spif/.", "x.xml", fileId));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileServeTests);
