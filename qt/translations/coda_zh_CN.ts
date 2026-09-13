@@ -152,22 +152,22 @@
     <message>
         <location filename="../Bridge.cpp" line="353"/>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>导出错误</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="354"/>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法导出文档</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="939"/>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开远程文档</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="942"/>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>Collabora Online 服务器</translation>
     </message>
     <message>
         <location filename="../Bridge.cpp" line="1129"/>
@@ -199,12 +199,12 @@
     <message>
         <location filename="../DBusService.cpp" line="86"/>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>模板错误</translation>
     </message>
     <message>
         <location filename="../DBusService.cpp" line="87"/>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法使用此模板新建文档</translation>
     </message>
 </context>
 <context>
