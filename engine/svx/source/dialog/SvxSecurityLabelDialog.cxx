@@ -362,8 +362,10 @@ void SvxSecurityLabelDialog::restoreFromLabel()
     {
         for (int c = 0; c < m_aGroups[nGroup].nCats; ++c)
         {
-            if (aValues.count(m_xChecks[nGroup][c]->get_label()))
-                m_xChecks[nGroup][c]->set_active(true);
+            // Set both ways: switching policies and back must clear stale ticks, not
+            // just add new ones.
+            m_xChecks[nGroup][c]->set_active(
+                aValues.count(m_xChecks[nGroup][c]->get_label()) != 0);
         }
     }
 }
