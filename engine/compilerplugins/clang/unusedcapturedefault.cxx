@@ -43,6 +43,9 @@ public:
             // be empty, so filter those out here:
             return true;
         }
+        if (compiler.getSourceManager().isMacroBodyExpansion(expr->getCaptureDefaultLoc())) {
+            return true;
+        }
         if (suppressWarningAt(expr->getCaptureDefaultLoc()))
         {
             return true;

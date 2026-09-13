@@ -24,4 +24,20 @@ template <typename T> auto f3(T x)
     return [=]() { return x; };
 }
 
+#define MACRO1(x) [&] { return x; }
+
+auto f4() {
+    int n = 0;
+    return MACRO1(n)();
+}
+
+auto f5() { return MACRO1(0)(); }
+
+#define MACRO2(x) (x)
+
+auto f6() {
+    // expected-error@+1 {{unused capture-default [loplugin:unusedcapturedefault]}}
+    return MACRO2([=] { return 0; })();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
