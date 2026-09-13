@@ -39,7 +39,14 @@ endif
 
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
+	CustomTarget_lightproof \
+	Library_lightproof \
 	Library_numbertext \
+	Package_lightproof \
+))
+
+$(eval $(call gb_Module_add_check_targets,lingucomponent,\
+	CppunitTest_lingucomponent_lightproof \
 ))
 
 # vim: set noet sw=4 ts=4:

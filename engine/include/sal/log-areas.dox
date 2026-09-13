@@ -639,6 +639,7 @@ certain functionality.
 @li @c jsuno.legacyapi
 @li @c jvmaccess
 @li @c lingucomponent
+@li @c lingucomponent.lightproof
 @li @c linguistic
 @li @c net
 @li @c opencl

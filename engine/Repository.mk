@@ -284,6 +284,7 @@ endif
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
 	$(if $(ENABLE_CURL),LanguageTool) \
+	lightproof \
     $(call gb_Helper_optional,AVMEDIA, \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
@@ -667,6 +668,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
+	lingucomponent_lightproof \
 	officecfg_misc \
 	$(if $(filter $(OS),MACOSX), \
 		extensions_mdibundle \
