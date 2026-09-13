@@ -318,7 +318,7 @@ const Util::UnorderedStringMap<std::string> DefServerConfig = {
 #endif
 };
 
-Util::UnorderedStringMap<std::string> buildDefaultAppConfig()
+static Util::UnorderedStringMap<std::string> buildDefaultAppConfig()
 {
     Util::UnorderedStringMap<std::string> config = DefAppConfig;
     config.emplace("accessibility.enable", Util::isMobileApp() ? "true" : "false");
