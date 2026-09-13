@@ -591,40 +591,50 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         // Take the first that claims it rather than giving up on the first.
         for (const OUString& rSvcImplName : aSvcImplNames)
         {
+            // A service instantiated for one language is kept for the next,
+            // but it still has to be asked about this locale: the one that
+            // serves English need not serve Hungarian.
             GCReferences_t::const_iterator aImplNameIt(
                 m_aGCReferencesByService.find(rSvcImplName) );
-            if (aImplNameIt != m_aGCReferencesByService.end())  // matching impl name found?
+            const bool bKnown = aImplNameIt != m_aGCReferencesByService.end();
+
+            uno::Reference< linguistic2::XProofreader > xGC;
+            if (bKnown)
             {
-                xRes = aImplNameIt->second;
-                break;
+                xGC = aImplNameIt->second;
             }
-
-            // the service is to be instantiated here for the first time...
-            try
+            else    // the service is to be instantiated here for the first time...
             {
-                const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
-                uno::Reference< linguistic2::XProofreader > xGC(
-                        xContext->getServiceManager()->createInstanceWithContext(rSvcImplName, xContext),
-                        uno::UNO_QUERY_THROW );
-                uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
-
-                if (xSuppLoc->hasLocale( rLocale ))
+                try
                 {
-                    m_aGCReferencesByService[ rSvcImplName ] = xGC;
-                    xRes = xGC;
-
-                    uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xBC( xGC, uno::UNO_QUERY );
-                    if (xBC.is())
-                        xBC->addLinguServiceEventListener( this );
-                    break;
+                    const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
+                    xGC.set(xContext->getServiceManager()->createInstanceWithContext(rSvcImplName, xContext),
+                            uno::UNO_QUERY_THROW );
                 }
+                catch (cpo::uno::Exception &)
+                {
+                    SAL_WARN( "linguistic", "instantiating " << rSvcImplName << " failed" );
+                    continue;
+                }
+            }
 
-                SAL_INFO( "linguistic", rSvcImplName << " does not support the required locale" );
-            }
-            catch (cpo::uno::Exception &)
+            // XProofreader is an XSupportedLocales, so ask it directly.
+            if (!xGC.is() || !xGC->hasLocale( rLocale ))
             {
-                SAL_WARN( "linguistic", "instantiating " << rSvcImplName << " failed" );
+                SAL_INFO( "linguistic", rSvcImplName << " does not support the required locale" );
+                continue;
             }
+
+            if (!bKnown)
+            {
+                m_aGCReferencesByService[ rSvcImplName ] = xGC;
+
+                uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xBC( xGC, uno::UNO_QUERY );
+                if (xBC.is())
+                    xBC->addLinguServiceEventListener( this );
+            }
+            xRes = xGC;
+            break;
         }
     }
     else // not found - quite normal
