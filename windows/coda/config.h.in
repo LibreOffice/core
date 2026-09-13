@@ -28,7 +28,13 @@
 /* Set in CODALib.vcxproj differently for Release and Debug */
 
 /* Destination for Trace Event output */
-#undef COOLWSD_TRACEEVENTFILE
+#define COOLWSD_TRACEEVENTFILE "/should/not/be/used"
+
+/* Default location of coolwsd log file */
+#define COOLWSD_LOGFILE "/should/not/be/used"
+
+/* Default location of coolwsd UI command log file */
+#define COOLWSD_LOGFILE_UICMD "/should/not/be/used"
 
 /* The user-name which is allowed to run coolwsd and its tools */
 #undef COOL_USER_ID
@@ -59,7 +65,7 @@
 #define ENABLE_SSL 0
 
 /* Whether to default to using SSL_VERIFY_PEER */
-#undef SSL_VERIFY
+#define SSL_VERIFY "true"
 
 /* Whether to enable support key */
 #define ENABLE_SUPPORT_KEY 0
@@ -86,7 +92,7 @@
 #define HAVE_PIPE2 0
 
 /* Default value of help root URL */
-#undef HELP_URL
+#define HELP_URL ""
 
 /* Default value of feature_lock.impress_unlock_highlights */
 #undef IMPRESS_UNLOCK_HIGHLIGHTS

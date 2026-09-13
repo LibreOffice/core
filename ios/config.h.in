@@ -71,11 +71,26 @@
 /* Define to 1 if you have the `memrchr' function. */
 #define HAVE_MEMRCHR 0
 
+/* Default location of coolwsd log file */
+#define COOLWSD_LOGFILE "/should/not/be/used"
+
+/* Default location of coolwsd UI command log file */
+#define COOLWSD_LOGFILE_UICMD "/should/not/be/used"
+
+/* Default coolwsd loglevel */
+#define COOLWSD_LOGLEVEL "warning"
+
+/* Destination for Trace Event output */
+#define COOLWSD_TRACEEVENTFILE "/should/not/be/used"
+
 /* Collabora Online WebSocket server version */
 #define COOLWSD_VERSION "@COOLWSD_VERSION@"
 
 /* Collabora Online git hash if present */
 #define COOLWSD_VERSION_HASH "@COOLWSD_VERSION_HASH@"
+
+/* Default value of help root URL */
+#define HELP_URL ""
 
 /* Path to LibreOffice installation */
 #define LO_PATH "."
@@ -115,6 +130,9 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
+
+/* Whether to default to using SSL_VERIFY_PEER */
+#define SSL_VERIFY "true"
 
 /* Makes config variables conditionally static, only in non-debug builds, to allow for overriding them in unit-tests. */
 #ifdef ENABLE_DEBUG

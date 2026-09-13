@@ -268,7 +268,6 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
 
 // The defaults the server adds to the set above.
 const Util::UnorderedStringMap<std::string> DefServerConfig = {
-#if !MOBILEAPP
     { "help_url", HELP_URL },
     // { "logging.anonymize.anonymize_user_data", "false" }, // Do not set to fallback on filename/username.
     { "logging.anonymize.anonymization_salt", "82589933" },
@@ -315,7 +314,6 @@ const Util::UnorderedStringMap<std::string> DefServerConfig = {
     { "ssl.ssl_verification", SSL_VERIFY },
     { "trace_event.path", COOLWSD_TRACEEVENTFILE },
     { "trace_event[@enable]", "false" },
-#endif
 };
 
 static Util::UnorderedStringMap<std::string> buildDefaultAppConfig()
