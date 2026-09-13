@@ -138,6 +138,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 		helper.processToIdle(this.win);
 
+		cy.cGet('#busypopup').should('not.exist');
+
 		cy.cGet('#document-container').compareSnapshot('text-selection', 0.02);
 	});
 
