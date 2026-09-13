@@ -9876,20 +9876,17 @@ static void preloadData()
 {
     comphelper::ProfileZone aZone("preload data");
 
-    // Create user profile in the temp directory for loading the dictionaries
+    // Preload against a scratch profile, so whatever is warmed up here does
+    // not leave anything behind in the one the kits will use.
     OUString sUserPath;
     rtl::Bootstrap::get(u"UserInstallation"_ustr, sUserPath);
     utl::TempFileNamed aTempDir(nullptr, true);
     aTempDir.EnableKillingFile();
     rtl::Bootstrap::set(u"UserInstallation"_ustr, aTempDir.GetURL());
 
-    // Register the bundled extensions
-    desktop::Desktop::SynchronizeExtensionRepositories(true);
-    bool bAbort = desktop::Desktop::CheckExtensionDependencies();
-    if(bAbort)
-        std::cerr << "CheckExtensionDependencies failed" << std::endl;
-
-    // inhibit forced 2nd synchronization from Main
+    // Nothing ships as an extension, so nothing has to be registered as one.
+    // Make sure nothing goes looking either: the walk is pure cost, and it
+    // writes into the profile it walks.
     ::rtl::Bootstrap::set( u"DISABLE_EXTENSION_SYNCHRONIZATION"_ustr, u"true"_ustr);
 
     std::cerr << "Preload textencodings"; // sal_textenc
@@ -10443,13 +10440,6 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             SfxApplication::GetOrCreate();
 #endif
 
-#ifdef ANDROID
-            // Register the bundled extensions - so that the dictionaries work
-            desktop::Desktop::SynchronizeExtensionRepositories(false);
-            bool bFailed = desktop::Desktop::CheckExtensionDependencies();
-            if (bFailed)
-                SAL_INFO("kit", "CheckExtensionDependencies failed");
-#endif
 
             // Configure system language early, before InitVCL() and service
             // manager preload trigger locale-dependent code paths.
