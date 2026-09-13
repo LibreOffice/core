@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/avoid-negative-left-shift.patch.1 \
     external/cairo/cairo/ubsan-memcpy-nullptr.patch.1 \
     external/cairo/cairo/ubsan-memcpy-nullptr2.patch.1 \
+    external/cairo/cairo/cairo.ofz516227797-Integer-overflow.patch.1 \
     external/cairo/cairo/Wincompatible-pointer-types.patch.0 \
     external/cairo/cairo/disable-cairo-utilities.patch.1 \
 ))
