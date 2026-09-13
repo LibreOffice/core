@@ -427,6 +427,21 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
     }
 }
 
+static void lcl_OpenWorksheetElement(vcl::PDFExtOutDevData& rPDF, ScOutputData& rOutputData,
+                                     SCTAB nTab)
+{
+    if (rOutputData.ReopenPDFStructureElement(vcl::pdf::StructElement::Part))
+        return;
+
+    const sal_Int32 nId(rPDF.EnsureStructureElement(nullptr));
+    rPDF.InitStructureElement(nId, vcl::pdf::StructElement::Part, u"Worksheet"_ustr);
+    rPDF.BeginStructureElement(nId);
+    ScEnhancedPDFState& rState = *rPDF.GetScPDFState();
+    rState.m_WorksheetId = nId;
+    // ISO 14289-2 8.8: the destinations that point at this sheet name this element
+    rState.m_WorksheetIds[nTab] = nId;
+}
+
 //      output to Device (static)
 //
 //      is used for:
@@ -553,16 +568,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
-    {
-        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::pdf::StructElement::Part);
-        if (!bReopen)
-        {
-            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::Part, u"Worksheet"_ustr);
-            pPDF->BeginStructureElement(nId);
-            pPDF->GetScPDFState()->m_WorksheetId = nId;
-        }
-    }
+        lcl_OpenWorksheetElement(*pPDF, aOutputData, nTab);
 
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     std::unique_ptr<FmFormView> pDrawView;
@@ -1613,16 +1619,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
-    {
-        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::pdf::StructElement::Part);
-        if (!bReopen)
-        {
-            sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::Part, u"Worksheet"_ustr);
-            pPDF->BeginStructureElement(nId);
-            pPDF->GetScPDFState()->m_WorksheetId = nId;
-        }
-    }
+        lcl_OpenWorksheetElement(*pPDF, aOutputData, nPrintTab);
 
     aOutputData.SetDrawView( pDrawView );
 

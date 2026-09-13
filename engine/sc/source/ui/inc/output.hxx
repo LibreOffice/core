@@ -30,7 +30,11 @@
 #include <vcl/pdfwriter.hxx>
 #include <tools/degree.hxx>
 #include <o3tl/deleter.hxx>
+#include <map>
 #include <optional>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 struct ScCellInfo;
 
@@ -71,7 +75,17 @@ struct ScEnhancedPDFState
     sal_Int32 m_WorksheetId = -1;
     TableRowIdMap m_TableRowMap;
     TableDataIdMap m_TableDataMap;
+    /// the Worksheet element of every sheet drawn so far
+    std::unordered_map<SCTAB, sal_Int32> m_WorksheetIds;
+    /// destinations, and the sheet each points at, which may not be drawn when it is made
+    std::vector<std::pair<sal_Int32, SCTAB>> m_PendingDests;
     ScEnhancedPDFState(){};
+    void StartSheet()
+    {
+        m_WorksheetId = -1;
+        m_TableRowMap.clear();
+        m_TableDataMap.clear();
+    }
 };
 
 /// Describes reference mark to be drawn, position & size in TWIPs

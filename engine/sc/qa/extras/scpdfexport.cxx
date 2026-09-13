@@ -35,6 +35,9 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 #include <o3tl/string_view.hxx>
+#include <rtl/strbuf.hxx>
+
+#include <set>
 
 using namespace css::lang;
 using namespace ::com::sun::star;
@@ -81,6 +84,7 @@ public:
     void testTdf120190();
     void testTdf84012();
     void testTdf78897();
+    void testSheetDestinations();
     void testForcepoint97();
 #if ENABLE_PDFIMPORT
     void testTdf156893();
@@ -104,6 +108,7 @@ public:
     CPPUNIT_TEST(testTdf120190);
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
+    CPPUNIT_TEST(testSheetDestinations);
     CPPUNIT_TEST(testForcepoint97);
 #if ENABLE_PDFIMPORT
     CPPUNIT_TEST(testTdf156893);
@@ -987,6 +992,48 @@ void ScPDFExportTest::testTdf78897()
     // - Expected:  11.00 11.00
     // - Actual  :  11.00 ###
     CPPUNIT_ASSERT_EQUAL(u" 11.00 11.00 "_ustr, aActualText);
+}
+
+void ScPDFExportTest::testSheetDestinations()
+{
+    loadFromFile(u"sheet-destinations.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                               comphelper::makePropertyValue(u"ExportBookmarks"_ustr, true) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // Without the fix, an outline item carried a bare /Dest array and no /A at all, so this
+    // stops at the assertion below.
+    //
+    // ISO 14289-2 8.8: a sheet's outline item names the sheet, not only the page it starts on
+    OStringBuffer aTypes;
+    std::set<int> aTargets;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        // an outline item, not the document information dictionary, which also has a title
+        if (!pObject || !pObject->Lookup("Title"_ostr) || !pObject->Lookup("Parent"_ostr))
+            continue;
+        auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
+        CPPUNIT_ASSERT(pAction);
+        auto pStructure
+            = dynamic_cast<vcl::filter::PDFArrayElement*>(pAction->LookupElement("SD"_ostr));
+        CPPUNIT_ASSERT(pStructure);
+        CPPUNIT_ASSERT(!pStructure->GetElements().empty());
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pStructure->GetElements()[0]);
+        CPPUNIT_ASSERT(pRef);
+        CPPUNIT_ASSERT(pRef->LookupObject());
+        // the sheet's own element, not one the sheet before it left behind
+        CPPUNIT_ASSERT(aTargets.insert(pRef->GetObjectValue()).second);
+        auto pS
+            = dynamic_cast<vcl::filter::PDFNameElement*>(pRef->LookupObject()->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pS);
+        aTypes.append(pS->GetValue() + " ");
+    }
+
+    // one outline item per sheet, each naming that sheet's own element
+    CPPUNIT_ASSERT_EQUAL("Worksheet Worksheet "_ostr, aTypes.makeStringAndClear());
 }
 
 // just needs to not crash on export to pdf

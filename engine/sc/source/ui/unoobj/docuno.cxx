@@ -2682,7 +2682,8 @@ cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_I
     return aSequence;
 }
 
-static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabName, bool bIsFirstPage)
+static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabName, SCTAB nTab,
+                                bool bIsFirstPage)
 {
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     if (pPDF)
@@ -2692,11 +2693,12 @@ static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabNa
 
         // first page of a sheet: add outline item for the sheet name
 
+        sal_Int32 nDestID = -1;
         if (pPDF->GetIsExportBookmarks())
         {
             // the sheet starts at the top of the page
             tools::Rectangle aArea(pDev->PixelToLogic(tools::Rectangle(0, 0, 0, 0)));
-            sal_Int32 nDestID = pPDF->CreateDest(aArea);
+            nDestID = pPDF->CreateDest(aArea);
             // top-level
             pPDF->CreateOutlineItem(-1/*nParent*/, rTabName, nDestID);
         }
@@ -2711,16 +2713,20 @@ static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabNa
         if (pPDF->GetIsExportTaggedPDF())
         {
             if (bIsFirstPage)
+            {
                 pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Document, u"Workbook"_ustr);
+                assert(pPDF->GetScPDFState() == nullptr);
+                // the state outlives the sheet: what a destination points at can be drawn later
+                pPDF->SetScPDFState(new ScEnhancedPDFState());
+            }
             else
-            {   // if there is a new worksheet(not first), delete and add new ScPDFState
+            {
                 assert(pPDF->GetScPDFState());
-                delete pPDF->GetScPDFState();
-                pPDF->SetScPDFState(nullptr);
+                pPDF->GetScPDFState()->StartSheet();
             }
 
-            assert(pPDF->GetScPDFState() == nullptr);
-            pPDF->SetScPDFState(new ScEnhancedPDFState());
+            if (nDestID != -1)
+                pPDF->GetScPDFState()->m_PendingDests.emplace_back(nDestID, nTab);
         }
     }
 }
@@ -2830,6 +2836,23 @@ static void lcl_PDFExportBookmarkHelper(OutputDevice* pDev, ScDocument& rDoc,
         }
     }
     rBookmarks.clear();
+}
+
+// every sheet is drawn now, so each destination can name the element it reached
+static void lcl_PDFExportFinishTagging(vcl::PDFExtOutDevData& rPDF)
+{
+    const ScEnhancedPDFState* pState = rPDF.GetScPDFState();
+    if (!pState)
+        return;
+
+    for (const auto& rDest : pState->m_PendingDests)
+    {
+        const auto it(pState->m_WorksheetIds.find(rDest.second));
+        if (it != pState->m_WorksheetIds.end())
+            rPDF.SetDestStructureElement(rDest.first, it->second);
+    }
+    delete pState;
+    rPDF.SetScPDFState(nullptr);
 }
 
 static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShape,
@@ -3115,20 +3138,19 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
 
         OUString aTabName;
         rDoc.GetName(nVisTab, aTabName);
-        lcl_PDFExportHelper(pDev, aTabName, bIsFirstPage);
+        lcl_PDFExportHelper(pDev, aTabName, nVisTab, bIsFirstPage);
 
         pDocShell->DoDraw(pDev, Point(0, 0), aMMRect.GetSize(), JobSetup());
 
         vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
-        if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
-        {
+        const bool bFinishTagging(pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage);
+        if (bFinishTagging)
             pPDFData->EndStructureElement();  // Workbook
-            assert(pPDFData->GetScPDFState());
-            delete pPDFData->GetScPDFState();
-            pPDFData->SetScPDFState(nullptr);
-        }
 
         lcl_PDFExportBookmarkHelper(pDev, rDoc, pPrintFuncCache, aMark, nVisTab);
+
+        if (bFinishTagging)
+            lcl_PDFExportFinishTagging(*pPDFData);
 
         return;
     }
@@ -3246,7 +3268,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
     {
         OUString aTabName;
         rDoc.GetName(nTab, aTabName);
-        lcl_PDFExportHelper(pDev, aTabName, bIsFirstPage);
+        lcl_PDFExportHelper(pDev, aTabName, nTab, bIsFirstPage);
     }
 
     (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
@@ -3265,13 +3287,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
     }
 
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
-    if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
-    {
+    const bool bFinishTagging(pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage);
+    if (bFinishTagging)
         pPDFData->EndStructureElement();  // Workbook
-        assert(pPDFData->GetScPDFState());
-        delete pPDFData->GetScPDFState();
-        pPDFData->SetScPDFState(nullptr);
-    }
 
     if (!m_pPrintState)
     {
@@ -3280,6 +3298,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
     }
 
     lcl_PDFExportBookmarkHelper(pDev, rDoc, pPrintFuncCache, aMark, nTab);
+
+    if (bFinishTagging)
+        lcl_PDFExportFinishTagging(*pPDFData);
 }
 
 // XLinkTargetSupplier
