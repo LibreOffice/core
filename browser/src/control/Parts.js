@@ -107,7 +107,7 @@ window.L.Map.include({
 
 		this.fire('scrolltopart');
 
-		if (app.file.textCursor.visible) {
+		if (app.file.textCursor.visible && !external) {
 			// a click outside the slide to clear any selection
 			app.socket.sendMessage('resetselection');
 		}
