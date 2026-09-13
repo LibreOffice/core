@@ -108,10 +108,11 @@ private:
     DECL_DLLPRIVATE_LINK(CloseHandler, const OUString&, void);
 };
 
-class SfxInfoBarContainerWindow final : public vcl::Window
+class SFX2_DLLPUBLIC SfxInfoBarContainerWindow final : public vcl::Window
 {
 private:
     SfxInfoBarContainerChild* m_pChildWin;
+    Link<LinkParamNone*, void> m_aLayoutChangedHandler;
     std::vector<VclPtr<SfxInfoBarWindow>> m_pInfoBars;
     Idle m_aLayoutIdle;
     bool m_bResizing;
@@ -119,8 +120,15 @@ private:
     DECL_LINK(DoUpdateLayout, Timer*, void);
 
 public:
-    SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
+    /// pChildWin is null for a host that has no child window and lays the container out itself.
+    SfxInfoBarContainerWindow(vcl::Window* pParent, SfxInfoBarContainerChild* pChildWin);
     virtual ~SfxInfoBarContainerWindow() override;
+
+    /// Run when the bars have changed height, for a container without a child window.
+    void SetLayoutChangedHandler(const Link<LinkParamNone*, void>& rHandler)
+    {
+        m_aLayoutChangedHandler = rHandler;
+    }
     virtual void dispose() override;
 
     VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId, const OUString& sPrimaryMessage,

@@ -379,8 +379,9 @@ IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OUString&, void)
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
 }
 
-SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin)
-    : Window(pChildWin->GetParent(), WB_DIALOGCONTROL)
+SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(vcl::Window* pParent,
+                                                     SfxInfoBarContainerChild* pChildWin)
+    : Window(pParent, WB_DIALOGCONTROL)
     , m_pChildWin(pChildWin)
     , m_aLayoutIdle("SfxInfoBarContainerWindow m_aLayoutIdle")
     , m_bResizing(false)
@@ -389,7 +390,13 @@ SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* p
     m_aLayoutIdle.SetInvokeHandler(LINK(this, SfxInfoBarContainerWindow, DoUpdateLayout));
 }
 
-IMPL_LINK_NOARG(SfxInfoBarContainerWindow, DoUpdateLayout, Timer*, void) { m_pChildWin->Update(); }
+IMPL_LINK_NOARG(SfxInfoBarContainerWindow, DoUpdateLayout, Timer*, void)
+{
+    if (m_pChildWin)
+        m_pChildWin->Update();
+    else
+        m_aLayoutChangedHandler.Call(nullptr);
+}
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow() { disposeOnce(); }
 
@@ -450,7 +457,13 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const& pI
         m_pInfoBars.erase(it);
     }
 
-    m_pChildWin->Update();
+    if (m_pChildWin)
+        m_pChildWin->Update();
+    else
+    {
+        Resize();
+        m_aLayoutChangedHandler.Call(nullptr);
+    }
 }
 
 bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
@@ -531,7 +544,7 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild(vcl::Window* _pParent, sal_uI
     : SfxChildWindow(_pParent, nId)
     , m_pBindings(pBindings)
 {
-    SetWindow(VclPtr<SfxInfoBarContainerWindow>::Create(this));
+    SetWindow(VclPtr<SfxInfoBarContainerWindow>::Create(_pParent, this));
     GetWindow()->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
     GetWindow()->Show();
 
