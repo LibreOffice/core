@@ -1448,6 +1448,17 @@ function retryUntil(action, condition, options) {
 	}, opts);
 }
 
+// Wait until the canvas has no animation running. The container holds the
+// name of the section that started the animation and clears it when the
+// animation ends, so a null name means every canvas animation has settled.
+// Take this before a screenshot, so an animation part way through, such as
+// the scroll bar fading out, cannot land in the picture.
+function waitForCanvasAnimation(win) {
+	return cy.waitUntil(function() {
+		return win.app.sectionContainer.getAnimatingSectionName() === null;
+	}, { interval: 50 });
+}
+
 // Wait until no timers of the given tag exist.
 // If no timers with the tag exist at call time resolve immediately.
 function waitForTimers(win, tag) {
@@ -1603,6 +1614,7 @@ module.exports.waitUntilCoreIsIdle = waitUntilCoreIsIdle;
 module.exports.waitUntilLayoutingIsIdle = waitUntilLayoutingIsIdle;
 module.exports.processToIdle = processToIdle;
 module.exports.retryUntil = retryUntil;
+module.exports.waitForCanvasAnimation = waitForCanvasAnimation;
 module.exports.waitForTimers = waitForTimers;
 module.exports.waitForOnDemandRenders = waitForOnDemandRenders;
 module.exports.waitForMapState = waitForMapState;
