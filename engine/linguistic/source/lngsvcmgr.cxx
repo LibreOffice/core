@@ -790,7 +790,7 @@ void LngSvcMgr::Notify( const cpo::uno::Sequence< OUString > &rPropertyNames )
                 aValues = /*aCfg.*/GetProperties( aNames );
                 cpo::uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
-                    aSvcImplNames = GetLangSvc(aValues[0]);
+                    aSvcImplNames = GetLangSvcList(aValues[0]);
 
                 LanguageType nLang = LANGUAGE_NONE;
                 if (!aKeyText.isEmpty())
@@ -1197,10 +1197,10 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
         cpo::uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
         {
-            // there should only be one grammar checker in use per language...
-            if (aSvcImplNames.getLength() > 1)
-                aSvcImplNames.realloc(1);
-
+            // Every configured service is kept: one of them ends up checking
+            // the language, but which one depends on the locales each
+            // reports, and GrammarCheckingIterator can only find that out by
+            // asking them in turn.
             OUString aLocaleStr( *pNames++ );
             sal_Int32 nSeparatorPos = aLocaleStr.lastIndexOf( '/' );
             aLocaleStr = aLocaleStr.copy( nSeparatorPos + 1 );
@@ -1714,7 +1714,7 @@ cpo::uno::Sequence< OUString >
             pNames[0] = aNode + "/" + aCfgLocale;
             aValues = /*aCfg.*/GetProperties( aNames );
             if (aValues.hasElements())
-                aSvcImplNames = GetLangSvc(aValues[0]);
+                aSvcImplNames = GetLangSvcList(aValues[0]);
         }
     }
     else if ( rServiceName == SN_HYPHENATOR )

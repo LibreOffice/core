@@ -39,6 +39,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <map>
+#include <vector>
 #include <optional>
 #include <utility>
 #include <deque>
@@ -100,7 +101,10 @@ class GrammarCheckingIterator:
 
 
     // BCP-47 language tag -> implname mapping
-    typedef std::map< OUString, OUString > GCImplNames_t;
+    // Every service the configuration names for a language, in order. Only
+    // one of them ends up checking it, but which one depends on the locales
+    // each reports, which cannot be known before they are instantiated.
+    typedef std::map< OUString, std::vector< OUString > > GCImplNames_t;
     GCImplNames_t   m_aGCImplNamesByLang;
 
     // implname -> UNO reference mapping
@@ -153,7 +157,7 @@ class GrammarCheckingIterator:
     // Gets the grammar checker service, using fallback locales if necessary,
     // and the BCP-47 tag for the updated locale, if the fallback was used.
     // Precondition: MyMutex() is locked.
-    std::pair<OUString, std::optional<OUString>>
+    std::pair<std::vector<OUString>, std::optional<OUString>>
     getServiceForLocale(const css::lang::Locale& rLocale) const;
 
 public:

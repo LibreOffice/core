@@ -51,6 +51,7 @@
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -527,7 +528,7 @@ void GrammarCheckingIterator::ProcessResult(
 }
 
 
-std::pair<OUString, std::optional<OUString>>
+std::pair<std::vector<OUString>, std::optional<OUString>>
 GrammarCheckingIterator::getServiceForLocale(const lang::Locale& rLocale) const
 {
     if (!rLocale.Language.isEmpty())
@@ -578,43 +579,51 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         return m_xLastGC;
     }
 
-    const auto [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
-    if (!aSvcImplName.isEmpty()) // matching configured language found?
+    const auto [aSvcImplNames, oFallbackBcp47] = getServiceForLocale(rLocale);
+    if (!aSvcImplNames.empty()) // matching configured language found?
     {
         if (oFallbackBcp47)
             rLocale = LanguageTag::convertToLocale(*oFallbackBcp47, false);
-        GCReferences_t::const_iterator aImplNameIt( m_aGCReferencesByService.find( aSvcImplName ) );
-        if (aImplNameIt != m_aGCReferencesByService.end())  // matching impl name found?
+
+        // A language is checked by one service, but which one is not settled
+        // until they are asked: a service can be configured and still decline
+        // the locale, as the remote checker does while it is switched off.
+        // Take the first that claims it rather than giving up on the first.
+        for (const OUString& rSvcImplName : aSvcImplNames)
         {
-            xRes = aImplNameIt->second;
-        }
-        else    // the service is to be instantiated here for the first time...
-        {
+            GCReferences_t::const_iterator aImplNameIt(
+                m_aGCReferencesByService.find(rSvcImplName) );
+            if (aImplNameIt != m_aGCReferencesByService.end())  // matching impl name found?
+            {
+                xRes = aImplNameIt->second;
+                break;
+            }
+
+            // the service is to be instantiated here for the first time...
             try
             {
                 const uno::Reference< cpo::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
                 uno::Reference< linguistic2::XProofreader > xGC(
-                        xContext->getServiceManager()->createInstanceWithContext(aSvcImplName, xContext),
+                        xContext->getServiceManager()->createInstanceWithContext(rSvcImplName, xContext),
                         uno::UNO_QUERY_THROW );
                 uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
 
                 if (xSuppLoc->hasLocale( rLocale ))
                 {
-                    m_aGCReferencesByService[ aSvcImplName ] = xGC;
+                    m_aGCReferencesByService[ rSvcImplName ] = xGC;
                     xRes = xGC;
 
                     uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xBC( xGC, uno::UNO_QUERY );
                     if (xBC.is())
                         xBC->addLinguServiceEventListener( this );
+                    break;
                 }
-                else
-                {
-                    SAL_WARN( "linguistic", "grammar checker does not support required locale" );
-                }
+
+                SAL_INFO( "linguistic", rSvcImplName << " does not support the required locale" );
             }
             catch (cpo::uno::Exception &)
             {
-                SAL_WARN( "linguistic", "instantiating grammar checker failed" );
+                SAL_WARN( "linguistic", "instantiating " << rSvcImplName << " failed" );
             }
         }
     }
@@ -1191,8 +1200,10 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
             {
                 if (aImplNames.hasElements())
                 {
-                    // only the first entry is used, there should be only one grammar checker per language
-                    aTmpGCImplNamesByLang[rElementName] = aImplNames[0];
+                    // One of them checks the language; GetGrammarChecker picks
+                    // which, since that depends on the locales they report.
+                    aTmpGCImplNamesByLang[rElementName]
+                        = std::vector<OUString>(aImplNames.begin(), aImplNames.end());
                 }
             }
             else
@@ -1244,14 +1255,11 @@ void GrammarCheckingIterator::SetServiceList(
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
     OUString sBcp47 = LanguageTag::convertToBcp47(rLocale, false);
-    OUString aImplName;
-    if (rSvcImplNames.hasElements())
-        aImplName = rSvcImplNames[0];   // there is only one grammar checker per language
-
     if (!LinguIsUnspecified(sBcp47) && !sBcp47.isEmpty())
     {
-        if (!aImplName.isEmpty())
-            m_aGCImplNamesByLang[sBcp47] = aImplName;
+        if (rSvcImplNames.hasElements())
+            m_aGCImplNamesByLang[sBcp47]
+                = std::vector<OUString>(rSvcImplNames.begin(), rSvcImplNames.end());
         else
             m_aGCImplNamesByLang.erase(sBcp47);
     }
@@ -1263,11 +1271,7 @@ cpo::uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
-    const OUString aImplName = getServiceForLocale(rLocale).first;     // there is only one grammar checker per language
-
-    if (!aImplName.isEmpty())
-        return { aImplName };
-    return {};
+    return comphelper::containerToSequence(getServiceForLocale(rLocale).first);
 }
 
 
