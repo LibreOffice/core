@@ -1,0 +1,43 @@
+diff -ur cairo.org/src/cairo-spline.c cairo/src/cairo-spline.c
+--- cairo.org/src/cairo-spline.c	2026-09-13 14:29:04.468307688 +0000
++++ cairo/src/cairo-spline.c	2026-09-13 14:29:04.482278900 +0000
+@@ -141,8 +141,10 @@
+ static void
+ _lerp_half (const cairo_point_t *a, const cairo_point_t *b, cairo_point_t *result)
+ {
+-    result->x = a->x + ((b->x - a->x) >> 1);
+-    result->y = a->y + ((b->y - a->y) >> 1);
++    /* The midpoint lies between the two points, so the result fits in a
++     * cairo_fixed_t even when the distance between them does not. */
++    result->x = (cairo_fixed_t) ((int64_t) a->x + (((int64_t) b->x - a->x) >> 1));
++    result->y = (cairo_fixed_t) ((int64_t) a->y + (((int64_t) b->y - a->y) >> 1));
+ }
+ 
+ static void
+@@ -181,11 +183,11 @@
+      * and c control points and the segment a-b. The maximum of these two
+      * distances will be our approximation error. */
+ 
+-    bdx = _cairo_fixed_to_double (knots->b.x - knots->a.x);
+-    bdy = _cairo_fixed_to_double (knots->b.y - knots->a.y);
++    bdx = _cairo_fixed_to_double (knots->b.x) - _cairo_fixed_to_double (knots->a.x);
++    bdy = _cairo_fixed_to_double (knots->b.y) - _cairo_fixed_to_double (knots->a.y);
+ 
+-    cdx = _cairo_fixed_to_double (knots->c.x - knots->a.x);
+-    cdy = _cairo_fixed_to_double (knots->c.y - knots->a.y);
++    cdx = _cairo_fixed_to_double (knots->c.x) - _cairo_fixed_to_double (knots->a.x);
++    cdy = _cairo_fixed_to_double (knots->c.y) - _cairo_fixed_to_double (knots->a.y);
+ 
+     if (knots->a.x != knots->d.x || knots->a.y != knots->d.y) {
+ 	/* Intersection point (px):
+@@ -197,8 +199,8 @@
+ 
+ 	double dx, dy, u, v;
+ 
+-	dx = _cairo_fixed_to_double (knots->d.x - knots->a.x);
+-	dy = _cairo_fixed_to_double (knots->d.y - knots->a.y);
++	dx = _cairo_fixed_to_double (knots->d.x) - _cairo_fixed_to_double (knots->a.x);
++	dy = _cairo_fixed_to_double (knots->d.y) - _cairo_fixed_to_double (knots->a.y);
+ 	 v = dx * dx + dy * dy;
+ 
+ 	u = bdx * dx + bdy * dy;
