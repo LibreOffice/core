@@ -261,7 +261,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			);
 		}
 
-		if (hasSaveAs) {
+		if (hasSaveAs && !this.map['wopi'].HideExportOption) {
 			content.push(
 			{
 				'id': 'exportas:ExportAsMenu',

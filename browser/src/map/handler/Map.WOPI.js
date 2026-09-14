@@ -191,6 +191,9 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		if (wopiInfo['HideUserList'])
 			this.HideUserList = wopiInfo['HideUserList'].split(',');
 
+		// HideExportOption decides whether the UI may offer the export formats
+		app.updateExportFormatsVisibility();
+
 		this.sendFrameReady();
 
 		if ('TemplateSaveAs' in wopiInfo) {
@@ -812,13 +815,9 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			this._map.fire('hidebusy');
 		}
 		else if (msg.MessageId === 'Get_Export_Formats') {
-			var exportFormatsResp = [];
-			for (var index in app.file.exportFormats) {
-				exportFormatsResp.push({
-					Label: app.file.exportFormats[index].label,
-					Format: app.file.exportFormats[index].format
-				});
-			}
+			var exportFormatsResp = app.exportFormats.map(function (entry) {
+				return { Label: entry.label, Format: entry.format };
+			});
 
 			this._postMessage({msgId: 'Get_Export_Formats_Resp', args: exportFormatsResp});
 		}

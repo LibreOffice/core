@@ -216,7 +216,6 @@ interface AppInterface {
 		writer: {
 			pageRectangleList: Array<any>;
 		};
-		exportFormats: Array<any>;
 	};
 	roundedDpiScale: number;
 	following: {
@@ -226,6 +225,11 @@ interface AppInterface {
 	tile: {
 		size: null | cool.SimplePoint;
 	};
+	exportFormats: Array<ExportFormat>;
+	getExportFormats: (docType: string) => Array<ExportFormat>;
+	initExportFormats: (docType: string) => void;
+	updateExportFormatsVisibility: () => void;
+	isExportEntryVisible: (id: string) => boolean;
 	languages: Array<{ translated: string; neutral: string; iso: string }>;
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;

@@ -1068,6 +1068,7 @@ class Socket {
 			Util.ensureValue(command.type);
 			// initialize and append text input before doc layer
 			this._map.initTextInput(command.type);
+			app.initExportFormats(command.type);
 
 			// Reinitialize the menubar and top toolbar if browser settings are enabled.
 			// During the initial `initializeBasicUI` call, we don't know if compact mode is enabled.

@@ -21,6 +21,7 @@
 /// <reference path="../src/app/DocEvents.ts" />
 /// <reference path="../src/docstate.ts" />
 /// <reference path="../src/docstatefunctions.js" />
+/// <reference path="../src/app/ExportFormats.ts" />
 /// <reference path="../src/docdispatcher.ts" />
 /// <reference path="../src/core/geometry.ts" />
 /// <reference path="../src/core/DPIChangeListener.ts" />

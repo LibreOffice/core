@@ -208,7 +208,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			}
 		}
 
-		if (hasSaveAs) {
+		if (hasSaveAs && !this.map['wopi'].HideExportOption) {
 			content.push({
 				'id': 'exportas:ExportAsMenu',
 				'command': 'exportas',

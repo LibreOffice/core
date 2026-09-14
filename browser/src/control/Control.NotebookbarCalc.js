@@ -200,7 +200,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			);
 		}
 
-		if (hasSaveAs) {
+		if (hasSaveAs && !this.map['wopi'].HideExportOption) {
 			content.push({
 				'id': 'exportas:ExportAsMenu',
 				'command': 'exportas',

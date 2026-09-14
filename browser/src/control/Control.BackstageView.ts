@@ -1088,11 +1088,10 @@ class BackstageView extends window.L.Class {
 	}
 
 	private getExportOptionsFromNotebookbar(): ExportSections {
-		const docType = this.getDocTypeString();
 		const builder = new (window.L.Control.NotebookbarBuilder as any)();
 
 		const downloadAsOpts: ExportOptionItem[] = builder._getDownloadAsSubmenuOpts
-			? builder._getDownloadAsSubmenuOpts(docType) || []
+			? builder._getDownloadAsSubmenuOpts() || []
 			: [];
 
 		return {

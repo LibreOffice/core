@@ -364,6 +364,7 @@ COOL_JS_LST =\
 	src/app/DocEvents.ts \
 	src/docstate.ts \
 	src/docstatefunctions.js \
+	src/app/ExportFormats.ts \
 	src/docdispatcher.ts \
 	src/app/TableStylesService.ts \
 	src/app/ImpressTableStylesService.ts \
@@ -1584,6 +1585,7 @@ pot:
 		admin/src/Util.js \
 		js/global.js \
 		src/app/Debug.ts \
+		src/app/ExportFormats.ts \
 		src/app/IconUtil.ts \
 		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \

@@ -26,12 +26,7 @@ function _mapDispatchToolItem(
 ) {
 	if (!data.command) data.command = data.id;
 
-	if (data.id && data.id !== 'exportas' && data.id.startsWith('export')) {
-		const format = data.id.substring('export'.length);
-		app.registerExportFormat(data.text, format);
-
-		if (builder.map['wopi'].HideExportOption) return false;
-	}
+	if (data.id && !app.isExportEntryVisible(data.id)) return false;
 
 	const backupInlineText = builder.options.useInLineLabelsForUnoButtons;
 	if (data.inlineLabel !== undefined)

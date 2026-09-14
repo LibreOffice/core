@@ -169,23 +169,6 @@ app.getPermission = function () {
 	return app.file.permission;
 };
 
-app.registerExportFormat = function (label, format) {
-	var duplicate = false;
-	for (var i = 0; i < app.file.exportFormats.length; i++) {
-		if (
-			app.file.exportFormats[i].label == label &&
-			app.file.exportFormats[i].format == format
-		) {
-			duplicate = true;
-			break;
-		}
-	}
-
-	if (duplicate == false) {
-		app.file.exportFormats.push({ label: label, format: format });
-	}
-};
-
 app.getFollowedViewId = function () {
 	return app.following.viewId;
 };

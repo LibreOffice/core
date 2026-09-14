@@ -120,7 +120,6 @@
 		writer: {
 			pageRectangleList: [], // Array of arrays: [x, y, w, h] (as usual) // twips only. Pixels will be calculated on the fly. Corresponding pixels may change too often.
 		},
-		exportFormats: [], // possible output formats
 		viewModeExtensions: '',
 	},
 	following: {
@@ -131,6 +130,7 @@
 	tile: {
 		size: null, // SimplePoint.
 	},
+	exportFormats: [], // formats the document can be exported to, see ExportFormats.ts
 	socket: (window as any).app.socket,
 	console: window.app.console,
 
