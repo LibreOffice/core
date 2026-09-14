@@ -56,6 +56,7 @@
 		BE70D2742FC4F13200FA34B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE70D2392FC4F13200FA34B7 /* Main.storyboard */; };
 		BE70D2752FC4F13200FA34B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D1FE2FC4F13200FA34B7 /* AppDelegate.swift */; };
 		BE70D2762FC4F13200FA34B7 /* BackstageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */; };
+		6C9C9A30313542C9BBE8FE26 /* CoolURLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B946906E4C40B99E712470 /* CoolURLSchemeHandler.swift */; };
 		BE70D2772FC4F13200FA34B7 /* COWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2032FC4F13200FA34B7 /* COWrapper.mm */; };
 		BE70D2782FC4F13200FA34B7 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2042FC4F13200FA34B7 /* Document.swift */; };
 		BE70D2792FC4F13200FA34B7 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE70D2052FC4F13200FA34B7 /* DocumentController.swift */; };
@@ -225,6 +226,7 @@
 		BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackstageViewController.swift; sourceTree = "<group>"; };
 		BE70D2012FC4F13200FA34B7 /* coda.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = coda.entitlements; sourceTree = "<group>"; };
 		BE70D2012FC4F13200FA34B8 /* coda-debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "coda-debug.entitlements"; sourceTree = "<group>"; };
+		55B946906E4C40B99E712470 /* CoolURLSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoolURLSchemeHandler.swift; sourceTree = "<group>"; };
 		BE70D2022FC4F13200FA34B7 /* COWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COWrapper.h; sourceTree = "<group>"; };
 		BE70D2032FC4F13200FA34B7 /* COWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = COWrapper.mm; sourceTree = "<group>"; };
 		BE70D2042FC4F13200FA34B7 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				BE70D2002FC4F13200FA34B7 /* BackstageViewController.swift */,
 				BE70D2012FC4F13200FA34B8 /* coda-debug.entitlements */,
 				BE70D2012FC4F13200FA34B7 /* coda.entitlements */,
+				55B946906E4C40B99E712470 /* CoolURLSchemeHandler.swift */,
 				BE70D2022FC4F13200FA34B7 /* COWrapper.h */,
 				BE70D2032FC4F13200FA34B7 /* COWrapper.mm */,
 				BE70D2042FC4F13200FA34B7 /* Document.swift */,
@@ -952,6 +955,7 @@
 				BEA2636E2CBE38E20007435A /* Util.cpp in Sources */,
 				BE70D2752FC4F13200FA34B7 /* AppDelegate.swift in Sources */,
 				BE70D2762FC4F13200FA34B7 /* BackstageViewController.swift in Sources */,
+				6C9C9A30313542C9BBE8FE26 /* CoolURLSchemeHandler.swift in Sources */,
 				BE70D2772FC4F13200FA34B7 /* COWrapper.mm in Sources */,
 				BE70D2782FC4F13200FA34B7 /* Document.swift in Sources */,
 				BE70D2792FC4F13200FA34B7 /* DocumentController.swift in Sources */,

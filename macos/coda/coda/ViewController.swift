@@ -230,6 +230,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         config.preferences.isElementFullscreenEnabled = true
         config.userContentController = contentController
         ViewController.allowLocalCrossFrameAccess(config)
+        // Media embedded in the document, such as a video on a slide, reaches the page as
+        // cool: URLs. WebKit copies this configuration, handler included, for the windows that
+        // the page opens, such as the slideshow.
+        config.setURLSchemeHandler(CoolURLSchemeHandler(viewController: self), forURLScheme: "cool")
 
         // Create the web view
         webView = CODAWebView(frame: .zero, configuration: config)
