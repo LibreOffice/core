@@ -2498,6 +2498,22 @@ class Socket {
 			this._map.saveState?.showSaveFailedStatus();
 		} else if (
 			textMsg.startsWith('error:') &&
+			command.errorCmd === 'renamefile'
+		) {
+			// A rename the server turns down otherwise falls through to the
+			// generic report, which only names the command and the kind of
+			// error the message carried.
+			this._map.hideBusy();
+			this._map.fire('warn', {
+				msg:
+					command.errorKind === 'invalid'
+						? _('Please enter a valid document name.')
+						: errorMessages.storage.renamefailed,
+			});
+
+			return true; // caller should exit immediately.
+		} else if (
+			textMsg.startsWith('error:') &&
 			command.errorCmd === 'internal'
 		) {
 			this._map.hideBusy();

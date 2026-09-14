@@ -26,12 +26,17 @@
 
 class UnitWOPIRenameFile : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, RenameFile, WaitRenameNotification, Done)
+    STATE_ENUM(Phase, Load, RejectNameWithPath, WaitNameRejected, RenameFile, WaitRenameNotification,
+               Done)
     _phase;
 
     static constexpr auto FilenameUtf8 = "Ḽơᶉëᶆ ȋṕšᶙṁ ḍỡḽǭᵳ ʂǐť";
     static constexpr auto FilenameUtf7 =
         "+HjwBoR2JAOsdhg +AgseVQFhHZkeQQ +Hg0e4R49Ae0dcw +AoIB0AFl-";
+
+    /// A host is free to take the requested name literally, and this one names
+    /// two folders and a file.
+    static constexpr auto FilenameWithPath = "Suivi test 20/05/2025";
 
 public:
     UnitWOPIRenameFile()
@@ -42,13 +47,22 @@ public:
 
     void assertRenameFileRequest(const Poco::Net::HTTPRequest& request) override
     {
-        // spec says UTF-7...
+        // The name with a path in it never gets this far, so the header still carries the
+        // plain name. spec says UTF-7...
         LOK_ASSERT_EQUAL(std::string(FilenameUtf7), request.get("X-WOPI-RequestedName"));
     }
 
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /* code */,
                                       const bool /* flush */, int& /*unitReturn*/) override
     {
+        if (_phase == Phase::WaitNameRejected &&
+            message.find("error: cmd=renamefile kind=invalid") == 0)
+        {
+            TST_LOG("The name with a path in it was refused");
+            TRANSITION_STATE(_phase, Phase::RenameFile);
+            return false;
+        }
+
         const std::string expected("renamefile filename=" + Uri::encode(FilenameUtf8));
 
         TST_LOG("Got [" << message << "], expect: [" << expected << ']');
@@ -69,11 +83,11 @@ public:
     bool onDocumentLoaded(const std::string& message) override
     {
         TST_LOG("onDocumentLoaded: [" << message << ']');
-        LOK_ASSERT_STATE(_phase, Phase::RenameFile);
+        LOK_ASSERT_STATE(_phase, Phase::RejectNameWithPath);
 
-        TRANSITION_STATE(_phase, Phase::WaitRenameNotification);
+        TRANSITION_STATE(_phase, Phase::WaitNameRejected);
 
-        WSD_CMD("renamefile filename=" + Uri::encode(FilenameUtf8));
+        WSD_CMD("renamefile filename=" + Uri::encode(FilenameWithPath));
 
         return true;
     }
@@ -84,15 +98,28 @@ public:
         {
             case Phase::Load:
             {
-                TRANSITION_STATE(_phase, Phase::RenameFile);
+                TRANSITION_STATE(_phase, Phase::RejectNameWithPath);
 
                 initWebsocket("/wopi/files/0?access_token=anything");
 
                 WSD_CMD("load url=" + getWopiSrc());
                 break;
             }
+            case Phase::RejectNameWithPath:
+            {
+                // wait for the document to load
+                break;
+            }
+            case Phase::WaitNameRejected:
+            {
+                // just wait for the results
+                break;
+            }
             case Phase::RenameFile:
             {
+                TRANSITION_STATE(_phase, Phase::WaitRenameNotification);
+
+                WSD_CMD("renamefile filename=" + Uri::encode(FilenameUtf8));
                 break;
             }
             case Phase::WaitRenameNotification:

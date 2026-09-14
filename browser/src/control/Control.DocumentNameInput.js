@@ -30,8 +30,35 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		map.on('wopiprops', this.onWopiProps, this);
 	},
 
+	// A document name is a single name. A host is free to take the name it is
+	// given literally, so a name with a slash in it creates the folders it names
+	// and puts the document in the last of them. The server refuses such a name
+	// as well. Answering here puts the message next to the name field.
+	_invalidNameMessage: function(value) {
+		if (value.indexOf('/') !== -1 || value.indexOf('\\') !== -1)
+			return _('A document name cannot contain a slash or a backslash.');
+
+		if (value === '.' || value === '..')
+			return _('Please enter a valid document name.');
+
+		return null;
+	},
+
 	documentNameConfirm: function(value) {
 		if (value !== null && value != '' && value != this.map['wopi'].BaseFileName) {
+			var invalidName = this._invalidNameMessage(value);
+			if (invalidName) {
+				// The modal takes the focus, so the name field goes back to the
+				// name the document still has.
+				this.map.uiManager.showInfoModal(
+					'invalid-document-name',
+					_('Invalid document name'),
+					invalidName,
+					'',
+					_('OK'));
+				return;
+			}
+
 			this._renaming = true;
 			if (this.map['wopi'].UserCanRename && this.map['wopi'].SupportsRename) {
 				if (value.lastIndexOf('.') > 0) {

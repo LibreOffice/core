@@ -2686,8 +2686,18 @@ bool DocumentBroker::parseBrowserSettings(const std::shared_ptr<ClientSession>& 
 std::string DocumentBroker::handleRenameFileCommand(std::string sessionId,
                                                     std::string newFilename)
 {
-    if (newFilename.empty())
-        return "error: cmd=renamefile kind=invalid"; //TODO: better filename validation.
+    // The new name goes to the storage as the requested name, and a host is free to take it
+    // literally. A name with a path separator in it then creates the folders it names and puts
+    // the document in the last of them. A document name is one plain path component.
+    const bool hasControlChar =
+        std::any_of(newFilename.begin(), newFilename.end(),
+                    [](unsigned char c) { return c < 0x20 || c == 0x7f; });
+    if (newFilename.empty() || newFilename == "." || newFilename == ".." ||
+        newFilename.find_first_of("/\\") != std::string::npos || hasControlChar)
+    {
+        LOG_ERR("Invalid filename for rename: [" << newFilename << ']');
+        return "error: cmd=renamefile kind=invalid";
+    }
 
     if (_docState.activity() == DocumentState::Activity::Rename)
     {
