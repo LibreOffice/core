@@ -196,17 +196,12 @@ AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(
     AbsoluteScreenPixelRectangle aRect;
     if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xContext = mpParent->getAccessibleContext();
-        uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
-        if (xComp.is())
-        {
-            // has the same size and position on screen like the parent
-            aRect = AbsoluteScreenPixelRectangle(
-                AbsoluteScreenPixelPoint(
-                    vcl::unohelper::ConvertToVCLPoint(xComp->getLocationOnScreen())),
-                AbsoluteScreenPixelSize(
-                    vcl::unohelper::ConvertToVCLRect(xComp->getBounds()).GetSize()));
-        }
+        // has the same size and position on screen like the parent
+        aRect = AbsoluteScreenPixelRectangle(
+            AbsoluteScreenPixelPoint(
+                vcl::unohelper::ConvertToVCLPoint(mpParent->getLocationOnScreen())),
+            AbsoluteScreenPixelSize(
+                vcl::unohelper::ConvertToVCLRect(mpParent->getBounds()).GetSize()));
     }
     return aRect;
 }
