@@ -1471,7 +1471,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
                     ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::CellInEditMode);
 
-                AddChild(uno::Reference<XAccessible>(mpTempAccEdit), true);
+                AddChild(mpTempAccEdit, true);
 
                 if (mpAccessibleSpreadsheet.is())
                     mpAccessibleSpreadsheet->LostFocus();
@@ -2033,12 +2033,13 @@ bool ScAccessibleDocument::IsDefunc(sal_Int64 nParentStates)
         (nParentStates & AccessibleStateType::DEFUNC);
 }
 
-void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)
+void ScAccessibleDocument::AddChild(const rtl::Reference<comphelper::OAccessible>& pAcc,
+                                    bool bFireEvent)
 {
     OSL_ENSURE(!mxTempAcc.is(), "this object should be removed before");
-    if (xAcc.is())
+    if (pAcc.is())
     {
-        mxTempAcc = xAcc;
+        mxTempAcc = pAcc;
         if( bFireEvent )
         {
             CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(mxTempAcc),
