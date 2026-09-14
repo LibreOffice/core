@@ -32,6 +32,10 @@ def main():
     print("Running '{}'".format("' '".join(cmdline)))
     subprocess.run(cmdline, check=True)
 
+    # On success, write here too in case this is invoked manually.
+    with open("autogen-input.mk", "w") as stream:
+        stream.write("# Marks the autogen.input that the build tree was configured from.\n")
+
 if __name__ == "__main__":
     main()
 

@@ -22,6 +22,21 @@ MAKEFLAGS := $(MAKEFLAGS) \
 # For `make run` skip the build-time unit test execution in test/.
 export COOL_SKIP_UNITTESTS ?= $(if $(filter run,$(MAKECMDGOALS)),1,)
 
+# Configure again when autogen.input changes. Only autogen.py reads that file,
+# so the rules Automake generates for configure.ac are not sufficient.
+# Include it here so that make restarts itself after running autogen.py.
+# Note that configure will invoke `make am--depfiles` so it must be filtered here.
+autogen_input_goals = $(filter-out %clean %clean-am am--depfiles,$(or $(MAKECMDGOALS),all))
+
+# Do not use "-include", if configure fails it causes make to restart itself in an infinite loop.
+include $(top_builddir)/autogen-input.mk
+
+$(top_builddir)/autogen-input.mk: $(if $(autogen_input_goals),$(wildcard $(top_builddir)/autogen.input))
+	$(if $<,$(abs_top_srcdir)/autogen.py)
+	@echo '# Marks the autogen.input that the build tree was configured from.' > $@
+
+DISTCLEANFILES = autogen-input.mk
+
 build-samples:
 	$(QUIET_MKDIRP) mkdir -p $(abs_top_builddir)/test/samples
 	$(QUIET_SAMPLES) $(abs_top_srcdir)/scripts/build-samples.py $(abs_top_srcdir)/test/samples $(abs_top_srcdir)/test/samples
