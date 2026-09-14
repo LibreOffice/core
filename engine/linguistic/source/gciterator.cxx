@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -420,6 +421,7 @@ void GrammarCheckingIterator::ProcessResult(
                 text::TextMarkupDescriptor * pDescriptors = aDescriptors.getArray();
 
                 uno::Reference< linguistic2::XDictionary > xIgnoreAll = ::GetIgnoreAllList();
+                uno::Reference< linguistic2::XSearchableDictionaryList > xDicList = ::GetDictionaryList();
                 sal_Int32 ignoredCount = 0;
 
                 // at pos 0 .. nErrors-1 -> all grammar errors
@@ -427,6 +429,21 @@ void GrammarCheckingIterator::ProcessResult(
                 {
                     OUString word(rRes.aText.subView(rError.nErrorStart, rError.nErrorLength));
                     bool ignored = xIgnoreAll.is() && xIgnoreAll->getEntry(word).is();
+
+                    // A proofreader reports misspellings as well, and reports
+                    // them as proofreading errors, so the user dictionaries
+                    // have to be consulted here too - the spelling path, which
+                    // does consult them, is not taken for these. Ask only
+                    // about a single word, that being the only question a
+                    // dictionary can answer, and let a negative dictionary
+                    // outweigh a positive one, as the spelling path does.
+                    if (!ignored && xDicList.is() && !word.isEmpty()
+                        && word.indexOf(' ') < 0 && word.indexOf('\t') < 0
+                        && word.indexOf('\n') < 0
+                        && !xDicList->queryDictionaryEntry(word, rRes.aLocale, false, true).is())
+                    {
+                        ignored = xDicList->queryDictionaryEntry(word, rRes.aLocale, true, true).is();
+                    }
 
                     if (!ignored)
                     {
