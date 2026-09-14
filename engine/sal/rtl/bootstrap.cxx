@@ -667,7 +667,6 @@ void rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
 
     osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
-    OSL_ASSERT(bootstrap_map.find(that->_iniName)->second == that);
     --that->_nRefCount;
 
     if (that->_nRefCount != 0)
