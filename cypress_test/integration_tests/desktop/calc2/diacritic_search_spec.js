@@ -11,7 +11,11 @@ describe(['tagdesktop'], 'Calc: searching without diacritics', function() {
 		cy.getFrameWindow().then(function(win) {
 			findHelper.openFindDialog(win);
 
+			// Opening the options rebuilds the dialog through the layouting queue, so
+			// the checkbox below is a new element once that queue has drained.
 			cy.cGet('#OptionsExpander-button').click();
+			helper.waitUntilLayoutingIsIdle(win);
+
 			cy.cGet('#includediacritics-input').should('be.visible').click();
 			cy.cGet('#includediacritics-input').should('not.be.checked');
 
