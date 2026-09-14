@@ -410,7 +410,6 @@ Any VCLXAccessibleBox::getCurrentValue( )
     Any aAny;
     if (m_xList.is() && m_pText.is())
     {
-        // VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
         Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
         if ( xText.is() )
         {
