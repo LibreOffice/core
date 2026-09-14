@@ -72,7 +72,25 @@ bool passesNegativeList(std::u16string_view rUrl) {
         u"/dictionaries/hu_HU/help/hu/help.tree",
         (u"/dictionaries/hu_HU/help/hu/"
          "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
-        u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
+        u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        // The UIName labels of the *WindowState.xcu files name toolbars and
+        // context menus for the floating toolbar titles, the View - Toolbars
+        // menu and the Customize dialog. None of those exist in the browser
+        // based user interface, so the labels are never shown and do not need
+        // to be translated.
+        u"/officecfg/registry/data/org/openoffice/Office/UI/BasicIDEWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/ChartWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/DbBrowserWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/DbTableDataWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/DrawWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/MathWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/StartModuleWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/WriterGlobalWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/WriterWindowState.xcu",
+        u"/officecfg/registry/data/org/openoffice/Office/UI/XFormsWindowState.xcu"
     };
     return !matchList(rUrl, list, std::size(list));
 }
