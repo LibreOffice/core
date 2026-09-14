@@ -204,17 +204,12 @@ sal_Int64 SAL_CALL ScAccessibleContextBase::getAccessibleStateSet()
     return 0;
 }
 
-lang::Locale SAL_CALL
-       ScAccessibleContextBase::getLocale()
+lang::Locale SAL_CALL ScAccessibleContextBase::getLocale()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
     if (mpParent.is())
-    {
-        uno::Reference<XAccessibleContext> xParentContext(mpParent->getAccessibleContext());
-        if (xParentContext.is())
-            return xParentContext->getLocale ();
-    }
+        return mpParent->getLocale();
 
     //  No locale and no parent.  Therefore throw exception to indicate this
     //  cluelessness.
