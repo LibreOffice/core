@@ -468,17 +468,17 @@ class SdrPage;
 class EditFieldInfo
 {
 private:
-    Outliner*           pOutliner;
-    const SvxFieldItem& rFldItem;
+    Outliner*           m_pOutliner;
+    const SvxFieldItem& m_rFldItem;
 
     std::optional<Color> mxTxtColor;
     std::optional<Color> mxFldColor;
     std::optional<FontLineStyle> mxFldLineStyle;
 
-    OUString            aRepresentation;
+    OUString            m_aRepresentation;
 
-    sal_Int32           nPara;
-    sal_Int32           nPos;
+    sal_Int32           m_nPara;
+    sal_Int32           m_nPos;
 
                         EditFieldInfo( const EditFieldInfo& ) = delete;
 
@@ -486,16 +486,16 @@ private:
 
 public:
                     EditFieldInfo( Outliner* pOutl, const SvxFieldItem& rFItem, sal_Int32 nPa, sal_Int32 nPo )
-                        : rFldItem( rFItem )
+                        : m_rFldItem( rFItem )
                     {
-                        pOutliner = pOutl;
-                        nPara = nPa; nPos = nPo;
+                        m_pOutliner = pOutl;
+                        m_nPara = nPa; m_nPos = nPo;
                         mpSdrPage = nullptr;
                     }
 
-    Outliner*       GetOutliner() const { return pOutliner; }
+    Outliner*       GetOutliner() const { return m_pOutliner; }
 
-    const SvxFieldItem& GetField() const { return rFldItem; }
+    const SvxFieldItem& GetField() const { return m_rFldItem; }
 
     std::optional<Color> const & GetTextColor() const { return mxTxtColor; }
     void            SetTextColor( std::optional<Color> xCol ) { mxTxtColor = xCol; }
@@ -506,12 +506,12 @@ public:
     std::optional<FontLineStyle> const& GetFontLineStyle() const { return mxFldLineStyle; }
     void            SetFontLineStyle( std::optional<FontLineStyle> xLineStyle ) { mxFldLineStyle = xLineStyle; }
 
-    sal_Int32       GetPara() const { return nPara; }
-    sal_Int32       GetPos() const { return nPos; }
+    sal_Int32       GetPara() const { return m_nPara; }
+    sal_Int32       GetPos() const { return m_nPos; }
 
-    const OUString&     GetRepresentation() const                { return aRepresentation; }
-    OUString&           GetRepresentation()                      { return aRepresentation; }
-    void                SetRepresentation( const OUString& rStr ){ aRepresentation = rStr; }
+    const OUString&     GetRepresentation() const                { return m_aRepresentation; }
+    OUString&           GetRepresentation()                      { return m_aRepresentation; }
+    void                SetRepresentation( const OUString& rStr ){ m_aRepresentation = rStr; }
 
     void            SetSdrPage( SdrPage* pPage ) { mpSdrPage = pPage; }
     SdrPage*        GetSdrPage() const { return mpSdrPage; }
