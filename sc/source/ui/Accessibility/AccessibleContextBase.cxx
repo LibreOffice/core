@@ -110,15 +110,9 @@ bool ScAccessibleContextBase::isShowing(  )
     bool bShowing(false);
     if (mpParent.is())
     {
-        uno::Reference<XAccessibleComponent> xParentComponent(mpParent->getAccessibleContext(),
-                                                              uno::UNO_QUERY);
-        if (xParentComponent.is())
-        {
-            tools::Rectangle aParentBounds(
-                vcl::unohelper::ConvertToVCLRect(xParentComponent->getBounds()));
-            tools::Rectangle aBounds(vcl::unohelper::ConvertToVCLRect(getBounds()));
-            bShowing = aBounds.Overlaps(aParentBounds);
-        }
+        tools::Rectangle aParentBounds(vcl::unohelper::ConvertToVCLRect(mpParent->getBounds()));
+        tools::Rectangle aBounds(vcl::unohelper::ConvertToVCLRect(getBounds()));
+        bShowing = aBounds.Overlaps(aParentBounds);
     }
     return bShowing;
 }
