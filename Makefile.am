@@ -545,6 +545,7 @@ EXTRA_DIST = \
              gbuild/StaticLibrary_kitglobals.mk \
              gbuild/StaticLibrary_shared.mk \
              gbuild/StaticLibrary_simd.mk \
+             gbuild/StaticLibrary_wsd.mk \
              gbuild/StaticLibrary_wsdglobals.mk \
              scripts/create-sbom.py \
              scripts/sbom-externals.json \
