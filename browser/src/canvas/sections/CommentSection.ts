@@ -46,6 +46,11 @@ export class Comment extends CanvasSectionObject {
 	static readonly replyCommentLabel = _('Reply comment');
 	static readonly openMenuLabel = _('Open menu');
 
+	// Typing and pointing inside a comment card mean the user is still working. Pointer
+	// movement stays out of this list, because a comment that moves under a resting pointer
+	// produces it on its own.
+	static readonly activityEvents = ['input', 'keydown', 'mousedown', 'touchstart'];
+
 	processingOrder: number = app.CSections.Comment.processingOrder;
 	drawingOrder: number = app.CSections.Comment.drawingOrder;
 	zIndex: number = app.CSections.Comment.zIndex;
@@ -208,6 +213,12 @@ export class Comment extends CanvasSectionObject {
 		var events = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'keydown', 'keypress', 'keyup', 'touchstart', 'touchmove', 'touchend'];
 		window.L.DomEvent.on(this.sectionProperties.container, 'click', this.onMouseClick, this);
 		window.L.DomEvent.on(this.sectionProperties.container, 'keydown', this.onCommentKeyDown, this);
+
+		// Events on a comment card stay inside the card. This is where the idle handler
+		// hears about the ones that show the user is still working.
+		for (const name of Comment.activityEvents) {
+			window.L.DomEvent.on(this.sectionProperties.container, name, this.notifyActive, this);
+		}
 
 		for (var it = 0; it < events.length; it++) {
 			window.L.DomEvent.on(this.sectionProperties.container, events[it], window.L.DomEvent.stopPropagation, this);
@@ -671,6 +682,12 @@ export class Comment extends CanvasSectionObject {
 		} else {
 			this.handleSaveCommentButton(ev);
 		}
+	}
+
+	// Working inside a comment card keeps the document awake, in the same way that working
+	// in the document itself does.
+	private notifyActive(): void {
+		app.idleHandler.notifyActive();
 	}
 
 	private textAreaKeyDown(ev: KeyboardEvent): void {
