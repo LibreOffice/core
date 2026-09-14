@@ -201,8 +201,8 @@ class GraphicSelection {
 	public static updateGraphicSelection() {
 		if (this.hasActiveSelection()) {
 			// Hide the keyboard on graphic selection, unless cursor is visible.
-			// Don't interrupt editing in dialogs
-			if (!JSDialog.IsAnyInputFocused())
+			// Keep the focus in a dialog input or the search bar.
+			if (!JSDialog.IsAnyInputFocused() && !app.map.isSearching())
 				app.map.focus(app.file.textCursor.visible);
 
 			let editMode = app.map.isEditMode();

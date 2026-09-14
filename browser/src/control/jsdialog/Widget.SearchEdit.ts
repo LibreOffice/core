@@ -76,7 +76,46 @@ class SearchEditWidget extends EditWidget {
 	}
 
 	private onSearchBlur() {
+		if (window.mode.isSmallScreenDevice()) return;
+
 		window.L.Map.THIS._onGotFocus();
+	}
+
+	// One handler for the page, replaced when the search bar is rebuilt.
+	private static viewportResizeHandler: (() => void) | null = null;
+
+	// Viewport size at the previous resize event.
+	private lastViewportHeight = 0;
+	private lastViewportWidth = 0;
+
+	private tallestViewportHeight = 0;
+	private static readonly fullHeightTolerance = 4;
+
+	private onViewportResize() {
+		const viewport = window.visualViewport;
+		if (!viewport) return;
+
+		const rotated = viewport.width !== this.lastViewportWidth;
+		const grown = viewport.height > this.lastViewportHeight;
+		this.lastViewportHeight = viewport.height;
+		this.lastViewportWidth = viewport.width;
+
+		// The keyboard changes only the height. A rotation changes both.
+		if (rotated) {
+			this.tallestViewportHeight = viewport.height;
+			return;
+		}
+		this.tallestViewportHeight = Math.max(
+			this.tallestViewportHeight,
+			viewport.height,
+		);
+
+		// Back at full height means the keyboard closed.
+		const fullHeight =
+			viewport.height >=
+			this.tallestViewportHeight - SearchEditWidget.fullHeightTolerance;
+		const focused = document.activeElement === this.edit.input;
+		if (grown && fullHeight && focused) this.edit.input.blur();
 	}
 
 	private updateSearchButtons() {
@@ -118,6 +157,23 @@ class SearchEditWidget extends EditWidget {
 		);
 		this.edit.input.addEventListener('focus', this.onSearchFocus.bind(this));
 		this.edit.input.addEventListener('blur', this.onSearchBlur.bind(this));
+
+		const viewport = window.visualViewport;
+		if (window.mode.isSmallScreenDevice() && viewport) {
+			this.lastViewportHeight = viewport.height;
+			this.lastViewportWidth = viewport.width;
+			this.tallestViewportHeight = viewport.height;
+			if (SearchEditWidget.viewportResizeHandler)
+				viewport.removeEventListener(
+					'resize',
+					SearchEditWidget.viewportResizeHandler,
+				);
+			SearchEditWidget.viewportResizeHandler = this.onViewportResize.bind(this);
+			viewport.addEventListener(
+				'resize',
+				SearchEditWidget.viewportResizeHandler,
+			);
+		}
 	}
 }
 

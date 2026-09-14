@@ -831,6 +831,7 @@ window.L.Map.include({
 		if (window.mode.isSmallScreenDevice()) {
 			searchInput.focus();
 			toolbar.enableItem('cancelsearch', false);
+			return;
 		}
 
 		this._onGotFocus();

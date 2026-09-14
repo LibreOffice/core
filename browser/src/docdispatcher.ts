@@ -327,6 +327,8 @@ class Dispatcher {
 		};
 		this.actionsMap['hidesearchbar'] = () => {
 			$('#toolbar-search').hide();
+			app.map.fire('searchend');
+			app.map._onGotFocus();
 			if (app.map.isEditMode()) $('#toolbar-down').show();
 			/** show edit button if only we are able to edit but in readonly mode */
 			if (!app.isReadOnly() && app.map.isReadOnlyMode())

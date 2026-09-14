@@ -224,6 +224,7 @@ window.L.Map = window.L.Evented.extend({
 		this.on('changefocuswidget', this._onChangeFocusWidget, this);
 
 		this.on('searchstart', this._onSearchStart, this);
+		this.on('searchend', this._onSearchEnd, this);
 
 		// View info (user names and view ids)
 		this._viewInfo = {};
@@ -1079,6 +1080,10 @@ window.L.Map = window.L.Evented.extend({
 
 	_onSearchStart: function () {
 		this._isSearching = true;
+	},
+
+	_onSearchEnd: function () {
+		this._isSearching = false;
 	},
 
 	_onUpdateProgress: function (e) {

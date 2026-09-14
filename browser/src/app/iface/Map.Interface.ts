@@ -225,6 +225,8 @@ interface MapInterface extends Evented {
 	zoomIn(delta: number, options?: any, animate?: boolean): MapInterface;
 	zoomOut(delta: number, options?: any, animate?: boolean): MapInterface;
 	cancelSearch(): void;
+	isSearching(): boolean;
+	_onGotFocus(): void;
 	goToPage(page: string | number): void;
 	serverAuditDialog?: ServerAuditDialog;
 	_lockAccessibilityOn: boolean;
