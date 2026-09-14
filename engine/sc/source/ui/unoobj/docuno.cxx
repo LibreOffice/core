@@ -2346,6 +2346,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const cpo::uno::Any& aSelection,
 
     m_pPrintState.reset();
     maValidPages.clear();
+    mnPreviousRenderTab = -1;
 
     sal_Int32 nContent = 0;
     sal_Int32 nEOContent = 0;
@@ -3167,6 +3168,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
         OUString aTabName;
         rDoc.GetName(nVisTab, aTabName);
         lcl_PDFExportHelper(pDev, aTabName, nVisTab, bIsFirstPage);
+        mnPreviousRenderTab = nVisTab;
 
         pDocShell->DoDraw(pDev, Point(0, 0), aMMRect.GetSize(), JobSetup());
 
@@ -3292,12 +3294,14 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& a
 
     tools::Long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
 
-    if ( nRenderer == nTabStart || bIsFirstPage )
+    // the sheet's own first page can be outside a page range, so ask whether the sheet changed
+    if (bIsFirstPage || nTab != mnPreviousRenderTab)
     {
         OUString aTabName;
         rDoc.GetName(nTab, aTabName);
         lcl_PDFExportHelper(pDev, aTabName, nTab, bIsFirstPage);
     }
+    mnPreviousRenderTab = nTab;
 
     (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
 
