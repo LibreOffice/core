@@ -394,20 +394,15 @@ sal_Int64 SAL_CALL
             mnStateSet &= ~AccessibleStateType::FOCUSED;
     }
     //Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
-    css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
-    if( xTempAcc.is() )
+    rtl::Reference<comphelper::OAccessible> pParent = implGetAccessibleParent();
+    if (pParent.is())
     {
-        css::uno::Reference<XAccessibleContext>
-                                xTempAccContext = xTempAcc->getAccessibleContext();
-        if( xTempAccContext.is() )
+        sal_Int64 nState = pParent->getAccessibleStateSet();
+        if (nState & AccessibleStateType::EDITABLE)
         {
-            sal_Int64 nState = xTempAccContext->getAccessibleStateSet();
-            if (nState & AccessibleStateType::EDITABLE)
-            {
-                mnStateSet |= AccessibleStateType::EDITABLE;
-                mnStateSet |= AccessibleStateType::RESIZABLE;
-                mnStateSet |= AccessibleStateType::MOVEABLE;
-            }
+            mnStateSet |= AccessibleStateType::EDITABLE;
+            mnStateSet |= AccessibleStateType::RESIZABLE;
+            mnStateSet |= AccessibleStateType::MOVEABLE;
         }
     }
 
