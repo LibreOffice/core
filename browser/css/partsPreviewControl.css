@@ -413,12 +413,6 @@
 	margin: 0;
 }
 
-/* The picture fills its cell here and carries no strip margin, so the marks
-   sit that much closer to the cell's edge. */
-.parts-preview-grid .preview-link-badge::before {
-	left: -22px;
-}
-
 .parts-preview-grid .preview-avatars {
 	inset-inline-end: -8px;
 }
