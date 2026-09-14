@@ -2726,7 +2726,11 @@ static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabNa
             }
 
             if (nDestID != -1)
-                pPDF->GetScPDFState()->m_PendingDests.emplace_back(nDestID, nTab);
+                pPDF->GetScPDFState()->m_PendingDests.push_back(
+                    { .m_nDestId = nDestID,
+                      .m_aTarget = ScAddress(0, 0, nTab),
+                      .m_bWholeSheet = true,
+                      .m_bSheetOnPage = true });
         }
     }
 }
@@ -2826,7 +2830,18 @@ static void lcl_PDFExportBookmarkHelper(OutputDevice* pDev, ScDocument& rDoc,
                 }
 
                 if (nPage >= 0)
-                    pPDF->SetLinkDest(rBookmark.nLinkId, pPDF->CreateDest(aArea, nPage));
+                {
+                    const sal_Int32 nDestID = pPDF->CreateDest(aArea, nPage);
+                    pPDF->SetLinkDest(rBookmark.nLinkId, nDestID);
+                    const SCTAB nTargetTab = aTargetRange.aStart.Tab();
+                    if (ScEnhancedPDFState* pState = pPDF->GetScPDFState())
+                        pState->m_PendingDests.push_back(
+                            { .m_nDestId = nDestID,
+                              .m_aTarget = aTargetRange.aStart,
+                              .m_bWholeSheet = bIsSheet,
+                              .m_bSheetOnPage
+                              = nPage == pPrintFuncCache->GetTabStart(nTargetTab) });
+                }
             }
         }
         else
@@ -2847,9 +2862,22 @@ static void lcl_PDFExportFinishTagging(vcl::PDFExtOutDevData& rPDF)
 
     for (const auto& rDest : pState->m_PendingDests)
     {
-        const auto it(pState->m_WorksheetIds.find(rDest.second));
-        if (it != pState->m_WorksheetIds.end())
-            rPDF.SetDestStructureElement(rDest.first, it->second);
+        sal_Int32 nElement = -1;
+        if (!rDest.m_bWholeSheet)
+        {
+            const auto it(pState->m_CellIds.find(rDest.m_aTarget));
+            if (it != pState->m_CellIds.end())
+                nElement = it->second;
+        }
+        // nothing was drawn where it points, so the sheet stands in where it shares the page
+        if (nElement == -1 && rDest.m_bSheetOnPage)
+        {
+            const auto it(pState->m_WorksheetIds.find(rDest.m_aTarget.Tab()));
+            if (it != pState->m_WorksheetIds.end())
+                nElement = it->second;
+        }
+        if (nElement != -1)
+            rPDF.SetDestStructureElement(rDest.m_nDestId, nElement);
     }
     delete pState;
     rPDF.SetScPDFState(nullptr);
