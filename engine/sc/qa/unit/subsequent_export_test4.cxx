@@ -890,6 +890,24 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool14390_ChartExternalRef)
     assertXPath(pExtLink, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData[@sheetId='2']/x:row", 6);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool14390_ChartExternalRefPath)
+{
+    createScDoc("xlsx/cool14390_chart_external_ref.xlsx");
+    save(TestFilter::XLSX);
+
+    // The linked workbook lives on a disk of its own, in a directory that has nothing above
+    // it in common with the directory this file is written to. The saved link has to name it
+    // by a whole URL, because a relative path would only say how deep this one save went.
+    xmlDocUniquePtr pExtRel
+        = parseExport(u"xl/externalLinks/_rels/externalLink1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pExtRel);
+    OUString aTarget = getXPath(pExtRel, "/rels:Relationships/rels:Relationship", "Target");
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8).getStr(),
+                           aTarget.startsWith("file:///"));
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8).getStr(),
+                           aTarget.indexOf("/Desktop/") > 0);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf51022_lostPrintRange)
 {
     createScDoc("ods/tdf87973_externalLinkSkipUnuseds.ods");

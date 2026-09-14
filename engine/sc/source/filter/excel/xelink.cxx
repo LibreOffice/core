@@ -28,6 +28,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
+#include <tools/urlobj.hxx>
 #include <document.hxx>
 #include <scextopt.hxx>
 #include <externalrefmgr.hxx>
@@ -1695,11 +1696,30 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
         // BuildFileName delete ../ and convert them to nLevel
         // but addrelation needs ../ instead of nLevel, so we have to convert it back
         sFile = XclExpHyperlink::BuildFileName(nLevel, bRel, maUrl, GetRoot(), true);
-        while (nLevel > 0)
+
+        // A relative path keeps naming the linked workbook as long as the two files stay in
+        // the same arrangement, which holds while the linked one sits in a directory this
+        // file is somewhere inside of. When the path instead has to climb out to the root of
+        // the file system and then walk down another branch, all it describes is where this
+        // file happened to be written, and the depth of that directory is part of the path.
+        // Write the whole URL in that case, so the target still names the same workbook
+        // after the file is downloaded or copied to another machine.
+        const sal_Int32 nBaseDepth = INetURLObject(GetRoot().GetBasePath()).getSegmentCount();
+        const bool bLeavesTree = bRel && nBaseDepth > 0 && nLevel >= nBaseDepth
+                                 && sFile.indexOf('/') >= 0;
+        if (bLeavesTree)
         {
-            sFile = "../" + sFile;
-            --nLevel;
+            sFile = INetURLObject(maUrl).GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         }
+        else
+        {
+            while (nLevel > 0)
+            {
+                sFile = "../" + sFile;
+                --nLevel;
+            }
+        }
+
         sRelType = oox::getRelationship(Relationship::EXTERNALLINKPATH);
     }
 
