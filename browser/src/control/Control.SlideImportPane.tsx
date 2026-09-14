@@ -281,12 +281,7 @@ class SlideImportPane {
     // has not answered yet keeps its place, because opening it is what made
     // it the active one.
     const active = this.activeSource();
-    const unreadable =
-      active &&
-      (active.state === 'missing' ||
-        active.state === 'noaccess' ||
-        active.state === 'failed');
-    if (this.activeKey && (!active || unreadable)) {
+    if (this.activeKey && (!active || this.degraded(active))) {
       this.activeKey = '';
       this.session.close();
     }
@@ -345,6 +340,7 @@ class SlideImportPane {
   private expandSource(source: SlideImportPaneSource): void {
     source.expanded = true;
     this.scrollRowToTop = source.key;
+    if (this.degraded(source) || !this.canShowSlides(source)) return;
     this.activate(source);
     this.askSource(source);
     // A source that answered before it was opened has its slides already,
@@ -356,6 +352,12 @@ class SlideImportPane {
     if (source.expanded) source.expanded = false;
     else this.expandSource(source);
     this.render();
+    const row = this.panel.querySelector(
+      '.slide-import-source[data-key="' +
+        CSS.escape(source.key) +
+        '"] .slide-import-source-main',
+    ) as HTMLElement | null;
+    if (row) row.focus();
   }
 
   // Reads a source's slides again, so a file that changed shows what it holds
@@ -652,13 +654,13 @@ class SlideImportPane {
     kind: string;
     label: string;
   } {
+    if (source.opening) return { kind: 'unchecked', label: _('Checking...') };
     if (source.state === 'missing')
       return { kind: 'missing', label: _('Missing') };
     if (source.state === 'noaccess')
       return { kind: 'missing', label: _('No access') };
     if (source.state === 'failed')
       return { kind: 'missing', label: _('Could not open') };
-    if (source.opening) return { kind: 'unchecked', label: _('Checking...') };
     if (this.linkedSource(source)) {
       const changed = this.outdatedCount(source);
       if (changed)
@@ -699,13 +701,47 @@ class SlideImportPane {
     return links.countPagesFrom(linked);
   }
 
-  // Why a source shows no slides, or an empty string when it shows some.
+  // A state that shows no slides and will not start showing them by waiting.
+  private degraded(source: SlideImportPaneSource): boolean {
+    return (
+      source.state === 'missing' ||
+      source.state === 'noaccess' ||
+      source.state === 'failed'
+    );
+  }
+
+  // Why a source shows no slides, or an empty string when it shows some. The
+  // chip names the state; this says what the chip has no room to say.
   private sourceMessage(source: SlideImportPaneSource): string {
     if (source.slides.length) return '';
-    if (source.state === 'missing') return _('This file is not available.');
-    if (source.state === 'noaccess') return _('You cannot open this file.');
-    if (source.state === 'failed') return _('This file could not be opened.');
+    if (source.opening) return _('Reading the slides...');
+    if (source.state === 'missing')
+      return _(
+        'The slides are in this presentation. The file they came from is no longer here.',
+      );
+    if (source.state === 'noaccess')
+      return _('This file is here. You do not have permission to open it.');
+    if (source.state === 'failed')
+      return _('This file could not be read this time.');
     return _('Reading the slides...');
+  }
+
+  private sourceRecovery(
+    source: SlideImportPaneSource,
+  ): { text: string; enabled: boolean; run: () => void } | null {
+    if (source.state === 'missing')
+      return {
+        text: _('Locate file'),
+        enabled: !!app.relatedDocumentToken,
+        run: () => this.browseForImport(),
+      };
+    if (source.state === 'failed')
+      return {
+        text: _('Reload slides'),
+        enabled: true,
+        run: () => this.reloadSource(source),
+      };
+    return null;
   }
 
   private onSelectionChanged(): void {
@@ -1000,7 +1036,7 @@ class SlideImportPane {
 
   private toggleAll(open: boolean): void {
     for (const source of this.sources) {
-      source.expanded = open && this.canShowSlides(source);
+      source.expanded = open;
       if (source.expanded) this.askSource(source);
     }
     // The active source stays the one it was, so the accent, the picks and
@@ -1112,10 +1148,9 @@ class SlideImportPane {
 
   // One row of the source list: the file, what the pane says of it, and the
   // menu of what can be done with it. The file is a button while there are
-  // slides to show or hide, and the name alone when there are none.
+  // slides to show or hide, and the reason it has none when it has none.
   private renderSourceRow(source: SlideImportPaneSource): HTMLElement {
     const badge = this.sourceBadge(source);
-    const shows = this.canShowSlides(source);
     const panelId = 'slide-import-panel-' + source.id;
     const chip = (
       <span class={'slide-import-source-badge ' + badge.kind}>
@@ -1149,17 +1184,23 @@ class SlideImportPane {
         data-key={source.key}
       >
         <div class="slide-import-source-row">
-          {shows ? (
-            <button
-              class="slide-import-source-main"
-              aria-expanded={source.expanded ? 'true' : 'false'}
-              aria-controls={panelId}
-              onClick={() => this.toggleSource(source)}
-            >
-              {inside}
-            </button>
-          ) : (
-            <span class="slide-import-source-main">{inside}</span>
+          <button
+            class="slide-import-source-main"
+            aria-expanded={source.expanded ? 'true' : 'false'}
+            aria-controls={panelId}
+            aria-describedby={
+              this.degraded(source)
+                ? 'slide-import-why-' + source.id
+                : undefined
+            }
+            onClick={() => this.toggleSource(source)}
+          >
+            {inside}
+          </button>
+          {this.degraded(source) && (
+            <span class="visuallyhidden" id={'slide-import-why-' + source.id}>
+              {this.sourceMessage(source)}
+            </span>
           )}
           <button
             class="slide-import-source-menu"
@@ -1172,9 +1213,10 @@ class SlideImportPane {
           id={panelId}
           class="slide-import-source-panel"
           role="region"
+          aria-label={source.name}
           data-source-id={source.id}
         >
-          {source.expanded && shows && this.renderPanelBody(source)}
+          {source.expanded && this.renderPanelBody(source)}
         </div>
       </li>
     );
@@ -1293,7 +1335,22 @@ class SlideImportPane {
   // browsed one after another without losing sight of the others.
   private renderPanelBody(source: SlideImportPaneSource): HTMLElement {
     const message = this.sourceMessage(source);
-    if (message) return <div class="slide-import-panel-message">{message}</div>;
+    if (message) {
+      const recovery = this.sourceRecovery(source);
+      return (
+        <div class="slide-import-panel-message">
+          <p>{message}</p>
+          {recovery && recovery.enabled && (
+            <button
+              class="button slide-import-panel-action"
+              onClick={() => recovery.run()}
+            >
+              {recovery.text}
+            </button>
+          )}
+        </div>
+      );
+    }
 
     return (
       <div

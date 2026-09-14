@@ -238,12 +238,6 @@
 	cursor: pointer;
 }
 
-/* The name of a file whose slides cannot be read is not a button: there is
- * nothing to show or hide. */
-span.slide-import-source-main {
-	cursor: default;
-}
-
 /* The chevron is the one mark on a row that differs from the row above it,
  * and it says what a click will do. */
 .slide-import-source-chevron {
@@ -468,7 +462,20 @@ span.slide-import-source-main {
 
 .slide-import-panel-message {
 	padding: var(--spacing-m);
-	color: var(--color-text-light);
+	color: var(--color-text-dark);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--spacing-m);
+}
+
+.slide-import-panel-message p {
+	margin: 0;
+}
+
+#slide-import-panel .slide-import-panel-action {
+	margin: 0;
+	width: auto;
 }
 
 .slide-import-options {
