@@ -79,11 +79,7 @@ class HRuler extends Ruler {
 		this._map.on('tabstoplistupdate', this._updateTabStops, this);
 		this._map.on('scrolllimits', this._updatePaintTimer, this);
 		this._map.on('zoomend', this._updateBreakPoints, this);
-		// DEAD in its 'moveend' half, to be removed in the follow-up: 'moveend' is
-		// never fired, and the offset is fixed from
-		// ViewLayout.commitVisibleAreaAndRequestTiles now. 'fixruleroffset' is
-		// still fired.
-		this._map.on('moveend fixruleroffset', this.fixOffset, this);
+		this._map.on('fixruleroffset', this.fixOffset, this);
 		this._map.on('updatepermission', this._changeInteractions, this);
 		window.L.DomUtil.addClass(
 			document.getElementById('document-container'),
@@ -108,7 +104,7 @@ class HRuler extends Ruler {
 		this._map.off('tabstoplistupdate', this._updateTabStops, this);
 		this._map.off('scrolllimits', this._updatePaintTimer, this);
 		this._map.off('zoomend', this._updateBreakPoints, this);
-		this._map.off('moveend fixruleroffset', this.fixOffset, this);
+		this._map.off('fixruleroffset', this.fixOffset, this);
 		this._map.off('updatepermission', this._changeInteractions, this);
 
 		// The value tooltips live on the document body, so remove them

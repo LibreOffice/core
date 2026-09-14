@@ -1328,18 +1328,6 @@ class BitmapTileManager extends RenderManagerBase {
 				!this.tileNeedsFetch(coordsQueue[i].key())
 			) {
 				coordsQueue.splice(i, 1);
-			} else if (app.map._docLayer._moveInProgress) {
-				// DEAD, to be removed in the follow-up: _moveInProgress is never true
-				// since the map stopped owning the pan, and there is no scroll gesture
-				// with a start and an end to hang it on any more. A tile asked for
-				// again too soon is held back by Tile.requestingTooFast instead, which
-				// also schedules the one retry that keeps a skipped tile from being
-				// lost; filtering here would take that retry away.
-				// While we are actively scrolling, filter out duplicate
-				// (still) missing tiles requests during the scroll.
-				if (app.map._docLayer._moveTileRequests.includes(coordsQueue[i].key()))
-					coordsQueue.splice(i, 1);
-				else app.map._docLayer._moveTileRequests.push(coordsQueue[i].key());
 			}
 		}
 	}

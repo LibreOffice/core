@@ -105,8 +105,6 @@ interface DocLayerInterface {
 	recalculateZoomOnResize(): void;
 	_splitPanesContext?: cool.SplitPanesContext;
 	getSplitPanesContext(): cool.SplitPanesContext | undefined;
-	_moveInProgress: boolean;
-	_moveTileRequests: string[];
 	_debug: DebugManager;
 	_canonicalIdInitialized: boolean;
 	_gotFirstCellCursor?: boolean;

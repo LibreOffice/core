@@ -54,9 +54,6 @@ class VRuler extends Ruler {
 		this._map.on('vrulerupdate', this._updateOptions, this);
 		this._map.on('scrolllimits', this._updatePaintTimer, this);
 		this._map.on('zoomend', this._updateBreakPoints, this);
-		// DEAD, to be removed in the follow-up: 'moveend' is never fired. The
-		// offset is fixed from ViewLayout.commitVisibleAreaAndRequestTiles now.
-		this._map.on('moveend', this.fixOffset, this);
 		app.events.on('updatepermission', this._changeInteractions.bind(this));
 		this._map.on(
 			'resettopbottompagespacing',
@@ -87,7 +84,6 @@ class VRuler extends Ruler {
 		this._map.off('vrulerupdate', this._updateOptions, this);
 		this._map.off('scrolllimits', this._updatePaintTimer, this);
 		this._map.off('zoomend', this._updateBreakPoints, this);
-		this._map.off('moveend', this.fixOffset, this);
 		app.events.off('updatepermission', this._changeInteractions.bind(this));
 		this._map.off(
 			'resettopbottompagespacing',

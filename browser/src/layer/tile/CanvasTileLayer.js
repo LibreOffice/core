@@ -244,7 +244,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		opacity: 1,
 
 		updateWhenIdle: (window.mode.isSmallScreenDevice() || window.mode.isTablet()),
-		updateInterval: 200,
 
 		attribution: null,
 		zIndex: null,
@@ -296,10 +295,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._selectedTextContent = '';
 
-		this._moveInProgress = false;
-		// tile requests issued while _moveInProgress is true,
-		// i.e. issued between moveStart and moveEnd
-		this._moveTileRequests = [];
 		this._canonicalIdInitialized = false;
 
 		RenderManager.initialize(this._docType);
@@ -371,18 +366,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		app.sectionContainer.addSection(new cool.ScrollSection(() => this.isCalcRTL()));
 
-		// DEAD LISTENERS, to be removed in the follow-up: nothing fires 'move' or
-		// 'moveend' any more, since the layouts took the pan over from the map. The
-		// redraw these asked for comes from the layout now: a scroll assigns the
-		// viewed rectangle, and that refreshes the section container.
-		// For mobile/tablet the hammerjs swipe handler already uses a requestAnimationFrame to fire move/drag events
-		// Using window.L.TileSectionManager's own requestAnimationFrame loop to do the updates in that case does not perform well.
-		if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
-			this._map.on('move', this._painter.update, this._painter);
-			this._map.on('moveend', function () {
-				setTimeout(this.update.bind(this), 200);
-			}, this._painter);
-		}
 		this._map.on('zoomend', this._painter.update, this._painter);
 		this._map.on('splitposchanged', function () {
 			RenderManager.update();
@@ -533,46 +516,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (this._docType === 'spreadsheet')
 			this._syncTileContainerSize();
-	},
-
-	// DEAD, to be removed in the follow-up: 'movestart' is never fired. The
-	// pre-fetch restart it asked for runs in ViewLayout.onViewMoved. Nothing sets
-	// _moveInProgress any more, so the request de-duplication that flag gated in
-	// BitmapTileManager.removeIrrelevantsFromCoordsQueue is gone too; a duplicate
-	// request is stopped one step later, by Tile.requestingTooFast.
-	_moveStart: function () {
-		RenderManager.resetPreFetching();
-		this._moveInProgress = true;
-		this._moveTileRequests = [];
-	},
-
-	// DEAD, to be removed in the follow-up: 'move' is never fired, and the
-	// 'splitposchanged' binding below reaches this while _moveInProgress is false,
-	// so it returns at once. The tile update and the pre-fetch restart run in
-	// ViewLayout.commitVisibleAreaAndRequestTiles and onViewMoved, and the split
-	// case is handled where 'splitposchanged' is bound in onAdd.
-	_move: function () {
-		// We throttle the "move" event, but in moveEnd we always call
-		// a _move anyway, so if there are throttled moves still
-		// pending by the time moveEnd is called then there is no point
-		// processing them after _moveEnd because we are up to date
-		// already when they arrive and to do would just duplicate tile
-		// requests
-		if (!this._moveInProgress)
-			return;
-
-		RenderManager.update();
-		RenderManager.resetPreFetching(true);
-	},
-
-	// DEAD, to be removed in the follow-up: 'moveend' is never fired. The
-	// follow-state check runs in ViewLayout.onViewMoved now, on every scroll step
-	// rather than once a pan has finished, which settles on the same state.
-	_moveEnd: function () {
-		this._move();
-		this._moveInProgress = false;
-		this._moveTileRequests = [];
-		app.updateFollowingUsers();
 	},
 
 	_requestNewTiles: function () {
@@ -4067,21 +4010,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._removeSplitters();
 		window.L.DomUtil.remove(this._canvasContainer);
-	},
-
-	// DEAD BINDINGS, to be removed in the follow-up: of the four events below
-	// only 'splitposchanged' is still fired, and it lands in a _move that returns
-	// at once. The work all four stood for lives in the layouts now.
-	getEvents: function () {
-		var events = {
-			movestart: this._moveStart,
-			// update tiles on move, but not more often than once per given interval
-			move: app.util.throttle(this._move, this.options.updateInterval, this),
-			moveend: this._moveEnd,
-			splitposchanged: this._move,
-		};
-
-		return events;
 	},
 
 	_viewReset: function (e) {
