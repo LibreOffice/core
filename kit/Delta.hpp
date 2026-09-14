@@ -15,12 +15,11 @@
 #include <common/FileUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/Log.hpp>
+#include <common/NumUtil.hpp>
 #include <common/Png.hpp>
 #include <common/Simd.hpp>
 #include <kit/DeltaSimd.h>
 #include <wsd/TileDesc.hpp>
-
-#include <o3tl/safeint.hxx>
 
 #include <cassert>
 #include <cstdint>
@@ -379,9 +378,9 @@ class DeltaGenerator {
             , _rows(new DeltaBitmapRow[height])
         {
             assert(width > 0 && width <= 256);
-            assert (startX + width <= o3tl::make_unsigned(bufferWidth));
+            assert (startX + width <= NumUtil::makeUnsigned(bufferWidth));
             assert(height > 0 && height <= 256);
-            assert (startY + height <= o3tl::make_unsigned(bufferHeight));
+            assert (startY + height <= NumUtil::makeUnsigned(bufferHeight));
 
             LOGA_TRC(Pixel, "Converting pixel data to delta data of size "
                      << (width * height * 4) << " width " << width

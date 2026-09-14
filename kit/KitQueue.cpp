@@ -19,9 +19,8 @@
 #include "KitQueue.hpp"
 
 #include <common/JsonUtil.hpp>
+#include <common/NumUtil.hpp>
 #include <common/Util.hpp>
-
-#include <o3tl/safeint.hxx>
 
 #include <algorithm>
 #include <climits>
@@ -510,7 +509,7 @@ namespace {
         {
             const bool canCombineLeft = leftTile > -1 &&
                 allowCombineIfRow(prioTile, tilePosY, tileQueue[leftTile], "same row, left");
-            const bool canCombineRight = o3tl::make_unsigned(rightTile) < tileQueue.size() &&
+            const bool canCombineRight = NumUtil::makeUnsigned(rightTile) < tileQueue.size() &&
                 allowCombineIfRow(prioTile, tilePosY, tileQueue[rightTile], "same row, right");
             if (!canCombineLeft && !canCombineRight)
                 break;

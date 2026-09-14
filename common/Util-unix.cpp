@@ -17,10 +17,9 @@
 #include <config.h>
 
 #include <common/Log.hpp>
+#include <common/NumUtil.hpp>
 #include <common/ProcUtil.hpp>
 #include <common/Util.hpp>
-
-#include <o3tl/safeint.hxx>
 
 #include <cctype>
 #include <chrono>
@@ -66,7 +65,7 @@ namespace Util
                     break;
                 }
 
-                assert(o3tl::make_unsigned(b) <= nbytes);
+                assert(NumUtil::makeUnsigned(b) <= nbytes);
 
                 nbytes -= b;
                 p += b;

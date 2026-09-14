@@ -30,6 +30,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Message.hpp>
+#include <common/NumUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/SaveResult.hpp>
 #include <common/TilePrioritizer.hpp>
@@ -57,8 +58,6 @@
 #include <wsd/Storage.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
-
-#include <o3tl/safeint.hxx>
 
 #include <Poco/DigestStream.h>
 #include <Poco/DirectoryIterator.h>
@@ -664,9 +663,9 @@ void DocumentBroker::pollThread()
                          _docState.isCloseRequested())
                 {
                     if (limStoreFailures > 0 && (_saveManager.saveFailureCount() >=
-                                                     o3tl::make_unsigned(limStoreFailures) ||
+                                                     NumUtil::makeUnsigned(limStoreFailures) ||
                                                  _storageManager.uploadFailureCount() >=
-                                                     o3tl::make_unsigned(limStoreFailures)))
+                                                     NumUtil::makeUnsigned(limStoreFailures)))
                     {
 #if !MOBILEAPP
                         LOG_ERR(
@@ -4249,7 +4248,7 @@ void DocumentBroker::autoSaveAndStop(const std::string_view reason)
                 ConfigUtil::getConfigValue<int>("per_document.limit_store_failures", 5);
 
             if (limStoreFailures > 0 &&
-                _storageManager.uploadFailureCount() >= o3tl::make_unsigned(limStoreFailures))
+                _storageManager.uploadFailureCount() >= NumUtil::makeUnsigned(limStoreFailures))
             {
                 LOG_TRC("Uploads for always-save-on-exit are failing. Will stop");
                 canStop = true;

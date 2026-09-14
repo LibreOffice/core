@@ -12,6 +12,7 @@
 #pragma once
 
 #include <common/Log.hpp>
+#include <common/NumUtil.hpp>
 
 #include <Poco/Path.h>
 
@@ -22,8 +23,6 @@
 #include <fstream>
 #include <string>
 #include <sys/stat.h>
-
-#include <o3tl/safeint.hxx>
 
 #ifndef _WIN32
 #include <optional>
@@ -281,7 +280,7 @@ namespace FileUtil
             }
 
             got += n;
-            if (o3tl::make_unsigned(n) < room)
+            if (NumUtil::makeUnsigned(n) < room)
                 break;
         }
 

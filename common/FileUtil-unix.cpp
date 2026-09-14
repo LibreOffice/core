@@ -31,8 +31,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include <o3tl/safeint.hxx>
-
 #ifdef __linux__
 #include <sys/vfs.h>
 #elif defined IOS

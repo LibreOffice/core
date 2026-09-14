@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cctype>
 #include <cerrno>
 #include <cstdint>
@@ -29,6 +30,18 @@
 /// For convenient wrappers see parseStrTo*() and *FromString() functions.
 namespace NumUtil
 {
+
+/// Convert a non-negative signed integer to its unsigned counterpart, so that
+/// it can be compared against an unsigned value without a sign-compare warning.
+/// Deliberately not o3tl::make_unsigned: the engine headers are unavailable in
+/// the packaging builds, which configure with --with-lokit-path=bundled/include.
+template <typename T>
+constexpr std::make_unsigned_t<T> makeUnsigned(T value)
+    requires std::is_integral_v<T> && std::is_signed_v<T>
+{
+    assert(value >= 0);
+    return static_cast<std::make_unsigned_t<T>>(value);
+}
 
 enum class StrToState : std::uint8_t
 {

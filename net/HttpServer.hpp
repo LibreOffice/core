@@ -19,8 +19,6 @@
 #include <common/NumUtil.hpp>
 #include <net/HttpRequest.hpp>
 
-#include <o3tl/safeint.hxx>
-
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
@@ -368,7 +366,7 @@ private:
                 out.commit(provisioned, n);
                 socket->writeOutgoingData();
                 _pos += n;
-                LOG_ASSERT(o3tl::make_unsigned(n) <= capacity);
+                LOG_ASSERT(NumUtil::makeUnsigned(n) <= capacity);
                 capacity -= n;
                 LOG_TRC("performWrites wrote " << n << " bytes, capacity: " << capacity);
             }

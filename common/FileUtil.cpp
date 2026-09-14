@@ -20,14 +20,13 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/Log.hpp>
+#include <common/NumUtil.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 
 #include <Poco/File.h>
 #include <Poco/Path.h>
 #include <Poco/SHA2Engine.h>
-
-#include <o3tl/safeint.hxx>
 
 #include <chrono>
 #include <cstdio>
@@ -278,7 +277,7 @@ namespace FileUtil
         std::string target(size, '\0');
         char* target_data = target.data();
         const ssize_t written = ::readlink(fpath, target_data, size);
-        if (written <= 0 || o3tl::make_unsigned(written) > size)
+        if (written <= 0 || NumUtil::makeUnsigned(written) > size)
         {
             return {};
         }
@@ -361,7 +360,7 @@ namespace FileUtil
                 break;
 
             assert(n >= 0 && "Expected a positive read byte-count");
-            assert(o3tl::make_unsigned(n) <= nbytes && "Unexpectedly read more than requested");
+            assert(NumUtil::makeUnsigned(n) <= nbytes && "Unexpectedly read more than requested");
 
             nbytes -= n;
             p += n;
