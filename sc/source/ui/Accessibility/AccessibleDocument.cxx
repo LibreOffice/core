@@ -1399,7 +1399,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         auto pFocusLostHint = static_cast<const ScAccGridWinFocusLostHint*>(&rHint);
         if (pFocusLostHint->GetOldGridWin() == meSplitPos)
         {
-            if (mxTempAcc.is() && mpTempAccEdit)
+            if (mpTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->LostFocus();
             else if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->LostFocus();
@@ -1427,7 +1427,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             else
             {
-            if (mxTempAcc.is() && mpTempAccEdit)
+            if (mpTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->GotFocus();
             else if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->GotFocus();
@@ -1484,13 +1484,13 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (rHint.GetId() == SfxHintId::ScAccLeaveEditMode)
     {
-        if (mxTempAcc.is())
+        if (mpTempAcc.is())
         {
             if (mpTempAccEdit)
             {
                 mpTempAccEdit->LostFocus();
             }
-            RemoveChild(mxTempAcc, true);
+            RemoveChild(mpTempAcc, true);
             if (mpTempAccEdit)
             {
                 // tdf#125982 a11y use-after-free of editengine by
@@ -1569,15 +1569,15 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
             xAccessible = mpChildrenShapes->GetAt(rPoint);
         if(!xAccessible.is())
         {
-            if (mxTempAcc.is())
+            if (mpTempAcc.is())
             {
-                uno::Reference< XAccessibleContext > xCont(mxTempAcc->getAccessibleContext());
+                uno::Reference<XAccessibleContext> xCont(mpTempAcc->getAccessibleContext());
                 uno::Reference< XAccessibleComponent > xComp(xCont, uno::UNO_QUERY);
                 if (xComp.is())
                 {
                     tools::Rectangle aBound(vcl::unohelper::ConvertToVCLRect(xComp->getBounds()));
                     if (aBound.Contains(vcl::unohelper::ConvertToVCLPoint(rPoint)))
-                        xAccessible = mxTempAcc;
+                        xAccessible = mpTempAcc;
                 }
             }
             if (!xAccessible.is())
@@ -1620,7 +1620,7 @@ sal_Int64 SAL_CALL
     if (mpChildrenShapes)
         nCount = mpChildrenShapes->GetCount(); // returns the count of the shapes inclusive the table
 
-    if (mxTempAcc.is())
+    if (mpTempAcc.is())
         ++nCount;
 
     return nCount;
@@ -1645,8 +1645,8 @@ uno::Reference<XAccessible> SAL_CALL
         {
             if (nIndex < nCount)
                 xAccessible = GetAccessibleSpreadsheet();
-            else if (nIndex == nCount && mxTempAcc.is())
-                xAccessible = mxTempAcc;
+            else if (nIndex == nCount && mpTempAcc.is())
+                xAccessible = mpTempAcc;
         }
     }
 
@@ -1728,7 +1728,7 @@ void SAL_CALL
         return;
 
     sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
-    if (mxTempAcc.is())
+    if (mpTempAcc.is())
         ++nCount;
     if (nChildIndex < 0 || nChildIndex >= nCount)
         throw lang::IndexOutOfBoundsException();
@@ -1758,7 +1758,7 @@ sal_Bool SAL_CALL
     if (mpChildrenShapes)
     {
         sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
-        if (mxTempAcc.is())
+        if (mpTempAcc.is())
             ++nCount;
         if (nChildIndex < 0 || nChildIndex >= nCount)
             throw lang::IndexOutOfBoundsException();
@@ -1772,7 +1772,7 @@ sal_Bool SAL_CALL
         }
         else
         {
-            if (mxTempAcc.is() && nChildIndex == nCount)
+            if (mpTempAcc.is() && nChildIndex == nCount)
                 bResult = true;
             else
                 bResult = IsTableSelected();
@@ -1820,7 +1820,7 @@ sal_Int64 SAL_CALL
     if (IsTableSelected())
         ++nCount;
 
-    if (mxTempAcc.is())
+    if (mpTempAcc.is())
         ++nCount;
 
     return nCount;
@@ -1842,8 +1842,8 @@ uno::Reference<XAccessible > SAL_CALL
 
         if (mpChildrenShapes)
             xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked); // throws no lang::IndexOutOfBoundsException if Index is too high
-        if (mxTempAcc.is() && nSelectedChildIndex == nCount - 1)
-            xAccessible = mxTempAcc;
+        if (mpTempAcc.is() && nSelectedChildIndex == nCount - 1)
+            xAccessible = mpTempAcc;
         else if (bTabMarked)
             xAccessible = GetAccessibleSpreadsheet();
     }
@@ -1863,7 +1863,7 @@ void SAL_CALL
         return;
 
     sal_Int32 nCount(mpChildrenShapes->GetCount()); // all shapes and the table
-    if (mxTempAcc.is())
+    if (mpTempAcc.is())
         ++nCount;
     if (nChildIndex < 0 || nChildIndex >= nCount)
         throw lang::IndexOutOfBoundsException();
@@ -2036,13 +2036,14 @@ bool ScAccessibleDocument::IsDefunc(sal_Int64 nParentStates)
 void ScAccessibleDocument::AddChild(const rtl::Reference<comphelper::OAccessible>& pAcc,
                                     bool bFireEvent)
 {
-    OSL_ENSURE(!mxTempAcc.is(), "this object should be removed before");
+    OSL_ENSURE(!mpTempAcc.is(), "this object should be removed before");
     if (pAcc.is())
     {
-        mxTempAcc = pAcc;
+        mpTempAcc = pAcc;
         if( bFireEvent )
         {
-            CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(mxTempAcc),
+            CommitChange(AccessibleEventId::CHILD, uno::Any(),
+                         uno::Any(uno::Reference<XAccessible>(mpTempAcc)),
                          getAccessibleChildCount() - 1);
         }
     }
@@ -2050,14 +2051,15 @@ void ScAccessibleDocument::AddChild(const rtl::Reference<comphelper::OAccessible
 
 void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)
 {
-    OSL_ENSURE(mxTempAcc.is(), "this object should be added before");
+    OSL_ENSURE(mpTempAcc.is(), "this object should be added before");
     if (!xAcc.is())
         return;
 
-    OSL_ENSURE(xAcc.get() == mxTempAcc.get(), "only the same object should be removed");
+    OSL_ENSURE(xAcc.get() == mpTempAcc.get(), "only the same object should be removed");
     if( bFireEvent )
-        CommitChange(AccessibleEventId::CHILD, uno::Any(mxTempAcc), uno::Any());
-    mxTempAcc = nullptr;
+        CommitChange(AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(mpTempAcc)),
+                     uno::Any());
+    mpTempAcc = nullptr;
 }
 
 OUString ScAccessibleDocument::GetCurrentCellName() const

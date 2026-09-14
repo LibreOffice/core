@@ -183,7 +183,7 @@ private:
     rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
     std::unique_ptr<ScChildrenShapes> mpChildrenShapes;
     rtl::Reference<ScAccessibleEditObject> mpTempAccEdit;
-    css::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
+    rtl::Reference<comphelper::OAccessible> mpTempAcc;
     tools::Rectangle maVisArea;
     bool mbCompleteSheetSelected;
 
