@@ -26,9 +26,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox(ComboBox* pComboBox)
-    : VCLXAccessibleBox(pComboBox, VCLXAccessibleBox::COMBOBOX, true)
+    : VCLXAccessibleBox(pComboBox, VCLXAccessibleBox::BoxType::COMBOBOX, true)
 {
 }
 

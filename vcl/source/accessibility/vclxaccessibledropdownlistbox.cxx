@@ -23,9 +23,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (ListBox* pListBox)
-    : VCLXAccessibleBox(pListBox,  VCLXAccessibleBox::LISTBOX, true)
+VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox(ListBox* pListBox)
+    : VCLXAccessibleBox(pListBox, VCLXAccessibleBox::BoxType::LISTBOX, true)
 {
 }
 

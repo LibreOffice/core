@@ -36,7 +36,11 @@ class VCLXAccessibleBox : public cppu::ImplInheritanceHelper<VCLXAccessibleCompo
                                                              css::accessibility::XAccessibleAction>
 {
 public:
-    enum BoxType {COMBOBOX, LISTBOX};
+    enum class BoxType
+    {
+        COMBOBOX,
+        LISTBOX
+    };
 
     /** The constructor is initialized with the box type which may be
         either COMBOBOX or LISTBOX and a flag

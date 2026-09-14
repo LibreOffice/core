@@ -47,7 +47,7 @@ VCLXAccessibleBox::VCLXAccessibleBox(vcl::Window* pBox, BoxType aType, bool bIsD
     m_bHasListChild = true;
 
     // A text field is not present for non drop down list boxes.
-    if ((m_aBoxType==LISTBOX) && ! m_bIsDropDownBox)
+    if ((m_aBoxType == BoxType::LISTBOX) && !m_bIsDropDownBox)
         m_bHasTextChild = false;
     else
         m_bHasTextChild = true;
@@ -73,7 +73,7 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             // Just compare to the combo box text field.  All other children
             // are identical to this object in which case this object will
             // be removed in a short time.
-            if (m_aBoxType==COMBOBOX)
+            if (m_aBoxType == BoxType::COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
                 if (pComboBox && pChildWindow && pChildWindow == pComboBox->GetSubEdit()
@@ -174,7 +174,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                         sText = xText->getText();
                     m_xList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
 #if defined(_WIN32)
-                    if (m_bIsDropDownBox || m_aBoxType==COMBOBOX)
+                    if (m_bIsDropDownBox || m_aBoxType == BoxType::COMBOBOX)
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
 #endif
                 }
@@ -228,7 +228,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // Modify/Selection events are handled by the combo box instead of
             // directly by the edit field (Why?).  Therefore, delegate this
             // call to the edit field.
-            if (m_aBoxType==COMBOBOX)
+            if (m_aBoxType == BoxType::COMBOBOX)
             {
                 if (m_pText.is())
                 {
@@ -291,8 +291,10 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
         if ( ! m_xList.is())
         {
             m_xList = new VCLXAccessibleList(GetWindow(),
-                (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
-                                                                this);
+                                             (m_aBoxType == BoxType::LISTBOX
+                                                  ? VCLXAccessibleList::LISTBOX
+                                                  : VCLXAccessibleList::COMBOBOX),
+                                             this);
             m_xList->SetIndexInParent(i);
         }
         return m_xList;
@@ -302,7 +304,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
         // Text Field.
         if (!m_pText.is())
         {
-            if (m_aBoxType==COMBOBOX)
+            if (m_aBoxType == BoxType::COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
                 if (pComboBox && pComboBox->GetSubEdit())
@@ -321,7 +323,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 
     // Return the role <const>COMBO_BOX</const> for both VCL combo boxes and
     // VCL list boxes in DropDown-Mode else <const>PANEL</const>.
-    if (m_bIsDropDownBox || (m_aBoxType == COMBOBOX))
+    if (m_bIsDropDownBox || (m_aBoxType == BoxType::COMBOBOX))
         return AccessibleRole::COMBO_BOX;
     else
         return AccessibleRole::PANEL;
@@ -353,7 +355,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
                  + OUString::number(getAccessibleActionCount())),
                 getXWeak());
 
-        if (m_aBoxType == COMBOBOX)
+        if (m_aBoxType == BoxType::COMBOBOX)
         {
             VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
             if (pComboBox != nullptr)
@@ -362,7 +364,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
                 bNotify = true;
             }
         }
-        else if (m_aBoxType == LISTBOX)
+        else if (m_aBoxType == BoxType::LISTBOX)
         {
             VclPtr< ListBox > pListBox = GetAs< ListBox >();
             if (pListBox != nullptr)
@@ -418,7 +420,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
             aAny <<= sText;
         }
     }
-    if (m_aBoxType == LISTBOX && m_bIsDropDownBox  && m_xList.is() )
+    if (m_aBoxType == BoxType::LISTBOX && m_bIsDropDownBox && m_xList.is())
     {
         if (m_xList->IsInDropDown())
         {
@@ -468,7 +470,7 @@ Any VCLXAccessibleBox::getMinimumIncrement(  )
 void VCLXAccessibleBox::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
-    if (m_aBoxType == COMBOBOX )
+    if (m_aBoxType == BoxType::COMBOBOX)
     {
         OUString sText;
         sal_Int32 nEntryCount = 0;
@@ -483,7 +485,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( sal_Int64& rStateSet )
         if ( sText.isEmpty() && nEntryCount > 0 )
             rStateSet |= AccessibleStateType::INDETERMINATE;
     }
-    else if (m_aBoxType == LISTBOX && m_bIsDropDownBox)
+    else if (m_aBoxType == BoxType::LISTBOX && m_bIsDropDownBox)
     {
         VclPtr< ListBox > pListBox = GetAs< ListBox >();
         if (pListBox != nullptr && pListBox->GetEntryCount() > 0)
