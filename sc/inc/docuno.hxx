@@ -124,6 +124,9 @@ private:
 
     OUString                maBuildId;
     std::vector<sal_Int32>  maValidPages;
+    /// the sheet the previously rendered page belonged to; a page range can leave out its first
+    SCTAB mnPreviousRenderTab = -1;
+
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 

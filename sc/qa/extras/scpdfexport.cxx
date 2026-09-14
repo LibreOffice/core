@@ -1058,6 +1058,45 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testCellLinkDestinations)
     CPPUNIT_ASSERT_EQUAL(1, nSheetDests);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
+{
+    // Without the fix, this failed with
+    // - Expected: 2
+    // - Actual  : 1
+    // one Worksheet element holding both sheets' tables, and one bookmark rather than two.
+    //
+    // the second sheet spans pages 2 and 3, so this reaches it without its own first page
+    loadFromFile(u"page-range-sheets.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                               comphelper::makePropertyValue(u"PageRange"_ustr, u"1;3"_ustr) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDocument.GetPages().size());
+
+    int nOutlineItems = 0;
+    std::set<int> aWorksheetPages;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        if (pObject->Lookup("Title"_ostr) && pObject->Lookup("Parent"_ostr))
+            ++nOutlineItems;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "Worksheet")
+            continue;
+        auto pPage = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("Pg"_ostr));
+        CPPUNIT_ASSERT(pPage);
+        // an element of its own per sheet, not the second sheet landing inside the first one's
+        CPPUNIT_ASSERT(aWorksheetPages.insert(pPage->GetObjectValue()).second);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aWorksheetPages.size());
+    // the bookmark each sheet gets, which needs no tagging at all
+    CPPUNIT_ASSERT_EQUAL(2, nOutlineItems);
+}
+
 // just needs to not crash on export to pdf
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testForcepoint97)
 {
