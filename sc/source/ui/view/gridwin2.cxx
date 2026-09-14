@@ -136,7 +136,12 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     if (aRect.Contains(rMEvt.GetPosPixel()))
     {
         if ( DoPageFieldSelection( nCol, nRow ) )
+        {
+            // tdf#148660 - reset filter button to its default state
+            mpFilterButton.reset();
             return true;
+        }
+
 
         bool bFilterActive = IsAutoFilterActive(nCol, nRow, nTab);
         mpFilterButton->setHasHiddenMember(bFilterActive);
@@ -148,6 +153,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
         return true;
     }
 
+    // tdf#148660 - reset filter button to its default state
+    mpFilterButton.reset();
     return false;
 }
 
