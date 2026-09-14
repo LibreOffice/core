@@ -2767,7 +2767,7 @@ export class CommentSection extends CanvasSectionObject {
 			// upwards from that shared top anchor pushes them above the slide into
 			// the toolbar. Keep them in a single top-down stack with the selected
 			// comment expanded in place instead.
-			var stackFromTop = !selectedIndex
+			var stackFromTop = selectedIndex === null
 				|| app.map._docLayer._docType === 'presentation'
 				|| app.map._docLayer._docType === 'drawing';
 			if (stackFromTop) {
