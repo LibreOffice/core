@@ -2979,9 +2979,11 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
+ifneq ($(filter HELPTOOLS XMLHELP,$(BUILD_TYPE)),)
 $(eval $(call gb_Helper_register_external_libraries_for_install,clucene,PLAINLIBS_OOO,ooo,\
-    $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,clucene) \
+    clucene \
 ))
+endif
 
 endif # SYSTEM_CLUCENE
 
@@ -4339,9 +4341,11 @@ endef
 endif # SYSTEM_BZIP2
 
 
+ifneq ($(filter OPENCL,$(BUILD_TYPE)),)
 $(eval $(call gb_Helper_register_external_libraries_for_install,CLEW,OOOLIBS,ooo,\
-	$(call gb_Helper_optional,OPENCL,clew) \
+	clew \
 ))
+endif
 
 define gb_LinkTarget__use_clew
 $(call gb_LinkTarget_set_include,$(1), \
