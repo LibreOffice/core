@@ -122,6 +122,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUMBER_BULLETS:
     case SID_OUTLINE_BULLET:
     {
+        const SfxBoolItem* pIsBulletItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
+        const bool bBulletList = pIsBulletItem && pIsBulletItem->GetValue();
         SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE, SID_HTML_MODE, SID_HTML_MODE,
                      SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL>( GetPool() ));
         SwDocShell* pDocSh = GetView().GetDocShell();
@@ -183,6 +185,24 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     aSvxRule.SetLevel( n, aFormat, false );
                 }
                 aSvxRule.SetFeatureFlag(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP, false);
+
+            }
+
+            // When starting a new list from the bullet dropdown,
+            // make it a bullet list on every level
+            if (bBulletList)
+            {
+                UIName aBulletCharFormat;
+                SwStyleNameMapper::FillUIName(SwPoolFormatId::CHR_BULLET_LEVEL, aBulletCharFormat);
+                SfxAllItemSet aBulletSet(GetPool());
+                aBulletSet.Put(SfxStringItem(SID_BULLET_CHAR_FMT, aBulletCharFormat.toString()));
+                aBulletSet.Put(SvxNumBulletItem(aSvxRule, SID_ATTR_NUMBERING_RULE));
+                svx::sidebar::NBOTypeMgrBase* pBulletsTypeMgr = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance(svx::sidebar::NBOType::Bullets);
+                if (pBulletsTypeMgr)
+                {
+                    pBulletsTypeMgr->SetItems(&aBulletSet);
+                    pBulletsTypeMgr->ApplyNumRule(aSvxRule, 0, USHRT_MAX);
+                }
             }
             aSet.Put( SvxNumBulletItem( std::move(aSvxRule) ) );
         }

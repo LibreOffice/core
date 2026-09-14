@@ -251,8 +251,10 @@ void NumberingPopup::GrabFocus()
 
 IMPL_LINK_NOARG(NumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
 {
-    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::Any( u"customize"_ustr ) } } ) );
-    mrController.dispatchCommand( u".uno:OutlineBullet"_ustr, aArgs );
+    auto aArgs(comphelper::InitPropertySequence(
+        { { "Page", css::uno::Any(u"customize"_ustr) },
+          { "Bullet", css::uno::Any(mePageType == NumberingPageType::BULLET) } }));
+    mrController.dispatchCommand(u".uno:OutlineBullet"_ustr, aArgs);
 
     mrController.EndPopupMode();
 }
