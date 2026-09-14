@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-04 06:51+0000\n"
-"Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
+"PO-Revision-Date: 2026-09-15 07:54+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -918,17 +918,20 @@ msgstr "Ladda upp tillägg"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Säkerhetspolicyer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Ladda upp SPIF-säkerhetspolicyer (.xml). Dessa definierar de "
+"klassificeringar och kategorier som är tillgängliga när en säkerhetsetikett "
+"tillämpas på ett dokument."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Ladda upp säkerhetspolicy"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -2760,7 +2763,7 @@ msgstr "Signera"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Avsluta"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3690,7 +3693,7 @@ msgstr "HTML-fil (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Säkerhetsetikett"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4001,11 +4004,11 @@ msgstr "Distribuera"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Infoga bilder från fil..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Uppdatera länkade bilder..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4465,7 +4468,7 @@ msgstr "Skydda"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Rubrik"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -4999,7 +5002,7 @@ msgstr "Spårning"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Kommentar om ändring"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5160,11 +5163,11 @@ msgstr "Mellanrum & färg"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Importera bilder"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Uppdatera länkar"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5258,7 +5261,7 @@ msgstr "Visa ändringar"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Ändra till redigering"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5266,9 +5269,8 @@ msgid "Paste"
 msgstr "Klistra in"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Tom bild"
+msgstr "Avlänka bild"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5276,19 +5278,19 @@ msgstr "Lägga till avsnitt"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "förhandsgranskning av sida %1, länkad till %2 i %3"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Bild %1, länkad till %2 i %3"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "förhandsgranskning av sida %1, länkad till %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Bild %1, länkad till %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5339,74 +5341,72 @@ msgstr "Ange nytt avsnittsnamn:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Importera dina bilder"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Saknas"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Ingen åtkomst"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Misslyckades"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Länkad"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Inte länkad"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Den här filen är inte tillgänglig."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "Du kan inte öppna denna fil."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Den här filen kunde inte öppnas."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Läser bilderna..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 bild infogad"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} bilder infogade"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Bild {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "infoga %n bild"
+msgstr "Infoga 1 bild"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "Infoga {0} bilder"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Infoga form"
+msgstr "Infoga bilder"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} bilder"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5415,98 +5415,100 @@ msgstr "{0} valda"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Öppnar fil..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Infogar bilder..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Importera bilder"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "Expandera import av bildspel"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Stäng import av bildspel"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Lägg till presentation..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Inga presentationer ännu"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Lägg till en presentation för att bläddra bland dess bilder och infoga dem i "
+"den här presentationen."
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "Nyligen importerad från"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Presentationer att importera från"
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Åtgärder för {0}"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Hitta fil"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Dölj bilder"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Visa bilder"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Ladda om bilder"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Välj alla bilder"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Uppdatera bildspelen som är länkade till den här filen"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Ta bort från lista"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Växla {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Bilder i {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "Behåll den ursprungliga designen"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "Länk till källfil"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
-msgstr ""
+msgstr "Länka bilder till en position i en källfil"
 
 #: src/control/SlideSectionHeader.tsx:50
 msgid "Toggle section %1"
@@ -5514,78 +5516,82 @@ msgstr "Växla avsnitt %1"
 
 #: src/slideimport/SlideImportSession.ts:239
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Källans bildspel kunde inte läsas."
 
 #: src/slideimport/SlideImportSession.ts:290
 #: src/slideimport/SlideImportSession.ts:299
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Det gick inte att infoga bilderna."
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Det gick inte att importera bilderna."
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Ingen bild i denna presentation är länkad till en annan fil."
 
 #: src/slideimport/SlideLinks.ts:297 src/slideimport/SlideLinks.ts:557
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} är inte ett av dokumenten som detta är relaterat till, så servern kan "
+"inte läsa det."
 
 #: src/slideimport/SlideLinks.ts:309
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Dessa bilder kommer från {0}, som för närvarande inte är tillgänglig."
 
 #: src/slideimport/SlideLinks.ts:320
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Du har inte åtkomst till {0}, så dess sidor kan inte uppdateras."
 
 #: src/slideimport/SlideLinks.ts:393
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Det går inte att uppdatera bilderna för {0}: källan saknar motsvarande bilder"
 
 #: src/slideimport/SlideLinks.ts:396 src/slideimport/SlideLinks.ts:563
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Bilderna från {0} kunde inte läsas in i denna presentation."
 
 #: src/slideimport/SlideLinks.ts:496
 msgid "Cannot update slide {0}: the source lacks matching slide"
-msgstr ""
+msgstr "Det går inte att uppdatera bild {0}: källan saknar en motsvarande bild"
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Uppdateringen av bilderna för {0} misslyckades."
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Ingen bild i {0} uppdaterades."
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 bild uppdaterad från {0}."
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} bilder uppdaterade från {1}."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "{0} kunde inte läsas."
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Ingen bild i denna presentation är länkad till {0}."
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"En annan uppdatering pågår fortfarande. Försök med {0} igen om en stund."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Ändra storlek på paneler"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5752,7 +5758,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Anpassa sidan till fönstrets bredd."
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5856,11 +5862,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Kalkylbladet omberäknades på %1 ms"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Dokumentet omberäknades på %1 ms"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5884,13 +5890,13 @@ msgid "Insert connectors"
 msgstr "Infoga kopplingar"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Huvud"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
 msgstr ""
+"Du befinner dig för närvarande i visningsläge; tryck på {0} för att redigera"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -7285,7 +7291,7 @@ msgstr "Servern stängs av"
 
 #: src/docdispatcher.ts:651
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "AI är inte konfigurerat – kontakta din administratör"
 
 #: src/docdispatcher.ts:918
 msgid "Are you sure you want to delete this slide?"
@@ -7551,9 +7557,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Kunde inte exportera dokumentet. Försök igen."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Bilder"
+msgstr "Bild"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -8064,7 +8069,7 @@ msgstr "Modernt affärsbrev (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Modernt affärsbrev"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
