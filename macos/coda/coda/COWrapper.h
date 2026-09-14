@@ -31,6 +31,11 @@
 + (void)detachDocument:(Document *_Nonnull)document NS_SWIFT_NAME(detach(_:));
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
+// The path on disk of the media file that the document's server side registered under the
+// given tag, or nil when this document is not loaded or the tag is not one of its media files.
++ (NSString *_Nullable)embeddedMediaPathWithDocument:(Document *_Nonnull)document
+                                                 tag:(NSString *_Nonnull)tag
+    NS_SWIFT_NAME(embeddedMediaPath(document:tag:));
 + (BOOL)advertiseClipboard:(NSArray<NSString *> *_Nonnull)mimeTypes;
 + (void)materializeClipboard;
 

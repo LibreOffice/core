@@ -569,6 +569,23 @@ void install_filepicker_provider(COKit &rOffice)
     DocumentData::get(document.appDocId).loKitDocument->saveAs([url UTF8String], [format UTF8String], [filterOptions UTF8String]);
 }
 
++ (NSString *_Nullable)embeddedMediaPathWithDocument:(Document *)document tag:(NSString *)tag {
+    // The broker is recorded under the appDocId once the engine has loaded the document.
+    DocumentData *data = DocumentData::getIfExists(document.appDocId);
+    std::shared_ptr<DocumentBroker> docBroker = data ? data->docBroker.lock() : nullptr;
+    if (!docBroker) {
+        LOG_ERR("No document broker for appDocId " << document.appDocId
+                << ", cannot resolve media tag [" << [tag UTF8String] << ']');
+        return nil;
+    }
+
+    const std::string path = docBroker->getEmbeddedMediaPath(std::string([tag UTF8String]));
+    if (path.empty())
+        return nil;
+
+    return [NSString stringWithUTF8String:path.c_str()];
+}
+
 /**
  * Map an engine mime type to the pasteboard type other applications expect for
  * it. The common interchange formats map to their system UTI (text/html becomes
