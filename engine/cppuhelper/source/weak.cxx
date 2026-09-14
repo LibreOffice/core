@@ -150,19 +150,21 @@ void OWeakConnectionPoint::dispose()
 Reference< XInterface > OWeakConnectionPoint::queryAdapted()
 {
     Reference< XInterface > ret;
+    OWeakObject* pObject;
 
     {
         std::scoped_lock guard(*gpWeakMutex);
 
-        if (!m_pObject)
+        pObject = m_pObject;
+        if (!pObject)
             return ret;
 
-        oslInterlockedCount n = osl_atomic_increment( &m_pObject->m_refCount );
+        oslInterlockedCount n = osl_atomic_increment( &pObject->m_refCount );
 
         if (n <= 1)
         {
             // Another thread wait in the dispose method at the guard
-            osl_atomic_decrement( &m_pObject->m_refCount );
+            osl_atomic_decrement( &pObject->m_refCount );
             return ret;
         }
     }
@@ -171,8 +173,8 @@ Reference< XInterface > OWeakConnectionPoint::queryAdapted()
     // The reference is incremented. The object cannot be destroyed.
     // Release the guard at the earliest point.
     // WeakObject has a (XInterface *) cast operator
-    ret = *m_pObject;
-    osl_atomic_decrement( &m_pObject->m_refCount );
+    ret = *pObject;
+    osl_atomic_decrement( &pObject->m_refCount );
 
     return ret;
 }
