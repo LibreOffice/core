@@ -1571,14 +1571,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
         {
             if (mpTempAcc.is())
             {
-                uno::Reference<XAccessibleContext> xCont(mpTempAcc->getAccessibleContext());
-                uno::Reference< XAccessibleComponent > xComp(xCont, uno::UNO_QUERY);
-                if (xComp.is())
-                {
-                    tools::Rectangle aBound(vcl::unohelper::ConvertToVCLRect(xComp->getBounds()));
-                    if (aBound.Contains(vcl::unohelper::ConvertToVCLPoint(rPoint)))
-                        xAccessible = mpTempAcc;
-                }
+                tools::Rectangle aBound(vcl::unohelper::ConvertToVCLRect(mpTempAcc->getBounds()));
+                if (aBound.Contains(vcl::unohelper::ConvertToVCLPoint(rPoint)))
+                    xAccessible = mpTempAcc;
             }
             if (!xAccessible.is())
                 xAccessible = GetAccessibleSpreadsheet();
