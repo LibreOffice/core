@@ -128,6 +128,7 @@ class SlideImportPane {
     map.on('docloaded', this.onDocLoaded, this);
     map.on('relateddocuments', this.onRelatedDocuments, this);
     map.on('remotedoccommandresult', this.onRemoteResult, this);
+    map.on('updateparts', this.updateInsertButton, this);
   }
 
   public isVisible(): boolean {
