@@ -862,12 +862,12 @@ class SlideImportPane {
       </div>,
     );
 
-    // The header buttons show their labels as tooltips, like the
-    // navigator's header buttons do.
     this.panel
-      .querySelectorAll('.navigation-expand-button, .close-navigation-button')
-      .forEach((button: Element) =>
-        window.L.control.attachTooltipEventListener(button, this.map),
+      .querySelectorAll(
+        '.navigation-expand-button, .close-navigation-button, .slide-import-source-main, .slide-import-insert',
+      )
+      .forEach((el: Element) =>
+        window.L.control.attachTooltipEventListener(el, this.map),
       );
 
     const newList = this.panel.querySelector(
@@ -1091,7 +1091,8 @@ class SlideImportPane {
         <div class="slide-import-footer">
           <button
             class="button slide-import-insert"
-            title={this.insertLandsText()}
+            data-cooltip={this.insertLandsText()}
+            aria-description={this.insertLandsText()}
             disabled={session.selection.size === 0 || session.state !== 'ready'}
             onClick={() => session.insertSelected()}
           >
@@ -1152,7 +1153,8 @@ class SlideImportPane {
               class="slide-import-source-main"
               aria-expanded={source.expanded ? 'true' : 'false'}
               aria-controls={panelId}
-              title={this.sourceTooltip(source)}
+              data-cooltip={this.sourceTooltip(source)}
+              aria-description={this.sourceTooltip(source)}
               onClick={() => this.toggleSource(source)}
             >
               {inside}
@@ -1160,7 +1162,8 @@ class SlideImportPane {
           ) : (
             <span
               class="slide-import-source-main"
-              title={this.sourceTooltip(source)}
+              data-cooltip={this.sourceTooltip(source)}
+              aria-description={this.sourceTooltip(source)}
             >
               {inside}
             </span>
