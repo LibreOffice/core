@@ -1020,6 +1020,24 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, test1904NullDate)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf116148HatchWithoutName)
+{
+    // The bar series is filled with a hatch but names no hatch, so the drawing
+    // layer paints it with the item pool's default one.
+    loadFromFile(u"odp/tdf116148.odp");
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix the series carried no fill at all, and PowerPoint filled
+    // the bars with its own default instead, which is solid.
+    static constexpr OString sFill(
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:pattFill"_ostr);
+    assertXPath(pXmlDoc, sFill, "prst", u"ltHorz");
+    assertXPath(pXmlDoc, sFill + "/a:fgClr/a:srgbClr", "val", u"3465A4");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
