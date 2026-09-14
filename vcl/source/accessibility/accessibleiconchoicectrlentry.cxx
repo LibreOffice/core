@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/accessibleiconchoicectrl.hxx>
 #include <accessibility/accessibleiconchoicectrlentry.hxx>
 #include <ivctrl.hxx>
 
@@ -53,12 +54,12 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                                              sal_Int32 _nPos,
-                                                              const Reference< XAccessible >& _xParent ) :
-    m_pIconCtrl     ( &_rIconCtrl ),
-    m_nIndex        ( _nPos ),
-    m_xParent       ( _xParent )
+AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry(
+    SvtIconChoiceCtrl& _rIconCtrl, sal_Int32 _nPos,
+    const rtl::Reference<AccessibleIconChoiceCtrl>& rpParent)
+    : m_pIconCtrl(&_rIconCtrl)
+    , m_nIndex(_nPos)
+    , m_xParent(rpParent)
 
 {
     osl_atomic_increment( &m_refCount );
