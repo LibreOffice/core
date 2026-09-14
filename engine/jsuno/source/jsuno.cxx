@@ -1816,7 +1816,7 @@ cpo::uno::Any fromJsString(JSContext* ctx, JSValueConst val)
 
 cpo::uno::Any fromJsSequence(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val)
 {
-    if (!JS_IsArray(val))
+    if (!JS_IsArray(val) && JS_GetTypedArrayType(val) == -1)
     {
         JS_ThrowTypeError(ctx, "TODO: BAD UNO SEQUENCE VALUE");
         throw JsException();
@@ -1916,12 +1916,12 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < SAL_MIN_INT8 || n > SAL_MAX_INT8)
+            if (n < SAL_MIN_INT8 || n > SAL_MAX_UINT8)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO byte val %f", n);
                 throw JsException();
             }
-            return cpo::uno::Any(static_cast<sal_Int8>(n));
+            return cpo::uno::Any(static_cast<sal_Int8>(n <= SAL_MAX_INT8 ? n : n - 256));
         }
         case cpo::uno::TypeClass_SHORT:
         {

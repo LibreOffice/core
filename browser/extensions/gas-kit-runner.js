@@ -139,16 +139,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
                 });
             },
-            newBlob: function(data, contentType, name) {
-                // sequence<byte> maps to signed sal_Int8 on the UNO side; wrap values above
-                // 127 to their signed equivalents so the caller can pass plain 0-255 bytes:
-                const signed = [];
-                for (const v of data) { signed.push(v > 127 ? v - 256 : v); }
-                return cool.newBlob(
-                    signed,
-                    typeof contentType === 'string' ? contentType : '',
-                    typeof name === 'string' ? name : '');
-            }
+            newBlob: cool.newBlob.bind(cool)
         };
 
         // Round-tripped over the XClientRuntime proxy so the store lives in the iframe's

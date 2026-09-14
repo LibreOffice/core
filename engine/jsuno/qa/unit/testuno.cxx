@@ -274,6 +274,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.log(v);
     console.assert(v === -12);
     console.assert(test.isAnyByte(new uno.Any(uno.type.byte, -12)));
+    console.assert(test.isAnyByte(new uno.Any(uno.type.byte, 244)));
 }
 {
     const v = test.getAnyShort();
@@ -459,6 +460,8 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.assert(v[1] === 1);
     console.assert(v[2] === 12);
     console.assert(test.isSequenceByte([-12, 1, 12]));
+    console.assert(test.isSequenceByte(new Int8Array([-12, 1, 12])));
+    console.assert(test.isSequenceByte(new Uint8Array([244, 1, 12])));
 }
 {
     const v = test.getSequenceShort();
