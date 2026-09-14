@@ -76,6 +76,7 @@
 #include <scriptinterop/ImageOptions.hpp>
 #include <scriptinterop/ParagraphHeading.hpp>
 #include <scriptinterop/TextAlignment.hpp>
+#include <scriptinterop/XBlob.hpp>
 #include <scriptinterop/XBody.hpp>
 #include <scriptinterop/XContainerElement.hpp>
 #include <scriptinterop/XCursor.hpp>
@@ -122,6 +123,47 @@ void removeContent(cpo::uno::Reference<css::text::XTextContent> const & content)
 
 sal_Int32 hundredthMmToPixels(sal_Int32 hundredthMm) {
     return o3tl::convert(hundredthMm, o3tl::Length::mm100, o3tl::Length::px);
+}
+
+sal_Int32 pixelsToHundredthMm(sal_Int32 pixels) {
+    return o3tl::convert(pixels, o3tl::Length::px, o3tl::Length::mm100);
+}
+
+cpo::uno::Reference<css::text::XTextContent> createGraphicFromBlob(
+    cpo::uno::Reference<css::frame::XModel> const & model,
+    cpo::uno::Reference<scriptinterop::XBlob> const & blob)
+{
+    if (!blob.is()) {
+        throw cpo::uno::RuntimeException(u"createGraphicFromBlob: null blob"_ustr);
+    }
+    auto const componentCtx = comphelper::getProcessComponentContext();
+    auto const smgr = componentCtx->getServiceManager();
+    cpo::uno::Reference<css::io::XTempFile> const tmp(
+        smgr->createInstanceWithContext(u"com.sun.star.io.TempFile"_ustr, componentCtx),
+        cpo::uno::UNO_QUERY_THROW);
+    tmp->getOutputStream()->writeBytes(blob->getBytes());
+    tmp->getOutputStream()->closeOutput();
+    cpo::uno::Reference<css::graphic::XGraphicProvider> const gp(
+        smgr->createInstanceWithContext(u"com.sun.star.graphic.GraphicProvider"_ustr, componentCtx),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Sequence<css::beans::PropertyValue> const loaderArgs{
+        {u"URL"_ustr, 0, cpo::uno::Any(tmp->getUri()), {}}
+    };
+    auto const xgraphic = gp->queryGraphic(loaderArgs);
+    if (!xgraphic.is()) {
+        throw cpo::uno::RuntimeException(
+            u"createGraphicFromBlob: failed to load graphic"_ustr);
+    }
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const docFactory(
+        model, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextContent> const graphic(
+        docFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const props(graphic, cpo::uno::UNO_QUERY_THROW);
+    props->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xgraphic));
+    props->setPropertyValue(
+        u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
+    return graphic;
 }
 
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
@@ -688,6 +730,28 @@ public:
     }
 
     void removeFromParent() override { removeContent(content_); }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> setAltDescription(OUString const & description)
+        override
+    {
+        props()->setPropertyValue(u"Description"_ustr, cpo::uno::Any(description));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> setAltTitle(OUString const & title) override {
+        props()->setPropertyValue(u"Title"_ustr, cpo::uno::Any(title));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> setHeight(sal_Int32 height) override {
+        props()->setPropertyValue(u"Height"_ustr, cpo::uno::Any(pixelsToHundredthMm(height)));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> setWidth(sal_Int32 width) override {
+        props()->setPropertyValue(u"Width"_ustr, cpo::uno::Any(pixelsToHundredthMm(width)));
+        return this;
+    }
 
 private:
     cpo::uno::Reference<css::beans::XPropertySet> props() {
@@ -1572,6 +1636,20 @@ public:
 
     sal_Int32 getSurroundingTextOffset() override { return getOffset(); }
 
+    cpo::uno::Reference<scriptinterop::XInlineImage> insertInlineImage(
+        cpo::uno::Reference<scriptinterop::XBlob> const & blob) override
+    {
+        auto const c = viewCursor();
+        auto const host = c->getText();
+        if (!host.is()) {
+            throw cpo::uno::RuntimeException(
+                u"insertInlineImage: the cursor is not somewhere that accepts inline images"_ustr);
+        }
+        auto const graphic = createGraphicFromBlob(model_, blob);
+        host->insertTextContent(c->getStart(), graphic, false);
+        return new InlineImageImpl(nullptr, graphic);
+    }
+
     void insertText(OUString const & text) override {
         auto const c = viewCursor();
         auto const host = c->getText();
@@ -1702,6 +1780,19 @@ public:
         cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<css::text::XText> const & text):
         model_(model), text_(text) {}
+
+    cpo::uno::Reference<scriptinterop::XInlineImage> appendImage(
+        cpo::uno::Reference<scriptinterop::XBlob> const & blob) override
+    {
+        if (!text_.is()) {
+            throw cpo::uno::RuntimeException(u"XBody has no underlying text"_ustr);
+        }
+        auto const graphic = createGraphicFromBlob(model_, blob);
+        auto const cursor = text_->createTextCursorByRange(text_->getEnd());
+        text_->insertControlCharacter(cursor, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+        text_->insertTextContent(cursor, graphic, false);
+        return new InlineImageImpl(this, graphic);
+    }
 
     cpo::uno::Reference<scriptinterop::XParagraph> appendListItem(OUString const & text) override {
         return appendImpl(text, u"List Number"_ustr);

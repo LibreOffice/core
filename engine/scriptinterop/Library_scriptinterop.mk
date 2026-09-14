@@ -14,6 +14,7 @@ $(eval $(call gb_Library_Library,scriptinterop))
 $(eval $(call gb_Library_set_componentfile,scriptinterop,scriptinterop/util/scriptinterop,services))
 
 $(eval $(call gb_Library_add_exception_objects,scriptinterop,\
+    scriptinterop/source/blob \
     scriptinterop/source/cool \
     scriptinterop/source/document \
     scriptinterop/source/drawing \

@@ -9,26 +9,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-module scriptinterop {
+#include <sal/config.h>
 
-interface XInlineImage: XElement {
-    string getAltDescription();
+#include <cpo/uno/Reference.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <scriptinterop/XBlob.hpp>
 
-    string getAltTitle();
+namespace scriptinterop::detail {
 
-    long getHeight();
+cpo::uno::Reference<scriptinterop::XBlob> createBlob(
+    cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType, OUString const & name);
 
-    long getWidth();
-
-    XInlineImage setAltDescription([in] string description);
-
-    XInlineImage setAltTitle([in] string title);
-
-    XInlineImage setHeight([in] long height);
-
-    XInlineImage setWidth([in] long width);
-};
-
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -204,4 +204,27 @@ function documentTest() {
     console.assert(image.getHeight() === 60);
     console.assert(checkEqual(image.getAltTitle(), ''));
     console.assert(checkEqual(image.getAltDescription(), ''));
+
+    // Insert a 20x10 red PNG at the cursor, then verify the setters chain and round-trip:
+    const pngHex
+        = '89504e470d0a1a0a0000000d49484452000000140000000a08020000003b37e9b100'
+        + '00001549444154789c63f8cfc04036225fe7a8e611a319003144c73974da8b110000'
+        + '000049454e44ae426082';
+    const pngBytes = [];
+    for (let i = 0; i < pngHex.length; i += 2) {
+        pngBytes.push(parseInt(pngHex.substr(i, 2), 16));
+    }
+    const blob = Utilities.newBlob(pngBytes, 'image/png', 'red.png');
+    // appendImage places the image at the end of the body, unlike cursor.insertInlineImage
+    // which needs a visible cursor and returns null when there is none:
+    const inserted = body.appendImage(blob);
+    console.assert(inserted !== null);
+    console.assert(inserted.getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    // GAS stores image geometry in points at 72 DPI, so pixel values that are multiples of 4
+    // round-trip exactly through the 96/72 conversion:
+    inserted.setAltTitle('title').setAltDescription('desc').setWidth(80).setHeight(40);
+    console.assert(inserted.getAltTitle() === 'title');
+    console.assert(inserted.getAltDescription() === 'desc');
+    console.assert(inserted.getWidth() === 80);
+    console.assert(inserted.getHeight() === 40);
 }

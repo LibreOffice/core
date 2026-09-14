@@ -22,6 +22,8 @@ interface XFactory
     XPresentation getActivePresentation();
 
     XDrawing getActiveDrawing();
+
+    XBlob newBlob([in] sequence<byte> data, [in] string contentType, [in] string name);
 };
 
 };

@@ -12,6 +12,8 @@
 module scriptinterop {
 
 interface XBody: XContainerElement {
+    XInlineImage appendImage([in] XBlob blob);
+
     XParagraph appendListItem([in] string text);
 
     XParagraph appendParagraph([in] string text);

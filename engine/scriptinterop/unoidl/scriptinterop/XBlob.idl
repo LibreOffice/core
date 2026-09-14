@@ -11,22 +11,12 @@
 
 module scriptinterop {
 
-interface XInlineImage: XElement {
-    string getAltDescription();
+interface XBlob {
+    sequence<byte> getBytes();
 
-    string getAltTitle();
+    string getContentType();
 
-    long getHeight();
-
-    long getWidth();
-
-    XInlineImage setAltDescription([in] string description);
-
-    XInlineImage setAltTitle([in] string title);
-
-    XInlineImage setHeight([in] long height);
-
-    XInlineImage setWidth([in] long width);
+    string getName();
 };
 
 };

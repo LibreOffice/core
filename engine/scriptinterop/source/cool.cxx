@@ -25,12 +25,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <scriptinterop/XBlob.hpp>
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XDrawing.hpp>
 #include <scriptinterop/XFactory.hpp>
 #include <scriptinterop/XPresentation.hpp>
 #include <scriptinterop/XSpreadsheet.hpp>
 
+#include "blob.hxx"
 #include "document.hxx"
 #include "drawing.hxx"
 #include "presentation.hxx"
@@ -91,6 +93,13 @@ public:
         return scriptinterop::detail::createDrawing(
             modelRequiring(u"com.sun.star.drawing.DrawingDocument"_ustr,
                            u"com.sun.star.presentation.PresentationDocument"_ustr));
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlob(
+        cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType,
+        OUString const & name) override
+    {
+        return scriptinterop::detail::createBlob(data, contentType, name);
     }
 };
 }

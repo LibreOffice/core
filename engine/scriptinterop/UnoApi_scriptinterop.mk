@@ -33,6 +33,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     ParagraphHeading \
     TextAlignment \
     XBase \
+    XBlob \
     XBody \
     XClientRuntime \
     XContainerElement \
