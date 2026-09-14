@@ -234,6 +234,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         // cool: URLs. WebKit copies this configuration, handler included, for the windows that
         // the page opens, such as the slideshow.
         config.setURLSchemeHandler(CoolURLSchemeHandler(viewController: self), forURLScheme: "cool")
+        // The page is our own, so a slideshow video may start, with sound, as soon as its slide
+        // appears, with no click first.
+        config.mediaTypesRequiringUserActionForPlayback = []
 
         // Create the web view
         webView = CODAWebView(frame: .zero, configuration: config)
