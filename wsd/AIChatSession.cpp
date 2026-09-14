@@ -2613,7 +2613,7 @@ void AIChatSession::handleExpansionResponse(int statusCode, const std::string& b
             std::string slideStr;
             JsonUtil::findJSONValue(argsObj, "slide", slideStr);
             if (!slideStr.empty())
-                JsonUtil::parseJSON(slideStr, slide);
+                (void)JsonUtil::parseJSON(slideStr, slide);
         }
         if (!slide && (argsObj->has("intent") || argsObj->has("blocks")))
             slide = std::move(argsObj);
