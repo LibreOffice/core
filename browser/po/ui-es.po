@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
-"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
+"PO-Revision-Date: 2026-09-15 07:54+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fito@libreoffice.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -138,7 +138,7 @@ msgstr "Modificado"
 
 #: admin/admin.strings.js:42
 msgid "Uploaded"
-msgstr "Subido"
+msgstr "Cargado"
 
 #: admin/admin.strings.js:43
 msgid "WOPI host"
@@ -418,13 +418,12 @@ msgstr "Su servidor WOPI no es seguro: la verificación SSL falló"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Los documentos no están contenidos en la práctica: faltan capacidades o "
-"espacios de nombres."
+"Los documentos no están contenidos en la práctica: faltan capacidades, "
+"espacios de nombres y están aislados."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -497,38 +496,40 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Invalid request"
-msgstr ""
+msgstr "Solicitud no válida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Clave de API no válida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "A la clave de API le faltan permisos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Este anfitrión de IA no figura en la lista de anfitriones permitidos del "
+"servidor (lok_allow.host). Pida al personal de sistemas que lo autorice."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Límite de solicitudes: espere un momento y vuelva a intentarlo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "Error del servidor de la API: inténtelo de nuevo más tarde"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Servicio no disponible temporalmente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:625
 msgid "Signature Certificate"
@@ -588,11 +589,11 @@ msgstr "Modo oscuro"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Revisión ortográfica automática"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Usar la configuración de zum de este servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid "Smart Zoom"
@@ -604,7 +605,7 @@ msgstr "Zum predeterminado"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Desplazamiento suave"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 msgid "Compact layout"
@@ -859,12 +860,13 @@ msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
-"Suba fragmentos de textos reutilizables (.bau). Para insertar el texto en su "
-"documento, teclee el atajo de una entrada de texto automático y presione F3."
+"Cargue fragmentos de textos reutilizables (.bau). Para insertar el texto en "
+"su documento, digite el atajo de una entrada de texto automático y presione "
+"F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:976
 msgid "Upload Autotext"
-msgstr "Subir texto automático"
+msgstr "Cargar texto automático"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:982
 msgid "Custom dictionaries"
@@ -880,23 +882,23 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:990
 msgid "Upload Wordbook"
-msgstr "Subir diccionario"
+msgstr "Cargar diccionario"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:996
 msgid "Document themes"
-msgstr "Temas documentales"
+msgstr "Temas del documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:998
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
-"Subir temas documentales personales (.theme). Estas paletas de color definen "
-"colores disponibles en Formato > Tema."
+"Cargue temas personalizados para documentos (.theme). Estos definen las "
+"paletas de colores disponibles en Formato ▸ Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1004
 msgid "Upload Theme"
-msgstr "Subir Tema"
+msgstr "Cargar tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1010
 #: src/control/Control.Menubar.ts:437 src/control/Control.Menubar.ts:658
@@ -916,25 +918,28 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1018
 msgid "Upload Extension"
-msgstr ""
+msgstr "Cargar extensión"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Normativas de seguridad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Cargue las normativas de seguridad de SPIF (.xml). Estas definen las "
+"clasificaciones y categorías disponibles a la hora de aplicar una etiqueta "
+"de seguridad a un documento."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Cargar normativa de seguridad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "La configuración solo está disponible al acceder a su cuenta."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1131
 msgid "Something went wrong. Please try to refresh the page."
@@ -960,7 +965,7 @@ msgstr "Defina las preferencias predeterminadas de la interfaz."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1412
 #: admin/src/integrator/AdminIntegratorSettings.ts:3529
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Comportamiento de zum"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1557
 msgid ""
@@ -1018,7 +1023,7 @@ msgstr "Vista compacta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2278
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr "Ocurrió un problema al subir el archivo. Inténtelo de nuevo."
+msgstr "Ocurrió un problema al cargar el archivo. Inténtelo de nuevo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2354
 #: src/canvas/sections/CommentSection.ts:1600
@@ -1187,7 +1192,7 @@ msgstr "Configuración de los documentos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3704
 msgid "Upload Xcu"
-msgstr "Subir Xcu"
+msgstr "Cargar XCU"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3865
 msgid "Enter {0}"
@@ -1244,7 +1249,7 @@ msgstr "El formato del diccionario no es válido. Compruebe el archivo."
 
 #: admin/src/integrator/WordBook.ts:486
 msgid "Something went wrong while uploading dictionary file"
-msgstr "Ocurrió un problema al subir el archivo de diccionario"
+msgstr "Ocurrió un problema al cargar el archivo de diccionario"
 
 #: admin/src/integrator/Xcu.ts:167 admin/src/integrator/Xcu.ts:179
 msgid "Something went wrong while loading Document settings."
@@ -5254,7 +5259,7 @@ msgstr "Ver cambios"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Cambiar a edición"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5262,9 +5267,8 @@ msgid "Paste"
 msgstr "Pegar"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Diapositiva en blanco"
+msgstr "Desenlazar diapositiva"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5324,10 +5328,10 @@ msgid "Expand All Sections"
 msgstr "Expandir todas las secciones"
 
 #: src/control/Control.PartsPreview.js:1192
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "¿Eliminar sección «%1» y su %2 diapositiva(s)?"
+msgstr[0] "¿Quiere eliminar la sección «%1» y su diapositiva?"
+msgstr[1] "¿Quiere eliminar la sección «%1» y sus %n diapositivas?"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Enter new section name:"
@@ -5359,49 +5363,48 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Este archivo no está disponible."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "No puede abrir este archivo."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "No se pudo abrir este archivo."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Leyendo las diapositivas…"
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 diapositiva insertada"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} diapositivas insertadas"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Diapositiva {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
 msgid "Insert 1 slide"
-msgstr ""
+msgstr "Insertar 1 diapositiva"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "Insertar {0} diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Insertar formas"
+msgstr "Insertar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5418,25 +5421,25 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Importar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
 msgid "Expand slide import"
-msgstr ""
+msgstr "Expandir importación de diapositiva"
 
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Cerrar importación de diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Añadir presentación…"
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Aún no hay ninguna presentación"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
@@ -5552,7 +5555,7 @@ msgstr ""
 
 #: src/slideimport/SlideLinks.ts:514 src/slideimport/SlideLinks.ts:575
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "No se pudieron actualizar las diapositivas de {0}."
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
@@ -5580,7 +5583,7 @@ msgstr ""
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Redimensionar paneles"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5844,7 +5847,7 @@ msgstr ""
 
 #: src/control/Control.Tabs.js:757
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Introduzca la contraseña para desproteger la hoja"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -5884,13 +5887,12 @@ msgid "Insert connectors"
 msgstr "Insertar conectores"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Mín"
+msgstr "Principal"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Está en modo de visualización; presione {0} para editar"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -5912,19 +5914,19 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2805
 msgid "Confirm password"
-msgstr ""
+msgstr "Confirmar contraseña"
 
 #: src/control/Control.UIManager.ts:2851
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "La confirmación no se corresponde con la contraseña"
 
 #: src/control/Control.UIManager.ts:3069
 msgid "Copy error details"
-msgstr "Copia detalles de error"
+msgstr "Copiar detalles del error"
 
 #: src/control/Control.UIManager.ts:3116
 msgid "Show technical details"
-msgstr "Muestra detalles técnicos"
+msgstr "Mostrar detalles técnicos"
 
 #: src/control/Control.UIManager.ts:3130
 msgid "Technical Details:"
@@ -5932,11 +5934,11 @@ msgstr "Detalles técnicos:"
 
 #: src/control/Control.UIManager.ts:3134
 msgid "Error details copied to clipboard"
-msgstr "Detalles de error copiados al portapapeles"
+msgstr "Se copiaron los detalles del error en el portapapeles"
 
 #: src/control/Control.UIManager.ts:3144
 msgid "Failed to copy error details"
-msgstr "Incorrecto al copiar detalles de error"
+msgstr "No se pudieron copiar los detalles del error"
 
 #: src/control/Control.UserList.ts:54
 msgid "{user} has joined"
@@ -6830,19 +6832,19 @@ msgstr "Insertar nota"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Oscuro 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Claro 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Oscuro 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Claro 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
@@ -6870,19 +6872,19 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hiperenlace"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Hiperenlace visitado"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2 % más claro"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2 % más oscuro"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7043,11 +7045,11 @@ msgstr "Funciones de celda de tabla"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Tamaño de la forma seleccionada"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Tamaño de forma"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -7075,11 +7077,11 @@ msgstr "Bordes de celda"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Estilo de tabla nuevo…"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Vaciar estilo"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -7473,11 +7475,11 @@ msgstr ""
 
 #: src/errormessages.ts:68
 msgid "Uploading file to server failed, file not found."
-msgstr "No se pudo subir el archivo al servidor; archivo no encontrado."
+msgstr "No se pudo cargar el archivo al servidor; no se encontró."
 
 #: src/errormessages.ts:69
 msgid "Uploading file to server failed, the file is too large."
-msgstr "No se pudo subir el archivo al servidor; es demasiado grande."
+msgstr "No se pudo cargar el archivo al servidor; es demasiado grande."
 
 #: src/errormessages.ts:73
 msgid "Failed to load document."
@@ -7687,7 +7689,7 @@ msgstr "No se pudo descargar el portapapeles; vuelva a copiar"
 
 #: src/map/Clipboard.js:400
 msgid "Failed to upload the clipboard"
-msgstr "Incorrecto al subir el portapapeles"
+msgstr "No se pudo cargar el portapapeles"
 
 #: src/map/Clipboard.js:1506
 msgid ""
@@ -7765,7 +7767,8 @@ msgid ""
 "The file of type: {0} cannot be uploaded to server since the file has no "
 "name"
 msgstr ""
-"El archivo del tipo {0} no puede subirse al servidor ya que no tiene nombre"
+"El archivo del tipo {0} no puede cargarse en el servidor ya que no tiene "
+"nombre"
 
 #: src/map/handler/Map.FileInserter.js:196
 msgid "The file of type: {0} cannot be inserted since the file is empty"
@@ -7777,16 +7780,16 @@ msgstr ""
 msgid ""
 "The file of type: {0} cannot be uploaded to server since the file is empty"
 msgstr ""
-"El archivo del tipo {0} no puede subirse al el servidor ya que está vacío"
+"El archivo del tipo {0} no puede cargarse en el servidor ya que está vacío"
 
 #: src/map/handler/Map.FileInserter.js:233
 #: src/map/handler/Map.FileInserter.js:313
 msgid "Uploading..."
-msgstr "Subiendo…"
+msgstr "Cargando…"
 
 #: src/map/handler/Map.FileInserter.js:258
 msgid "Uploading file to server failed with status: {0}"
-msgstr "Falló la subida del archivo en el servidor con el estado: {0}"
+msgstr "Falló la carga del archivo en el servidor con el estado: {0}"
 
 #: src/map/handler/Map.FileInserter.js:285
 msgid "Failed to read the selected file."
