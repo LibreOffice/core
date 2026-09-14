@@ -232,10 +232,8 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             {
                 if (m_pText.is())
                 {
-                    Reference<XAccessibleContext> xContext = m_pText->getAccessibleContext();
-                    VCLXAccessibleEdit* pEdit = static_cast<VCLXAccessibleEdit*>(xContext.get());
-                    if (pEdit != nullptr)
-                        pEdit->ProcessWindowEvent (rVclWindowEvent);
+                    VCLXAccessibleEdit* pEdit = static_cast<VCLXAccessibleEdit*>(m_pText.get());
+                    pEdit->ProcessWindowEvent(rVclWindowEvent);
                 }
             }
             break;
