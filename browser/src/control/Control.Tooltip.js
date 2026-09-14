@@ -159,6 +159,10 @@ class Tooltip {
 
 	show(elem, textContent) {
 		if (this._disabled) return;
+		if (!elem || !elem.isConnected) {
+			this.hide();
+			return;
+		}
 		// `textContent` adds flexibility, enabling custom messages like document "Saved" instead of the fixed "cool-tooltip."
 		let content = textContent ? textContent : elem.dataset.cooltip,
 			iconUrl = elem.dataset.cooltipIcon,
@@ -173,7 +177,10 @@ class Tooltip {
 		while (this._container.firstChild)
 			this._container.removeChild(this._container.firstChild);
 
-		if (!content && !iconUrl) return;
+		if (!content && !iconUrl) {
+			this.hide();
+			return;
+		}
 
 		this._container.classList.toggle('cooltip-with-icon', !!iconUrl);
 
