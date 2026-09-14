@@ -135,7 +135,7 @@ public:
     /// Use this method to set initial Description without notification
     void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
-    void SetParent(const css::uno::Reference<css::accessibility::XAccessible>& rParent) { mxParent = rParent; }
+    void SetParent(const rtl::Reference<comphelper::OAccessible>& rpParent) { mxParent = rpParent; }
 
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
