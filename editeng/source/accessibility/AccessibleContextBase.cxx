@@ -254,18 +254,12 @@ sal_Int64 SAL_CALL
     }
 }
 
-
-lang::Locale SAL_CALL
-       AccessibleContextBase::getLocale()
+lang::Locale SAL_CALL AccessibleContextBase::getLocale()
 {
     ensureAlive();
     // Delegate request to parent.
     if (mpParent.is())
-    {
-        uno::Reference<XAccessibleContext> xParentContext(mpParent->getAccessibleContext());
-        if (xParentContext.is())
-            return xParentContext->getLocale ();
-    }
+        return mpParent->getLocale();
 
     //  No locale and no parent.  Therefore throw exception to indicate this
     //  cluelessness.
