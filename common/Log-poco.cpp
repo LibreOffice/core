@@ -212,7 +212,7 @@ namespace Log
                     pfd.fd = LOG_FILE_FD;
                     pfd.events = POLLOUT;
                     pfd.revents = 0;
-                    ::poll(&pfd, 1, StallWaitMs);
+                    (void)::poll(&pfd, 1, StallWaitMs);
                     continue;
                 }
 
