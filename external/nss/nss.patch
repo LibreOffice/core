@@ -92,8 +92,8 @@
  LDFLAGS		   += $(ARCHFLAG) -z noexecstack
  
  # On Maemo, we need to use the -rpath-link flag for even the standard system
-@@ -196,8 +196,13 @@
-     LITTLE_ENDIAN := 0
+@@ -188,8 +188,13 @@
+ endif
  endif
  
 +ifneq ($(SYSTEM_ZLIB),)
