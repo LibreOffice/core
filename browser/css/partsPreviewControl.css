@@ -162,9 +162,9 @@
 	top: 6px;
 	width: 16px;
 	height: 16px;
-	border-radius: 50%;
-	background: var(--color-background-lighter) url('images/lc_inserthyperlink.svg') no-repeat center;
-	background-size: 12px 12px;
+	border-radius: var(--border-radius-s);
+	background: var(--color-background-lighter) url('images/sc_linkedslide.svg') no-repeat center;
+	background-size: 16px 16px;
 	box-shadow: 0 0 2px var(--color-border);
 }
 
@@ -181,7 +181,7 @@
 }
 
 [data-theme='dark'] .preview-link-badge::before {
-	background-image: url('images/dark/lc_inserthyperlink.svg');
+	background-image: url('images/dark/sc_linkedslide.svg');
 }
 
 /* Slide section headers - styled to match sidebar expander labels */
