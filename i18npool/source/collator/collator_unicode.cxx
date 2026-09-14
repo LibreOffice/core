@@ -81,10 +81,21 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 throw RuntimeException(message);
             }
         }
-        if (!collator && OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
-            const sal_uInt8* (*func)() = nullptr;
-            size_t (*funclen)() = nullptr;
 
+        const sal_uInt8* (*func)() = nullptr;
+        size_t (*funclen)() = nullptr;
+        bool bKmrLatn = false;
+
+#if WITH_LOCALE_ALL || WITH_LOCALE_kmr_Latn
+        // tdf#173547: specific case for Kurdish Latin (it could be "kmr-Latn-TR" but also "kmr-Latn-SY")
+        bKmrLatn = rLocale.Language == "qlt" && rLocale.Variant.startsWith("kmr-Latn") && rAlgorithm == "alphanumeric";
+        if (bKmrLatn) {
+            func = get_collator_data_kmr_Latn_alphanumeric;
+            funclen = get_collator_data_kmr_Latn_alphanumeric_length;
+        }
+#endif
+
+        if (!collator && (OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0 || bKmrLatn)) {
             if (false) {
                 ;
 #if WITH_LOCALE_ALL || WITH_LOCALE_ca
@@ -136,14 +147,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 {
                     func = get_collator_data_ja_phonetic_alphanumeric_last;
                     funclen = get_collator_data_ja_phonetic_alphanumeric_last_length;
-                }
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ku
-            } else if ( rLocale.Language == "ku" ) {
-                if ( rAlgorithm == "alphanumeric" )
-                {
-                    func = get_collator_data_ku_alphanumeric;
-                    funclen = get_collator_data_ku_alphanumeric_length;
                 }
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ln
