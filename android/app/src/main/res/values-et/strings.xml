@@ -109,4 +109,5 @@
     <string name="negative_cancel">Katkesta</string>
     <string name="bad_directory">Vigane kausta asukoht</string>
     <string name="share_document">Jaga dokumenti</string>
+    <string name="app_version_and_hash">Versioon: %1$s\nSissekande räsi gitis: %2$s</string>
 </resources>
