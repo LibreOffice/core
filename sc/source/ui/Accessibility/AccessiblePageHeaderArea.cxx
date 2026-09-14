@@ -211,15 +211,10 @@ tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox()
     tools::Rectangle aRect;
     if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xContext = mpParent->getAccessibleContext();
-        uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
-        if (xComp.is())
-        {
             // has the same size and position on screen like the parent and so the pos is (0, 0)
             tools::Rectangle aNewRect(Point(0, 0),
-                                      vcl::unohelper::ConvertToVCLRect(xComp->getBounds()).GetSize());
+                                      vcl::unohelper::ConvertToVCLRect(mpParent->getBounds()).GetSize());
             aRect = aNewRect;
-        }
     }
 
     return aRect;
