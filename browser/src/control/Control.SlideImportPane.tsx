@@ -809,26 +809,12 @@ class SlideImportPane {
   }
 
   // How many slides a source holds, and how many of them are picked.
-  // What the row says on hover: the file, and what the document already took
-  // from it.
-  private sourceTooltip(source: SlideImportPaneSource): string {
-    const taken = this.takenCount(source);
-    if (!taken) return source.name;
-    return (
-      source.name +
-      ' - ' +
-      _('{0} of {1} slides taken')
-        .replace('{0}', String(taken))
-        .replace('{1}', String(source.slides.length))
-    );
-  }
-
   private slideCountText(source: SlideImportPaneSource): string {
     const count = source.slides.length;
     if (!count) return '';
     const taken = this.takenCount(source);
     // A row 342px wide holds the name, the chip and the menu btn first, so
-    // the short form is what fits; the row's tooltip carries the sentence.
+    // the short form is what fits.
     if (taken)
       return _('{0} of {1}')
         .replace('{0}', String(taken))
@@ -868,10 +854,21 @@ class SlideImportPane {
 
     this.panel
       .querySelectorAll(
-        '.navigation-expand-button, .close-navigation-button, .slide-import-source-main, .slide-import-insert',
+        '.navigation-expand-button, .close-navigation-button, .slide-import-insert',
       )
       .forEach((el: Element) =>
         window.L.control.attachTooltipEventListener(el, this.map),
+      );
+
+    this.panel
+      .querySelectorAll('.slide-import-source-name')
+      .forEach((element: Element) =>
+        app.layoutingService.onDrain(() => {
+          const name = element as HTMLElement;
+          if (name.scrollWidth <= name.clientWidth) return;
+          name.dataset.cooltip = name.innerText;
+          window.L.control.attachTooltipEventListener(name, this.map);
+        }),
       );
 
     const newList = this.panel.querySelector(
@@ -1157,20 +1154,12 @@ class SlideImportPane {
               class="slide-import-source-main"
               aria-expanded={source.expanded ? 'true' : 'false'}
               aria-controls={panelId}
-              data-cooltip={this.sourceTooltip(source)}
-              aria-description={this.sourceTooltip(source)}
               onClick={() => this.toggleSource(source)}
             >
               {inside}
             </button>
           ) : (
-            <span
-              class="slide-import-source-main"
-              data-cooltip={this.sourceTooltip(source)}
-              aria-description={this.sourceTooltip(source)}
-            >
-              {inside}
-            </span>
+            <span class="slide-import-source-main">{inside}</span>
           )}
           <button
             class="slide-import-source-menu"
