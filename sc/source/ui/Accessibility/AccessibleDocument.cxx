@@ -1316,10 +1316,11 @@ void ScAccessibleDocument::PreInit()
     ScViewData& rViewData = mpViewShell->GetViewData();
     if (rViewData.HasEditView(meSplitPos))
     {
-        uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
-            mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(), GetCurrentCellDescription(),
+        rtl::Reference<ScAccessibleEditObject> pAcc = new ScAccessibleEditObject(
+            this, rViewData.GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos),
+            GetCurrentCellName(), GetCurrentCellDescription(),
             ScAccessibleEditObject::CellInEditMode);
-        AddChild(xAcc, false);
+        AddChild(pAcc, false);
     }
 }
 
