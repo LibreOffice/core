@@ -196,7 +196,13 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingOffPage)
     CPPUNIT_ASSERT(pPage->GetSortedObjs());
     SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPageObjs.size());
-    auto pFly = rPageObjs[1]->DynCastFlyAtContentFrame();
+    SwFlyAtContentFrame* pFly = nullptr;
+    for (SwAnchoredObject* pObj : rPageObjs)
+    {
+        pFly = pObj->DynCastFlyAtContentFrame();
+        if (pFly)
+            break;
+    }
     CPPUNIT_ASSERT(pFly);
     SwTwips nFlyLeft = pFly->getFrameArea().Left() + pFly->getFramePrintArea().Left();
     // Without the accompanying fix in place, this test would have failed with:

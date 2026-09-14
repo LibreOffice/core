@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotCaptureDrawObjsOnPageDrawWrapNone)
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
-    SwAnchoredObject* pDrawObj = rPage2Objs[0];
+    SwAnchoredObject* pDrawObj = rPage2Objs[1];
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT),
                          pDrawObj->GetFrameFormat()->Which());
     SwTwips nDrawObjTop = pDrawObj->GetObjRect().Top();

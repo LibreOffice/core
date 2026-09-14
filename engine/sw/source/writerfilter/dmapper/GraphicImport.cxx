@@ -1284,14 +1284,6 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                         bool bTextBox = false;
                         xShapeProps->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
 
-                        // The positioning change caused by LayoutInCell doesn't sync well
-                        // in the text / frame duo. So the compatibility fix only correctly
-                        // positions the frame and not the text currently.
-                        // tdf#135943: Instead of half-fixing and making a complete mess,
-                        // just avoid until layout's repositioning is sync'd to the text frame.
-                        if (m_bLayoutInCell && bTextBox)
-                            m_bLayoutInCell = !m_bCompatForcedLayoutInCell;
-
                         xShapeProps->setPropertyValue(u"AnchorType"_ustr, cpo::uno::Any(eAnchorType));
 
                         if (m_nVertRelation == text::RelOrientation::TEXT_LINE)

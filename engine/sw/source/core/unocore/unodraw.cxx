@@ -1073,6 +1073,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
         if(pFormat)
         {
             SwAttrSet aSet(pFormat->GetAttrSet());
+
             SwDoc& rDoc = pFormat->GetDoc();
             if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
             {
@@ -1302,7 +1303,6 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
             else
             {
                 SfxItemPropertySet::setPropertyValue( *pEntry, aValue, aSet );
-
                 if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
                 {
                     bool bSetAttr = true;

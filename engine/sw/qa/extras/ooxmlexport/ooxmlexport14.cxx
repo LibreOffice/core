@@ -125,7 +125,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
     bool bValue;
     xShapeProperties->getPropertyValue(u"IsFollowingTextFlow"_ustr) >>= bValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("YOU FIXED ME? LayoutInCell ought to be true", false, bValue);
+    CPPUNIT_ASSERT(bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c12.docx")
@@ -1056,7 +1056,13 @@ CPPUNIT_TEST_FIXTURE(Test, testUserField)
                                  countXPathNodes(pXmlDoc, "//w:docVars/w:docVar[2]"));
 }
 
-
+DECLARE_OOXMLEXPORT_TEST(testTdf163338_shapeWithText,
+                         "textbox_in_wrong_place.docx")
+{
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    sal_Int32 nLeft = getXPath(pLayout, "//page[1]/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "left").toInt32();
+    CPPUNIT_ASSERT(nLeft > 6900);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

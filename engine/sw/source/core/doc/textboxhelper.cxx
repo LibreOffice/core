@@ -35,6 +35,7 @@
 #include <frameformats.hxx>
 #include <dflyobj.hxx>
 #include <swtable.hxx>
+#include <swunohelper.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
@@ -627,6 +628,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
             syncProperty(
                 pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION,
                 cpo::uno::Any(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
+
             syncProperty(
                 pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION,
                 cpo::uno::Any(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
@@ -836,6 +838,30 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             break;
         }
+        case RES_SURROUND:
+            switch (nMemberID)
+            {
+                case MID_SURROUND_SURROUNDTYPE:
+                {
+                    css::text::WrapTextMode eVal
+                        = static_cast<css::text::WrapTextMode>(SWUnoHelper::GetEnumAsInt32(rValue));
+                    if (eVal != css::text::WrapTextMode_PARALLEL)
+                        aPropertyName = UNO_NAME_TEXT_WRAP;
+                }
+                break;
+                case MID_SURROUND_ANCHORONLY:
+                    aPropertyName = UNO_NAME_SURROUND_ANCHORONLY;
+                    break;
+                case MID_SURROUND_CONTOUR:
+                case MID_SURROUND_CONTOUROUTSIDE:
+                    break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << o3tl::narrowing<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
+            }
+            break;
         case RES_VERT_ORIENT:
             switch (nMemberID)
             {
