@@ -15,11 +15,7 @@
 
 #include <common/ProcUtil.hpp>
 #include <common/Watchdog.hpp>
-
-extern "C"
-{
-    void handleUserProfileSignal(const int /* signal */);
-}
+#include <net/Socket.hpp>
 
 void Watchdog::installProfileSignalHandler()
 {

@@ -2219,4 +2219,6 @@ enum class WSOpCode : unsigned char {
     // ... reserved
 };
 
+extern "C" void handleUserProfileSignal(int signal);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
