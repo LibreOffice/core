@@ -38,7 +38,7 @@ using namespace ::com::sun::star::accessibility;
 
 ScAccessibleContextBase::ScAccessibleContextBase(
     const rtl::Reference<comphelper::OAccessible>& rpParent, const sal_Int16 aRole)
-    : mxParent(rpParent)
+    : mpParent(rpParent)
     , maRole(aRole)
 {
 }
@@ -72,7 +72,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
 
     OAccessible::disposing();
 
-    mxParent.clear();
+    mpParent.clear();
 }
 
 
@@ -108,9 +108,10 @@ bool ScAccessibleContextBase::isShowing(  )
     SolarMutexGuard aGuard;
     ensureAlive();
     bool bShowing(false);
-    if (mxParent.is())
+    if (mpParent.is())
     {
-        uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+        uno::Reference<XAccessibleComponent> xParentComponent(mpParent->getAccessibleContext(),
+                                                              uno::UNO_QUERY);
         if (xParentComponent.is())
         {
             tools::Rectangle aParentBounds(
@@ -147,7 +148,7 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
 uno::Reference<XAccessible> SAL_CALL
        ScAccessibleContextBase::getAccessibleParent()
 {
-    return mxParent;
+    return mpParent;
 }
 
 sal_Int16 SAL_CALL
@@ -214,10 +215,9 @@ lang::Locale SAL_CALL
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    if (mxParent.is())
+    if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xParentContext (
-            mxParent->getAccessibleContext());
+        uno::Reference<XAccessibleContext> xParentContext(mpParent->getAccessibleContext());
         if (xParentContext.is())
             return xParentContext->getLocale ();
     }

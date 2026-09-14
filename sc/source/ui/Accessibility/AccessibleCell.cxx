@@ -324,7 +324,8 @@ bool ScAccessibleCell::IsSelected()
 {
     if (IsFormulaMode())
     {
-        const ScAccessibleSpreadsheet *pSheet =static_cast<const ScAccessibleSpreadsheet*>(mxParent.get());
+        const ScAccessibleSpreadsheet* pSheet
+            = static_cast<const ScAccessibleSpreadsheet*>(mpParent.get());
         if (pSheet)
         {
             return pSheet->IsScAddrFormulaSel(maCellAddress);
@@ -509,7 +510,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
 
 bool ScAccessibleCell::IsFormulaMode()
 {
-    ScAccessibleSpreadsheet* pSheet = static_cast<ScAccessibleSpreadsheet*>(mxParent.get());
+    ScAccessibleSpreadsheet* pSheet = static_cast<ScAccessibleSpreadsheet*>(mpParent.get());
     if (pSheet)
     {
         return pSheet->IsFormulaMode();

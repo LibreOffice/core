@@ -194,9 +194,9 @@ OUString ScAccessiblePageHeaderArea::createAccessibleName()
 AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aRect;
-    if (mxParent.is())
+    if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
+        uno::Reference<XAccessibleContext> xContext = mpParent->getAccessibleContext();
         uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
         if (xComp.is())
         {
@@ -214,9 +214,9 @@ AbsoluteScreenPixelRectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(
 tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox()
 {
     tools::Rectangle aRect;
-    if (mxParent.is())
+    if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
+        uno::Reference<XAccessibleContext> xContext = mpParent->getAccessibleContext();
         uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
         if (xComp.is())
         {

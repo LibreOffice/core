@@ -135,7 +135,7 @@ public:
     /// Use this method to set initial Description without notification
     void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
-    void SetParent(const rtl::Reference<comphelper::OAccessible>& rpParent) { mxParent = rpParent; }
+    void SetParent(const rtl::Reference<comphelper::OAccessible>& rpParent) { mpParent = rpParent; }
 
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
@@ -147,7 +147,7 @@ protected:
     bool IsDefunc() const { return rBHelper.bDisposed; }
 
     /// Reference to the parent object.
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
 private:
     /** Description of this object.  This is not a constant because it can
