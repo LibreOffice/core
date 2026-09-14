@@ -171,6 +171,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
     ErrorRegistry::Reset();
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmojiShortcodeIsLanguageIndependent)
+{
+    // Given a document whose text language is not English:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SetAttrItem(SvxLanguageItem(LANGUAGE_GERMAN, RES_CHRATR_LANGUAGE));
+
+    // When typing the international shortcode of an emoji:
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    for (sal_Unicode ch : std::u16string_view(u":rocket:"))
+        rEditWin.KeyInput(KeyEvent(ch, 0));
+
+    // Then it is replaced, the shortcodes living in the "und" replacement list
+    // that AutoCorrect consults whatever the document language is.
+    // Without that, this was ":rocket:", the German list only knowing :Rakete:.
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(u"\U0001F680"_ustr, pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
 {
     createSwDoc("locale-independent-template.odt");
