@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstdlib>
+
 #include <vcl/outdev.hxx>
 
 #include <pagefrm.hxx>
@@ -1524,7 +1526,15 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
             tools::Long nRight = nCurrRight - nFlyRight;
             if( nFlyRight - nFlyLeft > FRAME_MAX )
             {
-                if( nLeft < nRight )
+                // Keep the side with more room for the text. An object centred
+                // in the text area leaves the same room on either side, give or
+                // take the twip the truncating division in the centred position
+                // loses. A DOCX file wraps such an object on its right, so break
+                // the tie that way for left-to-right text and on the mirrored
+                // side otherwise.
+                const bool bKeepRight = nLeft < nRight
+                    || ( std::abs( nLeft - nRight ) <= 1 && !m_pCurrFrame->IsRightToLeft() );
+                if( bKeepRight )
                     nLeft = 0;
                 else
                     nRight = 0;

@@ -926,6 +926,49 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf123898)
                 "type", u"PortionType::Text");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testWrapLargestCentered)
+{
+    // An image centred in the text area, wrapping on its largest side. The two sides are the
+    // same width, and a DOCX file has the text on the right of such an image.
+    createSwDoc("wrap-largest-centered.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The image sits in the middle of the 8306 twips wide text area, 3358 twips of room
+    // on either side of it.
+    assertXPath(pXmlDoc, "/root/page[1]/body/infos/prtBounds", "width", u"8306");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "left", u"5442");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "right", u"7031");
+
+    // So the line starts with a fly portion covering the image and everything left of it,
+    // and the text follows on the right. Without the fix the tie went the other way: the
+    // line had no fly portion at all and the text stood to the left of the image.
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion",
+                "type", u"PortionType::Fly");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion",
+                "width", u"4948");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testWrapLargestCenteredOddWidth)
+{
+    // The same centred image, one twip narrower. Centring divides the leftover room in two and
+    // rounds down, so an odd image width leaves one twip more on the left than on the right. The
+    // text still belongs on the right, as it does for a width that divides evenly.
+    createSwDoc("wrap-largest-centered-odd.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The 1589 twips wide image leaves 3359 twips of room on its left and 3358 on its right.
+    assertXPath(pXmlDoc, "/root/page[1]/body/infos/prtBounds", "width", u"8306");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "left", u"5443");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds", "right", u"7031");
+
+    // The line starts with a fly portion covering the image and everything left of it, and the
+    // text follows on the right.
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion",
+                "type", u"PortionType::Fly");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion",
+                "width", u"4948");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf123651)
 {
     createSwDoc("tdf123651.docx");
