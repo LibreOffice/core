@@ -2397,6 +2397,34 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					},
 				]
 			},
+			{ type: 'separator', id: 'review-spellcheck-break', orientation: 'vertical' },
+			{
+				'type': 'overflowgroup',
+				'id': 'review-AutoCorrect',
+				'name': _UNO('.uno:AutoFormatMenu', 'text'),
+				'icon': 'lc_autocorrectdlg.svg',
+				'accessibility': { focusBack: false, combination: 'AW', de: null },
+				'children' : [
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-online-autoformat',
+										'type': 'toolitem',
+										'text': _UNO('.uno:OnlineAutoFormat', 'text'),
+										'command': '.uno:OnlineAutoFormat',
+										'accessibility': { focusBack: true, combination: 'AW', de: null },
+									}
+								]
+							},
+						],
+						'vertical': 'true'
+					},
+				]
+			},
 			{ type: 'separator', id: 'review-spell-break', orientation: 'vertical' },
 			{
 				'id': 'review-insert-annotation',

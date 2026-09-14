@@ -506,7 +506,8 @@ describe(['tagdesktop', 'tagnextcloud'], 'Track Changes', function () {
 describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', function() {
 	function openManageChangesDialog() {
 		desktopHelper.switchUIToNotebookbar();
-		cy.viewport(1920, 1080);
+		// Wide enough for the Review tab not to fold the Tracking group into a menu.
+		cy.viewport(2048, 1080);
 		cy.cGet('.notebookbar #Review-tab-label').click();
 		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
 		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
