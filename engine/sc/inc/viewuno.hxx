@@ -40,11 +40,11 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include "types.hxx"
-
-namespace com::sun::star::view { class XSelectionChangeListener; }
 
 class ScTabViewShell;
 class ScPreviewShell;
@@ -146,7 +146,7 @@ private:
     typedef std::vector<cpo::uno::Reference<css::sheet::XRangeSelectionListener>> RangeSelListeners;
 
     SfxItemPropertySet                      aPropSet;
-    std::vector<cpo::uno::Reference<css::view::XSelectionChangeListener> >
+    ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener>
                                             aSelectionChgListeners;
     RangeSelListeners                       aRangeSelListeners;
     std::vector<cpo::uno::Reference<css::sheet::XRangeSelectionChangeListener> >

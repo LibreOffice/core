@@ -449,6 +449,7 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
     SfxBaseController( pViewSh ),
     aPropSet( lcl_GetViewOptPropertyMap() ),
+    aSelectionChgListeners( m_aMutex ),
     aMouseClickHandlers( 0 ),
     aActivationListeners( 0 ),
     nPreviousTab( 0 ),
@@ -1676,16 +1677,14 @@ void ScTabViewObj::addSelectionChangeListener(
     const uno::Reference<view::XSelectionChangeListener>& xListener )
 {
     SolarMutexGuard aGuard;
-    aSelectionChgListeners.push_back( xListener );
+    aSelectionChgListeners.addInterface( xListener );
 }
 
 void ScTabViewObj::removeSelectionChangeListener(
                 const uno::Reference< view::XSelectionChangeListener >& xListener )
 {
     SolarMutexGuard aGuard;
-    auto it = std::find(aSelectionChgListeners.begin(), aSelectionChgListeners.end(), xListener); //! why the hassle with queryInterface?
-    if (it != aSelectionChgListeners.end())
-        aSelectionChgListeners.erase(it);
+    aSelectionChgListeners.removeInterface( xListener );
 }
 
 void ScTabViewObj::SelectionChanged()
@@ -1700,8 +1699,9 @@ void ScTabViewObj::SelectionChanged()
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
     aEvent.Source.set(getXWeak());
-    for (const auto& rListener : aSelectionChgListeners)
-        rListener->selectionChanged( aEvent );
+    // The container notifies a copy of its listener list, so a listener can add or remove
+    // selection listeners on this view while the notification is running.
+    aSelectionChgListeners.notifyEach( &view::XSelectionChangeListener::selectionChanged, aEvent );
 
     // handle sheet events
     ScTabViewShell* pViewSh = GetViewShell();
