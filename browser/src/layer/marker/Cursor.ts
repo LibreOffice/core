@@ -62,6 +62,10 @@ class Cursor {
 
 		this.update();
 
+		// DEAD in its 'move' half, to be removed in the follow-up: 'move' is never
+		// fired. The caret is repositioned from the layout now, in
+		// ViewLayout.commitVisibleAreaAndRequestTiles and in Calc's
+		// refreshTextCursor. 'splitposchanged' is still fired.
 		if (this.map._docLayer.isCalc())
 			this.map.on('splitposchanged move', this.update, this);
 		else

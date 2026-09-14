@@ -1329,6 +1329,12 @@ class BitmapTileManager extends RenderManagerBase {
 			) {
 				coordsQueue.splice(i, 1);
 			} else if (app.map._docLayer._moveInProgress) {
+				// DEAD, to be removed in the follow-up: _moveInProgress is never true
+				// since the map stopped owning the pan, and there is no scroll gesture
+				// with a start and an end to hang it on any more. A tile asked for
+				// again too soon is held back by Tile.requestingTooFast instead, which
+				// also schedules the one retry that keeps a skipped tile from being
+				// lost; filtering here would take that retry away.
 				// While we are actively scrolling, filter out duplicate
 				// (still) missing tiles requests during the scroll.
 				if (app.map._docLayer._moveTileRequests.includes(coordsQueue[i].key()))
@@ -1515,17 +1521,13 @@ class BitmapTileManager extends RenderManagerBase {
 		var idleTime = 750;
 		this._preFetchPart = this._docLayer.getSelectedPart();
 		this._preFetchMode = app.activeDocument.activeModes;
-		this._preFetchIdle = setTimeout(
-			window.L.bind(function () {
-				this._tilesPreFetcher = setInterval(
-					window.L.bind(this.preFetchTiles, this),
-					interval,
-				);
-				this._preFetchIdle = undefined;
-				this._cumTileCount = 0;
-			}, this),
-			idleTime,
-		);
+		this._preFetchIdle = setTimeout(() => {
+			this._tilesPreFetcher = setInterval(() => {
+				this.preFetchTiles(false);
+			}, interval);
+			this._preFetchIdle = undefined;
+			this._cumTileCount = 0;
+		}, idleTime);
 	}
 
 	private clearPreFetchTimers() {

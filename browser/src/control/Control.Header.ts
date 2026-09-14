@@ -69,6 +69,9 @@ export class Header extends CanvasSectionObject {
 	onInitialize(): void {
 		this._selectionBackgroundGradient = [ '#3465A4', '#729FCF', '#004586' ];
 
+		// DEAD in its 'move' half, to be removed in the follow-up: 'move' is never
+		// fired. A scroll refreshes the headers through ViewLayoutCalc's
+		// refreshHeaders instead. The other three are still fired.
 		this._map.on('move zoomchanged sheetgeometrychanged splitposchanged', this._updateCanvas, this);
 		this._map.on('darkmodechanged', this._reInitRowColumnHeaderStylesAfterModeChange, this);
 		this._map.on('statusupdated', this._handleStatusUpdated, this);

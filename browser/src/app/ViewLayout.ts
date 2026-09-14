@@ -591,6 +591,7 @@ class ViewLayoutBase {
 		if (zoomChanged) {
 			map.fire('zoomend');
 			map.fire('zoomlevelschange');
+			RenderManager.resetPreFetching(true);
 		}
 	}
 
@@ -836,6 +837,16 @@ class ViewLayoutBase {
 		// stops counting as pending and coherency-paused drawing resumes as
 		// soon as the visible tiles are ready.
 		RenderManager.requestVisibleTiles(this.currentCoordList);
+
+		this.onViewMoved();
+	}
+
+	protected onViewMoved(): void {
+		RenderManager.resetPreFetching(true);
+
+		app.updateFollowingUsers();
+
+		app.events.fire('viewmoved', null);
 	}
 
 	// Reset currentCoordList and return the per-frame constants shared by the

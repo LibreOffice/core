@@ -53,14 +53,16 @@ class PreloadMapOverlay {
 		RenderManager.onTileStateChanged(this.boundOnChanged);
 		// Scrolling moves the view rectangle, and changing part moves the map
 		// to another part's tiles, without any tile itself changing.
-		app.map.on('move zoomend resize updateparts setpart', this.boundOnChanged);
+		app.events.on('viewmoved', this.boundOnChanged);
+		app.map.on('zoomend resize updateparts setpart', this.boundOnChanged);
 
 		this.onTileStateChanged();
 	}
 
 	destroy(): void {
 		RenderManager.offTileStateChanged(this.boundOnChanged);
-		app.map.off('move zoomend resize updateparts setpart', this.boundOnChanged);
+		app.events.off('viewmoved', this.boundOnChanged);
+		app.map.off('zoomend resize updateparts setpart', this.boundOnChanged);
 		if (this.redrawHandle) cancelAnimationFrame(this.redrawHandle);
 		this.redrawHandle = 0;
 		this.canvas.remove();

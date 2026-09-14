@@ -339,6 +339,8 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		// Request the tiles that cover the new visible area and mark the
 		// already-loaded ones current.
 		this.refreshTiles();
+
+		this.onViewMoved();
 	}
 
 	// Refresh the visible-tile list from the viewed rectangle and hand it to
