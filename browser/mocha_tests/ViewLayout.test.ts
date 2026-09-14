@@ -32,6 +32,9 @@ describe('ViewLayout', function () {
 		// DocumentBase / TableMiddleware call bare `getComputedStyle(...)`.
 		// In the browser it's a window global; in node we forward to jsdom's.
 		global.getComputedStyle = window.getComputedStyle.bind(window);
+		// DocEvents builds a CustomEvent and hands it to an element of the jsdom
+		// document, which accepts only events built by jsdom itself.
+		(global as any).CustomEvent = (window as any).CustomEvent;
 		global.ResizeObserver = ResizeObserver;
 
 		const canvasWidth = 1024;
@@ -42,6 +45,32 @@ describe('ViewLayout', function () {
 
 	describe('View Layout Tests', function () {
 		this.beforeAll(initializeJSDOM);
+
+		// The tile manager arms timers of its own: the pre-fetch idle wait and its
+		// tick, the retry for tiles a request wait skipped, and the part and
+		// adjacent pre-fetches. They would outlive the test that armed them and
+		// keep the test run from finishing.
+		function stopTileManagerTimers(tileManager: any): void {
+			if (!tileManager) return;
+
+			const timeouts = [
+				'_preFetchIdle',
+				'_skippedTileRetry',
+				'_partTilePreFetcher',
+				'_adjacentTilePreFetcher',
+				'shrinkCurrentId',
+			];
+			for (const field of timeouts) {
+				clearTimeout(tileManager[field]);
+				tileManager[field] = undefined;
+			}
+			clearInterval(tileManager._tilesPreFetcher);
+			tileManager._tilesPreFetcher = undefined;
+		}
+
+		this.afterEach(function () {
+			stopTileManagerTimers((RenderManager as any)._instance);
+		});
 
 		// Install the app-level stubs.
 		function setupAppStubs(pixelsToTwips: number): void {
@@ -75,8 +104,13 @@ describe('ViewLayout', function () {
 			};
 
 			// app.file is populated by docstate.ts in the browser. ViewLayoutMultiPage
-			// reset() reads app.file.writer.pageRectangleList.
-			(app as any).file = { writer: { pageRectangleList: [] } };
+			// reset() reads app.file.writer.pageRectangleList, and the follow-state
+			// check that a scroll runs reads app.file.textCursor. Both carry the
+			// values a freshly opened document starts with.
+			(app as any).file = {
+				writer: { pageRectangleList: [] },
+				textCursor: { visible: false, rectangle: null },
+			};
 
 			// Use the real twips/pixel convention (1 pixel = 15 twips by default).
 			app.pixelsToTwips = pixelsToTwips;
@@ -268,6 +302,9 @@ describe('ViewLayout', function () {
 		// scenario starts from clean state instead of inheriting tiles, caches and
 		// queues left behind by earlier tests.
 		function resetRenderManagerState(): any {
+			// The instance being replaced may have timers running.
+			stopTileManagerTimers((RenderManager as any)._instance);
+
 			const tileManager: any = new BitmapTileManager();
 			(RenderManager as any)._instance = tileManager;
 			return tileManager;
@@ -620,6 +657,109 @@ describe('ViewLayout', function () {
 			const layout = activeDocument.activeLayout as ViewLayoutCalc;
 			layout.viewSize = cool.SimplePoint.fromCorePixels([5000, 5000]);
 			return { layout, anchor };
+		}
+
+		// The pre-fetch reads state that the scroll path never touches: whether the
+		// canonical view id has arrived, whether the view may edit, and the frozen
+		// pane split.
+		function allowPreFetch(): void {
+			const docLayer: any = app.map._docLayer;
+			docLayer._canonicalIdInitialized = true;
+			if (!docLayer.getSplitPanesContext)
+				docLayer.getSplitPanesContext = function () {
+					return null;
+				};
+			(app.map as any).isEditMode = function () {
+				return true;
+			};
+		}
+
+		// Collect the timer callbacks the code under test arms, instead of waiting
+		// for them to fire, so a test can run them when it chooses.
+		function captureTimers(): { pending: Function[]; restore: () => void } {
+			const realSetTimeout = global.setTimeout;
+			const realSetInterval = global.setInterval;
+			const realClearTimeout = global.clearTimeout;
+			const realClearInterval = global.clearInterval;
+			const pending: Function[] = [];
+			let nextHandle = 1;
+
+			const record = function (callback: Function): any {
+				pending.push(callback);
+				return nextHandle++;
+			};
+			(global as any).setTimeout = record;
+			(global as any).setInterval = record;
+			(global as any).clearTimeout = function () {};
+			(global as any).clearInterval = function () {};
+
+			return {
+				pending,
+				restore: () => {
+					(global as any).setTimeout = realSetTimeout;
+					(global as any).setInterval = realSetInterval;
+					(global as any).clearTimeout = realClearTimeout;
+					(global as any).clearInterval = realClearInterval;
+				},
+			};
+		}
+
+		// Run the captured callbacks in the order they were armed. A callback may
+		// arm another one - the idle wait arms the repeating tick that does the
+		// fetching - so the queue is drained rather than walked once.
+		function runCapturedTimers(pending: Function[]): number {
+			let ran = 0;
+			while (pending.length > 0 && ran < 20) {
+				const callback = pending.shift();
+				callback();
+				ran++;
+			}
+			return ran;
+		}
+
+		// The tile keys of every request sent since the history array was last
+		// emptied.
+		function requestedKeys(
+			sentRequests: Array<Array<TileCoordData>>,
+		): Set<string> {
+			const keys: Set<string> = new Set();
+			for (const request of sentRequests)
+				for (const coords of request) keys.add(coords.key());
+			return keys;
+		}
+
+		// Scroll, then let the pre-fetch that the scroll armed run, and report the
+		// tiles it asked for beyond the ones covering the visible area.
+		function preFetchedBeyondTheView(layout: any): string[] {
+			allowPreFetch();
+			const tileManager: any = (RenderManager as any)._instance;
+			const tileCombine = instrumentTileCombineRequests(tileManager);
+			const timers = captureTimers();
+			try {
+				RenderManager.clearPreFetch();
+
+				layout.scroll(0, 400);
+
+				// Everything up to here is the visible area being fetched; the
+				// pre-fetch is what the armed timers do next.
+				tileCombine.sentRequests.length = 0;
+				runCapturedTimers(timers.pending);
+
+				const visible: Set<string> = new Set(
+					layout.getCurrentCoordList().map((coords: TileCoordData) => {
+						return coords.key();
+					}),
+				);
+				return Array.from(requestedKeys(tileCombine.sentRequests)).filter(
+					(key) => {
+						return !visible.has(key);
+					},
+				);
+			} finally {
+				timers.restore();
+				tileCombine.restore();
+				RenderManager.clearPreFetch();
+			}
 		}
 
 		// ========================================================================
@@ -1469,6 +1609,32 @@ describe('ViewLayout', function () {
 					grewAbove +
 					' against ' +
 					grewBelow,
+			);
+		});
+
+		// Tiles keep being fetched around the view once it has come to rest, so the
+		// next scroll in the same direction lands on tiles that are already there.
+		it('A scroll leads to tiles beyond the visible area being fetched', function () {
+			const layout = setupBaseLayoutForTest();
+
+			const beyond = preFetchedBeyondTheView(layout);
+
+			nodeassert.ok(
+				beyond.length > 0,
+				'no tiles were fetched beyond the visible area after a scroll',
+			);
+		});
+
+		// A spreadsheet commits its scroll on a path of its own, so it needs its own
+		// guarantee that the pre-fetch starts again there too.
+		it('Calc: a scroll leads to tiles beyond the visible area being fetched', function () {
+			const { layout } = setupCalcForTest();
+
+			const beyond = preFetchedBeyondTheView(layout);
+
+			nodeassert.ok(
+				beyond.length > 0,
+				'no tiles were fetched beyond the visible area after a scroll',
 			);
 		});
 
