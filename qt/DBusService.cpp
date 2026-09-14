@@ -128,6 +128,8 @@ namespace coda
         if (path.isEmpty())
         {
             LOG_ERR("Failed to create new " << templateType << " document");
+            QMessageBox::warning(nullptr, QObject::tr("New Document Error"),
+                                 QObject::tr("Could not create a new document."));
             return false;
         }
         Poco::URI newDocumentURI(Poco::Path(path.toStdString()));

@@ -149,15 +149,20 @@ std::string getUILanguage()
     return lang;
 }
 
+/// The directory new documents are created in.  XDG only tells us where the
+/// documents directory belongs; on a fresh account it does not exist yet, so
+/// create it here and fall back to the home directory when it cannot be
+/// created.
 QString getDocumentsDirectory()
 {
-    QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if (documentsDir.isEmpty())
-    {
-        // Fallback to home directory if Documents doesn't exist
-        documentsDir = QDir::homePath();
-    }
-    return documentsDir;
+    const QString documentsDir =
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if (!documentsDir.isEmpty() && QDir().mkpath(documentsDir))
+        return documentsDir;
+
+    LOG_WRN("Cannot create the documents directory " << documentsDir.toStdString()
+            << ", falling back to the home directory");
+    return QDir::homePath();
 }
 
 /// Resolve the template to copy.  pbUsedRequestedTemplate, when given, says
