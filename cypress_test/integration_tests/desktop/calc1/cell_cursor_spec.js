@@ -195,7 +195,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 		calcHelper.clickOnACell(2, 3, 4, 3, { ctrlKey: true });
 
 		cy.wait(500);
-		calcHelper.clickOnACell(4, 3, 2, 6);
+		calcHelper.clickOnACell(4, 3, 2, 6, { ctrlKey: true });
 
 		cy.wait(500);
 		calcHelper.clickOnACell(2, 6, 2, 10, { shiftKey: true });
