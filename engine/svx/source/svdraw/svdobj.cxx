@@ -43,6 +43,9 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/section.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <limits>
 #include <svx/svdoutl.hxx>
 #include <cmath>
 #include <o3tl/deleter.hxx>
@@ -2059,19 +2062,140 @@ OutlinerParaObject* SdrObject::GetOutlinerParaObject() const
     return nullptr;
 }
 
-void SdrObject::scaleText(double fScale, bool bUndo)
+namespace
+{
+/// Whether the item named by nWhich carries a length of the text that is fitted along with the
+/// shape showing it: the size of a letter, the room between two letters, and the room a
+/// paragraph keeps between its lines and around itself.
+bool isScaledTextLength(sal_uInt16 nWhich)
+{
+    return EE_CHAR_FONTHEIGHT == nWhich || EE_CHAR_FONTHEIGHT_CJK == nWhich
+           || EE_CHAR_FONTHEIGHT_CTL == nWhich || EE_CHAR_KERNING == nWhich
+           || EE_PARA_SBL == nWhich || EE_PARA_ULSPACE == nWhich || EE_PARA_LRSPACE == nWhich;
+}
+
+/// Whether the length the item named by nWhich holds runs across the text, as the room between
+/// two letters and the room left and right of a paragraph do, rather than down it.
+bool textLengthRunsAcross(sal_uInt16 nWhich)
+{
+    return EE_CHAR_KERNING == nWhich || EE_PARA_LRSPACE == nWhich;
+}
+
+/// fLength held within the range the field it goes into can take, so that a length scaled up
+/// comes out as the longest that field holds rather than starting again from the shortest.
+template <typename T> T lengthWithinRange(double fLength)
+{
+    const double fLowest(static_cast<double>(std::numeric_limits<T>::min()));
+    const double fHighest(static_cast<double>(std::numeric_limits<T>::max()));
+    return static_cast<T>(std::lround(std::clamp(fLength, fLowest, fHighest)));
+}
+
+/// The indent with its length multiplied by fScale. An indent given as a share of the letter
+/// size follows the letters on its own, so that one is left as it stands.
+SvxIndentValue scaledIndent(SvxIndentValue stIndent, double fScale)
+{
+    if (css::util::MeasureUnit::TWIP == stIndent.m_nUnit)
+        stIndent.m_dValue *= fScale;
+
+    return stIndent;
+}
+
+/// A copy of rItem with every length it holds multiplied by the scale for the direction that
+/// length runs in, or nothing when it holds no length that a scale reaches.
+std::unique_ptr<SfxPoolItem> scaledCopyOfTextItem(const SfxPoolItem& rItem, double fScaleX,
+                                                  double fScaleY)
+{
+    const sal_uInt16 nWhich(rItem.Which());
+
+    if (!isScaledTextLength(nWhich))
+        return nullptr;
+
+    const double fScale(textLengthRunsAcross(nWhich) ? fScaleX : fScaleY);
+
+    if (EE_CHAR_FONTHEIGHT == nWhich || EE_CHAR_FONTHEIGHT_CJK == nWhich
+        || EE_CHAR_FONTHEIGHT_CTL == nWhich)
+    {
+        // The scaled size stands on its own, so it is stated as a length rather than as the
+        // share it was of a size read from further out.
+        const SvxFontHeightItem& rHeight(static_cast<const SvxFontHeightItem&>(rItem));
+        return std::make_unique<SvxFontHeightItem>(
+            lengthWithinRange<sal_uInt32>(rHeight.GetHeight() * fScale), 100, nWhich);
+    }
+
+    if (EE_PARA_SBL == nWhich)
+    {
+        // A line height given as a share of the letter size follows the letters on its own and
+        // is left alone. One given as a length of its own is scaled.
+        const SvxLineSpacingItem& rSpacing(static_cast<const SvxLineSpacingItem&>(rItem));
+        const SvxLineSpaceRule eLineRule(rSpacing.GetLineSpaceRule());
+        const bool bLineIsLength
+            = SvxLineSpaceRule::Fix == eLineRule || SvxLineSpaceRule::Min == eLineRule;
+        const bool bInterIsLength
+            = SvxInterLineSpaceRule::Fix == rSpacing.GetInterLineSpaceRule();
+
+        if (!bLineIsLength && !bInterIsLength)
+            return nullptr;
+
+        std::unique_ptr<SvxLineSpacingItem> pScaled(rSpacing.Clone());
+
+        if (bLineIsLength)
+        {
+            pScaled->SetLineHeight(
+                lengthWithinRange<sal_uInt16>(rSpacing.GetLineHeight() * fScale));
+            // A height set this way is the least a line takes, so the rule the paragraph came
+            // with is put back over it.
+            pScaled->SetLineSpaceRule(eLineRule);
+        }
+
+        if (bInterIsLength)
+            pScaled->SetInterLineSpace(
+                lengthWithinRange<short>(rSpacing.GetInterLineSpace() * fScale));
+
+        return pScaled;
+    }
+
+    if (EE_PARA_LRSPACE == nWhich)
+    {
+        const SvxLRSpaceItem& rSpace(static_cast<const SvxLRSpaceItem&>(rItem));
+        std::unique_ptr<SvxLRSpaceItem> pScaled(rSpace.Clone());
+
+        pScaled->SetTextLeft(scaledIndent(rSpace.GetTextLeft(), fScale), rSpace.GetPropLeft());
+        pScaled->SetRight(scaledIndent(rSpace.GetRight(), fScale), rSpace.GetPropRight());
+        pScaled->SetTextFirstLineOffset(scaledIndent(rSpace.GetTextFirstLineOffset(), fScale),
+                                        rSpace.GetPropTextFirstLineOffset());
+        return pScaled;
+    }
+
+    std::unique_ptr<SfxPoolItem> pScaled(rItem.Clone());
+    pScaled->ScaleMetrics(fScale);
+    return pScaled;
+}
+
+/// The lengths a paragraph of the text carries.
+constexpr sal_uInt16 gaParagraphLengths[] = { EE_PARA_SBL, EE_PARA_ULSPACE, EE_PARA_LRSPACE };
+
+/// The lengths a shape holds for the text it shows, which stand for the runs and the paragraphs
+/// that carry none of their own.
+constexpr sal_uInt16 gaShapeTextLengths[]
+    = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, EE_CHAR_KERNING,
+        EE_PARA_SBL,        EE_PARA_ULSPACE,        EE_PARA_LRSPACE };
+}
+
+void SdrObject::scaleText(double fScaleX, double fScaleY, bool bUndo)
 {
     OutlinerParaObject* pParaObject(GetOutlinerParaObject());
 
     // limit change for extreme cases
     static constexpr double fSmallestChange(0.005);
 
-    if (nullptr == pParaObject || fScale <= 0.0 || std::abs(fScale - 1.0) < fSmallestChange)
+    if (nullptr == pParaObject || fScaleX <= 0.0 || fScaleY <= 0.0
+        || (std::abs(fScaleX - 1.0) < fSmallestChange
+            && std::abs(fScaleY - 1.0) < fSmallestChange))
         return;
 
     SdrModel& rModel(getSdrModelFromSdrObject());
 
-    // Two things change, the text of the object and the sizes the object holds. The one for the
+    // Two things change, the text of the object and the lengths the object holds. The one for the
     // text reads the text it replaces and the text that replaced it further down
     std::unique_ptr<SdrUndoObjSetText> pTextUndo;
 
@@ -2086,8 +2210,8 @@ void SdrObject::scaleText(double fScale, bool bUndo)
             pTextUndo.reset(static_cast<SdrUndoObjSetText*>(pAction.release()));
     }
 
-    // The sizes are part of the runs of the text, so we need an outliner and comes back
-    // with the changed sizes
+    // The lengths are part of the runs and the paragraphs of the text, so we need an outliner
+    // and comes back with the changed lengths
     SdrOutliner& rOutliner(getSdrModelFromSdrObject().GetDrawOutliner());
     rOutliner.SetText(*pParaObject);
 
@@ -2097,19 +2221,44 @@ void SdrObject::scaleText(double fScale, bool bUndo)
     for (const editeng::Section& rSection : aSections)
         for (const SfxPoolItem* pItem : rSection.maAttributes)
         {
-            const sal_uInt16 nWhich(pItem->Which());
+            std::unique_ptr<SfxPoolItem> pScaled(scaledCopyOfTextItem(*pItem, fScaleX, fScaleY));
 
-            if (EE_CHAR_FONTHEIGHT != nWhich && EE_CHAR_FONTHEIGHT_CJK != nWhich
-                && EE_CHAR_FONTHEIGHT_CTL != nWhich)
+            if (!pScaled)
                 continue;
 
-            const SvxFontHeightItem& rHeight(static_cast<const SvxFontHeightItem&>(*pItem));
             SfxItemSet aScaled(rOutliner.GetEmptyItemSet());
-            aScaled.Put(SvxFontHeightItem(
-                static_cast<sal_uInt32>(std::lround(rHeight.GetHeight() * fScale)), 100, nWhich));
+            aScaled.Put(std::move(pScaled));
             rOutliner.QuickSetAttribs(aScaled, ESelection(rSection.mnParagraph, rSection.mnStart,
                                                           rSection.mnParagraph, rSection.mnEnd));
         }
+
+    // The room a paragraph keeps between its lines and around itself belongs to the whole
+    // paragraph rather than to any run of its text.
+    for (sal_Int32 nPara = 0, nParaCount = rOutliner.GetParagraphCount(); nPara < nParaCount;
+         ++nPara)
+    {
+        const SfxItemSet& rParaSet(rOutliner.GetParaAttribs(nPara));
+        SfxItemSet aScaledSet(rParaSet);
+        bool bAnyScaled(false);
+
+        for (const sal_uInt16 nWhich : gaParagraphLengths)
+        {
+            if (SfxItemState::SET != rParaSet.GetItemState(nWhich, false))
+                continue;
+
+            std::unique_ptr<SfxPoolItem> pScaled(
+                scaledCopyOfTextItem(rParaSet.Get(nWhich), fScaleX, fScaleY));
+
+            if (!pScaled)
+                continue;
+
+            aScaledSet.Put(std::move(pScaled));
+            bAnyScaled = true;
+        }
+
+        if (bAnyScaled)
+            rOutliner.SetParaAttribs(nPara, aScaledSet);
+    }
 
     SetOutlinerParaObject(rOutliner.CreateParaObject());
     rOutliner.Clear();
@@ -2122,19 +2271,25 @@ void SdrObject::scaleText(double fScale, bool bUndo)
             rModel.AddUndo(std::move(pTextUndo));
     }
 
-    // the size the object holds for text that carries none of its own
-    for (const sal_uInt16 nWhich :
-         { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL })
-    {
-        const SfxItemSet& rSet(GetMergedItemSet());
+    // the lengths the object holds, which stand for the runs and the paragraphs of the text that
+    // carry none of their own
+    const SfxItemSet& rObjectSet(GetMergedItemSet());
+    SfxItemSet aScaledObjectSet(*rObjectSet.GetPool(), rObjectSet.GetRanges());
 
-        if (SfxItemState::SET != rSet.GetItemState(nWhich, false))
+    for (const sal_uInt16 nWhich : gaShapeTextLengths)
+    {
+        if (SfxItemState::SET != rObjectSet.GetItemState(nWhich, false))
             continue;
 
-        const SvxFontHeightItem& rHeight(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)));
-        SetMergedItem(SvxFontHeightItem(
-            static_cast<sal_uInt32>(std::lround(rHeight.GetHeight() * fScale)), 100, nWhich));
+        std::unique_ptr<SfxPoolItem> pScaled(
+            scaledCopyOfTextItem(rObjectSet.Get(nWhich), fScaleX, fScaleY));
+
+        if (pScaled)
+            aScaledObjectSet.Put(std::move(pScaled));
     }
+
+    if (aScaledObjectSet.Count())
+        SetMergedItemSet(aScaledObjectSet);
 }
 
 void SdrObject::NbcReformatText()

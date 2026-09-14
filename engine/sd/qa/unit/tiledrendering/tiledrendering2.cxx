@@ -18,6 +18,12 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/section.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
 #include <svl/undo.hxx>
@@ -366,6 +372,34 @@ OUString getSlideText(SdDrawDocument& rDoc, sal_uInt16 nIndex)
     }
     return aText.makeStringAndClear();
 }
+
+/// The shape at nObject on slide nIndex of rDoc, which holds text.
+SdrTextObj& getTextShape(SdDrawDocument& rDoc, sal_uInt16 nIndex, size_t nObject)
+{
+    SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    auto* pTextObject = dynamic_cast<SdrTextObj*>(pPage->GetObj(nObject));
+    CPPUNIT_ASSERT(pTextObject);
+    CPPUNIT_ASSERT(pTextObject->GetOutlinerParaObject());
+    return *pTextObject;
+}
+
+/// The letter sizes the runs of the text of the shape at nObject on slide nIndex carry, in
+/// hundredths of a millimetre and in the order the runs stand in.
+std::vector<sal_uInt32> getRunLetterSizes(SdDrawDocument& rDoc, sal_uInt16 nIndex, size_t nObject)
+{
+    SdrTextObj* pTextObject = &getTextShape(rDoc, nIndex, nObject);
+
+    std::vector<editeng::Section> aSections;
+    pTextObject->GetOutlinerParaObject()->GetTextObject().GetAllSections(aSections);
+
+    std::vector<sal_uInt32> aSizes;
+    for (const editeng::Section& rSection : aSections)
+        for (const SfxPoolItem* pItem : rSection.maAttributes)
+            if (pItem->Which() == EE_CHAR_FONTHEIGHT)
+                aSizes.push_back(static_cast<const SvxFontHeightItem*>(pItem)->GetHeight());
+    return aSizes;
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkList)
@@ -466,6 +500,91 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"link\":true,\"source\":\"/tmp/staged/Q3.odp\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportScalesLetterSizes)
+{
+    // A slide that comes from a deck whose pages are wider than this document's is fitted to
+    // the page it lands on, and the letters it shows are fitted along with it, so the slide
+    // reads the same as it did in the deck it came from.
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // The source page is 50.8cm by 28.575cm and keeps no border, so the slide is fitted to the
+    // room this document's own page leaves, which is a little over half of that.
+    SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    const double fScale
+        = double(pPage->GetSize().Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder())
+          / 28575.0;
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-wide-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":0,\"keepDesign\":true}"_ostr));
+
+    // The title holds one run of 80pt and the text box below it one run of 40pt, which are
+    // 2822 and 1411 hundredths of a millimetre. Without the accompanying fix in place, this
+    // test would have failed: the shapes were fitted to the smaller page and the letters kept
+    // the size they had, so the text ran past the shape that held it and past the page.
+    const std::vector<sal_uInt32> aTitleSizes = getRunLetterSizes(*pDoc, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTitleSizes.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2822.0 * fScale, static_cast<double>(aTitleSizes[0]), 4.0);
+
+    const std::vector<sal_uInt32> aBodySizes = getRunLetterSizes(*pDoc, 0, 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aBodySizes.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1411.0 * fScale, static_cast<double>(aBodySizes[0]), 4.0);
+
+    // The room the title paragraph keeps for each of its lines and above itself is a length of
+    // its own rather than a share of the letter size, so it is fitted to the page as well. It
+    // was 3cm and 1cm in the deck the slide came from.
+    const SfxItemSet& rParagraph
+        = getTextShape(*pDoc, 0, 0).GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        3000.0 * fScale,
+        static_cast<double>(rParagraph.Get(EE_PARA_SBL).GetLineHeight()), 4.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1000.0 * fScale, static_cast<double>(rParagraph.Get(EE_PARA_ULSPACE).GetUpper()), 4.0);
+
+    // The shapes are fitted to the page they landed on, and the text within them no longer
+    // asks for more room than they hold, so neither one grew past the page.
+    for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+        CPPUNIT_ASSERT(pPage->GetObj(nObject)->GetLogicRect().GetHeight()
+                       <= pPage->GetSize().Height());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextFollowsEachDirectionsOwnScale)
+{
+    // A page that changes shape as well as size scales by a different amount across than it does
+    // down. A length that runs across the text follows the one, and a length that runs down it
+    // follows the other, so the text keeps the shape the page gives it.
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-wide-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0],\"at\":0,\"keepDesign\":true}"_ostr));
+
+    // The room between one letter and the next runs across the text; the room a paragraph keeps
+    // above itself runs down it. Both are held by the shape here rather than by the text.
+    SdrTextObj& rShape = getTextShape(*pDoc, 0, 1);
+    rShape.SetMergedItem(SvxKerningItem(400, EE_CHAR_KERNING));
+    rShape.SetMergedItem(SvxULSpaceItem(800, 0, EE_PARA_ULSPACE));
+
+    rShape.scaleText(0.5, 0.25, /*bUndo=*/false);
+
+    // Without the accompanying fix in place, this test would have failed: both lengths took the
+    // scale for down the text, so the room between the letters came out at a quarter.
+    const SfxItemSet& rShapeSet = rShape.GetMergedItemSet();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(200), rShapeSet.Get(EE_CHAR_KERNING).GetValue());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(200), rShapeSet.Get(EE_PARA_ULSPACE).GetUpper());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePosition)

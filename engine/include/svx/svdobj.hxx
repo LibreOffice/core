@@ -679,8 +679,10 @@ public:
     virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject, bool bAdjustTextFrameWidthAndHeight = true);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
 
-    // Multiplies the size of every letter of the text by fScale
-    void scaleText(double fScale, bool bUndo);
+    // Multiplies every length the text holds - the size of its letters, the room between two
+    // of them, and the room its paragraphs keep between their lines and around themselves - by
+    // the scale for the direction that length runs in
+    void scaleText(double fScaleX, double fScaleY, bool bUndo);
     virtual void NbcReformatText();
 
     void BurnInStyleSheetAttributes();

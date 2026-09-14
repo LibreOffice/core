@@ -122,10 +122,13 @@ void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
 
         const tools::Long nNewHeight(xNewShape->getSize().Height);
 
-        // Now scale the text sizes
+        // Now scale the text sizes. The height is the one the shape is known to have changed
+        // by, so the text follows it in both directions.
         if (nOldHeight > 0 && nNewHeight > 0)
-            pNewShape->scaleText(static_cast<double>(nNewHeight) / static_cast<double>(nOldHeight),
-                                 /*bUndo=*/false);
+        {
+            const double fScale(static_cast<double>(nNewHeight) / static_cast<double>(nOldHeight));
+            pNewShape->scaleText(fScale, fScale, /*bUndo=*/false);
+        }
     }
 
 
