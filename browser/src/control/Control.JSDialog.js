@@ -692,6 +692,18 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// the focus from its container instead.
 			if (!firstFocusableElement)
 				firstFocusableElement = JSDialog.FindFocusableWithin(instance.container, 'next');
+
+			// A dialog whose only content is a message has nothing to focus, so
+			// it takes the focus itself and, with no title to be labelled by,
+			// carries the message as its name.
+			if (!firstFocusableElement && instance.form) {
+				if (!instance.form.hasAttribute('aria-labelledby')) {
+					const message = instance.form.innerText.trim();
+					if (message) instance.form.setAttribute('aria-label', message);
+				}
+				instance.form.tabIndex = -1;
+				firstFocusableElement = instance.form;
+			}
 		}
 
 		if (firstFocusableElement && document.activeElement !== firstFocusableElement && !instance.isAutoCompletePopup) {
