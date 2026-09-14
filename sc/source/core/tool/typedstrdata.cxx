@@ -10,9 +10,21 @@
 #include <typedstrdata.hxx>
 #include <global.hxx>
 
+#include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <utility>
+
+namespace
+{
+// tdf#158326 - compare case-insensitively with simple case mapping. The previously used
+// IGNORE_CASE transliteration folded the German "ß" to "ss", leading to a single entry.
+sal_Int32 compareIgnoreCase(const OUString& rLeft, const OUString& rRight)
+{
+    const CharClass& rCharClass = ScGlobal::getCharClass();
+    return rCharClass.uppercase(rLeft).compareTo(rCharClass.uppercase(rRight));
+}
+}
 
 bool ScTypedStrData::LessHiddenRows::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
@@ -81,8 +93,8 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    sal_Int32 nEqual
-        = ScGlobal::GetTransliteration().compareString(left.maStrValue, right.maStrValue);
+    // tdf#158326 - compare case-insensitively with simple case mapping
+    sal_Int32 nEqual = compareIgnoreCase(left.maStrValue, right.maStrValue);
 
     if (!nEqual)
         return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
@@ -105,7 +117,7 @@ bool ScTypedStrData::LessSortCaseInsensitive::operator() (const ScTypedStrData& 
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    sal_Int32 nEqual = ScGlobal::GetCaseCollator().compareString(left.maStrValue, right.maStrValue);
+    sal_Int32 nEqual = ScGlobal::GetCollator().compareString(left.maStrValue, right.maStrValue);
 
     if (!nEqual)
         return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
@@ -138,7 +150,8 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    return ScGlobal::GetTransliteration().isEqual(left.maStrValue, right.maStrValue);
+    // tdf#158326 - compare case-insensitively with simple case mapping
+    return compareIgnoreCase(left.maStrValue, right.maStrValue) == 0;
 }
 
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const

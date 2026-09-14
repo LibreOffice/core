@@ -22,6 +22,7 @@
 #include <undotab.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
+#include <filterentries.hxx>
 #include <reftokenhelper.hxx>
 #include <userdat.hxx>
 #include <refdata.hxx>
@@ -874,6 +875,28 @@ CPPUNIT_TEST_FIXTURE(Test, testDataEntries)
     CPPUNIT_ASSERT_EQUAL(u"Charlie"_ustr, it->GetString());
     ++it;
     CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf158326_GermanEszett)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Strasse"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"Straße"_ustr);
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"STRASSE"_ustr);
+
+    ScFilterEntries aFilterEntries;
+    m_pDoc->GetFilterEntriesArea(0, 0, 2, 0, /*bCaseSens*/ false, aFilterEntries);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the German "ß" would have been folded to "ss" leaving just a single entry
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFilterEntries.size());
+    CPPUNIT_ASSERT_EQUAL(u"Strasse"_ustr, aFilterEntries.maStrData[0].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"Straße"_ustr, aFilterEntries.maStrData[1].GetString());
 
     m_pDoc->DeleteTab(0);
 }
