@@ -124,6 +124,7 @@ class SlideShowPresenter {
 	_presentationInfo: PresentationInfo = null;
 	_slideCompositor: SlideCompositor = null;
 	_fullscreen: Element = null;
+	_fullscreenResizeObserver: ResizeObserver = null;
 	_presenterContainer: HTMLDivElement = null;
 	_slideShowCanvas: HTMLCanvasElement = null;
 	// On the web build this is the in-page iframe the slideshow renders into.
@@ -460,14 +461,30 @@ class SlideShowPresenter {
 			// window.addEventListener('keydown', this._onCanvasKeyDown.bind(this));
 			window.addEventListener('keydown', this._onKeyDownHandler, true);
 			this.centerCanvas();
+			// The window manager grows the window to the screen some time after
+			// this event arrives, so fit the slide again every time the full
+			// screen element settles on a size.
+			this._fullscreenResizeObserver = new ResizeObserver(() =>
+				this.centerCanvas(),
+			);
+			this._fullscreenResizeObserver.observe(this._fullscreen);
 		} else {
+			this._stopWatchingFullscreenSize();
 			// we need to cleanup current/prev slide
 			this._slideShowNavigator.quit();
 		}
 	}
 
+	private _stopWatchingFullscreenSize() {
+		if (!this._fullscreenResizeObserver) return;
+		this._fullscreenResizeObserver.disconnect();
+		this._fullscreenResizeObserver = null;
+	}
+
 	_stopFullScreen() {
 		if (!this._slideShowCanvas) return;
+
+		this._stopWatchingFullscreenSize();
 
 		if (this._slideCompositor) this._slideCompositor.deleteResources();
 		this._slideRenderer.deleteResources();
