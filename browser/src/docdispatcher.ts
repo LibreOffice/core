@@ -1023,16 +1023,38 @@ class Dispatcher {
 			else app.map.sendUnoCommand('.uno:NotesMode');
 		};
 
-		this.actionsMap['notespanel'] = function () {
-			app.map.notesPanel.toggle();
-		};
-
 		// The three notes views are mutually exclusive. Picking one turns the
 		// others off, and "Hidden" turns both off.
+
+		// The status bar button switches the bottom panel on and off, so
+		// switching it on leaves the handout page.
+		this.actionsMap['notespanel'] = () => {
+			if (app.map.notesPanel.isVisible()) this.actionsMap['notespanelhidden']();
+			else this.actionsMap['notespanelbottom']();
+		};
+
 		this.actionsMap['notespanelbottom'] = function () {
-			if (app.impress.notesMode)
-				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
-			if (!app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			const openPanel = function () {
+				if (!app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			};
+
+			if (!app.impress.notesMode) {
+				openPanel();
+				return;
+			}
+
+			// The engine takes its time to leave the handout page, and it moves
+			// through other pages on the way. A panel opened before the normal
+			// view is up is dropped, or fills itself from one of those pages,
+			// so wait for the state that says the normal view is there.
+			const onStateChange = function (e: any) {
+				if (e.commandName !== '.uno:NormalMultiPaneGUI' || e.state !== 'true')
+					return;
+				app.map.off('commandstatechanged', onStateChange);
+				openPanel();
+			};
+			app.map.on('commandstatechanged', onStateChange);
+			app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
 		};
 
 		this.actionsMap['notespanelhandout'] = function () {
