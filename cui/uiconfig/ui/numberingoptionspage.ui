@@ -164,7 +164,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes" context="numberingoptionspage|label4">Number:</property>
+                        <property name="label" translatable="yes" context="numberingoptionspage|label4">Type:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">numfmtlb</property>
                         <property name="xalign">0</property>
@@ -180,7 +180,7 @@
                         <property name="can-focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numfmtlb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering scheme for the selected levels.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering scheme or a bullet for the selected levels.</property>
                           </object>
                         </child>
                         <style>
@@ -754,7 +754,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="numberingoptionspage|label2">Numbering</property>
+                <property name="label" translatable="yes" context="numberingoptionspage|label2">List Format</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
