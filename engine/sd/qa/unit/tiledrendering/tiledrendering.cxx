@@ -3953,6 +3953,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideRendererSizeFitsTheRequestedBox)
+{
+    // The slide size never exceeds the requested size in either direction.
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest.odp");
+    std::string sHash = GetSlideHash(pXImpressDocument, 0);
+
+    // A square box limits the 16:9 slide by width.
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
+
+    // A wide box limits it by height, so the width shrinks to keep the ratio.
+    nViewWidth = 2000;
+    nViewHeight = 1000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1777), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), nViewHeight);
+
+    // A 9:16 portrait slide in a box whose width was rounded up from its height. The height that
+    // follows from that width is one pixel too tall, so the height stays at the requested value
+    // and the width shrinks by one pixel instead.
+    pXImpressDocument = createDoc("SlideRenderingTest_Portrait.odp");
+    sHash = GetSlideHash(pXImpressDocument, 0);
+    nViewWidth = 564;
+    nViewHeight = 1001;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(OString(sHash), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(563), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1001), nViewHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFields)
 {
     // Check rendering of fields - each in own layer

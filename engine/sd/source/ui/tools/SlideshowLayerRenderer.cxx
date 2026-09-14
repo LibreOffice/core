@@ -855,9 +855,18 @@ void SlideshowLayerRenderer::setupMasterPageFields()
 
 const Size& SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
 {
+    // Keep the slide aspect ratio and fit the result inside the desired box. Take the desired
+    // width and compute the height from it. When that height is too tall for the box, take the
+    // desired height instead and compute the width from it.
     double fRatio = double(mrPage.GetHeight()) / mrPage.GetWidth();
-    Size aSize(rDesiredSizePixel.Width(), ::tools::Long(rDesiredSizePixel.Width() * fRatio));
-    maSlideSize = aSize;
+    ::tools::Long nWidth = rDesiredSizePixel.Width();
+    ::tools::Long nHeight = ::tools::Long(nWidth * fRatio);
+    if (nHeight > rDesiredSizePixel.Height())
+    {
+        nHeight = rDesiredSizePixel.Height();
+        nWidth = ::tools::Long(nHeight / fRatio);
+    }
+    maSlideSize = Size(nWidth, nHeight);
 
     return maSlideSize;
 }
