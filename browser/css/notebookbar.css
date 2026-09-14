@@ -1,11 +1,20 @@
 
+/* The ribbon scrolls sideways when it is wider than the window, and it scrolls
+   without a visible scrollbar, so the whole row height stays with the icons. A
+   narrow screen shows the bar again, through the media query below. */
 .notebookbar-scroll-wrapper {
 	height: 82px;
 	display: flex;
 	overflow-x: auto;
 	overflow-y: hidden;
 	scrollbar-color: var(--scrollbar-color);
-	scrollbar-width: var(--scrollbar-width);
+	scrollbar-width: none;
+}
+
+@media (max-width: 480px) {
+	.notebookbar-scroll-wrapper {
+		scrollbar-width: var(--scrollbar-width);
+	}
 }
 
 /* stretch the fields */

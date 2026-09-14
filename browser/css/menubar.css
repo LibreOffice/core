@@ -205,8 +205,6 @@ nav [id^='save'].saved img {
 }
 .main-nav.hasnotebookbar {
 	height: var(--header-height);
-	/* overflow is set dynamically */
-	scrollbar-width: none;
 }
 
 .main-nav.hasnotebookbar:not(.readonly) {
@@ -214,13 +212,6 @@ nav [id^='save'].saved img {
 	padding: 0px;
 	overflow: visible;
 	padding-inline-start: 5px;
-}
-
-@media (max-width: 480px) {
-
-	.main-nav.hasnotebookbar {
-		scrollbar-width: unset;
-	}
 }
 
 /* Customizations to sm-simple theme to make it look like LO menu, lo-menu class */
