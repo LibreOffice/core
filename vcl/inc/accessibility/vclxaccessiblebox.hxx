@@ -115,8 +115,7 @@ private:
     bool m_bIsDropDownBox;
 
     /// The child that represents the text field if there is one.
-    css::uno::Reference< css::accessibility::XAccessible>
-        m_xText;
+    rtl::Reference<comphelper::OAccessible> m_pText;
 
     /// The child that contains the items of this box.
     rtl::Reference<VCLXAccessibleList> m_xList;

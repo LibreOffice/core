@@ -77,19 +77,19 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
                 if (pComboBox && pChildWindow && pChildWindow == pComboBox->GetSubEdit()
-                    && m_xText.is())
+                    && m_pText.is())
                 {
                     if (rVclWindowEvent.GetId() == VclEventId::WindowShow)
                     {
                         // Instantiate text field.
                         getAccessibleChild (0);
-                        aNewValue <<= m_xText;
+                        aNewValue <<= uno::Reference<XAccessible>(m_pText);
                     }
                     else
                     {
                         // Release text field.
-                        aOldValue <<= m_xText;
-                        m_xText = nullptr;
+                        aOldValue <<= uno::Reference<XAccessible>(m_pText);
+                        m_pText = nullptr;
                     }
                     // Tell the listeners about the new/removed child.
                     NotifyAccessibleEvent (
@@ -164,9 +164,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VclEventId::ComboboxSelect:
         {
-            if (m_xList.is() && m_xText.is())
+            if (m_xList.is() && m_pText.is())
             {
-                Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
+                Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
                 {
                     OUString sText = xText->getSelectedText();
@@ -208,9 +208,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // the same VCL object as this box does.  In case of the
             // combobox, however, we have to help by providing the list with
             // the text of the currently selected item.
-            if (m_xList.is() && m_xText.is())
+            if (m_xList.is() && m_pText.is())
             {
-                Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
+                Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
                 {
                     OUString sText = xText->getSelectedText();
@@ -230,9 +230,9 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // call to the edit field.
             if (m_aBoxType==COMBOBOX)
             {
-                if (m_xText.is())
+                if (m_pText.is())
                 {
-                    Reference<XAccessibleContext> xContext = m_xText->getAccessibleContext();
+                    Reference<XAccessibleContext> xContext = m_pText->getAccessibleContext();
                     VCLXAccessibleEdit* pEdit = static_cast<VCLXAccessibleEdit*>(xContext.get());
                     if (pEdit != nullptr)
                         pEdit->ProcessWindowEvent (rVclWindowEvent);
@@ -266,7 +266,7 @@ sal_Int64 VCLXAccessibleBox::implGetAccessibleChildCount()
     {
         // Object not valid anymore.  Release references to children.
         m_bHasTextChild = false;
-        m_xText = nullptr;
+        m_pText = nullptr;
         m_bHasListChild = false;
         m_xList = nullptr;
     }
@@ -300,18 +300,18 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
     else
     {
         // Text Field.
-        if ( ! m_xText.is())
+        if (!m_pText.is())
         {
             if (m_aBoxType==COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
                 if (pComboBox && pComboBox->GetSubEdit())
-                    m_xText = pComboBox->GetSubEdit()->GetAccessible();
+                    m_pText = pComboBox->GetSubEdit()->GetAccessible();
             }
             else if (m_bIsDropDownBox)
-                m_xText = new VCLXAccessibleTextField(GetAs<ListBox>(), this);
+                m_pText = new VCLXAccessibleTextField(GetAs<ListBox>(), this);
         }
-        return m_xText;
+        return m_pText;
     }
 }
 
@@ -408,10 +408,10 @@ Any VCLXAccessibleBox::getCurrentValue( )
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     Any aAny;
-    if( m_xList.is() && m_xText.is())
+    if (m_xList.is() && m_pText.is())
     {
         // VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-        Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
+        Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
         if ( xText.is() )
         {
             OUString sText = xText->getText();
