@@ -791,7 +791,10 @@ class SlideImportPane {
       '.slide-import-insert',
     ) as HTMLButtonElement | null;
     if (!button) return;
+    const lands = this.insertLandsText();
     button.textContent = this.insertButtonLabel();
+    button.dataset.cooltip = lands;
+    button.setAttribute('aria-description', lands);
     button.disabled =
       this.session.selection.size === 0 || this.session.state !== 'ready';
   }
