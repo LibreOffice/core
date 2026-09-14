@@ -45,7 +45,7 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     VclPtr<SvtIconChoiceCtrl>           m_pIconCtrl;
     sal_Int32                           m_nIndex;
 
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    rtl::Reference<AccessibleIconChoiceCtrl> m_pParent;
 
     tools::Rectangle               GetBoundingBox_Impl() const;
     bool                IsAlive_Impl() const;

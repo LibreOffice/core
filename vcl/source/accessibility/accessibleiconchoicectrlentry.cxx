@@ -59,24 +59,23 @@ AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry(
     const rtl::Reference<AccessibleIconChoiceCtrl>& rpParent)
     : m_pIconCtrl(&_rIconCtrl)
     , m_nIndex(_nPos)
-    , m_xParent(rpParent)
+    , m_pParent(rpParent)
 
 {
     osl_atomic_increment( &m_refCount );
     {
-        Reference< XComponent > xComp( m_xParent, UNO_QUERY );
-        if ( xComp.is() )
-            xComp->addEventListener( this );
+        if (m_pParent.is())
+            m_pParent->addEventListener(this);
     }
     osl_atomic_decrement( &m_refCount );
 }
 
 void AccessibleIconChoiceCtrlEntry::disposing( const css::lang::EventObject& _rSource )
 {
-    if ( _rSource.Source == m_xParent )
+    if (_rSource.Source == m_pParent->getXWeak())
     {
         dispose();
-        OSL_ENSURE( !m_xParent.is() && ( m_pIconCtrl == nullptr ), "" );
+        OSL_ENSURE(!m_pParent.is() && (m_pIconCtrl == nullptr), "");
     }
 }
 
@@ -108,14 +107,10 @@ bool AccessibleIconChoiceCtrlEntry::IsAlive_Impl() const
 bool AccessibleIconChoiceCtrlEntry::IsShowing_Impl() const
 {
     bool bShowing = false;
-    Reference< XAccessibleContext > xParentContext =
-        m_xParent.is() ? m_xParent->getAccessibleContext() : Reference< XAccessibleContext >();
-    if( xParentContext.is() )
+    if (m_pParent.is())
     {
-        Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
-        if( xParentComp.is() )
-            bShowing = GetBoundingBox_Impl().Overlaps(
-                vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
+        bShowing = GetBoundingBox_Impl().Overlaps(
+            vcl::unohelper::ConvertToVCLRect(m_pParent->getBounds()));
     }
 
     return bShowing;
@@ -174,12 +169,11 @@ void SAL_CALL AccessibleIconChoiceCtrlEntry::disposing()
 
     comphelper::OAccessible::disposing();
 
-    Reference< XComponent > xComp( m_xParent, UNO_QUERY );
-    if ( xComp.is() )
-        xComp->removeEventListener( this );
+    if (m_pParent.is())
+        m_pParent->removeEventListener(this);
 
     m_pIconCtrl = nullptr;
-    m_xParent = nullptr;
+    m_pParent = nullptr;
 }
 
 // XAccessibleContext
@@ -199,7 +193,7 @@ Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessiblePa
     ::osl::MutexGuard aGuard( m_aMutex );
 
     EnsureIsAlive();
-    return m_xParent;
+    return m_pParent;
 }
 
 sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
