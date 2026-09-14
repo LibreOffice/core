@@ -1627,28 +1627,29 @@ uno::Reference<XAccessible> SAL_CALL
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     if (nIndex >= 0)
     {
         sal_Int64 nCount(1);
         if (mpChildrenShapes)
         {
-            xAccessible = mpChildrenShapes->Get(nIndex); // returns NULL if it is the table or out of range
+            // returns NULL if it is the table or out of range
+            pAccessible = mpChildrenShapes->Get(nIndex);
             nCount = mpChildrenShapes->GetCount(); //there is always a table
         }
-        if (!xAccessible.is())
+        if (!pAccessible.is())
         {
             if (nIndex < nCount)
-                xAccessible = GetAccessibleSpreadsheet();
+                pAccessible = GetAccessibleSpreadsheet();
             else if (nIndex == nCount && mpTempAcc.is())
-                xAccessible = mpTempAcc;
+                pAccessible = mpTempAcc;
         }
     }
 
-    if (!xAccessible.is())
+    if (!pAccessible.is())
         throw lang::IndexOutOfBoundsException();
 
-    return xAccessible;
+    return pAccessible;
 }
 
     /// Return the set of current states.
