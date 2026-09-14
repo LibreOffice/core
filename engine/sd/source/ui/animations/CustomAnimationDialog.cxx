@@ -893,7 +893,7 @@ private:
     weld::Window* mpDialog;
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
-    std::unique_ptr<weld::Widget> mxSettings;
+    std::unique_ptr<weld::Frame> mxSettings;
     std::unique_ptr<weld::Label> mxFTProperty1;
     std::unique_ptr<weld::Container> mxPlaceholderBox;
     std::unique_ptr<weld::CheckButton> mxCBSmoothStart;
@@ -917,7 +917,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
     , mpDialog(pDialog)
     , mxBuilder(Application::CreateBuilder(pParent, u"modules/simpress/ui/customanimationeffecttab.ui"_ustr))
     , mxContainer(mxBuilder->weld_container(u"EffectTab"_ustr))
-    , mxSettings(mxBuilder->weld_widget(u"settings"_ustr))
+    , mxSettings(mxBuilder->weld_frame(u"settings"_ustr))
     , mxFTProperty1(mxBuilder->weld_label(u"prop_label1"_ustr))
     , mxPlaceholderBox(mxBuilder->weld_container(u"placeholder"_ustr))
     , mxCBSmoothStart(mxBuilder->weld_check_button(u"smooth_start"_ustr))
