@@ -166,7 +166,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         {
             if (m_xList.is() && m_pText.is())
             {
-                Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
+                Reference<XAccessibleText> xText(m_pText->getXWeak(), UNO_QUERY);
                 if ( xText.is() )
                 {
                     OUString sText = xText->getSelectedText();
@@ -210,7 +210,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // the text of the currently selected item.
             if (m_xList.is() && m_pText.is())
             {
-                Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
+                Reference<XAccessibleText> xText(m_pText->getXWeak(), UNO_QUERY);
                 if ( xText.is() )
                 {
                     OUString sText = xText->getSelectedText();
@@ -410,7 +410,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
     Any aAny;
     if (m_xList.is() && m_pText.is())
     {
-        Reference<XAccessibleText> xText(m_pText->getAccessibleContext(), UNO_QUERY);
+        Reference<XAccessibleText> xText(m_pText->getXWeak(), UNO_QUERY);
         if ( xText.is() )
         {
             OUString sText = xText->getText();
