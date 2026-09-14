@@ -1560,26 +1560,26 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
         ensureAlive();
         if (mpChildrenShapes)
-            xAccessible = mpChildrenShapes->GetAt(rPoint);
-        if(!xAccessible.is())
+            pAccessible = mpChildrenShapes->GetAt(rPoint);
+        if (!pAccessible.is())
         {
             if (mpTempAcc.is())
             {
                 tools::Rectangle aBound(vcl::unohelper::ConvertToVCLRect(mpTempAcc->getBounds()));
                 if (aBound.Contains(vcl::unohelper::ConvertToVCLPoint(rPoint)))
-                    xAccessible = mpTempAcc;
+                    pAccessible = mpTempAcc;
             }
-            if (!xAccessible.is())
-                xAccessible = GetAccessibleSpreadsheet();
+            if (!pAccessible.is())
+                pAccessible = GetAccessibleSpreadsheet();
         }
     }
-    return xAccessible;
+    return pAccessible;
 }
 
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
