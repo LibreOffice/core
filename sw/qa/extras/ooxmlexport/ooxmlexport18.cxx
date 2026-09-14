@@ -587,6 +587,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomXmlTwoDataStores)
+{
+    createSwDoc("customxml-two-data-stores.docx");
+    saveAndReload(mpFilter);
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // Each data-bound content control keeps the value held by the custom xml item its own data
+    // binding names, so the two controls still show different values after the round trip.
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]"_ostr, u"Placeholder -> *ABC*"_ustr);
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[2]"_ostr, u"Placeholder -> *HERUNTERLADEN*"_ustr);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
 {
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
