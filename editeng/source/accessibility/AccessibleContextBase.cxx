@@ -42,9 +42,9 @@ namespace accessibility {
 // internal
 
 AccessibleContextBase::AccessibleContextBase (
-        uno::Reference<XAccessible> xParent,
+        const rtl::Reference<comphelper::OAccessible>& rpParent,
         const sal_Int16 aRole)
-    :   mxParent(std::move(xParent)),
+    :   mpParent(rpParent),
         meDescriptionOrigin(NotSet),
         meNameOrigin(NotSet),
         maRole(aRole)
@@ -170,12 +170,16 @@ uno::Reference<XAccessible> SAL_CALL
         nullptr);
 }
 
+rtl::Reference<comphelper::OAccessible> AccessibleContextBase::implGetAccessibleParent()
+{
+    ensureAlive();
+    return mpParent;
+}
 
 uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent()
 {
-    ensureAlive();
-    return mxParent;
+    return implGetAccessibleParent();
 }
 
 sal_Int16 SAL_CALL
@@ -256,10 +260,9 @@ lang::Locale SAL_CALL
 {
     ensureAlive();
     // Delegate request to parent.
-    if (mxParent.is())
+    if (mpParent.is())
     {
-        uno::Reference<XAccessibleContext> xParentContext (
-            mxParent->getAccessibleContext());
+        uno::Reference<XAccessibleContext> xParentContext(mpParent->getAccessibleContext());
         if (xParentContext.is())
             return xParentContext->getLocale ();
     }
@@ -309,7 +312,7 @@ void SAL_CALL AccessibleContextBase::disposing()
 
     comphelper::OAccessible::disposing();
 
-    mxParent.clear();
+    mpParent.clear();
     mxRelationSet.clear();
 }
 

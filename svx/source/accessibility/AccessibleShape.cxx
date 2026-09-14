@@ -95,7 +95,7 @@ OUString GetOptionalProperty (
 // internal
 AccessibleShape::AccessibleShape(const AccessibleShapeInfo& rShapeInfo,
                                  const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : ImplInheritanceHelper(rShapeInfo.mxParent, AccessibleRole::SHAPE)
+    : ImplInheritanceHelper(rShapeInfo.mpParent, AccessibleRole::SHAPE)
     , mxShape(rShapeInfo.mxShape)
     , maShapeTreeInfo(rShapeTreeInfo)
     , m_nIndexInParent(-1)

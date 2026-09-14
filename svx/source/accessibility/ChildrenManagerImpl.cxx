@@ -774,7 +774,7 @@ bool ChildrenManagerImpl::ReplaceChild (
 
         // Replace with replacement and send an event about existence
         // of the new child.
-        AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
+        AccessibleShapeInfo aShapeInfo(_rxShape, pCurrentChild->implGetAccessibleParent(), this);
         // create the new child
         rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
             aShapeInfo,

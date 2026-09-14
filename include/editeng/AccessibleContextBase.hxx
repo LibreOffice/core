@@ -41,9 +41,8 @@ public:
         NotSet
     };
 
-    AccessibleContextBase (
-        css::uno::Reference< css::accessibility::XAccessible> xParent,
-        const sal_Int16 aRole);
+    AccessibleContextBase(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                          const sal_Int16 aRole);
     virtual ~AccessibleContextBase() override;
 
 
@@ -149,8 +148,8 @@ public:
         getAccessibleChild (sal_Int64 nIndex) override;
 
     /// Return a reference to the parent.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleParent() override final;
 
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL
@@ -204,6 +203,8 @@ public:
     */
     bool IsDisposed() const;
 
+    rtl::Reference<comphelper::OAccessible> implGetAccessibleParent();
+
 protected:
     /** The state set.
     */
@@ -236,7 +237,7 @@ protected:
 
 private:
     /// Reference to the parent object.
-    css::uno::Reference< css::accessibility::XAccessible> mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.  Furthermore, it changes according to the

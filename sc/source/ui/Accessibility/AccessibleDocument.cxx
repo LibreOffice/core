@@ -417,7 +417,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
 {
     // create the new child
     rtl::Reference< ::accessibility::AccessibleShape > pReplacement(::accessibility::ShapeTypeHandler::Instance().CreateAccessibleObject (
-        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this ),
+        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->implGetAccessibleParent(), this ),
         _rShapeTreeInfo
     ));
 

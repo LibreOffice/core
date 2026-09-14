@@ -2785,7 +2785,7 @@ bool SwAccessibleMap::ReplaceChild (
                                                             // we might be the only one that
                                                             // holds it.
     // Also get keep parent.
-    uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
+    rtl::Reference<comphelper::OAccessible> pParent = pCurrentChild->implGetAccessibleParent();
     pCurrentChild = nullptr;  // will be released by dispose
     A11yDispose( nullptr, pObj, nullptr );
 
@@ -2795,8 +2795,7 @@ bool SwAccessibleMap::ReplaceChild (
     // create the new child
     ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
                     ::accessibility::ShapeTypeHandler::Instance();
-    ::accessibility::AccessibleShapeInfo aShapeInfo(
-                                        xShape, xParent, this );
+    ::accessibility::AccessibleShapeInfo aShapeInfo(xShape, pParent, this);
     rtl::Reference< ::accessibility::AccessibleShape> pReplacement(
         rShapeTypeHandler.CreateAccessibleObject (
             aShapeInfo, mpShapeMap->GetInfo() ));

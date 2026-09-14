@@ -56,8 +56,7 @@ public:
 
     /** The accessible parent object of the shape.
     */
-    css::uno::Reference<
-        css::accessibility::XAccessible> mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
     /** This object that may be realized by the same implementation as that
         of that of <member>mxParent</member> can be used to modify
@@ -68,12 +67,9 @@ public:
 
     /** Copy the given values into the members described above.
     */
-    AccessibleShapeInfo (
-        css::uno::Reference<
-            css::drawing::XShape> xShape,
-        css::uno::Reference<
-            css::accessibility::XAccessible> xParent,
-        IAccessibleParent* pChildrenManager);
+    AccessibleShapeInfo(css::uno::Reference<css::drawing::XShape> xShape,
+                        const rtl::Reference<comphelper::OAccessible>& rpParent,
+                        IAccessibleParent* pChildrenManager);
 
     /** Copy the given values into the members described above.
         The accessible parent implementation object is set to NULL.
