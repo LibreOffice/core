@@ -97,7 +97,7 @@ bool HeadlessClientSession::connect(const std::string& uri, SocketPoll& poll)
 
     LOG_DBG("RemoteDoc: connecting to " << host << ':' << port);
 
-    http::Request request(pathAndQuery);
+    http::Request request(std::move(pathAndQuery));
 
     // The secret marks as a connection only RemoteDocumentBroker could made
     request.add(std::string(RemoteDocumentBroker::ChainSecretHeader),

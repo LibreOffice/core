@@ -1656,7 +1656,8 @@ bool ChildSession::downloadAs(const StringVector& tokens)
             << "], Filter Options: ["
             << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
 
-    const DownloadAsRequest request{ download, id, filename, format, filterOptions };
+    const DownloadAsRequest request{ download, std::move(id), filename, std::move(format),
+                                     std::move(filterOptions) };
 
     // A second download from the same session while one is still running in a forked
     // process has nowhere to park its reply, so it is exported here instead.

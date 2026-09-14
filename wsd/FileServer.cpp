@@ -3358,7 +3358,7 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
         }
 
         LOG_TRC("Allowed frame ancestors:" << frameAncestors);
-        csp.appendDirective("frame-ancestors", frameAncestors);
+        csp.appendDirective("frame-ancestors", std::move(frameAncestors));
     }
 
     response.add("Content-Security-Policy", csp.generate());

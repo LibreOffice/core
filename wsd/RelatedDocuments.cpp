@@ -291,7 +291,7 @@ void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::strin
             itView->second.subscriptions.erase(itSub);
         else if (event == "connected" || event == "disconnected" || event == "failed" ||
                  event == "missing")
-            itSub->second.state = event;
+            itSub->second.state = std::move(event);
 
         refreshView(docBroker, tag);
     }
