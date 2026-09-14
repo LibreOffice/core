@@ -173,36 +173,6 @@ class UserList extends window.L.Control {
 		return img;
 	}
 
-	getUserItem(
-		viewId: number,
-		username: string,
-		extraInfo: UserExtraInfo,
-		color: string,
-	) {
-		var content = window.L.DomUtil.create('tr', 'useritem');
-		content.id = 'user-' + viewId;
-		$(document).on(
-			'click',
-			'#' + content.id,
-			this.onUseritemClicked.bind(this),
-		);
-
-		var iconTd = window.L.DomUtil.create('td', 'usercolor', content);
-		var nameTd = window.L.DomUtil.create('td', 'username cool-font', content);
-
-		const avatarElement = this.createAvatar(
-			undefined,
-			viewId,
-			username,
-			extraInfo,
-			color,
-		);
-		iconTd.appendChild(avatarElement);
-		nameTd.textContent = username;
-
-		return content;
-	}
-
 	openDropdown() {
 		const userListSummary = document.getElementById(
 			'userListSummaryBackground',

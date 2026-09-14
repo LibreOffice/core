@@ -1495,26 +1495,6 @@ button.leaflet-control-search-next
 	background-color: var(--color-background-darker) !important;
 }
 
-tr.useritem:hover {
-	cursor: default;
-	background-color: rgba(67, 172, 232, 0.25);
-}
-
-tr.useritem > td {
-	padding: 7px;
-}
-
-tr.useritem > td.usercolor {
-	display: inline-block;
-	top: 0px;
-	left: 3px;
-	position: relative;
-}
-
-tr.useritem > td > img {
-	border-radius: 100px;
-}
-
 .context-menu-link {
 	text-decoration: none;
 	color: var(--color-main-text);
