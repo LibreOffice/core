@@ -36,6 +36,8 @@
 #include <txtfrm.hxx>
 #include <frameformats.hxx>
 #include <memory>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 using namespace ::boost;
 using namespace ::sw::mark;
@@ -438,8 +440,12 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, SwNodeOffset nNode, sal_
     SwCursorShell* pShell = rDoc.GetEditShell();
     if (!pShell)
         return;
-    const SwViewShell* pActingViewShell
-        = bCheckCoincidentCursors ? rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
+    const SwViewShell* pActingViewShell = nullptr;
+    if (bCheckCoincidentCursors && rDoc.GetDocShell())
+    {
+        // The current COKit view.
+        pActingViewShell = rDoc.GetDocShell()->GetWrtShell();
+    }
     for(SwViewShell& rCurShell : pShell->GetRingContainer())
     {
         if( auto pCursorShell = dynamic_cast<SwCursorShell *>(&rCurShell) )

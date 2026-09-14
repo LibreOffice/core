@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_core_doc))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_core_doc))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_doc, \
+    sw/qa/core/doc/CntntIdxStore \
     sw/qa/core/doc/doc \
     sw/qa/core/doc/number \
     sw/qa/core/doc/DocumentRedlineManager \
