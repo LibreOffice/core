@@ -710,6 +710,8 @@ public:
     }
 };
 
+/// This test that we don't fail the upload if we get no JSON payload on PutFile.
+/// This happens when using sharepoint.
 class UnitPutFileNoJSON : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitUploaded,
