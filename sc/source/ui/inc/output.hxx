@@ -70,6 +70,18 @@ typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipR
 
 typedef std::map<SCROW, sal_Int32> TableRowIdMap;
 typedef std::map<std::pair<SCROW, SCCOL>, sal_Int32> TableDataIdMap;
+
+/// a destination and what it points at, which may not be drawn when the destination is made
+struct ScPendingDest
+{
+    sal_Int32 m_nDestId;
+    ScAddress m_aTarget;
+    /// name the sheet rather than the cell, the target being the sheet itself
+    bool m_bWholeSheet;
+    /// the sheet's element is on the page this destination names, so it can stand in
+    bool m_bSheetOnPage;
+};
+
 struct ScEnhancedPDFState
 {
     sal_Int32 m_WorksheetId = -1;
@@ -77,8 +89,11 @@ struct ScEnhancedPDFState
     TableDataIdMap m_TableDataMap;
     /// the Worksheet element of every sheet drawn so far
     std::unordered_map<SCTAB, sal_Int32> m_WorksheetIds;
-    /// destinations, and the sheet each points at, which may not be drawn when it is made
-    std::vector<std::pair<sal_Int32, SCTAB>> m_PendingDests;
+    /// the TD element at every grid position drawn so far, unlike m_TableDataMap kept for the
+    /// whole export; the grid position, not the cell the content came from, is what shares a
+    /// page with the destination that names it
+    std::unordered_map<ScAddress, sal_Int32> m_CellIds;
+    std::vector<ScPendingDest> m_PendingDests;
     ScEnhancedPDFState(){};
     void StartSheet()
     {

@@ -985,6 +985,79 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSheetDestinations)
     CPPUNIT_ASSERT_EQUAL("Worksheet Worksheet "_ostr, aTypes.makeStringAndClear());
 }
 
+CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testCellLinkDestinations)
+{
+    loadFromFile(u"cell-link-destinations.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    int nCellDests = 0;
+    int nSheetDests = 0;
+    std::set<int> aTargets;
+    for (auto pPage : aDocument.GetPages())
+    {
+        auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Annots"_ostr));
+        if (!pAnnots)
+            continue;
+        for (auto pElement : pAnnots->GetElements())
+        {
+            auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+            CPPUNIT_ASSERT(pAnnotRef);
+            vcl::filter::PDFObjectElement* pAnnot = pAnnotRef->LookupObject();
+            CPPUNIT_ASSERT(pAnnot);
+            auto pSubtype
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"_ostr));
+            if (!pSubtype || pSubtype->GetValue() != "Link")
+                continue;
+
+            // Without the fix, a link annotation carried a bare /Dest array and no /A, so this
+            // stops at the assertion below.
+            //
+            // ISO 14289-2 8.8: the link names the element it reaches
+            auto pAction
+                = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));
+            CPPUNIT_ASSERT(pAction);
+            auto pPlain
+                = dynamic_cast<vcl::filter::PDFArrayElement*>(pAction->LookupElement("D"_ostr));
+            CPPUNIT_ASSERT(pPlain);
+            auto pPlainPage
+                = dynamic_cast<vcl::filter::PDFReferenceElement*>(pPlain->GetElements()[0]);
+            CPPUNIT_ASSERT(pPlainPage);
+            auto pStructure
+                = dynamic_cast<vcl::filter::PDFArrayElement*>(pAction->LookupElement("SD"_ostr));
+            CPPUNIT_ASSERT(pStructure);
+            auto pRef
+                = dynamic_cast<vcl::filter::PDFReferenceElement*>(pStructure->GetElements()[0]);
+            CPPUNIT_ASSERT(pRef);
+            vcl::filter::PDFObjectElement* pElem = pRef->LookupObject();
+            CPPUNIT_ASSERT(pElem);
+            // the cell reached, or its sheet where nothing was drawn to reach
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pElem->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pType);
+            if (pType->GetValue() == "TD")
+                ++nCellDests;
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL("Worksheet"_ostr, pType->GetValue());
+                ++nSheetDests;
+            }
+            // /SD names an element in place of the page, so it must be /D's page
+            auto pElemPage
+                = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElem->Lookup("Pg"_ostr));
+            CPPUNIT_ASSERT(pElemPage);
+            CPPUNIT_ASSERT_EQUAL(pPlainPage->GetObjectValue(), pElemPage->GetObjectValue());
+            // each link reaches an element of its own
+            CPPUNIT_ASSERT(aTargets.insert(pRef->GetObjectValue()).second);
+        }
+    }
+
+    // the three links onto a cell with something in it, and the one onto an empty cell
+    CPPUNIT_ASSERT_EQUAL(3, nCellDests);
+    CPPUNIT_ASSERT_EQUAL(1, nSheetDests);
+}
+
 // just needs to not crash on export to pdf
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testForcepoint97)
 {

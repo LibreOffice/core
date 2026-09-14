@@ -1983,6 +1983,8 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
 
             sal_Int32 nId = pPDF->GetCurrentStructureElement();
             pPDF->GetScPDFState()->m_TableDataMap[{ nY, nX }] = nId;
+            // the first page it is drawn on, which is the one a destination for it names
+            pPDF->GetScPDFState()->m_CellIds.emplace(ScAddress(nX, nY, mnTab), nId);
 
             pPDF->EndStructureElement(); // TableData
             pPDF->EndStructureElement(); // TableRow
@@ -2210,8 +2212,11 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                         bReopenRowTag = true;
                     }
 
-                    pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
-                                                    u"TD"_ustr);
+                    // what a destination naming this cell has to reach
+                    pPDF->GetScPDFState()->m_CellIds.emplace(
+                        ScAddress(nX, nY, mnTab),
+                        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
+                                                        u"TD"_ustr));
                     pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph,
                                                     u"P"_ustr);
                 }
