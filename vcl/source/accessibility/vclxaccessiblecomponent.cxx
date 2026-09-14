@@ -517,10 +517,10 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
-        xAcc = GetWindow()->GetAccessibleParent();
-    return xAcc;
+        return GetWindow()->GetAccessibleParent();
+
+    return {};
 }
 
 sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  )
