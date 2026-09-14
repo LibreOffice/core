@@ -58,6 +58,11 @@ bool SortOperation::runImplementation()
 
     ScSortParam aLocalParam(mrSortParam);
 
+    // A Total Row is not data: it stays at the bottom, the way the filter already leaves it
+    // alone. Exclude it from the sort.
+    if (aLocalParam.bByRow && pDBData->HasTotals() && aLocalParam.nRow2 > aLocalParam.nRow1)
+        --aLocalParam.nRow2;
+
     // If we are in a sheet view and aren't sorting auto-filtered cell range, we need
     // to sync the sorted cells. If this is the case then we need to convert the tab
     // from the sheet view tab to the default view tab.
@@ -80,9 +85,11 @@ bool SortOperation::runImplementation()
 
     if (bCopy)
     {
-        // Copy the data range to the destination then move the sort range to it.
-        ScRange aSrcRange(mrSortParam.nCol1, mrSortParam.nRow1, mnTab, mrSortParam.nCol2,
-                          mrSortParam.nRow2, mnTab);
+        // Copy the data range to the destination then move the sort range to it. The range
+        // comes from aLocalParam, so a Total Row is left behind rather than copied to the
+        // destination as an ordinary data row.
+        ScRange aSrcRange(aLocalParam.nCol1, aLocalParam.nRow1, mnTab, aLocalParam.nCol2,
+                          aLocalParam.nRow2, mnTab);
         ScAddress aDestPos(mrSortParam.nDestCol, mrSortParam.nDestRow, mrSortParam.nDestTab);
 
         ScDocFunc& rDocFunc = mrDocShell.GetDocFunc();

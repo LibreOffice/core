@@ -46,6 +46,7 @@
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
 #include <subtotalparam.hxx>
+#include <sortparam.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <tablestyle.hxx>
@@ -1434,6 +1435,121 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoExpandUndoKeepsCursor)
                                  pViewData->GetCurX());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on D3", sal_Int32(2),
                                  pViewData->GetCurY());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortTableKeepsTotalRowLast)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table A1:B6 with header (row 1), data rows 2-5 and a Total Row (row 6).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 1, 5,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    rDoc.SetString(0, 1, 0, u"Delta"_ustr);   rDoc.SetValue(1, 1, 0, 40.0);
+    rDoc.SetString(0, 2, 0, u"Alpha"_ustr);   rDoc.SetValue(1, 2, 0, 10.0);
+    rDoc.SetString(0, 3, 0, u"Charlie"_ustr); rDoc.SetValue(1, 3, 0, 30.0);
+    rDoc.SetString(0, 4, 0, u"Bravo"_ustr);   rDoc.SetValue(1, 4, 0, 20.0);
+    pData->RefreshTableColumnNames(&rDoc);
+
+    // The average of the data lies between the smallest and the largest value, so a sort that
+    // takes the Total Row for data lands it in the middle of the table.
+    rDoc.SetString(0, 5, 0, u"Total"_ustr);
+    rDoc.SetString(1, 5, 0, u"=SUBTOTAL(101;Table1[Number])"_ustr);
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(25.0, rDoc.GetValue(1, 5, 0));
+
+    // The cursor column is the sort key.
+    pViewShell->SetCursor(1, 1);
+    dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the name came along with its number", u"Alpha"_ustr,
+                                 rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(40.0, rDoc.GetValue(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the Total Row stays at the bottom", u"Total"_ustr,
+                                 rDoc.GetString(0, 5, 0));
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the total is still over all four data rows", 25.0,
+                                 rDoc.GetValue(1, 5, 0));
+
+    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(40.0, rDoc.GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the Total Row stays at the bottom", u"Total"_ustr,
+                                 rDoc.GetString(0, 5, 0));
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(25.0, rDoc.GetValue(1, 5, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortTableToDestinationLeavesTotalRow)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    // Styled table A1:B5 with header (row 1), data rows 2-4 and a Total Row (row 5).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 1, 4,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    rDoc.SetString(0, 1, 0, u"Charlie"_ustr); rDoc.SetValue(1, 1, 0, 30.0);
+    rDoc.SetString(0, 2, 0, u"Alpha"_ustr);   rDoc.SetValue(1, 2, 0, 10.0);
+    rDoc.SetString(0, 3, 0, u"Bravo"_ustr);   rDoc.SetValue(1, 3, 0, 20.0);
+    pData->RefreshTableColumnNames(&rDoc);
+    rDoc.SetString(0, 4, 0, u"Total"_ustr);
+    rDoc.SetString(1, 4, 0, u"=SUBTOTAL(101;Table1[Number])"_ustr);
+    rDoc.CalcAll();
+
+    // Sort the table by its Number column into D1, the way the sort dialog's "Copy sort
+    // results to" does.
+    ScSortParam aParam;
+    pData->GetSortParam(aParam);
+    aParam.bHasHeader = true;
+    aParam.bInplace = false;
+    aParam.nDestCol = 3;
+    aParam.nDestRow = 0;
+    aParam.nDestTab = 0;
+    aParam.maKeyState[0].bDoSort = true;
+    aParam.maKeyState[0].nField = 1;
+    aParam.maKeyState[0].bAscending = true;
+    CPPUNIT_ASSERT(ScDBDocFunc(*pDocShell).SortTab(0, aParam, /*bRecord*/ true, /*bPaint*/ true,
+                                                   /*bApi*/ true));
+
+    CPPUNIT_ASSERT_EQUAL(u"Number"_ustr, rDoc.GetString(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(4, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(4, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(4, 3, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the Total Row is not data to copy", OUString(),
+                                 rDoc.GetString(3, 4, 0));
+
+    // The table itself keeps its Total Row at the bottom.
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, rDoc.GetString(0, 4, 0));
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(1, 4, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
