@@ -26,8 +26,8 @@ i18npool_COTXTS := \
 		$(call gb_Helper_optional_locale,ko, \
 			ko_charset.txt) \
 			) \
-    $(call gb_Helper_optional_locale,ku, \
-        ku_alphanumeric.txt) \
+    $(call gb_Helper_optional_locale,kmr_Latn, \
+        kmr_Latn_alphanumeric.txt) \
     $(call gb_Helper_optional_locale,ln, \
         ln_charset.txt) \
     $(call gb_Helper_optional_locale,my, \

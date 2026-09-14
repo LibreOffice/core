@@ -38,8 +38,8 @@
 #define WITH_LOCALE_hu 0
 #define WITH_LOCALE_is 0
 #define WITH_LOCALE_ja 0
+#define WITH_LOCALE_kmr_Latn 0
 #define WITH_LOCALE_ko 0
-#define WITH_LOCALE_ku 0
 #define WITH_LOCALE_ln 0
 #define WITH_LOCALE_my 0
 #define WITH_LOCALE_ne 0

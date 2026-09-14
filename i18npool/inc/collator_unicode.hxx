@@ -79,8 +79,8 @@ extern "C" {
     const sal_uInt8* get_collator_data_ja_charset();
     const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_first();
     const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_last();
+    const sal_uInt8* get_collator_data_kmr_Latn_alphanumeric();
     const sal_uInt8* get_collator_data_ko_charset();
-    const sal_uInt8* get_collator_data_ku_alphanumeric();
     const sal_uInt8* get_collator_data_ln_charset();
     const sal_uInt8* get_collator_data_my_dictionary();
     const sal_uInt8* get_collator_data_ne_charset();
@@ -102,8 +102,8 @@ extern "C" {
     size_t get_collator_data_ja_charset_length();
     size_t get_collator_data_ja_phonetic_alphanumeric_first_length();
     size_t get_collator_data_ja_phonetic_alphanumeric_last_length();
+    size_t get_collator_data_kmr_Latn_alphanumeric_length();
     size_t get_collator_data_ko_charset_length();
-    size_t get_collator_data_ku_alphanumeric_length();
     size_t get_collator_data_ln_charset_length();
     size_t get_collator_data_my_dictionary_length();
     size_t get_collator_data_ne_charset_length();
