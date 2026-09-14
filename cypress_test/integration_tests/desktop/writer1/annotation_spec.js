@@ -893,6 +893,32 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		});
 	});
 
+	// Opens the Reply pane on a comment, writes in it and posts it. The reply that comes back
+	// is the next comment in the thread.
+	function addReply(id, text) {
+		cy.cGet('#comment-annotation-menu-' + id).click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-' + id).should('have.focus').type(text);
+		cy.cGet('#annotation-reply-' + id).click();
+	}
+
+	it('A reply answers a click while its thread is selected', function () {
+		desktopHelper.insertComment('first comment');
+		addReply(1, 'a reply');
+
+		// The card's box reaches down past its reply, so its middle is over the reply.
+		// Its author row is the part of it that is drawn.
+		cy.cGet('#comment-container-1 .cool-annotation-author-header').click();
+
+		cy.cGet('#comment-annotation-menu-2').should(function (menu) {
+			const box = menu[0].getBoundingClientRect();
+			const front = menu[0].ownerDocument.elementFromPoint(box.left + box.width / 2,
+				box.top + box.height / 2);
+			expect(front && front.id, 'what a click on the reply menu reaches')
+				.to.equal('comment-annotation-menu-2');
+		});
+	});
+
 	it('Modify focuses the modify textbox', function () {
 		desktopHelper.insertComment();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');

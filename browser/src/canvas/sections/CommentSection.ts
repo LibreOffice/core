@@ -533,7 +533,7 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	private createChildLinesNode (): void {
-		this.sectionProperties.childLinesNode = window.L.DomUtil.create('div', '', this.sectionProperties.container);
+		this.sectionProperties.childLinesNode = window.L.DomUtil.create('div', 'cool-annotation-child-lines', this.sectionProperties.container);
 		this.sectionProperties.childLinesNode.id = 'annotation-child-lines-' + this.sectionProperties.data.id;
 		this.sectionProperties.childLinesNode.style.width = this.sectionProperties.childCommentOffset*(this.getChildLevel() + 1) + 'px';
 	}
@@ -2208,8 +2208,7 @@ export class Comment extends CanvasSectionObject {
 		if (invalidateCache)
 			this.cachedCommentHeight = null;
 		if (this.cachedCommentHeight === null)
-			this.cachedCommentHeight = this.sectionProperties.container.getBoundingClientRect().height
-			- this.sectionProperties.childLinesNode.getBoundingClientRect().height;
+			this.cachedCommentHeight = this.sectionProperties.container.getBoundingClientRect().height;
 		return this.cachedCommentHeight;
 	}
 

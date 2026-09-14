@@ -735,6 +735,13 @@ input, button {
 	transition: left .25s;
 }
 
+/* Drawn below the card, down the side of its replies. It is out of the card's
+   flow, so the card's own box stops where the card does. */
+.cool-annotation-child-lines {
+	position: absolute;
+	top: 100%;
+}
+
 .comment-placement-overlay {
 	position: absolute;
 	pointer-events: none;
