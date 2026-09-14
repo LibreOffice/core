@@ -491,6 +491,11 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     return nOrient;
 }
 
+sal_Int16 convertThemeTintOrShade( sal_Int32 nFileValue )
+{
+    return sal_Int16((255.0 - nFileValue) * 10000.0 / 255.0);
+}
+
 // Return the suggested default if the given format has no known conversion
 sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
 {

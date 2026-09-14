@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "CellColorHandler.hxx"
+#include "ConversionHelper.hxx"
 #include "PropertyMap.hxx"
 #include "TDefTableHandler.hxx"
 #include <ooxml/resourceids.hxx>
@@ -357,12 +358,12 @@ model::ComplexColor CellColorHandler::getComplexColor() const
 
         if (m_nThemeColorTint > 0 )
         {
-            sal_Int16 nTint = sal_Int16((255.0 - m_nThemeColorTint) * 10000.0 / 255.0);
+            sal_Int16 nTint = ConversionHelper::convertThemeTintOrShade(m_nThemeColorTint);
             aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
         }
         if (m_nThemeColorShade > 0)
         {
-            sal_Int16 nShade = sal_Int16((255.0 - m_nThemeColorShade) * 10000 / 255.0);
+            sal_Int16 nShade = ConversionHelper::convertThemeTintOrShade(m_nThemeColorShade);
             aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
         }
     }
@@ -378,12 +379,12 @@ model::ComplexColor CellColorHandler::getFillComplexColor() const
 
         if (m_nFillThemeColorTint > 0 )
         {
-            sal_Int16 nTint = sal_Int16((255.0 - m_nFillThemeColorTint) * 10000.0 / 255.0);
+            sal_Int16 nTint = ConversionHelper::convertThemeTintOrShade(m_nFillThemeColorTint);
             aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
         }
         if (m_nFillThemeColorShade > 0)
         {
-            sal_Int16 nShade = sal_Int16((255.0 - m_nFillThemeColorShade) * 10000.0 / 255.0);
+            sal_Int16 nShade = ConversionHelper::convertThemeTintOrShade(m_nFillThemeColorShade);
             aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
         }
     }

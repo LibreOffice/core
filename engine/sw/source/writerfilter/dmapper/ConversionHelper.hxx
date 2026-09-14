@@ -49,6 +49,11 @@ namespace writerfilter::dmapper::ConversionHelper{
     sal_Int32 convertTwipToMm100_LimitedRoundUp(sal_Int32 _t);
     SAL_DLLPUBLIC_EXPORT sal_uInt32 convertTwipToMm100_LimitedUnsigned(sal_Int32 _t);
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
+    /** The tint or the shade of a theme color, as hundredths of a percent.
+
+        A file gives that value as a byte, counting the other way round.
+     */
+    sal_Int16 convertThemeTintOrShade( sal_Int32 nFileValue );
     css::text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault = css::style::NumberingType::ARABIC);
     sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat);

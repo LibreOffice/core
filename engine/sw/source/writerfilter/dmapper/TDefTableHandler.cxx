@@ -504,12 +504,12 @@ model::ComplexColor TDefTableHandler::getComplexColor() const
 
     if (m_nThemeTint > 0)
     {
-        sal_Int16 nTint = sal_Int16((255.0 - m_nThemeTint) * 10000.0 / 255.0);
+        sal_Int16 nTint = ConversionHelper::convertThemeTintOrShade(m_nThemeTint);
         aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
     }
     if (m_nThemeShade > 0)
     {
-        sal_Int16 nShade = sal_Int16((255.0 - m_nThemeShade) * 10000.0 / 255.0);
+        sal_Int16 nShade = ConversionHelper::convertThemeTintOrShade(m_nThemeShade);
         aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
     }
 

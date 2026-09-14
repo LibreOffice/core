@@ -402,7 +402,8 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 {
                     if (nIntValue > 0)
                     {
-                        sal_Int16 nTransformedValue = sal_Int16((255.0 - nIntValue) * 10000.0 / 255.0);
+                        sal_Int16 nTransformedValue
+                            = ConversionHelper::convertThemeTintOrShade(nIntValue);
                         aComplexColor.addTransformation({model::TransformationType::Tint, sal_Int16(nTransformedValue)});
                     }
                 }
@@ -410,7 +411,8 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 {
                     if (nIntValue > 0)
                     {
-                        sal_Int16 nTransformedValue = sal_Int16((255.0 - nIntValue) * 10000.0 / 255.0);
+                        sal_Int16 nTransformedValue
+                            = ConversionHelper::convertThemeTintOrShade(nIntValue);
                         aComplexColor.addTransformation({model::TransformationType::Shade, sal_Int16(nTransformedValue)});
                     }
                 }
@@ -2707,12 +2709,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
                     if (pThemeColorHandler->mnTint > 0 )
                     {
-                        sal_Int16 nTint = sal_Int16((255 - pThemeColorHandler->mnTint) * 10000 / 255);
+                        sal_Int16 nTint
+                            = ConversionHelper::convertThemeTintOrShade(pThemeColorHandler->mnTint);
                         aComplexColor.addTransformation({model::TransformationType::Tint, nTint});
                     }
                     if (pThemeColorHandler->mnShade > 0)
                     {
-                        sal_Int16 nShade = sal_Int16((255 - pThemeColorHandler->mnShade) * 10000 / 255);
+                        sal_Int16 nShade
+                            = ConversionHelper::convertThemeTintOrShade(pThemeColorHandler->mnShade);
                         aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
                     }
                 }
