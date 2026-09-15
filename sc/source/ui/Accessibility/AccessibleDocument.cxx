@@ -1827,7 +1827,7 @@ uno::Reference<XAccessible > SAL_CALL
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     if (mpChildrenShapes)
     {
         sal_Int64 nCount(getSelectedAccessibleChildCount()); //all shapes and the table
@@ -1837,16 +1837,18 @@ uno::Reference<XAccessible > SAL_CALL
         bool bTabMarked(IsTableSelected());
 
         if (mpChildrenShapes)
-            xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked); // throws no lang::IndexOutOfBoundsException if Index is too high
+            // throws no lang::IndexOutOfBoundsException if Index is too high
+            pAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex, bTabMarked);
         if (mpTempAcc.is() && nSelectedChildIndex == nCount - 1)
-            xAccessible = mpTempAcc;
+            pAccessible = mpTempAcc;
         else if (bTabMarked)
-            xAccessible = GetAccessibleSpreadsheet();
+            pAccessible = GetAccessibleSpreadsheet();
     }
 
-    OSL_ENSURE(xAccessible.is(), "here should always be an accessible object or an exception thrown");
+    OSL_ENSURE(pAccessible.is(),
+               "here should always be an accessible object or an exception thrown");
 
-    return xAccessible;
+    return pAccessible;
 }
 
 void SAL_CALL
