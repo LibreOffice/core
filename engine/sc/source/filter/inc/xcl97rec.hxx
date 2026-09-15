@@ -273,6 +273,8 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const cpo::uno::Reference< css::drawing::XShape >& rShape, SCTAB nTab );
+    /** Returns what the drawing calls the way a shape follows the cells beneath it. */
+    static const char*          GetEditAs( const cpo::uno::Reference< css::drawing::XShape >& rShape );
 
 private:
     cpo::uno::Reference< css::drawing::XShape >

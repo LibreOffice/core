@@ -2203,7 +2203,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
 
     // FIXME: two cell? it seems the two cell anchor is incorrect.
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
-            XML_editAs, "oneCell" );
+            XML_editAs, XclObjAny::GetEditAs( mxShape ) );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
     if (xPropSet.is())
     {

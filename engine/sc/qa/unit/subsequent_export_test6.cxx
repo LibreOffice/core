@@ -696,6 +696,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testMissingPathExternal)
     assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"Tabelle1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeKeepsTheWayItFollowsTheCells)
+{
+    createScDoc("xlsx/chart_hyperlink.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]", "editAs", u"twoCell");
+
+    createScDoc("xlsx/tdf161365.xlsx");
+    save(TestFilter::XLSX);
+
+    pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing, "(//xdr:twoCellAnchor)[1]", "editAs", u"absolute");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testXlStartupExternalXLS)
 {
     createScDoc("xls/XlStartupExternal.xls");

@@ -1263,10 +1263,9 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
     WriteFromTo( rStrm, rObj.GetShape(), rObj.GetTab() );
 }
 
-static const char*
-GetEditAs( const XclObjAny& rObj )
+const char* XclObjAny::GetEditAs( const Reference< XShape >& rShape )
 {
-    if( const SdrObject* pShape = EscherEx::GetSdrObject( rObj.GetShape() ) )
+    if( const SdrObject* pShape = EscherEx::GetSdrObject( rShape ) )
     {
         switch( ScDrawLayer::GetAnchorType( *pShape ) )
         {
@@ -1435,7 +1434,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     aDML.SetURLTranslator(pURLTransformer);
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
-            XML_editAs, GetEditAs( *this ) );
+            XML_editAs, XclObjAny::GetEditAs( GetShape() ) );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
     if (xPropSet.is())
     {
