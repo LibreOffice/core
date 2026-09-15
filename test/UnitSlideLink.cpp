@@ -265,7 +265,31 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
                                testname);
         helpers::getResponseString(socket, "slideimport:", testname);
 
-        const std::vector<std::string> parts = getParts(getLinks(socket)->getObject(0), 2);
+        const std::vector<std::string> insertedParts = getParts(getLinks(socket)->getObject(0), 2);
+
+        // An update that names one page reads that page alone: it holds a new
+        // part afterwards and the other page of the source keeps the one it has.
+        stageSource(socket, documentURL, "one.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=one.odp part=" + insertedParts[1]);
+        const std::string oneListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        const std::vector<std::string> parts = getParts(
+            helpers::parseJsonReply(oneListReply, "slidelinks:")->getArray("links")->getObject(0),
+            2);
+        LOK_ASSERT_EQUAL(insertedParts[0], parts[0]);
+        LOK_ASSERT_MESSAGE("the refreshed page holds a new part", parts[1] != insertedParts[1]);
+        const std::string oneReply = helpers::getResponseString(socket, "slidelink:", testname);
+        LOK_ASSERT_EQUAL(1,
+                         helpers::parseJsonReply(oneReply, "slidelink:")->getValue<int>("count"));
+
+        // A page that is not linked to the source is refreshed from nothing, and
+        // the staged file goes with the answer.
+        stageSource(socket, documentURL, "none.odp");
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=none.odp part=999999",
+                         "notlinked", std::string(" source=") + EncodedSourceName);
 
         // wsd stages the slides of the source as a file of the jail and has the
         // kit read the pages of that source from it. The staged name holds a

@@ -2672,11 +2672,16 @@ struct COKitDocument
      * @param pNotUpdated when given, takes a JSON array of the slides the file held no slide for,
      *        by the identifier of each one, in document order: ["{...}","{...}"]. It is an empty
      *        array when every linked slide was read, and empty when the refresh did not run.
+     * @param pPart one page, by the identifier getSlideLinks reports for it, which is then the
+     *        only page refreshed; no part at all refreshes every page linked to the source
+     *        document.
      * @return the number of pages refreshed, or -1 when no page is linked to that source document,
-     *         when the URL is not a file on this machine, or when the file could not be read.
+     *         when pPart names a page that is not, when the URL is not a file on this machine, or
+     *         when the file could not be read.
      */
     virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                                  const char* pLastModifiedTime, std::string* pNotUpdated) = 0;
+                                  const char* pLastModifiedTime, std::string* pNotUpdated,
+                                  const char* pPart) = 0;
 
     /**
      * Take the source document off one linked page.

@@ -2794,8 +2794,10 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
 namespace
 {
-/// Whether a link list holds an entry for the named source document.
-bool linksToSource(const std::string& linksJson, const std::string& source)
+/// Whether a link list holds an entry for the named source document, and, when a part is named,
+/// whether that entry lists the page of that part.
+bool linksToSource(const std::string& linksJson, const std::string& source,
+                   const std::string& part = std::string())
 {
     Object::Ptr object;
     if (!JsonUtil::parseJSON(linksJson, object))
@@ -2808,8 +2810,19 @@ bool linksToSource(const std::string& linksJson, const std::string& source)
     for (std::size_t i = 0; i < links->size(); ++i)
     {
         const Object::Ptr entry = links->getObject(i);
-        if (entry && JsonUtil::getJSONValue<std::string>(entry, "source") == source)
+        if (!entry || JsonUtil::getJSONValue<std::string>(entry, "source") != source)
+            continue;
+        if (part.empty())
             return true;
+
+        const Poco::JSON::Array::Ptr slides = entry->getArray("slides");
+        for (std::size_t j = 0; slides && j < slides->size(); ++j)
+        {
+            const Object::Ptr slide = slides->getObject(j);
+            if (slide && JsonUtil::getJSONValue<std::string>(slide, "part") == part)
+                return true;
+        }
+        return false;
     }
 
     return false;
@@ -2849,10 +2862,7 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 {
     std::string encodedSource;
     std::string encodedFile;
-    // A time= token is optional: it names the time the source was last modified now, recorded on
-    // the refreshed pages.
-    std::string encodedTime;
-    if ((tokens.size() != 4 && tokens.size() != 5) ||
+    if (tokens.size() < 4 || tokens.size() > 6 ||
         !getTokenString(tokens[2], "source", encodedSource) ||
         !getTokenString(tokens[3], "file", encodedFile))
     {
@@ -2895,10 +2905,19 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
                                          /*recursive=*/true);
     const std::string& sharedStagedPath = stagedFile._file;
 
-    if (tokens.size() == 5 && !getTokenString(tokens[4], "time", encodedTime))
+    // Two tokens are optional, in either order: time= names the time the source was last modified
+    // now, recorded on the refreshed pages, and part= names the one page to refresh, where no part
+    // refreshes every page linked to the source.
+    std::string encodedTime;
+    std::string part;
+    for (std::size_t i = 4; i < tokens.size(); ++i)
     {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
-        return false;
+        if (!getTokenString(tokens[i], "time", encodedTime) &&
+            !(getTokenString(tokens[i], "part", part) && isValidPartId(part)))
+        {
+            sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+            return false;
+        }
     }
 
     std::string source;
@@ -2955,14 +2974,16 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
     std::string notUpdated;
     const int count = getLOKitDocument()->refreshSlideLinks(
-        source.c_str(), url.c_str(), lastModifiedTime.c_str(), &notUpdated);
+        source.c_str(), url.c_str(), lastModifiedTime.c_str(), &notUpdated,
+        part.empty() ? nullptr : part.c_str());
 
     if (count < 0)
     {
         // The document reports only that it refreshed nothing. A source no page
-        // of the document is linked to is a different matter from a file whose
-        // pages could not be read, and a caller can act on the second one.
-        const bool linked = linksToSource(getSlideLinksJson(), source);
+        // of the document is linked to, or a page that is not linked to it, is a
+        // different matter from a file whose pages could not be read, and a
+        // caller can act on the second one.
+        const bool linked = linksToSource(getSlideLinksJson(), source, part);
         sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
                                  (linked ? "failed" : "notlinked") + named);
         return false;

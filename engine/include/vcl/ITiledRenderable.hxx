@@ -527,11 +527,14 @@ public:
         pages, and returns how many pages were refreshed; -1 when no page is linked to that source
         or the file could not be read. rLastModifiedTime is the time the source was last modified
         now, recorded on each refreshed page. pNotUpdated, when it is given, takes the
-        identifier of every page the file held no slide for (Impress only function) */
+        identifier of every page the file held no slide for. nPageIndex names one page in the page
+        list of the standard pages, which is then the only page refreshed, or is -1 for every page
+        linked to the source (Impress only function) */
     virtual sal_Int32 refreshSlideLinks(const OUString& /*rSourceName*/,
                                         const OUString& /*rFileUrl*/,
                                         const OUString& /*rLastModifiedTime*/,
-                                        std::vector<OString>* /*pNotUpdated*/ = nullptr)
+                                        std::vector<OString>* /*pNotUpdated*/ = nullptr,
+                                        sal_Int32 /*nPageIndex*/ = -1)
     {
         return -1;
     }

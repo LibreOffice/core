@@ -424,7 +424,8 @@ namespace desktop {
         bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) override;
         std::string getSlideLinks() override;
         int refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                              const char* pLastModifiedTime, std::string* pNotUpdated) override;
+                              const char* pLastModifiedTime, std::string* pNotUpdated,
+                              const char* pPart) override;
         bool breakSlideLink(const char* pPart) override;
         bool exportPages(const char* pParts, const char* pUrl) override;
     };

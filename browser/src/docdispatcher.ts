@@ -220,6 +220,15 @@ class Dispatcher {
 		this.actionsMap['updateslidelinks'] = function () {
 			if (app.map.slideLinks) app.map.slideLinks.updateAll();
 		};
+		// The two act on the slide on show alone.
+		this.actionsMap['updatelinkedslide'] = function () {
+			const links = app.map.slideLinks;
+			if (links) links.updatePage(links.currentPart());
+		};
+		this.actionsMap['unlinkslide'] = function () {
+			const links = app.map.slideLinks;
+			if (links) links.breakLink(links.currentPart());
+		};
 
 		this.actionsMap['showhelp'] = function () {
 			app.map.showHelp('online-help-content');

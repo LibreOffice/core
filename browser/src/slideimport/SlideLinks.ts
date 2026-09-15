@@ -54,12 +54,17 @@ interface SlideLinkSource {
 // A refresh waiting for its turn.
 interface SlideLinkRefresh {
 	source: string;
+	// The one page to refresh, or undefined for every page linked to the
+	// source.
+	part?: string;
 	// Whether the server has taken this refresh on, which it reports before
 	// it reads anything.
 	accepted: boolean;
 	// Whether the source was asked for the slides the pages record the
 	// identifiers of, rather than for its whole deck.
 	byIdentifier: boolean;
+	// The address the source was asked at, once it was.
+	wopiSrc?: string;
 }
 
 class SlideLinks {
@@ -87,12 +92,16 @@ class SlideLinks {
 	private queue: SlideLinkRefresh[] = [];
 	// The refresh the server is running, or null.
 	private running: SlideLinkRefresh | null = null;
+	// Whether a list arrived that names parts this view does not know yet, so
+	// the change is announced once the part list has caught up.
+	private announceOnParts: boolean = false;
 
 	constructor(map: any) {
 		this.map = map;
 
 		map.on('docloaded', this.onDocLoaded, this);
 		map.on('slidelinks', this.onList, this);
+		map.on('updateparts', this.onUpdateParts, this);
 		map.on('slidelink', this.onUpdated, this);
 		map.on('remotedoccommandresult', this.onRemoteResult, this);
 		map.on('relateddocuments', this.onRelatedDocuments, this);
@@ -174,6 +183,39 @@ class SlideLinks {
 		return related !== null && related.state === 'connected';
 	}
 
+	// The state of the related document a page's source names, as the
+	// storage announced it, or an empty string when this document is related
+	// to no document of that name or the page is linked to nothing.
+	public getPageSourceState(part: string): string {
+		const link = this.pages.get(part);
+		if (!link) return '';
+		const related = this.relatedDocument(link.source);
+		return related ? related.state : '';
+	}
+
+	// Whether the source of a page can be read, so that its pages can be
+	// refreshed from it.
+	public isPageUpdatable(part: string): boolean {
+		return SlideLinks.isReadable(this.getPageSourceState(part));
+	}
+
+	// Whether a source in the given state can be read: the storage named it,
+	// this view holds a token for it, and reading it has not failed.
+	private static isReadable(state: string): boolean {
+		return (
+			state !== '' &&
+			state !== 'noaccess' &&
+			state !== 'missing' &&
+			state !== 'failed'
+		);
+	}
+
+	// The identifier of the slide on show, or an empty string when the
+	// document shows no slide.
+	public currentPart(): string {
+		return this.map._docLayer ? this.map._docLayer.getSelectedPart() : '';
+	}
+
 	private currentSourceTime(source: string): string | null {
 		const related = this.relatedDocument(source);
 		return related && related.lastModifiedTime
@@ -208,9 +250,47 @@ class SlideLinks {
 	public updateSource(source: string): void {
 		if (!this.map.isEditMode()) return;
 		if (this.sources.indexOf(source) < 0) return;
-		if (this.running && this.running.source === source) return;
-		if (this.queue.some((refresh) => refresh.source === source)) return;
+		if (this.covers(this.running, source)) return;
+		if (this.queue.some((refresh) => this.covers(refresh, source))) return;
+		// The pages of this source waiting to be read on their own are read
+		// with the rest of it.
+		this.queue = this.queue.filter(
+			(refresh) => refresh.source !== source || refresh.part === undefined,
+		);
 		this.enqueue(source);
+	}
+
+	// Refreshes one page from its source, and leaves every other page of that
+	// source as it is. The source writes its pages out as for a whole refresh,
+	// and the document reads the one page from them.
+	public updatePage(part: string): void {
+		if (!this.map.isEditMode()) return;
+		const link = this.pages.get(part);
+		if (!link) {
+			this.say(_('This slide is not linked to another file.'));
+			return;
+		}
+		// A refresh already waiting reads this page, on its own or with the
+		// rest of its source, so asking twice reads it once.
+		if (this.covers(this.running, link.source, part)) return;
+		if (this.queue.some((refresh) => this.covers(refresh, link.source, part)))
+			return;
+		this.enqueue(link.source, part);
+	}
+
+	// Whether a refresh reads the given page of the given source, on its own
+	// or with the rest of that source; with no page, whether it reads every
+	// page of the source.
+	private covers(
+		refresh: SlideLinkRefresh | null,
+		source: string,
+		part?: string,
+	): boolean {
+		return (
+			refresh !== null &&
+			refresh.source === source &&
+			(refresh.part === undefined || refresh.part === part)
+		);
 	}
 
 	private say(message: string): void {
@@ -265,8 +345,28 @@ class SlideLinks {
 				});
 		}
 		this.readSourceSlides();
-		app.events.fire('slidelink:changed', {});
+		// A refreshed page is a new page, and the list reaches a view before
+		// the status that renews its part list. Announced now, a list naming
+		// a part the view does not know yet would read the slide on show as
+		// linked to nothing for a moment, so it is announced with that status.
+		if (this.namesUnknownPart()) this.announceOnParts = true;
+		else app.events.fire('slidelink:changed', {});
 		this.showUpdateCommand();
+	}
+
+	// Whether the list names a part the view's part list does not hold.
+	private namesUnknownPart(): boolean {
+		const layer = this.map._docLayer;
+		if (!layer) return false;
+		for (const part of this.pages.keys())
+			if (layer.getIndexFromPart(part) < 0) return true;
+		return false;
+	}
+
+	private onUpdateParts(): void {
+		if (!this.announceOnParts) return;
+		this.announceOnParts = false;
+		app.events.fire('slidelink:changed', {});
 	}
 
 	// The command that updates the linked slides is offered by a document
@@ -283,8 +383,13 @@ class SlideLinks {
 		}
 	}
 
-	private enqueue(source: string): void {
-		this.queue.push({ source: source, accepted: false, byIdentifier: false });
+	private enqueue(source: string, part?: string): void {
+		this.queue.push({
+			source: source,
+			part: part,
+			accepted: false,
+			byIdentifier: false,
+		});
 		this.sendNext();
 	}
 
@@ -332,14 +437,10 @@ class SlideLinks {
 			return;
 		}
 
-		if (related.state === 'noaccess') {
-			// This view holds no token for the source, so it cannot read it.
-			this.say(
-				_(
-					'You do not have access to {0}, so its pages cannot be refreshed.',
-				).replace('{0}', () => next.source),
-			);
-			this.sendNext();
+		// A source this view holds no token for, or one the storage could not
+		// give, is never asked: a subscription to it would wait for ever.
+		if (!SlideLinks.isReadable(related.state)) {
+			this.abandonUnreadableSource(next.source, related.state);
 			return;
 		}
 
@@ -348,11 +449,24 @@ class SlideLinks {
 		else SlideImportSession.subscribeRelatedDocument(related.wopiSrc);
 	}
 
+	// A source that cannot be read leaves the run it was asked for. The user is told why the
+	// source could not be read, and the next source in the queue goes.
+	private abandonUnreadableSource(source: string, state: string): void {
+		this.say(
+			(state === 'noaccess'
+				? _('You do not have access to {0}, so its pages cannot be refreshed.')
+				: _('{0} could not be read.')
+			).replace('{0}', () => source),
+		);
+		this.sendNext();
+	}
+
 	// The source is asked for the slides the pages of this document came from.
 	private askForPages(wopiSrc: string): void {
 		if (this.running === null) return;
 		this.running.accepted = true;
-		const guids = this.sourceGuids(this.running.source);
+		this.running.wopiSrc = wopiSrc;
+		const guids = this.sourceGuids(this.running.source, this.running.part);
 		this.running.byIdentifier = guids !== null;
 		SlideImportSession.sendRemoteCommand(
 			wopiSrc,
@@ -361,30 +475,42 @@ class SlideLinks {
 	}
 
 	// The identifiers the pages linked to a source record for their slides, or null when a page
-	// of that source records none or is read by the name of its slide.
-	private sourceGuids(source: string): string[] | null {
+	// of that source records none or is read by the name of its slide. A refresh of one page
+	// asks for the slide of that page alone.
+	private sourceGuids(source: string, part?: string): string[] | null {
 		const guids: string[] = [];
-		for (const link of this.pages.values()) {
+		for (const [linkedPart, link] of this.pages) {
 			if (link.source !== source) continue;
+			if (part !== undefined && linkedPart !== part) continue;
 			if (!link.sourceGuid || link.name) return null;
 			guids.push(link.sourceGuid);
 		}
 		return guids.length > 0 ? guids : null;
 	}
 
-	// A source this run is waiting on has come up, so it is asked for its pages.
+	// A source this run is waiting on has come up, so it is asked for its pages. A source
+	// that became unreadable while the run waited for it ends the run instead, so that the
+	// run leaves the queue and the sources behind it are still refreshed.
 	private onRelatedDocuments(): void {
 		this.readSourceSlides();
 		app.events.fire('slidelink:changed', {});
 
 		if (this.running === null || this.running.accepted) return;
 		const related = this.relatedDocument(this.running.source);
-		if (related && related.state === 'connected')
+		if (related && related.state === 'connected') {
 			this.askForPages(related.wopiSrc);
+			return;
+		}
+		if (related && SlideLinks.isReadable(related.state)) return;
+
+		const source = this.running.source;
+		this.running = null;
+		this.abandonUnreadableSource(source, related ? related.state : '');
 	}
 
 	// The pages the source wrote, staged in this document's jail by the server. The document
-	// reads the pages of that source from the file.
+	// reads the pages of that source from the file. The import pane may be reading another
+	// document at the same time, so only the answers of the source in hand are taken.
 	private onRemoteResult(e: any): void {
 		const textMsg = e.textMsg || '';
 		if (textMsg.startsWith('presentationinfo:')) {
@@ -395,7 +521,8 @@ class SlideLinks {
 			return;
 		}
 
-		if (this.running === null) return;
+		if (this.running === null || !this.running.accepted) return;
+		if (e.wopiSrc && e.wopiSrc !== this.running.wopiSrc) return;
 		if (!textMsg.startsWith('exportslides:')) return;
 
 		const body = textMsg.substring('exportslides:'.length);
@@ -420,14 +547,17 @@ class SlideLinks {
 		}
 
 		// The pages read now match the source as it is, so they record the
-		// source time the related documents list reports for it.
+		// source time the related documents list reports for it. A refresh of
+		// one page names it, and the document leaves the other pages of the
+		// source as they are.
 		const current = this.currentSourceTime(this.running.source);
 		app.socket.sendMessage(
 			'slidelink update source=' +
 				encodeURIComponent(this.running.source) +
 				' file=' +
 				encodeURIComponent(stagedName) +
-				(current ? ' time=' + encodeURIComponent(current) : ''),
+				(current ? ' time=' + encodeURIComponent(current) : '') +
+				(this.running.part !== undefined ? ' part=' + this.running.part : ''),
 		);
 	}
 
@@ -524,17 +654,25 @@ class SlideLinks {
 	// answered by an error that names it and by one that names nothing.
 	private onError(e: any): void {
 		window.app.console.warn('slidelink error of kind ' + (e.kind || ''));
-		if (e.part) return;
+		if (e.part) {
+			// A page that is linked to nothing has nothing to take off, and the
+			// toolbar of a slide that lost its link has gone already.
+			if (e.kind !== 'notlinked') this.say(_('Unlinking the slide failed.'));
+			return;
+		}
 		if (this.running === null) return;
 		if (e.source && e.source !== this.running.source) return;
 		const refresh = this.running;
 		this.running = null;
-		this.say(
-			_('Updating the slides of {0} failed.').replace(
-				'{0}',
-				() => refresh.source,
-			),
-		);
+		// A page asked for on its own that another view refreshed or unlinked
+		// meanwhile is linked to nothing the document knows, and is up to date.
+		if (e.kind !== 'notlinked' || refresh.part === undefined)
+			this.say(
+				_('Updating the slides of {0} failed.').replace(
+					'{0}',
+					() => refresh.source,
+				),
+			);
 		this.sendNext();
 	}
 

@@ -261,7 +261,7 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
 
 slidelink list
 slidelink break part=<part>
-slidelink update source=<source name> file=<staged name> [time=<source time>]
+slidelink update source=<source name> file=<staged name> [time=<source time>] [part=<part>]
 
     Reads the pages of the document that are linked to a source document,
     refreshes the pages of one source, and takes the source off one page. Only
@@ -310,7 +310,10 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     that source. This is the message wsd sends the kit once it has the content
     of a source as a local file. The kit reads only the staged file, never a
     location, and removes the file once the refresh is done. A page whose slide the file does not hold keeps the
-    content it holds. The whole refresh is one undo step. Each refreshed page is
+    content it holds. With part=<part> the page <part> alone is refreshed, and
+    the other pages linked to the source keep their content and the time they
+    record; a <part> that is not linked to <source name> is answered
+    kind=notlinked. The whole refresh is one undo step. Each refreshed page is
     the page read for it, so it holds a new part; the reply is therefore the
     fresh link list followed by
         slidelink: {"status":"updated","source":"<source document>","count":<K>}

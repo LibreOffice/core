@@ -140,12 +140,18 @@ public:
         slide for, in document order, so that the user can be told which slides of the document
         their source no longer holds a slide for.
 
+        nPageIndex names one page in the standard page list of rDoc, which is then the only page
+        refreshed, so that the other pages linked to rSourceName keep their content and the time
+        they record. An nPageIndex of -1 refreshes every page linked to rSourceName.
+
         @return the number of pages refreshed, or -1 when no page of rDoc is linked to rSourceName,
-                when rFileUrl is not a file on this machine, or when the file could not be read.
+                when nPageIndex names a page that is not, when rFileUrl is not a file on this
+                machine, or when the file could not be read.
     */
     static sal_Int32 Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
                              const OUString& rFileUrl, const OUString& rLastModifiedTime,
-                             std::vector<OString>* pNotUpdated = nullptr);
+                             std::vector<OString>* pNotUpdated = nullptr,
+                             sal_Int32 nPageIndex = -1);
 
     /** Takes the source document off the page at nIndex in the standard page list of rDoc.
 

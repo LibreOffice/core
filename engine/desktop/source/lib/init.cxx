@@ -1350,7 +1350,8 @@ static bool doc_insertPagesFromFile(COKitDocument* pThis, const char* pUrl,
 static std::string doc_getSlideLinks(COKitDocument* pThis);
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
-                                 const char* pLastModifiedTime, std::string* pNotUpdated);
+                                 const char* pLastModifiedTime, std::string* pNotUpdated,
+                                 const char* pPart);
 
 static bool doc_breakSlideLink(COKitDocument* pThis, const char* pPart);
 static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char* pUrl);
@@ -1898,9 +1899,10 @@ std::string COKitDocumentImpl::getSlideLinks()
 }
 
 int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                                         const char* pLastModifiedTime, std::string* pNotUpdated)
+                                         const char* pLastModifiedTime, std::string* pNotUpdated,
+                                         const char* pPart)
 {
-    return doc_refreshSlideLinks(this, pSourceName, pUrl, pLastModifiedTime, pNotUpdated);
+    return doc_refreshSlideLinks(this, pSourceName, pUrl, pLastModifiedTime, pNotUpdated, pPart);
 }
 
 bool COKitDocumentImpl::breakSlideLink(const char* pPart)
@@ -7160,7 +7162,8 @@ static std::string doc_getSlideLinks(COKitDocument* pThis)
 }
 
 static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, const char* pUrl,
-                                 const char* pLastModifiedTime, std::string* pNotUpdated)
+                                 const char* pLastModifiedTime, std::string* pNotUpdated,
+                                 const char* pPart)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7175,10 +7178,20 @@ static int doc_refreshSlideLinks(COKitDocument* pThis, const char* pSourceName, 
         return -1;
     }
 
+    // A linked page is a standard page, and the boundary names it by its page identifier. No part
+    // at all stands for every page linked to the source.
+    int nIndex = -1;
+    if (pPart && *pPart)
+    {
+        nIndex = pDoc->getPartIndex(pPart, 0);
+        if (nIndex < 0)
+            return -1;
+    }
+
     std::vector<OString> aNotUpdated;
     const sal_Int32 nRefreshed
         = pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl),
-                                  getUString(pLastModifiedTime), &aNotUpdated);
+                                  getUString(pLastModifiedTime), &aNotUpdated, nIndex);
     if (nRefreshed < 0 || !pNotUpdated)
         return nRefreshed;
 

@@ -713,6 +713,7 @@ class UIManager extends window.L.Control {
 			this.map.navigator = JSDialog.NavigatorPanel(this.map);
 
 			this.map.slideImportPane = new SlideImportPane(this.map);
+			this.map.slideLinkToolbar = new SlideLinkToolbar(this.map);
 
 			this.map.paneExpander = new PaneExpander(this.map);
 			this.map.paneSplitter = new PaneSplitter(this.map);

@@ -924,3 +924,124 @@
 	color: var(--color-primary-text);
 	cursor: pointer;
 }
+
+/* The toolbar over the slide on show when that slide is linked to another
+ * file. It floats over the top left corner of the document area, so the
+ * document keeps its layout under it, and it takes only the room its
+ * buttons need. The horizontal ruler shares this corner and sits at the very
+ * top of the area, so the toolbar starts below the room the ruler takes. */
+#slide-link-toolbar {
+	position: absolute;
+	top: calc(var(--ruler-height) + 8px);
+	inset-inline-start: 16px;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	border-radius: var(--border-radius-large);
+	background: var(--color-background-dark);
+	color: var(--color-text-dark);
+	font-size: var(--default-font-size);
+}
+
+/* The link mark, the same picture the slide's thumbnail carries. */
+.slide-link-toolbar-badge {
+	flex: none;
+	width: 24px;
+	height: 24px;
+	border-radius: var(--border-radius);
+	background: var(--color-background-lighter) url('images/lc_inserthyperlink.svg') no-repeat center / 16px;
+}
+
+.slide-link-toolbar-title {
+	font-weight: 600;
+}
+
+.slide-link-toolbar-state {
+	color: var(--color-text-light);
+}
+
+/* The chevron that unfolds the actions. Folded it points into the toolbar,
+ * where the actions would go; unfolded it points back the other way. Its
+ * selectors carry the toolbar's id: btns.css styles every button under a div
+ * that is not a .button with one long rule of many :not() classes, and only
+ * an id outranks it. */
+#slide-link-toolbar .slide-link-toolbar-expander {
+	flex: none;
+	width: 24px;
+	height: 24px;
+	margin: 0;
+	padding: 0;
+	border: none;
+	border-radius: var(--border-radius);
+	background: transparent url('images/unfold.svg') no-repeat center / 12px;
+	transform: rotate(-90deg);
+	cursor: pointer;
+}
+
+#slide-link-toolbar.expanded .slide-link-toolbar-expander {
+	transform: rotate(90deg);
+}
+
+[dir='rtl'] #slide-link-toolbar .slide-link-toolbar-expander {
+	transform: rotate(90deg);
+}
+
+[dir='rtl'] #slide-link-toolbar.expanded .slide-link-toolbar-expander {
+	transform: rotate(-90deg);
+}
+
+#slide-link-toolbar .slide-link-toolbar-expander:hover,
+#slide-link-toolbar .slide-link-toolbar-expander:focus-visible {
+	background-color: var(--color-background-lighter);
+}
+
+/* The shared secondary button, with its picture before its label and the
+ * toolbar's own spacing. It is lighter than the toolbar behind it, which the
+ * shared rule paints the same shade. */
+#slide-link-toolbar .slide-link-toolbar-action {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+	padding: 0 10px;
+	background-color: var(--color-background-lighter);
+}
+
+#slide-link-toolbar .slide-link-toolbar-action:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+#slide-link-toolbar .slide-link-toolbar-action::before {
+	content: '';
+	display: block;
+	width: 16px;
+	height: 16px;
+	background: no-repeat center / 16px;
+}
+
+#slide-link-toolbar .slide-link-toolbar-action.unlink::before {
+	background-image: url('images/lc_removehyperlink.svg');
+}
+
+#slide-link-toolbar .slide-link-toolbar-action.update::before {
+	background-image: url('images/lc_updateall.svg');
+}
+
+[data-theme='dark'] .slide-link-toolbar-badge {
+	background-image: url('images/dark/lc_inserthyperlink.svg');
+}
+
+[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-expander {
+	background-image: url('images/dark/unfold.svg');
+}
+
+[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.unlink::before {
+	background-image: url('images/dark/lc_removehyperlink.svg');
+}
+
+[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.update::before {
+	background-image: url('images/dark/lc_updateall.svg');
+}

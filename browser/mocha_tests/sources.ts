@@ -262,6 +262,7 @@
 /// <reference path="../src/control/SlideSectionHeader.tsx" />
 /// <reference path="../src/control/SlideDragGhost.tsx" />
 /// <reference path="../src/control/Control.SlideImportPane.tsx" />
+/// <reference path="../src/control/Control.SlideLinkToolbar.tsx" />
 /// <reference path="../src/control/AccessibilityNotice.tsx" />
 /// <reference path="../src/control/Control.UIManager.ts" />
 /// <reference path="../src/control/Notebookbar.WriterReferencesTab.ts" />

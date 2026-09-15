@@ -327,12 +327,21 @@ void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonW
 
 sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
                              const OUString& rFileUrl, const OUString& rLastModifiedTime,
-                             std::vector<OString>* pNotUpdated)
+                             std::vector<OString>* pNotUpdated, sal_Int32 nPageIndex)
 {
     const OUString aReference = MakeSourceReference(rSourceName);
-    const std::vector<sal_uInt16> aLinkedPages = getLinkedPages(rDoc, aReference);
+    std::vector<sal_uInt16> aLinkedPages = getLinkedPages(rDoc, aReference);
     if (aLinkedPages.empty())
         return -1;
+
+    // One page alone is read when the caller names it, and it has to be one of the pages linked
+    // to this source.
+    if (nPageIndex >= 0)
+    {
+        if (std::find(aLinkedPages.begin(), aLinkedPages.end(), nPageIndex) == aLinkedPages.end())
+            return -1;
+        aLinkedPages = { static_cast<sal_uInt16>(nPageIndex) };
+    }
 
     // The pages come from a file on this machine, so that a refresh needs no network.
     if (!isLocalFile(rFileUrl))

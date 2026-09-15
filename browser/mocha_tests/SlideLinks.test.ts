@@ -24,6 +24,7 @@ describe('SlideLinks', function () {
 	let commandShown: Map<string, boolean>;
 	let editable: boolean;
 	let links: SlideLinks;
+	let map: any;
 	let savedSocket: any;
 	let savedEvents: any;
 	let savedRelated: any;
@@ -130,7 +131,7 @@ describe('SlideLinks', function () {
 		commandShown = new Map();
 		editable = true;
 
-		const map: any = {
+		map = {
 			on: function (name: string, callback: any, context: any) {
 				listeners.set(name, callback.bind(context));
 			},
@@ -328,6 +329,34 @@ describe('SlideLinks', function () {
 		]);
 	});
 
+	it('carries on to the next source when one it waited on cannot be opened', function () {
+		(app as any).relatedDocuments = relatedDocuments('available');
+		documentHoldsLinks();
+		links.updateAll();
+
+		nodeassert.deepEqual(sent, [
+			'remotedocsubscribe wopisrc=' +
+				encodeURIComponent(wopiSrcOf('Sales deck.odp')),
+		]);
+
+		// The source the refresh waits on could not be opened, so it comes up
+		// in no state a refresh can read.
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'failed' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+		];
+		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
+
+		// The user is told why that source was left, and the source behind it
+		// in the queue is refreshed.
+		nodeassert.equal(told.length, 1);
+		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
+		nodeassert.deepEqual(sent.slice(1), [
+			infoOf('Support deck.odp'),
+			exportOf('Support deck.odp'),
+		]);
+	});
+
 	it('refreshes a source once however often the update is asked for', function () {
 		documentHoldsLinks();
 		links.updateAll();
@@ -359,6 +388,21 @@ describe('SlideLinks', function () {
 			exportOf('Sales deck.odp'),
 			exportOf('Support deck.odp'),
 		]);
+	});
+
+	it('says so rather than waiting on a source that cannot be read', function () {
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
+			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+		];
+		documentHoldsLinks();
+		links.updateAll();
+
+		// A source the storage could not give never comes up, so it is not
+		// waited on, and the next source is asked straight away.
+		nodeassert.equal(told.length, 1);
+		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Support deck.odp')]);
 	});
 
 	it('says when the document is related to no source of that name', function () {
@@ -474,5 +518,147 @@ describe('SlideLinks', function () {
 
 		nodeassert.deepEqual(sent, []);
 		nodeassert.deepEqual(told, []);
+	});
+
+	it('reads one page again and leaves the rest of its source alone', function () {
+		documentHoldsLinks();
+		links.updatePage(outlookPart);
+
+		// The source writes its pages out as for any refresh, and the update
+		// names the one page the document reads from them.
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		pagesStaged('sourceslides-1.odp');
+		nodeassert.equal(
+			sent[sent.length - 1],
+			updateOf('Sales deck.odp', 'sourceslides-1.odp') + ' part=' + outlookPart,
+		);
+		refreshEnded('Sales deck.odp', 1);
+		nodeassert.deepEqual(told, ['1 slide updated from Sales deck.odp.']);
+	});
+
+	it('leaves the answers of another document alone', function () {
+		documentHoldsLinks();
+		links.updatePage(outlookPart);
+
+		// The import pane may be reading a document of its own at the same time.
+		deliver('remotedoccommandresult', {
+			wopiSrc: wopiSrcOf('Support deck.odp'),
+			textMsg: 'exportslides: {"status":"staged","name":"other.odp"}',
+		});
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
+	it('takes a page that left the list before its turn as up to date', function () {
+		documentHoldsLinks();
+		links.updatePage(outlookPart);
+		links.updatePage(ticketsPart);
+		pagesStaged('sourceslides-1.odp');
+
+		// Another view refreshed or unlinked the page meanwhile, so the document
+		// knows no page of that part any more. Nothing is wrong, and the next
+		// refresh follows.
+		deliver('slidelinkerror', { kind: 'notlinked', source: 'Sales deck.odp' });
+		nodeassert.deepEqual(told, []);
+		nodeassert.equal(sent[sent.length - 1], exportOf('Support deck.odp'));
+	});
+
+	it('reads the whole source over pages of it waiting on their own', function () {
+		documentHoldsLinks();
+		links.updatePage(numbersPart);
+		links.updatePage(outlookPart);
+		links.updateAll();
+
+		pagesStaged('sourceslides-1.odp');
+		refreshEnded('Sales deck.odp', 1);
+		pagesStaged('sourceslides-2.odp');
+		refreshEnded('Sales deck.odp', 2);
+
+		// The page in hand is read on its own, the one waiting is read with the
+		// rest of its source, and then the other source follows.
+		nodeassert.deepEqual(sent, [
+			exportOf('Sales deck.odp'),
+			updateOf('Sales deck.odp', 'sourceslides-1.odp') + ' part=' + numbersPart,
+			exportOf('Sales deck.odp'),
+			updateOf('Sales deck.odp', 'sourceslides-2.odp'),
+			exportOf('Support deck.odp'),
+		]);
+	});
+
+	it('announces a list naming new parts once the part list holds them', function () {
+		const fired: string[] = [];
+		(app as any).events = {
+			on: () => {},
+			fire: (name: string) => fired.push(name),
+		};
+		// The view knows the parts of the list above; a refreshed page holds a
+		// part it does not know until the next status message.
+		let known = [numbersPart, outlookPart, ticketsPart];
+		map._docLayer = {
+			getIndexFromPart: (part: string) => (known.indexOf(part) >= 0 ? 0 : -1),
+		};
+
+		deliver('slidelinks', { message: list });
+		nodeassert.deepEqual(fired, ['slidelink:changed']);
+
+		deliver('slidelinks', {
+			message: {
+				links: [
+					{
+						source: 'Sales deck.odp',
+						slides: [{ part: unknownPart, name: 'Numbers' }],
+					},
+				],
+			},
+		});
+		nodeassert.deepEqual(fired, ['slidelink:changed']);
+
+		known = [unknownPart];
+		deliver('updateparts', {});
+		nodeassert.deepEqual(fired, ['slidelink:changed', 'slidelink:changed']);
+		// The status that follows an ordinary change announces nothing more.
+		deliver('updateparts', {});
+		nodeassert.equal(fired.length, 2);
+	});
+
+	it('reads a page once when its source is already being refreshed', function () {
+		documentHoldsLinks();
+		links.updateAll();
+		links.updatePage(numbersPart);
+		links.updatePage(numbersPart);
+
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
+	it('says so rather than reading a page that is linked to nothing', function () {
+		documentHoldsLinks();
+		links.updatePage(unknownPart);
+
+		nodeassert.deepEqual(sent, []);
+		nodeassert.equal(told.length, 1);
+	});
+
+	it('says so when the source could not be taken off a page', function () {
+		documentHoldsLinks();
+		deliver('slidelinkerror', { kind: 'failed', part: numbersPart });
+		nodeassert.deepEqual(told, ['Unlinking the slide failed.']);
+	});
+
+	it('tells whether the source of a page can be read', function () {
+		(app as any).relatedDocuments = [
+			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'noaccess' },
+		];
+		deliver('slidelinks', { message: list });
+
+		nodeassert.equal(links.getPageSourceState(numbersPart), 'noaccess');
+		nodeassert.equal(links.isPageUpdatable(numbersPart), false);
+		// The storage named no document for this source.
+		nodeassert.equal(links.getPageSourceState(ticketsPart), '');
+		nodeassert.equal(links.isPageUpdatable(ticketsPart), false);
+
+		(app as any).relatedDocuments = relatedDocuments('available');
+		nodeassert.equal(links.getPageSourceState(numbersPart), 'available');
+		nodeassert.equal(links.isPageUpdatable(numbersPart), true);
+		// A page that is linked to nothing has no source to speak of.
+		nodeassert.equal(links.getPageSourceState(unknownPart), '');
 	});
 });

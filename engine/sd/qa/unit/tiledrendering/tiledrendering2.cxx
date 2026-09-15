@@ -751,8 +751,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
     // The slides are read from a local file, so a location that would have to be fetched is
     // refused.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->refreshSlideLinks(
-                             u"Q3 deck.odp"_ustr, u"https://example.com/deck.odp"_ustr, OUString()));
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
+                                                              u"https://example.com/deck.odp"_ustr,
+                                                              OUString()));
 
     // A file that holds no slide the linked page records leaves that slide as it is, and a refresh
     // that changes nothing is no undo step of its own.
@@ -760,9 +761,53 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
         static_cast<sal_Int32>(0),
         pXImpressDocument->refreshSlideLinks(
             u"Q3 deck.odp"_ustr,
-            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"), OUString()));
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"),
+            OUString()));
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshOnePage)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Two slides of one source are inserted as links, in front of the page the document had.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"at\":0,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+    const OUString aFirstId = pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString();
+    const OUString aSecondId = pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getOUString();
+
+    // The source deck changed. Reading the second page alone leaves the first one the page it is,
+    // with the content and the time it holds, and reads the second one again: a refreshed page is
+    // the page read for it, so it holds a new identifier and the time of this read.
+    const OUString aChangedUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                              u"2021-01-01T00:00:00Z"_ustr,
+                                                              nullptr, 1));
+    CPPUNIT_ASSERT_EQUAL(aFirstId,
+                         pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         pDoc->GetSdPage(0, PageKind::Standard)->GetSourceModifiedTime());
+    CPPUNIT_ASSERT(aSecondId != pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getOUString());
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr,
+                         pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+
+    // A page that is not linked to the source, and an index that names no page, refresh nothing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                              OUString(), nullptr, 2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                              OUString(), nullptr, 7));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)

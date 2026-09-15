@@ -60,4 +60,5 @@
 /// <reference path="./AIChatMessageCodes.test.ts" />
 /// <reference path="./OtherViewCursorSection.test.ts" />
 /// <reference path="./SlideLinks.test.ts" />
+/// <reference path="./SlideLinkToolbar.test.ts" />
 // NOTE: reference new tests here ...

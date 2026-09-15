@@ -181,6 +181,7 @@ interface MapInterface extends Evented {
 	navigator: NavigatorPanel;
 	slideImportPane: SlideImportPane;
 	slideLinks: SlideLinks;
+	slideLinkToolbar: SlideLinkToolbar;
 	paneExpander: PaneExpander;
 	paneSplitter: PaneSplitter;
 	setPart(
