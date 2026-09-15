@@ -108,12 +108,23 @@
 	font-size: var(--default-font-size);
 }
 
+/* The counter is the last circle in the avatar row, so it keeps their size. */
 .preview-avatars-more {
 	flex: 0 0 auto;
-	min-width: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 24px;
 	height: 24px;
 	border: 2px solid var(--color-background-lighter);
-	border-radius: 12px;
+	border-radius: var(--border-radius-pill);
+	background: var(--color-primary);
+	color: var(--color-primary-text);
+	font-family: var(--cool-font);
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1;
 	pointer-events: auto;
 	cursor: pointer;
 }
@@ -154,25 +165,21 @@
 }
 
 /* How many slides the drag carries, over the top picture's corner. */
-.slide-drag-ghost-count,
-.preview-avatars-more {
+.slide-drag-ghost-count {
+	position: absolute;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
+	min-width: 22px;
+	height: 22px;
 	padding: 0 6px;
+	border-radius: 11px;
 	background: var(--color-primary);
 	color: var(--color-primary-text);
 	font-family: var(--cool-font);
 	font-size: 12px;
 	font-weight: 600;
-}
-
-.slide-drag-ghost-count {
-	position: absolute;
-	min-width: 22px;
-	height: 22px;
-	border-radius: 11px;
 }
 
 @media (prefers-reduced-motion: reduce) {
