@@ -1683,14 +1683,70 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svExternalDoubleRef:
                 {
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if (eType == formula::ParamClass::Value || eType == formula::ParamClass::Array)
+                    // Resolve the implicit intersection here. A svDoubleRef is
+                    // instead left on the stack, and whichever function pops
+                    // it intersects with DoubleRefToPosSingleRef(). No
+                    // function does so for an external reference, and an
+                    // entire column would become a JumpMatrix of MAXROW+1
+                    // rows.
+                    if (eType == formula::ParamClass::Value && !IsInArrayContext())
+                    {
+                        auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
+                        ScComplexRefData aData( pEDRToken->GetDoubleRef());
+                        const ScRange aRange = aData.toAbs(mrDoc, aPos);
+                        // Resolve from the shape of the range.
+                        // DoubleRefToPosSingleRefScalarCase() asks instead
+                        // whether the formula position lies within the range.
+                        SCCOL nCol = aPos.Col();
+                        SCROW nRow = aPos.Row();
+                        bool bOk = true;
+                        if (aRange.aStart == aRange.aEnd)
+                        {
+                            nCol = aRange.aStart.Col();
+                            nRow = aRange.aStart.Row();
+                        }
+                        else if (aRange.aStart.Col() == aRange.aEnd.Col() &&
+                                aRange.aStart.Row() <= nRow && nRow <= aRange.aEnd.Row())
+                            nCol = aRange.aStart.Col();
+                        else if (aRange.aStart.Row() == aRange.aEnd.Row() &&
+                                aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
+                            nRow = aRange.aStart.Row();
+                        else
+                            bOk = false;
+                        if (!bOk)
+                            SetError( FormulaError::NoValue);
+                        else
+                        {
+                            ScSingleRefData aRefData;
+                            // Absolute, an external table reference must be.
+                            aRefData.InitAddress( nCol, nRow, aRange.aStart.Tab());
+                            formula::FormulaToken* pNew = new ScExternalSingleRefToken(
+                                    pEDRToken->GetFileId(), pEDRToken->GetTableName(), aRefData);
+                            pNew->IncRef();
+                            pStack[ sp - i ] = pNew;
+                            p->DecRef();    // p may be dead now!
+                        }
+                    }
+                    else if (eType == formula::ParamClass::Value || eType == formula::ParamClass::Array)
                     {
                         auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
                         sal_uInt16 nFileId = pEDRToken->GetFileId();
                         OUString aTabName = pEDRToken->GetTableName().getString();
-                        const ScComplexRefData& rRef = pEDRToken->GetDoubleRef();
+                        ScComplexRefData aRef( pEDRToken->GetDoubleRef());
+                        // Array context, the JumpMatrix is unavoidable here,
+                        // so trim it as the svDoubleRef case does.
+                        if (eType == formula::ParamClass::Value)
+                        {
+                            ScRange aRange = aRef.toAbs(mrDoc, aPos);
+                            if (aRange.aStart.Tab() == aRange.aEnd.Tab() &&
+                                (aRange.aEnd.Row() == mrDoc.MaxRow() || aRange.aEnd.Col() == mrDoc.MaxCol()))
+                            {
+                                mrDoc.GetExternalRefManager()->shrinkToDataArea( nFileId, aTabName, aRange);
+                                aRef.Ref2.SetAddress( mrDoc.GetSheetLimits(), aRange.aEnd, aPos);
+                            }
+                        }
                         ScExternalRefCache::TokenArrayRef pArray;
-                        GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
+                        GetExternalDoubleRef(nFileId, aTabName, aRef, pArray);
                         if (nGlobalError != FormulaError::NONE || !pArray)
                             break;
                         formula::FormulaToken* pTemp = pArray->FirstToken();

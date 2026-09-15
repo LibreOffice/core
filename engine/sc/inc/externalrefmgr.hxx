@@ -493,6 +493,13 @@ public:
      */
     SC_DLLPUBLIC void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
 
+    /** Shrink the end of a range to the data area of the external sheet, so
+     *  an entire column or row does not turn into a matrix of MAXROW+1 rows.
+        The start is left alone, and the range is left alone if the extent is
+        not known. Does not load the source document.
+     */
+    void shrinkToDataArea(sal_uInt16 nFileId, const OUString& rTabName, ScRange& rRange);
+
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified
      * file.
