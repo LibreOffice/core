@@ -2024,6 +2024,11 @@ void TestFormula2::testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& 
                                         u"'file:///extdata.fake'#Data.B1:B1048576)"_ustr);
     CPPUNIT_ASSERT_EQUAL(40.0, pDoc->GetValue(ScAddress(0, 3, 0)));
 
+    // A range that the formula position does not intersect is an error, as
+    // for a sheet local range, and not the top left cell.
+    pDoc->SetString(ScAddress(0, 8, 0), u"='file:///extdata.fake'#Data.A1:A5"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(0, 8, 0)));
+
     // In array context the entire column is trimmed to the data area instead.
     ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);

@@ -4675,6 +4675,12 @@ StackVar ScInterpreter::Interpret()
                         ScMatrixRef xMat;
                         PopExternalDoubleRef(xMat);
                         QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
+                        // Outside a matrix formula the intersection above
+                        // found nothing, which is #VALUE! as for a sheet
+                        // local range. An unreachable document reports its
+                        // own error and keeps it.
+                        if (!bMatrixFormula && nGlobalError == FormulaError::NONE)
+                            SetError( FormulaError::NoValue);
                     }
                     break;
                     case svMatrix :
