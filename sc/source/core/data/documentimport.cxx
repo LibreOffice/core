@@ -650,9 +650,8 @@ void ScDocumentImport::setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd
 {
     if (!bVisible)
     {
+        // tdf#171228 - postpone page size/breaks updates to avoid calculations on every row
         getDoc().ShowRows(nRowStart, nRowEnd, nTab, false);
-        getDoc().SetDrawPageSize(nTab);
-        getDoc().UpdatePageBreaks( nTab );
     }
     else
     {

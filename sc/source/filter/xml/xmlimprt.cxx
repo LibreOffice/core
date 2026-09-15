@@ -1407,6 +1407,14 @@ void SAL_CALL ScXMLImport::endDocument()
                 mpDoc->GetExternalRefManager()->updateAbsAfterLoad();
         }
 
+        // tdf#171228 - compute page size once per sheet after row visibility was applied
+        if (mpDoc)
+        {
+            const SCTAB nTabCount = mpDoc->GetTableCount();
+            for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+                mpDoc->SetDrawPageSize(nTab);
+        }
+
         // If the stream contains cells outside of the current limits, the styles can't be re-created,
         // so stream copying is disabled then.
         if (mpDoc && GetModel().is() && !mpDoc->HasRangeOverflow())
@@ -1418,7 +1426,6 @@ void SAL_CALL ScXMLImport::endDocument()
             SCTAB nTabCount = mpDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
             {
-                mpDoc->SetDrawPageSize(nTab);
                 if (!pSheetData->IsSheetBlocked( nTab ))
                     mpDoc->SetStreamValid( nTab, true );
             }
