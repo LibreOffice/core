@@ -2009,7 +2009,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             uno::Reference<drawing::XShape> xShape;
             std::get<1>(aTuple)->getAny() >>= xShape;
             if (xShape.is())
-                Mapper().startShape(xShape);
+                m_pSdrImport->open(xShape);
         }
         else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveSubstream)
         {
@@ -3812,7 +3812,9 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                     && !m_aStates.top().getDrawingObject().getHadShapeText())
                 {
                     m_aStates.top().setHadShapeText(true);
-                    if (!m_aStates.top().getCurrentBuffer())
+                    // A replay can send a buffered start before the group ends, and the end
+                    // has to follow it.
+                    if (m_pSdrImport->isOpenInMapper() || !m_aStates.top().getCurrentBuffer())
                         m_pSdrImport->close();
                     else
                         m_aStates.top().getCurrentBuffer()->emplace_back(RTFBufferTypes::EndShape,
