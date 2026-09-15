@@ -6308,7 +6308,7 @@
             <desc>Specifies whether vertical text settings are available (true)
             or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="CTLSequenceChecking" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6316,7 +6316,7 @@
             <desc>Specifies whether CTL strings are checked for the correct
             input sequence(true) or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="CTLSequenceCheckingRestricted" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6325,7 +6325,7 @@
             correct input sequence(true) or not (false). Is only effective when
             CTLSequenceChecking is true.</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="CTLSequenceCheckingTypeAndReplace" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6333,7 +6333,7 @@
             <desc>Specifies whether CTL input sequences are corrected while
             typing. Is only effective when CTLSequenceChecking is true.</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="CTLCursorMovement" oor:type="xs:int" oor:nillable="false">
           <!-- UIHints: options-->
