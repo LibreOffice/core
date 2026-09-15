@@ -1095,8 +1095,8 @@ void collectObjectFindings(SdDrawDocument& rDoc, const LintOptions& rOptions,
                            const std::shared_ptr<LintMeasureCache>& rpMeasureCache,
                            std::vector<std::shared_ptr<LintFinding>>& rFindings)
 {
-    const bool bWantLargeImages = rOptions.mnImageResolution > 0;
-    const bool bWantOleObjects = rOptions.mbForPublication;
+    const bool bWantLargeImages = isCategoryScanned(rOptions, LintCategory::LargeImage);
+    const bool bWantOleObjects = isCategoryScanned(rOptions, LintCategory::OleObject);
     if (!bWantLargeImages && !bWantOleObjects)
         return;
 

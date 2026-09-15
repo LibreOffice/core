@@ -461,6 +461,17 @@ void LintSession::sendList(ListReason eReason)
                        rJson.put("forPublication", maOptions.mbForPublication);
                    }
                    {
+                       // The kinds of problem the last scan looked for, whether or not it found
+                       // any of them. A session that has not scanned yet names none.
+                       auto aScannedArray = rJson.startArray("scanned");
+                       if (mnRun != 0)
+                       {
+                           for (const LintCategory eCategory : getScannedCategories(maOptions))
+                               rJson.putSimpleValue(
+                                   OUString::createFromAscii(getCategoryName(eCategory)));
+                       }
+                   }
+                   {
                        auto aMeasuredNode = rJson.startNode("measured");
                        rJson.put("done", sal_Int32(moLint ? moLint->getMeasuredCount() : 0));
                        rJson.put("total", sal_Int32(moLint ? moLint->getMeasureCount() : 0));

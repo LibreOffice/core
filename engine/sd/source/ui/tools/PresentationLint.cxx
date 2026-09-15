@@ -149,6 +149,44 @@ LintUndoGroup::~LintUndoGroup()
     mpUndoManager->LeaveListAction();
 }
 
+bool isCategoryScanned(const LintOptions& rOptions, LintCategory eCategory)
+{
+    switch (eCategory)
+    {
+        case LintCategory::LargeImage:
+        case LintCategory::CroppedImage:
+            // One walk over the images of the deck finds both kinds, and a target of zero dots per
+            // inch leaves every image alone.
+            return rOptions.mnImageResolution > 0;
+
+        case LintCategory::HiddenSlide:
+        case LintCategory::UnusedMaster:
+            return true;
+
+        case LintCategory::NotesContent:
+        case LintCategory::OleObject:
+            return rOptions.mbForPublication;
+    }
+
+    return false;
+}
+
+std::vector<LintCategory> getScannedCategories(const LintOptions& rOptions)
+{
+    static constexpr LintCategory aEveryCategory[]
+        = { LintCategory::LargeImage,   LintCategory::CroppedImage, LintCategory::HiddenSlide,
+            LintCategory::UnusedMaster, LintCategory::NotesContent, LintCategory::OleObject };
+
+    std::vector<LintCategory> aScanned;
+    for (const LintCategory eCategory : aEveryCategory)
+    {
+        if (isCategoryScanned(rOptions, eCategory))
+            aScanned.push_back(eCategory);
+    }
+
+    return aScanned;
+}
+
 
 namespace detail
 {
@@ -267,7 +305,7 @@ void PresentationLint::scanStructure()
     detail::collectHiddenSlides(mrDoc, maFindings);
     detail::collectUnusedMasters(mrDoc, maFindings);
 
-    if (maOptions.mbForPublication)
+    if (isCategoryScanned(maOptions, LintCategory::NotesContent))
         detail::collectNotesContent(mrDoc, maFindings);
 
     sortForDisplay();

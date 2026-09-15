@@ -247,8 +247,8 @@ private:
         text over as the one the client knows. */
     void putChangedNumbers(tools::JsonWriter& rJson);
 
-    /** Sends the whole list: the state of the run, the settings it was gathered under, how far the
-        measurement has come, every row and what they come to. */
+    /** Sends the whole list: the state of the run, the settings it was gathered under, the kinds of
+        problem it looked for, how far the measurement has come, every row and what they come to. */
     void sendList(ListReason eReason);
 
     /** Sends how far a run of nTotal steps has come, and sends nothing while that has not moved by

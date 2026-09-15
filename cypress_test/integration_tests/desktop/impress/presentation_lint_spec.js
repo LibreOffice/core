@@ -11,6 +11,7 @@ var deck = '#cleanup-deck';
 // is taken out of the panel.
 var groupIds = {
 	images: 'cleanup-group-image',
+	cropped: 'cleanup-group-cropped-image',
 	hidden: 'cleanup-group-hidden-slide',
 	masters: 'cleanup-group-unused-master',
 	notes: 'cleanup-group-notes',
@@ -385,6 +386,36 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 			});
 	});
 
+	it('lists the picture that is drawn with part of it hidden', function() {
+		const win = this.win;
+
+		scanPresentation(win);
+
+		assertGroupListed('cropped');
+
+		// A heading says how many pictures the deck draws with part of them
+		// hidden.
+		cy.cGet(groupTitle('cropped')).should('have.text', 'Cropped images (1)');
+
+		// The row names where the picture sits the same way an image row does.
+		cy.cGet(rowsOf('cropped') + ':visible ' + rowText).first().invoke('text').then((text) => {
+			expect(text.trim(), 'text of the cropped image row').to.match(/^Slide \d+(, image \d+)?$/);
+		});
+
+		// How many bytes the picture takes and how much of it never reaches
+		// the slide read as a detail under that line.
+		cy.cGet(rowsOf('cropped') + ':visible .cleanup-row-detail').first()
+			.should('be.visible')
+			.invoke('text').then((text) => {
+				expect(text.trim(), 'detail of the cropped image row')
+					.to.match(/^\d+(\.\d)? (KB|MB), \d+% cropped away$/);
+			});
+
+		// The row says how much smaller trimming the picture leaves the
+		// document.
+		assertRowSavings('cropped', 1);
+	});
+
 	it('removing a hidden slide can be undone', function() {
 		const win = this.win;
 
@@ -448,6 +479,44 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 				.invoke('text').then((text) => {
 					expect(text, 'the image rows on screen').to.not.contain(imageRow);
 				});
+		});
+	});
+
+	it('trimming a cropped image can be undone', function() {
+		const win = this.win;
+
+		scanPresentation(win);
+
+		cy.cGet(rowsOf('cropped') + ':visible ' + rowText).first().invoke('text').then((text) => {
+			const croppedRow = text.trim();
+			expect(croppedRow, 'text of the cropped image row').to.not.be.empty;
+
+			dealWithRowOf('cropped', win);
+
+			// The picture now holds only the part the slide shows, so there
+			// is nothing hidden left to report and the group goes with its
+			// only row.
+			assertGroupNotListed('cropped');
+
+			undo(win);
+
+			// The picture is back with the part that was hidden, and the panel
+			// says so without being asked to look again: the very same row
+			// returns along with its figure.
+			waitForRunToEnd();
+			assertGroupListed('cropped');
+			cy.cGet(rowsOf('cropped') + ':visible ' + rowText).should('have.length', 1)
+				.invoke('text').then((restored) => {
+					expect(restored.trim(), 'the cropped image row on screen').to.equal(croppedRow);
+				});
+			assertRowSavings('cropped', 1);
+
+			// Trimming it over again takes the row off the list once more,
+			// again without being asked.
+			redo(win);
+
+			waitForRunToEnd();
+			assertGroupNotListed('cropped');
 		});
 	});
 
@@ -533,7 +602,10 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 
 		scanPresentation(win);
 
+		// Cropped pictures are measured against the same resolution, so asking
+		// for images to be left alone leaves them alone too.
 		assertGroupNotListed('images');
+		assertGroupNotListed('cropped');
 		assertGroupListed('hidden');
 	});
 
@@ -551,6 +623,22 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 			.should('contain.text', 'Slide 2').click();
 
 		cy.cGet('#preview-img-part-1').should('have.class', 'preview-img-currentpart');
+	});
+
+	it('the row link of a cropped image moves the view to its slide', function() {
+		const win = this.win;
+
+		scanPresentation(win);
+
+		// The view is on the first slide of the deck.
+		cy.cGet('#preview-img-part-0').should('have.class', 'preview-img-currentpart');
+
+		// The cropped picture is on the third slide, and pressing its row takes
+		// the reader there to look at it.
+		cy.cGet(rowsOf('cropped') + ':visible ' + rowLink).first()
+			.should('contain.text', 'Slide 3').click();
+
+		cy.cGet('#preview-img-part-2').should('have.class', 'preview-img-currentpart');
 	});
 
 	it('a row link moves the view while a run is going', function() {

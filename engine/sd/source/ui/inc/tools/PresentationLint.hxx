@@ -59,6 +59,13 @@ struct LintOptions
     bool mbForPublication = false;
 };
 
+/** True when a scan run with these settings gathers the findings of that category. A category is
+    gathered whether or not the document holds anything of the kind. */
+SD_DLLPUBLIC bool isCategoryScanned(const LintOptions& rOptions, LintCategory eCategory);
+
+/** Every category a scan run with these settings gathers, in the order LintCategory lists them. */
+SD_DLLPUBLIC std::vector<LintCategory> getScannedCategories(const LintOptions& rOptions);
+
 /** The figures one finding is described by, which the client writes into a row in the language of
     its own view. A field that has no meaning for the kind of finding keeps its empty value. */
 struct LintFindingFacts

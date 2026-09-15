@@ -5775,6 +5775,21 @@ int cleanupRowId(const boost::property_tree::ptree& rList, std::string_view aCat
     return -1;
 }
 
+/** The categories the list says its scan looked for, joined in the order the list names them. */
+std::string cleanupScannedCategories(const boost::property_tree::ptree& rList)
+{
+    std::string aJoined;
+    for (const auto& rEntry : rList.get_child("scanned"))
+    {
+        if (!aJoined.empty())
+            aJoined += ",";
+
+        aJoined += rEntry.second.get_value<std::string>();
+    }
+
+    return aJoined;
+}
+
 /** Answers whether a message of the given kind has arrived. Everything that produces one runs on
     this thread, so the run is driven to its end by the turns of the scheduler this loop takes. The
     short pause between rounds leaves the machine free between turns of the scheduler, and the
@@ -5980,6 +5995,64 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupListBeforeAnyS
     CPPUNIT_ASSERT_EQUAL(std::string("idle"), oList->get("status", std::string()));
     CPPUNIT_ASSERT_EQUAL(size_t(0), oList->get_child("rows").size());
     CPPUNIT_ASSERT_EQUAL(0, oList->get_child("total").get("count", -1));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupListNamesWhatTheScanLookedFor)
+{
+    // The list names the kinds of problem the scan behind it looked for, so a category that turned
+    // up nothing reads differently from one the settings left out.
+    loadFromURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/presentation-lint.fodp"));
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SdTestViewCallback aView;
+
+    // Nothing has been scanned yet, so the session names no category at all.
+    requestCleanup(u"{\"action\":\"list\",\"request\":1}"_ustr);
+
+    const auto oBeforeScan = firstCleanupEvent(aView, "list");
+    CPPUNIT_ASSERT(oBeforeScan);
+    CPPUNIT_ASSERT_EQUAL(0, oBeforeScan->get("run", -1));
+    CPPUNIT_ASSERT_EQUAL(std::string(), cleanupScannedCategories(*oBeforeScan));
+
+    // A scan that names no settings of its own keeps the images in and leaves the stricter rules of
+    // a deck being prepared to hand out out.
+    std::size_t nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"scan\",\"request\":2}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished", nSeen));
+
+    const auto oDefaults = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oDefaults);
+    CPPUNIT_ASSERT_EQUAL(std::string("image,croppedImage,hiddenSlide,unusedMaster"),
+                         cleanupScannedCategories(*oDefaults));
+
+    // A target of zero dots per inch leaves every image alone, so neither kind of image row is
+    // looked for.
+    nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"scan\",\"request\":3,\"options\":{\"resolution\":0}}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished", nSeen));
+
+    const auto oWithoutImages = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oWithoutImages);
+    CPPUNIT_ASSERT_EQUAL(std::string("hiddenSlide,unusedMaster"),
+                         cleanupScannedCategories(*oWithoutImages));
+
+    // A deck being prepared to hand out adds the speaker notes and the embedded objects. The
+    // resolution goes back in the request because a setting the last scan was given stands until
+    // another scan changes it.
+    nSeen = aView.m_aCommandResults.size();
+    requestCleanup(u"{\"action\":\"scan\",\"request\":4,"
+                   u"\"options\":{\"resolution\":150,\"forPublication\":true}}"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("the scan never reported finishing",
+                           waitForCleanupEvent(aView, "finished", nSeen));
+
+    const auto oForPublication = firstCleanupEvent(aView, "list", nSeen);
+    CPPUNIT_ASSERT(oForPublication);
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("image,croppedImage,hiddenSlide,unusedMaster,notes,embeddedObject"),
+        cleanupScannedCategories(*oForPublication));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationCleanupReleaseStartsAnEmptySession)
