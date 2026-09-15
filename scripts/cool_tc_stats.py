@@ -216,7 +216,7 @@ def main():
     print("# Patch review")
     print(f"- [All changes]({GERRIT_BASE}/q/status:open+-is:wip+project:online+branch:main)")
     print(f"  - Week {week}: {gerrit_str}")
-    print(f"- [PRs to migrate from GitHub](https://github.com/{GITHUB_REPO}/pulls)")
+    print(f"- [GitHub PRs](https://github.com/{GITHUB_REPO}/pulls)")
     print(f"  - Week {week}: {pr_str}")
     if new_contribs:
         print("- New contributors since last week")
