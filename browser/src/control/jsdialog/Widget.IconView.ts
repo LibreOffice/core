@@ -60,7 +60,11 @@ function _createEntryImageFromCommand(
 		{ once: true },
 	);
 
-	img.src = app.LOUtil.getImageURL(app.LOUtil.getIconNameOfCommand(command));
+	app.LOUtil.setImage(
+		img,
+		app.LOUtil.getIconNameOfCommand(command),
+		builder.map,
+	);
 }
 
 /// What the pointer shows on an entry. The placeholder carries it while the
