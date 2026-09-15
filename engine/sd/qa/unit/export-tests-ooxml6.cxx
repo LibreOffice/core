@@ -207,6 +207,31 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutomaticColorStaysOutOfAListStyle)
     CPPUNIT_ASSERT(countXPathNodes(pMaster, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill") > 0);
 }
 
+// The top and bottom insets of a shape stay where they are. A shape that states no height of its
+// own was taken to have a text area of no height, and the insets were then written as what they
+// would have to be to fit inside it, which is a negative distance.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTextInsetsOfAShapeWithNoHeight)
+{
+    createSdImpressDoc("pptx/subtitle-animation-save.pptx");
+
+    auto aTopInset = [this]() -> sal_Int32 {
+        uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes(xSupplier->getMasterPages()->getByIndex(0),
+                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xShapes->getByIndex(0), uno::UNO_QUERY_THROW);
+        sal_Int32 nTop = 0;
+        xShape->getPropertyValue(u"TextUpperDistance"_ustr) >>= nTop;
+        return nTop;
+    };
+
+    const sal_Int32 nBefore = aTopInset();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nBefore);
+
+    saveAndReload(TestFilter::PPTX);
+
+    CPPUNIT_ASSERT_EQUAL(nBefore, aTopInset());
+}
+
 // The pages of a Draw document keep their identity across sessions the same way the slides of
 // a presentation do.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)

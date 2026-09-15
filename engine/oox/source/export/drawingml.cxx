@@ -4678,7 +4678,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 nTextHeight = convertTwipToMm100(nTextHeight);
         }
 
-        if (nTop + nBottom >= nTextHeight)
+        // A shape that states no height of its own has no text area to normalize against, and
+        // taking the indents from a height of zero turns them negative.
+        if (nTextHeight > 0 && nTop + nBottom >= nTextHeight)
         {
             // Effective bottom would be above effective top of text area. LO normalizes the
             // effective text area in such case implicitly for rendering. MS needs indents so that
