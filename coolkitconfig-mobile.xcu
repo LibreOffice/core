@@ -10,17 +10,6 @@
 <!-- Hyperlink insertion in MS fileformats, should behave like in excel: hyperlinks inserted into the whole cell, not only for textfields.  -->
 <item oor:path="/org.openoffice.Office.Calc/Compatibility"><prop oor:name="Links" oor:op="fuse"><value>true</value></prop></item>
 
-<!-- CJK/CTL settings -->
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="VerticalText" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="Ruby" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="JapaneseFind" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="EmphasisMarks" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="DoubleLines" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="CJKFont" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="ChangeCaseMap" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="AsianTypography" oor:op="fuse"><value>true</value></prop></item>
-<item oor:path="/org.openoffice.Office.Common/I18N/CTL"><prop oor:name="CTLFont" oor:op="fuse"><value>true</value></prop></item>
-
 <!-- Themes -->
 <!-- Light Theme -->
 <item oor:path="/org.openoffice.Office.UI/ColorScheme/ColorSchemes">

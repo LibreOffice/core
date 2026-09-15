@@ -6230,7 +6230,7 @@
             <desc>Specifies, whether CJK font settings are available (true) or
             not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="VerticalText" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6238,7 +6238,7 @@
             <desc>Specifies, whether vertical text is available (true) or not
             (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="AsianTypography" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6246,7 +6246,7 @@
             <desc>Specifies, whether Asian typography options like compression
             and forbidden characters are available (true) or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="JapaneseFind" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6254,7 +6254,7 @@
             <desc>Specifies, whether Japanese find options are selectable for
             search and replace (true) or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Ruby" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6262,7 +6262,7 @@
             <desc>Specifies whether Rubys are available (true) or not
             (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="ChangeCaseMap" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6270,7 +6270,7 @@
             <desc>Specifies whether case mapping to half and full width,
             hiragana and katakana are available (true) or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="DoubleLines" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6278,7 +6278,7 @@
             <desc>Specifies whether writing in double lines is available (true)
             or not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="EmphasisMarks" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
@@ -6286,7 +6286,7 @@
             <desc>Specifies whether emphasis marks are available (true) or not
             (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="CTL">
@@ -6300,7 +6300,7 @@
             <desc>Specifies whether CTL font settings are available (true) or
             not (false).</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="CTLVerticalText" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
