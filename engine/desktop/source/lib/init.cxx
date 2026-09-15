@@ -1935,6 +1935,8 @@ COKitDocumentImpl::~COKitDocumentImpl()
     if (!maOriginalDocumentUrlKey.isEmpty())
         comphelper::COKit::clearOriginalDocumentUrl(maOriginalDocumentUrlKey);
 
+    comphelper::COKit::clearDialogsSuppressed(ViewShellDocId(mnDocumentId));
+
     if (comphelper::COKit::isForkedChild())
     {
         // Touch the least memory possible, while trying to avoid leaking files.
@@ -3541,11 +3543,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
         KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
+        // Batch names a document that is loaded with nobody to answer a dialog. The document is
+        // marked below, once it has an id. Until then the load itself carries the suppression,
+        // because a document has no view to belong to while it loads.
         const OUString aBatch = extractParameter(aOptions, u"Batch");
-        if (!aBatch.isEmpty())
-        {
-             Application::SetDialogCancelMode(DialogCancelMode::KitSilent);
-        }
+        const bool bSuppressDialogs = !aBatch.isEmpty();
 
         rtl::Reference<KitInteractionHandler> const pInteraction(
             new KitInteractionHandler("load"_ostr, pLib));
@@ -3661,6 +3663,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         const int nThisDocumentId = nDocumentIdCounter++;
         comphelper::COKit::setDocId(ViewShellDocId(nThisDocumentId));
+        std::optional<comphelper::COKit::SuppressDialogsLoadGuard> oSuppressDialogsGuard;
+        if (bSuppressDialogs)
+            oSuppressDialogsGuard.emplace(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
@@ -3676,6 +3681,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
+
+        if (bSuppressDialogs)
+            comphelper::COKit::setDialogsSuppressed(ViewShellDocId(nThisDocumentId));
 
         // Type detection can resolve a load to a template-format filter for a
         // file whose own name does not have one of that filter's extensions,

@@ -217,7 +217,6 @@ private:
 enum class DialogCancelMode {
     Off,      ///< do not automatically cancel dialogs
     Silent,   ///< silently cancel any dialogs
-    KitSilent, ///< silently cancel any dialogs (COKit case)
     Fatal     ///< cancel any dialogs by std::abort
 };
 
@@ -1300,6 +1299,10 @@ public:
                               const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>()) const override;
     virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const override;
     virtual bool hasKitClient() const override { return m_pCallback != nullptr; }
+    virtual ViewShellDocId getKitDocId() const override
+    {
+        return comphelper::COKit::NoDocId;
+    }
     virtual bool acceptsViewCallback(COKitCallbackType eType) const override;
     virtual void notifyInvalidation(tools::Rectangle const* pRect) const override;
     virtual void notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const override;

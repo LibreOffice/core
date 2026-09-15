@@ -957,6 +957,25 @@ bool Dialog::ImplStartExecute(bool async)
             return false;
         }
 
+        // A document with nobody to answer a dialog cancels its own, whatever the process-wide
+        // mode is. One process holds the documents of every window, so the answer is the one
+        // for the document this dialog belongs to. A dialog that belongs to no document is
+        // answered for by the load that is running, if one is.
+        if (bModal
+            && comphelper::COKit::areDialogsSuppressed(
+                   GetKitNotifier() ? GetKitNotifier()->getKitDocId() : comphelper::COKit::NoDocId))
+        {
+            if (o3tl::IsRunningUnitTest())
+            { // helps starbasic unit tests show their errors
+                std::cerr << "Dialog \"" << ImplGetDialogText(this)
+                          << "\" cancelled, nobody can answer it\n";
+            }
+
+            SAL_INFO("vcl", "Dialog \"" << ImplGetDialogText(this)
+                                        << "\" cancelled, nobody can answer it");
+            return false;
+        }
+
         switch ( Application::GetDialogCancelMode() )
         {
         case DialogCancelMode::Off:
@@ -987,9 +1006,6 @@ bool Dialog::ImplStartExecute(bool async)
                 "vcl",
                 "Dialog \"" << ImplGetDialogText(this)
                     << "\" cancelled in silent mode");
-            return false;
-
-        case DialogCancelMode::KitSilent:
             return false;
 
         default: // default cannot happen

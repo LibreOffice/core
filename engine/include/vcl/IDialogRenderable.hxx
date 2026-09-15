@@ -17,6 +17,7 @@
 #include <vector>
 
 #include <COKit/COKit.hxx>
+#include <comphelper/kit.hxx>
 
 namespace tools { class Rectangle; }
 
@@ -41,6 +42,9 @@ public:
 
     /// Whether a client is attached to receive the callbacks at all.
     virtual bool hasKitClient() const = 0;
+
+    /// The document this notifier speaks for, or NoDocId when it speaks for no document.
+    virtual ViewShellDocId getKitDocId() const = 0;
 
     /// Whether viewCallback() would hand a payload of this type to the client now.
     virtual bool acceptsViewCallback(COKitCallbackType eType) const = 0;

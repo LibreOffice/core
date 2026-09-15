@@ -19,6 +19,7 @@
 
 #include "kitinteractionhandler.hxx"
 
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -444,12 +445,12 @@ bool KitInteractionHandler::handleFilterOptionsRequest(
     if (!(rRequest >>= aFilterOptionsRequest))
         return false;
 
-    // Only auto-accept the default filter options in batch/silent mode (e.g.
-    // convertTo, where the dialog can't be shown anyway and would just be
-    // cancelled by DialogCancelMode::KitSilent, aborting the load). In
-    // interactive mode hand the request to the standard VCL handler so the
-    // user sees the CSV import dialog and can choose the separator etc.
-    if (Application::GetDialogCancelMode() != DialogCancelMode::KitSilent)
+    // Only auto-accept the default filter options when nobody can answer a dialog (e.g.
+    // convertTo, where the dialog can't be shown anyway and would just be cancelled,
+    // aborting the load). In interactive mode hand the request to the standard VCL handler
+    // so the user sees the CSV import dialog and can choose the separator etc. This runs
+    // during the load and has no document of its own, so it asks about the load.
+    if (!comphelper::COKit::areDialogsSuppressed(comphelper::COKit::NoDocId))
         return false;
 
     for (auto const& cont : rContinuations)

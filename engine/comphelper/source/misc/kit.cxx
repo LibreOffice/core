@@ -12,6 +12,7 @@
 #include <atomic>
 #include <map>
 #include <mutex>
+#include <set>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 
@@ -51,6 +52,10 @@ static std::mutex g_aSharedPresetsDirMutex;
 static OUString g_aSharedPresetsDir;
 
 static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
+
+/// The documents whose dialogs are suppressed, and the one loading now.
+static std::set<ViewShellDocId> g_aDialogsSuppressedDocIds;
+static ViewShellDocId g_nDialogsSuppressedLoadDocId(NoDocId);
 
 static bool g_bIdleLayouting(false);
 
@@ -226,6 +231,30 @@ TiledPaintingGuard::TiledPaintingGuard(ViewShellDocId nDocId, bool bTiledPaintin
 }
 
 TiledPaintingGuard::~TiledPaintingGuard() { g_nTiledPaintingDocId = m_nPrevDocId; }
+
+bool areDialogsSuppressed(ViewShellDocId nDocId)
+{
+    if (g_nDialogsSuppressedLoadDocId != NoDocId
+        && (nDocId == NoDocId || nDocId == g_nDialogsSuppressedLoadDocId))
+        return true;
+
+    return g_aDialogsSuppressedDocIds.find(nDocId) != g_aDialogsSuppressedDocIds.end();
+}
+
+void setDialogsSuppressed(ViewShellDocId nDocId) { g_aDialogsSuppressedDocIds.insert(nDocId); }
+
+void clearDialogsSuppressed(ViewShellDocId nDocId) { g_aDialogsSuppressedDocIds.erase(nDocId); }
+
+SuppressDialogsLoadGuard::SuppressDialogsLoadGuard(ViewShellDocId nDocId)
+    : m_nPrevDocId(g_nDialogsSuppressedLoadDocId)
+{
+    g_nDialogsSuppressedLoadDocId = nDocId;
+}
+
+SuppressDialogsLoadGuard::~SuppressDialogsLoadGuard()
+{
+    g_nDialogsSuppressedLoadDocId = m_nPrevDocId;
+}
 
 void setIdleLayouting(bool bIdleLayouting)
 {

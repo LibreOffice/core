@@ -3377,6 +3377,8 @@ void SfxViewShell::viewCallbackWithViewId(COKitCallbackType eType, const OString
 
 bool SfxViewShell::hasKitClient() const { return pImpl->m_pCOKitViewCallback != nullptr; }
 
+ViewShellDocId SfxViewShell::getKitDocId() const { return GetDocId(); }
+
 bool SfxViewShell::acceptsViewCallback(COKitCallbackType eType) const
 {
     return !ignoreCOKitViewCallback(eType, pImpl.get()) && pImpl->m_pCOKitViewCallback != nullptr;
