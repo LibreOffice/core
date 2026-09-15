@@ -20,7 +20,7 @@ MAKEFLAGS := $(MAKEFLAGS) \
 	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(NPROC),-l$(NPROC)))
 
 # For `make run` skip the build-time unit test execution in test/.
-export COOL_SKIP_UNITTESTS ?= $(if $(filter run,$(MAKECMDGOALS)),1,)
+export COOL_SKIP_UNITTESTS ?= $(if $(filter run run-gdb,$(MAKECMDGOALS)),1,)
 
 # Configure again when autogen.input changes. Only autogen.py reads that file,
 # so the rules Automake generates for configure.ac are not sufficient.
