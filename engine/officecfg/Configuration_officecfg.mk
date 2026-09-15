@@ -83,9 +83,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-32bit.xcu \
 	org/openoffice/Office/Jobs-impress.xcu \
 	org/openoffice/Office/ProtocolHandler-impress.xcu \
-	org/openoffice/Office/Common-cjk.xcu \
-	org/openoffice/Office/Common-ctl.xcu \
-	org/openoffice/Office/Common-ctlseqcheck.xcu \
 	org/openoffice/Office/DataAccess-evoab2.xcu \
 	org/openoffice/Office/Paths-macosx.xcu \
 	org/openoffice/Office/Paths-unxwnt.xcu \
@@ -94,7 +91,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Paths-externallibexttextcatdata.xcu \
 	org/openoffice/Office/Paths-internallibnumbertextdata.xcu \
 	org/openoffice/Office/Paths-externallibnumbertextdata.xcu \
-	org/openoffice/Office/Writer-cjk.xcu \
 	org/openoffice/Office/Embedding-calc.xcu \
 	org/openoffice/Office/Embedding-chart.xcu \
 	org/openoffice/Office/Embedding-draw.xcu \

@@ -96,37 +96,6 @@ File gid_File_Registry_Spool_Langpack_Lang
     FILE_ALL_LANG_LETTER(Langpack-,xcd);
 End
 
-File gid_File_Share_Registry_Ctl_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name (ar) = "ctl.xcd";
-    Name (bo) = "ctl.xcd";
-    Name (dz) = "ctl.xcd";
-    Name (fa) = "ctl.xcd";
-    Name (gu) = "ctl.xcd";
-    Name (he) = "ctl.xcd";
-    Name (hi) = "ctl.xcd";
-    Name (km) = "ctl.xcd";
-    Name (ky-CN) = "ctl.xcd";
-    Name (lo) = "ctl.xcd";
-    Name (my) = "ctl.xcd";
-    Name (ne) = "ctl.xcd";
-    Name (or) = "ctl.xcd";
-    Name (pa-IN) = "ctl.xcd";
-    Name (ta) = "ctl.xcd";
-    Name (th) = "ctl.xcd";
-End
-
-File gid_File_Share_Registry_Ctlseqcheck_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name (km) = "ctlseqcheck.xcd";
-    Name (lo) = "ctlseqcheck.xcd";
-    Name (th) = "ctlseqcheck.xcd";
-End
-
 // user interface configuration files
 UI_FILELIST(basicide, "UIConfig/modules/BasicIDE.filelist")
 UI_FILELIST(cui, "UIConfig/cui.filelist")

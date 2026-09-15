@@ -63,7 +63,6 @@ Module gid_Module_Langpack_Brand_Template
     Styles = (TEMPLATEMODULE);
     InstallOrder = "1050";
     Dirs = (gid_Brand_Dir_Program_Shell);
-    Files = (gid_Brand_File_Share_Registry_Cjk_Xcd);
 End
 
 // Directories
@@ -127,18 +126,6 @@ End
 Directory gid_Brand_Dir_Share_Registry
     ParentID = gid_Brand_Dir_Share;
     DosName = "registry";
-End
-
-// Files
-
-File gid_Brand_File_Share_Registry_Cjk_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name (ja) = "cjk.xcd";
-    Name (ko) = "cjk.xcd";
-    Name (zh-CN) = "cjk.xcd";
-    Name (zh-TW) = "cjk.xcd";
 End
 
 // Profiles

@@ -50,51 +50,6 @@
       <value install:module="wnt">true</value>
     </prop>
   </node>
-  <node oor:name="I18N">
-    <node oor:name="CTL">
-      <prop oor:name="CTLFont" install:module="ctl">
-        <value>true</value>
-      </prop>
-      <prop oor:name="CTLVerticalText" install:module="ctl">
-        <value>true</value>
-      </prop>
-      <prop oor:name="CTLSequenceChecking" install:module="ctlseqcheck">
-        <value>true</value>
-      </prop>
-      <prop oor:name="CTLSequenceCheckingRestricted" install:module="ctlseqcheck">
-        <value>true</value>
-      </prop>
-      <prop oor:name="CTLSequenceCheckingTypeAndReplace" install:module="ctlseqcheck">
-        <value>true</value>
-      </prop>
-    </node>
-    <node oor:name="CJK" install:module="cjk">
-      <prop oor:name="VerticalText">
-        <value>true</value>
-      </prop>
-      <prop oor:name="Ruby">
-        <value>true</value>
-      </prop>
-      <prop oor:name="JapaneseFind">
-        <value>true</value>
-      </prop>
-      <prop oor:name="EmphasisMarks">
-        <value>true</value>
-      </prop>
-      <prop oor:name="DoubleLines">
-        <value>true</value>
-      </prop>
-      <prop oor:name="CJKFont">
-        <value>true</value>
-      </prop>
-      <prop oor:name="ChangeCaseMap">
-        <value>true</value>
-      </prop>
-      <prop oor:name="AsianTypography">
-        <value>true</value>
-      </prop>
-    </node>
-  </node>
   <node oor:name="Menus">
     <node oor:name="New">
       <node oor:name="m0" oor:op="replace" install:module="writer">

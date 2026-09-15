@@ -21,9 +21,6 @@ postprocess_DRIVERS :=
 postprocess_XCDS := \
 	base.xcd \
 	calc.xcd \
-	cjk.xcd \
-	ctl.xcd \
-	ctlseqcheck.xcd \
 	draw.xcd \
 	graphicfilter.xcd \
 	impress.xcd \
@@ -53,15 +50,6 @@ postprocess_FILES_calc := \
 	$(postprocess_MOD)/org/openoffice/Office/Common-calc.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-calc.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-calc.xcu
-
-postprocess_DEPS_cjk := main
-postprocess_FILES_cjk := \
-	$(postprocess_MOD)/org/openoffice/Office/Common-cjk.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/Writer-cjk.xcu
-
-postprocess_DEPS_ctl := main
-postprocess_FILES_ctl := \
-	$(postprocess_MOD)/org/openoffice/Office/Common-ctl.xcu
 
 postprocess_DEPS_draw := main
 postprocess_FILES_draw := \
