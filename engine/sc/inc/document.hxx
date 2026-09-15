@@ -383,25 +383,15 @@ private:
 public:
     SC_DLLPUBLIC CellAttributeHelper& getCellAttributeHelper() const;
 
-    void setConnectionVector(const ConnectionVector& rIn)
-    {
-        maConnectionVector = rIn;
-    }
+    SC_DLLPUBLIC void setConnectionVector(const ConnectionVector& rIn);
 
     const ConnectionVector& getConnectionVector() const
     {
         return maConnectionVector;
     }
 
-    void setSheetQueryTables(SCTAB nTab, QueryTableModelVector aIn)
-    {
-        maSheetQueryTables[nTab] = std::move(aIn);
-    }
-    const QueryTableModelVector* getSheetQueryTables(SCTAB nTab) const
-    {
-        auto it = maSheetQueryTables.find(nTab);
-        return it == maSheetQueryTables.end() ? nullptr : &it->second;
-    }
+    SC_DLLPUBLIC void setSheetQueryTables(SCTAB nTab, QueryTableModelVector aIn);
+    SC_DLLPUBLIC const QueryTableModelVector* getSheetQueryTables(SCTAB nTab) const;
     bool hasAnyQueryTables() const { return !maSheetQueryTables.empty(); }
 
     void UpdateQueryTables(const sc::RefUpdateInsertTabContext& rCxt);

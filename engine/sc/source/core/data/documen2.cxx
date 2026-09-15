@@ -136,6 +136,22 @@ CellAttributeHelper& ScDocument::getCellAttributeHelper() const
     return *mpCellAttributeHelper;
 }
 
+void ScDocument::setConnectionVector(const ConnectionVector& rIn)
+{
+    maConnectionVector = rIn;
+}
+
+void ScDocument::setSheetQueryTables(SCTAB nTab, QueryTableModelVector aIn)
+{
+    maSheetQueryTables[nTab] = std::move(aIn);
+}
+
+const QueryTableModelVector* ScDocument::getSheetQueryTables(SCTAB nTab) const
+{
+    auto it = maSheetQueryTables.find(nTab);
+    return it == maSheetQueryTables.end() ? nullptr : &it->second;
+}
+
 ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         mpCellAttributeHelper(),
         mpCellStringPool(std::make_shared<svl::SharedStringPool>(ScGlobal::getCharClass())),
