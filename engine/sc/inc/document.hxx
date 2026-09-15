@@ -29,7 +29,6 @@
 #include "interpretercontext.hxx"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
-#include "recursionhelper.hxx"
 #include "tabopparams.hxx"
 #include "types.hxx"
 #include <formula/grammar.hxx>
@@ -167,6 +166,7 @@ class ScFormulaCell;
 class ScMacroManager;
 class ScOutlineTable;
 class ScPrintRangeSaver;
+class ScRecursionHelper;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class ScTable;
