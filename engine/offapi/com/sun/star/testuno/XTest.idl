@@ -136,6 +136,10 @@ interface XTest {
         [in] any value1, [in] string value2);
     [overload getOverloadedTwoArgs] string getOverloadedStringAny(
         [in] string value1, [in] any value2);
+    com::sun::star::beans::Optional<string> getOptionalString([in] boolean present);
+    string unwrapOptionalString([in] com::sun::star::beans::Optional<string> value);
+    string unwrapOptionalStructString(
+        [in] com::sun::star::beans::Optional<StructString> value);
     void throwRuntimeException();
     void passJob([in] com::sun::star::task::XJob object);
     void passJobExecutor([in] com::sun::star::task::XJobExecutor object, [in] boolean newThread);

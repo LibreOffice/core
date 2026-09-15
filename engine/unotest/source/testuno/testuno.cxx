@@ -14,6 +14,7 @@
 #include <source_location>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -1432,6 +1433,20 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 
     OUString getOverloadedStringAny(OUString const &, cpo::uno::Any const &) override {
         return u"stringany"_ustr;
+    }
+
+    css::beans::Optional<OUString> getOptionalString(bool present) override {
+        return {present, present ? u"hello"_ustr : u""_ustr};
+    }
+
+    OUString unwrapOptionalString(css::beans::Optional<OUString> const & value) override {
+        return value.IsPresent ? value.Value : u"absent"_ustr;
+    }
+
+    OUString unwrapOptionalStructString(
+        css::beans::Optional<css::testuno::StructString> const & value) override
+    {
+        return value.IsPresent ? value.Value.m : u"absent"_ustr;
     }
 
     void SAL_CALL throwRuntimeException() override

@@ -810,6 +810,39 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
         console.assert(e.message.startsWith('overload dispatch: no member matches'));
     }
 }
+console.assert(test.getOptionalString(true) === 'hello');
+console.assert(test.getOptionalString(false) === null);
+console.assert(test.unwrapOptionalString('hi') === 'hi');
+console.assert(test.unwrapOptionalString(null) === 'absent');
+console.assert(
+    test.unwrapOptionalString(
+        new uno.idl.com.sun.star.beans.Optional(
+            [uno.type.string], {IsPresent: true, Value: 'hi'}))
+    === 'hi');
+console.assert(
+    test.unwrapOptionalString(
+        new uno.idl.com.sun.star.beans.Optional(
+            [uno.type.string], {IsPresent: false, Value: ''}))
+    === 'absent');
+console.assert(test.unwrapOptionalString({IsPresent: true, Value: 'hi'}) === 'hi');
+console.assert(test.unwrapOptionalString({IsPresent: false, Value: ''}) === 'absent');
+console.assert(
+    test.unwrapOptionalStructString(
+        new uno.idl.com.sun.star.testuno.StructString({m: 'hi'}))
+    === 'hi');
+console.assert(test.unwrapOptionalStructString({m: 'hi'}) === 'hi');
+console.assert(
+    test.unwrapOptionalStructString(
+        new uno.idl.com.sun.star.beans.Optional(
+            [uno.type.struct(uno.idl.com.sun.star.testuno.StructString)],
+            {IsPresent: true,
+             Value: new uno.idl.com.sun.star.testuno.StructString({m: 'hi'})}))
+    === 'hi');
+console.assert(test.unwrapOptionalStructString(null) === 'absent');
+console.assert(
+    test.unwrapOptionalStructString(
+        new uno.idl.com.sun.star.testuno.StructStringDerived({m: 'hi'}))
+    === 'hi');
 try {
     test.throwRuntimeException();
     console.assert(false);

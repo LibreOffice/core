@@ -149,8 +149,7 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                 getProperty: function(k) {
                     $internal.suppressLegacyUnoApiStart();
                     try {
-                        const opt = clientRuntime.userPropGetProperty(String(k));
-                        return opt.IsPresent ? opt.Value : null;
+                        return clientRuntime.userPropGetProperty(String(k));
                     } finally { $internal.suppressLegacyUnoApiEnd(); }
                 },
                 setProperty: function(k, v) {
@@ -167,8 +166,8 @@ window.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) 
                     $internal.suppressLegacyUnoApiStart();
                     try {
                         for (let i = 0; i < keys.length; ++i) {
-                            const opt = clientRuntime.userPropGetProperty(keys[i]);
-                            if (opt.IsPresent) out[keys[i]] = opt.Value;
+                            const value = clientRuntime.userPropGetProperty(keys[i]);
+                            if (value !== null) out[keys[i]] = value;
                         }
                     } finally { $internal.suppressLegacyUnoApiEnd(); }
                     return out;

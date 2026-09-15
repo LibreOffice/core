@@ -573,6 +573,49 @@ bool isUnoAnyInstance(JSContext * ctx, JSValueConst val) {
     return r == 1;
 }
 
+std::optional<cpo::uno::Type> getOptionalType(cpo::uno::Type const & type) {
+    if (type.getTypeClass() != cpo::uno::TypeClass_STRUCT
+        || !type.getTypeName().startsWith(u"com.sun.star.beans.Optional<"))
+    {
+        return std::nullopt;
+    }
+    cpo::uno::TypeDescription desc(type);
+    desc.makeComplete();
+    auto const compDesc = reinterpret_cast<typelib_CompoundTypeDescription const *>(desc.get());
+    assert(compDesc->nMembers == 2);
+    return cpo::uno::Type(compDesc->ppTypeRefs[1]);
+}
+
+bool hasIsPresentProperty(JSContext * ctx, JSValueConst val) {
+    if (JS_IsNull(val) || !JS_IsObject(val)) {
+        return false;
+    }
+    AtomRef const atom(ctx, JS_NewAtomLen(ctx, "IsPresent", 9));
+    if (atom == JS_ATOM_NULL) {
+        return false;
+    }
+    return JS_HasProperty(ctx, val, atom) == 1;
+}
+
+bool isCompoundOfType(JSContext * ctx, JSValueConst val, cpo::uno::Type const & type) {
+    if (JS_GetClassID(val) != getRuntimeData(ctx)->compoundClassId) {
+        return false;
+    }
+    cpo::uno::Type const valType(static_cast<typelib_TypeDescriptionReference *>(
+        JS_GetOpaque(val, getRuntimeData(ctx)->compoundClassId)));
+    cpo::uno::TypeDescription desc(valType);
+    desc.makeComplete();
+    auto const targetName = type.getTypeName();
+    for (auto p = reinterpret_cast<typelib_CompoundTypeDescription const *>(desc.get());
+         p != nullptr; p = p->pBaseTypeDescription)
+    {
+        if (cpo::uno::Type(p->aBase.pWeakRef).getTypeName() == targetName) {
+            return true;
+        }
+    }
+    return false;
+}
+
 enum class ArgumentFit { None, Loose, Exact };
 
 ArgumentFit argumentFit(
@@ -620,6 +663,17 @@ ArgumentFit argumentFit(
         return ArgumentFit::None;
     case cpo::uno::TypeClass_STRUCT:
     case cpo::uno::TypeClass_EXCEPTION:
+        if (auto const type2 = getOptionalType(type)) {
+            if (JS_IsNull(val)) {
+                return ArgumentFit::Exact;
+            }
+            if (!isCompoundOfType(ctx, val, type)) {
+                if (hasIsPresentProperty(ctx, val)) {
+                    return ArgumentFit::Loose;
+                }
+                return argumentFit(ctx, mode, *type2, val);
+            }
+        }
         if (JS_GetClassID(val) == getRuntimeData(ctx)->compoundClassId) {
             return ArgumentFit::Exact;
         }
@@ -1856,6 +1910,9 @@ ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type)
         }
         case cpo::uno::TypeClass_STRUCT:
         {
+            if (getOptionalType(type)) {
+                return ValueRef(ctx, JS_NULL);
+            }
             auto const id = type.getTypeName();
             auto n = id.indexOf('<');
             auto const rep = getUnoidlRepresentation(ctx, n == -1 ? id : id.subView(0, n));
@@ -2392,6 +2449,33 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
         case cpo::uno::TypeClass_STRUCT:
         case cpo::uno::TypeClass_EXCEPTION:
         {
+            ValueRef synthesizedOptional(ctx);
+            JSValueConst effective;
+            if (getOptionalType(type) && !isCompoundOfType(ctx, val, type)
+                && !hasIsPresentProperty(ctx, val))
+            {
+                synthesizedOptional = ValueRef(ctx, JS_NewObject(ctx));
+                if (JS_IsException(synthesizedOptional)) {
+                    throw JsException();
+                }
+                auto const present = !JS_IsNull(val);
+                if (JS_SetPropertyStr(
+                        ctx, synthesizedOptional, "IsPresent", JS_NewBool(ctx, present))
+                    == -1)
+                {
+                    throw JsException();
+                }
+                if (present
+                    && JS_SetPropertyStr(
+                           ctx, synthesizedOptional, "Value", JS_DupValue(ctx, val))
+                       == -1)
+                {
+                    throw JsException();
+                }
+                effective = synthesizedOptional;
+            } else {
+                effective = val;
+            }
             cpo::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
             std::vector<cpo::uno::Any> mems;
@@ -2402,7 +2486,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                     auto const name = OUString::unacquired(&compDesc->ppMemberNames[i]).toUtf8();
                     AtomRef const a(ctx, JS_NewAtomLen(ctx, name.getStr(), name.getLength()));
                     assert(a != JS_ATOM_NULL); //TODO
-                    auto const has = JS_HasProperty(ctx, val, a);
+                    auto const has = JS_HasProperty(ctx, effective, a);
                     if (has == -1)
                     {
                         throw JsException();
@@ -2425,7 +2509,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                     }
                     else
                     {
-                        ValueRef mem(ctx, JS_GetProperty(ctx, val, a));
+                        ValueRef mem(ctx, JS_GetProperty(ctx, effective, a));
                         if (JS_IsException(mem))
                         {
                             throw JsException();
@@ -2654,6 +2738,20 @@ ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
         case cpo::uno::TypeClass_STRUCT:
         case cpo::uno::TypeClass_EXCEPTION:
         {
+            if (getOptionalType(type)) {
+                cpo::uno::TypeDescription desc(type);
+                auto const compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(
+                    desc.get());
+                // Member 0 is IsPresent (boolean), member 1 is Value (T):
+                auto const present = *reinterpret_cast<bool const *>(
+                    static_cast<std::byte const *>(value) + compDesc->pMemberOffsets[0]);
+                if (!present) {
+                    return ValueRef(ctx, JS_NULL);
+                }
+                return toJs(
+                    ctx, compDesc->ppTypeRefs[1],
+                    static_cast<std::byte const *>(value) + compDesc->pMemberOffsets[1]);
+            }
             ValueRef mems(ctx, JS_NewObject(ctx));
             if (JS_IsException(mems))
             {

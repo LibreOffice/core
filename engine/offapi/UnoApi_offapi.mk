@@ -3462,6 +3462,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/testuno, \
     Struct \
     StructLong \
     StructString \
+    StructStringDerived \
     Template \
     XArgumentStore \
     XAttributes \
