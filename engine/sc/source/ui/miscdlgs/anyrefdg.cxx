@@ -380,6 +380,15 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
     assert(pEdit && pEdit->GetWidget());
     m_pDialog->collapse(*pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
 
+    // Collapsed to a single field, the title is what is left to name it.
+    const OUString aLabelText = pEdit->GetLabelTextForShrinkMode();
+    if (!aLabelText.isEmpty())
+    {
+        const OUString aTitle
+            = m_sOldDialogText + ": " + comphelper::string::stripEnd(aLabelText, ':');
+        m_pDialog->set_title(m_pDialog->strip_mnemonic(aTitle));
+    }
+
     if (weld::Widget* pLabel = pEdit->GetLabelWidget())
     {
         pLabel->hide();

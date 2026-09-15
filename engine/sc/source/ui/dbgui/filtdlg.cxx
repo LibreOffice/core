@@ -110,7 +110,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xFtDbArea(m_xBuilder->weld_label(u"dbarea"_ustr))
 {
     m_xExpander->connect_expanded(LINK(this, ScFilterDlg, MoreExpandedHdl));
-    m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
+    m_xEdCopyArea->SetReferences(this, m_xBtnCopyResult.get());
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
 
     assert(m_xLbCond1->find_text(aStrFontColor) != -1);

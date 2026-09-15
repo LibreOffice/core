@@ -83,7 +83,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
 {
     m_xEdFilterArea->SetReferences(this, m_xFilterFrame.get());
     m_xRbFilterArea->SetReferences(this, m_xEdFilterArea.get());
-    m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
+    m_xEdCopyArea->SetReferences(this, m_xBtnCopyResult.get());
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());
 
     Init( rArgSet );

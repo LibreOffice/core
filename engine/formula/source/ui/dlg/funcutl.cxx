@@ -315,9 +315,34 @@ void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
     mpAnyRefDlg = pDlg;
     if (pLabel) {
         maGetLabelWidgetFunc = [pLabel] { return pLabel; };
+        maGetLabelTextForShrinkModeFunc = [pLabel] { return pLabel->get_label(); };
     }
     else {
         maGetLabelWidgetFunc = nullptr;
+        maGetLabelTextForShrinkModeFunc = nullptr;
+    }
+
+    if( pDlg )
+    {
+        maIdle.SetInvokeHandler(LINK(this, RefEdit, UpdateHdl));
+    }
+    else
+    {
+        maIdle.ClearInvokeHandler();
+        maIdle.Stop();
+    }
+}
+
+void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::CheckButton* pCheckButton)
+{
+    mpAnyRefDlg = pDlg;
+    if (pCheckButton) {
+        maGetLabelWidgetFunc = [pCheckButton] { return pCheckButton; };
+        maGetLabelTextForShrinkModeFunc = [pCheckButton] { return pCheckButton->get_label(); };
+    }
+    else {
+        maGetLabelWidgetFunc = nullptr;
+        maGetLabelTextForShrinkModeFunc = nullptr;
     }
 
     if( pDlg )
@@ -336,9 +361,11 @@ void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Frame* pFrame)
     mpAnyRefDlg = pDlg;
     if (pFrame) {
         maGetLabelWidgetFunc = [pFrame] { return pFrame; };
+        maGetLabelTextForShrinkModeFunc = [pFrame] { return pFrame->get_label(); };
     }
     else {
         maGetLabelWidgetFunc = nullptr;
+        maGetLabelTextForShrinkModeFunc = nullptr;
     }
 }
 
@@ -348,6 +375,14 @@ weld::Widget* RefEdit::GetLabelWidget()
         return maGetLabelWidgetFunc();
 
     return nullptr;
+}
+
+OUString RefEdit::GetLabelTextForShrinkMode() const
+{
+    if (maGetLabelTextForShrinkModeFunc)
+        return maGetLabelTextForShrinkModeFunc();
+
+    return OUString();
 }
 
 IMPL_LINK_NOARG(RefEdit, Modify, weld::Entry&, void)

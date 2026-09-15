@@ -41,6 +41,7 @@ private:
     Idle maIdle;
     IControlReferenceHandler* mpAnyRefDlg; // parent dialog
     std::function<weld::Widget*()> maGetLabelWidgetFunc;
+    std::function<OUString()> maGetLabelTextForShrinkModeFunc;
     ImplSVEvent* mpFocusInEvent;
     ImplSVEvent* mpFocusOutEvent;
 
@@ -85,11 +86,13 @@ public:
 
     void StartUpdateData();
 
-    // The label/text set in the Label/Frame is used in shrink mode
+    // The label/text set in the Label/Frame/CheckButton is used in shrink mode
     void SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel = nullptr);
     void SetReferences(IControlReferenceHandler* pDlg, weld::Frame* pFrame);
+    void SetReferences(IControlReferenceHandler* pDlg, weld::CheckButton* pCheckButton);
 
     weld::Widget* GetLabelWidget();
+    OUString GetLabelTextForShrinkMode() const;
 
     void DoModify()
     {
