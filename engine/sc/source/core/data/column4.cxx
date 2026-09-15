@@ -1853,6 +1853,16 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
 
             if (!bGroupInterpreted)
             {
+                // Interpret can return with the span's first cell still dirty, when a cycle left
+                // it for the unthreaded pass, so check it the way the cells after it are checked.
+                if (pCellStart->NeedsInterpret())
+                {
+                    SAL_WARN("sc.core.formulagroup", "Internal error, cell " << pCellStart->aPos
+                        << " was left uncalculated, not allowing threading");
+                    bAllowThreading = false;
+                    return bAnyDirty;
+                }
+
                 // Evaluate from second cell in non-grouped style (no point in trying group-interpret again).
                 ++itSpanStart;
                 for (SCROW nIdx = nSpanStart+1; nIdx <= nSpanEnd; ++nIdx, ++itSpanStart)
