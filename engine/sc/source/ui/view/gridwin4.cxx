@@ -1755,17 +1755,22 @@ std::optional<tools::Rectangle> ScGridWindow::GetForeignEditInvalidateRect(EditV
         return std::nullopt;
 
     const ScViewData& rViewData = pGridWin->getViewData();
-    tools::Long nRefTabNo = rViewData.GetRefTabNo();
-    tools::Long nX = rViewData.GetCurXForTab(nRefTabNo);
-    tools::Long nY = rViewData.GetCurYForTab(nRefTabNo);
+    SCCOL nStartCol = rViewData.GetEditStartCol();
+    SCROW nStartRow = rViewData.GetEditStartRow();
+    SCCOL nEndCol = rViewData.GetEditEndCol();
+    SCROW nEndRow = rViewData.GetEditEndRow();
 
-    if (nX < 0 || nY < 0)
+    if (nStartCol < 0 || nStartRow < 0 || nEndCol < nStartCol || nEndRow < nStartRow)
         return std::nullopt;
 
-    tools::Rectangle aPixRect = getViewData().GetEditArea(eWhich, nX, nY, this, nullptr, true);
+    // The same area the editing view draws into: the text area of the first and of the last cell
+    // the edit covers, without the cell margins and the grid lines.
+    tools::Rectangle aPixRect
+        = getViewData().GetEditArea(eWhich, nStartCol, nStartRow, this, nullptr, true);
+    aPixRect.Union(getViewData().GetEditArea(eWhich, nEndCol, nEndRow, this, nullptr, true));
     tools::Rectangle aLogicRect = PixelToLogic(aPixRect, getViewData().GetLogicMode());
 
-    // The in-progress text can reach past the cell into neighbouring tiles
+    // The in-progress text can reach past the cells into neighbouring tiles
     return ExtendEditInvalidateRectForText(aLogicRect,
                                            pEditView->getEditEngine().CalcTextWidth());
 }

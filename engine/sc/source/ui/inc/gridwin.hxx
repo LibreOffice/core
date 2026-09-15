@@ -412,8 +412,9 @@ public:
     bool InvalidateByForeignEditView(EditView* pEditView) override;
 
     // The logic-coordinate (1/100 mm) area this view must repaint to show a
-    // foreign edit view's in-progress text, already widened to the text. Empty
-    // when the edit view or its cursor cell is not available in this view.
+    // foreign edit view's in-progress text. It holds every cell the edit covers,
+    // widened to the text. Empty when the edit view or the cell range it covers
+    // is not available in this view.
     std::optional<tools::Rectangle> GetForeignEditInvalidateRect(EditView* pEditView);
 
     // Compute the OutputArea (in painter pixels) for a foreign EditView when the

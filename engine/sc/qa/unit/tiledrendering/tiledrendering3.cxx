@@ -39,6 +39,7 @@
 #include <drawview.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <vcl/virdev.hxx>
+#include <vcl/keycodes.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editview.hxx>
 #include <docmodel/color/ComplexColor.hxx>
@@ -1635,6 +1636,67 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testForeignEditPaintKeepsEditArea)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("the painting view moved the edit's first column",
                                      nEditStartCol, rViewData1.GetEditStartCol());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testForeignEditInvalidatesEveryEditedRow)
+{
+    // A view that only watches another view's edit sees it through its tiles, so it has to be
+    // told to repaint every row the text of that edit reaches. Before the fix only the row of
+    // the edited cell was invalidated, and once the text grew past the tile holding that row the
+    // watching view kept showing the cells below as they were before the edit.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // the watching view, which does nothing but receive the invalidations
+    ScTestViewCallback aWatchingView;
+
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    auto* pEditingViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pEditingViewShell);
+
+    // an area tall enough for the edit to grow over several rows
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 15360, 7680));
+    Scheduler::ProcessEventsToIdle();
+
+    // Ctrl+Enter breaks the line inside the cell, so the text takes in the rows below it.
+    typeCharsInCell("a", 0, 0, pEditingViewShell, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    for (int i = 0; i < 4; ++i)
+    {
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN | KEY_MOD1);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN | KEY_MOD1);
+        Scheduler::ProcessEventsToIdle();
+        typeCharsInCell("a", 0, 0, pEditingViewShell, pModelObj, /*bInEdit*/ true,
+                        /*bCommit*/ false);
+    }
+
+    ScViewData& rEditingViewData = pEditingViewShell->GetViewData();
+    CPPUNIT_ASSERT(hasEditView(rEditingViewData));
+    const SCROW nFirstRow = rEditingViewData.GetEditStartRow();
+    const SCROW nLastRow = rEditingViewData.GetEditEndRow();
+    CPPUNIT_ASSERT_MESSAGE("the broken lines did not grow the edit past its own row",
+                           nLastRow > nFirstRow + 1);
+
+    // One more character: what the watching view is told to repaint has to hold the whole edit.
+    aWatchingView.m_aInvalidations.clear();
+    typeCharsInCell("a", 0, 0, pEditingViewShell, pModelObj, /*bInEdit*/ true, /*bCommit*/ false);
+    CPPUNIT_ASSERT_MESSAGE("the watching view was told nothing about the edit",
+                           !aWatchingView.m_aInvalidations.empty());
+
+    // The last row of the edit begins this far below the top of the sheet, in twips.
+    const tools::Long nLastRowTop
+        = pDoc->GetRowHeight(0, nLastRow - 1, rEditingViewData.CurrentTabForData());
+    tools::Long nInvalidatedBottom = 0;
+    for (const tools::Rectangle& rInvalidation : aWatchingView.m_aInvalidations)
+    {
+        if (rInvalidation.Bottom() > nInvalidatedBottom)
+            nInvalidatedBottom = rInvalidation.Bottom();
+    }
+    CPPUNIT_ASSERT_MESSAGE("the rows the edit grew over were left out of the invalidation",
+                           nInvalidatedBottom >= nLastRowTop);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
