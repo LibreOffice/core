@@ -512,7 +512,16 @@ void handlePresetRequest(const std::string& kind, const std::string& etagString,
         if (unitWsd)
             unitWsd->filterRegisterPresetAsset(uri);
         configEntry->set("uri", uri);
-        configEntry->set("stamp", etagString);
+        // A preset file the client can re-upload needs a stamp that changes
+        // with it, or the settings cache goes on serving the copy it already
+        // has: the Options dialog writes the xcu, and adding a word writes
+        // the wordbook. Carry the modification time for every preset, the
+        // way the browser and view settings below do.
+        const FileUtil::Stat itemStat(fwd + item.second);
+        configEntry->set("stamp",
+                         itemStat.exists()
+                             ? etagString + '-' + std::to_string(itemStat.modifiedTimeUs())
+                             : etagString);
         if (item.first == "autotext")
             configAutoTexts->add(configEntry);
         else if (item.first == "wordbook")
@@ -591,7 +600,7 @@ enum class PresetType : std::uint8_t
 };
 
 // search for presets file in test/data/presets directory
-std::vector<asset> getAssetVec(PresetType type)
+std::vector<asset> getAssetVec(PresetType type, const std::string& userId)
 {
     std::string searchDir = "test/data/presets";
     std::vector<asset> assetVec;
@@ -602,13 +611,19 @@ std::vector<asset> getAssetVec(PresetType type)
     }
 
     // Static presets (xcu config, autotext, dictionary, templates) are common
-    // defaults served to every user. The per-user store (userPresetDir) only
-    // holds runtime-uploaded browsersetting/viewsetting json, served separately
-    // in handlePresetRequest, so it is never searched here.
+    // defaults served to every user. A user with a store of their own is also
+    // served what they have uploaded into it, which is how the Options dialog
+    // saves a setting and the next document load reads it back. Their own copy
+    // of a file wins over the common default of the same name.
+    std::string userDir;
     if (type == PresetType::Shared)
         searchDir.append("/shared");
     else if (type == PresetType::User)
+    {
         searchDir.append("/user");
+        if (userPresetDir(userId) != searchDir)
+            userDir = userPresetDir(userId);
+    }
 
     auto searchInDir = [&assetVec](const std::string& directory)
     {
@@ -621,6 +636,11 @@ std::vector<asset> getAssetVec(PresetType type)
                 continue;
             std::string filePath = '/' + directory + '/';
             filePath.append(fileName);
+            // One name appears once in a directory, so this can only drop the
+            // common default that the user's own store replaces.
+            std::erase_if(assetVec,
+                          [&fileName](const asset& rOther)
+                          { return Poco::Path(rOther.second).getFileName() == fileName; });
             if (ext == "bau")
                 assetVec.push_back(asset("autotext", filePath));
             else if (ext == "dic")
@@ -635,6 +655,11 @@ std::vector<asset> getAssetVec(PresetType type)
 
     LOG_DBG("Looking for preset files in directory[" << searchDir << ']');
     searchInDir(searchDir);
+    if (!userDir.empty())
+    {
+        LOG_DBG("Looking for preset files in directory[" << userDir << ']');
+        searchInDir(userDir);
+    }
     return assetVec;
 }
 
@@ -687,13 +712,13 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
             std::string presetUser;
             if (serveBrowerSettings)
                 presetUser = settingsUserId(params);
-            auto items = getAssetVec(PresetType::User);
+            auto items = getAssetVec(PresetType::User, presetUser);
             handlePresetRequest("user", etagString, prefix, socket, items, serveBrowerSettings,
                                 unittest, presetUser);
         }
         else if (configPath == "/sharedconfig.json")
         {
-            auto items = getAssetVec(PresetType::Shared);
+            auto items = getAssetVec(PresetType::Shared, std::string());
             handlePresetRequest("shared", etagString, prefix, socket, items, false, unittest,
                                 std::string());
         }
