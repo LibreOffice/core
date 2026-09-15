@@ -1029,8 +1029,11 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         }
     }
 
+    // A drop down that only opens a list on a cell is drawn as a button on the cell border, and
+    // the file gives such a control no height at all, so only a size that cannot be read is
+    // refused. The height decides how many lines a list shows, and no height means no line.
     mnHeight = xShape->getSize().Height;
-    if( mnHeight <= 0 )
+    if( mnHeight < 0 )
         return;
 
     // control type

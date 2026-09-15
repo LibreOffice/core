@@ -1368,11 +1368,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf165655)
     xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDrawing);
 
-    // Original has 3 drawingML and 1 VML objects
-    // Not sure if the VML dropdown should be exported, but as long as it cannot be
-    //  exported properly, it should not be exported at all (only the 3 drawingMLs)
+    // three shapes of the drawing; the drop down is not one of them, because the legacy drawing
+    // is what paints it and the drawing holds only a hidden record that stands for it
     const int aNodes = countXPathNodes(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor");
     CPPUNIT_ASSERT_EQUAL(3, aNodes);
+
+    xmlDocUniquePtr pVml = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pVml);
+    assertXPath(pVml, "/xml/v:shape/xx:ClientData", "ObjectType", u"Drop");
+    assertXPathContent(pVml, "/xml/v:shape/xx:ClientData/xx:PrintObject", u"False");
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "//x:controls//x:control", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testConnectorToFirstShape)
