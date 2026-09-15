@@ -73,6 +73,7 @@
 #include <spellcheckcontext.hxx>
 #include <scopetools.hxx>
 #include <tabvwsh.hxx>
+#include <dbdata.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -1485,6 +1486,40 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
     return eHorJustContext;
 }
 
+/// what a database range's labels head, where this position holds one of them
+static vcl::pdf::PDFWriter::StructAttributeValue
+lcl_GetLabelScope(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow)
+{
+    const ScDBData* pDBData(rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA));
+    if (!pDBData || !pDBData->HasHeader())
+        return vcl::pdf::PDFWriter::Invalid;
+
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    // a range the user works left to right keeps its labels in the first column
+    if (!pDBData->IsByRow())
+        return nCol == aRange.aStart.Col() ? vcl::pdf::PDFWriter::Row
+                                           : vcl::pdf::PDFWriter::Invalid;
+
+    return nRow == aRange.aStart.Row() ? vcl::pdf::PDFWriter::Column
+                                       : vcl::pdf::PDFWriter::Invalid;
+}
+
+/// the element for a cell, a TH where a database range says the cell holds one of its labels
+static sal_Int32 lcl_OpenCellElement(vcl::PDFExtOutDevData& rPDF, const ScDocument& rDoc,
+                                     SCTAB nTab, SCCOL nCol, SCROW nRow)
+{
+    const vcl::pdf::PDFWriter::StructAttributeValue eScope(
+        lcl_GetLabelScope(rDoc, nTab, nCol, nRow));
+    if (eScope == vcl::pdf::PDFWriter::Invalid)
+        return rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableData, u"TD"_ustr);
+
+    const sal_Int32 nId(
+        rPDF.WrapBeginStructureElement(vcl::pdf::StructElement::TableHeader, u"TH"_ustr));
+    rPDF.SetStructureAttribute(vcl::pdf::PDFWriter::Scope, eScope);
+    return nId;
+}
+
 void ScOutputData::DrawStrings( bool bPixelToLogic )
 {
     LayoutStrings(bPixelToLogic);
@@ -1945,7 +1980,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
         pThisRowInfo->basicCellInfo(nMarkX).bEditEngine = true;
         bDoCell = false;    // don't draw here
 
-        // Mark the tagged "TD" structure element to be drawn in DrawEdit
+        // Mark the tagged cell structure element to be drawn in DrawEdit
         if (bTaggedPDF)
         {
             if (bReopenRowTag)
@@ -1960,10 +1995,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                 bReopenRowTag = true;
             }
 
-            pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
-                                            u"TD"_ustr);
-
-            sal_Int32 nId = pPDF->GetCurrentStructureElement();
+            const sal_Int32 nId(lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY));
             pPDF->GetScPDFState()->m_TableDataMap[{ nY, nX }] = nId;
             // the first page it is drawn on, which is the one a destination for it names
             pPDF->GetScPDFState()->m_CellIds.emplace(ScAddress(nX, nY, mnTab), nId);
@@ -2197,8 +2229,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                     // what a destination naming this cell has to reach
                     pPDF->GetScPDFState()->m_CellIds.emplace(
                         ScAddress(nX, nY, mnTab),
-                        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData,
-                                                        u"TD"_ustr));
+                        lcl_OpenCellElement(*pPDF, *mpDoc, mnTab, nX, nY));
                     pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph,
                                                     u"P"_ustr);
                 }

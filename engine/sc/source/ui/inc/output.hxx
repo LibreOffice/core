@@ -89,7 +89,7 @@ struct ScEnhancedPDFState
     TableDataIdMap m_TableDataMap;
     /// the Worksheet element of every sheet drawn so far
     std::unordered_map<SCTAB, sal_Int32> m_WorksheetIds;
-    /// the TD element at every grid position drawn so far, unlike m_TableDataMap kept for the
+    /// the cell element at every grid position drawn so far, unlike m_TableDataMap kept for the
     /// whole export; the grid position, not the cell the content came from, is what shares a
     /// page with the destination that names it
     std::unordered_map<ScAddress, sal_Int32> m_CellIds;

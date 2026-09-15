@@ -87,6 +87,7 @@ public:
     void testSheetDestinations();
     void testCellLinkDestinations();
     void testPageRangeSkipsSheetStart();
+    void testDatabaseRangeHeader();
     void testForcepoint97();
 #if ENABLE_PDFIMPORT
     void testTdf156893();
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testSheetDestinations);
     CPPUNIT_TEST(testCellLinkDestinations);
     CPPUNIT_TEST(testPageRangeSkipsSheetStart);
+    CPPUNIT_TEST(testDatabaseRangeHeader);
     CPPUNIT_TEST(testForcepoint97);
 #if ENABLE_PDFIMPORT
     CPPUNIT_TEST(testTdf156893);
@@ -1150,6 +1152,75 @@ void ScPDFExportTest::testPageRangeSkipsSheetStart()
     CPPUNIT_ASSERT_EQUAL(size_t(2), aWorksheetPages.size());
     // the bookmark each sheet gets, which needs no tagging at all
     CPPUNIT_ASSERT_EQUAL(2, nOutlineItems);
+}
+
+void ScPDFExportTest::testDatabaseRangeHeader()
+{
+    loadFromFile(u"db-range-header.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    std::vector<vcl::filter::PDFObjectElement*> aTables;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "Table")
+            aTables.push_back(pObject);
+    }
+    // the sheet fits one page, so every row it has is in this one table
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aTables.size());
+
+    vcl::filter::PDFObjectElement* pTable = aTables.front();
+
+    OStringBuffer aCells;
+    auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTable->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pRows);
+    for (auto* pRowElement : pRows->GetElements())
+    {
+        auto pRow = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRowElement);
+        CPPUNIT_ASSERT(pRow);
+        CPPUNIT_ASSERT(pRow->LookupObject());
+        auto pCells
+            = dynamic_cast<vcl::filter::PDFArrayElement*>(pRow->LookupObject()->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pCells);
+        for (auto* pCellElement : pCells->GetElements())
+        {
+            auto pCell = dynamic_cast<vcl::filter::PDFReferenceElement*>(pCellElement);
+            CPPUNIT_ASSERT(pCell);
+            CPPUNIT_ASSERT(pCell->LookupObject());
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+                pCell->LookupObject()->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pType);
+            // the scope a header cell announces, and nothing for a data cell
+            OString aScope;
+            if (vcl::filter::PDFElement* pElement = pCell->LookupObject()->Lookup("A"_ostr))
+            {
+                // one owner dictionary, which several attribute groups would turn into an array
+                auto pAttributes = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement);
+                CPPUNIT_ASSERT(pAttributes);
+                auto pValue = dynamic_cast<vcl::filter::PDFNameElement*>(
+                    pAttributes->LookupElement("Scope"_ostr));
+                CPPUNIT_ASSERT(pValue);
+                aScope = "/" + pValue->GetValue();
+            }
+            aCells.append(pType->GetValue() + aScope + " ");
+        }
+        aCells.append("| ");
+    }
+
+    // Without the fix every cell was a TD, so this read
+    // "TD TD | TD TD | TD TD | TD | TD TD | TD TD | TD TD | TD TD | ".
+    //
+    // the labels of the first range and of the one kept by column, and nothing in the range
+    // defined without labels or outside every range
+    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TD | TD TD | TD | TD TD | TD TD | "
+                         "TH/Row TD | TH/Row TD | "_ostr,
+                         aCells.makeStringAndClear());
 }
 
 // just needs to not crash on export to pdf
