@@ -119,6 +119,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterPlaceholdersSurviveRepeatedSa
         nShapes, pDocument->GetDoc()->GetMasterSdPage(0, PageKind::Standard)->GetObjCount());
 }
 
+// A paragraph that hangs its punctuation still does after the document has been saved. The
+// attribute that carries it was never written, so every paragraph of a saved file came back
+// with punctuation set inside the margin instead.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testHangingPunctuationSurvivesASave)
+{
+    createSdImpressDoc("pptx/3columns.pptx");
+
+    uno::Reference<beans::XPropertySet> xParagraph(
+        getParagraphFromShape(0, getShapeFromPage(0, 0)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(true,
+                         xParagraph->getPropertyValue(u"ParaIsHangingPunctuation"_ustr).get<bool>());
+
+    saveAndReload(TestFilter::PPTX);
+
+    xParagraph.set(getParagraphFromShape(0, getShapeFromPage(0, 0)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(true,
+                         xParagraph->getPropertyValue(u"ParaIsHangingPunctuation"_ustr).get<bool>());
+}
+
 // The pages of a Draw document keep their identity across sessions the same way the slides of
 // a presentation do.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)
