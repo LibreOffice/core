@@ -2454,7 +2454,8 @@ void Test::testMultilineFieldSelectionHighlight()
 {
     // A long hyperlink field wraps onto several rows. Selecting the whole
     // field, as a double click on the link does, must highlight every row the
-    // link is drawn on.
+    // link is drawn on, and no row may reach past the paper the link wrapped
+    // against.
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
 
     // Paragraph 0 holds only the wrapping field.
@@ -2476,7 +2477,8 @@ void Test::testMultilineFieldSelectionHighlight()
     aEditView.GetSelectionRectangles(aRects);
     CPPUNIT_ASSERT_MESSAGE("the selected link is not highlighted at all", !aRects.empty());
 
-    // Every row of the link carries highlight.
+    // Every row of the link carries highlight, and none of it spills past the
+    // width the link wrapped against.
     const tools::Long nRowHeight
         = rEditEngine.GetParaPortions().getRef(0).GetLines()[0].GetHeight();
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
@@ -2491,6 +2493,9 @@ void Test::testMultilineFieldSelectionHighlight()
                                           });
         CPPUNIT_ASSERT_MESSAGE("a row of the selected link is not highlighted", bCovered);
     }
+
+    for (const tools::Rectangle& rRect : aRects)
+        CPPUNIT_ASSERT_LESSEQUAL(nPaperWidth, rRect.Right());
 }
 
 // Backspacing inside a justified, multi-line paragraph must not leave words on

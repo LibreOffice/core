@@ -611,6 +611,12 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 Range aLineXPosStartEnd = getEditEngine().GetLineXPosStartEnd(rInfo.rPortion, *rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
+                // The width of a line holding a wrapped field counts the
+                // field's text as one long run, so the line reaches far past
+                // the paper. The field's first subline ends where the field
+                // had room to wrap.
+                if (aFieldRows.nRowsBelow)
+                    aTmpRect.SetRight(aFieldRows.nRight);
                 aTmpRect.Move(aLineOffset.Width(), 0);
                 ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
                                       pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
