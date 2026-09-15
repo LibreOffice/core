@@ -91,6 +91,25 @@ class JSDialogModelState {
 		this.model = data;
 	}
 
+	/// replaces complete state of a model but keeps the entries widgets received
+	/// at runtime (styles view, font name box, ...), those are not part of the
+	/// generated layout so a rebuilt model would show such widgets as empty
+	public fullUpdateKeepingEntries(data: JSDialogJSON) {
+		const previousModel = this.model;
+		this.fullUpdate(data);
+
+		if (!previousModel) return;
+
+		JSDialogModelState.forEachWidget(previousModel, (widget) => {
+			const entries = (widget as WidgetWithEntries).entries;
+			if (entries)
+				this.widgetUpdate({
+					id: widget.id,
+					entries: entries,
+				} as WidgetWithEntries);
+		});
+	}
+
 	/// applies widget update to a model
 	public applyUpdate(data: UpdateData) {
 		if (!data || !data.control || !data.control.id) {
@@ -172,6 +191,16 @@ class JSDialogModelState {
 					widgetId,
 			);
 		return found;
+	}
+
+	private static forEachWidget(
+		widget: WidgetJSON,
+		callback: (widget: WidgetJSON) => void,
+	) {
+		callback(widget);
+		if (widget.children)
+			for (const child of widget.children)
+				JSDialogModelState.forEachWidget(child, callback);
 	}
 
 	private static findWidgetById(

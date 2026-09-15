@@ -755,7 +755,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		var selected = this._lastSelectedTabName
 			? this._lastSelectedTabName + '-tab-label'
 			: this.HOME_TAB_ID;
-		this.model.fullUpdate(this.getFullJSON(selected));
+		this.model.fullUpdateKeepingEntries(this.getFullJSON(selected));
 		if (this.container) this.loadTab();
 	},
 

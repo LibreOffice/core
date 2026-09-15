@@ -41,6 +41,9 @@ interface WidgetJSON {
 	gridKeyboardNavigation?: boolean; // receives keyboard navigation for elements in col/rows
 }
 
+// A widget that can carry a list of entries, such as a combo box or the styles icon view
+type WidgetWithEntries = WidgetJSON & { entries?: Array<unknown> };
+
 interface JSBuilderOptions {
 	cssClass: string; // class added to every widget root
 	windowId?: WindowId | number; // window id to be sent with dialogevent for engine

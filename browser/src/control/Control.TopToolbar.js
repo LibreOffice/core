@@ -333,9 +333,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			type: 'toolbox',
 			children: items,
 		};
-		var previousModel = this.model.getSnapshot();
-		this.model.fullUpdate(json);
-		this.restoreDynamicEntries(previousModel);
+		this.model.fullUpdateKeepingEntries(json);
 		this.builder.build(this.parentContainer, this.model.getSnapshot().children);
 
 		if (window.mode.isSmallScreenDevice()) {

@@ -16,10 +16,6 @@
 
 declare var JSDialog: any;
 
-// A widget that can carry a list of entries, such as a combo box. The entries
-// are filled in at runtime and are not part of the static toolbar layout.
-type WidgetWithEntries = WidgetJSON & { entries?: Array<string> };
-
 class Toolbar extends JSDialogComponent {
 	protected docType: string;
 	protected callback: JSDialogCallback;
@@ -82,9 +78,7 @@ class Toolbar extends JSDialogComponent {
 			children: items,
 		} as JSDialogJSON;
 
-		const previousModel = this.model.getSnapshot();
-		this.model.fullUpdate(json);
-		this.restoreDynamicEntries(previousModel);
+		this.model.fullUpdateKeepingEntries(json);
 
 		this.builder.build(
 			this.parentContainer,
@@ -140,32 +134,6 @@ class Toolbar extends JSDialogComponent {
 		if (container && container.updateEntries) container.updateEntries(entries);
 
 		this.model.widgetUpdate({ id: id, entries: entries } as WidgetWithEntries);
-	}
-
-	/// Copies the entry lists that widgets received at runtime from the given
-	/// model into the current one. The structure and everything else comes
-	/// from the static item definitions, only the entries are carried over.
-	protected restoreDynamicEntries(previousModel: WidgetJSON | null) {
-		if (!previousModel) return;
-
-		Toolbar.forEachWidget(previousModel, (widget) => {
-			const entries = (widget as WidgetWithEntries).entries;
-			if (entries && this.model.getById(widget.id))
-				this.model.widgetUpdate({
-					id: widget.id,
-					entries: entries,
-				} as WidgetWithEntries);
-		});
-	}
-
-	private static forEachWidget(
-		widget: WidgetJSON,
-		callback: (widget: WidgetJSON) => void,
-	) {
-		callback(widget);
-		if (widget.children)
-			for (const child of widget.children)
-				Toolbar.forEachWidget(child, callback);
 	}
 
 	getItemElement(id: string) {

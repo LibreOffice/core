@@ -28,6 +28,26 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 		cy.cGet('.notebookbar #stylesview').should('exist').should('be.visible').should('not.be.empty');
 	});
 
+	// The styles come from core, the layout the client generates for the
+	// notebookbar has the styles view empty. Anything that builds the
+	// notebookbar again after load, for example the extensions becoming known,
+	// goes through refresh(), and the styles have to be there afterwards.
+	it('Styles are still listed after the notebookbar is built again', function() {
+		cy.cGet('.notebookbar #stylesview .ui-iconview-entry').should('have.length.greaterThan', 1);
+
+		cy.cGet('.notebookbar #stylesview .ui-iconview-entry').then(function($entries) {
+			const entryCountBefore = $entries.length;
+
+			cy.getFrameWindow().then(function(win) {
+				win.app.map.uiManager.notebookbar.impl.refresh();
+			});
+
+			cy.cGet('.notebookbar #stylesview .ui-iconview-entry')
+				.should('have.length', entryCountBefore);
+			cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should('be.visible');
+		});
+	});
+
 	it('Scroll Up/Down Buttons', function() {
 		cy.cGet('#stylesview-iconview-list-scroll-up').should('exist').should('be.visible');
 		cy.cGet('#stylesview-iconview-list-scroll-down').should('exist').should('be.visible');
