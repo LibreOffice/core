@@ -66,7 +66,7 @@ SwContentFrame *SwPageFrame::FindLastBodyContent()
     return pRet;
 }
 
-SwSectionFrame* SwPageFrame::GetEndNoteSection()
+SwLayoutFrame* SwPageFrame::GetEndNoteSectionUpper()
 {
     SwLayoutFrame* pBody = FindBodyCont();
     if (!pBody)
@@ -75,6 +75,27 @@ SwSectionFrame* SwPageFrame::GetEndNoteSection()
     }
 
     SwFrame* pLast = pBody->GetLastLower();
+    if (!pLast || !pLast->IsColumnFrame())
+    {
+        return pBody;
+    }
+
+    // A body frame with columns keeps its text in the column bodies, so the body text ends at
+    // the end of the last column's body.
+    SwFrame* pColumnBody = static_cast<SwLayoutFrame*>(pLast)->Lower();
+    assert(pColumnBody && pColumnBody->IsBodyFrame() && "column frame without a body frame");
+    return static_cast<SwLayoutFrame*>(pColumnBody);
+}
+
+SwSectionFrame* SwPageFrame::GetEndNoteSection()
+{
+    SwLayoutFrame* pUpper = GetEndNoteSectionUpper();
+    if (!pUpper)
+    {
+        return nullptr;
+    }
+
+    SwFrame* pLast = pUpper->GetLastLower();
     if (!pLast || !pLast->IsSctFrame())
     {
         return nullptr;

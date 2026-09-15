@@ -218,6 +218,8 @@ public:
     void SetFootnotePage( bool b )                       { m_bFootnotePage = b; }
     void SetEndNotePage( bool b )                   { m_bEndNotePage = b; }
     SwSectionFrame* GetEndNoteSection();
+    /// The frame an endnote section at the end of the document is a lower of.
+    SwLayoutFrame* GetEndNoteSectionUpper();
 
     sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
     void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}

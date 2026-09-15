@@ -1658,7 +1658,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             {
                 SwSection* pSwSection = rDoc.GetEndNoteInfo().GetSwSection(rDoc);
                 pEndnoteSection = new SwSectionFrame(*pSwSection, pPage);
-                SwLayoutFrame* pParent = pPage->FindBodyCont();
+                SwLayoutFrame* pParent = pPage->GetEndNoteSectionUpper();
                 SwFrame* pBefore = pPage->FindLastBodyContent();
                 while (pBefore)
                 {
