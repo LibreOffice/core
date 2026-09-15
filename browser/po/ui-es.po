@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-15 07:54+0000\n"
+"PO-Revision-Date: 2026-09-16 07:52+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fito@libreoffice.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
@@ -915,6 +915,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Cargue una extensión empaquetada en formato .zip; su contenido "
+"(manifest.json, ...) se descomprimirá en el servidor."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1018
 msgid "Upload Extension"
@@ -972,6 +974,8 @@ msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Cuando se activa, los documentos de texto se abren con el nivel de zum que "
+"elige este servidor. Desactívelo para elegir usted mismo el nivel de zum."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1563
 msgid ""
@@ -1115,7 +1119,7 @@ msgstr "p. ej."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2693
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Déjelo en blanco si su servidor no lo requiere"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2712
 msgid ""
@@ -1188,7 +1192,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:3560
 #: admin/src/integrator/Xcu.ts:345
 msgid "Document Settings"
-msgstr "Configuración de los documentos"
+msgstr "Configuración del documento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3704
 msgid "Upload Xcu"
@@ -2143,7 +2147,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Pensando…"
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
@@ -2685,7 +2689,7 @@ msgstr "No volver a mostrar"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr "Ocurrió un error {0} mientras procesaba el comando {1}."
+msgstr "Ocurrió un error {0} mientras se procesaba la orden {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -2752,7 +2756,7 @@ msgstr "Firmar"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Salir"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -4269,7 +4273,7 @@ msgstr "Diseño de tabla"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Herramientas"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4460,16 +4464,15 @@ msgstr "Proteger"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Leyenda"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
 msgstr "Animaciones"
 
 #: src/control/Control.Notebookbar.js:582
-#, fuzzy
 msgid "Start:"
-msgstr "Inicio"
+msgstr "Inicio:"
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
@@ -6848,27 +6851,27 @@ msgstr "Claro 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Realce 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Realce 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Realce 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Realce 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Realce 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Realce 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
@@ -7562,9 +7565,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "No se puede exportar el documento. Inténtelo de nuevo."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Diapositivas"
+msgstr "Diapositiva"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
