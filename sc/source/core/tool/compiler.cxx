@@ -7151,6 +7151,29 @@ bool ScCompiler::DoubleRefToPosSingleRefScalarCase(const ScRange& rRange, ScAddr
     return bOk;
 }
 
+bool ScCompiler::ExternalDoubleRefToPosSingleRef(const ScRange& rRange, ScAddress& rAdr,
+                                                 const ScAddress& rFormulaPos)
+{
+    SCCOL nCol = rFormulaPos.Col();
+    SCROW nRow = rFormulaPos.Row();
+    if (rRange.aStart == rRange.aEnd)
+    {
+        nCol = rRange.aStart.Col();
+        nRow = rRange.aStart.Row();
+    }
+    else if (rRange.aStart.Col() == rRange.aEnd.Col() && rRange.aStart.Row() <= nRow
+             && nRow <= rRange.aEnd.Row())
+        nCol = rRange.aStart.Col();
+    else if (rRange.aStart.Row() == rRange.aEnd.Row() && rRange.aStart.Col() <= nCol
+             && nCol <= rRange.aEnd.Col())
+        nRow = rRange.aStart.Row();
+    else
+        return false;
+
+    rAdr.Set(nCol, nRow, rRange.aStart.Tab());
+    return true;
+}
+
 static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rYDelta)
 {
     rXDelta = rRange.aEnd.Col() - rRange.aStart.Col();

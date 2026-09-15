@@ -657,6 +657,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testExternalRefWholeColumnXLOOKUP)
     CPPUNIT_ASSERT_EQUAL(u"#N/A"_ustr, pDoc->GetString(ScAddress(1, 9, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testExternalRefWholeColumnResult)
+{
+    createScDoc("xlsx/external-ref-wholecol-xlookup.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Excel's cached results are applied on import, recalculate to run the formulas.
+    pDoc->CalcAll();
+
+    // D2:D6 are @ on an entire external column, each row takes its own.
+    for (SCROW nRow = 1; nRow <= 5; ++nRow)
+        CPPUNIT_ASSERT_EQUAL(9.0 + nRow, pDoc->GetValue(ScAddress(3, nRow, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testExternalRefCacheODS)
 {
     createScDoc("ods/external-ref-cache.ods");
