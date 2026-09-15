@@ -77,6 +77,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_htmlimport \
     CppunitTest_sw_indexingexport \
     CppunitTest_sw_macros_test \
+    CppunitTest_sw_roundtrip_diff \
     CppunitTest_sw_ooxmlexport \
     CppunitTest_sw_ooxmlexport2 \
     CppunitTest_sw_ooxmlexport3 \
