@@ -434,6 +434,11 @@ bool SvStream::ReadLine( OStringBuffer& aBuf, sal_Int32 nMaxBytesToRead )
         sal_uInt16 j, n;
         for( j = n = 0; j < nLen ; ++j )
         {
+            if (nTotalLen + j >= o3tl::make_unsigned(nMaxBytesToRead))
+            {
+                bEnd = true;
+                break;
+            }
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
@@ -445,12 +450,6 @@ bool SvStream::ReadLine( OStringBuffer& aBuf, sal_Int32 nMaxBytesToRead )
             ++n;
         }
         nTotalLen += j;
-        if (nTotalLen > o3tl::make_unsigned(nMaxBytesToRead))
-        {
-            n -= nTotalLen - nMaxBytesToRead;
-            nTotalLen = nMaxBytesToRead;
-            bEnd = true;
-        }
         if ( n )
             aBuf.append(buf, n);
     }
@@ -510,6 +509,11 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         sal_uInt16 j, n;
         for( j = n = 0; j < nLen ; ++j )
         {
+            if (nTotalLen + j >= o3tl::make_unsigned(nMaxCodepointsToRead))
+            {
+                bEnd = true;
+                break;
+            }
             if (m_isSwap)
                 SwapNumber( buf[n] );
             c = buf[j];
@@ -530,12 +534,6 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
             }
         }
         nTotalLen += j;
-        if (nTotalLen > o3tl::make_unsigned(nMaxCodepointsToRead))
-        {
-            n -= nTotalLen - nMaxCodepointsToRead;
-            nTotalLen = nMaxCodepointsToRead;
-            bEnd = true;
-        }
         if ( n )
             aBuf.append( buf, n );
     }
