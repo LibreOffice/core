@@ -1262,7 +1262,7 @@ public:
 
 STATE_ENUM(SharedFDType, SMAPS, URPToKit, URPFromKit);
 
-enum HostType : uint8_t { LocalHost, Other };
+enum class HostType : uint8_t { LocalHost, Other };
 
 // A plain, non-blocking, data streaming socket.
 class StreamSocket : public Socket,
@@ -1283,7 +1283,7 @@ public:
         , _inputProcessingEnabled(true)
         , _doneDisconnect(false)
         , _isClient(isClient)
-        , _isLocalHost(hostType == LocalHost)
+        , _isLocalHost(hostType == HostType::LocalHost)
         , _sentHTTPContinue(false)
     {
         LOG_TRC("StreamSocket ctor");

@@ -28,7 +28,7 @@ public:
     }
 
     explicit MockStreamSocket(int fd)
-        : StreamSocket("localhost", fd, Socket::Type::Unix, false, LocalHost)
+        : StreamSocket("localhost", fd, Socket::Type::Unix, false, HostType::LocalHost)
     {
     }
 
