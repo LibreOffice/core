@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -95,11 +96,53 @@ public:
                            u"com.sun.star.presentation.PresentationDocument"_ustr));
     }
 
-    cpo::uno::Reference<scriptinterop::XBlob> newBlob(
-        cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType,
-        OUString const & name) override
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobBytes(
+        cpo::uno::Sequence<sal_Int8> const & data) override
+    {
+        return scriptinterop::detail::createBlob(data, {false, {}}, {false, {}});
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobBytesType(
+        cpo::uno::Sequence<sal_Int8> const & data,
+        css::beans::Optional<OUString> const & contentType) override
+    {
+        return scriptinterop::detail::createBlob(data, contentType, {false, {}});
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobBytesTypeName(
+        cpo::uno::Sequence<sal_Int8> const & data,
+        css::beans::Optional<OUString> const & contentType,
+        css::beans::Optional<OUString> const & name) override
     {
         return scriptinterop::detail::createBlob(data, contentType, name);
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobString(OUString const & data) override {
+        // Real GAS's Utilities.newBlob(String data) defaults the content type to "text/plain"
+        // (the two- and three-arg string overloads take an explicit Optional<string>, so a
+        // caller who wants no content type there passes null):
+        return scriptinterop::detail::createBlob(
+            stringToBytes(data), {true, u"text/plain"_ustr}, {false, {}});
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobStringType(
+        OUString const & data, css::beans::Optional<OUString> const & contentType) override
+    {
+        return scriptinterop::detail::createBlob(stringToBytes(data), contentType, {false, {}});
+    }
+
+    cpo::uno::Reference<scriptinterop::XBlob> newBlobStringTypeName(
+        OUString const & data, css::beans::Optional<OUString> const & contentType,
+        css::beans::Optional<OUString> const & name) override
+    {
+        return scriptinterop::detail::createBlob(stringToBytes(data), contentType, name);
+    }
+
+private:
+    static cpo::uno::Sequence<sal_Int8> stringToBytes(OUString const & data) {
+        auto const utf8 = data.toUtf8();
+        return cpo::uno::Sequence<sal_Int8>(
+            reinterpret_cast<sal_Int8 const *>(utf8.getStr()), utf8.getLength());
     }
 };
 }

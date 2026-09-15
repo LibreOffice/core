@@ -214,7 +214,7 @@ function documentTest() {
     for (let i = 0; i < pngHex.length; i += 2) {
         pngBytes.push(parseInt(pngHex.substr(i, 2), 16));
     }
-    const blob = Utilities.newBlob(pngBytes, 'image/png', 'red.png');
+    const blob = Utilities.newBlob(pngBytes, 'image/png');
     // appendImage places the image at the end of the body, unlike cursor.insertInlineImage
     // which needs a visible cursor and returns null when there is none:
     const inserted = body.appendImage(blob);

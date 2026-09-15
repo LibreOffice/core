@@ -119,6 +119,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     runScript(createFileURL(u"document-test.js"), u"documentTest");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
+    runScript(createFileURL(u"utilities-test.js"), u"utilitiesTest");
+}
+
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

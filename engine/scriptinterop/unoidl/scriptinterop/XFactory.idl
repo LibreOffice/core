@@ -23,7 +23,23 @@ interface XFactory
 
     XDrawing getActiveDrawing();
 
-    XBlob newBlob([in] sequence<byte> data, [in] string contentType, [in] string name);
+    [overload newBlob] XBlob newBlobBytes([in] sequence<byte> data);
+
+    [overload newBlob] XBlob newBlobBytesType(
+        [in] sequence<byte> data, [in] com::sun::star::beans::Optional<string> contentType);
+
+    [overload newBlob] XBlob newBlobBytesTypeName(
+        [in] sequence<byte> data, [in] com::sun::star::beans::Optional<string> contentType,
+        [in] com::sun::star::beans::Optional<string> name);
+
+    [overload newBlob] XBlob newBlobString([in] string data);
+
+    [overload newBlob] XBlob newBlobStringType(
+        [in] string data, [in] com::sun::star::beans::Optional<string> contentType);
+
+    [overload newBlob] XBlob newBlobStringTypeName(
+        [in] string data, [in] com::sun::star::beans::Optional<string> contentType,
+        [in] com::sun::star::beans::Optional<string> name);
 };
 
 };

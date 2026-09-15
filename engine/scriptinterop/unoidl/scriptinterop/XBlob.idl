@@ -14,9 +14,9 @@ module scriptinterop {
 interface XBlob {
     sequence<byte> getBytes();
 
-    string getContentType();
+    com::sun::star::beans::Optional<string> getContentType();
 
-    string getName();
+    com::sun::star::beans::Optional<string> getName();
 };
 
 };

@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/Optional.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
@@ -20,7 +21,8 @@
 namespace scriptinterop::detail {
 
 cpo::uno::Reference<scriptinterop::XBlob> createBlob(
-    cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType, OUString const & name);
+    cpo::uno::Sequence<sal_Int8> const & data, css::beans::Optional<OUString> const & contentType,
+    css::beans::Optional<OUString> const & name);
 
 }
 

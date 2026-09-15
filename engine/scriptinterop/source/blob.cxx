@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/Optional.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -26,26 +27,28 @@ namespace {
 class BlobImpl: public cppu::WeakImplHelper<scriptinterop::XBlob> {
 public:
     BlobImpl(
-        cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType,
-        OUString const & name):
+        cpo::uno::Sequence<sal_Int8> const & data,
+        css::beans::Optional<OUString> const & contentType,
+        css::beans::Optional<OUString> const & name):
         data_(data), contentType_(contentType), name_(name) {}
 
     cpo::uno::Sequence<sal_Int8> getBytes() override { return data_; }
 
-    OUString getContentType() override { return contentType_; }
+    css::beans::Optional<OUString> getContentType() override { return contentType_; }
 
-    OUString getName() override { return name_; }
+    css::beans::Optional<OUString> getName() override { return name_; }
 
 private:
     cpo::uno::Sequence<sal_Int8> data_;
-    OUString contentType_;
-    OUString name_;
+    css::beans::Optional<OUString> contentType_;
+    css::beans::Optional<OUString> name_;
 };
 
 }
 
 cpo::uno::Reference<scriptinterop::XBlob> scriptinterop::detail::createBlob(
-    cpo::uno::Sequence<sal_Int8> const & data, OUString const & contentType, OUString const & name)
+    cpo::uno::Sequence<sal_Int8> const & data, css::beans::Optional<OUString> const & contentType,
+    css::beans::Optional<OUString> const & name)
 { return new BlobImpl(data, contentType, name); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
