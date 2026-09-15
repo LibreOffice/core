@@ -26,25 +26,28 @@
             </node>
         </node>
         <node oor:name="GrammarCheckerList">
-            <prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="ar" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="ast-ES" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="en-CA" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="be-BY" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="de-DE" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="br-FR" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="es" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="ca-ES" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="fr" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="ca-ES-valencia" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="it" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="zh-CN" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="da-DK" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="nl" oor:op="fuse" oor:type="oor:string-list">
@@ -53,25 +56,118 @@
             <prop oor:name="nl-BE" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="ar" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="en" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="pl-PL" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="en-AU" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="ru-RU" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="en-CA" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="en-NZ" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="en-ZA" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="fr" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="gl-ES" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="de" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="de-AT" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="de-DE" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="de-CH" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="el-GR" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="ga-IE" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="it" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="ja-JP" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
+            <prop oor:name="km-KH" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="nb" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="no" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
             <prop oor:name="fa" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
-            <prop oor:name="zh-CN" oor:op="fuse" oor:type="oor:string-list">
+            <prop oor:name="pl-PL" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="pt" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="pt-AO" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="pt-BR" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="pt-MZ" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="pt-PT" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="ro-RO" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="ru-RU" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="de-DE-x-simple-language" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="sk-SK" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="sl-SI" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="es" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="es-AR" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="sv" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="tl-PH" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="ta-IN" oor:op="fuse" oor:type="oor:string-list">
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+            </prop>
+            <prop oor:name="uk-UA" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
         </node>
