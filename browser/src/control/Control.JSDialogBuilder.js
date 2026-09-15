@@ -703,11 +703,28 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				var label = window.L.DomUtil.create('span', 'ui-expander-label ' + builder.options.cssClass, expanderBtn);
 				label.innerText = builder._cleanText(data.children[0].text);
 				label.id = prefix + '-label';
+
+				// A heading that says a second thing about what it holds, such as how many rows
+				// there are or what a set of values comes to, carries it beside the name.
+				if (data.secondaryText) {
+					var secondary = window.L.DomUtil.create('span', 'ui-expander-secondary ' + builder.options.cssClass, expanderBtn);
+					secondary.innerText = builder._cleanText(data.secondaryText);
+					secondary.id = prefix + '-secondary';
+				}
 				if (data.children[0].visible === false) {
 					window.L.DomUtil.addClass(label, 'hidden');
 					window.L.DomUtil.addClass(expanderBtn, 'hidden');
 				}
 				builder.postProcess(expanderBtn, data.children[0]);
+
+				// The button is the heading on screen, so the tooltip of the
+				// heading shows beside the name rather than under everything
+				// the section holds.
+				if (data.children[0].tooltip) {
+					expanderBtn.setAttribute('data-cooltip',
+						builder._cleanText(data.children[0].tooltip));
+					window.L.control.attachTooltipEventListener(expanderBtn, builder.map);
+				}
 
 				var state = data.children.length > 1 && expanded;
 				if (state) {

@@ -390,6 +390,8 @@ interface ExpanderWidgetJSON extends WidgetJSON {
 	expanded?: boolean; // true when the section starts open
 	hidden?: boolean;
 	command?: string; // command to trigger options for the section
+	// A second thing the heading says about what it holds, beside the name
+	secondaryText?: string;
 }
 
 // type: 'progressbar'

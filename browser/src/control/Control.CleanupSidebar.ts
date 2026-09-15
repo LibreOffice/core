@@ -80,6 +80,9 @@ interface CleanupMeasured {
 /// What the whole list comes to. estimated and saved are byte figures, count is how many
 /// rows there are and fixable how many of them offer a cleanup.
 interface CleanupTotal {
+	/// The size of the file the presentation was loaded from or last saved to, and zero
+	/// while that size is not known.
+	documentBytes?: number;
 	estimated?: number;
 	saved?: number;
 	count?: number;
@@ -103,6 +106,9 @@ interface CleanupResult {
 	/// dealt with.
 	dropped?: unknown;
 	removed?: unknown;
+	/// The kinds of finding the scan behind this list looked for. A kit that does not say
+	/// leaves the field out.
+	scanned?: unknown;
 	/// The whole list on every event but progress, where it is the number of steps of
 	/// the phase.
 	total?: CleanupTotal | number;
@@ -147,26 +153,124 @@ interface CleanupPanelState {
 	goneRows: Set<number>;
 	/// The groups the reader folded shut.
 	foldedGroups: Set<CleanupCategory>;
+	/// The size of the file the presentation was loaded from or last saved to, and zero
+	/// while the kit has not said what that size is.
+	documentBytes: number;
+	/// The kinds of finding the scan behind the list on screen looked for. It is empty
+	/// while the panel has no list.
+	scanned: Set<CleanupCategory>;
+	/// True while the row that holds the values a scan is run with stands open. It
+	/// opens with the deck, so the values are in view from the start.
+	optionsOpen: boolean;
 }
 
-const CLEANUP_CATEGORIES: CleanupCategory[] = [
-	'image',
-	'croppedImage',
-	'hiddenSlide',
-	'unusedMaster',
-	'notes',
-	'embeddedObject',
+/// What a check has to report: found while it holds findings, none once a scan has covered
+/// it and turned nothing up, and unchecked while no scan has covered it.
+type CleanupCheckState = 'unchecked' | 'none' | 'found';
+
+/// One kind of finding as the panel lists it. slug is the part of the check's widget ids
+/// that names it, and name says what the check looks for, with the values of the scan
+/// written into it.
+interface CleanupCheck {
+	category: CleanupCategory;
+	slug: string;
+	name(): string;
+	/// What the check looks for at greater length, for a name that leaves something
+	/// open. A check whose name says everything carries none.
+	tooltip?(options: CleanupOptions): string;
+}
+
+/// A group of related checks, drawn as one titled section.
+interface CleanupTool {
+	id: string;
+	name(): string;
+	checks: CleanupCheck[];
+}
+
+/// What the check that looks for images holding more detail than a slide draws says at
+/// greater length: the detail an image is stored at, against the detail a slide can show. A
+/// scan that leaves the images alone measures against no figure, so the line names none.
+function imageCheckTooltip(options: CleanupOptions): string {
+	if (options.resolution <= 0)
+		return _('Images stored with more detail than a slide can show');
+
+	return _(
+		'Images stored at more than %1 DPI, more detail than a slide can show',
+	).replace('%1', String(options.resolution));
+}
+
+/// The checks the panel lists, grouped into the tools they belong to and in the order they
+/// are drawn in. A new tool is a new entry here with its checks.
+const CLEANUP_TOOLS: CleanupTool[] = [
+	{
+		id: 'images',
+		name: () => _('Images'),
+		checks: [
+			{
+				category: 'image',
+				slug: 'image',
+				// The row that holds the values a scan is run with says which resolution
+				// the images are measured against, so the name of the check does not.
+				// The line the reader can rest on says it instead.
+				name: () => _('High-resolution images'),
+				tooltip: (options: CleanupOptions) => imageCheckTooltip(options),
+			},
+			{
+				category: 'croppedImage',
+				slug: 'cropped-image',
+				name: () => _('Cropped images'),
+			},
+		],
+	},
+	{
+		id: 'slides',
+		name: () => _('Slides'),
+		checks: [
+			{
+				category: 'hiddenSlide',
+				slug: 'hidden-slide',
+				name: () => _('Hidden slides'),
+			},
+			{
+				category: 'unusedMaster',
+				slug: 'unused-master',
+				name: () => _('Unused master slides'),
+			},
+		],
+	},
+	{
+		id: 'sharing',
+		name: () => _('For sharing'),
+		checks: [
+			{ category: 'notes', slug: 'notes', name: () => _('Speaker notes') },
+			{
+				category: 'embeddedObject',
+				slug: 'embedded-object',
+				name: () => _('Embedded objects'),
+			},
+		],
+	},
 ];
 
+const CLEANUP_CHECKS: CleanupCheck[] = CLEANUP_TOOLS.reduce(
+	(all: CleanupCheck[], tool: CleanupTool) => all.concat(tool.checks),
+	[],
+);
+
+/// The kinds of finding, in the order the panel lists them.
+const CLEANUP_CATEGORIES: CleanupCategory[] = CLEANUP_CHECKS.map(
+	(check) => check.category,
+);
+
 /// The part of a group's widget ids that names its category.
-const CLEANUP_GROUP_SLUG: { [key in CleanupCategory]: string } = {
-	image: 'image',
-	croppedImage: 'cropped-image',
-	hiddenSlide: 'hidden-slide',
-	unusedMaster: 'unused-master',
-	notes: 'notes',
-	embeddedObject: 'embedded-object',
-};
+const CLEANUP_GROUP_SLUG: { [key in CleanupCategory]: string } =
+	CLEANUP_CHECKS.reduce(
+		(slugs: any, check: CleanupCheck) => {
+			slugs[check.category] = check.slug;
+			return slugs;
+		},
+		{} as { [key in CleanupCategory]: string },
+	);
 
 /// The targets a scan can be asked for, in the order the list offers them. Zero leaves the
 /// images as they are.
@@ -196,7 +300,74 @@ const CleanupWidgetId = {
 	fixAll: 'cleanup-fix-all',
 	separator: 'cleanup-separator',
 	message: 'cleanup-message',
+	footer: 'cleanup-footer',
+	optionsBody: 'cleanup-options-body',
 };
+
+const CLEANUP_TOOL_PREFIX = 'cleanup-tool-';
+const CLEANUP_CHECK_PREFIX = 'cleanup-check-';
+
+/// The flat row that stands in the place of a check while it has nothing to report.
+function checkWidgetId(category: CleanupCategory): string {
+	return CLEANUP_CHECK_PREFIX + CLEANUP_GROUP_SLUG[category];
+}
+
+function toolWidgetId(id: string): string {
+	return CLEANUP_TOOL_PREFIX + id;
+}
+
+/// The kinds of finding a scan run with these values looks for. This is what the panel goes
+/// by while the kit says nothing: a target resolution brings the two image checks, the two
+/// slide checks run every time, and a scan for sharing brings the notes and the embedded
+/// objects.
+function scannedFromOptions(options: CleanupOptions): CleanupCategory[] {
+	const scanned: CleanupCategory[] = [];
+
+	if (options.resolution > 0) scanned.push('image', 'croppedImage');
+	scanned.push('hiddenSlide', 'unusedMaster');
+	if (options.forPublication) scanned.push('notes', 'embeddedObject');
+
+	return scanned;
+}
+
+/// What a check has to report, from how many findings it holds and whether a scan covered
+/// it.
+function checkStateFor(count: number, scanned: boolean): CleanupCheckState {
+	if (count > 0) return 'found';
+
+	return scanned ? 'none' : 'unchecked';
+}
+
+/// The one line the values a scan is run with say while they are folded away: what the
+/// images are measured against and what they are written at.
+function imageOptionsSummary(options: CleanupOptions): string {
+	if (options.resolution <= 0) return _('images left alone');
+
+	return _('%1 DPI, quality %2 %')
+		.replace('%1', String(options.resolution))
+		.replace('%2', String(options.quality));
+}
+
+/// What the band over the list says the whole list comes to: the figure the list would free
+/// up, and the share of the file that figure is. A file whose size is not known, and a
+/// saving too small to round to a whole percent, leave the share out.
+function cleanupTotalText(savingBytes: number, documentBytes: number): string {
+	const percent =
+		documentBytes > 0 ? Math.round((savingBytes * 100) / documentBytes) : 0;
+
+	if (percent <= 0)
+		return _('%1 can be cleaned up').replace('%1', formatByteSize(savingBytes));
+
+	return _('%1 (%2%) can be cleaned up')
+		.replace('%1', formatByteSize(savingBytes))
+		.replace('%2', String(percent));
+}
+
+/// The word on the button of a row. A cleanup takes the speaker notes off the slide they
+/// are on, so that row offers to remove them. Every other row offers to fix what it names.
+function fixButtonText(category: CleanupCategory): string {
+	return category === 'notes' ? _('Remove') : _('Fix');
+}
 
 const CLEANUP_GROUP_PREFIX = 'cleanup-group-';
 const CLEANUP_ROW_PREFIX = 'cleanup-row-';
@@ -213,6 +384,14 @@ function rowWidgetId(rowId: number): string {
 function categoryOfGroupWidgetId(id: string): CleanupCategory | null {
 	for (const category of CLEANUP_CATEGORIES)
 		if (id === groupWidgetId(category)) return category;
+
+	return null;
+}
+
+/// The category the flat row of a check names, and null for any other id.
+function categoryOfCheckWidgetId(id: string): CleanupCategory | null {
+	for (const category of CLEANUP_CATEGORIES)
+		if (id === checkWidgetId(category)) return category;
 
 	return null;
 }
@@ -247,6 +426,9 @@ function newCleanupPanelState(): CleanupPanelState {
 		rows: new Map<number, CleanupRow>(),
 		goneRows: new Set<number>(),
 		foldedGroups: new Set<CleanupCategory>(),
+		documentBytes: 0,
+		scanned: new Set<CleanupCategory>(),
+		optionsOpen: true,
 	};
 }
 
@@ -277,7 +459,9 @@ function formatByteSize(bytes: number): string {
 
 /// The label a screen reader hears on the Fix button of a row, naming the row it belongs
 /// to.
-function fixLabelFor(rowText: string): string {
+function fixLabelFor(category: CleanupCategory, rowText: string): string {
+	if (category === 'notes') return _('Remove %1').replace('%1', rowText);
+
 	return _('Fix %1').replace('%1', rowText);
 }
 
@@ -287,6 +471,16 @@ function isFiniteNumber(value: unknown): value is number {
 
 /// The entries a payload field holds, and an empty list when the field holds anything but a
 /// list.
+/// The kinds of finding a payload field names, with every entry the panel does not know
+/// left out.
+function asCategoryArray(value: unknown): CleanupCategory[] {
+	return asArray(value).filter(
+		(entry): entry is CleanupCategory =>
+			typeof entry === 'string' &&
+			CLEANUP_CATEGORIES.indexOf(entry as CleanupCategory) !== -1,
+	);
+}
+
 function asArray(value: unknown): unknown[] {
 	return Array.isArray(value) ? value : [];
 }
@@ -475,27 +669,35 @@ function statusTextFor(status: string): string {
 	return '';
 }
 
-function headingFor(
+function countOf(state: CleanupPanelState, category: CleanupCategory): number {
+	return rowsOf(state, category).length;
+}
+
+/// What a check looks for, in the language of the view and with the values of the scan the
+/// list stands under written into it.
+function checkNameFor(category: CleanupCategory): string {
+	for (const check of CLEANUP_CHECKS)
+		if (check.category === category) return check.name();
+
+	return '';
+}
+
+/// What a check looks for at greater length, and nothing for a check whose name says
+/// everything.
+function checkTooltipFor(
 	state: CleanupPanelState,
 	category: CleanupCategory,
-	count: number,
 ): string {
-	switch (category) {
-		case 'image':
-			return _('Images over %1 DPI (%2)')
-				.replace('%1', String(state.options.resolution))
-				.replace('%2', String(count));
-		case 'croppedImage':
-			return _('Cropped images (%1)').replace('%1', String(count));
-		case 'hiddenSlide':
-			return _('Hidden slides (%1)').replace('%1', String(count));
-		case 'unusedMaster':
-			return _('Unused master slides (%1)').replace('%1', String(count));
-		case 'notes':
-			return _('Speaker notes (%1)').replace('%1', String(count));
-		case 'embeddedObject':
-			return _('Embedded objects (%1)').replace('%1', String(count));
-	}
+	for (const check of CLEANUP_CHECKS)
+		if (check.category === category)
+			return check.tooltip ? check.tooltip(state.options) : '';
+
+	return '';
+}
+
+/// True while there is a list to deal with in one go.
+function offersFixAllIn(state: CleanupPanelState): boolean {
+	return !state.readOnly && state.fixableCount > 0;
 }
 
 /// What the band under the list says the whole list comes to, and nothing while it has no
@@ -505,10 +707,7 @@ function totalTextFor(state: CleanupPanelState): string {
 		return _('Saved %1').replace('%1', formatByteSize(state.savedBytes));
 
 	if (state.estimatedBytes > 0)
-		return _('Estimated saving: %1').replace(
-			'%1',
-			formatByteSize(state.estimatedBytes),
-		);
+		return cleanupTotalText(state.estimatedBytes, state.documentBytes);
 
 	if (state.fixableCount > 0)
 		return _n(
@@ -520,19 +719,41 @@ function totalTextFor(state: CleanupPanelState): string {
 	return '';
 }
 
+/// The values a scan is run with stand behind one row that names them, at the foot of the
+/// panel. The row opens with the deck and folds the fields away on a press, and while it is
+/// folded it says what the values come to.
+function optionsJSON(state: CleanupPanelState): ExpanderWidgetJSON {
+	return {
+		id: CleanupWidgetId.options,
+		type: 'expander',
+		expanded: state.optionsOpen,
+		visible: !state.readOnly,
+		secondaryText: imageOptionsSummary(state.chosenOptions),
+		cssClass: 'cleanup-options',
+		children: [
+			{
+				id: CleanupWidgetId.options + '-heading',
+				type: 'fixedtext',
+				text: _('Options'),
+			} as TextWidget,
+			optionsBodyJSON(state),
+		],
+	};
+}
+
 /// The three option rows: a label and its control side by side, and the choice under them.
-/// Each control names the label beside it, so the label alone is the name a screen reader
-/// reads out for the control.
-function optionsJSON(state: CleanupPanelState): GridWidgetJSON {
+/// The body is a region of its own, since the run turns its fields off and on again while
+/// the row around them stands as it is. Each control names the label beside it, so the
+/// label alone is the name a screen reader reads out for the control.
+function optionsBodyJSON(state: CleanupPanelState): GridWidgetJSON {
 	const enabled = !state.busy;
 
 	return {
-		id: CleanupWidgetId.options,
+		id: CleanupWidgetId.optionsBody,
 		type: 'grid',
 		cols: 2,
 		rows: 3,
-		visible: !state.readOnly,
-		cssClass: 'cleanup-options',
+		cssClass: 'cleanup-options-body',
 		children: [
 			{
 				id: CleanupWidgetId.resolutionLabel,
@@ -540,6 +761,7 @@ function optionsJSON(state: CleanupPanelState): GridWidgetJSON {
 				text: _('Image resolution'),
 				labelFor: CleanupWidgetId.resolution,
 				labelForType: 'listbox',
+				hexpand: true,
 				left: '0',
 				top: '0',
 			} as TextWidget,
@@ -552,16 +774,16 @@ function optionsJSON(state: CleanupPanelState): GridWidgetJSON {
 					String(resolutionIndex(state.chosenOptions.resolution)),
 				],
 				enabled: enabled,
-				hexpand: true,
 				left: '1',
 				top: '0',
 			} as ListBoxWidget,
 			{
 				id: CleanupWidgetId.qualityLabel,
 				type: 'fixedtext',
-				text: _('JPEG quality in %'),
+				text: _('JPEG quality (%)'),
 				labelFor: CleanupWidgetId.quality,
 				labelForType: 'spinfield',
+				hexpand: true,
 				left: '0',
 				top: '1',
 			} as TextWidget,
@@ -577,7 +799,6 @@ function optionsJSON(state: CleanupPanelState): GridWidgetJSON {
 				max: 100,
 				step: 5,
 				enabled: enabled,
-				hexpand: true,
 				left: '1',
 				top: '1',
 			} as SpinFieldWidgetJSON,
@@ -680,7 +901,8 @@ function runJSON(state: CleanupPanelState): ContainerWidgetJSON {
 			{
 				id: CleanupWidgetId.scan,
 				type: 'pushbutton',
-				text: _('Scan'),
+				text: _('Scan presentation'),
+				cssClass: offersFixAllIn(state) ? '' : 'cleanup-primary',
 				enabled: !state.busy,
 				visible: !state.busy && !state.readOnly,
 			} as PushButtonWidget,
@@ -689,16 +911,18 @@ function runJSON(state: CleanupPanelState): ContainerWidgetJSON {
 	};
 }
 
-/// The band under the list says what the whole list comes to. It waits for the run to
-/// settle rather than reporting a figure that is still moving, and stands there only while
-/// it has something in it: a figure, a count, or the button that deals with the whole list.
+/// The band over the foot of the panel says what the whole list comes to, with the button
+/// that deals with the whole list under it. It waits for the run to settle rather than
+/// reporting a figure that is still moving, and stands there only while it has something in
+/// it: a figure, a count, or the button.
 function summaryJSON(state: CleanupPanelState): ContainerWidgetJSON {
 	const total = totalTextFor(state);
-	const offersFixAll = !state.readOnly && state.fixableCount > 0;
+	const offersFixAll = offersFixAllIn(state);
 
 	return {
 		id: CleanupWidgetId.summary,
 		type: 'container',
+		vertical: true,
 		ariaLive: 'polite',
 		visible: !state.busy && !state.readOnly && (total !== '' || offersFixAll),
 		cssClass: 'cleanup-summary',
@@ -716,7 +940,25 @@ function summaryJSON(state: CleanupPanelState): ContainerWidgetJSON {
 				text: _('Fix all'),
 				enabled: !state.busy,
 				visible: offersFixAll,
+				cssClass: 'cleanup-primary',
 			} as PushButtonWidget,
+		],
+	};
+}
+
+/// The foot of the panel: what the list comes to, the values the next scan is run with, and
+/// the button that starts one. It keeps to the foot of the dock however short the list is.
+function footerJSON(state: CleanupPanelState): ContainerWidgetJSON {
+	return {
+		id: CleanupWidgetId.footer,
+		type: 'container',
+		vertical: true,
+		cssClass: 'cleanup-footer',
+		children: [
+			summaryJSON(state),
+			separatorJSON(state),
+			optionsJSON(state),
+			runJSON(state),
 		],
 	};
 }
@@ -740,13 +982,9 @@ function messageJSON(state: CleanupPanelState): TextWidget {
 		text = _(
 			'This document cannot be changed here, so there is nothing to clean up.',
 		);
-	} else if (!state.hasList) {
-		text = _(
-			'Choose a target resolution, then press Scan to find what can be cleaned up.',
-		);
 	} else {
-		text = _('Nothing to clean up.');
-		visible = state.rowCount === 0;
+		text = _('Find what makes this presentation large, and clean it up here.');
+		visible = !state.hasList;
 	}
 
 	return {
@@ -759,45 +997,51 @@ function messageJSON(state: CleanupPanelState): TextWidget {
 	} as TextWidget;
 }
 
-/// A row: where the finding is, as a link when the view can go there; the figures it was
-/// made on under that; how much it saves, once measured; and its Fix button, when it offers
-/// one.
+/// A row: where the finding is, as a link when the view can go there, with the figures it
+/// was made on under that; how much it saves, once measured; and its Fix button, when it
+/// offers one. The two lines stand together in one cell, so the badge and the button sit
+/// beside the pair of them.
 function rowJSON(state: CleanupPanelState, row: CleanupRow): GridWidgetJSON {
 	const id = rowWidgetId(row.id);
 	const text = rowTextFor(row);
 	const detail = rowDetailFor(row);
-	const children: WidgetJSON[] = [];
+	const lines: WidgetJSON[] = [];
 
 	if (row.canGoTo)
-		children.push({
+		lines.push({
 			id: id + '-goto',
 			type: 'linkbutton',
 			text: text,
 			cssClass: 'cleanup-row-text',
-			hexpand: true,
-			left: '0',
-			top: '0',
 		} as WidgetJSON);
 	else
-		children.push({
+		lines.push({
 			id: id + '-text',
 			type: 'fixedtext',
 			text: text,
 			cssClass: 'cleanup-row-text',
-			hexpand: true,
-			left: '0',
-			top: '0',
 		} as TextWidget);
 
 	if (detail !== '')
-		children.push({
+		lines.push({
 			id: id + '-detail',
 			type: 'fixedtext',
 			text: detail,
 			cssClass: 'cleanup-row-detail',
-			left: '0',
-			top: '1',
 		} as TextWidget);
+
+	const children: WidgetJSON[] = [
+		{
+			id: id + '-lines',
+			type: 'container',
+			vertical: true,
+			cssClass: 'cleanup-row-lines',
+			hexpand: true,
+			left: '0',
+			top: '0',
+			children: lines,
+		} as ContainerWidgetJSON,
+	];
 
 	if (row.saving > 0)
 		children.push({
@@ -813,9 +1057,9 @@ function rowJSON(state: CleanupPanelState, row: CleanupRow): GridWidgetJSON {
 		children.push({
 			id: id + '-fix',
 			type: 'pushbutton',
-			text: _('Fix'),
+			text: fixButtonText(row.category),
 			enabled: !state.busy,
-			aria: { label: fixLabelFor(text) },
+			aria: { label: fixLabelFor(row.category, text) },
 			left: '2',
 			top: '0',
 		} as PushButtonWidget);
@@ -824,7 +1068,7 @@ function rowJSON(state: CleanupPanelState, row: CleanupRow): GridWidgetJSON {
 		id: id,
 		type: 'grid',
 		cols: 3,
-		rows: detail === '' ? 1 : 2,
+		rows: 1,
 		cssClass:
 			'cleanup-row' + (state.goneRows.has(row.id) ? ' cleanup-row-gone' : ''),
 		children: children,
@@ -832,7 +1076,9 @@ function rowJSON(state: CleanupPanelState, row: CleanupRow): GridWidgetJSON {
 }
 
 /// A group is a section that folds shut under a heading saying what kind of finding it
-/// holds and how many. A group with nothing to report is off the screen.
+/// holds and how many. A group with nothing to report is off the screen. The line that
+/// says more about the check belongs to the heading, so it shows beside the heading rather
+/// than under the rows.
 function groupJSON(
 	state: CleanupPanelState,
 	category: CleanupCategory,
@@ -843,7 +1089,8 @@ function groupJSON(
 		{
 			id: id + '-heading',
 			type: 'fixedtext',
-			text: headingFor(state, category, rows.length),
+			text: checkNameFor(category),
+			tooltip: checkTooltipFor(state, category),
 		} as TextWidget,
 	];
 	for (const row of rows) children.push(rowJSON(state, row));
@@ -853,15 +1100,89 @@ function groupJSON(
 		type: 'expander',
 		expanded: !state.foldedGroups.has(category),
 		visible: rows.length > 0,
+		secondaryText: String(rows.length),
 		cssClass: 'cleanup-group',
+		children: children,
+	};
+}
+
+/// The flat row that stands in the place of a check while it has nothing to report. It
+/// holds nothing to press, so the keyboard walks past a check with no findings.
+function checkRowJSON(
+	state: CleanupPanelState,
+	category: CleanupCategory,
+): GridWidgetJSON {
+	const id = checkWidgetId(category);
+	const state_ = checkStateFor(
+		countOf(state, category),
+		state.scanned.has(category),
+	);
+
+	return {
+		id: id,
+		type: 'grid',
+		cols: 2,
+		rows: 1,
+		visible: state_ !== 'found',
+		cssClass: 'cleanup-check-row',
+		children: [
+			{
+				id: id + '-title',
+				type: 'fixedtext',
+				text: checkNameFor(category),
+				tooltip: checkTooltipFor(state, category),
+				cssClass: 'cleanup-check-title',
+				hexpand: true,
+				left: '0',
+				top: '0',
+			} as TextWidget,
+			{
+				id: id + '-state',
+				type: 'fixedtext',
+				text: state_ === 'none' ? _('None') : _('Not checked'),
+				cssClass: 'cleanup-check-state',
+				left: '1',
+				top: '0',
+			} as TextWidget,
+		],
+	};
+}
+
+/// One tool: a title and the checks that belong to it, each of them in whichever of its two
+/// shapes belongs on the screen.
+function toolJSON(
+	state: CleanupPanelState,
+	tool: CleanupTool,
+): ContainerWidgetJSON {
+	const children: WidgetJSON[] = [
+		{
+			id: toolWidgetId(tool.id) + '-title',
+			type: 'fixedtext',
+			text: tool.name(),
+			allyRole: 'heading',
+			cssClass: 'cleanup-tool-title',
+		} as TextWidget,
+	];
+
+	for (const check of tool.checks) {
+		children.push(groupJSON(state, check.category));
+		children.push(checkRowJSON(state, check.category));
+	}
+
+	return {
+		id: toolWidgetId(tool.id),
+		type: 'container',
+		vertical: true,
+		visible: !state.readOnly,
+		cssClass: 'cleanup-tool',
 		children: children,
 	};
 }
 
 /// The JSON of one region of the deck, named by the id of its widget, and null for an id
 /// that names no region. The regions are the widgets the panel sends on their own once the
-/// deck is built: the options, the run, the band, the divider, the message, a group and a
-/// row.
+/// deck is built: the options row and the fields inside it, the run, the band, the divider,
+/// the message, a tool, a check in both of its shapes and a row.
 function cleanupRegionJSON(
 	state: CleanupPanelState,
 	id: string,
@@ -869,6 +1190,8 @@ function cleanupRegionJSON(
 	switch (id) {
 		case CleanupWidgetId.options:
 			return optionsJSON(state);
+		case CleanupWidgetId.optionsBody:
+			return optionsBodyJSON(state);
 		case CleanupWidgetId.run:
 			return runJSON(state);
 		case CleanupWidgetId.statusText:
@@ -883,8 +1206,14 @@ function cleanupRegionJSON(
 			return messageJSON(state);
 	}
 
+	for (const tool of CLEANUP_TOOLS)
+		if (id === toolWidgetId(tool.id)) return toolJSON(state, tool);
+
 	const category = categoryOfGroupWidgetId(id);
 	if (category) return groupJSON(state, category);
+
+	const checked = categoryOfCheckWidgetId(id);
+	if (checked) return checkRowJSON(state, checked);
 
 	const rowId = rowOfWidgetId(id, '');
 	if (rowId !== null) {
@@ -906,7 +1235,7 @@ function regionLook(json: WidgetJSON): string {
 	return JSON.stringify(
 		Object.assign({}, json, {
 			children: children.map((child) => child.id),
-			heading: children.length ? children[0].text : '',
+			heading: children.length ? children[0] : null,
 		}),
 	);
 }
@@ -914,15 +1243,11 @@ function regionLook(json: WidgetJSON): string {
 /// The whole deck: a heading row that says the title, and the regions under it.
 function cleanupDeckJSON(state: CleanupPanelState): DeckWidgetJSON {
 	const title = _('Clean Up');
-	const children: WidgetJSON[] = [
-		optionsJSON(state),
-		runJSON(state),
-		summaryJSON(state),
-		separatorJSON(state),
-		messageJSON(state),
-	];
-	for (const category of CLEANUP_CATEGORIES)
-		children.push(groupJSON(state, category));
+	const children: WidgetJSON[] = [messageJSON(state)];
+
+	for (const tool of CLEANUP_TOOLS) children.push(toolJSON(state, tool));
+
+	children.push(footerJSON(state));
 
 	return {
 		id: CleanupWidgetId.deck,
@@ -952,6 +1277,9 @@ function goesDeadWhenBusy(elementId: string): boolean {
 	if (
 		elementId === buttonElementId(CleanupWidgetId.scan) ||
 		elementId === buttonElementId(CleanupWidgetId.fixAll) ||
+		// The fields the row holds go dead with the rest, so the row hands the keyboard
+		// on rather than dropping it.
+		elementId === buttonElementId(CleanupWidgetId.options + '-heading') ||
 		elementId === inputElementId(CleanupWidgetId.resolution) ||
 		elementId === inputElementId(CleanupWidgetId.quality) ||
 		elementId === inputElementId(CleanupWidgetId.sharing)
@@ -1114,6 +1442,7 @@ class CleanupSidebar extends SidebarBase {
 	private buildDeck(): void {
 		if (!this.builder || !this.container) return;
 
+		const deck = cleanupDeckJSON(this.state);
 		this.model.fullUpdate({
 			// The container the deck sits in. It carries a name of its own rather than the
 			// deck's, so that an id names one thing.
@@ -1121,9 +1450,10 @@ class CleanupSidebar extends SidebarBase {
 			jsontype: SidebarType.Cleanup,
 			type: 'container',
 			dialogid: '0',
-			children: [cleanupDeckJSON(this.state)],
+			children: [deck],
 		} as any as JSDialogJSON);
 		this.markContainerContentOwner();
+		this.rememberDrawn(deck);
 
 		// The deck is built away from the page and put in once it is whole.
 		const fragment = new DocumentFragment();
@@ -1177,6 +1507,8 @@ class CleanupSidebar extends SidebarBase {
 		this.run = null;
 		this.requestActions.clear();
 		this.lastSent.clear();
+		this.state.scanned.clear();
+		this.state.documentBytes = 0;
 		this.fixedRowId = null;
 		this.fixedRowCategory = null;
 		this.rowAfterFixedId = null;
@@ -1259,8 +1591,27 @@ class CleanupSidebar extends SidebarBase {
 		}
 	}
 
+	/// Notes what a widget and everything inside it look like as they go on screen,
+	/// so a region asked for again in the same state is left as it stands.
+	private rememberDrawn(widget: WidgetJSON): void {
+		this.lastSent.set(widget.id, regionLook(widget));
+		for (const child of widget.children || []) this.rememberDrawn(child);
+	}
+
+	/// Notes that the region named already looks the way the state says, for a change
+	/// the builder has drawn on its own.
+	private markDrawn(id: string): void {
+		const json = cleanupRegionJSON(this.state, id);
+		if (json) this.lastSent.set(id, regionLook(json));
+	}
+
+	/// A check is drawn again in both of its shapes, since a row joining or leaving it
+	/// decides which of them belongs on the screen.
 	private refreshGroups(): void {
-		this.refresh(...CLEANUP_CATEGORIES.map(groupWidgetId));
+		this.refresh(
+			...CLEANUP_CATEGORIES.map(groupWidgetId),
+			...CLEANUP_CATEGORIES.map(checkWidgetId),
+		);
 	}
 
 	private refreshAll(): void {
@@ -1320,23 +1671,50 @@ class CleanupSidebar extends SidebarBase {
 			const rowId = rowOfWidgetId(id, '-goto');
 			if (rowId !== null) this.onGoToPressed(rowId);
 		} else if (objectType === 'expander' && eventType === 'toggle') {
+			// The row that holds the values a scan is run with folds like a check does,
+			// and the builder has already turned the section on screen, so the panel
+			// only follows where it now stands.
+			if (id === CleanupWidgetId.options) {
+				this.state.optionsOpen = !this.state.optionsOpen;
+				this.markDrawn(id);
+				this.writeOptionsSummary();
+				return true;
+			}
+
 			const category = categoryOfGroupWidgetId(id);
 			if (category) {
 				if (this.state.foldedGroups.has(category))
 					this.state.foldedGroups.delete(category);
 				else this.state.foldedGroups.add(category);
+				this.markDrawn(id);
 			}
-		} else {
+		} else if (
 			applyOptionEvent(
 				this.state.chosenOptions,
 				objectType,
 				eventType,
 				id,
 				data,
-			);
+			)
+		) {
+			this.writeOptionsSummary();
 		}
 
 		return true;
+	}
+
+	/// The line the row that holds the fields says while they are folded away. It sits
+	/// inside the heading the builder draws, which is not a widget of its own, so it is
+	/// written here rather than by drawing the row again. Drawing the row again would
+	/// take the keyboard out of the field the reader is in.
+	private writeOptionsSummary(): void {
+		if (!this.container) return;
+
+		const line = this.container.querySelector(
+			'#' + CleanupWidgetId.options + '-heading-secondary',
+		);
+		if (line) line.textContent = imageOptionsSummary(this.state.chosenOptions);
+		this.markDrawn(CleanupWidgetId.options);
 	}
 
 	private onScanPressed(): void {
@@ -1387,7 +1765,8 @@ class CleanupSidebar extends SidebarBase {
 	private writeOptions(options: CleanupOptions): void {
 		this.state.options = options;
 		this.state.chosenOptions = Object.assign({}, options);
-		this.refresh(CleanupWidgetId.options);
+		this.refresh(CleanupWidgetId.optionsBody);
+		this.writeOptionsSummary();
 	}
 
 	// --- the wire
@@ -1530,6 +1909,8 @@ class CleanupSidebar extends SidebarBase {
 		if (result.reason === 'request' && isCleanupOptions(result.options))
 			this.writeOptions(result.options);
 
+		this.takeScanned(result);
+
 		const measured = asMeasuredProgress(result.measured);
 
 		// The rows the panel drew are what the counts are worked out over, so a row
@@ -1540,8 +1921,30 @@ class CleanupSidebar extends SidebarBase {
 		this.setStatus(result.status || 'idle');
 		this.setBusy(this.state.statusName !== 'idle');
 		this.setProgress(measured.done, measured.total);
+		this.updateChecks();
 		this.updateSummary();
 		this.updateMessage();
+	}
+
+	/// Which checks the scan behind this list looked for. A kit that says nothing leaves
+	/// the panel to work it out from the values the list was made with, and a list of a
+	/// session that has scanned nothing covers no check at all.
+	private takeScanned(result: CleanupResult): void {
+		if (!this.state.hasList) {
+			this.state.scanned.clear();
+			return;
+		}
+
+		const named = asCategoryArray(result.scanned);
+		this.state.scanned = new Set<CleanupCategory>(
+			named.length > 0 ? named : scannedFromOptions(this.state.options),
+		);
+	}
+
+	/// Both shapes of every check are drawn again, since what a check has to report
+	/// decides which of them belongs on the screen.
+	private updateChecks(): void {
+		this.refreshGroups();
 	}
 
 	private onProgress(result: CleanupResult): void {
@@ -1582,7 +1985,7 @@ class CleanupSidebar extends SidebarBase {
 		this.recountRows();
 		this.takeTotal(result.total);
 
-		this.updateGroupHeadings();
+		this.updateChecks();
 		this.updateSummary();
 		this.updateMessage();
 	}
@@ -1596,7 +1999,7 @@ class CleanupSidebar extends SidebarBase {
 
 		this.setStatus('idle');
 		this.setBusy(false);
-		this.updateGroupHeadings();
+		this.updateChecks();
 		this.updateSummary();
 		this.updateMessage();
 	}
@@ -1639,7 +2042,7 @@ class CleanupSidebar extends SidebarBase {
 			this.recountRows();
 			this.setStatus('idle');
 			this.setBusy(false);
-			this.updateGroupHeadings();
+			this.updateChecks();
 			this.updateSummary();
 			this.updateMessage();
 		}
@@ -1729,6 +2132,8 @@ class CleanupSidebar extends SidebarBase {
 		if (typeof total.count === 'number') this.state.rowCount = total.count;
 		if (typeof total.fixable === 'number')
 			this.state.fixableCount = total.fixable;
+		if (typeof total.documentBytes === 'number')
+			this.state.documentBytes = total.documentBytes;
 	}
 
 	// --- the rows
@@ -1813,13 +2218,7 @@ class CleanupSidebar extends SidebarBase {
 	}
 
 	private countOf(category: CleanupCategory): number {
-		return rowsOf(this.state, category).length;
-	}
-
-	/// A heading says how many rows its group holds, so a group folded away still says
-	/// how much there is in it. A group with nothing to report is off the screen.
-	private updateGroupHeadings(): void {
-		this.refreshGroups();
+		return countOf(this.state, category);
 	}
 
 	// --- the top of the panel
@@ -1868,11 +2267,11 @@ class CleanupSidebar extends SidebarBase {
 		if (target) this.focusAfterRefresh(target);
 	}
 
-	/// The busy state shows in the options, the run, the band and the button of every
-	/// row.
+	/// The busy state shows in the fields of the options row, the run, the band and the
+	/// button of every row.
 	private refreshBusyRegions(): void {
 		this.refresh(
-			CleanupWidgetId.options,
+			CleanupWidgetId.optionsBody,
 			CleanupWidgetId.run,
 			CleanupWidgetId.summary,
 		);

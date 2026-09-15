@@ -258,6 +258,111 @@ describe('CleanupSidebar', function () {
 		canFix: true,
 	};
 
+	describe('the kinds of finding a scan covers', function () {
+		it('are the two slide checks whatever the scan is run with', function () {
+			const scanned = scannedFromOptions({
+				resolution: 0,
+				quality: 80,
+				forPublication: false,
+			});
+			assert.deepEqual(scanned, ['hiddenSlide', 'unusedMaster']);
+		});
+
+		it('bring the image checks in once a target resolution is asked for', function () {
+			const scanned = scannedFromOptions({
+				resolution: 150,
+				quality: 80,
+				forPublication: false,
+			});
+			assert.equal(scanned.indexOf('image') !== -1, true);
+			assert.equal(scanned.indexOf('croppedImage') !== -1, true);
+		});
+
+		it('bring the sharing checks in for a deck being prepared to hand out', function () {
+			const scanned = scannedFromOptions({
+				resolution: 0,
+				quality: 80,
+				forPublication: true,
+			});
+			assert.equal(scanned.indexOf('notes') !== -1, true);
+			assert.equal(scanned.indexOf('embeddedObject') !== -1, true);
+		});
+
+		it('are read off the list, with anything the panel does not know left out', function () {
+			assert.deepEqual(asCategoryArray(['image', 'video', 'notes']), [
+				'image',
+				'notes',
+			]);
+			assert.deepEqual(asCategoryArray(undefined), []);
+		});
+	});
+
+	describe('what a check has to report', function () {
+		it('is what it found while it holds findings', function () {
+			assert.equal(checkStateFor(2, true), 'found');
+			assert.equal(checkStateFor(2, false), 'found');
+		});
+
+		it('is none once a scan has covered it and turned nothing up', function () {
+			assert.equal(checkStateFor(0, true), 'none');
+		});
+
+		it('is that it was not checked while no scan has covered it', function () {
+			assert.equal(checkStateFor(0, false), 'unchecked');
+		});
+	});
+
+	describe('the one line the scan values say while they are folded away', function () {
+		it('names the resolution and the quality', function () {
+			assert.equal(
+				imageOptionsSummary({
+					resolution: 150,
+					quality: 80,
+					forPublication: false,
+				}),
+				'150 DPI, quality 80 %',
+			);
+		});
+
+		it('says the images are left alone when no resolution is asked for', function () {
+			assert.equal(
+				imageOptionsSummary({
+					resolution: 0,
+					quality: 80,
+					forPublication: false,
+				}),
+				'images left alone',
+			);
+		});
+	});
+
+	describe('what the band says the list comes to', function () {
+		it('gives the share of the file the saving would free up', function () {
+			assert.equal(
+				cleanupTotalText(250000, 1000000),
+				'244 KB (25%) can be cleaned up',
+			);
+		});
+
+		it('leaves the share out when the size of the file is not known', function () {
+			assert.equal(cleanupTotalText(250000, 0), '244 KB can be cleaned up');
+		});
+
+		it('leaves the share out when it would not round to a whole percent', function () {
+			assert.equal(
+				cleanupTotalText(100, 1000000),
+				'100 bytes can be cleaned up',
+			);
+		});
+	});
+
+	describe('the word on the button of a row', function () {
+		it('offers to remove the speaker notes and to fix everything else', function () {
+			assert.equal(fixButtonText('notes'), 'Remove');
+			assert.equal(fixButtonText('image'), 'Fix');
+		});
+	});
+
 	describe('the deck before a scan', function () {
 		const deck = cleanupDeckJSON(newCleanupPanelState());
 
@@ -268,10 +373,10 @@ describe('CleanupSidebar', function () {
 			assert.equal(isShown(findWidget(deck, 'cleanup-summary')), false);
 		});
 
-		it('says what the scan button is for', function () {
+		it('says what the deck is for', function () {
 			const message = findWidget(deck, 'cleanup-message');
 			assert.equal(isShown(message), true);
-			assert.equal(message.text.indexOf('press Scan') !== -1, true);
+			assert.equal(message.text.indexOf('clean it up here') !== -1, true);
 		});
 
 		it('keeps every group off the screen', function () {
@@ -299,14 +404,23 @@ describe('CleanupSidebar', function () {
 	describe('the deck with a list', function () {
 		const deck = cleanupDeckJSON(stateWithRows([imageRow, notesRow]));
 
-		it('shows the groups that hold a row, with the count in the heading', function () {
+		it('shows the checks that hold a row, with the count beside the name', function () {
 			const images = findWidget(deck, 'cleanup-group-image');
 			assert.equal(isShown(images), true);
-			assert.equal(images.children[0].text, 'Images over 150 DPI (1)');
+			assert.equal(images.children[0].text, 'High-resolution images');
+			assert.equal(images.secondaryText, '1');
 			assert.equal(isShown(findWidget(deck, 'cleanup-group-notes')), true);
 			assert.equal(
 				isShown(findWidget(deck, 'cleanup-group-hidden-slide')),
 				false,
+			);
+		});
+
+		it('leaves the flat row of a check that holds a row off the screen', function () {
+			assert.equal(isShown(findWidget(deck, 'cleanup-check-image')), false);
+			assert.equal(
+				isShown(findWidget(deck, 'cleanup-check-hidden-slide')),
+				true,
 			);
 		});
 
@@ -447,9 +561,12 @@ describe('CleanupSidebar', function () {
 			const deck = cleanupDeckJSON(state);
 			for (const id of [
 				'cleanup-options',
+				'cleanup-options-body',
 				'cleanup-run',
 				'cleanup-summary',
 				'cleanup-message',
+				'cleanup-tool-images',
+				'cleanup-check-notes',
 				'cleanup-group-image',
 				'cleanup-row-4',
 			])
@@ -461,6 +578,26 @@ describe('CleanupSidebar', function () {
 			assert.equal(cleanupRegionJSON(state, 'cleanup-row-9'), null);
 			assert.equal(cleanupRegionJSON(state, 'cleanup-row-3-fix'), null);
 			assert.equal(cleanupRegionJSON(state, 'somethingelse'), null);
+		});
+	});
+
+	describe('how the options row looks', function () {
+		it('stays as it was while a run turns its fields off, and the fields change instead', function () {
+			const idle = stateWithRows([imageRow]);
+			const busy = stateWithRows([imageRow]);
+			busy.busy = true;
+
+			const look = (state: CleanupPanelState, id: string) =>
+				regionLook(cleanupRegionJSON(state, id));
+
+			assert.equal(
+				look(idle, 'cleanup-options'),
+				look(busy, 'cleanup-options'),
+			);
+			assert.notEqual(
+				look(idle, 'cleanup-options-body'),
+				look(busy, 'cleanup-options-body'),
+			);
 		});
 	});
 

@@ -12,6 +12,334 @@
 /* The Cleanup deck. Its widgets are the sidebar's own, so what is here lays them out; the
    classes are the ones the deck's JSON puts on its widgets. */
 
+/* The builder wraps every region of the deck in a container of its own, so the regions are
+   reached through those wrappers. Reading the generated shape is the price of keeping the
+   per-region rebuild the panel works by. */
+#cleanup-deck.deck {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+/* The regions line up with the title over them: their inline padding is the padding of the
+   heading row of the deck, and a line of text inside them starts at the edge of its region
+   rather than a step in from it. The badge on a row keeps the padding that makes it a
+   badge. */
+#cleanup-deck.deck > .root-container {
+	box-sizing: border-box;
+	padding-inline: var(--spacing-xl);
+}
+
+#cleanup-deck.deck .ui-text:not(.cleanup-row-saving) {
+	padding-inline-start: 0;
+}
+
+/* The wrapper is what sticks, not the foot itself: an element sticks inside the box that holds
+   it, and the box that holds the foot is exactly as tall as the foot. */
+#cleanup-deck.deck > .root-container:has(.cleanup-footer) {
+	margin-block-start: auto;
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+	background-color: var(--color-background-lighter);
+	box-shadow: 0 -4px 8px -6px rgb(0 0 0 / 25%);
+}
+
+/* The foot of the panel: what the list comes to, the values the next scan is run with, and the
+   button that starts one. */
+.cleanup-footer {
+	padding-block: var(--spacing-s) var(--spacing-m);
+}
+
+/* What the scan button is for, or why there is nothing to do. */
+.cleanup-message {
+	display: block;
+	margin-block-end: var(--spacing-m);
+	font-size: var(--medium-font-size);
+	color: var(--color-text-light);
+}
+
+/* One tool and the checks that belong to it. A hairline stands over every tool but the first,
+   which stands straight under the line that says what the deck is for. */
+.cleanup-tool {
+	padding-block: var(--spacing-s) var(--spacing-m);
+	border-top: 1px solid var(--color-border-lighter);
+}
+
+#cleanup-tool-images {
+	border-top: none;
+}
+
+.cleanup-tool-title {
+	display: block;
+	margin-block: var(--spacing-s);
+	font-size: var(--header-font-size);
+	font-weight: 600;
+	color: var(--color-main-text);
+}
+
+/* A check with nothing to report: its name on the left, what it has to say at the end. It
+   holds nothing to press, so it reads as a line rather than as a row. */
+.cleanup-check-row {
+	align-items: center;
+	column-gap: var(--spacing-m);
+	row-gap: 0;
+	padding-block: var(--spacing-s);
+}
+
+.cleanup-check-title {
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+}
+
+.cleanup-check-state {
+	white-space: nowrap;
+	font-size: var(--medium-font-size);
+	color: var(--color-text-light);
+}
+
+/* The heading of a check with findings, and the row that holds the values a scan is run with:
+   the name on the left, what the heading adds beside it and the chevron at the end of the
+   line. The sidebar draws its chevron before the name, so that one is hidden and one is drawn
+   after the content of the button. */
+.cleanup-group .ui-expander,
+.cleanup-options .ui-expander {
+	box-shadow: none;
+}
+
+.cleanup-group .ui-expander-btn,
+.cleanup-options .ui-expander-btn {
+	width: 100%;
+	padding: var(--spacing-s) 0;
+	cursor: pointer;
+}
+
+.cleanup-group .ui-expander-label,
+.cleanup-options .ui-expander-label {
+	padding-inline: 0;
+	line-height: normal;
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+}
+
+.cleanup-options .ui-expander-label {
+	font-size: var(--header-font-size);
+}
+
+.cleanup-group .ui-expander-label::before,
+.cleanup-options .ui-expander-label::before {
+	display: none;
+}
+
+.cleanup-group .ui-expander-btn::after,
+.cleanup-options .ui-expander-btn::after {
+	content: 'V';
+	display: inline-block;
+	flex: none;
+	color: transparent;
+	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
+	filter: brightness(0.5);
+}
+
+@supports (content: '' / '') {
+	.cleanup-group .ui-expander-btn::after,
+	.cleanup-options .ui-expander-btn::after {
+		content: 'V' / '';
+	}
+}
+
+.cleanup-group .ui-expander-btn[aria-expanded='true']::after,
+.cleanup-options .ui-expander-btn[aria-expanded='true']::after {
+	transform: rotate(90deg);
+}
+
+[data-theme='dark'] .cleanup-group .ui-expander-btn::after,
+[data-theme='dark'] .cleanup-options .ui-expander-btn::after {
+	filter: brightness(1);
+}
+
+/* How many findings a check holds, or what the values of a scan come to, beside the name. */
+.cleanup-group .ui-expander-secondary,
+.cleanup-options .ui-expander-secondary {
+	padding-inline-end: var(--spacing-m);
+	white-space: nowrap;
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.cleanup-options .ui-expander-secondary {
+	font-size: var(--default-font-size);
+	font-weight: normal;
+	color: var(--color-text-light);
+}
+
+/* While the fields are on show they say what they hold, so the line that stands in for them
+   while they are folded away steps aside. */
+.cleanup-options .ui-expander-btn[aria-expanded='true'] .ui-expander-secondary {
+	display: none;
+}
+
+/* What a heading folds away starts at the edge the heading starts at. */
+.cleanup-group .ui-expander-content,
+.cleanup-options .ui-expander-content {
+	width: auto;
+	padding-inline: 0;
+	line-height: normal;
+}
+
+.cleanup-group .ui-expander-content > .root-container,
+.cleanup-options .ui-expander-content > .root-container {
+	margin: 0;
+}
+
+/* A row: the two lines on the left take what the badge and the button leave, and those two
+   stand centred beside the pair of lines. */
+.cleanup-row {
+	align-items: center;
+	column-gap: var(--spacing-m);
+	padding-block: var(--spacing-s);
+	border-bottom: 1px solid var(--color-border-lighter);
+}
+
+.cleanup-row .ui-pushbutton {
+	width: auto;
+}
+
+/* A row a cleanup has dealt with waits here, dimmed, until the fresh scan that follows says
+   what the list now holds. */
+.cleanup-row-gone {
+	opacity: 0.5;
+}
+
+.cleanup-row-lines {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	gap: var(--spacing-xs);
+	min-width: 0;
+}
+
+.cleanup-row-text {
+	text-align: start;
+	overflow-wrap: anywhere;
+	font-size: var(--medium-font-size);
+}
+
+/* A line that leads to the finding reads as text until it is pointed at. */
+.cleanup-row-text.ui-linkbutton {
+	padding: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+	font-family: inherit;
+	text-decoration: none;
+}
+
+.cleanup-row-text.ui-linkbutton:hover,
+.cleanup-row-text.ui-linkbutton:focus-visible {
+	text-decoration: underline;
+}
+
+/* The figures the finding was made on, dimmed against the line above them. */
+.cleanup-row-detail {
+	color: var(--color-text-light);
+	font-variant-numeric: tabular-nums;
+}
+
+/* How much the document sheds, as a badge with a faint tint of the colour that marks something
+   worth a look. */
+.cleanup-row-saving {
+	white-space: nowrap;
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	padding: var(--spacing-xs) var(--spacing-m);
+	border-radius: var(--border-radius);
+	background-color: color-mix(in srgb, var(--color-warning) 22%, transparent);
+}
+
+/* The band that adds the list up: the figure on one line and the button that deals with the
+   whole list under it, as wide as the panel. */
+.cleanup-summary {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	margin-block: var(--spacing-s);
+}
+
+.cleanup-total {
+	font-size: var(--medium-font-size);
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+#cleanup-fix-all > .ui-pushbutton,
+#cleanup-scan > .ui-pushbutton {
+	width: 100%;
+	margin-inline: 0;
+}
+
+#cleanup-scan {
+	margin-block-start: var(--spacing-s);
+}
+
+/* The button most likely to be pressed next takes the primary fill: the one that deals with the
+   whole list while there is a list, and the one that starts a scan otherwise. The widget's class
+   lands on the wrapper the button is drawn in, so the fill is carried through to the button. The
+   selector names the wrapper by its id, because the rule in btns.css that gives every plain
+   button its look reaches further than a class on its own would. */
+#cleanup-scan.cleanup-primary > .ui-pushbutton,
+#cleanup-fix-all.cleanup-primary > .ui-pushbutton {
+	background-color: var(--color-primary-dark);
+	border-color: var(--color-primary-darker);
+	color: var(--color-primary-text);
+}
+
+#cleanup-scan.cleanup-primary > .ui-pushbutton:hover,
+#cleanup-scan.cleanup-primary > .ui-pushbutton:focus-visible,
+#cleanup-fix-all.cleanup-primary > .ui-pushbutton:hover,
+#cleanup-fix-all.cleanup-primary > .ui-pushbutton:focus-visible {
+	background-color: var(--color-btn-primary-hover-bg);
+	border-color: var(--color-primary-dark);
+	color: var(--color-primary-dark);
+}
+
+/* The fields a scan is run with: a label on the left and its control at the end of the line. */
+.cleanup-options-body {
+	align-items: center;
+	column-gap: var(--spacing-m);
+	padding-block: var(--spacing-s);
+}
+
+.cleanup-options-body .ui-grid-cell {
+	font-size: var(--medium-font-size);
+}
+
+/* The two controls take one width, so their edges line up in a column. */
+#cleanup-resolution,
+#cleanup-quality {
+	justify-self: end;
+	box-sizing: border-box;
+	width: 140px;
+	margin-inline-end: 0;
+}
+
+#cleanup-resolution > .ui-listbox {
+	width: 100%;
+}
+
+#cleanup-quality > .spinfield {
+	flex: 1;
+	width: auto;
+	min-width: 0;
+}
+
+/* The box of the choice starts where the labels over it start. */
+#cleanup-sharing > .ui-checkbox-input {
+	margin-inline-start: 0;
+}
+
 /* The phase of the run on the left, Stop at the end of the line. */
 .cleanup-status-line {
 	grid-template-columns: 1fr auto;
@@ -29,62 +357,4 @@
 .cleanup-progress-figures {
 	white-space: nowrap;
 	font-variant-numeric: tabular-nums;
-}
-
-/* The band that adds the list up carries a faint tint of the primary colour, so it reads as
-   the result of the run rather than as one more row. */
-.cleanup-summary {
-	grid-template-columns: 1fr auto;
-	align-items: center;
-	column-gap: var(--spacing-m);
-	margin-block: var(--spacing-m);
-	padding: var(--spacing-m);
-	border-radius: var(--border-radius);
-	background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
-
-.cleanup-total {
-	font-weight: 600;
-	overflow-wrap: anywhere;
-}
-
-/* What the scan button is for, or what the list came to. */
-.cleanup-message {
-	color: var(--color-text-light);
-}
-
-/* A row: the two lines on the left take what the badge and the button leave. */
-.cleanup-row {
-	align-items: center;
-	column-gap: var(--spacing-m);
-	padding-block: var(--spacing-s);
-	border-bottom: 1px solid var(--color-border-lighter);
-}
-
-/* A row a cleanup has dealt with waits here, dimmed, until the fresh scan that follows says
-   what the list now holds. */
-.cleanup-row-gone {
-	opacity: 0.5;
-}
-
-.cleanup-row-text {
-	text-align: start;
-	overflow-wrap: anywhere;
-}
-
-/* The figures the finding was made on, dimmed against the line above them. */
-.cleanup-row-detail {
-	color: var(--color-text-light);
-	font-variant-numeric: tabular-nums;
-}
-
-/* How much the document sheds, as a badge with a faint tint of the colour that stands for a
-   gain. */
-.cleanup-row-saving {
-	white-space: nowrap;
-	font-weight: 600;
-	font-variant-numeric: tabular-nums;
-	padding: var(--spacing-xs) var(--spacing-m);
-	border-radius: var(--border-radius-large);
-	background-color: color-mix(in srgb, var(--color-success) 18%, transparent);
 }
