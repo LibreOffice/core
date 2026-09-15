@@ -510,6 +510,11 @@ namespace FileUtil
 
         return true;
     }
+
+    std::string fixPocoURIgetPathReturnValue(const std::string& path)
+    {
+        return path;
+    }
 } // namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

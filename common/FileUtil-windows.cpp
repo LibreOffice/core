@@ -209,6 +209,14 @@ namespace FileUtil
         LOG_INF("No write access to path [" << path << "]: " << strerror(errno));
         return false;
     }
+
+    std::string fixPocoURIgetPathReturnValue(const std::string& path)
+    {
+        if (path.length() > 4 && path[0] == '/' &&
+            std::isalpha(path[1]) && path[2] == ':' && path[3] == '/')
+            return path.substr(1);
+        return path;
+    }
 } // namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

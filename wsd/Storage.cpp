@@ -295,7 +295,7 @@ std::atomic<unsigned> LocalStorage::LastLocalStorageId;
 
 std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
 {
-    const Poco::Path path = getUri().getPath();
+    const Poco::Path path = FileUtil::fixPocoURIgetPathReturnValue(getUri().getPath());
     LOG_DBG("Getting info for local uri [" << Anonymizer::anonymizeUrl(getUri().toString())
                                            << "], path ["
                                            << Anonymizer::anonymizeUrl(path.toString()) << "].");
@@ -443,7 +443,7 @@ std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth
 #else // MOBILEAPP
 
     // In the mobile app we use no jail
-    setRootFilePath(getUri().getPath());
+    setRootFilePath(FileUtil::fixPocoURIgetPathReturnValue(getUri().getPath()));
     // Mark the document as downloaded
     setDownloaded(true);
 

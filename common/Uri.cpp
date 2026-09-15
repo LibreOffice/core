@@ -37,7 +37,7 @@ std::string Uri::decode(const std::string& uri)
     return decoded;
 }
 
-std::string Uri::encodeAllPercent(const std::string_view path)
+std::string Uri::encodePercentHashQuestionmark(const std::string_view path)
 {
     std::string result;
     result.reserve(path.size());
@@ -45,6 +45,19 @@ std::string Uri::encodeAllPercent(const std::string_view path)
     {
         if (c == '%')
             result += "%25";
+        else if (Util::isMobileApp())
+        {
+            // FIXME: Having this conditional on Uti::isMobileApp() is idiotic, yes, but needed to
+            // make CODA able to open documents with # or ? in their name. Doing this also for COOL
+            // breaks COOL unit tests. Go figure. No idea whether it should actually be done on iOS
+            // and Android.
+            if (c == '#')
+                result += "%23";
+            else if (c == '?')
+                result += "%3F";
+            else
+                result += c;
+        }
         else
             result += c;
     }

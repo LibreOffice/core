@@ -367,19 +367,14 @@ Poco::URI RequestDetails::sanitizeURI(const std::string& uri)
 
 Poco::URI RequestDetails::sanitizeLocalPath(const std::string& path)
 {
-    // For local file paths, '%' is always a literal character, never URI encoding.
-    // Encode every '%' so that Poco::URI's automatic decoding restores the originals.
-    Poco::URI uriPublic(Uri::encodeAllPercent(path));
+    // For local file paths, '%' is always a literal character, never the start of a percent-encoded
+    // character. '#' and '?' are also OK in a pathname but not in a URI. Encode them so that
+    // Poco::URI's automatic decoding restores the originals.
+
+    Poco::URI uriPublic(Uri::encodePercentHashQuestionmark(path));
 
     if (uriPublic.isRelative() || uriPublic.getScheme() == "file")
-    {
         uriPublic.normalize();
-#ifdef _WIN32
-        std::string p = uriPublic.getPath();
-        if (p.length() > 4 && p[0] == '/' && std::isalpha(p[1]) && p[2] == ':' && p[3] == '/')
-            uriPublic.setPath(p.substr(1));
-#endif
-    }
 
     if (uriPublic.getPath().empty())
     {

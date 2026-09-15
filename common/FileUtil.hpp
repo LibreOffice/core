@@ -17,6 +17,7 @@
 #include <Poco/Path.h>
 
 #include <algorithm>
+#include <cctype>
 #include <cerrno>
 #include <chrono>
 #include <fcntl.h>
@@ -456,6 +457,9 @@ namespace FileUtil
     /// Reads the whole file, so keep it off hot paths.
     std::string sha256Base64(const std::string& path);
 
+    /// On Windows Poco::URI::getPath() returns a bogus path that starts with a slash followed by
+    /// the drive letter. Fix that. On Unix just return the input.
+    std::string fixPocoURIgetPathReturnValue(const std::string& path);
 } // end namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

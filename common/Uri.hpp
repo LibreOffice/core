@@ -51,9 +51,11 @@ public:
     /// URI-decode and return the URI.
     std::string decoded() const { return decode(_uri); }
 
-    /// Encode every '%' as '%25' unconditionally.
-    /// For local file paths where '%' is always a literal character, not URI encoding.
-    static std::string encodeAllPercent(std::string_view path);
+    /// Encode every '%' as '%25'. For mobile apps and CODA, also encode every '#' as '%23' and
+    /// every '?' as '%3F' unconditionally. For local file paths '%' is always a literal character,
+    /// not URI encoding, and '#' and '?' are also literal characters.
+    /// Why such complexity? Because this is a mess.
+    static std::string encodePercentHashQuestionmark(std::string_view path);
 
     /// Checks whether or not the given string is encoded.
     /// That is, a string that is identical when encoded will return false.
