@@ -73,6 +73,11 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/ole/olehelper.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <comphelper/processfactory.hxx>
+#include <docsh.hxx>
+#include <docuno.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -623,9 +628,11 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
         const tools::Rectangle* pChildAnchor, OUString aClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE, true ),
     XclExpControlHelper( rObjMgr.GetRoot() ),
+    mxShape( xShape ),
     maClassName(std::move( aClassName )),
     mnStrmStart( nStrmStart ),
-    mnStrmSize( nStrmSize )
+    mnStrmSize( nStrmSize ),
+    mnShapeId( 0 )
 {
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
 
@@ -648,7 +655,10 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // #i51348# name of the control, may overwrite shape name
     OUString aCtrlName;
     if( aCtrlProp.GetProperty( aCtrlName, u"Name"_ustr ) && !aCtrlName.isEmpty() )
+    {
+        maCtrlName = aCtrlName;
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
+    }
 
     // meta file
     //TODO - needs check
@@ -721,6 +731,139 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
         WriteFormula( rStrm, *pSrcRange );
 
     rStrm.EndRecord();
+}
+
+namespace
+{
+/// A legacy drawing shape that stands for an ActiveX control and carries its position and size.
+class VmlActiveXControlExporter : public oox::vml::VMLExport
+{
+    tools::Rectangle maAreaFrom;
+    tools::Rectangle maAreaTo;
+    OUString maControlName;
+
+public:
+    VmlActiveXControlExporter(const sax_fastparser::FSHelperPtr& rFS,
+                              const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
+                              OUString aControlName)
+        : oox::vml::VMLExport(rFS)
+        , maAreaFrom(rAreaFrom)
+        , maAreaTo(rAreaTo)
+        , maControlName(std::move(aControlName))
+    {
+    }
+
+protected:
+    using VMLExport::StartShape;
+    sal_Int32 StartShape() override
+    {
+        AddShapeAttribute(XML_type, "#_x0000_t201");
+        if (!maControlName.isEmpty())
+            AddShapeAttribute(XML_id, maControlName.toUtf8());
+        AddShapeAttribute(XML_stroked, "f");
+        return VMLExport::StartShape();
+    }
+
+    using VMLExport::EndShape;
+    void EndShape(sal_Int32 nShapeElement) override
+    {
+        sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
+
+        pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, "Pict");
+        pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
+        const OString aAnchor
+            = OString::number(maAreaFrom.Left()) + ", " + OString::number(maAreaFrom.Top()) + ", "
+              + OString::number(maAreaFrom.Right()) + ", " + OString::number(maAreaFrom.Bottom())
+              + ", " + OString::number(maAreaTo.Left()) + ", " + OString::number(maAreaTo.Top())
+              + ", " + OString::number(maAreaTo.Right()) + ", "
+              + OString::number(maAreaTo.Bottom());
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Anchor), aAnchor);
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_CF), "Pict");
+        pVmlDrawing->singleElement(FSNS(XML_x, XML_AutoPict));
+        pVmlDrawing->endElement(FSNS(XML_x, XML_ClientData));
+
+        VMLExport::EndShape(nShapeElement);
+    }
+};
+}
+
+OUString XclExpOcxControlObj::SaveActiveXXml( XclExpXmlStream& rStrm ) const
+{
+    Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( mxShape );
+    if( !xCtrlModel.is() )
+        return OUString();
+
+    Reference< css::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : nullptr );
+    if( !xModel.is() )
+        return OUString();
+
+    oox::ole::OleFormCtrlExportHelper aHelper( comphelper::getProcessComponentContext(),
+                                               xModel, xCtrlModel );
+    if( !aHelper.isValid() )
+        return OUString();
+
+    const sal_Int32 nControl = rStrm.getNewOLEUniqueId();
+    const OUString aBinaryName = "xl/activeX/activeX" + OUString::number( nControl ) + ".bin";
+    const OUString aFragmentName = "xl/activeX/activeX" + OUString::number( nControl ) + ".xml";
+
+    Reference< css::io::XStream > xBinary( rStrm.openFragmentStream( aBinaryName,
+                                               u"application/vnd.ms-office.activeX"_ustr ),
+                                           UNO_QUERY );
+    if( !xBinary.is() )
+        return OUString();
+
+    {
+        oox::ole::OleStorage aStorage( rStrm.getComponentContext(), xBinary, false );
+        Reference< css::io::XOutputStream > xContents(
+            aStorage.openOutputStream( u"contents"_ustr ), cpo::uno::UNO_SET_THROW );
+        aHelper.exportControl( xContents, mxShape->getSize(), true );
+        aStorage.commit();
+    }
+
+    sax_fastparser::FSHelperPtr pFragment = rStrm.openFragmentStreamWithSerializer(
+        aFragmentName, u"application/vnd.ms-office.activeX+xml"_ustr );
+
+    const OUString aBinaryId = rStrm.addRelation( pFragment->getOutputStream(),
+        oox::getRelationship( Relationship::ACTIVEXCONTROLBINARY ),
+        aBinaryName.subView( aBinaryName.lastIndexOf( '/' ) + 1 ) );
+
+    pFragment->singleElementNS( XML_ax, XML_ocx,
+        FSNS( XML_xmlns, XML_ax ), rStrm.getNamespaceURL( OOX_NS( ax ) ),
+        FSNS( XML_xmlns, XML_r ), rStrm.getNamespaceURL( OOX_NS( officeRel ) ),
+        FSNS( XML_ax, XML_classid ), OUString::Concat( "{" ) + aHelper.getGUID() + u"}",
+        FSNS( XML_ax, XML_persistence ), "persistStorage",
+        FSNS( XML_r, XML_id ), aBinaryId );
+    pFragment->endDocument();
+
+    const OUString aRelativeName = "../activeX/activeX" + OUString::number( nControl ) + ".xml";
+    return rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+                              oox::getRelationship( Relationship::CONTROL ), aRelativeName );
+}
+
+void XclExpOcxControlObj::SaveVml( XclExpXmlStream& rStrm ) const
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape );
+    if( !pObj )
+        return;
+
+    tools::Rectangle aAreaFrom;
+    tools::Rectangle aAreaTo;
+    lcl_GetFromTo( *this, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo );
+
+    VmlActiveXControlExporter aExporter( rStrm.GetCurrentStream(), aAreaFrom, aAreaTo, maCtrlName );
+    aExporter.SetSkipwzName( true );
+    aExporter.OverrideShapeIDGen( true, "_x0000_s"_ostr );
+    aExporter.AddSdrObject( *pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1, /*eVOri=*/-1,
+                            /*eHRel=*/-1, /*eVRel=*/-1, /*pWrapAttrList=*/nullptr,
+                            /*bOOxmlExport=*/true, mnShapeId );
+}
+
+void XclExpOcxControlObj::SaveSheetXml( XclExpXmlStream& rStrm, const OUString& rRelId ) const
+{
+    rStrm.GetCurrentStream()->singleElement( XML_control,
+        XML_shapeId, OString::number( mnShapeId ),
+        FSNS( XML_r, XML_id ), rRelId,
+        XML_name, maCtrlName );
 }
 
 //#else

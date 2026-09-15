@@ -67,6 +67,7 @@
 #include <svx/msdffdef.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/svdobj.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -1468,6 +1469,22 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // create and return the control shape (including control model)
                 sal_Int32 nCtrlIndex = -1;
                 Reference< XShape > xShape = mrDrawing.createAndInsertXControlShape( aControl, rxShapes, rShapeRect, nCtrlIndex );
+
+                // A spreadsheet keeps a control of this kind in a part of its own, and the export
+                // tells it apart from a form control by the type the model carries.
+                if( xShape.is() && mrDrawing.getType() == VMLDRAWING_EXCEL )
+                {
+                    try
+                    {
+                        Reference< XControlShape > xCtrlShape( xShape, UNO_QUERY_THROW );
+                        Reference< XPropertySet > xModelProps( xCtrlShape->getControl(), UNO_QUERY_THROW );
+                        xModelProps->setPropertyValue( u"ControlTypeinMSO"_ustr, Any( sal_Int16( 2 ) ) );
+                    }
+                    catch( const Exception& )
+                    {
+                        TOOLS_WARN_EXCEPTION( "oox", "cannot mark the control as an ActiveX one" );
+                    }
+                }
 
                 if (pControlInfo->mbTextContentShape)
                 {

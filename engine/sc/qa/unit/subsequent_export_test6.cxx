@@ -30,6 +30,13 @@
 #include <svl/intitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 using namespace ::com::sun::star;
 
@@ -906,6 +913,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomExportXLSX)
     assertXPath(pStyles, sFirstRowStripeDxf + "/x:fill/x:patternFill/x:bgColor", "theme", u"9");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testActiveXControlsSurviveTheSave)
+{
+    createScDoc("xlsx/tdf111980_radioButtons.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:controls/x:control", 5);
+    assertXPath(pSheet, "/x:worksheet/x:controls/x:control[1]", "name", u"OptionButton1");
+
+    // the part the sheet points at, and the shape that carries the position of the control
+    CPPUNIT_ASSERT(parseExport(u"xl/activeX/activeX1.xml"_ustr));
+    CPPUNIT_ASSERT(parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleInnerBordersExportXLSX)
 {
     createScDoc("xlsx/tableStyleInnerBorders.xlsx");
@@ -1430,6 +1452,53 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testWorkbookCodeName)
 
     xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
     assertXPathNoAttribute(pWorkbook, "/x:workbook/x:workbookPr", "codeName");
+}
+
+// Every control of a sheet is named by a shape identifier only it has.
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testControlShapeIdsStayApart)
+{
+    // Given a sheet holding ActiveX controls, with thirty form controls added beside them:
+    createScDoc("xlsx/tdf111980_radioButtons.xlsx");
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
+                                                               cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xSheets(xDoc->getSheets(),
+                                                              cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPageSupplier> xSupplier(xSheets->getByIndex(0),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XShapes> xPage(xSupplier->getDrawPage(),
+                                                     cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+    for (sal_Int32 i = 0; i < 30; ++i)
+    {
+        cpo::uno::Reference<css::drawing::XControlShape> xShape(
+            xFactory->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::awt::XControlModel> xModel(
+            comphelper::getProcessServiceFactory()->createInstance(
+                u"com.sun.star.form.component.CheckBox"_ustr),
+            cpo::uno::UNO_QUERY_THROW);
+        xShape->setControl(xModel);
+        xShape->setPosition(css::awt::Point(10000, 1000 + i * 600));
+        xShape->setSize(css::awt::Size(2000, 500));
+        xPage->add(xShape);
+    }
+
+    save(TestFilter::XLSX);
+
+    // Without the fix in place, the form controls were numbered from 1001 and the ActiveX
+    // controls from 1025, so the twenty fifth form control and the first ActiveX control were
+    // given the same number.
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    const int nControls = countXPathNodes(pSheet, "//x:control");
+    for (int i = 1; i <= nControls; ++i)
+    {
+        const OString aId
+            = getXPath(pSheet, "(//x:control)[" + OString::number(i) + "]", "shapeId").toUtf8();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aId.getStr(), 1,
+                                     countXPathNodes(pSheet, "//x:control[@shapeId='" + aId + "']"));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

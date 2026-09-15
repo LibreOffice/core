@@ -236,13 +236,26 @@ public:
                             OUString aClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
+    /** Writes the control part and the binary it points at, and returns the identifier of the
+        relationship that the sheet reaches the part through. */
+    OUString            SaveActiveXXml( XclExpXmlStream& rStrm ) const;
+    /** Writes the legacy drawing shape that carries the position and the size of the control. */
+    void                SaveVml( XclExpXmlStream& rStrm ) const;
+    /** Writes the control element of the sheet. */
+    void                SaveSheetXml( XclExpXmlStream& rStrm, const OUString& rRelId ) const;
+
+    void                setShapeId( sal_Int32 nShapeId ) { mnShapeId = nShapeId; }
+
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 
 private:
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
     OUString            maClassName;        /// Class name of the control.
+    OUString            maCtrlName;         /// Name of the control.
     sal_uInt32          mnStrmStart;        /// Start position in 'Ctls' stream.
     sal_uInt32          mnStrmSize;         /// Size in 'Ctls' stream.
+    sal_Int32           mnShapeId;          /// Identifier of the shape inside the sheet.
 };
 
 //#else

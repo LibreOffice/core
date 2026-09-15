@@ -405,6 +405,14 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
     Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
     if( xCtrlModel.is() )
     {
+        // A spreadsheet in the OOXML format keeps every control in a part of its own, so there is
+        // no 'Ctls' stream to write and no position inside one to record.
+        if( GetOutput() == EXC_OUTPUT_XML_2007 )
+        {
+            xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pChildAnchor, OUString(), 0, 0 ) );
+            return xOcxCtrl;
+        }
+
         // output stream
         if( !mxCtlsStrm.is() )
             mxCtlsStrm = OpenStream( EXC_STREAM_CTLS );
