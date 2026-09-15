@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
-#include "DataFlavorMapping.hxx"
+#include <osx/DataFlavorMapping.hxx>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>

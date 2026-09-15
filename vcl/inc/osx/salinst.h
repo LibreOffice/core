@@ -32,6 +32,7 @@
 #include <tools/long.hxx>
 
 #include "MacInstance.hxx"
+#include "clipboard.hxx"
 
 class AquaSalFrame;
 class SalFrame;
@@ -62,6 +63,7 @@ public:
     osl::Mutex                              maUserEventListMutex;
     osl::Condition                          maWaitingYieldCond;
     bool                                    mbTimerProcessed;
+    AquaClipboard*                          mpAquaClipboard;
 
     static std::list<const ApplicationEvent*> aAppEventList;
 

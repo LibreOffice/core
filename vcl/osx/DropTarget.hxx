@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "DataFlavorMapping.hxx"
+#include <osx/DataFlavorMapping.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

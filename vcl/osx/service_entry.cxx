@@ -29,7 +29,7 @@
 
 #include "DragSource.hxx"
 #include "DropTarget.hxx"
-#include "clipboard.hxx"
+#include <osx/clipboard.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -46,7 +46,10 @@ AquaSalInstance::CreateClipboard(ClipboardSelectionType eSelection)
 
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )
-        pSalData->mxClipboard = new AquaClipboard(nullptr, true);
+    {
+        GetAquaSalInstance()->mpAquaClipboard = new AquaClipboard(nullptr, true);;
+        pSalData->mxClipboard = GetAquaSalInstance()->mpAquaClipboard;
+    }
     return pSalData->mxClipboard;
 }
 

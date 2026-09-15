@@ -44,6 +44,7 @@
 #include <osx/salframeview.h>
 #include <osx/salinst.h>
 #include <osx/saltimer.h>
+#include <osx/clipboard.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 
@@ -1108,6 +1109,44 @@ static NSString* getCurrentSelection()
 @end
 
 @implementation SalFrameView
+
+-(id)validRequestorForSendType: (NSPasteboardType)sendType
+                      returnType: (NSPasteboardType)returnType
+{
+    // For Continuity we only accept clipboard content; never return it
+    if (sendType == nil && returnType != nil)
+        return self;
+    return [super validRequestorForSendType:sendType returnType:returnType];
+}
+
+-(BOOL)readSelectionFromPasteboard: (NSPasteboard *)pboard
+{
+    // Continuity Sketch, Scan Documents, and Take Photo operations
+    // end up here with a picture on the clipboard
+    if (![NSImage canInitWithPasteboard:pboard])
+        return NO;
+
+    // The pasteboard's data is not retained after this method
+    // returns. We must copy the image and create a new pasteboard
+    // that we control, because the LO paste operation happens
+    // asynchronously.
+    NSImage *image = [[NSImage alloc] initWithPasteboard:pboard];
+    NSPasteboard *pCopy = [NSPasteboard pasteboardWithUniqueName];
+    [pCopy writeObjects:[NSArray arrayWithObject:image]];
+    GetAquaSalInstance()->mpAquaClipboard->setContinuityPasteboard(pCopy);
+    [pCopy release];
+    [image release];
+
+    KeyEvent aEvent(0, KEY_PASTE, 0);
+    mpFrame->CallCallback( SalEvent::ExternalKeyInput, &aEvent );
+    return YES;
+}
+
+-(BOOL)writeSelectionToPasteboard: (NSPasteboard *)pboard types: (NSArray<NSString *> *)types
+{
+    return FALSE;
+}
+
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame
 {
     if( pFrame == s_pMouseFrame )

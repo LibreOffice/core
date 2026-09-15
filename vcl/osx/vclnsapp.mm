@@ -63,6 +63,9 @@
 {
     (void)pNotification;
 
+    NSArray *emptyArray = @[];
+    [NSApp registerServicesMenuSendTypes:emptyArray returnTypes:NSImage.imageTypes];
+
     NSEvent* pEvent = [NSEvent otherEventWithType: NSEventTypeApplicationDefined
                                location: NSZeroPoint
                                modifierFlags: 0

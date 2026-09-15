@@ -127,6 +127,8 @@ public:
 
   void applicationDidBecomeActive(NSNotification* aNotification);
 
+  void setContinuityPasteboard(NSPasteboard *pboard);
+
 private:
 
   /* Notify all registered XClipboardListener that the clipboard content
@@ -142,6 +144,7 @@ private:
   DataFlavorMapperPtr_t mpDataFlavorMapper;
   bool mIsSystemPasteboard;
   NSPasteboard* mPasteboard;
+  NSPasteboard* mContinuityPasteboard;
   int mPasteboardChangeCount;
   EventListener* mEventListener;
 };

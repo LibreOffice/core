@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "clipboard.hxx"
+#include <osx/clipboard.hxx>
 
-#include "DataFlavorMapping.hxx"
+#include <osx/DataFlavorMapping.hxx>
 #include "OSXTransferable.hxx"
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -134,11 +134,21 @@ AquaClipboard::~AquaClipboard()
     [mEventListener disposing];
     [mEventListener release];
     [mPasteboard release];
+    if (mContinuityPasteboard)
+        [mContinuityPasteboard release];
 }
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL AquaClipboard::getContents()
 {
     osl::MutexGuard aGuard(m_aMutex);
+
+    if (mContinuityPasteboard)
+    {
+        return uno::Reference<datatransfer::XTransferable>(
+                    new OSXTransferable(mrXMimeCntFactory,
+                                        mpDataFlavorMapper,
+                                        mContinuityPasteboard));
+    }
 
     // tdf#144124 Detect if ownership has been lost
     // The shortcut assumes that lost ownership notifications from the
@@ -249,6 +259,8 @@ void AquaClipboard::applicationDidBecomeActive(NSNotification*)
             fireLostClipboardOwnershipEvent(oldOwner, oldContent);
         }
 
+        setContinuityPasteboard(nil);
+
         fireClipboardChangedEvent();
     }
 }
@@ -331,6 +343,22 @@ void SAL_CALL AquaClipboard::flushClipboard()
             }
         }
         mXClipboardContent.clear();
+    }
+    setContinuityPasteboard(nil);
+}
+
+void AquaClipboard::setContinuityPasteboard(NSPasteboard *pBoard)
+{
+    if (mContinuityPasteboard)
+    {
+        [mContinuityPasteboard release];
+        mContinuityPasteboard = nil;
+    }
+
+    if (pBoard)
+    {
+        mContinuityPasteboard = [pBoard retain];
+        fireClipboardChangedEvent();
     }
 }
 

@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include "DataFlavorMapping.hxx"
+#include <osx/DataFlavorMapping.hxx>
 #include "HtmlFmtFlt.hxx"
 #include "PictToBmpFlt.hxx"
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>

@@ -27,7 +27,7 @@
 
 #include "DragSource.hxx"
 #include "DragSourceContext.hxx"
-#include "clipboard.hxx"
+#include <osx/clipboard.hxx>
 #include "DragActionConversion.hxx"
 
 #include <osx/salframe.h>

@@ -86,7 +86,7 @@ enum class SalEvent;
 
 @end
 
-@interface SalFrameView : NSView <NSTextInputClient>
+@interface SalFrameView : NSView <NSTextInputClient, NSServicesMenuRequestor>
 {
     AquaSalFrame*       mpFrame;
     AquaA11yWrapper*    mpChildWrapper;
@@ -120,6 +120,9 @@ enum class SalEvent;
     NSTimer*        mpMouseDraggedTimer;
     NSEvent*        mpPendingMouseDraggedEvent;
 }
+-(BOOL)readSelectionFromPasteboard: (NSPasteboard *)pboard;
+-(BOOL)writeSelectionToPasteboard: (NSPasteboard *)pboard types: (NSArray<NSString *> *)types;
+-(id)validRequestorForSendType: (NSPasteboardType)sendType returnType: (NSPasteboardType)returnType;
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(void)clearMouseDraggedTimer;

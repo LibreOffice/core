@@ -29,7 +29,7 @@
 
 #include "OSXTransferable.hxx"
 
-#include "DataFlavorMapping.hxx"
+#include <osx/DataFlavorMapping.hxx>
 
 #include <quartz/utils.h>
 

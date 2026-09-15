@@ -21,7 +21,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
-#include "clipboard.hxx"
+#include <osx/clipboard.hxx>
 #include "DropTarget.hxx"
 #include "DragActionConversion.hxx"
 #include "DragSource.hxx"

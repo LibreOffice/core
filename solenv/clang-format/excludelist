@@ -14006,6 +14006,8 @@ vcl/inc/opengl/win/WinDeviceInfo.hxx
 vcl/inc/osx/a11yfactory.h
 vcl/inc/osx/a11yfocustracker.hxx
 vcl/inc/osx/a11ywrapper.h
+vcl/inc/osx/clipboard.hxx
+vcl/inc/osx/DataFlavorMapping.hxx
 vcl/inc/osx/printview.h
 vcl/inc/osx/runinmain.hxx
 vcl/inc/osx/saldata.hxx
@@ -14244,7 +14246,6 @@ vcl/ios/iosinst.cxx
 vcl/ios/salios.cxx
 vcl/null/printerinfomanager.cxx
 vcl/osx/DataFlavorMapping.cxx
-vcl/osx/DataFlavorMapping.hxx
 vcl/osx/DragSource.cxx
 vcl/osx/DragSource.hxx
 vcl/osx/DragSourceContext.cxx
@@ -14261,7 +14262,6 @@ vcl/osx/a11ylistener.cxx
 vcl/osx/a11yrolehelper.h
 vcl/osx/a11ytextattributeswrapper.h
 vcl/osx/clipboard.cxx
-vcl/osx/clipboard.hxx
 vcl/osx/cuidraw.hxx
 vcl/osx/documentfocuslistener.cxx
 vcl/osx/documentfocuslistener.hxx
