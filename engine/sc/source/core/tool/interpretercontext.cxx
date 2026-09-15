@@ -18,6 +18,7 @@
  */
 
 #include <interpretercontext.hxx>
+#include <interpreterrandom.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
@@ -37,7 +38,8 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
     , maTokens(TOKEN_CACHE_SIZE, nullptr)
     // create a per-interpreter Random Number Generator, seeded from the global rng, so we don't have
     // to lock a mutex to generate a random number
-    , aRNG(comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max()))
+    , mxRandomEngine(new ScInterpreterRandomEngine(
+          comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max())))
     , pInterpreter(nullptr)
     , mpFormatter(pFormatter)
 {

@@ -11,7 +11,6 @@
 
 #include <array>
 #include <memory>
-#include <random>
 #include <vector>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/numformat.hxx>
@@ -28,6 +27,7 @@ class Color;
 class ScDocument;
 struct ScLookupCacheMap;
 class ScInterpreter;
+struct ScInterpreterRandomEngine;
 
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
@@ -47,7 +47,7 @@ struct ScInterpreterContext
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
     std::vector<sal_uInt8> maConditions;
-    std::mt19937 aRNG;
+    std::unique_ptr<ScInterpreterRandomEngine> mxRandomEngine;
     ScInterpreter* pInterpreter;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter);

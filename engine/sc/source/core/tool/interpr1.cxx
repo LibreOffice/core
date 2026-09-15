@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <interpre.hxx>
+#include <interpreterrandom.hxx>
 
 #include <optional>
 #include <scitems.hxx>
@@ -1914,7 +1915,7 @@ void ScInterpreter::ScRandom()
     auto RandomFunc = [this]( double, double )
     {
         std::uniform_real_distribution<double> dist(0.0, 1.0);
-        return dist(mrContext.aRNG);
+        return dist(mrContext.mxRandomEngine->maEngine);
     };
     ScRandomImpl( RandomFunc, 0.0, 0.0 );
 }
@@ -1970,9 +1971,9 @@ void ScInterpreter::ScRandArray()
         {
             std::uniform_real_distribution<double> dist(fFirst, fLast);
             if (bWholeNum)
-                return floor(dist(mrContext.aRNG));
+                return floor(dist(mrContext.mxRandomEngine->maEngine));
             else
-                return dist(mrContext.aRNG);
+                return dist(mrContext.mxRandomEngine->maEngine);
         };
 
     if (nCols == 1 && nRows == 1)
@@ -2016,7 +2017,7 @@ void ScInterpreter::ScRandbetween()
     auto RandomFunc = [this]( double fFirst, double fLast )
     {
         std::uniform_real_distribution<double> dist(fFirst, fLast);
-        return floor(dist(mrContext.aRNG));
+        return floor(dist(mrContext.mxRandomEngine->maEngine));
     };
     ScRandomImpl( RandomFunc, fMin, fMax);
 }

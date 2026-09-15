@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <random>
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
