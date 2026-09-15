@@ -12,6 +12,7 @@
 #include <test/unoapi_test.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -136,6 +137,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testHangingPunctuationSurvivesASave)
     xParagraph.set(getParagraphFromShape(0, getShapeFromPage(0, 0)), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(true,
                          xParagraph->getPropertyValue(u"ParaIsHangingPunctuation"_ustr).get<bool>());
+}
+
+// A diagram keeps the name the document gave it. Every diagram was written under a name made from
+// the number it was counted with, so the name a reader shows for it changed on every save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testDiagramKeepsItsName)
+{
+    createSdImpressDoc("pptx/Bar_List.pptx");
+
+    uno::Reference<container::XNamed> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    const OUString aName = xDiagram->getName();
+    CPPUNIT_ASSERT(!aName.isEmpty());
+
+    saveAndReload(TestFilter::PPTX);
+
+    xDiagram.set(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(aName, xDiagram->getName());
 }
 
 // The pages of a Draw document keep their identity across sessions the same way the slides of

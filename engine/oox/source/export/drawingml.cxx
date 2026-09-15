@@ -7405,7 +7405,15 @@ void DrawingML::WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rX
     // but can be different from diagram's own id
     const sal_Int32 nExpShapeId = nShapeId != -1 ? nShapeId : nDiagramId;
     pDocPrAttrList->add(XML_id, OString::number(nExpShapeId));
+    // A diagram that was given a name keeps it. One that has none is named after its number,
+    // which is what a reader shows for it.
     OString sName = "Diagram" + OString::number(nDiagramId);
+    if (cpo::uno::Reference<css::container::XNamed> xNamed{ rXShape, cpo::uno::UNO_QUERY })
+    {
+        const OUString aShapeName = xNamed->getName();
+        if (!aShapeName.isEmpty())
+            sName = OUStringToOString(aShapeName, RTL_TEXTENCODING_UTF8);
+    }
     pDocPrAttrList->add(XML_name, sName);
 
     if (GetDocumentType() == DOCUMENT_DOCX)
