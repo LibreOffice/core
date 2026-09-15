@@ -3321,7 +3321,12 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 
     // non visual shape properties
     mpFS->startElementNS(XML_p, XML_nvSpPr);
-    const OString aPlaceholderID("PlaceHolder " + OString::number(mnShapeIdMax++));
+    // A placeholder that was given a name keeps it. One that has none is named after the number
+    // it was counted with, which is what a reader shows for it.
+    const OUString aShapeName = GetShapeName(xShape);
+    const OString aPlaceholderID
+        = aShapeName.isEmpty() ? "PlaceHolder " + OString::number(mnShapeIdMax++)
+                               : OUStringToOString(aShapeName, RTL_TEXTENCODING_UTF8);
     WriteNonVisualDrawingProperties(xShape, aPlaceholderID.getStr());
     mpFS->startElementNS(XML_p, XML_cNvSpPr);
     mpFS->singleElementNS(XML_a, XML_spLocks, XML_noGrp, "1");

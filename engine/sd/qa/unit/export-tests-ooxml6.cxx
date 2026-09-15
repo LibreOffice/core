@@ -155,6 +155,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testDiagramKeepsItsName)
     CPPUNIT_ASSERT_EQUAL(aName, xDiagram->getName());
 }
 
+// A placeholder keeps the name the document gave it. Every placeholder was written under a name
+// made from the number it was counted with, so the name a reader shows for the title of a slide
+// changed to a generic one on every save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPlaceholderKeepsItsName)
+{
+    createSdImpressDoc("pptx/3columns.pptx");
+
+    uno::Reference<container::XNamed> xPlaceholder(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    const OUString aName = xPlaceholder->getName();
+    CPPUNIT_ASSERT(!aName.isEmpty());
+    CPPUNIT_ASSERT(!aName.startsWith("PlaceHolder"));
+
+    saveAndReload(TestFilter::PPTX);
+
+    xPlaceholder.set(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(aName, xPlaceholder->getName());
+}
+
 // The pages of a Draw document keep their identity across sessions the same way the slides of
 // a presentation do.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)
