@@ -3931,7 +3931,7 @@
                 <desc>Specifies whether a numbered or bulleted text is created automatically while typing.</desc>
                 <label>Bulleted and numbered lists</label>
               </info>
-              <value>false</value>
+              <value>true</value>
             </prop>
             <group oor:name="SpecialCharacter">
               <info>
