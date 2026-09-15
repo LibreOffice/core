@@ -18,6 +18,7 @@
  */
 
 #include <formel.hxx>
+#include <document.hxx>
 
 #include <osl/diagnose.h>
 
