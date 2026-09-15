@@ -21,13 +21,15 @@
 
 #include <formula/token.hxx>
 #include <rtl/ref.hxx>
-#include "document.hxx"
+#include "sheetlimits.hxx"
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"
 #include "address.hxx"
 #include "global.hxx"
 #include <formula/tokenarray.hxx>
+
+class ScDocument;
 
 namespace sc {
 
