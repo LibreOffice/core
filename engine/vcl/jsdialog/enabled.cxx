@@ -521,7 +521,6 @@ constexpr auto SidebarList
         { u"svx/ui/accessibilitychecklevel.ui" },
         { u"svx/ui/defaultshapespanel.ui" },
         { u"svx/ui/inspectortextpanel.ui" },
-        { u"svx/ui/mediaplayback.ui" },
         { u"svx/ui/sidebararea.ui" },
         { u"svx/ui/sidebareffect.ui" },
         { u"svx/ui/sidebarempty.ui" },
@@ -879,12 +878,8 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
 
         if (docType != COKitDocumentType::PRESENTATION && docType != COKitDocumentType::DRAWING)
         {
-            // Skip this one, in practice it appears in draw/impress
-            // TODO: it should probably be made to appear in writer/calc too
-            if (entry == u"svx/ui/mediaplayback.ui")
-                continue;
             // Skip this one, its context means it can only appear in draw/impress
-            else if (entry == u"svx/ui/defaultshapespanel.ui")
+            if (entry == u"svx/ui/defaultshapespanel.ui")
                 continue;
             // Skip this one, its context means it can only appear in draw/impress
             else if (entry == u"svx/ui/sidebarlists.ui")

@@ -87,7 +87,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/linkwarndialog \
 	svx/uiconfig/ui/measurewidthbar \
 	svx/uiconfig/ui/medialine \
-	svx/uiconfig/ui/mediaplayback \
 	svx/uiconfig/ui/mediawindow \
 	svx/uiconfig/ui/metricfieldbox \
 	svx/uiconfig/ui/namespacedialog \
