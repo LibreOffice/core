@@ -5821,7 +5821,7 @@
           </desc>
           <label>Defines the maximum number of lines visible in a ListBox.</label>
         </info>
-        <value>25</value>
+        <value>11</value>
       </prop>
       <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
         <info>
