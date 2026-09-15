@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<!-- Hide MediaPlaybackPanel on sidebar. It does not work in Online. Video playback controls are implemented by the browser.  -->
-<item oor:path="/org.openoffice.Office.UI.Sidebar/Content/PanelList/org.openoffice.Office.UI.Sidebar:Panel['MediaPlaybackPanel']"><prop oor:name="ContextList" oor:op="fuse"><value><it>any, default, hidden</it></value></prop></item>
-
 <!-- CJK/CTL settings -->
 <item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="VerticalText" oor:op="fuse"><value>true</value></prop></item>
 <item oor:path="/org.openoffice.Office.Common/I18N/CJK"><prop oor:name="Ruby" oor:op="fuse"><value>true</value></prop></item>
