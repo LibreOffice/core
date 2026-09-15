@@ -53,6 +53,8 @@ public:
         PICT
     };
     void resolve(RTFShape& rShape, bool bClose, ShapeOrPict shapeOrPict);
+    /// Send the start of a shape to the dmapper. It stays open there until its end is sent.
+    void open(css::uno::Reference<css::drawing::XShape> const& xShape);
     void close();
     void append(std::u16string_view aKey, std::u16string_view aValue);
     /// Append property on the current parent.
@@ -78,6 +80,7 @@ public:
     void popParent();
     css::uno::Reference<css::drawing::XShape> const& getCurrentShape() const { return m_xShape; }
     bool isFakePict() const { return m_bFakePict; }
+    bool isOpenInMapper() const { return m_bOpenInMapper; }
     bool isTextGraphicObject() const { return m_bTextGraphicObject; }
 
 private:
@@ -98,6 +101,8 @@ private:
     bool m_bTextGraphicObject;
     /// if inside \pict, but actually it's a shape (not a picture)
     bool m_bFakePict;
+    /// If a shape start has gone to the dmapper and its end has not.
+    bool m_bOpenInMapper;
     std::stack<writerfilter::dmapper::GraphicZOrderHelper> m_aGraphicZOrderHelpers;
 };
 } // namespace writerfilter::rtftok

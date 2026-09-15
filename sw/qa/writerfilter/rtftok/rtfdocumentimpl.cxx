@@ -134,6 +134,20 @@ CPPUNIT_TEST_FIXTURE(Test, testImageSizeInShapeText)
     // i.e. the size of the icon was inherited from the containing shape, losing the own size.
     CPPUNIT_ASSERT_EQUAL(nExpected, rImageSize.GetWidth());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testShapeInHeaderTableRow)
+{
+    // Given a header with a shape in a table row, and a paragraph mark inside the shape text:
+    // When loading this document:
+    createSwDoc("shape-in-header-table-row.rtf");
+
+    // Then make sure the document loads and the shape is there:
+    // Without the accompanying fix in place, this test would have failed with an assertion
+    // failure in DomainMapper_Impl::substream(), because the header left the context stack one
+    // level deeper than it found it.
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSpzFrameFormats()->size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
