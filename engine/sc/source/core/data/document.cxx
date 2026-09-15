@@ -222,6 +222,12 @@ bool ScDocument::SetCodeName( SCTAB nTab, const OUString& rName )
     return false;
 }
 
+bool ScDocument::IsCodeNameStated( SCTAB nTab ) const
+{
+    const ScTable* pTable = FetchTable(nTab);
+    return pTable && pTable->IsCodeNameStated();
+}
+
 bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))

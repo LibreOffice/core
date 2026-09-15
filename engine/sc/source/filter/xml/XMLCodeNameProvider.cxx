@@ -61,20 +61,29 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
 {
 }
 
+namespace
+{
+/// The code name a document gives the sheet, or nothing where it gives none.
+OUString lcl_GetStatedCodeName(const ScDocument* pDoc, SCTAB nTab)
+{
+    OUString aCodeName;
+    if (pDoc->IsCodeNameStated(nTab))
+        pDoc->GetCodeName(nTab, aCodeName);
+    return aCodeName;
+}
+}
+
 bool XMLCodeNameProvider::hasByName( const OUString& aName )
 {
     if( aName == gsDocName )
         return !mpDoc->GetCodeName().isEmpty();
 
     SCTAB nCount = mpDoc->GetTableCount();
-    OUString sSheetName, sCodeName;
+    OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
-        {
-            mpDoc->GetCodeName( i, sCodeName );
-            return !sCodeName.isEmpty();
-        }
+            return !lcl_GetStatedCodeName( mpDoc, i ).isEmpty();
     }
 
     return false;
@@ -91,13 +100,13 @@ cpo::uno::Any XMLCodeNameProvider::getByName( const OUString& aName )
     }
 
     SCTAB nCount = mpDoc->GetTableCount();
-    OUString sSheetName, sCodeName;
+    OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
         {
-            mpDoc->GetCodeName( i, sCodeName );
-            aRet <<= cpo::uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sCodeName) };
+            aRet <<= cpo::uno::Sequence{ comphelper::makePropertyValue(
+                gsCodeNameProp, lcl_GetStatedCodeName( mpDoc, i )) };
             return aRet;
         }
     }
@@ -114,15 +123,11 @@ cpo::uno::Sequence< OUString > XMLCodeNameProvider::getElementNames(  )
     if( !mpDoc->GetCodeName().isEmpty() )
         aNames.push_back(gsDocName);
 
-    OUString sSheetName, sCodeName;
+    OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        mpDoc->GetCodeName( i, sCodeName );
-        if (!sCodeName.isEmpty())
-        {
-            if( mpDoc->GetName( i, sSheetName ) )
-                aNames.push_back(sSheetName);
-        }
+        if (!lcl_GetStatedCodeName( mpDoc, i ).isEmpty() && mpDoc->GetName( i, sSheetName ))
+            aNames.push_back(sSheetName);
     }
 
     return comphelper::containerToSequence(aNames);
@@ -139,11 +144,10 @@ bool XMLCodeNameProvider::hasElements()
         return true;
 
     SCTAB nCount = mpDoc->GetTableCount();
-    OUString sSheetName, sCodeName;
+    OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        mpDoc->GetCodeName( i, sCodeName );
-        if (!sCodeName.isEmpty() && mpDoc->GetName(i, sSheetName))
+        if (!lcl_GetStatedCodeName( mpDoc, i ).isEmpty() && mpDoc->GetName(i, sSheetName))
             return true;
     }
 

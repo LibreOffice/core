@@ -254,6 +254,9 @@ private:
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
     bool            mbTotalsRowBelow:1;
+    /// True where the document gives the sheet a code name, false where the code name is still
+    /// the name the sheet was made with.
+    bool            bCodeNameStated:1;
 
     sc::SheetViewID mnSheetViewID = sc::InvalidSheetViewID;
     ScTable* mpSheetViewFor = nullptr;
@@ -404,7 +407,9 @@ public:
     const ScDBData* GetAnonymousDBData() const { return pDBDataNoName.get(); }
 
     const OUString& GetCodeName() const { return aCodeName; }
-    void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
+    bool        IsCodeNameStated() const { return bCodeNameStated; }
+    void        SetCodeName( const OUString& rNewName )
+                { aCodeName = rNewName; bCodeNameStated = true; }
 
     bool        GetTotalsRowBelow() const { return mbTotalsRowBelow; }
     void        SetTotalsRowBelow( bool bNewVal ) { mbTotalsRowBelow = bNewVal; }

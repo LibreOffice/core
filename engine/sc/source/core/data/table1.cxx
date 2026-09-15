@@ -279,6 +279,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     mbPageBreaksValid(false),
     mbForceBreaks(false),
     mbTotalsRowBelow(true),
+    bCodeNameStated(false),
     bStreamValid(false),
     mpSheetViewManager(new sc::SheetViewManager())
 {

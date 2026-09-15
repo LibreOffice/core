@@ -1081,6 +1081,7 @@ public:
     SC_DLLPUBLIC bool GetHashCode( SCTAB nTab, sal_Int64& rHashCode) const;
     SC_DLLPUBLIC bool GetName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
+    SC_DLLPUBLIC bool IsCodeNameStated( SCTAB nTab ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
     SC_DLLPUBLIC bool GetTotalsRowBelow( SCTAB nTab ) const;
     SC_DLLPUBLIC bool SetTotalsRowBelow( SCTAB nTab, bool bVal );

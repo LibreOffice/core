@@ -367,6 +367,16 @@ XclExpXmlSheetPr::XclExpXmlSheetPr( bool bFitToPages, SCTAB nScTab, const Color&
 void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    // The name a macro addresses the sheet by, which is not the name on its tab and does not
+    // change when that one is renamed. Only a name the document gives the sheet is written,
+    // since a sheet that was given none carries the name it was made with.
+    OUString aCodeName;
+    ScDocument& rDoc = rStrm.GetRoot().GetDoc();
+    if (rDoc.IsCodeNameStated(mnScTab))
+        rDoc.GetCodeName(mnScTab, aCodeName);
+    const OString aCodeNameUtf8 = aCodeName.toUtf8();
+
     rWorksheet->startElement( XML_sheetPr,
             // OOXTODO: XML_syncHorizontal,
             // OOXTODO: XML_syncVertical,
@@ -374,7 +384,7 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_transitionEvaluation,
             // OOXTODO: XML_transitionEntry,
             // OOXTODO: XML_published,
-            // OOXTODO: XML_codeName,
+            XML_codeName, aCodeNameUtf8.isEmpty() ? nullptr : aCodeNameUtf8.getStr(),
             XML_filterMode, mpManager ? ToPsz(mpManager->HasFilterMode(mnScTab)) : nullptr
             // OOXTODO: XML_enableFormatConditionsCalculation
     );

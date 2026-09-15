@@ -1370,6 +1370,52 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testNamedRangeErrorReferenceXLSX)
                            "localSheetId");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testSheetCodeName)
+{
+    createScDoc("xlsx/MissingPathExternal.xlsx");
+
+    OUString aCodeName;
+    CPPUNIT_ASSERT(getScDoc()->GetCodeName(0, aCodeName));
+    CPPUNIT_ASSERT_EQUAL(u"Tabelle4"_ustr, aCodeName);
+
+    saveAndReload(TestFilter::XLSX);
+
+    OUString aReloadedCodeName;
+    CPPUNIT_ASSERT(getScDoc()->GetCodeName(0, aReloadedCodeName));
+    CPPUNIT_ASSERT_EQUAL(aCodeName, aReloadedCodeName);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testSheetWithoutCodeName)
+{
+    // A sheet that the document gives no code name to is written without one, whatever its tab
+    // says, because the name on the tab is free to read as a sentence and to be taken by another
+    // sheet once this one is renamed.
+    createScDoc();
+    getScDoc()->InsertTab(1, u"My Sheet"_ustr);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet2.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr[@codeName]", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testSheetWithoutCodeNameThroughODS)
+{
+    // A sheet that the document gives no code name to does not pick one up on the way through
+    // ODS, where the name it was made with would otherwise be written and read back as a name
+    // the document gave it.
+    createScDoc();
+    getScDoc()->InsertTab(1, u"My Sheet"_ustr);
+
+    saveAndReload(TestFilter::ODS);
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet2.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr[@codeName]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
