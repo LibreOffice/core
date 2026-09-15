@@ -76,20 +76,21 @@ executeErrorDialog(
     switch (eClassification)
     {
         case task::InteractionClassification_ERROR:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear()));
+            xBox = Application::CreateMessageDialog(
+                pParent, VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear());
             break;
         case task::InteractionClassification_WARNING:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear()));
+            xBox = Application::CreateMessageDialog(
+                pParent, VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear());
             break;
         case task::InteractionClassification_INFO:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear()));
+            xBox = Application::CreateMessageDialog(
+                pParent, VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear());
             break;
         case task::InteractionClassification_QUERY:
-            xBox.reset(Application::CreateMessageDialog(pParent,
-                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear()));
+            xBox = Application::CreateMessageDialog(pParent, VclMessageType::Question,
+                                                    VclButtonsType::NONE,
+                                                    aText.makeStringAndClear());
             break;
         default:
             assert(false);

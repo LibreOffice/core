@@ -944,15 +944,14 @@ std::unique_ptr<weld::Builder> QtInstance::CreateInterimBuilder(vcl::Window* pPa
     return std::make_unique<QtInstanceBuilder>(pWidget, rUIRoot, rUIFile);
 }
 
-weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
-                                                     VclMessageType eMessageType,
-                                                     VclButtonsType eButtonsType,
-                                                     const OUString& rPrimaryMessage)
+std::unique_ptr<weld::MessageDialog>
+QtInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                                VclButtonsType eButtonsType, const OUString& rPrimaryMessage)
 {
     SolarMutexGuard g;
     if (!IsMainThread())
     {
-        weld::MessageDialog* pDialog = nullptr;
+        std::unique_ptr<weld::MessageDialog> pDialog;
         RunInMainThread([&] {
             pDialog = CreateMessageDialog(pParent, eMessageType, eButtonsType, rPrimaryMessage);
         });
@@ -971,7 +970,8 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
         pMessageBox->setText(toQString(rPrimaryMessage));
         pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
         pMessageBox->setWindowTitle(toQString(GetStandardMessageDialogText(eMessageType)));
-        QtInstanceMessageDialog* pDialog = new QtInstanceMessageDialog(pMessageBox);
+        std::unique_ptr<QtInstanceMessageDialog> pDialog
+            = std::make_unique<QtInstanceMessageDialog>(pMessageBox);
         pDialog->addStandardButtons(eButtonsType);
         return pDialog;
     }

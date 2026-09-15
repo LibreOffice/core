@@ -56,6 +56,7 @@
 #include <vcl/settings.hxx>
 #include <slider.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <iconview.hxx>
@@ -199,8 +200,9 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
                                               bAllowCycleFocusOut);
 }
 
-weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage)
+std::unique_ptr<weld::MessageDialog>
+Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                                 VclButtonsType eButtonType, const OUString& rPrimaryMessage)
 {
     return GetSalInstance()->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }

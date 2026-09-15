@@ -92,16 +92,15 @@ std::unique_ptr<weld::Builder> SalInstance::CreateInterimBuilder(vcl::Window* pP
     return std::make_unique<SalInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }
 
-weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
-                                                      VclMessageType eMessageType,
-                                                      VclButtonsType eButtonsType,
-                                                      const OUString& rPrimaryMessage)
+std::unique_ptr<weld::MessageDialog>
+SalInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                                 VclButtonsType eButtonsType, const OUString& rPrimaryMessage)
 {
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                  eButtonsType);
-    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
+    return std::make_unique<SalInstanceMessageDialog>(xMessageDialog, nullptr, true);
 }
 
 std::unique_ptr<weld::ColorChooserDialog>

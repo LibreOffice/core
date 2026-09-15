@@ -285,7 +285,9 @@ public:
                                                                 const OUString& rUIRoot,
                                                                 const OUString& rUIFile,
                                                                 bool bAllowCycleFocusOut) override;
-    virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
+    virtual std::unique_ptr<weld::MessageDialog>
+    CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                        VclButtonsType eButtonType, const OUString& rPrimaryMessage) override;
     std::unique_ptr<weld::ColorChooserDialog>
     CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;

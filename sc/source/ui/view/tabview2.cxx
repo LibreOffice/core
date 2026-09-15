@@ -1661,9 +1661,8 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
         }
     }
 
-    m_xMessageBox.reset(Application::CreateMessageDialog(pParent,
-                                                         VclMessageType::Info, VclButtonsType::Ok,
-                                                         ScResId(pGlobStrId)));
+    m_xMessageBox = Application::CreateMessageDialog(pParent, VclMessageType::Info,
+                                                     VclButtonsType::Ok, ScResId(pGlobStrId));
 
     if (comphelper::LibreOfficeKit::isActive())
         m_xMessageBox->SetInstallLOKNotifierHdl(LINK(this, ScTabView, InstallLOKNotifierHdl));
