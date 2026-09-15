@@ -21,8 +21,8 @@ $(call gb_Output_announce,$(subst $(gb_CustomTarget_workdir)/filter/source/docbo
 $(call gb_Trace_StartRange,$(subst $(gb_CustomTarget_workdir)/filter/source/docbook/,,$@),ZIP)
 cd $(dir $<) && \
 $(call gb_Helper_wsl_path,\
-$(WSL) zip -q0X -b . --filesync --must-match $@ mimetype && \
-$(WSL) zip -qrX -b . --must-match $@ $(subst $(dir $<),,$^)) -x mimetype
+$(WSL) zip -q0X $(call gb_Helper_zip_temporary_directory,.) --filesync --must-match $@ mimetype && \
+$(WSL) zip -qrX $(call gb_Helper_zip_temporary_directory,.) --must-match $@ $(subst $(dir $<),,$^)) -x mimetype
 $(call gb_Trace_EndRange,$(subst $(gb_CustomTarget_workdir)/filter/source/docbook/,,$@),ZIP)
 endef
 

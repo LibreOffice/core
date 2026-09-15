@@ -104,6 +104,17 @@ gb_Helper_wsl_path=$(1)
 gb_Helper_cyg_path=$(1)
 endif
 
+# Info-ZIP builds an archive in a temporary file and moves it into place when it is complete.
+# The Windows build of zip chooses that temporary name without an atomic check, so on Windows each
+# target writes its temporary file in a directory of its own. Every other platform lets zip build
+# the archive where it stands, which gives it the same permissions as any other file the build
+# creates.
+ifeq ($(OS),WNT)
+gb_Helper_zip_temporary_directory = -b $(1)
+else
+gb_Helper_zip_temporary_directory =
+endif
+
 define gb_Helper_make_clean_target
 gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 

@@ -283,8 +283,8 @@ $(gb_CustomTarget_workdir)/extras/source/autocorr/acor_%.dat : \
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		$(autocorr_PYTHONCOMMAND) $(SRCDIR)/bin/check-autocorr.py DocumentList.xml && \
-		$(call gb_Helper_wsl_path,$(WSL) zip -q0X -b . --filesync --must-match $@ mimetype) && \
-		$(call gb_Helper_wsl_path,$(WSL) zip -qrX -b . --must-match $@ $(call extras_AUTOCORR_XMLFILES_LANG,$(call extras_AUTOCORR_SHORTLANG,$*))) \
+		$(call gb_Helper_wsl_path,$(WSL) zip -q0X $(call gb_Helper_zip_temporary_directory,.) --filesync --must-match $@ mimetype) && \
+		$(call gb_Helper_wsl_path,$(WSL) zip -qrX $(call gb_Helper_zip_temporary_directory,.) --must-match $@ $(call extras_AUTOCORR_XMLFILES_LANG,$(call extras_AUTOCORR_SHORTLANG,$*))) \
 	)
 	$(call gb_Trace_EndRange,autocorr/acor_$*.dat,ZIP)
 
