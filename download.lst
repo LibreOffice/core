@@ -262,8 +262,8 @@ FONT_SCHEHERAZADE_TARBALL := Scheherazade-2.100.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FREEHAND_SHA256SUM := a431d78767e5aa27ade7c6d1b7a11a9f1848cb4b9260bf0a6a44689553ecccfe
-FREEHAND_TARBALL := libfreehand-0.1.3.tar.xz
+FREEHAND_SHA256SUM := 350b10d24a76d7e8c8ae98b74c2d432a2c8ddec08935d09856d20b695a35e600
+FREEHAND_TARBALL := libfreehand-0.1.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
