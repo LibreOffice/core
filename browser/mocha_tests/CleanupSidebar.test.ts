@@ -77,6 +77,13 @@ describe('CleanupSidebar', function () {
 			assert.equal(isCleanupRow(unknown), false);
 		});
 
+		it('is accepted when the finding is a cropped image', function () {
+			const cropped = Object.assign({}, finding, {
+				category: 'croppedImage',
+			});
+			assert.equal(isCleanupRow(cropped), true);
+		});
+
 		it('is refused when it is not an object at all', function () {
 			assert.equal(isCleanupRow(null), false);
 			assert.equal(isCleanupRow('Slide 2'), false);
@@ -236,6 +243,21 @@ describe('CleanupSidebar', function () {
 		canFix: false,
 	};
 
+	const croppedRow = {
+		id: 5,
+		category: 'croppedImage',
+		slide: 2,
+		imageNumber: 0,
+		dpi: 0,
+		hiddenPercent: 62,
+		name: '',
+		currentBytes: 921600,
+		saving: 400000,
+		measured: true,
+		canGoTo: true,
+		canFix: true,
+	};
+
 	describe('the deck before a scan', function () {
 		const deck = cleanupDeckJSON(newCleanupPanelState());
 
@@ -330,6 +352,25 @@ describe('CleanupSidebar', function () {
 			);
 			assert.equal(isShown(findWidget(deck, 'cleanup-fix-all')), true);
 			assert.equal(isShown(findWidget(deck, 'cleanup-message')), false);
+		});
+	});
+
+	describe('the detail line of a cropped image', function () {
+		it('says what the picture takes and how much of it is hidden', function () {
+			const deck = cleanupDeckJSON(stateWithRows([croppedRow]));
+			assert.equal(
+				findWidget(deck, 'cleanup-row-5-detail').text,
+				'900 KB, 62% cropped away',
+			);
+		});
+
+		it('says the share alone while the picture has no size of its own', function () {
+			const noBytes = Object.assign({}, croppedRow, { currentBytes: 0 });
+			const deck = cleanupDeckJSON(stateWithRows([noBytes]));
+			assert.equal(
+				findWidget(deck, 'cleanup-row-5-detail').text,
+				'62% cropped away',
+			);
 		});
 	});
 

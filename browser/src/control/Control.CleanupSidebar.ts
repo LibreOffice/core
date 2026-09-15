@@ -28,9 +28,10 @@
 
 declare var JSDialog: any;
 
-/// The five kinds of finding, in the order the kit lists them.
+/// The kinds of finding, in the order the kit lists them.
 type CleanupCategory =
 	| 'image'
+	| 'croppedImage'
 	| 'hiddenSlide'
 	| 'unusedMaster'
 	| 'notes'
@@ -150,6 +151,7 @@ interface CleanupPanelState {
 
 const CLEANUP_CATEGORIES: CleanupCategory[] = [
 	'image',
+	'croppedImage',
 	'hiddenSlide',
 	'unusedMaster',
 	'notes',
@@ -159,6 +161,7 @@ const CLEANUP_CATEGORIES: CleanupCategory[] = [
 /// The part of a group's widget ids that names its category.
 const CLEANUP_GROUP_SLUG: { [key in CleanupCategory]: string } = {
 	image: 'image',
+	croppedImage: 'cropped-image',
 	hiddenSlide: 'hidden-slide',
 	unusedMaster: 'unused-master',
 	notes: 'notes',
@@ -326,6 +329,7 @@ function rowTextFor(row: CleanupRow): string {
 
 	switch (row.category) {
 		case 'image':
+		case 'croppedImage':
 			if (row.slide < 0)
 				return row.imageNumber <= 0
 					? _('Master slide')
@@ -365,6 +369,15 @@ function rowDetailFor(row: CleanupRow): string {
 			return _('%1 DPI').replace('%1', String(row.dpi));
 
 		return _('%1 at %2 DPI').replace('%1', size).replace('%2', String(row.dpi));
+	}
+
+	if (row.category === 'croppedImage') {
+		if (row.currentBytes === 0)
+			return _('%1% cropped away').replace('%1', String(row.hiddenPercent));
+
+		return _('%1, %2% cropped away')
+			.replace('%1', size)
+			.replace('%2', String(row.hiddenPercent));
 	}
 
 	return '';
@@ -472,6 +485,8 @@ function headingFor(
 			return _('Images over %1 DPI (%2)')
 				.replace('%1', String(state.options.resolution))
 				.replace('%2', String(count));
+		case 'croppedImage':
+			return _('Cropped images (%1)').replace('%1', String(count));
 		case 'hiddenSlide':
 			return _('Hidden slides (%1)').replace('%1', String(count));
 		case 'unusedMaster':
