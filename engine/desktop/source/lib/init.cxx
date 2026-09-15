@@ -10400,12 +10400,15 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
             osl::FileBase::getTempDirURL(aNewTemp);
             aOptions.SetTempPath(aNewTemp);
             {
+                // The work path has to be somewhere that exists inside the jail
                 const char *pWorkPath = getenv("KIT_WORKDIR");
                 if (pWorkPath)
                 {
                     OString sWorkPath(pWorkPath);
                     aOptions.SetWorkPath(OStringToOUString(sWorkPath, RTL_TEXTENCODING_UTF8));
                 }
+                else
+                    aOptions.SetWorkPath(aNewTemp);
             }
             desktop::Desktop::CreateTemporaryDirectory();
 
