@@ -2161,14 +2161,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPictureTagOrder)
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet3.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:picture", 1);
-    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 1);
-    assertXPath(pSheet, "/x:worksheet/x:picture/following-sibling::mc:AlternateContent", 1);
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls", 1);
+    assertXPath(pSheet,
+                "/x:worksheet/x:picture/following-sibling::mc:AlternateContent"
+                "/mc:Choice/x:controls",
+                1);
 
     pSheet = parseExport(u"xl/worksheets/sheet4.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:picture", 1);
-    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 1);
-    assertXPath(pSheet, "/x:worksheet/x:picture/following-sibling::mc:AlternateContent", 1);
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls", 1);
+    assertXPath(pSheet,
+                "/x:worksheet/x:picture/following-sibling::mc:AlternateContent"
+                "/mc:Choice/x:controls",
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testfdo55572)

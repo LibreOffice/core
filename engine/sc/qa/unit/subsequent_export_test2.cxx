@@ -75,9 +75,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170285_controlsInGroupShape)
     save(TestFilter::XLSM);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     // without the fix, this was 0
-    assertXPath(pDoc, "//mc:AlternateContent[1]/mc:Choice/x:control", "shapeId", u"1001");
+    assertXPath(pDoc, "//x:controls/*[1]/mc:Choice/x:control", "shapeId", u"1001");
     // without the fix, this was also 0
-    assertXPath(pDoc, "//mc:AlternateContent[2]/mc:Choice/x:control", "shapeId", u"1002");
+    assertXPath(pDoc, "//x:controls/*[2]/mc:Choice/x:control", "shapeId", u"1002");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
@@ -1034,8 +1034,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134769)
     assertXPath(pSheet, "/x:worksheet/x:drawing", "id", u"rId2");
     assertXPath(pSheet, "/x:worksheet/x:legacyDrawing", "id", u"rId3");
     assertXPath(pSheet,
-                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control",
+                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                "mc:AlternateContent/mc:Choice/x:control",
                 "id", u"rId4");
 }
 
@@ -1048,12 +1048,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf106181)
     CPPUNIT_ASSERT(pSheet);
 
     assertXPath(pSheet,
-                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control",
+                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                "mc:AlternateContent/mc:Choice/x:control",
                 "name", u"Check Box");
     assertXPath(pSheet,
-                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control/x:controlPr",
+                "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                "mc:AlternateContent/mc:Choice/x:control/x:controlPr",
                 "altText", u"Check Box 1");
 
     xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
@@ -1498,21 +1498,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf161365)
     CPPUNIT_ASSERT(pSheet1);
 
     assertXPathContent(pSheet1,
-                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:col",
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                       "mc:AlternateContent/mc:Choice/x:control/"
+                       "x:controlPr/x:anchor/x:from/xdr:col",
                        u"1");
     assertXPathContent(pSheet1,
-                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:row",
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                       "mc:AlternateContent/mc:Choice/x:control/"
+                       "x:controlPr/x:anchor/x:from/xdr:row",
                        u"2");
 
     assertXPathContent(pSheet1,
-                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                       "mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:col",
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                       "mc:AlternateContent/mc:Choice/x:control/"
+                       "x:controlPr/x:anchor/x:to/xdr:col",
                        u"2");
     assertXPathContent(pSheet1,
-                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                       "mc:Choice/x:control/x:controlPr/x:anchor/x:to/xdr:row",
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                       "mc:AlternateContent/mc:Choice/x:control/"
+                       "x:controlPr/x:anchor/x:to/xdr:row",
                        u"3");
 
     xmlDocUniquePtr pDrawing1 = parseExport(u"xl/drawings/drawing1.xml"_ustr);

@@ -2355,8 +2355,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnBounds)
     pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc,
-                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:col",
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/"
+                       "mc:AlternateContent/mc:Choice/x:control/"
+                       "x:controlPr/x:anchor/x:from/xdr:col",
                        u"0"); // earlier -1
 }
 

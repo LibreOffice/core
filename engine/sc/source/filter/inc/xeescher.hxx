@@ -191,6 +191,7 @@ private:
     sal_uInt16          mnEntryCount;   /// Number of entries in source range.
 protected:
     ScAddress mxCellLinkAddress;
+    ScRange maSrcRangeAddress;      /// Cell range the control reads its entries from.
 };
 
 class XclMacroHelper : public XclExpControlHelper
@@ -279,6 +280,15 @@ public:
 
     OUString SaveControlPropertiesXml(XclExpXmlStream& rStrm) const;
     void SaveSheetXml(XclExpXmlStream& rStrm, const OUString& aIdFormControlPr) const;
+
+    /** Returns the address of the linked cell in the style a formula takes, or nothing. */
+    OUString            GetCellLinkFormula() const;
+    /** Returns the address of the source range in the style a formula takes, or nothing. */
+    OUString            GetSourceRangeFormula() const;
+    /** True for a list and for a dropped down list, which keep their look in a field of their own. */
+    bool                IsAList() const;
+    /** True where the control is drawn flat rather than raised. */
+    bool                IsFlat() const;
 
     void setShapeId(sal_Int32 aShapeId);
 

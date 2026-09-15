@@ -256,6 +256,70 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
     }
 }
 
+/// The name the legacy drawing gives a control of the passed type.
+const char* lcl_GetVmlObjectType(sal_uInt16 nObjType)
+{
+    switch (nObjType)
+    {
+        case EXC_OBJTYPE_BUTTON:
+            return "Button";
+        case EXC_OBJTYPE_CHECKBOX:
+            return "Checkbox";
+        case EXC_OBJTYPE_OPTIONBUTTON:
+            return "Radio";
+        case EXC_OBJTYPE_EDIT:
+            return "Edit";
+        case EXC_OBJTYPE_LABEL:
+            return "Label";
+        case EXC_OBJTYPE_DIALOG:
+            return "Dialog";
+        case EXC_OBJTYPE_SPIN:
+            return "Spin";
+        case EXC_OBJTYPE_SCROLLBAR:
+            return "Scroll";
+        case EXC_OBJTYPE_LISTBOX:
+            return "List";
+        case EXC_OBJTYPE_GROUPBOX:
+            return "GBox";
+        case EXC_OBJTYPE_DROPDOWN:
+            return "Drop";
+        default:
+            return "Shape";
+    }
+}
+
+/// The name the 2009 control properties give a control of the passed type.
+const char* lcl_GetControlPropertiesObjectType(sal_uInt16 nObjType)
+{
+    switch (nObjType)
+    {
+        case EXC_OBJTYPE_BUTTON:
+            return "Button";
+        case EXC_OBJTYPE_CHECKBOX:
+            return "CheckBox";
+        case EXC_OBJTYPE_OPTIONBUTTON:
+            return "Radio";
+        case EXC_OBJTYPE_EDIT:
+            return "Edit";
+        case EXC_OBJTYPE_LABEL:
+            return "Label";
+        case EXC_OBJTYPE_DIALOG:
+            return "Dialog";
+        case EXC_OBJTYPE_SPIN:
+            return "Spin";
+        case EXC_OBJTYPE_SCROLLBAR:
+            return "Scroll";
+        case EXC_OBJTYPE_LISTBOX:
+            return "List";
+        case EXC_OBJTYPE_GROUPBOX:
+            return "GBox";
+        case EXC_OBJTYPE_DROPDOWN:
+            return "Drop";
+        default:
+            return nullptr;
+    }
+}
+
 const char* lcl_GetVmlHorAlign(sal_uInt8 nHorAlign)
 {
     switch (nHorAlign)
@@ -557,6 +621,7 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape 
     mxCellLink.reset();
     mxCellLinkAddress.SetInvalid();
     mxSrcRange.reset();
+    maSrcRangeAddress.SetInvalid();
     mnEntryCount = 0;
 
     // get control model
@@ -600,7 +665,10 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape 
         ScRange aSrcRange;
         ScUnoConversion::FillScRange( aSrcRange, aApiRange );
         if( (aSrcRange.aStart.Tab() == aSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( aSrcRange.aStart.Tab() ) )
+        {
+            maSrcRangeAddress = aSrcRange;
             mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aSrcRange );
+        }
         mnEntryCount = static_cast< sal_uInt16 >( aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1 );
     }
 }
@@ -1407,6 +1475,17 @@ public:
     sal_uInt16 m_nXclFont = EXC_FONT_APP;
     sal_uInt8 m_nTextHAlign = EXC_OBJ_HOR_LEFT;
     sal_uInt8 m_nTextVAlign = EXC_OBJ_VER_CENTER;
+    OUString m_sFmlaRange;          /// Cell range the control reads its entries from.
+    bool m_bPrint = true;           /// True = the control appears on a printed page.
+    sal_Int16 m_nSelEntry = 0;      /// Selected entry, counted from one.
+    sal_Int16 m_nLineCount = 0;     /// Lines a dropped down list shows.
+    bool m_bMultiSel = false;       /// True = a list allows more than one entry to be picked.
+    sal_uInt16 m_nScrollValue = 0;
+    sal_uInt16 m_nScrollMin = 0;
+    sal_uInt16 m_nScrollMax = 100;
+    sal_uInt16 m_nScrollStep = 1;
+    sal_uInt16 m_nScrollPage = 10;
+    bool m_bScrollHor = false;
 
 protected:
     using VMLExport::StartShape;
@@ -1511,27 +1590,25 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
 {
     sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
 
-    pVmlDrawing->startElement(FSNS(XML_v, XML_textbox));
-    WriteLabel();
-    pVmlDrawing->endElement(FSNS(XML_v, XML_textbox));
-
-    OString aObjectType;
-    switch (m_nObjType)
+    // a list, a dropped down list, a scrollbar and a spinner carry no caption
+    if (!m_aLabel.isEmpty())
     {
-        case EXC_OBJTYPE_CHECKBOX:
-            aObjectType = "Checkbox"_ostr;
-            break;
-        case EXC_OBJTYPE_BUTTON:
-            aObjectType = "Button"_ostr;
-            break;
+        pVmlDrawing->startElement(FSNS(XML_v, XML_textbox));
+        WriteLabel();
+        pVmlDrawing->endElement(FSNS(XML_v, XML_textbox));
     }
-    pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);
+    pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType,
+                              lcl_GetVmlObjectType(m_nObjType));
 
     // These two elements are written empty, which means false, and left out for true
     if (!m_bMoveWithCells)
         pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
     if (!m_bSizeWithCells)
         pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
+
+    // a control is printed unless it says otherwise
+    if (!m_bPrint)
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_PrintObject), "False");
 
     OString aAnchor
         = OString::number(m_aAreaFrom.Left()) + ", " + OString::number(m_aAreaFrom.Top()) + ", "
@@ -1545,13 +1622,52 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaMacro), m_aMacroName);
     }
 
-    if (m_nObjType == EXC_OBJTYPE_CHECKBOX && m_nState == EXC_OBJ_CHECKBOX_CHECKED)
+    if ((m_nObjType == EXC_OBJTYPE_CHECKBOX || m_nObjType == EXC_OBJTYPE_OPTIONBUTTON)
+        && m_nState == EXC_OBJ_CHECKBOX_CHECKED)
     {
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Checked), "1");
     }
 
+    // a list and a dropped down list keep the flat look in a field of their own
+    const bool bListStyle
+        = m_nObjType == EXC_OBJTYPE_LISTBOX || m_nObjType == EXC_OBJTYPE_DROPDOWN;
     if (!m_bLook3d)
-        pVmlDrawing->singleElement(FSNS(XML_x, XML_NoThreeD));
+        pVmlDrawing->singleElement(FSNS(XML_x, bListStyle ? XML_NoThreeD2 : XML_NoThreeD));
+
+    switch (m_nObjType)
+    {
+        case EXC_OBJTYPE_LISTBOX:
+            if (m_bMultiSel)
+                XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_SelType), "Multi");
+            break;
+        case EXC_OBJTYPE_DROPDOWN:
+            if (m_nLineCount > 0)
+                XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_DropLines),
+                                          static_cast<sal_Int32>(m_nLineCount));
+            break;
+        case EXC_OBJTYPE_SPIN:
+        case EXC_OBJTYPE_SCROLLBAR:
+            XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Val),
+                                      static_cast<sal_Int32>(m_nScrollValue));
+            XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Min),
+                                      static_cast<sal_Int32>(m_nScrollMin));
+            XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Max),
+                                      static_cast<sal_Int32>(m_nScrollMax));
+            XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Inc),
+                                      static_cast<sal_Int32>(m_nScrollStep));
+            if (m_nObjType == EXC_OBJTYPE_SCROLLBAR)
+            {
+                XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Page),
+                                          static_cast<sal_Int32>(m_nScrollPage));
+                if (m_bScrollHor)
+                    pVmlDrawing->singleElement(FSNS(XML_x, XML_Horiz));
+            }
+            break;
+    }
+
+    if (m_nSelEntry > 0)
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Sel),
+                                  static_cast<sal_Int32>(m_nSelEntry));
 
     // Excel leaves these out for Left and Top, which the import applies when they are missing
     if (m_nTextHAlign != EXC_OBJ_HOR_LEFT)
@@ -1568,10 +1684,48 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     if (!m_sFmlaLink.isEmpty())
         XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaLink), m_sFmlaLink);
 
+    if (!m_sFmlaRange.isEmpty())
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaRange), m_sFmlaRange);
+
     pVmlDrawing->endElement(FSNS(XML_x, XML_ClientData));
     VMLExport::EndShape(nShapeElement);
 }
 
+}
+
+OUString XclExpTbxControlObj::GetCellLinkFormula() const
+{
+    if( !mxCellLinkAddress.IsValid() )
+        return OUString();
+
+    OUString aSheetName = GetTabInfo().GetScTabName( mxCellLinkAddress.Tab() );
+    ScCompiler::CheckTabQuotes( aSheetName );
+    const ScAddress::Details aDetails( ::formula::FormulaGrammar::CONV_XL_A1 );
+    return aSheetName + "!"
+           + mxCellLinkAddress.Format( ScRefFlags::ADDR_ABS, &GetDoc(), aDetails );
+}
+
+bool XclExpTbxControlObj::IsAList() const
+{
+    return mnObjType == EXC_OBJTYPE_LISTBOX || mnObjType == EXC_OBJTYPE_DROPDOWN;
+}
+
+bool XclExpTbxControlObj::IsFlat() const
+{
+    // A list reads the look it is drawn in from the border it states, every other kind of control
+    // from the effect it states, so each kind answers from the field its own look lives in.
+    return IsAList() ? mbFlatBorder : mbFlatButton;
+}
+
+OUString XclExpTbxControlObj::GetSourceRangeFormula() const
+{
+    if( !maSrcRangeAddress.IsValid() )
+        return OUString();
+
+    OUString aSheetName = GetTabInfo().GetScTabName( maSrcRangeAddress.aStart.Tab() );
+    ScCompiler::CheckTabQuotes( aSheetName );
+    const ScAddress::Details aDetails( ::formula::FormulaGrammar::CONV_XL_A1 );
+    return aSheetName + "!" + maSrcRangeAddress.Format( GetDoc(), ScRefFlags::RANGE_ABS, aDetails );
 }
 
 /// Save into xl/drawings/vmlDrawing1.vml.
@@ -1594,7 +1748,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
                                                 mnState);
     aFormControlExporter.SetSkipwzName(true);  // use XML_id for legacyid, not XML_ID
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
-    aFormControlExporter.m_bLook3d = !mbFlatButton;
+    aFormControlExporter.m_bLook3d = !IsFlat();
     aFormControlExporter.m_bStroked = mbStroked;
     aFormControlExporter.m_bMoveWithCells = mbMoveWithCells;
     aFormControlExporter.m_bSizeWithCells = mbSizeWithCells;
@@ -1603,6 +1757,17 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     aFormControlExporter.m_nXclFont = mnXclFont;
     aFormControlExporter.m_nTextHAlign = mnTextHAlign;
     aFormControlExporter.m_nTextVAlign = mnTextVAlign;
+    aFormControlExporter.m_sFmlaRange = GetSourceRangeFormula();
+    aFormControlExporter.m_bPrint = mbPrint;
+    aFormControlExporter.m_nSelEntry = mnSelEntry;
+    aFormControlExporter.m_nLineCount = mnLineCount;
+    aFormControlExporter.m_bMultiSel = mbMultiSel;
+    aFormControlExporter.m_nScrollValue = mnScrollValue;
+    aFormControlExporter.m_nScrollMin = mnScrollMin;
+    aFormControlExporter.m_nScrollMax = mnScrollMax;
+    aFormControlExporter.m_nScrollStep = mnScrollStep;
+    aFormControlExporter.m_nScrollPage = mnScrollPage;
+    aFormControlExporter.m_bScrollHor = mbScrollHor;
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
@@ -1833,74 +1998,54 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
     pDrawing->endElement( FSNS( XML_mc, XML_AlternateContent ) );
 }
 
-// output into ctrlProp1.xml
+// output into ctrlProps1.xml
 OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) const
 {
+    const char* pObjectType = lcl_GetControlPropertiesObjectType(mnObjType);
+    if (!pObjectType)
+        return OUString();
+
     OUString sIdFormControlPr;
+    const sal_Int32 nControl = rStrm.getNewDrawingUniqueId();
+    sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
+        XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProps", nControl),
+        XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProps", nControl),
+        rStrm.GetCurrentStream()->getOutputStream(),
+        "application/vnd.ms-excel.controlproperties+xml",
+        oox::getRelationship(Relationship::CTRLPROP), &sIdFormControlPr);
 
-    switch (mnObjType)
-    {
-        case EXC_OBJTYPE_CHECKBOX:
-        {
-            const sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
-            sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
-                    XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProp", nDrawing ),
-                    XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProp", nDrawing ),
-                    rStrm.GetCurrentStream()->getOutputStream(),
-                    "application/vnd.ms-excel.controlproperties+xml",
-                    oox::getRelationship(Relationship::CTRLPROP),
-                    &sIdFormControlPr );
+    const bool bChecked = mnState == EXC_OBJ_CHECKBOX_CHECKED;
+    const bool bTriState = mnState == EXC_OBJ_CHECKBOX_TRISTATE;
+    const bool bHasState
+        = mnObjType == EXC_OBJTYPE_CHECKBOX || mnObjType == EXC_OBJTYPE_OPTIONBUTTON;
+    const bool bHasValue = mnObjType == EXC_OBJTYPE_SPIN || mnObjType == EXC_OBJTYPE_SCROLLBAR;
+    const bool bIsList = IsAList();
+    const OUString aCellLink = GetCellLinkFormula();
+    const OUString aSourceRange = GetSourceRangeFormula();
 
-            rStrm.PushStream( pFormControl );
-            // checkbox
-            // <formControlPr
-            //      xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
-            //      objectType="CheckBox" checked="Checked" lockText="1" noThreeD="1"/>
-            //
-            pFormControl->write("<formControlPr xmlns=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/main\" objectType=\"CheckBox\"");
-            if (mnState == EXC_OBJ_CHECKBOX_CHECKED)
-                pFormControl->write(" checked=\"Checked\"");
-
-            if (mxCellLinkAddress.IsValid())
-            {
-                OUString aCellLink = mxCellLinkAddress.Format(ScRefFlags::ADDR_ABS,
-                    &GetDoc(),
-                    ScAddress::Details(::formula::FormulaGrammar::CONV_XL_A1));
-
-                // "Sheet1!$C$5"
-                pFormControl->write(" fmlaLink=\"");
-                if (aCellLink.indexOf('!') < 0)
-                {
-                    OUString sTabName = GetTabInfo().GetScTabName(mxCellLinkAddress.Tab());
-                    ScCompiler::CheckTabQuotes(sTabName);
-                    pFormControl->writeEscaped(sTabName);
-                    pFormControl->write("!");
-                }
-                pFormControl->write(aCellLink);
-                pFormControl->write("\"");
-            }
-
-            pFormControl->write(" lockText=\"1\" noThreeD=\"1\"/>");
-            rStrm.PopStream();
-
-            break;
-        }
-        case EXC_OBJTYPE_BUTTON:
-        {
-            sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
-            sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
-                XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProp", nDrawing),
-                XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProp", nDrawing),
-                rStrm.GetCurrentStream()->getOutputStream(),
-                "application/vnd.ms-excel.controlproperties+xml",
-                oox::getRelationship(Relationship::CTRLPROP), &sIdFormControlPr);
-
-            pFormControl->singleElement(XML_formControlPr, XML_xmlns,
-                                        rStrm.getNamespaceURL(OOX_NS(xls14Lst)), XML_objectType,
-                                        "Button", XML_lockText, "1");
-            break;
-        }
-    }
+    pFormControl->singleElement(
+        XML_formControlPr, XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls14Lst)),
+        XML_objectType, pObjectType,
+        XML_checked, sax_fastparser::UseIf(bTriState ? "Mixed" : "Checked",
+                                           bHasState && (bChecked || bTriState)),
+        XML_fmlaLink, sax_fastparser::UseIf(aCellLink, !aCellLink.isEmpty()),
+        XML_fmlaRange, sax_fastparser::UseIf(aSourceRange, !aSourceRange.isEmpty()),
+        XML_sel, sax_fastparser::UseIf(OString::number(mnSelEntry), bIsList && mnSelEntry > 0),
+        XML_seltype, sax_fastparser::UseIf("multi",
+                                           mnObjType == EXC_OBJTYPE_LISTBOX && mbMultiSel),
+        XML_dropLines, sax_fastparser::UseIf(OString::number(mnLineCount),
+                                             mnObjType == EXC_OBJTYPE_DROPDOWN && mnLineCount > 0),
+        XML_val, sax_fastparser::UseIf(OString::number(mnScrollValue), bHasValue),
+        XML_min, sax_fastparser::UseIf(OString::number(mnScrollMin), bHasValue),
+        XML_max, sax_fastparser::UseIf(OString::number(mnScrollMax), bHasValue),
+        XML_inc, sax_fastparser::UseIf(OString::number(mnScrollStep), bHasValue),
+        XML_page, sax_fastparser::UseIf(OString::number(mnScrollPage),
+                                        mnObjType == EXC_OBJTYPE_SCROLLBAR),
+        XML_horiz, sax_fastparser::UseIf("1",
+                                         mnObjType == EXC_OBJTYPE_SCROLLBAR && mbScrollHor),
+        XML_lockText, "1",
+        XML_noThreeD, sax_fastparser::UseIf("1", IsFlat() && !bIsList),
+        XML_noThreeD2, sax_fastparser::UseIf("1", IsFlat() && bIsList));
 
     return sIdFormControlPr;
 }
@@ -1908,94 +2053,44 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
 // output into sheet1.xml
 void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& aIdFormControlPr) const
 {
-    switch (mnObjType)
-    {
-        case EXC_OBJTYPE_CHECKBOX:
-        {
-            sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    if (aIdFormControlPr.isEmpty())
+        return;
 
-            rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
-                FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
-            rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
-            rWorksheet->startElement(
-                XML_control,
-                XML_shapeId, OString::number(mnShapeId),
-                FSNS(XML_r, XML_id), aIdFormControlPr,
-                XML_name, msLabel); // text to display with checkbox button
+    // The reader that knows the 2009 extensions takes the control from here, and the one that does
+    // not takes it from the legacy drawing, so the element states which reader it is meant for.
+    rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
+        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
+    rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
 
-            rWorksheet->write("<controlPr defaultSize=\"0\" locked=\"1\" autoFill=\"0\" autoLine=\"0\" autoPict=\"0\"");
+    rWorksheet->startElement(XML_control,
+        XML_shapeId, OString::number(mnShapeId),
+        FSNS(XML_r, XML_id), aIdFormControlPr,
+        XML_name, msLabel.isEmpty() ? msCtrlName : msLabel);
 
-            if (mbPrint)
-                rWorksheet->write(" print=\"true\"");
-            else
-                rWorksheet->write(" print=\"false\"");
+    const OUString aMacroName = GetMacroName();
+    rWorksheet->startElement(XML_controlPr,
+        XML_defaultSize, "0",
+        XML_locked, "1",
+        XML_autoFill, "0",
+        XML_autoLine, "0",
+        XML_autoPict, "0",
+        XML_print, mbPrint ? "true" : "false",
+        XML_macro, sax_fastparser::UseIf(aMacroName, !aMacroName.isEmpty()),
+        XML_altText, sax_fastparser::UseIf(msCtrlName, !msCtrlName.isEmpty()));
 
-            if (!msCtrlName.isEmpty())
-            {
-                rWorksheet->write(" altText=\"");
-                rWorksheet->write(msCtrlName); // alt text
-                rWorksheet->write("\"");
-            }
+    rWorksheet->startElement(XML_anchor, XML_moveWithCells, ToPsz(mbMoveWithCells),
+                             XML_sizeWithCells, ToPsz(mbSizeWithCells));
+    WriteAnchor(rWorksheet, /* bIsDrawing */ false);
+    rWorksheet->endElement(XML_anchor);
 
-            rWorksheet->write(">");
-
-            rWorksheet->startElement(XML_anchor, XML_moveWithCells, ToPsz(mbMoveWithCells),
-                                     XML_sizeWithCells, ToPsz(mbSizeWithCells));
-            WriteAnchor(rWorksheet, /* bIsDrawing */ false);
-            rWorksheet->endElement(XML_anchor);
-
-            rWorksheet->write("</controlPr>");
-
-            rWorksheet->endElement(XML_control);
-            rWorksheet->endElement( FSNS( XML_mc, XML_Choice ) );
-            rWorksheet->endElement( FSNS( XML_mc, XML_AlternateContent ) );
-
-            break;
-        }
-        case EXC_OBJTYPE_BUTTON:
-        {
-            sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-
-            rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent), FSNS(XML_xmlns, XML_mc),
-                                     rStrm.getNamespaceURL(OOX_NS(mce)));
-            rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
-
-            rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId),
-                                     FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msCtrlName);
-
-            OUString aMacroName = GetMacroName();
-            // Omit the macro attribute if it would be empty.
-            rWorksheet->startElement(XML_controlPr, XML_defaultSize, "0", XML_print,
-                                     mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
-                                     "0", XML_macro, sax_fastparser::UseIf(aMacroName, !aMacroName.isEmpty()));
-
-            rWorksheet->startElement(XML_anchor, XML_moveWithCells, ToPsz(mbMoveWithCells),
-                                     XML_sizeWithCells, ToPsz(mbSizeWithCells));
-
-            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
-            tools::Rectangle aAreaFrom;
-            tools::Rectangle aAreaTo;
-            lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo,
-                          /*bInEMU=*/true);
-
-            rWorksheet->startElement(XML_from);
-            lcl_WriteAnchorVertex(rWorksheet, aAreaFrom);
-            rWorksheet->endElement(XML_from);
-            rWorksheet->startElement(XML_to);
-            lcl_WriteAnchorVertex(rWorksheet, aAreaTo);
-            rWorksheet->endElement(XML_to);
-            rWorksheet->endElement(XML_anchor);
-
-            rWorksheet->endElement(XML_controlPr);
-
-            rWorksheet->endElement(XML_control);
-            rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
-            rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
-            break;
-        }
-    }
+    rWorksheet->endElement(XML_controlPr);
+    rWorksheet->endElement(XML_control);
+    rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
+    rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
 }
+
 
 //#endif
 

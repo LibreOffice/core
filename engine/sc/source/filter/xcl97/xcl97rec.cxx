@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <o3tl/sprintf.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
@@ -169,8 +170,15 @@ bool IsFormControlObject( const XclObj *rObj )
 {
     switch( rObj->GetObjType() )
     {
-        case EXC_OBJTYPE_CHECKBOX:
         case EXC_OBJTYPE_BUTTON:
+        case EXC_OBJTYPE_CHECKBOX:
+        case EXC_OBJTYPE_OPTIONBUTTON:
+        case EXC_OBJTYPE_LABEL:
+        case EXC_OBJTYPE_SPIN:
+        case EXC_OBJTYPE_SCROLLBAR:
+        case EXC_OBJTYPE_LISTBOX:
+        case EXC_OBJTYPE_GROUPBOX:
+        case EXC_OBJTYPE_DROPDOWN:
             return true;
         default:
             return false;
@@ -257,8 +265,7 @@ bool IsValidObject( const XclObj& rObj )
     return true;
 }
 
-/// Writes the objects of the drawing and answers the last shape number it handed out.
-sal_Int32 SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
+void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 {
     std::vector<XclObj*> aList;
     // do not add objects to the list that are in the group,
@@ -296,7 +303,7 @@ sal_Int32 SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     }
 
     if (aList.empty())
-        return 0;
+        return;
 
     sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
     OUString sId;
@@ -317,26 +324,12 @@ sal_Int32 SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
             FSNS(XML_xmlns, XML_a),   rStrm.getNamespaceURL(OOX_NS(dml)).toUtf8(),
             FSNS(XML_xmlns, XML_r),   rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8() );
 
-    sal_Int32 nShapeId = 1000; // unique id of the shape inside one worksheet (not the whole document)
     for (const auto& rpObj : aList)
-    {
-        // validate shapeId
-        if ( IsFormControlObject( rpObj ) )
-        {
-            XclExpTbxControlObj* pXclExpTbxControlObj = dynamic_cast<XclExpTbxControlObj*>(rpObj);
-            if (pXclExpTbxControlObj)
-            {
-                pXclExpTbxControlObj->setShapeId(++nShapeId);
-            }
-        }
-
         rpObj->SaveXml(rStrm);
-    }
 
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
 
     rStrm.PopStream();
-    return nShapeId;
 }
 
 void SaveControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
@@ -364,14 +357,19 @@ void SaveControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
     for (const auto pActiveXControl : aActiveXControls)
         aActiveXRelIds.push_back(pActiveXControl->SaveActiveXXml(rStrm));
 
-    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    // An ActiveX control that reached no part of its own has nothing left to point at, and the
+    // element below holds controls only, so with none of them to write there is nothing to open.
+    const bool bAnyActiveXPart = std::any_of(aActiveXRelIds.begin(), aActiveXRelIds.end(),
+                                             [](const OUString& rId) { return !rId.isEmpty(); });
+    if (aFormControls.empty() && !bAnyActiveXPart)
+        return;
 
-    // a form control needs the extensions of the 2009 schema, an ActiveX control does not
-    const bool bNeedsChoice = !aFormControls.empty();
-    if (bNeedsChoice)
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    const bool bOnlyForTheNewerReader = !bAnyActiveXPart;
+    if (bOnlyForTheNewerReader)
     {
         rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
-            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)));
         rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
     }
     rWorksheet->startElement(XML_controls);
@@ -389,14 +387,14 @@ void SaveControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
     }
 
     rWorksheet->endElement(XML_controls);
-    if (bNeedsChoice)
+    if (bOnlyForTheNewerReader)
     {
         rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
         rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
     }
 }
 
-void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32 nLastShapeId )
+void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 {
     if( GetVmlObjectCount( rList ) == 0 )
         return;
@@ -421,10 +419,6 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32 nLa
             FSNS(XML_xmlns, XML_x),   rStrm.getNamespaceURL(OOX_NS(vmlExcel)).toUtf8(),
             FSNS(XML_xmlns, XML_w10), rStrm.getNamespaceURL(OOX_NS(vmlWord)).toUtf8() );
 
-    // the legacy drawing numbers its shapes from 1025, and where the drawing of the sheet has
-    // already handed out numbers of its own it carries on past the last of them, so that every
-    // control of the sheet is named by a number only it has
-    sal_Int32 nShapeId = std::max<sal_Int32>(nLastShapeId, 1024);
     for ( const auto& rxObj : rList )
     {
         if (IsFormControlObject(rxObj.get()))
@@ -437,10 +431,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32 nLa
         }
 
         if (auto pActiveXObject = dynamic_cast<XclExpOcxControlObj*>(rxObj.get()))
-        {
-            pActiveXObject->setShapeId(++nShapeId);
             pActiveXObject->SaveVml(rStrm);
-        }
 
         if( !IsVmlObject( rxObj.get() ) )
             continue;
@@ -466,8 +457,19 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
         return;
     }
 
-    const sal_Int32 nLastShapeId = SaveDrawingMLObjects( *this, rStrm );
-    SaveVmlObjects( *this, rStrm, nLastShapeId );
+    // the shape of a control appears in the legacy drawing and in the sheet, and both name it by
+    // the same identifier, so every control is numbered once before anything is written
+    sal_Int32 nShapeId = 1000;
+    for( const auto& rxObj : maObjs )
+    {
+        if( auto pFormControl = dynamic_cast<XclExpTbxControlObj*>( rxObj.get() ) )
+            pFormControl->setShapeId( ++nShapeId );
+        else if( auto pActiveXControl = dynamic_cast<XclExpOcxControlObj*>( rxObj.get() ) )
+            pActiveXControl->setShapeId( ++nShapeId );
+    }
+
+    SaveDrawingMLObjects( *this, rStrm );
+    SaveVmlObjects( *this, rStrm );
     if (m_pImgData)
         m_pImgData->SaveXml(rStrm);
     SaveControlObjects( *this, rStrm );

@@ -570,6 +570,7 @@ altChunk
 altChunkPr
 altLang
 altName
+altText
 althref
 always
 alwaysMergeEmptyNamespace
@@ -2425,6 +2426,8 @@ flowersTiny
 fltVal
 flythrough
 fmla
+fmlaLink
+fmlaRange
 fmt
 fmtId
 fmtOvrs
@@ -2829,6 +2832,7 @@ holly
 honeycomb
 homePlate
 honeydew
+horiz
 horizontal
 horizontalCentered
 horizontalDpi
@@ -2933,6 +2937,7 @@ inEnd
 inactiveBorder
 inactiveCaption
 inactiveCaptionText
+inc
 includeHiddenRowCol
 includeNewItemsInFilter
 includePrintSettings
@@ -3722,6 +3727,8 @@ noSpaceRaiseLower
 noStrike
 noTabHangInd
 noTextEdit
+noThreeD
+noThreeD2
 noUngrp
 noVBand
 noWrap
@@ -4718,12 +4725,14 @@ sectionLst
 securityDescriptor
 seek
 segments
+sel
 selectFldWithFirstOrLastChar
 selectLockedCells
 selectUnlockedCells
 selected
 selection
 self
+seltype
 semiHidden
 semicolon
 sendLocale

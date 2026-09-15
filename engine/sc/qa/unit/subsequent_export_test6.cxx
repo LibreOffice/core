@@ -741,6 +741,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeMacroExtRef)
                 u"Importieren");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testEveryFormControlSurvivesTheSave)
+{
+    createScDoc("xlsx/tdf111980_radioButtons.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    // five option buttons, a group box and five controls that live in a part of their own
+    assertXPath(pSheet, "//x:controls/*", 11);
+    assertXPath(pSheet, "//x:controls//x:control[@name='Group Box 7']", 1);
+
+    xmlDocUniquePtr pVml = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pVml);
+    assertXPath(pVml, "//v:shape/xx:ClientData[@ObjectType='Radio']", 5);
+    assertXPath(pVml, "//v:shape/xx:ClientData[@ObjectType='GBox']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testListKeepsTheFlatLookItStates)
+{
+    // The sheet holds one list, and the document says it is drawn flat rather than raised.
+    createScDoc("xlsx/list-with-a-flat-look.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pVml = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    CPPUNIT_ASSERT(pVml);
+    assertXPath(pVml, "//v:shape/xx:ClientData[@ObjectType='List']/xx:NoThreeD2", 1);
+
+    xmlDocUniquePtr pControl = parseExport(u"xl/ctrlProps/ctrlProps2.xml"_ustr);
+    CPPUNIT_ASSERT(pControl);
+    assertXPath(pControl, "/x14:formControlPr", "noThreeD2", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
 {
     createScDoc("xlsx/TableEmptyHeaders.xlsx");
@@ -920,8 +952,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testActiveXControlsSurviveTheSave)
 
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
-    assertXPath(pSheet, "/x:worksheet/x:controls/x:control", 5);
-    assertXPath(pSheet, "/x:worksheet/x:controls/x:control[1]", "name", u"OptionButton1");
+    assertXPath(pSheet, "//x:controls/x:control[@name='OptionButton1']", 1);
+    assertXPath(pSheet, "//x:controls/x:control[@name='OptionButton5']", 1);
 
     // the part the sheet points at, and the shape that carries the position of the control
     CPPUNIT_ASSERT(parseExport(u"xl/activeX/activeX1.xml"_ustr));
