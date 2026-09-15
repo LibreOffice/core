@@ -462,6 +462,10 @@ private:
     bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
     void PopDoubleRefPushMatrix();
     void PopRefListPushMatrixOrRef();
+    /** Pop an external double reference and push the single reference its
+        implicit intersection yields. Leaves the stack alone and returns false
+        when the formula position does not intersect the range. */
+    bool PopExternalDoubleRefPushSingleRef();
     // If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
     // Else convert area reference parameters marked as ForceArray to array.
     // Returns true if JumpMatrix created.

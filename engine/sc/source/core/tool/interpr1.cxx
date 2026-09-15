@@ -1605,6 +1605,9 @@ void ScInterpreter::ScSingleValue()
             PushDouble(GetCellValue(aAdr, aCell));
         return;
     }
+    // Same intersection as for a sheet local range above.
+    if (eType == svExternalDoubleRef && PopExternalDoubleRefPushSingleRef())
+        return;
     if (eType == svMatrix)
     {
         ScMatrixRef pMat = GetMatrix();

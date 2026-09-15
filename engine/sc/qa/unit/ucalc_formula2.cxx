@@ -2091,6 +2091,10 @@ void TestFormula2::testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& 
         rExtDoc.SetValue(ScAddress(1, nRow, 0), (nRow + 1.0) * 10);
     }
 
+    // @ takes the same intersection, here where its result feeds an operator.
+    pDoc->SetString(ScAddress(0, 1, 0), u"=@'file:///extdata.fake'#Data.A1:A5*1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+
     // A scalar Value parameter takes an implicit intersection, row 3 looks up A3.
     pDoc->SetString(ScAddress(0, 2, 0),
                     u"=XLOOKUP('file:///extdata.fake'#Data.A1:A5;"

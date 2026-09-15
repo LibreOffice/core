@@ -1468,6 +1468,25 @@ bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
     return false;
 }
 
+bool ScInterpreter::PopExternalDoubleRefPushSingleRef()
+{
+    const ScExternalDoubleRefToken* pToken
+        = static_cast<const ScExternalDoubleRefToken*>(pStack[sp - 1]);
+    ScComplexRefData aData( pToken->GetDoubleRef());
+    const ScRange aRange = aData.toAbs(mrDoc, aPos);
+    ScAddress aAdr;
+    if (!ScCompiler::ExternalDoubleRefToPosSingleRef( aRange, aAdr, aPos))
+        return false;
+
+    ScSingleRefData aRefData;
+    aRefData.InitAddress( aAdr);
+    FormulaTokenRef xNew = new ScExternalSingleRefToken(
+            pToken->GetFileId(), pToken->GetTableName(), aRefData);
+    Pop();
+    PushTempTokenWithoutError( xNew.get());
+    return true;
+}
+
 void ScInterpreter::PopDoubleRefPushMatrix()
 {
     if ( GetStackType() == svDoubleRef )
@@ -1694,32 +1713,14 @@ bool ScInterpreter::ConvertMatrixParameters()
                         auto pEDRToken = static_cast<const ScExternalDoubleRefToken*>(p);
                         ScComplexRefData aData( pEDRToken->GetDoubleRef());
                         const ScRange aRange = aData.toAbs(mrDoc, aPos);
-                        // Resolve from the shape of the range.
-                        // DoubleRefToPosSingleRefScalarCase() asks instead
-                        // whether the formula position lies within the range.
-                        SCCOL nCol = aPos.Col();
-                        SCROW nRow = aPos.Row();
-                        bool bOk = true;
-                        if (aRange.aStart == aRange.aEnd)
-                        {
-                            nCol = aRange.aStart.Col();
-                            nRow = aRange.aStart.Row();
-                        }
-                        else if (aRange.aStart.Col() == aRange.aEnd.Col() &&
-                                aRange.aStart.Row() <= nRow && nRow <= aRange.aEnd.Row())
-                            nCol = aRange.aStart.Col();
-                        else if (aRange.aStart.Row() == aRange.aEnd.Row() &&
-                                aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
-                            nRow = aRange.aStart.Row();
-                        else
-                            bOk = false;
-                        if (!bOk)
+                        ScAddress aAdr;
+                        if (!ScCompiler::ExternalDoubleRefToPosSingleRef( aRange, aAdr, aPos))
                             SetError( FormulaError::NoValue);
                         else
                         {
                             ScSingleRefData aRefData;
                             // Absolute, an external table reference must be.
-                            aRefData.InitAddress( nCol, nRow, aRange.aStart.Tab());
+                            aRefData.InitAddress( aAdr);
                             formula::FormulaToken* pNew = new ScExternalSingleRefToken(
                                     pEDRToken->GetFileId(), pEDRToken->GetTableName(), aRefData);
                             pNew->IncRef();
@@ -4604,6 +4605,11 @@ StackVar ScInterpreter::Interpret()
                     PopRefListPushMatrixOrRef();
                     pCur = pStack[ sp-1 ];
                 }
+                // An external range takes the same implicit intersection as
+                // the svDoubleRef case below, which nothing else does for it.
+                if (!bMatrixFormula && pCur->GetType() == svExternalDoubleRef
+                        && PopExternalDoubleRefPushSingleRef())
+                    pCur = pStack[ sp-1 ];
                 switch( pCur->GetType() )
                 {
                     case svEmptyCell:

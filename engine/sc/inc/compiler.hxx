@@ -525,6 +525,11 @@ public:
     static bool DoubleRefToPosSingleRefScalarCase(const ScRange& rRange, ScAddress& rAdr,
                                                   const ScAddress& rFormulaPos);
 
+    /** The same for a range in another document, where the shape of the range
+        decides and not whether the formula position lies within it. */
+    static bool ExternalDoubleRefToPosSingleRef(const ScRange& rRange, ScAddress& rAdr,
+                                                const ScAddress& rFormulaPos);
+
     bool HasUnhandledPossibleImplicitIntersections() const { return !mUnhandledPossibleImplicitIntersections.empty(); }
 
     SC_DLLPUBLIC static OUString SanitizeDefinedName(const OUString& rStr, const ScDocument& rDoc);
