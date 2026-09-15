@@ -99,6 +99,11 @@
 	margin-inline-start: -6px;
 }
 
+.preview-avatars .avatar-img {
+	pointer-events: auto;
+	cursor: pointer;
+}
+
 .slide-user-item {
 	display: flex;
 	align-items: center;

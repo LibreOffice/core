@@ -433,12 +433,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				app.LOUtil.rgbToHex(map.getViewColor(viewId)));
 			if (user)
 				user.cachedSlideAvatar = avatar;
+			avatar.setAttribute('data-cooltip', img.viewNames[index]);
+			// A drag grabbed on a face starts from the frame, as one
+			// grabbed on the picture does.
+			avatar.draggable = false;
+			if (!avatar.namesItsUser) {
+				avatar.namesItsUser = true;
+				window.L.control.attachTooltipEventListener(avatar, map);
+				window.L.DomEvent.on(avatar, 'click', this._selectSlideUnder);
+			}
 			return avatar;
-		});
+		}, this);
 
 		if (slots.hidden) {
 			var more = window.L.DomUtil.create('span', 'preview-avatars-more');
 			more.textContent = app.SlideAvatars.counterText(slots.hidden);
+			more.setAttribute('data-cooltip', _('Show everyone on this slide'));
+			window.L.control.attachTooltipEventListener(more, map);
 			window.L.DomEvent.on(more, 'click', function (e) {
 				window.L.DomEvent.stop(e);
 				this._openFrameUserList(more, viewIds);
@@ -830,6 +841,28 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._idNum++;
 
 		return img;
+	},
+
+	// An avatar is kept between updates and travels with its user, so the
+	// slide it selects is the one it is drawn on now.
+	_selectSlideUnder: function (e) {
+		window.L.DomEvent.stop(e);
+		const frame = e.currentTarget.closest('.preview-frame');
+		const picture = frame && frame.querySelector('.preview-img');
+		if (!picture)
+			return;
+		// ctrl and shift pick a slide differently, so they travel with the
+		// click rather than being dropped by a synthetic one.
+		picture.dispatchEvent(
+			new MouseEvent('click', {
+				bubbles: true,
+				cancelable: true,
+				ctrlKey: e.ctrlKey,
+				shiftKey: e.shiftKey,
+				altKey: e.altKey,
+				metaKey: e.metaKey,
+			}),
+		);
 	},
 
 	// The names the faces show, then a count for anyone past them.

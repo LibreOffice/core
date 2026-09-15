@@ -144,6 +144,44 @@ describe(['tagmultiuser'], 'Multiuser slide sorter avatars', function() {
 		});
 	});
 
+	it('names the user behind a face, and the face follows that user', function() {
+		cy.cSetActiveFrame('#iframe1');
+		waitForLayout(win1);
+		cy.cSetActiveFrame('#iframe2');
+		waitForLayout(win2);
+
+		cy.cSetActiveFrame('#iframe2');
+		clickSlideThumbnail(1);
+		helper.processToIdle(win2);
+
+		cy.cSetActiveFrame('#iframe1');
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			var name = otherName(win1);
+			var face = win1.document.querySelectorAll('.preview-frame')[2]
+				.querySelector('.preview-avatars .avatar-img');
+			expect(face).to.not.be.null;
+			expect(face.getAttribute('data-cooltip')).to.equal(name);
+		});
+
+		// The element is kept and moved, so the one on the new slide has to be
+		// the one that names its user there, not the slide it started on.
+		cy.cSetActiveFrame('#iframe2');
+		clickSlideThumbnail(2);
+		helper.processToIdle(win2);
+
+		cy.cSetActiveFrame('#iframe1');
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			var name = otherName(win1);
+			var frames = win1.document.querySelectorAll('.preview-frame');
+			var face = frames[3].querySelector('.preview-avatars .avatar-img');
+			expect(face).to.not.be.null;
+			expect(face.getAttribute('data-cooltip')).to.equal(name);
+			expect(face.closest('.preview-frame')).to.equal(frames[3]);
+		});
+	});
+
 	it('moves the mark when the other user changes slide', function() {
 		cy.cSetActiveFrame('#iframe1');
 		waitForLayout(win1);
