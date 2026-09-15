@@ -188,6 +188,20 @@ struct FormatterFontMetric
     }
 };
 
+// The rows that a field wrapped onto several sublines fills on the line that
+// carries it. The line's own row holds the field's first subline, so
+// nRowsBelow counts the rows under that one, and is zero for a line with no
+// wrapped field. The other members are paragraph-relative X coordinates: a
+// row starts at nLeft, every row but the bottom one ends at nRight, and the
+// bottom row ends with the field text at nBottomRowRight.
+struct WrappedFieldRows
+{
+    sal_Int32 nRowsBelow = 0;
+    tools::Long nLeft = 0;
+    tools::Long nRight = 0;
+    tools::Long nBottomRowRight = 0;
+};
+
 class IdleFormattter : public Idle
 {
 private:
@@ -916,6 +930,8 @@ public:
     static tools::Long GetWrappedFieldExtraHeight(const EditLine& rLine,
                                                   const ExtraPortionInfo* pExtraInfo);
     static tools::Long GetMultiLineFieldRowLeft(EditLine const& rLine);
+    WrappedFieldRows GetWrappedFieldRows(ParaPortion const& rParaPortion, EditLine const& rLine,
+                                         sal_Int32 nStartIndex, sal_Int32 nEndIndex) const;
 
     EditUndoManager& GetUndoManager()
     {

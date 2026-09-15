@@ -3596,11 +3596,48 @@ bool ImpEditEngine::IsAtMultiLineFieldEnd(const EditPaM& rPaM)
     return IsAtMultiLineFieldEnd(*pPortion, rPaM.GetIndex());
 }
 
+WrappedFieldRows ImpEditEngine::GetWrappedFieldRows(ParaPortion const& rParaPortion,
+                                                    EditLine const& rLine, sal_Int32 nStartIndex,
+                                                    sal_Int32 nEndIndex) const
+{
+    // The first subline of a wrapped field sits on the row of the line that
+    // carries the field, so nRowsBelow counts only the rows under that one.
+    // A right-to-left paragraph reports no rows, as the wrapped field
+    // positions are only worked out for left-to-right text.
+    WrappedFieldRows aRows;
+    if (IsRightToLeft(GetEditDoc().GetPos(rParaPortion.GetNode())))
+        return aRows;
+
+    sal_Int32 nPortionStart = rLine.GetStart();
+    for (sal_Int32 nPortion = rLine.GetStartPortion(); nPortion <= rLine.GetEndPortion();
+         ++nPortion)
+    {
+        const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nPortion];
+        const sal_Int32 nPortionEnd = nPortionStart + rTextPortion.GetLen();
+        const ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
+        const bool bInRange = nPortionStart >= nStartIndex && nPortionEnd <= nEndIndex;
+        if (rTextPortion.GetKind() == PortionKind::FIELD && bInRange && pExtraInfo
+            && pExtraInfo->lineBreaksList.size() > 1)
+        {
+            aRows.nRowsBelow = static_cast<sal_Int32>(pExtraInfo->lineBreaksList.size()) - 1;
+            aRows.nLeft = GetMultiLineFieldRowLeft(rLine);
+            // A field breaks where the next character no longer fits, so every
+            // row but the bottom one reaches the width the field had room for.
+            aRows.nRight = rLine.GetStartPosX() + pExtraInfo->nOrgWidth;
+            aRows.nBottomRowRight = aRows.nLeft + pExtraInfo->nLastLineTextWidth;
+            // A field long enough to wrap is wider on its own than the line
+            // has room for, so the line ends with it and there is no second
+            // wrapped field to find here.
+            break;
+        }
+        nPortionStart = nPortionEnd;
+    }
+
+    return aRows;
+}
+
 tools::Long ImpEditEngine::GetMultiLineFieldRowLeft(EditLine const& rLine)
 {
-    // Where a row of a wrapped field starts. The rows below the first one
-    // start at the left edge the line was formatted from, which sits left of
-    // the line's own start when the following rows had more room.
     return rLine.GetStartPosX() - rLine.GetNextLinePosXDiff();
 }
 

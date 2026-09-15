@@ -44,6 +44,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/wrkwin.hxx>
+#include <editeng/editview.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -51,6 +53,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <editeng/outliner.hxx>
@@ -145,6 +148,7 @@ public:
     void testTdf154248MultilineFieldWrapping();
     void testMultilineFieldClipInvariance();
     void testMultilineFieldSublineSpacing();
+    void testMultilineFieldSelectionHighlight();
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
@@ -200,6 +204,7 @@ public:
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testMultilineFieldClipInvariance);
     CPPUNIT_TEST(testMultilineFieldSublineSpacing);
+    CPPUNIT_TEST(testMultilineFieldSelectionHighlight);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
@@ -2443,6 +2448,49 @@ void Test::testMultilineFieldSublineSpacing()
     CPPUNIT_ASSERT_MESSAGE("second plain line not drawn", nSecondLineY >= 0);
 
     CPPUNIT_ASSERT_EQUAL(nSecondLineY - nFirstLineY, nSecondSublineY - nFirstSublineY);
+}
+
+void Test::testMultilineFieldSelectionHighlight()
+{
+    // A long hyperlink field wraps onto several rows. Selecting the whole
+    // field, as a double click on the link does, must highlight every row the
+    // link is drawn on.
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+
+    // Paragraph 0 holds only the wrapping field.
+    const tools::Long nPaperWidth = 2000;
+    EditEngine& rEditEngine = prepareWrappedFieldDocument(aOutliner, OUString());
+
+    // The field must actually wrap, otherwise the bug cannot occur.
+    const ExtraPortionInfo* pExtraInfo = getWrappedFieldInfo(rEditEngine);
+    const sal_Int32 nRows = static_cast<sal_Int32>(pExtraInfo->lineBreaksList.size());
+
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(rEditEngine, xWindow.get());
+    aEditView.SetOutputArea(tools::Rectangle(Point(0, 0), Size(nPaperWidth, 5000)));
+
+    // The field counts as a single character, so this selects all of it.
+    aEditView.SetSelection(ESelection(0, 0, 0, 1));
+
+    std::vector<tools::Rectangle> aRects;
+    aEditView.GetSelectionRectangles(aRects);
+    CPPUNIT_ASSERT_MESSAGE("the selected link is not highlighted at all", !aRects.empty());
+
+    // Every row of the link carries highlight.
+    const tools::Long nRowHeight
+        = rEditEngine.GetParaPortions().getRef(0).GetLines()[0].GetHeight();
+    for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
+    {
+        // A point inside the row, far enough from its edges to stay clear of
+        // where one row ends and the next begins.
+        const tools::Long nRowMiddleY = nRow * nRowHeight + nRowHeight / 2;
+        const bool bCovered = std::any_of(aRects.begin(), aRects.end(),
+                                          [nRowMiddleY](const tools::Rectangle& rRect) {
+                                              return rRect.Top() <= nRowMiddleY
+                                                     && nRowMiddleY <= rRect.Bottom();
+                                          });
+        CPPUNIT_ASSERT_MESSAGE("a row of the selected link is not highlighted", bCovered);
+    }
 }
 
 // Backspacing inside a justified, multi-line paragraph must not leave words on

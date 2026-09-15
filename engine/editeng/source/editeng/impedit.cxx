@@ -590,7 +590,14 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             if (aTmpRect.Top() > GetVisDocBottom())
                 return ImpEditEngine::CallbackResult::Continue;
 
-            if (aTmpRect.Bottom() < GetVisDocTop())
+            // A selected field that wrapped onto several sublines reaches
+            // further down than this line's own row, and the rows it adds are
+            // covered further below.
+            const WrappedFieldRows aFieldRows = getImpEditEngine().GetWrappedFieldRows(
+                rInfo.rPortion, *rInfo.pLine, nStartIndex, nEndIndex);
+            const tools::Long nRowHeight = rInfo.pLine->GetHeight();
+
+            if (aTmpRect.Bottom() + aFieldRows.nRowsBelow * nRowHeight < GetVisDocTop())
                 return ImpEditEngine::CallbackResult::Continue;
 
             if ((rInfo.nPortion == nStartPara) && (rInfo.nLine == nStartLine))
@@ -633,6 +640,22 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                                           pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
                     nTmpStartIndex = nTmpEndIndex;
                 }
+            }
+
+            // The rectangles above cover the row of the line itself, which
+            // holds a wrapped field's first subline. The rows below hold the
+            // rest of the field and are covered with the same highlight, each
+            // one row height further down, the way the field is drawn.
+            for (sal_Int32 nRow = 1; nRow <= aFieldRows.nRowsBelow; ++nRow)
+            {
+                const bool bBottomRow = nRow == aFieldRows.nRowsBelow;
+                tools::Rectangle aRowRect(aTmpRect);
+                aRowRect.SetLeft(aFieldRows.nLeft + aLineOffset.Width());
+                aRowRect.SetRight((bBottomRow ? aFieldRows.nBottomRowRight : aFieldRows.nRight)
+                                  + aLineOffset.Width());
+                aRowRect.Move(0, nRow * nRowHeight);
+                ImplDrawHighlightRect(rTarget, aRowRect.TopLeft(), aRowRect.BottomRight(),
+                                      pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
             }
         }
         return ImpEditEngine::CallbackResult::Continue;
