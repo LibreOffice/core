@@ -225,6 +225,7 @@ public:
     void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                        SCCOL nUpdateCol = -1);
     void        SetByRow(bool bByR)             { bByRow = bByR; }
+    bool        IsByRow() const                 { return bByRow; }
     bool        HasHeader() const               { return bHasHeader; }
     void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
     bool        HasTotals() const               { return bHasTotals; }
