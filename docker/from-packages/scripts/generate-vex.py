@@ -29,9 +29,25 @@ from datetime import datetime, timezone
 
 
 def scan_findings(scan):
-    """Extract (id, purl, description) from a trivy JSON report."""
+    """Extract (id, purl, description) from a trivy or grype JSON report.
+
+    Both are accepted because they see different things: trivy matches the
+    pkg:deb components and the npm purls, grype also matches the CPEs of the
+    statically linked C libraries. A VEX refreshed from trivy alone silently
+    misses every CPE-only finding."""
     findings = []
-    for result in scan.get("Results", []):
+    if "matches" in scan:                                   # grype
+        for match in scan.get("matches", []):
+            artifact = match.get("artifact", {})
+            vulnerability = match.get("vulnerability", {})
+            findings.append({
+                "id": vulnerability.get("id"),
+                "purl": artifact.get("purl")
+                        or f"{artifact.get('name')}@{artifact.get('version')}",
+                "description": (vulnerability.get("description") or "")[:200],
+            })
+        return findings
+    for result in scan.get("Results", []):                  # trivy
         for vulnerability in result.get("Vulnerabilities", []) or []:
             findings.append({
                 "id": vulnerability.get("VulnerabilityID"),

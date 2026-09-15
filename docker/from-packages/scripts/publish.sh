@@ -143,6 +143,19 @@ publish_digest() {
             "$WORKDIR/scan.sarif"
         trivy sbom --format json --output "$WORKDIR/scan.json" \
             "$WORKDIR/sbom.cdx.json"
+        # grype additionally matches the CPEs of the statically linked C
+        # libraries, which trivy does not look at; without it the VEX is
+        # refreshed from half the findings
+        if command -v grype >/dev/null; then
+            echo "  scan (grype, for the VEX)"
+            grype -q "sbom:$WORKDIR/sbom.cdx.json" -o json \
+                > "$WORKDIR/scan-grype.json"
+            python3 "$SCRIPT_DIR/generate-vex.py" --vex "$VEX_FILE" \
+                --scan "$WORKDIR/scan-grype.json"
+        else
+            echo "  grype not found: the VEX refresh will miss CPE-only" \
+                 "findings (the statically linked C libraries)" >&2
+        fi
         python3 "$SCRIPT_DIR/generate-vex.py" --vex "$VEX_FILE" \
             --scan "$WORKDIR/scan.json"
     else
@@ -156,7 +169,23 @@ publish_digest() {
 
 # Every per-platform manifest digest of a ref (or the ref's own digest).
 ref_digests() {
-    docker buildx imagetools inspect --format '{{json .}}' "$1" | python3 -c '
+    # buildx is the nicest source, but it is a plugin and not every builder
+    # host has it; 'docker manifest inspect -v' answers the same question.
+    if command -v docker >/dev/null && docker buildx version >/dev/null 2>&1; then
+        docker buildx imagetools inspect --format '{{json .}}' "$1"
+    else
+        docker manifest inspect -v "$1" | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+# normalise to the shape buildx reports
+if isinstance(data, list):
+    print(json.dumps({"manifest": {"manifests": [
+        {"digest": e["Descriptor"]["digest"],
+         "platform": e["Descriptor"].get("platform", {})} for e in data]}}))
+else:
+    print(json.dumps({"manifest": {"digest": data["Descriptor"]["digest"]}}))
+'
+    fi | python3 -c '
 import json, sys
 data = json.load(sys.stdin)
 manifest = data.get("manifest", {})
