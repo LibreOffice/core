@@ -291,6 +291,9 @@ struct WriteRunInput
     sal_Int32 nCharHeight = -1;
     sal_Int16 nScriptType = css::i18n::ScriptType::LATIN;
     bool bUseTextSchemeColors = false;
+    /// Set while the default of a list style level is written. The default is taken from the
+    /// first run of a paragraph, and a few of that run's properties belong to the run alone.
+    bool bIsLevelDefault = false;
     cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
 };
 

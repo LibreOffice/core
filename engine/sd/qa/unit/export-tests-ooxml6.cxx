@@ -13,6 +13,7 @@
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -171,6 +172,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPlaceholderKeepsItsName)
 
     xPlaceholder.set(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(aName, xPlaceholder->getName());
+}
+
+// The list style of a shape says nothing about the language, so the level it stands for does not
+// hand the language of one run to every paragraph written at that level.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testListStyleStatesNoLanguage)
+{
+    createSdImpressDoc("pptx/tdf145162.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    // The run keeps the language it is written in, and the level beside it states none, which
+    // is what lets the text styles of the master name one.
+    assertXPathNoAttribute(
+        pMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp[1]/p:txBody/a:lstStyle/a:lvl1pPr/a:defRPr",
+        "lang");
+    assertXPath(pMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:r/a:rPr", "lang",
+                u"en-US");
 }
 
 // The pages of a Draw document keep their identity across sessions the same way the slides of

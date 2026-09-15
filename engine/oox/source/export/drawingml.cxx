@@ -2748,7 +2748,8 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     }
 
     mpFS->startElementNS( XML_a, nElement,
-                          XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()),
+                          XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()
+                                                                         && !rRunInput.bIsLevelDefault),
                           XML_sz, OString::number(nSize),
                           XML_b, bold,
                           XML_i, italic,
@@ -3833,6 +3834,10 @@ void DrawingML::WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>
         aInput.xShapePropSet = rXShapePropSet;
         aInput.bOverridingCharHeight = rbOverridingCharHeight;
         aInput.nCharHeight = rnCharHeight;
+        // Everything else of this level is taken from the first run of the paragraph, but its
+        // language is the language of that run alone. Stating it here would hand it to every
+        // paragraph of the level and override the language the master names.
+        aInput.bIsLevelDefault = true;
         WriteRunProperties(xFirstRunPropSet, XML_defRPr, aInput);
         rbOverridingCharHeight = aInput.bOverridingCharHeight;
         rnCharHeight = aInput.nCharHeight;
