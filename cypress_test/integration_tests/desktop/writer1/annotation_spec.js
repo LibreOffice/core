@@ -815,6 +815,39 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-reply-textarea-1').should('have.focus');
 	});
 
+	it('A reply outlives the comment it answered', function () {
+		desktopHelper.insertComment('first comment');
+		addReply(1, 'middle');
+		addReply(2, 'last');
+
+		cy.cGet('#comment-container-3').then(function (card) {
+			const before = card[0].getBoundingClientRect().top;
+
+			cy.cGet('#comment-annotation-menu-2').click();
+			cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove').click();
+			cy.cGet('#comment-container-2').should('not.exist');
+
+			// It is still laid out, so it takes the place the removed comment left.
+			cy.cGet('#comment-container-3').should(function (moved) {
+				expect(moved[0].getBoundingClientRect().top, 'top of the surviving reply')
+					.to.be.lessThan(before);
+			});
+		});
+
+		// It is still a working comment, so it answers a click.
+		cy.cGet('#comment-container-3').click();
+		cy.cGet('#comment-container-3').should('have.class', 'annotation-active');
+	});
+
+	// Opens the Reply pane on a comment, writes in it and posts it. The reply that comes back
+	// is the next comment in the thread.
+	function addReply(id, text) {
+		cy.cGet('#comment-annotation-menu-' + id).click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').click();
+		cy.cGet('#annotation-reply-textarea-' + id).should('have.focus').type(text);
+		cy.cGet('#annotation-reply-' + id).click();
+	}
+
 	it('Modify focuses the modify textbox', function () {
 		desktopHelper.insertComment();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');

@@ -3139,9 +3139,14 @@ export class CommentSection extends CanvasSectionObject {
 
 	private orderTextComments() {
 		var newOrder = [];
+		const ids = new Set(this.sectionProperties.commentList.map(
+			(comment: Comment) => comment.sectionProperties.data.id));
 
 		for (var i = 0; i < this.sectionProperties.commentList.length; i++) {
 			var comment = this.sectionProperties.commentList[i];
+			// A reply whose parent has gone carries on as a thread of its own.
+			if (!comment.isRootComment() && !ids.has(comment.sectionProperties.data.parent))
+				comment.setAsRootComment();
 
 			if (comment.isRootComment()) {
 				newOrder.push(comment);
