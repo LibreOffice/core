@@ -4962,7 +4962,7 @@
           <desc>Allows to specify whether locking should be used at all.
           Use this setting only for debugging purpose.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="AllowOverrideLocking" oor:type="xs:boolean" oor:nillable="false">
         <info>
