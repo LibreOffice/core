@@ -305,7 +305,7 @@ static void loop(void * arg) {
     static_cast<SvpSalInstance *>(arg)->ImplYield(comphelper::LibreOfficeKit::isActive(), false);
 }
 
-bool SvpSalInstance::DoExecute(int &) {
+bool SvpSalInstance::DoExecute() {
     assert(Application::IsUseSystemEventLoop());
     // emscripten_set_main_loop will unwind the stack by throwing a JavaScript exception, so we need
     // to manually undo the call of AcquireYieldMutex() done in InitVCL:
