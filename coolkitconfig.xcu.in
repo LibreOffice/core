@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="en-CA" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="de-DE" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="es" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="fr" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="it" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="nl" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="nl-BE" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="ar" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="pl-PL" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="ru-RU" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="ja-JP" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="fa" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="zh-CN" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-<item oor:path="/org.openoffice.Office.Linguistic/ServiceManager/GrammarCheckerList"><prop oor:name="ro-RO" oor:op="fuse" oor:type="oor:string-list"><value><it>org.openoffice.lingu.LanguageToolGrammarChecker</it></value></prop></item>
-
 <!-- Hide MediaPlaybackPanel on sidebar. It does not work in Online. Video playback controls are implemented by the browser.  -->
 <item oor:path="/org.openoffice.Office.UI.Sidebar/Content/PanelList/org.openoffice.Office.UI.Sidebar:Panel['MediaPlaybackPanel']"><prop oor:name="ContextList" oor:op="fuse"><value><it>any, default, hidden</it></value></prop></item>
 
