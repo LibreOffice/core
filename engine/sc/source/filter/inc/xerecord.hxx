@@ -130,6 +130,24 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
+/** Writes one attribute with a text value into the single element that is open.
+
+    A single element is opened by one record and closed by another, and the records between them
+    write its attributes. This one writes a text attribute, and writes nothing where there is no
+    text to write. */
+class XclExpXmlStringAttributeRecord : public XclExpRecordBase
+{
+public:
+                        XclExpXmlStringAttributeRecord( sal_Int32 nAttribute, OUString aValue );
+    virtual             ~XclExpXmlStringAttributeRecord() override;
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
+
+private:
+    sal_Int32           mnAttribute;
+    OUString            maValue;
+};
+
 /** Base class for single records with any content.
 
     This class handles writing the record header. Derived classes only have to

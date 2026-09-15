@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include <xerecord.hxx>
 #include <xeroot.hxx>
 #include <xltools.hxx>
@@ -125,6 +127,23 @@ XclExpXmlEndSingleElementRecord::~XclExpXmlEndSingleElementRecord()
 void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->write( "/>" );
+}
+
+XclExpXmlStringAttributeRecord::XclExpXmlStringAttributeRecord( sal_Int32 nAttribute,
+                                                                OUString aValue ) :
+    mnAttribute( nAttribute ),
+    maValue( std::move( aValue ) )
+{
+}
+
+XclExpXmlStringAttributeRecord::~XclExpXmlStringAttributeRecord()
+{
+}
+
+void XclExpXmlStringAttributeRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !maValue.isEmpty() )
+        rStrm.WriteAttributes( mnAttribute, maValue );
 }
 
 XclExpRecord::XclExpRecord( sal_uInt16 nRecId, std::size_t nRecSize ) :

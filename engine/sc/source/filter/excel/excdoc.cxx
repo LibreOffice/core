@@ -505,6 +505,8 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
     Add( new XclExpBoolRecord(0x0040, false, XML_backupFile ) );    // BACKUP
     Add( new XclExpBoolRecord(0x008D, false, XML_showObjects ) );   // HIDEOBJ
+    // The name a macro addresses the document by
+    Add( new XclExpXmlStringAttributeRecord( XML_codeName, rDoc.GetCodeName() ) );
 
     Add( new Exc1904( rDoc ) );
     // OOXTODO: The following /workbook/workbookPr attributes are mapped
@@ -513,7 +515,6 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     //          XML_allowRefreshQuery:          QSISTAG 802h: fEnableRefresh
     //          XML_autoCompressPictures:       COMPRESSPICTURES 89Bh: fAutoCompressPictures
     //          XML_checkCompatibility:         COMPAT12 88Ch: fNoCompatChk
-    //          XML_codeName:                   "Calc"
     //          XML_defaultThemeVersion:        ???
     //          XML_filterPrivacy:              BOOKEXT 863h: fFilterPrivacy
     //          XML_hidePivotFieldList:         BOOKBOOL DAh: fHidePivotTableFList

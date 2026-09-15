@@ -1416,6 +1416,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testSheetWithoutCodeNameThroughODS)
     assertXPath(pSheet, "/x:worksheet/x:sheetPr[@codeName]", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testWorkbookCodeName)
+{
+    createScDoc("xlsx/MissingPathExternal.xlsx");
+    CPPUNIT_ASSERT_EQUAL(u"DieseArbeitsmappe"_ustr, getScDoc()->GetCodeName());
+
+    saveAndReload(TestFilter::XLSX);
+
+    CPPUNIT_ASSERT_EQUAL(u"DieseArbeitsmappe"_ustr, getScDoc()->GetCodeName());
+
+    createScDoc("xlsx/CalcThemeTest.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    assertXPathNoAttribute(pWorkbook, "/x:workbook/x:workbookPr", "codeName");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
