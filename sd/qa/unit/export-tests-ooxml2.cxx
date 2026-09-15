@@ -1944,6 +1944,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
     assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
 }
 
+// A diagram keeps the name the document gave it. Every diagram was written under a name made from
+// the number it was counted with, so the name a reader shows for it changed on every save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testDiagramKeepsItsName)
+{
+    createSdImpressDoc("pptx/Bar_List.pptx");
+
+    uno::Reference<container::XNamed> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    const OUString aName = xDiagram->getName();
+    CPPUNIT_ASSERT(!aName.isEmpty());
+
+    saveAndReload(TestFilter::PPTX);
+
+    xDiagram.set(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(aName, xDiagram->getName());
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970_embeddedMediaFile)
 {
     // Embedded media file
