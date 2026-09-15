@@ -915,6 +915,7 @@ public:
     bool IsAtMultiLineFieldEnd(const EditPaM& rPaM);
     static tools::Long GetWrappedFieldExtraHeight(const EditLine& rLine,
                                                   const ExtraPortionInfo* pExtraInfo);
+    static tools::Long GetMultiLineFieldRowLeft(EditLine const& rLine);
 
     EditUndoManager& GetUndoManager()
     {

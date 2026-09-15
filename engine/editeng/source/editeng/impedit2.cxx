@@ -3307,8 +3307,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
             {
                 if (!IsRightToLeft(GetEditDoc().GetPos(rPortion.GetNode())))
                 {
-                    nX = rLine.GetStartPosX() - rLine.GetNextLinePosXDiff()
-                         + pEI->nLastLineTextWidth;
+                    nX = GetMultiLineFieldRowLeft(rLine) + pEI->nLastLineTextWidth;
                 }
                 nYShift = GetWrappedFieldExtraHeight(rLine, pEI);
             }
@@ -3597,6 +3596,14 @@ bool ImpEditEngine::IsAtMultiLineFieldEnd(const EditPaM& rPaM)
     return IsAtMultiLineFieldEnd(*pPortion, rPaM.GetIndex());
 }
 
+tools::Long ImpEditEngine::GetMultiLineFieldRowLeft(EditLine const& rLine)
+{
+    // Where a row of a wrapped field starts. The rows below the first one
+    // start at the left edge the line was formatted from, which sits left of
+    // the line's own start when the following rows had more room.
+    return rLine.GetStartPosX() - rLine.GetNextLinePosXDiff();
+}
+
 tools::Long ImpEditEngine::GetMultiLineFieldEndX(const ParaPortion& rPortion, sal_Int32 nLine,
                                                  sal_Int32 nIndex, tools::Long nFallback) const
 {
@@ -3611,7 +3618,7 @@ tools::Long ImpEditEngine::GetMultiLineFieldEndX(const ParaPortion& rPortion, sa
     if (!pEI || pEI->lineBreaksList.size() <= 1)
         return nFallback;
     const EditLine& rFieldLine = rPortion.GetLines()[nLine - 1];
-    return rFieldLine.GetStartPosX() - rFieldLine.GetNextLinePosXDiff() + pEI->nLastLineTextWidth;
+    return GetMultiLineFieldRowLeft(rFieldLine) + pEI->nLastLineTextWidth;
 }
 
 EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
