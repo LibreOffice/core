@@ -4434,8 +4434,6 @@ void lokit_main(
             // used by LO Migration::migrateSettingsIfNecessary() in startup code as config dir
             ::setenv("XDG_CONFIG_HOME", (tmpPath + "/.config").c_str(), 1);
             ::setenv("HOME", tmpPath.c_str(), 1);
-            // overwrite coolkitconfig.xcu setting to fit into allowed paths
-            ::setenv("KIT_WORKDIR", ("file://" + tmpPath).c_str(), 1);
 
             // Setup the OSL sandbox
             allowedPaths.emplace_back(pathFromFileURL(userdir_url),
