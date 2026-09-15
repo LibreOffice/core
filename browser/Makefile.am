@@ -404,6 +404,7 @@ COOL_JS_LST =\
 	src/app/Util.ts \
 	src/app/LOUtil.ts \
 	src/app/IconUtil.ts \
+	src/app/SlideAvatars.ts \
 	src/app/iface/DocLayer.Interface.ts \
 	src/app/iface/Map.Interface.ts \
 	src/app/iface/Control.Interface.ts \
@@ -1579,6 +1580,7 @@ pot:
 		src/app/Debug.ts \
 		src/app/ExportFormats.ts \
 		src/app/IconUtil.ts \
+		src/app/SlideAvatars.ts \
 		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \
 		src/app/ImpressTableStylesService.ts \

@@ -12,6 +12,7 @@
 /// <reference path="../js/plural.js" />
 /// <reference path="../src/dom/JSX.ts" />
 /// <reference path="../src/app/DocUtil.ts" />
+/// <reference path="../src/app/SlideAvatars.ts" />
 /// <reference path="../src/app/LocaleService.ts" />
 /// <reference path="../src/app/LayoutingService.ts" />
 /// <reference path="../src/control/jsdialog/Util.GenerateTableIcon.ts" />

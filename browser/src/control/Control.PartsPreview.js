@@ -365,9 +365,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	// Three avatars at most, never our own
-	_maxFrameAvatars: 3,
-
 	// Put every other user's avatar on the preview of the slide that user is on.
 	_updateViewAvatars: function () {
 		if (!this._previewInitialized || !this._map.userList)
@@ -409,7 +406,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var frame = img.parentNode;
 		var strip = frame.querySelector('.preview-avatars');
 
-		img.viewNames = viewIds.map(function (viewId) {
+		var viewNames = viewIds.map(function (viewId) {
 			return map.getViewName(viewId) || '';
 		});
 		this._setPreviewPositionLabels(img, i);
@@ -426,24 +423,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			frame.insertBefore(strip, img.nextSibling);
 		}
 
-		var shown = Math.min(
-			viewIds.length > 2 ? viewIds.length - 1 : viewIds.length,
-			this._maxFrameAvatars);
+		var slots = app.SlideAvatars.slots(viewIds.length);
 
-		var children = viewIds.slice(0, shown).map(function (viewId, index) {
+		var children = viewIds.slice(0, slots.faces).map(function (viewId, index) {
 			// The user list keeps the avatar between updates
 			var user = map.userList.users.get(viewId);
 			var avatar = map.userList.createAvatar(user && user.cachedSlideAvatar,
-				viewId, img.viewNames[index], undefined,
+				viewId, viewNames[index], undefined,
 				app.LOUtil.rgbToHex(map.getViewColor(viewId)));
 			if (user)
 				user.cachedSlideAvatar = avatar;
 			return avatar;
 		});
 
-		if (viewIds.length > shown) {
+		if (slots.hidden) {
 			var more = window.L.DomUtil.create('span', 'preview-avatars-more');
-			more.textContent = '+' + (viewIds.length - shown);
+			more.textContent = app.SlideAvatars.counterText(slots.hidden);
 			window.L.DomEvent.on(more, 'click', function (e) {
 				window.L.DomEvent.stop(e);
 				this._openFrameUserList(more, viewIds);
