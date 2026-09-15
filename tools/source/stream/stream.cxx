@@ -479,6 +479,11 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
         sal_uInt16 j, n;
         for( j = n = 0; j < nLen ; ++j )
         {
+            if (nTotalLen + j >= static_cast<std::size_t>(nMaxBytesToRead))
+            {
+                bEnd = true;
+                break;
+            }
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
@@ -490,12 +495,6 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             ++n;
         }
         nTotalLen += j;
-        if (nTotalLen > static_cast<std::size_t>(nMaxBytesToRead))
-        {
-            n -= nTotalLen - nMaxBytesToRead;
-            nTotalLen = nMaxBytesToRead;
-            bEnd = true;
-        }
         if ( n )
             aBuf.append(buf, n);
     }
@@ -556,6 +555,11 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         sal_uInt16 j, n;
         for( j = n = 0; j < nLen ; ++j )
         {
+            if (nTotalLen + j >= static_cast<std::size_t>(nMaxCodepointsToRead))
+            {
+                bEnd = true;
+                break;
+            }
             if (m_isSwap)
                 SwapUnicode( buf[n] );
             c = buf[j];
@@ -576,12 +580,6 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
             }
         }
         nTotalLen += j;
-        if (nTotalLen > static_cast<std::size_t>(nMaxCodepointsToRead))
-        {
-            n -= nTotalLen - nMaxCodepointsToRead;
-            nTotalLen = nMaxCodepointsToRead;
-            bEnd = true;
-        }
         if ( n )
             aBuf.append( buf, n );
     }
