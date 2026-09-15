@@ -157,6 +157,7 @@ protected:
     void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc);
+    void testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc);
 };
 
@@ -1988,6 +1989,53 @@ void TestFormula2::testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
+void TestFormula2::testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& rExtDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    // A1:A5 = 1..5, B1:B5 = 10..50.
+    for (SCROW nRow = 0; nRow < 5; ++nRow)
+    {
+        rExtDoc.SetValue(ScAddress(0, nRow, 0), nRow + 1.0);
+        rExtDoc.SetValue(ScAddress(1, nRow, 0), (nRow + 1.0) * 10);
+    }
+
+    // A scalar Value parameter takes an implicit intersection, row 3 looks up A3.
+    pDoc->SetString(ScAddress(0, 2, 0), u"=XLOOKUP('file:///extdata.fake'#Data.A1:A5;"
+                                        u"'file:///extdata.fake'#Data.A1:A5;"
+                                        u"'file:///extdata.fake'#Data.B1:B5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // Without an intersection the result is an error, not the first element.
+    pDoc->SetString(ScAddress(0, 7, 0), u"=XLOOKUP('file:///extdata.fake'#Data.A1:A5;"
+                                        u"'file:///extdata.fake'#Data.A1:A5;"
+                                        u"'file:///extdata.fake'#Data.B1:B5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoValue),
+                         static_cast<int>(pDoc->GetFormulaCell(ScAddress(0, 7, 0))->GetErrCode()));
+
+    // An entire column must not create a JumpMatrix over all of its rows.
+    pDoc->SetString(ScAddress(0, 3, 0), u"=XLOOKUP('file:///extdata.fake'#Data.A1:A1048576;"
+                                        u"'file:///extdata.fake'#Data.A1:A1048576;"
+                                        u"'file:///extdata.fake'#Data.B1:B1048576)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(40.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    // In array context the entire column is trimmed to the data area instead.
+    ScMarkData aMark(pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    pDoc->InsertMatrixFormula(0, 5, 0, 5, aMark,
+                              u"=XLOOKUP('file:///extdata.fake'#Data.A1:A1048576;"
+                              u"'file:///extdata.fake'#Data.A1:A5;"
+                              u"'file:///extdata.fake'#Data.B1:B5)"_ustr);
+    const ScMatrix* pMat = pDoc->GetFormulaCell(ScAddress(0, 5, 0))->GetMatrix();
+    CPPUNIT_ASSERT_MESSAGE("matrix expected", pMat != nullptr);
+    SCSIZE nMatCols, nMatRows;
+    pMat->GetDimensions(nMatCols, nMatRows);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("entire column not trimmed to the data area", SCSIZE(1), nMatCols);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("entire column not trimmed to the data area", SCSIZE(5), nMatRows);
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 5, 0)));
+}
+
 void TestFormula2::testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
@@ -2098,6 +2146,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefFunctions)
     testExtRefFuncT(m_pDoc, rExtDoc);
     testExtRefFuncOFFSET(m_pDoc, rExtDoc);
     testExtRefFuncVLOOKUP(m_pDoc, rExtDoc);
+    testExtRefImplicitIntersection(m_pDoc, rExtDoc);
     testExtRefConcat(m_pDoc, rExtDoc);
 
     // Unload the external document shell.

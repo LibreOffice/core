@@ -1717,6 +1717,57 @@ void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, std::vecto
     maRefCache.getAllTableNames(nFileId, rTabNames);
 }
 
+void ScExternalRefManager::shrinkToDataArea( sal_uInt16 nFileId, const OUString& rTabName, ScRange& rRange )
+{
+    SCCOL nCol2 = rRange.aEnd.Col();
+    SCROW nRow2 = rRange.aEnd.Row();
+
+    // A loaded source document knows the real extent, the cache only what
+    // the file happened to store.
+    if (const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId))
+    {
+        SCTAB nTab;
+        if (!getSrcDocTable(*pSrcDoc, rTabName, nTab, nFileId))
+            return;
+
+        SCCOL nCol1 = rRange.aStart.Col();
+        SCROW nRow1 = rRange.aStart.Row();
+        if (!pSrcDoc->ShrinkToDataArea(nTab, nCol1, nRow1, nCol2, nRow2))
+            return;
+    }
+    else
+    {
+        ScExternalRefCache::TableTypeRef pTab = maRefCache.getCacheTable(nFileId, rTabName, false, nullptr, nullptr);
+        if (!pTab)
+            return;
+
+        // Bounded by the range, or the end could be pulled in front of the
+        // start for a column or row the cache holds no data for at all.
+        std::vector<SCROW> aRows;
+        pTab->getAllRows(aRows, rRange.aStart.Row(), nRow2);
+        if (aRows.empty())
+            return;
+
+        nRow2 = aRows.back();
+
+        SCCOL nMaxCol = -1;
+        for (const SCROW nRow : aRows)
+        {
+            std::vector<SCCOL> aCols;
+            pTab->getAllCols(nRow, aCols, rRange.aStart.Col(), nCol2);
+            if (!aCols.empty())
+                nMaxCol = std::max(nMaxCol, aCols.back());
+        }
+        if (0 <= nMaxCol)
+            nCol2 = nMaxCol;
+    }
+
+    if (nCol2 < rRange.aEnd.Col())
+        rRange.aEnd.SetCol(nCol2);
+    if (nRow2 < rRange.aEnd.Row())
+        rRange.aEnd.SetRow(nRow2);
+}
+
 SCTAB ScExternalRefManager::getCachedTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
 {
     return maRefCache.getTabSpan( nFileId, rStartTabName, rEndTabName);
