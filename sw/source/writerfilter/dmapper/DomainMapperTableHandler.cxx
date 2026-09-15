@@ -676,7 +676,15 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-        // Fetch Horizontal Orientation in rFrameProperties if not set in m_aTableProperties
+        // The table style carries the alignment as a plain property.
+        if (const std::optional<PropertyMap::Property> oStyleHoriOrient
+                = m_aTableProperties->getProperty(PROP_HORI_ORIENT))
+        {
+            sal_Int16 nStyleHoriOrient{};
+            if (oStyleHoriOrient->second >>= nStyleHoriOrient)
+                nHoriOrient = nStyleHoriOrient;
+        }
+        // Direct formatting wins over it, then Horizontal Orientation in rFrameProperties.
         if ( !m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) )
             lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::Any( sal_Int16(nHoriOrient) ) );

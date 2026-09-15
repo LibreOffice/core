@@ -13,9 +13,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <pam.hxx>
@@ -255,6 +257,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146973_rtlDateLocale)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "(//w:r[w:instrText])[1]/w:rPr/w:lang", "bidi", u"ar-AE");
     assertXPathNoAttribute(pXmlDoc, "(//w:r[w:instrText])[1]/w:rPr/w:lang", "val");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableAlignmentFromTableStyle)
+{
+    // The first table takes its alignment from the w:jc of its table style, the second one
+    // overrides the w:jc of its style with a direct one.
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2
+        // - Actual  : 7
+        // i.e. the table was left aligned, the w:jc of the table style having been dropped.
+        CPPUNIT_ASSERT_EQUAL(
+            text::HoriOrientation::CENTER,
+            getProperty<sal_Int16>(xTables->getByName(u"Table1"_ustr), u"HoriOrient"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            text::HoriOrientation::LEFT_AND_WIDTH,
+            getProperty<sal_Int16>(xTables->getByName(u"Table2"_ustr), u"HoriOrient"_ustr));
+    };
+
+    createSwDoc("table-style-jc.docx");
+    verify();
+    saveAndReload(TestFilter::DOCX);
+    verify();
 }
 
 } // end of anonymous namespace
