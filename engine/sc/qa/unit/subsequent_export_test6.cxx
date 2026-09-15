@@ -661,6 +661,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvImportEmptyFilterOptions)
     CPPUNIT_ASSERT_EQUAL(u"second"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
+// A shape with no text still keeps the size its text would take. The export left out the text
+// body of such a shape, so the shape came back at the size a reader assumes rather than the one
+// the file gave it.
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testEmptyShapeKeepsTheTextSizeItIsGiven)
+{
+    createScDoc("xlsx/hiddenShape.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing, "//xdr:txBody/a:p/a:endParaRPr", "sz", u"1100");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testMissingPathExternal)
 {
     createScDoc("xlsx/MissingPathExternal.xlsx");

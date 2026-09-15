@@ -2339,6 +2339,25 @@ static bool lcl_isTextBox(const Reference<cpo::uno::XInterface>& xIface)
     return aTextBox.get<bool>();
 }
 
+namespace
+{
+/// The character size a reader assumes where a DrawingML text body says nothing, which is the
+/// size the import stamps on a shape that states none of its own.
+constexpr float fDefaultCharHeight = 18.0;
+
+/// True when the shape asks for a character size other than the one a text body implies.
+bool lcl_HasOwnCharacterHeight(const Reference<cpo::uno::XInterface>& xIface)
+{
+    Reference<XPropertySet> xPropSet(xIface, UNO_QUERY);
+    if (!xPropSet.is() || !xPropSet->getPropertySetInfo()->hasPropertyByName(u"CharHeight"_ustr))
+        return false;
+
+    float fCharHeight = fDefaultCharHeight;
+    xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
+    return fCharHeight != fDefaultCharHeight;
+}
+}
+
 ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
@@ -2353,7 +2372,13 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >&
     }
 
     Reference< XText > xXText( xIface, UNO_QUERY );
-    if( (NonEmptyText( xIface ) || GetDocumentType() == DOCUMENT_PPTX)
+    // A shape with no text still carries the size its text would take, so a presentation always
+    // writes the text body, and a spreadsheet writes it once the shape asks for a size other than
+    // the one a reader assumes.
+    const bool bWriteEmptyText
+        = GetDocumentType() == DOCUMENT_PPTX
+          || (GetDocumentType() == DOCUMENT_XLSX && !mbUserShapes && lcl_HasOwnCharacterHeight(xIface));
+    if( (NonEmptyText( xIface ) || bWriteEmptyText)
         && xXText.is() )
     {
         FSHelperPtr pFS = GetFS();
