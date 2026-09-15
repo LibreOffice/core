@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <officecfg/Office/Calc.hxx>
+#include <drwlayer.hxx>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>

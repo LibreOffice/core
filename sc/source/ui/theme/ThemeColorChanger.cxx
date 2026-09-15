@@ -9,6 +9,7 @@
  */
 
 #include <ThemeColorChanger.hxx>
+#include <drwlayer.hxx>
 
 #include <sal/config.h>
 

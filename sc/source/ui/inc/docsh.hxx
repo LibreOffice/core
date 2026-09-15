@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/objsh.hxx>
+#include <unotools/resmgr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>

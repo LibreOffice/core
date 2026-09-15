@@ -68,6 +68,15 @@ void ScDocument::BeginDrawUndo()
         mpDrawLayer->BeginCalcUndo(false);
 }
 
+sc::DrawUndoGuard::~DrawUndoGuard()
+{
+    if (mpDoc)
+    {
+        if (auto* pLayer = mpDoc->GetDrawLayer())
+            (void)pLayer->GetCalcUndo();
+    }
+}
+
 void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
     if (mpDrawLayer && rSrcDoc.mpDrawLayer)

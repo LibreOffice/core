@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include <drwlayer.hxx>
 
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/brushitem.hxx>

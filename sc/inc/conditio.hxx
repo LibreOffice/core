@@ -34,6 +34,7 @@
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <tools/link.hxx>
+#include <vcl/idle.hxx>
 
 #include <optional>
 #include <map>

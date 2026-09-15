@@ -8,6 +8,7 @@
  */
 
 #include <undo/UndoThemeChange.hxx>
+#include <drwlayer.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <scresid.hxx>

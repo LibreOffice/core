@@ -8,6 +8,7 @@
  */
 
 #include <test/htmltesttools.hxx>
+#include <drwlayer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

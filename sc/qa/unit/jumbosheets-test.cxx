@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include "helper/qahelper.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <drwlayer.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
 #include <comphelper/servicehelper.hxx>

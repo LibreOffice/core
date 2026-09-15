@@ -20,6 +20,7 @@
 #pragma once
 
 #include <global.hxx>
+#include <unotools/resmgr.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <typedstrdata.hxx>

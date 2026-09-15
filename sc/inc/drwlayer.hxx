@@ -22,6 +22,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/svdundo.hxx>
 #include "global.hxx"
+#include "types.hxx"
 
 class ScDocument;
 class SfxObjectShell;
@@ -84,14 +85,6 @@ public:
 
     virtual void     Undo() override;
     virtual void     Redo() override;
-};
-
-// for ScDrawLayer::SetPageSize
-enum class ScObjectHandling
-{
-    RecalcPosMode, // used for row height or col width changes
-    MoveRTLMode, // used for switch to RTL during import of right-to-left sheet
-    MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
 };
 
 class SAL_DLLPUBLIC_RTTI ScDrawLayer final : public FmFormModel

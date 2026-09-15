@@ -10,6 +10,7 @@
 #include <editeng/borderline.hxx>
 #include <sal/config.h>
 #include <helper/qahelper.hxx>
+#include <drwlayer.hxx>
 #include <sal/log.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/processfactory.hxx>

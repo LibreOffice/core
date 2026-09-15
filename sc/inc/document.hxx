@@ -57,7 +57,6 @@
 #include <vector>
 
 #include "markdata.hxx"
-#include "drwlayer.hxx"
 
 #include "SheetViewTypes.hxx"
 
@@ -137,6 +136,7 @@ class SfxItemPool;
 class SfxPrinter;
 class SfxStyleSheetBase;
 class SvMemoryStream;
+class SvStream;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxForbiddenCharactersTable;
@@ -161,6 +161,7 @@ class ScDetOpList;
 class ScDocOptions;
 class ScDocProtection;
 class ScDocumentPool;
+class ScDrawLayer;
 class ScExtDocOptions;
 class ScExternalRefManager;
 class ScFormulaCell;
@@ -3002,14 +3003,7 @@ public:
         if (mpDoc)
             mpDoc->BeginDrawUndo();
     }
-    ~DrawUndoGuard()
-    {
-        if (mpDoc)
-        {
-            if (auto* pLayer = mpDoc->GetDrawLayer())
-                (void)pLayer->GetCalcUndo();
-        }
-    }
+    ~DrawUndoGuard();
     DrawUndoGuard(const DrawUndoGuard&) = delete;
     DrawUndoGuard& operator=(const DrawUndoGuard&) = delete;
 };

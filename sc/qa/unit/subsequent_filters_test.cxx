@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <drwlayer.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>

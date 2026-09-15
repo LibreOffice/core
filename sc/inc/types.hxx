@@ -147,4 +147,12 @@ enum class ScQueryCellIteratorAccess
   SortedCache // Using ScSortedRangeCache.
 };
 
+// How ScDrawLayer::SetPageSize treats the drawing objects of a sheet.
+enum class ScObjectHandling
+{
+    RecalcPosMode, // used for row height or col width changes
+    MoveRTLMode, // used for switch to RTL during import of right-to-left sheet
+    MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
