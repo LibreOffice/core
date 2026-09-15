@@ -7,8 +7,8 @@ var desktopHelper = require('../../common/desktop_helper');
 
 var deck = '#cleanup-deck';
 
-// The panel keeps one group per kind of finding. A group with nothing to report
-// is taken out of the panel.
+// Every check is listed at all times. A check holding findings stands as the
+// disclosure over them.
 var groupIds = {
 	images: 'cleanup-group-image',
 	cropped: 'cleanup-group-cropped-image',
@@ -18,16 +18,26 @@ var groupIds = {
 	ole: 'cleanup-group-embedded-object',
 };
 
+// A check holding no findings stands as a flat row that says what it has to
+// report.
+var checkIds = {
+	images: 'cleanup-check-image',
+	cropped: 'cleanup-check-cropped-image',
+	hidden: 'cleanup-check-hidden-slide',
+	masters: 'cleanup-check-unused-master',
+	notes: 'cleanup-check-notes',
+	ole: 'cleanup-check-embedded-object',
+};
+
 function group(name) {
 	return deck + ' #' + groupIds[name];
 }
 
-// A group folds shut under a heading that says its name and how many rows it holds.
-function groupTitle(name) {
-	return group(name) + ' .ui-expander-label';
+function check(name) {
+	return deck + ' #' + checkIds[name];
 }
 
-// Every finding gets a row of its own inside its group.
+// Every finding gets a row of its own inside its check.
 function rowsOf(name) {
 	return group(name) + ' .cleanup-row';
 }
@@ -56,7 +66,28 @@ function openCleanupDeck(win) {
 	});
 	helper.processToIdle(win);
 
-	cy.cGet(deck + ' #cleanup-options').should('be.visible');
+	cy.cGet(deck + ' #cleanup-options-heading-button').should('be.visible');
+}
+
+// The values a scan is run with stand behind one row in the footer. The row
+// opens with the deck, so a test that reads or sets a value makes sure the row
+// is open rather than pressing it.
+function openOptions() {
+	cy.cGet(deck + ' #cleanup-options-heading-button').should('not.be.disabled')
+		.then(function($heading) {
+			if ($heading.attr('aria-expanded') !== 'true')
+				cy.wrap($heading).click();
+		});
+	cy.cGet(deck + ' #cleanup-options-body').should('be.visible');
+}
+
+// The row that holds the values a scan is run with folds them away.
+function closeOptions() {
+	cy.cGet(deck + ' #cleanup-options-heading-button')
+		.should('have.attr', 'aria-expanded', 'true').click();
+	cy.cGet(deck + ' #cleanup-options-heading-button')
+		.should('have.attr', 'aria-expanded', 'false');
+	cy.cGet(deck + ' #cleanup-options-body').should('not.be.visible');
 }
 
 function closeCleanupDeck(win) {
@@ -68,13 +99,23 @@ function closeCleanupDeck(win) {
 	cy.cGet(deck + ':visible').should('not.exist');
 }
 
-// The panel of a deck that has just opened holds no list: it says what the scan
-// button is for and there is nothing for the band that adds a list up to say.
+// The panel of a deck that has just opened holds no list: it says what the deck
+// is for, every check reports that no scan has covered it yet, there is
+// nothing for the band that adds a list up to say, and the values a scan is
+// run with are in view.
 function assertPanelIsEmpty() {
 	cy.cGet(deck + ' #cleanup-message').should('be.visible')
-		.and('contain.text', 'press Scan');
+		.and('contain.text', 'Find what makes this presentation large');
+	cy.cGet(deck + ' .cleanup-check-row:visible .cleanup-check-state')
+		.should('have.length', 6)
+		.each(function($state) {
+			expect($state.text(), 'what a check reports').to.equal('Not checked');
+		});
 	cy.cGet(deck + ' .cleanup-row:visible').should('not.exist');
 	cy.cGet(deck + ' #cleanup-summary:visible').should('not.exist');
+	cy.cGet(deck + ' #cleanup-options-heading-button')
+		.should('have.attr', 'aria-expanded', 'true');
+	cy.cGet(deck + ' #cleanup-options-body').should('be.visible');
 }
 
 // Every size the panel writes is one of three forms: whole bytes under a
@@ -82,7 +123,8 @@ function assertPanelIsEmpty() {
 // place.
 const byteSize = '(?:\\d+ bytes?|\\d+ KB|\\d+\\.\\d MB)';
 const savingText = new RegExp('^saves ' + byteSize + '$');
-const totalText = new RegExp('^(?:Estimated saving: ' + byteSize
+const totalText = new RegExp('^(?:' + byteSize + ' \\(\\d+%\\) can be cleaned up'
+	+ '|' + byteSize + ' can be cleaned up'
 	+ '|Saved ' + byteSize + '|\\d+ things? to clean up)$');
 
 // Press a control that sets a run going, and see that a run did follow. The status line stands
@@ -199,7 +241,7 @@ function scanPresentation(win) {
 
 	// The button asks to be pressed again once the scan is over, under the label
 	// it carried all along.
-	cy.cGet(scanButton).should('have.text', 'Scan');
+	cy.cGet(deck + ' #cleanup-scan').should('have.text', 'Scan presentation');
 }
 
 // Every row that offers a saving says what it comes to as a size.
@@ -219,14 +261,33 @@ function assertTotalFigure() {
 		.invoke('text').should('match', totalText);
 }
 
-function assertGroupListed(name) {
-	cy.cGet(group(name)).should('be.visible');
+// The footer stands at the foot of the dock, so its bottom edge is the bottom
+// edge of the dock itself.
+function assertFooterSitsAtBottomOfDock() {
+	cy.cGet('#sidebar-dock-wrapper').then(function($dock) {
+		const dockBottom = $dock[0].getBoundingClientRect().bottom;
+
+		cy.cGet(deck + ' .cleanup-footer').should(function($footer) {
+			const footerBottom = $footer[0].getBoundingClientRect().bottom;
+			expect(Math.abs(footerBottom - dockBottom),
+				'how far the footer is off the bottom of the dock').to.be.lessThan(2);
+		});
+	});
 }
 
-// A group the scan found nothing for is not on screen, and the panel is free to
-// leave it out of the deck altogether.
-function assertGroupNotListed(name) {
+// A check with findings stands as the disclosure that holds them, in the place
+// of the flat row.
+function assertGroupListed(name) {
+	cy.cGet(group(name)).should('be.visible');
+	cy.cGet(check(name) + ':visible').should('not.exist');
+}
+
+// A check with no findings keeps its place in the panel: the disclosure is off
+// the screen and a flat row stands there saying what the check has to report.
+function assertCheckReads(name, state) {
 	cy.cGet(group(name) + ':visible').should('not.exist');
+	cy.cGet(check(name)).should('be.visible')
+		.find('.cleanup-check-state').should('have.text', state);
 }
 
 // Carry out the cleanup the first row of a group offers. The kit works out what the
@@ -282,32 +343,38 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 	it('lists what the presentation has to clean up', function() {
 		const win = this.win;
 
-		// Until a scan has run the panel says what the scan button is for, and
-		// there is nothing for the band that adds the list up to say.
+		// Until a scan has run the panel says what the deck is for, and there is
+		// nothing for the band that adds the list up to say.
 		cy.cGet(deck + ' #cleanup-message').should('be.visible')
-			.and('contain.text', 'press Scan');
+			.and('contain.text', 'Find what makes this presentation large');
 		cy.cGet(deck + ' #cleanup-summary:visible').should('not.exist');
 
 		scanPresentation(win);
 
-		// The list takes the place of that invitation.
+		// The list takes the place of that line.
 		cy.cGet(deck + ' #cleanup-message:visible').should('not.exist');
 
 		assertGroupListed('images');
 		assertGroupListed('hidden');
 		assertGroupListed('masters');
 
-		// Neither the speaker notes group nor the embedded objects group is
-		// listed while the deck is not being prepared to hand out.
-		assertGroupNotListed('notes');
-		assertGroupNotListed('ole');
+		// The speaker notes and the embedded objects are not looked at while
+		// the deck is not being prepared to hand out, and both checks say so
+		// rather than going off the screen.
+		assertCheckReads('notes', 'Not checked');
+		assertCheckReads('ole', 'Not checked');
 
-		// A heading says how many rows its group holds, and the one over the
-		// image rows carries the resolution the scan measured against as well,
-		// so no row has to repeat it.
-		cy.cGet(groupTitle('images')).should('have.text', 'Images over 150 DPI (2)');
-		cy.cGet(groupTitle('hidden')).should('have.text', 'Hidden slides (1)');
-		cy.cGet(groupTitle('masters')).should('have.text', 'Unused master slides (1)');
+		// A heading says what a check looks for and the count beside it says how
+		// many findings it holds.
+		cy.cGet(group('images') + ' .ui-expander-label')
+			.should('have.text', 'High-resolution images');
+		cy.cGet(group('images') + ' .ui-expander-secondary').should('have.text', '2');
+		cy.cGet(group('hidden') + ' .ui-expander-label')
+			.should('have.text', 'Hidden slides');
+		cy.cGet(group('hidden') + ' .ui-expander-secondary').should('have.text', '1');
+		cy.cGet(group('masters') + ' .ui-expander-label')
+			.should('have.text', 'Unused master slides');
+		cy.cGet(group('masters') + ' .ui-expander-secondary').should('have.text', '1');
 
 		// A row names where the image sits, and which image on that slide it is
 		// when the slide has more than one, and nothing else.
@@ -336,19 +403,73 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		// sight for as long as nothing is running.
 		cy.cGet(deck + ' #cleanup-stop').should('exist').and('not.be.visible');
 
-		// The figure and the button that deals with the whole list stand over
-		// the groups, next to the scan button, so a short window does not push
-		// them out of sight below the list.
+		// The figure and the button that deals with the whole list stand in the
+		// footer, which keeps to the foot of the deck while the list scrolls, so
+		// a short window does not push them out of sight below the list. The
+		// band leads the footer, then the row the options stand behind, then the
+		// one action of the panel.
 		cy.cGet(deck + ' #cleanup-summary').should('be.visible');
 		cy.cGet(deck + ' #cleanup-summary #cleanup-total').should('be.visible');
 		cy.cGet(deck + ' #cleanup-summary #cleanup-fix-all').should('be.visible');
-		cy.cGet(deck).then(($deck) => {
-			const ids = Array.from($deck[0].querySelectorAll('[id]'))
-				.map((element) => element.id);
-			expect(ids, 'the summary band').to.include('cleanup-summary');
-			expect(ids.indexOf('cleanup-summary'), 'place of the summary band')
-				.to.be.lessThan(ids.indexOf(groupIds.images));
+		cy.cGet(deck + ' .cleanup-footer').then(($footer) => {
+			const order = ['cleanup-summary', 'cleanup-options', 'cleanup-run'];
+			const places = order.map((name) =>
+				Array.from($footer[0].children)
+					.findIndex((child) => child.classList.contains(name)));
+			expect(places[0], 'the summary band').to.not.equal(-1);
+			expect(places[1], 'the options row').to.not.equal(-1);
+			expect(places[0], 'place of the summary band').to.be.lessThan(places[1]);
+			expect(places[1], 'place of the options row').to.be.lessThan(places[2]);
 		});
+	});
+
+	it('the footer stands at the foot of the dock however little the panel lists', function() {
+		const win = this.win;
+
+		// The panel of a deck that has just opened lists nothing, and the band
+		// that adds a list up and the one action of the panel are at the foot of
+		// the dock.
+		assertFooterSitsAtBottomOfDock();
+
+		scanPresentation(win);
+		assertGroupListed('images');
+
+		// Folding every check that holds findings leaves the panel short again,
+		// and the footer has not moved.
+		cy.cGet(deck + ' .cleanup-group:visible .ui-expander-btn')
+			.then(function($headings) {
+				$headings.each(function(index, heading) {
+					cy.wrap(heading).click();
+				});
+			});
+		cy.cGet(deck + ' .cleanup-group:visible .ui-expander-btn[aria-expanded="true"]')
+			.should('not.exist');
+
+		assertFooterSitsAtBottomOfDock();
+	});
+
+	it('the name of the images check says what counts as too much detail', function() {
+		const win = this.win;
+
+		// The check says what it looks for in a line the reader can rest on,
+		// which carries the resolution the scan measures against, so the name
+		// itself does not have to.
+		const explanation
+			= 'Images stored at more than 150 DPI, more detail than a slide can show';
+
+		cy.cGet(check('images') + ' .cleanup-check-title')
+			.should('have.text', 'High-resolution images')
+			.and('have.attr', 'data-cooltip', explanation);
+
+		scanPresentation(win);
+
+		// The heading of the disclosure that stands over the findings says the
+		// same thing.
+		cy.cGet(group('images') + ' .ui-expander-label')
+			.should('have.text', 'High-resolution images');
+		cy.cGet(group('images') + ' .ui-expander-btn')
+			.should('have.attr', 'data-cooltip', explanation);
+		cy.cGet(group('images')).should('not.have.attr', 'data-cooltip');
 	});
 
 	it('an image with too little to gain is off the list by the end of the run', function() {
@@ -393,9 +514,11 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 
 		assertGroupListed('cropped');
 
-		// A heading says how many pictures the deck draws with part of them
-		// hidden.
-		cy.cGet(groupTitle('cropped')).should('have.text', 'Cropped images (1)');
+		// A heading says what the check looks for and the count beside it says
+		// how many pictures the deck draws with part of them hidden.
+		cy.cGet(group('cropped') + ' .ui-expander-label')
+			.should('have.text', 'Cropped images');
+		cy.cGet(group('cropped') + ' .ui-expander-secondary').should('have.text', '1');
 
 		// The row names where the picture sits the same way an image row does.
 		cy.cGet(rowsOf('cropped') + ':visible ' + rowText).first().invoke('text').then((text) => {
@@ -427,7 +550,7 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		// The slide is gone and the panel has nothing left to say about hidden
 		// slides, without being asked to look again.
 		impressHelper.assertSlidePreviewCountAfterIdle(win, 2);
-		assertGroupNotListed('hidden');
+		assertCheckReads('hidden', 'None');
 
 		undo(win);
 
@@ -493,10 +616,10 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 
 			dealWithRowOf('cropped', win);
 
-			// The picture now holds only the part the slide shows, so there
-			// is nothing hidden left to report and the group goes with its
-			// only row.
-			assertGroupNotListed('cropped');
+			// The picture now holds only the part the slide shows, so the
+			// check is left with nothing to report and the disclosure goes
+			// with its only row.
+			assertCheckReads('cropped', 'None');
 
 			undo(win);
 
@@ -516,7 +639,7 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 			redo(win);
 
 			waitForRunToEnd();
-			assertGroupNotListed('cropped');
+			assertCheckReads('cropped', 'None');
 		});
 	});
 
@@ -524,6 +647,7 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		const win = this.win;
 		let undoStepsBefore = 0;
 
+		openOptions();
 		cy.cGet(deck + ' #cleanup-sharing-input').check();
 		scanPresentation(win);
 
@@ -540,9 +664,9 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 
 		waitForRunToEnd();
 
-		assertGroupNotListed('hidden');
-		assertGroupNotListed('masters');
-		assertGroupNotListed('notes');
+		assertCheckReads('hidden', 'None');
+		assertCheckReads('masters', 'None');
+		assertCheckReads('notes', 'None');
 
 		// Having dealt with the whole list, the panel reports what it freed up
 		// rather than what is still there to gain.
@@ -597,16 +721,165 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 	it('asking for images to be left alone reports none of them', function() {
 		const win = this.win;
 
+		openOptions();
 		cy.cGet(deck + ' #cleanup-resolution-input').select('Leave images alone');
 		helper.processToIdle(win);
 
 		scanPresentation(win);
 
 		// Cropped pictures are measured against the same resolution, so asking
-		// for images to be left alone leaves them alone too.
-		assertGroupNotListed('images');
-		assertGroupNotListed('cropped');
+		// for images to be left alone leaves them alone too, and both checks
+		// say they were not looked at rather than that they found nothing.
+		assertCheckReads('images', 'Not checked');
+		assertCheckReads('cropped', 'Not checked');
 		assertGroupListed('hidden');
+	});
+
+	it('a check a scan covered and found nothing in says so', function() {
+		const win = this.win;
+
+		// The deck holds no embedded object, so a scan that looks for them
+		// leaves that check reporting that it found nothing, next to the
+		// speaker notes the same scan did find.
+		openOptions();
+		cy.cGet(deck + ' #cleanup-sharing-input').check();
+
+		scanPresentation(win);
+
+		assertGroupListed('notes');
+		assertCheckReads('ole', 'None');
+	});
+
+	it('the options stand behind a row that names what a scan would be run with', function() {
+		// The values a scan is run with stand together at the end of the panel,
+		// so the checks above them read as one list of what the presentation
+		// holds.
+		cy.cGet(deck + ' .cleanup-footer .cleanup-options').should('exist');
+		cy.cGet(deck + ' .cleanup-tool .cleanup-options').should('not.exist');
+
+		// The fields are in view from the start, and while they are on show they
+		// say what they hold, so the row says nothing of its own.
+		cy.cGet(deck + ' #cleanup-options-heading-button')
+			.should('have.attr', 'aria-expanded', 'true');
+		cy.cGet(deck + ' #cleanup-options-body').should('be.visible');
+		cy.cGet(deck + ' #cleanup-options-heading-secondary').should('not.be.visible');
+
+		// Pressing the row puts the fields away, and the line says what they
+		// hold.
+		closeOptions();
+		cy.cGet(deck + ' #cleanup-options-heading-secondary').should('be.visible')
+			.and('have.text', '150 DPI, quality 80 %');
+
+		openOptions();
+		cy.cGet(deck + ' #cleanup-options-heading-secondary').should('not.be.visible');
+		cy.cGet(deck + ' #cleanup-sharing-input').check();
+		cy.cGet(deck + ' #cleanup-resolution-input').select('Leave images alone');
+
+		// The line follows what the fields now hold.
+		closeOptions();
+		cy.cGet(deck + ' #cleanup-options-heading-secondary').should('be.visible')
+			.and('have.text', 'images left alone');
+	});
+
+	it('the options take a value again once a run is over', function() {
+		const win = this.win;
+
+		// A run turns the fields off. Once it is over they are live again, and
+		// they still hold what they held.
+		cy.cGet(deck + ' #cleanup-quality-input').should('have.value', '80');
+		scanPresentation(win);
+
+		cy.cGet(deck + ' #cleanup-resolution-input').should('not.be.disabled');
+		cy.cGet(deck + ' #cleanup-quality-input').should('not.be.disabled')
+			.and('have.value', '80');
+		cy.cGet(deck + ' #cleanup-sharing-input').should('not.be.disabled').check()
+			.should('be.checked');
+		cy.cGet(deck + ' #cleanup-resolution-input').select('Leave images alone')
+			.should('have.value', '0');
+
+		// The values are the ones the next scan is run with: a scan that leaves
+		// the images alone covers neither image check.
+		scanPresentation(win);
+		assertCheckReads('images', 'Not checked');
+		assertCheckReads('cropped', 'Not checked');
+	});
+
+	it('the choice that asks for a presentation to be readied for sharing stands with the other options', function() {
+		// The choice decides what a scan looks for, as the two figures above it
+		// do, so it stands behind the same row and folds away with them.
+		cy.cGet(deck + ' .cleanup-tool #cleanup-sharing-input').should('not.exist');
+		closeOptions();
+		cy.cGet(deck + ' #cleanup-sharing-input').should('not.be.visible');
+
+		openOptions();
+
+		cy.cGet(deck + ' #cleanup-options-body #cleanup-sharing-input').should('be.visible');
+		cy.cGet(deck + ' #cleanup-options-body').then(($body) => {
+			const ids = Array.from($body[0].children).map((child) => child.id);
+			expect(ids, 'the resolution').to.include('cleanup-resolution');
+			expect(ids, 'the quality').to.include('cleanup-quality');
+			expect(ids.indexOf('cleanup-sharing'), 'place of the choice')
+				.to.equal(ids.length - 1);
+		});
+	});
+
+	it('a notes row offers to remove the notes and an image row offers to fix the image', function() {
+		const win = this.win;
+
+		openOptions();
+		cy.cGet(deck + ' #cleanup-sharing-input').check();
+		scanPresentation(win);
+
+		assertGroupListed('notes');
+
+		// Dealing with a speaker notes row takes the notes off the slide they
+		// are on, and dealing with an image row leaves the image where it is
+		// and works on what it holds, so the two rows say different words.
+		cy.cGet(rowsOf('notes') + ':visible ' + rowFix).first()
+			.should('have.text', 'Remove');
+		cy.cGet(rowsOf('images') + ':visible ' + rowFix).first()
+			.should('have.text', 'Fix');
+	});
+
+	it('changing an option leaves the list and the scan button as they were', function() {
+		const win = this.win;
+
+		scanPresentation(win);
+		assertGroupListed('images');
+
+		openOptions();
+		cy.cGet(deck + ' #cleanup-resolution-input').select('300 DPI');
+
+		// The row says what the next scan would be run with. Nothing else
+		// moves: the list is still the one the last scan found, its heading
+		// still stands over it, and the button still offers to scan the
+		// presentation.
+		cy.cGet(deck + ' #cleanup-options-heading-secondary')
+			.should('have.text', '300 DPI, quality 80 %');
+		cy.cGet(deck + ' #cleanup-scan').should('have.text', 'Scan presentation');
+		cy.cGet(group('images') + ' .ui-expander-label')
+			.should('have.text', 'High-resolution images');
+		cy.cGet(rowsOf('images') + ':visible').should('have.length', 2);
+	});
+
+	it('the keyboard moves to Stop when a run starts from the options row', function() {
+		const win = this.win;
+
+		// The options go dead for as long as a run lasts, so the row they stand
+		// behind hands the keyboard on rather than dropping it. The run is set
+		// going without pressing the scan button, which would take the keyboard
+		// off the options row first.
+		cy.cGet(deck + ' #cleanup-options-heading-button').focus();
+		helper.assertFocus('id', 'cleanup-options-heading-button');
+
+		cy.cGet(deck + ' #cleanup-scan-button').then(function($scan) {
+			$scan[0].dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
+		});
+
+		helper.assertFocus('id', 'cleanup-stop-button');
+
+		helper.processToIdle(win);
+		waitForRunToEnd();
 	});
 
 	it('a row link moves the view to the slide it names', function() {
@@ -665,15 +938,10 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		cy.cGet(rowsOf('images') + ':visible').should('have.length', 1);
 	});
 
-	it('the keyboard reaches the scan button, a row and the Fix button of a row', function() {
+	it('the keyboard reaches a row, the button of a row, the options and the scan button', function() {
 		const win = this.win;
 
 		scanPresentation(win);
-
-		// Tab walks on from the last of the options and every widget it lands
-		// on is noted, so what is asserted is what the reader reaches rather
-		// than the widgets that happen to lie in between.
-		const visited = [];
 
 		function describeFocused() {
 			const element = win.document.activeElement;
@@ -682,10 +950,19 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 			return '.' + String(element.className).split(' ').join('.');
 		}
 
-		cy.cGet(deck + ' #cleanup-sharing-input').focus();
-		helper.assertFocus('id', 'cleanup-sharing-input');
+		// Tab walks on from the heading of the first check and every widget it
+		// lands on is noted, so what is asserted is what the reader reaches
+		// rather than the widgets that happen to lie in between.
+		const visited = [];
 
-		for (let step = 0; step < 8; step++) {
+		// The button inside the heading is what the keyboard lands on, and it
+		// takes the focus from the document rather than from the runner's own
+		// focus command.
+		cy.cGet(group('images') + ' .ui-expander-btn').then(function($heading) {
+			$heading[0].focus();
+		});
+
+		for (let step = 0; step < 6; step++) {
 			cy.realPress('Tab');
 			cy.then(function() {
 				visited.push(describeFocused());
@@ -693,18 +970,61 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		}
 
 		cy.then(function() {
-			expect(visited, 'the button that starts a run')
-				.to.include('#cleanup-scan-button');
 			expect(visited.some(function(widget) {
 				return widget.indexOf('-goto') !== -1;
 			}), 'the link of a row, in ' + visited.join(' ')).to.be.true;
 			expect(visited.some(function(widget) {
 				return widget.indexOf('-fix-button') !== -1;
-			}), 'the Fix button of a row, in ' + visited.join(' ')).to.be.true;
+			}), 'the button of a row, in ' + visited.join(' ')).to.be.true;
+
+			// A check with nothing to report holds nothing to press, so the
+			// keyboard walks past it rather than stopping on it.
+			expect(visited.some(function(widget) {
+				return widget.indexOf('cleanup-check-row') !== -1;
+			}), 'a check with nothing to report, in ' + visited.join(' ')).to.be.false;
+		});
+
+		// The footer ends the walk: the button that deals with the whole list,
+		// the row the options stand behind, each field in the order it stands
+		// in, and the one action of the panel.
+		const fields = [];
+
+		cy.cGet(deck + ' #cleanup-fix-all-button').focus();
+
+		for (let step = 0; step < 5; step++) {
+			cy.realPress('Tab');
+			cy.then(function() {
+				fields.push(describeFocused());
+			});
+		}
+
+		cy.then(function() {
+			expect(fields, 'the walk through the open options')
+				.to.deep.equal(['#cleanup-options-heading-button', '#cleanup-resolution-input',
+					'#cleanup-quality-input', '#cleanup-sharing-input', '#cleanup-scan-button']);
+		});
+
+		// With the fields folded away the keyboard walks past them, from the
+		// row they stand behind straight to the one action of the panel.
+		const footer = [];
+
+		closeOptions();
+		cy.cGet(deck + ' #cleanup-fix-all-button').focus();
+
+		for (let step = 0; step < 2; step++) {
+			cy.realPress('Tab');
+			cy.then(function() {
+				footer.push(describeFocused());
+			});
+		}
+
+		cy.then(function() {
+			expect(footer, 'the walk through the folded options')
+				.to.deep.equal(['#cleanup-options-heading-button', '#cleanup-scan-button']);
 		});
 	});
 
-	it('pressing Enter on a Fix button deals with that row', function() {
+	it('pressing Enter on the button of a row deals with that row', function() {
 		const win = this.win;
 
 		scanPresentation(win);
@@ -747,15 +1067,17 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		// So is the band the figure the whole list comes to sits in.
 		cy.cGet(deck + ' #cleanup-summary').should('have.attr', 'aria-live', 'polite');
 
-		// Each group is headed by a heading, so a reader can move from group to
-		// group by heading.
+		// Each tool is headed by a heading and each check under it by one a
+		// level down, so a reader can move through the panel by heading.
+		cy.cGet(deck + ' #cleanup-tool-images-title')
+			.should('have.attr', 'role', 'heading');
 		cy.cGet(group('images') + ' .ui-expander-heading').should(function($heading) {
-			expect($heading[0].tagName, 'the tag of a group heading').to.equal('H2');
+			expect($heading[0].tagName, 'the tag of a check heading').to.equal('H2');
 		});
 
-		// The Fix button of a row says which row it deals with, since its own
-		// label says only Fix.
-		cy.cGet(rowsOf('images') + ':visible ' + rowText).first().invoke('text')
+		// The button of an image row says only Fix, so its label names the row
+		// it deals with as well.
+		cy.cGet(rowsOf('images') + ':visible ' + rowLink).first().invoke('text')
 			.then(function(text) {
 				cy.cGet(rowsOf('images') + ':visible ' + rowFix).first()
 					.should('have.attr', 'aria-label', 'Fix ' + text.trim());
@@ -767,12 +1089,15 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 
 		scanPresentation(win);
 		assertGroupListed('images');
+		openOptions();
 
 		closeCleanupDeck(win);
 		openCleanupDeck(win);
 
 		// Closing the deck told the kit to let the run go, so the panel comes
 		// back asking for a scan rather than showing what the last one found.
+		// The fields are out of the way again too, so what the reader opens is
+		// the panel at its shortest however they left it.
 		assertPanelIsEmpty();
 
 		// A scan of its own fills it again.
@@ -850,7 +1175,7 @@ describe(['tagdesktop'], 'Presentation cleanup in the tabbed view', function() {
 		cy.cGet('#Review-tab-label').click();
 
 		cy.cGet(button).should('be.visible').click();
-		cy.cGet(deck + ' #cleanup-options').should('be.visible');
+		cy.cGet(deck + ' #cleanup-options-heading-button').should('be.visible');
 
 		// The button reads as pressed for as long as the deck is up.
 		cy.cGet(button).should('have.class', 'selected');
@@ -867,7 +1192,7 @@ describe(['tagdesktop'], 'Presentation cleanup and the keyboard', function() {
 		loadPresentationAndOpenDeck(this);
 	});
 
-	it('the keyboard moves to the Fix button of the next row once a row is dealt with', function() {
+	it('the keyboard moves to the button of the next row once a row is dealt with', function() {
 		const win = this.win;
 
 		scanPresentation(win);
@@ -881,10 +1206,10 @@ describe(['tagdesktop'], 'Presentation cleanup and the keyboard', function() {
 		waitForRunToEnd();
 
 		// The row that was dealt with took the keyboard with it, so the keyboard
-		// stands on the Fix button of the row that followed it and the next
-		// press acts on that row.
+		// stands on the button of the row that followed it and the next press
+		// acts on that row.
 		cy.cGet(rowsOf('images') + ':visible ' + rowFix).should(function($fix) {
-			expect($fix.length, 'Fix buttons left on screen').to.equal(1);
+			expect($fix.length, 'row buttons left on screen').to.equal(1);
 			expect($fix[0].ownerDocument.activeElement,
 				'the widget the keyboard is on').to.equal($fix[0]);
 		});

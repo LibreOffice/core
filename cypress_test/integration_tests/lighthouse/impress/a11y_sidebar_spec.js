@@ -260,7 +260,7 @@ describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolati
 		helper.processToIdle(win);
 
 		// The deck offers the scan options and a button that starts the scan
-		cy.cGet('#cleanup-deck #cleanup-options').should('exist');
+		cy.cGet('#cleanup-deck #cleanup-options-heading-button').should('exist');
 
 		cy.cGet('#cleanup-deck #cleanup-scan-button')
 			.should('be.visible').and('not.be.disabled').click();
