@@ -175,10 +175,6 @@ rtl::Reference<FastAttributeList> presentationPrNamespaces(const oox::core::XmlF
 }
 };
 
-#if OSL_DEBUG_LEVEL > 1
-void dump_pset(Reference< XPropertySet > const& rXPropSet);
-#endif
-
 namespace oox::core
 {
 
@@ -208,7 +204,6 @@ public:
     // helper parts
     bool WritePlaceholder(const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster);
 };
-
 
 namespace
 {
@@ -498,7 +493,6 @@ namespace {
 
 struct PPTXLayoutInfo
 {
-    int nType;
     const char* sName;
     const char* sType;
 };
@@ -512,41 +506,41 @@ struct PPTXLayoutInfo
 //  mediaAndTx, dgm, cust
 const PPTXLayoutInfo aLayoutInfo[] =
 {
-    { 0, "Title Slide", "title" },
-    { 1, "Title and text", "tx" },
-    { 2, "Title and chart", "chart" },
-    { 3, "Title, text on left, text on right", "twoObj" },
-    { 4, "Title, text on left and chart on right", "txAndChart" },
-    { 20, "Blank Slide", "blank" },
-    { 6, "Title, text on left, clip art on right", "txAndClipArt" },
-    { 7, "Title, chart on left and text on right", "chartAndTx" },
-    { 8, "Title and table", "tbl" },
-    { 9, "Title, clipart on left, text on right", "clipArtAndTx" },
-    { 10, "Title, text on left, object on right", "txAndObj" },
-    {  1, "Title and object", "obj" },
-    { 12, "Title, text on left, two objects on right", "txAndTwoObj" },
-    { 13, "Title, object on left, text on right", "objAndTx" },
-    { 14, "Title, object on top, text on bottom", "objOverTx" },
-    { 15, "Title, two objects on left, text on right", "twoObjAndTx" },
-    { 16, "Title, two objects on top, text on bottom", "twoObjOverTx" },
-    { 17, "Title, text on top, object on bottom", "txOverObj" },
-    { 18, "Title and four objects", "fourObj" },
-    { 19, "Title Only", "titleOnly" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" },
-    { 27, "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
-    { 28, "Vertical title on right, vertical text on left", "vertTitleAndTx" },
-    { 29, "Title and vertical text body", "vertTx" },
-    { 30, "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
-    { 20, "Blank Slide", "blank" },
-    { 32, "Object only", "objOnly" },
-    { 20, "Blank Slide", "blank" },
-    { 20, "Blank Slide", "blank" }
+    { "Title Slide", "title" },
+    { "Title and text", "tx" },
+    { "Title and chart", "chart" },
+    { "Title, text on left, text on right", "twoObj" },
+    { "Title, text on left and chart on right", "txAndChart" },
+    { "Blank Slide", "blank" },
+    { "Title, text on left, clip art on right", "txAndClipArt" },
+    { "Title, chart on left and text on right", "chartAndTx" },
+    { "Title and table", "tbl" },
+    { "Title, clipart on left, text on right", "clipArtAndTx" },
+    { "Title, text on left, object on right", "txAndObj" },
+    { "Title and object", "obj" },
+    { "Title, text on left, two objects on right", "txAndTwoObj" },
+    { "Title, object on left, text on right", "objAndTx" },
+    { "Title, object on top, text on bottom", "objOverTx" },
+    { "Title, two objects on left, text on right", "twoObjAndTx" },
+    { "Title, two objects on top, text on bottom", "twoObjOverTx" },
+    { "Title, text on top, object on bottom", "txOverObj" },
+    { "Title and four objects", "fourObj" },
+    { "Title Only", "titleOnly" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" },
+    { "Vertical title on right, vertical text on top, chart on bottom", "vertTitleAndTxOverChart" },
+    { "Vertical title on right, vertical text on left", "vertTitleAndTx" },
+    { "Title and vertical text body", "vertTx" },
+    { "Title, clip art on left, vertical text on right", "clipArtAndVertTx" },
+    { "Blank Slide", "blank" },
+    { "Object only", "objOnly" },
+    { "Blank Slide", "blank" },
+    { "Blank Slide", "blank" }
 };
 static_assert(std::size(aLayoutInfo) == AUTOLAYOUT_END,
               "aLayoutInfo must have a corresponding item for each AUTOLAYOUT");
@@ -965,7 +959,6 @@ protected:
 };
 
 } // end anonymous namespace
-
 
 std::unordered_set<OUString> PowerPointExport::getUsedFontList()
 {
@@ -2778,17 +2771,10 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     for (auto nLayout : aLayouts)
     {
-        // GetEquivalentMasterPage says SAL_MAX_UINT32 for a master with no equivalent, its own
-        // index for the one representing a group, and a lower index for a duplicate - and a
-        // duplicate has returned above. So a master of its own gets the layout its autolayout
-        // describes, while one standing for a group hands each layout the pages' own content.
-        if (GetEquivalentMasterPage(nPageNum) == nPageNum)
-            ImplWritePPTXLayoutWithContent(nLayout, nPageNum, aSlideName, aXBackgroundPropSet);
-        else
-        {
-            assert(GetEquivalentMasterPage(nPageNum) == SAL_MAX_UINT32);
-            ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
-        }
+        // Every layout carries the content of the page it stands for. A master representing a
+        // group hands each layout the pages' own shapes, and a master of its own hands its single
+        // layout the placeholders it holds.
+        ImplWritePPTXLayoutWithContent(nLayout, nPageNum, aSlideName, aXBackgroundPropSet);
         AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
     }
 
@@ -2914,78 +2900,6 @@ sal_Int32 PowerPointExport::GetLayoutFileId(sal_Int32 nOffset, sal_uInt32 nMaste
         return 0;
 
     return mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ];
-}
-
-void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName)
-{
-    SAL_INFO("sd.eppt", "write layout: " << nOffset);
-
-    Reference< drawing::XDrawPages > xDrawPages = mXModel->getDrawPages();
-    Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex(xDrawPages->getCount());
-
-#if OSL_DEBUG_LEVEL >= 2
-    if (xSlide.is())
-        printf("new page created\n");
-#endif
-
-    Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);
-    xPropSet->setPropertyValue(u"Layout"_ustr, Any(short(aLayoutInfo[ nOffset ].nType)));
-#if OSL_DEBUG_LEVEL > 1
-    dump_pset(xPropSet);
-#endif
-    mXPagePropSet.set(xSlide, UNO_QUERY);
-    mXShapes = xSlide;
-
-    if (mLayoutInfo[ nOffset ].mnFileIdArray.size() < mnMasterPages)
-    {
-        mLayoutInfo[ nOffset ].mnFileIdArray.resize(mnMasterPages);
-    }
-
-    if (mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ] != 0)
-        return;
-
-    FSHelperPtr pFS
-        = openFragmentStreamWithSerializer("ppt/slideLayouts/slideLayout" +
-                                            OUString::number(mnLayoutFileIdMax) + ".xml",
-                                           u"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"_ustr);
-
-    // add implicit relation of slide layout to slide master
-    addRelation(
-        pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),
-        Concat2View("../slideMasters/slideMaster" + OUString::number(nMasterNum + 1) + ".xml"));
-
-    auto pAttributes = presentationNamespaces(*this);
-    pAttributes->add(XML_type, aLayoutInfo[nOffset].sType);
-    pAttributes->add(XML_preserve, "1");
-
-    pFS->startElementNS(XML_p, XML_sldLayout, pAttributes);
-
-    if (!aSlideName.isEmpty())
-    {
-        pFS->startElementNS(XML_p, XML_cSld,
-            XML_name, aSlideName);
-    }
-    else
-    {
-        pFS->startElementNS(XML_p, XML_cSld,
-            XML_name, aLayoutInfo[nOffset].sName);
-    }
-    //pFS->write( MINIMAL_SPTREE ); // TODO: write actual shape tree
-    WriteShapeTree(pFS, LAYOUT, true);
-
-    pFS->endElementNS(XML_p, XML_cSld);
-
-    WriteLayoutClrMapOvr(pFS, nMasterNum);
-
-    pFS->endElementNS(XML_p, XML_sldLayout);
-
-    mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ] = mnLayoutFileIdMax;
-
-    mnLayoutFileIdMax ++;
-
-    xDrawPages->remove(xSlide);
-
-    pFS->endDocument();
 }
 
 void PowerPointExport::ImplWritePPTXLayoutWithContent(
@@ -3273,11 +3187,15 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     // A master standing for a group writes its placeholders and the shapes the group shares. A
     // placeholder reaches a slide only through a layout that references it, while a drawn shape
     // paints below every slide of this master - so a shape one layout drew does not belong there.
-    // A master of its own has no layout to leave anything to.
     const bool bMasterOfGroup
         = bSlideMasterPart && GetEquivalentMasterPage(nMasterNum) == nMasterNum;
+    // The layout of a master that stands for no group takes the placeholders alone. The master
+    // part draws the rest of the page, and a shape written in both parts is drawn twice.
+    const bool bLayoutOfOwnMaster = !bSlideMasterPart && ePageType == MASTER
+                                    && GetEquivalentMasterPage(nMasterNum) == SAL_MAX_UINT32;
     // The layouts of such a group leave those shapes to the master
-    const bool bLayoutOfGroup = !bSlideMasterPart && ePageType == MASTER;
+    const bool bLayoutOfGroup
+        = !bSlideMasterPart && ePageType == MASTER && !bLayoutOfOwnMaster;
     assert(!bLayoutOfGroup || GetEquivalentMasterPage(nMasterNum) != SAL_MAX_UINT32);
     const size_t nMasterOwn
         = bMasterOfGroup || bLayoutOfGroup ? GetMasterOwnShapeCount(nMasterNum) : 0;
@@ -3312,6 +3230,8 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
                 continue; // one layout's own shape, which that layout writes
             if (bLayoutOfGroup && bOwn)
                 continue; // the master draws it for every layout of the group
+            if (bLayoutOfOwnMaster && !mbPresObj)
+                continue; // the master part draws it
 
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
             bool bSaveAsDiagram(false);
@@ -4131,36 +4051,5 @@ css_comp_Impress_oox_PowerPointExport(cpo::uno::XComponentContext* rxCtxt,
 {
     return cppu::acquire(new PowerPointExport(rxCtxt, rArguments));
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void dump_pset(Reference< XPropertySet > const& rXPropSet)
-{
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo();
-    Sequence< beans::Property > props = info->getProperties();
-
-    for (int i=0; i < props.getLength(); i++)
-    {
-        OString name = OUStringToOString(props [i].Name, RTL_TEXTENCODING_UTF8);
-
-        Any value = rXPropSet->getPropertyValue(props [i].Name);
-
-        OUString strValue;
-        sal_Int32 intValue;
-        bool boolValue;
-        RectanglePoint pointValue;
-
-        if (value >>= strValue)
-            SAL_INFO("sd.eppt", name << " = \"" << strValue << "\"");
-        else if (value >>= intValue)
-            SAL_INFO("sd.eppt", name << " = " << intValue << "(hex : " << std::hex << intValue << ")");
-        else if (value >>= boolValue)
-            SAL_INFO("sd.eppt", name << " = " << boolValue << "           (bool)");
-        else if (value >>= pointValue)
-            SAL_INFO("sd.eppt", name << " = " << static_cast<int>(pointValue) << "    (RectanglePoint)");
-        else
-            SAL_INFO("sd.eppt", "???          <unhandled type>");
-    }
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -88,6 +88,37 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutomaticTextColorFollowsPageBackgr
     assertXPath(pXmlMaster, "//a:defRPr/a:solidFill/a:srgbClr[@val='FFFFFF']", 0);
 }
 
+// The placeholders of a master page are still there after the file has been saved twice. They are
+// written to the layout, which is where reading the file back looks for them, so a master that
+// went out once comes back whole and goes out whole again.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterPlaceholdersSurviveRepeatedSaves)
+{
+    createSdImpressDoc("pptx/ShapeLineProperties.pptx");
+
+    auto* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    const size_t nShapes
+        = pDocument->GetDoc()->GetMasterSdPage(0, PageKind::Standard)->GetObjCount();
+    CPPUNIT_ASSERT_GREATER(size_t(1), nShapes);
+
+    saveAndReload(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph", 5);
+
+    pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    CPPUNIT_ASSERT_EQUAL(
+        nShapes, pDocument->GetDoc()->GetMasterSdPage(0, PageKind::Standard)->GetObjCount());
+
+    saveAndReload(TestFilter::PPTX);
+
+    pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    CPPUNIT_ASSERT_EQUAL(
+        nShapes, pDocument->GetDoc()->GetMasterSdPage(0, PageKind::Standard)->GetObjCount());
+}
+
 // The pages of a Draw document keep their identity across sessions the same way the slides of
 // a presentation do.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)

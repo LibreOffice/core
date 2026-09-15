@@ -92,7 +92,6 @@ private:
                                  bool bHasBackground, cpo::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, cpo::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
-    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName );
     void ImplWritePPTXLayoutWithContent(
         sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
         cpo::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
