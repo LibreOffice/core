@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-07-29 11:05+0000\n"
+"PO-Revision-Date: 2026-09-15 07:55+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/uk/>\n"
-"Language: \n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -471,7 +471,7 @@ msgstr "Помилка"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr "Вивчити більше"
+msgstr "Докладніше"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -970,13 +970,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
-"Коли увімкнено, Writer підлаштовує документ під ширину області перегляду при "
-"відкритті. Якщо вимкнено, документ відкривається із Типовим рівнем "
-"Масштабування, встановленим нижче."
+"Коли увімкнено, Writer підлаштовує документ під ширину ділянки перегляду під "
+"час відкриття. Якщо вимкнено, документ відкривається із типовим масштабом, "
+"встановленим нижче."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1616
 msgid "No settings available for {0}"
-msgstr "Не має доступних налаштувань для {0}"
+msgstr "Немає доступних налаштувань для {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1628
 msgid "Select a tab to browser settings."
