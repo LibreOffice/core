@@ -441,6 +441,90 @@ class A11yValidator {
 		return errorCount;
 	}
 
+	private getAssociatedLabelElements(element: HTMLElement): HTMLElement[] {
+		const labelEls: HTMLElement[] = [];
+		const labelFor = document.querySelector(`label[for="${element.id}"]`);
+		if (labelFor instanceof HTMLElement) labelEls.push(labelFor);
+		const labelledBy = element.getAttribute('aria-labelledby');
+		if (labelledBy) {
+			for (const id of labelledBy.trim().split(/\s+/)) {
+				const target = document.getElementById(id);
+				if (target) labelEls.push(target);
+			}
+		}
+		return labelEls;
+	}
+
+	// A hidden label keeps its association, so the association alone is not enough.
+	private hasVisibleAssociatedLabel(element: HTMLElement): boolean {
+		return this.getAssociatedLabelElements(element).some((label) =>
+			this.isVisible(label),
+		);
+	}
+
+	// A frame that groups form controls is built as a fieldset, so its caption is
+	// a legend and carries no aria-labelledby.
+	private static readonly GroupSelector =
+		'fieldset, [role="group"][aria-labelledby]';
+
+	// One caption can serve a row of fields: each carries its own name for a
+	// screen reader while the group's caption is what the eye reads.
+	private groupCaptionIsVisible(
+		element: HTMLElement,
+		container: HTMLElement,
+	): boolean {
+		let group = element.closest(A11yValidator.GroupSelector);
+		while (group instanceof HTMLElement && container.contains(group)) {
+			const id = group.getAttribute('aria-labelledby');
+			const caption = id
+				? container.querySelector(`[id="${id}"]`)
+				: group.querySelector(':scope > legend');
+			if (caption instanceof HTMLElement && this.isVisible(caption))
+				return true;
+			group = group.parentElement
+				? group.parentElement.closest(A11yValidator.GroupSelector)
+				: null;
+		}
+		return false;
+	}
+
+	private hasOwnAccessibleName(element: HTMLElement): boolean {
+		return (
+			this.getAssociatedLabelElements(element).length > 0 ||
+			!!element.getAttribute('aria-label')?.trim()
+		);
+	}
+
+	// An aria-label or tooltip leaves a sighted user with no label on screen.
+	private checkSpinButtonsHaveVisibleLabel(container: HTMLElement): number {
+		const spinButtons = container.querySelectorAll('input[role="spinbutton"]');
+		let errorCount = 0;
+
+		spinButtons.forEach((el) => {
+			const htmlEl = el as HTMLElement;
+
+			if (!this.isVisible(htmlEl)) return;
+			if (this.hasVisibleAssociatedLabel(htmlEl)) return;
+
+			// A name of its own, unseen, plus a caption on the group is the
+			// shared-caption pattern, not a widget nobody named.
+			if (
+				this.hasOwnAccessibleName(htmlEl) &&
+				this.groupCaptionIsVisible(htmlEl, container)
+			)
+				return;
+
+			console.error(
+				new A11yValidatorException(
+					`In '${this.getDialogTitle(htmlEl)}' at '${this.getElementPath(htmlEl)}': spinbutton '${htmlEl.id}' is missing a visible label. A spinbutton needs a visible on-screen <label>, a visible element named by aria-labelledby, or a name of its own inside a group whose caption is visible; an aria-label or tooltip alone is not enough for a sighted user.`,
+				),
+			);
+			errorCount++;
+		});
+
+		return errorCount;
+	}
+
 	private checkDuplicateButtonLabels(container: HTMLElement): number {
 		const buttons = container.querySelectorAll('button[aria-labelledby]');
 		const labelMap = new Map<string, HTMLElement[]>();
@@ -560,7 +644,9 @@ class A11yValidator {
 			this.validateContainer(
 				dialogElement,
 				content instanceof HTMLElement ? content : undefined,
-			) + this.checkInitialFocusNotCloseButton(dialogElement);
+			) +
+			this.checkInitialFocusNotCloseButton(dialogElement) +
+			this.checkSpinButtonsHaveVisibleLabel(dialogElement);
 
 		if (errorCount === 0) {
 			console.error('A11yValidator: dialog passed all checks');
