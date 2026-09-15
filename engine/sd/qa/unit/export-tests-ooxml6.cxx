@@ -191,6 +191,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testListStyleStatesNoLanguage)
                 u"en-US");
 }
 
+// A list style states no colour for a level whose first run asks for the automatic one. The
+// automatic colour is the colour the shape holding the text asks for, and every shape that takes
+// this level asks for its own, so freezing one run's answer into the level hands it to them all.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testAutomaticColorStaysOutOfAListStyle)
+{
+    createSdImpressDoc("pptx/tdf157740.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster, "//p:sp/p:txBody/a:lstStyle//a:defRPr/a:solidFill", 0);
+
+    // The text itself still names a colour, because OOXML has no automatic one for a reader to
+    // resolve.
+    CPPUNIT_ASSERT(countXPathNodes(pMaster, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:solidFill") > 0);
+}
+
 // The pages of a Draw document keep their identity across sessions the same way the slides of
 // a presentation do.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPageGuidODG)

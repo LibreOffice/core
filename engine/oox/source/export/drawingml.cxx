@@ -2819,7 +2819,10 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                     WriteSolidFill(color, nTransparency);
                 }
             }
-            else if (GetDocumentType() == DOCUMENT_PPTX)
+            // An automatic colour is the colour the shape holding the text asks for, and the
+            // shapes that take a level of a list style each ask for their own, so the level
+            // states none and every one of them resolves it again.
+            else if (GetDocumentType() == DOCUMENT_PPTX && !rRunInput.bIsLevelDefault)
             {
                 // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
                 bool bIsTextBackgroundDark = mbIsBackgroundDark;
@@ -3835,8 +3838,8 @@ void DrawingML::WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>
         aInput.bOverridingCharHeight = rbOverridingCharHeight;
         aInput.nCharHeight = rnCharHeight;
         // Everything else of this level is taken from the first run of the paragraph, but its
-        // language is the language of that run alone. Stating it here would hand it to every
-        // paragraph of the level and override the language the master names.
+        // language and an automatic colour belong to that run alone. Stating either here would
+        // hand it to every paragraph of the level.
         aInput.bIsLevelDefault = true;
         WriteRunProperties(xFirstRunPropSet, XML_defRPr, aInput);
         rbOverridingCharHeight = aInput.bOverridingCharHeight;
