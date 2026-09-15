@@ -20,6 +20,7 @@
 #include <column.hxx>
 #include <docsh.hxx>
 #include <bcaslot.hxx>
+#include <sharedformula.hxx>
 #include <scitems.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -3565,11 +3566,14 @@ namespace {
 
 class CompileDBFormulaHandler
 {
+    sc::StartListeningContext& mrStartListenCxt;
     sc::CompileFormulaContext& mrCxt;
     formula::unordered_opcode_set maOps;
 
 public:
-    explicit CompileDBFormulaHandler( sc::CompileFormulaContext& rCxt ) :
+    CompileDBFormulaHandler( sc::StartListeningContext& rStartListenCxt,
+                             sc::CompileFormulaContext& rCxt ) :
+        mrStartListenCxt(rStartListenCxt),
         mrCxt(rCxt)
     {
         maOps.insert(ocDBArea);
@@ -3600,14 +3604,15 @@ public:
         (*ppBeg)->SetCompile(true);
         (*ppBeg)->CompileTokenArray(mrCxt, true /*bNoListening*/);
 
+        // Listen once for the whole group, so a range reference registers one area
+        // listener instead of one for every cell.
+        sc::SharedFormulaUtil::startListeningAsGroup(mrStartListenCxt, ppBeg);
+
         // A group can span a whole column, and SetDirty() tracks the formulas once per
         // cell. Coalesce the group's broadcasts so that walk happens once.
         ScBulkBroadcast aBulkBroadcast(rDoc.GetBASM(), SfxHintId::ScDataChanged);
         for (ScFormulaCell** pp = ppBeg; pp != ppEnd; ++pp)
-        {
-            (*pp)->StartListeningTo(rDoc);
             (*pp)->SetDirty();
-        }
     }
 };
 
@@ -3625,11 +3630,12 @@ public:
 
 }
 
-void ScColumn::CompileDBFormula( sc::CompileFormulaContext& rCxt )
+void ScColumn::CompileDBFormula(
+    sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCxt )
 {
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    CompileDBFormulaHandler aFunc(rCxt);
+    CompileDBFormulaHandler aFunc(rStartListenCxt, rCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
     RegroupFormulaCells();
 }

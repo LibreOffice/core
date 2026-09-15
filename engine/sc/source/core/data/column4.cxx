@@ -1044,18 +1044,20 @@ public:
                 xGroup->compileCode(mrDoc, pTop->aPos, mrDoc.GetGrammar());
 
                 // Propagate the new token array to all formula cells in the group.
-                // A group can span a whole column, and SetDirty() tracks the formulas
-                // once per cell. Coalesce the broadcasts so that walk happens once.
-                ScBulkBroadcast aBulkBroadcast(mrDoc.GetBASM(), SfxHintId::ScDataChanged);
                 ScFormulaCell** pp = rEntry.mpCells;
                 ScFormulaCell** ppEnd = pp + rEntry.mnLength;
                 for (; pp != ppEnd; ++pp)
-                {
-                    ScFormulaCell* p = *pp;
-                    p->SyncSharedCode();
-                    p->StartListeningTo(mrStartListenCxt);
-                    p->SetDirty();
-                }
+                    (*pp)->SyncSharedCode();
+
+                // Listen once for the whole group, so a range reference registers one
+                // area listener instead of one for every cell.
+                sc::SharedFormulaUtil::startListeningAsGroup(mrStartListenCxt, rEntry.mpCells);
+
+                // A group can span a whole column, and SetDirty() tracks the formulas
+                // once per cell. Coalesce the broadcasts so that walk happens once.
+                ScBulkBroadcast aBulkBroadcast(mrDoc.GetBASM(), SfxHintId::ScDataChanged);
+                for (pp = rEntry.mpCells; pp != ppEnd; ++pp)
+                    (*pp)->SetDirty();
             }
         }
         else

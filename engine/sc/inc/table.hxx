@@ -1383,7 +1383,8 @@ private:
                                     const ScMarkData& rMark) const;
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
     void        TestTabRefAbs(SCTAB nTable) const;
-    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
+    void CompileDBFormula(
+        sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );

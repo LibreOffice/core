@@ -623,7 +623,8 @@ public:
     void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
     void CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW nRow1, SCROW nRow2 );
 
-    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
+    void CompileDBFormula(
+        sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;

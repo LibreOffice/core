@@ -48,6 +48,7 @@
 #include <externalrefmgr.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
+#include <listenercontext.hxx>
 #include <scmatrix.hxx>
 #include <tablestyle.hxx>
 #include <tokenarray.hxx>
@@ -893,11 +894,12 @@ void ScDocument::CompileDBFormula()
 {
     // Flag the recompile so the table auto-expand ignores its SetDirty broadcasts (not user edits).
     ScCompilingDBFormulaGuard aGuard(*this);
+    sc::StartListeningContext aStartListenCxt(*this);
     sc::CompileFormulaContext aCxt(*this);
     for (auto& rxTab : maTabs)
     {
         if (rxTab)
-            rxTab->CompileDBFormula(aCxt);
+            rxTab->CompileDBFormula(aStartListenCxt, aCxt);
     }
 }
 
