@@ -789,6 +789,26 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
 {
     console.assert(test.getOverloaded() === 'foo');
     console.assert(test.getOverloaded(-123456) === -123456);
+    console.assert(test.getOverloaded('bar') === 'bar');
+    console.assert(test.getOverloaded([1, 2, 3]) === 3);
+    console.assert(test.getOverloaded(new Uint8Array([1, 2, 3])) === 3);
+    console.assert(test.getOverloaded(true) === 'any');
+    console.assert(test.getOverloadedTwoArgs('x', 5) === 'stringany');
+    console.assert(test.getOverloadedTwoArgs(5, 'y') === 'anystring');
+    try {
+        test.getOverloadedTwoArgs('x', 'y');
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof TypeError);
+        console.assert(e.message.startsWith('overload dispatch: ambiguous call'));
+    }
+    try {
+        test.getOverloaded(true, false);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof TypeError);
+        console.assert(e.message.startsWith('overload dispatch: no member matches'));
+    }
 }
 try {
     test.throwRuntimeException();

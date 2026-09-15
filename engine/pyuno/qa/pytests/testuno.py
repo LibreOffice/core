@@ -457,6 +457,21 @@ class Test(unohelper.Base, XTest):
     def getOverloadedOneArg(self, value):
         return value
 
+    def getOverloadedString(self, value):
+        return value
+
+    def getOverloadedBytes(self, value):
+        return len(value)
+
+    def getOverloadedAny(self, value):
+        return 'any'
+
+    def getOverloadedAnyString(self, value1, value2):
+        return 'anystring'
+
+    def getOverloadedStringAny(self, value1, value2):
+        return 'stringany'
+
     def throwRuntimeException(self):
         raise RuntimeException('test', None)
 
@@ -897,6 +912,11 @@ class TestUno(unittest.TestCase):
 
         self.assertEqual(test.getOverloadedNoArgs(), 'foo')
         self.assertEqual(test.getOverloadedOneArg(-123456), -123456)
+        self.assertEqual(test.getOverloadedString('bar'), 'bar')
+        self.assertEqual(test.getOverloadedBytes((1, 2, 3)), 3)
+        self.assertEqual(test.getOverloadedAny(True), 'any')
+        self.assertEqual(test.getOverloadedAnyString(True, 'y'), 'anystring')
+        self.assertEqual(test.getOverloadedStringAny('x', True), 'stringany')
 
         with self.assertRaises(RuntimeException) as cm:
             test.throwRuntimeException()

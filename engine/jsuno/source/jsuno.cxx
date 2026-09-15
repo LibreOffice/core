@@ -221,6 +221,13 @@ private:
     std::uint16_t const* ptr_;
 };
 
+struct EnumeratorData
+{
+    cpo::uno::Type type;
+    sal_Int32 value;
+    OUString name;
+};
+
 ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type);
 cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val);
 JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, int magic,
@@ -546,6 +553,123 @@ std::vector<OUString> findOverloads(
     return members;
 }
 
+bool isUnoAnyInstance(JSContext * ctx, JSValueConst val) {
+    ValueRef const global(ctx, JS_GetGlobalObject(ctx));
+    if (JS_IsException(global)) {
+        throw JsException();
+    }
+    ValueRef const uno(ctx, JS_GetPropertyStr(ctx, global, "uno"));
+    if (JS_IsException(uno)) {
+        throw JsException();
+    }
+    ValueRef const anyCtor(ctx, JS_GetPropertyStr(ctx, uno, "Any"));
+    if (JS_IsException(anyCtor)) {
+        throw JsException();
+    }
+    auto const r = JS_IsInstanceOf(ctx, val, anyCtor);
+    if (r == -1) {
+        throw JsException();
+    }
+    return r == 1;
+}
+
+enum class ArgumentFit { None, Loose, Exact };
+
+ArgumentFit argumentFit(
+    JSContext * ctx, css::reflection::ParamMode mode, cpo::uno::Type const & type, JSValueConst val)
+{
+    // An out or inout parameter takes a holder object, which is orthogonal to type; treat every
+    // candidate as loose so the tie-break falls to any in parameters alongside it:
+    if (mode != css::reflection::ParamMode_IN) {
+        return ArgumentFit::Loose;
+    }
+    switch (type.getTypeClass()) {
+    case cpo::uno::TypeClass_BOOLEAN:
+        return JS_IsBool(val) ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_DOUBLE:
+        return JS_IsNumber(val) ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
+        return JS_IsBigInt(val) ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_STRING:
+        return JS_IsString(val) ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_TYPE:
+        return JS_GetClassID(val) == getRuntimeData(ctx)->typeClassId
+            ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_ANY:
+        return isUnoAnyInstance(ctx, val) ? ArgumentFit::Exact : ArgumentFit::Loose;
+    case cpo::uno::TypeClass_SEQUENCE:
+        return JS_IsArray(val) || JS_GetTypedArrayType(val) != -1
+            ? ArgumentFit::Exact : ArgumentFit::None;
+    case cpo::uno::TypeClass_ENUM:
+        if (JS_GetClassID(val) == getRuntimeData(ctx)->enumeratorClassId) {
+            auto const data = static_cast<EnumeratorData const *>(
+                JS_GetOpaque(val, getRuntimeData(ctx)->enumeratorClassId));
+            assert(data != nullptr);
+            if (data->type == type) {
+                return ArgumentFit::Exact;
+            }
+        }
+        return ArgumentFit::None;
+    case cpo::uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_EXCEPTION:
+        if (JS_GetClassID(val) == getRuntimeData(ctx)->compoundClassId) {
+            return ArgumentFit::Exact;
+        }
+        if (JS_IsObject(val) && !JS_IsArray(val) && JS_GetTypedArrayType(val) == -1
+            && !isUnoAnyInstance(ctx, val)
+            && JS_GetClassID(val) != getRuntimeData(ctx)->wrapperClassId
+            && JS_GetClassID(val) != getRuntimeData(ctx)->enumeratorClassId
+            && JS_GetClassID(val) != getRuntimeData(ctx)->typeClassId)
+        {
+            // Conservatively:
+            return ArgumentFit::Loose;
+        }
+        return ArgumentFit::None;
+    case cpo::uno::TypeClass_INTERFACE:
+    {
+        if (JS_IsNull(val)) {
+            return ArgumentFit::Exact;
+        }
+        if (JS_GetClassID(val) != getRuntimeData(ctx)->wrapperClassId) {
+            return ArgumentFit::None;
+        }
+        auto const iface = static_cast<cpo::uno::XInterface *>(
+            JS_GetOpaque(val, getRuntimeData(ctx)->wrapperClassId));
+        return iface != nullptr
+                && cpo::uno::Reference(iface)->queryInterface(type).hasValue()
+            ? ArgumentFit::Exact : ArgumentFit::None;
+    }
+    default:
+        O3TL_UNREACHABLE;
+    }
+}
+
+int scoreOverload(
+    JSContext * ctx, css::script::InvocationInfo const & info, int argc, JSValueConst * argv)
+{
+    int exact = 0;
+    for (int i = 0; i != argc; ++i) {
+        switch (argumentFit(ctx, info.aParamModes[i], info.aParamTypes[i], argv[i])) {
+        case ArgumentFit::None:
+            return -1;
+        case ArgumentFit::Loose:
+            break;
+        case ArgumentFit::Exact:
+            ++exact;
+            break;
+        }
+    }
+    return exact;
+}
+
 JSValue overloadDispatch(
     JSContext * ctx, JSValueConst this_val, int argc, JSValueConst * argv, int, JSValueConst * data)
 {
@@ -564,7 +688,7 @@ JSValue overloadDispatch(
         ValueRef const lenVal(ctx, JS_GetPropertyStr(ctx, data[0], "length"));
         std::uint32_t nMembers = 0;
         JS_ToUint32(ctx, &nMembers, lenVal);
-        std::optional<css::script::InvocationInfo> chosen;
+        std::vector<css::script::InvocationInfo> matches;
         for (std::uint32_t i = 0; i != nMembers; ++i) {
             ValueRef const nameVal(ctx, JS_GetPropertyUint32(ctx, data[0], i));
             UniqueCString8 const nameStr(ctx, JS_ToCString(ctx, nameVal));
@@ -579,13 +703,50 @@ JSValue overloadDispatch(
             // implementation of f to invoke):
             auto info = invoke->getInfoForName(OUString::fromUtf8(nameStr.get()), false);
             if (info.aParamTypes.getLength() == argc) {
-                chosen = info;
-                break;
+                matches.push_back(info);
             }
         }
-        if (!chosen) {
+        if (matches.empty()) {
             JS_ThrowTypeError(ctx, "overload dispatch: no member matches %d argument(s)", argc);
             throw JsException();
+        }
+        std::optional<css::script::InvocationInfo> chosen;
+        if (matches.size() == 1) {
+            chosen = matches.front();
+        } else {
+            auto bestScore = -1;
+            auto tied = false;
+            for (auto const & info: matches) {
+                auto const score = scoreOverload(ctx, info, argc, argv);
+                if (score == -1) {
+                    continue;
+                }
+                if (score > bestScore) {
+                    bestScore = score;
+                    chosen = info;
+                    tied = false;
+                } else if (score == bestScore) {
+                    tied = true;
+                }
+            }
+            if (!chosen) {
+                OStringBuffer buf;
+                for (auto const & info: matches) {
+                    buf.append(" " + info.aName.toUtf8());
+                }
+                JS_ThrowTypeError(
+                    ctx, "overload dispatch: no member matches the argument types (candidates:%s)",
+                    buf.makeStringAndClear().getStr());
+                throw JsException();
+            }
+            if (tied) {
+                JS_ThrowTypeError(
+                    ctx,
+                    "overload dispatch: ambiguous call, %s and at least one other candidate match"
+                        " equally well",
+                    chosen->aName.toUtf8().getStr());
+                throw JsException();
+            }
         }
         ValueRef data0(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->pointerClassId));
         [[maybe_unused]] auto const e
@@ -802,13 +963,6 @@ JSValue wrapUnoObject(JSContext* ctx, cpo::uno::Reference<cpo::uno::XInterface> 
 #endif
     return val;
 }
-
-struct EnumeratorData
-{
-    cpo::uno::Type type;
-    sal_Int32 value;
-    OUString name;
-};
 
 void enumeratorFinalizer(JSRuntime* rt, JSValueConst val)
 {

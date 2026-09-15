@@ -1418,6 +1418,22 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 
     sal_Int32 getOverloadedOneArg(sal_Int32 value) override { return value; }
 
+    OUString getOverloadedString(OUString const & value) override { return value; }
+
+    sal_Int32 getOverloadedBytes(cpo::uno::Sequence<sal_Int8> const & data) override {
+        return data.getLength();
+    }
+
+    OUString getOverloadedAny(cpo::uno::Any const &) override { return u"any"_ustr; }
+
+    OUString getOverloadedAnyString(cpo::uno::Any const &, OUString const &) override {
+        return u"anystring"_ustr;
+    }
+
+    OUString getOverloadedStringAny(OUString const &, cpo::uno::Any const &) override {
+        return u"stringany"_ustr;
+    }
+
     void SAL_CALL throwRuntimeException() override
     {
         throw cpo::uno::RuntimeException(u"test"_ustr);
