@@ -160,6 +160,7 @@ public:
     void testPropertySettingOnFormulaBar();
     void testSearchTermReset();
     void testWriterShapePosSizeDialog();
+    void testDialogsOfOneDocumentOnly();
     void testFormulaBarAcceptButton();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
@@ -253,6 +254,7 @@ public:
     CPPUNIT_TEST(testPropertySettingOnFormulaBar);
     CPPUNIT_TEST(testSearchTermReset);
     CPPUNIT_TEST(testWriterShapePosSizeDialog);
+    CPPUNIT_TEST(testDialogsOfOneDocumentOnly);
     CPPUNIT_TEST(testFormulaBarAcceptButton);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
@@ -3556,6 +3558,49 @@ void DesktopKitTest::testWriterShapePosSizeDialog()
     const awt::Size aSizeAfter = xShape->getSize();
     CPPUNIT_ASSERT_MESSAGE("entered width was not applied to the shape",
                            aSizeBefore.Width != aSizeAfter.Width);
+}
+
+void DesktopKitTest::testDialogsOfOneDocumentOnly()
+{
+    // Suppressing a document's dialogs, because nobody is there to answer them, reaches that
+    // document only. One process holds every open document, so the others go on opening theirs.
+    COKitImpl aOffice;
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->initializeForRendering("{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Insert a rectangle. It is selected after insertion, so the Position and Size dialog has
+    // something to act on.
+    pDocument->postUnoCommand(".uno:BasicShapes.rectangle", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    const ViewShellDocId nThisDocId(pDocument->mnDocumentId);
+    const ViewShellDocId nOtherDocId(pDocument->mnDocumentId + 1);
+
+    // This document's dialogs are suppressed, so it opens none.
+    comphelper::COKit::setDialogsSuppressed(nThisDocId);
+    pDocument->postUnoCommand(".uno:TransformDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("a document with its dialogs suppressed opened one",
+                                 static_cast<unsigned long long>(0), aView.m_posSizeDialogId);
+
+    // Suppressing another document says nothing about this one, which opens its dialog as
+    // usual.
+    comphelper::COKit::clearDialogsSuppressed(nThisDocId);
+    comphelper::COKit::setDialogsSuppressed(nOtherDocId);
+    comphelper::ScopeGuard aGuard(
+        [nOtherDocId] { comphelper::COKit::clearDialogsSuppressed(nOtherDocId); });
+    CPPUNIT_ASSERT(!comphelper::COKit::areDialogsSuppressed(nThisDocId));
+
+    pDocument->postUnoCommand(".uno:TransformDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_MESSAGE("suppressing another document closed this document's dialog",
+                           aView.m_posSizeDialogId != 0);
 }
 
 void DesktopKitTest::testFormulaBarAcceptButton()
