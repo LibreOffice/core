@@ -761,10 +761,59 @@ ul {
   );
 }
 
+/* Drawn here rather than by the browser: a native checkbox sized away from
+   its default does not give its checked and unchecked states the same
+   metrics, so a column of them came out visibly ragged. */
 .checkbox-radio-switch-input {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
   width: 18px;
   height: 18px;
+  flex: 0 0 18px;
   margin: 4px calc((var(--default-clickable-area) - 16px) / 2);
+  border: 2px solid var(--settings-border-contrast);
+  border-radius: 4px;
+  background-color: var(--settings-background);
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.checkbox-radio-switch-input::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  background-color: var(--settings-btn-primary-text);
+  /* A tick, so the mark scales with the box instead of being a glyph. */
+  clip-path: polygon(
+    14% 44%,
+    0 65%,
+    40% 100%,
+    100% 16%,
+    84% 0,
+    39% 62%
+  );
+}
+
+.checkbox-radio-switch-input:checked {
+  background-color: var(--settings-btn-primary);
+  border-color: var(--settings-btn-primary);
+}
+
+.checkbox-radio-switch-input:checked::before {
+  transform: scale(1);
+}
+
+.checkbox-radio-switch-input:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.checkbox-radio-switch-input:focus-visible {
+  outline: 2px solid var(--settings-btn-primary);
+  outline-offset: 2px;
 }
 
 .checkbox-content--has-text {
