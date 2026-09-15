@@ -11,6 +11,7 @@
 
 #include <osl/thread.h>
 #include <svl/numformat.hxx>
+#include <drwlayer.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
 

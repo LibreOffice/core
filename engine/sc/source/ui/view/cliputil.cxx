@@ -8,6 +8,7 @@
  */
 
 #include <cliputil.hxx>
+#include <drwlayer.hxx>
 #include <attrib.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>

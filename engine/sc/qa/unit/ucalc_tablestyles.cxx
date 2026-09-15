@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include <drwlayer.hxx>
 #include <memory>
 
 #include <TableStyleGenerator.hxx>

@@ -11,6 +11,7 @@
 #pragma once
 
 #include <address.hxx>
+#include <unotools/resmgr.hxx>
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 

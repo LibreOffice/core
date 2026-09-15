@@ -12,6 +12,7 @@
 #include <config_vclplug.h>
 
 #include <helper/qahelper.hxx>
+#include <drwlayer.hxx>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>

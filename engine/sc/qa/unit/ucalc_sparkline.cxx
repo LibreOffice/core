@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include <drwlayer.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
 #include <undomanager.hxx>

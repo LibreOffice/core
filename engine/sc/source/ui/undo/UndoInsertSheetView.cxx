@@ -8,6 +8,7 @@
  */
 
 #include <undo/UndoInsertSheetView.hxx>
+#include <drwlayer.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <document.hxx>

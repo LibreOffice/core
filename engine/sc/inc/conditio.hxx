@@ -36,6 +36,7 @@
 #include <tools/link.hxx>
 #include <o3tl/lru_map.hxx>
 #include <vcl/dropcache.hxx>
+#include <vcl/idle.hxx>
 
 #include <optional>
 #include <map>

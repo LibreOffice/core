@@ -18,6 +18,7 @@
  */
 
 #include <notemark.hxx>
+#include <drwlayer.hxx>
 #include <postit.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>

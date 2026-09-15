@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/bindings.hxx>
+#include <drwlayer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
