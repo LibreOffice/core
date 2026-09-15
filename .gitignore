@@ -247,6 +247,7 @@ copilot.json
 
 # autoconf stuff
 autogen.input
+/autogen-input.mk
 
 # MacOS file manager metadata
 .DS_Store
