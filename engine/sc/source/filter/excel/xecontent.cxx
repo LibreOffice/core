@@ -290,6 +290,17 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
     return EXC_XFID_NOTFOUND;
 }
 
+const ScRange* XclExpMergedcells::GetMergedRange( const ScAddress& rPos ) const
+{
+    for( size_t i = 0, nRanges = maMergedRanges.size(); i < nRanges; ++i )
+    {
+        const ScRange& rScRange = maMergedRanges[ i ];
+        if( rScRange.Contains( rPos ) )
+            return &rScRange;
+    }
+    return nullptr;
+}
+
 void XclExpMergedcells::Save( XclExpStream& rStrm )
 {
     if( GetBiff() != EXC_BIFF8 )

@@ -37,6 +37,12 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/util/XMergeable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -824,6 +830,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testQueryTableHeaders)
 
 // --- Table Style OOXML Export Tests ---
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testMergedRangeKeepsTheFormatOfItsCells)
+{
+    createScDoc("xlsx/cell-anchored-hidden-shapes.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // row 10 is the range A10:H10, whose base cell is written with a format of its own
+    const OUString aBaseStyle = getXPath(pSheet, "//x:row[@r='10']/x:c[@r='A10']", "s");
+    const OUString aCoveredStyle = getXPath(pSheet, "//x:row[@r='10']/x:c[@r='H10']", "s");
+    CPPUNIT_ASSERT(!aBaseStyle.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("a covered cell must keep its own format",
+                           aBaseStyle != aCoveredStyle);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleDefaultExportXLSX)
 {
     // Open xlsx with default table style (TableStyleMedium2), save as xlsx, verify roundtrip
@@ -1567,6 +1589,112 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testControlShapeIdsStayApart)
             = getXPath(pSheet, "(//x:control)[" + OString::number(i) + "]", "shapeId").toUtf8();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aId.getStr(), 1,
                                      countXPathNodes(pSheet, "//x:control[@shapeId='" + aId + "']"));
+    }
+}
+
+// A cell given a box border and then merged with its neighbours: Calc draws the box around the whole
+// range, so the cell on the right edge of the range must state the right border.
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testBorderThenMergeKeepsItsRightEdge)
+{
+    createScDoc();
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
+                                                               cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xSheets(xDoc->getSheets(),
+                                                              cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0),
+                                                         cpo::uno::UNO_QUERY_THROW);
+
+    css::table::BorderLine2 aLine;
+    aLine.OuterLineWidth = 50;
+    aLine.LineWidth = 50;
+    aLine.LineStyle = css::table::BorderLineStyle::SOLID;
+    css::table::TableBorder2 aBorder;
+    aBorder.TopLine = aLine;
+    aBorder.IsTopLineValid = true;
+    aBorder.BottomLine = aLine;
+    aBorder.IsBottomLineValid = true;
+    aBorder.LeftLine = aLine;
+    aBorder.IsLeftLineValid = true;
+    aBorder.RightLine = aLine;
+    aBorder.IsRightLineValid = true;
+    cpo::uno::Reference<css::beans::XPropertySet>(xSheet->getCellRangeByName(u"A1"_ustr),
+                                                  cpo::uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"TableBorder2"_ustr, cpo::uno::Any(aBorder));
+    cpo::uno::Reference<css::util::XMergeable>(xSheet->getCellRangeByName(u"A1:C1"_ustr),
+                                               cpo::uno::UNO_QUERY_THROW)
+        ->merge(true);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    sal_Int32 nStyle = 0;
+    if (countXPathNodes(pSheet, "//x:c[@r='C1'][@s]"))
+        nStyle = getXPath(pSheet, "//x:c[@r='C1']", "s").toInt32();
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    const sal_Int32 nBorder
+        = getXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nStyle + 1) + "]",
+                   "borderId")
+              .toInt32();
+    assertXPath(pStyles,
+                "/x:styleSheet/x:borders/x:border[" + OString::number(nBorder + 1)
+                    + "]/x:right[@style]",
+                1);
+}
+
+// Two cells side by side, each given a box border and then merged with the cell below it: the
+// covered cells of the bottom row lie next to each other with one format, and each must state the
+// bottom edge of its range.
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testSideBySideMergesKeepTheirBottomEdge)
+{
+    createScDoc();
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
+                                                               cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xSheets(xDoc->getSheets(),
+                                                              cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0),
+                                                         cpo::uno::UNO_QUERY_THROW);
+
+    css::table::BorderLine2 aLine;
+    aLine.OuterLineWidth = 50;
+    aLine.LineWidth = 50;
+    aLine.LineStyle = css::table::BorderLineStyle::SOLID;
+    css::table::TableBorder2 aBorder;
+    aBorder.TopLine = aLine;
+    aBorder.IsTopLineValid = true;
+    aBorder.BottomLine = aLine;
+    aBorder.IsBottomLineValid = true;
+    aBorder.LeftLine = aLine;
+    aBorder.IsLeftLineValid = true;
+    aBorder.RightLine = aLine;
+    aBorder.IsRightLineValid = true;
+    for (const OUString& rCell : { u"A1"_ustr, u"B1"_ustr })
+        cpo::uno::Reference<css::beans::XPropertySet>(xSheet->getCellRangeByName(rCell),
+                                                      cpo::uno::UNO_QUERY_THROW)
+            ->setPropertyValue(u"TableBorder2"_ustr, cpo::uno::Any(aBorder));
+    for (const OUString& rRange : { u"A1:A2"_ustr, u"B1:B2"_ustr })
+        cpo::uno::Reference<css::util::XMergeable>(xSheet->getCellRangeByName(rRange),
+                                                   cpo::uno::UNO_QUERY_THROW)
+            ->merge(true);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    for (const char* pCell : { "A2", "B2" })
+    {
+        const OString aCell = OString::Concat("//x:c[@r='") + pCell + "']";
+        sal_Int32 nStyle = 0;
+        if (countXPathNodes(pSheet, aCell + "[@s]"))
+            nStyle = getXPath(pSheet, aCell, "s").toInt32();
+        const sal_Int32 nBorder
+            = getXPath(pStyles,
+                       "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nStyle + 1) + "]",
+                       "borderId")
+                  .toInt32();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pCell, 1,
+                                     countXPathNodes(pStyles, "/x:styleSheet/x:borders/x:border["
+                                                                  + OString::number(nBorder + 1)
+                                                                  + "]/x:bottom[@style]"));
     }
 }
 

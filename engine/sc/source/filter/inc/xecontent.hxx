@@ -79,6 +79,8 @@ public:
     void                AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId );
     /** Returns the XF identifier of the top-left cell in a merged range. */
     sal_uInt32          GetBaseXFId( const ScAddress& rPos ) const;
+    /** Returns the merged range a position lies in, or null when it lies in none. */
+    const ScRange*      GetMergedRange( const ScAddress& rPos ) const;
 
     /** Writes the record, if it contains at least one merged cell range. */
     virtual void        Save( XclExpStream& rStrm ) override;

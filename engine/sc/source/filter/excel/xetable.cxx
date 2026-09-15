@@ -21,12 +21,14 @@
 
 #include <map>
 #include <numeric>
+#include <optional>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scitems.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <tools/UnitConversion.hxx>
+#include <editeng/boxitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -2782,6 +2784,52 @@ XclExpInCellImages lclGetInCellImages( const ScDocument& rDoc, SCTAB nScTab )
     return aImages;
 }
 
+/** The box a cell covered by a merged range is written with, or nothing when it keeps its own.
+
+    A merged range is drawn with the box of its base cell, while the XML format states a box per
+    cell and draws the range from the edges of the cells it covers. So every covered cell states
+    the box of the base cell and keeps the rest of the format it was given. The lines that fall
+    inside the range are not drawn, because the cells of a merged range share one face. */
+std::optional< SvxBoxItem > lclGetCoveredCellBox( const ScDocument& rDoc, const ScRange& rRange,
+                                                  const ScPatternAttr& rPattern )
+{
+    const ScPatternAttr* pBasePattern = rDoc.GetPattern( rRange.aStart );
+    if( !pBasePattern )
+        return {};
+
+    const SvxBoxItem& rBaseBox = pBasePattern->GetItem( ATTR_BORDER );
+    if( rBaseBox == rPattern.GetItem( ATTR_BORDER ) )
+        return {};
+    return rBaseBox;
+}
+
+/** Cuts a run of cells where it leaves the merged range that its first cell lies in.
+
+    A run of cells is written as one record with one format, so a run that two merged ranges
+    cover in turn could state the box of only one of them. The rest of the run is put back as
+    the run that follows, so every part of it lies in one range. */
+void lclSplitRunAtTheRangeEnd( std::vector< XclExpUsedArea >& rRowAreas, size_t nArea,
+                               SCROW nScRow, SCTAB nScTab,
+                               const XclExpMergedcells& rMergedCells )
+{
+    XclExpUsedArea& rArea = rRowAreas[ nArea ];
+    const ScPatternAttr* pPattern = rArea.aPattern.getScPatternAttr();
+    if( !pPattern || !pPattern->GetItemSet().Get( ATTR_MERGE_FLAG ).IsOverlapped() )
+        return;
+
+    const ScRange* pRange
+        = rMergedCells.GetMergedRange( ScAddress( rArea.nScCol, nScRow, nScTab ) );
+    if( !pRange || pRange->aEnd.Col() >= rArea.nLastScCol )
+        return;
+
+    // The cell of a run sits at its start, so the rest of the run begins with a blank one.
+    XclExpUsedArea aRest = rArea;
+    aRest.nScCol = pRange->aEnd.Col() + 1;
+    aRest.aScCell = ScRefCellValue();
+    rArea.nLastScCol = pRange->aEnd.Col();
+    rRowAreas.insert( rRowAreas.begin() + nArea + 1, aRest );
+}
+
 } // namespace
 
 XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
@@ -2918,8 +2966,12 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             nPendingEmptyScRow = -1;
         }
 
-        for( const XclExpUsedArea& rArea : aRowAreas )
+        for( size_t nArea = 0; nArea < aRowAreas.size(); ++nArea )
         {
+            if( GetOutput() == EXC_OUTPUT_XML_2007 )
+                lclSplitRunAtTheRangeEnd( aRowAreas, nArea, nScRow, nScTab, *mxMergedcells );
+
+            const XclExpUsedArea& rArea = aRowAreas[ nArea ];
             const SCCOL nScCol = rArea.nScCol;
             const SCCOL nLastScCol = rArea.nLastScCol;
             ScAddress aScPos( nScCol, nScRow, nScTab );
@@ -2934,6 +2986,9 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             std::vector< XclExpCellRef > aSplitCells;
 
             const ScPatternAttr* pPattern = rArea.aPattern.getScPatternAttr();
+            /*  A cell covered by a merged range is written with a box of its own, which lives
+                as long as the cell record below is built from it. */
+            std::optional< ScPatternAttr > oCoveredPattern;
 
             // handle overlapped merged cells before creating the cell record
             sal_uInt32 nMergeBaseXFId = EXC_XFID_NOTFOUND;
@@ -2944,11 +2999,27 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 // base cell in a merged range
                 const ScMergeAttr& rMergeItem = rItemSet.Get( ATTR_MERGE );
                 bIsMergedBase = rMergeItem.IsMerged();
-                /*  overlapped cell in a merged range; in Excel all merged cells
-                    must contain same XF index, for correct border */
+                /*  Overlapped cell in a merged range. The binary format draws the border of the
+                    range only when every cell of it carries the same format, so the cell takes
+                    the one of the base cell there. The XML format draws the border from the
+                    outer edges of the range, so the cell keeps the format it was given and
+                    states the box the range is drawn with. */
                 const ScMergeFlagAttr& rMergeFlagItem = rItemSet.Get( ATTR_MERGE_FLAG );
                 if( rMergeFlagItem.IsOverlapped() )
-                    nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
+                {
+                    if( GetOutput() != EXC_OUTPUT_XML_2007 )
+                        nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
+                    else if( const ScRange* pRange = mxMergedcells->GetMergedRange( aScPos ) )
+                    {
+                        if( std::optional< SvxBoxItem > oBox
+                                = lclGetCoveredCellBox( GetDoc(), *pRange, *pPattern ) )
+                        {
+                            oCoveredPattern.emplace( *pPattern );
+                            oCoveredPattern->ItemSetPut( *oBox );
+                            pPattern = &*oCoveredPattern;
+                        }
+                    }
+                }
             }
 
             OUString aAddNoteText;    // additional text to be appended to a note
