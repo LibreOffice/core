@@ -18,7 +18,6 @@ Makefile
 !qt/freebsd/editors/*/Makefile
 !/gbuild/Makefile
 Makefile.in
-coolkitconfig.xcu
 coolwsd.spec
 coolwsd.xml
 aclocal.m4
@@ -167,7 +166,6 @@ ios/Mobile/Info.plist
 ios/Mobile/Fonts
 ios/Mobile/Branding
 ios/Mobile/Resources/Settings.bundle/Root.plist
-ios/Mobile/coolkitconfig.xcu
 
 ios/FakeQuickLook/Info.plist
 

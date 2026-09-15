@@ -2847,7 +2847,6 @@ convs
 coolclient
 coolforkit
 coolkit
-coolkitconfig
 coolkits
 coolmount
 coolserver

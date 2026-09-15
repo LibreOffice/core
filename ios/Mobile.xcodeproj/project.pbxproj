@@ -50,7 +50,6 @@
 		BE5EB5E721401E0F00E0826C /* RequestVettingStation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5E621401E0F00E0826C /* RequestVettingStation.cpp */; };
 		BE6362C22153B5B500F4237E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6362C12153B5B500F4237E /* CoreServices.framework */; };
 		BE7228E22417BC9F000ADABD /* StringVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE7228E02417BC9F000ADABD /* StringVector.cpp */; };
-		BE7D6A6B23FAA8B500C2E605 /* coolkitconfig.xcu in Resources */ = {isa = PBXBuildFile; fileRef = BE7D6A6A23FAA8B500C2E605 /* coolkitconfig.xcu */; };
 		BE80E43221AD92F700859C97 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = BE80E43121AD92F600859C97 /* Fonts */; };
 		BE80E45821B68F5700859C97 /* TemplateCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45721B68F5700859C97 /* TemplateCollectionViewController.mm */; };
 		BE80E45E21B6CEF200859C97 /* TemplateSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45D21B6CEF200859C97 /* TemplateSectionHeaderView.m */; };
@@ -754,7 +753,6 @@
 		BE7D6A6523FA9C2700C2E605 /* defaultprovider.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = defaultprovider.hxx; path = "../lobuilddir-symlink/configmgr/source/defaultprovider.hxx"; sourceTree = "<group>"; };
 		BE7D6A6623FA9C2700C2E605 /* parser.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = parser.hxx; path = "../lobuilddir-symlink/configmgr/source/parser.hxx"; sourceTree = "<group>"; };
 		BE7D6A6723FA9C2700C2E605 /* rootnode.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rootnode.cxx; path = "../lobuilddir-symlink/configmgr/source/rootnode.cxx"; sourceTree = "<group>"; };
-		BE7D6A6A23FAA8B500C2E605 /* coolkitconfig.xcu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = coolkitconfig.xcu; path = ../coolkitconfig.xcu; sourceTree = "<group>"; };
 		BE7E5B7623AD07BE00F9462A /* SvxPresetListBox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SvxPresetListBox.cxx; path = "../lobuilddir-symlink/svx/source/tbxctrls/SvxPresetListBox.cxx"; sourceTree = "<group>"; };
 		BE7E5B7723AD07BE00F9462A /* tbxcolor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxcolor.cxx; path = "../lobuilddir-symlink/svx/source/tbxctrls/tbxcolor.cxx"; sourceTree = "<group>"; };
 		BE7E5B7823AD07BE00F9462A /* tbxdrctl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxdrctl.cxx; path = "../lobuilddir-symlink/svx/source/tbxctrls/tbxdrctl.cxx"; sourceTree = "<group>"; };
@@ -1592,7 +1590,6 @@
 		BE00F8922139494E001CE2D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BE7D6A6A23FAA8B500C2E605 /* coolkitconfig.xcu */,
 				BE18C7DD226DE09A001AD27E /* Branding */,
 				BEB0E5D821C7CA800085A0CF /* Settings.bundle */,
 				BE80E46721B7066C00859C97 /* Templates */,
@@ -3794,7 +3791,6 @@
 				BE00F8A721396585001CE2D4 /* cool-help.html in Resources */,
 				BE8D773D2136762600AC58EA /* LaunchScreen.storyboard in Resources */,
 				BE00F8A121396585001CE2D4 /* bundle.css in Resources */,
-				BE7D6A6B23FAA8B500C2E605 /* coolkitconfig.xcu in Resources */,
 				BE8D85CF214055F3009F1860 /* udkapi.rdb in Resources */,
 				BE18C7DE226DE09A001AD27E /* Branding in Resources */,
 				BE8D85D5214055F3009F1860 /* unorc in Resources */,

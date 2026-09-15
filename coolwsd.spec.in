@@ -90,7 +90,6 @@ echo "account    required     pam_unix.so" >>  %{buildroot}/etc/pam.d/coolwsd
 
 %config(noreplace) /etc/pam.d/coolwsd
 %config(noreplace) %attr(640, cool, root) /etc/coolwsd/coolwsd.xml
-%config /etc/coolwsd/coolkitconfig.xcu
 %config(noreplace) /etc/nginx/snippets/coolwsd.conf
 %config(noreplace) /etc/apache2/conf-available/coolwsd.conf
 %config(noreplace) /etc/httpd/conf/coolwsd.conf

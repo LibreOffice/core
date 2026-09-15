@@ -2625,7 +2625,6 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
               # iOS app.
               touch ios/Mobile/Branding/branding.css
           fi
-          cp coolkitconfig-mobile.xcu ios/Mobile/coolkitconfig.xcu
        fi
       ])
 AC_SUBST(IOSAPP_FONTS)
@@ -2910,7 +2909,6 @@ AC_CONFIG_FILES([Makefile
                  browser/images/Makefile
                  browser/l10n/Makefile
                  browser/npm-shrinkwrap.json
-                 coolkitconfig.xcu
                  coolwsd.spec
                  coolwsd.xml
                  debian/coolwsd.postinst])

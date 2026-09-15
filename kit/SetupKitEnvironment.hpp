@@ -16,14 +16,6 @@
 
 #include <common/Log.hpp>
 
-#if defined(MACOS) && MOBILEAPP
-#include <macos.h>
-#endif
-
-#ifdef _WIN32
-#include <windows.hpp>
-#endif
-
 inline void setupKitEnvironment(const std::string& userInterface)
 {
     // Setup & check environment
@@ -39,21 +31,6 @@ inline void setupKitEnvironment(const std::string& userInterface)
         "sharedext:${${BRAND_BASE_DIR}/program/lounorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
         "userext:${${BRAND_BASE_DIR}/program/lounorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
         );
-#ifdef IOS
-    layers += "user:*${BRAND_BASE_DIR}/coolkitconfig.xcu ";
-#elif defined(_WIN32)
-    // app_installation_uri ends with a slash
-    layers += "user:*" + app_installation_uri + "../coolkitconfig.xcu ";
-#elif defined(MACOS) && MOBILEAPP
-    layers += "user:*" + getResourceURL("coolkitconfig", "xcu");
-#elif ENABLE_DEBUG && !defined(ANDROID) // '*' denotes non-writable.
-    layers += "user:*file://" DEBUG_ABSSRCDIR "/coolkitconfig.xcu ";
-#else
-    if(::getenv("COOLKITCONFIG_XCU"))
-        layers += "user:*file://" + std::string(::getenv("COOLKITCONFIG_XCU")) + " ";
-    else
-        layers += "user:*file://" COOLWSD_CONFIGDIR "/coolkitconfig.xcu ";
-#endif
     ::setenv("CONFIGURATION_LAYERS", layers.c_str(),
              1 /* override */);
 

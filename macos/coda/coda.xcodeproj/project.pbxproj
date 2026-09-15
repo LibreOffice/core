@@ -98,7 +98,6 @@
 		BEA264B32CBE99340007435A /* DocumentBroker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264A72CBE99340007435A /* DocumentBroker.cpp */; };
 		BEB7CC182F332BF8006FCAE9 /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = BEB7CC172F332BF8006FCAE9 /* TestPlan.xctestplan */; };
 		BEDAD86B2F5EF7BA00E82F00 /* WSDGlobals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDAD86A2F5EF7BA00E82F00 /* WSDGlobals.cpp */; };
-		BEEF3F862CE2139E00ABE785 /* coolkitconfig.xcu in Resources */ = {isa = PBXBuildFile; fileRef = BEEF3F852CE2139E00ABE785 /* coolkitconfig.xcu */; };
 		BEF5CE8F2D633CE60006FD77 /* discovery.xml in Resources */ = {isa = PBXBuildFile; fileRef = BEF5CE8E2D633CE60006FD77 /* discovery.xml */; };
 		BEF6F02D2DD1EC0200EA06BF /* RegexUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEF6F02C2DD1EC0200EA06BF /* RegexUtil.cpp */; };
 		BEF881392EA62DBF0080A631 /* dumpWsdState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEF881382EA62DBF0080A631 /* dumpWsdState.cpp */; };
@@ -345,7 +344,6 @@
 		BEDAD8692F5EF7BA00E82F00 /* WSDGlobals.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = WSDGlobals.hpp; path = WSDGlobals.hpp; sourceTree = "<group>"; };
 		BEDAD86A2F5EF7BA00E82F00 /* WSDGlobals.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WSDGlobals.cpp; path = WSDGlobals.cpp; sourceTree = "<group>"; };
 		BEEF3F822CE20BDD00ABE785 /* SetupKitEnvironment.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SetupKitEnvironment.hpp; path = SetupKitEnvironment.hpp; sourceTree = "<group>"; };
-		BEEF3F852CE2139E00ABE785 /* coolkitconfig.xcu */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = coolkitconfig.xcu; path = ../../coolkitconfig.xcu; sourceTree = "<group>"; };
 		BEF5CE8E2D633CE60006FD77 /* discovery.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = discovery.xml; path = ../../discovery.xml; sourceTree = "<group>"; };
 		BEF6F02B2DD1EC0200EA06BF /* RegexUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RegexUtil.hpp; path = RegexUtil.hpp; sourceTree = "<group>"; };
 		BEF6F02C2DD1EC0200EA06BF /* RegexUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RegexUtil.cpp; path = RegexUtil.cpp; sourceTree = "<group>"; };
@@ -408,7 +406,6 @@
 				BE22492E2CC79BAE00385A9C /* bundle.js */,
 				BE22492B2CC79AD700385A9C /* cool.html */,
 				BE22492F2CC79BAE00385A9C /* cool-help.html */,
-				BEEF3F852CE2139E00ABE785 /* coolkitconfig.xcu */,
 				BE4C62602D5B736200047DF2 /* coolwsd.xml */,
 				BE2249302CC79BAE00385A9C /* device-desktop.css */,
 				BEF5CE8E2D633CE60006FD77 /* discovery.xml */,
@@ -853,7 +850,6 @@
 				BE16C9F02CD51F58005E5960 /* hello.odt in Resources */,
 				BE2257AD2CC79BAE00385A9C /* bundle.css in Resources */,
 				BE22492C2CC79AD700385A9C /* cool.html in Resources */,
-				BEEF3F862CE2139E00ABE785 /* coolkitconfig.xcu in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

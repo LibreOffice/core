@@ -120,10 +120,6 @@ tasks.register('copyUnpackAssets', Copy) {
             includes = ['**']
         }
     }
-    into('etc/coolwsd') {
-        from('/android/coolkitconfig.xcu')
-        includes = ['coolkitconfig.xcu']
-    }
     into('user/fonts') {
         from "${coInstdir}/share/fonts/truetype"
         // Note: restrict list of fonts due to size considerations - no technical reason anymore
@@ -215,12 +211,6 @@ tasks.register('copyDocTemplates', Copy) {
             "${rootProject.getRootDir()}/templates/untitled.xlsx",
             "${rootProject.getRootDir()}/templates/untitled.docx"
     into "src/main/assets/templates"
-}
-
-tasks.register('copyKitConfig', Copy) {
-    from "${file(rootProject.getRootDir()).getParent()}/coolkitconfig-mobile.xcu"
-    into "src/main/assets/etc/coolwsd"
-    rename { "coolkitconfig.xcu" }
 }
 
 tasks.register('createStrippedConfig') {
@@ -350,8 +340,8 @@ afterEvaluate {
 	if (!file("${coBrandingDir}").exists()) {
 		copyBrandTheme.enabled = false
 	}
-	generateDebugAssets.dependsOn copyDocTemplates, copyKitConfig, generateCoolDebugAssets
-	generateReleaseAssets.dependsOn copyDocTemplates, copyKitConfig, generateCoolReleaseAssets
+	generateDebugAssets.dependsOn copyDocTemplates, generateCoolDebugAssets
+	generateReleaseAssets.dependsOn copyDocTemplates, generateCoolReleaseAssets
 
     // These tasks only exist under some cases (not in Android Studio)...
     // ...so use tasks.named so they don't fail if they are never registered...
@@ -365,6 +355,6 @@ afterEvaluate {
         "lintAnalyzeDebug",
         "lintVitalAnalyzeRelease",
     ] }.configureEach {
-        dependsOn copyDocTemplates, copyKitConfig
+        dependsOn copyDocTemplates
     }
 }

@@ -129,8 +129,7 @@ endif
 
 coolwsdconfigdir = @COOLWSD_CONFIGDIR@
 
-coolwsdconfig_DATA = coolwsd.xml \
-		     coolkitconfig.xcu
+coolwsdconfig_DATA = coolwsd.xml
 
 apache2configdir = ${sysconfdir}/apache2/conf-available
 
@@ -513,7 +512,6 @@ EXTRA_DIST = \
              README.md \
              SBOM.md \
              THIRDPARTYLICENSES \
-             coolkitconfig.xcu.in \
              coolwsd.service \
              coolwsd.spec \
              coolwsd.xml.in \
@@ -1032,7 +1030,7 @@ czech: all-local presets-dir
 	@echo "Running unit-tests only"
 	$(MAKE) check -C test
 
-collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml coolkitconfig.xcu \
+collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml \
 		$(abs_top_srcdir)/scripts/create-sbom.py \
 		$(abs_top_srcdir)/scripts/sbom-externals.json \
 		$(abs_top_builddir)/browser/npm-shrinkwrap.json

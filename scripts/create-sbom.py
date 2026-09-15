@@ -452,7 +452,6 @@ def collect_files(srcdir, builddir, enable_mobileapp=False):
     add("usr/share/coolwsd/discovery.xml", os.path.join(srcdir, "discovery.xml"))
     add("usr/share/coolwsd/favicon.ico", os.path.join(srcdir, "favicon.ico"))
     add("etc/coolwsd/coolwsd.xml", os.path.join(builddir, "coolwsd.xml"))
-    add("etc/coolwsd/coolkitconfig.xcu", os.path.join(builddir, "coolkitconfig.xcu"))
 
     dist = os.path.join(builddir, "browser", "dist")
     for root, dirs, names in os.walk(dist):

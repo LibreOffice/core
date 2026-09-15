@@ -1,5 +1,4 @@
 etc/coolwsd/coolwsd.xml
-etc/coolwsd/coolkitconfig.xcu
 etc/nginx/snippets/coolwsd.conf
 etc/apache2/conf-available/coolwsd.conf
 usr/bin/coolconfig
