@@ -19,6 +19,7 @@
 
 #include <column.hxx>
 #include <docsh.hxx>
+#include <bcaslot.hxx>
 #include <scitems.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -3599,6 +3600,9 @@ public:
         (*ppBeg)->SetCompile(true);
         (*ppBeg)->CompileTokenArray(mrCxt, true /*bNoListening*/);
 
+        // A group can span a whole column, and SetDirty() tracks the formulas once per
+        // cell. Coalesce the group's broadcasts so that walk happens once.
+        ScBulkBroadcast aBulkBroadcast(rDoc.GetBASM(), SfxHintId::ScDataChanged);
         for (ScFormulaCell** pp = ppBeg; pp != ppEnd; ++pp)
         {
             (*pp)->StartListeningTo(rDoc);

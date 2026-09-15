@@ -8,6 +8,7 @@
  */
 
 #include <column.hxx>
+#include <bcaslot.hxx>
 #include <clipparam.hxx>
 #include <cellvalue.hxx>
 #include <attarray.hxx>
@@ -1043,6 +1044,9 @@ public:
                 xGroup->compileCode(mrDoc, pTop->aPos, mrDoc.GetGrammar());
 
                 // Propagate the new token array to all formula cells in the group.
+                // A group can span a whole column, and SetDirty() tracks the formulas
+                // once per cell. Coalesce the broadcasts so that walk happens once.
+                ScBulkBroadcast aBulkBroadcast(mrDoc.GetBASM(), SfxHintId::ScDataChanged);
                 ScFormulaCell** pp = rEntry.mpCells;
                 ScFormulaCell** ppEnd = pp + rEntry.mnLength;
                 for (; pp != ppEnd; ++pp)
