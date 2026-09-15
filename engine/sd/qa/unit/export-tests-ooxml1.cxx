@@ -117,12 +117,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf149128)
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // The connector names the two shapes it joins and the point on each of them it meets,
+    // whatever numbers those shapes were given.
+    const OUString aFirstShape
+        = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:nvSpPr/p:cNvPr", "id");
+    const OUString aSecondShape
+        = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:cNvPr", "id");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn", "id",
-                u"10");
+                aFirstShape);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn", "idx",
                 u"0");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn", "id",
-                u"11");
+                aSecondShape);
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:endCxn", "idx",
                 u"2");
 }
