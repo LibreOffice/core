@@ -750,6 +750,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableFilterButtonsOff)
     assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[2]", "hiddenButton", u"1");
     assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[3]", "colId", u"2");
     assertXPath(pDocXml, "/x:table/x:autoFilter/x:filterColumn[3]", "hiddenButton", u"1");
+
+    // except when there's no header row
+    pDocXml = parseExport(u"xl/tables/table2.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml, "/x:table", "headerRowCount", u"0");
+    assertXPath(pDocXml, "/x:table/x:autoFilter", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testTableFilterButtonsOn)
