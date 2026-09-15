@@ -168,31 +168,37 @@ publish_digest() {
 }
 
 # Every per-platform manifest digest of a ref (or the ref's own digest).
-ref_digests() {
-    # buildx is the nicest source, but it is a plugin and not every builder
-    # host has it; 'docker manifest inspect -v' answers the same question.
-    if command -v docker >/dev/null && docker buildx version >/dev/null 2>&1; then
-        docker buildx imagetools inspect --format '{{json .}}' "$1"
-    else
-        docker manifest inspect -v "$1" | python3 -c '
+# Digest of each platform manifest behind a reference (or of the reference
+# itself when it is not an index). Several sources are tried because the
+# shape of what they print differs between versions, and buildx is a plugin
+# the builder may not have; publish_ref below fails if none of them answers,
+# rather than silently signing nothing.
+digests_from_json() {
+    python3 -c '
 import json, sys
 data = json.load(sys.stdin)
-# normalise to the shape buildx reports
-if isinstance(data, list):
-    print(json.dumps({"manifest": {"manifests": [
-        {"digest": e["Descriptor"]["digest"],
-         "platform": e["Descriptor"].get("platform", {})} for e in data]}}))
-else:
-    print(json.dumps({"manifest": {"digest": data["Descriptor"]["digest"]}}))
-'
-    fi | python3 -c '
-import json, sys
-data = json.load(sys.stdin)
-manifest = data.get("manifest", {})
-entries = [m["digest"] for m in manifest.get("manifests", [])
+if isinstance(data, dict) and "manifest" in data:   # buildx imagetools
+    data = data["manifest"]
+if isinstance(data, list):                          # docker manifest -v, index
+    data = {"manifests": [{"digest": e["Descriptor"]["digest"],
+                           "platform": e["Descriptor"].get("platform", {})}
+                          for e in data]}
+elif "Descriptor" in data:                          # docker manifest -v, single
+    data = {"digest": data["Descriptor"]["digest"]}
+entries = [m["digest"] for m in data.get("manifests", [])
            if m.get("platform", {}).get("os") not in (None, "unknown")]
-print("\n".join(entries if entries else [manifest.get("digest", "")]))
-'
+if not entries and data.get("digest"):
+    entries = [data["digest"]]
+print("\n".join(entries))
+' 2>/dev/null
+}
+
+ref_digests() {
+    docker buildx imagetools inspect --format '{{json .}}' "$1" 2>/dev/null \
+        | digests_from_json && return 0
+    docker buildx imagetools inspect --format '{{json .Manifest}}' "$1" \
+        2>/dev/null | digests_from_json && return 0
+    docker manifest inspect -v "$1" 2>/dev/null | digests_from_json
 }
 
 for ref in "$@"; do
@@ -209,10 +215,17 @@ fi
 
 for ref in "$@"; do
     repository=${ref%%@*}; repository=${repository%:*}
+    found=
     for digest in $(ref_digests "$ref"); do
         [ -n "$digest" ] || continue
+        found=yes
         publish_digest "$repository" "$digest"
     done
+    if [ -z "$found" ]; then
+        echo "publish.sh: cannot resolve a digest for $ref - is it pushed?" \
+             "Nothing was signed or attested." >&2
+        exit 1
+    fi
 done
 
 echo "done. verify with:"
