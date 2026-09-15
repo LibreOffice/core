@@ -227,7 +227,7 @@
 	border-radius: var(--border-radius-s);
 	background: var(--color-background-lighter) url('images/sc_linkedslide.svg') no-repeat center;
 	background-size: 16px 16px;
-	box-shadow: 0 0 2px var(--color-border);
+	box-shadow: var(--shadow-subtle);
 }
 
 .preview-link-badge.outdated::before {
