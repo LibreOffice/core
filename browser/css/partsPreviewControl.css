@@ -81,8 +81,8 @@
 	min-width: 0;
 	align-self: flex-end;
 	pointer-events: none;
-	inset-inline-end: 2px;
-	bottom: -9px;
+	inset-inline-end: 16px;
+	bottom: 6px;
 }
 
 .preview-avatars .avatar-img,
@@ -119,7 +119,7 @@
 	height: 24px;
 	border: 2px solid var(--color-background-lighter);
 	border-radius: var(--border-radius-pill);
-	background: var(--color-primary);
+	background: var(--color-primary-dark);
 	color: var(--color-primary-text);
 	font-family: var(--cool-font);
 	font-size: 12px;
@@ -421,5 +421,5 @@
 }
 
 .parts-preview-grid .preview-avatars {
-	inset-inline-end: -8px;
+	inset-inline-end: 6px;
 }
