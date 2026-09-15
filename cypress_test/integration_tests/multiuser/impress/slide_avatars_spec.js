@@ -108,6 +108,42 @@ describe(['tagmultiuser'], 'Multiuser slide sorter avatars', function() {
 		});
 	});
 
+	// The name the other view is known by, however the test host set it.
+	function otherName(win) {
+		var mine = win.app.map._docLayer._viewId;
+		var info = win.app.map._viewInfo;
+		for (var id in info)
+			if (parseInt(id) !== mine) return info[id].username;
+		return null;
+	}
+
+	it('names the people on a slide in the slide\'s own label', function() {
+		cy.cSetActiveFrame('#iframe1');
+		waitForLayout(win1);
+		cy.cSetActiveFrame('#iframe2');
+		waitForLayout(win2);
+
+		cy.cSetActiveFrame('#iframe2');
+		clickSlideThumbnail(1);
+		helper.processToIdle(win2);
+
+		cy.cSetActiveFrame('#iframe1');
+		helper.processToIdle(win1);
+
+		// The strip is aria-hidden, so the slide's own label is the only place
+		// a name can reach a screen reader.
+		cy.wrap(null).should(function() {
+			var name = otherName(win1);
+			expect(name).to.not.be.null;
+			var frames = win1.document.querySelectorAll('.preview-frame');
+			var here = frames[2].querySelector('.preview-img');
+			var elsewhere = frames[1].querySelector('.preview-img');
+			expect(here.getAttribute('alt')).to.contain(name);
+			expect(here.getAttribute('data-cooltip')).to.contain(name);
+			expect(elsewhere.getAttribute('alt')).to.not.contain(name);
+		});
+	});
+
 	it('moves the mark when the other user changes slide', function() {
 		cy.cSetActiveFrame('#iframe1');
 		waitForLayout(win1);

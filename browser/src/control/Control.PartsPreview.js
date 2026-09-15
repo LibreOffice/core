@@ -406,7 +406,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var frame = img.parentNode;
 		var strip = frame.querySelector('.preview-avatars');
 
-		var viewNames = viewIds.map(function (viewId) {
+		img.viewNames = viewIds.map(function (viewId) {
 			return map.getViewName(viewId) || '';
 		});
 		this._setPreviewPositionLabels(img, i);
@@ -429,7 +429,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// The user list keeps the avatar between updates
 			var user = map.userList.users.get(viewId);
 			var avatar = map.userList.createAvatar(user && user.cachedSlideAvatar,
-				viewId, viewNames[index], undefined,
+				viewId, img.viewNames[index], undefined,
 				app.LOUtil.rgbToHex(map.getViewColor(viewId)));
 			if (user)
 				user.cachedSlideAvatar = avatar;
@@ -832,6 +832,27 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return img;
 	},
 
+	// The names the faces show, then a count for anyone past them.
+	_peopleHere: function (img) {
+		const all = img.viewNames || [];
+		if (!all.length)
+			return '';
+		const named = all.filter(function (name) { return name; });
+		if (!named.length)
+			return _n('with 1 other', 'with %n others', all.length);
+		const names = named.slice(0, app.SlideAvatars.slots(all.length).faces);
+		const shown = names.join(', ');
+		const rest = all.length - names.length;
+		// The name goes in through a function, so one holding a '$' pattern
+		// goes in as it is.
+		const put = function (text) {
+			return text.replace('%1', function () { return shown; });
+		};
+		if (!rest)
+			return put(_('with %1'));
+		return put(_n('with %1 and 1 other', 'with %1 and %n others', rest));
+	},
+
 	// The visible digit, the alt text and the tooltip are plain position
 	// strings, so they only ever hold the position they were given here.
 	// Callers that move a preview to a different position must call this
@@ -840,6 +861,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	_setPreviewPositionLabels: function (img, i) {
 		const link = this._pageLink(img);
 		const position = String(i + 1);
+		const people = this._peopleHere(img);
+		const withPeople = function (text) {
+			return people ? text + ', ' + people : text;
+		};
 		const slideNumber = img.parentNode &&
 			img.parentNode.querySelector('.preview-slide-number');
 		if (slideNumber)
@@ -855,11 +880,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			const values = { '%1': position, '%2': link.name, '%3': link.source };
 			img.setAttribute(
 				'alt',
-				fill(_('preview of page %1, linked to %2 in %3'), values),
+				withPeople(fill(_('preview of page %1, linked to %2 in %3'), values)),
 			);
 			img.setAttribute(
 				'data-cooltip',
-				fill(_('Slide %1, linked to %2 in %3'), values),
+				withPeople(fill(_('Slide %1, linked to %2 in %3'), values)),
 			);
 			return;
 		}
@@ -869,13 +894,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			const values = { '%1': position, '%2': link.source };
 			img.setAttribute(
 				'alt',
-				fill(_('preview of page %1, linked to %2'), values),
+				withPeople(fill(_('preview of page %1, linked to %2'), values)),
 			);
-			img.setAttribute('data-cooltip', fill(_('Slide %1, linked to %2'), values));
+			img.setAttribute(
+				'data-cooltip',
+				withPeople(fill(_('Slide %1, linked to %2'), values)),
+			);
 			return;
 		}
-		img.setAttribute('alt', _('preview of page %1').replace('%1', position));
-		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', position));
+		img.setAttribute(
+			'alt',
+			withPeople(_('preview of page %1').replace('%1', position)),
+		);
+		img.setAttribute(
+			'data-cooltip',
+			withPeople(_('Slide %1').replace('%1', position)),
+		);
 	},
 
 	// The source document a slide is linked to and the slide of that document
