@@ -1722,6 +1722,7 @@ Reference< XShape > const & Shape::createAndInsert(
         ::Color nFillPhClr(ColorTransparency, 0xffffffff);
         sal_Int16 nFillPhClrTheme = -1;
         sal_Int16 nLinePhClrTheme = -1;
+        model::ComplexColor aLinePhClrComplex;
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 
@@ -1739,6 +1740,9 @@ Reference< XShape > const & Shape::createAndInsert(
                     aLineProperties.assignUsed( *pLineProps );
                 nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
                 nLinePhClrTheme = pLineRef->maPhClr.getSchemeColorIndex();
+                // What the reference asks for, with the transformations that reach its colour
+                aLinePhClrComplex
+                    = pLineRef->maPhClr.createComplexColor( rGraphicHelper, nLinePhClrTheme );
 
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
@@ -1931,7 +1935,8 @@ Reference< XShape > const & Shape::createAndInsert(
                                           nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape);
 
         LineProperties aLineProperties = getActualLineProperties(pTheme);
-        aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr, nLinePhClrTheme);
+        aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr, nLinePhClrTheme,
+                                       &aLinePhClrComplex );
         EffectProperties aEffectProperties = getActualEffectProperties(pTheme);
         // TODO: use ph color when applying effect properties
         aEffectProperties.pushToPropMap( aShapeProps, rGraphicHelper );

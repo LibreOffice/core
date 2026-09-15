@@ -73,6 +73,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvExportJsonFieldSeparator)
     CPPUNIT_ASSERT_MESSAGE("Tab separator should be used", aData.indexOf("A\tB\tC") >= 0);
 }
 
+// A shape whose line comes from the style reference of its theme keeps the colour that reference
+// arrives at. The reference shades a theme colour, and what the shape wrote named the theme colour
+// alone, so the outline came back in the colour before the shade.
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeLineKeepsTheShadeItIsGiven)
+{
+    createScDoc("xlsx/tdf135828_Shape_Rect.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+    assertXPath(pDrawing, "//a:ln/a:solidFill/a:schemeClr", "val", u"accent1");
+    assertXPath(pDrawing, "//a:ln/a:solidFill/a:schemeClr/a:shade", "val", u"50000");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testCsvExportJsonTextDelimiter)
 {
     createScDoc();

@@ -432,7 +432,8 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
 }
 
 void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, ::Color nPhClr, sal_Int16 nPhClrTheme) const
+        const GraphicHelper& rGraphicHelper, ::Color nPhClr, sal_Int16 nPhClrTheme,
+        const model::ComplexColor* pPhClrComplex) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( !maLineFill.moFillType.has_value() )
@@ -504,7 +505,21 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
         if (aColor == nPhClr)
         {
-            aComplexColor.setThemeColor(model::convertToThemeColorType(nPhClrTheme));
+            // The line is the colour the style reference of the shape asks for. That colour is a
+            // theme colour with something done to it, a shade of it most often, and naming the
+            // theme colour alone would hand the shape the colour before the shade.
+            if (pPhClrComplex && pPhClrComplex->getThemeColorType() != model::ThemeColorType::Unknown)
+            {
+                aComplexColor = *pPhClrComplex;
+                // Anything the line states of its own follows the reference. Reaching here
+                // means the line resolved to the colour the reference names, so it states
+                // nothing that moves the colour, and this adds nothing in practice.
+                for (auto const& rTransform :
+                     aLineColor.createComplexColor(rGraphicHelper, nPhClrTheme).getTransformations())
+                    aComplexColor.addTransformation(rTransform);
+            }
+            else
+                aComplexColor.setThemeColor(model::convertToThemeColorType(nPhClrTheme));
             rPropMap.setProperty(PROP_LineComplexColor, model::color::createXComplexColor(aComplexColor));
         }
         else

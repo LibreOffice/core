@@ -29,6 +29,7 @@
 #include <oox/helper/helper.hxx>
 #include <sal/types.h>
 
+#include <docmodel/color/ComplexColor.hxx>
 #include <drawingml/fillproperties.hxx>
 
 namespace oox { class GraphicHelper; }
@@ -65,12 +66,17 @@ struct LineProperties
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineProperties& rSourceProps );
 
-    /** Writes the properties to the passed property map. */
+    /** Writes the properties to the passed property map.
+
+        @param pPhClrComplex  What the style reference of the shape asks for, where the line
+        takes its colour from there. It names a theme colour and the transformations that reach
+        the colour from it, and a line of no colour of its own stands for all of that. */
     void                pushToPropMap(
                             ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
                             ::Color nPhClr = API_RGB_TRANSPARENT,
-                            sal_Int16 nPhClrTheme = -1) const;
+                            sal_Int16 nPhClrTheme = -1,
+                            const model::ComplexColor* pPhClrComplex = nullptr) const;
 
     /** Calculates the line style attribute from the internal state of the object */
     css::drawing::LineStyle  getLineStyle() const;
