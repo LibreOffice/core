@@ -98,8 +98,10 @@ sub resolve_filelist_flag
                     {
                         if ($use_internal_rights)
                         {
+                            # The build tree decides only whether the file is executable.
+                            # The mode itself is set here.
                             my $st = stat($path);
-                            $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                            $newfile{'UnixRights'} = ($st->mode & 0111) ? "755" : "644";
                         }
 
                         push @newfiles, \%newfile;
