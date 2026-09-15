@@ -15,7 +15,6 @@ gb_BUILD_TOOLS_executables = \
 		cfgex \
 		cpp \
 		cppumaker \
-		$(if $(ENABLE_EMBIND_UNO),embindmaker) \
 		$(if $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),wasmbridgegen) \
 		gencoll_rule \
 		genconv_dict \

@@ -53,8 +53,6 @@
 #endif
 
 #ifdef __EMSCRIPTEN__
-#include <initjsunoscripting.hxx>
-#include <config_emscripten.h>
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
 
@@ -9611,10 +9609,6 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
-
-#if defined __EMSCRIPTEN__ && HAVE_EMBIND_UNO
-    initJsUnoScripting();
-#endif
 
     SAL_INFO("kit", "Uno initialized  - " <<  xContext.is());
 

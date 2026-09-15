@@ -485,7 +485,6 @@ def isNonLinuxFile(path):
         "include/comphelper/windowsdebugoutput.hxx",
         "include/comphelper/windowsStart.hxx",
         "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
-        "include/static/unoembindhelpers/PrimaryBindings.hxx",
         "include/version.hrc",
         "include/vcl/winscheduler.hxx",
     )

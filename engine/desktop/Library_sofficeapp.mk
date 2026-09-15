@@ -35,12 +35,6 @@ $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
 ))
 
-ifeq ($(ENABLE_EMBIND_UNO),TRUE)
-$(eval $(call gb_Library_use_custom_headers,sofficeapp, \
-    static/unoembind \
-))
-endif
-
 $(eval $(call gb_Library_use_api,sofficeapp,\
 	udkapi \
 	offapi \
@@ -110,7 +104,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/cmdlinehelp \
     desktop/source/app/desktopcontext \
     desktop/source/app/dispatchwatcher \
-    desktop/source/app/initjsunoscripting \
     desktop/source/app/langselect \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \

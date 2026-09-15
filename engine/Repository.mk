@@ -34,7 +34,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	concat-deps \
 	cpp \
 	cppunittester \
-	$(if $(ENABLE_EMBIND_UNO),embindmaker) \
 	$(if $(or $(filter EMSCRIPTEN,$(BUILD_TYPE_FOR_HOST)),$(filter EMSCRIPTEN,$(OS))),wasmbridgegen) \
 	gbuildtojson \
 	$(if $(filter MSC,$(COM)), \
@@ -740,7 +739,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	cui \
 	$(if $(filter EMSCRIPTEN,$(OS)), \
 	    favicon \
-	    $(if $(ENABLE_EMBIND_UNO),unoembind) \
 	) \
 ))
 

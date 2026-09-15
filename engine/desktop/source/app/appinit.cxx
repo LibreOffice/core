@@ -47,10 +47,6 @@
 #include <iostream>
 #include <map>
 
-#if defined __EMSCRIPTEN__
-#include <config_emscripten.h>
-#include <initjsunoscripting.hxx>
-#endif
 
 using namespace ::cpo::uno;
 using namespace cpo::uno;
@@ -107,9 +103,6 @@ void Desktop::InitApplicationServiceManager()
     }
 #endif
     comphelper::setProcessServiceFactory(sm);
-#if defined __EMSCRIPTEN__ && HAVE_EMBIND_UNO
-    initJsUnoScripting();
-#endif
 }
 
 void Desktop::RegisterServices()

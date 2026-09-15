@@ -557,29 +557,6 @@ AC_ARG_ENABLE([feature-restriction],
               AS_HELP_STRING([--enable-feature-restriction],
                              [Enable control over which uno-commands/feature to disable completely.]))
 
-AC_ARG_ENABLE([wasm-embind-uno],
-              AS_HELP_STRING([--enable-wasm-embind-uno],
-                             [Enable the Embind-based UNO support. Relevant only for a Wasm
-                              build.]))
-
-AC_ARG_ENABLE([wasm-embindtest],
-              AS_HELP_STRING([--enable-wasm-embindtest],
-                             [Run the CollaboraOffice embindtest as part of running the app. Requires
-                              --enable-wasm-embind-uno. Relevant only for a Wasm build.]))
-
-AC_ARG_WITH([wasm-zetajs],
-            AS_HELP_STRING([--with-wasm-zetajs=<path>],
-                           [Include zetajs scripting support in the app. (Together with
-                            --enable-wasm-embindtest, also run the zetajs smoketest as part of
-                            running the app.) Requires --enable-wasm-embind-uno. Relevant only for a
-                            Wasm build. Path to a zetajs source tree.]))
-
-AC_ARG_ENABLE([wasm-zetajs-example],
-              AS_HELP_STRING([--enable-wasm-zetajs-example],
-                             [Include a zetajs scripting example in the app. Requires
-                              --enable-wasm-embind-uno and --with-wasm-zetajs. Relevant only for a
-                              Wasm build.]))
-
 AC_ARG_ENABLE([experimental],
               AS_HELP_STRING([--enable-experimental],
                              [Enable experimental features and behavior]))
@@ -2811,90 +2788,6 @@ fi
 
 AC_SUBST(FEATURE_RESTRICTION_CONFIGURATION)
 AM_SUBST_NOTMAKE(FEATURE_RESTRICTION_CONFIGURATION)
-
-ENABLE_WASM_EMBIND_UNO=
-if test "$host_os" = emscripten; then
-    AC_MSG_CHECKING([whether to enable the Embind-based UNO support])
-    if test "$enable_wasm_embind_uno" = yes; then
-        AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([whether the CollaboraOffice installation includes the Embind-base UNO support])
-        if test ! -f "$LOBUILDDIR"/workdir/CustomTarget/static/unoembind/bindings_uno.js; then
-            AC_MSG_ERROR(
-                [cannot find $LOBUILDDIR/workdir/CustomTarget/static/unoembind/bindings_uno.js])
-        else
-            AC_MSG_RESULT([yes])
-        fi
-        ENABLE_WASM_EMBIND_UNO=true
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AM_CONDITIONAL([ENABLE_WASM_EMBIND_UNO], [test "$ENABLE_WASM_EMBIND_UNO" = true])
-
-ENABLE_WASM_EMBINDTEST=
-if test "$host_os" = emscripten; then
-    AC_MSG_CHECKING([whether to run the CollaboraOffice embindtest])
-    if test "$enable_wasm_embindtest" = yes; then
-        if test "$ENABLE_WASM_EMBIND_UNO" != true; then
-            AC_MSG_ERROR([requires --enable-wasm-embind-uno])
-        else
-            AC_MSG_RESULT([yes])
-            AC_MSG_CHECKING([whether the CollaboraOffice installation includes embindtest])
-            if test ! -f "$LOBUILDDIR"/instdir/program/soffice.js.linkdeps; then
-                AC_MSG_ERROR([cannot find $LOBUILDDIR/instdir/program/soffice.js.linkdeps])
-            elif ! LC_ALL=POSIX grep -E -q -e '(^|[[[:space:]]])-ltestunolo($|[[[:space:]]])' \
-                    "$LOBUILDDIR"/instdir/program/soffice.js.linkdeps
-            then
-                AC_MSG_ERROR(
-                    [cannot find -ltestunolo in $LOBUILDDIR/instdir/program/soffice.js.linkdeps])
-            else
-                AC_MSG_RESULT([yes])
-            fi
-            ENABLE_WASM_EMBINDTEST=true
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST([ENABLE_WASM_EMBINDTEST])
-AM_CONDITIONAL([ENABLE_WASM_EMBINDTEST], [test "$ENABLE_WASM_EMBINDTEST" = true])
-
-ENABLE_WASM_ZETAJS=
-WITH_WASM_ZETAJS=
-if test "$host_os" = emscripten; then
-    AC_MSG_CHECKING([whether to include zetajs scripting support])
-    if test -n "$with_wasm_zetajs"; then
-        if test "$ENABLE_WASM_EMBIND_UNO" != true; then
-            AC_MSG_ERROR([requires --enable-wasm-embind-uno])
-        else
-            AC_MSG_RESULT([yes])
-            ENABLE_WASM_ZETAJS=true
-            WITH_WASM_ZETAJS=$with_wasm_zetajs
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST([ENABLE_WASM_ZETAJS])
-AC_SUBST([WITH_WASM_ZETAJS])
-AM_CONDITIONAL([ENABLE_WASM_ZETAJS], [test "$ENABLE_WASM_ZETAJS" = true])
-
-ENABLE_WASM_ZETAJS_EXAMPLE=
-if test "$host_os" = emscripten; then
-    AC_MSG_CHECKING([whether to include a zetajs scripting example])
-    if test "$enable_wasm_zetajs_example" = yes; then
-        if test "$ENABLE_WASM_EMBIND_UNO" != true || test "$ENABLE_WASM_ZETAJS" != true; then
-            AC_MSG_ERROR([requires --enable-wasm-embind-uno and --with-wasm-zetajs])
-        else
-            AC_MSG_RESULT([yes])
-        fi
-        ENABLE_WASM_ZETAJS_EXAMPLE=true
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST([ENABLE_WASM_ZETAJS_EXAMPLE])
-AM_CONDITIONAL([ENABLE_WASM_ZETAJS_EXAMPLE], [test "$ENABLE_WASM_ZETAJS_EXAMPLE" = true])
 
 AC_CONFIG_FILES([Makefile
                  cypress_test/Makefile

@@ -193,7 +193,6 @@ BUNDLE-VERSION
 gtk/mobile
 
 # Wasm app build artifacts
-/wasm/emscripten-module.js
 /wasm/exports
 /wasm/online.data
 /wasm/online.js

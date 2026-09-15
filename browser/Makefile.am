@@ -1005,10 +1005,6 @@ $(DIST_FOLDER)/emscripten-module.js: ../wasm/emscripten-module.js
 	@mkdir -p $(dir $@)
 	@cp $< $@
 
-$(DIST_FOLDER)/emscripten-zetajs-example.js: $(abs_top_srcdir)/wasm/emscripten-zetajs-example.js
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
 $(DIST_FOLDER)/online%: ../wasm/online%
 	@mkdir -p $(dir $@)
 	@cp $< $@
@@ -1033,28 +1029,6 @@ if ENABLE_DEBUG
 WASM_FILES += \
 	$(DIST_FOLDER)/online.wasm.debug.wasm \
 	$(DIST_FOLDER)/online.wasm.debug.wasm.dwp
-endif
-
-if ENABLE_WASM_ZETAJS
-
-$(DIST_FOLDER)/smoketest.js: $(WITH_WASM_ZETAJS)/test/smoketest.js
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
-$(DIST_FOLDER)/zeta.js: $(WITH_WASM_ZETAJS)/source/zeta.js
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
-WASM_FILES += $(DIST_FOLDER)/zeta.js
-
-if ENABLE_WASM_EMBINDTEST
-WASM_FILES += $(DIST_FOLDER)/smoketest.js
-endif
-
-endif
-
-if ENABLE_WASM_ZETAJS_EXAMPLE
-WASM_FILES += $(DIST_FOLDER)/emscripten-zetajs-example.js
 endif
 
 endif
