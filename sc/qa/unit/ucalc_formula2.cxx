@@ -158,6 +158,7 @@ protected:
     void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& rExtDoc);
+    void testExtRefEmptySearch(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc);
 };
 
@@ -2045,6 +2046,22 @@ void TestFormula2::testExtRefImplicitIntersection(ScDocument* pDoc, ScDocument& 
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(0, 5, 0)));
 }
 
+void TestFormula2::testExtRefEmptySearch(ScDocument* pDoc, ScDocument& rExtDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    // A1:A2 hold data, A3 stays empty, B3 marks the row.
+    rExtDoc.SetValue(ScAddress(0, 0, 0), 1.0);
+    rExtDoc.SetValue(ScAddress(0, 1, 0), 2.0);
+    rExtDoc.SetValue(ScAddress(1, 2, 0), 99.0);
+
+    // An empty search value finds an empty cell, here through a matrix.
+    pDoc->SetString(ScAddress(0, 0, 0), u"=XLOOKUP($B$9;'file:///extdata.fake'#Data.A1:A3;"
+                                        u"'file:///extdata.fake'#Data.B1:B3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(99.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+}
+
 void TestFormula2::testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
@@ -2156,6 +2173,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefFunctions)
     testExtRefFuncOFFSET(m_pDoc, rExtDoc);
     testExtRefFuncVLOOKUP(m_pDoc, rExtDoc);
     testExtRefImplicitIntersection(m_pDoc, rExtDoc);
+    testExtRefEmptySearch(m_pDoc, rExtDoc);
     testExtRefConcat(m_pDoc, rExtDoc);
 
     // Unload the external document shell.
@@ -5020,11 +5038,47 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testHoriQueryEmptyCell)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("XLOOKUP empty", u"$D$1"_ustr,
                                  m_pDoc->GetString(ScAddress(0, 3, 0)));
 
+    // A reference to an empty cell looks for an empty cell as well, not for "".
+    m_pDoc->SetFormula(ScAddress(0, 5, 0), u"=CELL(\"ADDRESS\"; XLOOKUP(I1;A1:H1;A1:H1))"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XLOOKUP empty cell reference", u"$D$1"_ustr,
+                                 m_pDoc->GetString(ScAddress(0, 5, 0)));
+
     // criterion <> counts empty cells too.
     m_pDoc->SetFormula(ScAddress(0, 4, 0), "=COUNTIF(A1:H1;\"<>y\")",
                        formula::FormulaGrammar::GRAM_NATIVE_UI);
     // Without fix, count was 2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF not equal", 7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testXMatchEmptyCell)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    m_pDoc->SetString(0, 0, 0, u"x"_ustr); // col, row, tab
+    m_pDoc->SetString(1, 0, 0, u"y"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"z"_ustr);
+    // D1:H1 stay empty, so the first empty cell is D1, at position 4.
+
+    m_pDoc->SetFormula(ScAddress(0, 2, 0), u"=XMATCH(;A1:H1)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XMATCH empty", 4.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // A reference to an empty cell looks for an empty cell as well, not for "".
+    m_pDoc->SetFormula(ScAddress(0, 3, 0), u"=XMATCH(I1;A1:H1)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XMATCH empty cell reference", 4.0,
+                                 m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    // The search value reaches ScXMatch() as a matrix element under a JumpMatrix.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 5, 0, 6, aMark, u"=XMATCH(I1:I2;A1:H1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XMATCH empty from a matrix", 4.0,
+                                 m_pDoc->GetValue(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XMATCH empty from a matrix", 4.0,
+                                 m_pDoc->GetValue(ScAddress(0, 6, 0)));
 
     m_pDoc->DeleteTab(0);
 }
