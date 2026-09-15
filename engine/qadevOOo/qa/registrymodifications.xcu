@@ -8,4 +8,9 @@
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooSetupSystemLocale" oor:op="fuse"><value>en-US</value></prop></item>
 <item oor:path="/org.openoffice.Setup/L10N"><prop oor:name="ooLocale" oor:op="fuse"><value>en</value></prop></item>
 <item oor:path="/org.openoffice.Office.Linguistic/General"><prop oor:name="UILocale" oor:op="fuse"><value>en-US</value></prop></item>
+<!-- Pin the Latin default fonts to the bundled Liberation fonts so that text metrics do not depend on Carlito/Calibri -->
+<item oor:path="/org.openoffice.VCL/DefaultFonts/org.openoffice.VCL:LocalizedDefaultFonts['en']"><prop oor:name="LATIN_HEADING" oor:op="fuse" oor:type="xs:string"><value>Liberation Sans</value></prop></item>
+<item oor:path="/org.openoffice.VCL/DefaultFonts/org.openoffice.VCL:LocalizedDefaultFonts['en']"><prop oor:name="LATIN_PRESENTATION" oor:op="fuse" oor:type="xs:string"><value>Liberation Sans</value></prop></item>
+<item oor:path="/org.openoffice.VCL/DefaultFonts/org.openoffice.VCL:LocalizedDefaultFonts['en']"><prop oor:name="LATIN_SPREADSHEET" oor:op="fuse" oor:type="xs:string"><value>Liberation Sans</value></prop></item>
+<item oor:path="/org.openoffice.VCL/DefaultFonts/org.openoffice.VCL:LocalizedDefaultFonts['en']"><prop oor:name="LATIN_TEXT" oor:op="fuse" oor:type="xs:string"><value>Liberation Serif</value></prop></item>
 </oor:items>

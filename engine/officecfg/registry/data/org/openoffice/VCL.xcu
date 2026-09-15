@@ -27,19 +27,19 @@
         <value>MS Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+        <value>Calibri;Carlito;Liberation Sans;Albany AMT;Albany;Arial;Noto Sans;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
         <value>Liberation Mono;Cumberland AMT;Cumberland;Courier New;Cousine;Nimbus Mono L;DejaVu Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+        <value>Calibri;Carlito;Liberation Sans;Albany AMT;Albany;Arial;Noto Sans;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
+        <value>Calibri;Carlito;Liberation Sans;Albany AMT;Albany;Arial;Noto Sans;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Liberation Serif;Thorndale AMT;Thorndale;Times New Roman;Tinos;Nimbus Roman No9 L;DejaVu Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Calibri;Carlito;Liberation Sans;Albany AMT;Albany;Arial;Noto Sans;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>

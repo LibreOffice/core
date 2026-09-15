@@ -49,6 +49,18 @@
     <prop oor:name="CTL_TEXT" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
+    <prop oor:name="LATIN_HEADING" oor:type="xs:string">
+     <value>Liberation Sans</value>
+    </prop>
+    <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string">
+     <value>Liberation Sans</value>
+    </prop>
+    <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string">
+     <value>Liberation Sans</value>
+    </prop>
+    <prop oor:name="LATIN_TEXT" oor:type="xs:string">
+     <value>Liberation Serif</value>
+    </prop>
     <prop oor:name="UI_SANS" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
