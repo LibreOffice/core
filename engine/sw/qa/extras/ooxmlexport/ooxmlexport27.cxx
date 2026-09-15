@@ -13,6 +13,8 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <docmodel/color/ComplexColor.hxx>
@@ -321,6 +323,32 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkKeepsNoEmptyStyledSpan)
     // hyperlink left an empty styled span behind.
     // Without the fix there were 42 of them, one per hyperlink.
     assertXPath(pXmlDoc, "//text:span[@text:style-name='Internet_20_link']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableAlignmentFromTableStyle)
+{
+    // The first table takes its alignment from the w:jc of its table style, the second one
+    // overrides the w:jc of its style with a direct one.
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2
+        // - Actual  : 7
+        // i.e. the table was left aligned, the w:jc of the table style having been dropped.
+        CPPUNIT_ASSERT_EQUAL(
+            text::HoriOrientation::CENTER,
+            getProperty<sal_Int16>(xTables->getByName(u"Table1"_ustr), u"HoriOrient"_ustr));
+        CPPUNIT_ASSERT_EQUAL(
+            text::HoriOrientation::LEFT_AND_WIDTH,
+            getProperty<sal_Int16>(xTables->getByName(u"Table2"_ustr), u"HoriOrient"_ustr));
+    };
+
+    createSwDoc("table-style-jc.docx");
+    verify();
+    saveAndReload(TestFilter::DOCX);
+    verify();
 }
 
 } // end of anonymous namespace

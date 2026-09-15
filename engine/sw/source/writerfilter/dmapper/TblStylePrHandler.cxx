@@ -22,6 +22,7 @@
 #include "CellMarginHandler.hxx"
 #include "PropertyMap.hxx"
 #include "MeasureHandler.hxx"
+#include "ConversionHelper.hxx"
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -158,6 +159,20 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TcPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag(u"tcPr"_ustr));
                 std::swap(m_aInteropGrabBag, aSavedGrabBag);
+            }
+        }
+            break;
+        case NS_ooxml::LN_CT_TrPrBase_jc:
+        case NS_ooxml::LN_CT_TblPrBase_jc:
+        {
+            // Table alignment: keep it as a property, the TablePropertyMap value that
+            // TablePropertiesHandler sets does not survive the copy into a style entry.
+            // Whole table only, the conditional formats (w:tblStylePr) feed cells.
+            if ( m_nType == TblStyleType::Unknown || m_nType == TblStyleType::WholeTable )
+            {
+                const Value* pValue = rSprm.getValue();
+                m_pProperties->Insert( PROP_HORI_ORIENT, cpo::uno::Any(
+                    ConversionHelper::convertTableJustification( pValue ? pValue->getInt() : 0 ) ) );
             }
         }
             break;
