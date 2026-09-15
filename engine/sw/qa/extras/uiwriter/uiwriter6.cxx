@@ -47,6 +47,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 #include <editeng/swafopt.hxx>
 #include <editeng/unolingu.hxx>
 #include <COKit/COKit.hxx>
@@ -2931,6 +2933,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf139922)
 {
     createSwDoc();
+    // The two initial capitals correction is off by default, this test needs it
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    const bool bCapitalStartWord = pACorr->IsAutoCorrFlag(ACFlags::CapitalStartWord);
+    pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, true);
+    comphelper::ScopeGuard aGuard(
+        [pACorr, bCapitalStartWord]
+        { pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, bCapitalStartWord); });
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);

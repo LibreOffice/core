@@ -4,9 +4,6 @@
 <!-- Dialogs have limited real estate, limit drop-down height -->
 <item oor:path="/org.openoffice.Office.Common/Accessibility"><prop oor:name="ListBoxMaximumLineCount" oor:op="fuse"><value>11</value></prop></item>
 
-<!-- Disable two capitals at start autocorrect -->
-<item oor:path="/org.openoffice.Office.Common/AutoCorrect"><prop oor:name="TwoCapitalsAtStart" oor:op="fuse"><value>false</value></prop></item>
-
 <!-- Save memory by avoiding collecting autocompletion words  -->
 <item oor:path="/org.openoffice.Office.Writer/AutoFunction/Completion"><prop oor:name="Enable" oor:op="fuse"><value>false</value></prop></item>
 

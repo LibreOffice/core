@@ -13,6 +13,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <docsh.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 #include <ndtxt.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <swacorr.hxx>
@@ -289,6 +290,13 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf42893)
 CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf55693)
 {
     createSwDoc(); // Default lang is en-US
+    // The two initial capitals correction is off by default, this test needs it
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    const bool bCapitalStartWord = pACorr->IsAutoCorrFlag(ACFlags::CapitalStartWord);
+    pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, true);
+    comphelper::ScopeGuard aGuard(
+        [pACorr, bCapitalStartWord]
+        { pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, bCapitalStartWord); });
 
     OUString sReplaced(u"Test-Test "_ustr);
     emulateTyping(u"TEst-TEst ");

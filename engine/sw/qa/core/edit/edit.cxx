@@ -11,6 +11,9 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <comphelper/scopeguard.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 #include <editeng/wghtitem.hxx>
 #include <COKit/COKit.hxx>
 #include <test/kitcallback.hxx>
@@ -536,7 +539,14 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
 CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
 {
     // Given a document where an author changed "1000 MWh/an." to "7 GWh/an."
-    // with track changes, and change display is hidden:
+    // with track changes, and change display is hidden, and the two initial
+    // capitals correction is on (it is off by default):
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    const bool bCapitalStartWord = pACorr->IsAutoCorrFlag(ACFlags::CapitalStartWord);
+    pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, true);
+    comphelper::ScopeGuard aGuard(
+        [pACorr, bCapitalStartWord]
+        { pACorr->SetAutoCorrFlag(ACFlags::CapitalStartWord, bCapitalStartWord); });
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"1000 MWh/an."_ustr);
