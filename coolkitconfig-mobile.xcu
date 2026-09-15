@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <oor:items xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<!-- Don't show the document boundaries by default, gh#3491.  Using many names so that it works with all kinds of the builds. -->
-<item oor:path="/org.openoffice.Office.UI/ColorScheme/ColorSchemes/org.openoffice.Office.UI:ColorScheme['Collabora Office']/DocBoundaries"><prop oor:name="IsVisible" oor:op="fuse"><value>false</value></prop></item>
-<item oor:path="/org.openoffice.Office.UI/ColorScheme/ColorSchemes/org.openoffice.Office.UI:ColorScheme['Collabora OfficeDev']/DocBoundaries"><prop oor:name="IsVisible" oor:op="fuse"><value>false</value></prop></item>
-<item oor:path="/org.openoffice.Office.UI/ColorScheme/ColorSchemes/org.openoffice.Office.UI:ColorScheme['LibreOffice']/DocBoundaries"><prop oor:name="IsVisible" oor:op="fuse"><value>false</value></prop></item>
-<item oor:path="/org.openoffice.Office.UI/ColorScheme/ColorSchemes/org.openoffice.Office.UI:ColorScheme['LibreOfficeDev']/DocBoundaries"><prop oor:name="IsVisible" oor:op="fuse"><value>false</value></prop></item>
-
-<!-- Hyperlink insertion in MS fileformats, should behave like in excel: hyperlinks inserted into the whole cell, not only for textfields.  -->
-<item oor:path="/org.openoffice.Office.Calc/Compatibility"><prop oor:name="Links" oor:op="fuse"><value>true</value></prop></item>
-
 </oor:items>
