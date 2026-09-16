@@ -270,15 +270,6 @@ bool SdrObject::useAdvancedDiagramFeatures()
     return nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES");
 }
 
-void SdrObject::setDiagramDataModelID(const OUString& /*rID*/)
-{
-}
-
-const OUString& SdrObject::getDiagramDataModelID() const
-{
-    return EMPTY_OUSTRING;
-}
-
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
     const SdrObject* pCurrent(this);
@@ -466,6 +457,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 
 SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     : mpFillGeometryDefiningShape(nullptr)
+    , maDiagramModelID(rSource.getDiagramDataModelID())
     , mrSdrModelFromSdrObject(rSdrModel)
     , m_pUserCall(nullptr)
     , maObjectUsers()

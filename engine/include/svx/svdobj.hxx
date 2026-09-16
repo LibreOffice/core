@@ -243,9 +243,9 @@ public:
     virtual bool isDiagram() const;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const;
 
-    // used at SdrObjCustomShape, else empty string
-    virtual void setDiagramDataModelID(const OUString& rID);
-    virtual const OUString& getDiagramDataModelID() const;
+    // The identifier a Diagram gives a shape it draws, empty for a shape that has none
+    void setDiagramDataModelID(const OUString& rID) { maDiagramModelID = rID; }
+    const OUString& getDiagramDataModelID() const { return maDiagramModelID; }
 
     // return DiagramSubSelection if exists. This will always return
     // a valid SdrObject* to allow to use this as a loop-through-call
@@ -294,6 +294,10 @@ public:
     const SdrObject* getFillGeometryDefiningShape() const { return mpFillGeometryDefiningShape; }
 
 private:
+    // The identifier that a Diagram gives the shape it draws for one of its nodes. Empty for
+    // a shape that is no part of a Diagram, and for the shape a Diagram draws behind its items.
+    OUString                    maDiagramModelID;
+
     // the SdrModel this objects was created with, unchanged during SdrObject lifetime
     SdrModel&                   mrSdrModelFromSdrObject;
 

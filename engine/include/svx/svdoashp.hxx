@@ -77,9 +77,6 @@ class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
     // fObjectRotation is containing the object rotation in degrees.
     double      m_fObjectRotation;
 
-    // DiagramModelID
-    OUString    m_aDiagramModelID;
-
     // internal flags
     bool        m_bAdjustingTextFrameWidthAndHeight;
     bool        m_bImportingSmartArtMember;
@@ -91,9 +88,6 @@ protected:
     virtual void setUnoShape(const cpo::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
 
 public:
-    virtual void setDiagramDataModelID(const OUString& rID) override;
-    virtual const OUString& getDiagramDataModelID() const override;
-
     void setImportingSmartArtMember(bool bNew) { m_bImportingSmartArtMember = bNew; }
     bool getImportingSmartArtMember() const { return m_bImportingSmartArtMember; }
 

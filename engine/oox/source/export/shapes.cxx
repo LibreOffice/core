@@ -2100,7 +2100,26 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
+    const sal_Int32 nShapeElement(GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp
+                                                                                    : XML_wsp);
+
+    // A Diagram gives every shape it draws an identifier, which is what pairs the shape with
+    // the node of the model that it stands for.
+    rtl::Reference<sax_fastparser::FastAttributeList> pShapeAttributes;
+    if (isDiagaramExport())
+    {
+        SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
+        if (nullptr != pTarget && !pTarget->getDiagramDataModelID().isEmpty())
+        {
+            pShapeAttributes = sax_fastparser::FastSerializerHelper::createAttrList();
+            pShapeAttributes->add(XML_modelId, pTarget->getDiagramDataModelID());
+        }
+    }
+
+    if (pShapeAttributes)
+        pFS->startElementNS(mnXmlNamespace, nShapeElement, pShapeAttributes);
+    else
+        pFS->startElementNS(mnXmlNamespace, nShapeElement);
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
@@ -2148,7 +2167,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, nShapeElement );
 
     return *this;
 }

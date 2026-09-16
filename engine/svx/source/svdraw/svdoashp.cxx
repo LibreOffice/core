@@ -783,20 +783,9 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrObjCustomShape::CreateObject
     return std::make_unique<sdr::properties::CustomShapeProperties>(*this);
 }
 
-void SdrObjCustomShape::setDiagramDataModelID(const OUString& rID)
-{
-    m_aDiagramModelID = rID;
-}
-
-const OUString& SdrObjCustomShape::getDiagramDataModelID() const
-{
-    return m_aDiagramModelID;
-}
-
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
     , m_fObjectRotation(0.0)
-    , m_aDiagramModelID()
     , m_bAdjustingTextFrameWidthAndHeight(false)
     , m_bImportingSmartArtMember(false)
 {
@@ -807,7 +796,6 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
     , m_fObjectRotation(rSource.m_fObjectRotation)
-    , m_aDiagramModelID(rSource.getDiagramDataModelID())
     , m_bAdjustingTextFrameWidthAndHeight(rSource.m_bAdjustingTextFrameWidthAndHeight)
     , m_bImportingSmartArtMember(false)
 {

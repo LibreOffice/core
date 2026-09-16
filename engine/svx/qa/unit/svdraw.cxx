@@ -1242,6 +1242,39 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testValidOrganizationChartExport)
     save(TestFilter::PPTX);
 }
 
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testDiagramConnectorKeepsItsIdentifier)
+{
+    // The file holds a diagram of type "Basic Target", whose items are joined by connectors.
+    // A diagram gives every shape it draws an identifier, and the file states one for each of
+    // those connectors, which are line shapes rather than custom shapes.
+    loadFromFile(u"diagram_with_connectors.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSmartArt.is());
+
+    sal_Int32 nConnectors(0);
+    for (sal_Int32 i = 0; i < xSmartArt->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+        if (!xShape.is() || xShape->getShapeType() != u"com.sun.star.drawing.LineShape")
+            continue;
+
+        ++nConnectors;
+        SdrObject* pObject(SdrObject::getSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pObject);
+
+        // Without the fix only a custom shape could hold the identifier, so a connector came
+        // out of the import without one and passed for the shape behind the diagram.
+        CPPUNIT_ASSERT(!pObject->getDiagramDataModelID().isEmpty());
+        CPPUNIT_ASSERT(!pObject->isDiagramBackgroundShape());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), nConnectors);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
