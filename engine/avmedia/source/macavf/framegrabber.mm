@@ -28,6 +28,7 @@
 #include <unotools/localfilehelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia::macavf {
 
@@ -73,7 +74,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // 'copyCGImageAtTime:actualTime:error:' is deprecated: first deprecated in macOS 15.0 -
         // Use generateCGImageAsynchronouslyForTime:completionHandler: instead
     CGImage* pCGImage = [mpImageGen copyCGImageAtTime:CMTimeMakeWithSeconds(fMediaTime,1000) actualTime:nullptr error:nullptr];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // convert the image to a TIFF-formatted byte-array
     CFMutableDataRef pCFData = CFDataCreateMutable( kCFAllocatorDefault, 0 );

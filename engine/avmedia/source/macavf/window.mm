@@ -25,6 +25,7 @@
 #include "player.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 namespace avmedia::macavf {

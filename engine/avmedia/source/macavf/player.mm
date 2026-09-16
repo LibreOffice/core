@@ -26,6 +26,7 @@
 #include <cmath> // for log10()
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 @implementation MacAVObserverObject
 
