@@ -350,7 +350,6 @@ private:
     /// Keyed by (remote docKey, access token, consumer docKey, view tag).
     std::map<Key, std::shared_ptr<RemoteDocument>> _remoteDocuments;
 
-    const size_t _maxRemoteDocuments;
     const unsigned _maxChainDepth;
     const unsigned _reconnectAttemptLimit;
 

@@ -580,7 +580,6 @@ void RemoteDocument::dumpState(std::ostream& os) const
 
 RemoteDocumentBroker::RemoteDocumentBroker()
     : SocketPoll("remotedocbroker")
-    , _maxRemoteDocuments(ConfigUtil::getConfigValue<int>("remote_documents.max_remote_docs", 16))
     , _maxChainDepth(ConfigUtil::getConfigValue<int>("remote_documents.max_chain_depth", 3))
     , _reconnectAttemptLimit(
           ConfigUtil::getConfigValue<int>("remote_documents.reconnect_attempts", 5))
@@ -814,7 +813,9 @@ void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
     auto it = _remoteDocuments.find(key);
     if (it == _remoteDocuments.end())
     {
-        if (_remoteDocuments.size() >= _maxRemoteDocuments)
+        const size_t maxRemoteDocuments =
+            ConfigUtil::getConfigValue<int>("remote_documents.max_remote_docs", 16);
+        if (_remoteDocuments.size() >= maxRemoteDocuments)
         {
             LOG_WRN("RemoteDoc: rejecting the subscription of ["
                     << request.localDocKey << "] to [" << docKey << "]: already have "
