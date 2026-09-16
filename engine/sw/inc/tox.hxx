@@ -37,7 +37,6 @@
 #include "hints.hxx"
 #include "swtypes.hxx"
 #include "toxe.hxx"
-#include "chpfld.hxx"
 #include "poolfmt.hxx"
 
 class SwTOXType;

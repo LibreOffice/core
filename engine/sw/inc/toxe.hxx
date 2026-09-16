@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_TOXE_HXX
 #define INCLUDED_SW_INC_TOXE_HXX
 
+#include <sal/types.h>
+
 enum SwTOXSearch
 {
     TOX_NXT,
@@ -119,6 +121,15 @@ enum ToxAuthorityField
     AUTH_FIELD_TARGET_URL,
 
     AUTH_FIELD_END
+};
+
+enum class SwChapterFormat : sal_uInt16
+{
+    Number,                  ///< only the chapter number
+    Title,                   ///< only the title
+    NumberAndTitle,          ///< number and title
+    NumberNoPrePost,         ///< only chapter number without post-/prefix
+    NumberNoPrePostAndTitle  ///< chapter number without post-/prefix and title
 };
 
 #endif

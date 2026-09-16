@@ -19,20 +19,12 @@
 #pragma once
 
 #include "fldbas.hxx"
+#include "toxe.hxx"
 
 class SwFrame;
 class SwContentNode;
 class SwTextNode;
 class SwRootFrame;
-
-enum class SwChapterFormat : sal_uInt16
-{
-    Number,                  ///< only the chapter number
-    Title,                   ///< only the title
-    NumberAndTitle,          ///< number and title
-    NumberNoPrePost,         ///< only chapter number without post-/prefix
-    NumberNoPrePostAndTitle  ///< chapter number without post-/prefix and title
-};
 
 class SAL_DLLPUBLIC_RTTI SwChapterFieldType final : public SwFieldType
 {

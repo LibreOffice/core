@@ -18,6 +18,7 @@
  */
 
 #include <calbck.hxx>
+#include <chpfld.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <editeng/tstpitem.hxx>
