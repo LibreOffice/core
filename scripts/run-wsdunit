@@ -46,7 +46,7 @@ pass=0;
 for ((i=1; i<=$limit; i++))
 do
     echo;
-    echo ">>> $(date +%b-%d) @ $(date +%H:%M:%S) Run #$i (of $limit):";
+    echo ">>> $(date -I) @ $(date +%H:%M:%S) Run #$i (of $limit):";
     ./coolwsd --disable-cool-user-checking --cleanup &> /dev/null
     (cd test && ./run_unit.sh --test-name $name.la --log-file $name.log --trs-file $name.trs --color-tests yes --enable-hard-errors yes --expect-failure no -- ./$name.la)
     if test $? -eq 0 && grep -q PASS test/$name.trs; then
