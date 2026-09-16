@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">Підтвердьте Формат Файлу</string>
     <string name="use_odf">Використати Формат ODF</string>
     <string name="use_text">Використати Текстовий Формат</string>
+    <string name="all_files_access_title">Відкрито в режимі лише для читання</string>
+    <string name="all_files_access_message">Застосунок, який надіслав цей файл, не дозволив зберегти зміни в ньому.\n\nНадайте дозвіл «Доступ до всіх файлів», щоб цей застосунок міг записувати дані у файл у місці його зберігання, і ви змогли редагувати його тут.</string>
+    <string name="all_files_access_grant">Дозволити доступ</string>
+    <string name="do_not_ask_again">Більше не запитувати</string>
+    <string name="failed_to_save_file">Не вдалося зберегти зміни у файлі</string>
 </resources>
