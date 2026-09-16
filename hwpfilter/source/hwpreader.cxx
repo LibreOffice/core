@@ -3756,18 +3756,23 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->ishyper )
             {
                 mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
+                // The link target starts after the four byte tag and runs to the first NUL or to
+                // the end of the block, whichever comes first.
+                const std::string_view aFollow(reinterpret_cast<const char *>(hbox->follow.data()),
+                                               hbox->follow.size());
+                const size_t nStart = (aFollow.size() > 4 && aFollow[4] != 0) ? 4 : 5;
+                std::string aTarget;
+                if (nStart < aFollow.size())
+                {
+                    const std::string_view aRest = aFollow.substr(nStart);
+                    aTarget = aRest.substr(0, aRest.find('\0'));
+                }
 #ifdef _WIN32
-                if( hbox->follow[4] != 0 )
-                    mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 4).c_str()));
-                else
-                    mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 5).c_str()));
+                mxList->addAttribute("xlink:href", sXML_CDATA,
+                    hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(aTarget.c_str())).c_str()));
 #else
-                if( hbox->follow[4] != 0 )
-                    mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
-                        hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str()));
-                else
-                    mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
-                        hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str()));
+                mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,
+                    hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(aTarget.c_str()).c_str())).c_str()));
 #endif
                 startEl(u"draw:a"_ustr);
                 mxList->clear();
