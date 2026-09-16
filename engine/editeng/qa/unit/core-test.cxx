@@ -25,7 +25,10 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -162,6 +165,16 @@ public:
     /// Test pasting a URL over selected text creates a hyperlink field
     void testPasteURLOverSelection();
 
+    /// Test that the whole space kept for a bullet selects the paragraph
+    void testBulletHitAreaCoversWholeLabel();
+
+    // Fills rOutliner with two bulleted paragraphs whose label runs from 300 to 1200
+    // twips, where the second paragraph keeps 500 twips of space above itself.
+    static void prepareBulletedParagraphs(Outliner& rOutliner);
+
+    // The y coordinate halfway down the first line of the paragraph.
+    static tools::Long firstLineMiddle(Outliner& rOutliner, sal_Int32 nPara);
+
     // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
     // long enough to wrap onto several sublines, with rTailText supplying
     // the paragraphs after it, and formats the document.
@@ -214,6 +227,7 @@ public:
     CPPUNIT_TEST(testFillColorMaxAscentFraction);
 #endif
     CPPUNIT_TEST(testPasteURLOverSelection);
+    CPPUNIT_TEST(testBulletHitAreaCoversWholeLabel);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2930,6 +2944,67 @@ void Test::testFillColorMaxAscentFraction()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, fFrac60NoFill, 1e-10);
 }
 #endif
+
+void Test::prepareBulletedParagraphs(Outliner& rOutliner)
+{
+    rOutliner.SetPaperSize(Size(10000, 5000));
+    rOutliner.SetText(u"First\nSecond"_ustr, rOutliner.GetParagraph(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rOutliner.GetParagraphCount());
+
+    SvxNumRule aNumRule(SvxNumRuleFlags::BULLET_REL_SIZE, 1, false);
+    SvxNumberFormat aFormat(SVX_NUM_CHAR_SPECIAL);
+    aFormat.SetBulletChar(0x25CF);
+    // A bullet drawn at 45 percent of the size of the text covers about a tenth of the
+    // space kept for it.
+    aFormat.SetBulletRelSize(45);
+    vcl::Font aBulletFont(u"OpenSymbol"_ustr, Size(0, 100));
+    aFormat.SetBulletFont(&aBulletFont);
+    // The text starts 1200 twips from the left edge and the label takes the 900 twips
+    // before it, so the label runs from 300 to 1200.
+    aFormat.SetAbsLSpace(1200);
+    aFormat.SetFirstLineOffset(-900);
+    aNumRule.SetLevel(0, aFormat);
+
+    SfxItemSet aAttribs(rOutliner.GetEmptyItemSet());
+    aAttribs.Put(SvxNumBulletItem(std::move(aNumRule), EE_PARA_NUMBULLET));
+    // The space above a paragraph pushes its first line down, and its bullet down with it.
+    aAttribs.Put(SvxULSpaceItem(500, 0, EE_PARA_ULSPACE));
+    for (sal_Int32 nPara = 0; nPara < 2; ++nPara)
+    {
+        rOutliner.SetDepth(rOutliner.GetParagraph(nPara), 0);
+        rOutliner.SetParaAttribs(nPara, aAttribs);
+    }
+}
+
+tools::Long Test::firstLineMiddle(Outliner& rOutliner, sal_Int32 nPara)
+{
+    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    const ParaPortion& rParaPortion = rEditEngine.GetParaPortions().getRef(nPara);
+    return rEditEngine.GetDocPosTopLeft(nPara).Y() + rParaPortion.GetFirstLineOffset()
+           + rEditEngine.GetParagraphInfos(nPara).nFirstLineHeight / 2;
+}
+
+void Test::testBulletHitAreaCoversWholeLabel()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
+    prepareBulletedParagraphs(aOutliner);
+
+    // The second paragraph is the one that keeps space above itself.
+    const EditEngine& rEditEngine = aOutliner.GetEditEngine();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500),
+                         rEditEngine.GetParaPortions().getRef(1).GetFirstLineOffset());
+    const tools::Long nMiddle = firstLineMiddle(aOutliner, 1);
+
+    // The gap between the bullet and the text counts as the bullet.
+    bool bBullet = false;
+    CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(1100, nMiddle), 0, &bBullet));
+    CPPUNIT_ASSERT(bBullet);
+
+    // The text itself does not.
+    bBullet = true;
+    CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(1300, nMiddle), 0, &bBullet));
+    CPPUNIT_ASSERT(!bBullet);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }

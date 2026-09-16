@@ -1399,6 +1399,104 @@ void Outliner::StyleSheetChanged( SfxStyleSheet const * pStyle )
     }
 }
 
+// The space that the first line of the paragraph keeps free for its label, measured from
+// the top left corner of that line. The bullet or the number is drawn inside this space.
+tools::Rectangle Outliner::ImpCalcLabelArea( sal_Int32 nPara, bool bAdjust )
+{
+    const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
+    if ( !pFmt )
+        return tools::Rectangle();
+
+    const Size aBulletSize( ImplGetBulletSize( nPara ) );
+
+    bool bOutlineMode = bool( pEditEngine->GetControlWord() & EEControlBits::OUTLINER );
+
+    // the ODF attribute text:space-before which holds the spacing to add to the left of the label
+    const auto nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
+
+    const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib(
+        nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
+    tools::Long nLeft = rLR.ResolveTextLeft({}) + rLR.ResolveTextFirstLineOffset({}) + nSpaceBefore;
+
+    tools::Long nWidth = std::max(
+        static_cast<tools::Long>(-rLR.ResolveTextFirstLineOffset({})),
+        static_cast<tools::Long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()));
+    if ( nWidth < aBulletSize.Width() )   // The Bullet creates its space
+        nWidth = aBulletSize.Width();
+
+    if ( bAdjust && !bOutlineMode )
+    {
+        // Adjust when centered or align right
+        const SvxAdjustItem& rItem = pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
+        if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Left ) ) ||
+             ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Right ) ) )
+        {
+            nLeft = pEditEngine->GetFirstLineStartX( nPara ) - nWidth;
+        }
+    }
+
+    // The label is as tall as the line it belongs to.
+    ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
+    tools::Long nHeight = aInfos.bValid ? aInfos.nFirstLineHeight : aBulletSize.Height();
+
+    return tools::Rectangle( Point( nLeft, 0 ), Size( nWidth, nHeight ) );
+}
+
+// The area where the mouse points at the label of the paragraph. The whole space kept
+// for the label counts, because a bullet character is often drawn at a fraction of the
+// size of the text and is hard to point at.
+tools::Rectangle Outliner::ImpCalcBulletHitArea( sal_Int32 nPara )
+{
+    const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
+    if ( !pFmt || pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE )
+        return tools::Rectangle();
+
+    // With the bullet switched off the paragraph keeps the space but draws nothing in it,
+    // so there is nothing to point at.
+    const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE );
+    if ( !rBulletState.GetValue() )
+        return tools::Rectangle();
+
+    tools::Rectangle aHitArea( ImpCalcLabelArea( nPara, true ) );
+    // A bullet can be wider or taller than the space kept for it, and it is drawn outside
+    // that space then.
+    aHitArea.Union( ImpCalcBulletArea( nPara, true, false ) );
+
+    return ImpConvertToPaperPos( nPara, aHitArea );
+}
+
+// Turn a rectangle that is measured from the top left corner of the first line of the
+// paragraph into a rectangle on the paper.
+tools::Rectangle Outliner::ImpConvertToPaperPos( sal_Int32 nPara,
+                                                 const tools::Rectangle& rParaArea )
+{
+    Size aSize( rParaArea.GetSize() );
+    Point aDocPos( rParaArea.TopLeft() );
+    aDocPos.AdjustY(pEditEngine->GetDocPosTopLeft( nPara ).Y() );
+    // The paragraph starts above its first line by the space that it keeps above itself.
+    const ParaPortion* pParaPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
+    if ( pParaPortion )
+        aDocPos.AdjustY( pParaPortion->GetFirstLineOffset() );
+    Point aPaperPos( aDocPos );
+
+    if ( IsVertical() )
+    {
+        aPaperPos.setY( aDocPos.X() );
+        aPaperPos.setX( GetPaperSize().Width() - aDocPos.Y() );
+        // Rotate:
+        aPaperPos.AdjustX( -(aSize.Height()) );
+        Size aSz( aSize );
+        aSize.setWidth( aSz.Height() );
+        aSize.setHeight( aSz.Width() );
+    }
+    else if ( pEditEngine->IsRightToLeft( nPara ) )
+    {
+        aPaperPos.setX( GetPaperSize().Width() - aDocPos.X() - aSize.Width() );
+    }
+
+    return tools::Rectangle( aPaperPos, aSize );
+}
+
 tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos )
 {
     // Bullet area within the paragraph ...
@@ -1407,33 +1505,11 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     if ( pFmt )
     {
-        Point aTopLeft;
         Size aBulletSize( ImplGetBulletSize( nPara ) );
 
-        bool bOutlineMode = bool( pEditEngine->GetControlWord() & EEControlBits::OUTLINER );
-
-        // the ODF attribute text:space-before which holds the spacing to add to the left of the label
-        const auto nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
-
-        const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
-        aTopLeft.setX(rLR.ResolveTextLeft({}) + rLR.ResolveTextFirstLineOffset({}) + nSpaceBefore);
-
-        tools::Long nBulletWidth = std::max(
-            static_cast<tools::Long>(-rLR.ResolveTextFirstLineOffset({})),
-            static_cast<tools::Long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()));
-        if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
-            nBulletWidth = aBulletSize.Width();
-
-        if ( bAdjust && !bOutlineMode )
-        {
-            // Adjust when centered or align right
-            const SvxAdjustItem& rItem = pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
-            if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Left ) ) ||
-                 ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Right ) ) )
-            {
-                aTopLeft.setX( pEditEngine->GetFirstLineStartX( nPara ) - nBulletWidth );
-            }
-        }
+        const tools::Rectangle aLabelArea( ImpCalcLabelArea( nPara, bAdjust ) );
+        Point aTopLeft( aLabelArea.Left(), 0 );
+        const tools::Long nBulletWidth = aLabelArea.GetWidth();
 
         // Vertical:
         ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
@@ -1477,33 +1553,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         aBulletArea = tools::Rectangle( aTopLeft, aBulletSize );
     }
     if ( bReturnPaperPos )
-    {
-        Size aBulletSize( aBulletArea.GetSize() );
-        Point aBulletDocPos( aBulletArea.TopLeft() );
-        aBulletDocPos.AdjustY(pEditEngine->GetDocPosTopLeft( nPara ).Y() );
-        // The paragraph starts above its first line by the space that it keeps above itself.
-        const ParaPortion* pParaPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
-        if ( pParaPortion )
-            aBulletDocPos.AdjustY( pParaPortion->GetFirstLineOffset() );
-        Point aBulletPos( aBulletDocPos );
-
-        if ( IsVertical() )
-        {
-            aBulletPos.setY( aBulletDocPos.X() );
-            aBulletPos.setX( GetPaperSize().Width() - aBulletDocPos.Y() );
-            // Rotate:
-            aBulletPos.AdjustX( -(aBulletSize.Height()) );
-            Size aSz( aBulletSize );
-            aBulletSize.setWidth( aSz.Height() );
-            aBulletSize.setHeight( aSz.Width() );
-        }
-        else if ( pEditEngine->IsRightToLeft( nPara ) )
-        {
-            aBulletPos.setX( GetPaperSize().Width() - aBulletDocPos.X() - aBulletSize.Width() );
-        }
-
-        aBulletArea = tools::Rectangle( aBulletPos, aBulletSize );
-    }
+        aBulletArea = ImpConvertToPaperPos( nPara, aBulletArea );
     return aBulletArea;
 }
 

@@ -425,7 +425,7 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
         sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ((nPara != EE_PARA_MAX) && ImplHasNumberFormat(nPara))
         {
-            tools::Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
+            tools::Rectangle aBulArea = ImpCalcBulletHitArea( nPara );
             if ( aBulArea.Contains( rPaperPos ) )
             {
                 bTextPos = true;

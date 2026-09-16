@@ -612,6 +612,10 @@ private:
     SAL_DLLPRIVATE void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
     SAL_DLLPRIVATE vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
     SAL_DLLPRIVATE tools::Rectangle   ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos );
+    SAL_DLLPRIVATE tools::Rectangle   ImpCalcLabelArea( sal_Int32 nPara, bool bAdjust );
+    SAL_DLLPRIVATE tools::Rectangle   ImpCalcBulletHitArea( sal_Int32 nPara );
+    SAL_DLLPRIVATE tools::Rectangle   ImpConvertToPaperPos( sal_Int32 nPara,
+                                                           const tools::Rectangle& rParaArea );
     SAL_DLLPRIVATE bool        ImpCanIndentSelectedPages( OutlinerView* pCurView );
     SAL_DLLPRIVATE bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     SAL_DLLPRIVATE bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
