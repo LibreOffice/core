@@ -33,6 +33,12 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <prltempl.hxx>
+#include <svx/documentbullets.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <svx/svdoutl.hxx>
 #include <bulmaper.hxx>
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
@@ -44,16 +50,16 @@
 /**
  * Constructor of Tab dialog: appends pages to the dialog
  */
-SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
-                                weld::Window* pParent,
-                                bool bBackground,
-                                SfxStyleSheetBase& rStyleBase,
-                                PresentationObjects _ePO,
-                                SfxStyleSheetBasePool* pSSPool)
-    : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawprtldialog.ui"_ustr, u"DrawPRTLDialog"_ustr)
+SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent,
+                                                 bool bBackground, SfxStyleSheetBase& rStyleBase,
+                                                 PresentationObjects _ePO,
+                                                 SfxStyleSheetBasePool* pSSPool)
+    : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawprtldialog.ui"_ustr,
+                             u"DrawPRTLDialog"_ustr)
     , mpDocShell(pDocSh)
     , ePO(_ePO)
-    , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>)
+    , aInputSet(*rStyleBase.GetItemSet().GetPool(),
+                svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>)
 {
     const SfxItemSet* pOrgSet(&rStyleBase.GetItemSet());
 
@@ -278,6 +284,23 @@ void SdPresLayoutTemplateDlg::PageCreated(const OUString& rId, SfxTabPage &rPage
     else if (rId == "background")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "bullets" || rId == "image" || rId == "customize")
+    {
+        ::sd::DrawDocShell* pDrawDocShell = dynamic_cast<::sd::DrawDocShell*>(mpDocShell);
+        const SdDrawDocument* pDocument = pDrawDocShell ? pDrawDocShell->GetDoc() : nullptr;
+        if (pDocument)
+        {
+            // A shape under edit keeps its text in the outliner rather than on the shape, so a
+            // bullet applied a moment ago is found there and nowhere else.
+            const ::sd::ViewShell* pViewShell = pDrawDocShell->GetViewShell();
+            const ::sd::View* pView = pViewShell ? pViewShell->GetView() : nullptr;
+            const SdrOutliner* pActiveOutliner = pView ? pView->GetTextEditOutliner() : nullptr;
+
+            aSet.Put(SvxDocumentBulletsItem(SID_DOCUMENT_BULLETS,
+                                            pDocument->GetUsedBullets(pActiveOutliner)));
+        }
         rPage.PageCreated(aSet);
     }
 }

@@ -34,7 +34,7 @@ class SfxStyleSheetBasePool;
 class SdPresLayoutTemplateDlg final : public SfxTabDialogController
 {
 private:
-    const SfxObjectShell*   mpDocShell;
+    SfxObjectShell* mpDocShell;
 
     XColorListRef         pColorTab;
     XGradientListRef      pGradientList;
@@ -55,7 +55,9 @@ private:
     sal_uInt16 GetOutlineLevel() const;
 
 public:
-    SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, bool bBackground, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool);
+    SdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, bool bBackground,
+                            SfxStyleSheetBase& rStyleBase, PresentationObjects ePO,
+                            SfxStyleSheetBasePool* pSSPool);
     virtual ~SdPresLayoutTemplateDlg() override;
 
     const SfxItemSet* GetOutputItemSet() const;

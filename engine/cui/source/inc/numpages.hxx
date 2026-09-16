@@ -98,14 +98,25 @@ class SvxBulletPickTabPage final : public SfxTabPage
 
     std::unique_ptr<weld::Button> m_xBtChangeBullet;
     std::unique_ptr<weld::IconView> m_xExamplesIV;
+    std::unique_ptr<weld::Widget> m_xDocumentSection;
+    std::unique_ptr<weld::IconView> m_xDocumentIV;
+    /// The character bullets that the document already uses, in the order the icon view shows
+    /// them.
+    std::vector<SvxDocumentBullet> maDocumentBullets;
     Size aPreviewSize;
     cpo::uno::Sequence<OUString> m_aBulletSymbols;
     cpo::uno::Sequence<OUString> m_aBulletSymbolsFonts;
+
+    void ApplyBulletCharacter(sal_UCS4 cBullet, const OUString& rFontName);
+    void FillDocumentBullets();
 
     DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(ClickAddChangeHdl_Impl, weld::Button&, void);
+    DECL_LINK(DocumentNumSelectHdl_Impl, weld::IconView&, void);
+    DECL_LINK(DocumentDoubleClickHdl_Impl, weld::IconView&, bool);
+
 public:
     SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
@@ -177,11 +188,20 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     std::unique_ptr<weld::Label> m_xErrorText;
     std::unique_ptr<weld::Button> m_xBtBrowseFile;
     std::unique_ptr<weld::IconView> m_xExamplesIV;
+    std::unique_ptr<weld::Widget> m_xDocumentSection;
+    std::unique_ptr<weld::IconView> m_xDocumentIV;
+    /// The image bullets that the document already uses, in the order the icon view shows them.
+    std::vector<SvxDocumentBullet> maDocumentBullets;
+
+    void ApplyGraphicBullet(const Graphic& rGraphic, const Size& rSizeMM100);
+    void FillDocumentBullets();
 
     DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
+    DECL_LINK(DocumentNumSelectHdl_Impl, weld::IconView&, void);
+    DECL_LINK(DocumentDoubleClickHdl_Impl, weld::IconView&, bool);
 
 public:
     SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -194,6 +214,8 @@ public:
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
+
+    virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 class SvxNumOptionsTabPage : public SfxTabPage

@@ -346,14 +346,33 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, weld::IconView&, b
     return true;
 }
 
-SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, u"cui/ui/pickbulletpage.ui"_ustr, u"PickBulletPage"_ustr, &rSet)
+namespace
+{
+/// The first character of aText as a whole code point, so a character from outside the Basic
+/// Multilingual Plane arrives complete rather than as the first half of a surrogate pair.
+sal_UCS4 lcl_FirstCodePoint(std::u16string_view aText)
+{
+    if (aText.empty())
+        return 0;
+
+    sal_Int32 nIndex = 0;
+    return o3tl::iterateCodePoints(aText, &nIndex);
+}
+}
+
+SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage,
+                                           weld::DialogController* pController,
+                                           const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/pickbulletpage.ui"_ustr, u"PickBulletPage"_ustr,
+                 &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , bModified(false)
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_xBtChangeBullet(m_xBuilder->weld_button(u"changeBulletBtn"_ustr))
     , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_bullet_iconview"_ustr))
+    , m_xDocumentSection(m_xBuilder->weld_widget(u"documentsection"_ustr))
+    , m_xDocumentIV(m_xBuilder->weld_icon_view(u"pick_bullet_iconview_doc"_ustr))
     , aPreviewSize(150, 200)
 {
     SetExchangeSupport();
@@ -363,6 +382,13 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesIV->connect_item_activated(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
     m_xExamplesIV->connect_query_tooltip(LINK(this, SvxBulletPickTabPage, QueryTooltipHdl));
     m_xBtChangeBullet->connect_clicked(LINK(this, SvxBulletPickTabPage, ClickAddChangeHdl_Impl));
+
+    // The section stays out of the way until a document turns out to have bullets of its own.
+    m_xDocumentIV->connect_selection_changed(
+        LINK(this, SvxBulletPickTabPage, DocumentNumSelectHdl_Impl));
+    m_xDocumentIV->connect_item_activated(
+        LINK(this, SvxBulletPickTabPage, DocumentDoubleClickHdl_Impl));
+    m_xDocumentSection->hide();
     m_aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
     m_aBulletSymbolsFonts = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
 }
@@ -409,6 +435,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         *pActNum = *pSaveNum;
         m_xExamplesIV->unselect_all();
+        m_xDocumentIV->unselect_all();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
@@ -482,20 +509,10 @@ IMPL_LINK(SvxBulletPickTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, O
     return SvxBmpNumIconView::GetNumberingDescription(NumberingPageType::BULLET, nIndex);
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
+void SvxBulletPickTabPage::ApplyBulletCharacter(sal_UCS4 cBullet, const OUString& rFontName)
 {
-    if(!pActNum)
-        return;
-
-    m_xBtChangeBullet->set_sensitive(true);
-
-    bPreset = false;
-    bModified = true;
-    OUString sId = m_xExamplesIV->get_selected_id();
-    sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
-    sal_Unicode cChar = m_aBulletSymbols[nIndex].toChar();
     vcl::Font& rActBulletFont = SvxBmpNumIconView::GetDefaultBulletFont();
-    rActBulletFont.SetFamilyName(m_aBulletSymbolsFonts[nIndex]);
+    rActBulletFont.SetFamilyName(rFontName);
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -507,13 +524,64 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
             // #i93908# clear suffix for bullet lists
             aFmt.SetListFormat(u""_ustr, u""_ustr, i);
             aFmt.SetBulletFont(&rActBulletFont);
-            aFmt.SetBulletChar(cChar );
+            aFmt.SetBulletChar(cBullet);
             aFmt.SetCharFormatName(sBulletCharFormatName);
             aFmt.SetBulletRelSize(45);
             pActNum->SetLevel(i, aFmt);
         }
         nMask <<= 1;
     }
+}
+
+IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
+{
+    if (!pActNum)
+        return;
+
+    // The Change Bullet button replaces an entry of the fixed library, so it belongs to this view.
+    m_xBtChangeBullet->set_sensitive(true);
+    m_xDocumentIV->unselect_all();
+
+    bPreset = false;
+    bModified = true;
+    OUString sId = m_xExamplesIV->get_selected_id();
+    sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
+    ApplyBulletCharacter(lcl_FirstCodePoint(m_aBulletSymbols[nIndex]),
+                         m_aBulletSymbolsFonts[nIndex]);
+}
+
+IMPL_LINK_NOARG(SvxBulletPickTabPage, DocumentNumSelectHdl_Impl, weld::IconView&, void)
+{
+    if (!pActNum)
+        return;
+
+    const OUString sId = m_xDocumentIV->get_selected_id();
+    if (sId.isEmpty())
+        return;
+
+    const sal_Int32 nIndex = sId.toInt32();
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maDocumentBullets.size())
+        return;
+
+    m_xBtChangeBullet->set_sensitive(false);
+    m_xExamplesIV->unselect_all();
+
+    bPreset = false;
+    bModified = true;
+    const SvxDocumentBullet& rBullet = maDocumentBullets[nIndex];
+    ApplyBulletCharacter(lcl_FirstCodePoint(rBullet.aBulletCharacter), rBullet.aFontName);
+}
+
+IMPL_LINK_NOARG(SvxBulletPickTabPage, DocumentDoubleClickHdl_Impl, weld::IconView&, bool)
+{
+    if (m_xDocumentIV->get_selected_id().isEmpty())
+        return false;
+
+    DocumentNumSelectHdl_Impl(*m_xDocumentIV);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool)
@@ -613,12 +681,52 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     });
 }
 
+void SvxBulletPickTabPage::FillDocumentBullets()
+{
+    m_xDocumentIV->clear();
+
+    // The name is what a screen reader announces for the entry.
+    for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
+    {
+        const SvxDocumentBullet& rBullet = maDocumentBullets[nBullet];
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet);
+        Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+        OUString sId = OUString::number(nBullet);
+        OUString sText = rBullet.aBulletCharacter;
+        m_xDocumentIV->insert(-1, &sText, &sId, &aBitmap, nullptr);
+        m_xDocumentIV->set_item_accessible_name(m_xDocumentIV->n_children() - 1, sText);
+    }
+
+    m_xDocumentSection->set_visible(!maDocumentBullets.empty());
+}
+
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
 
     if (pBulletCharFmt)
         sBulletCharFormatName = pBulletCharFmt->GetValue();
+
+    const SvxDocumentBulletsItem* pDocumentBullets
+        = aSet.GetItem<SvxDocumentBulletsItem>(SID_DOCUMENT_BULLETS, false);
+    if (!pDocumentBullets)
+        return;
+
+    maDocumentBullets.clear();
+    for (const SvxDocumentBullet& rBullet : pDocumentBullets->GetBullets())
+    {
+        // The images that the document uses belong on the Image tab, not here.
+        if (rBullet.IsGraphic())
+            continue;
+
+        // A bullet the fixed set above already offers is left out, matching the bullet dropdown.
+        if (rBullet.IsInDefaultLibrary())
+            continue;
+
+        maDocumentBullets.push_back(rBullet);
+    }
+
+    FillDocumentBullets();
 }
 
 SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
@@ -891,8 +999,11 @@ void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetCharFormatNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
 
-SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, u"cui/ui/pickgraphicpage.ui"_ustr, u"PickGraphicPage"_ustr, &rSet)
+SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage,
+                                           weld::DialogController* pController,
+                                           const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, u"cui/ui/pickgraphicpage.ui"_ustr, u"PickGraphicPage"_ustr,
+                 &rSet)
     , nActNumLvl(SAL_MAX_UINT16)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
@@ -900,6 +1011,8 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     , m_xErrorText(m_xBuilder->weld_label(u"errorft"_ustr))
     , m_xBtBrowseFile(m_xBuilder->weld_button(u"browseBtn"_ustr))
     , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_graphic_iconview"_ustr))
+    , m_xDocumentSection(m_xBuilder->weld_widget(u"documentsection"_ustr))
+    , m_xDocumentIV(m_xBuilder->weld_icon_view(u"pick_graphic_iconview_doc"_ustr))
 {
     SetExchangeSupport();
 
@@ -909,6 +1022,14 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesIV->connect_item_activated(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
     m_xExamplesIV->connect_query_tooltip(LINK(this, SvxBitmapPickTabPage, QueryTooltipHdl));
     m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
+
+    // The document's own images come from the records the page was given rather than from a
+    // gallery theme.
+    m_xDocumentIV->connect_selection_changed(
+        LINK(this, SvxBitmapPickTabPage, DocumentNumSelectHdl_Impl));
+    m_xDocumentIV->connect_item_activated(
+        LINK(this, SvxBitmapPickTabPage, DocumentDoubleClickHdl_Impl));
+    m_xDocumentSection->hide();
 
     if(comphelper::COKit::isActive())
         m_xBtBrowseFile->hide();
@@ -979,6 +1100,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         *pActNum = *pSaveNum;
         m_xExamplesIV->unselect_all();
+        m_xDocumentIV->unselect_all();
     }
 
     if(!aGrfNames.empty() &&
@@ -1001,7 +1123,7 @@ DeactivateRC SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    if ( aGrfNames.empty() )
+    if (aGrfNames.empty() && maDocumentBullets.empty())
     {
         return false;
     }
@@ -1063,16 +1185,52 @@ IMPL_LINK(SvxBitmapPickTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, O
     return OUString();
 }
 
+void SvxBitmapPickTabPage::ApplyGraphicBullet(const Graphic& rGraphic, const Size& rSizeMM100)
+{
+    Size aSize
+        = OutputDevice::LogicToLogic(rSizeMM100, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
+    const SvxBrushItem aBrush(rGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+
+    sal_uInt16 nMask = 1;
+    for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if (nActNumLvl & nMask)
+        {
+            SvxNumberFormat aFmt(pActNum->GetLevel(i));
+            aFmt.SetNumberingType(SVX_NUM_BITMAP);
+            aFmt.SetListFormat(u""_ustr, u""_ustr, i);
+            aFmt.SetCharFormatName(u""_ustr);
+            sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
+            aFmt.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+            pActNum->SetLevel(i, aFmt);
+        }
+        nMask <<= 1;
+    }
+}
+
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
 {
     if(!pActNum)
         return;
+
+    m_xDocumentIV->unselect_all();
 
     bPreset = false;
     bModified = true;
     OUString sId = m_xExamplesIV->get_selected_id();
     sal_uInt16 nIdx = !sId.isEmpty() ? sId.toInt32() : 0;
 
+    Graphic aGraphic;
+    if (GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, nIdx, &aGraphic))
+    {
+        ApplyGraphicBullet(aGraphic, SvxNumberFormat::GetGraphicSizeMM100(&aGraphic));
+        return;
+    }
+
+    if (aGrfNames.size() <= nIdx)
+        return;
+
+    // Without the image itself at hand the format can only point at the file it came from.
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1082,22 +1240,89 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
             aFmt.SetListFormat(u""_ustr, u""_ustr, i);
             aFmt.SetCharFormatName( u""_ustr );
-
-            Graphic aGraphic;
-            if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
-            {
-                Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
-                sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
-                SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
-                aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
-            }
-            else if(aGrfNames.size() > nIdx)
-                aFmt.SetGraphic( aGrfNames[nIdx] );
+            aFmt.SetGraphic(aGrfNames[nIdx]);
             pActNum->SetLevel(i, aFmt);
         }
         nMask <<= 1;
     }
+}
+
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DocumentNumSelectHdl_Impl, weld::IconView&, void)
+{
+    if (!pActNum)
+        return;
+
+    const OUString sId = m_xDocumentIV->get_selected_id();
+    if (sId.isEmpty())
+        return;
+
+    const sal_Int32 nIndex = sId.toInt32();
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maDocumentBullets.size())
+        return;
+
+    m_xExamplesIV->unselect_all();
+
+    bPreset = false;
+    bModified = true;
+    ApplyGraphicBullet(maDocumentBullets[nIndex].aGraphic,
+                       maDocumentBullets[nIndex].GetGraphicSizeMM100());
+}
+
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DocumentDoubleClickHdl_Impl, weld::IconView&, bool)
+{
+    if (m_xDocumentIV->get_selected_id().isEmpty())
+        return false;
+
+    DocumentNumSelectHdl_Impl(*m_xDocumentIV);
+    weld::Button& rOk = GetDialogController()->GetOKButton();
+    rOk.clicked();
+
+    return true;
+}
+
+void SvxBitmapPickTabPage::FillDocumentBullets()
+{
+    m_xDocumentIV->clear();
+
+    // The name is what a screen reader announces for the entry, and an image carries no character
+    // to announce.
+    for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
+    {
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(maDocumentBullets[nBullet]);
+        Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+        OUString sId = OUString::number(nBullet);
+        OUString sText = CuiResId(RID_CUISTR_DOCUMENT_BULLET_ENTRY)
+                             .replaceFirst("%1", OUString::number(nBullet + 1));
+        m_xDocumentIV->insert(-1, &sText, &sId, &aBitmap, nullptr);
+        m_xDocumentIV->set_item_accessible_name(m_xDocumentIV->n_children() - 1, sText);
+    }
+
+    const bool bHasDocumentBullets = !maDocumentBullets.empty();
+    m_xDocumentSection->set_visible(bHasDocumentBullets);
+
+    // The error label only applies to the gallery, which is one of two sources now.
+    if (bHasDocumentBullets)
+        m_xErrorText->hide();
+}
+
+void SvxBitmapPickTabPage::PageCreated(const SfxAllItemSet& aSet)
+{
+    const SvxDocumentBulletsItem* pDocumentBullets
+        = aSet.GetItem<SvxDocumentBulletsItem>(SID_DOCUMENT_BULLETS, false);
+    if (!pDocumentBullets)
+        return;
+
+    maDocumentBullets.clear();
+    for (const SvxDocumentBullet& rBullet : pDocumentBullets->GetBullets())
+    {
+        // The characters that the document uses belong on the Bullets tab, not here.
+        if (!rBullet.IsGraphic())
+            continue;
+
+        maDocumentBullets.push_back(rBullet);
+    }
+
+    FillDocumentBullets();
 }
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool)
