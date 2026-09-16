@@ -808,7 +808,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     assert(pMed);
 
     const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : GetMedium()->GetName() );
-    if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
+    if (nMaxLength == SFX_TITLE_PICKLIST || nMaxLength == SFX_TITLE_HISTORY)
     {
         sal_uInt16 nRemote;
         if (aURL.GetProtocol() == INetProtocol::File)
