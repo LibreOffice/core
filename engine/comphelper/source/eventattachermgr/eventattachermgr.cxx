@@ -266,6 +266,7 @@ Any AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
                 Reference< XIdlClass > xRetType = xMeth->getReturnType();
                 Type aRetType(xRetType->getTypeClass(), xRetType->getName());
                 convertToEventReturn( aRet, aRetType );
+                // coverity[delete_var : FALSE] - the type class picks both the allocation and the free
             }
 
             switch( aRet.getValueTypeClass()  )
