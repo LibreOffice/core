@@ -27,6 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <swporlayoutcontext.hxx>
 
+#include <optional>
+
 class SwTextSizeInfo;
 class SwTextPaintInfo;
 class SwTextFormatInfo;

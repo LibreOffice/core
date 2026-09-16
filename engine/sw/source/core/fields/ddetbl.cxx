@@ -34,6 +34,8 @@
 #include <osl/diagnose.h>
 #include <pam.hxx>
 
+#include <o3tl/deleter.hxx>
+
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate )

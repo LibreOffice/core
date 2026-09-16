@@ -27,6 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/long.hxx>
+#include <vcl/kernarray.hxx>
 #include "TextFrameIndex.hxx"
 #include <doc.hxx>
 

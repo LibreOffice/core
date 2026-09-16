@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <limits.h>
 #include <cpo/uno/Reference.h>
@@ -27,7 +28,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <i18nlangtag/lang.h>
-#include <vcl/outdev.hxx>
 #include <unotools/resmgr.hxx>
 
 namespace com::sun::star {
@@ -47,6 +47,11 @@ class Graphic;
 class CharClass;
 class CollatorWrapper;
 class LanguageTag;
+class OutputDevice;
+
+namespace vcl {
+    typedef OutputDevice RenderContext;
+}
 
 typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX

@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <tools/UnitConversion.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>

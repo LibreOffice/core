@@ -39,6 +39,8 @@
 #include "fmtornt.hxx"
 #include "swdllapi.h"
 
+#include <o3tl/cow_wrapper.hxx>
+
 struct SwAfVersions;
 struct SwTableStyleSettings;
 

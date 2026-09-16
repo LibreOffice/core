@@ -63,6 +63,7 @@
 #include <svx/dialmgr.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <vcl/outdev.hxx>
 #include <strings.hrc>
 #include <frmatr.hxx>
 #include <frameformats.hxx>

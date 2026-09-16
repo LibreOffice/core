@@ -19,6 +19,7 @@
 
 #include <svtools/unitconv.hxx>
 #include <tools/poly.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

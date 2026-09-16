@@ -21,6 +21,7 @@
 
 #include <tools/fract.hxx>
 #include <tools/color.hxx>
+#include <tools/solar.h>
 #include <basegfx/units/Length.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"

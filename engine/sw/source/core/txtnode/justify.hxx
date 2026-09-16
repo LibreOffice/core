@@ -8,7 +8,9 @@
  */
 
 #pragma once
+
 #include <sal/types.h>
+#include <vcl/kernarray.hxx>
 #include <TextFrameIndex.hxx>
 
 namespace sw::Justify

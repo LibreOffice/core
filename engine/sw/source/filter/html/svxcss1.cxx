@@ -53,6 +53,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
+#include <tools/solar.h>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>

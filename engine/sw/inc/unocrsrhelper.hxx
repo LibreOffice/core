@@ -25,6 +25,7 @@
 
 #include <optional>
 #include <map>
+#include <span>
 #include <string_view>
 
 class SfxItemSet;
