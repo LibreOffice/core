@@ -82,6 +82,7 @@
 #include <scriptinfo.hxx>
 #include <mdiexp.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include <printdata.hxx>
 #include <strings.hrc>
 #include <SwUndoTOXChange.hxx>

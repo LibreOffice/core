@@ -63,6 +63,7 @@
 #include <olmenu.hxx>
 #include <hintids.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <fmtcntnt.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>

@@ -19,6 +19,7 @@
 
 #include <cellatr.hxx>
 #include <doc.hxx>
+#include <frameformats.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/outdev.hxx>
+#include <libxml/xmlwriter.h>
 #include <editeng/brushitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/kernitem.hxx>

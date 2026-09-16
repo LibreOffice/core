@@ -28,6 +28,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <libxml/xmlwriter.h>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 #include <view.hxx>

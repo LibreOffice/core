@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
+#include <frameformats.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <IDocumentLayoutAccess.hxx>

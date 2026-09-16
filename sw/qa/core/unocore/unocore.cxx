@@ -27,6 +27,7 @@
 #include <unotextrange.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <ndtxt.hxx>
 #include <textlinebreak.hxx>
 #include <textcontentcontrol.hxx>

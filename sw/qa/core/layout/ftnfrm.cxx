@@ -11,6 +11,7 @@
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <formatflysplit.hxx>
 #include <frmmgr.hxx>
 #include <pagefrm.hxx>

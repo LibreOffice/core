@@ -39,6 +39,7 @@
 #include <swtable.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
+#include <frameformats.hxx>
 #include <wrtswtbl.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

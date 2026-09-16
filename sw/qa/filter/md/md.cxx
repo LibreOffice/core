@@ -19,6 +19,7 @@
 #include <svx/xflclit.hxx>
 
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <IDocumentStylePoolAccess.hxx>

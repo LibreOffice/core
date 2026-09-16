@@ -23,6 +23,7 @@
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <libxml/xmlwriter.h>
 #include <node.hxx>
 #include <rolbck.hxx>
 #include <rtl/ustring.hxx>

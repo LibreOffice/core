@@ -27,6 +27,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <txatbase.hxx>
