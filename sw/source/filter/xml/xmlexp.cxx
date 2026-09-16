@@ -42,6 +42,7 @@
 #include <xmloff/xformsexport.hxx>
 #include <drawdoc.hxx>
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>

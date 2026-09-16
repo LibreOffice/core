@@ -32,6 +32,7 @@
 #include <pagedesc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <lineinfo.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>

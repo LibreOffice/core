@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel3.hpp>

@@ -28,6 +28,7 @@
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fmtsrnd.hxx>
 #include <docary.hxx>
 #include <pagedesc.hxx>

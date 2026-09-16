@@ -45,6 +45,7 @@
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <docary.hxx>
 #include <osl/diagnose.h>
 

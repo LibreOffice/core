@@ -46,6 +46,7 @@
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

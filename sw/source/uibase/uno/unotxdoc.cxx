@@ -140,6 +140,7 @@
 #include <i18nutil/searchopt.hxx>
 
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fmtcol.hxx>
 #include <istyleaccess.hxx>
 

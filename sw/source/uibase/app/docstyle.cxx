@@ -39,6 +39,7 @@
 #include <docsh.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <tblafmt.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
