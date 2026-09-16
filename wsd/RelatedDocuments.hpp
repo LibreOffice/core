@@ -57,7 +57,9 @@ public:
 
     /// Opens or drops one view's subscription to a remote document. On
     /// subscribe the view's own token is used; a view without a token for the
-    /// source is refused.
+    /// source is refused. A subscription in the failed or missing state holds
+    /// no connection, so subscribing to its source again opens a fresh
+    /// attempt.
     void handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
                          const std::string& encodedWopiSrc, bool subscribe);
 

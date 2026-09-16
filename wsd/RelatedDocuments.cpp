@@ -214,16 +214,23 @@ void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::str
         return;
     }
 
+    const auto isLive = [](const Subscription& subscription)
+    { return subscription.state != "failed" && subscription.state != "missing"; };
+
     // A view already subscribed to the source has nothing to do.
-    if (view.subscriptions.find(remoteDocKey) != view.subscriptions.end())
+    const auto itSubscription = view.subscriptions.find(remoteDocKey);
+    if (itSubscription != view.subscriptions.end() && isLive(itSubscription->second))
         return;
 
-    static const size_t maxLinks =
+    const size_t maxLinks =
         ConfigUtil::getConfigValue<int>("remote_documents.max_links_per_document", 4);
-    if (view.subscriptions.size() >= maxLinks)
+    const size_t liveLinks =
+        std::count_if(view.subscriptions.begin(), view.subscriptions.end(),
+                      [&isLive](const auto& it) { return isLive(it.second); });
+    if (liveLinks >= maxLinks)
     {
         LOG_ERR("Remote document subscribe by view ["
-                << tag << "] rejected: the view already holds " << view.subscriptions.size()
+                << tag << "] rejected: the view already holds " << liveLinks
                 << " subscriptions of the maximum " << maxLinks);
         sendError(docBroker, tag, encodedWopiSrc, "limitreached");
         return;

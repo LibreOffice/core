@@ -29,6 +29,7 @@
 
 #include <Poco/Net/HTTPRequest.h>
 
+#include <map>
 #include <mutex>
 #include <set>
 #include <string>
@@ -1076,6 +1077,179 @@ public:
     }
 };
 
+/// A view subscribes to sources whose files are gone from storage, and each report comes back
+/// missing. A record in that state holds no connection: subscribing to the same source again
+/// reads the storage afresh, and with as many missing sources as the per-view link limit, a
+/// readable source still connects.
+class UnitRemoteDocumentRetry : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, WaitRetryMissing, WaitAllMissing,
+               WaitReadableSource, Done)
+    _phase;
+
+    /// CheckFileInfo requests answered with 404, counted per source file id.
+    std::map<int, int> _goneRequests;
+
+    std::string fileWopiSrc(int id) const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(id);
+    }
+
+    std::string encodedFileWopiSrc(int id) const { return Uri::encode(fileWopiSrc(id)); }
+
+    /// How many sources the given list message reports in the given state.
+    static std::size_t countStates(const std::string_view message, const std::string_view state)
+    {
+        const std::string needle = "\"state\":\"" + std::string(state) + '"';
+        std::size_t count = 0;
+        for (std::size_t pos = message.find(needle); pos != std::string_view::npos;
+             pos = message.find(needle, pos + needle.size()))
+            ++count;
+        return count;
+    }
+
+public:
+    UnitRemoteDocumentRetry()
+        : WopiTestServer("UnitRemoteDocumentRetry")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_documents.enable", true);
+        // Room for several remote documents at once, so the per-view link limit is the one
+        // limit exercised here.
+        config.setInt("remote_documents.max_remote_docs", 16);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // The subscribing document lists four sources whose files are gone, as many as the
+        // per-view link limit, and one readable source.
+        if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
+        {
+            for (int id = 2; id <= 6; ++id)
+                setRelatedDocument(fileInfo, fileWopiSrc(id), "remotetoken");
+        }
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        // The files of the sources 2 to 5 are gone, so the storage cannot find them. The
+        // subscribing document itself and the source 6 load normally.
+        const std::string path = Poco::URI(request.getURI()).getPath();
+        for (int id = 2; id <= 5; ++id)
+        {
+            if (path.ends_with("/" + std::to_string(id)))
+            {
+                ++_goneRequests[id];
+                return std::make_unique<http::Response>(http::StatusCode::NotFound);
+            }
+        }
+
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            // The subscriber document is up; ask for the first source that is gone.
+            TRANSITION_STATE(_phase, Phase::WaitMissing);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(2));
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("relateddocuments:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        // The first read of the source failed, so its entry reports missing. Subscribing to
+        // the same source again opens a fresh attempt.
+        if (_phase == Phase::WaitMissing && countStates(message, "missing") == 1)
+        {
+            TST_LOG("The source that is gone was reported missing, subscribing to it again");
+            TRANSITION_STATE(_phase, Phase::WaitRetryMissing);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(2));
+            return false;
+        }
+
+        // The second subscribe read the storage again and came back missing again.
+        if (_phase == Phase::WaitRetryMissing && countStates(message, "missing") == 1)
+        {
+            if (_goneRequests[2] < 2)
+            {
+                failTest("The second subscribe to a missing source must read the storage "
+                         "again, but it was read " +
+                         std::to_string(_goneRequests[2]) + " times");
+                return false;
+            }
+
+            TST_LOG("The retried source was read again, filling the link limit with gone sources");
+            TRANSITION_STATE(_phase, Phase::WaitAllMissing);
+            for (int id = 3; id <= 5; ++id)
+                WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(id));
+            return false;
+        }
+
+        // All four sources that are gone report missing, so together they would fill the
+        // per-view link limit if they counted. The readable source is asked for next.
+        if (_phase == Phase::WaitAllMissing && countStates(message, "missing") == 4)
+        {
+            TST_LOG("All the gone sources report missing, asking for the readable one");
+            TRANSITION_STATE(_phase, Phase::WaitReadableSource);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(6));
+            return false;
+        }
+
+        if (_phase == Phase::WaitReadableSource &&
+            message.find("\"state\":\"connected\"") != std::string_view::npos)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("A missing source can be subscribed to again, and missing sources do not "
+                     "count toward the per-view link limit");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/1?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitMissing:
+            case Phase::WaitRetryMissing:
+            case Phase::WaitAllMissing:
+            case Phase::WaitReadableSource:
+            case Phase::Done:
+            {
+                break;
+            }
+        }
+    }
+};
+
 /// Two views of one document hold different access to the same related source:
 /// only the view whose UserPrivateInfo carries the token can subscribe. The
 /// other view, which sees the source but holds no token, is refused, so one
@@ -1600,7 +1774,8 @@ UnitBase** unit_create_wsd_multi(void)
                               new UnitRelatedDocumentPost(), new UnitRelatedDocumentDelete(),
                               new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
-                              new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
+                              new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
+                              new UnitRemoteDocumentSaved(),
                               new UnitRemoteDocumentNoChain(), nullptr };
 }
 
