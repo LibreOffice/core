@@ -22,6 +22,8 @@
 
 #include <config_features.h>
 
+#include <functional>
+
 #include <rtl/string.hxx>
 
 #include <swdllapi.h>
@@ -34,12 +36,19 @@ namespace SwTranslateHelper
 {
 SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
-
 /// Node range to walk for translation: the current selection when there is one, otherwise
 /// the whole document body, but never the header/footer/footnote sections that also live in
 /// the shell's node array outside the body.
 SW_DLLPUBLIC void GetTranslationNodeRange(SwWrtShell& rWrtSh, SwNodeOffset& rStartNode,
                                           SwNodeOffset& rEndNode);
+
+/// Translates the current selection (or the whole document when there is no
+/// selection) text node by text node, replacing the original text with the
+/// result of rTranslate for the exported HTML of each node. A table box
+/// selection is translated box by box.
+SW_DLLPUBLIC bool TranslateRanges(SwWrtShell& rWrtSh,
+                                  const std::function<OString(const OString&)>& rTranslate,
+                                  const bool& rCancelTranslation);
 #if HAVE_FEATURE_CURL
 SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang);
 SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,

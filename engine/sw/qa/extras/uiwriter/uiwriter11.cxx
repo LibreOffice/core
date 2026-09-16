@@ -25,6 +25,10 @@
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <rtl/strbuf.hxx>
+#include <utility>
 
 #include <editeng/brushitem.hxx>
 #include <hintids.hxx>
@@ -35,10 +39,13 @@
 #include <edtwin.hxx>
 #include <fmtfsize.hxx>
 #include <i18nutil/paper.hxx>
+#include <itabenum.hxx>
+#include <names.hxx>
 #include <pagedesc.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <PostItMgr.hxx>
+#include <translatehelper.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
@@ -903,6 +910,103 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36181_findReplaceParaStyle)
     // Without the fix, all of the selection applied the Caption style
     CPPUNIT_ASSERT_EQUAL(u"Text body indent"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
+}
+
+/// Fake translator for SwTranslateHelper::TranslateRanges: strips the HTML
+/// tags of the exported fragment and returns the content prefixed with "de:".
+OString FakeTranslate(const OString& rHtml)
+{
+    OStringBuffer aText;
+    bool bInTag = false;
+    for (sal_Int32 i = 0; i < rHtml.getLength(); ++i)
+    {
+        const char c = rHtml[i];
+        if (c == '<')
+            bInTag = true;
+        else if (c == '>')
+            bInTag = false;
+        else if (!bInTag)
+            aText.append(c);
+    }
+    return "<span>de:"_ostr + aText.makeStringAndClear() + "</span>"_ostr;
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTranslateTextSelection)
+{
+    createSwDoc();
+    SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Hello World"_ustr);
+
+    // Select the whole paragraph and "translate" it.
+    pWrtSh->SelAll();
+    sal_Int32 nCalls = 0;
+    auto aTranslate = [&nCalls](const OString& rHtml) -> OString
+    {
+        ++nCalls;
+        return FakeTranslate(rHtml);
+    };
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateRanges(*pWrtSh, aTranslate, bCancel));
+
+    // The original text is replaced by the translation, not kept.
+    CPPUNIT_ASSERT_EQUAL(u"de:Hello World"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nCalls);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTranslateTableSelection)
+{
+    createSwDoc();
+    SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
+
+    // Insert a 3-row x 2-column table.
+    SwInsertTableOptions aTableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtSh->InsertTable(aTableOpt, 3, 2);
+
+    // Fill the cells via the model (independent of layout): the text cursor
+    // after InsertTable would need layout to step between the cells.
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTable.is());
+    for (const char* pCellName : { "A1", "B1", "A2", "B2", "A3", "B3" })
+    {
+        uno::Reference<text::XText> xCellText(
+            xTable->getCellByName(OUString::createFromAscii(pCellName)), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xCellText.is());
+        xCellText->setString(OUString::createFromAscii(pCellName));
+    }
+
+    // Move the cursor back to the start of the table: after InsertTable it is
+    // outside the table, where SelTable() would fail.
+    CPPUNIT_ASSERT(pWrtSh->MoveTable(GotoPrevTable, fnTableStart));
+
+    // Select the whole table, i.e. a table box selection of all 6 cells.
+    pWrtSh->SelTable();
+    CPPUNIT_ASSERT(pWrtSh->IsTableMode());
+
+    sal_Int32 nCalls = 0;
+    auto aTranslate = [&nCalls](const OString& rHtml) -> OString
+    {
+        ++nCalls;
+        return FakeTranslate(rHtml);
+    };
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateRanges(*pWrtSh, aTranslate, bCancel));
+
+    // Every cell was translated separately: without handling the box
+    // selection, only the first cell was exported and its translation was
+    // pasted into every selected cell, appended after the original text.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nCalls);
+    const std::pair<const char*, const char*> aCases[] = {
+        { "A1", "de:A1" }, { "B1", "de:B1" }, { "A2", "de:A2" },
+        { "B2", "de:B2" }, { "A3", "de:A3" }, { "B3", "de:B3" },
+    };
+    for (const auto& rCase : aCases)
+    {
+        uno::Reference<text::XText> xCellText(
+            xTable->getCellByName(OUString::createFromAscii(rCase.first)), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xCellText.is());
+        // The cell contains its own translation and the original text is gone.
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rCase.second), xCellText->getString());
+    }
 }
 
 } // end of anonymous namespace

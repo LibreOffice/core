@@ -19,11 +19,16 @@
 
 #include <sal/config.h>
 
+#include <vector>
+
 #include <config_features.h>
 #include <wrtsh.hxx>
 #include <pam.hxx>
 #include <node.hxx>
+#include <swtable.hxx>
+#include <tblsel.hxx>
 #include <ndtxt.hxx>
+#include <swcrsr.hxx>
 #include <translatehelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
@@ -88,6 +93,12 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rDa
         if (aDataHelper.GetXTransferable().is()
             && SwTransferable::IsPasteSpecial(rWrtSh, aDataHelper))
         {
+            // Pasting with a table box selection active would not delete the
+            // cell content (PasteData skips it in table mode) and would insert
+            // the data into every selected box instead of replacing the given
+            // range: collapse it first.
+            if (rWrtSh.IsTableMode())
+                rWrtSh.ClearMark();
             rWrtSh.SetSelection(*pCursor);
             SwTransferable::Paste(rWrtSh, aDataHelper);
             rWrtSh.KillSelection(nullptr, false);
@@ -119,6 +130,212 @@ void GetTranslationNodeRange(SwWrtShell& rWrtSh, SwNodeOffset& rStartNode, SwNod
     SwPosition aMark = *pCurrentPam->GetMark();
     rStartNode = std::max(aPoint.nNode.GetIndex(), nBodyStart);
     rEndNode = std::min(aMark.nNode.GetIndex(), nBodyEnd);
+}
+
+namespace
+{
+/// A range of the document to translate: the content between aStart and aEnd.
+/// The positions are registered, so they keep pointing at the same content
+/// even if translating an earlier range inserts or deletes nodes.
+struct TranslateRange
+{
+    SwPosition aStart;
+    SwPosition aEnd;
+};
+}
+
+bool TranslateRanges(SwWrtShell& rWrtSh,
+                     const std::function<OString(const OString&)>& rTranslate,
+                     const bool& rCancelTranslation)
+{
+    SwCursor* pCurrentPam = rWrtSh.GetCursor();
+    const bool bTableMode = rWrtSh.IsTableMode();
+    const bool bHasSelection = rWrtSh.HasSelection();
+
+    if (bHasSelection)
+    {
+        // iteration will start top to bottom
+        pCurrentPam->Normalize();
+    }
+
+    // Collect the ranges to translate.
+    std::vector<TranslateRange> aRanges;
+    if (bTableMode)
+    {
+        // A table box selection is a list of selected boxes on the table
+        // cursor. Looking only at the current PaM would translate the first
+        // selected box only (and pasting would then insert that single result
+        // into every selected box), so expand each box to the range of its
+        // content and translate the boxes separately. The selection lives on
+        // the table cursor (model side), so this does not depend on layout.
+        for (const SwTableBox* pBox : rWrtSh.GetTableCursor()->GetSelectedBoxes())
+        {
+            const SwNode* pSttNd = pBox->GetSttNd();
+            if (!pSttNd)
+                continue;
+
+            // First content node inside the box: the node after the box start
+            // node; GoNextSection skips over nested section starts.
+            SwNodeIndex aSttIdx(*pSttNd, 1);
+            SwContentNode* pContent
+                = aSttIdx.GetNode().IsContentNode()
+                      ? aSttIdx.GetNode().GetContentNode()
+                      : SwNodes::GoNextSection(&aSttIdx, true, false);
+            if (!pContent)
+                continue;
+
+            // Last content node inside the box: the node before the box end
+            // node; GoPrevSection skips over nested section ends.
+            SwNodeIndex aEndIdx(*pSttNd->EndOfSectionNode(), -1);
+            SwContentNode* pLast
+                = aEndIdx.GetNode().IsContentNode()
+                      ? aEndIdx.GetNode().GetContentNode()
+                      : SwNodes::GoPrevSection(&aEndIdx, true, false);
+            if (!pLast || pLast->GetIndex() < pContent->GetIndex())
+                pLast = pContent;
+
+            SwPosition aStart(*pContent, 0);
+            SwPosition aEnd(*pLast, pLast->Len());
+
+            aRanges.push_back({ aStart, aEnd });
+        }
+        // Leave table mode, so that pasting the translation replaces the cell
+        // content instead of inserting it into every selected box.
+        rWrtSh.ClearMark();
+    }
+    else if (bHasSelection)
+    {
+        aRanges.push_back({ *pCurrentPam->Start(), *pCurrentPam->End() });
+    }
+    else
+    {
+        // Use the body-only range so a document-wide translate never walks into
+        // the header/footer/footnote sections (cool#6098): the node array also
+        // holds those ahead of the body.
+        SwNodeOffset nStartNode, nEndNode;
+        GetTranslationNodeRange(rWrtSh, nStartNode, nEndNode);
+        SwNodes& rNodes = rWrtSh.GetDoc()->GetNodes();
+        const SwNodeIndex aStartIdx(rNodes, nStartNode);
+        const SwNodeIndex aEndIdx(rNodes, nEndNode);
+        aRanges.push_back({ SwPosition(aStartIdx), SwPosition(aEndIdx) });
+        // Note: can't use SwPosition(SwNodeIndex(...)) — the rvalue overload
+        // of SwPosition's ctor (SwPosition(SwNodeIndex&&)) is deleted.
+    }
+
+    auto const& pNodes = rWrtSh.GetNodes();
+
+    sal_Int32 nCount(0);
+    sal_Int32 nProgress(0);
+
+    for (const TranslateRange& rRange : aRanges)
+    {
+        for (SwNodeOffset n(rRange.aStart.nNode.GetIndex());
+             n <= rRange.aEnd.nNode.GetIndex(); ++n)
+        {
+            if (pNodes[n] && pNodes[n]->IsTextNode())
+            {
+                if (pNodes[n]->GetTextNode()->GetText().isEmpty())
+                    continue;
+                nCount++;
+            }
+        }
+    }
+
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    uno::Reference<frame::XFrame> xFrame(pFrame ? pFrame->GetFrame().GetFrameInterface() : nullptr);
+    uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(xFrame, uno::UNO_QUERY);
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
+    if (xProgressFactory.is())
+    {
+        xStatusIndicator = xProgressFactory->createStatusIndicator();
+    }
+
+    if (xStatusIndicator.is())
+        xStatusIndicator->start(SwResId(STR_STATSTR_SWTRANSLATE), nCount);
+
+    bool bStop = false;
+    for (const TranslateRange& rRange : aRanges)
+    {
+        const SwNodeOffset nStartNode = rRange.aStart.nNode.GetIndex();
+        const SwNodeOffset nEndNode = rRange.aEnd.nNode.GetIndex();
+        for (SwNodeOffset n(nStartNode); !bStop && n <= nEndNode; ++n)
+        {
+            if (rCancelTranslation)
+                break;
+
+            if (n >= rWrtSh.GetNodes().Count())
+                break;
+
+            if (!pNodes[n])
+                break;
+
+            SwNode* pNode = pNodes[n];
+            if (pNode->IsTextNode())
+            {
+                if (pNode->GetTextNode()->GetText().isEmpty())
+                    continue;
+                auto cursor
+                    = Writer::NewUnoCursor(*rWrtSh.GetDoc(), pNode->GetIndex(), pNode->GetIndex());
+
+                // set edges (start, end) for nodes inside the selection.
+                if (bHasSelection)
+                {
+                    if (nStartNode == nEndNode)
+                    {
+                        cursor->SetMark();
+                        cursor->GetPoint()->nContent = rRange.aStart.nContent;
+                        cursor->GetMark()->nContent = rRange.aEnd.nContent;
+                    }
+                    else if (n == nStartNode)
+                    {
+                        cursor->SetMark();
+                        cursor->GetPoint()->nContent = rRange.aStart.nContent;
+                    }
+                    else if (n == nEndNode)
+                    {
+                        cursor->SetMark();
+                        cursor->GetMark()->nContent = rRange.aEnd.nContent;
+                        cursor->GetPoint()->nContent = 0;
+                    }
+                }
+
+                const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
+                const auto aTranslatedOut = rTranslate(aOut);
+                if (!aTranslatedOut.isEmpty())
+                {
+                    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+                }
+                else
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Error, VclButtonsType::Ok,
+                        SwResId(STR_SWTRANSLATE_ERROR)));
+                    xBox->run();
+                    bStop = true;
+                    break;
+                }
+
+                if (xStatusIndicator.is() && nCount)
+                    xStatusIndicator->setValue((100 * ++nProgress) / nCount);
+
+                Idle aIdle("TranslateDocumentCancellable aIdle");
+                aIdle.SetPriority(TaskPriority::POST_PAINT);
+                aIdle.Start();
+
+                rWrtSh.LockView(true);
+                while (aIdle.IsActive() && !Application::IsQuit())
+                {
+                    Application::Yield();
+                }
+                rWrtSh.LockView(false);
+            }
+        }
+    }
+
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
+    return true;
 }
 
 #if HAVE_FEATURE_CURL
@@ -155,119 +372,10 @@ bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang
         return false;
     }
 
-    bool bHasSelection = rWrtSh.HasSelection();
-    auto const& pNodes = rWrtSh.GetNodes();
-    SwNodeOffset startNode;
-    SwNodeOffset endNode;
-    GetTranslationNodeRange(rWrtSh, startNode, endNode);
-
-    // Re-read the cursor after GetTranslationNodeRange() has normalized it.
-    auto m_pCurrentPam = rWrtSh.GetCursor();
-    SwPosition aPoint = *m_pCurrentPam->GetPoint();
-    SwPosition aMark = *m_pCurrentPam->GetMark();
-
-    sal_Int32 nCount(0);
-    sal_Int32 nProgress(0);
-
-    for (SwNodeOffset n(startNode); n <= endNode; ++n)
-    {
-        if (pNodes[n] && pNodes[n]->IsTextNode())
-        {
-            if (pNodes[n]->GetTextNode()->GetText().isEmpty())
-                continue;
-            nCount++;
-        }
-    }
-
-    SfxViewFrame* pFrame = SfxViewFrame::Current();
-    uno::Reference<frame::XFrame> xFrame(pFrame ? pFrame->GetFrame().GetFrameInterface() : nullptr);
-    uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(xFrame, uno::UNO_QUERY);
-    uno::Reference<task::XStatusIndicator> xStatusIndicator;
-
-    if (xProgressFactory.is())
-    {
-        xStatusIndicator = xProgressFactory->createStatusIndicator();
-    }
-
-    if (xStatusIndicator.is())
-        xStatusIndicator->start(SwResId(STR_STATSTR_SWTRANSLATE), nCount);
-
-    for (SwNodeOffset n(startNode); n <= endNode; ++n)
-    {
-        if (rCancelTranslation)
-            break;
-
-        if (n >= rWrtSh.GetNodes().Count())
-            break;
-
-        if (!pNodes[n])
-            break;
-
-        SwNode* pNode = pNodes[n];
-        if (pNode->IsTextNode())
-        {
-            if (pNode->GetTextNode()->GetText().isEmpty())
-                continue;
-
-            auto cursor
-                = Writer::NewUnoCursor(*rWrtSh.GetDoc(), pNode->GetIndex(), pNode->GetIndex());
-
-            // set edges (start, end) for nodes inside the selection.
-            if (bHasSelection)
-            {
-                if (startNode == endNode)
-                {
-                    cursor->SetMark();
-                    cursor->GetPoint()->nContent = aPoint.nContent;
-                    cursor->GetMark()->nContent = aMark.nContent;
-                }
-                else if (n == startNode)
-                {
-                    cursor->SetMark();
-                    cursor->GetPoint()->nContent = aPoint.nContent;
-                }
-                else if (n == endNode)
-                {
-                    cursor->SetMark();
-                    cursor->GetMark()->nContent = aMark.nContent;
-                    cursor->GetPoint()->nContent = 0;
-                }
-            }
-
-            const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
-            const auto aTranslatedOut = linguistic::Translate(rTargetLang, aAPIUrl, aAuthKey, aOut);
-            if (!aTranslatedOut.isEmpty())
-            {
-                SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
-            }
-            else
-            {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                    nullptr, VclMessageType::Error, VclButtonsType::Ok,
-                    SwResId(STR_SWTRANSLATE_ERROR)));
-                xBox->run();
-                break;
-            }
-
-            if (xStatusIndicator.is() && nCount)
-                xStatusIndicator->setValue((100 * ++nProgress) / nCount);
-
-            Idle aIdle("TranslateDocumentCancellable aIdle");
-            aIdle.SetPriority(TaskPriority::POST_PAINT);
-            aIdle.Start();
-
-            rWrtSh.LockView(true);
-            while (aIdle.IsActive() && !Application::IsQuit())
-            {
-                Application::Yield();
-            }
-            rWrtSh.LockView(false);
-        }
-    }
-
-    if (xStatusIndicator.is())
-        xStatusIndicator->end();
-    return true;
+    return TranslateRanges(rWrtSh,
+                           [&rTargetLang, &aAPIUrl, &aAuthKey](const OString& rData)
+                           { return linguistic::Translate(rTargetLang, aAPIUrl, aAuthKey, rData); },
+                           rCancelTranslation);
 }
 #endif // HAVE_FEATURE_CURL
 }
