@@ -47,8 +47,8 @@
     <text:table-of-content-source text:outline-level="10" text:use-outline-level="true"/>
     <text:index-body>
      <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head"><text:p text:style-name="Contents_20_Heading">Table of Contents</text:p></text:index-title>
-     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc1|outline" text:style-name="Internet_20_link">First heading<text:tab/>1</text:a></text:p>
-     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2|outline" text:style-name="Internet_20_link">Second heading<text:tab/>1</text:a></text:p>
+     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc1" text:style-name="Internet_20_link">First heading<text:tab/>1</text:a></text:p>
+     <text:p text:style-name="Contents_20_1"><text:a xlink:type="simple" xlink:href="#__RefHeading___Toc2" text:style-name="Internet_20_link">Second heading<text:tab/>1</text:a></text:p>
     </text:index-body>
    </text:table-of-content>
    <text:h text:style-name="Heading_20_1" text:outline-level="1"><text:bookmark-start text:name="__RefHeading___Toc1"/>First heading<text:bookmark-end text:name="__RefHeading___Toc1"/></text:h>

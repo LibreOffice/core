@@ -12,6 +12,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <algorithm>
+#include <unordered_set>
 #include <vector>
 
 #include <comphelper/propertyvalue.hxx>
@@ -155,6 +156,53 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
 
     // the only footnote type ISO 32000-1 has, FENote being a PDF 2.0 addition
     CPPUNIT_ASSERT_EQUAL("Note"_ostr, aFootnoteType(aPDF17));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTOCItemRef)
+{
+    createSwDoc("toc-structure-ref.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                               comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
+                                                             sal_Int32(20)) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // Without the fix a TOC item had no Ref at all, and ISO 14289-2 8.2.5.8 asks each of them to
+    // name the element its entry reaches
+    OStringBuffer aTargets;
+    std::unordered_set<sal_Int32> aSeen;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "TOCI")
+            continue;
+
+        auto pRefs = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("Ref"_ostr));
+        CPPUNIT_ASSERT(pRefs);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pRefs->GetElements().size());
+
+        auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRefs->GetElements()[0]);
+        CPPUNIT_ASSERT(pRef);
+        CPPUNIT_ASSERT(pRef->LookupObject());
+        // the heading of this entry, not the one the entry before it reached
+        CPPUNIT_ASSERT(aSeen.insert(pRef->GetObjectValue()).second);
+
+        auto pTargetType
+            = dynamic_cast<vcl::filter::PDFNameElement*>(pRef->LookupObject()->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pTargetType);
+        aTargets.append(pTargetType->GetValue() + " ");
+    }
+
+    // one item per heading, each naming its own
+    CPPUNIT_ASSERT_EQUAL("H1 H2 "_ostr, aTargets.makeStringAndClear());
 }
 }
 

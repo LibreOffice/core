@@ -604,6 +604,8 @@ struct PDFStructureElement
     std::map<PDFWriter::StructAttribute, PDFStructureAttribute >
                                                         m_aAttributes;
     ::std::vector<sal_Int32>                            m_AnnotIds;
+    // what the content in this element refers to, as indexes into the structure vector
+    std::vector<sal_Int32> m_RefElements;
     // a Link has one annotation per line, and per fly gap
     std::vector<sal_Int32> m_LinkAnnotIds;
     tools::Rectangle                                    m_aBBox;
@@ -1329,6 +1331,7 @@ public:
     sal_Int32 registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType );
     void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     void setDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId);
+    void addStructureRef(sal_Int32 nElementId, sal_Int32 nRefElementId);
     void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
