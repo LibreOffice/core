@@ -15,6 +15,7 @@
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -37,6 +38,11 @@
 
 namespace
 {
+template<typename T> T getValue(css::beans::Optional<T> const & optional) {
+    CPPUNIT_ASSERT(optional.IsPresent);
+    return optional.Value;
+}
+
 class Test : public UnoApiTest
 {
 public:
@@ -82,8 +88,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertTextBoxGeometryRoundTrip)
     // The chosen point values convert to whole 1/100 mm, so they round-trip exactly.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, xShape->getLeft(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(72.0, xShape->getTop(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(288.0, xShape->getWidth(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(144.0, xShape->getHeight(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(288.0, getValue(xShape->getWidth()), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(144.0, getValue(xShape->getHeight()), 0.05);
     xShape->setLeft(90)->setTop(18);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(90.0, xShape->getLeft(), 0.05);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(18.0, xShape->getTop(), 0.05);
@@ -98,7 +104,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTextStyling)
     auto const xSlide = xPresentation->appendSlide();
     auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
     auto const xRange = xShape->getText();
-    xRange->getTextStyle()->setBold(true)->setFontSize(24)->setForegroundColor(u"#c9211e"_ustr);
+    getValue(xRange->getTextStyle())->setBold(true)->setFontSize(24)
+        ->setForegroundColor(u"#c9211e"_ustr);
     // The formatting lands on the text runs, so a cursor over the text reports it.
     cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
                                                       cpo::uno::UNO_QUERY_THROW);
@@ -126,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testItalicAndStrikethrough)
     auto const xPresentation = loadPresentation();
     auto const xSlide = xPresentation->appendSlide();
     auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
-    xShape->getText()->getTextStyle()->setItalic(true)->setStrikethrough(true);
+    getValue(xShape->getText()->getTextStyle())->setItalic(true)->setStrikethrough(true);
     // The formatting lands on the text runs, so a cursor over the text reports it.
     cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
                                                       cpo::uno::UNO_QUERY_THROW);
@@ -151,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendTextRunStyling)
     auto const xText = xShape->getText();
     auto const xPlain = xText->appendText(u"plain "_ustr);
     auto const xBold = xText->appendText(u"bold"_ustr);
-    xBold->getTextStyle()->setBold(true);
+    getValue(xBold->getTextStyle())->setBold(true);
     CPPUNIT_ASSERT_EQUAL(u"plain bold"_ustr, xText->asString());
     CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, xBold->asString());
     // Styling the returned range covers only that run, so the earlier run stays regular.
@@ -171,8 +178,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendTextRunStyling)
     xAfterProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
     CPPUNIT_ASSERT_EQUAL(100.0f, fWeight);
     // Appending an empty string produces an empty range, which has no characters to style.
-    CPPUNIT_ASSERT_THROW(xText->appendText(u""_ustr)->getTextStyle(),
-                         cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT(!xText->appendText(u""_ustr)->getTextStyle().IsPresent);
     // Only the shape's whole text range can append runs.
     CPPUNIT_ASSERT_THROW(xBold->appendText(u"x"_ustr), cpo::uno::RuntimeException);
 }
@@ -187,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     xText->appendText(u"first"_ustr);
     // appendParagraph hands back the paragraph holding the given text; its range covers that
     // text.
-    auto const xPara = xText->appendParagraph(u"second"_ustr)->getRange();
+    auto const xPara = getValue(xText->appendParagraph(u"second"_ustr)->getRange());
     CPPUNIT_ASSERT_EQUAL(u"second"_ustr, xPara->asString());
     xPara->setBulletLevel(1);
     CPPUNIT_ASSERT_EQUAL(u"first\nsecond"_ustr, xText->asString());
@@ -227,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nLevel);
     // Appending an empty paragraph gives back a position where later appended text lands, so
     // a depth set on the empty paragraph holds for text appended afterwards.
-    auto const xEmpty = xText->appendParagraph(u""_ustr)->getRange();
+    auto const xEmpty = getValue(xText->appendParagraph(u""_ustr)->getRange());
     xEmpty->setBulletLevel(3);
     xText->appendText(u"third"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"first\nsecond\nthird"_ustr, xText->asString());
@@ -259,13 +265,13 @@ CPPUNIT_TEST_FIXTURE(Test, testGeometryValidation)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSlide->getShapes().getLength());
     // A rejected setter leaves the shape's geometry untouched.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, xShape->getLeft(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(288.0, xShape->getWidth(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(288.0, getValue(xShape->getWidth()), 0.05);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCurrentPageAndRemove)
 {
     auto const xPresentation = loadPresentation();
-    auto const xCurrent = xPresentation->getSelection()->getCurrentPage();
+    auto const xCurrent = getValue(getValue(xPresentation->getSelection())->getCurrentPage());
     CPPUNIT_ASSERT(xCurrent.is());
     CPPUNIT_ASSERT(xCurrent->asSlide().is());
     auto const xNewSlide = xPresentation->appendSlide();
@@ -306,16 +312,18 @@ CPPUNIT_TEST_FIXTURE(Test, testSlideBackgroundColor)
 CPPUNIT_TEST_FIXTURE(Test, testCurrentPageOutsideNormalView)
 {
     auto const xPresentation = loadPresentation();
-    CPPUNIT_ASSERT(xPresentation->getSelection()->getCurrentPage()->asSlide().is());
+    CPPUNIT_ASSERT(
+        getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide().is());
     // The notes view reports the notes page as current; the notes page is a page but not a
     // slide.
     dispatchCommand(mxComponent, u".uno:NotesMode"_ustr, {});
-    auto const xNotesPage = xPresentation->getSelection()->getCurrentPage();
+    auto const xNotesPage = getValue(getValue(xPresentation->getSelection())->getCurrentPage());
     CPPUNIT_ASSERT(xNotesPage.is());
     CPPUNIT_ASSERT_THROW(xNotesPage->asSlide(), cpo::uno::RuntimeException);
     // Back in the normal drawing view the slide is current again.
     dispatchCommand(mxComponent, u".uno:DrawingMode"_ustr, {});
-    CPPUNIT_ASSERT(xPresentation->getSelection()->getCurrentPage()->asSlide().is());
+    CPPUNIT_ASSERT(
+        getValue(getValue(xPresentation->getSelection())->getCurrentPage())->asSlide().is());
 }
 }
 

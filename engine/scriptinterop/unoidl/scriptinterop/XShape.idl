@@ -19,9 +19,9 @@ interface XShape : XBase
 
     double getTop();
 
-    double getWidth();
+    com::sun::star::beans::Optional<double> getWidth();
 
-    double getHeight();
+    com::sun::star::beans::Optional<double> getHeight();
 
     XShape setLeft([in] double points);
 

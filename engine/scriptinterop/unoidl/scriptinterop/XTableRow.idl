@@ -12,7 +12,7 @@
 module scriptinterop {
 
 interface XTableRow: XContainerElement {
-    XTableCell getCell([in] long index);
+    com::sun::star::beans::Optional<XTableCell> getCell([in] long index);
 
     long getNumCells();
 };

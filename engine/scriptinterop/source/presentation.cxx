@@ -16,6 +16,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -193,9 +194,10 @@ public:
         return range_->getuno();
     }
 
-    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL getRange() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>> SAL_CALL getRange()
+        override
     {
-        return range_;
+        return {range_.is(), range_};
     }
 
 private:
@@ -324,15 +326,15 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XTextStyle> SAL_CALL getTextStyle() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextStyle>> SAL_CALL getTextStyle()
+        override
     {
         // Character formatting lives on the text runs, so an empty range holds none to style.
         if (asString().isEmpty())
         {
-            throw cpo::uno::RuntimeException(
-                u"getTextStyle: the range is empty and has no characters to style"_ustr);
+            return {false, {}};
         }
-        return new TextStyleImpl(text_, range_);
+        return {true, new TextStyleImpl(text_, range_)};
     }
 
 private:
@@ -366,9 +368,13 @@ public:
 
     double SAL_CALL getTop() override { return hundredthMmToPoints(shape_->getPosition().Y); }
 
-    double SAL_CALL getWidth() override { return hundredthMmToPoints(shape_->getSize().Width); }
+    css::beans::Optional<double> SAL_CALL getWidth() override {
+        return {true, hundredthMmToPoints(shape_->getSize().Width)};
+    }
 
-    double SAL_CALL getHeight() override { return hundredthMmToPoints(shape_->getSize().Height); }
+    css::beans::Optional<double> SAL_CALL getHeight() override {
+        return {true, hundredthMmToPoints(shape_->getSize().Height)};
+    }
 
     cpo::uno::Reference<scriptinterop::XShape> SAL_CALL setLeft(double points) override
     {
@@ -568,7 +574,8 @@ public:
         return controller;
     }
 
-    cpo::uno::Reference<scriptinterop::XPage> SAL_CALL getCurrentPage() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPage>> SAL_CALL getCurrentPage()
+        override
     {
         cpo::uno::Reference<css::drawing::XDrawView> const view(model_->getCurrentController(),
                                                                 cpo::uno::UNO_QUERY);
@@ -577,9 +584,9 @@ public:
         auto const page = view.is() ? view->getCurrentPage() : nullptr;
         if (!page.is())
         {
-            return nullptr;
+            return {false, {}};
         }
-        return new PageImpl(model_, page);
+        return {true, new PageImpl(model_, page)};
     }
 
 private:
@@ -626,9 +633,10 @@ public:
 
     double SAL_CALL getPageHeight() override { return pageSizePoints(u"Height"_ustr); }
 
-    cpo::uno::Reference<scriptinterop::XSlideSelection> SAL_CALL getSelection() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideSelection>> SAL_CALL
+    getSelection() override
     {
-        return new SlideSelectionImpl(model_);
+        return {true, new SlideSelectionImpl(model_)};
     }
 
 private:

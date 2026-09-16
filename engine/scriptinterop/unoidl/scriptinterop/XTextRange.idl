@@ -27,7 +27,7 @@ interface XTextRange : XBase
 
     XTextRange setBulletLevel([in] long level);
 
-    XTextStyle getTextStyle();
+    com::sun::star::beans::Optional<XTextStyle> getTextStyle();
 };
 
 };

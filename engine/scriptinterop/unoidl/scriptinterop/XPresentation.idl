@@ -21,7 +21,7 @@ interface XPresentation : XBase
 
     double getPageHeight();
 
-    XSlideSelection getSelection();
+    com::sun::star::beans::Optional<XSlideSelection> getSelection();
 };
 
 };

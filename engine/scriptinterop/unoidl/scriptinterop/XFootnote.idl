@@ -12,7 +12,7 @@
 module scriptinterop {
 
 interface XFootnote: XElement {
-    XContainerElement getFootnoteContents();
+    com::sun::star::beans::Optional<XContainerElement> getFootnoteContents();
 };
 
 };

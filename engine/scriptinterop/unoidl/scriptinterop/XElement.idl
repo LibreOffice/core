@@ -19,11 +19,11 @@ interface XElement: XBase {
 
     XElement copy();
 
-    XElement getNextSibling();
+    com::sun::star::beans::Optional<XElement> getNextSibling();
 
-    XElement getParent();
+    com::sun::star::beans::Optional<XElement> getParent();
 
-    XElement getPreviousSibling();
+    com::sun::star::beans::Optional<XElement> getPreviousSibling();
 
     string getText();
 

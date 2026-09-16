@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -18,9 +19,12 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -97,6 +101,10 @@
 
 namespace
 {
+template<typename T>
+css::beans::Optional<cpo::uno::Reference<T>> maybe(cpo::uno::Reference<T> const & ref)
+{ return {ref.is(), ref}; }
+
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
     cpo::uno::Reference<css::text::XText> const & text,
     cpo::uno::Reference<scriptinterop::XElement> const & parent);
@@ -373,38 +381,58 @@ public:
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
 
-    OUString getFontFamily(sal_Int32 offset) override {
+    css::beans::Optional<OUString> getFontFamily(sal_Int32 offset) override {
+        auto const any = getProp(
+            runAt(offset), u"getFontFamily", u"font family", u"CharFontName"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         OUString name;
-        getProp(runAt(offset), u"getFontFamily", u"font family", u"CharFontName"_ustr) >>= name;
-        return name;
+        *any >>= name;
+        return {true, name};
     }
 
-    OUString getLinkUrl(sal_Int32 offset) override {
+    css::beans::Optional<OUString> getLinkUrl(sal_Int32 offset) override {
+        auto const any = getProp(runAt(offset), u"getLinkUrl", u"link URL", u"HyperLinkURL"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         OUString url;
-        getProp(runAt(offset), u"getLinkUrl", u"link URL", u"HyperLinkURL"_ustr) >>= url;
-        return url;
+        *any >>= url;
+        return {true, url};
     }
 
     // A text portion has no true siblings in our model (paragraph.getChild only exposes one Text
     // child), so both sides are null; TODO: real sibling walk once inline images and breaks join
     // the paragraph's child list:
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     OUString getText() override {
         return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
             ->getString();
     }
 
-    scriptinterop::TextAlignment getTextAlignment(sal_Int32 offset) override {
+    css::beans::Optional<scriptinterop::TextAlignment> getTextAlignment(sal_Int32 offset) override {
+        auto const any = getProp(
+            runAt(offset), u"getTextAlignment", u"alignment", u"CharEscapement"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         sal_Int16 esc = 0;
-        getProp(runAt(offset), u"getTextAlignment", u"alignment", u"CharEscapement"_ustr) >>= esc;
-        return esc > 0 ? scriptinterop::TextAlignment_SUPERSCRIPT
-            : esc < 0 ? scriptinterop::TextAlignment_SUBSCRIPT
-            : scriptinterop::TextAlignment_NORMAL;
+        *any >>= esc;
+        return {true,
+            esc > 0 ? scriptinterop::TextAlignment_SUPERSCRIPT
+                : esc < 0 ? scriptinterop::TextAlignment_SUBSCRIPT
+                : scriptinterop::TextAlignment_NORMAL};
     }
 
     // GAS guarantees at least one attribute index for any text (uniform text has one index at 0):
@@ -435,31 +463,47 @@ public:
 
     scriptinterop::ElementType getType() override { return reportedType_; }
 
-    bool isBold(sal_Int32 offset) override {
+    css::beans::Optional<bool> isBold(sal_Int32 offset) override {
+        auto const any = getProp(runAt(offset), u"isBold", u"bold attribute", u"CharWeight"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         float weight = css::awt::FontWeight::NORMAL;
-        getProp(runAt(offset), u"isBold", u"bold attribute", u"CharWeight"_ustr) >>= weight;
-        return weight >= css::awt::FontWeight::BOLD;
+        *any >>= weight;
+        return {true, weight >= css::awt::FontWeight::BOLD};
     }
 
-    bool isItalic(sal_Int32 offset) override {
+    css::beans::Optional<bool> isItalic(sal_Int32 offset) override {
+        auto const any = getProp(
+            runAt(offset), u"isItalic", u"italic attribute", u"CharPosture"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         css::awt::FontSlant slant = css::awt::FontSlant_NONE;
-        getProp(runAt(offset), u"isItalic", u"italic attribute", u"CharPosture"_ustr) >>= slant;
-        return slant == css::awt::FontSlant_ITALIC || slant == css::awt::FontSlant_OBLIQUE;
+        *any >>= slant;
+        return {true, slant == css::awt::FontSlant_ITALIC || slant == css::awt::FontSlant_OBLIQUE};
     }
 
-    bool isStrikethrough(sal_Int32 offset) override {
+    css::beans::Optional<bool> isStrikethrough(sal_Int32 offset) override {
+        auto const any = getProp(
+            runAt(offset), u"isStrikethrough", u"strikethrough attribute", u"CharStrikeout"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         sal_Int16 strike = css::awt::FontStrikeout::NONE;
-        getProp(
-            runAt(offset), u"isStrikethrough", u"strikethrough attribute", u"CharStrikeout"_ustr)
-            >>= strike;
-        return strike != css::awt::FontStrikeout::NONE;
+        *any >>= strike;
+        return {true, strike != css::awt::FontStrikeout::NONE};
     }
 
-    bool isUnderline(sal_Int32 offset) override {
+    css::beans::Optional<bool> isUnderline(sal_Int32 offset) override {
+        auto const any = getProp(
+            runAt(offset), u"isUnderline", u"underline attribute", u"CharUnderline"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         sal_Int16 underline = css::awt::FontUnderline::NONE;
-        getProp(runAt(offset), u"isUnderline", u"underline attribute", u"CharUnderline"_ustr)
-            >>= underline;
-        return underline != css::awt::FontUnderline::NONE;
+        *any >>= underline;
+        return {true, underline != css::awt::FontUnderline::NONE};
     }
 
     void removeFromParent() override { removeContent(content_); }
@@ -575,7 +619,7 @@ private:
         return runs_.back();
     }
 
-    static cpo::uno::Any getProp(
+    std::optional<cpo::uno::Any> getProp(
         cpo::uno::Reference<css::text::XTextRange> const & range, std::u16string_view apiMethod,
         std::u16string_view apiAttribute, OUString const & name)
     {
@@ -586,7 +630,27 @@ private:
             throw cpo::uno::RuntimeException(
                 OUString::Concat(apiMethod) + ": the text has no " + apiAttribute);
         }
-        return props->getPropertyValue(name);
+        cpo::uno::Reference<css::beans::XPropertyState> const runState(range, cpo::uno::UNO_QUERY);
+        if (runState.is()
+            && runState->getPropertyState(name) == css::beans::PropertyState_DIRECT_VALUE)
+        {
+            return props->getPropertyValue(name);
+        }
+        // A property set on the whole paragraph shows up on the paragraph itself as DIRECT while
+        // the paragraph's runs still report DEFAULT, so the paragraph is the fallback place to
+        // look; not every run-level property is exposed at paragraph level, so check whether it is
+        // before querying its state:
+        cpo::uno::Reference<css::beans::XPropertySet> const paraProps(
+            content_, cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::beans::XPropertyState> const paraState(
+            content_, cpo::uno::UNO_QUERY);
+        if (paraProps.is() && paraState.is() && paraProps->getPropertySetInfo().is()
+            && paraProps->getPropertySetInfo()->hasPropertyByName(name)
+            && paraState->getPropertyState(name) == css::beans::PropertyState_DIRECT_VALUE)
+        {
+            return props->getPropertyValue(name);
+        }
+        return std::nullopt;
     }
 
     cpo::uno::Reference<css::text::XTextRange> wholeRange() {
@@ -691,16 +755,24 @@ public:
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    OUString getAltDescription() override {
+    css::beans::Optional<OUString> getAltDescription() override {
+        auto const any = getInlineProp(u"Description"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         OUString description;
-        props()->getPropertyValue(u"Description"_ustr) >>= description;
-        return description;
+        *any >>= description;
+        return {true, description};
     }
 
-    OUString getAltTitle() override {
+    css::beans::Optional<OUString> getAltTitle() override {
+        auto const any = getInlineProp(u"Title"_ustr);
+        if (!any) {
+            return {false, {}};
+        }
         OUString title;
-        props()->getPropertyValue(u"Title"_ustr) >>= title;
-        return title;
+        *any >>= title;
+        return {true, title};
     }
 
     sal_Int32 getHeight() override {
@@ -711,13 +783,21 @@ public:
 
     // TODO: siblings within a paragraph would join the paragraph's own child walk once inline
     // images are placed in reading order alongside their text runs.
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
-    OUString getText() override { return getAltTitle(); }
+    OUString getText() override {
+        auto const title = getAltTitle();
+        return title.IsPresent ? title.Value : u""_ustr;
+    }
 
     scriptinterop::ElementType getType() override {
         return scriptinterop::ElementType_INLINE_IMAGE;
@@ -761,6 +841,16 @@ private:
         return cpo::uno::Reference<css::beans::XPropertySet>(content_, cpo::uno::UNO_QUERY_THROW);
     }
 
+    std::optional<cpo::uno::Any> getInlineProp(OUString const & name) {
+        auto const p = props();
+        auto const any = p->getPropertyValue(name);
+        OUString value;
+        if ((any >>= value) && value.isEmpty()) {
+            return std::nullopt;
+        }
+        return any;
+    }
+
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
 };
@@ -796,24 +886,22 @@ public:
         return asText();
     }
 
-    scriptinterop::HorizontalAlignment getAlignment() override {
-        cpo::uno::Reference<css::beans::XPropertySet> const props(
-            content_, cpo::uno::UNO_QUERY_THROW);
-        auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"ParaAdjust"_ustr)) {
-            return scriptinterop::HorizontalAlignment_LEFT;
+    css::beans::Optional<scriptinterop::HorizontalAlignment> getAlignment() override {
+        auto const any = getParaProp(u"ParaAdjust"_ustr);
+        if (!any) {
+            return {false, {}};
         }
         sal_Int16 adjust = static_cast<sal_Int16>(css::style::ParagraphAdjust_LEFT);
-        props->getPropertyValue(u"ParaAdjust"_ustr) >>= adjust;
+        *any >>= adjust;
         switch (adjust) {
         case static_cast<sal_Int16>(css::style::ParagraphAdjust_CENTER):
-            return scriptinterop::HorizontalAlignment_CENTER;
+            return {true, scriptinterop::HorizontalAlignment_CENTER};
         case static_cast<sal_Int16>(css::style::ParagraphAdjust_RIGHT):
-            return scriptinterop::HorizontalAlignment_RIGHT;
+            return {true, scriptinterop::HorizontalAlignment_RIGHT};
         case static_cast<sal_Int16>(css::style::ParagraphAdjust_BLOCK):
-            return scriptinterop::HorizontalAlignment_JUSTIFY;
+            return {true, scriptinterop::HorizontalAlignment_JUSTIFY};
         default:
-            return scriptinterop::HorizontalAlignment_LEFT;
+            return {true, scriptinterop::HorizontalAlignment_LEFT};
         }
     }
 
@@ -831,21 +919,22 @@ public:
         return new InlineImageImpl(this, images[imgIndex]);
     }
 
-    scriptinterop::GlyphType getGlyphType() override {
+    css::beans::Optional<scriptinterop::GlyphType> getGlyphType() override {
+        auto const rulesAny = getParaProp(u"NumberingRules"_ustr);
+        if (!rulesAny) {
+            return {false, {}};
+        }
         cpo::uno::Reference<css::beans::XPropertySet> const props(
             content_, cpo::uno::UNO_QUERY_THROW);
-        auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"NumberingRules"_ustr)
-            || !info->hasPropertyByName(u"NumberingLevel"_ustr))
-        {
-            return scriptinterop::GlyphType_BULLET;
-        }
         cpo::uno::Reference<css::container::XIndexAccess> rules;
-        props->getPropertyValue(u"NumberingRules"_ustr) >>= rules;
+        *rulesAny >>= rules;
         sal_Int16 level = 0;
-        props->getPropertyValue(u"NumberingLevel"_ustr) >>= level;
+        auto const info(props->getPropertySetInfo());
+        if (info.is() && info->hasPropertyByName(u"NumberingLevel"_ustr)) {
+            props->getPropertyValue(u"NumberingLevel"_ustr) >>= level;
+        }
         if (!rules.is() || level < 0 || level >= rules->getCount()) {
-            return scriptinterop::GlyphType_BULLET;
+            return {true, scriptinterop::GlyphType_BULLET};
         }
         cpo::uno::Sequence<css::beans::PropertyValue> entry;
         rules->getByIndex(level) >>= entry;
@@ -860,90 +949,89 @@ public:
         }
         switch (numberingType) {
         case css::style::NumberingType::ARABIC:
-            return scriptinterop::GlyphType_NUMBER;
+            return {true, scriptinterop::GlyphType_NUMBER};
         case css::style::NumberingType::CHARS_UPPER_LETTER:
         case css::style::NumberingType::CHARS_UPPER_LETTER_N:
-            return scriptinterop::GlyphType_LATIN_UPPER;
+            return {true, scriptinterop::GlyphType_LATIN_UPPER};
         case css::style::NumberingType::CHARS_LOWER_LETTER:
         case css::style::NumberingType::CHARS_LOWER_LETTER_N:
-            return scriptinterop::GlyphType_LATIN_LOWER;
+            return {true, scriptinterop::GlyphType_LATIN_LOWER};
         case css::style::NumberingType::ROMAN_UPPER:
-            return scriptinterop::GlyphType_ROMAN_UPPER;
+            return {true, scriptinterop::GlyphType_ROMAN_UPPER};
         case css::style::NumberingType::ROMAN_LOWER:
-            return scriptinterop::GlyphType_ROMAN_LOWER;
+            return {true, scriptinterop::GlyphType_ROMAN_LOWER};
         default:
             break;
         }
         if (!bulletChar.isEmpty()) {
             auto const ch = bulletChar[0];
             if (ch == u'◦' || ch == u'○') {
-                return scriptinterop::GlyphType_HOLLOW_BULLET;
+                return {true, scriptinterop::GlyphType_HOLLOW_BULLET};
             }
             if (ch == u'▪' || ch == u'■') {
-                return scriptinterop::GlyphType_SQUARE_BULLET;
+                return {true, scriptinterop::GlyphType_SQUARE_BULLET};
             }
         }
-        return scriptinterop::GlyphType_BULLET;
+        return {true, scriptinterop::GlyphType_BULLET};
     }
 
-    scriptinterop::ParagraphHeading getHeading() override {
-        cpo::uno::Reference<css::beans::XPropertySet> const props(
-            content_, cpo::uno::UNO_QUERY_THROW);
-        auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"ParaStyleName"_ustr)) {
-            return scriptinterop::ParagraphHeading_NORMAL;
+    css::beans::Optional<scriptinterop::ParagraphHeading> getHeading() override {
+        auto const any = getParaProp(u"ParaStyleName"_ustr);
+        if (!any) {
+            return {false, {}};
         }
         OUString style;
-        props->getPropertyValue(u"ParaStyleName"_ustr) >>= style;
+        *any >>= style;
         if (style == u"Heading 1") {
-            return scriptinterop::ParagraphHeading_HEADING1;
+            return {true, scriptinterop::ParagraphHeading_HEADING1};
         }
         if (style == u"Heading 2") {
-            return scriptinterop::ParagraphHeading_HEADING2;
+            return {true, scriptinterop::ParagraphHeading_HEADING2};
         }
         if (style == u"Heading 3") {
-            return scriptinterop::ParagraphHeading_HEADING3;
+            return {true, scriptinterop::ParagraphHeading_HEADING3};
         }
         if (style == u"Heading 4") {
-            return scriptinterop::ParagraphHeading_HEADING4;
+            return {true, scriptinterop::ParagraphHeading_HEADING4};
         }
         if (style == u"Heading 5") {
-            return scriptinterop::ParagraphHeading_HEADING5;
+            return {true, scriptinterop::ParagraphHeading_HEADING5};
         }
         if (style == u"Heading 6") {
-            return scriptinterop::ParagraphHeading_HEADING6;
+            return {true, scriptinterop::ParagraphHeading_HEADING6};
         }
         if (style == u"Title") {
-            return scriptinterop::ParagraphHeading_TITLE;
+            return {true, scriptinterop::ParagraphHeading_TITLE};
         }
         if (style == u"Subtitle") {
-            return scriptinterop::ParagraphHeading_SUBTITLE;
+            return {true, scriptinterop::ParagraphHeading_SUBTITLE};
         }
-        return scriptinterop::ParagraphHeading_NORMAL;
+        return {true, scriptinterop::ParagraphHeading_NORMAL};
     }
 
-    double getIndentStart() override {
-        cpo::uno::Reference<css::beans::XPropertySet> const props(
-            content_, cpo::uno::UNO_QUERY_THROW);
-        auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"ParaLeftMargin"_ustr)) {
-            return 0.0;
+    css::beans::Optional<double> getIndentStart() override {
+        auto const any = getParaProp(u"ParaLeftMargin"_ustr);
+        if (!any) {
+            return {false, {}};
         }
         sal_Int32 hundredthMm = 0;
-        props->getPropertyValue(u"ParaLeftMargin"_ustr) >>= hundredthMm;
-        return hundredthMm * 72.0 / 2540.0;
+        *any >>= hundredthMm;
+        return {true, hundredthMm * 72.0 / 2540.0};
     }
 
-    OUString getListId() override {
+    css::beans::Optional<OUString> getListId() override {
+        auto const rulesAny = getParaProp(u"NumberingRules"_ustr);
+        if (!rulesAny) {
+            return {false, {}};
+        }
         cpo::uno::Reference<css::beans::XPropertySet> const props(
             content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"ListId"_ustr)) {
-            return {};
-        }
         OUString id;
-        props->getPropertyValue(u"ListId"_ustr) >>= id;
-        return id;
+        if (info.is() && info->hasPropertyByName(u"ListId"_ustr)) {
+            props->getPropertyValue(u"ListId"_ustr) >>= id;
+        }
+        return {true, id};
     }
 
     sal_Int32 getNestingLevel() override {
@@ -958,19 +1046,20 @@ public:
         return level;
     }
 
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override {
-        return siblingContent(content_, parent_, true);
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return maybe(siblingContent(content_, parent_, true));
     }
 
     sal_Int32 getNumChildren() override {
         return 1 + static_cast<sal_Int32>(enumerateInlineImages().size());
     }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
-
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
-        return siblingContent(content_, parent_, false);
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
     }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return maybe(siblingContent(content_, parent_, false)); }
 
     OUString SAL_CALL getText() override
     {
@@ -992,22 +1081,31 @@ public:
         return scriptinterop::ElementType_PARAGRAPH;
     }
 
-    bool isLeftToRight() override {
+    css::beans::Optional<bool> isLeftToRight() override {
         cpo::uno::Reference<css::beans::XPropertySet> const props(
             content_, cpo::uno::UNO_QUERY_THROW);
-        auto const info(props->getPropertySetInfo());
-        if (!info.is() || !info->hasPropertyByName(u"WritingMode"_ustr)) {
-            throw cpo::uno::RuntimeException(
-                u"isLeftToRight: the paragraph has no writing direction"_ustr);
-        }
         sal_Int16 mode = css::text::WritingMode2::LR_TB;
         props->getPropertyValue(u"WritingMode"_ustr) >>= mode;
-        return mode != css::text::WritingMode2::RL_TB;
+        return {true, mode != css::text::WritingMode2::RL_TB};
     }
 
     void removeFromParent() override { removeContent(content_); }
 
 private:
+    std::optional<cpo::uno::Any> getParaProp(OUString const & name) {
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
+        auto const info(props->getPropertySetInfo());
+        if (!info.is() || !info->hasPropertyByName(name)) {
+            return std::nullopt;
+        }
+        cpo::uno::Reference<css::beans::XPropertyState> const state(content_, cpo::uno::UNO_QUERY);
+        if (state.is() && state->getPropertyState(name) != css::beans::PropertyState_DIRECT_VALUE) {
+            return std::nullopt;
+        }
+        return props->getPropertyValue(name);
+    }
+
     std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateInlineImages() {
         std::vector<cpo::uno::Reference<css::text::XTextContent>> images;
         cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
@@ -1103,13 +1201,18 @@ public:
     sal_Int32 getColSpan() override { return 1; }
 
     // TODO: real sibling walk that steps through the containing row's cells:
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     sal_Int32 getRowSpan() override {
         cpo::uno::Reference<css::beans::XPropertySet> const props(text_, cpo::uno::UNO_QUERY);
@@ -1173,32 +1276,41 @@ public:
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    cpo::uno::Reference<scriptinterop::XTableCell> getCell(sal_Int32 index) override {
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XTableCell>> getCell(sal_Int32 index)
+        override
+    {
         cpo::uno::Reference<css::table::XCellRange> const range(
             table_, cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::text::XText> text;
         try {
             text.set(range->getCellByPosition(index, rowIndex_), cpo::uno::UNO_QUERY);
         } catch (css::lang::IndexOutOfBoundsException const &) {
-            return {};
+            return {false, {}};
         }
         if (!text.is()) {
             throw cpo::uno::RuntimeException(
                 "getCell: cell " + OUString::number(index) + " cannot hold text");
         }
-        return new TableCellImpl(this, text);
+        return {true,
+            cpo::uno::Reference<scriptinterop::XTableCell>(new TableCellImpl(this, text))};
     }
 
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
-        return getCell(index);
+        auto const cell = getCell(index);
+        return cell.IsPresent ? cell.Value : nullptr;
     }
 
     // TODO: real sibling walk that steps through the containing table's rows:
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE_ROW; }
 
@@ -1233,14 +1345,14 @@ public:
         auto const n = getNumCells();
         for (sal_Int32 i = 0; i != n; ++i) {
             auto const cell = getCell(i);
-            if (!cell.is()) {
+            if (!cell.IsPresent) {
                 throw cpo::uno::RuntimeException(
                     "getText: the row has no cell at position " + OUString::number(i));
             }
             if (!buf.isEmpty()) {
                 buf.append('\t');
             }
-            buf.append(cell->getText());
+            buf.append(cell.Value->getText());
         }
         return buf.makeStringAndClear();
     }
@@ -1296,42 +1408,47 @@ public:
         return rows->getCount();
     }
 
-    cpo::uno::Reference<scriptinterop::XTableRow> getRow(sal_Int32 index) override {
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XTableRow>> getRow(sal_Int32 index)
+        override
+    {
         if (index < 0 || index >= getNumRows()) {
-            return {};
+            return {false, {}};
         }
-        return new TableRowImpl(this, table_, index);
+        return {true,
+            cpo::uno::Reference<scriptinterop::XTableRow>(new TableRowImpl(this, table_, index))};
     }
 
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
-        return getRow(index);
+        auto const row = getRow(index);
+        return row.IsPresent ? row.Value : nullptr;
     }
 
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override {
-        return siblingContent(table_, parent_, true);
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return maybe(siblingContent(table_, parent_, true));
     }
 
     sal_Int32 getNumChildren() override { return getNumRows(); }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
-
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
-        return siblingContent(table_, parent_, false);
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
     }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return maybe(siblingContent(table_, parent_, false)); }
 
     OUString getText() override {
         OUStringBuffer buf;
         auto const n = getNumRows();
         for (sal_Int32 i = 0; i != n; ++i) {
             auto const row = getRow(i);
-            if (!row.is()) {
+            if (!row.IsPresent) {
                 throw cpo::uno::RuntimeException(
                     "getText: the table has no row " + OUString::number(i));
             }
             if (!buf.isEmpty()) {
                 buf.append('\n');
             }
-            buf.append(row->getText());
+            buf.append(row.Value->getText());
         }
         return buf.makeStringAndClear();
     }
@@ -1636,7 +1753,7 @@ public:
 
     sal_Int32 getSurroundingTextOffset() override { return getOffset(); }
 
-    cpo::uno::Reference<scriptinterop::XInlineImage> insertInlineImage(
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XInlineImage>> insertInlineImage(
         cpo::uno::Reference<scriptinterop::XBlob> const & blob) override
     {
         auto const c = viewCursor();
@@ -1647,7 +1764,7 @@ public:
         }
         auto const graphic = createGraphicFromBlob(model_, blob);
         host->insertTextContent(c->getStart(), graphic, false);
-        return new InlineImageImpl(nullptr, graphic);
+        return {true, new InlineImageImpl(nullptr, graphic)};
     }
 
     void insertText(OUString const & text) override {
@@ -1700,15 +1817,20 @@ public:
     }
 
     // TODO: a footnote section is not part of a sibling list in our model:
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
     sal_Int32 getNumChildren() override { return enumerateElements(text_, this).getLength(); }
 
     // TODO: no natural container for a footnote section in scriptinterop (GAS's Document analogue
     // would be that parent, but we do not model it):
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     OUString getText() override {
         if (!text_.is()) {
@@ -1743,20 +1865,28 @@ public:
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    cpo::uno::Reference<scriptinterop::XContainerElement> getFootnoteContents() override {
-        return new FootnoteSectionImpl(
-            cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW));
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XContainerElement>>
+        getFootnoteContents() override
+    {
+        cpo::uno::Reference<css::text::XText> const text(footnote_, cpo::uno::UNO_QUERY);
+        if (!text.is()) return {false, {}};
+        return {true, new FootnoteSectionImpl(text)};
     }
 
     // TODO: footnotes are surfaced via Document.getFootnotes rather than a sibling walk in our
     // model:
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
     // TODO: GAS's Footnote.getParent is the paragraph anchoring the footnote; scriptinterop does
     // not currently track that link:
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     OUString getText() override {
         return cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW)
@@ -1823,13 +1953,18 @@ public:
         return enumerateElements(text_, this);
     }
 
-    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
-    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return {false, {}};
+    }
 
-    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
 
     OUString getText() override {
         if (!text_.is()) {
@@ -1929,7 +2064,8 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
-    cpo::uno::Reference<scriptinterop::XSelection> SAL_CALL getSelection() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSelection>> SAL_CALL getSelection()
+        override
     {
         cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
@@ -1937,14 +2073,14 @@ public:
         cpo::uno::Reference<css::container::XIndexAccess> ranges;
         sup->getSelection() >>= ranges;
         if (!ranges.is()) {
-            return {};
+            return {false, {}};
         }
         bool anyContent = false;
         auto const n = ranges->getCount();
         for (sal_Int32 i = 0; i != n; ++i) {
             cpo::uno::Reference<css::text::XTextRange> range;
             if (!(ranges->getByIndex(i) >>= range) || !range.is()) {
-                return {};
+                return {false, {}};
             }
             if (!range->getString().isEmpty()) {
                 anyContent = true;
@@ -1952,9 +2088,9 @@ public:
             }
         }
         if (!anyContent) {
-            return nullptr;
+            return {false, {}};
         }
-        return new SelectionImpl(ranges);
+        return {true, cpo::uno::Reference<scriptinterop::XSelection>(new SelectionImpl(ranges))};
     }
 
     cpo::uno::Reference<scriptinterop::XBody> getBody() override
@@ -1963,9 +2099,9 @@ public:
         return new BodyImpl(model_, doc->getText());
     }
 
-    cpo::uno::Reference<scriptinterop::XCursor> getCursor() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XCursor>> getCursor() override
     {
-        return new CursorImpl(model_);
+        return {true, cpo::uno::Reference<scriptinterop::XCursor>(new CursorImpl(model_))};
     }
 
     cpo::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {

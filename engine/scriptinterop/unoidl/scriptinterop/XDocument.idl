@@ -13,11 +13,11 @@ module scriptinterop {
 
 interface XDocument : XBase
 {
-    XSelection getSelection();
+    com::sun::star::beans::Optional<XSelection> getSelection();
 
     XBody getBody();
 
-    XCursor getCursor();
+    com::sun::star::beans::Optional<XCursor> getCursor();
 
     sequence<XFootnote> getFootnotes();
 

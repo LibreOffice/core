@@ -18,23 +18,23 @@ interface XText: XElement {
 
     XText editAsText();
 
-    string getFontFamily([in] long offset);
+    com::sun::star::beans::Optional<string> getFontFamily([in] long offset);
 
-    string getLinkUrl([in] long offset);
+    com::sun::star::beans::Optional<string> getLinkUrl([in] long offset);
 
-    TextAlignment getTextAlignment([in] long offset);
+    com::sun::star::beans::Optional<TextAlignment> getTextAlignment([in] long offset);
 
     sequence<long> getTextAttributeIndices();
 
     XText insertText([in] long offset, [in] string text);
 
-    boolean isBold([in] long offset);
+    com::sun::star::beans::Optional<boolean> isBold([in] long offset);
 
-    boolean isItalic([in] long offset);
+    com::sun::star::beans::Optional<boolean> isItalic([in] long offset);
 
-    boolean isStrikethrough([in] long offset);
+    com::sun::star::beans::Optional<boolean> isStrikethrough([in] long offset);
 
-    boolean isUnderline([in] long offset);
+    com::sun::star::beans::Optional<boolean> isUnderline([in] long offset);
 
     [overload setBold] XText setBold([in] boolean value);
 

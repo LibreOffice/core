@@ -12,9 +12,9 @@
 module scriptinterop {
 
 interface XInlineImage: XElement {
-    string getAltDescription();
+    com::sun::star::beans::Optional<string> getAltDescription();
 
-    string getAltTitle();
+    com::sun::star::beans::Optional<string> getAltTitle();
 
     long getHeight();
 

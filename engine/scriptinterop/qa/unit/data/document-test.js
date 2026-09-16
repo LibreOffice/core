@@ -14,11 +14,6 @@ if (!globalThis.cool) {
     console.assert = console.assert || (cond => { if (!cond) throw new Error('failed: ' + cond); });
 }
 
-//TODO: GAS appears to return null when text properties are not set explicitly:
-function checkEqual(actual, expected) {
-    return actual === expected || (!globalThis.cool && actual === null);
-}
-
 function documentTest() {
     const body = DocumentApp.getActiveDocument().getBody();
     console.assert(body.getType() === DocumentApp.ElementType.BODY_SECTION);
@@ -37,8 +32,8 @@ function documentTest() {
     console.assert(p0.getChild(0).getText() === 'BoldItalicPlain');
     console.assert(p0.getChild(0).getParent().getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(p0.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
-    console.assert(checkEqual(p0.getAlignment(), DocumentApp.HorizontalAlignment.LEFT));
-    console.assert(checkEqual(p0.getIndentStart(), 0));
+    console.assert(p0.getAlignment() === null);
+    console.assert(p0.getIndentStart() === null);
     console.assert(p0.getPreviousSibling() === null);
     console.assert(p0.getNextSibling().getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(p0.getNextSibling().getText() === 'UnderStrikeSuperPlain');
@@ -47,13 +42,13 @@ function documentTest() {
     console.assert(t0.getText() === 'BoldItalicPlain');
     console.assert(t0.getParent().getType() === DocumentApp.ElementType.BODY_SECTION);
     console.assert(t0.isBold(0) === true);
-    console.assert(checkEqual(t0.isBold(4), false));
-    console.assert(checkEqual(t0.isItalic(0), false));
+    console.assert(t0.isBold(4) === null);
+    console.assert(t0.isItalic(0) === null);
     console.assert(t0.isItalic(4) === true);
-    console.assert(checkEqual(t0.isUnderline(0), false));
-    console.assert(checkEqual(t0.isStrikethrough(0), false));
-    console.assert(checkEqual(t0.getTextAlignment(0), DocumentApp.TextAlignment.NORMAL));
-    console.assert(checkEqual(t0.getLinkUrl(0), ''));
+    console.assert(t0.isUnderline(0) === null);
+    console.assert(t0.isStrikethrough(0) === null);
+    console.assert(t0.getTextAlignment(0) === null);
+    console.assert(t0.getLinkUrl(0) === null);
     console.assert(t0.getFontFamily(0).length > 0);
     const idx = t0.getTextAttributeIndices();
     console.assert(idx.length >= 1);
@@ -63,16 +58,16 @@ function documentTest() {
     const t1 = body.getChild(1).editAsText();
     console.assert(t1.getText() === 'UnderStrikeSuperPlain');
     console.assert(t1.isUnderline(0) === true);
-    console.assert(checkEqual(t1.isUnderline(5), false));
+    console.assert(t1.isUnderline(5) === null);
     console.assert(t1.isStrikethrough(5) === true);
-    console.assert(checkEqual(t1.isStrikethrough(11), false));
+    console.assert(t1.isStrikethrough(11) === null);
     console.assert(t1.getTextAlignment(11) === DocumentApp.TextAlignment.SUPERSCRIPT);
-    console.assert(checkEqual(t1.getTextAlignment(16), DocumentApp.TextAlignment.NORMAL));
+    console.assert(t1.getTextAlignment(16) === null);
 
     // Paragraph 2 concatenates a plain "Third" run and a hyperlinked "Link" run:
     const t2 = body.getChild(2).editAsText();
     console.assert(t2.getText() === 'ThirdLink');
-    console.assert(checkEqual(t2.getLinkUrl(0), ''));
+    console.assert(t2.getLinkUrl(0) === null);
     console.assert(t2.getLinkUrl(5) === 'https://example.com');
 
     // Child 3 is a 2x2 table with cells A1, B1, A2, B2:
@@ -202,8 +197,8 @@ function documentTest() {
     console.assert(image !== null);
     console.assert(image.getWidth() === 100);
     console.assert(image.getHeight() === 60);
-    console.assert(checkEqual(image.getAltTitle(), ''));
-    console.assert(checkEqual(image.getAltDescription(), ''));
+    console.assert(image.getAltTitle() === null);
+    console.assert(image.getAltDescription() === null);
 
     // Insert a 20x10 red PNG at the cursor, then verify the setters chain and round-trip:
     const pngHex

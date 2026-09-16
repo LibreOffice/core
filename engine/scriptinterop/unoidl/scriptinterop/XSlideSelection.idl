@@ -13,7 +13,7 @@ module scriptinterop {
 
 interface XSlideSelection : XBase
 {
-    XPage getCurrentPage();
+    com::sun::star::beans::Optional<XPage> getCurrentPage();
 };
 
 };

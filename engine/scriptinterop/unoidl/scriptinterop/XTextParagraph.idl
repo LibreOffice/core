@@ -13,7 +13,7 @@ module scriptinterop {
 
 interface XTextParagraph : XBase
 {
-    XTextRange getRange();
+    com::sun::star::beans::Optional<XTextRange> getRange();
 };
 
 };

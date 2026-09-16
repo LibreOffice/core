@@ -17,19 +17,19 @@ interface XParagraph: XContainerElement
 
     XText editAsText();
 
-    HorizontalAlignment getAlignment();
+    com::sun::star::beans::Optional<HorizontalAlignment> getAlignment();
 
-    GlyphType getGlyphType();
+    com::sun::star::beans::Optional<GlyphType> getGlyphType();
 
-    ParagraphHeading getHeading();
+    com::sun::star::beans::Optional<ParagraphHeading> getHeading();
 
-    double getIndentStart();
+    com::sun::star::beans::Optional<double> getIndentStart();
 
-    string getListId();
+    com::sun::star::beans::Optional<string> getListId();
 
     long getNestingLevel();
 
-    boolean isLeftToRight();
+    com::sun::star::beans::Optional<boolean> isLeftToRight();
 };
 
 };
