@@ -111,6 +111,53 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
     CPPUNIT_ASSERT_EQUAL("H1"_ostr, aLinkTypes[2]);
     CPPUNIT_ASSERT_EQUAL("Standard"_ostr, aLinkTypes[3]);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
+{
+    createSwDoc("footnote-tag.fodt");
+
+    // the type of the one element a footnote frame opens
+    const auto aFootnoteType = [](vcl::filter::PDFDocument& rDocument) -> OString {
+        for (const auto& rDocElement : rDocument.GetElements())
+        {
+            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+            if (!pObject)
+                continue;
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+            if (pType && (pType->GetValue() == "Note" || pType->GetValue() == "FENote"))
+                return pType->GetValue();
+        }
+        return OString();
+    };
+
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(
+             u"FilterData"_ustr,
+             cpo::uno::Sequence{
+                 comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                 comphelper::makePropertyValue(u"SelectPdfVersion"_ustr, sal_Int32(20)) }) });
+
+    vcl::filter::PDFDocument aPDF20;
+    CPPUNIT_ASSERT(aPDF20.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // Without the fix this was Note, which ISO 14289-2 8.2.5.14 takes only where a role map
+    // sends it to the PDF 2.0 namespace
+    CPPUNIT_ASSERT_EQUAL("FENote"_ostr, aFootnoteType(aPDF20));
+
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(
+             u"FilterData"_ustr,
+             cpo::uno::Sequence{
+                 comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) }) });
+
+    vcl::filter::PDFDocument aPDF17;
+    maTempFile.CloseStream();
+    CPPUNIT_ASSERT(aPDF17.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // the only footnote type ISO 32000-1 has, FENote being a PDF 2.0 addition
+    CPPUNIT_ASSERT_EQUAL("Note"_ostr, aFootnoteType(aPDF17));
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

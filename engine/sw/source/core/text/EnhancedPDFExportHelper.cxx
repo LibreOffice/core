@@ -864,7 +864,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 bWritingMode = true;
                 break;
 
-            case vcl::pdf::StructElement::Note:
+            case vcl::pdf::StructElement::FENote:
                 bPlacement = true;
                 break;
 
@@ -1541,12 +1541,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
         case SwFrameType::Footnote:
 
-            // Footnote frame: Note
+            // Footnote frame: FENote, which the writer names Note below PDF 2.0
 
-            // Note: vcl::pdf::PDFWriter::Note is actually a ILSE. Nevertheless
-            // we treat it like a grouping element!
-            nPDFType = sal_uInt16(vcl::pdf::StructElement::Note);
-            aPDFType = u"Note"_ustr;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::FENote);
             break;
 
         case SwFrameType::Section :

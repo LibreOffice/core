@@ -171,6 +171,7 @@ enum class StructElement
     List, ListItem, LILabel, LIBody,
     Table, TableRow, TableHeader, TableData,
     Title, // PDF 2.0
+    FENote, // PDF 2.0, which has it in place of Note
 
     // Inline level elements
     Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
