@@ -451,9 +451,8 @@ void ChartController::attachFrame(
                     xLayoutManager->unlock();
 
                     // add as listener to get notified when
-                    m_xLayoutManagerEventBroadcaster.set( xLayoutManager, uno::UNO_QUERY );
-                    if( m_xLayoutManagerEventBroadcaster.is())
-                        m_xLayoutManagerEventBroadcaster->addLayoutManagerEventListener( this );
+                    m_xLayoutManagerEventBroadcaster = xLayoutManager;
+                    m_xLayoutManagerEventBroadcaster->addLayoutManagerEventListener( this );
                 }
             }
             catch( const cpo::uno::Exception & )

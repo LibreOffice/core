@@ -43,7 +43,7 @@
     </p>
 */
 
-service LayoutManager : XLayoutManager2;
+service LayoutManager : XLayoutManager;
 
 }; }; }; };
 

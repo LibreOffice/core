@@ -355,7 +355,7 @@ private:
     void impl_checkMenuCloser            (                                                                        );
     static void impl_setCloser           ( const cpo::uno::Reference< css::frame::XFrame2 >& xFrame , bool bState );
 
-    void disableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager);
+    void disableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager >& xLayoutManager);
 
     void checkDisposed() {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -409,7 +409,7 @@ private:
     /// The container window has WindowExtendedStyle::DocHidden set.
     bool                                                                    m_bDocHidden = false;
     /// Is used to layout the child windows of the frame.
-    cpo::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager >                       m_xLayoutManager;
     rtl::Reference< DispatchInformationProvider >                           m_xDispatchInfoHelper;
     rtl::Reference< TitleHelper >                                           m_xTitleHelper;
 
@@ -713,7 +713,7 @@ void XFrameImpl::setActiveFrame( const cpo::uno::Reference< css::frame::XFrame >
 /*-****************************************************************************************************
    initialize new created layout manager
 **/
-void lcl_enableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager,
+void lcl_enableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager >& xLayoutManager,
                              const cpo::uno::Reference< css::frame::XFrame >&         xFrame        )
 {
     // Provide container window to our layout manager implementation
@@ -728,7 +728,7 @@ void lcl_enableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManag
 /*-****************************************************************************************************
    deinitialize layout manager
 **/
-void XFrameImpl::disableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager)
+void XFrameImpl::disableLayoutManager(const cpo::uno::Reference< css::frame::XLayoutManager >& xLayoutManager)
 {
     removeFrameActionListener(xLayoutManager);
     xLayoutManager->setDockingAreaAcceptor(cpo::uno::Reference< css::ui::XDockingAreaAcceptor >());
@@ -781,7 +781,7 @@ void XFrameImpl::initialize( const cpo::uno::Reference< css::awt::XWindow >& xWi
             = static_cast<bool>(pWindow->GetExtendedStyle() & WindowExtendedStyle::DocHidden);
     }
 
-    cpo::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager >  xLayoutManager = m_xLayoutManager;
 
     // Release lock, because we call some impl methods, which are threadsafe by themselves.
     // If we hold this lock - we will produce our own deadlock!
@@ -1836,8 +1836,8 @@ void XFrameImpl::setLayoutManager(const cpo::uno::Reference<cpo::uno::XInterface
     checkDisposed();
     SolarMutexGuard g;
 
-    cpo::uno::Reference<css::frame::XLayoutManager2> xOldLayoutManager = m_xLayoutManager;
-    cpo::uno::Reference<css::frame::XLayoutManager2> xNewLayoutManager(p1, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XLayoutManager> xOldLayoutManager = m_xLayoutManager;
+    cpo::uno::Reference<css::frame::XLayoutManager> xNewLayoutManager(p1, cpo::uno::UNO_QUERY);
 
     if (xOldLayoutManager != xNewLayoutManager)
     {
@@ -2084,7 +2084,7 @@ void XFrameImpl::disposing()
     // We will die, die and die...
     implts_stopWindowListening();
 
-    cpo::uno::Reference<css::frame::XLayoutManager2> layoutMgr;
+    cpo::uno::Reference<css::frame::XLayoutManager> layoutMgr;
     {
         SolarMutexGuard g;
         layoutMgr = m_xLayoutManager;
@@ -2737,8 +2737,8 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
 
         case FramePropHandle::LayoutManager :
                 {
-                    cpo::uno::Reference< css::frame::XLayoutManager2 > xOldLayoutManager = m_xLayoutManager;
-                    cpo::uno::Reference< css::frame::XLayoutManager2 > xNewLayoutManager;
+                    cpo::uno::Reference< css::frame::XLayoutManager > xOldLayoutManager = m_xLayoutManager;
+                    cpo::uno::Reference< css::frame::XLayoutManager > xNewLayoutManager;
                     aValue >>= xNewLayoutManager;
 
                     if (xOldLayoutManager != xNewLayoutManager)

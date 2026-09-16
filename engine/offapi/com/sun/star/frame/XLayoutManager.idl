@@ -51,7 +51,7 @@ module com { module sun { module star { module frame {
     </p>
 */
 
-interface XLayoutManager : cpo::uno::XInterface
+interface XLayoutManager
 {
     /** attaches a com::sun::star::frame::XFrame to a layout manager.
 
@@ -456,6 +456,40 @@ interface XLayoutManager : cpo::uno::XInterface
     */
     boolean isVisible();
 
+    /** notification interface to receive status information about the state
+        of the connected frame.
+
+        <p>
+        E.g., you can receive events of instantiation/destruction and
+        activation/deactivation of a frame.
+        </p>
+
+        @see XFrame::addFrameActionListener()
+        @see XFrame::removeFrameActionListener()
+    */
+    interface ::com::sun::star::frame::XFrameActionListener;
+
+    /** notification interface to receive change messages of user interface
+        elements which are part of the layout manager.
+
+        <p>
+        E.g., you can receive events of insertion/replacing and
+        removing of settings data of user interface elements.
+        </p>
+
+        @see com::sun::star::ui::XUIConfiguration
+    */
+    interface ::com::sun::star::ui::XUIConfigurationListener;
+
+    /** provides functions to merge menus for inplace editing of components
+        inside OpenOffice.org.
+    */
+    interface ::com::sun::star::frame::XMenuBarMergingAcceptor;
+
+    /** registers listeners that want to receive layout manager
+        events.
+    */
+    interface ::com::sun::star::frame::XLayoutManagerEventBroadcaster;
 };
 
 }; }; }; };

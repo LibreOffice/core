@@ -23,7 +23,7 @@
 #include <uielement/uielement.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XLayoutManager2.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -52,7 +52,7 @@ namespace framework
         class InfoHelperBuilder;
     }
     typedef ::cppu::WeakImplHelper <   css::lang::XServiceInfo
-                                    ,   css::frame::XLayoutManager2
+                                    ,   css::frame::XLayoutManager
                                     ,   css::awt::XWindowListener
                                     >   LayoutManager_Base;
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;

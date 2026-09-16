@@ -2457,7 +2457,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XInfobarProvider \
 	XInterceptorInfo \
 	XLayoutManager \
-	XLayoutManager2 \
 	XLayoutManagerEventBroadcaster \
 	XLayoutManagerListener \
 	XLoadEventListener \

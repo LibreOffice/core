@@ -21,7 +21,7 @@
 #include <services.h>
 #include <properties.h>
 
-#include <com/sun/star/frame/XLayoutManager2.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -227,7 +227,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
     if ( m_xPopupCtrlQuery.is() )
         return;
 
-    cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     cpo::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
 
     if ( !xFrame.is() )

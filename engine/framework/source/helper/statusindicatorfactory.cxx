@@ -26,7 +26,7 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XLayoutManager2.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -341,7 +341,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
     if (xPropSet.is())
     {
-        cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+        cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -419,7 +419,7 @@ void StatusIndicatorFactory::impl_createProgress()
         cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+            cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
             if (xLayoutManager.is())
             {
@@ -460,7 +460,7 @@ void StatusIndicatorFactory::impl_showProgress()
     cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
     if (xPropSet.is())
     {
-        cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+        cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -498,7 +498,7 @@ void StatusIndicatorFactory::impl_hideProgress()
         cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+            cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
             if (xLayoutManager.is())
                 xLayoutManager->hideElement( PROGRESS_RESOURCE );
