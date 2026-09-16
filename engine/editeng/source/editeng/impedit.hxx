@@ -360,7 +360,8 @@ protected:
     void ShowDDCursor( const tools::Rectangle& rRect );
     void HideDDCursor();
 
-    void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL);
+    void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon& rPolyPoly, bool bLOKCalcRTL);
+    static void ImplInvertSelection(OutputDevice& rTarget, const vcl::Region& rRegion);
     tools::Rectangle ImplGetEditCursor(EditPaM const& rPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:

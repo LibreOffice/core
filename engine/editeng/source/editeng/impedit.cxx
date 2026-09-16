@@ -515,8 +515,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             mpOutputWindow->GetCursor()->Hide();
     }
 
-    if (comphelper::COKit::isActive() || pRegion)
-        pPolyPoly = tools::PolyPolygon();
+    pPolyPoly = tools::PolyPolygon();
 
     DBG_ASSERT(!getEditEngine().IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!");
     aTmpSel.Adjust(getEditEngine().GetEditDoc());
@@ -619,7 +618,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     aTmpRect.SetRight(aFieldRows.nRight);
                 aTmpRect.Move(aLineOffset.Width(), 0);
                 ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                      pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
+                                      *pPolyPoly, bLOKCalcRTL);
             }
             else
             {
@@ -643,7 +642,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     aTmpRect.Move(aLineOffset.Width(), 0);
 
                     ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                          pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
+                                          *pPolyPoly, bLOKCalcRTL);
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }
@@ -661,7 +660,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                                   + aLineOffset.Width());
                 aRowRect.Move(0, nRow * nRowHeight);
                 ImplDrawHighlightRect(rTarget, aRowRect.TopLeft(), aRowRect.BottomRight(),
-                                      pPolyPoly ? &*pPolyPoly : nullptr, bLOKCalcRTL);
+                                      *pPolyPoly, bLOKCalcRTL);
             }
         }
         return ImpEditEngine::CallbackResult::Continue;
@@ -688,6 +687,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     }
     else
     {
+        ImplInvertSelection(rTarget, vcl::Region(*pPolyPoly));
+        pPolyPoly.reset();
+
         if (mpOutputWindow && mpOutputWindow->GetCursor())
             mpOutputWindow->GetCursor()->Show();
 
@@ -705,12 +707,12 @@ void ImpEditView::GetSelectionRectangles(EditSelection aTmpSel, std::vector<tool
     aRegion.GetRegionRectangles(rLogicRects);
 }
 
-void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL )
+void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon& rPolyPoly, bool bLOKCalcRTL )
 {
     if ( rDocPosTopLeft.X() == rDocPosBottomRight.X() )
         return;
 
-    if (mpKitSpecialPositioning && pPolyPoly)
+    if (mpKitSpecialPositioning)
     {
         MapUnit eDevUnit = rTarget.GetMapMode().GetMapUnit();
         tools::Rectangle aSelRect(rDocPosTopLeft, rDocPosBottomRight);
@@ -733,7 +735,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
         aTmpPoly[1] = aSelRect.TopRight();
         aTmpPoly[2] = aSelRect.BottomRight();
         aTmpPoly[3] = aSelRect.BottomLeft();
-        pPolyPoly->Insert(aTmpPoly);
+        rPolyPoly.Insert(aTmpPoly);
         return;
     }
 
@@ -754,32 +756,35 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
     }
 
     tools::Rectangle aRect( aPnt1, aPnt2 );
-    if ( pPolyPoly )
-    {
-        tools::Polygon aTmpPoly( 4 );
-        aTmpPoly[0] = aRect.TopLeft();
-        aTmpPoly[1] = aRect.TopRight();
-        aTmpPoly[2] = aRect.BottomRight();
-        aTmpPoly[3] = aRect.BottomLeft();
-        pPolyPoly->Insert( aTmpPoly );
-    }
-    else
-    {
-        vcl::Window* pWindow = rTarget.GetOwnerWindow();
+    tools::Polygon aTmpPoly( 4 );
+    aTmpPoly[0] = aRect.TopLeft();
+    aTmpPoly[1] = aRect.TopRight();
+    aTmpPoly[2] = aRect.BottomRight();
+    aTmpPoly[3] = aRect.BottomLeft();
+    rPolyPoly.Insert( aTmpPoly );
+}
 
-        if (pWindow)
-        {
-            pWindow->GetOutDev()->Invert( aRect );
-        }
-        else
-        {
-            auto popIt = rTarget.ScopedPush(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR|vcl::PushFlags::RASTEROP);
-            rTarget.SetLineColor();
-            rTarget.SetFillColor(COL_BLACK);
-            rTarget.SetRasterOp(RasterOp::Invert);
-            rTarget.DrawRect(aRect);
-        }
+// A region's rectangles never overlap, so each one inverts its area once.
+void ImpEditView::ImplInvertSelection(OutputDevice& rTarget, const vcl::Region& rRegion)
+{
+    RectangleVector aRects;
+    rRegion.GetRegionRectangles(aRects);
+    if (aRects.empty())
+        return;
+
+    if (vcl::Window* pWindow = rTarget.GetOwnerWindow())
+    {
+        for (const tools::Rectangle& rRect : aRects)
+            pWindow->GetOutDev()->Invert(rRect);
+        return;
     }
+
+    auto popIt = rTarget.ScopedPush(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR|vcl::PushFlags::RASTEROP);
+    rTarget.SetLineColor();
+    rTarget.SetFillColor(COL_BLACK);
+    rTarget.SetRasterOp(RasterOp::Invert);
+    for (const tools::Rectangle& rRect : aRects)
+        rTarget.DrawRect(rRect);
 }
 
 
