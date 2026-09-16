@@ -19,7 +19,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/propmultiplex.hxx>
-#include <osl/diagnose.h>
 
 
 namespace comphelper
@@ -57,9 +56,6 @@ void OPropertyChangeListener::disposeAdapter()
     }
     if ( xTmpAdapter.is() )
         xTmpAdapter->dispose();
-
-    // will automatically set a new adapter
-    OSL_ENSURE( !m_xAdapter.is(), "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
 }
 
 
