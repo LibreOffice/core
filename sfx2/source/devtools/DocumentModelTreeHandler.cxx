@@ -702,7 +702,7 @@ public:
 
 DocumentModelTreeHandler::DocumentModelTreeHandler(
     std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-    css::uno::Reference<css::uno::XInterface> xDocument)
+    css::uno::Reference<css::frame::XModel3> xDocument)
     : mpDocumentModelTree(pDocumentModelTree)
     , mxDocument(std::move(xDocument))
 {

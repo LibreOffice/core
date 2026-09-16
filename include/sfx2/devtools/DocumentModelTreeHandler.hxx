@@ -12,6 +12,7 @@
 
 #include <tools/link.hxx>
 
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -33,7 +34,7 @@ class DocumentModelTreeHandler
 {
 private:
     std::unique_ptr<weld::TreeView>& mpDocumentModelTree;
-    css::uno::Reference<css::uno::XInterface> mxDocument;
+    css::uno::Reference<css::frame::XModel3> mxDocument;
 
     // Clears all children of a tree node, where the parent is
     // identified by the input tree iter.
@@ -44,7 +45,7 @@ private:
 
 public:
     DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-                             css::uno::Reference<css::uno::XInterface> xDocument);
+                             css::uno::Reference<css::frame::XModel3> xDocument);
 
     DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 
