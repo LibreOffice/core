@@ -30,6 +30,7 @@
 #include "paralist.hxx"
 #include <editeng/outlobj.hxx>
 #include <outleeng.hxx>
+#include <ParagraphPortionList.hxx>
 #include "outlundo.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
@@ -1480,6 +1481,10 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         Size aBulletSize( aBulletArea.GetSize() );
         Point aBulletDocPos( aBulletArea.TopLeft() );
         aBulletDocPos.AdjustY(pEditEngine->GetDocPosTopLeft( nPara ).Y() );
+        // The paragraph starts above its first line by the space that it keeps above itself.
+        const ParaPortion* pParaPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
+        if ( pParaPortion )
+            aBulletDocPos.AdjustY( pParaPortion->GetFirstLineOffset() );
         Point aBulletPos( aBulletDocPos );
 
         if ( IsVertical() )
