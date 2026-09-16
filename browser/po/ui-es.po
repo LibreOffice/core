@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-16 07:52+0000\n"
+"PO-Revision-Date: 2026-09-17 03:07+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fito@libreoffice.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
@@ -1386,7 +1386,7 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Duplicar estilo"
 
 #: src/canvas/sections/CommentListSection.ts:2029
 #: src/canvas/sections/CommentListSection.ts:2042
@@ -1535,7 +1535,7 @@ msgstr "Versión actual"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n más"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -2374,7 +2374,7 @@ msgstr "No se pudo analizar el contenido de la selección"
 
 #: src/control/Control.AIChatSidebar.ts:3218
 msgid "Design (optional):"
-msgstr ""
+msgstr "Diseño (opcional):"
 
 #: src/control/Control.AIChatSidebar.ts:3235
 msgid "No design"
@@ -2412,7 +2412,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3457
 msgid "Slide title"
-msgstr ""
+msgstr "Título de diapositiva"
 
 #: src/control/Control.AIChatSidebar.ts:3469
 msgid "What this slide should cover"
@@ -2420,7 +2420,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3494
 msgid "Add slide"
-msgstr ""
+msgstr "Añadir diapositiva"
 
 #: src/control/Control.AIChatSidebar.ts:3532
 msgid "Outline approved - building %1 slides."
@@ -2928,7 +2928,7 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Editar cuenta"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
@@ -2936,7 +2936,7 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL del servidor"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
@@ -2956,19 +2956,19 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Guardar cambios"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Añadir cuenta"
 
 #: src/control/backstage/CloudDialogs.tsx:183
 msgid "Remove account"
-msgstr ""
+msgstr "Quitar cuenta"
 
 #: src/control/backstage/CloudDialogs.tsx:185
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Desconecta esta nube"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
@@ -2980,15 +2980,15 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:241
 msgid "Open Files"
-msgstr ""
+msgstr "Abrir archivos"
 
 #: src/control/backstage/CloudDialogs.tsx:267
 msgid "Remove this account?"
-msgstr ""
+msgstr "¿Quiere quitar esta cuenta?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Se desconectará de esta cuenta en la nube."
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
@@ -2997,11 +2997,11 @@ msgstr ""
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Esta vista para móviles no es accesible del todo."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Declaración sobre la accesibilidad"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:115
@@ -4252,7 +4252,7 @@ msgstr ""
 
 #: src/control/Control.NavigatorPanel.ts:629
 msgid "Find and Replace"
-msgstr ""
+msgstr "Buscar y reemplazar"
 
 #: src/control/Control.NavigatorPanel.ts:638
 #: src/control/jsdialog/Widget.Combobox.js:497
@@ -4537,7 +4537,7 @@ msgstr "Imagen (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:781
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Cambios no guardados."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -5467,11 +5467,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Ocultar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Mostrar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
@@ -6219,7 +6219,7 @@ msgstr ""
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
-msgstr ""
+msgstr "Editar localmente"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
@@ -6227,7 +6227,7 @@ msgstr ""
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Edición colaborativa"
 
 #: src/control/Permission.js:438 src/control/Permission.js:470
 msgid "Edit together in real-time"
@@ -6651,7 +6651,7 @@ msgstr "Muy amplio"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Copiar Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6685,15 +6685,15 @@ msgstr "Reglas superior/inferior..."
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Escala de colores"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Barra de datos"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Conjunto de iconos"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
