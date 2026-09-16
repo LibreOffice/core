@@ -56,9 +56,12 @@ public:
      * @param nRow2 bottom row position of the changed cell span.
      * @param rCells all formula cells that need to be notified are put into
      *               this container.
+     *
+     * @return true when the whole group went into rCells, so a further changed
+     *         span cannot add anything to it.
      */
-    void collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
-    void collectFormulaCells( SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
+    bool collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
+    bool collectFormulaCells( SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
 
     const ScFormulaCell* getTopCell() const;
 

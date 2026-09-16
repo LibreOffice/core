@@ -2770,6 +2770,12 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub, bool bKeepTo
     sc::TableColumnBlockPositionSet blockPos( GetDoc(), nTab ); // cache mdds access
     ScQueryEvaluator queryEvaluator(GetDoc(), *this, aParam);
 
+    // The loop below calls DBShowRows() once for each block of consecutive rows
+    // that share a filter result, and each call ended a bulk broadcast of its
+    // own, so every formula group area was collected again for every block.
+    // Coalesce them into one for the whole query.
+    ScBulkBroadcast aBulkBroadcast( rDocument.GetBASM(), SfxHintId::ScDataChanged);
+
     SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
     {

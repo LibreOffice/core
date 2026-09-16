@@ -42,6 +42,7 @@ class CollectCellAction : public sc::ColumnSpanSet::ColumnAction
     const FormulaGroupAreaListener& mrAreaListener;
     ScAddress maPos;
     std::vector<ScFormulaCell*> maCells;
+    bool mbWholeGroup = false;
 
 public:
     explicit CollectCellAction( const FormulaGroupAreaListener& rAreaListener ) :
@@ -55,10 +56,11 @@ public:
 
     virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) override
     {
-        if (!bVal)
+        if (!bVal || mbWholeGroup)
             return;
 
-        mrAreaListener.collectFormulaCells(maPos.Tab(), maPos.Col(), nRow1, nRow2, maCells);
+        mbWholeGroup = mrAreaListener.collectFormulaCells(
+            maPos.Tab(), maPos.Col(), nRow1, nRow2, maCells);
     };
 
     void swapCells( std::vector<ScFormulaCell*>& rCells )
@@ -164,23 +166,23 @@ void FormulaGroupAreaListener::notifyBulkChange( const BulkDataHint& rHint )
     std::for_each(aCells.begin(), aCells.end(), Notifier(aHint));
 }
 
-void FormulaGroupAreaListener::collectFormulaCells(
+bool FormulaGroupAreaListener::collectFormulaCells(
     SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
 {
     PutInOrder(nRow1, nRow2);
 
     if (nTab < maRange.aStart.Tab() || maRange.aEnd.Tab() < nTab)
         // Wrong sheet.
-        return;
+        return false;
 
     if (nCol < maRange.aStart.Col() || maRange.aEnd.Col() < nCol)
         // Outside the column range.
-        return;
+        return false;
 
-    collectFormulaCells(nRow1, nRow2, rCells);
+    return collectFormulaCells(nRow1, nRow2, rCells);
 }
 
-void FormulaGroupAreaListener::collectFormulaCells(
+bool FormulaGroupAreaListener::collectFormulaCells(
     SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
 {
     SAL_INFO( "sc.core.grouparealistener",
@@ -194,7 +196,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
     if (!pp)
     {
         SAL_WARN("sc.core", "GetFormulaCellBlockAddress not found");
-        return;
+        return false;
     }
 
     /* FIXME: this is tdf#90717, when deleting a row fixed size area listeners
@@ -216,7 +218,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
             if (!pp)
             {
                 SAL_WARN("sc.core", "GetFormulaCellBlockAddress not found");
-                return;
+                return false;
             }
         }
     }
@@ -262,9 +264,12 @@ void FormulaGroupAreaListener::collectFormulaCells(
             SCROW nRefRow1 = maRange.aStart.Row();
             SCROW nRefRow2 = maRange.aEnd.Row();
             if (nRow2 < nRefRow1 || nRefRow2 < nRow1)
-                return;
+                return false;
 
             rCells.insert(rCells.end(), pp, ppEnd);
+            // An absolute range takes the whole group whenever a span overlaps
+            // it, so every later span would only append the same cells again.
+            return true;
         }
         else
         {
@@ -273,20 +278,23 @@ void FormulaGroupAreaListener::collectFormulaCells(
             SCROW nRefRow2 = maRange.aEnd.Row();
             SCROW nMaxRefRow = nRefRow2 + mnGroupLen - 1;
             if (nRow2 < nRefRow1 || nMaxRefRow < nRow1)
-                return;
+                return false;
 
+            bool bFromGroupStart = true;
             if (nRefRow2 < nRow1)
             {
                 // Skip ahead to the first hit.
                 SCROW nSkip = nRow1 - nRefRow2;
                 pp += nSkip;
                 nRefRow2 += nSkip;
+                bFromGroupStart = (nSkip == 0);
             }
 
             assert(nRow1 <= nRefRow2);
 
             // Notify the first hit cell and all subsequent ones.
             rCells.insert(rCells.end(), pp, ppEnd);
+            return bFromGroupStart;
         }
     }
     else if (mbEndFixed)
@@ -296,10 +304,11 @@ void FormulaGroupAreaListener::collectFormulaCells(
         SCROW nRefRow2 = maRange.aEnd.Row();
 
         if (nRow2 < nRefRow1 || nRefRow2 < nRow1)
-            return;
+            return false;
 
         for (; pp != ppEnd && nRefRow1 <= nRefRow2; ++pp, ++nRefRow1)
             rCells.push_back(*pp);
+        return false;
     }
     else
     {
@@ -308,7 +317,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
         SCROW nRefRow2 = maRange.aEnd.Row();
         SCROW nMaxRefRow = nRefRow2 + mnGroupLen - 1;
         if (nMaxRefRow < nRow1)
-            return;
+            return false;
 
         if (nRefRow2 < nRow1)
         {
@@ -328,6 +337,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
         for (; pp != ppEnd && nRefRow1 <= nRow2; ++pp, ++nRefRow1, ++nRefRow2)
             rCells.push_back(*pp);
     }
+    return false;
 }
 
 const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
