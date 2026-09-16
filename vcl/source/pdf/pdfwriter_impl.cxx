@@ -197,6 +197,7 @@ constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const
     { StructElement::Title, "Title" },
     { StructElement::Emphasis, "Em" },
     { StructElement::Strong, "Strong" },
+    { StructElement::FENote, "FENote" },
 });
 
 // standard structure types getStructureTag never returns, so the table above lacks them:
@@ -204,8 +205,7 @@ constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const
 // Annot is standard from PDF 1.5, and below that getStructureTag answers Figure for it
 constexpr std::string_view constUnusedTagStrings[]{ "Annot", "Artifact", "Private",
                                                     "THead", "TBody",    "TFoot" };
-constexpr std::string_view constUnusedTagStrings20[]{ "Aside", "DocumentFragment", "FENote",
-                                                      "Sub" };
+constexpr std::string_view constUnusedTagStrings20[]{ "Aside", "DocumentFragment", "Sub" };
 
 // PDF 2.0 has heading levels without a limit, so H7 and up are standard there as well;
 // H1 to H6 are the table's, and must not answer here, or the level could be claimed wrong
@@ -10168,6 +10168,8 @@ const char* PDFWriterImpl::getStructureTag(StructElement eType)
                 eType = StructElement::Span; break;
             case StructElement::Strong:
                 eType = StructElement::Span; break;
+            case StructElement::FENote:
+                eType = StructElement::Note; break;
             default:
                 break;
         }
@@ -10404,8 +10406,8 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
         rEle.m_nObject      = createObject();
         // update parent's kids list
         m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(ObjReference{rEle.m_nObject});
-        // ISO 14289-1:2014, Clause: 7.9
-        if (*rEle.m_oType == StructElement::Note)
+        // ISO 14289-1:2014, Clause: 7.9, for the element it names Note
+        if (*rEle.m_oType == StructElement::FENote)
         {
             m_StructElemObjsWithID.insert(rEle.m_nObject);
         }
@@ -10820,6 +10822,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                         eType == StructElement::Emphasis ||
                         eType == StructElement::Strong ||
                         eType == StructElement::Note        ||
+                        eType == StructElement::FENote      ||
                         eType == StructElement::Reference   ||
                         eType == StructElement::BibEntry    ||
                         eType == StructElement::Code        ||
@@ -10858,6 +10861,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                         eType == StructElement::Emphasis ||
                         eType == StructElement::Strong ||
                         eType == StructElement::Note        ||
+                        eType == StructElement::FENote      ||
                         eType == StructElement::Reference   ||
                         eType == StructElement::BibEntry    ||
                         eType == StructElement::Code        ||
@@ -11064,6 +11068,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
                     eType == StructElement::Emphasis ||
                     eType == StructElement::Strong ||
                     eType == StructElement::Note        ||
+                    eType == StructElement::FENote      ||
                     eType == StructElement::Reference   ||
                     eType == StructElement::BibEntry    ||
                     eType == StructElement::Code        ||

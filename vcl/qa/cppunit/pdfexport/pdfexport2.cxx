@@ -2200,9 +2200,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
     loadFromFile(u"StructureNamespaces.fodt");
 
     // Tagged rather than PDF/UA, because the harness validates a PDF/UA export and this document
-    // still fails ISO 14289-2 8.2.5.8 (a TOCI needs Ref) and 8.2.5.14 (PDF/UA-2 wants FENote,
-    // not Note). TODO: ask for PDF/UA here once those are fixed. The namespaces below depend on
-    // the version alone.
+    // still fails ISO 14289-2 8.2.5.8, a TOCI needing Ref. TODO: ask for PDF/UA here once that
+    // is fixed. The namespaces below depend on the version alone.
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                              sal_Int32(20)) };
@@ -2304,12 +2303,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
     CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["BlockQuote"_ostr]);
     CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Quote"_ostr]);
     CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Code"_ostr]);
-    CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["Note"_ostr]);
     CPPUNIT_ASSERT_EQUAL(aPDF17, aNamespaceOfType["BibEntry"_ostr]);
     // and the ones it kept
     CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["Document"_ostr]);
     CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["H1"_ostr]);
     CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["Link"_ostr]);
+    // the footnote takes the type PDF 2.0 put in place of Note
+    CPPUNIT_ASSERT_EQUAL(aPDF20, aNamespaceOfType["FENote"_ostr]);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166963)
