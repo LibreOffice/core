@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Right_20_to_20_left" style:display-name="Right to left"
+               style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties style:writing-mode="rl-tb"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph"
+               style:parent-style-name="Right_20_to_20_left">
+   <style:paragraph-properties style:writing-mode="page"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+                                 style:writing-mode="lr-tb"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Right_20_to_20_left">This paragraph reads right to left.</text:p>
+   <text:p text:style-name="P1">This paragraph reads the way the page reads.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

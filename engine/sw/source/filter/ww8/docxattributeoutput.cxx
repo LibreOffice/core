@@ -11084,6 +11084,21 @@ void DocxAttributeOutput::FormatLineNumbering( const SwFormatLineNumber& rNumber
         m_pSerializer->singleElementNS(XML_w, XML_suppressLineNumbers, FSNS(XML_w, XML_val), "0");
 }
 
+namespace
+{
+/*  True where a paragraph takes its direction from the style it is written in, or a style from
+    the style it is based on, and that direction reads right to left. */
+bool lcl_inheritsRightToLeft( const sw::BroadcastingModify* pOutFormatNode )
+{
+    const SwFormat* pFormat = nullptr;
+    if ( auto pTextNode = dynamic_cast< const SwTextNode* >( pOutFormatNode ) )
+        pFormat = pTextNode->GetTextColl();
+    else if ( auto pTextColl = dynamic_cast< const SwTextFormatColl* >( pOutFormatNode ) )
+        pFormat = pTextColl->DerivedFrom();
+    return pFormat && pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB;
+}
+}
+
 void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDirection )
 {
     OString sTextFlow;
@@ -11091,7 +11106,17 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     SvxFrameDirection nDir = rDirection.GetValue();
 
     if ( nDir == SvxFrameDirection::Environment )
+    {
         nDir = GetExport( ).GetDefaultFrameDirection( );
+        /*  The text follows whatever surrounds it, and reading left to right is what a reader
+            assumes where a document says nothing, so that answer is left unwritten. Writing it
+            would pin the text to it, and a paragraph inside a style that reads right to left
+            would come back reading left to right. The answer is written where the style does
+            read right to left, because that is what a reader takes from silence there. */
+        if ( nDir == SvxFrameDirection::Horizontal_LR_TB
+             && !lcl_inheritsRightToLeft( m_rExport.m_pOutFormatNode ) )
+            return;
+    }
 
     switch ( nDir )
     {

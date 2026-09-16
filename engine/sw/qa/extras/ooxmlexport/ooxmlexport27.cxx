@@ -694,6 +694,39 @@ CPPUNIT_TEST_FIXTURE(Test, testHyphenationZoneLeavesTheDefaultStyleAlone)
     assertXPath(pXmlDoc, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testParagraphKeepsUnstatedDirection)
+{
+    // The document names no direction for its paragraphs, so they read the way whatever holds
+    // them reads.
+    createSwDoc("cloud.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Naming left to right pinned the text to it, so a paragraph in a style that reads right to
+    // left came back reading left to right. It also wrote the whole formatting of the style onto
+    // the first paragraph, which the document had left to the style.
+    assertXPath(pXmlDoc, "//w:pPr/w:bidi", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:jc", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:widowControl", 0);
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+    assertXPath(pXmlStyles, "//w:pPr/w:bidi", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testParagraphFollowingThePageInARightToLeftStyle)
+{
+    // The second paragraph is written in a style that reads right to left and follows the page
+    // instead, and the page reads left to right. It keeps reading left to right.
+    createSwDoc("paragraph-direction-follows-the-page.fodt");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Righttoleft']/w:pPr/w:bidi", "val", u"1");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:bidi", "val", u"0");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

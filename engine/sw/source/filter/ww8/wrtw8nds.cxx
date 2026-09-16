@@ -3103,14 +3103,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             }
 
             /*
-            If a given para is using the SvxFrameDirection::Environment direction we
-            cannot export that, if it's ltr then that's ok as that is word's
-            default. Otherwise we must add a RTL attribute to our export list
-            Only necessary if the ParaStyle doesn't define the direction.
+            A paragraph that follows the direction of whatever surrounds it has no direction of
+            its own to write, and the format says that the same way, by stating none. A
+            paragraph that reads right to left is stated, because reading left to right is what
+            a reader assumes where nothing says otherwise. Only necessary if the ParaStyle
+            doesn't define the direction.
             */
             const SvxFrameDirectionItem* pItem =
                 rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
             if (
+                bParaRTL &&
                 (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
                 rTextColl.GetFrameDir().GetValue() == SvxFrameDirection::Environment
                )
@@ -3118,10 +3120,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( !oTmpSet )
                     oTmpSet.emplace(rNode.GetSwAttrSet());
 
-                if ( bParaRTL )
-                    oTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
-                else
-                    oTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
+                oTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
 
                 const SvxAdjustItem* pAdjust = rNode.GetSwAttrSet().GetItem(RES_PARATR_ADJUST);
                 if ( pAdjust && (pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right ) )
