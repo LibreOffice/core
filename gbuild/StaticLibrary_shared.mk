@@ -83,6 +83,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     net/HttpRequest \
     net/NetUtil \
     net/Socket \
+    net/Socket-server \
     net/Socket-unix \
     net/Ssl \
     wsd/Exceptions \
