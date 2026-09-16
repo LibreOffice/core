@@ -18,6 +18,7 @@
  */
 
 #include <float.h>
+#include <libxml/xmlwriter.h>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>

@@ -26,6 +26,7 @@
 #include <svx/svdpage.hxx>
 
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentMarkAccess.hxx>

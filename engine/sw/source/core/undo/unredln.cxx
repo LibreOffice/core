@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
+#include <libxml/xmlwriter.h>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <swundo.hxx>

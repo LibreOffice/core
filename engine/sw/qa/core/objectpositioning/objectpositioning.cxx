@@ -22,6 +22,7 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>

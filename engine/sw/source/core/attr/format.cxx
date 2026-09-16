@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <poolfmt.hxx>
+#include <libxml/xmlwriter.h>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

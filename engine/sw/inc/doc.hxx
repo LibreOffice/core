@@ -33,7 +33,6 @@
 #include <editeng/numitem.hxx>
 #include "tox.hxx"
 #include "frmfmt.hxx"
-#include "frameformats.hxx"
 #include "charfmt.hxx"
 #include "docary.hxx"
 #include "charformats.hxx"
@@ -145,6 +144,8 @@ namespace sw {
     enum class RedlineMode;
     enum class FieldmarkMode;
     enum class ParagraphBreakMode;
+    template<class T> class FrameFormats;
+    typedef FrameFormats<::SwTableFormat*> TableFrameFormats;
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;

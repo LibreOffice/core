@@ -19,6 +19,7 @@
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <fmtanchr.hxx>
 
 using namespace css;

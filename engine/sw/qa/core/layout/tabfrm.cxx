@@ -18,6 +18,7 @@
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <wrtsh.hxx>
 
 namespace

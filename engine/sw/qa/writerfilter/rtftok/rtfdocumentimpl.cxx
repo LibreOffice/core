@@ -19,6 +19,7 @@
 #include <vcl/graph.hxx>
 
 #include <fmtfsize.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;

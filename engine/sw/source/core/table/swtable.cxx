@@ -38,6 +38,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
