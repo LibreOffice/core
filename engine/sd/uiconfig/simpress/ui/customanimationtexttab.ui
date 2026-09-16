@@ -46,6 +46,9 @@
             <property name="adjustment">adjustment1</property>
             <property name="digits">1</property>
             <property name="truncate-multiline">True</property>
+            <accessibility>
+              <relation type="labelled-by" target="auto_after"/>
+            </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="auto_after_value-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|auto_after_value">Enter an additional delay in seconds to animate subsequent paragraphs.</property>
@@ -65,6 +68,9 @@
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
+            <accessibility>
+              <relation type="label-for" target="auto_after_value"/>
+            </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="auto_after-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|auto_after">If "Group text - By 1st level paragraphs" is selected, the paragraphs are animated one after the other.</property>
