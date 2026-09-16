@@ -110,4 +110,14 @@ sal_uInt32 decimalStringToNumber(OUString const& str, sal_Int32 nStart, sal_Int3
     return result;
 }
 
+template <typename T> struct Base
+{
+    virtual void g(OUString const&) = 0;
+};
+
+template <typename T> struct Derived : Base<T>
+{
+    void g(OUString const&) override {}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

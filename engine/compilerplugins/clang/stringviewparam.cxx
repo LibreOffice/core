@@ -536,7 +536,7 @@ private:
         }
         if (auto const d = dyn_cast<CXXMethodDecl>(decl))
         {
-            if (d->isVirtual())
+            if (d->isVirtual() || d->hasAttr<OverrideAttr>())
             {
                 return false;
             }
