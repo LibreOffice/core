@@ -31,7 +31,10 @@ if you are a reasonably able C++ programmer.
 
 ## The Build Chain and Runtime Baselines
 
-These are the current minimal operating system and compiler versions to
+The C++ baseline is C++23. The available features are constrained by
+the minimum compiler versions.
+
+These are the current minimum operating system and compiler versions to
 run and compile LibreOffice, also used by the TDF builds:
 
 * Windows:

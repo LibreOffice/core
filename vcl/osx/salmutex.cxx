@@ -24,6 +24,8 @@
 #include <osl/thread.hxx>
 #include <osx/salmutex.hxx>
 
+#include <mutex>
+
 #include <premac.h>
 #include <Foundation/Foundation.h>
 #include <postmac.h>

@@ -44,7 +44,7 @@
 			"/usr/include/libxml2/"
 		],
 		"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
-		"C_Cpp.default.cppStandard": "c++20",
+		"C_Cpp.default.cppStandard": "c++23",
 		// point this to LibreOffice's version of clang-format 5.0.0,
 		// otherwise clang-format from the plugin is used, and that
 		// gives slightly different results

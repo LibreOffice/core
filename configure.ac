@@ -8326,18 +8326,24 @@ dnl C++11
 dnl ===================================================================
 
 if test -z "${CXXFLAGS_CXX11+x}"; then
-    AC_MSG_CHECKING([whether $CXX_BASE supports C++20])
+    AC_MSG_CHECKING([whether $CXX_BASE supports C++23])
     if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
-        if test "$with_latest_c__" = yes; then
+        # /std:c++23 will only arrive in MSVC 14.52, so we have to
+        # use c++latest for older build tool versions
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+            #if _MSC_VER < 1952
+            #endif
+        ]])],[with_latest_c__=yes])
+        if test "$with_latest_c__" = "yes"; then
             CXXFLAGS_CXX11=-std:c++latest
         else
-            CXXFLAGS_CXX11=-std:c++20
+            CXXFLAGS_CXX11=-std:c++23
         fi
         CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -permissive- -Zc:__cplusplus,preprocessor"
     elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-        my_flags='-std=c++20 -std=c++2a'
-        if test "$with_latest_c__" = yes; then
-            my_flags="-std=c++29 -std=c++2d -std=c++26 -std=c++2c -std=c++23 -std=c++2b $my_flags"
+        my_flags='-std=c++23 -std=c++2b'
+        if test "$with_latest_c__" = "yes"; then
+            my_flags="-std=c++29 -std=c++2d -std=c++26 -std=c++2c $my_flags"
         fi
         for flag in $my_flags; do
             if test "$COM" = MSC; then
