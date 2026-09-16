@@ -215,6 +215,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/items/chrtitem \
     svx/source/items/clipfmtitem \
     svx/source/items/customshapeitem \
+    svx/source/items/documentbullets \
     svx/source/items/drawitem \
     svx/source/items/e3ditem \
     svx/source/items/RectangleAlignmentItem \

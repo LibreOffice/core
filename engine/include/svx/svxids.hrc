@@ -45,6 +45,7 @@ class SvxColorItem;
 class SvxColorListItem;
 class SvxColumnItem;
 class SvxDashListItem;
+class SvxDocumentBulletsItem;
 class SvxDoubleItem;
 class SvxGradientListItem;
 class SvxHatchListItem;
@@ -1126,8 +1127,16 @@ class XFillGradientItem;
 #define SID_ATTR_REFLECTION_END_TRANSPARENCY            ( SID_SVX_START + 1269 )
 #define SID_ATTR_REFLECTION_END_POSITION                ( SID_SVX_START + 1270 )
 
+// The bullets that the document already uses, handed to a numbering tab page when its dialog is
+// built.
+#define SID_DOCUMENT_BULLETS                            TypedWhichId<SvxDocumentBulletsItem>( SID_SVX_START + 1271 )
+// Names one of those bullets, as an argument of the SetBullet slot.
+#define SID_ATTR_BULLET_GRAPHIC                         TypedWhichId<SfxStringItem>( SID_SVX_START + 1272 )
+// The image bullets that the document already uses, as a sequence of name and image pairs.
+#define SID_GET_DOCUMENT_BULLET_GRAPHICS                TypedWhichId<SfxUnoAnyItem>( SID_SVX_START + 1273 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1270 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1273 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

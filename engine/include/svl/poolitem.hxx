@@ -332,6 +332,7 @@ enum class SfxItemType : sal_uInt16
     SvxContourItemType,
     SvxCrossedOutItemType,
     SvxDashListItemType,
+    SvxDocumentBulletsItemType,
     SvxDoubleItemType,
     SvxEmphasisMarkItemType,
     SvxEscapementItemType,
@@ -542,7 +543,6 @@ enum class SfxItemType : sal_uInt16
     XLineWidthItemType,
     XSecondaryFillColorItemType
 };
-
 
 #ifdef DBG_UTIL
 SVL_DLLPUBLIC size_t getAllocatedSfxPoolItemCount();
