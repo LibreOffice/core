@@ -595,11 +595,11 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     {
         uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, sFilter) };
 
-        uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+        rtl::Reference<SwXTextDocument> pModel = pTargetView->GetDocShell()->GetBaseModel();
         ErrCode nErrorCode = ERRCODE_NONE;
         try
         {
-            xStore->storeToURL( sPath, aValues );
+            pModel->storeToURL(sPath, aValues);
         }
         catch (const task::ErrorCodeIOException& rErrorEx)
         {
@@ -629,11 +629,11 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
         pValues[0].Name = "FilterName";
         pValues[0].Value <<= pSfxFlt->GetFilterName();
 
-        uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+        rtl::Reference<SwXTextDocument> pModel = pTargetView->GetDocShell()->GetBaseModel();
         ErrCode nErrorCode = ERRCODE_NONE;
         try
         {
-            xStore->storeToURL( sTargetTempURL, aValues );
+            pModel->storeToURL(sTargetTempURL, aValues);
         }
         catch (const task::ErrorCodeIOException& rErrorEx)
         {
@@ -1111,8 +1111,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
     uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, pTargetSfxFlt->GetFilterName()) };
 
-    uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-    xStore->storeToURL( sTargetTempURL, aValues   );
+    rtl::Reference<SwXTextDocument> pModel = pTargetView->GetDocShell()->GetBaseModel();
+    pModel->storeToURL(sTargetTempURL, aValues);
 
     //create the send dialog
     std::shared_ptr<SwSendMailDialog> xDlg = std::make_shared<SwSendMailDialog>(Application::GetDefDialogParent(), *xConfigItem);
@@ -1191,8 +1191,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                 pFilterValues[nOpt].Value <<= sPassword;
             }
 
-            uno::Reference< frame::XStorable > xTempStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-            xTempStore->storeToURL( aName.GetValue(), aFilterValues );
+            rtl::Reference<SwXTextDocument> pTempModel = pTempView->GetDocShell()->GetBaseModel();
+            pTempModel->storeToURL(aName.GetValue(), aFilterValues);
         }
         xTempDocShell->DoClose();
 
