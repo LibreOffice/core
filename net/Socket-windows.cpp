@@ -46,6 +46,36 @@ void disableNagleAlgorithm(int)
     Util::forcedExit(EX_SOFTWARE);
 }
 
+ssize_t readDescriptor(int, void*, std::size_t)
+{
+    LOG_FTL("Reading from a real descriptor is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
+int createPipe(int[2])
+{
+    LOG_FTL("Creating a real pipe is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
+int pollDescriptors(struct pollfd*, std::size_t, int64_t)
+{
+    LOG_FTL("Waiting on real descriptors is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
+int openStreamSocket(Socket::Type)
+{
+    LOG_FTL("Opening a real stream socket is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
+bool bindToPort(int, Socket::Type, bool, int)
+{
+    LOG_FTL("Binding a real socket to a port is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
 } // namespace net
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -97,6 +97,18 @@ namespace net
         else
             fakeSocketClose(descriptor);
     }
+
+    /// Read from a descriptor that has a real pipe or socket underneath. Returns the number of
+    /// bytes read, or -1 with errno set.
+    ssize_t readDescriptor(int descriptor, void* buffer, std::size_t length);
+
+    /// Create a real pipe whose two descriptors are non-blocking and are closed when a new
+    /// program starts. Returns 0, or -1 with errno set.
+    int createPipe(int descriptors[2]);
+
+    /// Wait until one of the real descriptors is ready, for at most the given number of
+    /// microseconds. Returns how many are ready, 0 when the time ran out, or -1 with errno set.
+    int pollDescriptors(struct pollfd* descriptors, std::size_t count, int64_t timeoutMicroseconds);
 }
 
 class Socket;
@@ -516,6 +528,17 @@ private:
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Socket &s) { return s.stream(os); }
+
+namespace net
+{
+    /// Open a real stream socket of the given kind, non-blocking and closed when a new program
+    /// starts. Returns the descriptor, or -1 with errno set.
+    int openStreamSocket(Socket::Type type);
+
+    /// Give a real socket the given port, on every address when publicly is true and on the
+    /// loopback address otherwise. Returns true on success only.
+    bool bindToPort(int descriptor, Socket::Type socketType, bool publicly, int port);
+}
 
 class StreamSocket;
 class MessageHandlerInterface;

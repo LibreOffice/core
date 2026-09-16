@@ -606,4 +606,104 @@ bool StreamSocket::sniffSSL() const
             _inBuffer[5] == 0x01);  // Handshake: CLIENT_HELLO
 }
 
+bool SocketPoll::insertNewWebSocketSync(const Poco::URI& uri,
+                                        const std::shared_ptr<WebSocketHandler>& websocketHandler)
+{
+    LOG_TRC("Connecting WS to " << uri.getHost());
+
+    const bool isSSL = uri.getScheme() != "ws";
+#if !ENABLE_SSL
+    if (isSSL)
+    {
+        LOG_ERR("Error: wss for client websocket requested but SSL not compiled in.");
+        return false;
+    }
+#endif
+
+    http::Request req(uri.getPathAndQuery());
+    req.set("User-Foo", "Adminbits");
+    //FIXME: Why do we need the following here?
+    req.set("Accept-Language", "en");
+    req.set("Cache-Control", "no-cache");
+    req.set("Pragma", "no-cache");
+
+    const std::string port = std::to_string(uri.getPort());
+    if (websocketHandler->wsRequest(req, uri.getHost(), port, isSSL, *this))
+    {
+        LOG_DBG("Connected WS to " << uri.getHost());
+        return true;
+    }
+
+    LOG_ERR("Failed to connected WS to " << uri.getHost());
+    return false;
+}
+
+bool SocketPoll::insertNewUnixSocket(
+    const UnxSocketPath &location,
+    const std::string &pathAndQuery,
+    const std::shared_ptr<WebSocketHandler>& websocketHandler,
+    const std::vector<int>* shareFDs)
+{
+    LOG_DBG("Connecting to local UDS " << location);
+    const int fd = Syscall::socket_cloexec_nonblock(AF_UNIX, SOCK_STREAM /*| SOCK_NONBLOCK | SOCK_CLOEXEC*/, 0);
+    if (fd < 0)
+    {
+        LOG_SYS("Failed to connect to unix socket at " << location);
+        return false;
+    }
+
+    struct sockaddr_un addrunix;
+    std::memset(&addrunix, 0, sizeof(addrunix));
+    addrunix.sun_family = AF_UNIX;
+    location.fillInto(addrunix);
+
+    const int res = connect(fd, reinterpret_cast<const struct sockaddr*>(&addrunix), sizeof(addrunix));
+    if (res < 0 && errno != EINPROGRESS)
+    {
+        LOG_SYS("Failed to connect to unix socket at " << location);
+        ::close(fd);
+        return false;
+    }
+
+    std::shared_ptr<StreamSocket> socket
+        = StreamSocket::create<StreamSocket>(std::string(), fd, Socket::Type::Unix,
+                                             true, HostType::Other, websocketHandler);
+    if (!socket)
+    {
+        LOG_ERR("Failed to create socket unix socket at " << location);
+        return false;
+    }
+
+    LOG_DBG("Connected to local UDS " << location << " #" << socket->getFD());
+
+    http::Request req(pathAndQuery);
+    req.set("User-Foo", "Adminbits");
+    req.set("Sec-WebSocket-Key", websocketHandler->getWebSocketKey());
+    req.set("Sec-WebSocket-Version", "13");
+    //FIXME: Why do we need the following here?
+    req.set("Accept-Language", "en");
+    req.set("Cache-Control", "no-cache");
+    req.set("Pragma", "no-cache");
+
+    LOG_TRC("Requesting upgrade of websocket at path " << pathAndQuery << " #" << socket->getFD());
+    if (!shareFDs || shareFDs->empty())
+    {
+        socket->send(req);
+    }
+    else
+    {
+        Buffer buf;
+        req.writeData(buf, INT_MAX); // Write the whole request.
+        socket->sendFDs(buf.getBlock(), buf.getBlockSize(), *shareFDs);
+    }
+
+    std::static_pointer_cast<ProtocolHandlerInterface>(websocketHandler)->onConnect(socket);
+    insertNewSocket(socket);
+
+    // We send lots of data back via this local UDS'
+    socket->setSocketBufferSize(Socket::MaximumSendBufferSize);
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

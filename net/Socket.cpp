@@ -69,11 +69,6 @@
 #endif
 
 #include <Poco/MemoryStream.h>
-#if !MOBILEAPP
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/Net/NetException.h>
-#endif
 // The windows app build cannot compile Poco's net headers.
 #ifndef _WIN32
 #include <Poco/Net/WebSocket.h> // computeAccept
@@ -117,23 +112,12 @@ constexpr std::string_view Socket::toString(Type t)
     return "Unknown";
 }
 
-int Socket::createSocket([[maybe_unused]] Socket::Type type)
+int Socket::createSocket(Socket::Type type)
 {
-#if !MOBILEAPP
-    int domain = AF_UNSPEC;
-    switch (type)
-    {
-    case Type::IPv4: domain = AF_INET;  break;
-    case Type::IPv6: domain = AF_INET6; break;
-    case Type::All:  domain = AF_INET6; break;
-    case Type::Unix: domain = AF_UNIX;  break;
-    default: assert(!"Unknown Socket::Type"); break;
-    }
+    if (!Util::isMobileApp())
+        return net::openStreamSocket(type);
 
-    return Syscall::socket_cloexec_nonblock(domain, SOCK_STREAM /*| SOCK_NONBLOCK | SOCK_CLOEXEC*/, 0);
-#else
     return fakeSocketSocket();
-#endif
 }
 
 std::ostream& Socket::streamStats(std::ostream& os,
@@ -368,13 +352,16 @@ void SocketPoll::removeFromWakeupArray()
             getWakeupsArray().erase(it);
     }
 
-#if !MOBILEAPP
-    ::close(_wakeup[0]);
-    ::close(_wakeup[1]);
-#else
-    fakeSocketClose(_wakeup[0]);
-    fakeSocketClose(_wakeup[1]);
-#endif
+    if (!Util::isMobileApp())
+    {
+        net::closeDescriptor(_wakeup[0]);
+        net::closeDescriptor(_wakeup[1]);
+    }
+    else
+    {
+        fakeSocketClose(_wakeup[0]);
+        fakeSocketClose(_wakeup[1]);
+    }
 
     _wakeup[0] = -1;
     _wakeup[1] = -1;
@@ -505,24 +492,14 @@ int SocketPoll::poll(int64_t timeoutMaxMicroS, bool justPoll)
     int rc;
     do
     {
-#if !MOBILEAPP
-#  if HAVE_PPOLL
-        LOGA_TRC(Socket, "ppoll start, timeoutMicroS: " << timeoutMaxMicroS << " size " << size);
-        timeoutMaxMicroS = std::max(timeoutMaxMicroS, int64_t(0));
-        struct timespec timeout;
-        timeout.tv_sec = timeoutMaxMicroS / (1000 * 1000);
-        timeout.tv_nsec = (timeoutMaxMicroS % (1000 * 1000)) * 1000;
-        rc = ::ppoll(_pollFds.data(), size + 1, &timeout, nullptr);
-#  else
-        int timeoutMaxMs = (timeoutMaxMicroS + 999) / 1000;
-        LOG_TRC("Legacy Poll start, timeoutMs: " << timeoutMaxMs);
-        rc = ::poll(_pollFds.data(), size + 1, std::max(timeoutMaxMs,0));
-#  endif
-#else
-        LOG_TRC("SocketPoll Poll");
-        int timeoutMaxMs = (timeoutMaxMicroS + 999) / 1000;
-        rc = fakeSocketPoll(_pollFds.data(), size + 1, std::max(timeoutMaxMs,0));
-#endif
+        LOGA_TRC(Socket, "poll start, timeoutMicroS: " << timeoutMaxMicroS << " size " << size);
+        if (!Util::isMobileApp())
+            rc = net::pollDescriptors(_pollFds.data(), size + 1, timeoutMaxMicroS);
+        else
+        {
+            const int timeoutMaxMs = (timeoutMaxMicroS + 999) / 1000;
+            rc = fakeSocketPoll(_pollFds.data(), size + 1, std::max(timeoutMaxMs, 0));
+        }
     }
     while (rc < 0 && errno == EINTR);
     LOGA_TRC(Socket, "Poll completed with " << rc << " live polls max (" <<
@@ -563,11 +540,10 @@ int SocketPoll::poll(int64_t timeoutMaxMicroS, bool justPoll)
 
         // Clear the data.
         int dump[32];
-#if !MOBILEAPP
-        dump[0] = ::read(_wakeup[0], &dump, sizeof(dump));
-#else
-        dump[0] = fakeSocketRead(_wakeup[0], &dump, sizeof(dump));
-#endif
+        if (!Util::isMobileApp())
+            dump[0] = net::readDescriptor(_wakeup[0], &dump, sizeof(dump));
+        else
+            dump[0] = fakeSocketRead(_wakeup[0], &dump, sizeof(dump));
         LOGA_TRC(Socket, "Wakeup pipe (" << _wakeup[0] << ") read " << dump[0] << " bytes");
 
         std::vector<CallbackFn> invoke;
@@ -851,13 +827,7 @@ void SocketPoll::createWakeups()
     assert(_wakeup[0] == -1 && _wakeup[1] == -1);
 
     // Create the wakeup fd.
-    if (
-#if !MOBILEAPP
-        Syscall::pipe2(_wakeup, O_CLOEXEC | O_NONBLOCK) == -1
-#else
-        fakeSocketPipe2(_wakeup) == -1
-#endif
-        )
+    if ((!Util::isMobileApp() ? net::createPipe(_wakeup) : fakeSocketPipe2(_wakeup)) == -1)
     {
         throw std::runtime_error("Failed to allocate pipe for SocketPoll [" + _name + "] waking.");
     }
@@ -898,110 +868,6 @@ void SocketPoll::removeSockets()
     }
 }
 
-#if !MOBILEAPP
-
-bool SocketPoll::insertNewWebSocketSync(const Poco::URI& uri,
-                                        const std::shared_ptr<WebSocketHandler>& websocketHandler)
-{
-    LOG_TRC("Connecting WS to " << uri.getHost());
-
-    const bool isSSL = uri.getScheme() != "ws";
-#if !ENABLE_SSL
-    if (isSSL)
-    {
-        LOG_ERR("Error: wss for client websocket requested but SSL not compiled in.");
-        return false;
-    }
-#endif
-
-    http::Request req(uri.getPathAndQuery());
-    req.set("User-Foo", "Adminbits");
-    //FIXME: Why do we need the following here?
-    req.set("Accept-Language", "en");
-    req.set("Cache-Control", "no-cache");
-    req.set("Pragma", "no-cache");
-
-    const std::string port = std::to_string(uri.getPort());
-    if (websocketHandler->wsRequest(req, uri.getHost(), port, isSSL, *this))
-    {
-        LOG_DBG("Connected WS to " << uri.getHost());
-        return true;
-    }
-
-    LOG_ERR("Failed to connected WS to " << uri.getHost());
-    return false;
-}
-
-bool SocketPoll::insertNewUnixSocket(
-    const UnxSocketPath &location,
-    const std::string &pathAndQuery,
-    const std::shared_ptr<WebSocketHandler>& websocketHandler,
-    const std::vector<int>* shareFDs)
-{
-    LOG_DBG("Connecting to local UDS " << location);
-    const int fd = Syscall::socket_cloexec_nonblock(AF_UNIX, SOCK_STREAM /*| SOCK_NONBLOCK | SOCK_CLOEXEC*/, 0);
-    if (fd < 0)
-    {
-        LOG_SYS("Failed to connect to unix socket at " << location);
-        return false;
-    }
-
-    struct sockaddr_un addrunix;
-    std::memset(&addrunix, 0, sizeof(addrunix));
-    addrunix.sun_family = AF_UNIX;
-    location.fillInto(addrunix);
-
-    const int res = connect(fd, reinterpret_cast<const struct sockaddr*>(&addrunix), sizeof(addrunix));
-    if (res < 0 && errno != EINPROGRESS)
-    {
-        LOG_SYS("Failed to connect to unix socket at " << location);
-        ::close(fd);
-        return false;
-    }
-
-    std::shared_ptr<StreamSocket> socket
-        = StreamSocket::create<StreamSocket>(std::string(), fd, Socket::Type::Unix,
-                                             true, HostType::Other, websocketHandler);
-    if (!socket)
-    {
-        LOG_ERR("Failed to create socket unix socket at " << location);
-        return false;
-    }
-
-    LOG_DBG("Connected to local UDS " << location << " #" << socket->getFD());
-
-    http::Request req(pathAndQuery);
-    req.set("User-Foo", "Adminbits");
-    req.set("Sec-WebSocket-Key", websocketHandler->getWebSocketKey());
-    req.set("Sec-WebSocket-Version", "13");
-    //FIXME: Why do we need the following here?
-    req.set("Accept-Language", "en");
-    req.set("Cache-Control", "no-cache");
-    req.set("Pragma", "no-cache");
-
-    LOG_TRC("Requesting upgrade of websocket at path " << pathAndQuery << " #" << socket->getFD());
-    if (!shareFDs || shareFDs->empty())
-    {
-        socket->send(req);
-    }
-    else
-    {
-        Buffer buf;
-        req.writeData(buf, INT_MAX); // Write the whole request.
-        socket->sendFDs(buf.getBlock(), buf.getBlockSize(), *shareFDs);
-    }
-
-    std::static_pointer_cast<ProtocolHandlerInterface>(websocketHandler)->onConnect(socket);
-    insertNewSocket(socket);
-
-    // We send lots of data back via this local UDS'
-    socket->setSocketBufferSize(Socket::MaximumSendBufferSize);
-
-    return true;
-}
-
-#else
-
 bool SocketPoll::insertNewFakeSocket(
     int peerSocket,
     const std::shared_ptr<ProtocolHandlerInterface>& websocketHandler)
@@ -1034,7 +900,6 @@ bool SocketPoll::insertNewFakeSocket(
     }
     return false;
 }
-#endif
 
 void ServerSocket::dumpState(std::ostream& os)
 {
@@ -1099,9 +964,7 @@ bool SocketDisposition::execute()
 void WebSocketHandler::dumpState(std::ostream& os, const std::string& indent) const
 {
     os << (_shuttingDown ? "shutd " : "alive ");
-#if !MOBILEAPP
     os << std::setw(5) << _pingTimeUs/1000. << "ms ";
-#endif
     if (_wsPayload.size() > 0)
         HexUtil::dumpHex(os, _wsPayload, "\t\tws queued payload:\n", "\t\t");
     os << '\n';
@@ -1200,62 +1063,12 @@ void SocketPoll::dumpState(std::ostream& os) const
 }
 
 /// Returns true on success only.
-bool ServerSocket::bind([[maybe_unused]] Type type, [[maybe_unused]] int port)
+bool ServerSocket::bind(Type type, int port)
 {
-#if !MOBILEAPP
-    // Enable address reuse to avoid stalling after
-    // recycling, when previous socket is TIME_WAIT.
-    //TODO: Might be worth refactoring out.
-    const int reuseAddress = 1;
-    constexpr unsigned int len = sizeof(reuseAddress);
-    if (::setsockopt(getFD(), SOL_SOCKET, SO_REUSEADDR, &reuseAddress, len) == -1)
-        LOG_SYS("Failed setsockopt SO_REUSEADDR on socket fd " << getFD() << ": " << strerror(errno));
+    if (!Util::isMobileApp())
+        return net::bindToPort(getFD(), Socket::type(), type == Type::Public, port);
 
-    int rc;
-
-    assert (_type != Socket::Type::Unix);
-    if (_type == Socket::Type::IPv4)
-    {
-        struct sockaddr_in addrv4;
-        std::memset(&addrv4, 0, sizeof(addrv4));
-        addrv4.sin_family = AF_INET;
-        addrv4.sin_port = htons(port);
-        if (type == Type::Public)
-            addrv4.sin_addr.s_addr = htonl(INADDR_ANY);
-        else
-            addrv4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-
-        rc = ::bind(getFD(), reinterpret_cast<const sockaddr *>(&addrv4), sizeof(addrv4));
-    }
-    else
-    {
-        struct sockaddr_in6 addrv6;
-        std::memset(&addrv6, 0, sizeof(addrv6));
-        addrv6.sin6_family = AF_INET6;
-        addrv6.sin6_port = htons(port);
-        if (type == Type::Public)
-            addrv6.sin6_addr = in6addr_any;
-        else
-            addrv6.sin6_addr = in6addr_loopback;
-
-        const int ipv6only = (_type == Socket::Type::All ? 0 : 1);
-        if (::setsockopt(getFD(), IPPROTO_IPV6, IPV6_V6ONLY, &ipv6only, sizeof(ipv6only)) == -1)
-            LOG_SYS("Failed set ipv6 socket to " << ipv6only);
-
-        rc = ::bind(getFD(), reinterpret_cast<const sockaddr *>(&addrv6), sizeof(addrv6));
-    }
-
-    if (rc)
-        LOG_SYS("Failed to bind to: " << (_type == Socket::Type::IPv4 ? "IPv4" : "IPv6")
-                                      << " port: " << port);
-    else
-        LOG_TRC("Bind to: " << (_type == Socket::Type::IPv4 ? "IPv4" : "IPv6")
-                            << " port: " << port);
-
-    return rc == 0;
-#else
     return true;
-#endif
 }
 
 
