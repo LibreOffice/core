@@ -13,7 +13,7 @@
 /* global globalThis UIManager */
 /* global errorMessages accessToken accessTokenTTL noAuthHeader accessHeader createOnlineModule */
 /* global app $ host idleTimeoutSecs outOfFocusTimeoutSecs _ LocaleService LayoutingService DropFileOverlay */
-/* global ServerConnectionService createEmscriptenModule */
+/* global ServerConnectionService */
 /*eslint indent: [error, "tab", { "outerIIFEBody": 0 }]*/
 
 (function (global) {
@@ -123,7 +123,7 @@ if (window.coolParams.get('starterMode')) {
 }
 
 var initEmscriptenModule = function(docKind, docDescriptor) {
-	globalThis.Module = createEmscriptenModule(docKind, docDescriptor);
+	globalThis.Module = { arguments: [docKind, docDescriptor] };
 	globalThis.Module.onRuntimeInitialized = function() {
 		map.loadDocument(global.socket);
 	};

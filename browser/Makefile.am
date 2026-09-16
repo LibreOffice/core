@@ -1165,10 +1165,6 @@ all-local: build-cool $(MOCHA_JS_DIR)/main.js
 ADMIN_BUNDLE = $(DIST_FOLDER)/admin-bundle.js
 
 if ENABLE_WASM
-$(DIST_FOLDER)/emscripten-module.js: ../wasm/emscripten-module.js
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
 $(DIST_FOLDER)/online%: ../wasm/online%
 	@mkdir -p $(dir $@)
 	@cp $< $@
@@ -1178,7 +1174,6 @@ $(DIST_FOLDER)/soffice%: ../wasm/soffice%
 	@cp $< $@
 
 WASM_FILES= \
-	$(DIST_FOLDER)/emscripten-module.js \
 	$(DIST_FOLDER)/online.js \
 	$(DIST_FOLDER)/online.wasm \
 	$(DIST_FOLDER)/soffice.data \
