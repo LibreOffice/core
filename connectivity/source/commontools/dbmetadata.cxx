@@ -300,6 +300,24 @@ namespace dbtools
         return doGenerate;
     }
 
+    sal_Int32 DatabaseMetaData::getMaxDateTimeLiteralFractionDigits() const
+    {
+        if ( !isConnected() )
+            return 4; // fallback for a caller with no connection info
+
+        sal_Int32 nDigits( 9 );
+        Any setting;
+        if ( lcl_getDriverSetting( u"MaxDateTimeLiteralFractionDigits"_ustr, *m_pImpl, setting ) )
+        {
+            if( ! (setting >>= nDigits) )
+            {
+                SAL_WARN("connectivity.commontools", "getMaxDateTimeLiteralFractionDigits: unable to assign MaxDateTimeLiteralFractionDigits");
+                nDigits = 4;
+            }
+        }
+        return nDigits;
+    }
+
     bool DatabaseMetaData::shouldSubstituteParameterNames() const
     {
         bool doSubstitute( true );

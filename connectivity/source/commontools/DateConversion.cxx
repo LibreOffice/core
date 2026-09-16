@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/dbconversion.hxx>
+#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -32,6 +33,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tuple>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -48,7 +50,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 
 OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
-                                              const Reference< XTypeConverter >&  _rxTypeConverter)
+                                              const Reference< XTypeConverter >&  _rxTypeConverter,
+                                              const Reference< XConnection >& _rxConnection)
 {
     OUStringBuffer aRet;
     if (_rVal.hasValue())
@@ -125,6 +128,10 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                     // check if this is really a timestamp or only a date
                     if ( bOk )
                     {
+                        // This is a SQL literal, so cap the fraction to what
+                        // _rxConnection's backend can parse (tdf#153057).
+                        DBTypeConversion::roundDateTimeFraction(aDateTime,
+                            ::dbtools::DatabaseMetaData(_rxConnection).getMaxDateTimeLiteralFractionDigits());
                         aRet.append("{ts '"
                             + DBTypeConversion::toDateTimeString(aDateTime)
                             + "'}");
@@ -178,6 +185,10 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                     else
                         bOk = _rVal >>= aTime;
                     OSL_ENSURE( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    // See the TIMESTAMP case above.
+                    // Discarding the day-carry return: this is just a Time.
+                    std::ignore = DBTypeConversion::roundTimeFraction(aTime,
+                        ::dbtools::DatabaseMetaData(_rxConnection).getMaxDateTimeLiteralFractionDigits());
                     aRet.append("{t '"
                         + DBTypeConversion::toTimeString(aTime)
                         + "'}");

@@ -1689,7 +1689,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::VARCHAR:
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter ) );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter, m_xConnection ) );
                 break;
             case DataType::CLOB:
                 {
@@ -1704,7 +1704,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     }
                     else
                     {
-                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter ) );
+                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter, m_xConnection ) );
                     }
                 }
                 break;
@@ -1737,7 +1737,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                 }
                 break;
             default:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter ) );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, m_xTypeConverter, m_xConnection ) );
                 break;
             }
         }

@@ -52,6 +52,19 @@ public:
     void test_toDateTime_date_only();
     void test_toDateTime_with_nanoseconds();
 
+    // toTimeString / toDateTimeString tests
+    void test_toTimeString_no_fraction_when_zero_nanoseconds();
+    void test_toTimeString_keeps_full_precision();
+    void test_toDateTimeString_no_fraction_when_zero_nanoseconds();
+
+    // fractional-seconds rounding for SQL literal generation
+    void test_roundTimeFraction_rounds_to_4_digits();
+    void test_roundTimeFraction_carries_into_seconds();
+    void test_roundTimeFraction_wraps_at_midnight();
+    void test_roundDateTimeFraction_carries_into_next_day();
+    void test_roundDateTimeFraction_rolls_over_month_end();
+    void test_roundTimeFraction_noop_when_no_cap_requested();
+
     CPPUNIT_TEST_SUITE(DBTypeConversionTest);
 
     CPPUNIT_TEST(test_toDate_basic);
@@ -65,6 +78,17 @@ public:
     CPPUNIT_TEST(test_toDateTime_basic);
     CPPUNIT_TEST(test_toDateTime_date_only);
     CPPUNIT_TEST(test_toDateTime_with_nanoseconds);
+
+    CPPUNIT_TEST(test_toTimeString_no_fraction_when_zero_nanoseconds);
+    CPPUNIT_TEST(test_toTimeString_keeps_full_precision);
+    CPPUNIT_TEST(test_toDateTimeString_no_fraction_when_zero_nanoseconds);
+
+    CPPUNIT_TEST(test_roundTimeFraction_rounds_to_4_digits);
+    CPPUNIT_TEST(test_roundTimeFraction_carries_into_seconds);
+    CPPUNIT_TEST(test_roundTimeFraction_wraps_at_midnight);
+    CPPUNIT_TEST(test_roundDateTimeFraction_carries_into_next_day);
+    CPPUNIT_TEST(test_roundDateTimeFraction_rolls_over_month_end);
+    CPPUNIT_TEST(test_roundTimeFraction_noop_when_no_cap_requested);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -164,6 +188,118 @@ void DBTypeConversionTest::test_toDateTime_with_nanoseconds()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Minutes", sal_uInt16(30), aDT.Minutes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Seconds", sal_uInt16(45), aDT.Seconds);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("NanoSeconds", sal_uInt32(500000000), aDT.NanoSeconds);
+}
+
+// ----- toTimeString / toDateTimeString ---------------------------------------
+
+void DBTypeConversionTest::test_toTimeString_no_fraction_when_zero_nanoseconds()
+{
+    // tdf#153057 (reopened): TIME values must not get trailing ".000000000"
+    css::util::Time aTime;
+    aTime.Hours = 0;
+    aTime.Minutes = 3;
+    aTime.Seconds = 0;
+    aTime.NanoSeconds = 0;
+    CPPUNIT_ASSERT_EQUAL(u"00:03:00"_ustr, DBTypeConversion::toTimeString(aTime));
+}
+
+void DBTypeConversionTest::test_toTimeString_keeps_full_precision()
+{
+    css::util::Time aTime;
+    aTime.Hours = 0;
+    aTime.Minutes = 3;
+    aTime.Seconds = 0;
+    aTime.NanoSeconds = 123456789;
+    CPPUNIT_ASSERT_EQUAL(u"00:03:00.123456789"_ustr, DBTypeConversion::toTimeString(aTime));
+}
+
+void DBTypeConversionTest::test_roundTimeFraction_rounds_to_4_digits()
+{
+    // this is the rounding the Firebird is using
+    css::util::Time aTime;
+    aTime.Hours = 0;
+    aTime.Minutes = 3;
+    aTime.Seconds = 0;
+    aTime.NanoSeconds = 123456789;
+    CPPUNIT_ASSERT(!DBTypeConversion::roundTimeFraction(aTime, 4));
+    // 123456789ns rounds to the nearest 1/10000s (123500000ns = .1235).
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(123500000), aTime.NanoSeconds);
+    // toTimeString() trims trailing zeros
+    CPPUNIT_ASSERT_EQUAL(u"00:03:00.1235"_ustr, DBTypeConversion::toTimeString(aTime));
+}
+
+void DBTypeConversionTest::test_roundTimeFraction_carries_into_seconds()
+{
+    css::util::Time aTime;
+    aTime.Hours = 0;
+    aTime.Minutes = 3;
+    aTime.Seconds = 59;
+    aTime.NanoSeconds = 999960000; // rounds up to a full extra second
+    CPPUNIT_ASSERT(!DBTypeConversion::roundTimeFraction(aTime, 4));
+    CPPUNIT_ASSERT_EQUAL(u"00:04:00"_ustr, DBTypeConversion::toTimeString(aTime));
+}
+
+void DBTypeConversionTest::test_roundTimeFraction_wraps_at_midnight()
+{
+    css::util::Time aTime;
+    aTime.Hours = 23;
+    aTime.Minutes = 59;
+    aTime.Seconds = 59;
+    aTime.NanoSeconds = 999950000;
+    CPPUNIT_ASSERT(DBTypeConversion::roundTimeFraction(aTime, 4));
+    CPPUNIT_ASSERT_EQUAL(u"00:00:00"_ustr, DBTypeConversion::toTimeString(aTime));
+}
+
+void DBTypeConversionTest::test_roundDateTimeFraction_carries_into_next_day()
+{
+    css::util::DateTime aDT;
+    aDT.Year = 2024;
+    aDT.Month = 7;
+    aDT.Day = 15;
+    aDT.Hours = 23;
+    aDT.Minutes = 59;
+    aDT.Seconds = 59;
+    aDT.NanoSeconds = 999950000;
+    DBTypeConversion::roundDateTimeFraction(aDT, 4);
+    CPPUNIT_ASSERT_EQUAL(u"2024-07-16 00:00:00"_ustr, DBTypeConversion::toDateTimeString(aDT));
+}
+
+void DBTypeConversionTest::test_roundDateTimeFraction_rolls_over_month_end()
+{
+    css::util::DateTime aDT;
+    aDT.Year = 2024;
+    aDT.Month = 12;
+    aDT.Day = 31;
+    aDT.Hours = 23;
+    aDT.Minutes = 59;
+    aDT.Seconds = 59;
+    aDT.NanoSeconds = 999950000;
+    DBTypeConversion::roundDateTimeFraction(aDT, 4);
+    CPPUNIT_ASSERT_EQUAL(u"2025-01-01 00:00:00"_ustr, DBTypeConversion::toDateTimeString(aDT));
+}
+
+void DBTypeConversionTest::test_roundTimeFraction_noop_when_no_cap_requested()
+{
+    css::util::Time aTime;
+    aTime.Hours = 0;
+    aTime.Minutes = 3;
+    aTime.Seconds = 0;
+    aTime.NanoSeconds = 123456789;
+    CPPUNIT_ASSERT(!DBTypeConversion::roundTimeFraction(aTime, 9));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(123456789), aTime.NanoSeconds);
+}
+
+void DBTypeConversionTest::test_toDateTimeString_no_fraction_when_zero_nanoseconds()
+{
+    css::util::DateTime aDT;
+    aDT.Year = 2024;
+    aDT.Month = 7;
+    aDT.Day = 15;
+    aDT.Hours = 14;
+    aDT.Minutes = 30;
+    aDT.Seconds = 0;
+    aDT.NanoSeconds = 0;
+    CPPUNIT_ASSERT_EQUAL(u"2024-07-15 14:30:00"_ustr, DBTypeConversion::toDateTimeString(aDT));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DBTypeConversionTest);

@@ -52,6 +52,10 @@ namespace com::sun::star
     {
         class XTypeConverter;
     }
+    namespace sdbc
+    {
+        class XConnection;
+    }
 }
 
 namespace dbtools::DBTypeConversion
@@ -119,13 +123,51 @@ namespace dbtools::DBTypeConversion
         OOO_DLLPUBLIC_DBTOOLS OUString toDateString(const css::util::Date& rDate);
         // return the time in the format %02d:%02d:%02d
         OOO_DLLPUBLIC_DBTOOLS OUString toTimeStringS(const css::util::Time& rTime);
-        // return the time in the format %02d:%02d:%02d.%09d
+        // return the time in the format %02d:%02d:%02d[.%d], the fraction (up to 9
+        // digits, trailing zeros trimmed) being omitted entirely when there is none.
+        // The value's full precision is kept - callers that build a SQL literal for a
+        // backend which cannot parse that many fractional digits must round the value
+        // first, see roundTimeFraction() below (the trailing-zero trim here is what
+        // makes such a rounded value actually render with fewer digits, rather than
+        // the same digit count with zeros in the low positions).
         OOO_DLLPUBLIC_DBTOOLS OUString toTimeString(const css::util::Time& rTime);
-        // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d
+        // return the DateTime in the format %04d-%02d-%02d, plus the time part as toTimeString() above
         OOO_DLLPUBLIC_DBTOOLS OUString toDateTimeString(const css::util::DateTime& _rDateTime);
-        // return the any in an sql standard format
+
+        /** rounds rTime's fractional seconds to at most nMaxFractionDigits digits
+            (nearest 10^(9-nMaxFractionDigits) nanoseconds), carrying into
+            seconds/minutes/hours as needed. A value of 9 (or higher, or negative) is
+            treated as "no cap" and leaves rTime untouched.
+
+            Some backends (e.g. Firebird, whose native TIME/TIMESTAMP precision is
+            1/10000s) reject a literal carrying more fractional digits than that
+            (tdf#153057) - see dbtools::DatabaseMetaData::getMaxDateTimeLiteralFractionDigits()
+            for the driver-aware digit count to pass in. This is deliberately *not*
+            done inside toTimeString()/toDateTimeString(), which several drivers use to
+            render a value for parameter binding rather than to build a literal (e.g.
+            PostgreSQL's setTime()/setTimestamp(), which support microsecond precision)
+            - only code generating a SQL literal should opt in.
+
+            @return whether the rounding carried past 23:59:59 into the next day. A bare
+                    Time has no date to absorb that, so its Hours wrap to 0; use
+                    roundDateTimeFraction() when a date is available. [[nodiscard]] because
+                    silently dropping this return is exactly how the day-carry regression
+                    this function was introduced to fix would resurface - a caller with a
+                    genuine Date in scope (as opposed to a bare Time for a SQL TIME value,
+                    which has nothing to advance) must check it.
+        */
+        [[nodiscard]] OOO_DLLPUBLIC_DBTOOLS bool roundTimeFraction(css::util::Time& rTime, sal_Int32 nMaxFractionDigits);
+
+        /** as roundTimeFraction(), but advances rDateTime's date part by a day if the
+            rounding carries past 23:59:59.
+        */
+        OOO_DLLPUBLIC_DBTOOLS void roundDateTimeFraction(css::util::DateTime& rDateTime, sal_Int32 nMaxFractionDigits);
+        // return the any in an sql standard format, capping any fractional-seconds
+        // digits to what _rxConnection's driver declares it can parse in a literal
+        // (see dbtools::DatabaseMetaData::getMaxDateTimeLiteralFractionDigits())
         OOO_DLLPUBLIC_DBTOOLS OUString toSQLString(sal_Int32 eType, const css::uno::Any& _rVal,
-            const css::uno::Reference< css::script::XTypeConverter >&  _rxTypeConverter);
+            const css::uno::Reference< css::script::XTypeConverter >&  _rxTypeConverter,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection);
 
         /** converts a Unicode string into a 8-bit string, using the given encoding
 

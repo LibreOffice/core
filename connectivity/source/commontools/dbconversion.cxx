@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/date.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <sstream>
 #include <iomanip>
@@ -100,8 +101,18 @@ namespace dbtools
         ostr.fill('0');
         ostr << setw(2) << rTime.Hours   << ":"
              << setw(2) << rTime.Minutes << ":"
-             << setw(2) << rTime.Seconds << "."
-             << setw(9) << rTime.NanoSeconds;
+             << setw(2) << rTime.Seconds;
+        if (rTime.NanoSeconds)
+        {
+            std::ostringstream ostrFraction;
+            ostrFraction.fill('0');
+            ostrFraction << setw(9) << rTime.NanoSeconds;
+            // Trim trailing zeros if exist, since some backends (e.g. Firebird)
+            // reject a literal with more fractional digits than they support.
+            std::string sFraction = ostrFraction.str();
+            sFraction.erase(sFraction.find_last_not_of('0') + 1);
+            ostr << "." << sFraction;
+        }
         return OUString::createFromAscii(ostr.str());
     }
 
@@ -111,6 +122,43 @@ namespace dbtools
         css::util::Time const aTime(_rDateTime.NanoSeconds, _rDateTime.Seconds,
                 _rDateTime.Minutes, _rDateTime.Hours, _rDateTime.IsUTC);
         return toDateString(aDate) + " " + toTimeString(aTime);
+    }
+
+    bool DBTypeConversion::roundTimeFraction(css::util::Time& rTime, sal_Int32 nMaxFractionDigits)
+    {
+        // Round the fraction to at most nMaxFractionDigits digits,
+        // carrying into seconds/minutes/hours as needed.
+        if (nMaxFractionDigits >= 9 || nMaxFractionDigits < 0)
+            return false;
+
+        sal_uInt32 nRoundingUnit = 1;
+        for (sal_Int32 i = 0; i < 9 - nMaxFractionDigits; ++i)
+            nRoundingUnit *= 10;
+
+        sal_uInt32 nNanoSeconds
+            = ((rTime.NanoSeconds + nRoundingUnit / 2) / nRoundingUnit) * nRoundingUnit;
+        bool bCarriedPastMidnight = false;
+        if (nNanoSeconds >= o3tl::make_unsigned(nanoSecInSec))
+        {
+            nNanoSeconds -= static_cast<sal_uInt32>(nanoSecInSec);
+            if (++rTime.Seconds >= secInMin)
+            {
+                rTime.Seconds -= secInMin;
+                if (++rTime.Minutes >= minInHour)
+                {
+                    rTime.Minutes -= minInHour;
+                    // Time has no day of its own to carry into so wrap
+                    // at 24h and report it to the caller.
+                    if (++rTime.Hours >= 24)
+                    {
+                        rTime.Hours -= 24;
+                        bCarriedPastMidnight = true;
+                    }
+                }
+            }
+        }
+        rTime.NanoSeconds = nNanoSeconds;
+        return bCarriedPastMidnight;
     }
 
     css::util::Date DBTypeConversion::toDate(const sal_Int32 _nVal)
@@ -219,6 +267,27 @@ namespace dbtools
         }
         else
             comphelper::date::convertDaysToDate( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
+    }
+
+    void DBTypeConversion::roundDateTimeFraction(css::util::DateTime& rDateTime, sal_Int32 nMaxFractionDigits)
+    {
+        css::util::Time aTime(rDateTime.NanoSeconds, rDateTime.Seconds, rDateTime.Minutes,
+                              rDateTime.Hours, rDateTime.IsUTC);
+        if (roundTimeFraction(aTime, nMaxFractionDigits))
+        {
+            // Unlike a bare Time, a DateTime does have a date to carry into,
+            // so 23:59:59.99995 becomes the next day at 00:00:00 rather than
+            // an out-of-range 24:00:00 on the original date.
+            css::util::Date aDate(rDateTime.Day, rDateTime.Month, rDateTime.Year);
+            addDays(1, aDate);
+            rDateTime.Day   = aDate.Day;
+            rDateTime.Month = aDate.Month;
+            rDateTime.Year  = aDate.Year;
+        }
+        rDateTime.Hours       = aTime.Hours;
+        rDateTime.Minutes     = aTime.Minutes;
+        rDateTime.Seconds     = aTime.Seconds;
+        rDateTime.NanoSeconds = aTime.NanoSeconds;
     }
 
     static void subDays(const sal_Int32 nDays, css::util::Date& _rDate )

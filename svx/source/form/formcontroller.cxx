@@ -793,7 +793,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 
                             OUString sErrorMsg;
                             const std::unique_ptr< OSQLParseNode > pParseNode =
-                                predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
+                                predicateTree( sErrorMsg, sFilterValue, xFormatter, xField, xConnection );
                             OSL_ENSURE( pParseNode != nullptr, "FormController::getFastPropertyValue: could not parse the field value predicate!" );
                             if ( pParseNode != nullptr )
                             {
@@ -3089,7 +3089,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         {
                             OUString sPredicate,sErrorMsg;
                             rRefValue.Value >>= sPredicate;
-                            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField);
+                            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField, xConnection);
                             if ( pParseNode != nullptr )
                             {
                                 OUString sCriteria;

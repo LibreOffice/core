@@ -36,10 +36,12 @@ namespace svxform
             OUString& _rErrorMessage,
             const OUString& _rStatement,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxField
+            const css::uno::Reference< css::beans::XPropertySet >& _rxField,
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         ) const
     {
-        return m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
+        return m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField,
+                                         /*bUseRealName*/true, _rxConnection);
     }
 
 }

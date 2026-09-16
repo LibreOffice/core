@@ -135,6 +135,14 @@ namespace dbtools
         */
         bool shouldEscapeDateTime() const;
 
+        /** the maximum number of fractional-seconds digits this connection's backend
+            accepts in a TIME/TIMESTAMP SQL literal.
+
+            Reflects the driver's declared "MaxDateTimeLiteralFractionDigits" setting
+            (see e.g. Firebird's Drivers.xcu).
+        */
+        sal_Int32 getMaxDateTimeLiteralFractionDigits() const;
+
         /** should named parameters (:foo, [foo]) be replaced by unnamed parameters (?)
         */
         bool shouldSubstituteParameterNames() const;

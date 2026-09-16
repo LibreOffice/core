@@ -128,7 +128,7 @@ namespace dbtools
 
     std::unique_ptr<OSQLParseNode> OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
     {
-        std::unique_ptr<OSQLParseNode> pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
+        std::unique_ptr<OSQLParseNode> pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField, /*bUseRealName*/true, m_xConnection );
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
@@ -149,7 +149,7 @@ namespace dbtools
                 {
                     sQuoted = u"'" + sQuoted.replaceAll(u"'", u"''") + u"'";
                 }
-                pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sQuoted, m_xFormatter, _rxField );
+                pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sQuoted, m_xFormatter, _rxField, /*bUseRealName*/true, m_xConnection );
             }
 
             // one more fallback: for numeric fields, and value strings containing a decimal/thousands separator
@@ -215,7 +215,7 @@ namespace dbtools
                     sTranslated = sTranslated.replace( nCtxThdSep,  nFmtThdSep );
                     sTranslated = sTranslated.replace( nIntermediate, nFmtDecSep );
 
-                    pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sTranslated, m_xFormatter, _rxField );
+                    pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sTranslated, m_xFormatter, _rxField, /*bUseRealName*/true, m_xConnection );
                 }
             }
         }

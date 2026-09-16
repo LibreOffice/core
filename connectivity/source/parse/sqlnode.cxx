@@ -57,6 +57,7 @@
 #include <functional>
 #include <memory>
 #include <string_view>
+#include <tuple>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -214,6 +215,14 @@ OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, s
 OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
     DateTime aDate = DBTypeConversion::toDateTime(rString);
+
+    // round here in case of re-normalization on a rounded value
+    if (aDate.NanoSeconds)
+    {
+        DBTypeConversion::roundDateTimeFraction(aDate, rParam.aMetaData.getMaxDateTimeLiteralFractionDigits());
+        return DBTypeConversion::toDateTimeString(aDate);
+    }
+
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
 
@@ -226,6 +235,15 @@ OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rPara
 OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, std::u16string_view rString)
 {
     css::util::Time aTime = DBTypeConversion::toTime(rString);
+
+    // Same fallback as convertDateTimeString() above
+    if (aTime.NanoSeconds)
+    {
+        // Discarding the day-carry return: only time is relevant here
+        std::ignore = DBTypeConversion::roundTimeFraction(aTime, rParam.aMetaData.getMaxDateTimeLiteralFractionDigits());
+        return DBTypeConversion::toTimeString(aTime);
+    }
+
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());
 
     Reference< XNumberFormatTypes >  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
@@ -1081,6 +1099,7 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
         case DataType::TIME:
         {
             css::util::Time aTime = DBTypeConversion::toTime(fValue);
+            std::ignore = DBTypeConversion::roundTimeFraction(aTime, m_aMetaData.getMaxDateTimeLiteralFractionDigits());
             OUString aString = DBTypeConversion::toTimeString(aTime);
             pDateNode->append(new OSQLInternalNode("", SQLNodeType::Keyword, SQL_TOKEN_T));
             pDateNode->append(new OSQLInternalNode(aString, SQLNodeType::String));
@@ -1089,6 +1108,7 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
         case DataType::TIMESTAMP:
         {
             DateTime aDateTime = DBTypeConversion::toDateTime(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
+            DBTypeConversion::roundDateTimeFraction(aDateTime, m_aMetaData.getMaxDateTimeLiteralFractionDigits());
             if (aDateTime.Seconds || aDateTime.Minutes || aDateTime.Hours)
             {
                 OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
@@ -1176,7 +1196,8 @@ std::mutex& OSQLParser::getMutex()
 std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                                          const Reference< css::util::XNumberFormatter > & xFormatter,
                                          const Reference< XPropertySet > & xField,
-                                         bool bUseRealName)
+                                         bool bUseRealName,
+                                         const Reference< css::sdbc::XConnection >& xConnection)
 {
     // Guard the parsing
     std::unique_lock aGuard(getMutex());
@@ -1187,6 +1208,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
     // reset the parser
     m_xField        = xField;
     m_xFormatter    = xFormatter;
+    m_aMetaData     = ::dbtools::DatabaseMetaData(xConnection);
 
     if (m_xField.is())
     {

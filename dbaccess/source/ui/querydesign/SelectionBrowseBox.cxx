@@ -1145,7 +1145,9 @@ bool OSelectionBrowseBox::SaveModified()
                             pParseNode = rParser.predicateTree(aErrorMsg,
                                                                 aText,
                                                                 static_cast<OQueryController&>(getDesignView()->getController()).getNumberFormatter(),
-                                                                xColumn);
+                                                                xColumn,
+                                                                /*bUseRealName*/true,
+                                                                static_cast<OQueryController&>(getDesignView()->getController()).getConnection());
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,

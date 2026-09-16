@@ -2968,7 +2968,8 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
                                                         _sCriteria,
                                                         static_cast<OQueryController&>(getController()).getNumberFormatter(),
                                                         _rxColumn,
-                                                        false);
+                                                        false,
+                                                        static_cast<OQueryController&>(getController()).getConnection());
     return pParseNode;
 }
 

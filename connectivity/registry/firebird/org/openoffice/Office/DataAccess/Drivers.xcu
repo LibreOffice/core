@@ -75,6 +75,13 @@
       <node oor:name="Features">
       </node><!--Features-->
       <node oor:name="MetaData">
+        <!-- Firebird's native TIME/TIMESTAMP precision is 1/10000s; it rejects a SQL
+             literal with more fractional-seconds digits than that (tdf#153057). -->
+        <node oor:name="MaxDateTimeLiteralFractionDigits" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:int">
+            <value>4</value>
+          </prop>
+        </node>
       </node>
     </node>
     <!-- Firebird EXTERNAL Driver -->
@@ -127,6 +134,13 @@
         <node oor:name="Authentication" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
             <value>UserPassword</value>
+          </prop>
+        </node>
+        <!-- Firebird's native TIME/TIMESTAMP precision is 1/10000s; it rejects a SQL
+             literal with more fractional-seconds digits than that (tdf#153057). -->
+        <node oor:name="MaxDateTimeLiteralFractionDigits" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:int">
+            <value>4</value>
           </prop>
         </node>
       </node>

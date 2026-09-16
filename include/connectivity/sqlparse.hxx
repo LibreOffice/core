@@ -138,6 +138,7 @@ namespace connectivity
                                     m_xField;       // current field
         css::uno::Reference< css::util::XNumberFormatter >
                                     m_xFormatter;   // current number formatter
+        ::dbtools::DatabaseMetaData m_aMetaData;    // meta data of the connection the current predicateTree() call is for, if any
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         sal_Int32                   m_nDateFormatKey;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -172,10 +173,14 @@ namespace connectivity
         // Check a Predicate
         // set bUseRealName to false if you pass a xField that comes from where you got that field,
         // as opposed from to from yourself.
+        // xConnection, if given, lets buildNode_Date() cap a date/time literal's fractional-seconds
+        // digits to what that connection's driver actually accepts (tdf#153057); omit it only if no
+        // connection is available, which falls back to the most conservative known limit.
         std::unique_ptr<OSQLParseNode> predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                        const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
                        const css::uno::Reference< css::beans::XPropertySet > & xField,
-                       bool bUseRealName = true);
+                       bool bUseRealName = true,
+                       const css::uno::Reference< css::sdbc::XConnection >& xConnection = css::uno::Reference< css::sdbc::XConnection >());
 
         // Access to the context
         const IParseContext& getContext() const { return *m_pContext; }

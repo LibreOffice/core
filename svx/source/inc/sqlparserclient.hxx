@@ -34,6 +34,9 @@ namespace com::sun::star {
     namespace beans {
         class XPropertySet;
     }
+    namespace sdbc {
+        class XConnection;
+    }
 }
 namespace connectivity {
     class OSQLParser;
@@ -56,7 +59,9 @@ namespace svxform
                 OUString& _rErrorMessage,
                 const OUString& _rStatement,
                 const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
-                const css::uno::Reference< css::beans::XPropertySet >& _rxField
+                const css::uno::Reference< css::beans::XPropertySet >& _rxField,
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+                    = css::uno::Reference< css::sdbc::XConnection >()
             ) const;
     };
 
