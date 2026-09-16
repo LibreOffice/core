@@ -25,6 +25,7 @@
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svx/documentbullets.hxx>
 #include <svx/numberingpreview.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/timer.hxx>
@@ -268,10 +269,14 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xOrientLB;
     std::unique_ptr<weld::Frame> m_xAllLevelsFrame;
     std::unique_ptr<weld::Menu> m_xGalleryMenu;
+    std::unique_ptr<weld::Menu> m_xDocumentMenu;
+    /// The image bullets that the document already uses, in the order the menu lists them.
+    std::vector<SvxDocumentBullet> maDocumentBullets;
     std::unique_ptr<weld::CheckButton> m_xSameLevelCB;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
     void                InitControls();
+    void PopulateDocumentMenu();
 
     void                SwitchNumberType( NumberType nType );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);

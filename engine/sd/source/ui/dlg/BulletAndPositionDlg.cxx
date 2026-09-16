@@ -30,11 +30,13 @@
 #include <svl/intitem.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/unitconv.hxx>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <vector>
 #include <sfx2/opengrf.hxx>
 
@@ -207,6 +209,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     m_xGrid->set_size_request(aSize.Width(), -1);
 
     PopulateGalleryMenu();
+    PopulateDocumentMenu(*pView);
 
     // PageCreated
     FieldUnit eMetric = pView->GetDoc().GetUIUnit();
@@ -814,6 +817,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, BulRelSizeHdl_Impl, weld::MetricSpinButton&, 
 IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, void)
 {
     OUString aGrfName;
+    std::optional<Graphic> oDocumentGraphic;
     Size aSize;
     bool bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(SdResId(RID_SVXSTR_EDIT_GRAPHIC), p_Window);
@@ -831,6 +835,16 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, voi
                 aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                 bSucc = true;
             }
+        }
+    }
+    else if (rIdent.startsWith("document", &sNumber))
+    {
+        auto idx = o3tl::toUInt32(sNumber);
+        if (idx < aDocumentGraphicBullets.size())
+        {
+            oDocumentGraphic = aDocumentGraphicBullets[idx].aGraphic;
+            aSize = aDocumentGraphicBullets[idx].GetGraphicSizeMM100();
+            bSucc = true;
         }
     }
     else if (rIdent == "fromfile")
@@ -862,6 +876,20 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, voi
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             aNumFmt.SetCharFormatName(m_sNumCharFmtName);
+            if (oDocumentGraphic)
+            {
+                // An image the presentation already carries has no file behind it to link to, so
+                // the image itself goes into the format.
+                const SvxBrushItem aBrush(*oDocumentGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                sal_Int16 eOrient = aNumFmt.GetVertOrient() == css::text::VertOrientation::NONE
+                                        ? sal_Int16(css::text::VertOrientation::TOP)
+                                        : aNumFmt.GetVertOrient();
+                aNumFmt.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+                aInitSize[i] = aNumFmt.GetGraphicSize();
+                pActNum->SetLevel(i, aNumFmt);
+                nMask <<= 1;
+                continue;
+            }
             aNumFmt.SetGraphic(aGrfName);
 
             // set size for a later comparison
@@ -886,6 +914,49 @@ IMPL_LINK(SvxBulletAndPositionDlg, GraphicHdl_Impl, const OUString&, rIdent, voi
     SetModified();
     //needed due to asynchronous loading of graphics in the SvxBrushItem
     aInvalidateTimer.Start();
+}
+
+void SvxBulletAndPositionDlg::PopulateDocumentMenu(const ::sd::View& rView)
+{
+    if (m_xDocumentMenu)
+        return;
+
+    // The shape under edit keeps its text in the outliner rather than on the shape, so its
+    // bullets are read from there.
+    for (const SvxDocumentBullet& rBullet :
+         rView.GetDoc().GetUsedBullets(rView.GetTextEditOutliner()))
+    {
+        if (rBullet.IsGraphic())
+            aDocumentGraphicBullets.push_back(rBullet);
+    }
+
+    // A presentation with no image bullets of its own has nothing to offer here, and the entry
+    // stays hidden the way the dialog description leaves it.
+    if (aDocumentGraphicBullets.empty())
+        return;
+
+    m_xDocumentMenu = m_xBuilder->weld_menu(u"fromdocumentsubmenu"_ustr);
+    m_xBitmapMB->set_item_visible(u"fromdocument"_ustr, true);
+
+    ScopedVclPtrInstance<VirtualDevice> pVD;
+    for (size_t i = 0; i < aDocumentGraphicBullets.size(); ++i)
+    {
+        Bitmap aBitmap(aDocumentGraphicBullets[i].aGraphic.GetBitmap());
+        Size aSize(aBitmap.GetSizePixel());
+        if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
+        {
+            bool bWidth = aSize.Width() > aSize.Height();
+            double nScale = bWidth ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
+                                   : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
+            aBitmap.Scale(nScale, nScale);
+        }
+        pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+        pVD->DrawBitmap(Point(), aBitmap);
+
+        m_xDocumentMenu->append(
+            "document" + OUString::number(i),
+            SdResId(STR_DOCUMENT_BULLET_ENTRY).replaceFirst("%1", OUString::number(i + 1)), *pVD);
+    }
 }
 
 void SvxBulletAndPositionDlg::PopulateGalleryMenu()

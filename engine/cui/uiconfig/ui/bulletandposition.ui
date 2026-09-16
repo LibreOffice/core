@@ -59,6 +59,20 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="fromdocument">
+        <property name="visible">False</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="bulletandposition|fromdocument">From Document</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="fromdocumentsubmenu">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>

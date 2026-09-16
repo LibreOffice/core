@@ -504,5 +504,8 @@
 
 #define STR_UNDO_MOVE_SHAPE_TO_PAGE                     NC_("STR_UNDO_MOVE_SHAPE_TO_PAGE", "Move shape to another page")
 #define STR_UNDO_INSERT_SHAPE_INTO_SLIDE                NC_("STR_UNDO_INSERT_SHAPE_INTO_SLIDE", "Insert shape")
+// To translators: %1 is replaced by the position of the image among the presentation's own bullet
+// images, counted from 1.
+#define STR_DOCUMENT_BULLET_ENTRY                       NC_("STR_DOCUMENT_BULLET_ENTRY", "Image %1")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

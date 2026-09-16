@@ -61,6 +61,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <vector>
 #include <sfx2/opengrf.hxx>
 
@@ -1288,6 +1289,8 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     m_xBulletPB->connect_clicked(LINK(this, SvxNumOptionsTabPage, BulletHdl_Impl));
     m_xFmtLB->connect_changed(LINK(this, SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl));
     m_xBitmapMB->connect_selected(LINK(this, SvxNumOptionsTabPage, GraphicHdl_Impl));
+    // The entry appears once the document turns out to have image bullets of its own.
+    m_xBitmapMB->set_item_visible(u"fromdocument"_ustr, false);
     m_xBitmapMB->connect_toggled(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
     m_xLevelLB->connect_selection_changed(LINK(this, SvxNumOptionsTabPage, LevelHdl_Impl));
@@ -2058,6 +2061,7 @@ IMPL_LINK(SvxNumOptionsTabPage, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rFi
 IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
 {
     OUString                aGrfName;
+    std::optional<Graphic> oDocumentGraphic;
     Size                    aSize;
     bool                bSucc(false);
     SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_CUISTR_EDIT_GRAPHIC), GetFrameWeld());
@@ -2075,6 +2079,16 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
                 aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                 bSucc = true;
             }
+        }
+    }
+    else if (rIdent.startsWith("document", &sNumber))
+    {
+        auto idx = o3tl::toUInt32(sNumber);
+        if (idx < maDocumentBullets.size())
+        {
+            oDocumentGraphic = maDocumentBullets[idx].aGraphic;
+            aSize = maDocumentBullets[idx].GetGraphicSizeMM100();
+            bSucc = true;
         }
     }
     else if (rIdent == "fromfile")
@@ -2106,6 +2120,20 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             aNumFmt.SetCharFormatName(m_sNumCharFmtName);
+            if (oDocumentGraphic)
+            {
+                // An image the document already carries has no file behind it to link to, so the
+                // image itself goes into the format.
+                const SvxBrushItem aBrush(*oDocumentGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                sal_Int16 eOrient = aNumFmt.GetVertOrient() == text::VertOrientation::NONE
+                                        ? sal_Int16(text::VertOrientation::TOP)
+                                        : aNumFmt.GetVertOrient();
+                aNumFmt.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+                aInitSize[i] = aNumFmt.GetGraphicSize();
+                pActNum->SetLevel(i, aNumFmt);
+                nMask <<= 1;
+                continue;
+            }
             aNumFmt.SetGraphic(aGrfName);
 
             // set size for a later comparison
@@ -2131,6 +2159,37 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     SetModified();
     //needed due to asynchronous loading of graphics in the SvxBrushItem
     aInvalidateTimer.Start();
+}
+
+void SvxNumOptionsTabPage::PopulateDocumentMenu()
+{
+    // A document with no image bullets of its own has nothing to offer here.
+    if (maDocumentBullets.empty())
+        return;
+
+    m_xDocumentMenu = m_xBuilder->weld_menu(u"fromdocumentsubmenu"_ustr);
+    m_xBitmapMB->set_item_visible(u"fromdocument"_ustr, true);
+
+    ScopedVclPtrInstance<VirtualDevice> pVD;
+    for (size_t i = 0; i < maDocumentBullets.size(); ++i)
+    {
+        Bitmap aBitmap(maDocumentBullets[i].aGraphic.GetBitmap());
+        Size aSize(aBitmap.GetSizePixel());
+        if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
+        {
+            bool bWidth = aSize.Width() > aSize.Height();
+            double nScale = bWidth ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
+                                   : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
+            aBitmap.Scale(nScale, nScale);
+        }
+        pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+        pVD->DrawBitmap(Point(), aBitmap);
+
+        m_xDocumentMenu->append(
+            "document" + OUString::number(i),
+            CuiResId(RID_CUISTR_DOCUMENT_BULLET_ENTRY).replaceFirst("%1", OUString::number(i + 1)),
+            *pVD);
+    }
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, void)
@@ -3265,6 +3324,19 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
+
+    const SvxDocumentBulletsItem* pDocumentBullets
+        = aSet.GetItem<SvxDocumentBulletsItem>(SID_DOCUMENT_BULLETS, false);
+    if (pDocumentBullets)
+    {
+        for (const SvxDocumentBullet& rBullet : pDocumentBullets->GetBullets())
+        {
+            if (rBullet.IsGraphic())
+                maDocumentBullets.push_back(rBullet);
+        }
+    }
+
+    PopulateDocumentMenu();
 }
 
 void SvxNumPositionTabPage::PageCreated(const SfxAllItemSet& aSet)

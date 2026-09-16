@@ -26,6 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include <vcl/weld.hxx>
 #include "View.hxx"
+#include <svx/documentbullets.hxx>
 #include <svx/numberingpreview.hxx>
 #include <svx/dlgutil.hxx>
 
@@ -59,6 +60,8 @@ class SvxBulletAndPositionDlg final : public weld::GenericDialogController
     bool bApplyToMaster;
 
     std::vector<OUString> aGrfNames;
+    /// The image bullets that the presentation itself uses, in the order the menu lists them.
+    std::vector<SvxDocumentBullet> aDocumentGraphicBullets;
     vcl::Font aActBulletFont;
 
     sal_uInt8 nBullet;
@@ -96,6 +99,7 @@ class SvxBulletAndPositionDlg final : public weld::GenericDialogController
     std::unique_ptr<weld::CustomWeld> m_xImgRatioTop;
     std::unique_ptr<weld::CustomWeld> m_xImgRatioBottom;
     std::unique_ptr<weld::Menu> m_xGalleryMenu;
+    std::unique_ptr<weld::Menu> m_xDocumentMenu;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
     std::unique_ptr<weld::Label> m_xDistBorderFT;
     std::unique_ptr<weld::MetricSpinButton> m_xDistBorderMF;
@@ -111,6 +115,7 @@ class SvxBulletAndPositionDlg final : public weld::GenericDialogController
 
     void InitControls();
     void PopulateGalleryMenu();
+    void PopulateDocumentMenu(const ::sd::View& rView);
     /** To switch between the numbering type
         0 - Number;
         1 - Bullet;
