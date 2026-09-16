@@ -110,10 +110,12 @@ public:
     void ApplyStyleSheets( const FontTablePtr& rFontTable );
     StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
     StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(std::u16string_view rIndex);
+    StyleSheetEntryPtr FindStyleSheetByStyleName(std::u16string_view rIndex);
     StyleSheetEntryPtr FindDefaultParaStyle();
 
     OUString ConvertStyleNameExt(const OUString& rWWName);
-    static std::pair<OUString, bool> ConvertStyleName(const OUString& rWWName);
+    static std::pair<OUString, bool> ConvertStyleName(const OUString& rWWName,
+                                                      StyleType eType = StyleType::Unknown);
     OUString CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
     void ApplyClonedTOCStyles();
 

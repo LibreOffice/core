@@ -3026,7 +3026,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
                         if (pParent)
                         {
-                            OUString sParent = StyleSheetTable::ConvertStyleName(pParent->m_sStyleName).first;
+                            OUString sParent = StyleSheetTable::ConvertStyleName(
+                                                  pParent->m_sStyleName, pParent->m_nStyleTypeCode)
+                                                  .first;
                             pStyleTable->MarkParagraphStyleAsUsed(sParent);
                         }
                     }
@@ -3036,7 +3038,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         StyleSheetEntryPtr pFollow = pStyleTable->FindStyleSheetByISTD(pStyle->m_sNextStyleIdentifier);
                         if (pFollow)
                         {
-                            OUString sFollow = StyleSheetTable::ConvertStyleName(pFollow->m_sStyleName).first;
+                            OUString sFollow = StyleSheetTable::ConvertStyleName(
+                                                  pFollow->m_sStyleName, pFollow->m_nStyleTypeCode)
+                                                  .first;
                             pStyleTable->MarkParagraphStyleAsUsed(sFollow);
                         }
                     }

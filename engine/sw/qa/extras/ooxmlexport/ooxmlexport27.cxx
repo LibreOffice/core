@@ -614,6 +614,51 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158349_SDTstreamStateStack, "tdf158349_SDTstream
     // should load and reload without reporting a corrupt document
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStyleNamedAfterABuiltInStaysItsOwn)
+{
+    // The document has a paragraph style of its own called Default Paragraph Style, which is the
+    // name a reader sees for the style every paragraph starts from.
+    createSwDoc("style-named-after-a-builtin.docx");
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Default Paragraph Style
+    // - Actual  : Standard
+    // i.e. the style of the document took the name Writer knows its own by, and the two became
+    // one style.
+    CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testParagraphStyleKeepsItsOwnName)
+{
+    // The document has a paragraph style called Quotation. A character style of that name is one
+    // Writer supplies, and the paragraph style is a style of its own.
+    createSwDoc("paragraph-style-named-after-character-style.docx");
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Quotation
+    // - Actual  : Citation
+    // i.e. the paragraph took the name the character style of Writer is known by.
+    CPPUNIT_ASSERT_EQUAL(u"Quotation"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFrameContentsStyleStaysOneStyle)
+{
+    // The text of a frame uses a style that Writer supplies. Saving names that style in the
+    // document, so reading the document back has to find the same style again.
+    createSwDoc("AnchorId.docx");
+    saveAndReload(TestFilter::DOCX);
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    // The name a reader sees for the style is translated, and the one the document is read by
+    // is not, so the second reading did not recognise the style and made a copy of it under a
+    // name that the application had to keep apart from the original.
+    assertXPath(pXmlDoc, "/w:styles/w:style/w:name[@w:val='Frame Contents']", 1);
+    assertXPath(pXmlDoc, "/w:styles/w:style/w:name[@w:val='Frame Contents (user)']", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -7511,7 +7511,8 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
     assert(!rTOCStyleName.isEmpty());
     if (auto const pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(FilterChars(rTOCStyleName)))
     {
-        auto const [convertedStyleName, isBuiltIn] = StyleSheetTable::ConvertStyleName(pStyle->m_sStyleName);
+        auto const [convertedStyleName, isBuiltIn] = StyleSheetTable::ConvertStyleName(
+            pStyle->m_sStyleName, pStyle->m_nStyleTypeCode);
         if (isBuiltIn && m_bIsNewDoc)
         {   // practical case: Word wrote i18n name to TOC field, but it doesn't
             // exist in styles.xml; tdf#153083 clone it for best roundtrip
@@ -7524,6 +7525,15 @@ OUString DomainMapper_Impl::ConvertTOCStyleName(OUString const& rTOCStyleName)
             }
         }
     }
+    // A field gives a style by the name a reader sees, and a style of the document's own that
+    // carries the name of one Writer supplies is read under the name Writer knows that one by,
+    // so the field asks for the style under the name it was read with.
+    if (auto const pNamed = GetStyleSheetTable()->FindStyleSheetByStyleName(rTOCStyleName))
+    {
+        if (!pNamed->m_sConvertedStyleName.isEmpty())
+            return pNamed->m_sConvertedStyleName;
+    }
+
     // theoretical case: what OOXML says
     return StyleSheetTable::ConvertStyleName(rTOCStyleName).first;
 }
