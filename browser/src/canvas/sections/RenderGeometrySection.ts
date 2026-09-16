@@ -483,6 +483,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 							hidden: true,
 							editView: false,
 							edge: false,
+							link: false,
 						}
 					: undefined);
 			if (!hit) continue;
@@ -1187,18 +1188,31 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	/*
 		The pointer the objects ask for at a document position, in the names the engine sends for
-		them: 'text' where the text of an object is what lies under the point, 'move' where the
-		object itself does, and 'default' where there is no object. It is the same answer the hit
-		test gives, so what the pointer says and what the hit test found are one thing.
+		them: 'pointer', the hand, where the text of a hyperlink lies under the point, 'text' where
+		other text of an object does, 'move' where the object itself does, and 'default' where there
+		is no object. It is the same answer the hit test gives, so what the pointer says and what
+		the hit test found are one thing.
 	*/
 	public static pointerAt(x: number, y: number): string {
 		const section = RenderGeometrySection.ofPage();
 
 		if (!section) return 'default';
 
-		const hit = section.hitObjectInDocument(x, y);
+		return RenderGeometrySection.pointerOf(section.hitObjectInDocument(x, y));
+	}
+
+	/// The same answer for a point in the coordinates of the section container.
+	public static pointerAtCanvasPoint(point: number[]): string {
+		const section = RenderGeometrySection.ofPage();
+
+		if (!section) return 'default';
+
+		return RenderGeometrySection.pointerOf(section.hitObject(point));
+	}
+
+	private static pointerOf(hit: RenderGeometryHit | undefined): string {
 		if (!hit) return 'default';
-		if (hit.hit.kind === 'text') return 'text';
+		if (hit.hit.kind === 'text') return hit.hit.link ? 'pointer' : 'text';
 
 		// An object of a diagram other than its first, which spans the whole of it, cannot be
 		// moved, so the pointer does not say it can.

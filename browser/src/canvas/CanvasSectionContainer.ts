@@ -1223,9 +1223,11 @@ class CanvasSectionContainer {
 		this.clearMousePositions();
 	}
 
-	// The engine reports the shape of the mouse pointer for the position it
-	// last saw. The 'pointer' shape is the hand it shows over a hyperlink.
+	// The 'pointer' shape is the hand over a hyperlink. It comes from the shapes while
+	// they answer for the pointer, otherwise from the engine.
 	private isPointerOverHyperlink(): boolean {
+		if (RenderGeometrySection.answersPointer() && this.mousePosition)
+			return RenderGeometrySection.pointerAtCanvasPoint(this.mousePosition) === 'pointer';
 		return app.map && app.map._docLayer
 			&& app.map._docLayer._coreMousePointer === 'pointer';
 	}
@@ -1386,10 +1388,10 @@ class CanvasSectionContainer {
 	public onMouseDown (e: MouseEvent) { // Ignore this event, just rely on this.draggingSomething variable.
 		if (e.button === 1) {
 			this.middleButtonDownOnCanvas = true;
-			// The engine shows the hand pointer while the mouse is over a
-			// hyperlink. Only then does the middle button act as a click
-			// that opens the link: consume the press here, before the
-			// browser would start the autoscroll.
+			// The hand pointer shows while the mouse is over a hyperlink.
+			// Only then does the middle button act as a click that opens
+			// the link: consume the press here, before the browser would
+			// start the autoscroll.
 			this.middleClickOnHyperlink = this.isPointerOverHyperlink();
 			if (this.middleClickOnHyperlink) {
 				e.preventDefault();

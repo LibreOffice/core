@@ -1173,6 +1173,10 @@ class Socket {
 
 				// close all the popups otherwise document textArea will not get focus
 				this._map.uiManager.closeAll();
+
+				// A new view reports the mouse pointer until it is told not to.
+				if (RenderGeometrySection.answersPointer())
+					RenderGeometrySection.requestPointerFromServer(false);
 			}
 			this._map.setPermission(app.file.permission);
 			this.endMigration();

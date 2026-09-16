@@ -363,9 +363,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			app.sectionContainer.addSection(new cool.VectorContentSection());
 
 			// The geometry the client holds answers what lies under the mouse, so
-			// the pointer is worked out here. The engine keeps reporting its own,
-			// since the hand over a hyperlink is known to it alone.
+			// the pointer is worked out here and the engine is told not to send it.
 			app.sectionContainer.addSection(new RenderGeometrySection());
+			RenderGeometrySection.requestPointerFromServer(false);
 		}
 
 		this._canvasOverlay = new CanvasOverlay(this._map, app.sectionContainer.getContext());
@@ -1777,9 +1777,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		textMsg = Cursor.getCustomCursor(textMsg) || textMsg;
 		this._coreMousePointer = textMsg;
 
-		// While the shapes answer for the pointer theirs is the one on screen, apart
-		// from the hand over a hyperlink, which only the engine can tell.
-		if (RenderGeometrySection.answersPointer() && textMsg !== 'pointer')
+		// The pointer is kept and stays available, but while the shapes answer for it theirs is
+		// the one on screen.
+		if (RenderGeometrySection.answersPointer())
 			return;
 
 		const canvas = document.getElementById('document-canvas');

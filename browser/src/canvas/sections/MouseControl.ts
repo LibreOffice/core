@@ -255,18 +255,14 @@ class MouseControl extends CanvasSectionObject {
 	private setCursorType() {
 		/*
 			The shapes the client holds can say what lies under the mouse, so while they answer for
-			the pointer it is set from them, with the mouse rather than a round trip later. The hand
-			over a hyperlink is the one answer only the engine knows, since a link is a property of
-			the text and not of the geometry held here, so it shows while the engine reports it.
+			the pointer it is set from them and the engine is not asked. The answer arrives with the
+			mouse event.
 		*/
 		if (RenderGeometrySection.answersPointer()) {
-			const pointer =
-				app.map._docLayer._coreMousePointer === 'pointer'
-					? 'pointer'
-					: RenderGeometrySection.pointerAt(
-							this.currentPosition.x,
-							this.currentPosition.y,
-						);
+			const pointer = RenderGeometrySection.pointerAt(
+				this.currentPosition.x,
+				this.currentPosition.y,
+			);
 			const cursor = Cursor.getCustomCursor(pointer) || pointer;
 			if (this.context.canvas.style.cursor !== cursor)
 				this.context.canvas.style.cursor = cursor;

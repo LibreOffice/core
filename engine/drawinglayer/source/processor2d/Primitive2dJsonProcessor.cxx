@@ -1723,6 +1723,25 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             if (pTypeName)
             {
                 mrWriter.put("type", pTypeName);
+                // A field says what kind it is. A hyperlink is a property of the text and not
+                // of the geometry, so a reader that holds the geometry alone learns it here.
+                if (nId == PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
+                {
+                    const auto& rField
+                        = static_cast<const primitive2d::TextHierarchyFieldPrimitive2D&>(
+                            rBasePrimitive);
+                    switch (rField.getType())
+                    {
+                        case primitive2d::FIELD_TYPE_URL:
+                            mrWriter.put("fieldType", "url");
+                            break;
+                        case primitive2d::FIELD_TYPE_PAGE:
+                            mrWriter.put("fieldType", "page");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
             else if (maExternalPrimitiveWriter
                      && maExternalPrimitiveWriter(rBasePrimitive, mrWriter, mfScaleFactor))

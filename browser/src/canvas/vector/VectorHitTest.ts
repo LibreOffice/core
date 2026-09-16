@@ -28,6 +28,8 @@ namespace cool {
 		editView: boolean;
 		/// A fill answered within the tolerance of its boundary rather than inside it.
 		edge: boolean;
+		/// The text that answered is a hyperlink.
+		link: boolean;
 		/*
 			The geometry that answered, in the coordinates the primitives were asked in. It is the
 			outline of a fill, the line of a stroke, the box of a text portion or the area of an
@@ -44,6 +46,8 @@ namespace cool {
 		textOnly: boolean;
 		hidden: boolean;
 		editView: boolean;
+		/// What is walked is the text of a hyperlink field.
+		link: boolean;
 		/*
 			Maps what is walked now onto the coordinates the walk was asked in. The point travels
 			the other way, through the inverse, so this is what puts the geometry that answers back
@@ -378,6 +382,13 @@ namespace cool {
 					// A shadow cannot be hit.
 					return undefined;
 
+				case 'textHierarchyField':
+					// The text of a hyperlink field answers as a link.
+					return VectorHitTest.hit(primitive.children, position, range, {
+						...walk,
+						link: walk.link || fields.fieldType === 'url',
+					});
+
 				default:
 					/*
 						Everything else is painted by what it holds: the containers, the text
@@ -517,6 +528,7 @@ namespace cool {
 				hidden: walk.hidden,
 				editView: walk.editView,
 				edge: false,
+				link: kind === 'text' && walk.link,
 				path: VectorHitTest.pathThrough(path, walk.matrix),
 			};
 		}
@@ -533,6 +545,7 @@ namespace cool {
 				hidden: walk.hidden,
 				editView: walk.editView,
 				edge: where === 'edge',
+				link: false,
 				path: VectorHitTest.pathThrough(path, walk.matrix),
 			};
 		}
@@ -543,6 +556,7 @@ namespace cool {
 				textOnly: false,
 				hidden: false,
 				editView: false,
+				link: false,
 				matrix: Matrix2D.IDENTITY,
 			};
 		}
@@ -778,6 +792,7 @@ namespace cool {
 
 	/// The fields the tests read, which the types of primitive carry in different combinations.
 	interface HitFields extends Primitive {
+		fieldType?: string;
 		matrix?: number[];
 		path?: string;
 		clip?: string;

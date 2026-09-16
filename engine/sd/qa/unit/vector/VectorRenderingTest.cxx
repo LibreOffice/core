@@ -2481,6 +2481,42 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewNamesTheFillOfTheShown
     CPPUNIT_ASSERT(!aNotes.has("/objects/0/backdrop"));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHyperlinkFieldSaysWhatItIs)
+{
+    // Both forms of a hyperlink, a span of real text and the placeholder field from older
+    // versions, mark their field as a URL, so a client holding the geometry can show the hand.
+    createBlankDoc();
+    SdDrawDocument* pDrawDoc = getSdDocShell()->GetDoc();
+    SdrOutliner& rOutliner = pDrawDoc->GetDrawOutliner();
+    const SvxURLField aLink(u"https://example.org"_ustr, u"Example"_ustr, SvxURLFormat::Repr);
+
+    rtl::Reference<SdrRectObj> pSpan = new SdrRectObj(
+        *pDrawDoc, tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), SdrObjKind::Text);
+    rOutliner.Clear();
+    // The span holds the shown text itself, so the text ends after its last character.
+    const ESelection aSpanEnd = rOutliner.QuickInsertUrlField(aLink, ESelection());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aSpanEnd.end.nIndex);
+    pSpan->SetOutlinerParaObject(rOutliner.CreateParaObject());
+    page(1)->NbcInsertObject(pSpan.get());
+
+    rtl::Reference<SdrRectObj> pField = new SdrRectObj(
+        *pDrawDoc, tools::Rectangle(Point(1000, 4000), Size(8000, 2000)), SdrObjKind::Text);
+    rOutliner.Clear();
+    rOutliner.QuickInsertField(SvxFieldItem(aLink, EE_FEATURE_FIELD), ESelection());
+    pField->SetOutlinerParaObject(rOutliner.CreateParaObject());
+    page(1)->NbcInsertObject(pField.get());
+
+    auto aJson = getVectorPrimitives(u"testHyperlinkField");
+    for (const rtl::Reference<SdrRectObj>& pText : { pSpan, pField })
+    {
+        const auto oEntry = findEntryOfObject(aJson, pText->GetUniqueID());
+        CPPUNIT_ASSERT(oEntry.has_value());
+        const auto oLink = findNodeOfType(*oEntry, "textHierarchyField"_ostr);
+        CPPUNIT_ASSERT(oLink.has_value());
+        assertJsonPath(*oLink, "fieldType", "url");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)
 {
     // A text portion names its face by id and the font command returns
