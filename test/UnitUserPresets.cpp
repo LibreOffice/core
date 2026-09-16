@@ -26,6 +26,8 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <csignal>
 #include <ctime>
+#include <set>
+#include <string>
 
 using namespace std::literals;
 
@@ -301,9 +303,156 @@ public:
     }
 };
 
+/// Two people open the same document, each with settings of their own.
+///
+/// Both users' settings are fetched, because the browser settings are per
+/// session, but the presets are installed once: one document is one kit and
+/// one configuration, and it is the first user's. The second user's dialog
+/// still shows what they saved, because it reads that back from the host
+/// rather than from the kit, so their setting looks applied while the
+/// document goes on checking with the first user's.
+class UnitSecondUserPresets : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitFirstInstall, SecondView, WaitSecondView, Done) _phase;
+
+    /// The users whose settings the server was asked for.
+    std::set<std::string> _settingsAsked;
+    int _installs = 0;
+    int _viewsLoaded = 0;
+
+public:
+    UnitSecondUserPresets()
+        : Base("UnitSecondUserPresets")
+        , _phase(Phase::Load)
+    {
+    }
+
+    static std::string userOf(const Poco::URI& uri, const std::string& name)
+    {
+        for (const auto& parameter : uri.getQueryParameters())
+        {
+            if (parameter.first == name)
+                return parameter.second;
+        }
+        return std::string();
+    }
+
+    /// The access token names the user, so the two views are two people, each
+    /// with a settings store of their own.
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        const std::string user = userOf(Poco::URI(request.getURI()), "access_token");
+        fileInfo->set("UserId", user);
+        fileInfo->set("UserFriendlyName", user);
+
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI() + "/wopi/settings/userconfig.json?user="
+                          + user + "&testname=UnitSecondUserPresets";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", user);
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        if (uriReq.getPath() == "/wopi/settings/userconfig.json")
+        {
+            const std::string user = userOf(uriReq, "user");
+            TST_LOG("Settings asked for user [" << user << ']');
+            _settingsAsked.insert(user);
+
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("{\"kind\":\"user\"}", "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    void onDocBrokerPresetsInstallEnd(bool success) override
+    {
+        ++_installs;
+        TST_LOG("onDocBrokerPresetsInstallEnd: success=" << success
+                                                         << " install #" << _installs);
+        LOK_ASSERT_MESSAGE("the presets should install", success);
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>&) override
+    {
+        ++_viewsLoaded;
+        TST_LOG("onDocBrokerViewLoaded: " << _viewsLoaded << " view(s), "
+                                          << _installs << " preset install(s)");
+
+        if (_viewsLoaded == 1)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitFirstInstall);
+            LOK_ASSERT_EQUAL(1, _installs);
+            TRANSITION_STATE(_phase, Phase::SecondView);
+            return;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
+
+        // A document does not load until its presets are installed, so by the
+        // time the second view is up a second install would have finished.
+        // There is only ever one: the configuration this document checks with
+        // is the one the first user brought.
+        LOK_ASSERT_EQUAL(1, _installs);
+
+        // Both users' settings were fetched all the same - the browser
+        // settings are per session - so an untouched second user's store is
+        // not what makes their options do nothing.
+        LOK_ASSERT_MESSAGE("both users' settings should have been fetched",
+                           _settingsAsked.count("first") == 1
+                               && _settingsAsked.count("second") == 1);
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("the second user's presets are not installed");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstInstall);
+                TST_LOG("First user opens the document");
+                initWebsocket("/wopi/files/0?access_token=first");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::SecondView:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondView);
+                TST_LOG("Second user joins the same document");
+                // A connection of their own, with their own token: the doc key
+                // is the WOPISrc path, so the token names the user without
+                // making it a different document. initWebsocket puts the new
+                // connection at index 0.
+                initWebsocket("/wopi/files/0?access_token=second");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitFirstInstall:
+            case Phase::WaitSecondView:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[3]{ new UnitEarlyDocDeath(), new UnitSpifPreset(), nullptr };
+    return new UnitBase*[4]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
+                             new UnitSecondUserPresets(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
