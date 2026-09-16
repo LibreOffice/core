@@ -33,7 +33,6 @@
 #include <vcl/weld.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
 
-#include <doc.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <reffldsubtype.hxx>
@@ -717,37 +716,8 @@ private:
     bool m_bScrollToCursor = false;
 public:
     static sal_uInt32 nLock;
-    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc, bool bScrollToCursor = false)
-    {
-        ++nLock;
-        if (nLock > 1)
-            return;
-        if (SwDocShell* pDocSh = pDoc->GetDocShell())
-            if ((m_pWrtSh = pDocSh->GetWrtShell()) && m_pWrtSh->GetViewOptions() &&
-                    m_pWrtSh->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-            {
-                m_pWrtSh->LockView(true);
-                m_pWrtSh->LockPaint(LockPaintReason::OutlineFolding);
-                m_pWrtSh->MakeAllFoldedOutlineContentVisible();
-                m_bScrollToCursor = bScrollToCursor;
-                m_bDone = true;
-            }
-    }
-
-    ~MakeAllOutlineContentTemporarilyVisible() COVERITY_NOEXCEPT_FALSE
-    {
-        --nLock;
-        if (nLock > 0)
-            return;
-        if (m_bDone && m_pWrtSh)
-        {
-            m_pWrtSh->MakeAllFoldedOutlineContentVisible(false);
-            m_pWrtSh->UnlockPaint();
-            m_pWrtSh->LockView(false);
-            if (m_bScrollToCursor)
-                m_pWrtSh->UpdateCursor(SwCursorShell::SCROLLWIN);
-        }
-    }
+    MakeAllOutlineContentTemporarilyVisible(SwDoc* pDoc, bool bScrollToCursor = false);
+    ~MakeAllOutlineContentTemporarilyVisible() COVERITY_NOEXCEPT_FALSE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

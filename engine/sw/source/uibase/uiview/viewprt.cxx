@@ -44,6 +44,7 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <viewopt.hxx>
 #include <prtopt.hxx>
 #include <cfgitems.hxx>

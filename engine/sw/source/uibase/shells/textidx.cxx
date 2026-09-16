@@ -30,6 +30,7 @@
 #include <cmdid.h>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <textsh.hxx>
 #include <idxmrk.hxx>
 #include <toxmgr.hxx>

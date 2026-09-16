@@ -37,6 +37,7 @@
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/time.hxx>

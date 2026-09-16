@@ -25,6 +25,7 @@
 #include <svl/zformat.hxx>
 
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <IDocumentState.hxx>

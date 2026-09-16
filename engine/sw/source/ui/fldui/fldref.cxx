@@ -25,6 +25,8 @@
 #include <frmatr.hxx>
 #include <reffld.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
+#include <pagedesc.hxx>
 
 #include <fldref.hrc>
 #include <strings.hrc>

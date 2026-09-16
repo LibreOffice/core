@@ -14,6 +14,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <svl/srchitem.hxx>
 #include <view.hxx>
+#include <doc.hxx>
 #include <swmodule.hxx>
 #include <pam.hxx>
 #include <node.hxx>

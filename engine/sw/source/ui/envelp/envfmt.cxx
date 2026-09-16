@@ -31,6 +31,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <view.hxx>
 #include "envfmt.hxx"
 #include <fmtcol.hxx>
