@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
@@ -1425,17 +1426,16 @@ bool ScUnoAddInCall::NeedsCaller() const
     return pFuncData && pFuncData->GetCallerPos() != SC_CALLERPOS_NONE;
 }
 
-void ScUnoAddInCall::SetCaller( const uno::Reference<uno::XInterface>& rInterface )
+void ScUnoAddInCall::SetCaller(const css::uno::Reference<css::frame::XModel3>& rModel)
 {
-    xCaller = rInterface;
+    xCaller = rModel;
 }
 
 void ScUnoAddInCall::SetCallerFromObjectShell( const SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
-        uno::Reference<uno::XInterface> xInt( pObjSh->GetBaseModel(), uno::UNO_QUERY );
-        SetCaller( xInt );
+        SetCaller(pObjSh->GetBaseModel());
     }
 }
 

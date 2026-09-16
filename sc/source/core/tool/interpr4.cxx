@@ -3070,8 +3070,7 @@ void ScInterpreter::ScExternal()
             else
             {
                 // use temporary model object (without document) to supply options
-                aCall.SetCaller( static_cast<beans::XPropertySet*>(
-                                    new ScDocOptionsObj( mrDoc.GetDocOptions() ) ) );
+                aCall.SetCaller(new ScDocOptionsObj(mrDoc.GetDocOptions()));
             }
         }
 

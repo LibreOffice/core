@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -218,7 +219,7 @@ public:
                     ~ScUnoAddInCall();
 
     bool                NeedsCaller() const;
-    void                SetCaller( const css::uno::Reference<css::uno::XInterface>& rInterface );
+    void SetCaller(const css::uno::Reference<css::frame::XModel3>& rModel);
     void                SetCallerFromObjectShell( const SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}
