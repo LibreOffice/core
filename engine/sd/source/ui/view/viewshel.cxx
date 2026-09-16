@@ -33,6 +33,11 @@
 #include <ResourceId.hxx>
 
 #include <sal/log.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
+#include <sfx2/frame.hxx>
+#include <svx/documentbullets.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -950,6 +955,37 @@ void ViewShell::SetupRulers()
             mpHorizontalRuler->Show();
         }
     }
+}
+
+void ViewShell::PutDocumentBulletsState(SfxItemSet& rSet, sal_uInt16 nSlotId,
+                                        const std::vector<SvxDocumentBullet>& rBullets)
+{
+    if (nSlotId == sal_uInt16(FN_BUL_GET_DOC_BULLETS))
+    {
+        std::vector<OUString> aCharacterBullets;
+        for (const SvxDocumentBullet& rBullet : rBullets)
+        {
+            // The character comes first and the font name makes up the rest of the string.
+            if (!rBullet.IsGraphic())
+                aCharacterBullets.push_back(rBullet.aBulletCharacter + rBullet.aFontName);
+        }
+
+        SfxStringListItem aItem(FN_BUL_GET_DOC_BULLETS);
+        aItem.SetStringList(comphelper::containerToSequence(aCharacterBullets));
+        rSet.Put(aItem);
+        return;
+    }
+
+    std::vector<css::beans::PropertyValue> aGraphicBullets;
+    for (const SvxDocumentBullet& rBullet : rBullets)
+    {
+        if (rBullet.IsGraphic())
+            aGraphicBullets.push_back(comphelper::makePropertyValue(
+                rBullet.GetIdentifier(), rBullet.aGraphic.GetXGraphic()));
+    }
+
+    rSet.Put(SfxUnoAnyItem(SID_GET_DOCUMENT_BULLET_GRAPHICS,
+                           cpo::uno::Any(comphelper::containerToSequence(aGraphicBullets))));
 }
 
 const SvxNumBulletItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId)

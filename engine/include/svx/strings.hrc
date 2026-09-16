@@ -1969,6 +1969,10 @@
 #define RID_SVXSTR_FOOTER                           NC_("RID_SVXSTR_FOOTER", "Footer")
 #define RID_SVXSTR_HEADER                           NC_("RID_SVXSTR_HEADER", "Header")
 
+// To translators: the name a screen reader announces for an entry of the Document Bullets
+// section that draws a picture rather than a character.
+#define RID_SVXSTR_DOCUMENT_BULLET_IMAGE            NC_("RID_SVXSTR_DOCUMENT_BULLET_IMAGE", "Image")
+
 /*--------------------------------------------------------------------
     Description: GraphicSizeCheck strings
  --------------------------------------------------------------------*/

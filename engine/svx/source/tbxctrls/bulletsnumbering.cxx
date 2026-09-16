@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -16,6 +17,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/documentbullets.hxx>
+#include <svx/strings.hrc>
 #include <svx/numvset.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
@@ -57,7 +61,16 @@ class NumberingPopup : public WeldToolbarPopup
     virtual void GrabFocus() override;
 
 private:
-    std::vector<std::pair<OUString, OUString>> maCustomBullets;
+    /// The character bullets of the document, without the ones the fixed library already offers.
+    std::vector<SvxDocumentBullet> maCharacterBullets;
+    /// The image bullets of the document.
+    std::vector<SvxDocumentBullet> maGraphicBullets;
+    /// The two lists one after the other, in the order the icon view shows them.
+    std::vector<SvxDocumentBullet> maDocumentBullets;
+
+    /// Draws the document bullets into the second icon view, and hides that view when the
+    /// document has no bullets of its own.
+    void FillDocumentBullets();
 
 public:
     NumberingPopup(NumberingToolBoxControl& rController, weld::Widget* pParent, NumberingPageType ePageType);
@@ -131,6 +144,7 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     {
         AddStatusListener( u".uno:CurrentBulletListType"_ustr );
         AddStatusListener( u".uno:DocumentBulletList"_ustr );
+        AddStatusListener(u".uno:DocumentBulletGraphicList"_ustr);
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
         AddStatusListener( u".uno:CurrentNumListType"_ustr );
@@ -147,21 +161,31 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
     mxIconViewDoc->connect_item_activated(LINK(this, NumberingPopup, DocItemActivatedHdl));
 }
 
-namespace
+void NumberingPopup::FillDocumentBullets()
 {
-bool lcl_BulletIsDefault(std::u16string_view aSymbol, std::u16string_view aFont)
-{
-    Sequence<OUString> aBulletSymbols
-        = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
-    Sequence<OUString> aBulletFonts
-        = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
-    for (sal_Int32 i = 0; i < aBulletSymbols.getLength(); i++)
+    maDocumentBullets = maCharacterBullets;
+    maDocumentBullets.insert(maDocumentBullets.end(), maGraphicBullets.begin(),
+                             maGraphicBullets.end());
+
+    mxIconViewDoc->clear();
+
+    // The name is what a screen reader announces for the entry, and an image carries no character
+    // to announce.
+    for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
     {
-        if (aBulletSymbols[i] == aSymbol && aBulletFonts[i] == aFont)
-            return true;
+        const SvxDocumentBullet& rBullet = maDocumentBullets[nBullet];
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet);
+        Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
+        OUString sId = OUString::number(nBullet);
+        OUString sText = rBullet.IsGraphic() ? SvxResId(RID_SVXSTR_DOCUMENT_BULLET_IMAGE)
+                                             : rBullet.aBulletCharacter;
+        mxIconViewDoc->insert(-1, &sText, &sId, &aBitmap, nullptr);
+        mxIconViewDoc->set_item_accessible_name(mxIconViewDoc->n_children() - 1, sText);
     }
-    return false;
-}
+
+    const bool bHasDocumentBullets = !maDocumentBullets.empty();
+    mxDocBulletsLabel->set_visible(bHasDocumentBullets);
+    mxIconViewDoc->set_visible(bHasDocumentBullets);
 }
 
 void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -171,35 +195,42 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         Sequence<OUString> aSeq;
         if (rEvent.State >>= aSeq)
         {
-            std::vector<std::pair<OUString, OUString>> aList;
-            mxIconViewDoc->clear();
+            maCharacterBullets.clear();
 
             // The string contains the bullet as first character, and then the font name
             for (const OUString& sBulletFont : aSeq)
             {
-                OUString sBullet(sBulletFont.copy(0, 1));
-                OUString sFont(sBulletFont.copy(1, sBulletFont.getLength() - 1));
-                if (lcl_BulletIsDefault(sBullet, sFont))
+                SvxDocumentBullet aBullet;
+                aBullet.aBulletCharacter = sBulletFont.copy(0, 1);
+                aBullet.aFontName = sBulletFont.copy(1, sBulletFont.getLength() - 1);
+                if (aBullet.IsInDefaultLibrary())
                     continue;
 
-                auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(sBullet, sFont);
-                Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
-                OUString sId = OUString::number(aList.size());
-                mxIconViewDoc->insert(-1, nullptr, &sId, &aBmp, nullptr);
-                aList.emplace_back(sBullet, sFont);
+                maCharacterBullets.push_back(aBullet);
             }
 
-            if (!aList.empty())
+            FillDocumentBullets();
+        }
+    }
+    else if (rEvent.FeatureURL.Complete == ".uno:DocumentBulletGraphicList")
+    {
+        Sequence<css::beans::PropertyValue> aSeq;
+        if (rEvent.State >>= aSeq)
+        {
+            maGraphicBullets.clear();
+
+            for (const css::beans::PropertyValue& rEntry : aSeq)
             {
-                mxDocBulletsLabel->show();
-                mxIconViewDoc->show();
-                maCustomBullets = aList;
+                Reference<css::graphic::XGraphic> xGraphic;
+                if (!(rEntry.Value >>= xGraphic) || !xGraphic.is())
+                    continue;
+
+                SvxDocumentBullet aBullet;
+                aBullet.aGraphic = Graphic(xGraphic);
+                maGraphicBullets.push_back(aBullet);
             }
-            else
-            {
-                mxDocBulletsLabel->hide();
-                mxIconViewDoc->hide();
-            }
+
+            FillDocumentBullets();
         }
     }
     else
@@ -252,12 +283,16 @@ IMPL_LINK(NumberingPopup, DocItemActivatedHdl, weld::IconView&, rIconView, bool)
 
     sal_Int32 nId = sId.toInt32();
 
-    if (nId >= 0 && nId < static_cast<sal_Int32>(maCustomBullets.size()))
+    if (nId >= 0 && nId < static_cast<sal_Int32>(maDocumentBullets.size()))
     {
-        OUString nChar(maCustomBullets[nId].first);
-        OUString sFont(maCustomBullets[nId].second);
-        auto aArgs(comphelper::InitPropertySequence(
-            { { u"BulletChar"_ustr, Any(nChar) }, { u"BulletFont"_ustr, Any(sFont) } }));
+        const SvxDocumentBullet& rBullet = maDocumentBullets[nId];
+        // An image bullet travels by name, and the document looks the image up again by that name.
+        auto aArgs = rBullet.IsGraphic()
+                         ? comphelper::InitPropertySequence(
+                               { { u"BulletGraphic"_ustr, Any(rBullet.GetIdentifier()) } })
+                         : comphelper::InitPropertySequence(
+                               { { u"BulletChar"_ustr, Any(rBullet.aBulletCharacter) },
+                                 { u"BulletFont"_ustr, Any(rBullet.aFontName) } });
         mrController.dispatchCommand(u".uno:SetBullet"_ustr, aArgs);
         mrController.EndPopupMode();
     }

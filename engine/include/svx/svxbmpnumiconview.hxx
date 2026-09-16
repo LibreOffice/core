@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/documentbullets.hxx>
 #include <svx/numvset.hxx>
 #include <vcl/weld.hxx>
 
@@ -35,33 +36,34 @@ public:
         const css::lang::Locale& rLocale = css::lang::Locale());
 
     static ScopedVclPtr<VirtualDevice> CreatePreviewFromUserDraw(
-        NumberingPageType ePageType,
-        sal_Int32 nIndex,
-        Size previewSize,
-        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>(),
-        const cpo::uno::Sequence<cpo::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = cpo::uno::Sequence<cpo::uno::Reference<css::container::XIndexAccess>>(),
+        NumberingPageType ePageType, sal_Int32 nIndex, Size previewSize,
+        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& rNumSettings
+        = cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>(),
+        const cpo::uno::Sequence<cpo::uno::Reference<css::container::XIndexAccess>>&
+            rOutlineSettings
+        = cpo::uno::Sequence<cpo::uno::Reference<css::container::XIndexAccess>>(),
         cpo::uno::Reference<css::text::XNumberingFormatter> const& xFormatter = nullptr,
         const css::lang::Locale& rLocale = css::lang::Locale(),
-        const std::vector<std::pair<OUString, OUString>>& rCustomBullets = std::vector<std::pair<OUString, OUString>>());
+        const std::vector<SvxDocumentBullet>& rCustomBullets = std::vector<SvxDocumentBullet>());
 
-    static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName);
+    /// Draws one bullet of the document, the character in its own font or the image scaled into
+    /// the same box, on the three sample lines the other previews use.
+    static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const SvxDocumentBullet& rBullet);
     static OUString GetNumberingDescription(NumberingPageType ePageType, sal_Int32 nIndex);
 
     static void SetNumberingSettings(
-        weld::IconView* mxIconView,
-        Size previewSize,
+        weld::IconView* mxIconView, Size previewSize,
         const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& aNum,
         cpo::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
         const css::lang::Locale& rLocale,
-        std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
+        std::vector<SvxDocumentBullet> maCustomBullets = std::vector<SvxDocumentBullet>());
 
     static void SetOutlineNumberingSettings(
-        weld::IconView* mxIconView,
-        Size previewSize,
+        weld::IconView* mxIconView, Size previewSize,
         const cpo::uno::Sequence<cpo::uno::Reference<css::container::XIndexAccess>>& rOutline,
         cpo::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
         const css::lang::Locale& rLocale,
-        std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
+        std::vector<SvxDocumentBullet> maCustomBullets = std::vector<SvxDocumentBullet>());
 
     static ScopedVclPtr<VirtualDevice> CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex);
     static void PopulateBitmapIconView(weld::IconView* pIconView);

@@ -869,6 +869,16 @@ interface DrawView
         StateMethod = GetAttrState;
         Asynchron  , AutoUpdate ;
     ]
+    FN_BUL_GET_DOC_BULLETS
+    [
+        StateMethod = GetAttrState;
+        AutoUpdate ;
+    ]
+    SID_GET_DOCUMENT_BULLET_GRAPHICS
+    [
+        StateMethod = GetAttrState;
+        AutoUpdate ;
+    ]
     SID_ATTR_CHAR // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;

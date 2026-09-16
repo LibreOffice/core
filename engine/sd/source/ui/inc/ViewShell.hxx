@@ -32,12 +32,14 @@
 #include <sddllapi.h>
 
 #include <memory>
+#include <vector>
 
 class SdPage;
 class SvxRuler;
 class SdrOle2Obj;       // for the ones, who have undefined parts of SVDRAW
 class SdDrawDocument;
 class SvxNumBulletItem;
+struct SvxDocumentBullet;
 
 namespace weld
 {
@@ -184,6 +186,13 @@ public:
     bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     const SvxNumBulletItem* GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId);
+
+    /** Puts the answer to one of the two status slots that publish the bullets a document already
+        uses into rSet: the character bullets as a list of strings, or the image bullets as a list
+        of name and image pairs.
+     */
+    static void PutDocumentBulletsState(SfxItemSet& rSet, sal_uInt16 nSlotId,
+                                        const std::vector<SvxDocumentBullet>& rBullets);
 
     bool HasRuler() const { return mbHasRulers;}
     void SetRuler(bool bRuler);

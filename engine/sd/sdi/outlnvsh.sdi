@@ -189,6 +189,16 @@ interface OutlineView
     [
         ExecMethod = FuTemporaryModify ;
     ]
+    FN_BUL_GET_DOC_BULLETS
+    [
+        StateMethod = GetAttrState;
+        AutoUpdate ;
+    ]
+    SID_GET_DOCUMENT_BULLET_GRAPHICS
+    [
+        StateMethod = GetAttrState;
+        AutoUpdate ;
+    ]
     SID_OUTLINE_BULLET // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;

@@ -62,8 +62,10 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/urlfieldhelper.hxx>
 #include <svx/nbdtmgfact.hxx>
+#include <svx/documentbullets.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
+#include <optional>
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
@@ -276,6 +278,15 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     bool    bAttr = false;
     SfxAllItemSet aAllSet( *rSet.GetPool() );
+
+    // Walking the whole document for its bullets is not cheap, and the character bullets and the
+    // image bullets are asked for separately, so the walk is done once and shared between them.
+    std::optional<std::vector<SvxDocumentBullet>> oUsedBullets;
+    auto aUsedBullets = [this, &oUsedBullets]() -> const std::vector<SvxDocumentBullet>& {
+        if (!oUsedBullets)
+            oUsedBullets = GetDoc()->GetUsedBullets(mpDrawView->GetTextEditOutliner());
+        return *oUsedBullets;
+    };
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     while ( nWhich )
@@ -774,6 +785,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
             }
             break;
+            case FN_BUL_GET_DOC_BULLETS:
+            case SID_GET_DOCUMENT_BULLET_GRAPHICS:
+                PutDocumentBulletsState(rSet, nSlotId, aUsedBullets());
+                break;
             case FN_NUM_BULLET_ON:
             case FN_NUM_NUMBERING_ON:
             {

@@ -4521,6 +4521,20 @@ SfxStringListItem DocumentBulletList FN_BUL_GET_DOC_BULLETS
     GroupId = SfxGroupId::Enumeration;
 ]
 
+SfxUnoAnyItem DocumentBulletGraphicList SID_GET_DOCUMENT_BULLET_GRAPHICS
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Enumeration;
+]
+
 SfxVoidItem InsertObject SID_INSERT_OBJECT
 ( SfxGlobalNameItem ClassId SID_INSERT_OBJECT )
 [

@@ -109,14 +109,11 @@ void SvxBmpNumIconView::PopulateIconView(
 }
 
 ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
-    NumberingPageType ePageType,
-    sal_Int32 nIndex,
-    Size previewSize,
+    NumberingPageType ePageType, sal_Int32 nIndex, Size previewSize,
     const Sequence<Sequence<PropertyValue>>& rNumSettings,
     const Sequence<Reference<XIndexAccess>>& rOutlineSettings,
-    Reference<XNumberingFormatter> const& xFormatter,
-    const Locale& rLocale,
-    const std::vector<std::pair<OUString, OUString>>& rCustomBullets)
+    Reference<XNumberingFormatter> const& xFormatter, const Locale& rLocale,
+    const std::vector<SvxDocumentBullet>& rCustomBullets)
 {
     static const sal_uInt16 aLinesArr[] =
     {
@@ -167,7 +164,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
         {
             if (o3tl::make_unsigned(nIndex) < rCustomBullets.size())
             {
-                aRuleFont.SetFamilyName(rCustomBullets[nIndex].second);
+                aRuleFont.SetFamilyName(rCustomBullets[nIndex].aFontName);
             }
         }
         aSize.setHeight(nRectHeight/6);
@@ -233,7 +230,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
             else if(ePageType == NumberingPageType::DOCBULLET)
             {
                 if (o3tl::make_unsigned(nIndex) < rCustomBullets.size())
-                    sText = rCustomBullets[nIndex].first;
+                    sText = rCustomBullets[nIndex].aBulletCharacter;
                 aStart.AdjustY(-(pVDev->GetTextHeight()/2));
                 aStart.setX(aBLPos.X() + 5);
             }
@@ -423,7 +420,8 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
     return pVDev;
 }
 
-ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateCustomBulletPreview(const OUString& rBulletChar, const OUString& rFontName)
+ScopedVclPtr<VirtualDevice>
+SvxBmpNumIconView::CreateCustomBulletPreview(const SvxDocumentBullet& rBullet)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     Size aSize(80, 100);
@@ -450,7 +448,33 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateCustomBulletPreview(const O
         pVDev->DrawLine(aStart, aEnd);
     }
 
-    vcl::Font aRuleFont(rFontName, Size(0, aSize.Height()/6));
+    if (rBullet.IsGraphic())
+    {
+        const Graphic& rGraphic = rBullet.aGraphic;
+        // The picture keeps its proportions inside the box a character bullet would occupy, so a
+        // wide or a tall image is not drawn stretched.
+        Size aGraphicSize(aSize.Height() / 8, aSize.Height() / 8);
+        const Size aPreferredSize(rGraphic.GetPrefSize());
+        if (aPreferredSize.Width() > 0 && aPreferredSize.Height() > 0)
+        {
+            if (aPreferredSize.Width() > aPreferredSize.Height())
+                aGraphicSize.setHeight(aGraphicSize.Height() * aPreferredSize.Height()
+                                       / aPreferredSize.Width());
+            else
+                aGraphicSize.setWidth(aGraphicSize.Width() * aPreferredSize.Width()
+                                      / aPreferredSize.Height());
+        }
+
+        for (sal_uInt16 i = 0; i < 3; i++) // Show 3 sample lines
+        {
+            sal_uInt16 nY = 11 + i * 33;
+            rGraphic.Draw(*pVDev, Point(5, aSize.Height() * nY / 100), aGraphicSize);
+        }
+
+        return pVDev;
+    }
+
+    vcl::Font aRuleFont(rBullet.aFontName, Size(0, aSize.Height() / 6));
     aRuleFont.SetCharSet(RTL_TEXTENCODING_SYMBOL);
     aRuleFont.SetColor(aTextColor);
     aRuleFont.SetFillColor(aBackColor);
@@ -461,7 +485,7 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreateCustomBulletPreview(const O
         sal_uInt16 nY = 11 + i * 33;
         Point pStart(5, aSize.Height() * nY / 100);
         pStart.AdjustY(-(pVDev->GetTextHeight()/2));
-        pVDev->DrawText(pStart, rBulletChar);
+        pVDev->DrawText(pStart, rBullet.aBulletCharacter);
     }
 
     return pVDev;
@@ -495,13 +519,11 @@ OUString SvxBmpNumIconView::GetNumberingDescription(NumberingPageType ePageType,
     return OUString();
 }
 
-void SvxBmpNumIconView::SetNumberingSettings(
-    weld::IconView* mxIconView,
-    Size previewSize,
-    const Sequence<Sequence<PropertyValue>>& aNum,
-    Reference<XNumberingFormatter> const& xFormat,
-    const Locale& rLocale,
-    std::vector<std::pair<OUString, OUString>> maCustomBullets)
+void SvxBmpNumIconView::SetNumberingSettings(weld::IconView* mxIconView, Size previewSize,
+                                             const Sequence<Sequence<PropertyValue>>& aNum,
+                                             Reference<XNumberingFormatter> const& xFormat,
+                                             const Locale& rLocale,
+                                             std::vector<SvxDocumentBullet> maCustomBullets)
 {
     mxIconView->clear();
 
@@ -519,12 +541,9 @@ void SvxBmpNumIconView::SetNumberingSettings(
 }
 
 void SvxBmpNumIconView::SetOutlineNumberingSettings(
-    weld::IconView* mxIconView,
-    Size previewSize,
-    const Sequence<Reference<XIndexAccess>>& rOutline,
-    Reference<XNumberingFormatter> const& xFormat,
-    const Locale& rLocale,
-    std::vector<std::pair<OUString, OUString>> maCustomBullets)
+    weld::IconView* mxIconView, Size previewSize, const Sequence<Reference<XIndexAccess>>& rOutline,
+    Reference<XNumberingFormatter> const& xFormat, const Locale& rLocale,
+    std::vector<SvxDocumentBullet> maCustomBullets)
 {
     mxIconView->clear();
 

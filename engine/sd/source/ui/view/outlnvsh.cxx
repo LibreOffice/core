@@ -37,6 +37,8 @@
 #include <editeng/editund2.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/request.hxx>
+#include <svx/documentbullets.hxx>
+#include <svx/svxids.hrc>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
@@ -87,6 +89,7 @@
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 
 #include <memory>
+#include <optional>
 
 #define ShellClass_OutlineViewShell
 using namespace sd;
@@ -1406,6 +1409,15 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
     sal_uInt16        nWhich = aIter.FirstWhich();
     SfxAllItemSet aAllSet( *rSet.GetPool() );
 
+    // Walking the whole document for its bullets is not cheap, and the character bullets and the
+    // image bullets are asked for separately, so the walk is done once and shared between them.
+    std::optional<std::vector<SvxDocumentBullet>> oUsedBullets;
+    auto aUsedBullets = [this, &oUsedBullets]() -> const std::vector<SvxDocumentBullet>& {
+        if (!oUsedBullets)
+            oUsedBullets = GetDoc()->GetUsedBullets(&pOlView->GetOutliner());
+        return *oUsedBullets;
+    };
+
     while ( nWhich )
     {
         sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
@@ -1486,6 +1498,11 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 rSet.DisableItem(nWhich);
             }
             break;
+
+            case FN_BUL_GET_DOC_BULLETS:
+            case SID_GET_DOCUMENT_BULLET_GRAPHICS:
+                PutDocumentBulletsState(rSet, nSlotId, aUsedBullets());
+                break;
         }
 
         nWhich = aIter.NextWhich();
