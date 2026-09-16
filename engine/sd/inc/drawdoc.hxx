@@ -58,6 +58,7 @@ class SdTransferable;
 class SdCustomShowList;
 class SdUndoGroup;
 class SdrObject;
+struct SvxDocumentBullet;
 class Idle;
 class Outliner;
 class SdrOutliner;
@@ -1226,6 +1227,14 @@ public:
     /** Get the style sheet pool if it was a SdStyleSheetPool.
      */
     SdStyleSheetPool* GetSdStyleSheetPool() const;
+
+    /** The bullet characters and bullet images that this document uses, gathered from its style
+        sheets, its slides and its master slides, each one listed once. Text under edit lives in
+        an outliner of its own until the edit ends, so pActiveOutliner names the outliner holding
+        such text, or is null when no text is being edited.
+     */
+    std::vector<SvxDocumentBullet> GetUsedBullets(const SdrOutliner* pActiveOutliner
+                                                  = nullptr) const;
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(
         std::u16string_view aOldName, std::u16string_view aNewName);

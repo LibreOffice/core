@@ -34,15 +34,18 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/dispatch.hxx>
@@ -51,6 +54,7 @@
 #include <svl/intitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>
+#include <svx/documentbullets.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpagv.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -6670,6 +6674,117 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterFitsMarking)
     CPPUNIT_ASSERT_GREATER(aOrigRect.GetHeight(), aRect.GetHeight());
     CPPUNIT_ASSERT_EQUAL(aOrigRect.Bottom(), aRect.Bottom());
     CPPUNIT_ASSERT_EQUAL(tools::Long(pMaster->GetLeftBorder()), aRect.Left());
+}
+
+namespace
+{
+/// Gives rObject a red square as its first-level bullet, so the document holds an image bullet.
+SvxDocumentBullet lcl_SetImageBullet(SdrTextObj& rObject)
+{
+    Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_RED);
+    const Graphic aGraphic{ aBitmap };
+
+    const SvxNumBulletItem* pItem
+        = rObject.GetMergedItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
+    SvxNumRule aRule(
+        pItem ? pItem->GetNumRule()
+              : SvxNumRule(SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR,
+                           SVX_MAX_NUM, false));
+
+    SvxNumberFormat aFormat(aRule.GetLevel(0));
+    aFormat.SetNumberingType(SVX_NUM_BITMAP);
+    const SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+    Size aSize(200, 200);
+    sal_Int16 eOrient = css::text::VertOrientation::LINE_CENTER;
+    aFormat.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+    aRule.SetLevel(0, aFormat);
+
+    SfxItemSetFixed<EE_PARA_NUMBULLET, EE_PARA_NUMBULLET> aSet(
+        rObject.getSdrModelFromSdrObject().GetItemPool());
+    aSet.Put(SvxNumBulletItem(aRule, EE_PARA_NUMBULLET));
+    rObject.SetMergedItemSet(aSet, false);
+
+    SvxDocumentBullet aBullet;
+    aBullet.aGraphic = aGraphic;
+    return aBullet;
+}
+
+/// The first text object that any master slide of rDocument holds, or nullptr when there is none.
+SdrTextObj* lcl_MasterSlideTextObject(SdDrawDocument& rDocument)
+{
+    for (sal_uInt16 nPage = 0; nPage < rDocument.GetMasterPageCount(); ++nPage)
+    {
+        SdrPage* pPage = rDocument.GetMasterPage(nPage);
+        for (size_t nObject = 0; pPage && nObject < pPage->GetObjCount(); ++nObject)
+        {
+            if (SdrTextObj* pObject = DynCastSdrTextObj(pPage->GetObj(nObject)))
+                return pObject;
+        }
+    }
+    return nullptr;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsAreCollected)
+{
+    // The outline style of the slide layout carries a bullet that no slide of the presentation
+    // uses. That style is where a master slide defines its bullets, so finding it here is what
+    // makes a master slide's bullet offered alongside the ones a slide uses.
+    createSdImpressDoc("document-bullets.odp");
+
+    bool bLayoutBulletFound = false;
+    const std::vector<SvxDocumentBullet> aBullets = getSdDocShell()->GetDoc()->GetUsedBullets();
+    for (const SvxDocumentBullet& rBullet : aBullets)
+    {
+        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2726"_ustr
+            && rBullet.aFontName == u"OpenSymbol"_ustr)
+            bLayoutBulletFound = true;
+    }
+
+    CPPUNIT_ASSERT(bLayoutBulletFound);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentImageBulletIsCollected)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    const SvxDocumentBullet aExpected = lcl_SetImageBullet(*pMasterSlideObject);
+
+    std::vector<SvxDocumentBullet> aImageBullets;
+    for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
+    {
+        if (rBullet.IsGraphic())
+            aImageBullets.push_back(rBullet);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImageBullets.size());
+    CPPUNIT_ASSERT_EQUAL(aExpected.GetIdentifier(), aImageBullets[0].GetIdentifier());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentImageBulletSurvivesReload)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    lcl_SetImageBullet(*pMasterSlideObject);
+
+    saveAndReload(TestFilter::ODP);
+
+    int nImages = 0;
+    for (const SvxDocumentBullet& rBullet : getSdDocShell()->GetDoc()->GetUsedBullets())
+    {
+        if (rBullet.IsGraphic())
+            ++nImages;
+    }
+
+    // An image bullet that Impress itself put on a shape comes back when the file is reopened.
+    CPPUNIT_ASSERT_EQUAL(1, nImages);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -152,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/SlideLink \
 	sd/source/core/SlideSectionManager \
 	sd/source/core/UndoSlideSection \
+	sd/source/core/documentbullets \
 	sd/source/core/drawdoc \
 	sd/source/core/drawdoc2 \
 	sd/source/core/drawdoc3 \
