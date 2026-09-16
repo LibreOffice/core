@@ -345,6 +345,7 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
     if (pFontItem && pFontHeightItem)
     {
         Size aFontSize(0, pFontHeightItem->GetHeight());
+        aFontSize /= rRenderContext.GetDPIScaleFactor();
         Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
 
         SvxFont aFont = GetFontFromItems(pFontItem, aPixelSize, pItemSet);
