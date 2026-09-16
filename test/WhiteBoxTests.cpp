@@ -132,6 +132,17 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
     LOK_ASSERT(COOLProtocol::getTokenInteger("foo=42", "foo", foo));
     LOK_ASSERT_EQUAL(42, foo);
 
+    // A token whose value is not a number leaves the caller's variable alone.
+    LOK_ASSERT(!COOLProtocol::getTokenInteger("foo=abc", "foo", foo));
+    LOK_ASSERT_EQUAL(42, foo);
+
+    LOK_ASSERT(!COOLProtocol::getTokenInteger("foo=abc", std::string_view("foo"), foo));
+    LOK_ASSERT_EQUAL(42, foo);
+
+    // A negative number is not a non-negative one, so it is not handed back either.
+    LOK_ASSERT(!COOLProtocol::getNonNegTokenInteger("foo=-1", "foo", foo));
+    LOK_ASSERT_EQUAL(42, foo);
+
     std::string bar;
     LOK_ASSERT(COOLProtocol::getTokenString("bar=hello-sailor", "bar", bar));
     LOK_ASSERT_EQUAL_STR("hello-sailor", bar);

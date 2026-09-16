@@ -81,8 +81,9 @@ namespace COOLProtocol
             token.compare(0, name.size(), name) == 0 &&
             token[name.size()] == '=')
         {
-            bool success;
-            std::tie(value, success) = NumUtil::i32FromString(token.substr(name.size() + 1));
+            const auto [parsed, success] = NumUtil::i32FromString(token.substr(name.size() + 1));
+            if (success)
+                value = parsed;
             return success;
         }
 
@@ -97,8 +98,12 @@ namespace COOLProtocol
         {
             const char* str = token.data() + name.size() + 1;
             char* endptr = nullptr;
-            value = strtoull(str, &endptr, 10);
-            return (endptr > str);
+            const uint64_t parsed = strtoull(str, &endptr, 10);
+            if (endptr <= str)
+                return false;
+
+            value = parsed;
+            return true;
         }
 
         return false;
@@ -112,8 +117,12 @@ namespace COOLProtocol
         {
             const char* str = token.data() + name.size() + 1;
             char* endptr = nullptr;
-            value = strtoul(str, &endptr, 10);
-            return (endptr > str);
+            const uint32_t parsed = strtoul(str, &endptr, 10);
+            if (endptr <= str)
+                return false;
+
+            value = parsed;
+            return true;
         }
 
         return false;

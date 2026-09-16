@@ -179,8 +179,9 @@ namespace COOLProtocol
         static_assert(N > 1, "Token name must be at least one character long.");
         if (token.size() > N && token[N - 1] == '=' && token.compare(0, N - 1, name) == 0)
         {
-            bool success;
-            std::tie(value, success) = NumUtil::i32FromString(token.substr(N));
+            const auto [parsed, success] = NumUtil::i32FromString(token.substr(N));
+            if (success)
+                value = parsed;
             return success;
         }
 
@@ -192,7 +193,12 @@ namespace COOLProtocol
     inline bool getNonNegTokenInteger(const std::string_view token, const char (&name)[N],
                                       int& value)
     {
-        return getTokenInteger(token, name, value) && value >= 0;
+        int parsed = 0;
+        if (!getTokenInteger(token, name, parsed) || parsed < 0)
+            return false;
+
+        value = parsed;
+        return true;
     }
 
     /// Whether the string is a well-formed part identifier: a decimal part index, or a page

@@ -16,8 +16,6 @@
 
 #include <common/NumUtil.hpp>
 
-#include <tuple>
-
 bool StringVector::equals(std::size_t index, const StringVector& other, std::size_t otherIndex)
 {
     if (index >= _tokens.size())
@@ -51,9 +49,10 @@ bool StringVector::getUInt32(std::size_t index, const std::string& key, uint32_t
             _string.compare(token._index, key.size(), key, 0, key.size()) == 0 &&
             _string[token._index + key.size()] == '=')
     {
-        bool res = false;
-        std::tie(value, res) = NumUtil::u32FromString(
+        const auto [parsed, res] = NumUtil::u32FromString(
             std::string(&_string[token._index + offset], token._length - offset));
+        if (res)
+            value = parsed;
         return res;
     }
 
@@ -74,9 +73,10 @@ bool StringVector::getUInt64(std::size_t index, const std::string& key, uint64_t
             _string.compare(token._index, key.size(), key, 0, key.size()) == 0 &&
             _string[token._index + key.size()] == '=')
     {
-        bool res = false;
-        std::tie(value, res) = NumUtil::u64FromString(
+        const auto [parsed, res] = NumUtil::u64FromString(
             std::string_view(&_string[token._index + offset], token._length - offset));
+        if (res)
+            value = parsed;
         return res;
     }
 
@@ -109,9 +109,10 @@ bool StringVector::getNameIntegerPair(std::size_t index, std::string& name, int&
 
     name = _string.substr(token._index, mid - token._index);
     size_t offset = mid + 1;
-    bool res = false;
-    std::tie(value, res) = NumUtil::i32FromString(
+    const auto [parsed, res] = NumUtil::i32FromString(
         std::string(&_string[offset], token._index + token._length - offset));
+    if (res)
+        value = parsed;
     return res;
 }
 
