@@ -2912,34 +2912,10 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			},
 			{ type: 'separator', id: 'picture-transparency-break', orientation: 'vertical' },
 			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'picture-tab-xlinecolor:ColorPickerMenu',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:XLineColor'),
-								'command': '.uno:XLineColor'
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'picture-tab-fillcolor:ColorPickerMenu',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor'
-							}
-						]
-					}
-				],
-				'vertical': 'true'
+				'id': 'picture-tab-fillcolor:ColorPickerMenu',
+				'type': 'menubutton',
+				'text': _UNO('.uno:FillColor'),
+				'command': '.uno:FillColor'
 			},
 			{ type: 'separator', id: 'picture-fillcolor-break', orientation: 'vertical' },
 			{
