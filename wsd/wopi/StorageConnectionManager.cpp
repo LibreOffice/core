@@ -11,8 +11,8 @@
 
 #include <config.h>
 
-#if MOBILEAPP
-#error "Mobile doesn't need or support WOPI"
+#if !ENABLE_WOPI
+#error This file should be excluded from builds without the WOPI storage backend
 #endif
 
 #include "StorageConnectionManager.hpp"

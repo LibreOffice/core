@@ -1072,10 +1072,14 @@ int main(int argc, char**argv)
     }
 
     /// True when this binary links the WOPI storage backend and so can talk to
-    /// a remote WOPI host. False in the app build, which opens local files only.
+    /// a remote WOPI host. False for a build that opens local files only.
     constexpr bool isWopiSupported()
     {
-        return !isMobileAppBuild();
+#ifdef ENABLE_WOPI
+        return ENABLE_WOPI;
+#else
+        return false;
+#endif
     }
 
     constexpr bool isDebugEnabled()

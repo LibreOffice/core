@@ -181,6 +181,12 @@
 #define HAVE_SECURITY_PAM_APPL_H 0
 #endif
 
+/* True when this binary links the WOPI storage backend, the server sources
+   under wsd/wopi/.  The app builds open local files only. */
+#ifndef ENABLE_WOPI
+#define ENABLE_WOPI (!MOBILEAPP)
+#endif
+
 /* Controls whether or not we allow loading documents from the local filesystem. */
 #ifndef ENABLE_LOCAL_FILESYSTEM
 #if MOBILEAPP || ENABLE_DEBUG

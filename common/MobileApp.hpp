@@ -64,6 +64,8 @@ public:
     std::weak_ptr<DocumentBroker> docBroker;
 };
 
+#if !ENABLE_WOPI
+
 /// Stub/Dummy WOPI types/interface.
 class WopiStorage : public StorageBase
 {
@@ -93,6 +95,8 @@ public:
         TriState getHideChangeTrackingControls() const { return TriState::Unset; }
     };
 };
+
+#endif // !ENABLE_WOPI
 
 #endif
 

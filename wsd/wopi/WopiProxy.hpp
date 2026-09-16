@@ -11,9 +11,9 @@
 
 #pragma once
 
-#if MOBILEAPP
-#error This file should be excluded from Mobile App builds
-#endif // MOBILEAPP
+#if !ENABLE_WOPI
+#error This file should be excluded from builds without the WOPI storage backend
+#endif // !ENABLE_WOPI
 
 #include <RequestDetails.hpp>
 #include <wopi/CheckFileInfo.hpp>
