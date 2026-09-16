@@ -24,4 +24,5 @@
     <string name="use_odf">Usar formato ODF</string>
     <string name="use_text">Usar formato de texto</string>
     <string name="convert_odf_message">Este documento contiene formato o contenido que quizá no pueda guardarse en el formato seleccionado, «Texto».</string>
+    <string name="all_files_access_grant">Permitir acceso</string>
 </resources>
