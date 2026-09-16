@@ -799,12 +799,10 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     assert(pMed);
 
     const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : GetMedium()->GetName() );
-    if (nMaxLength == SFX_TITLE_PICKLIST || nMaxLength == SFX_TITLE_HISTORY)
+    if ((nMaxLength == SFX_TITLE_PICKLIST || nMaxLength == SFX_TITLE_HISTORY)
+        && aURL.GetProtocol() != INetProtocol::File)
     {
-        if (aURL.GetProtocol() == INetProtocol::File)
-            nMaxLength = 32;
-        else
-            nMaxLength = SFX_TITLE_FULLNAME;
+        nMaxLength = SFX_TITLE_FULLNAME;
     }
 
     // Local file?
