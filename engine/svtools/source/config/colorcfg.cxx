@@ -44,7 +44,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/themecolors.hxx>
 #include <officecfg/Office/UI.hxx>
-#include <officecfg/Office/Common.hxx>
 
 using namespace utl;
 using namespace com::sun::star;

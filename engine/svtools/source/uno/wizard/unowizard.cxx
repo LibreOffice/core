@@ -35,7 +35,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/genericunodialog.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

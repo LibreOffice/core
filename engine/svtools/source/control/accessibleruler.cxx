@@ -21,7 +21,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>

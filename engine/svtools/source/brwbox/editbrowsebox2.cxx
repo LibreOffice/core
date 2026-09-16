@@ -23,7 +23,6 @@
 #include <comphelper/types.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>

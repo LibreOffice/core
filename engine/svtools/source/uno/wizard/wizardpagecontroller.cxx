@@ -21,7 +21,6 @@
 #include "wizardpagecontroller.hxx"
 #include "wizardshell.hxx"
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 
