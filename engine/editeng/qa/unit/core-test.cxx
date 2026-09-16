@@ -24,6 +24,9 @@
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editund2.hxx>
+#include <vcl/commandevent.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -185,6 +188,9 @@ public:
     // The y coordinate halfway down the first line of the paragraph.
     static tools::Long firstLineMiddle(Outliner& rOutliner, sal_Int32 nPara);
 
+    /// Test that a character typed over a selection through an input method is one undo step
+    void testExtTextInputOverSelectionIsOneUndoStep();
+
     // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
     // long enough to wrap onto several sublines, with rTailText supplying
     // the paragraphs after it, and formats the document.
@@ -243,6 +249,7 @@ public:
     CPPUNIT_TEST(testOutlinerLastParagraphIsChild);
     CPPUNIT_TEST(testOutlinerUndoParaFlag);
     CPPUNIT_TEST(testOutlinerReadDepth);
+    CPPUNIT_TEST(testExtTextInputOverSelectionIsOneUndoStep);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3096,6 +3103,43 @@ void Test::testOutlinerReadDepth()
     // Each paragraph takes the depth of its outline level, not the depth set before reading.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetDepth(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetDepth(1));
+}
+
+/*
+ * A character typed over a selection through an input method, which is how a browser client sends
+ * every keystroke, has to cost one undo step, as a key press does. The text that was selected is
+ * taken away as part of that input rather than as a step of its own.
+ */
+void Test::testExtTextInputOverSelectionIsOneUndoStep()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.EnableUndo(true);
+    aEditEngine.SetText(u"Hello"_ustr);
+
+    // The view needs a window of its own: setting a selection draws it, and drawing goes through
+    // the output device of that window.
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWindow.get());
+    aEditEngine.InsertView(&aEditView);
+    aEditView.SetOutputArea(tools::Rectangle(Point(0, 0), Size(2000, 2000)));
+    aEditView.SetSelection(ESelection(0, 0, 0, 5));
+
+    CommandEvent aStart(Point(), CommandEventId::StartExtTextInput, false);
+    aEditView.Command(aStart);
+
+    CommandExtTextInputData aInputData(u"X"_ustr, nullptr, 1, 0, false);
+    CommandEvent aInput(Point(), CommandEventId::ExtTextInput, false, &aInputData);
+    aEditView.Command(aInput);
+
+    CommandEvent aEnd(Point(), CommandEventId::EndExtTextInput, false);
+    aEditView.Command(aEnd);
+
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, aEditEngine.GetText());
+
+    aEditEngine.GetUndoManager().Undo();
+    CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, aEditEngine.GetText());
+
+    aEditEngine.RemoveView(&aEditView);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
