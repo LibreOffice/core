@@ -2809,7 +2809,7 @@ public:
 
     void                StartTrackTimer();
 
-    void                CompileDBFormula();
+    void                CompileDBFormula( sal_uInt16 nIndex );
     void                CompileColRowNameFormula();
 
     /** Maximum string length of a column, e.g. for dBase export.

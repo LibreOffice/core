@@ -3113,11 +3113,11 @@ void ScTable::TestTabRefAbs(SCTAB nTable) const
             return;
 }
 
-void ScTable::CompileDBFormula(
+void ScTable::CompileDBFormula( sal_uInt16 nIndex,
     sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {
     for (SCCOL i = 0; i < aCol.size(); ++i)
-        aCol[i].CompileDBFormula(rStartListenCxt, rCompileCxt);
+        aCol[i].CompileDBFormula(nIndex, rStartListenCxt, rCompileCxt);
 }
 
 void ScTable::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )

@@ -623,7 +623,7 @@ public:
     void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
     void CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW nRow1, SCROW nRow2 );
 
-    void CompileDBFormula(
+    void CompileDBFormula( sal_uInt16 nIndex,
         sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
 

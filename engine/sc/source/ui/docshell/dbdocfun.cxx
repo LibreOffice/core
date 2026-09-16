@@ -1009,10 +1009,13 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         sOldName = pData->GetName();
     }
 
+    // The index the existing formulas were compiled against; operator= takes rNewData's.
+    const sal_uInt16 nDBIndex = pData->GetIndex();
+
     *pData = rNewData;
     if (bAreaChanged || bOldAutoFilter != bNewAutoFilter) {
         if (bAreaChanged)
-            rDoc.CompileDBFormula();
+            rDoc.CompileDBFormula(nDBIndex);
         if (bOldAutoFilter && !bNewAutoFilter)
         {
             rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aEnd.Col(), aOldRange.aEnd.Row(), aOldRange.aStart.Tab(), ScMF::Auto);
@@ -1620,7 +1623,7 @@ bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     // store
     pDBData->SetSubTotalParam(aNewParam);
     pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
-    rDoc.CompileDBFormula();
+    rDoc.CompileDBFormula(pDBData->GetIndex());
 
     rDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                         PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top

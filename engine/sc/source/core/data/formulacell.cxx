@@ -4504,20 +4504,15 @@ void ScFormulaCell::SetRunning( bool bVal )
     bRunning = bVal;
 }
 
-void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
+bool ScFormulaCell::CompileDBFormula( sal_uInt16 nIndex, sc::CompileFormulaContext& rCxt )
 {
-    FormulaTokenArrayPlainIterator aIter(*pCode);
-    for( FormulaToken* p = aIter.First(); p; p = aIter.Next() )
-    {
-        OpCode eOp = p->GetOpCode();
-        if ( eOp == ocDBArea || eOp == ocTableRef )
-        {
-            bCompile = true;
-            CompileTokenArray(rCxt);
-            SetDirty();
-            break;
-        }
-    }
+    if (!pCode->HasDBRef(nIndex))
+        return false;
+
+    bCompile = true;
+    CompileTokenArray(rCxt);
+    SetDirty();
+    return true;
 }
 
 void ScFormulaCell::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )

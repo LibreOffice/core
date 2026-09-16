@@ -3568,30 +3568,36 @@ class CompileDBFormulaHandler
 {
     sc::StartListeningContext& mrStartListenCxt;
     sc::CompileFormulaContext& mrCxt;
-    formula::unordered_opcode_set maOps;
+    sal_uInt16 mnIndex;
+    bool mbRecompiled;
 
 public:
-    CompileDBFormulaHandler( sc::StartListeningContext& rStartListenCxt,
+    CompileDBFormulaHandler( sal_uInt16 nIndex, sc::StartListeningContext& rStartListenCxt,
                              sc::CompileFormulaContext& rCxt ) :
         mrStartListenCxt(rStartListenCxt),
-        mrCxt(rCxt)
+        mrCxt(rCxt),
+        mnIndex(nIndex),
+        mbRecompiled(false)
     {
-        maOps.insert(ocDBArea);
-        maOps.insert(ocTableRef);
     }
+
+    bool HasRecompiled() const { return mbRecompiled; }
 
     void operator() ( sc::FormulaGroupEntry& rEntry )
     {
         if (!rEntry.mbShared)
         {
-            rEntry.mpCell->CompileDBFormula(mrCxt);
+            if (rEntry.mpCell->CompileDBFormula(mnIndex, mrCxt))
+                mbRecompiled = true;
             return;
         }
 
         ScFormulaCell** ppBeg = rEntry.mpCells;
         ScFormulaCell** ppEnd = ppBeg + rEntry.mnLength;
-        if (!(*ppBeg)->GetCode()->HasOpCodes(maOps))
+        if (!(*ppBeg)->GetCode()->HasDBRef(mnIndex))
             return;
+
+        mbRecompiled = true;
 
         // End listening while the old RPN still describes what each cell listens to.
         ScDocument& rDoc = mrCxt.getDoc();
@@ -3630,14 +3636,19 @@ public:
 
 }
 
-void ScColumn::CompileDBFormula(
+void ScColumn::CompileDBFormula( sal_uInt16 nIndex,
     sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCxt )
 {
+    if (!HasFormulaCell())
+        return;
+
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    CompileDBFormulaHandler aFunc(rStartListenCxt, rCxt);
-    std::for_each(aGroups.begin(), aGroups.end(), aFunc);
-    RegroupFormulaCells();
+    CompileDBFormulaHandler aFunc(nIndex, rStartListenCxt, rCxt);
+    for (sc::FormulaGroupEntry& rEntry : aGroups)
+        aFunc(rEntry);
+    if (aFunc.HasRecompiled())
+        RegroupFormulaCells();
 }
 
 void ScColumn::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )

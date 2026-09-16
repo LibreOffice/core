@@ -404,7 +404,7 @@ public:
 
     bool            IsRunning() const { return bRunning;}
     void            SetRunning( bool bVal );
-    void CompileDBFormula( sc::CompileFormulaContext& rCxt );
+    bool CompileDBFormula( sal_uInt16 nIndex, sc::CompileFormulaContext& rCxt );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
     ScFormulaCell*  GetPrevious() const { return pPrevious; }
     ScFormulaCell*  GetNext() const { return pNext; }

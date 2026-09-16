@@ -583,7 +583,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                                                 // store
     pDBData->SetSubTotalParam( aNewParam );
     pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
-    rDoc.CompileDBFormula();
+    rDoc.CompileDBFormula(pDBData->GetIndex());
 
     const ScRange aMarkRange( aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2, nTab);
     DoneBlockMode();

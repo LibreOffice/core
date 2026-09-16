@@ -2293,6 +2293,22 @@ bool ScTokenArray::HasTableRef( sal_uInt16 nIndex ) const
     return false;
 }
 
+bool ScTokenArray::HasDBRef( sal_uInt16 nIndex ) const
+{
+    FormulaTokenArrayPlainIterator aIter(*this);
+    for (const FormulaToken* p = aIter.First(); p; p = aIter.Next())
+    {
+        const OpCode eOp = p->GetOpCode();
+        if (eOp == ocDBArea
+            && static_cast<const FormulaIndexToken*>(p)->GetIndex() == nIndex)
+            return true;
+        if (eOp == ocTableRef
+            && static_cast<const ScTableRefToken*>(p)->GetIndex() == nIndex)
+            return true;
+    }
+    return false;
+}
+
 std::unique_ptr<ScTokenArray> ScTokenArray::ConvertTableRefsToRange(
     sal_uInt16 nIndex, const ScAddress& rPos ) const
 {

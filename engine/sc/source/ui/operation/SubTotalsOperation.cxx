@@ -196,7 +196,7 @@ bool SubTotalsOperation::runImplementation()
     // memorize
     pDBData->SetSubTotalParam(aNewParam);
     pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
-    rDoc.CompileDBFormula();
+    rDoc.CompileDBFormula(pDBData->GetIndex());
 
     mrDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                          PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top

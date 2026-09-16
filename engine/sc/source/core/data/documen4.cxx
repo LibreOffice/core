@@ -890,8 +890,12 @@ void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
         pTable->ReplaceStyle(rSearchItem, nCol, nRow, rMark, true/*bIsUndoP*/);
 }
 
-void ScDocument::CompileDBFormula()
+void ScDocument::CompileDBFormula( sal_uInt16 nIndex )
 {
+    // Anonymous database ranges carry no index and cannot be named in a formula.
+    if (!nIndex)
+        return;
+
     // Flag the recompile so the table auto-expand ignores its SetDirty broadcasts (not user edits).
     ScCompilingDBFormulaGuard aGuard(*this);
     sc::StartListeningContext aStartListenCxt(*this);
@@ -899,7 +903,7 @@ void ScDocument::CompileDBFormula()
     for (auto& rxTab : maTabs)
     {
         if (rxTab)
-            rxTab->CompileDBFormula(aStartListenCxt, aCxt);
+            rxTab->CompileDBFormula(nIndex, aStartListenCxt, aCxt);
     }
 }
 

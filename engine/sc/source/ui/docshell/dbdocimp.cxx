@@ -572,7 +572,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         pDBData->SetByRow( true );
         pDBData->SetArea( nTab, rParam.nCol1,rParam.nRow1, nEndCol,nEndRow );
         pDBData->SetImportSelection( bRealSelection );
-        rDoc.CompileDBFormula();
+        rDoc.CompileDBFormula(pDBData->GetIndex());
 
         if (bRecord)
         {

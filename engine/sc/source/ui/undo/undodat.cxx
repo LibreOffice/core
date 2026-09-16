@@ -1449,7 +1449,7 @@ void ScUndoDBData::DoChange( const bool bUndo )
             if (bAreaChanged || bOldAutoFilter != bNewAutoFilter)
             {
                 if (bAreaChanged)
-                    rDoc.CompileDBFormula();
+                    rDoc.CompileDBFormula(pDBData->GetIndex());
                 // ScMF::Auto only ever lives on the header row, so all
                 // three branches operate on the header span only.
                 if (bOldAutoFilter && !bNewAutoFilter)

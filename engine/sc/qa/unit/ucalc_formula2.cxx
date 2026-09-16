@@ -18,6 +18,7 @@
 #include <tokenstringcontext.hxx>
 #include <tokenuno.hxx>
 #include <dbdata.hxx>
+#include <dbdocfun.hxx>
 #include <scmatrix.hxx>
 #include <docoptio.hxx>
 #include <externalrefmgr.hxx>
@@ -3348,6 +3349,49 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)
                              OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
 
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRefResizeScope)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Calc"_ustr);
+
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+    {
+        // "tableA" covers A1:A3, one row short of the data below it, "tableB" covers C1:C3.
+        std::unique_ptr<ScDBData> pT1(new ScDBData(u"tableA"_ustr, 0, 0, 0, 0, 2));
+        CPPUNIT_ASSERT(pDBs->getNamedDBs().insert(std::move(pT1)));
+        std::unique_ptr<ScDBData> pT2(new ScDBData(u"tableB"_ustr, 0, 2, 0, 2, 2));
+        CPPUNIT_ASSERT(pDBs->getNamedDBs().insert(std::move(pT2)));
+    }
+
+    insertRangeData(m_pDoc, ScAddress(0, 0, 0),
+                    { { "Amount" }, { "1" }, { "2" }, { "4" } });
+    insertRangeData(m_pDoc, ScAddress(2, 0, 0), { { "Amount" }, { "10" }, { "20" } });
+
+    // Both formulas sit on the other sheet, outside either table.
+    m_pDoc->SetString(ScAddress(0, 0, 1), u"=SUM(tableA[[Amount]])"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 1), u"=SUM(tableB[[Amount]])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+
+    // Grow "tableA" by one row so it takes in A4.
+    ScDBData* pLiveT1 = pDBs->getNamedDBs().findByUpperName(u"TABLEA"_ustr);
+    CPPUNIT_ASSERT(pLiveT1);
+    ScDBData aNewData(*pLiveT1);
+    aNewData.SetArea(0, 0, 0, 0, 3);
+    ScDBDocFunc(*m_xDocShell).ModifyDBData(aNewData);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("resized table's reference takes in the new row", 7.0,
+                                 m_pDoc->GetValue(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("other table's reference keeps its result", 30.0,
+                                 m_pDoc->GetValue(ScAddress(0, 1, 1)));
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 

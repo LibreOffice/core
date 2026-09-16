@@ -167,6 +167,10 @@ public:
     /** True if this array holds a structured reference to database range nIndex. */
     bool HasTableRef( sal_uInt16 nIndex ) const;
 
+    /** True if this array references database range nIndex, either by name
+        (ocDBArea) or structured (ocTableRef). */
+    bool HasDBRef( sal_uInt16 nIndex ) const;
+
     /** Adjust relative tab references when copying a formula to a new table.
         Non-zero relative tab offsets are recalculated so they still resolve
         to the original target sheet from the new position. Same-sheet
