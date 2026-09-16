@@ -93,7 +93,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     Reference< XDataSource>                 m_xSource;
     SharedConnection                        m_xConnection;
     Reference< XColumnsSupplier>            m_xColumnsSupplier;
-    Reference< XResultSet>                  m_xResultSet;
+    Reference<XRowSet> m_xResultSet;
     SwDBData                                m_aDBData;
     OUString                                m_sFilter;
     sal_Int32                               m_nResultSetCursorPos;
@@ -838,7 +838,7 @@ void SwMailMergeConfigItem::SetCurrentDBData( const SwDBData& rDBData)
     }
 }
 
-Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
+Reference<XRowSet> const& SwMailMergeConfigItem::GetResultSet() const
 {
     if(!m_pImpl->m_xConnection.is() && !m_pImpl->m_aDBData.sDataSource.isEmpty())
     {
@@ -911,8 +911,8 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
     {
         xRowProperties->setPropertyValue(u"ApplyFilter"_ustr, Any(!m_pImpl->m_sFilter.isEmpty()));
         xRowProperties->setPropertyValue(u"Filter"_ustr, Any(m_pImpl->m_sFilter));
-        uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
-        xRowSet->execute();
+        assert(m_pImpl->m_xResultSet.is());
+        m_pImpl->m_xResultSet->execute();
     }
     catch (const Exception&)
     {

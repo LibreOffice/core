@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MMCONFIGITEM_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MMCONFIGITEM_HXX
 
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -92,7 +93,7 @@ public:
 
     css::uno::Reference< css::sdbcx::XColumnsSupplier> const & GetColumnsSupplier();
 
-    css::uno::Reference< css::sdbc::XResultSet> const & GetResultSet() const;
+    css::uno::Reference<css::sdbc::XRowSet> const& GetResultSet() const;
 
     void DisposeResultSet();
 
