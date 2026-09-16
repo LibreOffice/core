@@ -1175,8 +1175,8 @@ bool StreamSocket::send(const http::Response& response)
     return false;
 }
 
-#if !(defined QTAPP || defined _WIN32 || defined(MACOS))
-// CODA-Q/-W/-M build fine without HttpRequest.cpp, which is where the below writeData() is, and also
+#if !(defined _WIN32 || defined(MACOS))
+// CODA-W/-M build fine without HttpRequest.cpp, which is where the below writeData() is, and also
 // without this function.
 
 bool StreamSocket::send(http::Request& request)
