@@ -28,8 +28,6 @@
 #include <set>
 #include <utility>
 
-#include <view.hxx>
-
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class MarkBase; }
@@ -45,12 +43,15 @@ class SwTextFootnote;
 class SwInterHyphInfo;      // Hyphenate()
 class SwCache;
 class SwFrameFormat;
+class SfxItemSet;
 struct SwCursorMoveState;
 struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
 enum class ExpandMode;
 class SwTextAttr;
+class SwView;
+class SwViewShell;
 class SwWrtShell;
 class SwNode;
 class SwNodeIndex;

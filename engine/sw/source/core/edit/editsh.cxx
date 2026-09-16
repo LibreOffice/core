@@ -29,6 +29,7 @@
 #include <i18nutil/guessparadirection.hxx>
 #include <editeng/autodiritem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
 #include <COKit/COKit.hxx>
 #include <sax/tools/converter.hxx>

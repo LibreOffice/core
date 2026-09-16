@@ -31,6 +31,7 @@
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
 #include <txtfrm.hxx>
+#include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <frameformats.hxx>
 #include <unotextrange.hxx>

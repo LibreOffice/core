@@ -51,6 +51,7 @@
 #include <UndoInsert.hxx>
 #include <breakit.hxx>
 #include <docsh.hxx>
+#include <view.hxx>
 #include <PostItMgr.hxx>
 #include <UndoRedline.hxx>
 #include <rolbck.hxx>
