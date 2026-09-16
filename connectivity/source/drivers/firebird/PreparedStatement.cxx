@@ -966,9 +966,9 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             setParameterNull(nParameterIndex, false);
             const sal_Int32 nMaxSize = 0xFFFF;
             const sal_uInt16 nSize = std::min(xBytes.getLength(), nMaxSize);
-            // 8000 corresponds to value from lcl_addDefaultParameters
-            // in dbaccess/source/filter/hsqldb/createparser.cxx
-            if (nSize > 8000)
+            // sqldata was allocated from sqllen in mallocSQLVAR, so grow it whenever the value is
+            // longer than the column it is bound to.
+            if (nSize > pVar->sqllen)
             {
                 free(pVar->sqldata);
                 pVar->sqldata = static_cast<char *>(malloc(sizeof(char) * nSize + 2));
