@@ -90,7 +90,7 @@ class Socket {
 
 		if (
 			window.Worker &&
-			(!(window as any).ThisIsAMobileApp || (window as any).mode.isCODesktop())
+			(!window.ThisIsAMobileApp || window.mode.isCODesktop())
 		) {
 			window.app.console.info('Creating TaskWorkers');
 			for (let i = 0; i < 4; ++i) {

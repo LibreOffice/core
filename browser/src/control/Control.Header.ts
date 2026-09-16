@@ -177,8 +177,8 @@ export class Header extends CanvasSectionObject {
 	}
 
 	private _showHeaderContextMenu(posEl: HTMLElement): void {
-		if ((window as any).mode.isSmallScreenDevice()) {
-			(window as any).contextMenuWizard = true;
+		if (window.mode.isSmallScreenDevice()) {
+			window.contextMenuWizard = true;
 			const menuData = Object.assign({}, this._menuData);
 			menuData.children = this._menuData.children.filter(
 				(child: any) => this._isHeaderCommandUsable(child.command));

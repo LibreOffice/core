@@ -354,7 +354,7 @@ class AboutDialog {
 		text = text.replace(/\u00A0/g, ' ');
 
 		if (window.mode.isCODesktop()) {
-			(window as any).postMobileMessage('TEXTCLIPBOARD ' + text);
+			window.postMobileMessage('TEXTCLIPBOARD ' + text);
 			this.contentHasBeenCopiedShowSnackbar();
 		} else if (navigator.clipboard && window.isSecureContext) {
 			navigator.clipboard

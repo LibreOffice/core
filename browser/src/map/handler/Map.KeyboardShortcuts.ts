@@ -16,14 +16,14 @@ declare var ThisIsTheQtApp: any;
 declare var ThisIsTheWindowsApp: any;
 
 function isCtrlKey (e: KeyboardEvent) {
-    if ((window as any).ThisIsTheiOSApp || window.L.Browser.mac)
+    if (window.ThisIsTheiOSApp || window.L.Browser.mac)
         return e.metaKey;
     else
         return e.ctrlKey;
 }
 
 function isMacCtrlKey (e: KeyboardEvent) {
-    if ((window as any).ThisIsTheiOSApp || window.L.Browser.mac)
+    if (window.ThisIsTheiOSApp || window.L.Browser.mac)
         return e.ctrlKey;
     else
         return false;

@@ -58,10 +58,7 @@ class Dispatcher {
 		};
 
 		this.actionsMap['closeapp'] = () => {
-			if (
-				(window as any).ThisIsAMobileApp &&
-				!(window as any).ThisIsTheEmscriptenApp
-			) {
+			if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
 				window.postMobileMessage('BYE');
 			} else {
 				if (app.map) app.map.acceptPendingCellEdit();

@@ -440,7 +440,7 @@ class LOUtil {
 		const hasLocalized = lang && LOUtil.localizedIcons[lang]?.includes(imgName);
 		const iconLang = LOUtil.localeIconAlias[lang] || lang;
 
-		if ((window as any).prefs.getBoolean('darkTheme')) {
+		if (window.prefs.getBoolean('darkTheme')) {
 			if (hasLocalized)
 				return LOUtil.getURL('images/dark/' + iconLang + '/' + imgName);
 			return LOUtil.getURL('images/dark/' + imgName);

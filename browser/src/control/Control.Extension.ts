@@ -775,13 +775,13 @@ window.L.Control.Extension = window.L.Control.extend({
 			return;
 		}
 		const filename = (msg.filename || 'file').replace(/^.*[\\/]/, '');
-		if ((window as any).ThisIsAMobileApp) {
+		if (window.ThisIsAMobileApp) {
 			// Hand the bytes to the native app (see the CODA/iOS extensionsavefile
 			// handler), base64 so the message stays text.
 			let binary = '';
 			for (let i = 0; i < bytes.length; i++)
 				binary += String.fromCharCode(bytes[i]);
-			(window as any).postMobileMessage(
+			window.postMobileMessage(
 				'extensionsavefile name=' +
 					encodeURIComponent(filename) +
 					' mime=' +
@@ -1034,7 +1034,7 @@ async function tryLoadAppsScriptExtension(
 
 // The UI language as COOL knows it, e.g. "en-US", "pt-BR", "de".
 function uiLanguage(): string {
-	return (window as any).langParam || 'en-US';
+	return window.langParam || 'en-US';
 }
 
 function uiDirection(): string {

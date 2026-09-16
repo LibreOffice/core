@@ -119,7 +119,7 @@ class SearchEditWidget extends EditWidget {
 	}
 
 	private updateSearchButtons() {
-		var toolbar = (window as any).mode.isSmallScreenDevice()
+		var toolbar = window.mode.isSmallScreenDevice()
 			? app.map.mobileSearchBar
 			: app.map.statusBar;
 		if (!toolbar) {

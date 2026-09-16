@@ -91,7 +91,7 @@
 	accessibilityState: false, // If accessibility was enabled by user
 	UI: {
 		language: {
-			fromURL: (window as any).langParam, // This is set in global.js.
+			fromURL: window.langParam, // This is set in global.js.
 			fromBrowser: window.L.Browser.lang, // Again in global.js.
 			notebookbarAccessibility: null,
 		},
@@ -131,7 +131,7 @@
 		size: null, // SimplePoint.
 	},
 	exportFormats: [], // formats the document can be exported to, see ExportFormats.ts
-	socket: (window as any).app.socket,
+	socket: window.app.socket,
 	console: window.app.console,
 
 	// Below 2 are related to document. I guess we can move these into "file" property.
@@ -356,5 +356,5 @@ if (activateValidation) {
 	window.app.file = new Proxy(window.app.file, validator);
 }
 
-(window as any).JSDialog = { verbose: false }; // initialize jsdialog module
-(window as any).SlideShow = {}; // initialize slideshow module
+window.JSDialog = { verbose: false }; // initialize jsdialog module
+window.SlideShow = {}; // initialize slideshow module

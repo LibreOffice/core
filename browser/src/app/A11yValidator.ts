@@ -712,7 +712,7 @@ class A11yValidator {
 	}
 
 	private checkDuplicateShortcuts(selectedTabId: string): number {
-		const notebookbar = (window as any).app?.map?.uiManager?.notebookbar;
+		const notebookbar = window.app?.map?.uiManager?.notebookbar;
 		if (!notebookbar) return 0;
 
 		const tabs = notebookbar.getTabs();

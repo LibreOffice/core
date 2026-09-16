@@ -101,7 +101,7 @@ export class RowHeader extends cool.Header {
 
 	isMouseOverResizeArea(start: number, end:number, position: number, entryIsCurrent: boolean) : boolean {
 		let resizeAreaStart = Math.max(start, end - this.borderResizeHandle * app.dpiScale);
-		if (entryIsCurrent || (window as any).mode.isSmallScreenDevice()) {
+		if (entryIsCurrent || window.mode.isSmallScreenDevice()) {
 			if (this.resizeHandleSize > (end - start) / 4) {
 				resizeAreaStart = end - ((end - start) / 4);
 			} else {

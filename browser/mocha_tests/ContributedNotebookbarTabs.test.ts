@@ -11,7 +11,7 @@
 
 describe('Notebookbar contributes.notebookbar handling', function () {
 	function newNotebookbar(): any {
-		return new (window as any).L.Control.Notebookbar();
+		return new window.L.Control.Notebookbar();
 	}
 
 	// A manifest fixture with two tabs: the first reuses command "cmdX" as both a

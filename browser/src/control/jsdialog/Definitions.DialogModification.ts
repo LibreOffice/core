@@ -108,7 +108,7 @@ dialogModifications.set('TocDialog', function (instance: any) {
 				data: data,
 				type: 'pushbutton',
 			});
-		(window as any).app.socket.sendMessage(message);
+		window.app.socket.sendMessage(message);
 	}
 
 	function deleteToken(tokenWrapper: Element) {
@@ -139,7 +139,7 @@ dialogModifications.set('TocDialog', function (instance: any) {
 				data: '',
 				type: 'edit',
 			});
-		(window as any).app.socket.sendMessage(message);
+		window.app.socket.sendMessage(message);
 	});
 
 	// Delete key removes the selected token
