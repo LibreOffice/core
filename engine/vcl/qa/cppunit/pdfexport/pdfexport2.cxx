@@ -2065,10 +2065,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
 {
     loadFromFile(u"StructureNamespaces.fodt");
 
-    // Tagged rather than PDF/UA, because the harness validates a PDF/UA export and this document
-    // still fails ISO 14289-2 8.2.5.8, a TOCI needing Ref. TODO: ask for PDF/UA here once that
-    // is fixed. The namespaces below depend on the version alone.
-    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true),
                                     comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                                   sal_Int32(20)) };
     save(TestFilter::PDF_WRITER,

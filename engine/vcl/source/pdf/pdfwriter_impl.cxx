@@ -1237,6 +1237,16 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
               "/Pg "
             + OString::number(rEle.m_nFirstPageObject)
             + " 0 R\n" );
+        if (!rEle.m_RefElements.empty())
+        {
+            aLine.append("/Ref[");
+            for (const auto nRef : rEle.m_RefElements)
+            {
+                aLine.append(" ");
+                appendObjectReference(m_aStructure[nRef].m_nObject, aLine);
+            }
+            aLine.append("]\n");
+        }
         if( !rEle.m_aActualText.isEmpty() )
         {
             aLine.append( "/ActualText" );
@@ -10102,6 +10112,22 @@ void PDFWriterImpl::setDestStructureElement(sal_Int32 nDestId, sal_Int32 nStruct
         return;
 
     m_aDests[nDestId].m_nStructElement = nStructElementId;
+}
+
+void PDFWriterImpl::addStructureRef(sal_Int32 nElementId, sal_Int32 nRefElementId)
+{
+    if (nElementId < 0 || o3tl::make_unsigned(nElementId) >= m_aStructure.size())
+        return;
+    if (nRefElementId < 0 || o3tl::make_unsigned(nRefElementId) >= m_aStructure.size())
+        return;
+    // an element left out of the tree has no object to point at
+    if (m_aStructure[nRefElementId].m_nObject <= 0)
+        return;
+    // ISO 32000-2 added Ref to a structure element, and PDF 1.7 has no entry of that name
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+        return;
+
+    m_aStructure[nElementId].m_RefElements.push_back(nRefElementId);
 }
 
 void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )

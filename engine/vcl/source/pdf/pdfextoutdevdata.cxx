@@ -73,10 +73,17 @@ struct SetLinkDest {
     sal_Int32 mnLinkId;
     sal_Int32 mnDestId;
 };
+/// a destination and the element it names, for the destination's /SD
 struct SetDestStructureElement
 {
     sal_Int32 mnDestId;
     sal_Int32 mnStructElementId;
+};
+/// an element and what its content refers to, for the element's /Ref
+struct AddStructureRef
+{
+    sal_Int32 mnElementId;
+    sal_Int32 mnRefElementId;
 };
 struct SetLinkURL {
     OUString maLinkURL;
@@ -148,6 +155,7 @@ typedef std::variant<CreateNamedDest,
                     CreateScreen,
                     SetLinkDest,
                     SetDestStructureElement,
+                    AddStructureRef,
                     SetLinkURL,
                     SetScreenURL,
                     SetScreenStream,
@@ -282,6 +290,11 @@ void GlobalSyncData::PlayGlobalActions( pdf::PDFWriter& rWriter )
         {
             const vcl::SetDestStructureElement& rSet = std::get<SetDestStructureElement>(action);
             rWriter.SetDestStructureElement(GetMappedId(rSet.mnDestId), rSet.mnStructElementId);
+        }
+        else if (std::holds_alternative<AddStructureRef>(action))
+        {
+            const vcl::AddStructureRef& rAdd = std::get<AddStructureRef>(action);
+            rWriter.AddStructureRef(rAdd.mnElementId, rAdd.mnRefElementId);
         }
         else if (std::holds_alternative<SetLinkURL>(action)) {
             const vcl::SetLinkURL& rSetLinkURL = std::get<SetLinkURL>(action);
@@ -715,6 +728,11 @@ sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect,
 void PDFExtOutDevData::SetDestStructureElement(sal_Int32 nDestId, sal_Int32 nStructElementId)
 {
     mpGlobalSyncData->mActions.push_back(vcl::SetDestStructureElement{ nDestId, nStructElementId });
+}
+
+void PDFExtOutDevData::AddStructureRef(sal_Int32 nElementId, sal_Int32 nRefElementId)
+{
+    mpGlobalSyncData->mActions.push_back(vcl::AddStructureRef{ nElementId, nRefElementId });
 }
 
 void PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
