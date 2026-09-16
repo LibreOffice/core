@@ -1560,9 +1560,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345FullTransparentGradient)
     createSdImpressDoc("odp/tdf128345_FullTransparentGradient.odp");
     save(TestFilter::PPTX);
 
-    // Make sure the shape has no fill. Without the patch, fill was solid red.
+    // The shape keeps the colour of its fill and states that nothing of it shows, so a reader
+    // that makes the fill solid again arrives at the colour the document holds.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:noFill");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:solidFill/a:srgbClr", "val",
+                u"FF0000");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:solidFill/a:srgbClr/a:alpha",
+                "val", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientLinear)

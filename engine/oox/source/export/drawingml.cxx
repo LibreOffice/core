@@ -6386,38 +6386,6 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( u"FillStyle"_ustr ) >>= aFillStyle;
 
-    // map full transparent background to no fill
-    if (aFillStyle == FillStyle_SOLID)
-    {
-        OUString sFillTransparenceGradientName;
-
-        if (GetProperty(xPropSet, u"FillTransparenceGradientName"_ustr)
-            && (mAny >>= sFillTransparenceGradientName)
-            && !sFillTransparenceGradientName.isEmpty()
-            && GetProperty(xPropSet, u"FillTransparenceGradient"_ustr))
-        {
-            // check if a fully transparent TransparenceGradient is used
-            // use BGradient constructor & tooling here now
-            const basegfx::BGradient aTransparenceGradient = model::gradient::getFromAny(mAny);
-            basegfx::BColor aSingleColor;
-            const bool bSingleColor(aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor));
-            const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));
-
-            if (bCompletelyTransparent)
-            {
-                aFillStyle = FillStyle_NONE;
-            }
-        }
-        else if ( GetProperty( xPropSet, u"FillTransparence"_ustr ) )
-        {
-            // check if a fully transparent FillTransparence is used
-            sal_Int16 nVal = 0;
-            xPropSet->getPropertyValue( u"FillTransparence"_ustr ) >>= nVal;
-            if ( nVal == 100 )
-                aFillStyle = FillStyle_NONE;
-        }
-    }
-
     bool bUseBackground(false);
     if (GetProperty(xPropSet, u"FillUseSlideBackground"_ustr))
         xPropSet->getPropertyValue(u"FillUseSlideBackground"_ustr) >>= bUseBackground;

@@ -1432,6 +1432,26 @@ CPPUNIT_TEST_FIXTURE(Test, testPPTXExportOutlinerListStyle)
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl6pPr", 1);
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl7pPr", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFullySeeThroughFillKeepsItsColour)
+{
+    // Given a document whose footer holds a shape with a white fill that nothing shows of:
+    loadFromFile(u"tdf81100.docx");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then make sure the colour is still there, with nothing of it showing:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/footer2.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//wps:spPr/a:solidFill/a:srgbClr' number of nodes is incorrect
+    // i.e. the fill was written as no fill at all, which threw the colour away, so a reader that
+    // made the fill solid again arrived at a colour the document never held.
+    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", u"FFFFFF");
+    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr/a:alpha", "val", u"0");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
