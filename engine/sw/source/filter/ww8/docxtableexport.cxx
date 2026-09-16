@@ -664,6 +664,62 @@ void DocxAttributeOutput::TableBackgrounds(
     }
 }
 
+/** The tracked change of a table row, or nothing where the row carries none.
+
+    A row says it changed either on its own entry among the changes kept beside the text, or,
+    where it has none of its own, through the single change the whole table lies in. */
+static const SwRedlineData* lcl_GetTableRowRedline(const SwDoc& rDoc, const SwTableLine* pTabLine,
+                                                   bool* pFromWholeTable = nullptr)
+{
+    SwRedlineTable::size_type nPos(0);
+    SwRedlineTable::size_type nChange = pTabLine->UpdateTextChangesOnly(nPos);
+    if (pFromWholeTable)
+        *pFromWholeTable = false;
+    // tdf#150824 if no tracked table row, is the table in a single redline?
+    // if yes, convert the row to a tracked table row instead of losing its tracking
+    if (nChange == SwRedlineTable::npos)
+    {
+        nChange = pTabLine->GetTableRedline();
+        if (pFromWholeTable)
+            *pFromWholeTable = nChange != SwRedlineTable::npos;
+    }
+    if (nChange == SwRedlineTable::npos)
+        return nullptr;
+
+    const SwRangeRedline* pRedline
+        = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[nChange];
+    const SwExtraRedlineTable& rExtra = rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
+    for (sal_uInt16 n = 0; n < rExtra.GetSize(); ++n)
+    {
+        auto* pRowRedline = dynamic_cast<SwTableRowRedline*>(rExtra.GetRedline(n));
+        if (pRowRedline && &pRowRedline->GetTableLine() == pTabLine
+            // still the same type (an inserted row could become a tracked deleted one)
+            && pRowRedline->GetRedlineData().GetType() == pRedline->GetRedlineData().GetType())
+        {
+            return &pRowRedline->GetRedlineData();
+        }
+    }
+    return &pRedline->GetRedlineData();
+}
+
+const SwRedlineData* DocxAttributeOutput::GetTableRowMove(
+    const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
+{
+    const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
+    bool bFromWholeTable = false;
+    const SwRedlineData* pData
+        = lcl_GetTableRowRedline(m_rExport.m_rDoc, pTabBox->GetUpper(), &bFromWholeTable);
+    if (!pData || bFromWholeTable)
+    {
+        // The row says nothing of its own, and what it holds moved as part of a longer stretch
+        // of text. That text carries the range around both of its halves already.
+        return nullptr;
+    }
+    // A move carries a number that pairs its two halves, and one stands for a half whose pair is
+    // not known. A row of that kind has nothing to be paired with.
+    return pData->GetMoved() > 1 ? pData : nullptr;
+}
+
 void DocxAttributeOutput::TableRowRedline(
     const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
@@ -674,44 +730,20 @@ void DocxAttributeOutput::TableRowRedline(
         = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
           && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
-    // check table row property "HasTextChangesOnly"
-    SwRedlineTable::size_type nPos(0);
-    SwRedlineTable::size_type nChange = pTabLine->UpdateTextChangesOnly(nPos);
-    // tdf#150824 if no tracked table row, is the table in a single redline?
-    // if yes, convert the row to a tracked table row instead of losing its tracking
-    if (nChange == SwRedlineTable::npos)
-        nChange = pTabLine->GetTableRedline();
-    if (nChange != SwRedlineTable::npos)
+    const SwRedlineData* pRedlineData = lcl_GetTableRowRedline(m_rExport.m_rDoc, pTabLine);
+    if (pRedlineData)
     {
-        const SwRedlineTable& aRedlineTable
-            = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        const SwRangeRedline* pRedline = aRedlineTable[nChange];
-        SwTableRowRedline* pTableRowRedline = nullptr;
-        bool bIsInExtra = false;
+        const SwRedlineData& aRedlineData = *pRedlineData;
 
-        // use the original DOCX redline data stored in ExtraRedlineTable,
-        // if it exists and its type wasn't changed
-        const SwExtraRedlineTable& aExtraRedlineTable
-            = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
-        for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize();
-             ++nCurRedlinePos)
-        {
-            SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
-            pTableRowRedline = dynamic_cast<SwTableRowRedline*>(pExtraRedline);
-            if (pTableRowRedline && &pTableRowRedline->GetTableLine() == pTabLine)
-            {
-                bIsInExtra = true;
-                break;
-            }
-        }
+        /*  A move carries a number that pairs its two halves. The row says it moved through the
+            text it holds, which reads as moved away in the one place and moved here in the
+            other, so a row that also carried a change of its own would read as a row deleted and
+            a row inserted on top of that.
 
-        const SwRedlineData& aRedlineData
-            = bIsInExtra &&
-                      // still the same type (an inserted row could become a tracked deleted one)
-                      pTableRowRedline->GetRedlineData().GetType()
-                          == pRedline->GetRedlineData().GetType()
-                  ? pTableRowRedline->GetRedlineData()
-                  : pRedline->GetRedlineData();
+            A number of one stands for a half whose pair is not known. Such a row has nothing to
+            be paired with, so it is written as a deletion and an insertion. */
+        if (aRedlineData.GetMoved() > 1)
+            return;
 
         // Note: all redline ranges and table row redline (with the same author and timestamp)
         // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
@@ -734,11 +766,11 @@ void DocxAttributeOutput::TableRowRedline(
 
         if (bNoDate)
             m_pSerializer->singleElementNS(
-                XML_w, RedlineType::Delete == pRedline->GetType() ? XML_del : XML_ins,
+                XML_w, RedlineType::Delete == aRedlineData.GetType() ? XML_del : XML_ins,
                 FSNS(XML_w, XML_id), aId, FSNS(XML_w, XML_author), aAuthor);
         else
             m_pSerializer->singleElementNS(
-                XML_w, RedlineType::Delete == pRedline->GetType() ? XML_del : XML_ins,
+                XML_w, RedlineType::Delete == aRedlineData.GetType() ? XML_del : XML_ins,
                 FSNS(XML_w, XML_id), aId, FSNS(XML_w, XML_author), aAuthor, FSNS(XML_w, XML_date),
                 DateTimeToOString(aDateTime));
         return;

@@ -1305,9 +1305,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510)
     createSwDoc("TC-table-DnD-move.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    // This was 0 (missing tracked table row deletion/insertion)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
+    // The rows say that they moved through the text they hold, so they carry no change of their
+    // own. A row that also read as deleted in the one place and inserted in the other would show
+    // the one move as two changes on top of each other.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:tc/w:p/w:moveFrom", 4);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:tc/w:p/w:moveTo", 4);
+
+    // The two rows moved together, so one range covers both of them rather than one range each.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:moveFromRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:moveFromRangeEnd", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:moveToRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:moveToRangeEnd", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143510_table_from_row)
@@ -1316,11 +1326,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_table_from_row)
     createSwDoc("TC-table-Separate-Move.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    // This was 0 (missing tracked table row deletion/insertion)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del", 1);
+    // The row says that it moved through the text it holds, so it carries no change of its own.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:tc/w:p/w:moveFrom", 3);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:tc/w:p/w:moveTo", 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table)
@@ -1329,9 +1340,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table)
     createSwDoc("TC-table-rowDND.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    // This was 0 (missing tracked table row deletion/insertion)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 1);
+    // The row says that it moved through the text it holds, so it carries no change of its own.
+    // A row that also read as deleted in the one place and inserted in the other would show the
+    // one move as two changes on top of each other.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 0);
+
+    // A row dragged from one place to another is a move, so both halves stay paired under one
+    // name and the text of the row reads as moved rather than as deleted and typed again.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:moveFromRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:moveFromRangeEnd", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:moveToRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:moveToRangeEnd", 1);
+    CPPUNIT_ASSERT_EQUAL(
+        getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:moveFromRangeStart", "name"),
+        getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:moveToRangeStart", "name"));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:moveFrom", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:moveTo", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table2)
@@ -1340,9 +1365,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table2)
     createSwDoc("TC-table-rowDND-front.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    // This was 0 (missing tracked table row deletion/insertion)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 1);
+    // The row says that it moved through the text it holds, so it carries no change of its own.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 0);
+
+    // A row dragged from one place to another is a move, so both halves stay paired under one
+    // name and the text of the row reads as moved rather than as deleted and typed again.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:moveToRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:moveToRangeEnd", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:moveFromRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:moveFromRangeEnd", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:moveTo", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:moveFrom", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150824)

@@ -2316,6 +2316,21 @@ void DocxAttributeOutput::DoWriteBookmarkTagEnd(sal_Int32 const nId)
         FSNS(XML_w, XML_id), OString::number(nId));
 }
 
+bool DocxAttributeOutput::IsInMovedRange() const
+{
+    for (const auto& rRow : m_aMovedTableRows)
+    {
+        if (rRow.bOpen)
+            return true;
+    }
+    for (const auto& rOpenedBookmark : m_rOpenedBookmarksIds)
+    {
+        if (rOpenedBookmark.first.startsWith(u"__RefMove"))
+            return true;
+    }
+    return false;
+}
+
 void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkName,
     bool bFrom, const SwRedlineData* pRedlineData)
 {
@@ -4150,15 +4165,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     // the text run is usually XML_t, with the exception of the deleted (and not moved) text
     sal_Int32 nTextToken = XML_t;
 
-    bool isInMoveBookmark = false;
-    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
-    {
-        if (openedBookmark.first.startsWith(u"__RefMove"))
-        {
-            isInMoveBookmark = true;
-            break;
-        }
-    }
+    bool isInMoveBookmark = IsInMovedRange();
     // Check also the bookmarks that will be opened just now
     for (const OUString& bookmarkName : m_rBookmarksStart)
     {
@@ -4599,16 +4606,7 @@ void DocxAttributeOutput::StartRedline(const SwRedlineData* pRedlineData, bool b
         // The officeotron validator does not think year 0 is valid, so just dont put anything,
         // a zero year is not useful anyway.
         ( aDateTime.GetYear() == 0 && aDateTime.GetMonth() == 0 && aDateTime.GetDay() == 0 );
-    bool isInMoveBookmark = false;
-    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
-    {
-        if (openedBookmark.first.startsWith(u"__RefMove"))
-        {
-            isInMoveBookmark = true;
-            break;
-        }
-    }
-    bool bMoved = (isInMoveBookmark || bParagraphProps) && pRedlineData->IsMoved() &&
+    bool bMoved = (IsInMovedRange() || bParagraphProps) && pRedlineData->IsMoved() &&
                   // tdf#150166 save tracked moving around TOC as w:ins, w:del
                   SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
@@ -4643,16 +4641,7 @@ void DocxAttributeOutput::EndRedline(const SwRedlineData* pRedlineData, bool bPa
     if ( !pRedlineData || m_bWritingField )
         return;
 
-    bool isInMoveBookmark = false;
-    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
-    {
-        if (openedBookmark.first.startsWith(u"__RefMove"))
-        {
-            isInMoveBookmark = true;
-            break;
-        }
-    }
-    bool bMoved = (isInMoveBookmark || bParagraphProps) && pRedlineData->IsMoved() &&
+    bool bMoved = (IsInMovedRange() || bParagraphProps) && pRedlineData->IsMoved() &&
                   // tdf#150166 save tracked moving around TOC as w:ins, w:del
                   SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
@@ -5239,6 +5228,7 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t cons
     m_TableFirstCells.push_back(pTableTextNodeInfoInner);
     m_LastOpenCell.push_back(-1);
     m_LastClosedCell.push_back(-1);
+    m_aMovedTableRows.emplace_back();
 
     InitTableHelper( pTableTextNodeInfoInner );
     TableDefinition( pTableTextNodeInfoInner );
@@ -5246,6 +5236,11 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t cons
 
 void DocxAttributeOutput::EndTable()
 {
+    // The rows that moved run to the end of the table, so the range around them ends with the
+    // last of them, inside the table they are rows of.
+    CloseMovedTableRows();
+    m_aMovedTableRows.pop_back();
+
     m_pSerializer->endElementNS( XML_w, XML_tbl );
 
     if ( m_tableReference.m_nTableDepth > 0 )
@@ -5269,6 +5264,21 @@ void DocxAttributeOutput::EndTable()
 
 void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
+    /*  Rows that move together carry one number between them and are written under one range,
+        which stays open from the first of them to the last. This row either carries on the range
+        that is open, or the rows it covers have all been written and it ends here, in front of
+        the row that does not belong to it. */
+    const SwRedlineData* pMove = GetTableRowMove(pTableTextNodeInfoInner);
+    if (!m_aMovedTableRows.empty())
+    {
+        const MovedTableRows& rRows = m_aMovedTableRows.back();
+        const bool bCarriesOn
+            = pMove && rRows.bOpen && rRows.nMoveId == pMove->GetMoved()
+              && rRows.bFrom == (pMove->GetType() == RedlineType::Delete);
+        if (!bCarriesOn)
+            CloseMovedTableRows();
+    }
+
     m_pSerializer->startElementNS(XML_w, XML_tr);
 
     // Output the row properties
@@ -5308,11 +5318,40 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
 
 
     m_pSerializer->endElementNS( XML_w, XML_trPr );
+
+    /*  A moved row is deleted in one place and inserted in the other, and a range around both
+        halves pairs them. Elsewhere that range comes from a bookmark, but a bookmark stops at
+        the edge of a table cell, so a row keeps the pairing on its own tracked change and the
+        name of the range is taken from there.
+
+        Rows that move together carry one number between them, and they are written under one
+        range that stays open from the first of them to the last. */
+    if (pMove && !m_aMovedTableRows.empty() && !m_aMovedTableRows.back().bOpen)
+    {
+        MovedTableRows& rRows = m_aMovedTableRows.back();
+        rRows.bOpen = true;
+        rRows.bFrom = pMove->GetType() == RedlineType::Delete;
+        rRows.nMoveId = pMove->GetMoved();
+        rRows.nRangeId = m_nNextBookmarkId;
+        const OUString aName = "move" + OUString::number(rRows.nMoveId);
+        DoWriteMoveRangeTagStart(aName, rRows.bFrom, pMove);
+        ++m_nNextBookmarkId;
+    }
+}
+
+void DocxAttributeOutput::CloseMovedTableRows()
+{
+    if (m_aMovedTableRows.empty() || !m_aMovedTableRows.back().bOpen)
+        return;
+
+    DoWriteMoveRangeTagEnd(m_aMovedTableRows.back().nRangeId, m_aMovedTableRows.back().bFrom);
+    m_aMovedTableRows.back().bOpen = false;
 }
 
 void DocxAttributeOutput::EndTableRow( )
 {
     m_pSerializer->endElementNS( XML_w, XML_tr );
+
     m_LastOpenCell.back() = -1;
     m_LastClosedCell.back() = -1;
 }

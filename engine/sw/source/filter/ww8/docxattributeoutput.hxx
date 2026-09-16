@@ -815,6 +815,14 @@ private:
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 
+    /// True while the export is inside a range that the document tracks as moved text.
+    bool IsInMovedRange() const;
+    /// Ends the range around the rows that moved together, when one is open.
+    void CloseMovedTableRows();
+    /// The tracked change of a row that says the row moved and names the half it pairs with.
+    const SwRedlineData*
+    GetTableRowMove(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+
     void DoWritePermissionTagStart(const OUString& permission);
     void DoWritePermissionTagEnd(const OUString& permission);
     void DoWritePermissionsStart();
@@ -969,6 +977,20 @@ private:
 
     /// Name of the last opened bookmark.
     OUString m_sLastOpenedBookmark;
+
+    /** The range that pairs the two halves of a move, while the rows it covers are written.
+
+        A move carries a number that both halves are named by. The range stays open over the
+        rows that follow one another under that number, and bOpen says whether one is open at
+        all. There is one of these per table, so a table inside a cell keeps its own. */
+    struct MovedTableRows
+    {
+        sal_Int32 nRangeId = 0;
+        sal_uInt32 nMoveId = 0;
+        bool bOpen = false;
+        bool bFrom = false;
+    };
+    std::vector<MovedTableRows> m_aMovedTableRows;
 
     /// Set of ids of the saved bookmarks (used only for moveRange, yet)
     std::unordered_set<sal_Int32> m_rSavedBookmarksIds;
