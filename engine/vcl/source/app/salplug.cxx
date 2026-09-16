@@ -212,7 +212,7 @@ SalInstance *CreateSalInstance()
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 
-   static const char* const pPlugin[] = {
+    static const char* const pPlugin[] = {
 #ifdef _WIN32
         "win",
 #elif defined(MACOSX)
