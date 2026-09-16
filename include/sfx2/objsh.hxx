@@ -626,7 +626,7 @@ public:
                                 GetModel() const;
     // Only temporarily for the applications!
     void                        SetBaseModel( SfxBaseModel* pModel );
-    css::uno::Reference< css::frame::XModel3 > GetBaseModel() const;
+    rtl::Reference<SfxBaseModel> GetBaseModel() const;
     // Only temporarily for the applications!
 
     virtual css::uno::Sequence< OUString > GetEventNames();

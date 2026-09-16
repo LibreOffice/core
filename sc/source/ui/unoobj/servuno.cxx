@@ -528,14 +528,16 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
             {
                 bool bListPos = ( nType == Type::LISTCELLBIND );
-                uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
+                uno::Reference<sheet::XSpreadsheetDocument> xDoc(
+                    cppu::getXWeak(pDocShell->GetBaseModel().get()), uno::UNO_QUERY);
                 xRet.set(*new calc::OCellValueBinding( xDoc, bListPos ));
             }
             break;
         case Type::LISTSOURCE:
             if (pDocShell)
             {
-                uno::Reference<sheet::XSpreadsheetDocument> xDoc( pDocShell->GetBaseModel(), uno::UNO_QUERY );
+                uno::Reference<sheet::XSpreadsheetDocument> xDoc(
+                    cppu::getXWeak(pDocShell->GetBaseModel().get()), uno::UNO_QUERY);
                 xRet.set(*new calc::OCellListSource( xDoc ));
             }
             break;

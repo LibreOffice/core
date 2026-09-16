@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/configuration.hxx>
 #include <rtl/ref.hxx>

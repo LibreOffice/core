@@ -18,6 +18,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <vcl/weld/Builder.hxx>

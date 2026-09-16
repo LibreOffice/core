@@ -75,6 +75,7 @@
 #include <vcl/help.hxx>
 
 #include <sfx2/signaturestate.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>

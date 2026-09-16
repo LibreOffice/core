@@ -372,7 +372,7 @@ SfxCloseVetoLock::~SfxCloseVetoLock()
         if (mpDocShell->Get_Impl()->m_bCloseModelScheduled)
         {
             mpDocShell->Get_Impl()->m_bCloseModelScheduled = false; // pass ownership
-            if (rtl::Reference model = static_cast<SfxBaseModel*>(mpDocShell->GetBaseModel().get()))
+            if (rtl::Reference<SfxBaseModel> model = mpDocShell->GetBaseModel())
             {
                 try
                 {
@@ -417,13 +417,13 @@ bool SfxObjectShell::CloseInternal()
             return false;
 
         pImpl->bClosing = true;
-        Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
+        rtl::Reference<SfxBaseModel> pModel = GetBaseModel();
 
-        if ( xCloseable.is() )
+        if (pModel.is())
         {
             try
             {
-                xCloseable->close( true );
+                pModel->close(true);
             }
             catch (const Exception&)
             {
@@ -895,11 +895,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
     }
 }
 
-
-css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetBaseModel() const
-{
-    return pImpl->pBaseModel;
-}
+rtl::Reference<SfxBaseModel> SfxObjectShell::GetBaseModel() const { return pImpl->pBaseModel; }
 
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
 {
