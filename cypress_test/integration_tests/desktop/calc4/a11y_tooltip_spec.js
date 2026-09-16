@@ -44,13 +44,22 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 
 	/// The harness moves the pointer in jumps, which do not always fire the
 	/// leave, so the control's own off/on pair is what clears the tooltip.
+	///
+	/// A jump scrolls the page and it springs back a frame later, so a widget
+	/// the pointer lands on fires a leave after the command has returned, and
+	/// that leave arms a hide against whatever is showing by then. The format
+	/// code entry carries no tooltip of its own.
 	function pointerAway() {
-		cy.cGet('.ui-dialog #delete').realHover();
+		cy.cGet('.ui-dialog #formatted').realHover();
+		cy.wrap(null).should(function () {
+			expect(win.document.querySelector('.ui-dialog [data-cooltip]:hover'),
+				'a widget still under the pointer').to.be.null;
+		});
 		cy.then(function () {
 			win.app.map.tooltip.disable();
 			win.app.map.tooltip.enable();
 		});
-		cy.wrap(null, { timeout: 4000 }).should(function () {
+		cy.wrap(null).should(function () {
 			expect(shown(), 'no tooltip left over').to.be.false;
 		});
 	}
@@ -60,7 +69,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 	function hover(id) {
 		cy.cGet('.ui-dialog #' + id + '[data-cooltip]').realHover();
 		cy.then(function () { win.app.map.tooltip.show(widget(id)); });
-		cy.wrap(null, { timeout: 4000 }).should(function () {
+		cy.wrap(null).should(function () {
 			expect(shown(), 'the tooltip of ' + id + ' opened').to.be.true;
 		});
 	}
@@ -133,7 +142,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 
 		cy.realPress('Escape');
 
-		cy.wrap(null, { timeout: 4000 }).should(function () {
+		cy.wrap(null).should(function () {
 			expect(shown(), 'Escape took the tooltip down').to.be.false;
 		});
 
@@ -166,7 +175,8 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 			tip.show(widget('edit'));
 		});
 
-		cy.wait(900);
+		// Wait for that hide to fall due.
+		helper.waitForTimers(win, 'tooltip');
 
 		cy.then(function () {
 			expect(shown(), 'the tooltip Edit opened').to.be.true;
@@ -189,7 +199,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 			tip.beginHide();
 		});
 
-		cy.wrap(null, { timeout: 4000 }).should(function () {
+		cy.wrap(null).should(function () {
 			expect(shown(), 'the tooltip Add opened').to.be.false;
 		});
 	});
