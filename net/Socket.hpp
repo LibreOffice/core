@@ -332,59 +332,6 @@ public:
     /// Gets our fast cache of the socket buffer size
     int getSendBufferSize() const { return (Util::isMobileApp() ? INT_MAX : _sendBufferSize); }
 
-    /// Sets the receive buffer size in bytes.
-    /// Note: TCP will allocate twice this size for admin purposes,
-    /// so a subsequent call to getReceieveBufferSize will return
-    /// the larger (actual) buffer size, if this succeeds.
-    /// Note: the upper limit is set via /proc/sys/net/core/rmem_max,
-    /// and there is an unconfigurable lower limit as well.
-    /// Returns true on success only.
-    bool setReceiveBufferSize([[maybe_unused]] const int size)
-    {
-#ifdef _WIN32
-        return false;
-#else
-        constexpr unsigned int len = sizeof(size);
-        const int rc = ::setsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, len);
-        return rc == 0;
-#endif
-    }
-
-    /// Gets the actual receive buffer size in bytes, -1 on error.
-    int getReceiveBufferSize() const
-    {
-#ifdef _WIN32
-        return -1;
-#else
-        int size;
-        socklen_t len = sizeof(size);
-        const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_RCVBUF, &size, &len);
-        return rc == 0 ? size : -1;
-#endif
-    }
-
-    /// Gets the error code.
-    /// Sets errno on success and returns it.
-    /// Returns -1 on failure to get the error code.
-    int getError() const
-    {
-#ifdef _WIN32
-        return -1;
-#else
-        int error;
-        socklen_t len = sizeof(error);
-        const int rc = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, &error, &len);
-        if (rc == 0)
-        {
-            // Set errno so client can use strerror etc.
-            errno = error;
-            return error;
-        }
-
-        return rc;
-#endif
-    }
-
     // Does this socket come from the localhost ?
     bool isLocal() const;
 
