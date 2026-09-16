@@ -152,7 +152,7 @@ cpo::uno::Reference<css::frame::XController> SVGFilter::getSourceController() co
     // Try current frame as a fallback.
     if (!xController)
     {
-        uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+        uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(mxContext));
         if (auto xFrame = xDesktop->getCurrentFrame()) // Manage headless case
             xController = xFrame->getController();
     }

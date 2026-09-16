@@ -92,7 +92,7 @@ DocumentHolder::DocumentHolder(
     m_nMacroExecMode( document::MacroExecMode::USE_CONFIG ),
     m_bLink( false )
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+    uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
     xDesktop->addTerminateListener( static_cast<frame::XTerminateListener*>(this) );
 }
 
@@ -352,7 +352,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             // load the model into the frame
             LoadDocInFrame( true );
 
-            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+            uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
             xDesktop->getFrames()->append(m_xFrame);
 
             // determine the menuhandle to get menuitems.
@@ -597,7 +597,7 @@ BOOL DocumentHolder::Undo()
 
 void DocumentHolder::FreeOffice()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+    uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
     xDesktop->removeTerminateListener(
         static_cast<frame::XTerminateListener*>(this) );
 }
@@ -752,7 +752,7 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
 {
     if(! m_xFrame.is() )
     {
-        uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
+        uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
 
         // the frame will be registered on desktop here, later when the document
         // is loaded into the frame in ::show() method the terminate listener will be removed

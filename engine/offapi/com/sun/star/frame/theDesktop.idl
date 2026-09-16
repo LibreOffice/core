@@ -32,7 +32,7 @@
     Prior to LibreOffice 4.3, this singleton was only available as a
     (single-instance) Desktop service.
  */
-published singleton theDesktop : XDesktop2;
+published singleton theDesktop : XDesktop;
 
 }; }; }; };
 

@@ -188,7 +188,7 @@ MacabDriver::MacabDriver(
     osl_atomic_increment( &m_refCount );
     try
     {
-        Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
+        Reference< XDesktop > xDesktop = Desktop::create( m_xContext );
         xDesktop->addTerminateListener( this );
     }
     catch( const Exception& )

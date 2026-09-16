@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <osl/mutex.hxx>
@@ -69,7 +69,7 @@ namespace connectivity
         cpo::uno::Reference< css::sdbc::XDriverManager2 >         m_xManager;
         cpo::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
         cpo::uno::Reference< cpo::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
-        cpo::uno::Reference< css::frame::XDesktop2>               m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop>                m_xDesktop;
 
     public:
         OPoolCollection(const OPoolCollection&) = delete;

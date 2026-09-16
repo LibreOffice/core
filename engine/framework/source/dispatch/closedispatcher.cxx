@@ -547,7 +547,7 @@ bool CloseDispatcher::implts_terminateApplication()
         xContext = m_xContext;
     }
 
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( xContext );
 
     return xDesktop->terminate();
 }

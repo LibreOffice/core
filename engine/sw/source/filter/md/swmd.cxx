@@ -836,7 +836,7 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
 
     // Go via filter detection so non-ODF templates work, too.
     uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
     cpo::uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };

@@ -465,7 +465,7 @@ VclPtr<vcl::Window> ImplGetActiveFrameWindow()
     try
     {
         // query desktop instance
-        cpo::uno::Reference<css::frame::XDesktop2> xDesktop
+        cpo::uno::Reference<css::frame::XDesktop> xDesktop
             = css::frame::Desktop::create(comphelper::getProcessComponentContext());
         if (cpo::uno::Reference<css::frame::XFrame> xActiveFrame = xDesktop->getActiveFrame())
             return VCLUnoHelper::GetWindow(xActiveFrame->getComponentWindow());

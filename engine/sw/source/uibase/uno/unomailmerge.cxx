@@ -143,7 +143,7 @@ static bool LoadFromURL_impl(
     Sequence < PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
     try
     {
-        Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xTmpModel.set( xDesktop->loadComponentFromURL( rURL, u"_blank"_ustr, 0, aArgs ), UNO_QUERY );
     }
     catch (const cpo::uno::Exception&)

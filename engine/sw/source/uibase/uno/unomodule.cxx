@@ -64,7 +64,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
         SfxRequest aReq(pSlot, aArgs, SfxCallMode::SYNCHRON, mod->GetPool());
         SfxAllItemSet aInternalSet( SfxGetpApp()->GetPool() );
 
-        cpo::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
+        cpo::uno::Reference<css::frame::XDesktop> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
         cpo::uno::Reference<css::frame::XFrame> xCurrentFrame = xDesktop->getCurrentFrame();
         if (xCurrentFrame.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
             aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xCurrentFrame));

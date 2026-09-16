@@ -88,7 +88,7 @@ bool dispatchCommand(const OUString& rCommand,
 {
     // Target where we will execute the .uno: command
     const uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(xContext);
 
     uno::Reference<frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())

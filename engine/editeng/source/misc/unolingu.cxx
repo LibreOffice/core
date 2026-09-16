@@ -373,7 +373,7 @@ uno::Reference< linguistic2::XPossibleHyphens >
 
 class LinguMgrExitLstnr : public cppu::WeakImplHelper<XEventListener>
 {
-    uno::Reference< XDesktop2 >        xDesktop;
+    uno::Reference< XDesktop >        xDesktop;
 
     static void AtExit();
 

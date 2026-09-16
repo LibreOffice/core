@@ -202,7 +202,7 @@ void SAL_CALL TerminateOfficeThread::run()
 
 void TerminateOfficeThread::PerformOfficeTermination()
 {
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(mxContext);
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(mxContext);
 
     cpo::uno::Reference< css::container::XElementAccess > xList = xDesktop->getFrames();
     if ( !xList.is() )
@@ -234,7 +234,7 @@ FinalThreadManager::FinalThreadManager(cpo::uno::Reference< cpo::uno::XComponent
 
 void FinalThreadManager::registerAsListenerAtDesktop()
 {
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(m_xContext);
     xDesktop->addTerminateListener( cpo::uno::Reference< css::frame::XTerminateListener >( this ) );
 }
 

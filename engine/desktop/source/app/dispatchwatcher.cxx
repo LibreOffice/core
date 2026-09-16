@@ -334,7 +334,7 @@ bool DispatchWatcher::executeDispatchRequests(
     const std::vector<DispatchRequest>& aDispatchRequestsList, bool bNoTerminate,
     DispatchRequestFlags* pFlags)
 {
-    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XDesktop > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     std::vector< DispatchHolder >   aDispatches;
     bool                     bSetInputFilter = false;
@@ -854,7 +854,7 @@ void DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
     if ( !nCount && !RequestHandler::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XDesktop > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         Reference< XElementAccess > xList = xDesktop->getFrames();
 
         if ( !xList->hasElements() )

@@ -36,7 +36,7 @@
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::frame { class XDesktop2; }
+namespace com::sun::star::frame { class XDesktop; }
 namespace com::sun::star::linguistic2 { class XDictionary; }
 namespace com::sun::star::linguistic2 { class XDictionaryEntry; }
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
@@ -171,7 +171,7 @@ LNG_DLLPUBLIC bool SaveDictionaries( const cpo::uno::Reference< css::linguistic2
 class AppExitListener :
     public cppu::WeakImplHelper< css::frame::XTerminateListener >
 {
-    cpo::uno::Reference< css::frame::XDesktop2 >     xDesktop;
+    cpo::uno::Reference< css::frame::XDesktop >     xDesktop;
 
 public:
     AppExitListener();

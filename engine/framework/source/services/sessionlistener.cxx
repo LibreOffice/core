@@ -340,7 +340,7 @@ void SessionListener::approveInteraction( bool bInteractionGranted )
             // first of all let the session be stored to be sure that we lose no information
             StoreSession( false );
 
-            cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+            cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( m_xContext );
             // honestly: how many implementations of XDesktop will we ever have?
             // so casting this directly to the implementation
             Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));

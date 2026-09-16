@@ -60,7 +60,7 @@ public:
 void LpSolverTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(m_xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xComponentLoader->loadComponentFromURL(
             u"private:factory/scalc"_ustr, u"_blank"_ustr, 0,
             cpo::uno::Sequence < css::beans::PropertyValue >()));
@@ -186,7 +186,7 @@ void LpSolverTest::testSLPSolverLargeModel()
 {
     OUString aUrl
         = m_directories.getURLFromSrc(u"/sc/qa/unit/data/solver/ResourceDepletion.fods"_ustr);
-    uno::Reference<frame::XDesktop2> xLoader = frame::Desktop::create(m_xContext);
+    uno::Reference<frame::XDesktop> xLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xLoader->loadComponentFromURL(
         aUrl, u"_blank"_ustr, 0, cpo::uno::Sequence<css::beans::PropertyValue>()));
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(xComponent, uno::UNO_QUERY_THROW);

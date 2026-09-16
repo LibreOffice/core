@@ -436,7 +436,7 @@ void WindowListMenuController::itemActivated( const css::awt::MenuEvent& rEvent 
     // update window list
     ::std::vector< OUString > aNewWindowListVector;
 
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( m_xContext );
 
     sal_uInt16  nActiveItemId = 0;
     sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
@@ -511,7 +511,7 @@ void WindowListMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
         return;
 
     // window list menu item selected
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( m_xContext );
 
     sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
     cpo::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();

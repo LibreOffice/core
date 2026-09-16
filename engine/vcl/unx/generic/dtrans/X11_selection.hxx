@@ -29,7 +29,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <osl/thread.h>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
@@ -213,7 +213,7 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         ::Window                    m_aWindow;
-        cpo::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop > m_xDesktop;
         rtl::Reference<vcl::DisplayConnectionDispatch> m_xDisplayConnection;
         Time                        m_nSelectionTimestamp;
 

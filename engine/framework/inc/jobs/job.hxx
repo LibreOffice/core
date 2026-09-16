@@ -22,7 +22,7 @@
 #include <jobs/jobdata.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/task/XJobListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -110,7 +110,7 @@ class Job final : public  ::cppu::WeakImplHelper<
             We are registered at this instance to listen for office shutdown events.
             It's necessary suppress it (if possible) or to react in the right way.
          */
-        cpo::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop > m_xDesktop;
 
         /**
             A job can return a dispatch result event after finishing its work.

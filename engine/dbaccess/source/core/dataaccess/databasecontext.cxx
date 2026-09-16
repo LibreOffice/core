@@ -91,7 +91,7 @@ namespace dbaccess
         class DatabaseDocumentLoader : public DatabaseDocumentLoader_Base
         {
         private:
-            Reference< XDesktop2 >               m_xDesktop;
+            Reference< XDesktop >               m_xDesktop;
             std::vector< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
 
         public:

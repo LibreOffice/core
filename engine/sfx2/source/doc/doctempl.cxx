@@ -833,7 +833,7 @@ bool SfxDocumentTemplates::CopyFrom
     }
     else
     {
-        uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        uno::Reference< XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
         Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 

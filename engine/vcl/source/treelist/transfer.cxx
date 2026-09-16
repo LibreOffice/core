@@ -525,7 +525,7 @@ void TransferableHelper::lostOwnership( const Reference< XClipboard >&, const Re
     {
         if( mxTerminateListener.is() )
         {
-            Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+            Reference< XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
             xDesktop->removeTerminateListener( mxTerminateListener );
 
             mxTerminateListener.clear();
@@ -972,7 +972,7 @@ void TransferableHelper::CopyToClipboard(const Reference<XClipboard>& rClipboard
     try
     {
         mxTerminateListener = new TerminateListener(*this);
-        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xDesktop->addTerminateListener(mxTerminateListener);
 
         mxClipboard->setContents(this, this);
@@ -1001,7 +1001,7 @@ void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection
     try
     {
         mxTerminateListener = new TerminateListener(*this);
-        Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xDesktop->addTerminateListener(mxTerminateListener);
 
         rSelection->setContents(this, this);

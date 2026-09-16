@@ -3392,7 +3392,7 @@ COKitImpl::~COKitImpl()
     SAL_INFO("kit", "COKitImpl dtor");
 
     comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
-    uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
+    uno::Reference <frame::XDesktop> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
     // FIXME: the terminate() call here is a no-op because it detects
     // that COKit::isActive() and then returns early!
     bool bSuccess = xDesktop.is() && xDesktop->terminate();
@@ -3474,7 +3474,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         return nullptr;
     }
 
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
 
     if (!xComponentLoader.is())
     {
@@ -3862,7 +3862,7 @@ static bool lo_runMacro(COKit* pThis, const char *pURL)
     if( xParser.is() )
         xParser->parseStrict( aURL );
 
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
 
     if (!xComponentLoader.is())
     {
@@ -3974,7 +3974,7 @@ static COKitTranslateResult lo_translateDocument(COKit* /*pThis*/,
 
 static std::string lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
 {
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
     if (!aURL.isEmpty())
@@ -4024,7 +4024,7 @@ static std::string lo_extractDocumentStructureRequest(COKit* /*pThis*/, const ch
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+    uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
     if (!aURL.isEmpty())
@@ -9967,7 +9967,7 @@ static void preloadData()
         { u"private:factory/sdraw"_ustr, u".uno:MovePageLast"_ustr }
     };
     // getting the remote LibreOffice service manager
-    uno::Reference<frame::XDesktop2> xCompLoader(frame::Desktop::create(xContext));
+    uno::Reference<frame::XDesktop> xCompLoader(frame::Desktop::create(xContext));
 
     // Preload and close each of the main components once to initialize global state
     cpo::uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);

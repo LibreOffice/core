@@ -566,7 +566,7 @@ public:
 
 void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference<XComponentContext> & _rxContext, const Reference< XFrame >& _rxFrame )
 {
-    Reference< XDesktop2 > xDesktop = Desktop::create( _rxContext );
+    Reference< XDesktop > xDesktop = Desktop::create( _rxContext );
     Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_SET_THROW );
     xFrames->remove( _rxFrame );
 }
@@ -1458,7 +1458,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
     if ( !xParentFrame.is() )
     { // i87957 we need a parent frame
-        Reference< XDesktop2 > xDesktop = Desktop::create( m_aContext );
+        Reference< XDesktop > xDesktop = Desktop::create( m_aContext );
         xParentFrame.set( xDesktop, UNO_QUERY_THROW );
         rtl::Reference<ODatabaseDocument> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate());
         if ( xCloseable.is() )

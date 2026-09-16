@@ -20,7 +20,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
@@ -42,7 +42,7 @@ private:
                      rtl::OUStringBuffer& buffer, bool onlyChildren = false);
 
 protected:
-    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> mxDesktop;
     cpo::uno::Reference<css::lang::XComponent> mxDocument;
     cpo::uno::Reference<css::awt::XWindow> mxWindow;
 

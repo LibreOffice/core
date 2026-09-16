@@ -248,7 +248,7 @@ using namespace cpo::uno;
         URL aURL; aURL.Complete = u".uno:OpenHyperlink"_ustr;
         xTransformer->parseStrict( aURL );
 
-        Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
+        Reference< XDesktop > xDispProv = Desktop::create( m_xContext );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_SET_THROW );
 
         Sequence aDispatchArgs{ comphelper::makePropertyValue(u"URL"_ustr, _rURL) };

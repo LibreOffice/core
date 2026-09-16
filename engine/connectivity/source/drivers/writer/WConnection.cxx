@@ -110,7 +110,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
         pArgs[2].Value <<= m_sPassword;
     }
 
-    uno::Reference<frame::XDesktop2> xDesktop
+    uno::Reference<frame::XDesktop> xDesktop
         = frame::Desktop::create(getDriver()->getComponentContext());
     uno::Reference<lang::XComponent> xComponent;
     cpo::uno::Any aLoaderException;

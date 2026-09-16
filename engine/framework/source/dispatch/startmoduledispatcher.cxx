@@ -116,7 +116,7 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
 
 void StartModuleDispatcher::implts_establishBackingMode()
 {
-    cpo::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop> xDesktop        = css::frame::Desktop::create( m_xContext );
     cpo::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
     cpo::uno::Reference< css::awt::XWindow  > xContainerWindow = xFrame->getContainerWindow();
 

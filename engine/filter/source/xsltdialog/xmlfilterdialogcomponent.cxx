@@ -88,7 +88,7 @@ private:
 XMLFilterDialogComponent::XMLFilterDialogComponent(const cpo::uno::Reference< XComponentContext >& rxContext)
     : mxContext(rxContext)
 {
-    Reference< XDesktop2 > xDesktop = Desktop::create( rxContext );
+    Reference< XDesktop > xDesktop = Desktop::create( rxContext );
     Reference< XTerminateListener > xListener( this );
     xDesktop->addTerminateListener( xListener );
 }

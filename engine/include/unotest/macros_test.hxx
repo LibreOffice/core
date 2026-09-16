@@ -18,7 +18,7 @@
 #include <unotest/detail/unotestdllapi.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/Any.h>
 #include <utility>
@@ -84,7 +84,7 @@ public:
         const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData = {});
 
 protected:
-    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> mxDesktop;
 
 private:
     std::unique_ptr<BasicDLL> mpDll;

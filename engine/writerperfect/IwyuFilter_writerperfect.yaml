@@ -99,7 +99,7 @@ excludelist:
     - com/sun/star/beans/PropertyValue.hpp
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/document/XFilter.hpp
-    - com/sun/star/frame/XDesktop2.hpp
+    - com/sun/star/frame/XDesktop.hpp
     - com/sun/star/io/XInputStream.hpp
     - cpo/uno/XComponentContext.hpp
     # Needed for UnoType template instantiation

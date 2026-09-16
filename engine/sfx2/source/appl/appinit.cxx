@@ -184,7 +184,7 @@ void SfxApplication::Initialize_Impl()
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
 #endif
 
-    Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
+    Reference < XDesktop > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl );
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;

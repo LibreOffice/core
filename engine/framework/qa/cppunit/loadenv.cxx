@@ -43,7 +43,7 @@ IMPL_STATIC_LINK(DocumentOpener, OpenDocument, void*, pArg, void)
     auto pURL = static_cast<OUString*>(pArg);
     uno::Reference<cpo::uno::XComponentContext> xComponentContext
         = comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xComponentContext);
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(xComponentContext);
     xDesktop->loadComponentFromURL(*pURL, u"_default"_ustr, 0, {});
     delete pURL;
 }

@@ -384,7 +384,7 @@ void XMLFilterTestDialog::onExportBrowse()
         {
             m_sExportRecentFile = aDlg.GetPath();
 
-            Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
+            Reference< XDesktop > xLoader = Desktop::create( mxContext );
             Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
             Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"InteractionHandler"_ustr,
                                                                                 xInter) };
@@ -562,7 +562,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 {
     try
     {
-        Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
+        Reference< XDesktop > xLoader = Desktop::create( mxContext );
         Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
 
         Sequence< PropertyValue > aArguments{
@@ -643,7 +643,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     try
     {
-        Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
+        Reference< XDesktop > xDesktop = Desktop::create( mxContext );
         Reference< XComponent > xTest( mxLastFocusModel );
         if( checkComponent( xTest, rServiceName ) )
         {

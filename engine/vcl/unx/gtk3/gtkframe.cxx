@@ -1291,7 +1291,7 @@ static void session_client_signal(GDBusProxy* client_proxy, const char*, const c
     if (g_str_equal (signal_name, "QueryEndSession"))
     {
         const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
-        uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(xContext));
+        uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(xContext));
 
         bool bModified = false;
 

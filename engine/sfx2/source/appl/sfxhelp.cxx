@@ -385,7 +385,7 @@ static OUString getCurrentModuleIdentifier_Impl()
     OUString sIdentifier;
     const Reference < XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
-    Reference < XDesktop2 > xDesktop = Desktop::create(xContext);
+    Reference < XDesktop > xDesktop = Desktop::create(xContext);
     Reference < XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
 
     if ( xCurrentFrame.is() )
@@ -527,7 +527,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
                                     Reference< XFrame >& rHelpContent)
 {
-    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // otherwise - create new help task
     Reference< XFrame2 > xHelpTask(
@@ -1126,7 +1126,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
     }
 
     // old-help to display
-    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // check if help window is still open
     // If not, create a new one and return access directly to the internal sub frame showing the help content
@@ -1312,7 +1312,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
     }
 
     // old-help to display
-    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // check if help window is still open
     // If not, create a new one and return access directly to the internal sub frame showing the help content

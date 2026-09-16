@@ -29,7 +29,7 @@
 #include "transactionmanager.hxx"
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
@@ -86,7 +86,7 @@ enum ELoadState
 *//*-*************************************************************************************************************/
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
-           css::frame::XDesktop2                ,
+           css::frame::XDesktop                 ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;

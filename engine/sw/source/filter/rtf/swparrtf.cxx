@@ -162,7 +162,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
         return false;
 #endif
 
-    uno::Reference<css::frame::XDesktop2> xDesktop
+    uno::Reference<css::frame::XDesktop> xDesktop
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
 

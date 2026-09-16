@@ -182,7 +182,7 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     // get dispatch provider
-    Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
+    Reference<XDesktop> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
 }

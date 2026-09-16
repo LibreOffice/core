@@ -1083,7 +1083,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 
     try
     {
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( comphelper::getProcessComponentContext() );
+        uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create( comphelper::getProcessComponentContext() );
 
         m_xEdit->GrabFocus();
 

@@ -55,7 +55,7 @@ class XTypeDetection;
 }
 namespace frame
 {
-class XDesktop2;
+class XDesktop;
 }
 }
 
@@ -69,7 +69,7 @@ public:
     virtual void setUp() override;
 
 protected:
-    cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> m_xDesktop;
     cpo::uno::Reference<css::document::XTypeDetection> m_xTypeDetection;
     cpo::uno::Reference<css::container::XNameAccess> m_xTypeMap;
 };

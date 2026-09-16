@@ -132,7 +132,7 @@ openNewDoc(const OUString& aSheetName )
         const uno::Reference< cpo::uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
 
-        uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
+        uno::Reference <frame::XDesktop > xComponentLoader = frame::Desktop::create(xContext);
 
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
                 u"private:factory/scalc"_ustr,

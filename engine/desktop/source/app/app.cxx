@@ -567,7 +567,7 @@ bool Desktop::QueryExit()
 
     static constexpr OUString SUSPEND_QUICKSTARTVETO = u"SuspendQuickstartVeto"_ustr;
 
-    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XDesktop > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
     xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(true) );
 
@@ -1189,7 +1189,7 @@ int Desktop::Main()
     SetSplashScreenProgress(40);
     recordTime(startT, "SetSplashScreenProgress(40): time = ");
 
-    Reference<XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
+    Reference<XDesktop> xDesktop = css::frame::Desktop::create(xContext);
 
     // create service for loading SFX (still needed in startup)
     pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
@@ -1804,7 +1804,7 @@ void Desktop::OpenClients()
     }
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
-    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+    Reference< XDesktop > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY_THROW );
     if ( xList->hasElements() )
         return;
@@ -1962,7 +1962,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             const Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             // find active task - the active task is always a visible task
-            Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+            Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( xContext );
             Reference< css::frame::XFrame > xTask = xDesktop->getActiveFrame();
             if ( !xTask.is() )
             {
@@ -2160,7 +2160,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         return;
     }
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xContext);
+    Reference< XDesktop > xDesktop = css::frame::Desktop::create(xContext);
     if (progress != nullptr)
     {
         progress->SetSplashScreenProgress(60);

@@ -3238,8 +3238,7 @@ void XFrameImpl::impl_checkMenuCloser()
     // do so! By the way, we need the desktop instance to have access
     // to all other top level frames too.
     cpo::uno::Reference< css::frame::XDesktop > xDesktop (m_xParent, cpo::uno::UNO_QUERY);
-    cpo::uno::Reference< css::frame::XFramesSupplier > xTaskSupplier(xDesktop , cpo::uno::UNO_QUERY);
-    if ( !xDesktop.is() || !xTaskSupplier.is() )
+    if ( !xDesktop.is() )
         return;
 
     aReadLock.clear();
@@ -3249,7 +3248,7 @@ void XFrameImpl::impl_checkMenuCloser()
     // Suppress search for other views to the same model.
     // It's not needed here and can be very expensive.
     FrameListAnalyzer aAnalyzer(
-        xTaskSupplier,
+        xDesktop,
         this,
         FrameAnalyzerFlags::Hidden | FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 

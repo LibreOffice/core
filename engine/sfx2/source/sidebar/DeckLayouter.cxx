@@ -32,7 +32,6 @@
 
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 
@@ -379,7 +378,7 @@ void GetRequestedSizes (
             {
             }
 
-            uno::Reference<frame::XDesktop2> xDesktop
+            uno::Reference<frame::XDesktop> xDesktop
                 = frame::Desktop::create(comphelper::getProcessComponentContext());
             uno::Reference<frame::XFrame> xFrame = xDesktop->getActiveFrame();
             if (xFrame.is())

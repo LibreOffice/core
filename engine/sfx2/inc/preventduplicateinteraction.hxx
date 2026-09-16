@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
@@ -121,7 +122,7 @@ private:
 
 public:
     WarningDialogsParentScope(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
-        : m_xDesktop(css::frame::Desktop::create(rContext), cpo::uno::UNO_QUERY_THROW)
+        : m_xDesktop(css::frame::Desktop::create(rContext), cpo::uno::UNO_SET_THROW)
         , m_xListener(new WarningDialogsParent)
     {
         m_xDesktop->addTerminateListener(m_xListener);

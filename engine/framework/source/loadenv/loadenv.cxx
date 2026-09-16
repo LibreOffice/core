@@ -1308,7 +1308,7 @@ cpo::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     // otherwise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
-    cpo::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop >  xSupplier = css::frame::Desktop::create( m_xContext );
     cpo::uno::Reference< css::container::XIndexAccess > xTaskList = xSupplier->getFrames();
 
     if (!xTaskList.is())

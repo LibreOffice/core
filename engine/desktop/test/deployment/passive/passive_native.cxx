@@ -202,7 +202,7 @@ void Dispatch::dispatch(
     css::util::URL const &,
     cpo::uno::Sequence< css::beans::PropertyValue > const &)
 {
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(context_);
     cpo::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
     cpo::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), cpo::uno::UNO_QUERY_THROW );
     cpo::uno::Reference< css::awt::XToolkit2 >    xToolkit = css::awt::Toolkit::create(context_);

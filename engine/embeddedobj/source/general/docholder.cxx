@@ -163,7 +163,7 @@ DocumentHolder::DocumentHolder( uno::Reference< cpo::uno::XComponentContext > xC
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
+    uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create( m_xContext );
     osl_atomic_increment(&m_refCount);
     try
     {
@@ -237,7 +237,7 @@ void DocumentHolder::CloseFrame()
 void DocumentHolder::FreeOffice()
 {
     try {
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
+        uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create( m_xContext );
         xDesktop->removeTerminateListener( this );
     } catch (const cpo::uno::DeploymentException&) {
         // if this happens, the desktop is already gone

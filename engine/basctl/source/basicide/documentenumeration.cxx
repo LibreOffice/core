@@ -36,7 +36,7 @@ namespace basctl::docs {
     using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::UNO_SET_THROW;
     using ::com::sun::star::frame::Desktop;
-    using ::com::sun::star::frame::XDesktop2;
+    using ::com::sun::star::frame::XDesktop;
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XFrames;
@@ -140,7 +140,7 @@ namespace basctl::docs {
 
         try
         {
-            const Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
+            const Reference< XDesktop > xDesktop = Desktop::create( m_xContext );
             const Reference< XFrames > xFrames( xDesktop->getFrames(), UNO_SET_THROW );
             const Sequence< Reference< XFrame > > aFrames( xFrames->queryFrames( FrameSearchFlag::ALL ) );
 

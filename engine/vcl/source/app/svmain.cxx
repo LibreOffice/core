@@ -499,7 +499,7 @@ void DeInitVCL()
     {
         try
         {
-            uno::Reference<frame::XDesktop2> const xDesktop = frame::Desktop::create(
+            uno::Reference<frame::XDesktop> const xDesktop = frame::Desktop::create(
                     comphelper::getProcessComponentContext() );
             xDesktop->addEventListener(new VCLUnoWrapperDeleter);
         }

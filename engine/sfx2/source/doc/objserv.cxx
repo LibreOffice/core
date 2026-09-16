@@ -104,7 +104,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <guisaveas.hxx>
@@ -879,7 +878,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxRedactionHelper::getPageMetaFilesFromDoc(aMetaFiles, aPageSizes, nPages, aRenderer);
 
             // Create an empty Draw component.
-            uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+            uno::Reference<frame::XDesktop> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
             uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL(u"private:factory/sdraw"_ustr, u"_default"_ustr, 0, {});
 
             if (!xComponent.is())

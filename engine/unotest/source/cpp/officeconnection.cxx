@@ -110,7 +110,7 @@ void OfficeConnection::tearDown() {
         return;
 
     if (context_.is()) {
-        cpo::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
+        cpo::uno::Reference< css::frame::XDesktop > desktop = css::frame::Desktop::create( context_ );
         context_.clear();
         try {
             CPPUNIT_ASSERT(desktop->terminate());

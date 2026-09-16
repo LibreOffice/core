@@ -197,7 +197,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
     std::unique_lock aLock(m_mutex);
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = m_xDesktop;
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = m_xDesktop;
     aLock.unlock();
     // <- SAFE
 

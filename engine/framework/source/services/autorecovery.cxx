@@ -3401,7 +3401,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                                      comphelper::SequenceAsHashMap& lDescriptor,
                                            AutoRecovery::TDocumentInfo&   rInfo      )
 {
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(m_xContext);
 
     ::std::vector< Reference< XComponent > > aCleanup;
     try
@@ -4031,7 +4031,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList() ...");
     try
     {
-        cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+        cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(m_xContext);
 
         cpo::uno::Reference< css::container::XIndexAccess > xContainer(
             xDesktop->getFrames(),

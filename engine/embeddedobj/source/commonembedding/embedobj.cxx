@@ -82,7 +82,7 @@ cpo::uno::Reference< css::frame::XFrame > findLinkSourceFrame(
 
     try
     {
-        cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+        cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create( xContext );
         cpo::uno::Reference< css::container::XIndexAccess > xFrames = xDesktop->getFrames();
         if ( !xFrames.is() )
             return nullptr;

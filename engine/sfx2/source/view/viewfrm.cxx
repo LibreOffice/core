@@ -2162,7 +2162,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
     {
         if ( !xFrame.is() )
         {
-            Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+            Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
             if ( !i_bHidden )
             {
@@ -2590,7 +2590,7 @@ static bool impl_maxOpenDocCountReached()
     sal_Int32 nMaxDocs(*x);
     sal_Int32 nOpenDocs = 0;
 
-    cpo::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
+    cpo::uno::Reference< css::frame::XDesktop >  xDesktop = css::frame::Desktop::create(xContext);
     cpo::uno::Reference< css::container::XIndexAccess > xCont(xDesktop->getFrames(), cpo::uno::UNO_QUERY_THROW);
 
     sal_Int32 c = xCont->getCount();

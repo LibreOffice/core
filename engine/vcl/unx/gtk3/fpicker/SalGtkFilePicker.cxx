@@ -876,7 +876,7 @@ sal_Int16 SalGtkFilePicker::execute()
 
     uno::Reference< frame::XDesktop > xDesktop(
         frame::Desktop::create(m_xContext),
-        UNO_QUERY_THROW );
+        UNO_SET_THROW );
 
     GtkWindow *pParent = GTK_WINDOW(m_pParentWidget);
     if (!pParent)

@@ -7178,15 +7178,6 @@ module com {
      ::com::sun::star::lang::XComponent loadComponentFromURL([in] string URL, [in] string TargetFrameName, [in] long SearchFlags, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
     };
     published interface XTerminateListener;
-    published interface XDesktop {
-     interface ::cpo::uno::XInterface;
-     boolean terminate();
-     void addTerminateListener([in] ::com::sun::star::frame::XTerminateListener Listener);
-     void removeTerminateListener([in] ::com::sun::star::frame::XTerminateListener Listener);
-     ::com::sun::star::container::XEnumerationAccess getComponents();
-     ::com::sun::star::lang::XComponent getCurrentComponent();
-     ::com::sun::star::frame::XFrame getCurrentFrame();
-    };
     published interface XFrameActionListener;
     published interface XFramesSupplier;
     published interface XFrame {
@@ -7216,14 +7207,19 @@ module com {
      ::com::sun::star::frame::XFrame getActiveFrame();
      void setActiveFrame([in] ::com::sun::star::frame::XFrame Frame);
     };
-    published interface XDesktop2 {
+    published interface XDesktop {
      interface ::com::sun::star::frame::XDispatchProvider;
      interface ::com::sun::star::frame::XDispatchProviderInterception;
      interface ::com::sun::star::frame::XFramesSupplier;
-     interface ::com::sun::star::frame::XDesktop;
      interface ::com::sun::star::frame::XComponentLoader;
+     boolean terminate();
+     void addTerminateListener([in] ::com::sun::star::frame::XTerminateListener Listener);
+     void removeTerminateListener([in] ::com::sun::star::frame::XTerminateListener Listener);
+     ::com::sun::star::container::XEnumerationAccess getComponents();
+     ::com::sun::star::lang::XComponent getCurrentComponent();
+     ::com::sun::star::frame::XFrame getCurrentFrame();
     };
-    /** @deprecated */ published service Desktop: ::com::sun::star::frame::XDesktop2;
+    /** @deprecated */ published service Desktop: ::com::sun::star::frame::XDesktop;
     /** @deprecated */ published interface XWindowArranger {
      interface ::cpo::uno::XInterface;
      /** @deprecated */ boolean hasArrangeCommand([in] short nCommand);
@@ -7512,7 +7508,7 @@ module com {
      void queryTermination([in] ::com::sun::star::lang::EventObject Event) raises (::com::sun::star::frame::TerminationVetoException);
      void notifyTermination([in] ::com::sun::star::lang::EventObject Event);
     };
-    published singleton theDesktop: ::com::sun::star::frame::XDesktop2;
+    published singleton theDesktop: ::com::sun::star::frame::XDesktop;
    };
    module graphic {
     published service GraphicDescriptor {

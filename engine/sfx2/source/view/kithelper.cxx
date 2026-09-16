@@ -248,7 +248,7 @@ void KitHelper::setView(int nId)
 
     // Make comphelper::dispatchCommand() find the correct frame.
     uno::Reference<frame::XFrame> xFrame = rViewFrame.GetFrame().GetFrameInterface();
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     xDesktop->setActiveFrame(xFrame);
 }
 

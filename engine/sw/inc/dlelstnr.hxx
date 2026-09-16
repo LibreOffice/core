@@ -28,7 +28,7 @@ namespace com::sun::star {
         class XProofreadingIterator;
     }
     namespace frame {
-        class XDesktop2;
+        class XDesktop;
     }
 }
 
@@ -44,7 +44,7 @@ class SwLinguServiceEventListener final :
         css::frame::XTerminateListener
     >
 {
-    cpo::uno::Reference<css::frame::XDesktop2 >                      m_xDesktop;
+    cpo::uno::Reference<css::frame::XDesktop >                      m_xDesktop;
     cpo::uno::Reference<css::linguistic2::XLinguServiceManager2 >    m_xLngSvcMgr;
     cpo::uno::Reference<css::linguistic2::XProofreadingIterator >    m_xGCIterator;
 

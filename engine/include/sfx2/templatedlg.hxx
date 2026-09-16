@@ -26,7 +26,7 @@ class ThumbnailViewItem;
 
 namespace com::sun::star::frame
 {
-class XDesktop2;
+class XDesktop;
 class XModel;
 }
 
@@ -113,7 +113,7 @@ protected:
 protected:
     std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
     cpo::uno::Reference<css::frame::XModel> m_xModel;
-    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> mxDesktop;
 
     Timer m_aUpdateDataTimer;
 

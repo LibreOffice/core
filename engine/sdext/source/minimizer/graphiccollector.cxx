@@ -43,7 +43,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< cpo::uno::XC
     {
         try
         {
-            Reference< XDesktop2 > xDesktop = Desktop::create( rxFact );
+            Reference< XDesktop > xDesktop = Desktop::create( rxFact );
             Reference< XFrame > xFrame( xDesktop->getActiveFrame() );
             Reference< XWindow > xWindow( xFrame->getContainerWindow() );
             Reference< XDevice > xDevice( xWindow, UNO_QUERY_THROW );

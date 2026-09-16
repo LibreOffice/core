@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <file/FConnection.hxx>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <rtl/ref.hxx>
 #include <unotools/closeveto.hxx>
@@ -49,7 +49,7 @@ namespace connectivity::calc
             std::unique_ptr<utl::CloseVeto> m_pCloseListener;
             /// but also listen to XDesktop and if app is terminating anyway, dispose m_xDoc while
             /// its still possible to do so properly
-            cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+            cpo::uno::Reference<css::frame::XDesktop> m_xDesktop;
             osl::Mutex m_aMutex;
         public:
             CloseVetoButTerminateListener()
@@ -58,7 +58,7 @@ namespace connectivity::calc
             }
 
             void start(const cpo::uno::Reference<cpo::uno::XInterface>& rCloseable,
-                       const cpo::uno::Reference<css::frame::XDesktop2>& rDesktop)
+                       const cpo::uno::Reference<css::frame::XDesktop>& rDesktop)
             {
                 m_xDesktop = rDesktop;
                 m_xDesktop->addTerminateListener(this);

@@ -99,7 +99,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
     if ( !aFileURL.isEmpty() )
     {
         try {
-            uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(m_xContext);
+            uno::Reference < frame::XDesktop > xDocumentLoader = frame::Desktop::create(m_xContext);
 
             cpo::uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
             auto pArgs = aArgs.getArray();

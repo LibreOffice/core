@@ -1060,7 +1060,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)
     pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<frame::XFrame> xFrame2 = xDesktop->getActiveFrame();
 
     // Now switch back to the first view, and make sure that the active frame is updated.

@@ -16,7 +16,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -42,7 +42,7 @@ namespace writerperfect::test
 WpftLoader::WpftLoader(const OUString& rURL,
                        const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                        const OUString& rFactoryURL,
-                       const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const cpo::uno::Reference<css::frame::XDesktop>& rxDesktop,
                        const cpo::uno::Reference<css::container::XNameAccess>& rxTypeMap,
                        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_aURL(rURL)
@@ -59,7 +59,7 @@ WpftLoader::WpftLoader(const OUString& rURL,
 WpftLoader::WpftLoader(const cpo::uno::Reference<css::io::XInputStream>& rxInputStream,
                        const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                        const OUString& rFactoryURL,
-                       const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const cpo::uno::Reference<css::frame::XDesktop>& rxDesktop,
                        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_xInputStream(rxInputStream)
     , m_aFactoryURL(rFactoryURL)

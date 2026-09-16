@@ -639,7 +639,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             SetStatusValue( TK_Status, Any( SdextResId( STR_DUPLICATING_PRESENTATION ) ) );
             DispatchStatus();
 
-            Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
+            Reference< XDesktop > xDesktop = Desktop::create( mxContext );
             xSelf = xDesktop->findFrame( u"_blank"_ustr, FrameSearchFlag::CREATE );
             Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 

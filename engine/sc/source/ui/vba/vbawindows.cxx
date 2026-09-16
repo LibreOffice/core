@@ -80,7 +80,7 @@ public:
     /// @throws uno::RuntimeException
     explicit WindowComponentEnumImpl( uno::Reference< cpo::uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
     {
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
+        uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(m_xContext);
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
         while( xComponents->hasMoreElements() )
         {

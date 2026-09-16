@@ -162,7 +162,7 @@ void Test::test() {
     url.Complete = u"vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"_ustr
             "language=Basic&location=document";
 
-    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());
 
     cpo::uno::Reference< css::frame::XNotifyingDispatch > disp(
         cpo::uno::Reference< css::frame::XDispatchProvider >(

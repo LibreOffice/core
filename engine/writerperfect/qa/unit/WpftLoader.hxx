@@ -32,7 +32,7 @@ class XFilter;
 }
 namespace frame
 {
-class XDesktop2;
+class XDesktop;
 class XFrame;
 }
 namespace io
@@ -55,13 +55,13 @@ class WPFTQAHELPER_DLLPUBLIC WpftLoader
 public:
     WpftLoader(const OUString& rURL, const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                const OUString& rFactoryURL,
-               const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+               const cpo::uno::Reference<css::frame::XDesktop>& rxDesktop,
                const cpo::uno::Reference<css::container::XNameAccess>& rxTypeMap,
                const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     WpftLoader(const cpo::uno::Reference<css::io::XInputStream>& rxInputStream,
                const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                const OUString& rFactoryURL,
-               const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+               const cpo::uno::Reference<css::frame::XDesktop>& rxDesktop,
                const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     ~WpftLoader();
 
@@ -79,7 +79,7 @@ private:
     const cpo::uno::Reference<css::io::XInputStream> m_xInputStream;
     const OUString m_aFactoryURL;
     const cpo::uno::Reference<css::document::XFilter> m_xFilter;
-    const cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    const cpo::uno::Reference<css::frame::XDesktop> m_xDesktop;
     const cpo::uno::Reference<css::container::XNameAccess> m_xTypeMap;
     const cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     cpo::uno::Reference<css::lang::XComponent> m_xDoc;

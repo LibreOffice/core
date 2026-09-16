@@ -3276,7 +3276,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     try
     {
         mod->SetInSharedDocLoading(true);
-        uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+        uno::Reference< frame::XDesktop > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 
         if ( GetMedium() )

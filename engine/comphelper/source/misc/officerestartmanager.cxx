@@ -95,7 +95,7 @@ void OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
 
         if ( m_xContext.is() )
         {
-            uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
+            uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(m_xContext);
 
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );

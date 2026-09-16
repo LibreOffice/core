@@ -468,7 +468,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )
     {
-        Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
+        Reference< frame::XDesktop > xDesktop = frame::Desktop::create( xContext );
         Reference< container::XEnumeration > xModels;
         Reference< container::XEnumerationAccess > xComponents = xDesktop->getComponents();
         if ( xComponents.is() )

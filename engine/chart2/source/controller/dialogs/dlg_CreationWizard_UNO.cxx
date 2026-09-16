@@ -43,7 +43,7 @@ CreationWizardUnoDlg::CreationWizardUnoDlg(uno::Reference<cpo::uno::XComponentCo
     , m_xCC(std::move(xContext))
     , m_bUnlockControllersOnExecute(false)
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);
+    uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(m_xCC);
     uno::Reference< frame::XTerminateListener > xListener( this );
     xDesktop->addTerminateListener( xListener );
 }
@@ -251,7 +251,7 @@ void CreationWizardUnoDlg::disposing()
 
     try
     {
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);
+        uno::Reference< frame::XDesktop > xDesktop = frame::Desktop::create(m_xCC);
         uno::Reference< frame::XTerminateListener > xListener( this );
         xDesktop->removeTerminateListener( xListener );
     }

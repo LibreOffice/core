@@ -151,7 +151,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     // screen pixel size
     try
     {
-        Reference< frame::XDesktop2 > xFramesSupp = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< frame::XDesktop > xFramesSupp = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), uno::UNO_QUERY );
         if (xFrame)
         {

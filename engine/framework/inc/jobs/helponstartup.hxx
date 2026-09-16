@@ -29,7 +29,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -54,7 +54,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
         cpo::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
         /** @short  is needed to locate a might open help frame. */
-        cpo::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop > m_xDesktop;
 
         /** @short  provides read access to the underlying configuration. */
         cpo::uno::Reference< css::container::XNameAccess > m_xConfig;

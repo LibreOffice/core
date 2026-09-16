@@ -210,7 +210,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     Reference < XFrame > xFrame;
     try
     {
-        Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference < XDesktop > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         xFrame.set( xDesktop->findFrame( u"_blank"_ustr, 0 ), UNO_SET_THROW );
     }
     catch( const Exception& )

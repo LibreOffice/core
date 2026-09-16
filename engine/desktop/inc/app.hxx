@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/bootstrap.hxx>
-#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <cpo/uno/Reference.h>
 
@@ -82,7 +82,7 @@ class Desktop final : public Application
 
         static void             OpenClients();
         static void             OpenDefault();
-        static void             CheckOpenCLCompute(const cpo::uno::Reference<css::frame::XDesktop2> &);
+        static void             CheckOpenCLCompute(const cpo::uno::Reference<css::frame::XDesktop> &);
 
         DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*, void);
 

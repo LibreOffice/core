@@ -105,7 +105,7 @@ static bool testOpenCLDriver()
     return false;
 }
 
-static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &rURL)
+static bool testOpenCLCompute(const Reference< XDesktop > &xDesktop, const OUString &rURL)
 {
     bool bSuccess = false;
     cpo::uno::Reference< css::lang::XComponent > xComponent;
@@ -186,7 +186,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     return bSuccess;
 }
 
-void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
+void Desktop::CheckOpenCLCompute(const Reference< XDesktop > &xDesktop)
 {
     if (!openclwrapper::canUseOpenCL())
         return;
