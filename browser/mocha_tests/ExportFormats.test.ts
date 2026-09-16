@@ -15,7 +15,7 @@
 // tests run without any user interface at all.
 describe('ExportFormats', function () {
 	function setUp(hideExportOption: boolean, extraFormats?: string[]): void {
-		(window as any).extraExportFormats = extraFormats ? extraFormats : [];
+		window.extraExportFormats = extraFormats ? extraFormats : [];
 		app.map = { wopi: { HideExportOption: hideExportOption } } as any;
 	}
 

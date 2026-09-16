@@ -150,7 +150,7 @@ class Xcu {
 					: this.parse(XcuFileContent);
 			this.xcuDataObj = this.mergeDefaults(defaultXcuObj, parsedObj);
 		} catch (error) {
-			(window as any).SettingIframe.showErrorModal(
+			window.SettingIframe.showErrorModal(
 				_('Something went wrong while loading Document settings.'),
 			);
 			console.error('Error parsing XCU file:', error);
@@ -162,7 +162,7 @@ class Xcu {
 		const xmlDoc = parser.parseFromString(content, 'application/xml');
 
 		if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
-			(window as any).SettingIframe.showErrorModal(
+			window.SettingIframe.showErrorModal(
 				_('Something went wrong while loading Document settings.'),
 			);
 		}
@@ -456,8 +456,8 @@ class Xcu {
 
 	public async generateXcuAndUpload(): Promise<void> {
 		const xcuContent = this.generate(this.xcuDataObj);
-		await (window as any).settingIframe.uploadXcuFile(this.fileId, xcuContent);
+		await window.settingIframe.uploadXcuFile(this.fileId, xcuContent);
 	}
 }
 
-(window as any).Xcu = Xcu;
+window.Xcu = Xcu;

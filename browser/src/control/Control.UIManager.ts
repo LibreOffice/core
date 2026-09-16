@@ -523,7 +523,7 @@ class UIManager extends window.L.Control {
 	 * Returns true when it reconciled (and therefore already applied the theme).
 	 */
 	reconcileIntegratorThemeOverride(): boolean {
-		if (this.integratorThemeReconciled || (window as any).savedUIState)
+		if (this.integratorThemeReconciled || window.savedUIState)
 			return false;
 
 		const prefs = window.prefs as any;

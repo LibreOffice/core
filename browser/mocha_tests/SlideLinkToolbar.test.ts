@@ -101,9 +101,9 @@ describe('SlideLinkToolbar', function () {
 			},
 		};
 
-		savedDispatcher = (app as any).dispatcher;
+		savedDispatcher = app.dispatcher;
 		savedEvents = app.events;
-		(app as any).dispatcher = {
+		app.dispatcher = {
 			dispatch: (name: string) => dispatched.push(name),
 		};
 		(app as any).events = {
@@ -117,8 +117,8 @@ describe('SlideLinkToolbar', function () {
 	afterEach(function () {
 		const found = element();
 		if (found) found.remove();
-		(app as any).dispatcher = savedDispatcher;
-		(app as any).events = savedEvents;
+		app.dispatcher = savedDispatcher;
+		app.events = savedEvents;
 	});
 
 	it('stays away from a slide that is linked to nothing', function () {

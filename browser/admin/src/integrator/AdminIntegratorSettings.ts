@@ -34,6 +34,12 @@ interface Window {
 	versionHash?: string;
 	showLeftNav?: boolean;
 	scrollTarget?: string;
+	settingIframe?: SettingIframe;
+
+	WordBook?: WordBook;
+
+	Xcu: typeof Xcu;
+	SettingIframe: typeof SettingIframe;
 }
 
 interface ConfigItem {
@@ -192,7 +198,7 @@ const onMessage = (e) => {
 					parentTargetOrigin(),
 				);
 			} else if (data.MessageId === 'settings-save-all') {
-				const settingIframe = (window as any).settingIframe as SettingIframe;
+				const settingIframe = window.settingIframe as SettingIframe;
 				if (settingIframe) {
 					settingIframe.saveAll().then((result) => {
 						window.parent.postMessage(
@@ -838,7 +844,7 @@ class SettingIframe {
 			this.settingsStorage = new OnlineSettingsStorage();
 		}
 		this.fetchAndPopulateSharedConfigs();
-		this.wordbook = (window as any).WordBook;
+		this.wordbook = window.WordBook;
 	}
 
 	public async uploadXcuFile(filename: string, content: string): Promise<void> {
@@ -3559,7 +3565,7 @@ class SettingIframe {
 				const xcuFileContent = await this.settingsStorage.fetchSettingFile(
 					data.xcu[0].uri,
 				);
-				this.xcuEditor = new (window as any).Xcu(
+				this.xcuEditor = new window.Xcu(
 					this.getFilename(data.xcu[0].uri, false),
 					xcuFileContent,
 				);
@@ -3580,7 +3586,7 @@ class SettingIframe {
 				try {
 					if (!this.xcuInitializationAttempted) {
 						this.xcuInitializationAttempted = true;
-						this.xcuEditor = new (window as any).Xcu('documentView.xcu', null);
+						this.xcuEditor = new window.Xcu('documentView.xcu', null);
 						await this.xcuEditor.generateXcuAndUpload();
 						return await this.fetchAndPopulateSharedConfigs();
 					} else {
@@ -4108,8 +4114,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const adminContainer = document.getElementById('allConfigSection');
 	if (adminContainer) {
 		initTranslationStr();
-		(window as any).settingIframe = new SettingIframe();
-		(window as any).settingIframe.init();
+		window.settingIframe = new SettingIframe();
+		window.settingIframe.init();
 		const postHeight = () => {
 			window.parent.postMessage(
 				JSON.stringify({
@@ -4148,4 +4154,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 (window as any)._ = _;
-(window as any).onload = onLoaded;
+window.onload = onLoaded;

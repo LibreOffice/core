@@ -37,12 +37,12 @@ describe('OtherViewCursorSection', function () {
 		// Values mirror browser/src/canvas/CanvasSectionProps.js, which the mocha
 		// bundle does not carry.
 		function setupSectionProps() {
-			(app.CSections as any).DefaultForDocumentObjects = {
+			app.CSections.DefaultForDocumentObjects = {
 				zIndex: 9,
 				processingOrder: 10,
 				drawingOrder: 10,
 			};
-			(app.CSections as any).HTMLObject = {
+			app.CSections.HTMLObject = {
 				zIndex: 9,
 				processingOrder: 1,
 				drawingOrder: 55,

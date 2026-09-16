@@ -426,6 +426,7 @@ interface Window {
 	protocolDebug: boolean;
 	routeToken: string;
 	mobileDialogId?: number;
+	savedUIState: boolean;
 	sidebarId: number;
 	userInterfaceMode: string;
 	ThisIsAMobileApp: boolean;
@@ -475,6 +476,11 @@ interface Window {
 		f: number,
 		g: number,
 	) => string;
+	// TODO: unoData should be: string | { textCommand: string; objectCommand: string }
+	// but in docdispatcher ads a unused `unosheet`. See also `ControlCommand` in
+	// Control.Interface.ts
+	getUNOCommand: (unoData: any) => string;
+	getColorPickerData: (type: string) => any;
 	L: any;
 	createWebSocket(url: string): SockInterface;
 	getAccessibilityState(): boolean;

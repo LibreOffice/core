@@ -164,8 +164,8 @@ describe('ViewLayout', function () {
 
 			// sendTileCombineMessage reads app.tile.size.{x,y} and calls
 			// app.socket.sendMessage. Provide both.
-			(app.tile as any).size = { x: 3840, y: 3840 };
-			(app.socket as any).sendMessage = function () {};
+			(app.tile.size as any) = { x: 3840, y: 3840 };
+			app.socket.sendMessage = function () {};
 
 			// The tile grid is enumerated in steps of window.tileSize pixels. The
 			// browser sets this from the server; tests fix it at 256 pixels, which
@@ -1323,7 +1323,7 @@ describe('ViewLayout', function () {
 			};
 			(app.sectionContainer as any).requestReDraw = function () {};
 
-			const originalWindowMode = (window as any).mode;
+			const originalWindowMode = window.mode;
 			(window as any).mode = {
 				isSmallScreenDevice: function () {
 					return false;
@@ -1392,7 +1392,7 @@ describe('ViewLayout', function () {
 				);
 			} finally {
 				layoutingService.appendLayoutingTask = originalAppendLayoutingTask;
-				(window as any).mode = originalWindowMode;
+				window.mode = originalWindowMode;
 			}
 		});
 

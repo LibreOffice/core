@@ -987,7 +987,7 @@ class Dispatcher {
 
 		this.actionsMap['leftpara'] = function () {
 			app.map.sendUnoCommand(
-				(window as any).getUNOCommand({
+				window.getUNOCommand({
 					textCommand: '.uno:LeftPara',
 					objectCommand: '.uno:ObjectAlignLeft',
 					unosheet: '.uno:AlignLeft',
@@ -996,7 +996,7 @@ class Dispatcher {
 		};
 		this.actionsMap['centerpara'] = function () {
 			app.map.sendUnoCommand(
-				(window as any).getUNOCommand({
+				window.getUNOCommand({
 					textCommand: '.uno:CenterPara',
 					objectCommand: '.uno:AlignCenter',
 					unosheet: '.uno:AlignHorizontalCenter',
@@ -1005,7 +1005,7 @@ class Dispatcher {
 		};
 		this.actionsMap['rightpara'] = function () {
 			app.map.sendUnoCommand(
-				(window as any).getUNOCommand({
+				window.getUNOCommand({
 					textCommand: '.uno:RightPara',
 					objectCommand: '.uno:ObjectAlignRight',
 					unosheet: '.uno:AlignRight',
@@ -1376,12 +1376,12 @@ class Dispatcher {
 
 		this.actionsMap['fontcolor'] = () => {
 			app.map.fire('mobilewizard', {
-				data: (window as any).getColorPickerData('Font Color'),
+				data: window.getColorPickerData('Font Color'),
 			});
 		};
 		this.actionsMap['backcolor'] = () => {
 			app.map.fire('mobilewizard', {
-				data: (window as any).getColorPickerData('Highlight Color'),
+				data: window.getColorPickerData('Highlight Color'),
 			});
 		};
 		// TODO: leftover from mobile bottom bar

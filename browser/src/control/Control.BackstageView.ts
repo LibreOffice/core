@@ -52,7 +52,7 @@ class BackstageView extends window.L.Class {
 	constructor(map: any) {
 		super();
 		this.map = map;
-		this.isStarterMode = (window as any).starterScreen;
+		this.isStarterMode = window.starterScreen;
 		this.container = this.createContainer();
 		document.body.appendChild(this.container);
 		this.map?.on(

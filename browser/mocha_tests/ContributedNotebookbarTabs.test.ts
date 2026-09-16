@@ -86,7 +86,7 @@ describe('Notebookbar contributes.notebookbar handling', function () {
 	}
 
 	beforeEach(function () {
-		(window as any).enableExperimentalFeatures = true;
+		window.enableExperimentalFeatures = true;
 		app.map = { _extensions: {} } as any;
 	});
 

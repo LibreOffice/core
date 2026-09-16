@@ -192,10 +192,10 @@ class WordBook {
 		  </span>
 		`;
 		delButton.addEventListener('click', () => {
-			(window as any).WordBook.currWordbookFile.words.splice(index, 1);
-			if ((window as any).WordBook.virtualWordList) {
-				(window as any).WordBook.virtualWordList.refresh(
-					(window as any).WordBook.currWordbookFile.words,
+			window.WordBook.currWordbookFile.words.splice(index, 1);
+			if (window.WordBook.virtualWordList) {
+				window.WordBook.virtualWordList.refresh(
+					window.WordBook.currWordbookFile.words,
 				);
 			}
 		});
@@ -400,10 +400,7 @@ class WordBook {
 				dictDropdownContainer.getAttribute('data-selected') || 'positive';
 			const updatedContent = this.buildWordbookFile(this.currWordbookFile);
 			console.debug('Updated Dictionary Content:\n', updatedContent);
-			await (window as any).settingIframe.uploadWordbookFile(
-				fileName,
-				updatedContent,
-			);
+			await window.settingIframe.uploadWordbookFile(fileName, updatedContent);
 			document.body.removeChild(modal);
 		});
 		buttonContainer.appendChild(submitButton);
@@ -478,10 +475,7 @@ class WordBook {
 				words: dicWords,
 			};
 			const newContent = this.buildWordbookFile(newDic);
-			await (window as any).settingIframe.uploadWordbookFile(
-				file.name,
-				newContent,
-			);
+			await window.settingIframe.uploadWordbookFile(file.name, newContent);
 		} catch (error) {
 			window.alert(_('Something went wrong while uploading dictionary file'));
 		}
@@ -606,4 +600,4 @@ class VirtualWordList {
 	}
 }
 
-(window as any).WordBook = new WordBook();
+window.WordBook = new WordBook();
