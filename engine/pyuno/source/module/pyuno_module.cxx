@@ -388,7 +388,7 @@ static PyObject* initTestEnvironment(
         oslGenericFunction const pFunc(
                 mod.getFunctionSymbol("test_init"));
         if (!pFunc) { abort(); }
-        reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
+        reinterpret_cast<void (*)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
         testModule = &mod;
     }
     catch (const cpo::uno::Exception &)
@@ -408,7 +408,7 @@ static PyObject* deinitTestEnvironment(
             oslGenericFunction const pFunc(
                     testModule->getFunctionSymbol("test_deinit"));
             if (!pFunc) { abort(); }
-            reinterpret_cast<void (SAL_CALL *)()>(pFunc)();
+            reinterpret_cast<void (*)()>(pFunc)();
         }
         catch (const cpo::uno::Exception &)
         {

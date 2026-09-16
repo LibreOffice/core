@@ -274,23 +274,23 @@ public:
 
     // XInvocation
     virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >
-           SAL_CALL getIntrospection(  ) override;
-    virtual cpo::uno::Any SAL_CALL invoke(
+           getIntrospection(  ) override;
+    virtual cpo::uno::Any invoke(
         const OUString& aFunctionName,
         const cpo::uno::Sequence< cpo::uno::Any >& aParams,
         cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
         cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
 
-    virtual void SAL_CALL setValue(
+    virtual void setValue(
         const OUString& aPropertyName,
         const cpo::uno::Any& aValue ) override;
 
-    virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual cpo::uno::Any getValue( const OUString& aPropertyName ) override;
+    virtual bool hasMethod( const OUString& aName ) override;
+    virtual bool hasProperty( const OUString& aName ) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(
+    virtual sal_Int64 getSomething(
         const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
