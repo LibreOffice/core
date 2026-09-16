@@ -22,13 +22,16 @@
 #include <algorithm>
 #include <unordered_map>
 
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <hintids.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <sot/exchange.hxx>
+#include <svtools/embedhlp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/pdf/PDFNote.hxx>
@@ -424,6 +427,45 @@ const SwTextNode* lcl_JumpedToNode(const SwEditShell& rSh, const SwPosition& rBe
 {
     const SwPosition& rPoint = *rSh.GetCursor_()->GetPoint();
     return rPoint == rBeforeJump ? nullptr : rPoint.GetNode().GetTextNode();
+}
+
+// the StarMath source of the formula a frame holds, empty for anything else
+OUString lcl_GetFormulaSource(const SwFlyFrame& rFly)
+{
+    if (!rFly.Lower() || !rFly.Lower()->IsNoTextFrame())
+        return OUString();
+
+    const SwContentNode* pNode = static_cast<const SwNoTextFrame*>(rFly.Lower())->GetNode();
+    SwOLENode* pOLENd = pNode ? const_cast<SwOLENode*>(pNode->GetOLENode()) : nullptr;
+    if (!pOLENd)
+        return OUString();
+
+    const uno::Reference<embed::XEmbeddedObject> xObj(pOLENd->GetOLEObj().GetOleRef());
+    if (!xObj.is() || !SotExchange::IsMath(SvGlobalName(xObj->getClassID())))
+        return OUString();
+
+    OUString aSource;
+    try
+    {
+        // a loaded object has no component to read the source from
+        const bool bWasLoaded(xObj->getCurrentState() == embed::EmbedStates::LOADED);
+        if (!svt::EmbeddedObjectRef::TryRunningState(xObj))
+            return OUString();
+
+        // reading it ran the object, and an export leaves the document as it found it
+        const comphelper::ScopeGuard aRestore([&xObj, bWasLoaded] {
+            if (bWasLoaded)
+                xObj->changeState(embed::EmbedStates::LOADED);
+        });
+
+        const auto xProps(xObj->getComponent().query<beans::XPropertySet>());
+        if (xProps.is())
+            xProps->getPropertyValue(u"Formula"_ustr) >>= aSource;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    return aSource;
 }
 
 // the node a table of contents entry links to, which the mark in its URL names
@@ -1086,11 +1128,17 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
         // text here again.
         if (bAltText)
         {
-            SwFlyFrameFormat const& rFly(*static_cast<SwFlyFrame const*>(pFrame)->GetFormat());
+            SwFlyFrame const& rFlyFrame(*static_cast<SwFlyFrame const*>(pFrame));
+            SwFlyFrameFormat const& rFly(*rFlyFrame.GetFormat());
             OUString const sep(
                 (rFly.GetObjTitle().isEmpty() || rFly.GetObjDescription().isEmpty())
                 ? OUString() : u" - "_ustr);
-            OUString const altText(rFly.GetObjTitle() + sep + rFly.GetObjDescription());
+            OUString altText(rFly.GetObjTitle() + sep + rFly.GetObjDescription());
+            // a formula nobody described names its own source
+            if (altText.isEmpty() && eType == vcl::pdf::StructElement::Formula)
+            {
+                altText = lcl_GetFormulaSource(rFlyFrame);
+            }
             if (!altText.isEmpty())
             {
                 mpPDFExtOutDevData->SetAlternateText(altText);
