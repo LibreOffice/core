@@ -45,33 +45,33 @@ public:
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
                         supportsService( const OUString& rService ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
                         getSupportedServiceNames() override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
                             const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.sheet.XFilterFormulaParser interface ----------------------
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         getSupportedNamespace() override;
 
     // com.sun.star.sheet.XFormulaParser interface ----------------------------
 
-    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken >
                         parseFormula(
                             const OUString& rFormula,
                             const css::table::CellAddress& rReferencePos ) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
                         printFormula(
                             const cpo::uno::Sequence< css::sheet::FormulaToken >& rTokens,
                             const css::table::CellAddress& rReferencePos ) override;

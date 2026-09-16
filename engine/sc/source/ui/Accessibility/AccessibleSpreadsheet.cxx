@@ -302,7 +302,7 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     }
 }
 
-void SAL_CALL ScAccessibleSpreadsheet::disposing()
+void ScAccessibleSpreadsheet::disposing()
 {
     SolarMutexGuard aGuard;
     if (mpViewShell)
@@ -772,7 +772,7 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
 
 //=====  XAccessibleTable  ================================================
 
-uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
+uno::Reference< XAccessibleTable > ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -791,7 +791,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
     return xAccessibleTable;
 }
 
-uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleColumnHeaders(  )
+uno::Reference< XAccessibleTable > ScAccessibleSpreadsheet::getAccessibleColumnHeaders(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -810,7 +810,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
     return xAccessibleTable;
 }
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
+cpo::uno::Sequence< sal_Int32 > ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -840,7 +840,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAcc
     return aSequence;
 }
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
+cpo::uno::Sequence< sal_Int32 > ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -864,7 +864,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAcc
     return aSequence;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
+bool ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -885,7 +885,7 @@ bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
     return bResult;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
+bool ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -951,7 +951,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
     }
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+uno::Reference< XAccessible > ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -967,7 +967,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
     return pAccessibleCell;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+bool ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -992,7 +992,7 @@ bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtPoint(const awt::Point& rPoint)
+uno::Reference< XAccessible > ScAccessibleSpreadsheet::getAccessibleAtPoint(const awt::Point& rPoint)
 {
     uno::Reference< XAccessible > xAccessible;
     if (containsPoint(rPoint))
@@ -1016,7 +1016,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
+void ScAccessibleSpreadsheet::grabFocus(  )
 {
     if (getAccessibleParent().is())
     {
@@ -1026,12 +1026,12 @@ void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
     }
 }
 
-sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getForeground(  )
+sal_Int32 ScAccessibleSpreadsheet::getForeground(  )
 {
     return sal_Int32(COL_BLACK);
 }
 
-sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
+sal_Int32 ScAccessibleSpreadsheet::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1040,7 +1040,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 
     //=====  XAccessibleContext  ==============================================
 
-uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet()
+uno::Reference<XAccessibleRelationSet> ScAccessibleSpreadsheet::getAccessibleRelationSet()
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     if(mpAccDoc)
@@ -1050,7 +1050,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAcce
     return new utl::AccessibleRelationSetHelper();
 }
 
-sal_Int64 SAL_CALL ScAccessibleSpreadsheet::getAccessibleStateSet()
+sal_Int64 ScAccessibleSpreadsheet::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
     sal_Int64 nParentStates = 0;
@@ -1086,7 +1086,7 @@ sal_Int64 SAL_CALL ScAccessibleSpreadsheet::getAccessibleStateSet()
 
     ///=====  XAccessibleSelection  ===========================================
 
-void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int64 nChildIndex )
+void ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1102,7 +1102,7 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int64 nChildIn
     }
 }
 
-void SAL_CALL
+void
         ScAccessibleSpreadsheet::clearAccessibleSelection(  )
 {
     SolarMutexGuard aGuard;
@@ -1111,7 +1111,7 @@ void SAL_CALL
         mpViewShell->Unmark();
 }
 
-void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
+void ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1132,7 +1132,7 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
         mpViewShell->SelectAll();
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
         ScAccessibleSpreadsheet::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
@@ -1159,7 +1159,7 @@ sal_Int64 SAL_CALL
     return nResult;
 }
 
-uno::Reference<XAccessible > SAL_CALL
+uno::Reference<XAccessible >
         ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -1196,7 +1196,7 @@ uno::Reference<XAccessible > SAL_CALL
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int64 nChildIndex )
+void ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1374,7 +1374,7 @@ ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
+bool ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1392,7 +1392,7 @@ bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
     return true;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
+bool ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 
@@ -1410,7 +1410,7 @@ bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
     return true;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
+bool ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
 {
     SolarMutexGuard g;
 
@@ -1429,7 +1429,7 @@ bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
     return true;
 }
 
-bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
+bool ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
 {
     SolarMutexGuard g;
 

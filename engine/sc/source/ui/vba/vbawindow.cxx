@@ -80,11 +80,11 @@ public:
         m_it = m_sheets.begin();
     }
     // XEnumeration
-    virtual bool SAL_CALL hasMoreElements(  ) override
+    virtual bool hasMoreElements(  ) override
     {
         return m_it != m_sheets.end();
     }
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any nextElement(  ) override
     {
         if ( !hasMoreElements() )
         {
@@ -134,16 +134,16 @@ public:
     }
 
     //XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
+    virtual uno::Reference< container::XEnumeration > createEnumeration(  ) override
     {
         return new SelectedSheetsEnum( m_xContext, std::vector(sheets), m_xModel  );
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override
+    virtual ::sal_Int32 getCount(  ) override
     {
         return sheets.size();
     }
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
         || o3tl::make_unsigned( Index ) >= sheets.size() )
@@ -153,18 +153,18 @@ public:
     }
 
     //XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type getElementType(  ) override
     {
         return cppu::UnoType<excel::XWorksheet>::get();
     }
 
-    virtual bool SAL_CALL hasElements(  ) override
+    virtual bool hasElements(  ) override
     {
         return ( !sheets.empty() );
     }
 
     //XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    virtual cpo::uno::Any getByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
@@ -173,12 +173,12 @@ public:
 
     }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override
     {
         return comphelper::mapKeysToSequence( namesToIndices );
     }
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool hasByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
@@ -257,19 +257,19 @@ ScVbaWindow::Scroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const c
         m_xPane->SmallScroll( Down, Up, ToRight, ToLeft );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft )
 {
     Scroll( Down, Up, ToRight, ToLeft, false );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft )
 {
     Scroll( Down, Up, ToRight, ToLeft, true );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::SelectedSheets( const cpo::uno::Any& aIndex )
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( new SelectedSheetsEnumAccess( mxContext, m_xModel ) );
@@ -283,7 +283,7 @@ ScVbaWindow::SelectedSheets( const cpo::uno::Any& aIndex )
     return cpo::uno::Any( xSheets );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::ScrollWorkbookTabs( const cpo::uno::Any& /*Sheets*/, const cpo::uno::Any& /*Position*/ )
 {
 // #TODO #FIXME need some implementation to scroll through the tabs
@@ -303,7 +303,7 @@ ScVbaWindow::ScrollWorkbookTabs( const cpo::uno::Any& /*Sheets*/, const cpo::uno
 
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getCaption()
 {
     // tdf#118129 - return only the caption property of the frame
@@ -312,13 +312,13 @@ ScVbaWindow::getCaption()
     return cpo::uno::Any( sTitle );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setCaption( const cpo::uno::Any& _caption )
 {
     getFrameProps()->setPropertyValue( SC_UNONAME_TITLE, _caption );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getScrollRow()
 {
     sal_Int32 nValue = 0;
@@ -333,7 +333,7 @@ ScVbaWindow::getScrollRow()
     return cpo::uno::Any( nValue + 1);
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setScrollRow( const cpo::uno::Any& _scrollrow )
 {
     // !! TODO !! get view shell from controller
@@ -348,7 +348,7 @@ ScVbaWindow::setScrollRow( const cpo::uno::Any& _scrollrow )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getScrollColumn()
 {
     sal_Int32 nValue = 0;
@@ -363,7 +363,7 @@ ScVbaWindow::getScrollColumn()
     return cpo::uno::Any( nValue + 1);
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setScrollColumn( const cpo::uno::Any& _scrollcolumn )
 {
     // !! TODO !! get view shell from controller
@@ -378,7 +378,7 @@ ScVbaWindow::setScrollColumn( const cpo::uno::Any& _scrollcolumn )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getWindowState()
 {
     sal_Int32 nwindowState = xlNormal;
@@ -398,7 +398,7 @@ ScVbaWindow::getWindowState()
     return cpo::uno::Any( nwindowState );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setWindowState( const cpo::uno::Any& _windowstate )
 {
     sal_Int32 nwindowState = xlMaximized;
@@ -437,28 +437,28 @@ ScVbaWindow::Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& FileN
     workbook->Close(SaveChanges, FileName, RouteWorkBook );
 }
 
-uno::Reference< excel::XPane > SAL_CALL
+uno::Reference< excel::XPane >
 ScVbaWindow::ActivePane()
 {
     uno::Reference< sheet::XViewPane > xViewPane( getController(), uno::UNO_QUERY_THROW );
     return new ScVbaPane( this, mxContext, m_xModel, xViewPane );
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaWindow::ActiveCell(  )
 {
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     return xApplication->getActiveCell();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::Selection(  )
 {
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     return xApplication->getSelection();
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaWindow::RangeSelection()
 {
     /*  TODO / FIXME: According to documentation, this method returns the range
@@ -466,7 +466,7 @@ ScVbaWindow::RangeSelection()
     return uno::Reference< excel::XRange >( Selection(), uno::UNO_QUERY_THROW );
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayGridlines()
 {
     bool bGrid = true;
@@ -474,13 +474,13 @@ ScVbaWindow::getDisplayGridlines()
     return bGrid;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayGridlines( bool _displaygridlines )
 {
     getControllerProps()->setPropertyValue( SC_UNO_SHOWGRID, cpo::uno::Any( _displaygridlines ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayHeadings()
 {
     bool bHeading = true;
@@ -488,13 +488,13 @@ ScVbaWindow::getDisplayHeadings()
     return bHeading;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayHeadings( bool _bDisplayHeadings )
 {
     getControllerProps()->setPropertyValue( SC_UNO_COLROWHDR, cpo::uno::Any( _bDisplayHeadings ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayHorizontalScrollBar()
 {
     bool bHorizontalScrollBar = true;
@@ -502,13 +502,13 @@ ScVbaWindow::getDisplayHorizontalScrollBar()
     return bHorizontalScrollBar;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayHorizontalScrollBar( bool _bDisplayHorizontalScrollBar )
 {
     getControllerProps()->setPropertyValue( SC_UNO_HORSCROLL, cpo::uno::Any( _bDisplayHorizontalScrollBar ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayOutline()
 {
     bool bOutline = true;
@@ -516,13 +516,13 @@ ScVbaWindow::getDisplayOutline()
     return bOutline;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayOutline( bool _bDisplayOutline )
 {
     getControllerProps()->setPropertyValue( SC_UNO_OUTLSYMB, cpo::uno::Any( _bDisplayOutline ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayVerticalScrollBar()
 {
     bool bVerticalScrollBar = true;
@@ -530,13 +530,13 @@ ScVbaWindow::getDisplayVerticalScrollBar()
     return bVerticalScrollBar;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayVerticalScrollBar( bool _bDisplayVerticalScrollBar )
 {
     getControllerProps()->setPropertyValue( SC_UNO_VERTSCROLL, cpo::uno::Any( _bDisplayVerticalScrollBar ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getDisplayWorkbookTabs()
 {
     bool bWorkbookTabs = true;
@@ -544,20 +544,20 @@ ScVbaWindow::getDisplayWorkbookTabs()
     return bWorkbookTabs;
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setDisplayWorkbookTabs( bool _bDisplayWorkbookTabs )
 {
     getControllerProps()->setPropertyValue( SC_UNO_SHEETTABS, cpo::uno::Any( _bDisplayWorkbookTabs ));
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getFreezePanes()
 {
     uno::Reference< sheet::XViewFreezable > xViewFreezable( getController(), uno::UNO_QUERY_THROW );
     return xViewFreezable->hasFrozenPanes();
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setFreezePanes( bool _bFreezePanes )
 {
     uno::Reference< sheet::XViewPane > xViewPane( getController(), uno::UNO_QUERY_THROW );
@@ -588,14 +588,14 @@ ScVbaWindow::setFreezePanes( bool _bFreezePanes )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaWindow::getSplit()
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     return xViewSplitable->getIsWindowSplit();
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setSplit( bool _bSplit )
 {
     if( !_bSplit )
@@ -613,14 +613,14 @@ ScVbaWindow::setSplit( bool _bSplit )
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaWindow::getSplitColumn()
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     return xViewSplitable->getSplitColumn();
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setSplitColumn( sal_Int32 _splitcolumn )
 {
     if( getSplitColumn() != _splitcolumn )
@@ -631,14 +631,14 @@ ScVbaWindow::setSplitColumn( sal_Int32 _splitcolumn )
     }
 }
 
-double SAL_CALL
+double
 ScVbaWindow::getSplitHorizontal()
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     return PixelsToPoints( getDevice(), xViewSplitable->getSplitHorizontal(), true );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setSplitHorizontal( double _splithorizontal )
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
@@ -646,14 +646,14 @@ ScVbaWindow::setSplitHorizontal( double _splithorizontal )
     xViewSplitable->splitAtPosition( static_cast< sal_Int32 >( fHoriPixels ), 0 );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaWindow::getSplitRow()
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     return xViewSplitable->getSplitRow();
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setSplitRow( sal_Int32 _splitrow )
 {
     if( getSplitRow() != _splitrow )
@@ -664,14 +664,14 @@ ScVbaWindow::setSplitRow( sal_Int32 _splitrow )
     }
 }
 
-double SAL_CALL
+double
 ScVbaWindow::getSplitVertical()
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
     return PixelsToPoints( getDevice(), xViewSplitable->getSplitVertical(), false );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setSplitVertical(double _splitvertical )
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
@@ -705,7 +705,7 @@ void ScVbaWindow::SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getZoom()
 {
     uno::Reference< beans::XPropertySet > xProps = getControllerProps();
@@ -726,7 +726,7 @@ ScVbaWindow::getZoom()
     return cpo::uno::Any();
 }
 
-void SAL_CALL ScVbaWindow::setZoom(const cpo::uno::Any& _zoom)
+void ScVbaWindow::setZoom(const cpo::uno::Any& _zoom)
 {
     sal_Int16 nZoom = 100;
     _zoom >>= nZoom;
@@ -739,14 +739,14 @@ void SAL_CALL ScVbaWindow::setZoom(const cpo::uno::Any& _zoom)
     excel::implSetZoom( m_xModel, nZoom, vTabs );
 }
 
-uno::Reference< excel::XWorksheet > SAL_CALL
+uno::Reference< excel::XWorksheet >
 ScVbaWindow::ActiveSheet(  )
 {
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     return xApplication->getActiveSheet();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWindow::getView()
 {
     bool bPageBreak = false;
@@ -764,7 +764,7 @@ ScVbaWindow::getView()
     return cpo::uno::Any( nWindowView );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::setView( const cpo::uno::Any& _view)
 {
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
@@ -787,7 +787,7 @@ ScVbaWindow::setView( const cpo::uno::Any& _view)
         dispatchExecute( pViewShell, nSlot );
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaWindow::getVisibleRange()
 {
     uno::Reference< container::XIndexAccess > xPanesIA( getController(), uno::UNO_QUERY_THROW );
@@ -796,7 +796,7 @@ ScVbaWindow::getVisibleRange()
     return xPane->getVisibleRange();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaWindow::PointsToScreenPixelsX(sal_Int32 _points)
 {
     sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
@@ -804,7 +804,7 @@ ScVbaWindow::PointsToScreenPixelsX(sal_Int32 _points)
     return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaWindow::PointsToScreenPixelsY(sal_Int32 _points)
 {
     sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
@@ -812,7 +812,7 @@ ScVbaWindow::PointsToScreenPixelsY(sal_Int32 _points)
     return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any&To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName )
 {
     // need test, print current active sheet
@@ -820,7 +820,7 @@ ScVbaWindow::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any&To, const 
     PrintOutHelper( excel::getBestViewShell( m_xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, true );
 }
 
-void SAL_CALL
+void
 ScVbaWindow::PrintPreview( const cpo::uno::Any& EnableChanges )
 {
     // need test, print preview current active sheet
@@ -828,7 +828,7 @@ ScVbaWindow::PrintPreview( const cpo::uno::Any& EnableChanges )
     PrintPreviewHelper( EnableChanges, excel::getBestViewShell( m_xModel ) );
 }
 
-double SAL_CALL ScVbaWindow::getTabRatio()
+double ScVbaWindow::getTabRatio()
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell && pViewShell->GetViewData().GetView() )
@@ -840,7 +840,7 @@ double SAL_CALL ScVbaWindow::getTabRatio()
     return 0.0;
 }
 
-void SAL_CALL ScVbaWindow::setTabRatio( double fRatio )
+void ScVbaWindow::setTabRatio( double fRatio )
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell && pViewShell->GetViewData().GetView() )

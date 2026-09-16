@@ -102,7 +102,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 
 // XResultListener
 
-void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
+void ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
 {
     SolarMutexGuard aGuard; //TODO: or generate a UserEvent
 
@@ -121,7 +121,7 @@ void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
 
 // XEventListener
 
-void SAL_CALL ScAddInListener::disposing( const css::lang::EventObject& /* Source */ )
+void ScAddInListener::disposing( const css::lang::EventObject& /* Source */ )
 {
     // hold a ref so this is not deleted at removeResultListener
     uno::Reference<sheet::XResultListener> xKeepAlive( this );

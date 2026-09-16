@@ -111,17 +111,17 @@ public:
     virtual ~ScVbaHyperlinks() override;
 
     // XHyperlinks
-    virtual cpo::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(
+    virtual cpo::uno::Reference< ov::excel::XHyperlink > Add(
         const cpo::uno::Any& rAnchor, const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
         const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay ) override;
 
-    virtual void SAL_CALL Delete() override;
+    virtual void Delete() override;
 
     // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // ScVbaCollectionBase
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) override;

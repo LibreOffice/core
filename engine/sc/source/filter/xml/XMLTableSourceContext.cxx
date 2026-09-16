@@ -75,7 +75,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 {
 }
 
-void SAL_CALL ScXMLTableSourceContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLTableSourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (sLink.isEmpty())
         return;

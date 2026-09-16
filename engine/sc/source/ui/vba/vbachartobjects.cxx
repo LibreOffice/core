@@ -49,7 +49,7 @@ class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 public:
     /// @throws uno::RuntimeException
     ChartObjectEnumerationImpl( const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, uno::Reference< drawing::XDrawPageSupplier >  _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier(std::move( _xDrawPageSupplier )) {}
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any nextElement(  ) override
     {
         cpo::uno::Any ret;
 
@@ -132,7 +132,7 @@ ScVbaChartObjects::getChartObjectNames() const
 }
 
 // XChartObjects
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight )
 {
     try
@@ -156,7 +156,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     return aNULL();
 }
-void SAL_CALL ScVbaChartObjects::Delete(  )
+void ScVbaChartObjects::Delete(  )
 {
     const cpo::uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
     for (const auto& rChartName : sChartNames)

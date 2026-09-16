@@ -35,15 +35,15 @@ public:
         const cpo::uno::Reference< css::sheet::XViewPane >& rViewPane );
 
     // XPane attributes
-    virtual sal_Int32 SAL_CALL getScrollColumn() override;
-    virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) override;
-    virtual sal_Int32 SAL_CALL getScrollRow() override;
-    virtual void SAL_CALL setScrollRow( sal_Int32 _scrollrow ) override;
-     virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
+    virtual sal_Int32 getScrollColumn() override;
+    virtual void setScrollColumn( sal_Int32 _scrollcolumn ) override;
+    virtual sal_Int32 getScrollRow() override;
+    virtual void setScrollRow( sal_Int32 _scrollrow ) override;
+     virtual cpo::uno::Reference< ov::excel::XRange > getVisibleRange() override;
 
     // XPane methods
-    virtual void SAL_CALL SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
-    virtual void SAL_CALL LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
+    virtual void SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
+    virtual void LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
 
 private:
     cpo::uno::Reference< css::frame::XModel > m_xModel;

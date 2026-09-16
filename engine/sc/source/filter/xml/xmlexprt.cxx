@@ -5590,7 +5590,7 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 }
 
 // XExporter
-void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
+void ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
 {
     SolarMutexGuard aGuard;
     SvXMLExport::setSourceDocument( xComponent );
@@ -5619,7 +5619,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 }
 
 // XFilter
-bool SAL_CALL ScXMLExport::filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+bool ScXMLExport::filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     SolarMutexGuard aGuard;
     ScDocument* pDoc = GetDocument();
@@ -5631,7 +5631,7 @@ bool SAL_CALL ScXMLExport::filter( const cpo::uno::Sequence< css::beans::Propert
     return bReturn;
 }
 
-void SAL_CALL ScXMLExport::cancel()
+void ScXMLExport::cancel()
 {
     SolarMutexGuard aGuard;
     if (ScDocument* pDoc = GetDocument())
@@ -5640,7 +5640,7 @@ void SAL_CALL ScXMLExport::cancel()
 }
 
 // XInitialization
-void SAL_CALL ScXMLExport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void ScXMLExport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);

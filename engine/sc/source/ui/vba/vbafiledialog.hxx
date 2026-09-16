@@ -38,16 +38,16 @@ private:
 public:
     ScVbaFileDialog( const cpo::uno::Reference< ov::XHelperInterface >& xParent,  const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const sal_Int32 nType);
 
-    virtual cpo::uno::Any SAL_CALL getInitialFileName() override;
-    virtual void SAL_CALL setInitialFileName( const cpo::uno::Any& rName ) override;
-    virtual cpo::uno::Any SAL_CALL getTitle() override;
-    virtual void SAL_CALL setTitle( const cpo::uno::Any& rTitle ) override;
-    virtual cpo::uno::Any SAL_CALL getAllowMultiSelect() override;
-    virtual void SAL_CALL setAllowMultiSelect(const cpo::uno::Any& rAllowMultiSelect) override;
+    virtual cpo::uno::Any getInitialFileName() override;
+    virtual void setInitialFileName( const cpo::uno::Any& rName ) override;
+    virtual cpo::uno::Any getTitle() override;
+    virtual void setTitle( const cpo::uno::Any& rTitle ) override;
+    virtual cpo::uno::Any getAllowMultiSelect() override;
+    virtual void setAllowMultiSelect(const cpo::uno::Any& rAllowMultiSelect) override;
 
-    virtual cpo::uno::Reference< ov::excel::XFileDialogSelectedItems > SAL_CALL getSelectedItems() override;
+    virtual cpo::uno::Reference< ov::excel::XFileDialogSelectedItems > getSelectedItems() override;
 
-    virtual sal_Int32 SAL_CALL Show() override;
+    virtual sal_Int32 Show() override;
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;

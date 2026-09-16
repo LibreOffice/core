@@ -43,91 +43,91 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL
+uno::Reference< cpo::uno::XInterface >
 ScVbaOLEObject::getObject()
 {
     return uno::Reference< cpo::uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
 }
 
-bool SAL_CALL
+bool
 ScVbaOLEObject::getEnabled()
 {
     return m_xControl->getEnabled();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setEnabled( bool _enabled )
 {
     m_xControl->setEnabled( _enabled );
 }
 
-bool SAL_CALL
+bool
 ScVbaOLEObject::getVisible()
 {
     return m_xControl->getVisible();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setVisible( bool _visible )
 {
     m_xControl->setVisible( _visible );
 }
 
-double SAL_CALL
+double
 ScVbaOLEObject::getLeft()
 {
     return m_xControl->getLeft();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setLeft( double _left )
 {
     m_xControl->setLeft( _left );
 
 }
 
-double SAL_CALL
+double
 ScVbaOLEObject::getTop()
 {
     return m_xControl->getTop();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setTop( double _top )
 {
     m_xControl->setTop( _top );
 }
 
-double SAL_CALL
+double
 ScVbaOLEObject::getHeight()
 {
     return m_xControl->getHeight();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setHeight( double _height )
 {
     m_xControl->setHeight( _height );
 }
 
-double SAL_CALL
+double
 ScVbaOLEObject::getWidth()
 {
     return m_xControl->getWidth();
 }
 
-void SAL_CALL
+void
 ScVbaOLEObject::setWidth( double _width )
 {
     m_xControl->setWidth( _width );
 }
 
-OUString SAL_CALL ScVbaOLEObject::getLinkedCell()
+OUString ScVbaOLEObject::getLinkedCell()
 {
     return m_xControl->getControlSource();
 }
 
-void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell )
+void ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell )
 {
     m_xControl->setControlSource( _linkedcell );
 }

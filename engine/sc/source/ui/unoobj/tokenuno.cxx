@@ -128,7 +128,7 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     rCompiler.SetRefConventionChartOOXML(mbRefConventionChartOOXML);
 }
 
-cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
+cpo::uno::Sequence<sheet::FormulaToken> ScFormulaParserObj::parseFormula(
     const OUString& aFormula, const table::CellAddress& rReferencePos )
 {
     SolarMutexGuard aGuard;
@@ -159,7 +159,7 @@ cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormul
     return aRet;
 }
 
-OUString SAL_CALL ScFormulaParserObj::printFormula(
+OUString ScFormulaParserObj::printFormula(
         const cpo::uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
 {
     SolarMutexGuard aGuard;
@@ -185,13 +185,13 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScFormulaParserObj::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( lcl_GetFormulaParserMap() ));
     return aRef;
 }
 
-void SAL_CALL ScFormulaParserObj::setPropertyValue(
+void ScFormulaParserObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -256,7 +256,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         throw beans::UnknownPropertyException(aPropertyName);
 }
 
-cpo::uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;

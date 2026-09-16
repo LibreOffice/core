@@ -79,12 +79,12 @@ public:
     SLPSolver() {}
 
 private:
-    virtual void SAL_CALL solve() override;
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual void solve() override;
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.Calc.SLPSolver"_ustr;
     }
-    virtual OUString SAL_CALL getComponentDescription() override
+    virtual OUString getComponentDescription() override
     {
         return ScResId(RID_SLP_SOLVER_COMPONENT);
     }
@@ -501,7 +501,7 @@ void SLPSolver::reportSolution(const std::vector<double>& rPoint)
     }
 }
 
-void SAL_CALL SLPSolver::solve()
+void SLPSolver::solve()
 {
     uno::Reference<frame::XModel> xModel(mxDoc, uno::UNO_QUERY_THROW);
 

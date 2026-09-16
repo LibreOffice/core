@@ -39,15 +39,15 @@ public:
     virtual ~ScPanelFactory() override;
 
     // XUIElementFactory
-    cpo::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
+    cpo::uno::Reference<css::ui::XUIElement> createUIElement(
         const OUString& rsResourceURL,
         const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 } // end of namespace sc::sidebar

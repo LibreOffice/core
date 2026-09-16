@@ -64,107 +64,107 @@ public:
     void RemoveSink( sal_uInt32 nNumber );
 
     // XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) override;
+    virtual OUString getExactName( const OUString& aApproximateName ) override;
 
     // XInvocation
-    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
-    virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
-    virtual void  SAL_CALL setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
-    virtual cpo::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
-    virtual bool  SAL_CALL hasProperty(const OUString& Name) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >  getIntrospection() override;
+    virtual cpo::uno::Any  invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
+    virtual void  setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
+    virtual cpo::uno::Any  getValue(const OUString& PropertyName) override;
+    virtual bool  hasMethod(const OUString& Name) override;
+    virtual bool  hasProperty(const OUString& Name) override;
 
     // XApplication
-    virtual void SAL_CALL setDefaultFilePath( const OUString& DefaultFilePath ) override;
-    virtual OUString SAL_CALL getDefaultFilePath() override;
-    virtual OUString SAL_CALL getPathSeparator() override;
-    virtual OUString SAL_CALL getLibraryPath() override;
-    virtual OUString SAL_CALL getTemplatesPath() override;
-    virtual OUString SAL_CALL getOperatingSystem() override;
+    virtual void setDefaultFilePath( const OUString& DefaultFilePath ) override;
+    virtual OUString getDefaultFilePath() override;
+    virtual OUString getPathSeparator() override;
+    virtual OUString getLibraryPath() override;
+    virtual OUString getTemplatesPath() override;
+    virtual OUString getOperatingSystem() override;
 
-    virtual OUString SAL_CALL getName() override;
-    virtual bool SAL_CALL getDisplayAlerts() override;
-    virtual void SAL_CALL setDisplayAlerts( bool displayAlerts ) override;
-    virtual ::sal_Int32 SAL_CALL getCalculation() override;
-    virtual void SAL_CALL setCalculation( ::sal_Int32 _calculation ) override;
-    virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual cpo::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() override;
-    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() override;
-    virtual cpo::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() override;
-    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
-    virtual bool SAL_CALL getDisplayFormulaBar() override;
-    virtual void SAL_CALL setDisplayFormulaBar(bool _displayformulabar) override;
+    virtual OUString getName() override;
+    virtual bool getDisplayAlerts() override;
+    virtual void setDisplayAlerts( bool displayAlerts ) override;
+    virtual ::sal_Int32 getCalculation() override;
+    virtual void setCalculation( ::sal_Int32 _calculation ) override;
+    virtual cpo::uno::Any getSelection() override;
+    virtual cpo::uno::Reference< ov::excel::XWorkbook > getActiveWorkbook() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > getActiveCell() override;
+    virtual cpo::uno::Reference< ov::excel::XWindow > getActiveWindow() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > getActiveSheet() override;
+    virtual bool getDisplayFormulaBar() override;
+    virtual void setDisplayFormulaBar(bool _displayformulabar) override;
 
-    virtual cpo::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
-    virtual cpo::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
+    virtual cpo::uno::Reference< ov::XAssistant > getAssistant() override;
+    virtual cpo::uno::Reference< ov::excel::XWorkbook > getThisWorkbook() override;
 
-    virtual cpo::uno::Any SAL_CALL GetOpenFilename(const cpo::uno::Any& FileFilter, const cpo::uno::Any& FilterIndex, const cpo::uno::Any& Title, const cpo::uno::Any& ButtonText, const cpo::uno::Any& MultiSelect) override;
-    virtual cpo::uno::Any SAL_CALL International( sal_Int32 Index ) override;
-    virtual cpo::uno::Any SAL_CALL FileDialog( const cpo::uno::Any& DialogType ) override;
-    virtual cpo::uno::Any SAL_CALL Workbooks( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL Worksheets( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL WorksheetFunction( ) override;
-    virtual cpo::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
-    virtual cpo::uno::Any SAL_CALL Dialogs( const cpo::uno::Any& DialogIndex ) override;
-    virtual cpo::uno::Any SAL_CALL getCutCopyMode() override;
-    virtual void SAL_CALL setCutCopyMode( const cpo::uno::Any& _cutcopymode ) override;
-    virtual cpo::uno::Any SAL_CALL getStatusBar() override;
-    virtual void SAL_CALL setStatusBar( const cpo::uno::Any& _statusbar ) override;
-    virtual cpo::uno::Any SAL_CALL getWindowState() override;
-    virtual void SAL_CALL setWindowState(const cpo::uno::Any& rWindowState) override;
-    virtual ::sal_Int32 SAL_CALL getCursor() override;
-    virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) override;
-    virtual void SAL_CALL OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
-    virtual void SAL_CALL setScreenUpdating( bool bUpdate ) override;
-    virtual bool SAL_CALL getEnableEvents() override;
-    virtual void SAL_CALL setEnableEvents( bool bEnable ) override;
-    virtual bool SAL_CALL getEnableCancelKey() override;
-    virtual void SAL_CALL setEnableCancelKey( bool bEnable ) override;
+    virtual cpo::uno::Any GetOpenFilename(const cpo::uno::Any& FileFilter, const cpo::uno::Any& FilterIndex, const cpo::uno::Any& Title, const cpo::uno::Any& ButtonText, const cpo::uno::Any& MultiSelect) override;
+    virtual cpo::uno::Any International( sal_Int32 Index ) override;
+    virtual cpo::uno::Any FileDialog( const cpo::uno::Any& DialogType ) override;
+    virtual cpo::uno::Any Workbooks( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Worksheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any WorksheetFunction( ) override;
+    virtual cpo::uno::Any Evaluate( const OUString& Name ) override;
+    virtual cpo::uno::Any Dialogs( const cpo::uno::Any& DialogIndex ) override;
+    virtual cpo::uno::Any getCutCopyMode() override;
+    virtual void setCutCopyMode( const cpo::uno::Any& _cutcopymode ) override;
+    virtual cpo::uno::Any getStatusBar() override;
+    virtual void setStatusBar( const cpo::uno::Any& _statusbar ) override;
+    virtual cpo::uno::Any getWindowState() override;
+    virtual void setWindowState(const cpo::uno::Any& rWindowState) override;
+    virtual ::sal_Int32 getCursor() override;
+    virtual void setCursor( ::sal_Int32 _cursor ) override;
+    virtual void OnKey( const OUString& Key, const cpo::uno::Any& Procedure ) override;
+    virtual void setScreenUpdating( bool bUpdate ) override;
+    virtual bool getEnableEvents() override;
+    virtual void setEnableEvents( bool bEnable ) override;
+    virtual bool getEnableCancelKey() override;
+    virtual void setEnableCancelKey( bool bEnable ) override;
 
-    virtual bool SAL_CALL getDisplayFullScreen() override;
-    virtual void SAL_CALL setDisplayFullScreen( bool bSet ) override;
-    virtual bool SAL_CALL getDisplayScrollBars() override;
-    virtual void SAL_CALL setDisplayScrollBars( bool bSet ) override;
-    virtual bool SAL_CALL getDisplayExcel4Menus() override;
-    virtual void SAL_CALL setDisplayExcel4Menus( bool bSet ) override;
+    virtual bool getDisplayFullScreen() override;
+    virtual void setDisplayFullScreen( bool bSet ) override;
+    virtual bool getDisplayScrollBars() override;
+    virtual void setDisplayScrollBars( bool bSet ) override;
+    virtual bool getDisplayExcel4Menus() override;
+    virtual void setDisplayExcel4Menus( bool bSet ) override;
 
-    virtual bool SAL_CALL getDisplayNoteIndicator() override;
-    virtual void SAL_CALL setDisplayNoteIndicator( bool bSet ) override;
-    virtual bool SAL_CALL getShowWindowsInTaskbar() override;
-    virtual void SAL_CALL setShowWindowsInTaskbar( bool bSet ) override;
-    virtual bool SAL_CALL getIteration() override;
-    virtual void SAL_CALL setIteration( bool bSet ) override;
+    virtual bool getDisplayNoteIndicator() override;
+    virtual void setDisplayNoteIndicator( bool bSet ) override;
+    virtual bool getShowWindowsInTaskbar() override;
+    virtual void setShowWindowsInTaskbar( bool bSet ) override;
+    virtual bool getIteration() override;
+    virtual void setIteration( bool bSet ) override;
 
-    virtual cpo::uno::Any SAL_CALL Windows( const cpo::uno::Any& aIndex ) override;
-    virtual void SAL_CALL wait( double time ) override;
-    virtual cpo::uno::Any SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
-    virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
-    virtual void SAL_CALL GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scroll ) override;
-    virtual void SAL_CALL Calculate() override;
-    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Intersect( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
-    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Union( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
-    virtual double SAL_CALL CentimetersToPoints( double Centimeters ) override;
-    virtual double SAL_CALL InchesToPoints( double Inches ) override;
-    virtual void SAL_CALL Volatile( const cpo::uno::Any& Volatile ) override;
-    virtual cpo::uno::Any SAL_CALL MenuBars( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL Rows( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL Caller( const cpo::uno::Any& aIndex ) override;
-    virtual void SAL_CALL Undo() override;
+    virtual cpo::uno::Any Windows( const cpo::uno::Any& aIndex ) override;
+    virtual void wait( double time ) override;
+    virtual cpo::uno::Any Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
+    virtual cpo::uno::Any Names( const cpo::uno::Any& aIndex ) override;
+    virtual void GoTo( const cpo::uno::Any& Reference, const cpo::uno::Any& Scroll ) override;
+    virtual void Calculate() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > Intersect( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > Union( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
+    virtual double CentimetersToPoints( double Centimeters ) override;
+    virtual double InchesToPoints( double Inches ) override;
+    virtual void Volatile( const cpo::uno::Any& Volatile ) override;
+    virtual cpo::uno::Any MenuBars( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Rows( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Caller( const cpo::uno::Any& aIndex ) override;
+    virtual void Undo() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XInterfaceWithIID
-    virtual OUString SAL_CALL getIID() override;
+    virtual OUString getIID() override;
 
     // XConnectable
-    virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
-    virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
-    virtual cpo::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+    virtual OUString GetIIDForClassItselfNotCoclass() override;
+    virtual ov::TypeAndIID GetConnectionPoint() override;
+    virtual cpo::uno::Reference<ov::XConnectionPoint> FindConnectionPoint() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual void CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

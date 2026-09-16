@@ -54,25 +54,25 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XDispatchProvider
-    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL
+    virtual cpo::uno::Reference< css::frame::XDispatch >
                             queryDispatch( const css::util::URL& aURL,
                                         const OUString& aTargetFrameName,
                                         sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
                             queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
                             /// XDispatchProviderInterceptor
-    virtual cpo::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider >
                             getSlaveDispatchProvider() override;
-    virtual void SAL_CALL   setSlaveDispatchProvider( const cpo::uno::Reference<
+    virtual void   setSlaveDispatchProvider( const cpo::uno::Reference<
                                 css::frame::XDispatchProvider >& xNewDispatchProvider ) override;
-    virtual cpo::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider >
                             getMasterDispatchProvider() override;
-    virtual void SAL_CALL   setMasterDispatchProvider( const cpo::uno::Reference<
+    virtual void   setMasterDispatchProvider( const cpo::uno::Reference<
                                 css::frame::XDispatchProvider >& xNewSupplier ) override;
 
                             /// XEventListener
-    virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
+    virtual void   disposing( const css::lang::EventObject& Source ) override;
 };
 
 class ScDispatch final : public cppu::WeakImplHelper<
@@ -94,18 +94,18 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XDispatch
-    virtual void SAL_CALL   dispatch( const css::util::URL& aURL,
+    virtual void   dispatch( const css::util::URL& aURL,
                                 const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL   addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
+    virtual void   addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
                                 const css::util::URL& aURL ) override;
-    virtual void SAL_CALL   removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
+    virtual void   removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
                                 const css::util::URL& aURL ) override;
 
                             /// XSelectionChangeListener
-    virtual void SAL_CALL   selectionChanged( const css::lang::EventObject& aEvent ) override;
+    virtual void   selectionChanged( const css::lang::EventObject& aEvent ) override;
 
                             /// XEventListener
-    virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
+    virtual void   disposing( const css::lang::EventObject& Source ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

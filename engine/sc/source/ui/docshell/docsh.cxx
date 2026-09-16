@@ -476,7 +476,7 @@ public:
     }
 
     // XVBAScriptListener
-    virtual void SAL_CALL notifyVBAScriptEvent( const ::css::script::vba::VBAScriptEvent& aEvent ) override
+    virtual void notifyVBAScriptEvent( const ::css::script::vba::VBAScriptEvent& aEvent ) override
     {
         if (aEvent.Identifier == script::vba::VBAScriptEventId::SCRIPT_STOPPED &&
             m_pDocSh->GetClipData().is())
@@ -486,7 +486,7 @@ public:
     }
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::css::lang::EventObject& /*Source*/ ) override
+    virtual void disposing( const ::css::lang::EventObject& /*Source*/ ) override
     {
     }
 };

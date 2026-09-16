@@ -55,7 +55,7 @@ public:
         mxModel( xModel, uno::UNO_SET_THROW )
     {}
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         return AnnotationToComment( m_xEnumeration->nextElement(), m_xContext, mxModel );
     }

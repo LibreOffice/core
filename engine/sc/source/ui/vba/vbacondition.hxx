@@ -37,11 +37,11 @@ public:
     /// @throws css::script::BasicErrorException
     static css::sheet::ConditionOperator retrieveAPIOperator( const cpo::uno::Any& _aOperator);
 
-    virtual OUString SAL_CALL Formula1( ) override;
-    virtual OUString SAL_CALL Formula2( ) override;
+    virtual OUString Formula1( ) override;
+    virtual OUString Formula2( ) override;
     /// @throws css::script::BasicErrorException
     virtual sal_Int32 Operator(bool _bIncludeFormulaValue);
-    virtual sal_Int32 SAL_CALL Operator() override = 0;
+    virtual sal_Int32 Operator() override = 0;
 
 };
 

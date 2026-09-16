@@ -115,12 +115,12 @@ cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
 
 // XSolverDescription
 
-OUString SAL_CALL SolverComponent::getStatusDescription()
+OUString SolverComponent::getStatusDescription()
 {
     return maStatus;
 }
 
-OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rPropertyName )
+OUString SolverComponent::getPropertyDescription( const OUString& rPropertyName )
 {
     TranslateId pResId;
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
@@ -157,12 +157,12 @@ OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rProp
 
 // XSolver: settings
 
-uno::Reference<sheet::XSpreadsheetDocument> SAL_CALL SolverComponent::getDocument()
+uno::Reference<sheet::XSpreadsheetDocument> SolverComponent::getDocument()
 {
     return mxDoc;
 }
 
-void SAL_CALL SolverComponent::setDocument( const uno::Reference<sheet::XSpreadsheetDocument>& _document )
+void SolverComponent::setDocument( const uno::Reference<sheet::XSpreadsheetDocument>& _document )
 {
     mxDoc = _document;
     mpDocument = nullptr;
@@ -176,71 +176,71 @@ void SAL_CALL SolverComponent::setDocument( const uno::Reference<sheet::XSpreads
     }
 }
 
-table::CellAddress SAL_CALL SolverComponent::getObjective()
+table::CellAddress SolverComponent::getObjective()
 {
     return maObjective;
 }
 
-void SAL_CALL SolverComponent::setObjective( const table::CellAddress& _objective )
+void SolverComponent::setObjective( const table::CellAddress& _objective )
 {
     maObjective = _objective;
 }
 
-cpo::uno::Sequence<table::CellAddress> SAL_CALL SolverComponent::getVariables()
+cpo::uno::Sequence<table::CellAddress> SolverComponent::getVariables()
 {
     return maVariables;
 }
 
-void SAL_CALL SolverComponent::setVariables( const cpo::uno::Sequence<table::CellAddress>& _variables )
+void SolverComponent::setVariables( const cpo::uno::Sequence<table::CellAddress>& _variables )
 {
     maVariables = _variables;
 }
 
-cpo::uno::Sequence<sheet::SolverConstraint> SAL_CALL SolverComponent::getConstraints()
+cpo::uno::Sequence<sheet::SolverConstraint> SolverComponent::getConstraints()
 {
     return maConstraints;
 }
 
-void SAL_CALL SolverComponent::setConstraints( const cpo::uno::Sequence<sheet::SolverConstraint>& _constraints )
+void SolverComponent::setConstraints( const cpo::uno::Sequence<sheet::SolverConstraint>& _constraints )
 {
     maConstraints = _constraints;
 }
 
-bool SAL_CALL SolverComponent::getMaximize()
+bool SolverComponent::getMaximize()
 {
     return mbMaximize;
 }
 
-void SAL_CALL SolverComponent::setMaximize( bool _maximize )
+void SolverComponent::setMaximize( bool _maximize )
 {
     mbMaximize = _maximize;
 }
 
 // XSolver: get results
 
-bool SAL_CALL SolverComponent::getSuccess()
+bool SolverComponent::getSuccess()
 {
     return mbSuccess;
 }
 
-double SAL_CALL SolverComponent::getResultValue()
+double SolverComponent::getResultValue()
 {
     return mfResultValue;
 }
 
-cpo::uno::Sequence<double> SAL_CALL SolverComponent::getSolution()
+cpo::uno::Sequence<double> SolverComponent::getSolution()
 {
     return maSolution;
 }
 
 // XServiceInfo
 
-bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName )
+bool SolverComponent::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SolverComponent::getSupportedServiceNames()
 {
     return { u"com.sun.star.sheet.Solver"_ustr };
 }

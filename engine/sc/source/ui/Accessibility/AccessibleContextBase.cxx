@@ -66,7 +66,7 @@ void ScAccessibleContextBase::Init()
     msDescription = createAccessibleDescription();
 }
 
-void SAL_CALL ScAccessibleContextBase::disposing()
+void ScAccessibleContextBase::disposing()
 {
     SolarMutexGuard aGuard;
 
@@ -99,7 +99,7 @@ awt::Rectangle ScAccessibleContextBase::implGetBounds(  )
 
 //=====  XAccessibleComponent  ================================================
 
-awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
+awt::Point ScAccessibleContextBase::getLocationOnScreen(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -130,36 +130,36 @@ bool ScAccessibleContextBase::isVisible()
     return true;
 }
 
-void SAL_CALL ScAccessibleContextBase::grabFocus(  )
+void ScAccessibleContextBase::grabFocus(  )
 {
     OSL_FAIL("not implemented");
 }
 
-sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
+sal_Int32 ScAccessibleContextBase::getForeground(  )
 {
     return sal_Int32(COL_BLACK);
 }
 
-sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
+sal_Int32 ScAccessibleContextBase::getBackground(  )
 {
     return sal_Int32(COL_WHITE);
 }
 
 //=====  XAccessibleContext  ==================================================
 
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
        ScAccessibleContextBase::getAccessibleParent()
 {
     return mxParent;
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
     ScAccessibleContextBase::getAccessibleRole()
 {
     return maRole;
 }
 
-OUString SAL_CALL
+OUString
        ScAccessibleContextBase::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
@@ -180,7 +180,7 @@ OUString SAL_CALL
     return msDescription;
 }
 
-OUString SAL_CALL
+OUString
        ScAccessibleContextBase::getAccessibleName()
 {
     SolarMutexGuard aGuard;
@@ -201,18 +201,18 @@ OUString SAL_CALL
     return msName;
 }
 
-uno::Reference<XAccessibleRelationSet> SAL_CALL
+uno::Reference<XAccessibleRelationSet>
        ScAccessibleContextBase::getAccessibleRelationSet()
 {
     return new utl::AccessibleRelationSetHelper();
 }
 
-sal_Int64 SAL_CALL ScAccessibleContextBase::getAccessibleStateSet()
+sal_Int64 ScAccessibleContextBase::getAccessibleStateSet()
 {
     return 0;
 }
 
-lang::Locale SAL_CALL
+lang::Locale
        ScAccessibleContextBase::getLocale()
 {
     SolarMutexGuard aGuard;

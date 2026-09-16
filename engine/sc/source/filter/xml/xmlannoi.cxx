@@ -58,7 +58,7 @@ public:
         }
     }
 
-    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>&) override
     {
@@ -67,7 +67,7 @@ public:
         return nullptr;
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override
+    void endFastElement(sal_Int32) override
     {
         maEntry.maText = maTextBuffer.makeStringAndClear();
         if (mrData.mpThreadedCommentData)
@@ -112,7 +112,7 @@ public:
         }
     }
 
-    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
     {
@@ -123,7 +123,7 @@ public:
         return nullptr;
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override
+    void endFastElement(sal_Int32) override
     {
         if (mrData.mpThreadedCommentData)
             mrData.mpThreadedCommentData->maRoot.maText = maTextBuffer.makeStringAndClear();

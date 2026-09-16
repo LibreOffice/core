@@ -134,7 +134,7 @@ public:
 
     virtual ~ScXMLTableRowCellContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void PushParagraphSpan(std::u16string_view rSpan, const OUString& rStyleName);
@@ -148,7 +148,7 @@ public:
     void SetDetectiveObj( const ScAddress& rPosition );
     void SetCellRangeSource( const ScAddress& rPosition );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

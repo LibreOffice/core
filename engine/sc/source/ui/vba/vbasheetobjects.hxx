@@ -51,10 +51,10 @@ public:
     void collectShapes();
 
     // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
     // ScVbaCollectionBase
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) override;
@@ -76,7 +76,7 @@ public:
     explicit ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer );
 
     // XGraphicObjects
-    virtual cpo::uno::Any SAL_CALL Add(
+    virtual cpo::uno::Any Add(
         const cpo::uno::Any& rLeft,
         const cpo::uno::Any& rTop,
         const cpo::uno::Any& rWidth,

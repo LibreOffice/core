@@ -38,11 +38,11 @@ public:
 
 protected:
     // ____ XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged(
+    virtual void selectionChanged(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XSelectionChangeListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ WeakComponentImplHelperBase ____
@@ -50,10 +50,10 @@ protected:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // ____ XServiceInfo ____
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(
         const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     ScTabViewShell * m_pViewShell;

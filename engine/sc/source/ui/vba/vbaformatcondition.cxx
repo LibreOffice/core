@@ -52,7 +52,7 @@ ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterfa
         msStyleName = mxStyle->getName();
 }
 
-void SAL_CALL
+void
 ScVbaFormatCondition::Delete(  )
 {
     ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
@@ -60,7 +60,7 @@ ScVbaFormatCondition::Delete(  )
     notifyRange();
 }
 
-void SAL_CALL
+void
 ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2 )
 {
     try
@@ -75,18 +75,18 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const cpo::uno::Any& _aOperato
     }
 }
 
-uno::Reference< excel::XInterior > SAL_CALL
+uno::Reference< excel::XInterior >
 ScVbaFormatCondition::Interior(  )
 {
     return mxStyle->Interior();
 }
 
-uno::Reference< excel::XFont > SAL_CALL
+uno::Reference< excel::XFont >
 ScVbaFormatCondition::Font(  )
 {
     return mxStyle->Font();
 }
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormatCondition::Borders( const cpo::uno::Any& Index )
 { return mxStyle->Borders( Index );
 }
@@ -110,7 +110,7 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
     return aAPIType;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaFormatCondition::Type(  )
 {
     sal_Int32 nReturnType = 0;
@@ -121,7 +121,7 @@ ScVbaFormatCondition::Type(  )
     return nReturnType;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaFormatCondition::Operator(  )
 {
     return ScVbaFormatCondition_BASE::Operator( true );

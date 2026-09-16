@@ -30,13 +30,13 @@ class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 public:
     ScVbaWSFunction( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
-    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
-    virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
-    virtual void  SAL_CALL setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
-    virtual cpo::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
-    virtual bool  SAL_CALL hasProperty(const OUString& Name) override;
-    virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >  getIntrospection() override;
+    virtual cpo::uno::Any  invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
+    virtual void  setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
+    virtual cpo::uno::Any  getValue(const OUString& PropertyName) override;
+    virtual bool  hasMethod(const OUString& Name) override;
+    virtual bool  hasProperty(const OUString& Name) override;
+    virtual OUString getExactName( const OUString& aApproximateName ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

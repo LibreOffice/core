@@ -185,7 +185,7 @@ public:
     virtual ~ScXMLImport() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments ) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -281,10 +281,10 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
+    virtual void startDocument() override;
+    virtual void endDocument() override;
 
     virtual void DisposingModel() override;
 

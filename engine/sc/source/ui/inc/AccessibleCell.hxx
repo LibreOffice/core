@@ -67,7 +67,7 @@ private:
         ScAccessibleDocument* pAccDoc);
 
     using ScAccessibleCellBase::disposing;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 protected:
     virtual ~ScAccessibleCell() override;
@@ -86,9 +86,9 @@ public:
     ///=====  XAccessibleComponent  ============================================
 
     virtual cpo::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+        getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
-    virtual void SAL_CALL grabFocus(  ) override;
+    virtual void grabFocus(  ) override;
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
@@ -102,26 +102,26 @@ public:
 
     /// Return the number of currently visible children.
     /// override to calculate this on demand
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleStateSet() override;
 
     virtual cpo::uno::Reference<
-        css::accessibility::XAccessibleRelationSet> SAL_CALL
+        css::accessibility::XAccessibleRelationSet>
            getAccessibleRelationSet() override;
 
-    virtual OUString SAL_CALL getExtendedAttributes() override;
+    virtual OUString getExtendedAttributes() override;
 
     // Override this method to handle cell's ParaIndent attribute specially.
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;

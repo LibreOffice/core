@@ -123,12 +123,12 @@ public:
     void insertHyperlink( const uno::Reference< excel::XHyperlink >& rxHlink );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
 private:
     typedef ::std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
@@ -161,24 +161,24 @@ void ScVbaHlinkContainer::insertHyperlink( const uno::Reference< excel::XHyperli
         *aIt = rxHlink;
 }
 
-sal_Int32 SAL_CALL ScVbaHlinkContainer::getCount()
+sal_Int32 ScVbaHlinkContainer::getCount()
 {
     return static_cast< sal_Int32 >( maHlinks.size() );
 }
 
-cpo::uno::Any SAL_CALL ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
         return cpo::uno::Any( maHlinks[ static_cast< size_t >( nIndex ) ] );
     throw lang::IndexOutOfBoundsException();
 }
 
-cpo::uno::Type SAL_CALL ScVbaHlinkContainer::getElementType()
+cpo::uno::Type ScVbaHlinkContainer::getElementType()
 {
     return cppu::UnoType<excel::XHyperlink>::get();
 }
 
-bool SAL_CALL ScVbaHlinkContainer::hasElements()
+bool ScVbaHlinkContainer::hasElements()
 {
     return !maHlinks.empty();
 }
@@ -216,7 +216,7 @@ ScVbaHyperlinks::~ScVbaHyperlinks()
 
 // XHyperlinks ----------------------------------------------------------------
 
-uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
+uno::Reference< excel::XHyperlink > ScVbaHyperlinks::Add(
     const cpo::uno::Any& rAnchor, const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
     const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay )
 {
@@ -243,7 +243,7 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
     return xHlink;
 }
 
-void SAL_CALL ScVbaHyperlinks::Delete()
+void ScVbaHyperlinks::Delete()
 {
     // FIXME not implemented
     throw cpo::uno::RuntimeException();
@@ -251,14 +251,14 @@ void SAL_CALL ScVbaHyperlinks::Delete()
 
 // XEnumerationAccess ---------------------------------------------------------
 
-uno::Reference< container::XEnumeration > SAL_CALL ScVbaHyperlinks::createEnumeration()
+uno::Reference< container::XEnumeration > ScVbaHyperlinks::createEnumeration()
 {
     return new SimpleIndexAccessToEnumeration( m_xIndexAccess );
 }
 
 // XElementAccess -------------------------------------------------------------
 
-cpo::uno::Type SAL_CALL ScVbaHyperlinks::getElementType()
+cpo::uno::Type ScVbaHyperlinks::getElementType()
 {
     return cppu::UnoType<excel::XHyperlink>::get();
 }

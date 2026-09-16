@@ -43,17 +43,17 @@ uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
     return xShape;
 }
 
-OUString SAL_CALL ScPageObj::getImplementationName()
+OUString ScPageObj::getImplementationName()
 {
     return u"ScPageObj"_ustr;
 }
 
-bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
+bool ScPageObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScPageObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.sheet.SpreadsheetDrawPage"_ustr };
 }

@@ -63,7 +63,7 @@ ScXMLDataPilotTablesContext::~ScXMLDataPilotTablesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTablesContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotTablesContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -198,7 +198,7 @@ ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotTableContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -446,7 +446,7 @@ void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveGroupDimension& aGrou
     pDPDimSaveData->AddGroupDimension(aGroupDim);
 }
 
-void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!bTargetRangeAddress)
         return;
@@ -762,7 +762,7 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 {
 }
 
-    void SAL_CALL ScXMLDataPilotGrandTotalContext::endFastElement( sal_Int32 /*nElement*/ )
+    void ScXMLDataPilotGrandTotalContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     XMLTokenEnum eOrient = XML_NONE;
     switch (meOrientation)
@@ -816,7 +816,7 @@ ScXMLSourceCellRangeContext::~ScXMLSourceCellRangeContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceCellRangeContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLSourceCellRangeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -912,7 +912,7 @@ ScXMLDataPilotFieldContext::~ScXMLDataPilotFieldContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotFieldContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotFieldContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -970,7 +970,7 @@ void ScXMLDataPilotFieldContext::AddGroup(::std::vector<OUString>&& rMembers, co
     aGroups.push_back(std::move(aGroup));
 }
 
-void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!xDim)
         return;
@@ -1116,7 +1116,7 @@ ScXMLDataPilotLevelContext::~ScXMLDataPilotLevelContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotLevelContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotLevelContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1286,7 +1286,7 @@ ScXMLDataPilotSubTotalsContext::~ScXMLDataPilotSubTotalsContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotSubTotalsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotSubTotalsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1303,7 +1303,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotSubTotals
     return pContext;
 }
 
-void SAL_CALL ScXMLDataPilotSubTotalsContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotSubTotalsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDataPilotField->SetSubTotals(std::vector(maFunctions));
     if (!maDisplayName.isEmpty())
@@ -1359,7 +1359,7 @@ ScXMLDataPilotMembersContext::~ScXMLDataPilotMembersContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotMembersContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotMembersContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1414,7 +1414,7 @@ ScXMLDataPilotMemberContext::~ScXMLDataPilotMemberContext()
 {
 }
 
-void SAL_CALL ScXMLDataPilotMemberContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotMemberContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
@@ -1532,7 +1532,7 @@ ScXMLDataPilotGroupsContext::~ScXMLDataPilotGroupsContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotGroupsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1565,7 +1565,7 @@ ScXMLDataPilotGroupContext::~ScXMLDataPilotGroupContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDataPilotGroupContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1581,7 +1581,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupCont
     return pContext;
 }
 
-void SAL_CALL ScXMLDataPilotGroupContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotGroupContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDataPilotField->AddGroup(std::vector(aMembers), sName);
 }
@@ -1604,7 +1604,7 @@ ScXMLDataPilotGroupMemberContext::~ScXMLDataPilotGroupMemberContext()
 {
 }
 
-void SAL_CALL ScXMLDataPilotGroupMemberContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataPilotGroupMemberContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!sName.isEmpty())
         pDataPilotGroup->AddMember(sName);

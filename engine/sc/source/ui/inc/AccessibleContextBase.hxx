@@ -43,7 +43,7 @@ public:
         const sal_Int16 aRole);
 
     virtual void Init();
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 protected:
     virtual ~ScAccessibleContextBase() override;
 public:
@@ -63,43 +63,43 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
+    virtual css::awt::Point getLocationOnScreen(  ) override;
 
-    virtual void SAL_CALL grabFocus(  ) override;
+    virtual void grabFocus(  ) override;
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
 
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return a reference to the parent.
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getAccessibleRole() override;
 
     /// Return this object's description.
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleDescription() override;
 
     /// Return the object's current name.
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
 
     /// Return NULL to indicate that an empty relation set.
-    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
 
 protected:

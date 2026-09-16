@@ -41,14 +41,14 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
 
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return this objects index among the parents children.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleIndexInParent() override;
 
 protected:
@@ -63,19 +63,19 @@ protected:
 public:
     ///=====  XAccessibleValue  ================================================
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getCurrentValue() override;
 
-    virtual bool SAL_CALL
+    virtual bool
         setCurrentValue( const cpo::uno::Any& aNumber ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getMaximumValue(  ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getMinimumValue(  ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getMinimumIncrement(  ) override;
 
 protected:

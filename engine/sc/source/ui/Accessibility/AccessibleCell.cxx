@@ -93,7 +93,7 @@ ScAccessibleCell::~ScAccessibleCell()
     }
 }
 
-void SAL_CALL ScAccessibleCell::disposing()
+void ScAccessibleCell::disposing()
 {
     SolarMutexGuard aGuard;
     // dispose in AccessibleStaticTextBase
@@ -115,7 +115,7 @@ IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, Accessibl
 
     //=====  XTypeProvider  ===================================================
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > ScAccessibleCell::getTypes()
 {
     return ::comphelper::concatSequences(
         ScAccessibleCellBase::getTypes(),
@@ -127,13 +127,13 @@ IMPLEMENT_GET_IMPLEMENTATION_ID( ScAccessibleCell )
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
+uno::Reference< XAccessible > ScAccessibleCell::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
     return AccessibleStaticTextBase::getAccessibleAtPoint(rPoint);
 }
 
-void SAL_CALL ScAccessibleCell::grabFocus(  )
+void ScAccessibleCell::grabFocus(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -205,19 +205,19 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox()
 
     //=====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleCell::getAccessibleChildCount()
 {
     return AccessibleStaticTextBase::getAccessibleChildCount();
 }
 
-uno::Reference< XAccessible > SAL_CALL
+uno::Reference< XAccessible >
     ScAccessibleCell::getAccessibleChild(sal_Int64 nIndex)
 {
     return AccessibleStaticTextBase::getAccessibleChild(nIndex);
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
@@ -275,7 +275,7 @@ sal_Int64 SAL_CALL
     return nStateSet;
 }
 
-uno::Reference<XAccessibleRelationSet> SAL_CALL
+uno::Reference<XAccessibleRelationSet>
        ScAccessibleCell::getAccessibleRelationSet()
 {
     SolarMutexGuard aGuard;
@@ -467,7 +467,7 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
         .replaceAll(u":", u"\\:");
 }
 
-OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
+OUString ScAccessibleCell::getExtendedAttributes()
 {
     SolarMutexGuard aGuard;
 
@@ -509,7 +509,7 @@ OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 

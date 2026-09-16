@@ -53,26 +53,26 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XDataProvider
-    virtual bool SAL_CALL
+    virtual bool
         createDataSourcePossible(const cpo::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
 
-    virtual cpo::uno::Reference<css::chart2::data::XDataSource> SAL_CALL
+    virtual cpo::uno::Reference<css::chart2::data::XDataSource>
         createDataSource(const cpo::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
 
-    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL
+    virtual cpo::uno::Sequence<css::beans::PropertyValue>
         detectArguments(const cpo::uno::Reference<css::chart2::data::XDataSource>& xDataSource) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         createDataSequenceByRangeRepresentationPossible(const OUString& aRangeRepresentation) override;
 
-    virtual cpo::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
             createDataSequenceByRangeRepresentation(const OUString& aRangeRepresentation) override;
 
-    virtual cpo::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceByValueArray(const OUString& aRole, const OUString& aRangeRepresentation,
             const OUString& aRoleQualifier) override;
 
-    virtual cpo::uno::Reference<css::sheet::XRangeSelection> SAL_CALL getRangeSelection() override;
+    virtual cpo::uno::Reference<css::sheet::XRangeSelection> getRangeSelection() override;
 
     // AbstractPivotTableDataProvider
     virtual const std::vector<css::chart2::data::PivotTableFieldEntry>&
@@ -100,43 +100,43 @@ public:
     virtual OUString getFieldOutputDescription(sal_Int32 nPageFieldIndex) const override;
 
     // XPropertySet
-    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
-    virtual void SAL_CALL
+    virtual void
         setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getPropertyValue(const OUString& rPropertyName) override;
 
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
 
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rListener) override;
 
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rListener) override;
 
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rListener) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL
+    virtual void
         addModifyListener(const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeModifyListener(const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual bool supportsService(const OUString& rServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
 

@@ -63,10 +63,10 @@ public:
     ScXMLContentValidationContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 
     void SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const bool bDisplay);
     void SetErrorMessage(const OUString& sTitle, const OUString& sMessage, const OUString& sMessageType, const bool bDisplay);
@@ -88,11 +88,11 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLErrorMessageContext : public ScXMLImportContext
@@ -111,11 +111,11 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLErrorMacroContext : public ScXMLImportContext
@@ -129,10 +129,10 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 }
@@ -147,7 +147,7 @@ ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLContentValidationsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -220,7 +220,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLContentValidationContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -361,7 +361,7 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
     }
 }
 
-void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     // #i36650# event-listeners element moved up one level
     if (xEventContext.is())
@@ -463,7 +463,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLHelpMessageContex
     return pContext;
 }
 
-void SAL_CALL ScXMLHelpMessageContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLHelpMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetHelpMessage(sTitle, sMessage.makeStringAndClear(), bDisplay);
 }
@@ -517,7 +517,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLErrorMessageConte
     return pContext;
 }
 
-void SAL_CALL ScXMLErrorMessageContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLErrorMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetErrorMessage(sTitle, sMessage.makeStringAndClear(), sMessageType, bDisplay);
 }
@@ -558,7 +558,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler >  ScXMLErrorMacroContex
     return pContext;
 }
 
-void SAL_CALL ScXMLErrorMacroContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLErrorMacroContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetErrorMacro( bExecute );
 }

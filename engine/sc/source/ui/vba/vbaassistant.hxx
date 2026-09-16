@@ -37,18 +37,18 @@ public:
     ScVbaAssistant( const cpo::uno::Reference< ov::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext );
     virtual ~ScVbaAssistant() override;
     // XAssistant
-    virtual bool SAL_CALL getOn() override;
-    virtual void SAL_CALL setOn( bool _on ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
-    virtual ::sal_Int32 SAL_CALL getTop() override;
-    virtual void SAL_CALL setTop( ::sal_Int32 _top ) override;
-    virtual ::sal_Int32 SAL_CALL getLeft() override;
-    virtual void SAL_CALL setLeft( ::sal_Int32 _left ) override;
-    virtual ::sal_Int32 SAL_CALL getAnimation() override;
-    virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) override;
+    virtual bool getOn() override;
+    virtual void setOn( bool _on ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
+    virtual ::sal_Int32 getTop() override;
+    virtual void setTop( ::sal_Int32 _top ) override;
+    virtual ::sal_Int32 getLeft() override;
+    virtual void setLeft( ::sal_Int32 _left ) override;
+    virtual ::sal_Int32 getAnimation() override;
+    virtual void setAnimation( ::sal_Int32 _animation ) override;
 
-    virtual OUString SAL_CALL Name(  ) override;
+    virtual OUString Name(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -40,17 +40,17 @@ public:
     ScVbaCharacters( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, cpo::uno::Reference< css::text::XSimpleText > xRange, const cpo::uno::Any& Start, const cpo::uno::Any& Length, bool bReplace = false  );
 
     // Attributes
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
-    virtual ::sal_Int32 SAL_CALL getCount() override;
-    virtual OUString SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual cpo::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
-    virtual void SAL_CALL setFont( const cpo::uno::Reference< ov::excel::XFont >& _font ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
+    virtual ::sal_Int32 getCount() override;
+    virtual OUString getText() override;
+    virtual void setText( const OUString& _text ) override;
+    virtual cpo::uno::Reference< ov::excel::XFont > getFont() override;
+    virtual void setFont( const cpo::uno::Reference< ov::excel::XFont >& _font ) override;
 
     // Methods
-    virtual void SAL_CALL Insert( const OUString& String ) override;
-    virtual void SAL_CALL Delete(  ) override;
+    virtual void Insert( const OUString& String ) override;
+    virtual void Delete(  ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

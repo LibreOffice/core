@@ -71,7 +71,7 @@ ScAccessiblePageHeader::~ScAccessiblePageHeader()
     }
 }
 
-void SAL_CALL ScAccessiblePageHeader::disposing()
+void ScAccessiblePageHeader::disposing()
 {
     SolarMutexGuard aGuard;
     if (mpViewShell)
@@ -132,7 +132,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< XAccessible > ScAccessiblePageHeader::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     uno::Reference<XAccessible> xRet;
 
@@ -160,7 +160,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
     return xRet;
 }
 
-void SAL_CALL ScAccessiblePageHeader::grabFocus()
+void ScAccessiblePageHeader::grabFocus()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -174,7 +174,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
+sal_Int64 ScAccessiblePageHeader::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -204,7 +204,7 @@ sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
     return mnChildCount;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int64 nIndex )
+uno::Reference< XAccessible > ScAccessiblePageHeader::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -235,12 +235,12 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
     return xRet;
 }
 
-sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent()
+sal_Int64 ScAccessiblePageHeader::getAccessibleIndexInParent()
 {
     return mnIndex;
 }
 
-sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleStateSet()
+sal_Int64 ScAccessiblePageHeader::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
     sal_Int64 nParentStates = 0;

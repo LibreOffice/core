@@ -26,7 +26,7 @@ ScXMLCellTextParaContext::ScXMLCellTextParaContext(
 {
 }
 
-void SAL_CALL ScXMLCellTextParaContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellTextParaContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!maContent.isEmpty())
         mrParentCxt.PushParagraphSpan(maContent, OUString());
@@ -34,12 +34,12 @@ void SAL_CALL ScXMLCellTextParaContext::endFastElement( sal_Int32 /*nElement*/ )
     mrParentCxt.PushParagraphEnd();
 }
 
-void SAL_CALL ScXMLCellTextParaContext::characters( const OUString& rChars )
+void ScXMLCellTextParaContext::characters( const OUString& rChars )
 {
     maContent += rChars;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellTextParaContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if (!maContent.isEmpty())
@@ -116,7 +116,7 @@ ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
 {
 }
 
-void SAL_CALL ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/,
+void ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -132,17 +132,17 @@ void SAL_CALL ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/
     }
 }
 
-void SAL_CALL ScXMLCellTextSpanContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellTextSpanContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     submitContentAndClear();
 }
 
-void SAL_CALL ScXMLCellTextSpanContext::characters( const OUString& rChars )
+void ScXMLCellTextSpanContext::characters( const OUString& rChars )
 {
     maContent += rChars;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextSpanContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellTextSpanContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     submitContentAndClear();
@@ -207,7 +207,7 @@ void ScXMLCellFieldSheetNameContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldSheetNameContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellFieldSheetNameContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldSheetName(maStyleName);
 }
@@ -224,7 +224,7 @@ void ScXMLCellFieldDateContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldDateContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellFieldDateContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldDate(maStyleName);
 }
@@ -241,7 +241,7 @@ void ScXMLCellFieldTitleContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldTitleContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellFieldTitleContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldTitle(maStyleName);
 }
@@ -258,7 +258,7 @@ void ScXMLCellFieldURLContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
+void ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -280,12 +280,12 @@ void SAL_CALL ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/
     }
 }
 
-void SAL_CALL ScXMLCellFieldURLContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellFieldURLContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldURL(maURL, maRep, maStyleName, maTargetFrame);
 }
 
-void SAL_CALL ScXMLCellFieldURLContext::characters( const OUString& rChars )
+void ScXMLCellFieldURLContext::characters( const OUString& rChars )
 {
     maRep += rChars;
 }
@@ -303,7 +303,7 @@ void ScXMLCellFieldSContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldSContext::startFastElement( sal_Int32 /*nElement*/,
+void ScXMLCellFieldSContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -321,13 +321,13 @@ void SAL_CALL ScXMLCellFieldSContext::startFastElement( sal_Int32 /*nElement*/,
     }
 }
 
-void SAL_CALL ScXMLCellFieldSContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellFieldSContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (mnCount)
         PushSpaces();
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellFieldSContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellFieldSContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     // <text:s> does not have child elements, but ...
@@ -361,7 +361,7 @@ ScXMLCellTextRubyContext::ScXMLCellTextRubyContext(
 {
 }
 
-void SAL_CALL ScXMLCellTextRubyContext::startFastElement( sal_Int32 /*nElement*/,
+void ScXMLCellTextRubyContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -377,7 +377,7 @@ void SAL_CALL ScXMLCellTextRubyContext::startFastElement( sal_Int32 /*nElement*/
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextRubyContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellTextRubyContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
 
@@ -407,7 +407,7 @@ ScXMLCellRubyBaseContext::ScXMLCellRubyBaseContext(
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellRubyBaseContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellRubyBaseContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     submitContentAndClear();
@@ -430,7 +430,7 @@ ScXMLCellRubyTextContext::ScXMLCellRubyTextContext(
 {
 }
 
-void SAL_CALL ScXMLCellRubyTextContext::startFastElement( sal_Int32 /*nElement*/,
+void ScXMLCellRubyTextContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -446,7 +446,7 @@ void SAL_CALL ScXMLCellRubyTextContext::startFastElement( sal_Int32 /*nElement*/
     }
 }
 
-void SAL_CALL ScXMLCellRubyTextContext::characters( const OUString& rChars )
+void ScXMLCellRubyTextContext::characters( const OUString& rChars )
 {
     mrRubyText+= rChars;
 }

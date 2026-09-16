@@ -202,13 +202,13 @@ ScIndexEnumeration::~ScIndexEnumeration()
 
 // XEnumeration
 
-bool SAL_CALL ScIndexEnumeration::hasMoreElements()
+bool ScIndexEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return ( nPos < xIndex->getCount() );
 }
 
-cpo::uno::Any SAL_CALL ScIndexEnumeration::nextElement()
+cpo::uno::Any ScIndexEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aReturn;
@@ -223,18 +223,18 @@ cpo::uno::Any SAL_CALL ScIndexEnumeration::nextElement()
     return aReturn;
 }
 
-OUString SAL_CALL ScIndexEnumeration::getImplementationName()
+OUString ScIndexEnumeration::getImplementationName()
 {
     return u"ScIndexEnumeration"_ustr;
 }
 
-bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
+bool ScIndexEnumeration::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 cpo::uno::Sequence< OUString >
-    SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
+    ScIndexEnumeration::getSupportedServiceNames()
 {
     return { sServiceName };
 }
@@ -255,12 +255,12 @@ ScNameToIndexAccess::~ScNameToIndexAccess()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  )
+sal_Int32 ScNameToIndexAccess::getCount(  )
 {
     return aNames.getLength();
 }
 
-cpo::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
 {
     if ( xNameAccess.is() && nIndex >= 0 && nIndex < aNames.getLength() )
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );
@@ -270,7 +270,7 @@ cpo::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-cpo::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
+cpo::uno::Type ScNameToIndexAccess::getElementType(  )
 {
     if ( xNameAccess.is() )
         return xNameAccess->getElementType();
@@ -278,7 +278,7 @@ cpo::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
         return cpo::uno::Type();
 }
 
-bool SAL_CALL ScNameToIndexAccess::hasElements(  )
+bool ScNameToIndexAccess::hasElements(  )
 {
     return getCount() > 0;
 }

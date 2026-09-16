@@ -44,12 +44,12 @@ public:
     CoinMPSolver() {}
 
 private:
-    virtual void SAL_CALL solve() override;
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual void solve() override;
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.Calc.CoinMPSolver"_ustr;
     }
-    virtual OUString SAL_CALL getComponentDescription() override
+    virtual OUString getComponentDescription() override
     {
         return ScResId( RID_COINMP_SOLVER_COMPONENT );
     }
@@ -57,7 +57,7 @@ private:
 
 }
 
-void SAL_CALL CoinMPSolver::solve()
+void CoinMPSolver::solve()
 {
     uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY_THROW );
 

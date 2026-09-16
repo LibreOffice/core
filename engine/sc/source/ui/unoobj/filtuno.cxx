@@ -137,14 +137,14 @@ Calc_FilterOptionsDialog_get_implementation(cpo::uno::XComponentContext*, cpo::u
 
 // XPropertyAccess
 
-cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> ScFilterOptionsObj::getPropertyValues()
 {
     return comphelper::InitPropertySequence({
         { SC_UNONAME_FILTEROPTIONS, Any(aFilterOptions) }
     });
 }
 
-void SAL_CALL ScFilterOptionsObj::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& aProps )
+void ScFilterOptionsObj::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& aProps )
 {
     for (const beans::PropertyValue& rProp : aProps)
     {
@@ -163,12 +163,12 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const cpo::uno::Sequence<be
 
 // XExecutableDialog
 
-void SAL_CALL ScFilterOptionsObj::setTitle( const OUString& /* aTitle */ )
+void ScFilterOptionsObj::setTitle( const OUString& /* aTitle */ )
 {
     // not used
 }
 
-sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
+sal_Int16 ScFilterOptionsObj::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
@@ -362,21 +362,21 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
 // XImporter
 
-void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
+void ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
 {
     bExport = false;
 }
 
 // XExporter
 
-void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
+void ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
 {
     bExport = true;
 }
 
 // XInitialization
 
-void SAL_CALL ScFilterOptionsObj::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void ScFilterOptionsObj::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))

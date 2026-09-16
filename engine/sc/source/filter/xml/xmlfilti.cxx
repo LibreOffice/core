@@ -96,7 +96,7 @@ ScXMLFilterContext::~ScXMLFilterContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLFilterContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLFilterContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -128,7 +128,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLFilterContext::cre
     return pContext;
 }
 
-void SAL_CALL ScXMLFilterContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLFilterContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrQueryParam.bInplace = !bCopyOutputData;
     mrQueryParam.bDuplicate = !bSkipDuplicates;
@@ -200,7 +200,7 @@ ScXMLAndContext::~ScXMLAndContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLAndContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLAndContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -225,7 +225,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLAndContext::create
     return pContext;
 }
 
-void SAL_CALL ScXMLAndContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLAndContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pFilterContext->CloseConnection();
 }
@@ -244,7 +244,7 @@ ScXMLOrContext::~ScXMLOrContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLOrContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLOrContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -270,7 +270,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLOrContext::createF
     return pContext;
 }
 
-void SAL_CALL ScXMLOrContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLOrContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pFilterContext->CloseConnection();
 }
@@ -329,7 +329,7 @@ ScXMLConditionContext::~ScXMLConditionContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLConditionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -406,7 +406,7 @@ void ScXMLConditionContext::AddSetItem(const ScQueryEntry::Item& rItem)
     maQueryItems.push_back(rItem);
 }
 
-void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScQueryEntry& rEntry = mrQueryParam.AppendEntry();
 
@@ -529,7 +529,7 @@ ScXMLDPFilterContext::~ScXMLDPFilterContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPFilterContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDPFilterContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -558,7 +558,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPFilterContext::c
     return pContext;
 }
 
-void SAL_CALL ScXMLDPFilterContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDPFilterContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aFilterFields.eSearchType = eSearchType;
     aFilterFields.bCaseSens = bIsCaseSensitive;
@@ -588,7 +588,7 @@ ScXMLDPAndContext::~ScXMLDPAndContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPAndContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDPAndContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -612,7 +612,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPAndContext::crea
     return pContext;
 }
 
-void SAL_CALL ScXMLDPAndContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDPAndContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pFilterContext->CloseConnection();
 }
@@ -629,7 +629,7 @@ ScXMLDPOrContext::~ScXMLDPOrContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPOrContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDPOrContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -653,7 +653,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPOrContext::creat
     return pContext;
 }
 
-void SAL_CALL ScXMLDPOrContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDPOrContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pFilterContext->CloseConnection();
 }
@@ -745,7 +745,7 @@ void ScXMLDPConditionContext::getOperatorXML(
         aFilterOperator = SC_TOPVAL;
 }
 
-void SAL_CALL ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDPConditionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScQueryEntry aFilterField;
     aFilterField.nField = nField;

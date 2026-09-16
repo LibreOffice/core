@@ -43,11 +43,11 @@ public:
     virtual ~ScDrawModelBroadcaster() override;
 
     // css::document::XEventBroadcaster
-    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
     // css::document::XShapeEventBroadcaster
-    virtual void SAL_CALL addShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
-    virtual void SAL_CALL removeShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void addShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void removeShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };

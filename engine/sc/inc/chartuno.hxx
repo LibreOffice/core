@@ -58,33 +58,33 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XTableCharts
-    virtual void SAL_CALL   addNewByName( const OUString& aName,
+    virtual void   addNewByName( const OUString& aName,
                                     const css::awt::Rectangle& aRect,
                                     const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges,
                                     bool bColumnHeaders, bool bRowHeaders ) override;
-    virtual void SAL_CALL   removeByName( const OUString& aName ) override;
+    virtual void   removeByName( const OUString& aName ) override;
 
                             // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 using ScChartObj_Base = comphelper::OPropertyContainerImplHelper<
@@ -119,26 +119,26 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XTableChart
-    virtual bool SAL_CALL getHasColumnHeaders() override;
-    virtual void SAL_CALL   setHasColumnHeaders( bool bHasColumnHeaders ) override;
-    virtual bool SAL_CALL getHasRowHeaders() override;
-    virtual void SAL_CALL   setHasRowHeaders( bool bHasRowHeaders ) override;
-    virtual cpo::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
+    virtual bool getHasColumnHeaders() override;
+    virtual void   setHasColumnHeaders( bool bHasColumnHeaders ) override;
+    virtual bool getHasRowHeaders() override;
+    virtual void   setHasRowHeaders( bool bHasRowHeaders ) override;
+    virtual cpo::uno::Sequence< css::table::CellRangeAddress >
                             getRanges(  ) override;
-    virtual void SAL_CALL   setRanges( const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
+    virtual void   setRanges( const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
 
                             // XEmbeddedObjectSupplier
-    virtual cpo::uno::Reference< css::lang::XComponent > SAL_CALL
+    virtual cpo::uno::Reference< css::lang::XComponent >
                             getEmbeddedObject() override;
 
                             // XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL   setName( const OUString& aName ) override;
+    virtual OUString getName() override;
+    virtual void   setName( const OUString& aName ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

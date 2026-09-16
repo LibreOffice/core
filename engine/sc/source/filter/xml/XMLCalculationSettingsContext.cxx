@@ -94,7 +94,7 @@ ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSettingsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCalculationSettingsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -109,7 +109,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
     return pContext;
 }
 
-void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScModelObj* xPropertySet(GetScImport().GetScModel());
     if (!xPropertySet)

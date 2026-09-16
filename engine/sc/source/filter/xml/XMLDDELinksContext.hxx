@@ -31,7 +31,7 @@ public:
 
     virtual ~ScXMLDDELinksContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -62,7 +62,7 @@ public:
 
     virtual ~ScXMLDDELinkContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void SetApplication(const OUString& sValue) { sApplication = sValue; }
@@ -75,7 +75,7 @@ public:
     void AddCellToRow(const ScDDELinkCell& aCell);
     void AddRowsToTable(const sal_Int32 nRows);
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDDESourceContext : public ScXMLImportContext
@@ -89,7 +89,7 @@ public:
 
     virtual ~ScXMLDDESourceContext() override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDDETableContext : public ScXMLImportContext
@@ -102,7 +102,7 @@ public:
 
     virtual ~ScXMLDDETableContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -128,10 +128,10 @@ public:
 
     virtual ~ScXMLDDERowContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDDECellContext : public ScXMLImportContext
@@ -152,7 +152,7 @@ public:
 
     virtual ~ScXMLDDECellContext() override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@ ScVbaTextFrame::ScVbaTextFrame( cpo::uno::Sequence< cpo::uno::Any> const & args,
 }
 
 // Methods
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaTextFrame::Characters()
 {
     uno::Reference< text::XSimpleText > xSimpleText( m_xShape, uno::UNO_QUERY_THROW );

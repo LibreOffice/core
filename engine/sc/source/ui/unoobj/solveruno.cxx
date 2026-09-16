@@ -199,7 +199,7 @@ void ScSolverSettings::ShowErrorMessage(const OUString& rMessage)
 }
 
 // XSolverSettings
-sal_Int8 SAL_CALL ScSolverSettings::getObjectiveType()
+sal_Int8 ScSolverSettings::getObjectiveType()
 {
     sal_Int8 aRet(sheet::SolverObjectiveType::MAXIMIZE);
     switch (m_pSettings->GetObjectiveType())
@@ -218,7 +218,7 @@ sal_Int8 SAL_CALL ScSolverSettings::getObjectiveType()
     return aRet;
 }
 
-void SAL_CALL ScSolverSettings::setObjectiveType(sal_Int8 aObjType)
+void ScSolverSettings::setObjectiveType(sal_Int8 aObjType)
 {
     sc::ObjectiveType eType(sc::ObjectiveType::OT_MAXIMIZE);
     switch (aObjType)
@@ -237,7 +237,7 @@ void SAL_CALL ScSolverSettings::setObjectiveType(sal_Int8 aObjType)
     m_pSettings->SetObjectiveType(eType);
 }
 
-cpo::uno::Any SAL_CALL ScSolverSettings::getObjectiveCell()
+cpo::uno::Any ScSolverSettings::getObjectiveCell()
 {
     // The objective cell must be a valid cell address
     OUString sValue(m_pSettings->GetParameter(sc::SolverParameter::SP_OBJ_CELL));
@@ -262,7 +262,7 @@ cpo::uno::Any SAL_CALL ScSolverSettings::getObjectiveCell()
 
 // The value being set must be either a string referencing a single cell or
 // a CellAddress instance
-void SAL_CALL ScSolverSettings::setObjectiveCell(const cpo::uno::Any& aValue)
+void ScSolverSettings::setObjectiveCell(const cpo::uno::Any& aValue)
 {
     // Check if a string value is being used
     OUString sValue;
@@ -305,7 +305,7 @@ void SAL_CALL ScSolverSettings::setObjectiveCell(const cpo::uno::Any& aValue)
     m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_CELL, u""_ustr);
 }
 
-cpo::uno::Any SAL_CALL ScSolverSettings::getGoalValue()
+cpo::uno::Any ScSolverSettings::getGoalValue()
 {
     OUString sValue(m_pSettings->GetParameter(sc::SolverParameter::SP_OBJ_VAL));
 
@@ -332,7 +332,7 @@ cpo::uno::Any SAL_CALL ScSolverSettings::getGoalValue()
     return cpo::uno::Any();
 }
 
-void SAL_CALL ScSolverSettings::setGoalValue(const cpo::uno::Any& aValue)
+void ScSolverSettings::setGoalValue(const cpo::uno::Any& aValue)
 {
     // Check if a numeric value is being used
     double fValue;
@@ -388,12 +388,12 @@ void SAL_CALL ScSolverSettings::setGoalValue(const cpo::uno::Any& aValue)
     m_pSettings->SetParameter(sc::SolverParameter::SP_OBJ_VAL, u""_ustr);
 }
 
-OUString SAL_CALL ScSolverSettings::getEngine()
+OUString ScSolverSettings::getEngine()
 {
     return m_pSettings->GetParameter(sc::SP_LO_ENGINE);
 }
 
-void SAL_CALL ScSolverSettings::setEngine(const OUString& sEngine)
+void ScSolverSettings::setEngine(const OUString& sEngine)
 {
     // Only change the engine if the new engine exists; otherwise leave it unchanged
     cpo::uno::Sequence<OUString> arrEngineNames;
@@ -405,7 +405,7 @@ void SAL_CALL ScSolverSettings::setEngine(const OUString& sEngine)
     m_pSettings->SetParameter(sc::SP_LO_ENGINE, sEngine);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScSolverSettings::getAvailableEngines()
+cpo::uno::Sequence<OUString> ScSolverSettings::getAvailableEngines()
 {
     cpo::uno::Sequence<OUString> arrEngineNames;
     cpo::uno::Sequence<OUString> arrDescriptions;
@@ -413,7 +413,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScSolverSettings::getAvailableEngines()
     return arrEngineNames;
 }
 
-cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
+cpo::uno::Sequence<cpo::uno::Any> ScSolverSettings::getVariableCells()
 {
     // Variable cells parameter is stored as a single string composed of valid ranges
     // separated using the formula separator character
@@ -445,7 +445,7 @@ cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
     return aRangeSeq;
 }
 
-void SAL_CALL ScSolverSettings::setVariableCells(const cpo::uno::Sequence<cpo::uno::Any>& aRanges)
+void ScSolverSettings::setVariableCells(const cpo::uno::Sequence<cpo::uno::Any>& aRanges)
 {
     OUString sVarCells;
     bool bFirst(true);
@@ -490,7 +490,7 @@ void SAL_CALL ScSolverSettings::setVariableCells(const cpo::uno::Sequence<cpo::u
     m_pSettings->SetParameter(sc::SP_VAR_CELLS, sVarCells);
 }
 
-cpo::uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints()
+cpo::uno::Sequence<sheet::ModelConstraint> ScSolverSettings::getConstraints()
 {
     cpo::uno::Sequence<sheet::ModelConstraint> aRet;
     std::vector<sc::ModelConstraint> vConstraints = m_pSettings->GetConstraints();
@@ -543,7 +543,7 @@ cpo::uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstra
     return aRet;
 }
 
-void SAL_CALL
+void
 ScSolverSettings::setConstraints(const cpo::uno::Sequence<sheet::ModelConstraint>& aConstraints)
 {
     const formula::FormulaGrammar::AddressConvention eConv = m_rDoc.GetAddressConvention();
@@ -624,7 +624,7 @@ ScSolverSettings::setConstraints(const cpo::uno::Sequence<sheet::ModelConstraint
     m_pSettings->SetConstraints(std::move(vRetConstraints));
 }
 
-sal_Int32 SAL_CALL ScSolverSettings::getConstraintCount()
+sal_Int32 ScSolverSettings::getConstraintCount()
 {
     if (!m_pTable)
         return -1;
@@ -632,30 +632,30 @@ sal_Int32 SAL_CALL ScSolverSettings::getConstraintCount()
     return static_cast<sal_Int32>(m_pSettings->GetConstraints().size());
 }
 
-cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScSolverSettings::getEngineOptions()
+cpo::uno::Sequence<beans::PropertyValue> ScSolverSettings::getEngineOptions()
 {
     cpo::uno::Sequence<beans::PropertyValue> aRet = ScSolverUtil::GetDefaults(getEngine());
     m_pSettings->GetEngineOptions(aRet);
     return aRet;
 }
 
-void SAL_CALL
+void
 ScSolverSettings::setEngineOptions(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     m_pSettings->SetEngineOptions(rProps);
 }
 
-sal_Int8 SAL_CALL ScSolverSettings::getStatus() { return m_nStatus; }
+sal_Int8 ScSolverSettings::getStatus() { return m_nStatus; }
 
-OUString SAL_CALL ScSolverSettings::getErrorMessage() { return m_sErrorMessage; }
+OUString ScSolverSettings::getErrorMessage() { return m_sErrorMessage; }
 
-bool SAL_CALL ScSolverSettings::getSuppressDialog() { return m_bSuppressDialog; }
+bool ScSolverSettings::getSuppressDialog() { return m_bSuppressDialog; }
 
-void SAL_CALL ScSolverSettings::setSuppressDialog(bool bSuppress) { m_bSuppressDialog = bSuppress; }
+void ScSolverSettings::setSuppressDialog(bool bSuppress) { m_bSuppressDialog = bSuppress; }
 
-void SAL_CALL ScSolverSettings::reset() { m_pSettings->ResetToDefaults(); }
+void ScSolverSettings::reset() { m_pSettings->ResetToDefaults(); }
 
-void SAL_CALL ScSolverSettings::solve()
+void ScSolverSettings::solve()
 {
     // Show the progress dialog
     auto xProgress = std::make_shared<ScSolverProgressDialog>(Application::GetDefDialogParent());
@@ -972,17 +972,17 @@ void SAL_CALL ScSolverSettings::solve()
     }
 }
 
-void SAL_CALL ScSolverSettings::saveToFile() { m_pSettings->SaveSolverSettings(); }
+void ScSolverSettings::saveToFile() { m_pSettings->SaveSolverSettings(); }
 
 // XServiceInfo
-OUString SAL_CALL ScSolverSettings::getImplementationName() { return u"ScSolverSettings"_ustr; }
+OUString ScSolverSettings::getImplementationName() { return u"ScSolverSettings"_ustr; }
 
-bool SAL_CALL ScSolverSettings::supportsService(const OUString& rServiceName)
+bool ScSolverSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScSolverSettings::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScSolverSettings::getSupportedServiceNames()
 {
     return { SC_SOLVERSETTINGS_SERVICE };
 }

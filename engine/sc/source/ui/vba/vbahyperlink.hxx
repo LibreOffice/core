@@ -48,19 +48,19 @@ public:
     virtual ~ScVbaHyperlink() override;
 
     // Attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& rName ) override;
-    virtual OUString SAL_CALL getAddress() override;
-    virtual void SAL_CALL setAddress( const OUString& rAddress ) override;
-    virtual OUString SAL_CALL getSubAddress() override;
-    virtual void SAL_CALL setSubAddress( const OUString& rSubAddress ) override;
-    virtual OUString SAL_CALL getScreenTip() override;
-    virtual void SAL_CALL setScreenTip( const OUString& rScreenTip ) override;
-    virtual OUString SAL_CALL getTextToDisplay() override;
-    virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) override;
-    virtual sal_Int32 SAL_CALL getType() override;
-    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getRange() override;
-    virtual cpo::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& rName ) override;
+    virtual OUString getAddress() override;
+    virtual void setAddress( const OUString& rAddress ) override;
+    virtual OUString getSubAddress() override;
+    virtual void setSubAddress( const OUString& rSubAddress ) override;
+    virtual OUString getScreenTip() override;
+    virtual void setScreenTip( const OUString& rScreenTip ) override;
+    virtual OUString getTextToDisplay() override;
+    virtual void setTextToDisplay( const OUString& rTextToDisplay ) override;
+    virtual sal_Int32 getType() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > getRange() override;
+    virtual cpo::uno::Reference< ov::msforms::XShape > getShape() override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

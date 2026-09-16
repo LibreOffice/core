@@ -545,7 +545,7 @@ cpo::uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
     return cpo::uno::Any(xCondEntry);
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScCondFormatObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -553,7 +553,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySet
     return aRef;
 }
 
-void SAL_CALL ScCondFormatObj::setPropertyValue(
+void ScCondFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -592,7 +592,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScCondFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -621,25 +621,25 @@ cpo::uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPrope
     return aAny;
 }
 
-void SAL_CALL ScCondFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScCondFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScCondFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondFormatObj::addVetoableChangeListener( const OUString&,
+void ScCondFormatObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondFormatObj::removeVetoableChangeListener( const OUString&,
+void ScCondFormatObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
@@ -686,14 +686,14 @@ sal_Int32 ScConditionEntryObj::getType()
     return sheet::ConditionEntryType::CONDITION;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScConditionEntryObj::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( maPropSet.getPropertyMap() ));
     return aRef;
 }
 
-void SAL_CALL ScConditionEntryObj::setPropertyValue(
+void ScConditionEntryObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -757,7 +757,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScConditionEntryObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -805,25 +805,25 @@ cpo::uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aP
     return aAny;
 }
 
-void SAL_CALL ScConditionEntryObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScConditionEntryObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScConditionEntryObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScConditionEntryObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScConditionEntryObj::addVetoableChangeListener( const OUString&,
+void ScConditionEntryObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&,
+void ScConditionEntryObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
@@ -855,7 +855,7 @@ sal_Int32 ScColorScaleFormatObj::getType()
     return sheet::ConditionEntryType::COLORSCALE;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScColorScaleFormatObj::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( maPropSet.getPropertyMap() ));
@@ -900,7 +900,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
 
 }
 
-void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
+void ScColorScaleFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -935,7 +935,7 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScColorScaleFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -966,25 +966,25 @@ cpo::uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& 
     return aAny;
 }
 
-void SAL_CALL ScColorScaleFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScColorScaleFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScColorScaleFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScColorScaleFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScColorScaleFormatObj::addVetoableChangeListener( const OUString&,
+void ScColorScaleFormatObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScColorScaleFormatObj::removeVetoableChangeListener( const OUString&,
+void ScColorScaleFormatObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
@@ -1106,7 +1106,7 @@ sal_Int32 ScDataBarFormatObj::getType()
     return sheet::ConditionEntryType::DATABAR;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDataBarFormatObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -1151,7 +1151,7 @@ void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEn
 
 }
 
-void SAL_CALL ScDataBarFormatObj::setPropertyValue(
+void ScDataBarFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -1276,7 +1276,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDataBarFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1350,25 +1350,25 @@ cpo::uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPr
     return aAny;
 }
 
-void SAL_CALL ScDataBarFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScDataBarFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScDataBarFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScDataBarFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScDataBarFormatObj::addVetoableChangeListener( const OUString&,
+void ScDataBarFormatObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
+void ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
@@ -1482,7 +1482,7 @@ sal_Int32 ScIconSetFormatObj::getType()
     return sheet::ConditionEntryType::ICONSET;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScIconSetFormatObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -1528,7 +1528,7 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
 
 }
 
-void SAL_CALL ScIconSetFormatObj::setPropertyValue(
+void ScIconSetFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -1600,7 +1600,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScIconSetFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1650,25 +1650,25 @@ cpo::uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPr
     return aAny;
 }
 
-void SAL_CALL ScIconSetFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScIconSetFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScIconSetFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScIconSetFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScIconSetFormatObj::addVetoableChangeListener( const OUString&,
+void ScIconSetFormatObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScIconSetFormatObj::removeVetoableChangeListener( const OUString&,
+void ScIconSetFormatObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
@@ -1786,7 +1786,7 @@ sal_Int32 ScCondDateFormatObj::getType()
     return sheet::ConditionEntryType::DATE;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondDateFormatObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScCondDateFormatObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -1794,7 +1794,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondDateFormatObj::getPropert
     return aRef;
 }
 
-void SAL_CALL ScCondDateFormatObj::setPropertyValue(
+void ScCondDateFormatObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -1837,7 +1837,7 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScCondDateFormatObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1875,25 +1875,25 @@ cpo::uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aP
     return aAny;
 }
 
-void SAL_CALL ScCondDateFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
+void ScCondDateFormatObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondDateFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
+void ScCondDateFormatObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondDateFormatObj::addVetoableChangeListener( const OUString&,
+void ScCondDateFormatObj::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");
 }
 
-void SAL_CALL ScCondDateFormatObj::removeVetoableChangeListener( const OUString&,
+void ScCondDateFormatObj::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
 {
     SAL_WARN("sc", "not implemented");

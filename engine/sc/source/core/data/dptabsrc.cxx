@@ -302,7 +302,7 @@ ScDPDimensions* ScDPSource::GetDimensionsObject()
     return mpDimensions.get();
 }
 
-uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions()
+uno::Reference<container::XNameAccess> ScDPSource::getDimensions()
 {
     return GetDimensionsObject();
 }
@@ -356,7 +356,7 @@ sal_Int32 ScDPSource::GetSourceDim(sal_Int32 nDim)
     return nDim;
 }
 
-cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
+cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> > ScDPSource::getResults()
 {
     CreateRes_Impl(); // create mpColumnResultRoot and mpRowResultRoot
 
@@ -415,22 +415,22 @@ cpo::uno::Sequence<double> ScDPSource::getFilteredResults(
     return cpo::uno::Sequence<double>();
 }
 
-void SAL_CALL ScDPSource::refresh()
+void ScDPSource::refresh()
 {
     disposeData();
 }
 
-void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
+void ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
 {
     OSL_FAIL("not implemented");    //TODO: exception?
 }
 
-void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
+void ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
 {
     OSL_FAIL("not implemented");    //TODO: exception?
 }
 
-Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
+Sequence< Sequence<Any> > ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
 {
     sal_Int32 nColumnCount = GetData()->GetColumnCount();
 
@@ -1188,7 +1188,7 @@ const cpo::uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( con
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDPSource::getPropertySetInfo()
 {
     using beans::PropertyAttribute::READONLY;
 
@@ -1209,7 +1209,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void ScDPSource::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if (aPropertyName == SC_UNO_DP_COLGRAND)
         mbColumnGrand = lcl_GetBoolFromAny(aValue);
@@ -1232,7 +1232,7 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
     }
 }
 
-cpo::uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDPSource::getPropertyValue( const OUString& aPropertyName )
 {
     cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_COLGRAND )
@@ -1312,7 +1312,7 @@ void ScDPDimensions::CountChanged()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-cpo::uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
+cpo::uno::Any ScDPDimensions::getByName( const OUString& aName )
 {
     sal_Int32 nCount = getCount();
     for (sal_Int32 i=0; i<nCount; i++)
@@ -1328,7 +1328,7 @@ cpo::uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
 //    return cpo::uno::Any();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
+cpo::uno::Sequence<OUString> ScDPDimensions::getElementNames()
 {
     tools::Long nCount = getCount();
     cpo::uno::Sequence<OUString> aSeq(nCount);
@@ -1338,7 +1338,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
     return aSeq;
 }
 
-bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
+bool ScDPDimensions::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1347,12 +1347,12 @@ bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
     return false;
 }
 
-cpo::uno::Type SAL_CALL ScDPDimensions::getElementType()
+cpo::uno::Type ScDPDimensions::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-bool SAL_CALL ScDPDimensions::hasElements()
+bool ScDPDimensions::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1422,12 +1422,12 @@ const std::optional<OUString> & ScDPDimension::GetSubtotalName() const
     return mpSubtotalName;
 }
 
-uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
+uno::Reference<container::XNameAccess> ScDPDimension::getHierarchies()
 {
     return GetHierarchiesObject();
 }
 
-OUString SAL_CALL ScDPDimension::getName()
+OUString ScDPDimension::getName()
 {
     if (!aName.isEmpty())
         return aName;
@@ -1435,7 +1435,7 @@ OUString SAL_CALL ScDPDimension::getName()
         return pSource->GetData()->getDimensionName( nDim );
 }
 
-void SAL_CALL ScDPDimension::setName( const OUString& rNewName )
+void ScDPDimension::setName( const OUString& rNewName )
 {
     //  used after cloning
     aName = rNewName;
@@ -1476,7 +1476,7 @@ ScDPDimension* ScDPDimension::CreateCloneObject()
     return pNew;
 }
 
-uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone()
+uno::Reference<util::XCloneable> ScDPDimension::createClone()
 {
     return CreateCloneObject();
 }
@@ -1519,7 +1519,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDPDimension::getPropertySetInfo()
 {
     static const SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
@@ -1546,7 +1546,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
     return aRef;
 }
 
-void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void ScDPDimension::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
     {
@@ -1628,7 +1628,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     }
 }
 
-cpo::uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDPDimension::getPropertyValue( const OUString& aPropertyName )
 {
     cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_POSITION )
@@ -1750,7 +1750,7 @@ ScDPHierarchies::~ScDPHierarchies()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-cpo::uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
+cpo::uno::Any ScDPHierarchies::getByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1765,7 +1765,7 @@ cpo::uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
+cpo::uno::Sequence<OUString> ScDPHierarchies::getElementNames()
 {
     tools::Long nCount = getCount();
     cpo::uno::Sequence<OUString> aSeq(nCount);
@@ -1775,7 +1775,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
     return aSeq;
 }
 
-bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
+bool ScDPHierarchies::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1784,12 +1784,12 @@ bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
     return false;
 }
 
-cpo::uno::Type SAL_CALL ScDPHierarchies::getElementType()
+cpo::uno::Type ScDPHierarchies::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-bool SAL_CALL ScDPHierarchies::hasElements()
+bool ScDPHierarchies::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1847,12 +1847,12 @@ ScDPLevels* ScDPHierarchy::GetLevelsObject()
     return mxLevels.get();
 }
 
-uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
+uno::Reference<container::XNameAccess> ScDPHierarchy::getLevels()
 {
     return GetLevelsObject();
 }
 
-OUString SAL_CALL ScDPHierarchy::getName()
+OUString ScDPHierarchy::getName()
 {
     OUString aRet;        //TODO: globstr-ID !!!!
     switch (nHier)
@@ -1873,7 +1873,7 @@ OUString SAL_CALL ScDPHierarchy::getName()
     return aRet;
 }
 
-void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ )
+void ScDPHierarchy::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
@@ -1911,7 +1911,7 @@ ScDPLevels::~ScDPLevels()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-cpo::uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
+cpo::uno::Any ScDPLevels::getByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1926,7 +1926,7 @@ cpo::uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
+cpo::uno::Sequence<OUString> ScDPLevels::getElementNames()
 {
     tools::Long nCount = getCount();
     cpo::uno::Sequence<OUString> aSeq(nCount);
@@ -1936,7 +1936,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
     return aSeq;
 }
 
-bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
+bool ScDPLevels::hasByName( const OUString& aName )
 {
     tools::Long nCount = getCount();
     for (tools::Long i=0; i<nCount; i++)
@@ -1945,12 +1945,12 @@ bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
     return false;
 }
 
-cpo::uno::Type SAL_CALL ScDPLevels::getElementType()
+cpo::uno::Type ScDPLevels::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-bool SAL_CALL ScDPLevels::hasElements()
+bool ScDPLevels::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -2107,12 +2107,12 @@ ScDPMembers* ScDPLevel::GetMembersObject()
     return mxMembers.get();
 }
 
-uno::Reference<sheet::XMembersAccess> SAL_CALL ScDPLevel::getMembers()
+uno::Reference<sheet::XMembersAccess> ScDPLevel::getMembers()
 {
     return GetMembersObject();
 }
 
-cpo::uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
+cpo::uno::Sequence<sheet::MemberResult> ScDPLevel::getResults()
 {
     const cpo::uno::Sequence<sheet::MemberResult>* pRes = pSource->GetMemberResults( this );
     if (pRes)
@@ -2121,7 +2121,7 @@ cpo::uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
     return {};       //TODO: Error?
 }
 
-OUString SAL_CALL ScDPLevel::getName()
+OUString ScDPLevel::getName()
 {
     tools::Long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
@@ -2178,7 +2178,7 @@ OUString SAL_CALL ScDPLevel::getName()
     return pDim->getName();
 }
 
-void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ )
+void ScDPLevel::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
@@ -2196,7 +2196,7 @@ cpo::uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDPLevel::getPropertySetInfo()
 {
     static const SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
@@ -2214,7 +2214,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
     return aRef;
 }
 
-void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void ScDPLevel::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         bShowEmpty = lcl_GetBoolFromAny(aValue);
@@ -2243,7 +2243,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
     }
 }
 
-cpo::uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDPLevel::getPropertyValue( const OUString& aPropertyName )
 {
     cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
@@ -2395,7 +2395,7 @@ sal_Int32 ScDPMembers::GetIndexFromName( const OUString& rName ) const
         return -1;                      // not found
 }
 
-cpo::uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
+cpo::uno::Any ScDPMembers::getByName( const OUString& aName )
 {
     sal_Int32 nIndex = GetIndexFromName( aName );
     if ( nIndex >= 0 )
@@ -2409,22 +2409,22 @@ cpo::uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames()
+cpo::uno::Sequence<OUString> ScDPMembers::getElementNames()
 {
     return getElementNames( false );
 }
 
-bool SAL_CALL ScDPMembers::hasByName( const OUString& aName )
+bool ScDPMembers::hasByName( const OUString& aName )
 {
     return ( GetIndexFromName( aName ) >= 0 );
 }
 
-cpo::uno::Type SAL_CALL ScDPMembers::getElementType()
+cpo::uno::Type ScDPMembers::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-bool SAL_CALL ScDPMembers::hasElements()
+bool ScDPMembers::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -2433,7 +2433,7 @@ bool SAL_CALL ScDPMembers::hasElements()
 
 // XMembersAccess implementation
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
+cpo::uno::Sequence<OUString> ScDPMembers::getLocaleIndependentElementNames()
 {
     return getElementNames( true );
 }
@@ -2655,19 +2655,19 @@ OUString ScDPMember::GetNameStr( bool bLocaleIndependent ) const
     return OUString();
 }
 
-OUString SAL_CALL ScDPMember::getName()
+OUString ScDPMember::getName()
 {
     return GetNameStr( false );
 }
 
-void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ )
+void ScDPMember::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDPMember::getPropertySetInfo()
 {
     static const SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
@@ -2681,7 +2681,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void ScDPMember::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         bVisible = lcl_GetBoolFromAny(aValue);
@@ -2701,7 +2701,7 @@ void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const
     }
 }
 
-cpo::uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDPMember::getPropertyValue( const OUString& aPropertyName )
 {
     cpo::uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )

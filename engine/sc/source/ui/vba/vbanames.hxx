@@ -42,11 +42,11 @@ public:
     virtual ~ScVbaNames() override;
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& aName ,
+    virtual cpo::uno::Any Add( const cpo::uno::Any& aName ,
                     const cpo::uno::Any& aRefersTo,
                     const cpo::uno::Any& aVisible,
                     const cpo::uno::Any& aMacroType,

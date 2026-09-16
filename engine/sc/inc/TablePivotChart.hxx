@@ -48,20 +48,20 @@ public:
     using TablePivotChart_Base::disposing;
 
     // XEmbeddedObjectSupplier
-    virtual cpo::uno::Reference<css::lang::XComponent> SAL_CALL
+    virtual cpo::uno::Reference<css::lang::XComponent>
         getEmbeddedObject() override;
 
     // XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName(OUString const & aName) override;
+    virtual OUString getName() override;
+    virtual void setName(OUString const & aName) override;
 
     // XTablePivotChart
-    virtual OUString SAL_CALL getPivotTableName() override;
+    virtual OUString getPivotTableName() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(OUString const & ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 }

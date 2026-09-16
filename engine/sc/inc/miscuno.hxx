@@ -30,18 +30,18 @@
 #include "scdllapi.h"
 
 #define SC_SIMPLE_SERVICE_INFO_IMPL( ClassName, ClassNameAscii )            \
-OUString SAL_CALL ClassName::getImplementationName()                        \
+OUString ClassName::getImplementationName()                        \
 {                                                                           \
     return ClassNameAscii;                                                  \
 }                                                                           \
-bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
+bool ClassName::supportsService( const OUString& ServiceName ) \
 {                                                                           \
     return cppu::supportsService(this, ServiceName);                        \
 }
 
 #define SC_SIMPLE_SERVICE_INFO_NAME( ClassName, ServiceAscii ) \
 cpo::uno::Sequence< OUString >                                 \
-    SAL_CALL ClassName::getSupportedServiceNames()             \
+    ClassName::getSupportedServiceNames()             \
 {                                                              \
     cpo::uno::Sequence< OUString > aRet { ServiceAscii };      \
     return aRet;                                               \
@@ -52,7 +52,7 @@ cpo::uno::Sequence< OUString >                                 \
 // sequence. This mostly should be used by supportsService() iterating anyway.
 #define SC_SIMPLE_SERVICE_INFO_TYPO( ClassName, ServiceAscii, ServiceAsciiMistyped ) \
 cpo::uno::Sequence< OUString >                                                       \
-    SAL_CALL ClassName::getSupportedServiceNames()                                   \
+    ClassName::getSupportedServiceNames()                                   \
 {                                                                                    \
     cpo::uno::Sequence< OUString > aRet { ServiceAsciiMistyped, ServiceAscii };      \
     return aRet;                                                                     \
@@ -68,16 +68,16 @@ cpo::uno::Sequence< OUString >                                                  
 
 
 #define SC_IMPL_DUMMY_PROPERTY_LISTENER( ClassName )                                \
-    void SAL_CALL ClassName::addPropertyChangeListener( const OUString&,       \
+    void ClassName::addPropertyChangeListener( const OUString&,       \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::removePropertyChangeListener( const OUString&,    \
+    void ClassName::removePropertyChangeListener( const OUString&,    \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::addVetoableChangeListener( const OUString&,       \
+    void ClassName::addVetoableChangeListener( const OUString&,       \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::removeVetoableChangeListener( const OUString&,    \
+    void ClassName::removeVetoableChangeListener( const OUString&,    \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
     { OSL_FAIL("not implemented"); }
 
@@ -97,13 +97,13 @@ public:
     virtual                 ~ScIndexEnumeration() override;
 
                             // XEnumeration
-    virtual bool SAL_CALL hasMoreElements() override;
-    virtual cpo::uno::Any SAL_CALL nextElement() override;
+    virtual bool hasMoreElements() override;
+    virtual cpo::uno::Any nextElement() override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 //  new (uno 3) variant
@@ -121,17 +121,17 @@ public:
     virtual                 ~ScNameToIndexAccess() override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 class SC_DLLPUBLIC ScUnoHelpFunctions

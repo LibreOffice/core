@@ -101,7 +101,7 @@ void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // container::XNameAccess
 
-cpo::uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
+cpo::uno::Any ScLinkTargetTypesObj::getByName(const OUString& aName)
 {
     if (pDocShell)
     {
@@ -113,7 +113,7 @@ cpo::uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
+cpo::uno::Sequence<OUString> ScLinkTargetTypesObj::getElementNames()
 {
     cpo::uno::Sequence<OUString> aRet(SC_LINKTARGETTYPE_COUNT);
     OUString* pArray = aRet.getArray();
@@ -122,19 +122,19 @@ cpo::uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
     return aRet;
 }
 
-bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName)
+bool ScLinkTargetTypesObj::hasByName(const OUString& aName)
 {
     return std::find(std::begin(aNames), std::end(aNames), aName) != std::end(aNames);
 }
 
 // container::XElementAccess
 
-cpo::uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType()
+cpo::uno::Type ScLinkTargetTypesObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-bool SAL_CALL ScLinkTargetTypesObj::hasElements()
+bool ScLinkTargetTypesObj::hasElements()
 {
     return true;
 }
@@ -163,7 +163,7 @@ void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // document::XLinkTargetSupplier
 
-uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks()
+uno::Reference< container::XNameAccess >  ScLinkTargetTypeObj::getLinks()
 {
     uno::Reference< container::XNameAccess >  xCollection;
 
@@ -197,13 +197,13 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
 
 // beans::XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo >  ScLinkTargetTypeObj::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() ));
     return aRef;
 }
 
-void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aPropertyName */,
+void ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aPropertyName */,
             const cpo::uno::Any& /* aValue */)
 {
     //  everything is read-only
@@ -247,7 +247,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( cpo::uno::Any& rRet, sal_uInt16 n
     }
 }
 
-cpo::uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& PropertyName)
+cpo::uno::Any ScLinkTargetTypeObj::getPropertyValue(const OUString& PropertyName)
 {
     cpo::uno::Any aRet;
     if ( PropertyName == SC_UNO_LINKDISPBIT )
@@ -272,7 +272,7 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 
 // container::XNameAccess
 
-cpo::uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
+cpo::uno::Any ScLinkTargetsObj::getByName(const OUString& aName)
 {
     uno::Reference<beans::XPropertySet> xProp(xCollection->getByName(aName), uno::UNO_QUERY);
     if (xProp.is())
@@ -281,24 +281,24 @@ cpo::uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames()
+cpo::uno::Sequence<OUString> ScLinkTargetsObj::getElementNames()
 {
     return xCollection->getElementNames();
 }
 
-bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName)
+bool ScLinkTargetsObj::hasByName(const OUString& aName)
 {
     return xCollection->hasByName(aName);
 }
 
 // container::XElementAccess
 
-cpo::uno::Type SAL_CALL ScLinkTargetsObj::getElementType()
+cpo::uno::Type ScLinkTargetsObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-bool SAL_CALL ScLinkTargetsObj::hasElements()
+bool ScLinkTargetsObj::hasElements()
 {
     return xCollection->hasElements();
 }
@@ -360,7 +360,7 @@ void ScOleObjectsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // container::XNameAccess
 
-cpo::uno::Any SAL_CALL ScOleObjectsObj::getByName(const OUString& aName)
+cpo::uno::Any ScOleObjectsObj::getByName(const OUString& aName)
 {
     if (hasByName(aName))
         return cpo::uno::Any(uno::Reference<beans::XPropertySet>(new ScOleObjectLinkTargetObj(aName)));
@@ -368,13 +368,13 @@ cpo::uno::Any SAL_CALL ScOleObjectsObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScOleObjectsObj::getElementNames()
+cpo::uno::Sequence<OUString> ScOleObjectsObj::getElementNames()
 {
     const std::vector<OUString> aNames = lcl_GetOleObjectNames(pDocShell);
     return cpo::uno::Sequence<OUString>(aNames.data(), aNames.size());
 }
 
-bool SAL_CALL ScOleObjectsObj::hasByName(const OUString& aName)
+bool ScOleObjectsObj::hasByName(const OUString& aName)
 {
     const std::vector<OUString> aNames = lcl_GetOleObjectNames(pDocShell);
     return std::find(aNames.begin(), aNames.end(), aName) != aNames.end();
@@ -382,12 +382,12 @@ bool SAL_CALL ScOleObjectsObj::hasByName(const OUString& aName)
 
 // container::XElementAccess
 
-cpo::uno::Type SAL_CALL ScOleObjectsObj::getElementType()
+cpo::uno::Type ScOleObjectsObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
-bool SAL_CALL ScOleObjectsObj::hasElements()
+bool ScOleObjectsObj::hasElements()
 {
     return !lcl_GetOleObjectNames(pDocShell).empty();
 }
@@ -403,19 +403,19 @@ ScOleObjectLinkTargetObj::~ScOleObjectLinkTargetObj()
 
 // beans::XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ScOleObjectLinkTargetObj::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ScOleObjectLinkTargetObj::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() ));
     return aRef;
 }
 
-void SAL_CALL ScOleObjectLinkTargetObj::setPropertyValue(const OUString&,
+void ScOleObjectLinkTargetObj::setPropertyValue(const OUString&,
             const cpo::uno::Any&)
 {
     throw beans::PropertyVetoException(u"LinkDisplayName and LinkDisplayBitmap are read-only."_ustr);
 }
 
-cpo::uno::Any SAL_CALL ScOleObjectLinkTargetObj::getPropertyValue(const OUString& PropertyName)
+cpo::uno::Any ScOleObjectLinkTargetObj::getPropertyValue(const OUString& PropertyName)
 {
     cpo::uno::Any aRet;
     if ( PropertyName == SC_UNO_LINKDISPBIT )

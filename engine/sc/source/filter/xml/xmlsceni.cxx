@@ -93,7 +93,7 @@ ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
     GetScImport().UnlockSolarMutex();
 }
 
-void SAL_CALL ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     SCTAB nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc(GetScImport().GetDocument());

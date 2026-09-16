@@ -112,19 +112,19 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index )
 
 // public vba functions
 
-OUString SAL_CALL
+OUString
 ScVbaComment::getAuthor()
 {
     return getAnnotation()->getAuthor();
 }
 
-void SAL_CALL
+void
 ScVbaComment::setAuthor( const OUString& /*_author*/ )
 {
     // #TODO #FIXME  implementation needed
 }
 
-uno::Reference< msforms::XShape > SAL_CALL
+uno::Reference< msforms::XShape >
 ScVbaComment::getShape()
 {
     uno::Reference< sheet::XSheetAnnotationShapeSupplier > xAnnoShapeSupp( getAnnotation(), uno::UNO_QUERY_THROW );
@@ -135,39 +135,39 @@ ScVbaComment::getShape()
     return new ScVbaShape( this, mxContext, xAnnoShape, xShapes, mxModel, office::MsoShapeType::msoComment );
 }
 
-bool SAL_CALL
+bool
 ScVbaComment::getVisible()
 {
     return getAnnotation()->getIsVisible();
 }
 
-void SAL_CALL
+void
 ScVbaComment::setVisible( bool _visible )
 {
     getAnnotation()->setIsVisible( _visible );
 }
 
-void SAL_CALL
+void
 ScVbaComment::Delete()
 {
     getAnnotations()->removeByIndex( getAnnotationIndex() );
 }
 
-uno::Reference< excel::XComment > SAL_CALL
+uno::Reference< excel::XComment >
 ScVbaComment::Next()
 {
     // index: uno = 0, vba = 1
     return getCommentByIndex( getAnnotationIndex() + 2 );
 }
 
-uno::Reference< excel::XComment > SAL_CALL
+uno::Reference< excel::XComment >
 ScVbaComment::Previous()
 {
     // index: uno = 0, vba = 1
     return getCommentByIndex( getAnnotationIndex() );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaComment::Text( const cpo::uno::Any& aText, const cpo::uno::Any& aStart, const cpo::uno::Any& Overwrite )
 {
     OUString sText;

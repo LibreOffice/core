@@ -53,17 +53,17 @@ public:
         const cpo::uno::Reference< css::table::XCellRange >& xRange );
 
     // Attributes
-    virtual OUString SAL_CALL getAuthor() override;
-    virtual void SAL_CALL setAuthor( const OUString& _author ) override;
-    virtual cpo::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool _visible ) override;
+    virtual OUString getAuthor() override;
+    virtual void setAuthor( const OUString& _author ) override;
+    virtual cpo::uno::Reference< ov::msforms::XShape > getShape() override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool _visible ) override;
 
     // Methods
-    virtual void SAL_CALL Delete() override;
-    virtual cpo::uno::Reference< ov::excel::XComment > SAL_CALL Next() override;
-    virtual cpo::uno::Reference< ov::excel::XComment > SAL_CALL Previous() override;
-    virtual OUString SAL_CALL Text( const cpo::uno::Any& Text, const cpo::uno::Any& Start, const cpo::uno::Any& Overwrite ) override;
+    virtual void Delete() override;
+    virtual cpo::uno::Reference< ov::excel::XComment > Next() override;
+    virtual cpo::uno::Reference< ov::excel::XComment > Previous() override;
+    virtual OUString Text( const cpo::uno::Any& Text, const cpo::uno::Any& Start, const cpo::uno::Any& Overwrite ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

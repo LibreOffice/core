@@ -46,12 +46,12 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
     virtual void useInternalChartDataTable( bool bInternal ) override;
 
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     WorkbookGlobals*    mpBookGlob;
 };

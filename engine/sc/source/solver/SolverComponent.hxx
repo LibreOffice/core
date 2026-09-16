@@ -99,35 +99,35 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;    // from OPropertyArrayUsageHelper
 
                             // XSolver
-    virtual cpo::uno::Reference< css::sheet::XSpreadsheetDocument > SAL_CALL getDocument() override;
-    virtual void SAL_CALL   setDocument( const cpo::uno::Reference<
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheetDocument > getDocument() override;
+    virtual void   setDocument( const cpo::uno::Reference<
                                     css::sheet::XSpreadsheetDocument >& _document ) override;
-    virtual css::table::CellAddress SAL_CALL getObjective() override;
-    virtual void SAL_CALL   setObjective( const css::table::CellAddress& _objective ) override;
-    virtual cpo::uno::Sequence< css::table::CellAddress > SAL_CALL getVariables() override;
-    virtual void SAL_CALL   setVariables( const cpo::uno::Sequence<
+    virtual css::table::CellAddress getObjective() override;
+    virtual void   setObjective( const css::table::CellAddress& _objective ) override;
+    virtual cpo::uno::Sequence< css::table::CellAddress > getVariables() override;
+    virtual void   setVariables( const cpo::uno::Sequence<
                                     css::table::CellAddress >& _variables ) override;
-    virtual cpo::uno::Sequence< css::sheet::SolverConstraint > SAL_CALL getConstraints() override;
-    virtual void SAL_CALL   setConstraints( const cpo::uno::Sequence<
+    virtual cpo::uno::Sequence< css::sheet::SolverConstraint > getConstraints() override;
+    virtual void   setConstraints( const cpo::uno::Sequence<
                                     css::sheet::SolverConstraint >& _constraints ) override;
-    virtual bool SAL_CALL getMaximize() override;
-    virtual void SAL_CALL   setMaximize( bool _maximize ) override;
+    virtual bool getMaximize() override;
+    virtual void   setMaximize( bool _maximize ) override;
 
-    virtual bool SAL_CALL getSuccess() override;
-    virtual double SAL_CALL getResultValue() override;
-    virtual cpo::uno::Sequence< double > SAL_CALL getSolution() override;
+    virtual bool getSuccess() override;
+    virtual double getResultValue() override;
+    virtual cpo::uno::Sequence< double > getSolution() override;
 
-    virtual void SAL_CALL solve() override = 0;
+    virtual void solve() override = 0;
 
                             // XSolverDescription
-    virtual OUString SAL_CALL getComponentDescription() override = 0;
-    virtual OUString SAL_CALL getStatusDescription() override;
-    virtual OUString SAL_CALL getPropertyDescription( const OUString& aPropertyName ) override;
+    virtual OUString getComponentDescription() override = 0;
+    virtual OUString getStatusDescription() override;
+    virtual OUString getPropertyDescription( const OUString& aPropertyName ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override = 0;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override = 0;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2032,7 +2032,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
         }
 
         // XTransferable
-        cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        cpo::uno::Any getTransferData(const datatransfer::DataFlavor& aFlavor) override
         {
             if (!isDataFlavorSupported(aFlavor))
                 return {};
@@ -2041,11 +2041,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
             return cpo::uno::Any(bytes);
         }
-        cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        cpo::uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override
         {
             return { getBiff12Flavor() };
         }
-        bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        bool isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
         {
             return aFlavor.MimeType.equalsIgnoreAsciiCase(getBiff12Flavor().MimeType);
         }

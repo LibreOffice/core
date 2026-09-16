@@ -78,19 +78,19 @@ ScVbaChartObject::setShape()
     return nullptr;
 }
 
-void SAL_CALL
+void
 ScVbaChartObject::setName( const OUString& sName )
 {
     xNamedShape->setName(sName);
 }
 
-OUString SAL_CALL
+OUString
 ScVbaChartObject::getName()
 {
     return xNamedShape->getName();
 }
 
-void SAL_CALL
+void
 ScVbaChartObject::Delete()
 {
     // parent of this object is sheet
@@ -122,7 +122,7 @@ ScVbaChartObject::Activate()
     }
 }
 
-uno::Reference< excel::XChart > SAL_CALL
+uno::Reference< excel::XChart >
 ScVbaChartObject::getChart()
 {
     return new ScVbaChart( this, mxContext, xEmbeddedObjectSupplier->getEmbeddedObject(), xTableChart );

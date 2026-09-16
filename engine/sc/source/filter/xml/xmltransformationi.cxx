@@ -28,7 +28,7 @@ ScXMLTransformationsContext::ScXMLTransformationsContext(ScXMLImport& rImport)
 ScXMLTransformationsContext::~ScXMLTransformationsContext() {}
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLTransformationsContext::createFastChildContext(
+    ScXMLTransformationsContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     SvXMLImportContext* pContext = nullptr;
@@ -100,7 +100,7 @@ ScXMLColumnRemoveContext::~ScXMLColumnRemoveContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnRemoveContext::createFastChildContext(
+    ScXMLColumnRemoveContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     sax_fastparser::FastAttributeList* pAttribList
@@ -204,7 +204,7 @@ ScXMLColumnMergeContext::~ScXMLColumnMergeContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnMergeContext::createFastChildContext(
+    ScXMLColumnMergeContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)
@@ -238,7 +238,7 @@ ScXMLColumnSortContext::~ScXMLColumnSortContext() {}
 
 /*
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnSortContext::createFastChildContext(
+    ScXMLColumnSortContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
 
@@ -292,7 +292,7 @@ ScXMLColumnTextContext::~ScXMLColumnTextContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnTextContext::createFastChildContext(
+    ScXMLColumnTextContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)
@@ -363,7 +363,7 @@ ScXMLColumnAggregateContext::~ScXMLColumnAggregateContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnAggregateContext::createFastChildContext(
+    ScXMLColumnAggregateContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)
@@ -457,7 +457,7 @@ ScXMLColumnNumberContext::~ScXMLColumnNumberContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnNumberContext::createFastChildContext(
+    ScXMLColumnNumberContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)
@@ -513,7 +513,7 @@ ScXMLColumnRemoveNullContext::~ScXMLColumnRemoveNullContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL ScXMLColumnRemoveNullContext::createFastChildContext(
+    ScXMLColumnRemoveNullContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)
@@ -609,7 +609,7 @@ ScXMLDateTimeContext::~ScXMLDateTimeContext()
     }
 }
 
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL ScXMLDateTimeContext::createFastChildContext(
+uno::Reference<xml::sax::XFastContextHandler> ScXMLDateTimeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     switch (nElement)

@@ -414,7 +414,7 @@ void ScSelectionTransferObj::ObjectReleased()
     TransferableHelper::ObjectReleased();
 }
 
-bool SAL_CALL ScSelectionTransferObj::isComplex()
+bool ScSelectionTransferObj::isComplex()
 {
     switch (eMode)
     {

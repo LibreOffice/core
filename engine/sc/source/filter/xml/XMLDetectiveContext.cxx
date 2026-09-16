@@ -68,7 +68,7 @@ ScXMLDetectiveContext::~ScXMLDetectiveContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDetectiveContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext*     pContext    = nullptr;
@@ -132,7 +132,7 @@ ScXMLDetectiveHighlightedContext::~ScXMLDetectiveHighlightedContext()
 {
 }
 
-void SAL_CALL ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     switch( aDetectiveObj.eObjType )
     {
@@ -182,7 +182,7 @@ ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()
 {
 }
 
-void SAL_CALL ScXMLDetectiveOperationContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDetectiveOperationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if( bHasType && (aDetectiveOp.nIndex >= 0) )
         GetScImport().GetDetectiveOpArray()->AddDetectiveOp( aDetectiveOp );

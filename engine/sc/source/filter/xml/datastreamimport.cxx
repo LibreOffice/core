@@ -62,7 +62,7 @@ ScXMLDataStreamContext::ScXMLDataStreamContext(
 
 ScXMLDataStreamContext::~ScXMLDataStreamContext() {}
 
-void SAL_CALL ScXMLDataStreamContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDataStreamContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!maRange.IsValid())
         // Range must be valid.

@@ -23,7 +23,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaMenuBar( const cpo::uno::Reference< ov::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< ov::XCommandBar > xCommandBar );
 
-    virtual cpo::uno::Any SAL_CALL Menus( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Menus( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

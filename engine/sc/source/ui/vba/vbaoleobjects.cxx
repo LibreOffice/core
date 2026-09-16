@@ -50,12 +50,12 @@ public:
         }
     }
 
-    virtual ::sal_Int32 SAL_CALL getCount() override
+    virtual ::sal_Int32 getCount() override
     {
         return vObjects.size();
     }
 
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -63,12 +63,12 @@ public:
     }
 
         // Methods XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type getElementType() override
         {
             return cppu::UnoType<drawing::XControlShape>::get();
         }
 
-        virtual bool SAL_CALL hasElements() override
+        virtual bool hasElements() override
         {
             return ( getCount() > 0 );
         }
@@ -88,12 +88,12 @@ public:
                      uno::Reference< container::XIndexAccess > xIndexAccess )
             :  m_xParent(std::move( xParent )), m_xContext(std::move( xContext)), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
 
-        virtual bool SAL_CALL hasMoreElements(  ) override
+        virtual bool hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any nextElement(  ) override
         {
             if ( nIndex < m_xIndexAccess->getCount() )
             {

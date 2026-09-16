@@ -43,12 +43,12 @@ public:
     void removeByName(const OUString& _sChartName);
 
     // XChartObjects
-    virtual cpo::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) override;
-    virtual void SAL_CALL Delete(  ) override;
+    virtual cpo::uno::Any Add( double Left, double Top, double Width, double Height ) override;
+    virtual void Delete(  ) override;
     // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     // ChartObjects_BASE

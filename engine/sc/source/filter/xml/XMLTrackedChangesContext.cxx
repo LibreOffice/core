@@ -56,10 +56,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLBigRangeContext : public ScXMLImportContext
@@ -92,10 +92,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDependenceContext : public ScXMLImportContext
@@ -114,7 +114,7 @@ public:
     ScXMLDependingsContext( ScXMLImport& rImport,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -135,7 +135,7 @@ public:
     ScXMLDeletionsContext( ScXMLImport& rImport,
                            ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -156,12 +156,12 @@ public:
                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class ScXMLChangeCellContext : public ScXMLImportContext
@@ -187,14 +187,14 @@ public:
                                       OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void CreateTextPContext(bool bIsNewParagraph);
     bool IsEditCell() const { return mpEditTextObj.is(); }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLPreviousContext : public ScXMLImportContext
@@ -218,10 +218,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLContentChangeContext : public ScXMLImportContext
@@ -234,10 +234,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLInsertionContext : public ScXMLImportContext
@@ -249,10 +249,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLInsertionCutOffContext : public ScXMLImportContext
@@ -279,7 +279,7 @@ public:
     ScXMLCutOffsContext( ScXMLImport& rImport,
                          ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
@@ -292,10 +292,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLMovementContext : public ScXMLImportContext
@@ -309,10 +309,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLRejectionContext : public ScXMLImportContext
@@ -324,10 +324,10 @@ public:
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 }
@@ -360,7 +360,7 @@ ScXMLTrackedChangesContext::~ScXMLTrackedChangesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTrackedChangesContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLTrackedChangesContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -430,7 +430,7 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLChangeInfoContext
     return pContext;
 }
 
-void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
     if (!::sax::Converter::parseDateTime(aInfo.aDateTime, sDateTimeBuffer))
@@ -528,7 +528,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellContentDeletionContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLCellContentDeletionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -550,7 +550,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellContentDeletio
     return pContext;
 }
 
-void SAL_CALL ScXMLCellContentDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLCellContentDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     std::unique_ptr<ScMyCellInfo> pCellInfo(new ScMyCellInfo(maCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType,
             nMatrixFlag, nMatrixCols, nMatrixRows));
@@ -583,7 +583,7 @@ ScXMLDependingsContext::ScXMLDependingsContext(  ScXMLImport& rImport,
     // here are no attributes
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDependingsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDependingsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -623,7 +623,7 @@ ScXMLDeletionsContext::ScXMLDeletionsContext(  ScXMLImport& rImport,
     // here are no attributes
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionsContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDeletionsContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -655,7 +655,7 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     // here are no attributes
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLChangeTextPContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLChangeTextPContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
@@ -840,7 +840,7 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
     GetScImport().GetTextImport()->SetCursor(xTextCursor);
 }
 
-void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!bEmpty)
     {
@@ -905,7 +905,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     }
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLPreviousContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLPreviousContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -919,7 +919,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLPreviousContext::c
     return pContext;
 }
 
-void SAL_CALL ScXMLPreviousContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLPreviousContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetPreviousChange(nID, new ScMyCellInfo(maOldCell, sFormulaAddress, sFormula, eGrammar, sInputString,
         fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows));
@@ -962,7 +962,7 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentChangeContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLContentChangeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -991,7 +991,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentChangeConte
     return pContext;
 }
 
-void SAL_CALL ScXMLContentChangeContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLContentChangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetBigRange(aBigRange);
     pChangeTrackingImportHelper->EndChangeAction();
@@ -1055,7 +1055,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetPosition(nPosition, nCount, nTable);
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLInsertionContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLInsertionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -1078,7 +1078,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLInsertionContext::
     return pContext;
 }
 
-void SAL_CALL ScXMLInsertionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLInsertionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
@@ -1221,7 +1221,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetMultiSpanned(static_cast<sal_Int16>(nMultiSpanned));
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDeletionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -1247,7 +1247,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionContext::c
     return pContext;
 }
 
-void SAL_CALL ScXMLDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
@@ -1290,7 +1290,7 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMovementContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLMovementContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -1319,7 +1319,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMovementContext::c
     return pContext;
 }
 
-void SAL_CALL ScXMLMovementContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLMovementContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetMoveRanges(aSourceRange, aTargetRange);
     pChangeTrackingImportHelper->EndChangeAction();
@@ -1363,7 +1363,7 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLRejectionContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLRejectionContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -1386,7 +1386,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLRejectionContext::
     return pContext;
 }
 
-void SAL_CALL ScXMLRejectionContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLRejectionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }

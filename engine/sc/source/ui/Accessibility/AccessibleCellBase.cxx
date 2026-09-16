@@ -80,7 +80,7 @@ bool ScAccessibleCellBase::isVisible()
     return bVisible;
 }
 
-sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
+sal_Int32 ScAccessibleCellBase::getForeground()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -119,7 +119,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
     return nColor;
 }
 
-sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
+sal_Int32 ScAccessibleCellBase::getBackground()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -186,7 +186,7 @@ OUString
 
     //=====  XAccessibleValue  ================================================
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     ScAccessibleCellBase::getCurrentValue()
 {
     SolarMutexGuard aGuard;
@@ -199,7 +199,7 @@ cpo::uno::Any SAL_CALL
     return aAny;
 }
 
-bool SAL_CALL
+bool
     ScAccessibleCellBase::setCurrentValue( const cpo::uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
@@ -223,19 +223,19 @@ bool SAL_CALL
     return bResult;
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     ScAccessibleCellBase::getMaximumValue(  )
 {
     return cpo::uno::Any(DBL_MAX);
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     ScAccessibleCellBase::getMinimumValue(  )
 {
     return cpo::uno::Any(-DBL_MAX);
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     ScAccessibleCellBase::getMinimumIncrement(  )
 {
     return cpo::uno::Any();

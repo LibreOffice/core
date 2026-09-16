@@ -85,7 +85,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setVerticalAlignment( const cpo::uno::Any& _oAlignment)
 {
     try
@@ -123,7 +123,7 @@ ScVbaFormat< Ifc... >::setVerticalAlignment( const cpo::uno::Any& _oAlignment)
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getVerticalAlignment(  )
 {
     cpo::uno::Any aResult = aNULL();
@@ -158,7 +158,7 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setHorizontalAlignment( const cpo::uno::Any& HorizontalAlignment )
 {
     try
@@ -196,7 +196,7 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const cpo::uno::Any& HorizontalAl
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getHorizontalAlignment(  )
 {
     cpo::uno::Any NRetAlignment = aNULL();
@@ -237,7 +237,7 @@ ScVbaFormat< Ifc... >::getHorizontalAlignment(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setOrientation( const cpo::uno::Any& _aOrientation )
 {
     try
@@ -274,7 +274,7 @@ ScVbaFormat< Ifc... >::setOrientation( const cpo::uno::Any& _aOrientation )
     }
 }
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getOrientation(  )
 {
     cpo::uno::Any NRetOrientation = aNULL();
@@ -313,7 +313,7 @@ ScVbaFormat< Ifc... >::getOrientation(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setWrapText( const cpo::uno::Any& _aWrapText )
 {
     try
@@ -327,7 +327,7 @@ ScVbaFormat< Ifc... >::setWrapText( const cpo::uno::Any& _aWrapText )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getWrapText(  )
 {
     cpo::uno::Any aWrap = aNULL();
@@ -347,7 +347,7 @@ ScVbaFormat< Ifc... >::getWrapText(  )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::Borders( const cpo::uno::Any& Index )
 {
     ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
@@ -361,7 +361,7 @@ ScVbaFormat< Ifc... >::Borders( const cpo::uno::Any& Index )
 }
 
 template< typename... Ifc >
-uno::Reference< excel::XFont > SAL_CALL
+uno::Reference< excel::XFont >
 ScVbaFormat< Ifc... >::Font(  )
 {
     ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
@@ -369,14 +369,14 @@ ScVbaFormat< Ifc... >::Font(  )
 }
 
 template< typename... Ifc >
-uno::Reference< excel::XInterior > SAL_CALL
+uno::Reference< excel::XInterior >
 ScVbaFormat< Ifc... >::Interior(  )
 {
     return new ScVbaInterior( thisHelperIface(), ScVbaFormat_BASE::mxContext, mxPropertySet );
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 {
     cpo::uno::Any aRet{ OUString() };
@@ -407,7 +407,7 @@ ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setNumberFormatLocal( const cpo::uno::Any& _oLocalFormatString )
 {
     try
@@ -436,7 +436,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const cpo::uno::Any& _oLocalFormatS
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setNumberFormat( const cpo::uno::Any& _oFormatString )
 {
     try
@@ -467,7 +467,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const cpo::uno::Any& _oFormatString )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setIndentLevel( const cpo::uno::Any& _aLevel )
 {
     try
@@ -491,7 +491,7 @@ ScVbaFormat< Ifc... >::setIndentLevel( const cpo::uno::Any& _aLevel )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getIndentLevel(  )
 {
     cpo::uno::Any NRetIndentLevel = aNULL();
@@ -515,7 +515,7 @@ ScVbaFormat< Ifc... >::getIndentLevel(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setLocked( const cpo::uno::Any& _aLocked )
 {
     try
@@ -536,7 +536,7 @@ ScVbaFormat< Ifc... >::setLocked( const cpo::uno::Any& _aLocked )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setFormulaHidden( const cpo::uno::Any& FormulaHidden )
 {
     try
@@ -556,7 +556,7 @@ ScVbaFormat< Ifc... >::setFormulaHidden( const cpo::uno::Any& FormulaHidden )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getLocked(  )
 {
     cpo::uno::Any aCellProtection = aNULL();
@@ -590,7 +590,7 @@ ScVbaFormat< Ifc... >::getLocked(  )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getFormulaHidden(  )
 {
     cpo::uno::Any aBoolRet = aNULL();
@@ -623,7 +623,7 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setShrinkToFit( const cpo::uno::Any& ShrinkToFit )
 {
     try
@@ -638,7 +638,7 @@ ScVbaFormat< Ifc... >::setShrinkToFit( const cpo::uno::Any& ShrinkToFit )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getShrinkToFit(  )
 {
     cpo::uno::Any aRet = aNULL();
@@ -656,7 +656,7 @@ ScVbaFormat< Ifc... >::getShrinkToFit(  )
 }
 
 template< typename... Ifc >
-void SAL_CALL
+void
 ScVbaFormat< Ifc... >::setReadingOrder( const cpo::uno::Any& ReadingOrder )
 {
     try
@@ -692,7 +692,7 @@ ScVbaFormat< Ifc... >::setReadingOrder( const cpo::uno::Any& ReadingOrder )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getReadingOrder(  )
 {
     cpo::uno::Any NRetReadingOrder = aNULL();
@@ -725,7 +725,7 @@ ScVbaFormat< Ifc... >::getReadingOrder(  )
 }
 
 template< typename... Ifc >
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFormat< Ifc... >::getNumberFormat(  )
 {
     cpo::uno::Any aFormat = aNULL();

@@ -92,13 +92,13 @@ ScCellSearchObj::~ScCellSearchObj()
 
 // XSearchDescriptor
 
-OUString SAL_CALL ScCellSearchObj::getSearchString()
+OUString ScCellSearchObj::getSearchString()
 {
     SolarMutexGuard aGuard;
     return pSearchItem->GetSearchString();
 }
 
-void SAL_CALL ScCellSearchObj::setSearchString( const OUString& aString )
+void ScCellSearchObj::setSearchString( const OUString& aString )
 {
     SolarMutexGuard aGuard;
     pSearchItem->SetSearchString( aString );
@@ -106,13 +106,13 @@ void SAL_CALL ScCellSearchObj::setSearchString( const OUString& aString )
 
 // XReplaceDescriptor
 
-OUString SAL_CALL ScCellSearchObj::getReplaceString()
+OUString ScCellSearchObj::getReplaceString()
 {
     SolarMutexGuard aGuard;
     return pSearchItem->GetReplaceString();
 }
 
-void SAL_CALL ScCellSearchObj::setReplaceString( const OUString& aReplaceString )
+void ScCellSearchObj::setReplaceString( const OUString& aReplaceString )
 {
     SolarMutexGuard aGuard;
     pSearchItem->SetReplaceString( aReplaceString );
@@ -120,7 +120,7 @@ void SAL_CALL ScCellSearchObj::setReplaceString( const OUString& aReplaceString 
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScCellSearchObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -128,7 +128,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySet
     return aRef;
 }
 
-void SAL_CALL ScCellSearchObj::setPropertyValue(
+void ScCellSearchObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -151,7 +151,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     else if (aPropertyName == SC_UNO_SRCHWCESCCHAR) pSearchItem->SetWildcardEscapeCharacter( ScUnoHelpFunctions::GetInt32FromAny(aValue) );
 }
 
-cpo::uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;
@@ -180,17 +180,17 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellSearchObj::getImplementationName()
+OUString ScCellSearchObj::getImplementationName()
 {
     return u"ScCellSearchObj"_ustr;
 }
 
-bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
+bool ScCellSearchObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScCellSearchObj::getSupportedServiceNames()
 {
     return {SCSEARCHDESCRIPTOR_SERVICE, SCREPLACEDESCRIPTOR_SERVICE};
 }

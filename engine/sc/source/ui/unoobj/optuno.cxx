@@ -168,7 +168,7 @@ ScDocOptionsObj::~ScDocOptionsObj()
 {
 }
 
-void SAL_CALL ScDocOptionsObj::setPropertyValue(
+void ScDocOptionsObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -179,7 +179,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
         ScModelObj::setPropertyValue( aPropertyName, aValue );
 }
 
-cpo::uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 

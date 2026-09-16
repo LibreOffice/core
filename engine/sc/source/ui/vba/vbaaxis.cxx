@@ -68,14 +68,14 @@ ScVbaAxis::ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent,
     setCrosses(xlAxisCrossesAutomatic);
 }
 
-void SAL_CALL
+void
 ScVbaAxis::Delete(  )
 {
     uno::Reference< lang::XComponent > xComponent( mxPropertySet, uno::UNO_QUERY_THROW );
     xComponent->dispose();
 }
 
- uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL
+ uno::Reference< ::ooo::vba::excel::XAxisTitle >
 ScVbaAxis::getAxisTitle(  )
 {
     rtl::Reference< ScVbaAxisTitle > xAxisTitle;
@@ -108,20 +108,20 @@ ScVbaAxis::getAxisTitle(  )
 
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setDisplayUnit( ::sal_Int32 /*DisplayUnit*/ )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaAxis::getDisplayUnit(  )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
     return -1;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
 {
     try
@@ -154,7 +154,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
     }
 }
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaAxis::getCrosses(  )
 {
     sal_Int32 nCrosses = xlAxisCrossesCustom;
@@ -188,7 +188,7 @@ ScVbaAxis::getCrosses(  )
     return nCrosses;
 }
 
- void SAL_CALL
+ void
 ScVbaAxis::setCrossesAt( double _fCrossesAt )
 {
     try
@@ -203,7 +203,7 @@ ScVbaAxis::setCrossesAt( double _fCrossesAt )
     }
 }
 
- double SAL_CALL
+ double
 ScVbaAxis::getCrossesAt(  )
 {
     double fCrosses = 0.0;
@@ -218,19 +218,19 @@ ScVbaAxis::getCrossesAt(  )
     return fCrosses;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setType( ::sal_Int32 _nType )
 {
     mnType = _nType;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaAxis::getType(  )
 {
     return mnType;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setHasTitle( bool _bHasTitle )
 {
     try
@@ -256,7 +256,7 @@ ScVbaAxis::setHasTitle( bool _bHasTitle )
     }
 }
 
- bool SAL_CALL
+ bool
 ScVbaAxis::getHasTitle(  )
 {
     bool bHasTitle = false;
@@ -283,7 +283,7 @@ ScVbaAxis::getHasTitle(  )
     return bHasTitle;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMinorUnit( double _fMinorUnit )
 {
     try
@@ -297,7 +297,7 @@ ScVbaAxis::setMinorUnit( double _fMinorUnit )
     }
 }
 
-double SAL_CALL
+double
 ScVbaAxis::getMinorUnit(  )
 {
     double fMinor = 1.0;
@@ -313,7 +313,7 @@ ScVbaAxis::getMinorUnit(  )
     return fMinor;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMinorUnitIsAuto( bool _bMinorUnitIsAuto )
 {
     try
@@ -327,7 +327,7 @@ ScVbaAxis::setMinorUnitIsAuto( bool _bMinorUnitIsAuto )
     }
 }
 
- bool SAL_CALL
+ bool
 ScVbaAxis::getMinorUnitIsAuto(  )
 {
     bool bIsAuto = false;
@@ -345,20 +345,20 @@ ScVbaAxis::getMinorUnitIsAuto(  )
     return bIsAuto;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setReversePlotOrder( bool /*ReversePlotOrder*/ )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
 }
 
-bool SAL_CALL
+bool
 ScVbaAxis::getReversePlotOrder(  )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, {});
     return false;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMajorUnit( double _fMajorUnit )
 {
     try
@@ -374,7 +374,7 @@ ScVbaAxis::setMajorUnit( double _fMajorUnit )
     }
 }
 
-double SAL_CALL
+double
 ScVbaAxis::getMajorUnit(  )
 {
     double fMax = 1.0;
@@ -390,7 +390,7 @@ ScVbaAxis::getMajorUnit(  )
     return fMax;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMajorUnitIsAuto( bool _bMajorUnitIsAuto )
 {
     try
@@ -406,7 +406,7 @@ ScVbaAxis::setMajorUnitIsAuto( bool _bMajorUnitIsAuto )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaAxis::getMajorUnitIsAuto(  )
 {
     bool bIsAuto = false;
@@ -424,7 +424,7 @@ ScVbaAxis::getMajorUnitIsAuto(  )
     return bIsAuto;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMaximumScale( double _fMaximumScale )
 {
     try
@@ -440,7 +440,7 @@ ScVbaAxis::setMaximumScale( double _fMaximumScale )
     }
 }
 
-double SAL_CALL
+double
 ScVbaAxis::getMaximumScale(  )
 {
     double fMax = 1.0;
@@ -459,7 +459,7 @@ ScVbaAxis::getMaximumScale(  )
 
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMaximumScaleIsAuto( bool _bMaximumScaleIsAuto )
 {
     try
@@ -474,7 +474,7 @@ ScVbaAxis::setMaximumScaleIsAuto( bool _bMaximumScaleIsAuto )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaAxis::getMaximumScaleIsAuto(  )
 {
     bool bIsAuto = false;
@@ -490,7 +490,7 @@ ScVbaAxis::getMaximumScaleIsAuto(  )
     return bIsAuto;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMinimumScale( double _fMinimumScale )
 {
     try
@@ -504,7 +504,7 @@ ScVbaAxis::setMinimumScale( double _fMinimumScale )
     }
 }
 
-double SAL_CALL
+double
 ScVbaAxis::getMinimumScale(  )
 {
     double fMin = 0.0;
@@ -520,7 +520,7 @@ ScVbaAxis::getMinimumScale(  )
     return fMin;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setMinimumScaleIsAuto( bool _bMinimumScaleIsAuto )
 {
     try
@@ -536,7 +536,7 @@ ScVbaAxis::setMinimumScaleIsAuto( bool _bMinimumScaleIsAuto )
     }
 }
 
-bool SAL_CALL
+bool
 ScVbaAxis::getMinimumScaleIsAuto(  )
 {
     bool bIsAuto = false;
@@ -554,13 +554,13 @@ ScVbaAxis::getMinimumScaleIsAuto(  )
     return bIsAuto;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaAxis::getAxisGroup(  )
 {
     return mnGroup;
 }
 
-void SAL_CALL
+void
 ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType )
 {
     try
@@ -587,7 +587,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType )
     }
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaAxis::getScaleType(  )
 {
     sal_Int32 nScaleType = xlScaleLinear;
@@ -610,37 +610,37 @@ ScVbaAxis::getScaleType(  )
     return nScaleType;
 }
 
-double SAL_CALL
+double
 ScVbaAxis::getHeight(  )
 {
     return maShapeHelper.getHeight();
 }
 
-void SAL_CALL ScVbaAxis::setHeight( double height )
+void ScVbaAxis::setHeight( double height )
 {
     maShapeHelper.setHeight( height );
 }
-double SAL_CALL ScVbaAxis::getWidth(  )
+double ScVbaAxis::getWidth(  )
 {
     return maShapeHelper.getWidth( );
 }
-void SAL_CALL ScVbaAxis::setWidth( double width )
+void ScVbaAxis::setWidth( double width )
 {
     maShapeHelper.setWidth( width );
 }
-double SAL_CALL ScVbaAxis::getTop(  )
+double ScVbaAxis::getTop(  )
 {
     return maShapeHelper.getTop( );
 }
-void SAL_CALL ScVbaAxis::setTop( double top )
+void ScVbaAxis::setTop( double top )
 {
     maShapeHelper.setTop( top );
 }
-double SAL_CALL ScVbaAxis::getLeft(  )
+double ScVbaAxis::getLeft(  )
 {
     return maShapeHelper.getLeft( );
 }
-void SAL_CALL ScVbaAxis::setLeft( double left )
+void ScVbaAxis::setLeft( double left )
 {
     maShapeHelper.setLeft( left );
 }

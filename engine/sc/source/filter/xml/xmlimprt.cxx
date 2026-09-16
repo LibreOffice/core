@@ -188,7 +188,7 @@ protected:
 public:
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext( sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
@@ -211,7 +211,7 @@ public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext( sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
@@ -226,7 +226,7 @@ SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+uno::Reference< xml::sax::XFastContextHandler >
     ScXMLFlatDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -243,7 +243,7 @@ class ScXMLBodyContext_Impl : public ScXMLImportContext
 public:
     ScXMLBodyContext_Impl( ScXMLImport& rImport );
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext( sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
@@ -255,7 +255,7 @@ ScXMLImportContext( rImport )
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+uno::Reference< xml::sax::XFastContextHandler >
     ScXMLBodyContext_Impl::createFastChildContext( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -264,7 +264,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return GetScImport().CreateBodyContext( pAttribList );
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+uno::Reference< xml::sax::XFastContextHandler >
     ScXMLDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
@@ -1107,7 +1107,7 @@ void ScXMLImport::SetStylesToRangesFinished()
 }
 
 // XImporter
-void SAL_CALL ScXMLImport::setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc )
+void ScXMLImport::setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc )
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
@@ -1130,7 +1130,7 @@ void SAL_CALL ScXMLImport::setTargetDocument( const cpo::uno::Reference< css::la
 }
 
 // css::xml::sax::XDocumentHandler
-void SAL_CALL ScXMLImport::startDocument()
+void ScXMLImport::startDocument()
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
@@ -1425,7 +1425,7 @@ void ScXMLImport::SetStringRefSyntaxIfMissing()
     }
 }
 
-void SAL_CALL ScXMLImport::endDocument()
+void ScXMLImport::endDocument()
 {
     ScXMLImport::MutexGuard aGuard(*this);
     if (getImportFlags() & SvXMLImportFlags::CONTENT)

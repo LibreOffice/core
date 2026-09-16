@@ -33,11 +33,11 @@ class FileDialogItemEnumeration : public ::cppu::WeakImplHelper< container::XEnu
     std::vector< OUString >::iterator mIt;
 public:
     explicit FileDialogItemEnumeration( std::vector< OUString >&& rVector ) : m_sItems( std::move(rVector) ), mIt( m_sItems.begin() ) {}
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return ( mIt != m_sItems.end() );
     }
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -57,7 +57,7 @@ ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
 
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaFileDialogSelectedItems::getElementType()
 {
     return cppu::UnoType<OUString>::get();
@@ -83,7 +83,7 @@ ScVbaFileDialogSelectedItems::createCollectionObject( const cpo::uno::Any& aSour
 }
 
 // Methods
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaFileDialogSelectedItems::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;

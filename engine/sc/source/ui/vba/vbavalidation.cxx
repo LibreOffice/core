@@ -52,7 +52,7 @@ lcl_getValidationProps( const uno::Reference< table::XCellRange >& xRange )
     return xValProps;
 }
 
-bool SAL_CALL
+bool
 ScVbaValidation::getIgnoreBlank()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -61,7 +61,7 @@ ScVbaValidation::getIgnoreBlank()
     return bBlank;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setIgnoreBlank( bool _ignoreblank )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -69,7 +69,7 @@ ScVbaValidation::setIgnoreBlank( bool _ignoreblank )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-bool SAL_CALL
+bool
 ScVbaValidation::getCaseSensitive()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -78,7 +78,7 @@ ScVbaValidation::getCaseSensitive()
     return bCase;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setCaseSensitive( bool _bCase )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -86,7 +86,7 @@ ScVbaValidation::setCaseSensitive( bool _bCase )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-bool SAL_CALL
+bool
 ScVbaValidation::getInCellDropdown()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -95,7 +95,7 @@ ScVbaValidation::getInCellDropdown()
     return nShowList != 0;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setInCellDropdown( bool  _incelldropdown  )
 {
     sal_Int32 nDropDown = 0;
@@ -106,7 +106,7 @@ ScVbaValidation::setInCellDropdown( bool  _incelldropdown  )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-bool SAL_CALL
+bool
 ScVbaValidation::getShowInput()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -115,7 +115,7 @@ ScVbaValidation::getShowInput()
     return bShowInput;
 }
 
-void SAL_CALL
+void
 ScVbaValidation:: setShowInput( bool _showinput )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
@@ -123,7 +123,7 @@ ScVbaValidation:: setShowInput( bool _showinput )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-bool SAL_CALL
+bool
 ScVbaValidation::getShowError()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -132,7 +132,7 @@ ScVbaValidation::getShowError()
     return bShowError;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setShowError( bool _showerror )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -140,7 +140,7 @@ ScVbaValidation::setShowError( bool _showerror )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getErrorTitle()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -157,7 +157,7 @@ ScVbaValidation::setErrorTitle( const OUString& _errormessage )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getInputMessage()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -166,7 +166,7 @@ ScVbaValidation::getInputMessage()
     return sMsg;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setInputMessage( const OUString& _inputmessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -174,7 +174,7 @@ ScVbaValidation::setInputMessage( const OUString& _inputmessage )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getInputTitle()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -183,7 +183,7 @@ ScVbaValidation::getInputTitle()
     return sString;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setInputTitle( const OUString& _inputtitle )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -191,7 +191,7 @@ ScVbaValidation::setInputTitle( const OUString& _inputtitle )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getErrorMessage()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
@@ -200,7 +200,7 @@ ScVbaValidation::getErrorMessage()
     return sString;
 }
 
-void SAL_CALL
+void
 ScVbaValidation::setErrorMessage( const OUString& _errormessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -208,7 +208,7 @@ ScVbaValidation::setErrorMessage( const OUString& _errormessage )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-void SAL_CALL
+void
 ScVbaValidation::Delete(  )
 {
     OUString sBlank;
@@ -230,7 +230,7 @@ ScVbaValidation::Delete(  )
 }
 
 // Fix the defect that validation cannot work when the input should be limited between a lower bound and an upper bound
-void SAL_CALL
+void
 ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -312,7 +312,7 @@ ScVbaValidation::Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getFormula1()
 {
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
@@ -332,14 +332,14 @@ ScVbaValidation::getFormula1()
     return sString;
 }
 
-OUString SAL_CALL
+OUString
 ScVbaValidation::getFormula2()
 {
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
     return xCond->getFormula2();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaValidation::getType()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );

@@ -66,7 +66,7 @@ public:
 
     using ScAccessibleTableBase::disposing;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     void CompleteSelectionChanged(bool bNewState);
 
@@ -104,87 +104,87 @@ private:
     ///=====  XAccessibleTable  ================================================
 
     /// Returns the row headers as an AccessibleTable.
-    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable >
                 getAccessibleRowHeaders(  ) override;
 
     /// Returns the column headers as an AccessibleTable.
-    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable >
                 getAccessibleColumnHeaders(  ) override;
 
     /// Returns the selected rows in a table.
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
                 getSelectedAccessibleRows(  ) override;
 
     /// Returns the selected columns in a table.
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
                 getSelectedAccessibleColumns(  ) override;
 
     /// Returns a boolean value indicating whether the specified row is selected.
-    virtual bool SAL_CALL
+    virtual bool
                 isAccessibleRowSelected( sal_Int32 nRow ) override;
 
     /// Returns a boolean value indicating whether the specified column is selected.
-    virtual bool SAL_CALL
+    virtual bool
                 isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /// Returns the Accessible at a specified row and column in the table.
-    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
-    virtual bool SAL_CALL
+    virtual bool
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     ///=====  XAccessibleComponent  ============================================
 
     virtual cpo::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
+        getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
-    virtual void SAL_CALL grabFocus(  ) override;
+    virtual void grabFocus(  ) override;
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
 
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return NULL to indicate that an empty relation set.
-    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleStateSet() override;
 
     ///=====  XAccessibleSelection  ===========================================
 
-    virtual void SAL_CALL
+    virtual void
         selectAccessibleChild( sal_Int64 nChildIndex ) override;
 
-    virtual void SAL_CALL
+    virtual void
         clearAccessibleSelection(  ) override;
 
-    virtual void SAL_CALL
+    virtual void
         selectAllAccessibleChildren(  ) override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getSelectedAccessibleChildCount(  ) override;
 
-    virtual cpo::uno::Reference<css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible >
         getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
-    virtual void SAL_CALL
+    virtual void
         deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 
     //=====  XAccessibleTableSelection  ============================================
 
-    virtual bool SAL_CALL selectRow( sal_Int32 row ) override;
-    virtual bool SAL_CALL selectColumn( sal_Int32 column ) override;
-    virtual bool SAL_CALL unselectRow( sal_Int32 row ) override;
-    virtual bool SAL_CALL unselectColumn( sal_Int32 column ) override;
+    virtual bool selectRow( sal_Int32 row ) override;
+    virtual bool selectColumn( sal_Int32 column ) override;
+    virtual bool unselectRow( sal_Int32 row ) override;
+    virtual bool unselectColumn( sal_Int32 column ) override;
 
     /// Return the object's current bounding box relative to the desktop.
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;

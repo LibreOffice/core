@@ -64,7 +64,7 @@ static ScSheetEventId lcl_GetEventFromName( std::u16string_view aName )
 
 // XNameReplace
 
-void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
+void ScSheetEventsObj::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
     if (!mpDocShell)
@@ -113,7 +113,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const cpo:
 
 // XNameAccess
 
-cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
+cpo::uno::Any ScSheetEventsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
@@ -141,7 +141,7 @@ cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     return aRet;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
+cpo::uno::Sequence<OUString> ScSheetEventsObj::getElementNames()
 {
     auto aNames = cpo::uno::Sequence<OUString>(int(ScSheetEventId::COUNT));
     auto pNames = aNames.getArray();
@@ -150,7 +150,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
     return aNames;
 }
 
-bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
+bool ScSheetEventsObj::hasByName( const OUString& aName )
 {
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
     return (nEvent != ScSheetEventId::NOTFOUND);
@@ -158,12 +158,12 @@ bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 
 // XElementAccess
 
-cpo::uno::Type SAL_CALL ScSheetEventsObj::getElementType()
+cpo::uno::Type ScSheetEventsObj::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL ScSheetEventsObj::hasElements()
+bool ScSheetEventsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     if (mpDocShell)

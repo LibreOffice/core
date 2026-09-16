@@ -35,42 +35,42 @@ public:
     virtual                 ~ScCellCursorObj() override;
 
                             // XSheetCellCursor
-    virtual void SAL_CALL   collapseToCurrentRegion() override;
-    virtual void SAL_CALL   collapseToCurrentArray() override;
-    virtual void SAL_CALL   collapseToMergedArea() override;
-    virtual void SAL_CALL   expandToEntireColumns() override;
-    virtual void SAL_CALL   expandToEntireRows() override;
-    virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows ) override;
+    virtual void   collapseToCurrentRegion() override;
+    virtual void   collapseToCurrentArray() override;
+    virtual void   collapseToMergedArea() override;
+    virtual void   expandToEntireColumns() override;
+    virtual void   expandToEntireRows() override;
+    virtual void   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows ) override;
 
                             // XUsedAreaCursor
-    virtual void SAL_CALL   gotoStartOfUsedArea( bool bExpand ) override;
-    virtual void SAL_CALL   gotoEndOfUsedArea( bool bExpand ) override;
+    virtual void   gotoStartOfUsedArea( bool bExpand ) override;
+    virtual void   gotoEndOfUsedArea( bool bExpand ) override;
 
                             // XCellCursor
-    virtual void SAL_CALL   gotoStart() override;
-    virtual void SAL_CALL   gotoEnd() override;
-    virtual void SAL_CALL   gotoNext() override;
-    virtual void SAL_CALL   gotoPrevious() override;
-    virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset ) override;
+    virtual void   gotoStart() override;
+    virtual void   gotoEnd() override;
+    virtual void   gotoNext() override;
+    virtual void   gotoPrevious() override;
+    virtual void   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset ) override;
 
                             // XSheetCellRange
-    virtual cpo::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheet >
                             getSpreadsheet() override;
 
                             // XCellRange
-    virtual cpo::uno::Reference< css::table::XCell > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCell >
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange >
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom ) override;
     using ScCellRangeObj::getCellRangeByName;
-    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange >
                             getCellRangeByName( const OUString& aRange ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,23 +94,23 @@ public:
     explicit PaletteIndex( ColorVec&& rColorTable ) : maColor( std::move(rColorTable) ) {}
 
     // Methods XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount() override
+    virtual ::sal_Int32 getCount() override
     {
          return  maColor.size();
     }
 
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         //--Index;  // apparently the palette is already 1 based
         return cpo::uno::Any( sal_Int32( maColor[ Index ] ) );
     }
 
     // Methods XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
     {
         return (!maColor.empty());
     }

@@ -29,11 +29,11 @@ public:
     MenuBarEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< cpo::uno::XComponentContext > xContext, uno::Reference< container::XEnumeration > xEnumeration) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xEnumeration(std::move( xEnumeration ))
     {
     }
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return m_xEnumeration->hasMoreElements();
     }
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         // FIXME: should be add menubar
         if( !hasMoreElements() )
@@ -56,7 +56,7 @@ ScVbaMenuBars::~ScVbaMenuBars()
 }
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaMenuBars::getElementType()
 {
     return cppu::UnoType<excel::XMenuBar>::get();
@@ -76,14 +76,14 @@ ScVbaMenuBars::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource;
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaMenuBars::getCount()
 {
     return m_xCommandBars->getCount();
 }
 
 // ScVbaCollectionBaseImpl
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaMenuBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
     sal_Int16 nIndex = 0;

@@ -80,15 +80,15 @@ public:
 
     virtual ~ScXMLAnnotationContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL startFastElement(sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
+    virtual void startFastElement(sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
+    virtual void characters( const OUString& rChars ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     void SetShape(
         const cpo::uno::Reference< css::drawing::XShape >& rxShape,

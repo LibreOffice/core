@@ -63,37 +63,37 @@ public:
     ~ScSolverSettings();
 
     // XSolverSettings attributes
-    virtual sal_Int8 SAL_CALL getObjectiveType() override;
-    virtual void SAL_CALL setObjectiveType(sal_Int8 aObjType) override;
-    virtual cpo::uno::Any SAL_CALL getObjectiveCell() override;
-    virtual void SAL_CALL setObjectiveCell(const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL getGoalValue() override;
-    virtual void SAL_CALL setGoalValue(const cpo::uno::Any& aValue) override;
-    virtual OUString SAL_CALL getEngine() override;
-    virtual void SAL_CALL setEngine(const OUString& sEngine) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getAvailableEngines() override;
-    virtual cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getVariableCells() override;
-    virtual void SAL_CALL
+    virtual sal_Int8 getObjectiveType() override;
+    virtual void setObjectiveType(sal_Int8 aObjType) override;
+    virtual cpo::uno::Any getObjectiveCell() override;
+    virtual void setObjectiveCell(const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any getGoalValue() override;
+    virtual void setGoalValue(const cpo::uno::Any& aValue) override;
+    virtual OUString getEngine() override;
+    virtual void setEngine(const OUString& sEngine) override;
+    virtual cpo::uno::Sequence<OUString> getAvailableEngines() override;
+    virtual cpo::uno::Sequence<cpo::uno::Any> getVariableCells() override;
+    virtual void
     setVariableCells(const cpo::uno::Sequence<cpo::uno::Any>& aRanges) override;
-    virtual cpo::uno::Sequence<css::sheet::ModelConstraint> SAL_CALL getConstraints() override;
-    virtual void SAL_CALL
+    virtual cpo::uno::Sequence<css::sheet::ModelConstraint> getConstraints() override;
+    virtual void
     setConstraints(const cpo::uno::Sequence<css::sheet::ModelConstraint>& aConstraints) override;
-    virtual sal_Int32 SAL_CALL getConstraintCount() override;
-    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getEngineOptions() override;
-    virtual void SAL_CALL
+    virtual sal_Int32 getConstraintCount() override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> getEngineOptions() override;
+    virtual void
     setEngineOptions(const cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
-    virtual sal_Int8 SAL_CALL getStatus() override;
-    virtual OUString SAL_CALL getErrorMessage() override;
-    virtual bool SAL_CALL getSuppressDialog() override;
-    virtual void SAL_CALL setSuppressDialog(bool bSuppress) override;
+    virtual sal_Int8 getStatus() override;
+    virtual OUString getErrorMessage() override;
+    virtual bool getSuppressDialog() override;
+    virtual void setSuppressDialog(bool bSuppress) override;
 
     // XSolverSettings methods
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL solve() override;
-    virtual void SAL_CALL saveToFile() override;
+    virtual void reset() override;
+    virtual void solve() override;
+    virtual void saveToFile() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };

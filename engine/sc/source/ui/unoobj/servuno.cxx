@@ -101,7 +101,7 @@ public:
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override
+    virtual bool hasByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         maCachedObject = cpo::uno::Any(); // clear cached object
@@ -140,14 +140,14 @@ public:
         return maCachedObject.hasValue();
 
     }
-    cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
+    cpo::uno::Any getByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         if ( !hasByName( aName ) )
             throw css::container::NoSuchElementException();
         return maCachedObject;
     }
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override
     {
         SolarMutexGuard aGuard;
         ScDocument& rDoc = mpDocShell->GetDocument();
@@ -165,8 +165,8 @@ public:
         return aNames;
     }
     // XElemenAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return cpo::uno::Type(); }
-    virtual bool SAL_CALL hasElements(  ) override { return true; }
+    virtual cpo::uno::Type getElementType(  ) override { return cpo::uno::Type(); }
+    virtual bool hasElements(  ) override { return true; }
 
 };
 
@@ -176,7 +176,7 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeName
 public:
     explicit ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
-    OUString SAL_CALL getCodeNameForObject( const uno::Reference< cpo::uno::XInterface >& xIf ) override
+    OUString getCodeNameForObject( const uno::Reference< cpo::uno::XInterface >& xIf ) override
     {
         SolarMutexGuard aGuard;
         OUString sCodeName;
@@ -214,7 +214,7 @@ public:
         return sCodeName;
     }
 
-    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<cpo::uno::XInterface>& xContainer ) override
+    OUString getCodeNameForContainer( const uno::Reference<cpo::uno::XInterface>& xContainer ) override
     {
         SolarMutexGuard aGuard;
         uno::Reference<container::XIndexAccess> xIndex(mrDocShell.GetModel()->getDrawPages(), uno::UNO_QUERY_THROW);

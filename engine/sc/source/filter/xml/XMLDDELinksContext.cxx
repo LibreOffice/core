@@ -43,7 +43,7 @@ ScXMLDDELinksContext::~ScXMLDDELinksContext()
     GetScImport().UnlockSolarMutex();
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDDELinksContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -68,7 +68,7 @@ ScXMLDDELinkContext::~ScXMLDDELinkContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDDELinkContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -119,7 +119,7 @@ void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRowsP)
     aDDELinkRow.clear();
 }
 
-void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (!(nPosition > -1 && nColumns && nRows))
@@ -207,7 +207,7 @@ ScXMLDDESourceContext::~ScXMLDDESourceContext()
 {
 }
 
-void SAL_CALL ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDDELink->CreateDDELink();
 }
@@ -224,7 +224,7 @@ ScXMLDDETableContext::~ScXMLDDETableContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDDETableContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -285,7 +285,7 @@ ScXMLDDERowContext::~ScXMLDDERowContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLDDERowContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -298,7 +298,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::cre
     return pContext;
 }
 
-void SAL_CALL ScXMLDDERowContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDDERowContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDDELink->AddRowsToTable(nRows);
 }
@@ -348,7 +348,7 @@ ScXMLDDECellContext::~ScXMLDDECellContext()
 {
 }
 
-void SAL_CALL ScXMLDDECellContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLDDECellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     OSL_ENSURE(bString == bString2, "something wrong with this type");
     ScDDELinkCell aCell;

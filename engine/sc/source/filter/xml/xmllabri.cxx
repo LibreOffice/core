@@ -38,7 +38,7 @@ ScXMLLabelRangesContext::~ScXMLLabelRangesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLLabelRangesContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext*     pContext(nullptr);
@@ -85,7 +85,7 @@ ScXMLLabelRangeContext::~ScXMLLabelRangeContext()
 {
 }
 
-void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).

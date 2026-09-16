@@ -43,7 +43,7 @@ protected:
 
 public:
     using ScAccessibleCellBase::disposing;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     ///=====  SfxListener  =====================================================
 
@@ -51,18 +51,18 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
                             getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual void SAL_CALL   grabFocus() override;
+    virtual void   grabFocus() override;
 
     //=====  XAccessibleContext  ==============================================
 
     // override to calculate this on demand
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
                             getAccessibleChild( sal_Int64 i ) override;
 
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
 protected:
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;

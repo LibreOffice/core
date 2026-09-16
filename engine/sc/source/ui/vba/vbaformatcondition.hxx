@@ -51,14 +51,14 @@ public:
     static css::sheet::ConditionOperator retrieveAPIType(sal_Int32 _nVBAType, const cpo::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition );
 
     //Methods
-    virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL Modify( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
-    virtual ::sal_Int32 SAL_CALL Type(  ) override;
+    virtual void Delete(  ) override;
+    virtual void Modify( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
+    virtual ::sal_Int32 Type(  ) override;
     using ScVbaFormatCondition_BASE::Operator;
-    virtual ::sal_Int32 SAL_CALL Operator(  ) override;
-    virtual cpo::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) override;
-    virtual cpo::uno::Any SAL_CALL Borders( const cpo::uno::Any& Index ) override;
-    virtual cpo::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) override;
+    virtual ::sal_Int32 Operator(  ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XInterior > Interior(  ) override;
+    virtual cpo::uno::Any Borders( const cpo::uno::Any& Index ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XFont > Font(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

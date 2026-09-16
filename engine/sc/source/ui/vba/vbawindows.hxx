@@ -32,11 +32,11 @@ public:
     ScVbaWindows( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // XWindows
-    virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const cpo::uno::Any& ActiveWorkbook, const cpo::uno::Any& SyncHorizontal, const cpo::uno::Any& SyncVertical ) override;
+    virtual void Arrange( ::sal_Int32 ArrangeStyle, const cpo::uno::Any& ActiveWorkbook, const cpo::uno::Any& SyncHorizontal, const cpo::uno::Any& SyncVertical ) override;
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

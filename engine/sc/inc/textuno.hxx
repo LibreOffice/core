@@ -75,19 +75,19 @@ public:
                               const EditTextObject* pRight);
 
                             // XHeaderFooterContent
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getLeftText() override;
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getCenterText() override;
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getRightText() override;
 
     static rtl::Reference<ScHeaderFooterContentObj> getImplementation(const cpo::uno::Reference<css::sheet::XHeaderFooterContent>& rObj);
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 };
 
@@ -152,53 +152,53 @@ public:
     static void             FillDummyFieldData( ScHeaderFieldData& rData );
 
                             // XText
-    virtual void SAL_CALL   insertTextContent( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void   insertTextContent( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                 const cpo::uno::Reference< css::text::XTextContent >& xContent,
                                 bool bAbsorb ) override;
-    virtual void SAL_CALL   removeTextContent( const cpo::uno::Reference< css::text::XTextContent >& xContent ) override;
+    virtual void   removeTextContent( const cpo::uno::Reference< css::text::XTextContent >& xContent ) override;
 
                             // XSimpleText
-    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >
                             createTextCursor() override;
-    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >
                             createTextCursorByRange( const cpo::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
-    virtual void SAL_CALL   insertString( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void   insertString( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         const OUString& aString, bool bAbsorb ) override;
-    virtual void SAL_CALL   insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void   insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
                             // XTextRange
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getText() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getStart() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getEnd() override;
-    virtual OUString SAL_CALL getString() override;
-    virtual void SAL_CALL   setString( const OUString& aString ) override;
+    virtual OUString getString() override;
+    virtual void   setString( const OUString& aString ) override;
 
                             // XTextRangeMover
-    virtual void SAL_CALL   moveTextRange( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void   moveTextRange( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         sal_Int16 nParagraphs ) override;
 
                             // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
                             // XTextFieldsSupplier
-    virtual cpo::uno::Reference< css::container::XEnumerationAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumerationAccess >
                             getTextFields() override;
-    virtual cpo::uno::Reference< css::container::XNameAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XNameAccess >
                             getTextFieldMasters() override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 };
 
@@ -220,11 +220,11 @@ public:
     ScCellObj&              GetCellObj() const  { return *mxTextObj; }
 
                             // SvxUnoTextCursor methods reimplemented here:
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getText() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getStart() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getEnd() override;
 
                             // XUnoTunnel
@@ -246,11 +246,11 @@ public:
     ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor &&) = delete; // due to SvxUnoTextCursor
 
                             // SvxUnoTextCursor methods reimplemented here:
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getText() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getStart() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getEnd() override;
 
                             // XUnoTunnel
@@ -273,11 +273,11 @@ public:
     ScDrawTextCursor & operator =(ScDrawTextCursor &&) = delete; // due to SvxUnoTextCursor
 
                             // SvxUnoTextCursor methods reimplemented here:
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getText() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getStart() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getEnd() override;
 
                             // XUnoTunnel

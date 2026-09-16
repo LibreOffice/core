@@ -49,12 +49,12 @@ class EnumWrapper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
         explicit EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
-        virtual bool SAL_CALL hasMoreElements(  ) override
+        virtual bool hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
 
-        virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+        virtual cpo::uno::Any nextElement(  ) override
         {
                 if ( nIndex < m_xIndexAccess->getCount() )
                         return m_xIndexAccess->getByIndex( nIndex++ );
@@ -118,8 +118,8 @@ public:
             mCoordinates.emplace_back( xlSecondary, xlSeriesAxis );
 
     }
-    virtual ::sal_Int32 SAL_CALL getCount() override { return mCoordinates.size(); }
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
+    virtual ::sal_Int32 getCount() override { return mCoordinates.size(); }
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override
     {
         try
         {
@@ -136,11 +136,11 @@ public:
         }
     }
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type getElementType() override
     {
         return cppu::UnoType<excel::XAxis>::get();
     }
-    virtual bool SAL_CALL hasElements( ) override
+    virtual bool hasElements( ) override
     {
         return ( !mCoordinates.empty() );
     }
@@ -158,19 +158,19 @@ ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const un
 {
 }
 
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaAxes::getElementType()
 {
     return  cppu::UnoType<excel::XAxes>::get();
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration >
 ScVbaAxes::createEnumeration()
 {
     return new EnumWrapper( m_xIndexAccess );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaAxes::Item( const cpo::uno::Any& _nType, const cpo::uno::Any& _oAxisGroup)
 {
     // #TODO map the possible index combinations to a container::XIndexAccess wrapper impl

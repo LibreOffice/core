@@ -49,25 +49,25 @@ public:
     virtual ~ScVbaFont() override; // {}
 
     // Attributes
-    virtual cpo::uno::Any SAL_CALL getSize() override;
-    virtual cpo::uno::Any SAL_CALL getStandardFontSize() override;
-    virtual void SAL_CALL setStandardFontSize(const cpo::uno::Any& _standardfontsize) override;
-    virtual cpo::uno::Any SAL_CALL getStandardFont() override;
-    virtual void SAL_CALL setStandardFont(const cpo::uno::Any& _standardfont) override;
-    virtual cpo::uno::Any SAL_CALL getFontStyle() override;
-    virtual void SAL_CALL setFontStyle(const cpo::uno::Any& _fontstyle) override;
-    virtual cpo::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex(const cpo::uno::Any& _colorindex) override;
-    virtual cpo::uno::Any SAL_CALL getBold() override;
-    virtual cpo::uno::Any SAL_CALL getUnderline() override;
-    virtual void SAL_CALL setUnderline(const cpo::uno::Any& _underline) override;
-    virtual cpo::uno::Any SAL_CALL getStrikethrough() override;
-    virtual cpo::uno::Any SAL_CALL getShadow() override;
-    virtual cpo::uno::Any SAL_CALL getItalic() override;
-    virtual cpo::uno::Any SAL_CALL getName() override;
-    virtual cpo::uno::Any SAL_CALL getColor() override;
-    virtual cpo::uno::Any SAL_CALL getOutlineFont() override;
-    virtual void SAL_CALL setOutlineFont(const cpo::uno::Any& _outlinefont) override;
+    virtual cpo::uno::Any getSize() override;
+    virtual cpo::uno::Any getStandardFontSize() override;
+    virtual void setStandardFontSize(const cpo::uno::Any& _standardfontsize) override;
+    virtual cpo::uno::Any getStandardFont() override;
+    virtual void setStandardFont(const cpo::uno::Any& _standardfont) override;
+    virtual cpo::uno::Any getFontStyle() override;
+    virtual void setFontStyle(const cpo::uno::Any& _fontstyle) override;
+    virtual cpo::uno::Any getColorIndex() override;
+    virtual void setColorIndex(const cpo::uno::Any& _colorindex) override;
+    virtual cpo::uno::Any getBold() override;
+    virtual cpo::uno::Any getUnderline() override;
+    virtual void setUnderline(const cpo::uno::Any& _underline) override;
+    virtual cpo::uno::Any getStrikethrough() override;
+    virtual cpo::uno::Any getShadow() override;
+    virtual cpo::uno::Any getItalic() override;
+    virtual cpo::uno::Any getName() override;
+    virtual cpo::uno::Any getColor() override;
+    virtual cpo::uno::Any getOutlineFont() override;
+    virtual void setOutlineFont(const cpo::uno::Any& _outlinefont) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

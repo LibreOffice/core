@@ -39,11 +39,11 @@ public:
                      const cpo::uno::Reference<css::sheet::XSheetPageBreak>& xSheetPageBreak);
 
     // XHPageBreaks
-    virtual cpo::uno::Any SAL_CALL Add(const cpo::uno::Any& Before) override;
+    virtual cpo::uno::Any Add(const cpo::uno::Any& Before) override;
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference<css::container::XEnumeration> createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
 
     // XHelperInterface
@@ -65,11 +65,11 @@ public:
     virtual ~ScVbaVPageBreaks() override;
 
     // XVPageBreaks
-    virtual cpo::uno::Any SAL_CALL Add(const cpo::uno::Any& Before) override;
+    virtual cpo::uno::Any Add(const cpo::uno::Any& Before) override;
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference<css::container::XEnumeration> createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
 
     // XHelperInterface

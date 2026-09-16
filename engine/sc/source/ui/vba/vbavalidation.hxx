@@ -34,30 +34,30 @@ class ScVbaValidation : public ValidationImpl_BASE
 public:
     ScVbaValidation( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::table::XCellRange > xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange(std::move( xRange)) {}
     // Attributes
-    virtual bool SAL_CALL getIgnoreBlank() override;
-    virtual void SAL_CALL setIgnoreBlank( bool _ignoreblank ) override;
-    virtual bool SAL_CALL getCaseSensitive() override;
-    virtual void SAL_CALL setCaseSensitive( bool _bCase ) override;
-    virtual bool SAL_CALL getInCellDropdown() override;
-    virtual void SAL_CALL setInCellDropdown( bool _incelldropdown ) override;
-    virtual bool SAL_CALL getShowInput() override;
-    virtual void SAL_CALL setShowInput( bool _showinput ) override;
-    virtual bool SAL_CALL getShowError() override;
-    virtual void SAL_CALL setShowError( bool _showerror ) override;
-    virtual OUString SAL_CALL getInputTitle() override;
-    virtual void SAL_CALL setInputTitle( const OUString& _inputtitle ) override;
-    virtual OUString SAL_CALL getErrorTitle() override;
-    virtual void SAL_CALL setErrorTitle( const OUString& _errortitle ) override;
-    virtual OUString SAL_CALL getInputMessage() override;
-    virtual void SAL_CALL setInputMessage( const OUString& _inputmessage ) override;
-    virtual OUString SAL_CALL getErrorMessage() override;
-    virtual void SAL_CALL setErrorMessage( const OUString& _errormessage ) override;
-    virtual OUString SAL_CALL getFormula1() override ;
-    virtual OUString SAL_CALL getFormula2() override;
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual bool getIgnoreBlank() override;
+    virtual void setIgnoreBlank( bool _ignoreblank ) override;
+    virtual bool getCaseSensitive() override;
+    virtual void setCaseSensitive( bool _bCase ) override;
+    virtual bool getInCellDropdown() override;
+    virtual void setInCellDropdown( bool _incelldropdown ) override;
+    virtual bool getShowInput() override;
+    virtual void setShowInput( bool _showinput ) override;
+    virtual bool getShowError() override;
+    virtual void setShowError( bool _showerror ) override;
+    virtual OUString getInputTitle() override;
+    virtual void setInputTitle( const OUString& _inputtitle ) override;
+    virtual OUString getErrorTitle() override;
+    virtual void setErrorTitle( const OUString& _errortitle ) override;
+    virtual OUString getInputMessage() override;
+    virtual void setInputMessage( const OUString& _inputmessage ) override;
+    virtual OUString getErrorMessage() override;
+    virtual void setErrorMessage( const OUString& _errormessage ) override;
+    virtual OUString getFormula1() override ;
+    virtual OUString getFormula2() override;
+    virtual sal_Int32 getType() override;
     // Methods
-    virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
+    virtual void Delete(  ) override;
+    virtual void Add( const cpo::uno::Any& Type, const cpo::uno::Any& AlertStyle, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

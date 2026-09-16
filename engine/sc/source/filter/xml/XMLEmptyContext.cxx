@@ -29,7 +29,7 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 {
 }
 
-cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >
     ScXMLEmptyContext::createFastChildContext( sal_Int32 /*nElement*/,
     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {

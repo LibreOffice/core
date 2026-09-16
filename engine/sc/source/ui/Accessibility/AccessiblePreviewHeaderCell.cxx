@@ -71,7 +71,7 @@ ScAccessiblePreviewHeaderCell::~ScAccessiblePreviewHeaderCell()
         mpViewShell->RemoveAccessibilityObject(*this);
 }
 
-void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
+void ScAccessiblePreviewHeaderCell::disposing()
 {
     SolarMutexGuard aGuard;
     if (mpViewShell)
@@ -107,7 +107,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
 
 //=====  XAccessibleValue  ================================================
 
-cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
+cpo::uno::Any ScAccessiblePreviewHeaderCell::getCurrentValue()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -121,13 +121,13 @@ cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
     return cpo::uno::Any(fValue);
 }
 
-bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const cpo::uno::Any& /* aNumber */ )
+bool ScAccessiblePreviewHeaderCell::setCurrentValue( const cpo::uno::Any& /* aNumber */ )
 {
     //  it is not possible to set a value
     return false;
 }
 
-cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
+cpo::uno::Any ScAccessiblePreviewHeaderCell::getMaximumValue()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -141,12 +141,12 @@ cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
     return cpo::uno::Any(fValue);
 }
 
-cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue()
+cpo::uno::Any ScAccessiblePreviewHeaderCell::getMinimumValue()
 {
     return cpo::uno::Any(0.0);
 }
 
-cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
+cpo::uno::Any ScAccessiblePreviewHeaderCell::getMinimumIncrement()
 {
     // value can't be changed, s. 'setCurrentValue'
     return cpo::uno::Any();
@@ -154,7 +154,7 @@ cpo::uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )
+uno::Reference< XAccessible > ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     rtl::Reference<comphelper::OAccessible> pRet;
     if (containsPoint(rPoint))
@@ -171,7 +171,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
     return pRet;
 }
 
-void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
+void ScAccessiblePreviewHeaderCell::grabFocus()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -185,7 +185,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
+sal_Int64 ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -194,7 +194,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
     return mxTextHelper->GetChildCount();
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int64 nIndex)
+uno::Reference< XAccessible > ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -203,12 +203,12 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
     return mxTextHelper->GetChild(nIndex);
 }
 
-sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
+sal_Int64 ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
 {
     return mnIndex;
 }
 
-sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
+sal_Int64 ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
 

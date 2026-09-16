@@ -49,7 +49,7 @@ public:
         m_Palette(nullptr)
     {
     }
-    cpo::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) override
+    cpo::uno::Reference< ov::excel::XInterior > Interior(  ) override
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
@@ -57,14 +57,14 @@ public:
         // otherwise attempts to access the palette will fail
         return new ScVbaInterior( BaseClass::mxParent, BaseClass::mxContext, xShapePropertySet );
     }
-    cpo::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) override
+    cpo::uno::Reference< ov::excel::XFont > Font(  ) override
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
         return new ScVbaFont( BaseClass::mxParent, BaseClass::mxContext, m_Palette, xShapePropertySet );
 
     }
-    void SAL_CALL setText( const OUString& Text ) override
+    void setText( const OUString& Text ) override
     {
         try
         {
@@ -75,7 +75,7 @@ public:
             throw css::script::BasicErrorException( OUString(), cpo::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
     }
-    OUString SAL_CALL getText(  ) override
+    OUString getText(  ) override
     {
         OUString sText;
         try
@@ -89,23 +89,23 @@ public:
         return sText;
     }
 
-    void SAL_CALL setTop( double Top ) override
+    void setTop( double Top ) override
     {
         maShapeHelper.setTop( Top );
     }
-    double SAL_CALL getTop(  ) override
+    double getTop(  ) override
     {
         return maShapeHelper.getTop();
     }
-    void SAL_CALL setLeft( double Left ) override
+    void setLeft( double Left ) override
     {
         maShapeHelper.setLeft( Left );
     }
-    double SAL_CALL getLeft(  ) override
+    double getLeft(  ) override
     {
         return maShapeHelper.getLeft();
     }
-    void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) override
+    void setOrientation( ::sal_Int32 _nOrientation ) override
     {
         try
         {
@@ -116,7 +116,7 @@ public:
             throw css::script::BasicErrorException( OUString(), cpo::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
     }
-    ::sal_Int32 SAL_CALL getOrientation(  ) override
+    ::sal_Int32 getOrientation(  ) override
     {
         sal_Int32 nSOOrientation = 0;
         try

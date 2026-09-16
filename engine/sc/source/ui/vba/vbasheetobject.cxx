@@ -78,7 +78,7 @@ ScVbaButtonCharacters::~ScVbaButtonCharacters()
 
 // XCharacters attributes
 
-OUString SAL_CALL ScVbaButtonCharacters::getCaption()
+OUString ScVbaButtonCharacters::getCaption()
 {
     // ignore invalid mnStart and/or mnLength members
     OUString aString = getFullString();
@@ -87,7 +87,7 @@ OUString SAL_CALL ScVbaButtonCharacters::getCaption()
     return aString.copy( nStart, nLength );
 }
 
-void SAL_CALL ScVbaButtonCharacters::setCaption( const OUString& rCaption )
+void ScVbaButtonCharacters::setCaption( const OUString& rCaption )
 {
     /*  Replace the covered text with the passed text, ignore invalid mnStart
         and/or mnLength members. This operation does not affect the mnLength
@@ -102,37 +102,37 @@ void SAL_CALL ScVbaButtonCharacters::setCaption( const OUString& rCaption )
     setFullString( aString.replaceAt( nStart, nLength, rCaption ) );
 }
 
-sal_Int32 SAL_CALL ScVbaButtonCharacters::getCount()
+sal_Int32 ScVbaButtonCharacters::getCount()
 {
     // always return the total length of the caption
     return getFullString().getLength();
 }
 
-OUString SAL_CALL ScVbaButtonCharacters::getText()
+OUString ScVbaButtonCharacters::getText()
 {
     // Text attribute same as Caption attribute?
     return getCaption();
 }
 
-void SAL_CALL ScVbaButtonCharacters::setText( const OUString& rText )
+void ScVbaButtonCharacters::setText( const OUString& rText )
 {
     // Text attribute same as Caption attribute?
     setCaption( rText );
 }
 
-uno::Reference< excel::XFont > SAL_CALL ScVbaButtonCharacters::getFont()
+uno::Reference< excel::XFont > ScVbaButtonCharacters::getFont()
 {
     return new ScVbaFont( this, mxContext, maPalette, mxPropSet, nullptr, true );
 }
 
-void SAL_CALL ScVbaButtonCharacters::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ )
+void ScVbaButtonCharacters::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ )
 {
     // TODO
 }
 
 // XCharacters methods
 
-void SAL_CALL ScVbaButtonCharacters::Insert( const OUString& rString )
+void ScVbaButtonCharacters::Insert( const OUString& rString )
 {
     /*  The Insert() operation is in fact "replace covered characters", at
         least for buttons... It seems there is no easy way to really insert a
@@ -140,7 +140,7 @@ void SAL_CALL ScVbaButtonCharacters::Insert( const OUString& rString )
     setCaption( rString );
 }
 
-void SAL_CALL ScVbaButtonCharacters::Delete()
+void ScVbaButtonCharacters::Delete()
 {
     /*  The Delete() operation is nothing else than "replace with empty string".
         This does not affect the mnLength parameter, multiple calls of Delete()
@@ -180,65 +180,65 @@ ScVbaSheetObjectBase::ScVbaSheetObjectBase(
 
 // XSheetObject attributes
 
-double SAL_CALL ScVbaSheetObjectBase::getLeft()
+double ScVbaSheetObjectBase::getLeft()
 {
     return HmmToPoints( mxShape->getPosition().X );
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setLeft( double fLeft )
+void ScVbaSheetObjectBase::setLeft( double fLeft )
 {
     if( fLeft < 0.0 )
         throw cpo::uno::RuntimeException();
     mxShape->setPosition( awt::Point( PointsToHmm( fLeft ), mxShape->getPosition().Y ) );
 }
 
-double SAL_CALL ScVbaSheetObjectBase::getTop()
+double ScVbaSheetObjectBase::getTop()
 {
     return HmmToPoints( mxShape->getPosition().Y );
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setTop( double fTop )
+void ScVbaSheetObjectBase::setTop( double fTop )
 {
     if( fTop < 0.0 )
         throw cpo::uno::RuntimeException();
     mxShape->setPosition( awt::Point( mxShape->getPosition().X, PointsToHmm( fTop ) ) );
 }
 
-double SAL_CALL ScVbaSheetObjectBase::getWidth()
+double ScVbaSheetObjectBase::getWidth()
 {
     return HmmToPoints( mxShape->getSize().Width );
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setWidth( double fWidth )
+void ScVbaSheetObjectBase::setWidth( double fWidth )
 {
     if( fWidth <= 0.0 )
         throw cpo::uno::RuntimeException();
     mxShape->setSize( awt::Size( PointsToHmm( fWidth ), mxShape->getSize().Height ) );
 }
 
-double SAL_CALL ScVbaSheetObjectBase::getHeight()
+double ScVbaSheetObjectBase::getHeight()
 {
     return HmmToPoints( mxShape->getSize().Height );
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setHeight( double fHeight )
+void ScVbaSheetObjectBase::setHeight( double fHeight )
 {
     if( fHeight <= 0.0 )
         throw cpo::uno::RuntimeException();
     mxShape->setSize( awt::Size( mxShape->getSize().Width, PointsToHmm( fHeight ) ) );
 }
 
-OUString SAL_CALL ScVbaSheetObjectBase::getName()
+OUString ScVbaSheetObjectBase::getName()
 {
     return mxShapeProps->getPropertyValue( u"Name"_ustr ).get< OUString >();
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName )
+void ScVbaSheetObjectBase::setName( const OUString& rName )
 {
     mxShapeProps->setPropertyValue( u"Name"_ustr, cpo::uno::Any( rName ) );
 }
 
-sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
+sal_Int32 ScVbaSheetObjectBase::getPlacement()
 {
     sal_Int32 const nRet = excel::XlPlacement::xlMoveAndSize;
 #if 0 // TODO: not working at the moment.
@@ -257,7 +257,7 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
     return nRet;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ )
+void ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ )
 {
 #if 0 // TODO: not working at the moment.
     SvxShape* pShape = SdrObject::getSdrObjectFromXShape( mxShape );
@@ -278,13 +278,13 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ )
 #endif
 }
 
-bool SAL_CALL ScVbaSheetObjectBase::getPrintObject()
+bool ScVbaSheetObjectBase::getPrintObject()
 {
     // not supported
     return true;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPrintObject( bool /*bPrintObject*/ )
+void ScVbaSheetObjectBase::setPrintObject( bool /*bPrintObject*/ )
 {
     // not supported
 }
@@ -317,17 +317,17 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
 
 // XSheetObject attributes
 
-OUString SAL_CALL ScVbaControlObjectBase::getName()
+OUString ScVbaControlObjectBase::getName()
 {
     return mxControlProps->getPropertyValue( u"Name"_ustr ).get< OUString >();
 }
 
-void SAL_CALL ScVbaControlObjectBase::setName( const OUString& rName )
+void ScVbaControlObjectBase::setName( const OUString& rName )
 {
     mxControlProps->setPropertyValue( u"Name"_ustr, cpo::uno::Any( rName ) );
 }
 
-OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
+OUString ScVbaControlObjectBase::getOnAction()
 {
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
     sal_Int32 nIndex = getModelIndexInForm();
@@ -354,7 +354,7 @@ void ScVbaControlObjectBase::NotifyMacroEventRead()
     mbNotifyMacroEventRead = true;
 }
 
-void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
+void ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
 {
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
     sal_Int32 nIndex = getModelIndexInForm();
@@ -378,25 +378,25 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     xEventMgr->registerScriptEvent( nIndex, aDescriptor );
 }
 
-bool SAL_CALL ScVbaControlObjectBase::getPrintObject()
+bool ScVbaControlObjectBase::getPrintObject()
 {
     return mxControlProps->getPropertyValue( u"Printable"_ustr ).get<bool>();
 }
 
-void SAL_CALL ScVbaControlObjectBase::setPrintObject( bool bPrintObject )
+void ScVbaControlObjectBase::setPrintObject( bool bPrintObject )
 {
     mxControlProps->setPropertyValue( u"Printable"_ustr, cpo::uno::Any( bPrintObject ) );
 }
 
 // XControlObject attributes
 
-bool SAL_CALL ScVbaControlObjectBase::getAutoSize()
+bool ScVbaControlObjectBase::getAutoSize()
 {
     // not supported
     return false;
 }
 
-void SAL_CALL ScVbaControlObjectBase::setAutoSize( bool /*bAutoSize*/ )
+void ScVbaControlObjectBase::setAutoSize( bool /*bAutoSize*/ )
 {
     // not supported
 }
@@ -426,27 +426,27 @@ ScVbaButton::ScVbaButton(
 
 // XButton attributes
 
-OUString SAL_CALL ScVbaButton::getCaption()
+OUString ScVbaButton::getCaption()
 {
     return mxControlProps->getPropertyValue( u"Label"_ustr ).get< OUString >();
 }
 
-void SAL_CALL ScVbaButton::setCaption( const OUString& rCaption )
+void ScVbaButton::setCaption( const OUString& rCaption )
 {
     mxControlProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( rCaption ) );
 }
 
-uno::Reference< excel::XFont > SAL_CALL ScVbaButton::getFont()
+uno::Reference< excel::XFont > ScVbaButton::getFont()
 {
     return new ScVbaFont( this, mxContext, maPalette, mxControlProps, nullptr, true );
 }
 
-void SAL_CALL ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ )
+void ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ )
 {
     // TODO
 }
 
-sal_Int32 SAL_CALL ScVbaButton::getHorizontalAlignment()
+sal_Int32 ScVbaButton::getHorizontalAlignment()
 {
     switch( mxControlProps->getPropertyValue( u"Align"_ustr ).get< sal_Int16 >() )
     {
@@ -457,7 +457,7 @@ sal_Int32 SAL_CALL ScVbaButton::getHorizontalAlignment()
     return excel::Constants::xlCenter;
 }
 
-void SAL_CALL ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign )
+void ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign )
 {
     sal_Int32 nAwtAlign = awt::TextAlign::CENTER;
     switch( nAlign )
@@ -470,7 +470,7 @@ void SAL_CALL ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign )
     mxControlProps->setPropertyValue( u"Align"_ustr, cpo::uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
 }
 
-sal_Int32 SAL_CALL ScVbaButton::getVerticalAlignment()
+sal_Int32 ScVbaButton::getVerticalAlignment()
 {
     switch( mxControlProps->getPropertyValue( u"VerticalAlign"_ustr ).get< style::VerticalAlignment >() )
     {
@@ -482,7 +482,7 @@ sal_Int32 SAL_CALL ScVbaButton::getVerticalAlignment()
     return excel::Constants::xlCenter;
 }
 
-void SAL_CALL ScVbaButton::setVerticalAlignment( sal_Int32 nAlign )
+void ScVbaButton::setVerticalAlignment( sal_Int32 nAlign )
 {
     style::VerticalAlignment eAwtAlign = style::VerticalAlignment_MIDDLE;
     switch( nAlign )
@@ -494,40 +494,40 @@ void SAL_CALL ScVbaButton::setVerticalAlignment( sal_Int32 nAlign )
     mxControlProps->setPropertyValue( u"VerticalAlign"_ustr, cpo::uno::Any( eAwtAlign ) );
 }
 
-sal_Int32 SAL_CALL ScVbaButton::getOrientation()
+sal_Int32 ScVbaButton::getOrientation()
 {
     // not supported
     return excel::XlOrientation::xlHorizontal;
 }
 
-void SAL_CALL ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ )
+void ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ )
 {
     // not supported
 }
 
-cpo::uno::Any SAL_CALL ScVbaButton::getValue()
+cpo::uno::Any ScVbaButton::getValue()
 {
     return mxControlProps->getPropertyValue( u"State"_ustr );
 }
 
-void SAL_CALL ScVbaButton::setValue( const cpo::uno::Any &nValue )
+void ScVbaButton::setValue( const cpo::uno::Any &nValue )
 {
     return mxControlProps->setPropertyValue( u"State"_ustr, nValue );
 }
 
-OUString SAL_CALL ScVbaButton::getText()
+OUString ScVbaButton::getText()
 {
     return mxControlProps->getPropertyValue( u"Label"_ustr ).get< OUString >();
 }
 
-void SAL_CALL ScVbaButton::setText( const OUString &aText )
+void ScVbaButton::setText( const OUString &aText )
 {
     return mxControlProps->setPropertyValue( u"Label"_ustr, cpo::uno::Any( aText ) );
 }
 
 // XButton methods
 
-uno::Reference< excel::XCharacters > SAL_CALL ScVbaButton::Characters( const cpo::uno::Any& rStart, const cpo::uno::Any& rLength )
+uno::Reference< excel::XCharacters > ScVbaButton::Characters( const cpo::uno::Any& rStart, const cpo::uno::Any& rLength )
 {
     return new ScVbaButtonCharacters( this, mxContext, mxControlProps, maPalette, rStart, rLength );
 }

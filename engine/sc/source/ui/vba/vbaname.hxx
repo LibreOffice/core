@@ -40,26 +40,26 @@ public:
     virtual ~ScVbaName() override;
 
     // Attributes
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString &rName ) override;
-    virtual OUString SAL_CALL getNameLocal() override;
-    virtual void SAL_CALL setNameLocal( const OUString &rName ) override;
-    virtual bool SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( bool bVisible ) override;
-    virtual OUString SAL_CALL getValue() override;
-    virtual void SAL_CALL setValue( const OUString &rValue ) override;
-    virtual OUString SAL_CALL getRefersTo() override;
-    virtual void SAL_CALL setRefersTo( const OUString &rRefersTo ) override;
-    virtual OUString SAL_CALL getRefersToLocal() override;
-    virtual void SAL_CALL setRefersToLocal( const OUString &rRefersTo ) override;
-    virtual OUString SAL_CALL getRefersToR1C1() override;
-    virtual void SAL_CALL setRefersToR1C1( const OUString &rRefersTo ) override;
-    virtual OUString SAL_CALL getRefersToR1C1Local() override;
-    virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) override;
-    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString &rName ) override;
+    virtual OUString getNameLocal() override;
+    virtual void setNameLocal( const OUString &rName ) override;
+    virtual bool getVisible() override;
+    virtual void setVisible( bool bVisible ) override;
+    virtual OUString getValue() override;
+    virtual void setValue( const OUString &rValue ) override;
+    virtual OUString getRefersTo() override;
+    virtual void setRefersTo( const OUString &rRefersTo ) override;
+    virtual OUString getRefersToLocal() override;
+    virtual void setRefersToLocal( const OUString &rRefersTo ) override;
+    virtual OUString getRefersToR1C1() override;
+    virtual void setRefersToR1C1( const OUString &rRefersTo ) override;
+    virtual OUString getRefersToR1C1Local() override;
+    virtual void setRefersToR1C1Local( const OUString &rRefersTo ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > getRefersToRange() override;
 
     // Methods
-    virtual void SAL_CALL Delete() override;
+    virtual void Delete() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

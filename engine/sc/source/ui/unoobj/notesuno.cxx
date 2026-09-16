@@ -82,7 +82,7 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XChild
 
-uno::Reference<cpo::uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
+uno::Reference<cpo::uno::XInterface> ScAnnotationObj::getParent()
 {
     SolarMutexGuard aGuard;
 
@@ -95,7 +95,7 @@ uno::Reference<cpo::uno::XInterface> SAL_CALL ScAnnotationObj::getParent()
     return nullptr;
 }
 
-void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<cpo::uno::XInterface>& /* Parent */ )
+void ScAnnotationObj::setParent( const uno::Reference<cpo::uno::XInterface>& /* Parent */ )
 {
     //  ain't there
     //! exception or what ??!
@@ -103,14 +103,14 @@ void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<cpo::uno::XInterf
 
 // XSimpleText
 
-uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursor()
+uno::Reference<text::XTextCursor> ScAnnotationObj::createTextCursor()
 {
     SolarMutexGuard aGuard;
     //  notes does not need special treatment
     return GetUnoText().createTextCursor();
 }
 
-uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRange(
+uno::Reference<text::XTextCursor> ScAnnotationObj::createTextCursorByRange(
                                     const uno::Reference<text::XTextRange>& aTextPosition )
 {
     SolarMutexGuard aGuard;
@@ -118,45 +118,45 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
-OUString SAL_CALL ScAnnotationObj::getString()
+OUString ScAnnotationObj::getString()
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getString();
 }
 
-void SAL_CALL ScAnnotationObj::setString( const OUString& aText )
+void ScAnnotationObj::setString( const OUString& aText )
 {
     SolarMutexGuard aGuard;
     GetUnoText().setString(aText);
 }
 
-void SAL_CALL ScAnnotationObj::insertString( const uno::Reference<text::XTextRange>& xRange,
+void ScAnnotationObj::insertString( const uno::Reference<text::XTextRange>& xRange,
                                             const OUString& aString, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     GetUnoText().insertString( xRange, aString, bAbsorb );
 }
 
-void SAL_CALL ScAnnotationObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
+void ScAnnotationObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
                                             sal_Int16 nControlCharacter, bool bAbsorb )
 {
     SolarMutexGuard aGuard;
     GetUnoText().insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
-uno::Reference<text::XText> SAL_CALL ScAnnotationObj::getText()
+uno::Reference<text::XText> ScAnnotationObj::getText()
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getText();
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getStart()
+uno::Reference<text::XTextRange> ScAnnotationObj::getStart()
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getStart();
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getEnd()
+uno::Reference<text::XTextRange> ScAnnotationObj::getEnd()
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getEnd();
@@ -164,7 +164,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getEnd()
 
 // XSheetAnnotation
 
-table::CellAddress SAL_CALL ScAnnotationObj::getPosition()
+table::CellAddress ScAnnotationObj::getPosition()
 {
     SolarMutexGuard aGuard;
     table::CellAddress aAdr;
@@ -174,28 +174,28 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition()
     return aAdr;
 }
 
-OUString SAL_CALL ScAnnotationObj::getAuthor()
+OUString ScAnnotationObj::getAuthor()
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote ? pNote->GetAuthor() : OUString();
 }
 
-OUString SAL_CALL ScAnnotationObj::getDate()
+OUString ScAnnotationObj::getDate()
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote ? pNote->GetDate() : OUString();
 }
 
-bool SAL_CALL ScAnnotationObj::getIsVisible()
+bool ScAnnotationObj::getIsVisible()
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote && pNote->IsCaptionShown();
 }
 
-void SAL_CALL ScAnnotationObj::setIsVisible( bool bIsVisible )
+void ScAnnotationObj::setIsVisible( bool bIsVisible )
 {
     SolarMutexGuard aGuard;
     // show/hide note with undo action
@@ -204,7 +204,7 @@ void SAL_CALL ScAnnotationObj::setIsVisible( bool bIsVisible )
 }
 
 // XSheetAnnotationShapeSupplier
-uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape()
+uno::Reference < drawing::XShape > ScAnnotationObj::getAnnotationShape()
 {
     SolarMutexGuard aGuard;
     uno::Reference < drawing::XShape > xShape;

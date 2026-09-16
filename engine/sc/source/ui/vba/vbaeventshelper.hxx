@@ -32,11 +32,11 @@ public:
     ScVbaEventsHelper( const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
     virtual ~ScVbaEventsHelper() override;
 
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& rEvent ) override;
+    virtual void notifyEvent( const css::document::EventObject& rEvent ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 protected:
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;

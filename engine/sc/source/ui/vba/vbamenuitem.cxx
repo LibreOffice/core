@@ -18,31 +18,31 @@ ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface >& rPar
 {
 }
 
-OUString SAL_CALL
+OUString
 ScVbaMenuItem::getCaption()
 {
     return m_xCommandBarControl->getCaption();
 }
 
-void SAL_CALL
+void
 ScVbaMenuItem::setCaption( const OUString& _caption )
 {
     m_xCommandBarControl->setCaption( _caption );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaMenuItem::getOnAction()
 {
     return m_xCommandBarControl->getOnAction();
 }
 
-void SAL_CALL
+void
 ScVbaMenuItem::setOnAction( const OUString& _onaction )
 {
     m_xCommandBarControl->setOnAction( _onaction );
 }
 
-void SAL_CALL
+void
 ScVbaMenuItem::Delete( )
 {
     m_xCommandBarControl->Delete();

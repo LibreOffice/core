@@ -47,7 +47,7 @@ ScPanelFactory::~ScPanelFactory()
 {
 }
 
-Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
+Reference<ui::XUIElement> ScPanelFactory::createUIElement (
     const OUString& rsResourceURL,
     const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {

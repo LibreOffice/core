@@ -337,7 +337,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
     ScDocShell *getDocShell();
     void WriteAttribute(sal_Int32 nAttr, std::u16string_view sVal);
     void WriteAttribute(sal_Int32 nAttr, std::string_view sVal)

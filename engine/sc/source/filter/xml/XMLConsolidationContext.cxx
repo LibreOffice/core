@@ -74,7 +74,7 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
     GetScImport().UnlockSolarMutex();
 }
 
-void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!bTargetAddr)
         return;

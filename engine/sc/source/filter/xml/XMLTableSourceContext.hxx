@@ -39,7 +39,7 @@ public:
 
     virtual ~ScXMLTableSourceContext() override;
 
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

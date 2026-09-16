@@ -77,23 +77,23 @@ public:
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup);
     // Methods
-    virtual OUString SAL_CALL getName() override;
-    virtual cpo::uno::Any SAL_CALL SeriesCollection(const cpo::uno::Any&) override;
-    virtual ::sal_Int32 SAL_CALL getChartType() override;
-    virtual void SAL_CALL setChartType( ::sal_Int32 _charttype ) override;
-    virtual void SAL_CALL Activate(  ) override;
-    virtual void SAL_CALL setSourceData( const cpo::uno::Reference< ::ooo::vba::excel::XRange >& range, const cpo::uno::Any& PlotBy ) override;
-    virtual ::sal_Int32 SAL_CALL Location(  ) override;
-    virtual ::sal_Int32 SAL_CALL getLocation(  ) override;
-    virtual void SAL_CALL setLocation( ::sal_Int32 where, const cpo::uno::Any& Name ) override;
-    virtual bool SAL_CALL getHasTitle(  ) override;
-    virtual void SAL_CALL setHasTitle( bool bTitle ) override;
-    virtual bool SAL_CALL getHasLegend(  ) override;
-    virtual void SAL_CALL setHasLegend( bool bLegend ) override;
-    virtual void SAL_CALL setPlotBy( ::sal_Int32 xlRowCol ) override;
-    virtual ::sal_Int32 SAL_CALL getPlotBy(  ) override;
-    virtual cpo::uno::Reference< ov::excel::XChartTitle > SAL_CALL getChartTitle(  ) override;
-    virtual cpo::uno::Any SAL_CALL Axes( const cpo::uno::Any& Type, const cpo::uno::Any& AxisGroup ) override;
+    virtual OUString getName() override;
+    virtual cpo::uno::Any SeriesCollection(const cpo::uno::Any&) override;
+    virtual ::sal_Int32 getChartType() override;
+    virtual void setChartType( ::sal_Int32 _charttype ) override;
+    virtual void Activate(  ) override;
+    virtual void setSourceData( const cpo::uno::Reference< ::ooo::vba::excel::XRange >& range, const cpo::uno::Any& PlotBy ) override;
+    virtual ::sal_Int32 Location(  ) override;
+    virtual ::sal_Int32 getLocation(  ) override;
+    virtual void setLocation( ::sal_Int32 where, const cpo::uno::Any& Name ) override;
+    virtual bool getHasTitle(  ) override;
+    virtual void setHasTitle( bool bTitle ) override;
+    virtual bool getHasLegend(  ) override;
+    virtual void setHasLegend( bool bLegend ) override;
+    virtual void setPlotBy( ::sal_Int32 xlRowCol ) override;
+    virtual ::sal_Int32 getPlotBy(  ) override;
+    virtual cpo::uno::Reference< ov::excel::XChartTitle > getChartTitle(  ) override;
+    virtual cpo::uno::Any Axes( const cpo::uno::Any& Type, const cpo::uno::Any& AxisGroup ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

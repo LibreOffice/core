@@ -250,7 +250,7 @@ ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uIn
     return nIndex < maEntries.size() ? maEntries[nIndex].get() : nullptr;
 }
 
-void SAL_CALL ScTableConditionalFormat::addNew(
+void ScTableConditionalFormat::addNew(
                     const cpo::uno::Sequence<beans::PropertyValue >& aConditionalEntry )
 {
     SolarMutexGuard aGuard;
@@ -341,7 +341,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     AddEntry_Impl(aEntry);
 }
 
-void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
+void ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -351,7 +351,7 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
     }
 }
 
-void SAL_CALL ScTableConditionalFormat::clear()
+void ScTableConditionalFormat::clear()
 {
     SolarMutexGuard aGuard;
     maEntries.clear();
@@ -359,7 +359,7 @@ void SAL_CALL ScTableConditionalFormat::clear()
 
 // XEnumerationAccess
 
-uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::createEnumeration()
+uno::Reference<container::XEnumeration> ScTableConditionalFormat::createEnumeration()
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, u"com.sun.star.sheet.TableConditionalEntryEnumeration"_ustr);
@@ -367,13 +367,13 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScTableConditionalFormat::getCount()
+sal_Int32 ScTableConditionalFormat::getCount()
 {
     SolarMutexGuard aGuard;
     return maEntries.size();
 }
 
-cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
@@ -383,12 +383,12 @@ cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xEntry);
 }
 
-cpo::uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
+cpo::uno::Type ScTableConditionalFormat::getElementType()
 {
     return cppu::UnoType<sheet::XSheetConditionalEntry>::get();
 }
 
-bool SAL_CALL ScTableConditionalFormat::hasElements()
+bool ScTableConditionalFormat::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
@@ -403,7 +403,7 @@ static OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
     return aRet;
 }
 
-cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
+cpo::uno::Any ScTableConditionalFormat::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -422,7 +422,7 @@ cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aNam
     return cpo::uno::Any(xEntry);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
+cpo::uno::Sequence<OUString> ScTableConditionalFormat::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -435,7 +435,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames(
     return aNames;
 }
 
-bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
+bool ScTableConditionalFormat::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
@@ -464,55 +464,55 @@ void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
 
 // XSheetCondition
 
-sheet::ConditionOperator SAL_CALL ScTableConditionalEntry::getOperator()
+sheet::ConditionOperator ScTableConditionalEntry::getOperator()
 {
     SolarMutexGuard aGuard;
     return lcl_ConditionModeToOperator( aData.meMode );
 }
 
-void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOperator )
+void ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOperator )
 {
     SolarMutexGuard aGuard;
     aData.meMode = lcl_ConditionOperatorToMode( nOperator );
 }
 
-sal_Int32 SAL_CALL ScTableConditionalEntry::getConditionOperator()
+sal_Int32 ScTableConditionalEntry::getConditionOperator()
 {
     SolarMutexGuard aGuard;
     return lcl_ConditionModeToOperatorNew( aData.meMode );
 }
 
-void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator )
+void ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
     aData.meMode = ScConditionEntry::GetModeFromApi( static_cast<sheet::ConditionOperator>(nOperator) );
 }
 
-OUString SAL_CALL ScTableConditionalEntry::getFormula1()
+OUString ScTableConditionalEntry::getFormula1()
 {
     SolarMutexGuard aGuard;
     return aData.maExpr1;
 }
 
-void SAL_CALL ScTableConditionalEntry::setFormula1( const OUString& aFormula1 )
+void ScTableConditionalEntry::setFormula1( const OUString& aFormula1 )
 {
     SolarMutexGuard aGuard;
     aData.maExpr1 = aFormula1;
 }
 
-OUString SAL_CALL ScTableConditionalEntry::getFormula2()
+OUString ScTableConditionalEntry::getFormula2()
 {
     SolarMutexGuard aGuard;
     return aData.maExpr2;
 }
 
-void SAL_CALL ScTableConditionalEntry::setFormula2( const OUString& aFormula2 )
+void ScTableConditionalEntry::setFormula2( const OUString& aFormula2 )
 {
     SolarMutexGuard aGuard;
     aData.maExpr2 = aFormula2;
 }
 
-table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition()
+table::CellAddress ScTableConditionalEntry::getSourcePosition()
 {
     SolarMutexGuard aGuard;
     table::CellAddress aRet;
@@ -522,7 +522,7 @@ table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition()
     return aRet;
 }
 
-void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddress& aSourcePosition )
+void ScTableConditionalEntry::setSourcePosition( const table::CellAddress& aSourcePosition )
 {
     SolarMutexGuard aGuard;
     aData.maPos.Set( static_cast<SCCOL>(aSourcePosition.Column), static_cast<SCROW>(aSourcePosition.Row), aSourcePosition.Sheet );
@@ -530,13 +530,13 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 
 // XSheetConditionalEntry
 
-OUString SAL_CALL ScTableConditionalEntry::getStyleName()
+OUString ScTableConditionalEntry::getStyleName()
 {
     SolarMutexGuard aGuard;
     return ScStyleNameConversion::DisplayToProgrammaticName( aData.maStyle, SfxStyleFamily::Para );
 }
 
-void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName )
+void ScTableConditionalEntry::setStyleName( const OUString& aStyleName )
 {
     SolarMutexGuard aGuard;
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SfxStyleFamily::Para );
@@ -655,55 +655,55 @@ ScTableValidationObj::~ScTableValidationObj()
 
 // XSheetCondition
 
-sheet::ConditionOperator SAL_CALL ScTableValidationObj::getOperator()
+sheet::ConditionOperator ScTableValidationObj::getOperator()
 {
     SolarMutexGuard aGuard;
     return lcl_ConditionModeToOperator( nMode );
 }
 
-void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOperator )
+void ScTableValidationObj::setOperator( sheet::ConditionOperator nOperator )
 {
     SolarMutexGuard aGuard;
     nMode = lcl_ConditionOperatorToMode( nOperator );
 }
 
-sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
+sal_Int32 ScTableValidationObj::getConditionOperator()
 {
     SolarMutexGuard aGuard;
     return lcl_ConditionModeToOperatorNew( nMode );
 }
 
-void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
+void ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
     nMode = ScConditionEntry::GetModeFromApi( static_cast<css::sheet::ConditionOperator>(nOperator) );
 }
 
-OUString SAL_CALL ScTableValidationObj::getFormula1()
+OUString ScTableValidationObj::getFormula1()
 {
     SolarMutexGuard aGuard;
     return aExpr1;
 }
 
-void SAL_CALL ScTableValidationObj::setFormula1( const OUString& aFormula1 )
+void ScTableValidationObj::setFormula1( const OUString& aFormula1 )
 {
     SolarMutexGuard aGuard;
     aExpr1 = aFormula1;
 }
 
-OUString SAL_CALL ScTableValidationObj::getFormula2()
+OUString ScTableValidationObj::getFormula2()
 {
     SolarMutexGuard aGuard;
     return aExpr2;
 }
 
-void SAL_CALL ScTableValidationObj::setFormula2( const OUString& aFormula2 )
+void ScTableValidationObj::setFormula2( const OUString& aFormula2 )
 {
     SolarMutexGuard aGuard;
     aExpr2 = aFormula2;
 }
 
-table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition()
+table::CellAddress ScTableValidationObj::getSourcePosition()
 {
     SolarMutexGuard aGuard;
     table::CellAddress aRet;
@@ -713,13 +713,13 @@ table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition()
     return aRet;
 }
 
-void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress& aSourcePosition )
+void ScTableValidationObj::setSourcePosition( const table::CellAddress& aSourcePosition )
 {
     SolarMutexGuard aGuard;
     aSrcPos.Set( static_cast<SCCOL>(aSourcePosition.Column), static_cast<SCROW>(aSourcePosition.Row), aSourcePosition.Sheet );
 }
 
-cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
+cpo::uno::Sequence<sheet::FormulaToken> ScTableValidationObj::getTokens( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     if (nIndex >= 2 || nIndex < 0)
@@ -728,7 +728,7 @@ cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens
     return nIndex == 0 ? aTokens1 : aTokens2;
 }
 
-void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
+void ScTableValidationObj::setTokens( sal_Int32 nIndex, const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
 {
     SolarMutexGuard aGuard;
     if (nIndex >= 2 || nIndex < 0)
@@ -746,12 +746,12 @@ void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const cpo::uno:
     }
 }
 
-sal_Int32 SAL_CALL ScTableValidationObj::getCount()
+sal_Int32 ScTableValidationObj::getCount()
 {
     return 2;
 }
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScTableValidationObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -759,7 +759,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getProper
     return aRef;
 }
 
-void SAL_CALL ScTableValidationObj::setPropertyValue(
+void ScTableValidationObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -870,7 +870,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScTableValidationObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;

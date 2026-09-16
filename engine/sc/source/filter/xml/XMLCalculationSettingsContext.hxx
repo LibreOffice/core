@@ -45,14 +45,14 @@ public:
 
     virtual ~ScXMLCalculationSettingsContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void SetNullDate(const css::util::Date& aDate) { aNullDate = aDate; }
     void SetIterationStatus(const bool bValue) { bIsIterationEnabled = bValue; }
     void SetIterationCount(const sal_Int32 nValue) { nIterationCount = nValue; }
     void SetIterationEpsilon(const double fValue) { fIterationEpsilon = fValue; }
-    virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
+    virtual void endFastElement( sal_Int32 Element ) override;
 };
 
 class ScXMLNullDateContext : public ScXMLImportContext

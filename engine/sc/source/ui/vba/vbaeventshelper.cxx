@@ -132,28 +132,28 @@ public:
     void stopControllerListening( const uno::Reference< frame::XController >& rxController );
 
     // XTopWindowListener
-    virtual void SAL_CALL windowOpened( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowClosing( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowClosed( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowActivated( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowDeactivated( const lang::EventObject& rEvent ) override;
+    virtual void windowOpened( const lang::EventObject& rEvent ) override;
+    virtual void windowClosing( const lang::EventObject& rEvent ) override;
+    virtual void windowClosed( const lang::EventObject& rEvent ) override;
+    virtual void windowMinimized( const lang::EventObject& rEvent ) override;
+    virtual void windowNormalized( const lang::EventObject& rEvent ) override;
+    virtual void windowActivated( const lang::EventObject& rEvent ) override;
+    virtual void windowDeactivated( const lang::EventObject& rEvent ) override;
 
     // XWindowListener
-    virtual void SAL_CALL windowResized( const awt::WindowEvent& rEvent ) override;
-    virtual void SAL_CALL windowMoved( const awt::WindowEvent& rEvent ) override;
-    virtual void SAL_CALL windowShown( const lang::EventObject& rEvent ) override;
-    virtual void SAL_CALL windowHidden( const lang::EventObject& rEvent ) override;
+    virtual void windowResized( const awt::WindowEvent& rEvent ) override;
+    virtual void windowMoved( const awt::WindowEvent& rEvent ) override;
+    virtual void windowShown( const lang::EventObject& rEvent ) override;
+    virtual void windowHidden( const lang::EventObject& rEvent ) override;
 
     // XBorderResizeListener
-    virtual void SAL_CALL borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) override;
+    virtual void borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) override;
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& rEvent ) override;
+    virtual void changesOccurred( const util::ChangesEvent& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& rEvent ) override;
+    virtual void disposing( const lang::EventObject& rEvent ) override;
 
 private:
     /** Starts listening to the document model. */
@@ -255,27 +255,27 @@ void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::X
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowOpened( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowOpened( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowClosing( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowClosing( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowClosed( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowClosed( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowMinimized( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowMinimized( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowNormalized( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowNormalized( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEvent )
+void ScVbaEventListener::windowActivated( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -296,7 +296,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rEvent )
+void ScVbaEventListener::windowDeactivated( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -312,7 +312,7 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent )
+void ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -324,19 +324,19 @@ void SAL_CALL ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent 
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowMoved( const awt::WindowEvent& /*rEvent*/ )
+void ScVbaEventListener::windowMoved( const awt::WindowEvent& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowShown( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowShown( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowHidden( const lang::EventObject& /*rEvent*/ )
+void ScVbaEventListener::windowHidden( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ )
+void ScVbaEventListener::borderWidthsChanged( const uno::Reference< cpo::uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -349,7 +349,7 @@ void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< cpo
     }
 }
 
-void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEvent )
+void ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -401,7 +401,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
     }
 }
 
-void SAL_CALL ScVbaEventListener::disposing( const lang::EventObject& rEvent )
+void ScVbaEventListener::disposing( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -571,7 +571,7 @@ ScVbaEventsHelper::~ScVbaEventsHelper()
 {
 }
 
-void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent )
+void ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent )
 {
     static const cpo::uno::Sequence< cpo::uno::Any > saEmptyArgs;
     if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC )) ||

@@ -121,42 +121,42 @@ public:
     virtual void            PutData( const ScSubTotalParam& rParam ) = 0;
 
                             // XSubTotalDescriptor
-    virtual void SAL_CALL   addNew( const cpo::uno::Sequence< css::sheet::SubTotalColumn >& aSubTotalColumns,
+    virtual void   addNew( const cpo::uno::Sequence< css::sheet::SubTotalColumn >& aSubTotalColumns,
                                 sal_Int32 nGroupColumn ) override;
-    virtual void SAL_CALL   clear() override;
+    virtual void   clear() override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
                             // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 //  ScSubTotalDescriptor - dummy container to use with XImportTarget
@@ -207,17 +207,17 @@ public:
     virtual                 ~ScSubTotalFieldObj() override;
 
                             // XSubTotalField
-    virtual sal_Int32 SAL_CALL getGroupColumn() override;
-    virtual void SAL_CALL   setGroupColumn( sal_Int32 nGroupColumn ) override;
-    virtual cpo::uno::Sequence< css::sheet::SubTotalColumn > SAL_CALL
+    virtual sal_Int32 getGroupColumn() override;
+    virtual void   setGroupColumn( sal_Int32 nGroupColumn ) override;
+    virtual cpo::uno::Sequence< css::sheet::SubTotalColumn >
                             getSubTotalColumns() override;
-    virtual void SAL_CALL   setSubTotalColumns( const cpo::uno::Sequence<
+    virtual void   setSubTotalColumns( const cpo::uno::Sequence<
                                 css::sheet::SubTotalColumn >& aSubTotalColumns ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class ScConsolidationDescriptor final : public cppu::WeakImplHelper<
@@ -235,25 +235,25 @@ public:
     const ScConsolidateParam& GetParam() const  { return aParam; }
 
                             // XConsolidationDescriptor
-    virtual css::sheet::GeneralFunction SAL_CALL getFunction() override;
-    virtual void SAL_CALL   setFunction( css::sheet::GeneralFunction nFunction ) override;
-    virtual cpo::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
+    virtual css::sheet::GeneralFunction getFunction() override;
+    virtual void   setFunction( css::sheet::GeneralFunction nFunction ) override;
+    virtual cpo::uno::Sequence< css::table::CellRangeAddress >
                             getSources(  ) override;
-    virtual void SAL_CALL   setSources( const cpo::uno::Sequence< css::table::CellRangeAddress >& aSources ) override;
-    virtual css::table::CellAddress SAL_CALL getStartOutputPosition() override;
-    virtual void SAL_CALL   setStartOutputPosition(
+    virtual void   setSources( const cpo::uno::Sequence< css::table::CellRangeAddress >& aSources ) override;
+    virtual css::table::CellAddress getStartOutputPosition() override;
+    virtual void   setStartOutputPosition(
                                 const css::table::CellAddress& aStartOutputPosition ) override;
-    virtual bool SAL_CALL getUseColumnHeaders() override;
-    virtual void SAL_CALL   setUseColumnHeaders( bool bUseColumnHeaders ) override;
-    virtual bool SAL_CALL getUseRowHeaders() override;
-    virtual void SAL_CALL   setUseRowHeaders( bool bUseRowHeaders ) override;
-    virtual bool SAL_CALL getInsertLinks() override;
-    virtual void SAL_CALL   setInsertLinks( bool bInsertLinks ) override;
+    virtual bool getUseColumnHeaders() override;
+    virtual void   setUseColumnHeaders( bool bUseColumnHeaders ) override;
+    virtual bool getUseRowHeaders() override;
+    virtual void   setUseRowHeaders( bool bUseRowHeaders ) override;
+    virtual bool getInsertLinks() override;
+    virtual void   setInsertLinks( bool bInsertLinks ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 //  ScFilterDescriptorBase - base class for FilterDescriptor
@@ -285,47 +285,47 @@ public:
     virtual void            PutData( const ScQueryParam& rParam ) = 0;
 
                             // XSheetFilterDescriptor
-    virtual cpo::uno::Sequence< css::sheet::TableFilterField > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::TableFilterField >
                             getFilterFields() override;
-    virtual void SAL_CALL   setFilterFields( const cpo::uno::Sequence<
+    virtual void   setFilterFields( const cpo::uno::Sequence<
                                 css::sheet::TableFilterField >& aFilterFields ) override;
 
                             // XSheetFilterDescriptor2
-    virtual cpo::uno::Sequence< css::sheet::TableFilterField2 > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::TableFilterField2 >
                             getFilterFields2() override;
-    virtual void SAL_CALL   setFilterFields2( const cpo::uno::Sequence<
+    virtual void   setFilterFields2( const cpo::uno::Sequence<
                                 css::sheet::TableFilterField2 >& aFilterFields ) override;
 
                             // XSheetFilterDescriptor3
-    virtual cpo::uno::Sequence< css::sheet::TableFilterField3 > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::TableFilterField3 >
                             getFilterFields3() override;
-    virtual void SAL_CALL   setFilterFields3( const cpo::uno::Sequence<
+    virtual void   setFilterFields3( const cpo::uno::Sequence<
                                 css::sheet::TableFilterField3 >& aFilterFields ) override;
 
                             // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 //  ScFilterDescriptor - dummy container to use with XFilterable
@@ -416,56 +416,56 @@ public:
     void                    SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
                             // XNamed
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL   setName( const OUString& aName ) override;
+    virtual OUString getName() override;
+    virtual void   setName( const OUString& aName ) override;
 
                             // XDatabaseRange
-    SC_DLLPUBLIC virtual css::table::CellRangeAddress SAL_CALL getDataArea() override;
-    virtual void SAL_CALL   setDataArea( const css::table::CellRangeAddress& aDataArea ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    SC_DLLPUBLIC virtual css::table::CellRangeAddress getDataArea() override;
+    virtual void   setDataArea( const css::table::CellRangeAddress& aDataArea ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
                             getSortDescriptor() override;
-    virtual cpo::uno::Reference< css::sheet::XSheetFilterDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetFilterDescriptor >
                             getFilterDescriptor() override;
-    virtual cpo::uno::Reference< css::sheet::XSubTotalDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSubTotalDescriptor >
                             getSubTotalDescriptor() override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
                             getImportDescriptor() override;
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() override;
-    virtual void SAL_CALL   addRefreshListener( const cpo::uno::Reference<
+    virtual void   refresh() override;
+    virtual void   addRefreshListener( const cpo::uno::Reference<
                                     css::util::XRefreshListener >& l ) override;
-    virtual void SAL_CALL   removeRefreshListener( const cpo::uno::Reference<
+    virtual void   removeRefreshListener( const cpo::uno::Reference<
                                     css::util::XRefreshListener >& l ) override;
 
                             // XCellRangeReferrer
-    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange >
                             getReferredCells() override;
 
                             // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    SC_DLLPUBLIC virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    SC_DLLPUBLIC virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    SC_DLLPUBLIC virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    SC_DLLPUBLIC virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class ScDatabaseRangesObj final : public cppu::WeakImplHelper<
@@ -488,31 +488,31 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XDatabaseRanges
-    virtual void SAL_CALL   addNewByName( const OUString& aName,
+    virtual void   addNewByName( const OUString& aName,
                                 const css::table::CellRangeAddress& aRange ) override;
-    virtual void SAL_CALL   removeByName( const OUString& aName ) override;
+    virtual void   removeByName( const OUString& aName ) override;
 
                             // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >
                             createEnumeration() override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
                             // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class ScUnnamedDatabaseRangesObj final : public cppu::WeakImplHelper<
@@ -529,9 +529,9 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XUnnamedDatabaseRanges
-    virtual void SAL_CALL setByTable( const css::table::CellRangeAddress& aRange ) override;
-    virtual cpo::uno::Any SAL_CALL getByTable( sal_Int32 nTab ) override;
-    virtual bool SAL_CALL hasByTable( sal_Int32 nTab ) override;
+    virtual void setByTable( const css::table::CellRangeAddress& aRange ) override;
+    virtual cpo::uno::Any getByTable( sal_Int32 nTab ) override;
+    virtual bool hasByTable( sal_Int32 nTab ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

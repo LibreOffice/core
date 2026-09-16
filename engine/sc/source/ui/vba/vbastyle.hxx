@@ -47,15 +47,15 @@ public:
     static cpo::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const rtl::Reference<ScModelObj>& xModel );
     virtual cpo::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; };
     // XStyle Methods
-    virtual bool SAL_CALL BuiltIn() override;
-    virtual void SAL_CALL setName( const OUString& Name ) override;
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setNameLocal( const OUString& NameLocal ) override;
-    virtual OUString SAL_CALL getNameLocal() override;
-    virtual void SAL_CALL Delete() override;
+    virtual bool BuiltIn() override;
+    virtual void setName( const OUString& Name ) override;
+    virtual OUString getName() override;
+    virtual void setNameLocal( const OUString& NameLocal ) override;
+    virtual OUString getNameLocal() override;
+    virtual void Delete() override;
     // XFormat
-    virtual void SAL_CALL setMergeCells( const cpo::uno::Any& MergeCells ) override;
-    virtual cpo::uno::Any SAL_CALL getMergeCells(  ) override;
+    virtual void setMergeCells( const cpo::uno::Any& MergeCells ) override;
+    virtual cpo::uno::Any getMergeCells(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -32,19 +32,19 @@ ScVbaTextBoxShape::ScVbaTextBoxShape( const uno::Reference< cpo::uno::XComponent
     m_xTextRange.set( xShape , uno::UNO_QUERY_THROW );
 }
 
-OUString SAL_CALL
+OUString
 ScVbaTextBoxShape::getText()
 {
     return m_xTextRange->getString();
 }
 
-void SAL_CALL
+void
 ScVbaTextBoxShape::setText( const OUString& _text )
 {
     m_xTextRange->setString( _text );
 }
 
-uno::Reference< excel::XCharacters > SAL_CALL
+uno::Reference< excel::XCharacters >
 ScVbaTextBoxShape::characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length )
 {
     ScDocShell* pDocShell = excel::getDocShell( m_xModel );

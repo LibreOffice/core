@@ -19,7 +19,7 @@ ScVbaMenuBar::ScVbaMenuBar( const uno::Reference< ov::XHelperInterface >& rParen
 {
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaMenuBar::Menus( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBar->Controls( cpo::uno::Any() ), uno::UNO_QUERY_THROW );

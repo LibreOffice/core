@@ -69,77 +69,77 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataProvider
-    virtual bool SAL_CALL createDataSourcePossible(
+    virtual bool createDataSourcePossible(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual cpo::uno::Reference<
-        css::chart2::data::XDataSource > SAL_CALL createDataSource(
+        css::chart2::data::XDataSource > createDataSource(
             const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual cpo::uno::Sequence<
-        css::beans::PropertyValue > SAL_CALL detectArguments(
+        css::beans::PropertyValue > detectArguments(
             const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
 
-    virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual bool createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
 
     virtual cpo::uno::Reference<
-        css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
+        css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(
             const OUString& aRangeRepresentation ) override;
 
-    virtual cpo::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation,
             const OUString& aRoleQualifier ) override;
 
-    virtual cpo::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
+    virtual cpo::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
 
     // XSheetDataProvider
-    virtual bool SAL_CALL createDataSequenceByFormulaTokensPossible(
+    virtual bool createDataSequenceByFormulaTokensPossible(
         const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
     virtual cpo::uno::Reference< css::chart2::data::XDataSequence >
-        SAL_CALL createDataSequenceByFormulaTokens(
+        createDataSequenceByFormulaTokens(
             const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
     // XRangeXMLConversion
-    virtual OUString SAL_CALL convertRangeToXML( const OUString& sRangeRepresentation ) override;
+    virtual OUString convertRangeToXML( const OUString& sRangeRepresentation ) override;
 
-    virtual OUString SAL_CALL convertRangeFromXML( const OUString& sXMLRange ) override;
+    virtual OUString convertRangeFromXML( const OUString& sXMLRange ) override;
 
     // XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo>
         getPropertySetInfo() override;
 
-    virtual void SAL_CALL setPropertyValue(
+    virtual void setPropertyValue(
             const OUString& rPropertyName,
             const cpo::uno::Any& rValue) override;
 
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
             const OUString& rPropertyName) override;
 
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
 
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
 
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService( const OUString&
+    virtual bool supportsService( const OUString&
             rServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
 private:
@@ -164,16 +164,16 @@ public:
 
     // XDataSource
     virtual cpo::uno::Sequence< cpo::uno::Reference<
-            css::chart2::data::XLabeledDataSequence > > SAL_CALL
+            css::chart2::data::XLabeledDataSequence > >
         getDataSequences() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService( const OUString&
+    virtual bool supportsService( const OUString&
             rServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     // implementation
@@ -213,74 +213,74 @@ public:
 
     // XDataSequence
     virtual cpo::uno::Sequence< cpo::uno::Any >
-        SAL_CALL getData() override;
-    virtual OUString SAL_CALL getSourceRangeRepresentation() override;
+        getData() override;
+    virtual OUString getSourceRangeRepresentation() override;
     virtual cpo::uno::Sequence< OUString >
-        SAL_CALL generateLabel(css::chart2::data::LabelOrigin nOrigin) override;
+        generateLabel(css::chart2::data::LabelOrigin nOrigin) override;
 
     /** Get the number format key for the n-th data entry
      * If nIndex == -1, then you will get the number format key for the first non-empty entry
      */
-    virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
+    virtual ::sal_Int32 getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // XNumericalDataSequence
     virtual cpo::uno::Sequence< double >
-        SAL_CALL getNumericalData() override;
+        getNumericalData() override;
 
     // XTextualDataSequence
     virtual cpo::uno::Sequence< OUString >
-        SAL_CALL getTextualData() override;
+        getTextualData() override;
 
     // XTimeBased
-    virtual bool SAL_CALL switchToNext(bool bWrap) override;
-    virtual bool SAL_CALL setToPointInTime(sal_Int32 nPoint) override;
+    virtual bool switchToNext(bool bWrap) override;
+    virtual bool setToPointInTime(sal_Int32 nPoint) override;
 
-    virtual void SAL_CALL setRange(sal_Int32 nStart, sal_Int32 nEnd) override;
+    virtual void setRange(sal_Int32 nStart, sal_Int32 nEnd) override;
 
     // XPropertySet
     virtual cpo::uno::Reference<
-        css::beans::XPropertySetInfo> SAL_CALL
+        css::beans::XPropertySetInfo>
         getPropertySetInfo() override;
 
-    virtual void SAL_CALL setPropertyValue(
+    virtual void setPropertyValue(
             const OUString& rPropertyName,
             const cpo::uno::Any& rValue) override;
 
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
             const OUString& rPropertyName) override;
 
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
 
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
 
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
             const OUString& rPropertyName,
             const cpo::uno::Reference<  css::beans::XVetoableChangeListener>& rListener) override;
 
     // XCloneable
-    virtual cpo::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService( const OUString&
+    virtual bool supportsService( const OUString&
             rServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
 private:

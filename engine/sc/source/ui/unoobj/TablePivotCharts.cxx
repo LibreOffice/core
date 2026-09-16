@@ -67,7 +67,7 @@ void TablePivotCharts::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& r
 }
 
 // XTablePivotCharts
-void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
+void TablePivotCharts::addNewByName(OUString const & rName,
                                              const awt::Rectangle& aRect,
                                              OUString const & rDataPilotName)
 {
@@ -162,7 +162,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     pModel->AddUndo(std::make_unique<SdrUndoInsertObj>(*pObject));
 }
 
-void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
+void TablePivotCharts::removeByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObject = sctools::findChartsByName(m_pDocShell, m_nTab, rName, sctools::ChartSourceType::PIVOT_TABLE);
@@ -177,7 +177,7 @@ void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL TablePivotCharts::getCount()
+sal_Int32 TablePivotCharts::getCount()
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = 0;
@@ -197,7 +197,7 @@ sal_Int32 SAL_CALL TablePivotCharts::getCount()
     return nCount;
 }
 
-cpo::uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
+cpo::uno::Any TablePivotCharts::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObject = sctools::getChartByIndex(m_pDocShell, m_nTab, nIndex,
@@ -220,18 +220,18 @@ cpo::uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
     return cpo::uno::Any(xChart);
 }
 
-cpo::uno::Type SAL_CALL TablePivotCharts::getElementType()
+cpo::uno::Type TablePivotCharts::getElementType()
 {
     return cppu::UnoType<table::XTablePivotChart>::get();
 }
 
-bool SAL_CALL TablePivotCharts::hasElements()
+bool TablePivotCharts::hasElements()
 {
     SolarMutexGuard aGuard;
     return getCount() != 0;
 }
 
-cpo::uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
+cpo::uno::Any TablePivotCharts::getByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 
@@ -245,7 +245,7 @@ cpo::uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
     return cpo::uno::Any(xChart);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
+cpo::uno::Sequence<OUString> TablePivotCharts::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -266,7 +266,7 @@ cpo::uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
     return comphelper::containerToSequence(aElements);
 }
 
-bool SAL_CALL TablePivotCharts::hasByName(OUString const & rName)
+bool TablePivotCharts::hasByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 

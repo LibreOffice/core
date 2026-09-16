@@ -62,144 +62,144 @@ ScVbaGlobals::getApplication()
     return mxApplication;
 }
 
-uno::Reference<excel::XApplication > SAL_CALL
+uno::Reference<excel::XApplication >
 ScVbaGlobals::getExcel()
 {
        return getApplication();
 }
 
-uno::Reference< excel::XWorkbook > SAL_CALL
+uno::Reference< excel::XWorkbook >
 ScVbaGlobals::getActiveWorkbook()
 {
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_SET_THROW);
     return xWorkbook;
 }
 
-uno::Reference< excel::XWindow > SAL_CALL
+uno::Reference< excel::XWindow >
 ScVbaGlobals::getActiveWindow()
 {
     return getApplication()->getActiveWindow();
 }
 
-uno::Reference< excel::XWorksheet > SAL_CALL
+uno::Reference< excel::XWorksheet >
 ScVbaGlobals::getActiveSheet()
 {
     return getApplication()->getActiveSheet();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::WorkBooks( const cpo::uno::Any& aIndex )
 {
     return getApplication()->Workbooks(aIndex);
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::WorkSheets(const cpo::uno::Any& aIndex)
 {
     return getApplication()->Worksheets( aIndex );
 }
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::Sheets( const cpo::uno::Any& aIndex )
 {
     return WorkSheets( aIndex );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 )
 {
     return getApplication()->Range( Cell1, Cell2 );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::Names( const cpo::uno::Any& aIndex )
 {
     return getApplication()->Names( aIndex );
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaGlobals::getActiveCell()
 {
     return getApplication()->getActiveCell();
 }
 
-uno::Reference< XAssistant > SAL_CALL
+uno::Reference< XAssistant >
 ScVbaGlobals::getAssistant()
 {
     return getApplication()->getAssistant();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::getSelection()
 {
     return getApplication()->getSelection();
 }
 
-uno::Reference< excel::XWorkbook > SAL_CALL
+uno::Reference< excel::XWorkbook >
 ScVbaGlobals::getThisWorkbook()
 {
     return getApplication()->getThisWorkbook();
 }
-void SAL_CALL
+void
 ScVbaGlobals::Calculate()
 {
     return getApplication()->Calculate();
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaGlobals::Cells( const cpo::uno::Any& RowIndex, const cpo::uno::Any& ColumnIndex )
 {
     return getApplication()->getActiveSheet()->Cells( RowIndex, ColumnIndex );
 }
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaGlobals::Columns( const cpo::uno::Any& aIndex )
 {
     return getApplication()->getActiveSheet()->Columns( aIndex );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::CommandBars( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XApplicationBase > xBase( getApplication(), uno::UNO_QUERY_THROW );
     return xBase->CommandBars( aIndex );
 }
 
-cpo::uno::Reference< ov::excel::XRange > SAL_CALL
+cpo::uno::Reference< ov::excel::XRange >
 ScVbaGlobals::Union( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 )
 {
     return getApplication()->Union(  Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Arg16, Arg17, Arg18, Arg19, Arg20, Arg21, Arg22, Arg23, Arg24, Arg25, Arg26, Arg27, Arg28, Arg29, Arg30 );
 }
-cpo::uno::Reference< ov::excel::XRange > SAL_CALL
+cpo::uno::Reference< ov::excel::XRange >
 ScVbaGlobals::Intersect( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 )
 {
     return getApplication()->Intersect(  Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Arg16, Arg17, Arg18, Arg19, Arg20, Arg21, Arg22, Arg23, Arg24, Arg25, Arg26, Arg27, Arg28, Arg29, Arg30 );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::Evaluate( const OUString& Name )
 {
     return getApplication()->Evaluate( Name );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::WorksheetFunction(  )
 {
     return getApplication()->WorksheetFunction();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::Windows( const cpo::uno::Any& aIndex )
 {
     return getApplication()->Windows( aIndex );
 }
 
-uno::Reference< excel::XRange > SAL_CALL
+uno::Reference< excel::XRange >
 ScVbaGlobals::Rows( const cpo::uno::Any& aIndex )
 {
     return getApplication()->getActiveSheet()->Rows( aIndex );
 
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::getDebug()
 {
     try // return empty object on error
@@ -215,13 +215,13 @@ ScVbaGlobals::getDebug()
     return cpo::uno::Any();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaGlobals::MenuBars( const cpo::uno::Any& aIndex )
 {
     return getApplication()->MenuBars(aIndex);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 ScVbaGlobals::getAvailableServiceNames(  )
 {
     static const cpo::uno::Sequence< OUString > serviceNames = comphelper::concatSequences(

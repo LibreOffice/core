@@ -20,25 +20,25 @@ ScVbaMenu::ScVbaMenu( const uno::Reference< ov::XHelperInterface >& rParent, con
 {
 }
 
-OUString SAL_CALL
+OUString
 ScVbaMenu::getCaption()
 {
     return m_xCommandBarControl->getCaption();
 }
 
-void SAL_CALL
+void
 ScVbaMenu::setCaption( const OUString& _caption )
 {
     m_xCommandBarControl->setCaption( _caption );
 }
 
-void SAL_CALL
+void
 ScVbaMenu::Delete( )
 {
     m_xCommandBarControl->Delete();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaMenu::MenuItems( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCommandBarControls > xCommandBarControls( m_xCommandBarControl->Controls( cpo::uno::Any() ), uno::UNO_QUERY_THROW );

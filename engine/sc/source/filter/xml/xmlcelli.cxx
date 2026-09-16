@@ -637,7 +637,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     ++mnCurParagraph;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLTableRowCellContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -1573,7 +1573,7 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
             GetScImport().GetFormulaErrorConstant(*maStringValue) != FormulaError::NONE);
 }
 
-void SAL_CALL ScXMLTableRowCellContext::endFastElement(sal_Int32 /*nElement*/)
+void ScXMLTableRowCellContext::endFastElement(sal_Int32 /*nElement*/)
 {
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )

@@ -70,7 +70,7 @@ ScVbaWSFunction::getIntrospection()
     return uno::Reference<beans::XIntrospectionAccess>();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& /*OutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*OutParam*/)
 {
     // create copy of parameters, replace Excel range objects with UNO range objects
@@ -234,19 +234,19 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< 
     return aRet;
 }
 
-void SAL_CALL
+void
 ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const cpo::uno::Any& /*Value*/)
 {
     throw beans::UnknownPropertyException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWSFunction::getValue(const OUString& /*PropertyName*/)
 {
     throw beans::UnknownPropertyException();
 }
 
-bool SAL_CALL
+bool
 ScVbaWSFunction::hasMethod(const OUString& Name)
 {
     bool bIsFound = false;
@@ -265,13 +265,13 @@ ScVbaWSFunction::hasMethod(const OUString& Name)
     return bIsFound;
 }
 
-bool SAL_CALL
+bool
 ScVbaWSFunction::hasProperty(const OUString& /*Name*/)
 {
      return false;
 }
 
-OUString SAL_CALL
+OUString
 ScVbaWSFunction::getExactName( const OUString& aApproximateName )
 {
     OUString sName = aApproximateName.toAsciiUpperCase();

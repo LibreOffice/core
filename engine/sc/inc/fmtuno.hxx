@@ -83,31 +83,31 @@ public:
                                 formula::FormulaGrammar::Grammar eGrammar) const;
 
                             // XSheetConditionalEntries
-    virtual void SAL_CALL   addNew( const cpo::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry ) override;
-    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex ) override;
-    virtual void SAL_CALL   clear() override;
+    virtual void   addNew( const cpo::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry ) override;
+    virtual void   removeByIndex( sal_Int32 nIndex ) override;
+    virtual void   clear() override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
                             // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
                             // XEnumerationAccess
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class ScTableConditionalEntry final : public cppu::WeakImplHelper<
@@ -126,25 +126,25 @@ public:
     void                    GetData(ScCondFormatEntryItem& rData) const;
 
                             // XSheetCondition
-    virtual css::sheet::ConditionOperator SAL_CALL getOperator() override;
-    virtual sal_Int32 SAL_CALL getConditionOperator() override;
-    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator ) override;
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator ) override;
-    virtual OUString SAL_CALL getFormula1() override;
-    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 ) override;
-    virtual OUString SAL_CALL getFormula2() override;
-    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 ) override;
-    virtual css::table::CellAddress SAL_CALL getSourcePosition() override;
-    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
+    virtual css::sheet::ConditionOperator getOperator() override;
+    virtual sal_Int32 getConditionOperator() override;
+    virtual void   setOperator( css::sheet::ConditionOperator nOperator ) override;
+    virtual void   setConditionOperator( sal_Int32 nOperator ) override;
+    virtual OUString getFormula1() override;
+    virtual void   setFormula1( const OUString& aFormula1 ) override;
+    virtual OUString getFormula2() override;
+    virtual void   setFormula2( const OUString& aFormula2 ) override;
+    virtual css::table::CellAddress getSourcePosition() override;
+    virtual void setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
 
                             // XSheetConditionalEntry
-    virtual OUString SAL_CALL getStyleName() override;
-    virtual void SAL_CALL   setStyleName( const OUString& aStyleName ) override;
+    virtual OUString getStyleName() override;
+    virtual void   setStyleName( const OUString& aStyleName ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class SC_DLLPUBLIC ScTableValidationObj final : public cppu::WeakImplHelper<
@@ -191,44 +191,44 @@ public:
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
 
                             // XSheetCondition
-    virtual css::sheet::ConditionOperator SAL_CALL getOperator() override;
-    virtual sal_Int32 SAL_CALL getConditionOperator() override;
-    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator ) override;
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator ) override;
-    virtual OUString SAL_CALL getFormula1() override;
-    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 ) override;
-    virtual OUString SAL_CALL getFormula2() override;
-    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 ) override;
-    virtual css::table::CellAddress SAL_CALL getSourcePosition() override;
-    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
+    virtual css::sheet::ConditionOperator getOperator() override;
+    virtual sal_Int32 getConditionOperator() override;
+    virtual void   setOperator( css::sheet::ConditionOperator nOperator ) override;
+    virtual void   setConditionOperator( sal_Int32 nOperator ) override;
+    virtual OUString getFormula1() override;
+    virtual void   setFormula1( const OUString& aFormula1 ) override;
+    virtual OUString getFormula2() override;
+    virtual void   setFormula2( const OUString& aFormula2 ) override;
+    virtual css::table::CellAddress getSourcePosition() override;
+    virtual void setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
 
                             // XMultiFormulaTokens
     virtual cpo::uno::Sequence< css::sheet::FormulaToken >
-                            SAL_CALL getTokens( sal_Int32 nIndex ) override;
-    virtual void SAL_CALL setTokens( sal_Int32 nIndex,
+                            getTokens( sal_Int32 nIndex ) override;
+    virtual void setTokens( sal_Int32 nIndex,
                                      const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
-    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual sal_Int32 getCount() override;
 
                             // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ public:
     /// @throws uno::RuntimeException
     WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any nextElement(  ) override
     {
         uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getWorkbook( m_xContext, static_cast<ScModelObj*>(xDoc.get()), m_xParent );
@@ -105,7 +105,7 @@ ScVbaWorkbooks::createCollectionObject( const cpo::uno::Any& aSource )
     return getWorkbook( mxContext, dynamic_cast<ScModelObj*>(xDoc.get()), mxParent );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorkbooks::Add( const cpo::uno::Any& Template )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc;
@@ -154,7 +154,7 @@ ScVbaWorkbooks::Add( const cpo::uno::Any& Template )
     return aRet;
 }
 
-void SAL_CALL
+void
 ScVbaWorkbooks::Close()
 {
 }
@@ -191,7 +191,7 @@ ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLinks*/, const cpo::uno::Any& ReadOnly, const cpo::uno::Any& Format, const cpo::uno::Any& /*Password*/, const cpo::uno::Any& /*WriteResPassword*/, const cpo::uno::Any& /*IgnoreReadOnlyRecommended*/, const cpo::uno::Any& /*Origin*/, const cpo::uno::Any& Delimiter, const cpo::uno::Any& /*Editable*/, const cpo::uno::Any& /*Notify*/, const cpo::uno::Any& /*Converter*/, const cpo::uno::Any& /*AddToMru*/ )
 {
     // we need to detect if this is a URL, if not then assume it's a file path

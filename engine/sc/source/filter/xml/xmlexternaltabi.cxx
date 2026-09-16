@@ -96,7 +96,7 @@ static bool lcl_isValidRelativeURL(const OUString& rUrl)
     return true;
 }
 
-void SAL_CALL ScXMLExternalRefTabSourceContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLExternalRefTabSourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (!pDoc)
@@ -119,7 +119,7 @@ ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
 {
 }
 
-Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFastChildContext(
+Reference< XFastContextHandler > ScXMLExternalRefRowsContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     // #i101319# row elements inside group, rows or header-rows
@@ -171,7 +171,7 @@ ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
 {
 }
 
-Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFastChildContext(
+Reference< XFastContextHandler > ScXMLExternalRefRowContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     sax_fastparser::FastAttributeList *pAttribList =
@@ -183,7 +183,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFast
     return nullptr;
 }
 
-void SAL_CALL ScXMLExternalRefRowContext::endFastElement( sal_Int32 /* nElement */ )
+void ScXMLExternalRefRowContext::endFastElement( sal_Int32 /* nElement */ )
 {
     ScExternalRefCache::TableTypeRef pTab = mrExternalRefInfo.mpCacheTable;
 
@@ -311,7 +311,7 @@ ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
 {
 }
 
-Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFastChildContext(
+Reference< XFastContextHandler > ScXMLExternalRefCellContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
     if (nElement == XML_ELEMENT(TEXT, XML_P))
@@ -320,7 +320,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFas
     return nullptr;
 }
 
-void SAL_CALL ScXMLExternalRefCellContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLExternalRefCellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!maCellString.isEmpty())
         mbIsEmpty = false;
@@ -365,12 +365,12 @@ ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext()
 {
 }
 
-void SAL_CALL ScXMLExternalRefCellTextContext::characters( const OUString& rChars )
+void ScXMLExternalRefCellTextContext::characters( const OUString& rChars )
 {
     maCellStrBuf.append( rChars );
 }
 
-void SAL_CALL ScXMLExternalRefCellTextContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLExternalRefCellTextContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParent.SetCellString( maCellStrBuf.makeStringAndClear() );
 }

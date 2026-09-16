@@ -114,7 +114,7 @@ ScXMLSortContext::~ScXMLSortContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::createFastChildContext(
+uno::Reference< xml::sax::XFastContextHandler > ScXMLSortContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
@@ -133,7 +133,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::creat
     return pContext;
 }
 
-void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     sal_Int32 nAlgoLength(sAlgorithm.getLength());
     sal_uInt8 i (0);
@@ -251,7 +251,7 @@ ScXMLSortByContext::~ScXMLSortByContext()
 {
 }
 
-void SAL_CALL ScXMLSortByContext::endFastElement( sal_Int32 /*nElement*/ )
+void ScXMLSortByContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pSortContext->AddSortField(sFieldNumber, sDataType, sOrder);
 }

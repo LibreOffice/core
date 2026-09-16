@@ -31,7 +31,7 @@ public:
     ScVbaTextFrame(cpo::uno::Sequence<cpo::uno::Any> const& aArgs,
                    cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext);
     // Methods
-    virtual cpo::uno::Any SAL_CALL Characters() override;
+    virtual cpo::uno::Any Characters() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -1131,7 +1131,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview()
     }
 }
 
-void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
+void ScAccessibleDocumentPagePreview::disposing()
 {
     SolarMutexGuard aGuard;
     if (mpTable.is())
@@ -1239,7 +1239,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleAtPoint( const awt::Point& rPoint )
+uno::Reference< XAccessible > ScAccessibleDocumentPagePreview::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     uno::Reference<XAccessible> xAccessible;
     if (containsPoint(rPoint))
@@ -1302,7 +1302,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
+void ScAccessibleDocumentPagePreview::grabFocus()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1319,7 +1319,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
+sal_Int64 ScAccessibleDocumentPagePreview::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1334,7 +1334,7 @@ sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
     return nRet;
 }
 
-uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int64 nIndex)
+uno::Reference<XAccessible> ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1396,7 +1396,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
 }
 
     /// Return the set of current states.
-sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet()
+sal_Int64 ScAccessibleDocumentPagePreview::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
     sal_Int64 nParentStates = 0;

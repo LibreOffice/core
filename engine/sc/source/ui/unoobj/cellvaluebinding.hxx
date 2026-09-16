@@ -67,18 +67,18 @@ namespace calc
         virtual ~OCellValueBinding( ) override;
 
         // XValueBinding
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
-        virtual bool SAL_CALL supportsType( const cpo::uno::Type& aType ) override;
-        virtual cpo::uno::Any SAL_CALL getValue( const cpo::uno::Type& aType ) override;
-        virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getSupportedValueTypes(  ) override;
+        virtual bool supportsType( const cpo::uno::Type& aType ) override;
+        virtual cpo::uno::Any getValue( const cpo::uno::Type& aType ) override;
+        virtual void setValue( const cpo::uno::Any& aValue ) override;
 
         // OComponentHelper/XComponent
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
         using OCellValueBinding_Base::getFastPropertyValue;
@@ -88,15 +88,15 @@ namespace calc
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
-        virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void modified( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkValueType( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Type& _rType ) const;

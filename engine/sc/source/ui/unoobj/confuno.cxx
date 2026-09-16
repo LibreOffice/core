@@ -125,7 +125,7 @@ void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScDocumentConfiguration::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -133,7 +133,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPro
     return aRef;
 }
 
-void SAL_CALL ScDocumentConfiguration::setPropertyValue(
+void ScDocumentConfiguration::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -445,7 +445,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
 }
 
-cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;
@@ -648,17 +648,17 @@ cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 // XServiceInfo
-OUString SAL_CALL ScDocumentConfiguration::getImplementationName()
+OUString ScDocumentConfiguration::getImplementationName()
 {
     return u"ScDocumentConfiguration"_ustr;
 }
 
-bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
+bool ScDocumentConfiguration::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScDocumentConfiguration::getSupportedServiceNames()
 {
     return {u"com.sun.star.comp.SpreadsheetSettings"_ustr,
             u"com.sun.star.document.Settings"_ustr};

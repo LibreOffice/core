@@ -111,17 +111,17 @@ using namespace cpo::uno;
             throw NotInitializedException(u"CellListSource is not initialized"_ustr, getXWeak());
     }
 
-    OUString SAL_CALL OCellListSource::getImplementationName(  )
+    OUString OCellListSource::getImplementationName(  )
     {
         return u"com.sun.star.comp.sheet.OCellListSource"_ustr;
     }
 
-    bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )
+    bool OCellListSource::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  )
+    Sequence< OUString > OCellListSource::getSupportedServiceNames(  )
     {
         return {u"com.sun.star.table.CellRangeListSource"_ustr,
                 u"com.sun.star.form.binding.ListEntrySource"_ustr};
@@ -199,7 +199,7 @@ using namespace cpo::uno;
         return sText;
     }
 
-    sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  )
+    sal_Int32 OCellListSource::getListEntryCount(  )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -213,7 +213,7 @@ using namespace cpo::uno;
         return aAddress.EndRow - aAddress.StartRow + 1;
     }
 
-    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition )
+    OUString OCellListSource::getListEntry( sal_Int32 _nPosition )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -225,7 +225,7 @@ using namespace cpo::uno;
         return getCellTextContent_noCheck( aGuard, _nPosition, nullptr );
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  )
+    Sequence< OUString > OCellListSource::getAllListEntries(  )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -241,7 +241,7 @@ using namespace cpo::uno;
         return aAllEntries;
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntriesTyped( Sequence< Any >& rDataValues )
+    Sequence< OUString > OCellListSource::getAllListEntriesTyped( Sequence< Any >& rDataValues )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -260,7 +260,7 @@ using namespace cpo::uno;
         return aAllEntries;
     }
 
-    void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener )
+    void OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -272,7 +272,7 @@ using namespace cpo::uno;
         m_aListEntryListeners.addInterface( aGuard, _rxListener );
     }
 
-    void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener )
+    void OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener )
     {
         std::unique_lock<std::mutex> aGuard( m_aMutex );
         throwIfDisposed(aGuard);
@@ -284,7 +284,7 @@ using namespace cpo::uno;
         m_aListEntryListeners.removeInterface( aGuard, _rxListener );
     }
 
-    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ )
+    void OCellListSource::modified( const EventObject& /* aEvent */ )
     {
         notifyModified();
     }
@@ -313,7 +313,7 @@ using namespace cpo::uno;
             });
     }
 
-    void SAL_CALL OCellListSource::disposing( const EventObject& aEvent )
+    void OCellListSource::disposing( const EventObject& aEvent )
     {
         Reference<XInterface> xRangeInt( m_xRange, UNO_QUERY );
         if ( xRangeInt == aEvent.Source )
@@ -323,7 +323,7 @@ using namespace cpo::uno;
         }
     }
 
-    void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments )
+    void OCellListSource::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
             throw RuntimeException(u"CellListSource is already initialized"_ustr, getXWeak());

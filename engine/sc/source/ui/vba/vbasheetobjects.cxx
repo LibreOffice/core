@@ -127,12 +127,12 @@ public:
     cpo::uno::Any getItemByStringIndex( const OUString& rIndex );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
@@ -236,12 +236,12 @@ cpo::uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScVbaObjectContainer::getCount()
+sal_Int32 ScVbaObjectContainer::getCount()
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-cpo::uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
         return cpo::uno::Any( maShapes[ static_cast< size_t >( nIndex ) ] );
@@ -250,12 +250,12 @@ cpo::uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-cpo::uno::Type SAL_CALL ScVbaObjectContainer::getElementType()
+cpo::uno::Type ScVbaObjectContainer::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-bool SAL_CALL ScVbaObjectContainer::hasElements()
+bool ScVbaObjectContainer::hasElements()
 {
     return !maShapes.empty();
 }
@@ -315,14 +315,14 @@ void ScVbaSheetObjectsBase::collectShapes()
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL ScVbaSheetObjectsBase::createEnumeration()
+uno::Reference< container::XEnumeration > ScVbaSheetObjectsBase::createEnumeration()
 {
     return new ScVbaObjectEnumeration( mxContainer );
 }
 
 // XElementAccess
 
-cpo::uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType()
+cpo::uno::Type ScVbaSheetObjectsBase::getElementType()
 {
     return mxContainer->getVbaType();
 }
@@ -348,7 +348,7 @@ ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef&
 
 // XGraphicObjects
 
-cpo::uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const cpo::uno::Any& rLeft, const cpo::uno::Any& rTop, const cpo::uno::Any& rWidth, const cpo::uno::Any& rHeight )
+cpo::uno::Any ScVbaGraphicObjectsBase::Add( const cpo::uno::Any& rLeft, const cpo::uno::Any& rTop, const cpo::uno::Any& rWidth, const cpo::uno::Any& rHeight )
 {
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from

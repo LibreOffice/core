@@ -61,7 +61,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
 {
 }
 
-bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
+bool XMLCodeNameProvider::hasByName( const OUString& aName )
 {
     if( aName == gsDocName )
         return !mpDoc->GetCodeName().isEmpty();
@@ -80,7 +80,7 @@ bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
     return false;
 }
 
-cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
+cpo::uno::Any XMLCodeNameProvider::getByName( const OUString& aName )
 {
     cpo::uno::Any aRet;
     if( aName == gsDocName )
@@ -105,7 +105,7 @@ cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     return aRet;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
+cpo::uno::Sequence< OUString > XMLCodeNameProvider::getElementNames(  )
 {
     SCTAB nCount = mpDoc->GetTableCount() + 1;
     std::vector< OUString > aNames;
@@ -128,12 +128,12 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     return comphelper::containerToSequence(aNames);
 }
 
-cpo::uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
+cpo::uno::Type XMLCodeNameProvider::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL XMLCodeNameProvider::hasElements()
+bool XMLCodeNameProvider::hasElements()
 {
     if( !mpDoc->GetCodeName().isEmpty() )
         return true;

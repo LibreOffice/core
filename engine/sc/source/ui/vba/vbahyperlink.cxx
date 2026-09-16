@@ -142,12 +142,12 @@ void ScVbaHyperlink::setSubAddress( const OUString& rSubAddress )
     setUrlComponents( aUrlComp );
 }
 
-OUString SAL_CALL ScVbaHyperlink::getScreenTip()
+OUString ScVbaHyperlink::getScreenTip()
 {
     return maScreenTip;
 }
 
-void SAL_CALL ScVbaHyperlink::setScreenTip( const OUString& rScreenTip )
+void ScVbaHyperlink::setScreenTip( const OUString& rScreenTip )
 {
     maScreenTip = rScreenTip;
 }
@@ -166,12 +166,12 @@ void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay )
     mxTextField->setPropertyValue(u"Representation"_ustr, cpo::uno::Any( rTextToDisplay ) );
 }
 
-sal_Int32 SAL_CALL ScVbaHyperlink::getType()
+sal_Int32 ScVbaHyperlink::getType()
 {
     return mnType;
 }
 
-uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange()
+uno::Reference< excel::XRange > ScVbaHyperlink::getRange()
 {
     if( mnType == office::MsoHyperlinkType::msoHyperlinkRange )
     {
@@ -190,7 +190,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaHyperlink::getRange()
     throw cpo::uno::RuntimeException();
 }
 
-uno::Reference< msforms::XShape > SAL_CALL ScVbaHyperlink::getShape()
+uno::Reference< msforms::XShape > ScVbaHyperlink::getShape()
 {
     // error if called at a range Hyperlink object
     return uno::Reference< msforms::XShape >( getParent(), uno::UNO_QUERY_THROW );

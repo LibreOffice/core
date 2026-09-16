@@ -210,7 +210,7 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+uno::Reference< xml::sax::XFastContextHandler >
         ScXMLTableContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -326,7 +326,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return pContext;
 }
 
-void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
+void ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
 {
     ScXMLImport::MutexGuard aMutexGuard(GetScImport());
     ScXMLImport& rImport = GetScImport();

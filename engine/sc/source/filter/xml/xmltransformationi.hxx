@@ -25,7 +25,7 @@ public:
 
     virtual ~ScXMLTransformationsContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -40,7 +40,7 @@ public:
 
     virtual ~ScXMLColumnRemoveContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -65,7 +65,7 @@ public:
 
     virtual ~ScXMLColumnMergeContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -78,7 +78,7 @@ public:
 
     virtual ~ScXMLColumnSortContext() override;
     /*
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
     */
@@ -95,7 +95,7 @@ public:
 
     virtual ~ScXMLColumnTextContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -111,7 +111,7 @@ public:
 
     virtual ~ScXMLColumnAggregateContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -128,7 +128,7 @@ public:
 
     virtual ~ScXMLColumnNumberContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -144,7 +144,7 @@ public:
 
     virtual ~ScXMLColumnRemoveNullContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -161,7 +161,7 @@ public:
 
     virtual ~ScXMLDateTimeContext() override;
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };

@@ -43,7 +43,7 @@ ScCellCursorObj::~ScCellCursorObj()
 
 // XSheetCellCursor
 
-void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
+void ScCellCursorObj::collapseToCurrentRegion()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -68,7 +68,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
     SetNewRange( aNew );
 }
 
-void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
+void ScCellCursorObj::collapseToCurrentArray()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -100,7 +100,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     }*/
 }
 
-void SAL_CALL ScCellCursorObj::collapseToMergedArea()
+void ScCellCursorObj::collapseToMergedArea()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -118,7 +118,7 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea()
     }
 }
 
-void SAL_CALL ScCellCursorObj::expandToEntireColumns()
+void ScCellCursorObj::expandToEntireColumns()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -131,7 +131,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns()
     SetNewRange( aNewRange );
 }
 
-void SAL_CALL ScCellCursorObj::expandToEntireRows()
+void ScCellCursorObj::expandToEntireRows()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -144,7 +144,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows()
     SetNewRange( aNewRange );
 }
 
-void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
+void ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
 {
     SolarMutexGuard aGuard;
     if ( nColumns <= 0 || nRows <= 0 )
@@ -180,7 +180,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
 
 // XUsedAreaCursor
 
-void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(bool bExpand)
+void ScCellCursorObj::gotoStartOfUsedArea(bool bExpand)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -207,7 +207,7 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(bool bExpand)
     SetNewRange( aNewRange );
 }
 
-void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( bool bExpand )
+void ScCellCursorObj::gotoEndOfUsedArea( bool bExpand )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -236,7 +236,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( bool bExpand )
 
 // XCellCursor
 
-void SAL_CALL ScCellCursorObj::gotoStart()
+void ScCellCursorObj::gotoStart()
 {
     //  this is similar to collapseToCurrentRegion
     //! something like gotoEdge with 4 possible directions is needed
@@ -264,7 +264,7 @@ void SAL_CALL ScCellCursorObj::gotoStart()
     SetNewRange( aNew );
 }
 
-void SAL_CALL ScCellCursorObj::gotoEnd()
+void ScCellCursorObj::gotoEnd()
 {
     //  this is similar to collapseToCurrentRegion
     //! something like gotoEdge with 4 possible directions is needed
@@ -292,7 +292,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd()
     SetNewRange( aNew );
 }
 
-void SAL_CALL ScCellCursorObj::gotoNext()
+void ScCellCursorObj::gotoNext()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -314,7 +314,7 @@ void SAL_CALL ScCellCursorObj::gotoNext()
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
 }
 
-void SAL_CALL ScCellCursorObj::gotoPrevious()
+void ScCellCursorObj::gotoPrevious()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -336,7 +336,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious()
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
 }
 
-void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
+void ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -362,7 +362,7 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
 
 // XSheetCellRange
 
-uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
+uno::Reference<sheet::XSpreadsheet> ScCellCursorObj::getSpreadsheet()
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getSpreadsheet();
@@ -370,21 +370,21 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
 
 // XCellRange
 
-uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
+uno::Reference<table::XCell> ScCellCursorObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellByPosition(nColumn,nRow);
 }
 
-uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByPosition(
+uno::Reference<table::XCellRange> ScCellCursorObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
 }
 
-uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
+uno::Reference<table::XCellRange> ScCellCursorObj::getCellRangeByName(
                         const OUString& rRange )
 {
     SolarMutexGuard aGuard;
@@ -393,17 +393,17 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellCursorObj::getImplementationName()
+OUString ScCellCursorObj::getImplementationName()
 {
     return u"ScCellCursorObj"_ustr;
 }
 
-bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
+bool ScCellCursorObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScCellCursorObj::getSupportedServiceNames()
 {
     //  SheetCellCursor should be first (?)
     return comphelper::concatSequences<OUString>(

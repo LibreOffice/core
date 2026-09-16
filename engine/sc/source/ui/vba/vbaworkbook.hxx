@@ -43,40 +43,40 @@ public:
     ScVbaWorkbook(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     // Attributes
-    virtual bool SAL_CALL getProtectStructure() override;
-    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
-    virtual bool SAL_CALL getPrecisionAsDisplayed() override;
-    virtual void SAL_CALL setPrecisionAsDisplayed( bool _precisionAsDisplayed ) override;
-    virtual OUString SAL_CALL getAuthor() override;
-    virtual void SAL_CALL setAuthor( const OUString& _author ) override;
+    virtual bool getProtectStructure() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > getActiveSheet() override;
+    virtual bool getPrecisionAsDisplayed() override;
+    virtual void setPrecisionAsDisplayed( bool _precisionAsDisplayed ) override;
+    virtual OUString getAuthor() override;
+    virtual void setAuthor( const OUString& _author ) override;
 
     // Methods
-    virtual cpo::uno::Any SAL_CALL Worksheets( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL Sheets( const cpo::uno::Any& aIndex ) override;
-    virtual cpo::uno::Any SAL_CALL Windows( const cpo::uno::Any& aIndex ) override;
-    virtual void SAL_CALL Activate() override;
-    virtual void SAL_CALL Protect( const cpo::uno::Any & aPassword ) override;
-    virtual void SAL_CALL SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& Password, const cpo::uno::Any& WriteResPassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& CreateBackup, const cpo::uno::Any& AccessMode, const cpo::uno::Any& ConflictResolution, const cpo::uno::Any& AddToMru, const cpo::uno::Any& TextCodepage, const cpo::uno::Any& TextVisualLayout, const cpo::uno::Any& Local ) override;
-    virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Worksheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Sheets( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Any Windows( const cpo::uno::Any& aIndex ) override;
+    virtual void Activate() override;
+    virtual void Protect( const cpo::uno::Any & aPassword ) override;
+    virtual void SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileFormat, const cpo::uno::Any& Password, const cpo::uno::Any& WriteResPassword, const cpo::uno::Any& ReadOnlyRecommended, const cpo::uno::Any& CreateBackup, const cpo::uno::Any& AccessMode, const cpo::uno::Any& ConflictResolution, const cpo::uno::Any& AddToMru, const cpo::uno::Any& TextCodepage, const cpo::uno::Any& TextVisualLayout, const cpo::uno::Any& Local ) override;
+    virtual cpo::uno::Any Names( const cpo::uno::Any& aIndex ) override;
 
-    virtual cpo::uno::Any SAL_CALL Styles( const cpo::uno::Any& Item ) override;
-    virtual void SAL_CALL ResetColors(  ) override;
-    virtual cpo::uno::Any SAL_CALL Colors( const cpo::uno::Any& Index ) override;
-    virtual ::sal_Int32 SAL_CALL getFileFormat(  ) override;
-    virtual void SAL_CALL SaveCopyAs( const OUString& Filename ) override;
-    virtual void SAL_CALL ExportAsFixedFormat( const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
+    virtual cpo::uno::Any Styles( const cpo::uno::Any& Item ) override;
+    virtual void ResetColors(  ) override;
+    virtual cpo::uno::Any Colors( const cpo::uno::Any& Index ) override;
+    virtual ::sal_Int32 getFileFormat(  ) override;
+    virtual void SaveCopyAs( const OUString& Filename ) override;
+    virtual void ExportAsFixedFormat( const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
         const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& IgnorePrintAreas, const cpo::uno::Any& From,
         const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& FixedFormatExtClassPtr) override;
 
     // code name
-    virtual OUString SAL_CALL getCodeName() override;
+    virtual OUString getCodeName() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething(const cpo::uno::Sequence<sal_Int8 >& rId ) override;
+    virtual ::sal_Int64 getSomething(const cpo::uno::Sequence<sal_Int8 >& rId ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

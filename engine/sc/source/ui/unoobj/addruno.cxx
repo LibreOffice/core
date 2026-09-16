@@ -93,7 +93,7 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScAddressConversionObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
 
@@ -127,7 +127,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     }
 }
 
-void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     if ( !pDocShell )
         throw cpo::uno::RuntimeException();
@@ -209,7 +209,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         throw lang::IllegalArgumentException();
 }
 
-cpo::uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
 {
     if ( !pDocShell )
         throw cpo::uno::RuntimeException();
@@ -278,17 +278,17 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 // lang::XServiceInfo
 
-OUString SAL_CALL ScAddressConversionObj::getImplementationName()
+OUString ScAddressConversionObj::getImplementationName()
 {
     return u"ScAddressConversionObj"_ustr;
 }
 
-bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
+bool ScAddressConversionObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScAddressConversionObj::getSupportedServiceNames()
 {
     if (bIsRange)
         return {SC_SERVICENAME_RANGEADDRESS};

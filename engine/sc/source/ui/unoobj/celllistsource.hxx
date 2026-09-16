@@ -62,22 +62,22 @@ namespace calc
         virtual ~OCellListSource( ) override;
 
         // XListEntrySource
-        virtual sal_Int32 SAL_CALL getListEntryCount(  ) override;
-        virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) override;
-        virtual void SAL_CALL addListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
-        virtual void SAL_CALL removeListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
+        virtual sal_Int32 getListEntryCount(  ) override;
+        virtual OUString getListEntry( sal_Int32 Position ) override;
+        virtual cpo::uno::Sequence< OUString > getAllListEntries(  ) override;
+        virtual void addListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
+        virtual void removeListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
 
         // XListEntryTypedSource
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( cpo::uno::Sequence< cpo::uno::Any >& rDataValues ) override;
+        virtual cpo::uno::Sequence< OUString > getAllListEntriesTyped( cpo::uno::Sequence< cpo::uno::Any >& rDataValues ) override;
 
         // OComponentHelper/XComponent
         virtual void disposing( std::unique_lock<std::mutex>& ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
         using OCellListSource_Base::getFastPropertyValue;
@@ -87,11 +87,11 @@ namespace calc
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void modified( const css::lang::EventObject& aEvent ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkInitialized();

@@ -91,7 +91,7 @@ public:
             XMLTableStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void FillPropertySet(const cpo::uno::Reference<
@@ -153,7 +153,7 @@ public:
     XMLTableStylesContext( SvXMLImport& rImport, bool bAutoStyles );
     virtual ~XMLTableStylesContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const override;
@@ -182,7 +182,7 @@ public:
     ScXMLMasterStylesContext( SvXMLImport& rImport );
 
     virtual ~ScXMLMasterStylesContext() override;
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class ScMasterPageContext : public XMLTextMasterPageContext

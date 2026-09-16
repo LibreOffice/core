@@ -38,19 +38,19 @@ ScDrawModelBroadcaster::~ScDrawModelBroadcaster()
         EndListening( *mpDrawModel );
 }
 
-void SAL_CALL ScDrawModelBroadcaster::addEventListener( const uno::Reference< document::XEventListener >& xListener )
+void ScDrawModelBroadcaster::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     std::unique_lock aGuard(maListenerMutex);
     maEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
+void ScDrawModelBroadcaster::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     std::unique_lock aGuard(maListenerMutex);
     maEventListeners.removeInterface( aGuard, xListener );
 }
 
-void SAL_CALL ScDrawModelBroadcaster::addShapeEventListener(
+void ScDrawModelBroadcaster::addShapeEventListener(
                 const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
@@ -61,7 +61,7 @@ void SAL_CALL ScDrawModelBroadcaster::addShapeEventListener(
     (void)rv;
 }
 
-void SAL_CALL ScDrawModelBroadcaster::removeShapeEventListener(
+void ScDrawModelBroadcaster::removeShapeEventListener(
                 const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {

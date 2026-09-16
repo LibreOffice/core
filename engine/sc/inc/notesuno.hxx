@@ -48,47 +48,47 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XChild
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
                             getParent() override;
-    virtual void SAL_CALL   setParent( const cpo::uno::Reference<
+    virtual void   setParent( const cpo::uno::Reference<
                                         cpo::uno::XInterface >& Parent ) override;
 
                             /// XSimpleText
-    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >
                             createTextCursor() override;
-    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >
                             createTextCursorByRange( const cpo::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
-    virtual void SAL_CALL   insertString( const cpo::uno::Reference<
+    virtual void   insertString( const cpo::uno::Reference<
                                         css::text::XTextRange >& xRange,
                                         const OUString& aString, bool bAbsorb ) override;
-    virtual void SAL_CALL   insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void   insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
                             /// XTextRange
-    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText >
                             getText() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getStart() override;
-    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange >
                             getEnd() override;
-    virtual OUString SAL_CALL getString() override;
-    virtual void SAL_CALL   setString( const OUString& aString ) override;
+    virtual OUString getString() override;
+    virtual void   setString( const OUString& aString ) override;
 
                             /// XSheetAnnotation
-    virtual css::table::CellAddress SAL_CALL getPosition() override;
-    virtual OUString SAL_CALL getAuthor() override;
-    virtual OUString SAL_CALL getDate() override;
-    virtual bool SAL_CALL getIsVisible() override;
-    virtual void SAL_CALL setIsVisible( bool bIsVisible ) override;
+    virtual css::table::CellAddress getPosition() override;
+    virtual OUString getAuthor() override;
+    virtual OUString getDate() override;
+    virtual bool getIsVisible() override;
+    virtual void setIsVisible( bool bIsVisible ) override;
 
                             /// XSheetAnnotationShapeSupplier
-    virtual cpo::uno::Reference < css::drawing::XShape > SAL_CALL
+    virtual cpo::uno::Reference < css::drawing::XShape >
                             getAnnotationShape() override;
 
                             /// XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     SvxUnoText&         GetUnoText();

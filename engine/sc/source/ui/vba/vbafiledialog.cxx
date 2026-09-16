@@ -76,7 +76,7 @@ void ScVbaFileDialog::setAllowMultiSelect(const cpo::uno::Any& rAllowMultiSelect
     rAllowMultiSelect >>= m_bMultiSelectMode;
 }
 
-uno::Reference< excel::XFileDialogSelectedItems > SAL_CALL ScVbaFileDialog::getSelectedItems()
+uno::Reference< excel::XFileDialogSelectedItems > ScVbaFileDialog::getSelectedItems()
 {
     // TODO use InitialFileName when m_xItems is empty
     return m_xItems;

@@ -55,18 +55,18 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // css::container::XNameAccess
-    virtual cpo::uno::Any SAL_CALL     getByName(const OUString& aName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getElementNames() override;
-    virtual bool SAL_CALL           hasByName(const OUString& aName) override;
+    virtual cpo::uno::Any     getByName(const OUString& aName) override;
+    virtual cpo::uno::Sequence< OUString>      getElementNames() override;
+    virtual bool           hasByName(const OUString& aName) override;
 
                             // css::container::XElementAccess
-    virtual cpo::uno::Type SAL_CALL        getElementType() override;
-    virtual bool SAL_CALL           hasElements() override;
+    virtual cpo::uno::Type        getElementType() override;
+    virtual bool           hasElements() override;
 
                             // css::lang::XServiceInfo
-    virtual OUString SAL_CALL            getImplementationName() override;
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
+    virtual OUString            getImplementationName() override;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString>      getSupportedServiceNames() override;
 };
 
 class ScLinkTargetTypeObj final : public ::cppu::WeakImplHelper<
@@ -89,26 +89,26 @@ public:
     static void             SetLinkTargetBitmap( cpo::uno::Any& rRet, sal_uInt16 nType );
 
                             // css::beans::XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL  getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue(const OUString& aPropertyName,
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >  getPropertySetInfo() override;
+    virtual void   setPropertyValue(const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL     getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName,
+    virtual cpo::uno::Any     getPropertyValue(const OUString& PropertyName) override;
+    virtual void           addPropertyChangeListener(const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
-    virtual void SAL_CALL           removePropertyChangeListener(const OUString& aPropertyName,
+    virtual void           removePropertyChangeListener(const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
-    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName,
+    virtual void           addVetoableChangeListener(const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
-    virtual void SAL_CALL           removeVetoableChangeListener(const OUString& PropertyName,
+    virtual void           removeVetoableChangeListener(const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
 
                             // css::document::XLinkTargetSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess > SAL_CALL  getLinks() override;
+    virtual cpo::uno::Reference< css::container::XNameAccess >  getLinks() override;
 
                             // css::lang::XServiceInfo
-    virtual OUString SAL_CALL            getImplementationName() override;
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString            getImplementationName() override;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString> getSupportedServiceNames() override;
 };
 
 class ScLinkTargetsObj final : public ::cppu::WeakImplHelper<
@@ -123,18 +123,18 @@ public:
     virtual                 ~ScLinkTargetsObj() override;
 
                             // css::container::XNameAccess
-    virtual cpo::uno::Any SAL_CALL         getByName(const OUString& aName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getElementNames() override;
-    virtual bool SAL_CALL           hasByName(const OUString& aName) override;
+    virtual cpo::uno::Any         getByName(const OUString& aName) override;
+    virtual cpo::uno::Sequence< OUString>      getElementNames() override;
+    virtual bool           hasByName(const OUString& aName) override;
 
                             // css::container::XElementAccess
-    virtual cpo::uno::Type SAL_CALL        getElementType() override;
-    virtual bool SAL_CALL           hasElements() override;
+    virtual cpo::uno::Type        getElementType() override;
+    virtual bool           hasElements() override;
 
                             // css::lang::XServiceInfo
-    virtual OUString SAL_CALL            getImplementationName() override;
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
+    virtual OUString            getImplementationName() override;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString>      getSupportedServiceNames() override;
 };
 
 // Names of the OLE objects (for example charts) drawn on any sheet, exposed as link
@@ -155,18 +155,18 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // css::container::XNameAccess
-    virtual cpo::uno::Any SAL_CALL     getByName(const OUString& aName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getElementNames() override;
-    virtual bool SAL_CALL           hasByName(const OUString& aName) override;
+    virtual cpo::uno::Any     getByName(const OUString& aName) override;
+    virtual cpo::uno::Sequence< OUString>      getElementNames() override;
+    virtual bool           hasByName(const OUString& aName) override;
 
                             // css::container::XElementAccess
-    virtual cpo::uno::Type SAL_CALL        getElementType() override;
-    virtual bool SAL_CALL           hasElements() override;
+    virtual cpo::uno::Type        getElementType() override;
+    virtual bool           hasElements() override;
 
                             // css::lang::XServiceInfo
-    virtual OUString SAL_CALL            getImplementationName() override;
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() override;
+    virtual OUString            getImplementationName() override;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString>      getSupportedServiceNames() override;
 };
 
 // A single named OLE object, as a leaf link target. It carries only the display
@@ -184,23 +184,23 @@ public:
     virtual                 ~ScOleObjectLinkTargetObj() override;
 
                             // css::beans::XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL  getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue(const OUString& aPropertyName,
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >  getPropertySetInfo() override;
+    virtual void   setPropertyValue(const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL     getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName,
+    virtual cpo::uno::Any     getPropertyValue(const OUString& PropertyName) override;
+    virtual void           addPropertyChangeListener(const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
-    virtual void SAL_CALL           removePropertyChangeListener(const OUString& aPropertyName,
+    virtual void           removePropertyChangeListener(const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
-    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName,
+    virtual void           addVetoableChangeListener(const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
-    virtual void SAL_CALL           removeVetoableChangeListener(const OUString& PropertyName,
+    virtual void           removeVetoableChangeListener(const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
 
                             // css::lang::XServiceInfo
-    virtual OUString SAL_CALL            getImplementationName() override;
-    virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString            getImplementationName() override;
+    virtual bool           supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

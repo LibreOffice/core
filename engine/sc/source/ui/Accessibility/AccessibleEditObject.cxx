@@ -115,7 +115,7 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
     }
 }
 
-void SAL_CALL ScAccessibleEditObject::disposing()
+void ScAccessibleEditObject::disposing()
 {
     SolarMutexGuard aGuard;
     mpTextHelper.reset();
@@ -141,7 +141,7 @@ void ScAccessibleEditObject::GotFocus()
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPoint(
+uno::Reference< XAccessible > ScAccessibleEditObject::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
     uno::Reference<XAccessible> xRet;
@@ -215,7 +215,7 @@ tools::Rectangle ScAccessibleEditObject::GetBoundingBox()
 
     //=====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleEditObject::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
@@ -224,7 +224,7 @@ sal_Int64 SAL_CALL
     return mpTextHelper->GetChildCount();
 }
 
-uno::Reference< XAccessible > SAL_CALL
+uno::Reference< XAccessible >
     ScAccessibleEditObject::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -233,7 +233,7 @@ uno::Reference< XAccessible > SAL_CALL
     return mpTextHelper->GetChild(nIndex);
 }
 
-sal_Int64 SAL_CALL ScAccessibleEditObject::getAccessibleStateSet()
+sal_Int64 ScAccessibleEditObject::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
     sal_Int64 nParentStates = 0;
@@ -275,7 +275,7 @@ OUString
 
     ///=====  XAccessibleEventBroadcaster  =====================================
 
-void SAL_CALL
+void
     ScAccessibleEditObject::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
 {
     CreateTextHelper();
@@ -285,7 +285,7 @@ void SAL_CALL
     ScAccessibleContextBase::addAccessibleEventListener(xListener);
 }
 
-void SAL_CALL
+void
     ScAccessibleEditObject::removeAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
 {
     CreateTextHelper();
@@ -351,12 +351,12 @@ void ScAccessibleEditObject::CreateTextHelper()
     }
 }
 
-sal_Int32 SAL_CALL ScAccessibleEditObject::getForeground(  )
+sal_Int32 ScAccessibleEditObject::getForeground(  )
 {
     return GetFgBgColor(SC_UNONAME_CCOLOR);
 }
 
-sal_Int32 SAL_CALL ScAccessibleEditObject::getBackground(  )
+sal_Int32 ScAccessibleEditObject::getBackground(  )
 {
     return GetFgBgColor(SC_UNONAME_CELLBACK);
 }
@@ -400,11 +400,11 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
 }
 //=====  XAccessibleSelection  ============================================
 
-void SAL_CALL ScAccessibleEditObject::selectAccessibleChild( sal_Int64 )
+void ScAccessibleEditObject::selectAccessibleChild( sal_Int64 )
 {
 }
 
-bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool ScAccessibleEditObject::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;
@@ -425,15 +425,15 @@ bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int64 nChil
     return false;
 }
 
-void SAL_CALL ScAccessibleEditObject::clearAccessibleSelection(  )
+void ScAccessibleEditObject::clearAccessibleSelection(  )
 {
 }
 
-void SAL_CALL ScAccessibleEditObject::selectAllAccessibleChildren(  )
+void ScAccessibleEditObject::selectAllAccessibleChildren(  )
 {
 }
 
-sal_Int64 SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChildCount()
+sal_Int64 ScAccessibleEditObject::getSelectedAccessibleChildCount()
 {
     sal_Int64 nCount = 0;
     sal_Int64 TotalCount = getAccessibleChildCount();
@@ -442,7 +442,7 @@ sal_Int64 SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChildCount()
     return nCount;
 }
 
-uno::Reference<XAccessible> SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+uno::Reference<XAccessible> ScAccessibleEditObject::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     if ( nSelectedChildIndex < 0 || nSelectedChildIndex > getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
@@ -457,7 +457,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleEditObject::getSelectedAccessib
     return uno::Reference<XAccessible>();
 }
 
-void SAL_CALL ScAccessibleEditObject::deselectAccessibleChild(sal_Int64)
+void ScAccessibleEditObject::deselectAccessibleChild(sal_Int64)
 {
 }
 
@@ -522,7 +522,7 @@ tools::Rectangle ScAccessibleEditControlObject::GetBoundingBox()
     return aBounds;
 }
 
-void SAL_CALL ScAccessibleEditControlObject::disposing()
+void ScAccessibleEditControlObject::disposing()
 {
     ScAccessibleEditObject::disposing();
     m_pController = nullptr;

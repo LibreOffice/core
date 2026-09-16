@@ -123,7 +123,7 @@ public:
     {}
 
     // XCallback
-    virtual void SAL_CALL notify(const cpo::uno::Any& aData) override
+    virtual void notify(const cpo::uno::Any& aData) override
     {
         cpo::uno::Sequence<beans::PropertyValue> aProperties;
         if (!(aData >>= aProperties))

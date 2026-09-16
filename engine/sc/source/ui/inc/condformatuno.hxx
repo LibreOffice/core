@@ -45,13 +45,13 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XConditionalFormats
-    virtual sal_Int32 SAL_CALL createByRange(const cpo::uno::Reference<css::sheet::XSheetCellRanges>& xRanges) override;
+    virtual sal_Int32 createByRange(const cpo::uno::Reference<css::sheet::XSheetCellRanges>& xRanges) override;
 
-    virtual void SAL_CALL removeByID( const sal_Int32 nID ) override;
+    virtual void removeByID( const sal_Int32 nID ) override;
 
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::sheet::XConditionalFormat > > SAL_CALL getConditionalFormats() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::sheet::XConditionalFormat > > getConditionalFormats() override;
 
-    virtual sal_Int32 SAL_CALL getLength() override;
+    virtual sal_Int32 getLength() override;
 
     ScConditionalFormatList* getCoreObject();
 
@@ -71,34 +71,34 @@ public:
     ScDocShell* getDocShell();
 
     // XConditionalFormat
-    virtual void SAL_CALL createEntry(const sal_Int32 nType, const sal_Int32 nPos) override;
+    virtual void createEntry(const sal_Int32 nType, const sal_Int32 nPos) override;
 
-    virtual void SAL_CALL removeByIndex(const sal_Int32 nIndex) override;
+    virtual void removeByIndex(const sal_Int32 nIndex) override;
 
     // XIndexAccess
 
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
-    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual sal_Int32 getCount() override;
 
-    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual cpo::uno::Any getByIndex(sal_Int32 nIndex) override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     ScConditionalFormat* getCoreObject();
@@ -122,22 +122,22 @@ public:
     ScCondFormatEntry* getCoreObject();
 
     // XConditionEntry
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
@@ -156,25 +156,25 @@ public:
     virtual ~ScColorScaleFormatObj() override;
 
     // XConditionEntry
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
 
     ScColorScaleFormat* getCoreObject();
 
                             // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
@@ -190,17 +190,17 @@ public:
 
     virtual ~ScColorScaleEntryObj() override;
 
-    virtual sal_Int32 SAL_CALL getColor() override;
+    virtual sal_Int32 getColor() override;
 
-    virtual void SAL_CALL setColor(sal_Int32 aColor) override;
+    virtual void setColor(sal_Int32 aColor) override;
 
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
-    virtual void SAL_CALL setType(sal_Int32 nType) override;
+    virtual void setType(sal_Int32 nType) override;
 
-    virtual OUString SAL_CALL getFormula() override;
+    virtual OUString getFormula() override;
 
-    virtual void SAL_CALL setFormula(const OUString& rString) override;
+    virtual void setFormula(const OUString& rString) override;
 
 private:
     ScColorScaleEntry* getCoreObject();
@@ -220,22 +220,22 @@ public:
     ScDataBarFormat* getCoreObject();
 
     // XConditionEntry
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
@@ -251,13 +251,13 @@ public:
 
     virtual ~ScDataBarEntryObj() override;
 
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
-    virtual void SAL_CALL setType(sal_Int32 nType) override;
+    virtual void setType(sal_Int32 nType) override;
 
-    virtual OUString SAL_CALL getFormula() override;
+    virtual OUString getFormula() override;
 
-    virtual void SAL_CALL setFormula(const OUString& rString) override;
+    virtual void setFormula(const OUString& rString) override;
 
 private:
     ScColorScaleEntry* getCoreObject();
@@ -277,22 +277,22 @@ public:
     ScIconSetFormat* getCoreObject();
 
     // XConditionEntry
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
@@ -308,13 +308,13 @@ public:
 
     virtual ~ScIconSetEntryObj() override;
 
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
-    virtual void SAL_CALL setType(sal_Int32 nType) override;
+    virtual void setType(sal_Int32 nType) override;
 
-    virtual OUString SAL_CALL getFormula() override;
+    virtual OUString getFormula() override;
 
-    virtual void SAL_CALL setFormula(const OUString& rString) override;
+    virtual void setFormula(const OUString& rString) override;
 
 private:
     ScColorScaleEntry* getCoreObject();
@@ -335,22 +335,22 @@ public:
     ScCondDateFormatEntry* getCoreObject();
 
     // XConditionEntry
-    virtual sal_Int32 SAL_CALL getType() override;
+    virtual sal_Int32 getType() override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+                            getPropertySetInfo() override;
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
+    virtual void   addPropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
+    virtual void   removePropertyChangeListener( const OUString& aPropertyName,
                                     const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
+    virtual void   addVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
+    virtual void   removeVetoableChangeListener( const OUString& PropertyName,
                                     const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:

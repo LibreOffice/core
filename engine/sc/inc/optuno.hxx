@@ -61,9 +61,9 @@ public:
 
     // get/setPropertyValue override to used stored options instead of document
 
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+    virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
 };
 

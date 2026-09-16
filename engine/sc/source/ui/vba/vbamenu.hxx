@@ -23,11 +23,11 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaMenu( const cpo::uno::Reference< ov::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< ov::XCommandBarControl > xCommandBarControl );
 
-    virtual OUString SAL_CALL getCaption() override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual OUString getCaption() override;
+    virtual void setCaption( const OUString& _caption ) override;
 
-    virtual void SAL_CALL Delete(  ) override;
-    virtual cpo::uno::Any SAL_CALL MenuItems( const cpo::uno::Any& aIndex ) override;
+    virtual void Delete(  ) override;
+    virtual cpo::uno::Any MenuItems( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

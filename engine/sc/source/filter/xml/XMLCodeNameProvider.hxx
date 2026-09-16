@@ -37,15 +37,15 @@ public:
     explicit XMLCodeNameProvider(ScDocument* pDoc);
     virtual ~XMLCodeNameProvider() override;
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
 
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
     static void set( const cpo::uno::Reference< css::container::XNameAccess>& xNameAccess, ScDocument *pDoc );
 };

@@ -1338,7 +1338,7 @@ ScAccessibleDocument::~ScAccessibleDocument()
     }
 }
 
-void SAL_CALL ScAccessibleDocument::disposing()
+void ScAccessibleDocument::disposing()
 {
     SolarMutexGuard aGuard;
     FreeAccessibleSpreadsheet();
@@ -1356,7 +1356,7 @@ void SAL_CALL ScAccessibleDocument::disposing()
     ScAccessibleDocumentBase::disposing();
 }
 
-void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Source */ )
+void ScAccessibleDocument::disposing( const lang::EventObject& /* Source */ )
 {
     disposing();
 }
@@ -1532,7 +1532,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
 
-void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /* aEvent */ )
+void ScAccessibleDocument::selectionChanged( const lang::EventObject& /* aEvent */ )
 {
     bool bSelectionChanged(false);
     if (mpAccessibleSpreadsheet.is())
@@ -1555,7 +1555,7 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoint(
+uno::Reference< XAccessible > ScAccessibleDocument::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
     uno::Reference<XAccessible> xAccessible;
@@ -1585,7 +1585,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleDocument::grabFocus(  )
+void ScAccessibleDocument::grabFocus(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -1609,7 +1609,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleDocument::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
@@ -1625,7 +1625,7 @@ sal_Int64 SAL_CALL
 }
 
     /// Return the specified child or NULL if index is invalid.
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
     ScAccessibleDocument::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -1655,7 +1655,7 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
     /// Return the set of current states.
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleDocument::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
@@ -1681,7 +1681,7 @@ sal_Int64 SAL_CALL
     return nStateSet;
 }
 
-OUString SAL_CALL
+OUString
     ScAccessibleDocument::getAccessibleName()
 {
     SolarMutexGuard g;
@@ -1716,7 +1716,7 @@ OUString SAL_CALL
 
 ///=====  XAccessibleSelection  ===========================================
 
-void SAL_CALL
+void
     ScAccessibleDocument::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -1745,7 +1745,7 @@ void SAL_CALL
     }
 }
 
-bool SAL_CALL
+bool
     ScAccessibleDocument::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -1777,7 +1777,7 @@ bool SAL_CALL
     return bResult;
 }
 
-void SAL_CALL
+void
     ScAccessibleDocument::clearAccessibleSelection(  )
 {
     SolarMutexGuard aGuard;
@@ -1787,7 +1787,7 @@ void SAL_CALL
         mpChildrenShapes->DeselectAll(); //deselects all (also the table)
 }
 
-void SAL_CALL
+void
     ScAccessibleDocument::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
@@ -1803,7 +1803,7 @@ void SAL_CALL
     }
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
     ScAccessibleDocument::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
@@ -1822,7 +1822,7 @@ sal_Int64 SAL_CALL
     return nCount;
 }
 
-uno::Reference<XAccessible > SAL_CALL
+uno::Reference<XAccessible >
     ScAccessibleDocument::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -1849,7 +1849,7 @@ uno::Reference<XAccessible > SAL_CALL
     return xAccessible;
 }
 
-void SAL_CALL
+void
     ScAccessibleDocument::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
@@ -2082,7 +2082,7 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
     return mpViewShell ? mpViewShell->GetViewData().GetCurPos() : ScAddress();
 }
 
-OUString SAL_CALL ScAccessibleDocument::getExtendedAttributes()
+OUString ScAccessibleDocument::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
@@ -2098,12 +2098,12 @@ OUString SAL_CALL ScAccessibleDocument::getExtendedAttributes()
     return sValue;
 }
 
-sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
+sal_Int32 ScAccessibleDocument::getForeground(  )
 {
     return sal_Int32(COL_BLACK);
 }
 
-sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
+sal_Int32 ScAccessibleDocument::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();

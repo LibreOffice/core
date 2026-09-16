@@ -31,11 +31,11 @@ public:
     MenuEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< cpo::uno::XComponentContext > xContext, uno::Reference< container::XEnumeration > xEnumeration) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xEnumeration(std::move( xEnumeration ))
     {
     }
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return m_xEnumeration->hasMoreElements();
     }
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         // FIXME: should be add menu
         if( !hasMoreElements() )
@@ -60,7 +60,7 @@ ScVbaMenus::ScVbaMenus( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 // XEnumerationAccess
-cpo::uno::Type SAL_CALL
+cpo::uno::Type
 ScVbaMenus::getElementType()
 {
     return cppu::UnoType<excel::XMenu>::get();
@@ -80,7 +80,7 @@ ScVbaMenus::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource;
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaMenus::getCount()
 {
     // FIXME: should check if it is a popup menu
@@ -88,7 +88,7 @@ ScVbaMenus::getCount()
 }
 
 // ScVbaCollectionBaseImpl
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaMenus::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, cpo::uno::Any() ), uno::UNO_QUERY_THROW );
@@ -97,7 +97,7 @@ ScVbaMenus::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ 
     return cpo::uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
 }
 
-uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const cpo::uno::Any& Before, const cpo::uno::Any& Restore )
+uno::Reference< excel::XMenu > ScVbaMenus::Add( const OUString& Caption, const cpo::uno::Any& Before, const cpo::uno::Any& Restore )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
             cpo::uno::Any( office::MsoControlType::msoControlPopup ),

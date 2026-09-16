@@ -21,7 +21,7 @@ public:
 
     virtual ~ScXMLMappingsContext() override;
 
-    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
                         sal_Int32 nElement,
                         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -34,7 +34,7 @@ public:
     ScXMLMappingContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };

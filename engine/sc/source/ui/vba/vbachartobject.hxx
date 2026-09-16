@@ -47,10 +47,10 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     cpo::uno::Reference< css::drawing::XShape > setShape();
 public:
     ScVbaChartObject( const cpo::uno::Reference< ov::XHelperInterface >& _xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext, cpo::uno::Reference< css::table::XTableChart >  _xTableChart, cpo::uno::Reference< css::drawing::XDrawPageSupplier >  _xDrawPageSupplier );
-    virtual OUString SAL_CALL getName() override;
-    virtual void SAL_CALL setName( const OUString& sName ) override;
-    virtual cpo::uno::Reference< ov::excel::XChart > SAL_CALL getChart() override;
-    virtual void SAL_CALL Delete() override;
+    virtual OUString getName() override;
+    virtual void setName( const OUString& sName ) override;
+    virtual cpo::uno::Reference< ov::excel::XChart > getChart() override;
+    virtual void Delete() override;
     /// @throws css::script::BasicErrorException
     void Activate();
     // XHelperInterface

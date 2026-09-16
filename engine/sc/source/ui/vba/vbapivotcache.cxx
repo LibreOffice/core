@@ -28,7 +28,7 @@ ScVbaPivotCache::ScVbaPivotCache( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
-void SAL_CALL
+void
 ScVbaPivotCache::Refresh()
 {
     m_xTable->refresh();

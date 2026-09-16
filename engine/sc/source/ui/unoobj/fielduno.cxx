@@ -334,7 +334,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScCellFieldsObj::getCount()
+sal_Int32 ScCellFieldsObj::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -345,7 +345,7 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount()
     return aTempEngine.CountFields();       // count the fields, we don't care about their type in the cell
 }
 
-cpo::uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
@@ -355,37 +355,37 @@ cpo::uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xField);
 }
 
-cpo::uno::Type SAL_CALL ScCellFieldsObj::getElementType()
+cpo::uno::Type ScCellFieldsObj::getElementType()
 {
     return cppu::UnoType<text::XTextField>::get();
 }
 
-bool SAL_CALL ScCellFieldsObj::hasElements()
+bool ScCellFieldsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
-uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumeration()
+uno::Reference<container::XEnumeration> ScCellFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, u"com.sun.star.text.TextFieldEnumeration"_ustr);
 }
 
-void SAL_CALL ScCellFieldsObj::addContainerListener(
+void ScCellFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellFieldsObj::removeContainerListener(
+void ScCellFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
 // XRefreshable
-void SAL_CALL ScCellFieldsObj::refresh(  )
+void ScCellFieldsObj::refresh(  )
 {
     std::unique_lock g(aMutex);
     if (maRefreshListeners.getLength(g))
@@ -397,7 +397,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
     }
 }
 
-void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
+void ScCellFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
 {
     if (xListener.is())
     {
@@ -406,7 +406,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
     }
 }
 
-void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
+void ScCellFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
 {
     if (xListener.is())
     {
@@ -482,7 +482,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
     return xRet;
 }
 
-sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount()
+sal_Int32 ScHeaderFieldsObj::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -492,7 +492,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount()
     return aTempEngine.CountFields();
 }
 
-cpo::uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
@@ -502,37 +502,37 @@ cpo::uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xField);
 }
 
-cpo::uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
+cpo::uno::Type ScHeaderFieldsObj::getElementType()
 {
     return cppu::UnoType<text::XTextField>::get();
 }
 
-bool SAL_CALL ScHeaderFieldsObj::hasElements()
+bool ScHeaderFieldsObj::hasElements()
 {
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
-uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumeration()
+uno::Reference<container::XEnumeration> ScHeaderFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, u"com.sun.star.text.TextFieldEnumeration"_ustr);
 }
 
-void SAL_CALL ScHeaderFieldsObj::addContainerListener(
+void ScHeaderFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
+void ScHeaderFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
 // XRefreshable
-void SAL_CALL ScHeaderFieldsObj::refresh(  )
+void ScHeaderFieldsObj::refresh(  )
 {
     std::unique_lock g(aMutex);
     if (maRefreshListeners.getLength(g))
@@ -544,7 +544,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
     }
 }
 
-void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
+void ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
 {
     if (xListener.is())
     {
@@ -553,7 +553,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
     }
 }
 
-void SAL_CALL ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
+void ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
 {
     if (xListener.is())
     {
@@ -1119,7 +1119,7 @@ bool ScEditFieldObj::IsInserted() const
 
 // XTextField
 
-OUString SAL_CALL ScEditFieldObj::getPresentation( bool bShowCommand )
+OUString ScEditFieldObj::getPresentation( bool bShowCommand )
 {
     SolarMutexGuard aGuard;
 
@@ -1157,7 +1157,7 @@ OUString SAL_CALL ScEditFieldObj::getPresentation( bool bShowCommand )
 
 // XTextContent
 
-void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
+void ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
 {
     SolarMutexGuard aGuard;
     if (xTextRange.is())
@@ -1170,7 +1170,7 @@ void SAL_CALL ScEditFieldObj::attach( const uno::Reference<text::XTextRange>& xT
     }
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor()
+uno::Reference<text::XTextRange> ScEditFieldObj::getAnchor()
 {
     SolarMutexGuard aGuard;
     return mpContent;
@@ -1178,14 +1178,14 @@ uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor()
 
 // XPropertySet
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ScEditFieldObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     rtl::Reference<SfxItemPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
 
-void SAL_CALL ScEditFieldObj::setPropertyValue(
+void ScEditFieldObj::setPropertyValue(
                         const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
@@ -1217,7 +1217,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
     }
 }
 
-cpo::uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyName )
+cpo::uno::Any ScEditFieldObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
     if (aPropertyName == SC_UNONAME_TEXTFIELD_TYPE)
@@ -1266,23 +1266,23 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScEditFieldObj )
 
 // XServiceInfo
 
-OUString SAL_CALL ScEditFieldObj::getImplementationName()
+OUString ScEditFieldObj::getImplementationName()
 {
     return u"ScEditFieldObj"_ustr;
 }
 
-bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
+bool ScEditFieldObj::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScEditFieldObj::getSupportedServiceNames()
 {
     return {u"com.sun.star.text.TextField"_ustr,
             u"com.sun.star.text.TextContent"_ustr};
 }
 
-cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScEditFieldObj::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> ScEditFieldObj::getTypes()
 {
     return comphelper::concatSequences(
         ScEditFieldObj_Base::getTypes(),
@@ -1295,7 +1295,7 @@ cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScEditFieldObj::getTypes()
         } );
 }
 
-cpo::uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()
+cpo::uno::Sequence<sal_Int8> ScEditFieldObj::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }

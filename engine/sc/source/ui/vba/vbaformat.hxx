@@ -66,91 +66,91 @@ public:
     ScVbaFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::beans::XPropertySet >  _xPropertySet, const rtl::Reference<ScModelObj>& xModel, bool bCheckAmbiguoity );
     virtual cpo::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
      /// @throws cpo::uno::RuntimeException
-     void SAL_CALL setAddIndent( const cpo::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }
+     void setAddIndent( const cpo::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }
      /// @throws cpo::uno::RuntimeException
-     cpo::uno::Any SAL_CALL getAddIndent() { return cpo::uno::Any( mbAddIndent ); }
+     cpo::uno::Any getAddIndent() { return cpo::uno::Any( mbAddIndent ); }
         // Interface Methods
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL Borders( const cpo::uno::Any& Index );
+    virtual cpo::uno::Any Borders( const cpo::uno::Any& Index );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  );
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XFont > Font(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  );
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XInterior > Interior(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setNumberFormat( const cpo::uno::Any& NumberFormat );
+    virtual void setNumberFormat( const cpo::uno::Any& NumberFormat );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getNumberFormat(  );
+    virtual cpo::uno::Any getNumberFormat(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setNumberFormatLocal( const cpo::uno::Any& NumberFormatLocal );
+    virtual void setNumberFormatLocal( const cpo::uno::Any& NumberFormatLocal );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getNumberFormatLocal(  );
+    virtual cpo::uno::Any getNumberFormatLocal(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setIndentLevel( const cpo::uno::Any& IndentLevel );
+    virtual void setIndentLevel( const cpo::uno::Any& IndentLevel );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getIndentLevel(  );
+    virtual cpo::uno::Any getIndentLevel(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setHorizontalAlignment( const cpo::uno::Any& HorizontalAlignment );
+    virtual void setHorizontalAlignment( const cpo::uno::Any& HorizontalAlignment );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getHorizontalAlignment(  );
+    virtual cpo::uno::Any getHorizontalAlignment(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setVerticalAlignment( const cpo::uno::Any& VerticalAlignment );
+    virtual void setVerticalAlignment( const cpo::uno::Any& VerticalAlignment );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getVerticalAlignment(  );
+    virtual cpo::uno::Any getVerticalAlignment(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setOrientation( const cpo::uno::Any& Orientation );
+    virtual void setOrientation( const cpo::uno::Any& Orientation );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getOrientation(  );
+    virtual cpo::uno::Any getOrientation(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setShrinkToFit( const cpo::uno::Any& ShrinkToFit );
+    virtual void setShrinkToFit( const cpo::uno::Any& ShrinkToFit );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getShrinkToFit(  );
+    virtual cpo::uno::Any getShrinkToFit(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setWrapText( const cpo::uno::Any& WrapText );
+    virtual void setWrapText( const cpo::uno::Any& WrapText );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getWrapText(  );
+    virtual cpo::uno::Any getWrapText(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setLocked( const cpo::uno::Any& Locked );
+    virtual void setLocked( const cpo::uno::Any& Locked );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getLocked(  );
+    virtual cpo::uno::Any getLocked(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setFormulaHidden( const cpo::uno::Any& FormulaHidden );
+    virtual void setFormulaHidden( const cpo::uno::Any& FormulaHidden );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getFormulaHidden(  );
+    virtual cpo::uno::Any getFormulaHidden(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setMergeCells( const cpo::uno::Any& MergeCells ) = 0;
+    virtual void setMergeCells( const cpo::uno::Any& MergeCells ) = 0;
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getMergeCells(  ) = 0;
+    virtual cpo::uno::Any getMergeCells(  ) = 0;
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual void SAL_CALL setReadingOrder( const cpo::uno::Any& ReadingOrder );
+    virtual void setReadingOrder( const cpo::uno::Any& ReadingOrder );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL getReadingOrder(  );
+    virtual cpo::uno::Any getReadingOrder(  );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

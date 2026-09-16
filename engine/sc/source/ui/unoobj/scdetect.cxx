@@ -263,7 +263,7 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-OUString SAL_CALL ScFilterDetect::detect( cpo::uno::Sequence<beans::PropertyValue>& lDescriptor )
+OUString ScFilterDetect::detect( cpo::uno::Sequence<beans::PropertyValue>& lDescriptor )
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
     OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
@@ -330,7 +330,7 @@ OUString SAL_CALL ScFilterDetect::detect( cpo::uno::Sequence<beans::PropertyValu
     return aTypeName;
 }
 
-OUString SAL_CALL ScFilterDetect::getImplementationName()
+OUString ScFilterDetect::getImplementationName()
 {
     return u"com.sun.star.comp.calc.FormatDetector"_ustr;
 }

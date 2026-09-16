@@ -58,23 +58,23 @@ public:
         ScVbaInterior( const cpo::uno::Reference< ov::XHelperInterface >& xParent,  const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                  cpo::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
 
-    virtual cpo::uno::Any SAL_CALL getColor() override ;
-    virtual void SAL_CALL setColor( const cpo::uno::Any& _color ) override ;
+    virtual cpo::uno::Any getColor() override ;
+    virtual void setColor( const cpo::uno::Any& _color ) override ;
 
-    virtual cpo::uno::Any SAL_CALL getColorIndex() override;
-    virtual void SAL_CALL setColorIndex( const cpo::uno::Any& _colorindex ) override;
-    virtual cpo::uno::Any SAL_CALL getPattern() override;
-    virtual void SAL_CALL setPattern( const cpo::uno::Any& _pattern ) override;
-    virtual cpo::uno::Any SAL_CALL getPatternColor() override;
-    virtual void SAL_CALL setPatternColor( const cpo::uno::Any& _patterncolor ) override;
-    virtual cpo::uno::Any SAL_CALL getPatternColorIndex() override;
-    virtual void SAL_CALL setPatternColorIndex( const cpo::uno::Any& _patterncolorindex ) override;
-    cpo::uno::Any SAL_CALL getThemeColor() override;
-    void SAL_CALL setThemeColor(const cpo::uno::Any& rAny) override;
-    cpo::uno::Any SAL_CALL getTintAndShade() override;
-    void SAL_CALL setTintAndShade(const cpo::uno::Any& rAny) override;
-    cpo::uno::Any SAL_CALL getPatternTintAndShade() override;
-    void SAL_CALL setPatternTintAndShade(const cpo::uno::Any& rAny) override;
+    virtual cpo::uno::Any getColorIndex() override;
+    virtual void setColorIndex( const cpo::uno::Any& _colorindex ) override;
+    virtual cpo::uno::Any getPattern() override;
+    virtual void setPattern( const cpo::uno::Any& _pattern ) override;
+    virtual cpo::uno::Any getPatternColor() override;
+    virtual void setPatternColor( const cpo::uno::Any& _patterncolor ) override;
+    virtual cpo::uno::Any getPatternColorIndex() override;
+    virtual void setPatternColorIndex( const cpo::uno::Any& _patterncolorindex ) override;
+    cpo::uno::Any getThemeColor() override;
+    void setThemeColor(const cpo::uno::Any& rAny) override;
+    cpo::uno::Any getTintAndShade() override;
+    void setTintAndShade(const cpo::uno::Any& rAny) override;
+    cpo::uno::Any getPatternTintAndShade() override;
+    void setPatternTintAndShade(const cpo::uno::Any& rAny) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

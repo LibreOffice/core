@@ -41,28 +41,28 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XTablePivotCharts
-    virtual void SAL_CALL addNewByName(OUString const & aName,
+    virtual void addNewByName(OUString const & aName,
                                        const css::awt::Rectangle& aRect,
                                        OUString const & aDataPilotName) override;
-    virtual void SAL_CALL removeByName(OUString const & aName) override;
+    virtual void removeByName(OUString const & aName) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName(OUString const & aName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName(OUString const & aName) override;
+    virtual cpo::uno::Any getByName(OUString const & aName) override;
+    virtual cpo::uno::Sequence<OUString> getElementNames() override;
+    virtual bool hasByName(OUString const & aName) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual sal_Int32 getCount() override;
+    virtual cpo::uno::Any getByIndex(sal_Int32 nIndex) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(OUString const & ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 }

@@ -77,7 +77,7 @@ ScVbaChart::ScVbaChart( const cpo::uno::Reference< ov::XHelperInterface >& _xPar
     mxChartPropertySet.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
 }
 
-OUString SAL_CALL
+OUString
 ScVbaChart::getName()
 {
     OUString sName;
@@ -92,13 +92,13 @@ ScVbaChart::getName()
     return sName;
 }
 
-cpo::uno::Any  SAL_CALL
+cpo::uno::Any
 ScVbaChart::SeriesCollection(const cpo::uno::Any&)
 {
     return cpo::uno::Any();
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaChart::getChartType()
 {
     sal_Int32 nChartType = -1;
@@ -217,7 +217,7 @@ ScVbaChart::getChartType()
     return nChartType;
 }
 
-void SAL_CALL
+void
 ScVbaChart::setChartType( ::sal_Int32 _nChartType )
 {
     try
@@ -542,7 +542,7 @@ ScVbaChart::setChartType( ::sal_Int32 _nChartType )
     }
 }
 
-void SAL_CALL
+void
 ScVbaChart::Activate()
 {
     // #TODO how are Chart sheets handled ( I know we don't even consider
@@ -558,7 +558,7 @@ ScVbaChart::Activate()
 
 }
 
-void SAL_CALL
+void
 ScVbaChart::setSourceData( const cpo::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const cpo::uno::Any& _aPlotBy )
 {
     try
@@ -659,7 +659,7 @@ ScVbaChart::setPlotBy( ::sal_Int32 _nPlotBy )
     }
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ScVbaChart::getPlotBy(  )
 {
     try
@@ -699,19 +699,19 @@ ScVbaChart::setDiagram( const OUString& _sDiagramType )
 
 // #TODO find out why we have Location/getLocation? there is afaik no
 // Location property, just a Location function for the Chart object
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaChart::Location()
 {
     return getLocation();
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ScVbaChart::getLocation()
 {
      return -1;
 }
 
-void SAL_CALL
+void
 ScVbaChart::setLocation( ::sal_Int32 /*where*/, const cpo::uno::Any& /*Name*/ )
 {
     // Helper api just stubs out the code <shrug>
@@ -799,7 +799,7 @@ ScVbaChart::setLocation( ::sal_Int32 /*where*/, const cpo::uno::Any& /*Name*/ )
 
 }
 
-bool SAL_CALL
+bool
 ScVbaChart::getHasTitle(  )
 {
     bool bHasTitle = false;
@@ -814,7 +814,7 @@ ScVbaChart::getHasTitle(  )
     return bHasTitle;
 }
 
-void SAL_CALL
+void
 ScVbaChart::setHasTitle( bool bTitle )
 {
     try
@@ -828,7 +828,7 @@ ScVbaChart::setHasTitle( bool bTitle )
 
 }
 
-bool SAL_CALL
+bool
 ScVbaChart::getHasLegend(  )
 {
     bool bHasLegend = false;
@@ -843,7 +843,7 @@ ScVbaChart::getHasLegend(  )
     return bHasLegend;
 }
 
-void SAL_CALL
+void
 ScVbaChart::setHasLegend( bool bLegend )
 {
     try
@@ -856,7 +856,7 @@ ScVbaChart::setHasLegend( bool bLegend )
     }
 }
 
-uno::Reference< excel::XChartTitle > SAL_CALL
+uno::Reference< excel::XChartTitle >
 ScVbaChart::getChartTitle(  )
 {
     uno::Reference< drawing::XShape > xTitleShape = mxChartDocument->getTitle();
@@ -864,7 +864,7 @@ ScVbaChart::getChartTitle(  )
     return new ScVbaChartTitle(this, mxContext, xTitleShape);
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaChart::Axes( const cpo::uno::Any& Type, const cpo::uno::Any& AxisGroup )
 {
     // mmm chart probably is the parent, #TODO check parent

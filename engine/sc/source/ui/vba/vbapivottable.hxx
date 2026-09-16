@@ -31,7 +31,7 @@ class ScVbaPivotTable : public PivotTableImpl_BASE
 public:
     ScVbaPivotTable(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                     cpo::uno::Reference<css::sheet::XDataPilotTable> xTable);
-    virtual cpo::uno::Reference<ov::excel::XPivotCache> SAL_CALL PivotCache() override;
+    virtual cpo::uno::Reference<ov::excel::XPivotCache> PivotCache() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

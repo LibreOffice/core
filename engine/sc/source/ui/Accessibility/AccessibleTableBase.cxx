@@ -47,7 +47,7 @@ ScAccessibleTableBase::~ScAccessibleTableBase()
 {
 }
 
-void SAL_CALL ScAccessibleTableBase::disposing()
+void ScAccessibleTableBase::disposing()
 {
     SolarMutexGuard aGuard;
     mpDoc = nullptr;
@@ -57,21 +57,21 @@ void SAL_CALL ScAccessibleTableBase::disposing()
 
     //=====  XAccessibleTable  ================================================
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
+sal_Int32 ScAccessibleTableBase::getAccessibleRowCount(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
+sal_Int32 ScAccessibleTableBase::getAccessibleColumnCount(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
-OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
+OUString ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
 {
     OSL_FAIL("Here should be an implementation to fill the description");
 
@@ -82,7 +82,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 
     return OUString();
 }
 
-OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
 {
     OSL_FAIL("Here should be an implementation to fill the description");
 
@@ -93,7 +93,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int
     return OUString();
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
     return nCount;
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int32 ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -159,7 +159,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
     return nCount;
 }
 
-uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleRowHeaders(  )
+uno::Reference< XAccessibleTable > ScAccessibleTableBase::getAccessibleRowHeaders(  )
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be an implementation to fill the row headers");
@@ -168,7 +168,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
     return xAccessibleTable;
 }
 
-uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleColumnHeaders(  )
+uno::Reference< XAccessibleTable > ScAccessibleTableBase::getAccessibleColumnHeaders(  )
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be an implementation to fill the column headers");
@@ -177,54 +177,54 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
     return xAccessibleTable;
 }
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
+cpo::uno::Sequence< sal_Int32 > ScAccessibleTableBase::getSelectedAccessibleRows(  )
 {
     OSL_FAIL("not implemented yet");
     cpo::uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
+cpo::uno::Sequence< sal_Int32 > ScAccessibleTableBase::getSelectedAccessibleColumns(  )
 {
     OSL_FAIL("not implemented yet");
     cpo::uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
 
-bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
+bool ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
 }
 
-bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
+bool ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
+uno::Reference< XAccessible > ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCaption(  )
+uno::Reference< XAccessible > ScAccessibleTableBase::getAccessibleCaption(  )
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSummary(  )
+uno::Reference< XAccessible > ScAccessibleTableBase::getAccessibleSummary(  )
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
 
-bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
+bool ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
 {
     OSL_FAIL("not implemented yet");
     return false;
@@ -232,7 +232,7 @@ bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */,
 
 // =====  XAccessibleExtendedTable  ========================================
 
-sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Int64 ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -248,7 +248,7 @@ sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
     return (static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(maRange.aEnd.Col() + 1)) + nColumn;
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildIndex )
+sal_Int32 ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -259,7 +259,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildInde
     return nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
-sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
+sal_Int32 ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -272,7 +272,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildI
 
 // =====  XAccessibleContext  ==============================================
 
-sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
+sal_Int64 ScAccessibleTableBase::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     ensureAlive();
@@ -286,7 +286,7 @@ sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
     return nMax;
 }
 
-uno::Reference< XAccessible > SAL_CALL
+uno::Reference< XAccessible >
     ScAccessibleTableBase::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
@@ -321,14 +321,14 @@ OUString ScAccessibleTableBase::createAccessibleName()
     return sName;
 }
 
-uno::Reference<XAccessibleRelationSet> SAL_CALL
+uno::Reference<XAccessibleRelationSet>
     ScAccessibleTableBase::getAccessibleRelationSet()
 {
     OSL_FAIL("should be implemented in the abbreviated class");
     return uno::Reference<XAccessibleRelationSet>();
 }
 
-sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleStateSet()
+sal_Int64 ScAccessibleTableBase::getAccessibleStateSet()
 {
     OSL_FAIL("should be implemented in the abbreviated class");
     return 0;
@@ -336,11 +336,11 @@ sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleStateSet()
 
     ///=====  XAccessibleSelection  ===========================================
 
-void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int64 /* nChildIndex */ )
+void ScAccessibleTableBase::selectAccessibleChild( sal_Int64 /* nChildIndex */ )
 {
 }
 
-bool SAL_CALL
+bool
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     // I don't need to guard, because the called functions have a guard
@@ -349,29 +349,29 @@ bool SAL_CALL
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));
 }
 
-void SAL_CALL
+void
         ScAccessibleTableBase::clearAccessibleSelection(  )
 {
 }
 
-void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
+void ScAccessibleTableBase::selectAllAccessibleChildren()
 {
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
         ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
 {
     return 0;
 }
 
-uno::Reference<XAccessible > SAL_CALL
+uno::Reference<XAccessible >
         ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int64 /* nSelectedChildIndex */ )
 {
     uno::Reference < XAccessible > xAccessible;
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSelectedChildIndex */ )
+void ScAccessibleTableBase::deselectAccessibleChild( sal_Int64 /* nSelectedChildIndex */ )
 {
 }
 
@@ -387,22 +387,22 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     CommitChange(AccessibleEventId::TABLE_MODEL_CHANGED, cpo::uno::Any(), cpo::uno::Any(aModelChange));
 }
 
-bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
+bool ScAccessibleTableBase::selectRow( sal_Int32 )
 {
     return true;
 }
 
-bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
+bool ScAccessibleTableBase::selectColumn( sal_Int32 )
 {
     return true;
 }
 
-bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
+bool ScAccessibleTableBase::unselectRow( sal_Int32 )
 {
         return true;
 }
 
-bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
+bool ScAccessibleTableBase::unselectColumn( sal_Int32 )
 {
     return true;
 }

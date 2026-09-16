@@ -54,7 +54,7 @@ void TablePivotChart::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 // XEmbeddedObjectSupplier
 
-uno::Reference<lang::XComponent> SAL_CALL TablePivotChart::getEmbeddedObject()
+uno::Reference<lang::XComponent> TablePivotChart::getEmbeddedObject()
 {
     SolarMutexGuard aGuard;
     SdrOle2Obj* pObject = sctools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sctools::ChartSourceType::PIVOT_TABLE);
@@ -65,19 +65,19 @@ uno::Reference<lang::XComponent> SAL_CALL TablePivotChart::getEmbeddedObject()
 
 // XNamed
 
-OUString SAL_CALL TablePivotChart::getName()
+OUString TablePivotChart::getName()
 {
     return m_aChartName;
 }
 
-void SAL_CALL TablePivotChart::setName(OUString const & /* aName */)
+void TablePivotChart::setName(OUString const & /* aName */)
 {
     throw cpo::uno::RuntimeException(); // name cannot be changed
 }
 
 // XTablePivotChart
 
-OUString SAL_CALL TablePivotChart::getPivotTableName()
+OUString TablePivotChart::getPivotTableName()
 {
     SolarMutexGuard aGuard;
 

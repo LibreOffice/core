@@ -42,21 +42,21 @@ public:
     bool isSelectedSheets() const;
 
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // XWorksheets
-    virtual cpo::uno::Any SAL_CALL getVisible() override;
-    virtual void SAL_CALL setVisible( const cpo::uno::Any& _visible ) override;
-    virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Before, const cpo::uno::Any& After, const cpo::uno::Any& Count, const cpo::uno::Any& Type ) override;
-    virtual void SAL_CALL Delete(  ) override;
-    virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName ) override;
+    virtual cpo::uno::Any getVisible() override;
+    virtual void setVisible( const cpo::uno::Any& _visible ) override;
+    virtual cpo::uno::Any Add( const cpo::uno::Any& Before, const cpo::uno::Any& After, const cpo::uno::Any& Count, const cpo::uno::Any& Type ) override;
+    virtual void Delete(  ) override;
+    virtual void PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName ) override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
-    virtual void SAL_CALL Select( const cpo::uno::Any& Replace ) override;
-    virtual void SAL_CALL Copy ( const cpo::uno::Any& Before, const cpo::uno::Any& After) override;
-    virtual void SAL_CALL PrintPreview( const cpo::uno::Any& EnableChanges ) override;
+    virtual void Select( const cpo::uno::Any& Replace ) override;
+    virtual void Copy ( const cpo::uno::Any& Before, const cpo::uno::Any& After) override;
+    virtual void PrintPreview( const cpo::uno::Any& EnableChanges ) override;
     // ScVbaWorksheets_BASE
-    virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 ) override;
+    virtual cpo::uno::Any Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 ) override;
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 

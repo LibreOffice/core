@@ -372,7 +372,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection )
     }
 }
 
-bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
+bool ScVbaWorksheet::getAutoFilterMode()
 {
     if ( ScDocShell* pShell = excel::getDocShell( getModel() ))
     {
@@ -384,7 +384,7 @@ bool SAL_CALL ScVbaWorksheet::getAutoFilterMode()
     return false;
 }
 
-void SAL_CALL ScVbaWorksheet::setAutoFilterMode( bool bAutoFilterMode )
+void ScVbaWorksheet::setAutoFilterMode( bool bAutoFilterMode )
 {
     ScDocShell* pDocShell = excel::getDocShell( getModel() );
     if (!pDocShell)
@@ -699,7 +699,7 @@ ScVbaWorksheet::Columns( const cpo::uno::Any& aIndex )
     return getSheetRange()->Columns( aIndex );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::ChartObjects( const cpo::uno::Any& Index )
 {
     if ( !mxCharts.is() )
@@ -719,7 +719,7 @@ ScVbaWorksheet::ChartObjects( const cpo::uno::Any& Index )
 
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::PivotTables( const cpo::uno::Any& Index )
 {
     uno::Reference< css::sheet::XSpreadsheet > xSheet = getSheet();
@@ -732,7 +732,7 @@ ScVbaWorksheet::PivotTables( const cpo::uno::Any& Index )
     return cpo::uno::Any( xColl );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Comments( const cpo::uno::Any& Index )
 {
     uno::Reference< css::sheet::XSpreadsheet > xSheet = getSheet();
@@ -745,7 +745,7 @@ ScVbaWorksheet::Comments( const cpo::uno::Any& Index )
     return cpo::uno::Any( xColl );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Hyperlinks( const cpo::uno::Any& aIndex )
 {
     /*  The worksheet always returns the same Hyperlinks object.
@@ -757,7 +757,7 @@ ScVbaWorksheet::Hyperlinks( const cpo::uno::Any& aIndex )
     return cpo::uno::Any( mxHlinks );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Names( const cpo::uno::Any& aIndex )
 {
     cpo::uno::Reference<css::beans::XPropertySet> xProps(getSheet(), cpo::uno::UNO_QUERY_THROW);
@@ -768,7 +768,7 @@ ScVbaWorksheet::Names( const cpo::uno::Any& aIndex )
     return cpo::uno::Any( xNames );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::OLEObjects( const cpo::uno::Any& Index )
 {
     uno::Reference< sheet::XSpreadsheet > xSpreadsheet( getSheet(), uno::UNO_SET_THROW );
@@ -782,7 +782,7 @@ ScVbaWorksheet::OLEObjects( const cpo::uno::Any& Index )
     return cpo::uno::Any( xOleObjects );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Shapes( const cpo::uno::Any& aIndex )
 {
     uno::Reference< sheet::XSpreadsheet > xSpreadsheet( getSheet(), uno::UNO_SET_THROW );
@@ -810,61 +810,61 @@ ScVbaWorksheet::getButtons( const cpo::uno::Any &rIndex, bool bOptionButtons )
     return cpo::uno::Any( uno::Reference< XCollection >( rxButtons ) );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Buttons( const cpo::uno::Any& rIndex )
 {
     return getButtons( rIndex, false );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::CheckBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::DropDowns( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::GroupBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Labels( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::ListBoxes( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::OptionButtons( const cpo::uno::Any& rIndex )
 {
     return getButtons( rIndex, true );
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::ScrollBars( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Spinners( const cpo::uno::Any& /*rIndex*/ )
 {
     throw cpo::uno::RuntimeException();
 }
 
-void SAL_CALL
+void
 ScVbaWorksheet::ShowDataForm( )
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
@@ -877,7 +877,7 @@ ScVbaWorksheet::ShowDataForm( )
     }
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::Evaluate( const OUString& Name )
 {
     // #TODO Evaluate allows other things to be evaluated, e.g. functions
@@ -887,24 +887,24 @@ ScVbaWorksheet::Evaluate( const OUString& Name )
     return cpo::uno::Any( Range( cpo::uno::Any( Name ), aVoid ) );
 }
 
-uno::Reference< beans::XIntrospectionAccess > SAL_CALL
+uno::Reference< beans::XIntrospectionAccess >
 ScVbaWorksheet::getIntrospection(  )
 {
     return uno::Reference< beans::XIntrospectionAccess >();
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     throw cpo::uno::RuntimeException(u"Unsupported"_ustr); // unsupported operation
 }
 
-void SAL_CALL
+void
 ScVbaWorksheet::setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     setDefaultPropByIntrospection( getValue( aPropertyName ), aValue );
 }
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 ScVbaWorksheet::getValue( const OUString& aPropertyName )
 {
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
@@ -915,7 +915,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName )
     return cpo::uno::Any( xControl );
 }
 
-bool SAL_CALL
+bool
 ScVbaWorksheet::hasMethod( const OUString& /*aName*/ )
 {
     return false;
@@ -944,7 +944,7 @@ ScVbaWorksheet::getFormControls() const
     return xFormControls;
 
                 }
-bool SAL_CALL
+bool
 ScVbaWorksheet::hasProperty( const OUString& aName )
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
@@ -992,13 +992,13 @@ ScVbaWorksheet::getServiceImplName()
     return u"ScVbaWorksheet"_ustr;
 }
 
-void SAL_CALL
+void
 ScVbaWorksheet::setEnableCalculation( bool bEnableCalculation )
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);
     xCalculatable->enableAutomaticCalculation( bEnableCalculation);
 }
-bool SAL_CALL
+bool
 ScVbaWorksheet::getEnableCalculation(  )
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);
@@ -1015,7 +1015,7 @@ ScVbaWorksheet::getServiceNames()
     return aServiceNames;
 }
 
-OUString SAL_CALL
+OUString
 ScVbaWorksheet::getCodeName()
 {
     uno::Reference< beans::XPropertySet > xSheetProp( mxSheet, uno::UNO_QUERY_THROW );
@@ -1029,7 +1029,7 @@ ScVbaWorksheet::getSheetID() const
     return xAddressable->getRangeAddress().Sheet;
 }
 
-void SAL_CALL
+void
 ScVbaWorksheet::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName, const cpo::uno::Any& )
 {
     sal_Int32 nTo = 0;
@@ -1045,7 +1045,7 @@ ScVbaWorksheet::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, co
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
 
-void SAL_CALL
+void
 ScVbaWorksheet::ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
     const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& /*IgnorePrintAreas*/, const cpo::uno::Any& From,
     const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& /*FixedFormatExtClassPtr*/)
@@ -1057,7 +1057,7 @@ ScVbaWorksheet::ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::A
         IncludeDocProperties, From, To, OpenAfterPublish);
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 ScVbaWorksheet::getSomething(const cpo::uno::Sequence<sal_Int8 > & rId)
 {
     return comphelper::getSomethingImpl(rId, this);

@@ -65,11 +65,11 @@ private:
 public:
     SparklineGroupsImportContext(ScXMLImport& rImport);
 
-    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList) override;
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 } // end sc

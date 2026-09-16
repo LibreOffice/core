@@ -46,7 +46,7 @@ protected:
 public:
     using ScAccessibleContextBase::disposing;
 
-     virtual void SAL_CALL disposing() override;
+     virtual void disposing() override;
 
    ///=====  SfxListener  =====================================================
 
@@ -55,24 +55,24 @@ public:
     ///=====  XAccessibleComponent  ============================================
 
     virtual cpo::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
+        getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
-    virtual void SAL_CALL grabFocus(  ) override;
+    virtual void grabFocus(  ) override;
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int64 getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
-    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual OUString getAccessibleName() override;
 
 protected:
     /// Return this object's description.

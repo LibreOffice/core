@@ -71,7 +71,7 @@ protected:
 public:
     using ScAccessibleContextBase::disposing;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     void LostFocus();
 
@@ -80,7 +80,7 @@ public:
     ///=====  XAccessibleComponent  ============================================
 
     virtual cpo::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
+        getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
     virtual OutputDevice* GetOutputDeviceForView();
@@ -97,31 +97,31 @@ public:
 
     /// Return the number of currently visible children.
     /// override to calculate this on demand
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     //=====  XAccessibleSelection  ============================================
 
-        virtual void SAL_CALL selectAccessibleChild(
+        virtual void selectAccessibleChild(
             sal_Int64 nChildIndex ) override;
-        virtual bool SAL_CALL isAccessibleChildSelected(
+        virtual bool isAccessibleChildSelected(
             sal_Int64 nChildIndex ) override;
-        virtual void SAL_CALL clearAccessibleSelection(  ) override;
-        virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        virtual void clearAccessibleSelection(  ) override;
+        virtual void selectAllAccessibleChildren(  ) override;
+        virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
+        virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
             sal_Int64 nSelectedChildIndex ) override;
-        virtual void SAL_CALL deselectAccessibleChild(
+        virtual void deselectAccessibleChild(
             sal_Int64 nSelectedChildIndex ) override;
-    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
 protected:
     /// Return this object's description.
     virtual OUString
@@ -137,12 +137,12 @@ public:
     /** Add listener that is informed of future changes of name,
           description and so on events.
     */
-    virtual void SAL_CALL
+    virtual void
         addAccessibleEventListener(
             const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
     //  Remove an existing event listener.
-    virtual void SAL_CALL
+    virtual void
         removeAccessibleEventListener(
             const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
@@ -163,9 +163,9 @@ private:
     ScAddress m_curCellAddress;
 
     ///=====  XAccessibleComponent  ============================================
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 getForeground(  ) override;
 
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int32 getBackground(  ) override;
 
     sal_Int32 GetFgBgColor(  const OUString &strPropColor) ;
 };
@@ -189,13 +189,13 @@ public:
     {
     }
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
 
     // for mapping positions/sizes within the TextView to a11y
     virtual OutputDevice* GetOutputDeviceForView() override;
 
     using ScAccessibleContextBase::disposing;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 };
 
 class ScAccessibleEditLineObject final : public ScAccessibleEditControlObject

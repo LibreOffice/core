@@ -39,7 +39,7 @@ public:
     /// @throws uno::RuntimeException
     PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override
+    virtual cpo::uno::Any nextElement(  ) override
     {
         return DataPilotToPivotTable( m_xEnumeration->nextElement(),  m_xContext );
     }

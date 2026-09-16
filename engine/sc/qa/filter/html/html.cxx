@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
         }
 
         // XTransferable
-        cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        cpo::uno::Any getTransferData(const datatransfer::DataFlavor& aFlavor) override
         {
             if (!isDataFlavorSupported(aFlavor))
                 return {};
@@ -398,11 +398,11 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
             return cpo::uno::Any(bytes);
         }
-        cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        cpo::uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override
         {
             return { getHTMLFlavor() };
         }
-        bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        bool isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
         {
             return aFlavor.MimeType.equalsIgnoreAsciiCase(getHTMLFlavor().MimeType);
         }

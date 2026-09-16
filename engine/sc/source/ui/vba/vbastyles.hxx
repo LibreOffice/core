@@ -39,10 +39,10 @@ public:
     /// @throws css::script::BasicErrorException
     void Delete(const OUString& _sStyleName);
     // XStyles
-     virtual cpo::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const OUString& Name, const cpo::uno::Any& BasedOn ) override;
+     virtual cpo::uno::Reference< ov::excel::XStyle > Add( const OUString& Name, const cpo::uno::Any& BasedOn ) override;
     // XEnumerationAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
