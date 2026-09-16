@@ -19,6 +19,7 @@
 
 #include <deque>
 #include <memory>
+#include <string_view>
 
 #include "hwpreader.hxx"
 #include <math.h>
@@ -3795,18 +3796,23 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->ishyper )
             {
                 padd("xlink:type", sXML_CDATA, "simple");
+                // The link target starts after the four byte tag and runs to the first NUL or to
+                // the end of the block, whichever comes first.
+                const std::string_view aFollow(reinterpret_cast<const char *>(hbox->follow.data()),
+                                               hbox->follow.size());
+                const size_t nStart = (aFollow.size() > 4 && aFollow[4] != 0) ? 4 : 5;
+                std::string aTarget;
+                if (nStart < aFollow.size())
+                {
+                    const std::string_view aRest = aFollow.substr(nStart);
+                    aTarget = aRest.substr(0, aRest.find('\0'));
+                }
 #ifdef _WIN32
-                if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 4).c_str())));
-                else
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 5).c_str())));
+                padd("xlink:href", sXML_CDATA,
+                    reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(aTarget.c_str())).c_str())));
 #else
-                if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str())));
-                else
-                    padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str())));
+                padd("xlink:href", sXML_CDATA,
+                    reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(aTarget.c_str()).c_str())).c_str())));
 #endif
                 rstartEl("draw:a", mxList.get());
                 mxList->clear();
