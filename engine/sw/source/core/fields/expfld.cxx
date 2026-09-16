@@ -229,9 +229,9 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
                     pTab->GetTable()->GetRowsToRepeat() > 0 &&
                     pTab->IsInHeadline( *pContentFrame ) )
                 {
-                    // take the next line
+                    // take the next line, when the follow has one
                     const SwLayoutFrame* pRow = pTab->GetFirstNonHeadlineRow();
-                    pContentFrame = pRow->ContainsContent();
+                    pContentFrame = pRow ? pRow->ContainsContent() : nullptr;
                 }
             }
             else
