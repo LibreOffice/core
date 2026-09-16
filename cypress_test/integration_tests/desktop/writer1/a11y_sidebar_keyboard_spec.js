@@ -58,6 +58,10 @@ describe(['tagdesktop'], 'Writer sidebar keyboard navigation', { testIsolation: 
 		a11yHelper.sidebarKeyboard.assertTabWalksTheDeck(getWin);
 	});
 
+	it('a cursor move from the engine does not take the focus out of the deck', function () {
+		a11yHelper.sidebarKeyboard.assertCursorMoveKeepsFocus(getWin);
+	});
+
 	it('F6 leaves the deck from a widget inside it', function () {
 		a11yHelper.sidebarKeyboard.assertRingLeavesTheDeck(getWin);
 	});

@@ -769,6 +769,31 @@ const sidebarKeyboard = {
 		});
 	},
 
+	/// The engine reports a cursor move by putting the DOM selection in the
+	/// hidden contenteditable, which focuses it. Moving the cursor with a uno
+	/// command reproduces that without typing, so the focus is provably still
+	/// where the keyboard left it and not where a race put it.
+	assertCursorMoveKeepsFocus: function (getWin) {
+		cy.realPress('F6');
+
+		cy.then(function () {
+			const win = getWin();
+			const before = win.document.activeElement;
+			expect(win.app.map.sidebar.wrapper.contains(before),
+				'the focus entered the deck').to.equal(true);
+
+			win.app.map.sendUnoCommand('.uno:GoToNextPara');
+
+			cy.then(function () { return helper.processToIdle(win); });
+
+			cy.cGet('#sidebar-dock-wrapper').should(function () {
+				expect(describeFocusable(win.document.activeElement),
+					'the focus after the engine moved the cursor')
+					.to.equal(describeFocusable(before));
+			});
+		});
+	},
+
 	assertRingLeavesTheDeck: function (getWin) {
 		cy.realPress('F6');
 		cy.realPress('Tab');
