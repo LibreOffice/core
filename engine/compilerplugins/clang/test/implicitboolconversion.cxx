@@ -11,6 +11,7 @@
 
 #include <array>
 #include <atomic>
+#include <cassert>
 #include <initializer_list>
 
 #include <cpo/uno/Sequence.hxx>
@@ -62,6 +63,14 @@ void f()
     // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
     Sequence<Sequence<int>> s4{ { false } };
     (void)s4;
+}
+
+void testAssert([[maybe_unused]] bool b, [[maybe_unused]] int n) {
+    assert(b);
+#if !defined NDEBUG
+    // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'int' [loplugin:implicitboolconversion]}}
+    assert(n = b);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -45,6 +45,9 @@ public:
     bool PreTraverseFunctionDecl(FunctionDecl* decl);
     bool PostTraverseFunctionDecl(FunctionDecl* decl, bool);
     bool TraverseFunctionDecl(FunctionDecl* decl);
+    bool PreTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr);
+    bool PostTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr, bool);
+    bool TraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr);
     bool VisitCallExpr(CallExpr const*);
 
 private:
@@ -76,6 +79,30 @@ bool PointerBool::TraverseFunctionDecl(FunctionDecl* decl)
     return ret;
 }
 
+bool PointerBool::PreTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
+    // The C++ definition of assert in glibc 2.44 checks that its argument is a single expression
+    // with `1 ? 1 : bool (__VA_ARGS__)`, which re-evaluates the whole argument in a branch that is
+    // never taken; do not descend into that dead branch to avoid duplicate warnings:
+    if (!expr->getType()->isBooleanType()) {
+        return true;
+    }
+    auto const loc = expr->getBeginLoc();
+    return !compiler.getSourceManager().isMacroBodyExpansion(loc)
+        || Lexer::getImmediateMacroName(loc, compiler.getSourceManager(), compiler.getLangOpts())
+            != "assert";
+}
+
+bool PointerBool::PostTraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr *, bool) { return true; }
+
+bool PointerBool::TraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
+    bool ret = true;
+    if (PreTraverseCXXFunctionalCastExpr(expr)) {
+        ret = FilteringPlugin::TraverseCXXFunctionalCastExpr(expr);
+        PostTraverseCXXFunctionalCastExpr(expr, ret);
+    }
+    return ret;
+}
+
 bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
 {
     if (ignoreLocation(callExpr))
@@ -93,6 +120,11 @@ bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
         functionDecl = callExpr->getDirectCallee();
     }
     if (!functionDecl)
+        return true;
+    // glibc 2.44 checks that the argument to assert is a single expression by passing it to
+    // "extern _Bool __assert_single_arg (_Bool)" inside a sizeof.  A pointer argument to that
+    // internal check is not a mistake in the calling code:
+    if (functionDecl->getIdentifier() && functionDecl->getName() == "__assert_single_arg")
         return true;
 
     unsigned len = std::min(callExpr->getNumArgs(), functionDecl->getNumParams());

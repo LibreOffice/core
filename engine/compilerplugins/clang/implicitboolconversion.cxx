@@ -393,6 +393,18 @@ bool ImplicitBoolConversion::TraverseCXXStaticCastExpr(CXXStaticCastExpr * expr)
 bool ImplicitBoolConversion::TraverseCXXFunctionalCastExpr(
     CXXFunctionalCastExpr * expr)
 {
+    // The C++ definition of assert in glibc 2.44 checks that its argument is a single expression
+    // with `1 ? 1 : bool (__VA_ARGS__)`, which re-evaluates the whole argument in a branch that is
+    // never taken; do not descend into that dead branch to avoid duplicate warnings:
+    if (expr->getType()->isBooleanType()) {
+        auto const loc = expr->getBeginLoc();
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+            && Lexer::getImmediateMacroName(
+                loc, compiler.getSourceManager(), compiler.getLangOpts()) == "assert")
+        {
+            return true;
+        }
+    }
     nested.push(std::vector<ImplicitCastExpr const *>());
     bool bRet = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr(expr);
     assert(!nested.empty());
@@ -621,6 +633,15 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
                 }
             }
         }
+        // Ignore the conversion from bool to int in the `1 ? 1 : bool (__VA_ARGS__)` argument check
+        // of the C++ definition of assert in glibc 2.44:
+        auto const loc = expr->getBeginLoc();
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+            && Lexer::getImmediateMacroName(
+                loc, compiler.getSourceManager(), compiler.getLangOpts()) == "assert")
+        {
+            return true;
+        }
         if (nested.empty()) {
             reportWarning(expr);
         } else {
@@ -649,6 +670,13 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         && !calls.empty())
     {
         CallExpr const * call = calls.top();
+        // Ignore the conversion from pointer in the `extern _Bool __assert_single_arg (_Bool)`
+        // check in the C definition of assert in glibc 2.44:
+        if (auto const fd = call->getDirectCallee()) {
+            if (fd->getIdentifier() && fd->getName() == "__assert_single_arg") {
+                return true;
+            }
+        }
         if (std::any_of(
                 call->arg_begin(), call->arg_end(),
                 [expr](Expr const * e) { return expr == e->IgnoreParens(); }))

@@ -70,6 +70,8 @@ int main()
     }
     // expected-error@+1 {{implicit conversion of constant &"msg"[0] of type 'const char *' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     assert("msg");
+    // expected-error@+1 {{implicit conversion of constant 2 of type 'int' to 'bool'; use 'true' instead [loplugin:consttobool]}}
+    assert(2);
 #endif
 
     (void)b;
