@@ -1459,6 +1459,13 @@ window.L.TextInput = window.L.Layer.extend({
 	// start/end refer to the string represented by the whole plain text content
 	// it's not possible to set range start/end position at <img> delimiters
 	_setSelectionRange: function(start, end) {
+		// Putting the selection inside the contenteditable focuses it, so a
+		// cursor update must not run while the keyboard is on another widget.
+		const active = document.activeElement;
+		if (active && active !== document.body && active !== this._textArea &&
+			!this._textArea.contains(active))
+			return;
+
 		this._statusLog('_setSelectionRange [');
 		var selection = window.getSelection();
 		selection.removeAllRanges();
