@@ -204,6 +204,42 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCItemRef)
     // one item per heading, each naming its own
     CPPUNIT_ASSERT_EQUAL("H1 H2 "_ostr, aTargets.makeStringAndClear());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFormulaAltFromSource)
+{
+    createSwDoc("formula-alt.fodt");
+    // a formula reaches the export loaded, not running, in every document but a freshly typed one
+    saveAndReload(TestFilter::ODT);
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    maTempFile.CloseStream();
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    OUStringBuffer aAlts;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "Formula")
+            continue;
+
+        // Without the fix a formula nobody had described carried no Alt, which the PDF/UA
+        // checkers count against the file
+        auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"_ostr));
+        CPPUNIT_ASSERT(pAlt);
+        aAlts.append(vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt) + "|");
+    }
+
+    // the source where nobody described the formula, and the title where somebody did
+    CPPUNIT_ASSERT_EQUAL(u"E=mc^2|Half of a|"_ustr, aAlts.makeStringAndClear());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
