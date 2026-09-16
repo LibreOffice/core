@@ -484,22 +484,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), aProps[u"FirstLineIndent"_ustr].get<sal_Int32>());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf113399_drawnFrame)
+{
+    // A frame of Writer's own is written as a drawing rather than as a framed paragraph, and it
+    // states no space around its text. Zero is what a drawing of Writer means, and a reader of
+    // the format takes a quarter of a centimetre where nothing is said, so the zero is written
+    // out rather than left to the default.
+    createSwDoc("writer-frame-zero-padding.fodt");
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    for (const char* pInset : { "lIns", "tIns", "rIns", "bIns" })
+        assertXPath(pXmlDoc, "//wps:bodyPr", pInset, u"0");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf113399)
 {
     createSwDoc("tdf113399.doc");
     saveAndReload(TestFilter::DOCX);
     // 0 padding was not preserved
     // In LO 0 is the default, but in OOXML format the default is 254 / 127
-    uno::Reference<beans::XPropertySet> xPropSet(getShape(1), uno::UNO_QUERY);
+    // The page number sits in a framed paragraph of the footer, which is written back as one, so
+    // the space it leaves around its text is read from the frame.
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrames->getCount() > 0);
+    uno::Reference<beans::XPropertySet> xPropSet(xFrames->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nPaddingValue;
-    xPropSet->getPropertyValue(u"TextLeftDistance"_ustr) >>= nPaddingValue;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
-    xPropSet->getPropertyValue(u"TextRightDistance"_ustr) >>= nPaddingValue;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
-    xPropSet->getPropertyValue(u"TextUpperDistance"_ustr) >>= nPaddingValue;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
-    xPropSet->getPropertyValue(u"TextLowerDistance"_ustr) >>= nPaddingValue;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+    for (const OUString& rName : { u"LeftBorderDistance"_ustr, u"RightBorderDistance"_ustr,
+                                   u"TopBorderDistance"_ustr, u"BottomBorderDistance"_ustr })
+    {
+        xPropSet->getPropertyValue(rName) >>= nPaddingValue;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nPaddingValue);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf114882, "tdf114882.docx")
@@ -910,6 +928,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147810, "tdf147810.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,
     // because the exported file was corrupted.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHeaderFrameAsLastParagraph)
+{
+    // The header holds a plain paragraph and then a framed one, so the framed paragraph is the
+    // last thing in the header.
+    createSwDoc("header-frame-last.docx");
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the frame was dropped and its text read as an ordinary paragraph of the header.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    saveAndReload(TestFilter::DOCX);
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

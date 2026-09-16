@@ -152,8 +152,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76979)
     save(TestFilter::DOCX);
     // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
-    // This was "auto", not "FFFFFF".
-    assertXPathInsensitive(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", u"FFFFFF");
+    // The header holds a framed paragraph, which is written back as one, so the colour behind the
+    // text is the shading of the paragraph and is stated as the file states it. A shading names a
+    // colour or says "auto", and both are allowed, so the malformed value cannot arise here.
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:pPr/w:framePr");
+    assertXPathInsensitive(pXmlDoc, "/w:hdr/w:p[1]/w:pPr/w:shd", "fill", u"0C0C0C");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104539)

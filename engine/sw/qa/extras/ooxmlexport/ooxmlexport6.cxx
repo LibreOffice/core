@@ -930,7 +930,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO73546)
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL",u"0");
+    // The header holds a framed paragraph, which is written back as one, so the distance it
+    // keeps from the text around it is stated by the frame rather than by a floating shape.
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:pPr/w:framePr", "hSpace", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69616)
