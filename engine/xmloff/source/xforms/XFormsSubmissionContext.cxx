@@ -27,11 +27,11 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
 
 #include <sal/log.hxx>
 
-using com::sun::star::xforms::XModel2;
+using com::sun::star::xforms::XModel;
 
 using namespace ::cpo::uno;
 using namespace cpo::uno;
@@ -40,7 +40,7 @@ using namespace xmloff::token;
 
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
-    const Reference<XModel2>& xModel ) :
+    const Reference<XModel>& xModel ) :
         TokenContext( rImport )
 {
     // register submission with model

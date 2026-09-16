@@ -27,6 +27,8 @@ interface XSubmission;
  */
 interface XModel
 {
+    interface com::sun::star::beans::XPropertySet;
+
     /** get the XForms model ID */
     string getID();
 

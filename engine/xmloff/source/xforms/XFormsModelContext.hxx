@@ -21,14 +21,14 @@
 
 #include "TokenContext.hxx"
 #include <cpo/uno/Reference.hxx>
-#include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
 
 class SvXMLImport;
 
 /** import the xforms:model element */
 class XFormsModelContext : public TokenContext
 {
-    cpo::uno::Reference<css::xforms::XModel2> mxModel;
+    cpo::uno::Reference<css::xforms::XModel> mxModel;
 
 public:
     XFormsModelContext( SvXMLImport& rImport );

@@ -24,7 +24,7 @@
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace xforms { class XModel2; }
+    namespace xforms { class XModel; }
 }
 
 class SvXMLImport;
@@ -36,7 +36,7 @@ class XFormsSubmissionContext : public TokenContext
 
 public:
     XFormsSubmissionContext( SvXMLImport& rImport,
-                             const cpo::uno::Reference<css::xforms::XModel2>& xModel );
+                             const cpo::uno::Reference<css::xforms::XModel>& xModel );
 
     // implement TokenContext methods:
 

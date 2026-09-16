@@ -24,7 +24,7 @@
 
 namespace com::sun::star {
     namespace xml::dom { class XDocument; }
-    namespace xforms { class XModel2; }
+    namespace xforms { class XModel; }
 }
 
 class SvXMLImport;
@@ -32,14 +32,14 @@ class SvXMLImport;
 /** import the xforms:instance element */
 class XFormsInstanceContext : public TokenContext
 {
-    cpo::uno::Reference<css::xforms::XModel2> mxModel;
+    cpo::uno::Reference<css::xforms::XModel> mxModel;
     cpo::uno::Reference<css::xml::dom::XDocument> mxInstance;
     OUString msId;
     OUString msURL;
 
 public:
     XFormsInstanceContext( SvXMLImport& rImport,
-                           const cpo::uno::Reference<css::xforms::XModel2> & xModel );
+                           const cpo::uno::Reference<css::xforms::XModel> & xModel );
 
     // implement SvXMLImportContext & TokenContext methods:
     // We override CreateChildContext, because we want to read

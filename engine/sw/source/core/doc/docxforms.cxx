@@ -22,7 +22,6 @@
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/xforms/Model.hpp>
-#include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/xforms/XForms.hpp>
 #include <comphelper/processfactory.hxx>
@@ -36,7 +35,7 @@ using uno::Reference;
 using uno::UNO_QUERY;
 using cpo::uno::Any;
 using cpo::uno::Exception;
-using xforms::XModel2;
+using xforms::XModel;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
 using com::sun::star::container::XIndexAccess;
@@ -69,7 +68,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         if( bCreateDefaultModel && mxXForms.is() )
         {
             OUString sName(u"Model 1"_ustr);
-            Reference<XModel2> xModel = xforms::Model::create( comphelper::getProcessComponentContext() );
+            Reference<XModel> xModel = xforms::Model::create( comphelper::getProcessComponentContext() );
             xModel->setID( sName );
             Reference<XFormsUIHelper1> xHelper( xModel, uno::UNO_QUERY );
             if (!xHelper)

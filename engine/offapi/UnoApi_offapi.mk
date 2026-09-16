@@ -4001,7 +4001,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xforms,\
 	XFormsSupplier \
 	XFormsUIHelper1 \
 	XModel \
-	XModel2 \
 	XSubmission \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml,\

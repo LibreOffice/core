@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include "propertysetbase.hxx"
-#include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -62,7 +62,7 @@ namespace xforms
  */
 typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
-    css::xforms::XModel2,
+    css::xforms::XModel,
     css::xforms::XFormsUIHelper1,
     css::util::XUpdatable,
     css::lang::XServiceInfo

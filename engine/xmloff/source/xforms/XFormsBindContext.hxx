@@ -24,7 +24,7 @@
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace xforms { class XModel2; }
+    namespace xforms { class XModel; }
 }
 
 class SvXMLImport;
@@ -32,12 +32,12 @@ class SvXMLImport;
 /** import the xforms:binding element */
 class XFormsBindContext : public TokenContext
 {
-    const cpo::uno::Reference<css::xforms::XModel2> mxModel;
+    const cpo::uno::Reference<css::xforms::XModel> mxModel;
     cpo::uno::Reference<css::beans::XPropertySet> mxBinding;
 
 public:
     XFormsBindContext( SvXMLImport& rImport,
-                       const cpo::uno::Reference<css::xforms::XModel2>& xModel );
+                       const cpo::uno::Reference<css::xforms::XModel>& xModel );
 
     // implement SvXMLImportContext & TokenContext methods:
 

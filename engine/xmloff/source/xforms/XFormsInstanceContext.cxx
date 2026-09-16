@@ -26,7 +26,7 @@
 #include <sal/log.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -36,7 +36,7 @@
 using cpo::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::Sequence;
-using com::sun::star::xforms::XModel2;
+using com::sun::star::xforms::XModel;
 using com::sun::star::beans::PropertyValue;
 
 using xmloff::token::XML_SRC;
@@ -44,7 +44,7 @@ using xmloff::token::XML_ID;
 
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
-    const Reference<XModel2> & xModel ) :
+    const Reference<XModel> & xModel ) :
         TokenContext( rImport ),
         mxModel( xModel )
 {

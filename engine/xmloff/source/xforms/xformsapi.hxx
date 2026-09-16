@@ -29,15 +29,15 @@ namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace frame { class XModel; }
     namespace uno { template<class A> class Reference; }
-    namespace xforms { class XDataTypeRepository; class XModel2; }
+    namespace xforms { class XDataTypeRepository; class XModel; }
 }
 class SvXMLNamespaceMap;
 
-cpo::uno::Reference<css::xforms::XModel2> xforms_createXFormsModel();
+cpo::uno::Reference<css::xforms::XModel> xforms_createXFormsModel();
 
 void xforms_addXFormsModel(
     const cpo::uno::Reference<css::frame::XModel>& xDocument,
-    const cpo::uno::Reference<css::xforms::XModel2>& xModel );
+    const cpo::uno::Reference<css::xforms::XModel>& xModel );
 
 cpo::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( cpo::uno::Reference<css::frame::XModel> const &, const OUString& );
 

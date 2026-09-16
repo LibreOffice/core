@@ -29,7 +29,7 @@
 #include <xmloff/namespacemap.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
 
 #include <sal/log.hxx>
 
@@ -38,7 +38,7 @@ using cpo::uno::Any;
 using cpo::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XFastAttributeList;
-using com::sun::star::xforms::XModel2;
+using com::sun::star::xforms::XModel;
 using namespace xmloff::token;
 
 // helper function; see below
@@ -47,7 +47,7 @@ static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
-    const Reference<XModel2>& xModel ) :
+    const Reference<XModel>& xModel ) :
         TokenContext( rImport ),
         mxModel( xModel )
 {
