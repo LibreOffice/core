@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-12 12:51+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-09-16 07:52+0000\n"
+"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -596,7 +596,7 @@ msgstr "Gebruik de zoom-instellingen van deze server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid "Smart Zoom"
-msgstr "Smart Zoom"
+msgstr "Slim Inzoomen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:645
 msgid "Default Zoom"
@@ -981,9 +981,9 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
-"Wanneer aan, Writer past het document aan de viewport breedte op open. "
-"Wanneer uit, wordt het document geopend op het standaardzoomniveau dat "
-"hieronder is ingesteld."
+"Als deze optie is ingeschakeld, past Writer het document bij het openen aan "
+"de breedte van het weergavegebied aan. Als deze optie is uitgeschakeld, "
+"wordt het document geopend op het hieronder ingestelde standaardzoomniveau."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1616
 msgid "No settings available for {0}"
@@ -1011,8 +1011,8 @@ msgstr "Documentinstellingen opslaan"
 #: admin/src/integrator/AdminIntegratorSettings.ts:1968
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
-"(Waarschuwing: De Server toegankelijkheid moet ingeschakeld zijn om in te "
-"kunnen stellen)"
+"(Let op: om deze functie in of uit te schakelen, moet de optie "
+"Toegankelijkheid op de Server zijn ingeschakeld)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2156
 msgid "Notebookbar view"
@@ -5786,8 +5786,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
-"Pas de pagina aan de vensterbreedte aan. Smart Zoom on open kan worden "
-"geschakeld in Opties onder het tabblad Bestand."
+"Pas de pagina aan de breedte van het venster aan. De optie Slim Inzoomen kan "
+"worden in- of uitgeschakeld in de Opties onder het tabblad Bestand."
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
