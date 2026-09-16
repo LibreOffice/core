@@ -1052,10 +1052,10 @@ class LayerDrawing {
 		this.handleVideos(slideHash);
 		if (this.videoRenderers.has(slideHash)) {
 			this.loadVideos(slideHash);
-			// In our own Qt browser start playback on slide entry. A plain
-			// browser cannot guarantee sound without a user gesture, so
-			// there the video waits for a click.
-			if (window.ThisIsTheQtApp) {
+			// In our own Qt and macOS shells start playback on slide entry.
+			// A plain browser cannot guarantee sound without a user gesture,
+			// so there the video waits for a click.
+			if (window.ThisIsTheQtApp || window.ThisIsTheMacOSApp) {
 				this.playVideos(slideHash);
 			}
 		}
