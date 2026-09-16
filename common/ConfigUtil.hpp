@@ -166,9 +166,6 @@ int getInt(const std::string& key, int def);
 inline bool isSslEnabled()
 {
 #if defined(ENABLE_SSL) && ENABLE_SSL
-    // the embedded app uses a plain loopback connection with no certificate
-    if (Util::isMobileApp())
-        return false;
     if constexpr (!Util::isFuzzing())
     {
 #if ENABLE_DEBUG
@@ -188,8 +185,6 @@ inline bool isSslEnabled()
 inline bool isSSLTermination()
 {
 #if defined(ENABLE_SSL) && ENABLE_SSL
-    if (Util::isMobileApp())
-        return false;
     return !Util::isFuzzing() && SslTermination.get();
 #else
     return false;

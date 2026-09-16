@@ -322,6 +322,13 @@ static Util::UnorderedStringMap<std::string> buildDefaultAppConfig()
     config.emplace("accessibility.enable", Util::isMobileApp() ? "true" : "false");
     if (!Util::isMobileApp())
         config.insert(DefServerConfig.begin(), DefServerConfig.end());
+    else
+    {
+        // The embedded app talks to its own kit over a loopback connection that carries no
+        // certificate, so it serves plain HTTP.
+        config.insert_or_assign("ssl.enable", "false");
+        config.insert_or_assign("ssl.termination", "false");
+    }
     return config;
 }
 
