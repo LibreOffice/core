@@ -524,16 +524,9 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
                 bEnd = true;
                 break;
             }
-            // erAck 26.02.01: Old behavior was no special treatment of '\0'
-            // character here, but a following rStr+=c did ignore it. Is this
-            // really intended? Or should a '\0' better terminate a line?
-            // The nOldFilePos stuff wasn't correct then anyways.
-            if ( c )
-            {
-                if ( n < j )
-                    buf[n] = c;
-                ++n;
-            }
+            if ( n < j )
+                buf[n] = c;
+            ++n;
         }
         nTotalLen += j;
         if ( n )
