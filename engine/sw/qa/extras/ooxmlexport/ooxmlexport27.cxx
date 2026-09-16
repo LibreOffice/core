@@ -659,6 +659,41 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameContentsStyleStaysOneStyle)
     assertXPath(pXmlDoc, "/w:styles/w:style/w:name[@w:val='Frame Contents (user)']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testHyphenationSettingsWithoutHyphenatedText)
+{
+    // The document states how wide the hyphenation zone is and where a hyphenated word may sit,
+    // and it hyphenates nowhere. Those settings say how to hyphenate rather than whether to, so
+    // they are read and written whatever the text does.
+    createSwDoc("effect-extent-line-width.docx");
+
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(425), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xStyle, u"ParaHyphenationKeep"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xStyle, u"ParaHyphenationKeepLine"_ustr));
+
+    saveAndReload(TestFilter::DOCX);
+
+    uno::Reference<beans::XPropertySet> xReloaded(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(425),
+                         getProperty<sal_Int16>(xReloaded, u"ParaHyphenationZone"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xReloaded, u"ParaHyphenationKeep"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xReloaded, u"ParaHyphenationKeepLine"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHyphenationZoneLeavesTheDefaultStyleAlone)
+{
+    // The document states how wide the hyphenation zone is and hyphenates nowhere. The default
+    // style says nothing about whether to hyphenate, so a reader that turns hyphenation on
+    // afterwards hyphenates the text.
+    createSwDoc("a4andborders.docx");
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

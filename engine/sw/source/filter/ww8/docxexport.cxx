@@ -1235,6 +1235,29 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
     }
 }
 
+/*  States where a hyphenated word may sit at the bottom of a page. Neither element says that
+    hyphenation is allowed there, so a document that keeps a hyphenated word off the bottom of a
+    page states neither of them. */
+static auto
+WriteHyphenationCompatSettings(::sax_fastparser::FSHelperPtr const& rpFS, bool const bKeep,
+                               bool const bKeepLine) -> void
+{
+    if (!bKeepLine)
+    {
+        rpFS->singleElementNS(XML_w, XML_compatSetting, FSNS(XML_w, XML_name),
+                              "useWord2013TrackBottomHyphenation", FSNS(XML_w, XML_uri),
+                              "http://schemas.microsoft.com/office/word", FSNS(XML_w, XML_val),
+                              "1");
+    }
+    if (!bKeep)
+    {
+        rpFS->singleElementNS(XML_w, XML_compatSetting, FSNS(XML_w, XML_name),
+                              "allowHyphenationAtTrackBottom", FSNS(XML_w, XML_uri),
+                              "http://schemas.microsoft.com/office/word", FSNS(XML_w, XML_val),
+                              "1");
+    }
+}
+
 static auto
 WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> void
 {
@@ -1304,6 +1327,14 @@ bool lcl_hasAnyHyphenation(const SwDoc& rDoc)
     }
     return false;
 }
+}
+
+bool DocxExport::HasAnyHyphenation()
+{
+    // Walking every paragraph is a lot of work for an answer that stays the same, so it is kept.
+    if (!m_oHasAnyHyphenation.has_value())
+        m_oHasAnyHyphenation = lcl_hasAnyHyphenation(m_rDoc);
+    return *m_oHasAnyHyphenation;
 }
 
 void DocxExport::WriteSettings()
@@ -1649,7 +1680,7 @@ void DocxExport::WriteSettings()
         that do not hyphenate. A document where nothing hyphenates says nothing at all, because
         reading w:autoHyphenation puts the hyphenation properties on the default paragraph
         style, so a round trip would add properties the document never had. */
-    if (lcl_hasAnyHyphenation(m_rDoc))
+    if (HasAnyHyphenation())
         pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
 
     // Hyphenation details set depending on default style, otherwise on body style
@@ -1658,6 +1689,7 @@ void DocxExport::WriteSettings()
         pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT, /*bRegardLanguage=*/false);
     const SvxHyphenZoneItem* pZoneItem = nullptr;
     bool bHyphenationKeep = false;
+    bool bHyphenationKeepLine = false;
     bool bHyphenationZone = false;
     if (pColl)
         pZoneItem = pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false);
@@ -1692,7 +1724,10 @@ void DocxExport::WriteSettings()
     if (pZoneItem && pZoneItem->IsNoCapsHyphenation())
         pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
     if (pZoneItem && pZoneItem->IsKeep() && pZoneItem->GetKeepType() )
+    {
         bHyphenationKeep = true;
+        bHyphenationKeepLine = pZoneItem->IsKeepLine();
+    }
 
     // Even and Odd Headers
     if( m_aSettings.evenAndOddHeaders )
@@ -1738,6 +1773,15 @@ void DocxExport::WriteSettings()
                 bHasCompatibilityMode = true;
                 aValue = OUString::number(getWordCompatibilityMode());
             }
+            else if ( aName == "useWord2013TrackBottomHyphenation"
+                      || aName == "allowHyphenationAtTrackBottom" )
+            {
+                // Where these two are stated below out of what the document holds now, the ones
+                // it was read with are left out. A document of an older mode states neither
+                // below, so it carries on with the ones it came with.
+                if (getWordCompatibilityMode() >= 12)
+                    continue;
+            }
 
             pFS->singleElementNS( XML_w, XML_compatSetting,
                 FSNS( XML_w, XML_name ), aName,
@@ -1753,6 +1797,9 @@ void DocxExport::WriteSettings()
                 FSNS( XML_w, XML_val ),  OString::number(getWordCompatibilityMode()));
             bHasCompatibilityMode = true;
         }
+
+        if (getWordCompatibilityMode() >= 12)
+            WriteHyphenationCompatSettings(pFS, bHyphenationKeep, bHyphenationKeepLine);
 
         pFS->endElementNS( XML_w, XML_compat );
     }
@@ -1779,23 +1826,8 @@ void DocxExport::WriteSettings()
                     FSNS(XML_w, XML_val), "1");
         }
 
-        // export useWord2013TrackBottomHyphenation and
-        // allowHyphenationAtTrackBottom for Word 2013/2016/2019
         if (nWordCompatibilityMode >= 12)
-        {
-            pFS->singleElementNS(XML_w, XML_compatSetting,
-                    FSNS(XML_w, XML_name), "useWord2013TrackBottomHyphenation",
-                    FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
-                    FSNS(XML_w, XML_val), "1");
-
-            if ( !bHyphenationKeep )
-            {
-                pFS->singleElementNS(XML_w, XML_compatSetting,
-                    FSNS(XML_w, XML_name), "allowHyphenationAtTrackBottom",
-                    FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
-                    FSNS(XML_w, XML_val), "1");
-            }
-        }
+            WriteHyphenationCompatSettings(pFS, bHyphenationKeep, bHyphenationKeepLine);
 
         pFS->endElementNS( XML_w, XML_compat );
     }

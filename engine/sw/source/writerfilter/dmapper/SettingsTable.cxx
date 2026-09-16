@@ -101,6 +101,7 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 , m_bNoColumnBalance(false)
 , m_bAutoHyphenation(false)
 , m_bNoHyphenateCaps(false)
+, m_bHasHyphenationZone(false)
 , m_nHyphenationZone( 360 ) // default is 1/4 in
 , m_nConsecutiveHyphenLimit(0)
 , m_nUseWord2013TrackBottomHyphenation(-1)
@@ -300,6 +301,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     break;
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
         m_nHyphenationZone = nIntValue;
+        m_bHasHyphenationZone = true;
     break;
     case NS_ooxml::LN_CT_Settings_consecutiveHyphenLimit:
         m_nConsecutiveHyphenLimit = nIntValue;
@@ -750,7 +752,13 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
     // Situation is similar for RTF_WIDOWCTRL, which turns on widow / orphan control by default.
-    if (!(m_bAutoHyphenation || m_bNoHyphenateCaps || m_bWidowControl))
+    // The width of the hyphenation zone, the limit on hyphens in a row and the rules about a
+    // hyphenated word at the bottom of a page state how to hyphenate rather than whether to, and
+    // Writer holds them whether or not the text hyphenates. A document that states any of them is
+    // read for them even where nothing hyphenates.
+    if (!(m_bAutoHyphenation || m_bNoHyphenateCaps || m_bWidowControl || m_bHasHyphenationZone
+          || m_nConsecutiveHyphenLimit || m_nAllowHyphenationAtTrackBottom != -1
+          || m_nUseWord2013TrackBottomHyphenation != -1))
         return;
 
     rtl::Reference<SwXStyleFamilies> xStyleFamilies = xDoc->getSwStyleFamilies();

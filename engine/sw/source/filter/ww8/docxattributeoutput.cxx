@@ -9989,6 +9989,13 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
 void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 {
+    /*  Automatic hyphenation is a setting of the whole document in OOXML and this element turns
+        it off again for one paragraph. A document where nothing hyphenates asks for no automatic
+        hyphenation in the first place, and saying nothing here leaves a reader that turns it on
+        later free to hyphenate the text. */
+    if (!m_rExport.HasAnyHyphenation())
+        return;
+
     m_pSerializer->singleElementNS( XML_w, XML_suppressAutoHyphens,
             FSNS( XML_w, XML_val ), OString::boolean( !rHyphenZone.IsHyphen() ) );
 }

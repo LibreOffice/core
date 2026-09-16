@@ -28,6 +28,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <ndole.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -127,6 +128,9 @@ class DocxExport : public MSWordExportBase
 
     DocxSettingsData m_aSettings;
     sal_Int32 m_nWordCompatibilityMode;
+
+    /// Whether the text hyphenates anywhere, empty until that has been worked out once.
+    std::optional<bool> m_oHasAnyHyphenation;
 
     /// Pointer to the Frame of a floating table it is nested in
     const ww8::Frame *m_pFloatingTableFrame = nullptr;
@@ -343,6 +347,10 @@ public:
     size_t GetInfoID( const OUString& sPersonalInfo ) const { return m_pAuthorIDs->GetInfoID(sPersonalInfo); }
 
     sal_Int32 getWordCompatibilityMode();
+
+    /// True when the document's own defaults, a paragraph style or a paragraph ask the text to
+    /// hyphenate.
+    bool HasAnyHyphenation();
 
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();

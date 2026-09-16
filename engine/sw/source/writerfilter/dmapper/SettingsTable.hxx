@@ -143,6 +143,8 @@ private:
     bool m_bAutoHyphenation;
     bool m_bNoHyphenateCaps;
     bool m_bMsWordUlTrailSpace = false;
+    /// True when the document states a width for the hyphenation zone, whatever that width is.
+    bool m_bHasHyphenationZone;
     sal_Int16 m_nHyphenationZone;
     sal_Int16 m_nConsecutiveHyphenLimit;
     sal_Int16 m_nUseWord2013TrackBottomHyphenation;

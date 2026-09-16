@@ -597,8 +597,9 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     // Check that we output real content of rPrDefault
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", u"Times New Roman");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", u"ar-SA");
-    // pPrDefault contains only one hyphenation property
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 1);
+    // The document says nothing about hyphenation and nothing in it hyphenates, so the default
+    // paragraph properties say nothing either.
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 0);
 
     // Check latent styles
     cpo::uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
