@@ -390,6 +390,13 @@ function insertComment(text = 'some text0', save = true) {
 function toggleComments(resolved = false) {
 	cy.log('>> toggleComments - start');
 
+	// Both comments buttons decide which way to toggle from the engine's answer
+	// to the previous toggle, so the click is made once the engine has answered
+	// everything so far.
+	cy.getFrameWindow().then(function(win) {
+		return helper.processToIdle(win);
+	});
+
 	var mode = Cypress.env('USER_INTERFACE');
 	if (mode === 'notebookbar') {
 		cy.cGet('#Review-tab-label').click();
@@ -399,7 +406,14 @@ function toggleComments(resolved = false) {
 			// once it is done with the document. Wait for that, so the click is
 			// not dropped without a trace.
 			getNbItem('ShowResolvedAnnotations', 'Review').should('not.have.attr', 'disabled');
-			getNbIcon('ShowResolvedAnnotations', 'Review').click();
+			// The engine's answer to this click sets the selected class, so the class
+			// changing shows that the toggle was applied.
+			getNbItem('ShowResolvedAnnotations', 'Review').then(function($item) {
+				var wasSelected = $item.hasClass('selected');
+				getNbIcon('ShowResolvedAnnotations', 'Review').click();
+				getNbItem('ShowResolvedAnnotations', 'Review')
+					.should(wasSelected ? 'not.have.class' : 'have.class', 'selected');
+			});
 		}
 		else cy.cGet('#showannotations').click();
 		// to avoid notebookbar collapse in subsequent calls to toggleComments.
