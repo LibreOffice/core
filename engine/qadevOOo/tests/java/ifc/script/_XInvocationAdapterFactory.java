@@ -86,7 +86,7 @@ public class _XInvocationAdapterFactory extends MultiMethodTest {
         XInterface xInStr = null ;
 
         Object adp = oObj.createAdapter(xInv,
-                new Type(XInputStream.class)) ;
+                new Type[] { new Type(XInputStream.class) }) ;
 
         xInStr = UnoRuntime.queryInterface
                 (XInputStream.class, adp) ;

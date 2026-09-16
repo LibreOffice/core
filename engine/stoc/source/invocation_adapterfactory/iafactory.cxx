@@ -35,7 +35,6 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
@@ -71,8 +70,7 @@ namespace {
 
 class FactoryImpl
     : public ::cppu::WeakImplHelper< lang::XServiceInfo,
-                                      script::XInvocationAdapterFactory,
-                                      script::XInvocationAdapterFactory2 >
+                                      script::XInvocationAdapterFactory >
 {
 public:
     Mapping m_aUno2Cpp;
@@ -98,9 +96,6 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInvocationAdapterFactory
-    virtual Reference< XInterface > SAL_CALL createAdapter(
-        const Reference< script::XInvocation > & xReceiver, const Type & rType ) override;
-    // XInvocationAdapterFactory2
     virtual Reference< XInterface > SAL_CALL createAdapter(
         const Reference< script::XInvocation > & xReceiver,
         const Sequence< Type > & rTypes ) override;
@@ -781,8 +776,6 @@ static AdapterImpl * lookup_adapter(
     return nullptr;
 }
 
-// XInvocationAdapterFactory2 impl
-
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver,
     const Sequence< Type > & rTypes )
@@ -839,13 +832,6 @@ Reference< XInterface > FactoryImpl::createAdapter(
         }
     }
     return xRet;
-}
-// XInvocationAdapterFactory impl
-
-Reference< XInterface > FactoryImpl::createAdapter(
-    const Reference< script::XInvocation > & xReceiver, const Type & rType )
-{
-    return createAdapter( xReceiver, Sequence< Type >( &rType, 1 ) );
 }
 
 // XServiceInfo

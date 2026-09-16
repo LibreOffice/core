@@ -28,15 +28,8 @@ module com {  module sun {  module star {  module script {
     meet interface requirements, e.g. if a specific listener
     interface has to be passed to an add...Listener method.
     </p>
-
-    <p>
-    The adapter has to support
-        com::sun::star::script::XInvocationAdapterFactory.
-    The adapter may also support
-        com::sun::star::script::XInvocationAdapterFactory2.
-    </p>
  */
-published service InvocationAdapterFactory : XInvocationAdapterFactory2;
+published service InvocationAdapterFactory : XInvocationAdapterFactory;
 
 
 }; }; }; };

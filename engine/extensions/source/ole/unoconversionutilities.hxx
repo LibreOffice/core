@@ -21,7 +21,6 @@
 #include <memory>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
@@ -1862,7 +1861,7 @@ cpo::uno::Reference<cpo::uno::XInterface> UnoConversionUtilities<T>::createAdapt
     // support the property "_implementedInterfaces".
     cpo::uno::Reference<cpo::uno::XInterface> xIntAdapted;
     cpo::uno::Reference<css::script::XInvocation> xInv(receiver, cpo::uno::UNO_QUERY);
-    cpo::uno::Reference<css::script::XInvocationAdapterFactory2> xAdapterFac( xIntAdapterFac, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::XInvocationAdapterFactory> xAdapterFac( xIntAdapterFac, cpo::uno::UNO_QUERY);
     if( xAdapterFac.is())
         xIntAdapted= xAdapterFac->createAdapter( xInv, seqTypes);
 

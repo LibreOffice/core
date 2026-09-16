@@ -25,7 +25,7 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.script.XInvocation;
-import com.sun.star.script.XInvocationAdapterFactory2;
+import com.sun.star.script.XInvocationAdapterFactory;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import cpo.uno.XInterface;
@@ -44,7 +44,7 @@ public class _XInvocationAdapterFactory2 extends MultiMethodTest {
     /**
      * oObj filled by MultiMethodTest
      */
-    public XInvocationAdapterFactory2 oObj = null;
+    public XInvocationAdapterFactory oObj = null;
 
     /**
     * First an invocation object of <code>com.sun.star.io.Pipe</code>

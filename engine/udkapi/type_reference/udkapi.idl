@@ -1466,11 +1466,11 @@ module com {
     };
     published service Invocation: ::com::sun::star::lang::XSingleServiceFactory;
     published interface XInvocation;
-    published interface XInvocationAdapterFactory2 {
+    published interface XInvocationAdapterFactory {
      interface ::cpo::uno::XInterface;
      ::cpo::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] sequence< type > aTypes);
     };
-    published service InvocationAdapterFactory: ::com::sun::star::script::XInvocationAdapterFactory2;
+    published service InvocationAdapterFactory: ::com::sun::star::script::XInvocationAdapterFactory;
     published enum MemberType {
      METHOD = 0,
      PROPERTY = 1,
@@ -1540,10 +1540,6 @@ module com {
      sequence< string > getMemberNames();
      sequence< ::com::sun::star::script::InvocationInfo > getInfo();
      ::com::sun::star::script::InvocationInfo getInfoForName([in] string aName, [in] boolean bExact) raises (::com::sun::star::lang::IllegalArgumentException);
-    };
-    /** @deprecated */ published interface XInvocationAdapterFactory {
-     interface ::cpo::uno::XInterface;
-     ::cpo::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] type aType);
     };
     published interface XScriptEventsAttacher {
      interface ::cpo::uno::XInterface;

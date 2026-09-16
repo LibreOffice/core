@@ -59,7 +59,7 @@ namespace com::sun::star::reflection { class XIdlReflection; }
 namespace com::sun::star::reflection { class XServiceConstructorDescription; }
 namespace com::sun::star::reflection { class XServiceTypeDescription2; }
 namespace com::sun::star::script { class XInvocation2; }
-namespace com::sun::star::script { class XInvocationAdapterFactory2; }
+namespace com::sun::star::script { class XInvocationAdapterFactory; }
 namespace com::sun::star::script { class XTypeConverter; }
 
 namespace pyuno
@@ -223,7 +223,7 @@ struct RuntimeCargo
     cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     cpo::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
     cpo::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
-    cpo::uno::Reference< css::script::XInvocationAdapterFactory2 > xAdapterFactory;
+    cpo::uno::Reference< css::script::XInvocationAdapterFactory > xAdapterFactory;
     cpo::uno::Reference< css::beans::XIntrospection > xIntrospection;
     PyRef dictUnoModule;
     osl::Module testModule;

@@ -84,7 +84,7 @@ private:
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 static Reference< XInterface > createAllListenerAdapter
 (
-    const Reference< XInvocationAdapterFactory2 >& xInvocationAdapterFactory,
+    const Reference< XInvocationAdapterFactory >& xInvocationAdapterFactory,
     const Reference< XIdlClass >& xListenerType,
     const Reference< XAllListener >& xListener,
     const Any& Helper
@@ -235,7 +235,7 @@ public:
 private:
     static Reference<XEventListener> attachListenerForTarget(
         const Reference<XIntrospectionAccess>& xAccess,
-        const Reference<XInvocationAdapterFactory2>& xInvocationAdapterFactory,
+        const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
         const Reference<XAllListener>& xAllListener,
         const Any& aObject,
         const Any& aHelper,
@@ -255,7 +255,7 @@ private:
     Reference< XIntrospection >             m_xIntrospection;
     Reference< XIdlReflection >             m_xReflection;
     Reference< XTypeConverter >             m_xConverter;
-    Reference< XInvocationAdapterFactory2 >  m_xInvocationAdapterFactory;
+    Reference< XInvocationAdapterFactory >  m_xInvocationAdapterFactory;
 
     // needed services
     /// @throws Exception
@@ -263,7 +263,7 @@ private:
     /// @throws Exception
     Reference< XIdlReflection >             getReflection();
     /// @throws Exception
-    Reference< XInvocationAdapterFactory2 >  getInvocationAdapterService();
+    Reference< XInvocationAdapterFactory >  getInvocationAdapterService();
 };
 
 }
@@ -298,7 +298,7 @@ void EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
             throw IllegalArgumentException();
 
         // InvocationAdapter service ?
-        Reference< XInvocationAdapterFactory2 > xALAS;
+        Reference< XInvocationAdapterFactory > xALAS;
         arg >>= xALAS;
         if( xALAS.is() )
         {
@@ -362,7 +362,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection()
 
 
 //*** Private helper methods ***
-Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterService()
+Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterService()
 {
     std::scoped_lock aGuard( m_aMutex );
     if( !m_xInvocationAdapterFactory.is() )
@@ -521,7 +521,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     if( !xObject.is() || !AllListener.is() )
         throw IllegalArgumentException();
 
-    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory = getInvocationAdapterService();
+    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
 
@@ -551,7 +551,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
 
 Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     const Reference<XIntrospectionAccess>& xAccess,
-    const Reference<XInvocationAdapterFactory2>& xInvocationAdapterFactory,
+    const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
     const Reference<XAllListener>& xAllListener,
     const Any& aObject,
     const Any& aHelper,
@@ -661,7 +661,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
     if (!xObject.is())
         throw IllegalArgumentException();
 
-    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory = getInvocationAdapterService();
+    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
 

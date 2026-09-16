@@ -47,7 +47,7 @@
 #include <com/sun/star/script/InvocationInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
+#include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
@@ -2837,10 +2837,10 @@ JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int a
         OUString const id(idStr.get(), idLen);
         cpo::uno::Reference<css::script::XInvocation> invocation(
             new ProxyInvocation(interfaceType, id, getRuntimeData(ctx)->proxyCallHook));
-        cpo::uno::Reference<css::script::XInvocationAdapterFactory2> factory
+        cpo::uno::Reference<css::script::XInvocationAdapterFactory> factory
             = css::script::InvocationAdapterFactory::create(
                 comphelper::getProcessComponentContext());
-        //TODO: Ideally, XInvocationAdapterFactory2::createAdapter would automatically add
+        //TODO: Ideally, XInvocationAdapterFactory::createAdapter would automatically add
         // XTypeProvider support:
         cpo::uno::Reference<cpo::uno::XInterface> adapter(
             factory->createAdapter(

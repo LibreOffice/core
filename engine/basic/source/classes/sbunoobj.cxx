@@ -3929,7 +3929,7 @@ private:
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 static Reference< XInterface > createAllListenerAdapter
 (
-    const Reference< XInvocationAdapterFactory2 >& xInvocationAdapterFactory,
+    const Reference< XInvocationAdapterFactory >& xInvocationAdapterFactory,
     const Reference< XIdlClass >& xListenerType,
     const Reference< XAllListener >& xListener,
     const Any& Helper
@@ -4064,7 +4064,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
         return;
 
     // From 1999-11-30: get the InvocationAdapterFactory
-    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory =
+    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory =
          InvocationAdapterFactory::create( xContext );
 
     rtl::Reference<BasicAllListener_Impl> xAllLst = new BasicAllListener_Impl( aPrefixName );

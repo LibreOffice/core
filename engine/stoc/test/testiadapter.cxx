@@ -32,7 +32,6 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -936,7 +935,6 @@ static bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
         xMgr->createInstance("com.sun.star.script.InvocationAdapterFactory"), UNO_QUERY );
-    Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Reference< XInvocation > xInvok( new XLB_Invocation( xMgr, xOriginal ) );
@@ -956,7 +954,7 @@ static bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
         cppu::UnoType<XLBTestBase>::get(),
         cppu::UnoType<XInterface>::get()};
     Reference< XInterface > xLBT4(
-        xAdapFac2->createAdapter( xInvok, Sequence< Type >( ar, 2 ) ), UNO_QUERY );
+        xAdapFac->createAdapter( xInvok, Sequence< Type >( ar, 2 ) ), UNO_QUERY );
     if (xLBT != xLBT4)
         return false;
     Reference< XSimpleRegistry > xInvalidAdapter(

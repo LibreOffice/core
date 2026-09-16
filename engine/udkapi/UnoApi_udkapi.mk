@@ -442,7 +442,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 	XInvocation \
 	XInvocation2 \
 	XInvocationAdapterFactory \
-	XInvocationAdapterFactory2 \
 	XScriptEventsAttacher \
 	XScriptEventsSupplier \
 	XScriptListener \

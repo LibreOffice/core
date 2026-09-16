@@ -24,25 +24,24 @@
 
 /** Interface to create adapter objects giving a type to be supported and a
     an invocation interface incoming calls are delegated to.
-
-    This interface is deprecated.  Use XInvocationAdapterFactory2.
-    @deprecated
 */
 published interface XInvocationAdapterFactory: cpo::uno::XInterface
 {
-    /** Creates an adapter interface of given type for calling the given
+    /** Creates an adapter interface of given types for calling the given
         XInvocation interface.
 
         @param Invocation
                invocation interface being called on incoming adapter calls
-        @param aType
-               supported type of adapter
+        @param aTypes
+               supported types of adapter
 
         @returns
                  adapter interface; this interface can be queried for
-                 XInterface and given type
+                 XInterface and given types
     */
-    cpo::uno::XInterface createAdapter( [in]XInvocation Invocation, [in]type aType );
+    cpo::uno::XInterface createAdapter(
+        [in] XInvocation Invocation,
+        [in] sequence< type > aTypes );
 };
 
 }; }; }; };
