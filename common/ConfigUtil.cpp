@@ -77,6 +77,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "ai.image_model", "" },
     { "ai.image_size", "" },
     { "ai.model", "" },
+    { "ai.show_ai_sidebar", "false" },
     { "allowed_languages", "de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru" },
     { "allow_update_popup", "true" },
     { "browser_logging", "false" },

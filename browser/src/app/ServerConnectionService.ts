@@ -55,6 +55,11 @@ class ServerConnectionService {
 		app.map.isAIConfigured = !!props.AIConfigured;
 		app.map.aiModelName = props.AIModelName || '';
 		app.map.aiEthicalRating = props.AIEthicalRating || 'U';
+
+		// Whether AI is configured decides whether the AI Assistant opens with
+		// the document. This may land before or after the load, so both sides
+		// call in and the later one acts.
+		app.map.uiManager.initializeAIAssistant();
 	}
 
 	public onViewSetting(viewSetting: ViewSetting) {
@@ -79,6 +84,8 @@ class ServerConnectionService {
 			: 300;
 		app.map.aiModelName = viewSetting.aiModelName || '';
 		app.map.aiEthicalRating = viewSetting.aiEthicalRating || 'U';
+
+		app.map.uiManager.initializeAIAssistant();
 
 		// The user just changed the AI provider from the settings dialog. Now
 		// that isAIConfigured / aiModelName / aiEthicalRating reflect the new

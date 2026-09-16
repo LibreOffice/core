@@ -303,7 +303,9 @@ std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefa
         assert(currentDef);
 
         // detect the actual UI widget we want to hide or show
-        if (key == "Ruler" || key == "Sidebar" || key == "Statusbar" || key == "Toolbar")
+        // ("AISidebar" is the AI Assistant, which docks beside "Sidebar".)
+        if (key == "Ruler" || key == "Sidebar" || key == "Statusbar" || key == "Toolbar" ||
+            key == "AISidebar")
         {
             std::string value("true");
             if (keyValue.equals(1, "false") || keyValue.equals(1, "False") || keyValue.equals(1, "0"))

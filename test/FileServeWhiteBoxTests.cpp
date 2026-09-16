@@ -100,6 +100,20 @@ void FileServeTests::testUIDefaults()
             uiMode, uiTheme, savedUIState));
 
     LOK_ASSERT_EQUAL_STR("notebookbar", uiMode);
+
+    // The AI Assistant is a widget of its own, set without disturbing the
+    // property deck beside it.
+    LOK_ASSERT_EQUAL_STR(
+        "{\"text\":{\"ShowAISidebar\":\"true\",\"ShowSidebar\":\"false\"}}",
+        FileServerRequestHandler::uiDefaultsToJSON("TextAISidebar=true;TextSidebar=false",
+                                                   uiMode, uiTheme, savedUIState));
+
+    LOK_ASSERT_EQUAL_STR(
+        "{\"presentation\":{\"ShowAISidebar\":\"false\"},\"spreadsheet\":{\"ShowAISidebar\":"
+        "\"true\"}}",
+        FileServerRequestHandler::uiDefaultsToJSON(
+            "SpreadsheetAISidebar=true;PresentationAISidebar=false", uiMode, uiTheme,
+            savedUIState));
 }
 
 void FileServeTests::testCSSVars()

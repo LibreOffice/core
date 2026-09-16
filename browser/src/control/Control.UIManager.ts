@@ -51,6 +51,10 @@ class UIManager extends window.L.Control {
 	// Hidden Notebookbar tabs.
 	hiddenTabs: { [key: string]: boolean } = {};
 	permissionViewMode?: PermissionViewMode;
+	// The load and the AI configuration reply race to reach
+	// initializeAIAssistant(); these let the later one act, once.
+	private documentReadyForAI = false;
+	private aiInitialStateApplied = false;
 	// Guards the one-time reconciliation of an integrator-forced theme with
 	// the server-stored user setting (see reconcileIntegratorThemeOverride).
 	private integratorThemeReconciled = false;
@@ -1120,6 +1124,8 @@ class UIManager extends window.L.Control {
 	 * Initializes the sidebar based on saved state and preferences.
 	 */
 	initializeSidebar(): void {
+		this.documentReadyForAI = true;
+
 		// Hide the sidebar on start if saved state or UIDefault is set.
 		if (window.mode.isDesktop() && !window.mode.isInteractivePreview()) {
 			var showSidebar = this.getBooleanDocTypePref('ShowSidebar', true);
@@ -1164,6 +1170,54 @@ class UIManager extends window.L.Control {
 			// Chromebooks early
 			app.socket.sendMessage('uno .uno:SidebarHide');
 		}
+
+		this.initializeAIAssistant();
+	}
+
+	/**
+	 * coolwsd.xml's ai.show_ai_sidebar answers for the instance, the
+	 * integrator's TextAISidebar ui_default for one user's document.
+	 * Read directly, as prefs.get() would also consult browsersetting.json
+	 * and localStorage, and this is deliberately never stored.
+	 */
+	shouldShowAISidebar(): boolean {
+		const prefs = window.prefs as any;
+		const uiDefault = prefs._getUIDefault(
+			this.map.getDocType() + '.ShowAISidebar',
+		);
+
+		return uiDefault !== undefined ? uiDefault === 'true' : window.showAISidebar;
+	}
+
+	/// Opens the AI Assistant on load where it was asked for. Called from
+	/// both the document load and the AI configuration reply, in either order.
+	initializeAIAssistant(): void {
+		if (this.aiInitialStateApplied || !this.documentReadyForAI) return;
+		if (!this.map.isAIConfigured) return;
+		// Every way into the AI Assistant is a notebookbar button, so it is a
+		// desktop feature and there is nothing to open elsewhere.
+		if (!window.mode.isDesktop()) return;
+
+		this.aiInitialStateApplied = true;
+
+		if (!this.shouldShowAISidebar()) return;
+
+		const sidebar = JSDialog.getAIChatSidebar();
+		if (sidebar.isVisible()) return;
+
+		// The two dock side by side, so the sidebar gives up the edge. Hiding
+		// the engine's deck is not enough on its own: CanvasTileLayer shows
+		// the wrapper client-side, which would be left behind empty.
+		// closeSidebar records ShowSidebar=false on the way, so put the stored
+		// value back rather than rewrite the user's own preference.
+		app.socket.sendMessage('uno .uno:SidebarHide');
+		if (this.map.sidebar) {
+			const stored = this.getBooleanDocTypePref('ShowSidebar', true);
+			this.map.sidebar.closeSidebar();
+			this.setDocTypePref('ShowSidebar', stored);
+		}
+
+		sidebar.show();
 	}
 
 	/**
