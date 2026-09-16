@@ -6,14 +6,16 @@
 #
 # './g pull -r' just forwards to 'git pull -r'.
 #
-# './g review [branch]' to submit changes for review on Collabora's Gerrit,
-# assuming:
+# './g review [branch] [--topic=NAME]' to submit changes for review on
+# Collabora's Gerrit, assuming:
 # 1) You have a remote pointing at ssh://<user>@gerrit.collaboraoffice.com:29418/online
 #    (typically named 'origin' or 'cogerrit').
 # 2) All commits but the topmost are pushed as WIP; the topmost commit is the
 #    actual review.
 # If [branch] is given (e.g. 'main' or 'distro/collabora/co-26-04'), the
 # current branch's upstream is set to <gerrit-remote>/<branch> first.
+# Pass '--topic=NAME' (or '-t NAME') to set the Gerrit topic of every change
+# the push creates or updates, WIP commits included.
 # When the change targets main, './g review' also compares its base against
 # the newest commit that passed the "Tinderbox for online main" Jenkins job,
 # and offers to rebase onto that commit first when the two differ.
@@ -154,10 +156,56 @@ if [ "$1" == "review" ]; then
         exit 1
     fi
 
+    # Options: an optional target branch and an optional Gerrit topic.
+    TARGET_BRANCH=
+    TOPIC=
+    shift
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --topic=*)
+                TOPIC="${1#--topic=}"
+                if [ -z "$TOPIC" ]; then
+                    echo "Error: '--topic=' needs a topic name."
+                    exit 1
+                fi
+                ;;
+            --topic|-t)
+                if [ $# -lt 2 ]; then
+                    echo "Error: '$1' needs a topic name."
+                    exit 1
+                fi
+                shift
+                TOPIC="$1"
+                ;;
+            -*)
+                echo "Error: unknown option '$1'."
+                echo "Usage: ./g review [branch] [--topic=NAME]"
+                exit 1
+                ;;
+            *)
+                if [ -n "$TARGET_BRANCH" ]; then
+                    echo "Error: unexpected argument '$1'."
+                    echo "Usage: ./g review [branch] [--topic=NAME]"
+                    exit 1
+                fi
+                TARGET_BRANCH="$1"
+                ;;
+        esac
+        shift
+    done
+
+    # Gerrit reads the topic from the push refspec, where '%' starts the
+    # options and ',' separates them, so those characters cannot be part of
+    # the name.  Check this before anything is pushed.
+    if [ -n "$TOPIC" ] && printf '%s' "$TOPIC" | grep -q '[%,[:space:]]'; then
+        echo "Error: the topic '$TOPIC' must not contain '%', ',' or whitespace."
+        exit 1
+    fi
+
     # If a target branch was passed, set the upstream so the rest of the
     # script can derive REMOTE/TRACKED_BRANCH from it normally.
-    if [ -n "$2" ]; then
-        git branch --set-upstream-to=$GERRIT_REMOTE/$2 $BRANCH
+    if [ -n "$TARGET_BRANCH" ]; then
+        git branch --set-upstream-to=$GERRIT_REMOTE/$TARGET_BRANCH $BRANCH
     fi
 
     # e.g. origin
@@ -192,7 +240,7 @@ if [ "$1" == "review" ]; then
         # just means the WIP patches are already up-to-date; continue
         # to push the topmost commit as the actual review.
         set +e
-        wip_output=$(git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip 2>&1)
+        wip_output=$(git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip${TOPIC:+,topic=$TOPIC} 2>&1)
         wip_status=$?
         set -e
         if [ $wip_status -eq 0 ]; then
@@ -204,7 +252,7 @@ if [ "$1" == "review" ]; then
             exit $wip_status
         fi
     fi
-    git push $GERRIT_REMOTE HEAD:refs/for/$TRACKED_BRANCH
+    git push $GERRIT_REMOTE HEAD:refs/for/$TRACKED_BRANCH${TOPIC:+%topic=$TOPIC}
 
     exit 0
 fi
