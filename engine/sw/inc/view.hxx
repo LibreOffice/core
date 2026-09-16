@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_INC_VIEW_HXX
 #define INCLUDED_SW_INC_VIEW_HXX
 
+#include <tools/fldunit.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <svx/ruler.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/style.hxx>
@@ -51,6 +51,7 @@ class SwDocShell;
 class SwScrollbar;
 class SvBorder;
 class Ruler;
+class SvxRuler;
 class SvxSearchItem;
 class SearchAttrItemList;
 class SvxSearchDialog;
@@ -518,7 +519,7 @@ public:
     void            CreateTab();
     void            KillTab();
 
-    bool            StatVRuler() const { return m_pVRuler->IsVisible(); }
+    bool            StatVRuler() const;
     void            ChangeVRulerMetric(FieldUnit eUnit);
     void            GetVRulerMetric(FieldUnit& rToFill) const;
 

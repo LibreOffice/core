@@ -18,6 +18,7 @@
 #include <view.hxx>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <svx/ruler.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>

@@ -708,6 +708,11 @@ void SwView::KillVRuler()
     InvalidateBorder();
 }
 
+bool SwView::StatVRuler() const
+{
+    return m_pVRuler->IsVisible();
+}
+
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 {
     OUString sDefPage;

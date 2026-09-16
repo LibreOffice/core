@@ -75,6 +75,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/hint.hxx>
 
+#include <svx/ruler.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
