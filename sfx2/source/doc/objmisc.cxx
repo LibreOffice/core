@@ -812,9 +812,6 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
     }
     else
     {
-        if (nMaxLength == SFX_TITLE_PICKLIST || nMaxLength == SFX_TITLE_HISTORY)
-            nMaxLength = SFX_TITLE_FULLNAME;
-
         if ( nMaxLength >= SFX_TITLE_MAXLEN )
         {
             const OUString aComplete( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -827,7 +824,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
             const OUString aName = INetURLObject::decode( aURL.GetBase(), INetURLObject::DecodeMechanism::WithCharset );
             return aName.isEmpty() ? aURL.GetURLNoPass() : aName;
         }
-        if ( nMaxLength == SFX_TITLE_FULLNAME )
+        if (nMaxLength == SFX_TITLE_FULLNAME || nMaxLength == SFX_TITLE_PICKLIST || nMaxLength == SFX_TITLE_HISTORY)
             return aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
 
         // Generate Title from file name if possible
