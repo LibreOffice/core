@@ -904,6 +904,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         let childWebView = WKWebView(frame: .zero, configuration: configuration)
         childWebView.uiDelegate = self
 
+#if DEBUG
+        // Enable possibility to debug the slideshow and presenter console windows from Safari
+        childWebView.isInspectable = true
+#endif
+
         installDisplayConnectionMonitor()
 
         NSApp.presentationOptions = [.autoHideMenuBar, .autoHideDock]
