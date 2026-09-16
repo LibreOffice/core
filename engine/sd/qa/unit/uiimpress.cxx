@@ -115,6 +115,7 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdoutl.hxx>
 #include <set>
 #include <vector>
 
@@ -6678,6 +6679,16 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterFitsMarking)
 
 namespace
 {
+/// The identifiers of every bullet the document holds, so a test can talk about the set rather
+/// than about positions in it.
+std::set<OUString> lcl_BulletIdentifiers(const std::vector<SvxDocumentBullet>& rBullets)
+{
+    std::set<OUString> aIdentifiers;
+    for (const SvxDocumentBullet& rBullet : rBullets)
+        aIdentifiers.insert(rBullet.GetIdentifier());
+    return aIdentifiers;
+}
+
 /// Gives rObject a red square as its first-level bullet, so the document holds an image bullet.
 SvxDocumentBullet lcl_SetImageBullet(SdrTextObj& rObject)
 {
@@ -6785,6 +6796,118 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentImageBulletSurvivesReload)
 
     // An image bullet that Impress itself put on a shape comes back when the file is reopened.
     CPPUNIT_ASSERT_EQUAL(1, nImages);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletOfTextUnderEditIsCollected)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+
+    SdrTextObj* pShape = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pShape);
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pShape);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    // Give the paragraph under edit an image bullet, the way applying one from a dialog does.
+    Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_GREEN);
+    const Graphic aGraphic{ aBitmap };
+
+    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+    CPPUNIT_ASSERT(pOutliner);
+    SfxItemSet aParagraph(pOutliner->GetParaAttribs(0));
+    SvxNumRule aRule(SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR, SVX_MAX_NUM,
+                     false);
+    SvxNumberFormat aFormat(aRule.GetLevel(0));
+    aFormat.SetNumberingType(SVX_NUM_BITMAP);
+    const SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+    Size aSize(200, 200);
+    sal_Int16 eOrient = css::text::VertOrientation::LINE_CENTER;
+    aFormat.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+    aRule.SetLevel(0, aFormat);
+    aParagraph.Put(SvxNumBulletItem(aRule, EE_PARA_NUMBULLET));
+    pOutliner->SetParaAttribs(0, aParagraph);
+
+    SvxDocumentBullet aExpected;
+    aExpected.aGraphic = aGraphic;
+
+    // The shape still carries the text it held before the edit began, so without the outliner
+    // the bullet just applied is nowhere to be found.
+    std::set<OUString> aWithoutEdit = lcl_BulletIdentifiers(pDocument->GetUsedBullets());
+    CPPUNIT_ASSERT(!aWithoutEdit.count(aExpected.GetIdentifier()));
+
+    std::set<OUString> aWithEdit = lcl_BulletIdentifiers(pDocument->GetUsedBullets(pOutliner));
+    CPPUNIT_ASSERT(aWithEdit.count(aExpected.GetIdentifier()));
+
+    pView->SdrEndTextEdit();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
+{
+    createSdImpressDoc("document-bullets.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // Picking a character bullet out of the document's own bullets sends the character and its
+    // font rather than a position in the fixed bullet library.
+    dispatchCommand(
+        mxComponent, u".uno:SetBullet"_ustr,
+        comphelper::InitPropertySequence({ { u"BulletChar"_ustr, uno::Any(u"\u2726"_ustr) },
+                                           { u"BulletFont"_ustr, uno::Any(u"OpenSymbol"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrTextObj* pTextObject = DynCastSdrTextObj(pShape);
+    CPPUNIT_ASSERT(pTextObject);
+    const SvxNumBulletItem* pNumbering
+        = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItemIfSet(
+            EE_PARA_NUMBULLET, false);
+    CPPUNIT_ASSERT(pNumbering);
+    const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
+    CPPUNIT_ASSERT_EQUAL(SVX_NUM_CHAR_SPECIAL, rFormat.GetNumberingType());
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2726), rFormat.GetBulletChar());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentImage)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    // The image lives on the master slide only. A slide can still pick it, which is the point of
+    // offering the document's own bullets.
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    const SvxDocumentBullet aOnMasterSlide = lcl_SetImageBullet(*pMasterSlideObject);
+
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // An image bullet travels by name, and the document looks the image up again by that name.
+    dispatchCommand(mxComponent, u".uno:SetBullet"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"BulletGraphic"_ustr, uno::Any(aOnMasterSlide.GetIdentifier()) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrTextObj* pTextObject = DynCastSdrTextObj(pShape);
+    CPPUNIT_ASSERT(pTextObject);
+    const SvxNumBulletItem* pNumbering
+        = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItemIfSet(
+            EE_PARA_NUMBULLET, false);
+    CPPUNIT_ASSERT(pNumbering);
+    const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
+    CPPUNIT_ASSERT_EQUAL(SVX_NUM_BITMAP, rFormat.GetNumberingType());
+    CPPUNIT_ASSERT(rFormat.GetBrush());
+    CPPUNIT_ASSERT(rFormat.GetBrush()->GetGraphic());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

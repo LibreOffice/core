@@ -28,18 +28,53 @@
 
 #include <svx/svxids.hrc>
 #include <OutlineView.hxx>
+#include <View.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdabstdlg.hxx>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <editeng/brushitem.hxx>
+#include <svx/documentbullets.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>
 #include <memory>
+#include <vcl/outdev.hxx>
 
 using namespace svx::sidebar;
 namespace sd {
+namespace
+{
+/// Turns every selected level of rRule into an image bullet drawing the picture of rBullet at the
+/// size recorded with it. The size is converted into eCoreUnit, the unit the rule is measured in.
+void lcl_ApplyGraphicBullet(SvxNumRule& rRule, const SvxDocumentBullet& rBullet,
+                            sal_uInt16 nActNumLvl, MapUnit eCoreUnit)
+{
+    const SvxBrushItem aBrush(rBullet.aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+    Size aSize = rBullet.GetGraphicSizeMM100();
+    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
+
+    sal_uInt16 nMask = 1;
+    for (sal_uInt16 nLevel = 0; nLevel < rRule.GetLevelCount(); ++nLevel)
+    {
+        if (nActNumLvl & nMask)
+        {
+            SvxNumberFormat aFormat(rRule.GetLevel(nLevel));
+            aFormat.SetNumberingType(SVX_NUM_BITMAP);
+            // An image with no vertical orientation of its own sits on the text line like the
+            // images that come from a file.
+            sal_Int16 eOrient = aFormat.GetVertOrient() == css::text::VertOrientation::NONE
+                                    ? sal_Int16(css::text::VertOrientation::TOP)
+                                    : aFormat.GetVertOrient();
+            aFormat.SetGraphicBrush(&aBrush, &aSize, &eOrient);
+            rRule.SetLevel(nLevel, aFormat);
+        }
+        nMask <<= 1;
+    }
+}
+}
 
 FuBulletAndPosition::FuBulletAndPosition(ViewShell& rViewShell, ::sd::Window* pWindow,
                                  ::sd::View* pView, SdDrawDocument& rDoc,
@@ -125,10 +160,21 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    const SfxUInt16Item* pItem = rReq.GetArgs()->GetItem(SID_ATTR_BULLET_INDEX);
-    if (!pItem) // tdf#161653
-        pItem = rReq.GetArg<SfxUInt16Item>(nSId);
-    if ( !pItem )
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const SfxUInt16Item* pIndexItem = pArgs ? pArgs->GetItem(SID_ATTR_BULLET_INDEX) : nullptr;
+    if (!pIndexItem) // tdf#161653
+        pIndexItem = rReq.GetArg<SfxUInt16Item>(nSId);
+
+    // A bullet the document already uses arrives as a character and a font, or as the name of one
+    // of the document's own images, rather than as an index into the fixed bullet library.
+    const SfxStringItem* pCharacterItem = pArgs ? pArgs->GetItem(SID_ATTR_BULLET_CHAR) : nullptr;
+    const SfxStringItem* pFontItem = pArgs ? pArgs->GetItem(SID_ATTR_BULLET_FONT) : nullptr;
+    const SfxStringItem* pGraphicItem = pArgs ? pArgs->GetItem(SID_ATTR_BULLET_GRAPHIC) : nullptr;
+    const bool bDocumentCharacter = nSId == FN_SVX_SET_BULLET && pCharacterItem && pFontItem
+                                    && !pCharacterItem->GetValue().isEmpty();
+    const bool bDocumentGraphic = nSId == FN_SVX_SET_BULLET && pGraphicItem;
+
+    if (!pIndexItem && !bDocumentCharacter && !bDocumentGraphic)
     {
         rReq.Done();
         return;
@@ -164,15 +210,19 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         }
     }
 
-    sal_uInt16 nIdx = pItem->GetValue();
+    sal_uInt16 nIdx = 0;
     bool bToggle = false;
-    if( nIdx == BULLET_TOGGLE )
+    if (pIndexItem)
     {
-        // Set bullet status to on/off
-        nIdx = 1;
-        bToggle = true;
+        nIdx = pIndexItem->GetValue();
+        if (nIdx == BULLET_TOGGLE)
+        {
+            // Set bullet status to on/off
+            nIdx = 1;
+            bToggle = true;
+        }
+        nIdx--;
     }
-    nIdx--;
 
     TypedWhichId<SvxNumBulletItem> nNumItemId = SID_ATTR_NUMBERING_RULE;
     const SfxPoolItem* pTmpItem = GetNumBulletItem( aNewAttr, nNumItemId );
@@ -193,7 +243,30 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
             pNumRuleMgr->SetItems(&aNewAttr);
             SvxNumRule aTmpRule( *pNumRule );
-            if ( nSId == FN_SVX_SET_BULLET && bToggle && nIdx==0 )
+            BulletsTypeMgr* pBulletsMgr = dynamic_cast<BulletsTypeMgr*>(pNumRuleMgr);
+            if (bDocumentCharacter && pBulletsMgr)
+            {
+                pBulletsMgr->ApplyCustomRule(aTmpRule, pCharacterItem->GetValue(),
+                                             pFontItem->GetValue(), nActNumLvl);
+            }
+            else if (bDocumentGraphic)
+            {
+                const MapUnit eCoreUnit = mrDoc.GetPool().GetMetric(
+                    mrDoc.GetPool().GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
+                // The image may have been applied to text that is still under edit, where it
+                // lives in the outliner rather than on the shape.
+                const SdrOutliner* pActiveOutliner
+                    = mpView ? mpView->GetTextEditOutliner() : nullptr;
+                for (const SvxDocumentBullet& rBullet : mrDoc.GetUsedBullets(pActiveOutliner))
+                {
+                    if (rBullet.GetIdentifier() != pGraphicItem->GetValue())
+                        continue;
+
+                    lcl_ApplyGraphicBullet(aTmpRule, rBullet, nActNumLvl, eCoreUnit);
+                    break;
+                }
+            }
+            else if (nSId == FN_SVX_SET_BULLET && bToggle && nIdx == 0)
             {
                 // for toggling bullets get default numbering rule
                 pNumRuleMgr->ApplyNumRule( aTmpRule, nIdx, nActNumLvl, true );

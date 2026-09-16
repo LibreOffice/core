@@ -5566,6 +5566,7 @@ SfxUInt16Item SetNumber FN_SVX_SET_NUMBER
 SfxUInt16Item SetBullet FN_SVX_SET_BULLET
 (SfxStringItem BulletChar SID_ATTR_BULLET_CHAR,
  SfxStringItem BulletFont SID_ATTR_BULLET_FONT,
+ SfxStringItem BulletGraphic SID_ATTR_BULLET_GRAPHIC,
  SfxUInt16Item BulletIndex SID_ATTR_BULLET_INDEX)
 [
     AutoUpdate = TRUE,
