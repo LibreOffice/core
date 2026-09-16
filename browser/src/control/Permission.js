@@ -718,6 +718,13 @@ window.L.Map.include({
 	},
 
 	_enterReadOnlyMode: function (perm) {
+		// The dispatcher refuses an action while a dialog is open,
+		// close the dialogs first so the cell edit below is accepted.
+		this.fire('closealldialogs');
+
+		// Finish an open cell edit while the view is still editable
+		this.acceptPendingCellEdit();
+
 		this._permission = perm;
 
 		// disable all user interaction, will need to add keyboard too
@@ -730,7 +737,6 @@ window.L.Map.include({
 
 		app.events.fire('updatepermission', {perm : perm});
 		this.fire('closemobilewizard');
-		this.fire('closealldialogs');
 
 		// Mark the view read-only in core only after the listeners above
 		// have sent their cleanup commands. The kit accepts sidebar show
