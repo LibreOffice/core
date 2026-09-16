@@ -9645,15 +9645,26 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
         const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
         if( aColor != rDgm.getColors().end() )
         {
-            // Take the nth color from the color list in case we are the nth shape in a
-            // <dgm:forEach> loop.
+            // A style label is shared by a run of shapes, and a color list is spread
+            // over that run. The presentation node states where in the run it sits, so
+            // prefer that over the place in the <dgm:forEach> loop that got us here,
+            // which is only the same thing when the run happens to be one loop.
+            sal_Int32 nColorIdx(rPresNode->getPresentation().mnLayoutStyleIndex);
+            sal_Int32 nColorCnt(rPresNode->getPresentation().mnLayoutStyleCount);
+            if (nColorIdx < 0 || nColorCnt < 1)
+            {
+                nColorIdx = nCurrIdx;
+                nColorCnt = 0;
+            }
+
             const DiagramColor& rColor=aColor->second;
-            if( !rColor.maFillColors.empty() )
-                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = DiagramColor::getColorByIndex(rColor.maFillColors, nCurrIdx);
-            if( !rColor.maLineColors.empty() )
+            if( !rColor.maFillColors.maColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr
+                    = DiagramColor::getColorByIndex(rColor.maFillColors, nColorIdx, nColorCnt);
+            if( !rColor.maLineColors.maColors.empty() )
             {
                 const Color aLineColor(
-                    DiagramColor::getColorByIndex(rColor.maLineColors, nCurrIdx));
+                    DiagramColor::getColorByIndex(rColor.maLineColors, nColorIdx, nColorCnt));
                 rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = aLineColor;
 
                 // A line style of a theme carries the width and the dash of a line and leaves the
@@ -9667,10 +9678,12 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
                     rLineProperties.maLineFill.maFillColor = aLineColor;
                 }
             }
-            if( !rColor.maEffectColors.empty() )
-                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = DiagramColor::getColorByIndex(rColor.maEffectColors, nCurrIdx);
-            if( !rColor.maTextFillColors.empty() )
-                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = DiagramColor::getColorByIndex(rColor.maTextFillColors, nCurrIdx);
+            if( !rColor.maEffectColors.maColors.empty() )
+                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr
+                    = DiagramColor::getColorByIndex(rColor.maEffectColors, nColorIdx, nColorCnt);
+            if( !rColor.maTextFillColors.maColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr
+                    = DiagramColor::getColorByIndex(rColor.maTextFillColors, nColorIdx, nColorCnt);
         }
     }
 

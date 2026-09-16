@@ -43,6 +43,10 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <osl/process.h>
 
+#include <algorithm>
+#include <map>
+#include <set>
+
 using namespace ::com::sun::star;
 using namespace ::cpo;
 
@@ -1008,6 +1012,213 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillColorTypes)
             rText.toUtf8().getStr(), eThemeColorType,
             model::color::getFromXComplexColor(xComplexColor).getThemeColorType());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_spanColors)
+{
+    // The file contains a SmartArt diagram of type "Funnel" with three items. Its color
+    // definition gives the style label "node1" a list of two colors, and leaves the method
+    // at its default, so the three items span the way from the first color to the second.
+    // That list also asks for the other direction around the color wheel, which the producer
+    // of the format ignores, so the hue rises from the first color to the second.
+    // The cached drawing of the diagram has been taken out of the file, so that the
+    // diagram is laid out and colored here rather than read back.
+    loadFromFile(u"cool16183_Funnel.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+
+    // The items are the shapes that carry the text. The expected colors are the ones the
+    // cached drawing of the original file gives them.
+    const std::pair<OUString, ::Color> aExpected[]
+        = { { u"Three"_ustr, ::Color(0xE97132) },
+            { u"Two"_ustr, ::Color(0x8EB21E) },
+            { u"One"_ustr, ::Color(0x196B24) } };
+
+    for (const auto& [rText, rColor] : aExpected)
+    {
+        bool bFound(false);
+        uno::Reference<container::XIndexAccess> xGroup(xSmartArt, uno::UNO_QUERY_THROW);
+        for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+        {
+            uno::Reference<text::XText> xText(xGroup->getByIndex(i), uno::UNO_QUERY);
+            if (!xText.is() || !xText->getString().startsWith(rText))
+                continue;
+
+            bFound = true;
+            uno::Reference<beans::XPropertySet> xProps(xText, uno::UNO_QUERY_THROW);
+            ::Color nFillColor;
+            xProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+            // Without the fix every item took the first color of the list, so the second and
+            // the third were 0xE97132 as well.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                         rColor, nFillColor);
+            break;
+        }
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), bFound);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_spanHueFallsToTheSmallerHue)
+{
+    // The theme of this file gives the second color of the list a smaller hue than the
+    // first, so the hue falls from the one to the other. The items run from green through
+    // yellow to red, not through cyan and blue.
+    // The cached drawing of the diagram has been taken out of the file, so that the
+    // diagram is laid out and colored here rather than read back.
+    loadFromFile(u"Accent2To3.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+
+    // The colors the cached drawing of the original file gives the seven items.
+    const std::pair<OUString, ::Color> aExpected[]
+        = { { u"One"_ustr, ::Color(0x00B050) },   { u"Two"_ustr, ::Color(0x00BD09) },
+            { u"Three"_ustr, ::Color(0x4ACA00) }, { u"Four"_ustr, ::Color(0xA7D800) },
+            { u"Five"_ustr, ::Color(0xE5BB00) },  { u"Six"_ustr, ::Color(0xF26300) },
+            { u"Seven"_ustr, ::Color(0xFF0000) } };
+
+    for (const auto& [rText, rColor] : aExpected)
+    {
+        const OString aMessage(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        bool bFound(false);
+        for (sal_Int32 i = 0; i < xSmartArt->getCount(); ++i)
+        {
+            uno::Reference<text::XText> xText(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+            if (!xText.is() || !xText->getString().startsWith(rText))
+                continue;
+
+            bFound = true;
+            uno::Reference<beans::XPropertySet> xProps(xText, uno::UNO_QUERY_THROW);
+            ::Color nFillColor;
+            xProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+            // Walking the wheel the other way would take the items through cyan and blue.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rColor, nFillColor);
+            break;
+        }
+        CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), bFound);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_hueNeverPassesRed)
+{
+    // The ring of this file cycles through a list of blue, red and orange. From blue at 210
+    // degrees the hue falls to red at 0 degrees, through green and yellow, although rising
+    // through magenta would be the shorter way, because the hue between two colors of a list
+    // stays between 0 and 360 degrees. From red it then rises to orange.
+    // The cached drawing of the diagram has been taken out of the file, so that the diagram
+    // is laid out and colored here rather than read back.
+    loadFromFile(u"cool16183_Cycle3Colors.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+
+    // The colors that the cached drawing of the original file gives the items whose letter
+    // occurs only once in the ring.
+    const std::pair<OUString, ::Color> aExpected[]
+        = { { u"H"_ustr, ::Color(0x45DE99) },
+            { u"R"_ustr, ::Color(0x45DE99) },
+            { u"N"_ustr, ::Color(0xFFA600) },
+            { u"W"_ustr, ::Color(0xFF7300) } };
+
+    for (const auto& [rText, rColor] : aExpected)
+    {
+        const OString aMessage(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        bool bFound(false);
+        for (sal_Int32 i = 0; i < xSmartArt->getCount(); ++i)
+        {
+            uno::Reference<text::XText> xText(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+            if (!xText.is() || xText->getString() != rText)
+                continue;
+
+            bFound = true;
+            uno::Reference<beans::XPropertySet> xProps(xText, uno::UNO_QUERY_THROW);
+            ::Color nFillColor;
+            xProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+            // Rising from blue would make H and R violet instead of green.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rColor, nFillColor);
+            break;
+        }
+        CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), bFound);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_cycleColors)
+{
+    // The diagram of this file lays its items out in a ring. Their color list asks for the
+    // cycle method, which walks the colors to the end of the list and back again, and leaves
+    // room for one item more than there are, so that the ring meets the color it started
+    // from rather than repeat it. The arrows between the items carry another style label,
+    // whose list states no method and so spreads its colors evenly instead.
+    // The cached drawing of the diagram has been taken out of the file, so that the diagram
+    // is laid out and colored here rather than read back.
+    loadFromFile(u"BasicCycleColorMethods.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+
+    // The walk out and back makes the colors of the items a palindrome, while the arrows run
+    // the whole way from the first color to the last. Both are the colors that the cached
+    // drawing of the original file holds.
+    const std::map<OUString, ::Color> aItems
+        = { { u"One"_ustr, ::Color(0xE97132) },   { u"Two"_ustr, ::Color(0xD2B81E) },
+            { u"Three"_ustr, ::Color(0x75A71D) }, { u"Four"_ustr, ::Color(0x277F1B) },
+            { u"Five"_ustr, ::Color(0x277F1B) },  { u"Six"_ustr, ::Color(0x75A71D) },
+            { u"Seven"_ustr, ::Color(0xD2B81E) } };
+    const std::set<::Color> aArrows
+        = { ::Color(0xE97132), ::Color(0xE39D1F), ::Color(0xCBC11E), ::Color(0x8EB21E),
+            ::Color(0x56991D), ::Color(0x2C821B), ::Color(0x196B24) };
+
+    std::set<::Color> aSeenArrows;
+    sal_Int32 nItemsSeen(0);
+    for (sal_Int32 i = 0; i < xSmartArt->getCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xProps(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+        if (!xProps.is())
+            continue;
+
+        drawing::FillStyle eFillStyle(drawing::FillStyle_NONE);
+        xProps->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
+        if (drawing::FillStyle_SOLID != eFillStyle)
+            continue;
+
+        ::Color nFillColor;
+        xProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+
+        const OUString aText(xText.is() ? xText->getString() : OUString());
+        const auto aItem = std::find_if(aItems.begin(), aItems.end(),
+                                        [&aText](const std::pair<const OUString, ::Color>& rItem) {
+                                            return aText.startsWith(rItem.first);
+                                        });
+        if (aItem != aItems.end())
+        {
+            ++nItemsSeen;
+            // Without the fix a cycle took one color of the list per item and started the
+            // list over when it ran out, so the ring alternated between the two colors.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OUStringToOString(aItem->first, RTL_TEXTENCODING_UTF8).getStr(), aItem->second,
+                nFillColor);
+        }
+        else if (aText.isEmpty())
+            aSeenArrows.insert(nFillColor);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), nItemsSeen);
+    // The arrows keep spreading evenly while the items cycle.
+    CPPUNIT_ASSERT(std::includes(aSeenArrows.begin(), aSeenArrows.end(), aArrows.begin(),
+                                 aArrows.end()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

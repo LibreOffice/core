@@ -23,7 +23,9 @@
 #include "datamodelcontext.hxx"
 #include <drawingml/colorchoicecontext.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/graphichelper.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <utility>
 
 using namespace ::oox::core;
@@ -177,8 +179,20 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
     mrColorsMap(rColorsMap)
 {}
 
+namespace
+{
+/// Reads the meth attribute of a color list into rList.
+void lclInitColorList(DiagramColorList& rList, const AttributeList& rAttribs)
+{
+    // The standard gives span as the default when the attribute is absent. The hueDir
+    // attribute beside it is deliberately not read, see the comment where a spread is
+    // worked out.
+    rList.mnMethod = rAttribs.getToken(XML_meth, XML_span);
+}
+}
+
 ::oox::core::ContextHandlerRef ColorFragmentHandler::onCreateContext( sal_Int32 nElement,
-                                                                      const AttributeList& /*rAttribs*/ )
+                                                                      const AttributeList& rAttribs )
 {
     // state-table like way of navigating the color fragment. we
     // currently ignore everything except styleLbl in the colorsDef
@@ -196,17 +210,23 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
                 // the actual colors - defer to color fragment handlers.
 
                 case DGM_TOKEN(fillClrLst):
-                    return new ColorsContext( *this, maColorEntry.maFillColors );
+                    lclInitColorList(maColorEntry.maFillColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maFillColors.maColors );
                 case DGM_TOKEN(linClrLst):
-                    return new ColorsContext( *this, maColorEntry.maLineColors );
+                    lclInitColorList(maColorEntry.maLineColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maLineColors.maColors );
                 case DGM_TOKEN(effectClrLst):
-                    return new ColorsContext( *this, maColorEntry.maEffectColors );
+                    lclInitColorList(maColorEntry.maEffectColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maEffectColors.maColors );
                 case DGM_TOKEN(txFillClrLst):
-                    return new ColorsContext( *this, maColorEntry.maTextFillColors );
+                    lclInitColorList(maColorEntry.maTextFillColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maTextFillColors.maColors );
                 case DGM_TOKEN(txLinClrLst):
-                    return new ColorsContext( *this, maColorEntry.maTextLineColors );
+                    lclInitColorList(maColorEntry.maTextLineColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maTextLineColors.maColors );
                 case DGM_TOKEN(txEffectClrLst):
-                    return new ColorsContext( *this, maColorEntry.maTextEffectColors );
+                    lclInitColorList(maColorEntry.maTextEffectColors, rAttribs);
+                    return new ColorsContext( *this, maColorEntry.maTextEffectColors.maColors );
             }
             break;
         }
@@ -226,8 +246,26 @@ void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )
 
 void ColorFragmentHandler::onEndElement( )
 {
-    if( getCurrentElement() == DGM_TOKEN(styleLbl) )
-        mrColorsMap[maColorName] = maColorEntry;
+    if( getCurrentElement() != DGM_TOKEN(styleLbl) )
+        return;
+
+    // Resolve the colors of a list that spreads them, span or cycle, while the theme of the
+    // slide is still the current one, because a spread is worked out from the real colors.
+    const GraphicHelper& rGraphicHelper(getFilter().getGraphicHelper());
+    for (DiagramColorList* pList :
+         { &maColorEntry.maFillColors, &maColorEntry.maLineColors, &maColorEntry.maEffectColors,
+           &maColorEntry.maTextFillColors, &maColorEntry.maTextLineColors,
+           &maColorEntry.maTextEffectColors })
+    {
+        if ((XML_span != pList->mnMethod && XML_cycle != pList->mnMethod)
+            || pList->maColors.size() < 2)
+            continue;
+
+        for (const Color& rColor : pList->maColors)
+            pList->maResolvedColors.push_back(rColor.getColor(rGraphicHelper));
+    }
+
+    mrColorsMap[maColorName] = maColorEntry;
 }
 
 }

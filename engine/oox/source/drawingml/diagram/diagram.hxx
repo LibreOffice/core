@@ -26,9 +26,11 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
 #include "datamodel_oox.hxx"
 #include <oox/drawingml/shape.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace com::sun::star {
     namespace xml::dom { class XDocument; }
@@ -110,17 +112,48 @@ struct DiagramStyle
 
 typedef std::map<OUString,DiagramStyle> DiagramQStyleMap;
 
+/** One color list of a style label in the colors part of a Diagram.
+
+    A list holds the colors that the shapes carrying the style label are given,
+    together with the way the colors are spread over those shapes.
+ */
+struct DiagramColorList
+{
+    /// The colors of the list, in the order the file gives them.
+    std::vector<oox::drawingml::Color> maColors;
+
+    /** The colors of maColors resolved against the theme, in the same order.
+
+        Empty when the list holds fewer than two colors, or when mnMethod is neither
+        XML_span nor XML_cycle, because a single color or a plain pick of one needs no
+        resolved value.
+     */
+    std::vector<::Color> maResolvedColors;
+
+    /** The meth attribute: XML_span, XML_cycle or XML_repeat.
+
+        XML_span spreads the colors evenly over the shapes, XML_cycle walks them to the
+        end and back again, and XML_repeat takes one color of the list per shape and starts
+        the list over when it runs out. XML_span is the default.
+     */
+    sal_Int32 mnMethod = XML_span;
+};
+
 struct DiagramColor
 {
-    std::vector<oox::drawingml::Color> maFillColors;
-    std::vector<oox::drawingml::Color> maLineColors;
-    std::vector<oox::drawingml::Color> maEffectColors;
-    std::vector<oox::drawingml::Color> maTextFillColors;
-    std::vector<oox::drawingml::Color> maTextLineColors;
-    std::vector<oox::drawingml::Color> maTextEffectColors;
+    DiagramColorList maFillColors;
+    DiagramColorList maLineColors;
+    DiagramColorList maEffectColors;
+    DiagramColorList maTextFillColors;
+    DiagramColorList maTextLineColors;
+    DiagramColorList maTextEffectColors;
 
-    static const oox::drawingml::Color&
-    getColorByIndex(const std::vector<oox::drawingml::Color>& rColors, sal_Int32 nIndex);
+    /** The color that the nIndex-th of nCount shapes carrying this list gets.
+
+        Pass -1 as nIndex for the last color of the list.
+     */
+    static oox::drawingml::Color getColorByIndex(const DiagramColorList& rList, sal_Int32 nIndex,
+                                                 sal_Int32 nCount);
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
