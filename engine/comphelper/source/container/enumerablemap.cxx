@@ -451,6 +451,7 @@ namespace comphelper
                 *const_cast< EnumerableMap* >( this ) );
         }
 
+        // coverity[deref_arg : FALSE] - m_aValueType holds its own reference to the description
         impl_checkNaN_throw( _value, m_aData.m_aValueType );
     }
 
