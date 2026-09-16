@@ -289,6 +289,10 @@ public:
 
     void ShowItem( sal_uInt16 nItemId, bool bVisible = true );
     void HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, false ); }
+    /// Whether the item is one the menu was told to show. An item the menu does not hold is not,
+    /// and neither is the id 0, which every separator carries. This reports what was asked for
+    /// rather than what is drawn, which IsItemPosVisible answers instead.
+    bool IsItemVisible(sal_uInt16 nItemId) const;
 
     bool IsItemPosVisible( sal_uInt16 nItemPos ) const;
     bool IsMenuVisible() const;

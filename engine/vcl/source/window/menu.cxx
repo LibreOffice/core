@@ -969,6 +969,18 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
         ImplGetSalMenu()->ShowItem( nPos, bVisible );
 }
 
+bool Menu::IsItemVisible(sal_uInt16 nItemId) const
+{
+    // Every separator carries the id 0, so that id names no item of its own.
+    if (!nItemId)
+        return false;
+
+    size_t nPos;
+    MenuItemData* pData = pItemList->GetData(nItemId, nPos);
+
+    return pData && pData->bVisible;
+}
+
 void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
 {
     size_t          nPos;

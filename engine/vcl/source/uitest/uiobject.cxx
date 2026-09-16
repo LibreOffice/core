@@ -1682,6 +1682,31 @@ StringMap MenuButtonUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
     aMap[u"Label"_ustr] = mxMenuButton->GetDisplayText();
     aMap[u"CurrentItem"_ustr] = mxMenuButton->GetCurItemIdent();
+
+    // The identifiers the menu shows, comma separated and in menu order.
+    if (PopupMenu* pMenu = mxMenuButton->GetPopupMenu())
+    {
+        OUStringBuffer aVisibleItems;
+        for (sal_uInt16 nItem = 0; nItem < pMenu->GetItemCount(); ++nItem)
+        {
+            // Every separator carries the id 0, so asking for one by id answers for the first of
+            // them. A separator has no identifier worth reporting anyway.
+            if (pMenu->GetItemType(nItem) == MenuItemType::SEPARATOR)
+                continue;
+
+            const sal_uInt16 nItemId = pMenu->GetItemId(nItem);
+            if (!pMenu->IsItemVisible(nItemId))
+                continue;
+
+            if (!aVisibleItems.isEmpty())
+                aVisibleItems.append(",");
+            aVisibleItems.append(pMenu->GetItemIdent(nItemId));
+        }
+        aMap[u"VisibleItems"_ustr] = aVisibleItems.makeStringAndClear();
+    }
+    else
+        aMap[u"VisibleItems"_ustr] = OUString();
+
     return aMap;
 }
 
