@@ -28,6 +28,7 @@
 #include <basesh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
 #include <cmdid.h>

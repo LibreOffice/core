@@ -20,6 +20,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 
+#include <libxml/xmlwriter.h>
 #include <editeng/editids.hrc>
 #include <editeng/svxacorr.hxx>
 #include <officecfg/Office/Common.hxx>

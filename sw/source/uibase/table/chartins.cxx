@@ -21,6 +21,7 @@
 #include <sfx2/dispatch.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <osl/diagnose.h>
+#include <tools/mapunit.hxx>
 #include <vcl/weld/TransportAsXWindow.hxx>
 #include <vcl/weld/Window.hxx>
 

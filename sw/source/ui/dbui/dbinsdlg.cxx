@@ -59,6 +59,7 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <dbmgr.hxx>
 #include <tblafmt.hxx>

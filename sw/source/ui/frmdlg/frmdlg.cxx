@@ -24,6 +24,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <frmdlg.hxx>

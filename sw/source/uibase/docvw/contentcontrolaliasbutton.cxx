@@ -16,6 +16,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/weld/Builder.hxx>
 
