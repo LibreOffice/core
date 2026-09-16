@@ -277,7 +277,11 @@ case $MAILER_TYPE in
 
     generic-mailto | xdg-email)
 
-        while [ "$1" != "" ]; do
+        # The loop shifts options off the front of "$@" while the mail client's arguments are
+        # appended to the back. The marker separates the two.
+        set -- "$@" "--end-of-arguments"
+
+        while [ "$1" != "--end-of-arguments" ]; do
             case $1 in
                 --to)
                     if [ "${TO}" != "" ]; then
@@ -309,7 +313,7 @@ case $MAILER_TYPE in
                     MAILTO="${MAILTO:+${MAILTO}&}attach=${ATTACH_URL}&attachment=${ATTACH_URL}"
                     if [ "$MAILER_TYPE" = "xdg-email" ]; then
                         # Also add the argument: see https://gitlab.freedesktop.org/xdg/xdg-utils/-/issues/177
-                        ATTACH="${ATTACH:+${ATTACH} }--attach \"$2\""
+                        set -- "$@" --attach "$2"
                     fi
                     shift
                     ;;
@@ -318,9 +322,10 @@ case $MAILER_TYPE in
             esac
             shift;
         done
+        shift
 
         MAILTO="mailto:${TO}?${MAILTO}"
-        eval "${MAILER} ${ATTACH} \"${MAILTO}\"" &
+        ${MAILER} "$@" "${MAILTO}" &
         ;;
 
     dtmail)
