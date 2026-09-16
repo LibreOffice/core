@@ -37,7 +37,7 @@ private:
     std::unique_ptr<weld::Toolbar> mpDomToolbar;
 
     // Reference to the root object for the current document
-    css::uno::Reference<css::uno::XInterface> mxRoot;
+    css::uno::Reference<css::frame::XModel3> mxRoot;
     // Stores the current selected object in the document
     css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
     css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
