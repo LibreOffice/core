@@ -917,6 +917,7 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
             if (json == u"null")
             {
                 cpo::uno::XInterface* nullRef = nullptr;
+                // coverity[var_deref_model : FALSE] - acquire is skipped for a null interface
                 return cpo::uno::Any(&nullRef, type);
             }
             //TODO: non-null interface references need a JSContext-based path that can
