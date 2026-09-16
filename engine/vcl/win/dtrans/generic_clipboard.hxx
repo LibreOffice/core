@@ -74,7 +74,7 @@ namespace dtrans
 
         virtual void setContents(
             const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans,
-            const cpos::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
         virtual OUString getName() override;
 
