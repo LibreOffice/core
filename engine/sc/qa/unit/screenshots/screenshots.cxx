@@ -32,7 +32,7 @@ class ScScreenshotTest : public ScreenshotTest
 {
 private:
     /// members
-    uno::Reference<lang::XComponent>        mxComponent;
+    cpo::uno::Reference<lang::XComponent>        mxComponent;
     SfxObjectShell*                         mpFoundShell;
     ScDocShellRef                           mxDocSh;
     ScTabViewShell*                         mpViewShell;

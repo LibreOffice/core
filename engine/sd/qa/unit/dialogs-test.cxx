@@ -40,7 +40,7 @@ class SdDialogsTest : public ScreenshotTest
 {
 private:
     /// Document and ComponentContext
-    uno::Reference<lang::XComponent>        mxComponent;
+    cpo::uno::Reference<lang::XComponent>        mxComponent;
 
     /// initially created SdAbstractDialogFactory and pointer to document
     SdAbstractDialogFactory*                mpFact;
