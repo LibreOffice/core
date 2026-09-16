@@ -94,6 +94,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._controlHandlers['pagemarginentry'] = JSDialog.PageMarginEntry;
 		this._controlHandlers['newslidelayoutentry'] = JSDialog.slideLayoutEntry;
 		this._controlHandlers['pagesizeentry'] = JSDialog.pageSizeEntry;
+		this._controlHandlers['linewidthcustom'] = JSDialog.LineWidthCustom;
 		this._controlHandlers['checkbox'] = JSDialog.Checkbox;
 		this._controlHandlers['basespinfield'] = JSDialog.baseSpinField;
 		this._controlHandlers['spinfield'] = JSDialog.spinfieldControl;

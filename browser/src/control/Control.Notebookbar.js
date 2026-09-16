@@ -677,7 +677,15 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 												{ text: '2.3 pt', class: 'ui-linewidth-81', uno: 'LineWidth?LineWidth:long=81' },
 												{ text: '3.0 pt', class: 'ui-linewidth-106', uno: 'LineWidth?LineWidth:long=106' },
 												{ text: '4.5 pt', class: 'ui-linewidth-159', uno: 'LineWidth?LineWidth:long=159' },
-												{ text: '6.0 pt', class: 'ui-linewidth-212', uno: 'LineWidth?LineWidth:long=212' }
+												{ text: '6.0 pt', class: 'ui-linewidth-212', uno: 'LineWidth?LineWidth:long=212' },
+												{
+													id: p + '-linewidth-custom',
+													type: 'json',
+													content: {
+														id: p + '-linewidth-custom',
+														type: 'linewidthcustom'
+													}
+												}
 											]
 										}
 									]

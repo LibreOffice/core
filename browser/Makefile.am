@@ -682,6 +682,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.IconView.ts \
 	src/control/jsdialog/Widget.NotebookbarIconView.ts \
 	src/control/jsdialog/Widget.MenuButton.ts \
+	src/control/jsdialog/Widget.LineWidthCustom.ts \
 	src/control/jsdialog/Widget.Listbox.ts \
 	src/control/jsdialog/Widget.MobileBorderSelector.js \
 	src/control/jsdialog/Widget.MobileTabControl.js \
@@ -1682,6 +1683,7 @@ pot:
 		src/control/jsdialog/Widget.PageMarginEntry.ts \
 		src/control/jsdialog/Widget.PageSizeEntry.ts \
 		src/control/jsdialog/Widget.HTMLContent.ts \
+		src/control/jsdialog/Widget.LineWidthCustom.ts \
 		src/control/jsdialog/Widget.MobileBorderSelector.js \
 		src/control/jsdialog/Widget.NewSlideLayoutEntry.ts \
 		src/control/jsdialog/Widget.NotebookbarIconView.ts \

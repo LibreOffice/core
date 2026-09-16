@@ -2002,13 +2002,32 @@ img.ui-combobox-value-preview {
 
 /* Line width dropdown of the Shape tab: draw a preview line as thick as the
  * entry it labels */
+
+.ui-combobox-entry[class*='ui-linewidth-'] {
+	width: 100%;
+}
+
 .ui-combobox-entry[class*='ui-linewidth-']::before {
 	content: '';
-	flex: 0 0 auto;
-	width: 56px;
+	flex: 1 1 auto;
+	min-width: 56px;
 	margin-inline-end: 12px;
 	background-color: currentColor;
 	border-radius: 1px;
+}
+
+.ui-combobox-entry[class*='ui-linewidth-'] > span {
+	flex: 0 0 auto;
+	width: auto;
+	min-width: 8ch;
+}
+
+.ui-combobox-entry[class*='ui-linewidth-'].selected:not(:hover):not(.checked):not(.notchecked) {
+	background-color: var(--color-background-darker);
+}
+
+.ui-combobox-entry[class*='ui-linewidth-'].selected:not(:hover):not(.checked):not(.notchecked) > span {
+	background-color: transparent;
 }
 
 .ui-combobox-entry.ui-linewidth-18::before { height: 1px; }
@@ -2019,6 +2038,31 @@ img.ui-combobox-value-preview {
 .ui-combobox-entry.ui-linewidth-106::before { height: 8px; }
 .ui-combobox-entry.ui-linewidth-159::before { height: 11px; }
 .ui-combobox-entry.ui-linewidth-212::before { height: 14px; }
+
+.ui-combobox-entry.ui-linewidth-lastcustom::before {
+	height: var(--ui-linewidth-preview-height, 0);
+}
+
+.ui-linewidth-custom {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-s);
+	padding: 5px;
+	white-space: nowrap;
+}
+
+.ui-linewidth-custom > label {
+	font-size: var(--default-font-size);
+	font-family: var(--cool-font);
+	color: var(--color-text-dark);
+}
+
+.ui-linewidth-custom > .spinfieldcontainer {
+	flex: 0 0 auto;
+	width: 96px;
+	margin-inline-start: auto;
+	margin-inline-end: 0;
+}
 
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:hover,
 [id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry:hover,
