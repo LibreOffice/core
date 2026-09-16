@@ -65,6 +65,7 @@
 #include <txatbase.hxx>
 #include <swtblfmt.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>
 #include <redline.hxx>
@@ -839,6 +840,11 @@ SwFormat *SwDoc::MakeFrameFormat_(const UIName &rFormatName,
     SwFrameFormat *pFrameFormat = dynamic_cast<SwFrameFormat*>(pDerivedFrom);
     pFrameFormat = MakeFrameFormat( rFormatName, pFrameFormat, bAuto );
     return pFrameFormat;
+}
+
+SwCharFormat* SwDoc::FindCharFormatByName( const UIName& rName ) const
+{
+    return mpCharFormatTable->FindFormatByName(rName);
 }
 
 SwCharFormat *SwDoc::MakeCharFormat( const UIName &rFormatName,

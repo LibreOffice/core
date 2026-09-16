@@ -24,6 +24,7 @@
 #include <pam.hxx>
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <UndoAttribute.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>

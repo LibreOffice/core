@@ -37,6 +37,7 @@
 #include <txtinet.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>

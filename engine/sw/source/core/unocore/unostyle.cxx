@@ -60,6 +60,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <cmdid.h>
 #include <unomid.h>
 #include <unomap.hxx>

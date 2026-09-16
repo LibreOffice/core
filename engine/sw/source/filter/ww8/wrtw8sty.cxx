@@ -48,6 +48,7 @@
 #include <ndindex.hxx>
 #include <txtftn.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <docufld.hxx>
 #include <dcontact.hxx>
 #include <fmtcnct.hxx>

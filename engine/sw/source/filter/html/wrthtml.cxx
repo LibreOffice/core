@@ -51,6 +51,7 @@
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

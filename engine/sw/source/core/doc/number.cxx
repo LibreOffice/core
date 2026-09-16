@@ -28,6 +28,7 @@
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <docary.hxx>

@@ -28,6 +28,7 @@
 #include <svl/itemiter.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx>
 #include <hintids.hxx>

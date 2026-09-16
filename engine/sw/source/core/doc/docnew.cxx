@@ -63,6 +63,7 @@
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <frmfmt.hxx>
 #include <poolfmt.hxx>
 #include <dbmgr.hxx>

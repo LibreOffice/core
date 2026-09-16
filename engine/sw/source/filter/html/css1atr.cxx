@@ -59,6 +59,7 @@
 #include <unotools/charclass.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fmtclds.hxx>
 #include <fmtcol.hxx>
 #include <fmtfsize.hxx>

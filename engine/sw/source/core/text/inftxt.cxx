@@ -65,6 +65,7 @@
 #include "portab.hxx"
 #include <wrong.hxx>
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <pam.hxx>
 #include <numrule.hxx>
 #include <EnhancedPDFExportHelper.hxx>

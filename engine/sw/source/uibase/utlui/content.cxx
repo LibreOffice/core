@@ -60,6 +60,7 @@
 #include <navicfg.hxx>
 #include <edtwin.hxx>
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>

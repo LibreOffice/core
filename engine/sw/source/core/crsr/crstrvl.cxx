@@ -64,6 +64,7 @@
 #include <pagedesc.hxx>
 #include <fesh.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fmturl.hxx>
 #include <txtfrm.hxx>
 #include <wrong.hxx>

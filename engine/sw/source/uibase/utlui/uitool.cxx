@@ -66,6 +66,7 @@
 #include <cmdid.h>
 #include <doc.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <strings.hrc>
 #include <docmodel/color/ComplexColor.hxx>

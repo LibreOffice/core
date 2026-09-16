@@ -35,7 +35,6 @@
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
 #include "docary.hxx"
-#include "charformats.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
 #include "ndarr.hxx"
@@ -63,6 +62,7 @@ class SvxMacro;
 class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCellFrame;
+class SwCharFormats;
 class SwCellStyleTable;
 class SwCursorShell;
 class SwCursor;
@@ -804,8 +804,7 @@ public:
     SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const UIName &rFormatName, SwCharFormat *pDerivedFrom);
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
-    SwCharFormat* FindCharFormatByName( const UIName& rName ) const
-        {   return mpCharFormatTable->FindFormatByName(rName); }
+    SW_DLLPUBLIC SwCharFormat* FindCharFormatByName( const UIName& rName ) const;
 
     // Formatcollections (styles)
     // TXT
