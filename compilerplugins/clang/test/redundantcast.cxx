@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <cstddef>
 
 #include <sal/types.h>
@@ -483,6 +484,14 @@ void testFunctionalCast2() {
     // no warning expected
 #define S1_COL S1(0,0,0,0)
     S1 aTest2(S1_COL);
+}
+
+void testAssert([[maybe_unused]] int n) {
+    assert(n > 0);
+#if !defined NDEBUG
+    // expected-error@+1 {{redundant functional cast from 'bool' to 'bool' [loplugin:redundantcast]}}
+    assert(bool(n > 0));
+#endif
 }
 
 int main() {

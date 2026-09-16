@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -41,6 +45,18 @@ void test2(int p1)
 {
     // expected-note@+1 {{instantiated from here [loplugin:pointerbool]}}
     func_bool_via_forward_template(p1);
+}
+
+// expected-note@+1 {{method here [loplugin:pointerbool]}}
+bool func_boolA(bool);
+
+void testAssert([[maybe_unused]] int* p)
+{
+    assert(p);
+#if !defined NDEBUG
+    // expected-error@+1 {{possibly unwanted implicit conversion when calling bool param [loplugin:pointerbool]}}
+    assert(func_boolA(p));
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
