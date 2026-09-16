@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 
 $(eval $(call gb_Module_add_check_targets,lingucomponent,\
 	CppunitTest_lingucomponent_lightproof \
+	PythonTest_lingucomponent_python \
 ))
 
 # vim: set noet sw=4 ts=4:
