@@ -1364,8 +1364,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell& rSourceShell,
                         static_cast<CreateMonitor*>(xProgressDlg.get())->SetCurrentPosition(nDocNo);
                     else {
                         PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>(xProgressDlg.get());
-                        pPrintMonDlg->m_xPrinter->set_label(bNeedsTempFiles
-                            ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 2));
+                        pPrintMonDlg->m_xPrinter->set_label(
+                            bNeedsTempFiles ? aTempFileURL->GetBase()
+                                            : pSourceDocSh->GetTitle(SFX_TITLE_FULLNAME));
                         OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDocNo );
                         pPrintMonDlg->m_xPrintInfo->set_label(sStat);
                     }
