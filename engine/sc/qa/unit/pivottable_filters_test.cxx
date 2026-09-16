@@ -177,6 +177,11 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDatabaseRangeSourceX
     CPPUNIT_ASSERT(pCacheDef);
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheSource/x:worksheetSource", "name",
                 u"Table2");
+    // Neither ref nor sheet must be specified in this case (see MS-OE376 2.1.828)
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheSource/x:worksheetSource",
+                           "ref");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheSource/x:worksheetSource",
+                           "sheet");
 }
 
 namespace

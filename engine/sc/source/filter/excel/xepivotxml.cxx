@@ -342,8 +342,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
     if (aSourceName.isEmpty())
         pDefStrm->singleElement(XML_worksheetSource, XML_ref, aRef, XML_sheet, aSheetName.toUtf8());
     else
-        pDefStrm->singleElement(XML_worksheetSource, XML_ref, aRef, XML_sheet, aSheetName.toUtf8(),
-            XML_name, aSourceName.toUtf8());
+        pDefStrm->singleElement(XML_worksheetSource, XML_name, aSourceName.toUtf8());
 
     pDefStrm->endElement(XML_cacheSource);
 
