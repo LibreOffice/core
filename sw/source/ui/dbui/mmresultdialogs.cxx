@@ -717,8 +717,8 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 try
                 {
                     pValues[0].Value <<= sFilter;
-                    uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
-                    xTempStore->storeToURL( sOutPath, aValues   );
+                    rtl::Reference<SfxBaseModel> pTempModel = xTempDocShell->GetBaseModel();
+                    pTempModel->storeToURL(sOutPath, aValues);
                 }
                 catch (const uno::Exception&)
                 {
