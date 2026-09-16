@@ -276,11 +276,19 @@ class SlideImportPane {
       if (!this.sources.some((source) => source.key === key))
         this.picks.delete(key);
 
+    const active = this.activeSource();
+
+    // The export answer travels over the active source's connection, so an
+    // export awaited while that connection is not up will never arrive.
+    if (this.awaitingExport && (!active || active.state !== 'connected')) {
+      this.awaitingExport = false;
+      this.session.exportFailed();
+    }
+
     // The selection belongs to a source that is gone, or to one the pane
     // cannot read any more; there is nothing left to insert. A source that
     // has not answered yet keeps its place, because opening it is what made
     // it the active one.
-    const active = this.activeSource();
     if (this.activeKey && (!active || this.degraded(active))) {
       this.activeKey = '';
       this.session.close();
@@ -479,14 +487,22 @@ class SlideImportPane {
   // of their own. The server stages it in this document's jail and names it
   // here, and the insert takes that file.
   private onExportWanted(): void {
-    const source = this.activeSource();
     const insert = this.session.getPendingInsert();
-    if (!source || !insert) return;
+    if (!insert) return;
+
+    const source = this.activeSource();
+    if (!source) {
+      this.session.exportFailed();
+      return;
+    }
 
     const parts = insert.slides
       .map((index: number) => source.slideParts[index])
       .filter((part: string) => !!part);
-    if (!parts.length) return;
+    if (!parts.length) {
+      this.session.exportFailed();
+      return;
+    }
 
     // Update Linked Slides asks the same document for its pages, so only the
     // export this pane asked for is taken as the file an insert reads.

@@ -65,6 +65,11 @@ interface SlideLinkRefresh {
 	byIdentifier: boolean;
 	// The address the source was asked at, once it was.
 	wopiSrc?: string;
+	// Whether a subscription this run opened has been recorded by the server.
+	subscribed?: boolean;
+	// Whether the pages the source wrote have been handed to the document, so
+	// the answer awaited is the document's own.
+	updating?: boolean;
 }
 
 class SlideLinks {
@@ -489,19 +494,37 @@ class SlideLinks {
 	}
 
 	// A source this run is waiting on has come up, so it is asked for its pages. A source
-	// that became unreadable while the run waited for it ends the run instead, so that the
-	// run leaves the queue and the sources behind it are still refreshed.
+	// that became unreadable, or whose subscription was refused, ends the run instead,
+	// so that the run leaves the queue and the sources behind it are still refreshed.
+	// A source that went down after it was asked is asked again once it comes back up.
 	private onRelatedDocuments(): void {
 		this.readSourceSlides();
 		app.events.fire('slidelink:changed', {});
 
-		if (this.running === null || this.running.accepted) return;
+		if (this.running === null || this.running.updating) return;
 		const related = this.relatedDocument(this.running.source);
+
 		if (related && related.state === 'connected') {
-			this.askForPages(related.wopiSrc);
+			if (!this.running.accepted) this.askForPages(related.wopiSrc);
 			return;
 		}
-		if (related && SlideLinks.isReadable(related.state)) return;
+
+		if (this.running.accepted && related && related.state === 'disconnected') {
+			this.running.accepted = false;
+			return;
+		}
+
+		if (related && related.state === 'subscribed')
+			this.running.subscribed = true;
+
+		// A subscription this run opened was refused so went back to "available" state
+		const dead =
+			this.running.accepted ||
+			(related !== null &&
+				related.state === 'available' &&
+				this.running.subscribed === true);
+
+		if (related && !dead && SlideLinks.isReadable(related.state)) return;
 
 		const source = this.running.source;
 		this.running = null;
@@ -551,6 +574,7 @@ class SlideLinks {
 		// one page names it, and the document leaves the other pages of the
 		// source as they are.
 		const current = this.currentSourceTime(this.running.source);
+		this.running.updating = true;
 		app.socket.sendMessage(
 			'slidelink update source=' +
 				encodeURIComponent(this.running.source) +
