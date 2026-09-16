@@ -71,6 +71,8 @@
 #include <COKit/COKit.hxx>
 
 #include <sal/log.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/dropcache.hxx>
@@ -6903,12 +6905,23 @@ COKitSelection COKitDocumentImpl::getSelectionTypeAndText(const char* pMimeType)
     return { COKitSelectionType::TEXT, std::string(aRet) };
 }
 
+// True for the EMF, WMF and BMP renderings. Each one holds the same picture as the metafile or the
+// bitmap it was made from, and only a native system clipboard reads them. They are also the
+// slowest formats to produce, because each one draws the page once more.
+static bool isDuplicateRendering(const css::datatransfer::DataFlavor& rFlavor)
+{
+    const SotClipboardFormatId eFormat = SotExchange::GetFormat(rFlavor);
+    return eFormat == SotClipboardFormatId::EMF || eFormat == SotClipboardFormatId::WMF
+           || eFormat == SotClipboardFormatId::BMP;
+}
+
 // Serialize the current clipboard's contents into the out parameters. The
 // caller holds the solar mutex and has already zeroed the out parameters. The
 // clipboard is whichever getClipboardForCurView returns: the per-view one on
 // the collaborative server, or the single shared one in the desktop app.
 // Returns true on success, false when there is nothing on the clipboard.
-static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMimeTypes)
+static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMimeTypes,
+                                                              bool bSkipDuplicateRenderings = false)
 {
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
     if (!xClip.is())
@@ -6935,7 +6948,11 @@ static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMime
             return {};
         }
         for (const auto &it : flavors)
+        {
+            if (bSkipDuplicateRenderings && isDuplicateRendering(it))
+                continue;
             aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
+        }
     }
     else
     {
@@ -6960,7 +6977,8 @@ static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMime
     return aItems;
 }
 
-std::vector<COKitClipboardItem> COKitDocumentImpl::getClipboard(const char **pMimeTypes)
+std::vector<COKitClipboardItem> COKitDocumentImpl::getClipboard(const char **pMimeTypes,
+                                                                bool bSkipDuplicateRenderings)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::getClipboard");
 
@@ -6974,7 +6992,7 @@ std::vector<COKitClipboardItem> COKitDocumentImpl::getClipboard(const char **pMi
         return {};
     }
 
-    return fetchClipboardContents(pMimeTypes);
+    return fetchClipboardContents(pMimeTypes, bSkipDuplicateRenderings);
 }
 
 // Office-level clipboard read for the desktop app's one shared clipboard. It

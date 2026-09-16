@@ -2393,9 +2393,17 @@ struct COKitDocument
      *
      * @param pMimeTypes a nullptr terminated list of mime types to fetch, or
      *        nullptr for every type the clipboard offers.
+     * @param bSkipDuplicateRenderings when true, a fetch of every type leaves
+     *        out the EMF, WMF and BMP renderings. Those hold the same picture
+     *        as the metafile and the bitmap they come from, only a native
+     *        system clipboard reads them, and they take longer to draw than
+     *        all the other formats together. Pass true when the content goes
+     *        to another document; the default keeps every rendering, which is
+     *        what a system clipboard needs.
      * @return one item per format, empty when the clipboard has nothing to give.
      */
-    virtual std::vector<COKitClipboardItem> getClipboard(const char **pMimeTypes) = 0;
+    virtual std::vector<COKitClipboardItem> getClipboard(const char **pMimeTypes,
+                                                         bool bSkipDuplicateRenderings = false) = 0;
 
     /**
      * Populates the clipboard for this view with multiple types of content.

@@ -1962,7 +1962,8 @@ bool ChildSession::getClipboard(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    const std::vector<COKitClipboardItem> items = getLOKitDocument()->getClipboard(mimeTypes);
+    const std::vector<COKitClipboardItem> items =
+        getLOKitDocument()->getClipboard(mimeTypes, /*bSkipDuplicateRenderings=*/true);
 
     if (items.empty())
     {
