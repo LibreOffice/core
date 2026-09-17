@@ -1,4 +1,4 @@
-/* global describe expect it cy before require */
+/* global describe expect it cy before require Cypress */
 
 const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
@@ -95,6 +95,40 @@ describe(['tagdesktop'], 'Submenu arrow', { testIsolation: false }, function () 
 			expect(arrow.drawn, 'the arrow of the focused entry').to.be.true;
 			expect(arrow.ratio, 'focused ' + focused.textContent.trim() + ': ' +
 				arrow.colour + ' on ' + arrow.seat).to.be.at.least(3);
+		});
+	});
+
+	// The arrow is a mask painted in background-color, and forced colours
+	// override that property with the surface behind it, so the shape is drawn
+	// in the colour of its own seat and goes.
+	describe('under forced colours', function () {
+		before(function () {
+			cy.then(function () {
+				return Cypress.automation('remote:debugger:protocol', {
+					command: 'Emulation.setEmulatedMedia',
+					params: { features: [{ name: 'forced-colors', value: 'active' }] },
+				});
+			});
+			cy.then(function () {
+				expect(win.matchMedia('(forced-colors: active)').matches,
+					'the forced colours media query is on').to.be.true;
+			});
+		});
+
+		it('the arrow is still there and still stands out', function () {
+			cy.then(function () {
+				const entries = withSubmenu();
+
+				expect(entries, 'entries with a submenu').to.not.be.empty;
+
+				entries.forEach(function (entry) {
+					const arrow = arrowAgainstItsSeat(entry);
+
+					expect(arrow.drawn, 'an arrow on ' + entry.textContent.trim()).to.be.true;
+					expect(arrow.ratio, entry.textContent.trim() + ': ' + arrow.colour +
+						' on ' + arrow.seat).to.be.at.least(3);
+				});
+			});
 		});
 	});
 });

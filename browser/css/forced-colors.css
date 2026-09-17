@@ -151,4 +151,11 @@
 		mask: var(--icon-url) no-repeat center / contain;
 	}
 
+	/* The submenu arrow is a mask painted in background-color, and the colour
+	   forced on that property is the surface it sits on, so it vanishes. */
+	.ui-combobox-entry.ui-has-menu::after {
+		forced-color-adjust: none;
+		background-color: CanvasText !important;
+	}
+
 }
