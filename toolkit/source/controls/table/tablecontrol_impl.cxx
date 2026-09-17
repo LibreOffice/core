@@ -20,6 +20,7 @@
 #include <controls/table/AccessibleGridControl.hxx>
 #include <controls/table/tablecontrol.hxx>
 #include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableFunctionSet.hxx>
 #include <controls/table/defaultinputhandler.hxx>
 #include <controls/table/tablemodel.hxx>
 
@@ -2238,128 +2239,6 @@ void TableControl_Impl::impl_commitAccessibleEvent(sal_Int16 const i_eventID, An
     if (m_xAccessibleTable.is())
         m_xAccessibleTable->commitEvent(i_eventID, i_newValue, css::uno::Any());
 }
-
-//= TableFunctionSet
-
-TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
-    : m_pTableControl(_pTableControl)
-    , m_nCurrentRow(ROW_INVALID)
-{
-}
-
-TableFunctionSet::~TableFunctionSet() {}
-
-void TableFunctionSet::BeginDrag() {}
-
-void TableFunctionSet::CreateAnchor() { m_pTableControl->setAnchor(m_pTableControl->getCurRow()); }
-
-void TableFunctionSet::DestroyAnchor() { m_pTableControl->setAnchor(ROW_INVALID); }
-
-void TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor)
-{
-    // newRow is the row which includes the point, getCurRow() is the last selected row, before the mouse click
-    RowPos newRow = m_pTableControl->getRowAtPoint(rPoint);
-    if (newRow == ROW_COL_HEADERS)
-        newRow = m_pTableControl->getTopRow();
-
-    ColPos newCol = m_pTableControl->getColAtPoint(rPoint);
-    if (newCol == COL_ROW_HEADERS)
-        newCol = m_pTableControl->getLeftColumn();
-
-    if ((newRow == ROW_INVALID) || (newCol == COL_INVALID))
-        return;
-
-    if (bDontSelectAtCursor)
-    {
-        if (m_pTableControl->getSelectedRowCount() > 1)
-            m_pTableControl->getSelEngine()->AddAlways(true);
-    }
-    else if (m_pTableControl->getAnchor() == m_pTableControl->getCurRow())
-    {
-        //selected region lies above the last selection
-        if (m_pTableControl->getCurRow() >= newRow)
-        {
-            //put selected rows in vector
-            while (m_pTableControl->getAnchor() >= newRow)
-            {
-                m_pTableControl->markRowAsSelected(m_pTableControl->getAnchor());
-                m_pTableControl->setAnchor(m_pTableControl->getAnchor() - 1);
-            }
-            m_pTableControl->setAnchor(m_pTableControl->getAnchor() + 1);
-        }
-        //selected region lies beneath the last selected row
-        else
-        {
-            while (m_pTableControl->getAnchor() <= newRow)
-            {
-                m_pTableControl->markRowAsSelected(m_pTableControl->getAnchor());
-                m_pTableControl->setAnchor(m_pTableControl->getAnchor() + 1);
-            }
-            m_pTableControl->setAnchor(m_pTableControl->getAnchor() - 1);
-        }
-        m_pTableControl->invalidateSelectedRegion(m_pTableControl->getCurRow(), newRow);
-    }
-    //no region selected
-    else
-    {
-        if (!m_pTableControl->hasRowSelection())
-            m_pTableControl->markRowAsSelected(newRow);
-        else
-        {
-            if (m_pTableControl->getSelEngine()->GetSelectionMode() == SelectionMode::Single)
-            {
-                DeselectAll();
-                m_pTableControl->markRowAsSelected(newRow);
-            }
-            else
-            {
-                m_pTableControl->markRowAsSelected(newRow);
-            }
-        }
-        if (m_pTableControl->getSelectedRowCount() > 1
-            && m_pTableControl->getSelEngine()->GetSelectionMode() != SelectionMode::Single)
-            m_pTableControl->getSelEngine()->AddAlways(true);
-
-        m_pTableControl->invalidateRow(newRow);
-    }
-    m_pTableControl->goTo(newCol, newRow);
-}
-
-bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
-{
-    m_pTableControl->getSelEngine()->AddAlways(false);
-    if (!m_pTableControl->hasRowSelection())
-        return false;
-    else
-    {
-        RowPos curRow = m_pTableControl->getRowAtPoint(rPoint);
-        m_pTableControl->setAnchor(ROW_INVALID);
-        bool selected = m_pTableControl->isRowSelected(curRow);
-        m_nCurrentRow = curRow;
-        return selected;
-    }
-}
-
-void TableFunctionSet::DeselectAtPoint(const Point&)
-{
-    m_pTableControl->invalidateRow(m_nCurrentRow);
-    m_pTableControl->markRowAsDeselected(m_nCurrentRow);
-}
-
-void TableFunctionSet::DeselectAll()
-{
-    if (m_pTableControl->hasRowSelection())
-    {
-        for (size_t i = 0; i < m_pTableControl->getSelectedRowCount(); ++i)
-        {
-            RowPos const rowIndex = m_pTableControl->getSelectedRowIndex(i);
-            m_pTableControl->invalidateRow(rowIndex);
-        }
-
-        m_pTableControl->markAllRowsAsDeselected();
-    }
-}
-
 } // namespace svt::table
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

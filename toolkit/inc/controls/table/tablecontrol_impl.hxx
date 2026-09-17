@@ -491,26 +491,6 @@ private:
     DECL_LINK(OnUpdateScrollbars, void*, void);
 };
 
-//see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
-class TableFunctionSet : public FunctionSet
-{
-private:
-    TableControl_Impl* m_pTableControl;
-    RowPos m_nCurrentRow;
-
-public:
-    explicit TableFunctionSet(TableControl_Impl* _pTableControl);
-    virtual ~TableFunctionSet() override;
-
-    virtual void BeginDrag() override;
-    virtual void CreateAnchor() override;
-    virtual void DestroyAnchor() override;
-    virtual void SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor = false) override;
-    virtual bool IsSelectionAtPoint(const Point& rPoint) override;
-    virtual void DeselectAtPoint(const Point& rPoint) override;
-    virtual void DeselectAll() override;
-};
-
 } // namespace svt::table
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

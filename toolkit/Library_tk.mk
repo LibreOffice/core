@@ -113,6 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/table/tablecontrol \
     toolkit/source/controls/table/tablecontrol_impl \
     toolkit/source/controls/table/tabledatawindow \
+    toolkit/source/controls/table/TableFunctionSet \
     toolkit/source/controls/table/tablegeometry \
     toolkit/source/controls/tree/treecontrol \
     toolkit/source/controls/tree/treecontrolpeer \
