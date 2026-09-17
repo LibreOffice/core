@@ -124,6 +124,26 @@ CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testDefaultStyleNotListedTwice)
                            !lcl_HasStyle(aStyles, u"No Spacing"));
 }
 
+// All styles is commonly set to 1 - shouldn't be used for top toolbar widget
+CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStylePaneFilterAllStyles)
+{
+    loadFromFile(u"stylePaneAllStyles.docx");
+    SfxObjectShell* pDocShell = SfxObjectShell::Current();
+    CPPUNIT_ASSERT(pDocShell);
+
+    const StylePreviewList aStyles
+        = StylesPreviewWindow_Base::GetStyleList(pDocShell, StylePreviewList());
+
+    // Normal carries w:qFormat, so it is offered.
+    CPPUNIT_ASSERT_MESSAGE("The recommended style is missing",
+                           lcl_HasStyle(aStyles, u"Default Paragraph Style"));
+
+    // No Spacing is a visible style the document does not mark w:qFormat. With
+    // w:allStyles="1" honoured it came through, along with every other style.
+    CPPUNIT_ASSERT_MESSAGE("A style without qFormat should not be offered",
+                           !lcl_HasStyle(aStyles, u"No Spacing"));
+}
+
 // The document sets the DOCX style pane filter to "Recommended" (visibleStyles).
 // The preview then lists the recommended (qFormat) styles and hides plain custom
 // ones that are neither recommended nor otherwise selected.

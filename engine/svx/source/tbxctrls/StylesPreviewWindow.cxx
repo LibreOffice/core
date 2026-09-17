@@ -762,17 +762,6 @@ void lcl_AppendStyle(StylePreviewList& rAllStyles, const SfxStyleSheetBase& rSty
                     eFamily);
 }
 
-void lcl_AppendStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
-                      SfxStyleFamily eFamily, SfxStyleSearchBits eBits)
-{
-    if (!pPool)
-        return;
-
-    auto xIter = pPool->CreateIterator(eFamily, eBits);
-    for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
-        lcl_AppendStyle(rAllStyles, *pStyle, eFamily);
-}
-
 // The "Recommended" set: flagged as favourites (qFormat), except semiHidden
 void lcl_AppendRecommendedStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
                                  SfxStyleFamily eFamily)
@@ -792,17 +781,7 @@ void lcl_AppendFilteredStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePoo
     if (!pPool)
         return;
 
-    // "All styles" shows every visible style of the family; the other categories
-    // are subsets of it, so there is nothing left to add.
-    if (rFilter.bAllStyles)
-    {
-        lcl_AppendStyles(rAllStyles, pPool, eFamily, SfxStyleSearchBits::AllVisible);
-        return;
-    }
-
-    // "Recommended" (visibleStyles) shows the recommended styles.
-    if (rFilter.bVisibleStyles)
-        lcl_AppendRecommendedStyles(rAllStyles, pPool, eFamily);
+    lcl_AppendRecommendedStyles(rAllStyles, pPool, eFamily);
 
     auto xIter = pPool->CreateIterator(eFamily, SfxStyleSearchBits::AllVisible);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
@@ -833,13 +812,8 @@ StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShel
         aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
     }
 
-    // A document with no explicit style pane filter defaults to the "Recommended"
+    // A document with no explicit style pane filter adds the default styles below
     const bool bNoImportedFilter = !aFilter.bValid;
-    if (!aFilter.bValid)
-    {
-        aFilter.bValid = true;
-        aFilter.bVisibleStyles = true;
-    }
 
     StylePreviewList aAllStyles;
     if (pStyleSheetPool)
