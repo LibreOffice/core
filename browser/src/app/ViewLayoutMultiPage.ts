@@ -12,6 +12,9 @@
 class ViewLayoutMultiPage extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutMultiPage';
 	public gapBetweenPages = 20; // Core pixels.
+	private gapBeforeCommentColumn = 40; // Core pixels.
+	private minimumSideMargin = 20; // Core pixels.
+	private commentReserveUsedForZoom = 0;
 	private maxRowsSize = 2;
 	public documentRectangles = Array<cool.SimpleRectangle>();
 	private viewRectangles = Array<cool.SimpleRectangle>();
@@ -20,6 +23,10 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		super();
 
 		app.map.on('zoomend', this.reset, this);
+		app.map.on('insertannotation', this.onCommentLayoutChange, this);
+		app.map.on('deleteannotation', this.onCommentLayoutChange, this);
+		app.map.on('importannotations', this.onCommentLayoutChange, this);
+		app.map.on('showannotationschanged', this.onCommentLayoutChange, this);
 
 		this.adjustViewZoomLevel();
 		this.reset();
@@ -27,7 +34,19 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 
 	public override dispose(): void {
 		app.map.off('zoomend', this.reset, this);
+		app.map.off('insertannotation', this.onCommentLayoutChange, this);
+		app.map.off('deleteannotation', this.onCommentLayoutChange, this);
+		app.map.off('importannotations', this.onCommentLayoutChange, this);
+		app.map.off('showannotationschanged', this.onCommentLayoutChange, this);
 		super.dispose();
+	}
+
+	private onCommentLayoutChange(): void {
+		if (this.getCommentColumnReserve() === this.commentReserveUsedForZoom)
+			return;
+
+		this.adjustViewZoomLevel();
+		this.reset();
 	}
 
 	public override onResize(): void {
@@ -35,22 +54,88 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		this.reset();
 	}
 
-	public override adjustViewZoomLevel() {
+	private getPagesWidth(): number {
+		Util.ensureValue(app.activeDocument);
+
+		const pageRectangleList = app.file.writer.pageRectangleList;
+
+		if (pageRectangleList.length === 0) return app.activeDocument.fileSize.pX;
+
+		let result = 0;
+
+		for (let i = 0; i < pageRectangleList.length; i += this.maxRowsSize) {
+			const rowEnd = Math.min(i + this.maxRowsSize, pageRectangleList.length);
+			let rowWidth = 0;
+
+			for (let j = i; j < rowEnd; j++) {
+				if (j > i) rowWidth += this.gapBetweenPages;
+				rowWidth += pageRectangleList[j][2] * app.twipsToPixels;
+			}
+
+			result = Math.max(result, rowWidth);
+		}
+
+		return result;
+	}
+
+	private getCommentColumnReserve(): number {
+		const commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name,
+		) as cool.CommentSection;
+
+		if (!commentSection || commentSection.commentsHiddenOrNotPresent())
+			return 0;
+
+		return this.gapBeforeCommentColumn + cool.CommentSection.getCommentWidth();
+	}
+
+	private getZoomForWidth(
+		availableWidth: number,
+		contentWidth: number,
+	): number {
 		Util.ensureValue(app.activeDocument);
 
 		const min = 0.1;
 		const max = 10;
 
-		const anchorSection = this.getDocumentAnchorSection();
-
-		// Take 50% of the width and try to render 2 pages side by side.
-		const halfWidth = Math.round(anchorSection.size[0] * 0.5);
-
-		const ratio = halfWidth / app.activeDocument.fileSize.pX;
+		const ratio = Math.max(1, availableWidth) / contentWidth;
 		let zoom = app.activeDocument.getScaleZoom(ratio);
 		zoom = Math.min(max, Math.max(min, zoom));
 
 		if (zoom > 1) zoom = Math.floor(zoom);
+
+		return zoom;
+	}
+
+	public override adjustViewZoomLevel() {
+		Util.ensureValue(app.activeDocument);
+
+		const availableWidth =
+			this.getDocumentAnchorSection().size[0] - this.minimumSideMargin * 2;
+		const pagesWidth = this.getPagesWidth();
+		const commentReserve = this.getCommentColumnReserve();
+
+		this.commentReserveUsedForZoom = commentReserve;
+
+		const zoomWithoutComments = this.getZoomForWidth(
+			availableWidth,
+			pagesWidth,
+		);
+
+		let zoom = zoomWithoutComments;
+
+		if (commentReserve > 0) {
+			const zoomWithComments = this.getZoomForWidth(
+				availableWidth - commentReserve,
+				pagesWidth,
+			);
+
+			const floor = app.activeDocument.getZoomIndex(60);
+			const onlyCommentsFallBelowFloor =
+				zoomWithComments < floor && zoomWithoutComments >= floor;
+
+			zoom = onlyCommentsFallBelowFloor ? floor : zoomWithComments;
+		}
 
 		this.applyZoom(zoom);
 	}
@@ -61,7 +146,8 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 
 		if (app.file.writer.pageRectangleList.length === 0) return;
 
-		const canvasSize = app.sectionContainer.getViewSize();
+		const frameSize = this.getDocumentAnchorSection().size;
+		const commentReserve = this.getCommentColumnReserve();
 
 		// Copy the page rectangle array.
 		for (let i = 0; i < app.file.writer.pageRectangleList.length; i++) {
@@ -76,7 +162,7 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		}
 
 		let lastY = this.gapBetweenPages;
-		this._viewSize.pX = canvasSize[0];
+		let contentRight = 0;
 
 		for (let i = 0; i < this.documentRectangles.length; i++) {
 			let x = 0;
@@ -92,8 +178,8 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 			) {
 				const addition =
 					this.documentRectangles[j].pWidth + this.gapBetweenPages;
-				if (x + addition < canvasSize[0] || j === i) {
-					if (x + addition > canvasSize[0]) {
+				if (x + addition < frameSize[0] || j === i) {
+					if (x + addition > frameSize[0]) {
 						go = false;
 					}
 
@@ -104,10 +190,14 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 				} else go = false;
 			}
 
-			if (x < canvasSize[0]) {
+			if (x < frameSize[0]) {
 				const rowItemCount = j - i;
 				const gap = (rowItemCount - 1) * this.gapBetweenPages;
-				const margin = (canvasSize[0] - (totalWidth + gap)) * 0.5;
+				const rowWidth = totalWidth + gap;
+				const margin = Math.max(
+					this.minimumSideMargin,
+					(frameSize[0] - commentReserve - rowWidth) * 0.5,
+				);
 				let currentX = margin;
 				let maxY = 0;
 				for (let k = i; k < j; k++) {
@@ -118,30 +208,43 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 					maxY = Math.max(maxY, this.documentRectangles[k].pHeight);
 				}
 
+				contentRight = Math.max(contentRight, margin + rowWidth);
 				lastY += maxY + this.gapBetweenPages;
 			} else {
-				if (x > this._viewSize.pX)
-					this._viewSize.pX = x + this.gapBetweenPages * 2;
-
-				this.viewRectangles[i].pX1 = this.gapBetweenPages;
+				this.viewRectangles[i].pX1 = this.minimumSideMargin;
 				this.viewRectangles[i].pY1 = lastY;
 
+				contentRight = Math.max(
+					contentRight,
+					this.minimumSideMargin + this.documentRectangles[i].pWidth,
+				);
 				lastY += this.documentRectangles[i].pHeight + this.gapBetweenPages;
 			}
 
 			i = j - 1;
 		}
 
-		this._viewSize.pY = Math.max(lastY, canvasSize[1]);
+		this._viewSize.pX = Math.max(
+			frameSize[0],
+			contentRight + commentReserve + this.minimumSideMargin,
+		);
+		this._viewSize.pY = Math.max(lastY, frameSize[1]);
 
-		// Capture the comment-free page-layout extent. Comment overflow is applied
-		// on top via ensureViewSizeCoversComments; side-space math reads this base
-		// so it does not feed back into the comment width computation.
+		// Capture the page-layout extent, the comment column included. Side-space
+		// math reads this base so it does not feed back into the comment width
+		// computation.
 		this._baseViewSize = this._viewSize.clone();
 	}
 
 	protected override getBaseViewSize(): cool.SimplePoint {
 		return this._baseViewSize;
+	}
+
+	public override ensureViewSizeCoversComments(
+		extraWidth: number,
+		bottomY: number,
+	): void {
+		super.ensureViewSizeCoversComments(0, bottomY);
 	}
 
 	// Get the page rectangle or its corresponding view rectangle which contains the given point (document point or view point).
@@ -391,15 +494,10 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		const maxX: number = this.viewRectangles.reduce((result, currentItem) => {
 			return Math.max(currentItem.pX2, result);
 		}, 0);
-		const minX: number = this.viewRectangles.reduce((result, currentItem) => {
-			return Math.min(currentItem.pX1, result);
-		}, 100000);
-		const width = maxX - minX;
 
-		// Base extent (no comment overflow) so the comment width decision stays
-		// stable across relayouts instead of feeding back through viewSize.
-		const sideSpace = this._baseViewSize.pX - width;
+		// Twice the space between the last page and the right edge of the view.
+		const viewWidth = this.getDocumentAnchorSection().size[0];
 
-		return sideSpace;
+		return (viewWidth - maxX - this.gapBeforeCommentColumn) * 2;
 	}
 }
