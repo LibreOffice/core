@@ -501,7 +501,7 @@ public:
         SdDrawDocument* pBookmarkDoc,
         SlideLayoutNameList& rLayoutsToTransfer,
         const DocumentPageCounts& rPageCounts,
-        bool bMergeMasterPagesOnly);
+        const InsertBookmarkOptions& rOptions);
 
     /**
      * Transfer layout styles from source document to destination
@@ -1209,6 +1209,17 @@ public:
      * @return A new layout name that is unique and based on the original name
      */
     static OUString GenerateNewLayoutName(std::u16string_view rOriginalName);
+
+    // True when no master page of rDoc carries the layout name rCandidate and no presentation
+    // style sheet is named after it.
+    static bool IsLayoutNameUnused(const SdDrawDocument& rDoc, std::u16string_view rCandidate);
+
+    // Gives back a layout name that neither document uses and that rAlsoTaken does not
+    // list, counting up from rWanted. Passing null for pOtherDoc asks about rDoc alone.
+    static OUString GetUnusedLayoutName(const SdDrawDocument& rDoc,
+                                        const SdDrawDocument* pOtherDoc,
+                                        const std::vector<OUString>& rAlsoTaken,
+                                        const OUString& rWanted);
 
     SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 

@@ -119,6 +119,9 @@ public:
     void testInsertFileAsPageAdoptDesign();
     void testInsertFileAsPageAdoptDesignAtStart();
     void testInsertFileAsPageKeepDesign();
+    void testInsertFileAsPageKeepDesignSameMasterName();
+    void testInsertFileAsPageKeepDesignSameMasterNameAndDesign();
+    void testInsertFileAsPageKeepDesignTwiceSharesMaster();
     void testInsertFileAsPageLinkRecordsSource();
     void testInsertFileAsPageLinkWithoutSourceRecordsMedium();
     void testInsertWholeFileAsPagesLinkRecordsSource();
@@ -166,6 +169,9 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageAdoptDesign);
     CPPUNIT_TEST(testInsertFileAsPageAdoptDesignAtStart);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesign);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesignSameMasterName);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesignSameMasterNameAndDesign);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwiceSharesMaster);
     CPPUNIT_TEST(testInsertFileAsPageLinkRecordsSource);
     CPPUNIT_TEST(testInsertFileAsPageLinkWithoutSourceRecordsMedium);
     CPPUNIT_TEST(testInsertWholeFileAsPagesLinkRecordsSource);
@@ -1674,6 +1680,119 @@ void SdMiscTest::testInsertFileAsPageKeepDesign()
     pDoc->GetDocSh()->GetUndoManager()->Undo();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesignSameMasterName()
+{
+    // Both presentations name their master page "Default", and the two designs differ. A page
+    // that keeps its own design shows the background of the presentation it came from.
+    createSdImpressDoc("slide-import-same-master-name-target.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(
+        pDoc->OpenBookmarkDoc(createFileURL(u"slide-import-same-master-name-source.odp")));
+
+    std::vector<OUString> aBookmarkList{ u"SourceRed"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForSlideImport(
+                                              /*bKeepDesign=*/true),
+                                          3, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+    SdPage& rInsertedMaster = static_cast<SdPage&>(pInserted->TRG_GetMasterPage());
+    SdPage& rOwnMaster
+        = static_cast<SdPage&>(pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT(&rInsertedMaster != &rOwnMaster);
+
+    SfxStyleSheet* pInsertedBackground = rInsertedMaster.getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pInsertedBackground);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         pInsertedBackground->GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000),
+                         pInsertedBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
+
+    // The presentation's own slide keeps the background it had.
+    SfxStyleSheet* pOwnBackground = rOwnMaster.getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pOwnBackground);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         pOwnBackground->GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00),
+                         pOwnBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesignSameMasterNameAndDesign()
+{
+    // The two presentations carry the same design under the same name, so the inserted page
+    // shares the master page that is already there and no second one is added.
+    createSdImpressDoc("slide-import-same-master-name-source.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(
+        pDoc->OpenBookmarkDoc(createFileURL(u"slide-import-same-master-name-source.odp")));
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+
+    std::vector<OUString> aBookmarkList{ u"SourceRed"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForSlideImport(
+                                              /*bKeepDesign=*/true),
+                                          3, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+    CPPUNIT_ASSERT_EQUAL(u"Default"_ustr,
+                         SdDrawDocument::GetBaseLayoutName(pInserted->GetLayoutName()));
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesignTwiceSharesMaster()
+{
+    // Inserting from the same presentation a second time uses the design that the first insert
+    // brought over, so the two pages share one master page.
+    createSdImpressDoc("slide-import-same-master-name-target.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+    std::vector<OUString> aBookmarkList{ u"SourceRed"_ustr };
+
+    for (int nRun = 0; nRun < 2; ++nRun)
+    {
+        CPPUNIT_ASSERT(
+            pDoc->OpenBookmarkDoc(createFileURL(u"slide-import-same-master-name-source.odp")));
+        CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                              InsertBookmarkOptions::ForSlideImport(
+                                                  /*bKeepDesign=*/true),
+                                              3, nullptr, /*oScaleObjects=*/true));
+        pDoc->CloseBookmarkDoc();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // One design arrived, and the second insert added no master page of its own.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(nMasterCountBefore + 1),
+                         pDoc->GetMasterPageCount());
+
+    SdPage& rFirst = static_cast<SdPage&>(
+        pDoc->GetSdPage(1, PageKind::Standard)->TRG_GetMasterPage());
+    SdPage& rSecond = static_cast<SdPage&>(
+        pDoc->GetSdPage(2, PageKind::Standard)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(&rFirst, &rSecond);
+
+    SfxStyleSheet* pBackground = rFirst.getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pBackground);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000),
+                         pBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
 }
 
 void SdMiscTest::testInsertFileAsPageLinkRecordsSource()

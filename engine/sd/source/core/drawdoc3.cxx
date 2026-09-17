@@ -88,13 +88,77 @@ namespace {
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
-    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
-        : mrLayoutsToTransfer(rLayoutsToTransfer) {}
+    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer,
+                                                        bool bKeepSourceDesign )
+        : mrLayoutsToTransfer(rLayoutsToTransfer)
+        , mbKeepSourceDesign(bKeepSourceDesign) {}
     void operator()( SdDrawDocument&, SdPage const *, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc, bool bMergeMasterPagesOnly);
 private:
+    bool settleOwnDesignName( SdDrawDocument& rDoc, SdPage const * pBMMPage,
+                              SdDrawDocument* pBookmarkDoc, OUString& rLayout );
+
     std::vector<OUString> &mrLayoutsToTransfer;
+    // The inserted pages keep the design they came with, so a design of this document that
+    // shares its name does not stand in for it.
+    bool mbKeepSourceDesign;
 };
 
+}
+
+// Settles the name the source design travels under when the inserted pages keep it, and gives
+// back true when a master page of this document already serves them, so that no layout styles
+// have to travel.
+//
+// A master page keeps its identifier when it is merged into another document, so a master page
+// here carrying the identifier of the source master is that same design brought over by an
+// earlier insert, whatever it ended up being called. Failing that, a master page here of the
+// same name may hold the same design and serve just as well. Otherwise the name is taken by a
+// design that differs, and the arriving one takes a name that neither document uses.
+bool InsertBookmarkAsPage_FindDuplicateLayouts::settleOwnDesignName(
+    SdDrawDocument& rDoc, SdPage const * pBMMPage, SdDrawDocument* pBookmarkDoc,
+    OUString& rLayout )
+{
+    SdPage* pSameName = nullptr;
+    const sal_uInt16 nMasterPageCount = rDoc.GetMasterPageCount();
+    for (sal_uInt16 nMasterPage = 0; nMasterPage < nMasterPageCount; nMasterPage++)
+    {
+        SdPage* pTestPage = static_cast<SdPage*>( rDoc.GetMasterPage(nMasterPage) );
+        if (pTestPage->GetPageKind() != pBMMPage->GetPageKind())
+            continue;
+
+        const OUString aTest = SdDrawDocument::GetBaseLayoutName( pTestPage->GetLayoutName() );
+        if (pTestPage->GetGuid() == pBMMPage->GetGuid())
+        {
+            if (aTest == rLayout)
+                return true;
+
+            // The rename lands in the source document, so that document has to be one that
+            // does not use the name for the pages to arrive under it.
+            if (SdDrawDocument::IsLayoutNameUnused(*pBookmarkDoc, aTest))
+            {
+                pBookmarkDoc->RenameLayoutTemplate( pBMMPage->GetLayoutName(), aTest );
+                rLayout = pBMMPage->GetName();
+                return true;
+            }
+        }
+
+        if (aTest == rLayout)
+            pSameName = pTestPage;
+    }
+
+    // Nothing here uses the name, so the design travels under the one it has.
+    if (!pSameName)
+        return false;
+
+    if (pSameName->Equals(*pBMMPage))
+        return true;
+
+    const OUString aNewName = SdDrawDocument::GetUnusedLayoutName(
+        rDoc, pBookmarkDoc, mrLayoutsToTransfer,
+        SdDrawDocument::GenerateNewLayoutName(rLayout));
+    pBookmarkDoc->RenameLayoutTemplate( pBMMPage->GetLayoutName(), aNewName );
+    rLayout = pBMMPage->GetName();
+    return false;
 }
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage const * pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc, bool bMergeMasterPagesOnly )
@@ -107,6 +171,13 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         find(mrLayoutsToTransfer.begin(), mrLayoutsToTransfer.end(), aLayout);
 
     bool bFound = pIter != mrLayoutsToTransfer.end();
+
+    if (mbKeepSourceDesign)
+    {
+        if (!bFound && !settleOwnDesignName(rDoc, pBMMPage, pBookmarkDoc, aLayout))
+            mrLayoutsToTransfer.push_back(aLayout);
+        return;
+    }
 
     const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
     for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
@@ -541,10 +612,23 @@ void SdDrawDocument::collectLayoutsToTransfer(const PageNameList& rBookmarkList,
                                               SdDrawDocument* pBookmarkDoc,
                                               SlideLayoutNameList& aLayoutsToTransfer,
                                               const DocumentPageCounts& rPageCounts,
-                                              bool bMergeMasterPagesOnly)
+                                              const InsertBookmarkOptions& rOptions)
 {
+    const bool bMergeMasterPagesOnly = rOptions.bMergeMasterPagesOnly;
     sal_uInt16 nCount = bMergeMasterPagesOnly ? rPageCounts.nMasterPageCount : rPageCounts.nSourcePageCount;// Replace by pageCounts to add the masterpagecount
-    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor(aLayoutsToTransfer);
+
+    // The inserted pages keep the design they came with when they bring their master pages
+    // along and do not take the design of this document. Settling the name that design lands
+    // under renames it in the document the pages are read from, so it is done only for the
+    // copy this document opened for the insert and closes again afterwards. A document the
+    // caller handed over belongs to whoever opened it, and a rename there would reach a
+    // presentation somebody is editing.
+    const bool bKeepSourceDesign = !rOptions.bAdoptTargetDesign && rOptions.bMergeMasterPages
+                                   && !bMergeMasterPagesOnly && mxBookmarkDocShRef.is()
+                                   && mxBookmarkDocShRef->GetDoc() == pBookmarkDoc;
+
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor(aLayoutsToTransfer,
+                                                             bKeepSourceDesign);
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ), bMergeMasterPagesOnly );
 }
 
@@ -1658,6 +1742,44 @@ static bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, std::u16str
     return true;
 }
 
+bool SdDrawDocument::IsLayoutNameUnused(const SdDrawDocument& rDoc, std::u16string_view rCandidate)
+{
+    if (!isMasterPageLayoutNameUnique(rDoc, rCandidate))
+        return false;
+
+    // A presentation style sheet is named after every layout the document has ever held, so a
+    // name is taken even when no master page carries it any more.
+    SfxStyleSheetBasePool* pPool = const_cast<SdDrawDocument&>(rDoc).GetStyleSheetPool();
+    if (!pPool)
+        return true;
+
+    const OUString aPrefix = OUString::Concat(rCandidate) + SD_LT_SEPARATOR;
+    SfxStyleSheetIterator aIter(pPool, SfxStyleFamily::Page);
+    for (SfxStyleSheetBase* pSheet = aIter.First(); pSheet; pSheet = aIter.Next())
+    {
+        if (pSheet->GetName().startsWith(aPrefix))
+            return false;
+    }
+
+    return true;
+}
+
+OUString SdDrawDocument::GetUnusedLayoutName(const SdDrawDocument& rDoc,
+                                             const SdDrawDocument* pOtherDoc,
+                                             const std::vector<OUString>& rAlsoTaken,
+                                             const OUString& rWanted)
+{
+    OUString aName = rWanted;
+    while (!IsLayoutNameUnused(rDoc, aName)
+           || std::find(rAlsoTaken.begin(), rAlsoTaken.end(), aName) != rAlsoTaken.end()
+           || (pOtherDoc && !IsLayoutNameUnused(*pOtherDoc, aName)))
+    {
+        aName = GenerateNewLayoutName(aName);
+    }
+
+    return aName;
+}
+
 // #i121863# factored out functionality
 static OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 {
@@ -2345,7 +2467,7 @@ bool SdDrawDocument::PasteBookmarkAsPage(
 
     // Collect layout names that need to be transferred
     SlideLayoutNameList aLayoutsToTransfer;
-    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options.bMergeMasterPagesOnly);
+    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options);
 
     // Copy the style that we actually need.
     SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*aInsertParams.pBookmarkDoc->GetStyleSheetPool());
@@ -2456,7 +2578,7 @@ bool SdDrawDocument::ResolvePageLinks(
 
     // Collect layout names that need to be transferred
     SlideLayoutNameList aLayoutsToTransfer;
-    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options.bMergeMasterPagesOnly);
+    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options);
 
     // Copy the style that we actually need.
     SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*aInsertParams.pBookmarkDoc->GetStyleSheetPool());
@@ -2566,7 +2688,7 @@ bool SdDrawDocument::ImportDocumentPages(
 
     // Collect layout names that need to be transferred
     SlideLayoutNameList aLayoutsToTransfer;
-    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options.bMergeMasterPagesOnly);
+    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options);
 
     // Copy the style that we actually need.
     SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*aInsertParams.pBookmarkDoc->GetStyleSheetPool());
@@ -2694,7 +2816,7 @@ bool SdDrawDocument::InsertFileAsPage(
     // the list stays empty.
     SlideLayoutNameList aLayoutsToTransfer;
     if (!rOptions.bAdoptTargetDesign)
-        collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, rOptions.bMergeMasterPagesOnly);
+        collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, rOptions);
 
     // Copy the style that we actually need.
     SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*aInsertParams.pBookmarkDoc->GetStyleSheetPool());
@@ -2790,7 +2912,7 @@ bool SdDrawDocument::DropBookmarkAsPage(
 
     // Collect layout names that need to be transferred
     SlideLayoutNameList aLayoutsToTransfer;
-    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options.bMergeMasterPagesOnly);
+    collectLayoutsToTransfer(rBookmarkList, aInsertParams.pBookmarkDoc, aLayoutsToTransfer, pageCounts, options);
 
     // Copy the style that we actually need.
     SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*aInsertParams.pBookmarkDoc->GetStyleSheetPool());
