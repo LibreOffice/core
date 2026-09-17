@@ -11,7 +11,7 @@ module com { module sun { module star { module i18n {
 
 /** Access a locale specific calendar.
  */
-service LocaleCalendar2 : XCalendar4;
+service LocaleCalendar2 : XCalendar;
 
 }; }; }; };
 

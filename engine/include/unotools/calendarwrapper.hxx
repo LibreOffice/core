@@ -27,12 +27,12 @@
 #include <unotools/unotoolsdllapi.h>
 
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::i18n { class XCalendar4; }
+namespace com::sun::star::i18n { class XCalendar; }
 namespace com::sun::star::lang { struct Locale; }
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
-    cpo::uno::Reference< css::i18n::XCalendar4 >   xC;
+    cpo::uno::Reference< css::i18n::XCalendar >   xC;
 
     const DateTime aEpochStart;        // 1Jan1970
 
@@ -75,9 +75,6 @@ public:
     /// get UTC date/time
     double getDateTime() const;
 
-    // For local setDateTime() and getDateTime() see further down at wrapper
-    // implementations of XCalendar4.
-
     // wrapper implementations of XCalendar
 
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
@@ -93,9 +90,6 @@ public:
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getMonths() const;
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getGenitiveMonths() const;
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getPartitiveMonths() const;
-
-    // wrapper implementations of XCalendar4
-
     /// set local date/time
     void setLocalDateTime( double fTimeInDays );
     /// get local date/time

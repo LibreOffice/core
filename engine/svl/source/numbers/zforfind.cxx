@@ -48,7 +48,7 @@
 #endif
 #if NF_TEST_CALENDAR
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/XCalendar4.hpp>
+#include <com/sun/star/i18n/XCalendar.hpp>
 #endif
 
 #if defined ERA // from POSIX <langinfo.h>
@@ -2293,7 +2293,7 @@ input for the following reasons:
             sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
             uno::Reference< cpo::uno::XComponentContext > xContext =
                 ::comphelper::getProcessComponentContext();
-            uno::Reference< i18n::XCalendar4 > xCal = i18n::LocaleCalendar2::create(xContext);
+            uno::Reference< i18n::XCalendar > xCal = i18n::LocaleCalendar2::create(xContext);
             for ( const entry* p = cals; p->lan; ++p )
             {
                 aLocale.Language = OUString::createFromAscii( p->lan );

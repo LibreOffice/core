@@ -87,8 +87,6 @@ public:
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getMonths2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getGenitiveMonths2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getPartitiveMonths2() override;
-
-    // XCalendar4
     virtual void setLocalDateTime(double TimeInDays) override;
     virtual double getLocalDateTime() override;
 

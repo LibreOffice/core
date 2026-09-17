@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/i18n/XCalendar4.hpp>
+#include <com/sun/star/i18n/XCalendar.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <utility>
@@ -32,7 +32,7 @@ namespace i18npool {
 
 class CalendarImpl : public cppu::WeakImplHelper
 <
-    css::i18n::XCalendar4,
+    css::i18n::XCalendar,
     css::lang::XServiceInfo
 >
 {
@@ -75,8 +75,6 @@ public:
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getMonths2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getGenitiveMonths2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getPartitiveMonths2() override;
-
-    // XCalendar4
     virtual void setLocalDateTime(double TimeInDays) override;
     virtual double getLocalDateTime() override;
     virtual void loadDefaultCalendarTZ(const css::lang::Locale& rLocale, const OUString& rTimeZone) override;
@@ -89,14 +87,14 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(OUString aCacheID, cpo::uno::Reference < css::i18n::XCalendar4 > _xCalendar)
+        lookupTableItem(OUString aCacheID, cpo::uno::Reference < css::i18n::XCalendar > _xCalendar)
             : m_aCacheID(std::move(aCacheID)), xCalendar(std::move(_xCalendar)) {}
         OUString                                      m_aCacheID;
-        cpo::uno::Reference < css::i18n::XCalendar4 > xCalendar;
+        cpo::uno::Reference < css::i18n::XCalendar >  xCalendar;
     };
     std::vector<lookupTableItem>                        lookupTable;
     cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
-    cpo::uno::Reference < css::i18n::XCalendar4 >       xCalendar;
+    cpo::uno::Reference < css::i18n::XCalendar >        xCalendar;
 };
 
 }

@@ -7962,6 +7962,10 @@ module com {
      sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths2();
+     void setLocalDateTime([in] double TimeInDays);
+     double getLocalDateTime();
+     void loadDefaultCalendarTZ([in] ::com::sun::star::lang::Locale rLocale, [in] string TimeZone);
+     void loadCalendarTZ([in] string uniqueID, [in] ::com::sun::star::lang::Locale rLocale, [in] string TimeZone );
     };
     published service LocaleCalendar: ::com::sun::star::i18n::XCalendar;
     published struct LocaleDataItem {
