@@ -73,6 +73,8 @@ namespace Poco
     class URI;
 }
 
+struct sockaddr_in6;
+
 namespace net
 {
     /// Shut down both directions of a socket that has a real descriptor underneath.
@@ -88,6 +90,16 @@ namespace net
     /// Send each packet on a real socket as soon as it is ready, without waiting to aggregate
     /// several of them.
     void disableNagleAlgorithm(int descriptor);
+
+    /// True when accept failed for a reason that leaves the listening socket unusable, as opposed
+    /// to one worth retrying. Logs either way.
+    bool isUnrecoverableAcceptError(int cause);
+
+    /// Take a waiting connection from a real listening socket and say where it came from. Returns
+    /// the descriptor, -1 when there is nothing to take, and stops the process when the listening
+    /// socket is unusable.
+    int acceptConnection(int descriptor, struct sockaddr_in6& clientInfo);
+
     /// Close a descriptor that came from this build's socket layer, which is a real socket in the
     /// server and a fake one in the app.
     inline void closeSocketDescriptor(int descriptor)

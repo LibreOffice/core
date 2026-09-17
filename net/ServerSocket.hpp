@@ -120,7 +120,6 @@ public:
     }
 
 protected:
-    bool isUnrecoverableAcceptError(int cause) const;
     /// Create a Socket instance from the accepted socket FD.
     std::shared_ptr<Socket> createSocketFromAccept(int fd, Socket::Type type) const
     {

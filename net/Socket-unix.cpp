@@ -22,8 +22,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <sysexits.h>
+
 #include <common/Log.hpp>
 #include <common/Syscall.hpp>
+#include <common/Util.hpp>
 #include <net/Socket.hpp>
 
 namespace net
@@ -135,6 +138,58 @@ bool bindToPort(int descriptor, Socket::Type socketType, bool publicly, int port
                             << " port: " << port);
 
     return rc == 0;
+}
+
+bool isUnrecoverableAcceptError(const int cause)
+{
+    static constexpr const char * messagePrefix = "Failed to accept. (errno: ";
+    switch(cause)
+    {
+        case EINTR:
+        case EAGAIN:        // == EWOULDBLOCK
+        case ENETDOWN:
+        case EPROTO:
+        case ENOPROTOOPT:
+        case EHOSTDOWN:
+#ifdef ENONET
+        case ENONET:
+#endif
+        case EHOSTUNREACH:
+        case EOPNOTSUPP:
+        case ENETUNREACH:
+        case ECONNABORTED:
+        case ETIMEDOUT:
+        case EMFILE:
+        case ENFILE:
+        case ENOMEM:
+        case ENOBUFS:
+        {
+            LOG_DBG(messagePrefix << Util::symbolicErrno(cause) << ", " << std::strerror(cause)
+                                  << ')');
+            return false;
+        }
+        default:
+        {
+            LOG_FTL(messagePrefix << Util::symbolicErrno(cause) << ", " << std::strerror(cause)
+                                  << ')');
+            return true;
+        }
+    }
+}
+
+int acceptConnection(int descriptor, struct sockaddr_in6& clientInfo)
+{
+    socklen_t addrlen = sizeof(clientInfo);
+    const int rc = Syscall::accept_cloexec_nonblock(
+        descriptor, reinterpret_cast<struct sockaddr*>(&clientInfo), &addrlen);
+    if (rc < 0)
+    {
+        if (isUnrecoverableAcceptError(errno))
+            Util::forcedExit(EX_SOFTWARE);
+        return -1;
+    }
+
+    return rc;
 }
 
 } // namespace net

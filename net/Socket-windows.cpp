@@ -76,6 +76,18 @@ bool bindToPort(int, Socket::Type, bool, int)
     Util::forcedExit(EX_SOFTWARE);
 }
 
+bool isUnrecoverableAcceptError(int)
+{
+    LOG_FTL("Accepting on a real listening socket is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
+int acceptConnection(int, struct sockaddr_in6&)
+{
+    LOG_FTL("Accepting on a real listening socket is not implemented for this platform.");
+    Util::forcedExit(EX_SOFTWARE);
+}
+
 } // namespace net
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

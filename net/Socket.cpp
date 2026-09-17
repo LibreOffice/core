@@ -1084,14 +1084,9 @@ std::shared_ptr<Socket> ServerSocket::accept()
         return nullptr; // Recoverable error, ignore to retry
 
     struct sockaddr_in6 clientInfo;
-    socklen_t addrlen = sizeof(clientInfo);
-    const int rc = Syscall::accept_cloexec_nonblock(getFD(), reinterpret_cast<struct sockaddr *>(&clientInfo), &addrlen);
+    const int rc = net::acceptConnection(getFD(), clientInfo);
     if (rc < 0)
-    {
-        if (isUnrecoverableAcceptError(errno))
-            Util::forcedExit(EX_SOFTWARE);
         return nullptr;
-    }
 #else
     const int rc = fakeSocketAccept4(getFD());
 #endif

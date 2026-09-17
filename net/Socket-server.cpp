@@ -78,43 +78,6 @@ bool StreamSocket::socketpair(const std::chrono::steady_clock::time_point creati
     return true;
 }
 
-bool ServerSocket::isUnrecoverableAcceptError(const int cause) const
-{
-    static constexpr const char * messagePrefix = "Failed to accept. (errno: ";
-    switch(cause)
-    {
-        case EINTR:
-        case EAGAIN:        // == EWOULDBLOCK
-        case ENETDOWN:
-        case EPROTO:
-        case ENOPROTOOPT:
-        case EHOSTDOWN:
-#ifdef ENONET
-        case ENONET:
-#endif
-        case EHOSTUNREACH:
-        case EOPNOTSUPP:
-        case ENETUNREACH:
-        case ECONNABORTED:
-        case ETIMEDOUT:
-        case EMFILE:
-        case ENFILE:
-        case ENOMEM:
-        case ENOBUFS:
-        {
-            LOG_DBG(messagePrefix << Util::symbolicErrno(cause) << ", " << std::strerror(cause)
-                                  << ')');
-            return false;
-        }
-        default:
-        {
-            LOG_FTL(messagePrefix << Util::symbolicErrno(cause) << ", " << std::strerror(cause)
-                                  << ')');
-            return true;
-        }
-    }
-}
-
 int Socket::getPid() const
 {
     int pid = Syscall::get_peer_pid(_fd);
@@ -142,7 +105,7 @@ std::shared_ptr<Socket> LocalServerSocket::accept()
     const int rc = Syscall::accept_cloexec_nonblock(getFD(), nullptr, nullptr);
     if (rc < 0)
     {
-        if (isUnrecoverableAcceptError(errno))
+        if (net::isUnrecoverableAcceptError(errno))
             Util::forcedExit(EX_SOFTWARE);
         return nullptr;
     }
