@@ -13461,9 +13461,12 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
                 // A line style of a theme carries the width and the dash of a line and leaves the
                 // colour to whoever points at it. A shape that defines no line takes the colour
                 // that the Diagram gives it as a line, while the width and the dash are from the style.
+                // The style names the line of the theme it wants by a number counted from one, and
+                // zero is what a shape drawn without any line carries, so leave that one alone.
                 LineProperties& rLineProperties(rShape->getLineProperties());
 
-                if (!rLineProperties.maLineFill.moFillType.has_value())
+                if (!rLineProperties.maLineFill.moFillType.has_value()
+                    && 0 != rShape->getShapeStyleRefs()[XML_lnRef].mnThemedIdx)
                 {
                     rLineProperties.maLineFill.moFillType = XML_solidFill;
                     rLineProperties.maLineFill.maFillColor = aLineColor;

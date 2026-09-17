@@ -15,6 +15,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -1219,6 +1220,42 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_cycleColors)
     // The arrows keep spreading evenly while the items cycle.
     CPPUNIT_ASSERT(std::includes(aSeenArrows.begin(), aSeenArrows.end(), aArrows.begin(),
                                  aArrows.end()));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_noLineWhereTheStyleGivesNone)
+{
+    // The file holds a diagram of type "Basic Process", whose items are separated by arrows.
+    // Its colors state a line color for the style label that the arrows carry, but the style
+    // itself asks for no line at all, and an arrow is drawn without one.
+    // The cached drawing of the diagram has been taken out of the file, so that the diagram
+    // is laid out and colored here rather than read back.
+    loadFromFile(u"BasicProcess.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+
+    sal_Int32 nWithoutText(0);
+    for (sal_Int32 i = 0; i < xSmartArt->getCount(); ++i)
+    {
+        uno::Reference<text::XText> xText(xSmartArt->getByIndex(i), uno::UNO_QUERY);
+        if (xText.is() && !xText->getString().isEmpty())
+            continue;
+
+        ++nWithoutText;
+        uno::Reference<beans::XPropertySet> xProps(xSmartArt->getByIndex(i), uno::UNO_QUERY_THROW);
+        drawing::LineStyle eLineStyle(drawing::LineStyle_NONE);
+        xProps->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
+
+        // Without the fix the color of the list was taken for a line on every shape, so the
+        // arrows and the shape behind the items came out with a white hairline around them.
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, eLineStyle);
+    }
+
+    // The three arrows and the shape behind the items.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nWithoutText);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
