@@ -1059,20 +1059,27 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
 
         if ( bPlacement )
         {
-            bool bIsFigureInline = false;
+            bool bIsInline = vcl::pdf::StructElement::TableHeader == eType
+                             || vcl::pdf::StructElement::TableData == eType;
             if (vcl::pdf::StructElement::Figure == eType)
             {
                 const SwFrame* pKeyFrame = static_cast<const SwFlyFrame&>(*pFrame).GetAnchorFrame();
                 if (const SwLayoutFrame* pUpperFrame = pKeyFrame->GetUpper())
                     if (pUpperFrame->GetType() == SwFrameType::Body)
-                        bIsFigureInline = true;
+                        bIsInline = true;
+            }
+            else if (vcl::pdf::StructElement::Formula == eType)
+            {
+                // a formula anchored in content is tagged inside its anchor paragraph, as
+                // character by painting in it and otherwise through CheckReopenTag
+                const RndStdIds eAnchorId(
+                    static_cast<const SwFlyFrame&>(*pFrame).GetFormat()->GetAnchor().GetAnchorId());
+                bIsInline = RndStdIds::FLY_AS_CHAR == eAnchorId
+                            || RndStdIds::FLY_AT_PARA == eAnchorId
+                            || RndStdIds::FLY_AT_CHAR == eAnchorId;
             }
 
-            eVal = vcl::pdf::StructElement::TableHeader == eType
-                || vcl::pdf::StructElement::TableData == eType
-                || bIsFigureInline
-                       ? vcl::pdf::PDFWriter::Inline
-                       : vcl::pdf::PDFWriter::Block;
+            eVal = bIsInline ? vcl::pdf::PDFWriter::Inline : vcl::pdf::PDFWriter::Block;
 
             mpPDFExtOutDevData->SetStructureAttribute( vcl::pdf::PDFWriter::Placement, eVal );
         }

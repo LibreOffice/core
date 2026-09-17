@@ -240,6 +240,57 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaAltFromSource)
     // the source where nobody described the formula, and the title where somebody did
     CPPUNIT_ASSERT_EQUAL(u"E=mc^2|Half of a|"_ustr, aAlts.makeStringAndClear());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFormulaPlacement)
+{
+    createSwDoc("formula-placement.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    OString aInALine;
+    OString aInAParagraph;
+    OString aOnThePage;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pType || pType->GetValue() != "Formula")
+            continue;
+
+        auto pAttributes
+            = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
+        CPPUNIT_ASSERT(pAttributes);
+        auto pPlacement = dynamic_cast<vcl::filter::PDFNameElement*>(
+            pAttributes->LookupElement("Placement"_ostr));
+        CPPUNIT_ASSERT(pPlacement);
+
+        // each formula names its own source, so the three are told apart by it
+        auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"_ostr));
+        CPPUNIT_ASSERT(pAlt);
+        const OUString aSource(vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt));
+        if (aSource == u"E=mc^2")
+            aInALine = pPlacement->GetValue();
+        else if (aSource == u"a over 2")
+            aInAParagraph = pPlacement->GetValue();
+        else if (aSource == u"b+1")
+            aOnThePage = pPlacement->GetValue();
+    }
+
+    // Without the fix these were Block, which makes a block level element of a Formula that the
+    // export tags inside a paragraph, and PAC 2026 calls such a Formula inappropriate
+    CPPUNIT_ASSERT_EQUAL("Inline"_ostr, aInALine);
+    CPPUNIT_ASSERT_EQUAL("Inline"_ostr, aInAParagraph);
+    // one anchored to the page is tagged under the document, where it is a block of its own
+    CPPUNIT_ASSERT_EQUAL("Block"_ostr, aOnThePage);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
