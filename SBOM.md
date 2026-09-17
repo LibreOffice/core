@@ -204,6 +204,50 @@ per-platform manifest digest. It is registry-agnostic; see section 8 of
 `docker/README` for the invocation and for how consumers verify with
 `cosign verify-attestation`.
 
+## Verifying a published image
+
+Anyone can check what we publish, with cosign and nothing else: no registry
+account, no Docker login, no access to our infrastructure. The public key is
+`docker/cosign.pub` in this repository, also reachable at
+`https://raw.githubusercontent.com/CollaboraOnline/online/master/docker/cosign.pub`.
+It is the key Collabora already signs its images with; the private half is a
+Jenkins credential and is not in the repository.
+
+    curl -sfLO https://raw.githubusercontent.com/CollaboraOnline/online/master/docker/cosign.pub
+
+    IMAGE=registry.opencode.de/bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk:26.04.4.1.1
+
+    # the image is signed by Collabora
+    cosign verify --key cosign.pub "$IMAGE"
+
+    # and carries the five attestations
+    cosign verify-attestation --key cosign.pub --type cyclonedx       "$IMAGE"
+    cosign verify-attestation --key cosign.pub --type spdxjson        "$IMAGE"
+    cosign verify-attestation --key cosign.pub --type slsaprovenance1 "$IMAGE"
+    cosign verify-attestation --key cosign.pub \
+        --type https://cyclonedx.org/vex "$IMAGE"
+    cosign verify-attestation --key cosign.pub \
+        --type https://www.schemastore.org/schemas/json/sarif-2.1.0.json "$IMAGE"
+
+**Name a per-platform reference.** Signatures and attestations attach to the
+digest of a platform manifest, so a multi-arch tag - whose digest is the index
+- has none of its own and fails with `no matching attestations`. The openDesk
+images are single-platform and work as written; for the multi-arch CODE images
+on Docker Hub use `collabora/code:latest-amd64` and its `-arm64` / `-ppc64`
+siblings.
+
+To read a document rather than just verify it: an attestation is an in-toto
+statement in a DSSE envelope, so the payload is base64 and the SBOM itself is
+the `predicate`.
+
+    cosign verify-attestation --key cosign.pub --type cyclonedx "$IMAGE" \
+      | jq -r '.payload | @base64d | fromjson | .predicate' > sbom.cdx.json
+
+That is an ordinary CycloneDX 1.6 file which the scanners above consume
+directly (`trivy sbom sbom.cdx.json`, `grype sbom:sbom.cdx.json`). Read it
+together with the VEX attestation: the scan reports raw findings, the VEX
+records which of them affect the product, and why.
+
 ## What a scan does not tell you
 
 Three ways a vulnerability scan of a correct, complete SBOM stays silent about
@@ -278,3 +322,4 @@ upstream's changelog.
 | `docker/from-packages/scripts/generate-vex.py` | VEX finding merge |
 | `docker/from-packages/scripts/publish.sh` | sign and attest a published image |
 | `docker/from-packages/vex/cool.vex.json` | VEX statements |
+| `docker/cosign.pub` | public key the published images are verified with |
