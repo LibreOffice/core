@@ -476,10 +476,7 @@ interface Window {
 		f: number,
 		g: number,
 	) => string;
-	// TODO: unoData should be: string | { textCommand: string; objectCommand: string }
-	// but in docdispatcher ads a unused `unosheet`. See also `ControlCommand` in
-	// Control.Interface.ts
-	getUNOCommand: (unoData: any) => string;
+	getUNOCommand: (unoData: UnoCommand) => string;
 	getColorPickerData: (type: string) => any;
 	L: any;
 	createWebSocket(url: string): SockInterface;

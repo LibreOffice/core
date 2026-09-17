@@ -990,7 +990,6 @@ class Dispatcher {
 				window.getUNOCommand({
 					textCommand: '.uno:LeftPara',
 					objectCommand: '.uno:ObjectAlignLeft',
-					unosheet: '.uno:AlignLeft',
 				}),
 			);
 		};
@@ -999,7 +998,6 @@ class Dispatcher {
 				window.getUNOCommand({
 					textCommand: '.uno:CenterPara',
 					objectCommand: '.uno:AlignCenter',
-					unosheet: '.uno:AlignHorizontalCenter',
 				}),
 			);
 		};
@@ -1008,7 +1006,6 @@ class Dispatcher {
 				window.getUNOCommand({
 					textCommand: '.uno:RightPara',
 					objectCommand: '.uno:ObjectAlignRight',
-					unosheet: '.uno:AlignRight',
 				}),
 			);
 		};

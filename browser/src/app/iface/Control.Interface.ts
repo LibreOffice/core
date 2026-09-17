@@ -26,12 +26,14 @@ interface OverlaysInterface {
 	[name: string]: string;
 }
 
+type UnoCommand = string | { textCommand: string; objectCommand: string };
+
 // deduced from _extractCommand()
 type ControlCommand =
 	| string
 	| {
-			uno?: string | { textCommand: string; objectCommand: string };
-			lockUno?: string | { textCommand: string; objectCommand: string };
+			uno?: UnoCommand;
+			lockUno?: UnoCommand;
 			unosheet?: string;
 			command?: string;
 			id?: string;
