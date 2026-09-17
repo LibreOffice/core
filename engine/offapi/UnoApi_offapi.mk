@@ -214,7 +214,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/i18n,\
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	LocaleCalendar \
-	LocaleCalendar2 \
 	LocaleData \
 	LocaleData2 \
 	NativeNumberSupplier \

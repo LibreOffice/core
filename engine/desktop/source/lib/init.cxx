@@ -156,7 +156,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
-#include <com/sun/star/i18n/LocaleCalendar2.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -9839,7 +9839,7 @@ static void preloadData()
     // (when loading dictionaries of just non-Asian locales). Creating a XCalendar of one Asian locale
     // will cheaply load this missing "others" locale library. Appending an Asian locale in
     // KIT_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
-    cpo::uno::Reference< css::i18n::XCalendar > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
+    cpo::uno::Reference< css::i18n::XCalendar > xCal = css::i18n::LocaleCalendar::create(comphelper::getProcessComponentContext());
     css::lang::Locale aAsianLocale = { u"hi"_ustr, u"IN"_ustr, {} };
     xCal->loadDefaultCalendar(aAsianLocale);
 

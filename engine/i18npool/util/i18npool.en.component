@@ -30,7 +30,6 @@
   <implementation name="com.sun.star.i18n.CalendarImpl"
     constructor="i18npool_CalendarImpl_get_implementation">
     <service name="com.sun.star.i18n.LocaleCalendar"/>
-    <service name="com.sun.star.i18n.LocaleCalendar2"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Calendar_ROC"
     constructor="i18npool_Calendar_ROC_get_implementation">

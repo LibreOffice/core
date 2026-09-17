@@ -20,7 +20,7 @@
 #include <sal/log.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <com/sun/star/i18n/LocaleCalendar2.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
@@ -33,7 +33,7 @@ CalendarWrapper::CalendarWrapper(
         :
         aEpochStart( Date( 1, 1, 1970 ) )
 {
-    xC = LocaleCalendar2::create(rxContext);
+    xC = LocaleCalendar::create(rxContext);
 }
 
 CalendarWrapper::~CalendarWrapper()

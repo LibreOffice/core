@@ -363,7 +363,7 @@ CalendarImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString >
 CalendarImpl::getSupportedServiceNames()
 {
-    return { u"com.sun.star.i18n.LocaleCalendar"_ustr, u"com.sun.star.i18n.LocaleCalendar2"_ustr };
+    return { u"com.sun.star.i18n.LocaleCalendar"_ustr };
 }
 
 }

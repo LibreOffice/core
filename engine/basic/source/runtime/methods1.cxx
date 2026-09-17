@@ -57,7 +57,7 @@
 
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/LocaleCalendar2.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 #include <memory>
@@ -71,7 +71,7 @@ using namespace cpo::uno;
 
 static Reference< XCalendar > const & getLocaleCalendar()
 {
-    static Reference< XCalendar > xCalendar = LocaleCalendar2::create(getProcessComponentContext());
+    static Reference< XCalendar > xCalendar = LocaleCalendar::create(getProcessComponentContext());
     static css::lang::Locale aLastLocale;
     static bool bNeedsReload = true;
 

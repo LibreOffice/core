@@ -46,4 +46,4 @@ excludelist:
     - svl/urihelper.hxx
     svl/source/numbers/zforfind.cxx:
     # Used in test code behind #ifdef
-    - com/sun/star/i18n/LocaleCalendar2.hpp
+    - com/sun/star/i18n/LocaleCalendar.hpp
