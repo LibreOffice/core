@@ -4663,6 +4663,36 @@ std::string DocumentBroker::getJailRoot() const
     return std::string();
 }
 
+void DocumentBroker::sendDocumentSettingsLive()
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (const auto& it : _sessions)
+    {
+        const std::shared_ptr<ClientSession>& session = it.second;
+        if (!session || session->isCloseFrame())
+            continue;
+
+        session->sendTextFrame(std::string("documentsettingslive: ") +
+                               (isDocumentSettingsLive(session) ? "true" : "false"));
+    }
+}
+
+bool DocumentBroker::isDocumentSettingsLive(
+    [[maybe_unused]] const std::shared_ptr<ClientSession>& session) const
+{
+#if MOBILEAPP
+    // One person, one document, and the shell applies the file as it writes
+    // it, so a change is always felt here.
+    return true;
+#else
+    // A change is felt here only when this user's configuration is the one the
+    // document is running with, and they are the only one on it: with anyone
+    // else here it stays as whoever opened it left it.
+    return _sessions.size() == 1 && session->areUserPresetsApplied();
+#endif
+}
+
 std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& session,
                                        std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo)
 {
@@ -4759,6 +4789,16 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         if (!_userConfigId.empty()) {
             session->sendTextFrame("userpresetconfigid: " + Uri::encode(_userConfigId));
         }
+
+        // Whether the document is running with this user's own configuration,
+        // which decides what the settings dialog has to explain when a change
+        // will not be felt here.
+        session->sendTextFrame(std::string("userpresetsapplied: ") +
+                               (session->areUserPresetsApplied() ? "true" : "false"));
+
+        // And whether a change made now is felt here at all, which depends on
+        // who else is on the document and so changes as people come and go.
+        sendDocumentSettingsLive();
 
 #if !MOBILEAPP
         // Surface this session into any /co/collab CollabBroker for the
@@ -5145,6 +5185,10 @@ void DocumentBroker::finalRemoveSession(const std::shared_ptr<ClientSession>& se
         // Remove. The caller must have a reference to the session
         // in question, lest we destroy from underneath them.
         _sessions.erase(sessionId);
+
+        // Whoever is left may now be alone, and a change they make would be
+        // felt here after all.
+        sendDocumentSettingsLive();
 
         LOG_TRC("Removed " << (readonly ? "" : "non-") << "readonly session [" << sessionId
                            << "] from docKey [" << _docKey << "] to have " << _sessions.size()

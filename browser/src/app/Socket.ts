@@ -1509,6 +1509,17 @@ class Socket {
 			app.userPresetConfigId = textMsg
 				.substring('userpresetconfigid:'.length)
 				.trim();
+		} else if (textMsg.startsWith('userpresetsapplied:')) {
+			app.userPresetsApplied =
+				textMsg.substring('userpresetsapplied:'.length).trim() === 'true';
+			this._map.fire('documentsettingsscope');
+		} else if (textMsg.startsWith('documentsettingslive:')) {
+			app.documentSettingsLive =
+				textMsg.substring('documentsettingslive:'.length).trim() === 'true';
+			// Sent again whenever someone joins or leaves, so a dialog that is
+			// already open is told rather than left on what was true when it
+			// was opened.
+			this._map.fire('documentsettingsscope');
 		} else if (textMsg.startsWith('viewsetting:')) {
 			const settingJSON = JSON.parse(
 				textMsg.substring('viewsetting:'.length + 1),

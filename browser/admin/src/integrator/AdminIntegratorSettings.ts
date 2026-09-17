@@ -35,6 +35,11 @@ interface Window {
 	versionHash?: string;
 	showLeftNav?: boolean;
 	scrollTarget?: string;
+	// False when this document is running with another user's document
+	// settings, because they opened it first.
+	userPresetsApplied?: boolean;
+	// False when a change made now would not be felt in this document.
+	documentSettingsLive?: boolean;
 	settingIframe?: SettingIframe;
 
 	WordBook?: WordBook;
@@ -202,6 +207,11 @@ const onMessage = (e) => {
 					'{"MessageId":"settings-show"}',
 					parentTargetOrigin(),
 				);
+			} else if (data.MessageId === 'settings-scope') {
+				// Someone joined or left the document while this was open.
+				window.userPresetsApplied = data.user_presets_applied !== false;
+				window.documentSettingsLive = data.document_settings_live !== false;
+				window.settingIframe?.refreshSettingsScope();
 			} else if (data.MessageId === 'settings-save-all') {
 				const settingIframe = window.settingIframe as SettingIframe;
 				if (settingIframe) {
@@ -1158,6 +1168,11 @@ class SettingIframe {
 		this.wordbook = window.WordBook;
 	}
 
+	/// Called when the parent says the document's session count changed.
+	public refreshSettingsScope(): void {
+		this.updateNextDocumentNote();
+	}
+
 	public async uploadXcuFile(filename: string, content: string): Promise<void> {
 		const file = new File([content], filename, { type: 'application/xml' });
 		await this.uploadFile(this.PATH.XcuUpload(), file);
@@ -1217,6 +1232,12 @@ class SettingIframe {
 			read('disableAiSettings', 'disable_ai_settings') === 'true';
 		window.showLeftNav = read('showLeftNav', 'show_left_nav') === 'true';
 		window.scrollTarget = read('scrollTarget', 'scroll_target');
+		// Absent means yes: a host that does not send it is one where the
+		// question does not arise.
+		window.userPresetsApplied =
+			read('userPresetsApplied', 'user_presets_applied') !== 'false';
+		window.documentSettingsLive =
+			read('documentSettingsLive', 'document_settings_live') !== 'false';
 		try {
 			window.sentenceCheckingPackages = JSON.parse(
 				read('sentenceChecking', 'sentence_checking') || '[]',
@@ -3880,8 +3901,56 @@ class SettingIframe {
 				_('Choose what the sentence checker looks for as you type.'),
 			),
 		);
+		section.appendChild(this.createNextDocumentNote());
 		for (const panel of panels) section.appendChild(panel);
 		return section;
+	}
+
+	/**!
+	 * Said only when a change would not be felt in the document in front of
+	 * them, which is the case that needs explaining. Alone with a document
+	 * running on their own settings they get no note, because saving applies
+	 * the change here and now.
+	 *
+	 * There are two ways to be short of that. A document opened by another
+	 * session is not running on this user's settings at all. A document that
+	 * is running on them, but is open in more than one place, would have them
+	 * changed under whoever else is there, so it waits.
+	 *
+	 * Neither text says who the others are: another window of this user's own
+	 * is a session like any other, and the dialog cannot tell the two apart.
+	 */
+	private createNextDocumentNote(): HTMLElement {
+		const note = this.createParagraph('');
+		note.className = 'settings-scope-note';
+		this.updateNextDocumentNote();
+		return note;
+	}
+
+	/**!
+	 * People join and leave while the dialog is open, so the note is written
+	 * again whenever the parent says the answer has changed. Every note in
+	 * the page is written: the sections are built more than once while the
+	 * dialog fills in, and a note left over from an earlier build must not go
+	 * on saying the opposite of the one beside it.
+	 */
+	private updateNextDocumentNote(): void {
+		const text =
+			window.userPresetsApplied === false
+				? _(
+						'This document is using the document settings it was opened with. What you change here applies to the next document you open.',
+					)
+				: _(
+						'This document is open in more than one window, so what you change here applies to the next document you open rather than this one.',
+					);
+		const hidden = window.documentSettingsLive !== false;
+
+		document
+			.querySelectorAll<HTMLElement>('.settings-scope-note')
+			.forEach((note) => {
+				note.textContent = text;
+				note.hidden = hidden;
+			});
 	}
 
 	private createFieldsetFor(
@@ -3977,6 +4046,7 @@ class SettingIframe {
 						xcuContainer.id = 'xcu-section';
 						xcuContainer.classList.add('section');
 						const xcuSection = this.xcuEditor.createXcuEditorUI(xcuContainer);
+						xcuSection.appendChild(this.createNextDocumentNote());
 						this.appendXcuDebugUploadControls(xcuContainer, data);
 
 						this._xcuSection = this.mountConfigSection(

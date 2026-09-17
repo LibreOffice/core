@@ -45,6 +45,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 	addHooks: function (): void {
 		window.L.DomEvent.on(window, 'message', this.onMessage, this);
 		this._map.on('commandvalues', this.onCommandValues, this);
+		this._map.on('documentsettingsscope', this.sendSettingsScope, this);
 		// Asked for once the document is up, so the answer is in hand by the
 		// time anyone opens the dialog.
 		this._map.on('doclayerinit', this.askForSentenceChecking, this);
@@ -53,6 +54,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 	removeHooks: function (): void {
 		window.L.DomEvent.off(window, 'message', this.onMessage, this);
 		this._map.off('commandvalues', this.onCommandValues, this);
+		this._map.off('documentsettingsscope', this.sendSettingsScope, this);
 		this._map.off('doclayerinit', this.askForSentenceChecking, this);
 	},
 
@@ -129,6 +131,11 @@ window.L.Map.Settings = window.L.Handler.extend({
 			{
 				sentence_checking: JSON.stringify(app.sentenceCheckingPackages || []),
 			},
+			// Whether the document settings this document is running with are
+			// this user's own, and whether a change made now would be felt
+			// here at all, which is what the dialog explains.
+			{ user_presets_applied: app.userPresetsApplied !== false },
+			{ document_settings_live: app.documentSettingsLive !== false },
 		];
 
 		const options = {
@@ -180,6 +187,18 @@ window.L.Map.Settings = window.L.Handler.extend({
 			},
 			this,
 		);
+	},
+
+	// People come and go while the dialog is open, and what a change here
+	// would reach changes with them. Tell the dialog, so its note is about
+	// the document as it is now.
+	sendSettingsScope: function (): void {
+		if (!this._iframeDialog || !this._iframeDialog.hasLoaded()) return;
+		this._iframeDialog.postMessage({
+			MessageId: 'settings-scope',
+			user_presets_applied: app.userPresetsApplied !== false,
+			document_settings_live: app.documentSettingsLive !== false,
+		});
 	},
 
 	// The document types browsersetting.json groups the per-document view toggles

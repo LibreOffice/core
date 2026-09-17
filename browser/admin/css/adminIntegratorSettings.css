@@ -969,3 +969,14 @@ ul {
 	border-color: var(--settings-btn-primary);
 	box-shadow: 0 0 0 calc(var(--default-grid-baseline) / 2) rgba(0, 120, 212, 0.1);
 }
+
+/* Said when the document is running with someone else's settings, so a
+   change here is saved but will not show until the next document. */
+.settings-scope-note {
+  margin: 0 0 1rem;
+  padding: 8px 12px;
+  border-inline-start: 3px solid var(--settings-btn-primary);
+  background-color: var(--settings-background-hover, var(--settings-background));
+  color: var(--settings-text);
+  font-size: 0.9rem;
+}

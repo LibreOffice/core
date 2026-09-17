@@ -233,6 +233,12 @@ interface AppInterface {
 	languages: Array<{ translated: string; neutral: string; iso: string }>;
 	// The sentence checking rule packages the engine reports as installed.
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
+	// Whether this document is running with this user's own document
+	// settings. It is running with whoever opened it first's.
+	userPresetsApplied?: boolean;
+	// Whether a document settings change made now would be felt in this
+	// document, rather than waiting for the next one to be opened.
+	documentSettingsLive?: boolean;
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;
 	impressTableStyles: ImpressTableStylesService;

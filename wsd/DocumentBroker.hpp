@@ -800,6 +800,13 @@ public:
     // time since construction
     void timeoutNotLoaded(std::chrono::steady_clock::time_point now);
 
+    /// Tells every session whether a document settings change it makes now would
+    /// be felt in this document. It depends on who else is here, so it is sent
+    /// again as people come and go.
+    void sendDocumentSettingsLive();
+
+    bool isDocumentSettingsLive(const std::shared_ptr<ClientSession>& session) const;
+
 #if !MOBILEAPP
     /// Reads this user's settings into the jail again and has the kit apply them,
     /// so a change made in the dialog takes hold without reopening the document.

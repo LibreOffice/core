@@ -28,6 +28,7 @@
 #include <ctime>
 #include <set>
 #include <string>
+#include <vector>
 
 using namespace std::literals;
 
@@ -321,6 +322,10 @@ class UnitSecondUserPresets : public WopiTestServer
     std::set<std::string> _settingsAsked;
     int _installs = 0;
     int _viewsLoaded = 0;
+    /// The userpresetsapplied answers the clients were given.
+    std::vector<std::string> _presetsApplied;
+    /// And the documentsettingslive ones, which change as people arrive.
+    std::vector<std::string> _settingsLive;
 
 public:
     UnitSecondUserPresets()
@@ -375,6 +380,30 @@ public:
         return Base::handleHttpGetRequest(request, socket);
     }
 
+    /// The dialog is told whether the document is running with this user's
+    /// own settings, so it can say that a change will only show in the next
+    /// document rather than leave them wondering.
+    bool onFilterSendWebSocketMessage(std::string_view data, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        constexpr std::string_view prefix = "userpresetsapplied: ";
+        if (data.rfind(prefix, 0) == 0)
+        {
+            const std::string value(data.substr(prefix.size()));
+            TST_LOG("Client told userpresetsapplied: " << value);
+            _presetsApplied.push_back(value);
+        }
+
+        constexpr std::string_view livePrefix = "documentsettingslive: ";
+        if (data.rfind(livePrefix, 0) == 0)
+        {
+            const std::string value(data.substr(livePrefix.size()));
+            TST_LOG("Client told documentsettingslive: " << value);
+            _settingsLive.push_back(value);
+        }
+        return false;
+    }
+
     void onDocBrokerPresetsInstallEnd(bool success) override
     {
         ++_installs;
@@ -412,6 +441,19 @@ public:
         LOK_ASSERT_MESSAGE("both users' settings should have been fetched",
                            _settingsAsked.count("first") == 1
                                && _settingsAsked.count("second") == 1);
+
+        // And each is told which of the two they are, so the dialog can say
+        // what a change will do.
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), _presetsApplied.size());
+        LOK_ASSERT_EQUAL(std::string("true"), _presetsApplied[0]);
+        LOK_ASSERT_EQUAL(std::string("false"), _presetsApplied[1]);
+
+        // Alone, the first user's change would have been felt here; once the
+        // second arrives it would not, and both are told so.
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), _settingsLive.size());
+        LOK_ASSERT_EQUAL(std::string("true"), _settingsLive[0]);
+        LOK_ASSERT_EQUAL(std::string("false"), _settingsLive[1]);
+        LOK_ASSERT_EQUAL(std::string("false"), _settingsLive[2]);
 
         TRANSITION_STATE(_phase, Phase::Done);
         passTest("the second user's presets are not installed");
