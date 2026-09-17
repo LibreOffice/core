@@ -81,7 +81,7 @@ void removeExportTempDirectory(const std::string& filePath)
     std::error_code errorCode;
     const std::string dir =
         std::filesystem::weakly_canonical(std::filesystem::path(filePath).parent_path(), errorCode)
-            .string();
+            .string<char>();
 
     std::string tempRoot = FileUtil::getSysTempDirectoryPath();
     while (tempRoot.size() > 1 && tempRoot.back() == '/')

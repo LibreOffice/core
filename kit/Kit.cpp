@@ -3703,7 +3703,8 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
     // No chroot, no jail. Use a tmp dir that the embedding app process can
     // read for the deferred picker step.
     std::error_code ec;
-    const std::string baseDir = std::filesystem::temp_directory_path(ec).string() + "/cool-export/";
+    const std::string baseDir = std::filesystem::temp_directory_path(ec).string<char>()
+        + "/cool-export/";
     std::filesystem::create_directories(baseDir, ec);
     if (ec)
     {
