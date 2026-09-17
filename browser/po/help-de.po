@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-06-27 18:12+0000\n"
-"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
+"PO-Revision-Date: 2026-09-17 03:07+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "help/de/>\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -100,11 +100,11 @@ msgstr "Drucken"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Suchen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Suchen und ersetzen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
@@ -151,13 +151,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ende</kbd>"
+"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
@@ -167,20 +166,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ende</kbd>"
+"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1374,29 +1372,27 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Wählt die gesamte Spalte der aktuellen Zelle aus."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Strg</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tabulator</kbd>"
+"<kbd>Strg</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Leertaste</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Wählt die gesamte Zeile der aktuellen Zelle aus."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tabulator</kbd>"
+"<kbd>Umschalt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>Leertaste</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
@@ -1664,7 +1660,7 @@ msgstr "Öffnen, Schließen, Speichern, Drucken und Herunterladen von Dokumenten
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Dokumente öffnen, schließen, speichern und drucken"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:481-5
