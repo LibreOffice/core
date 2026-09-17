@@ -230,10 +230,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 aBuffer.append("--args ");
             }
 #endif
-            if( nFlags != 42 )
-                escapeForShell(aBuffer, OUStringToOString(aParameter, osl_getThreadTextEncoding()));
-            else
-                aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
+            escapeForShell(aBuffer, OUStringToOString(aParameter, osl_getThreadTextEncoding()));
         }
     }
 
