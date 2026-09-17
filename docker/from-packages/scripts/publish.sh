@@ -17,7 +17,7 @@
 #   - SLSA provenance v1                   (built from git metadata)
 #
 # Usage:
-#   publish.sh [-k cosign-key-ref] [-m manifest-list-tag] [-n] image-ref...
+#   publish.sh [-k cosign-key-ref] [-m manifest-list-tag] [-n] [-T] image-ref...
 #
 #   -k  cosign key reference: a file path, env://COSIGN_KEY, or a KMS URI
 #       (default: env://COSIGN_KEY; COSIGN_PASSWORD is honoured by cosign).
@@ -27,6 +27,11 @@
 #   -m  additionally assemble the given refs into a multi-arch manifest list
 #       under this tag (docker buildx imagetools create) and push it
 #   -n  no-push: the refs are already pushed, only sign and attest
+#   -T  do not record the signatures in the public transparency log. By
+#       default they are recorded, like the signatures the publishing jobs
+#       make themselves, so that 'cosign verify-attestation' works without
+#       further flags; use this for a private registry, an offline run or a
+#       rehearsal, and verify with --insecure-ignore-tlog=true.
 #
 # Consumers verify with:
 #   cosign verify              --key docker/cosign.pub <ref>
@@ -42,11 +47,13 @@ VEX_FILE="$SCRIPT_DIR/../vex/cool.vex.json"
 KEY="env://COSIGN_KEY"
 MANIFEST_TAG=
 PUSH=yes
-while getopts k:m:nh opt; do
+NO_TLOG=
+while getopts k:m:nTh opt; do
     case "$opt" in
         k) KEY="$OPTARG" ;;
         m) MANIFEST_TAG="$OPTARG" ;;
         n) PUSH= ;;
+        T) NO_TLOG=yes ;;
         *) usage ;;
     esac
 done
@@ -108,7 +115,10 @@ extract_sboms() {
 # without the OCI referrers API can serve. cosign >= 3 defaults to the new
 # sigstore bundle format and an implicit signing config, so both have to be
 # switched off there; cosign 2.x has neither flag and behaves this way anyway.
-COSIGN_FLAGS="--yes --tlog-upload=false"
+COSIGN_FLAGS="--yes"
+if [ -n "$NO_TLOG" ]; then
+    COSIGN_FLAGS="$COSIGN_FLAGS --tlog-upload=false"
+fi
 if cosign sign --help 2>&1 | grep -q use-signing-config; then
     COSIGN_FLAGS="$COSIGN_FLAGS --use-signing-config=false --new-bundle-format=false"
 fi
@@ -236,7 +246,7 @@ done
 # index, whose digest carries neither, so verification names a platform.
 echo "done. verify a per-platform reference, not a multi-arch tag:"
 for ref in "$@"; do
-    echo "  cosign verify --key docker/cosign.pub $ref"
-    echo "  cosign verify-attestation --key docker/cosign.pub --type cyclonedx $ref"
+    echo "  cosign verify --key docker/cosign.pub${NO_TLOG:+ --insecure-ignore-tlog=true} $ref"
+    echo "  cosign verify-attestation --key docker/cosign.pub${NO_TLOG:+ --insecure-ignore-tlog=true} --type cyclonedx $ref"
     break
 done
