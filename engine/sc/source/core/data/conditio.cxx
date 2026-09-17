@@ -1609,19 +1609,23 @@ void ScConditionEntry::CalcAll()
 {
     if (pFCell1 || pFCell2 || xRelRefCells1 || xRelRefCells2)
     {
+        // These cells are interpreted out of the sheets and nothing refers to
+        // them, so a broadcast at their position would announce a change to an
+        // address whose content did not change. Marking them dirty is enough,
+        // Interpret() reads them through IsValue() which interprets on demand.
         if (pFCell1)
-            pFCell1->SetDirty();
+            pFCell1->SetDirtyVar();
         if (xRelRefCells1)
         {
             for (auto& rEntry : *xRelRefCells1)
-                rEntry.second->SetDirty();
+                rEntry.second->SetDirtyVar();
         }
         if (pFCell2)
-            pFCell2->SetDirty();
+            pFCell2->SetDirtyVar();
         if (xRelRefCells2)
         {
             for (auto& rEntry : *xRelRefCells2)
-                rEntry.second->SetDirty();
+                rEntry.second->SetDirtyVar();
         }
         pCondFormat->DoRepaint();
     }
