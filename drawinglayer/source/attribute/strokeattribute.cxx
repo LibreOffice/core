@@ -36,6 +36,21 @@ namespace drawinglayer::attribute
             :   maDotDashArray(std::move(rDotDashArray)),
                 mfFullDotDashLen(fFullDotDashLen)
             {
+                // tdf#152997 - duplicate an odd length dash array in order to meet the spec.
+                // An odd-length array will be drawn as one dash spanning the entire path. The
+                // specifications under https://www.w3.org/TR/svg-strokes/#StrokeDashing state:
+                // "If the list has an odd number of values, then it is repeated to yield an
+                // even number of values. Thus, the rendering behavior of stroke-dasharray: 5,3,2
+                // is equivalent to stroke-dasharray: 5,3,2,5,3,2."
+                if (maDotDashArray.size() % 2 == 1)
+                {
+                    const std::vector<double> aOriginal(maDotDashArray);
+                    maDotDashArray.insert(maDotDashArray.end(), aOriginal.begin(), aOriginal.end());
+
+                    // Increase the length accordingly
+                    if (0.0 != mfFullDotDashLen)
+                        mfFullDotDashLen *= 2.0;
+                }
             }
 
             ImpStrokeAttribute()
