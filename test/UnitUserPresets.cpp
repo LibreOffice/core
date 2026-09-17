@@ -449,10 +449,106 @@ public:
     }
 };
 
+/// A user alone on a document asks for their settings to be read again, which
+/// is what the dialog does after writing them: a document reads them when it
+/// opens, so without this a change waits for the next one.
+class UnitLoneUserReloadsPresets : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitInstall, Reload, WaitReload, Done) _phase;
+
+    int _installs = 0;
+
+public:
+    UnitLoneUserReloadsPresets()
+        : Base("UnitLoneUserReloadsPresets")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI()
+                          + "/wopi/settings/userconfig.json?testname=UnitLoneUserReloadsPresets";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", "lonestamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        if (uriReq.getPath() == "/wopi/settings/userconfig.json")
+        {
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("{\"kind\":\"user\"}", "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    void onDocBrokerPresetsInstallEnd(bool success) override
+    {
+        ++_installs;
+        TST_LOG("onDocBrokerPresetsInstallEnd: success=" << success << " install #" << _installs);
+        LOK_ASSERT_MESSAGE("the presets should install", success);
+
+        if (_installs < 2)
+            return;
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitReload);
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("a lone session has its settings read again");
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>&) override
+    {
+        if (_phase != Phase::WaitInstall)
+            return;
+
+        LOK_ASSERT_EQUAL(1, _installs);
+        TRANSITION_STATE(_phase, Phase::Reload);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitInstall);
+                TST_LOG("Opening the document");
+                initWebsocket("/wopi/files/0?access_token=lone");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Reload:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitReload);
+                TST_LOG("The settings dialog has saved, so ask for them again");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "reloadconfig");
+                break;
+            }
+            case Phase::WaitInstall:
+            case Phase::WaitReload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[4]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
-                             new UnitSecondUserPresets(), nullptr };
+    return new UnitBase*[5]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
+                             new UnitSecondUserPresets(), new UnitLoneUserReloadsPresets(),
+                             nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

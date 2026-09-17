@@ -1788,8 +1788,10 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         auto const userExtensionsDir = Poco::Path(userExtensionsBase, Uri::encode(_userConfigId));
         Poco::File(Poco::Path(userExtensionsDir, "extensions")).createDirectories();
 
+        _userSettingsUri = userSettingsUri;
         asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath,
                             {{"extensions", userExtensionsDir.toString()}});
+        session->setUserPresetsApplied(true);
     }
 
     session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty());
@@ -2360,20 +2362,68 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
     return viewSettingsString;
 }
 
+void DocumentBroker::reinstallUserPresets(const std::shared_ptr<ClientSession>& session)
+{
+    ASSERT_CORRECT_THREAD();
+
+    // One document is one kit and one configuration. Re-reading it is only
+    // this user's to ask for while they are alone on the document: with anyone
+    // else here the configuration in force is whoever opened it's, and taking
+    // it out from under them mid-session would be a worse surprise than
+    // waiting for the next document.
+    if (_sessions.size() != 1)
+    {
+        LOG_DBG("Not re-reading the settings for [" << session->getId() << "]: the document has "
+                                                    << _sessions.size() << " sessions");
+        return;
+    }
+
+    if (!session->areUserPresetsApplied() || _userConfigId.empty())
+    {
+        LOG_DBG("Not re-reading the settings for [" << session->getId()
+                                                    << "]: none were installed for this session");
+        return;
+    }
+
+    if (_userSettingsUri.empty())
+        return;
+
+    const std::string jailPresetsPath = FileUtil::buildLocalPathToJail(
+        COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
+
+    LOG_DBG("Re-reading the settings of [" << session->getId() << "] into the jail");
+    asyncInstallPresets(session, _userConfigId, _userSettingsUri, jailPresetsPath, {},
+                        /*onlyWhileAlone=*/true);
+}
+
 void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                                          const std::string& configId,
                                          const std::string& userSettingsUri,
                                          const std::string& presetsPath,
-                                         std::map<std::string, std::string> groupOverridePath)
+                                         std::map<std::string, std::string> groupOverridePath,
+                                         bool onlyWhileAlone)
 {
-    auto installFinishedCB =
-        [selfWeak = weak_from_this(), this, session, userSettingsUri, presetsPath](bool success)
+    auto installFinishedCB = [selfWeak = weak_from_this(), this, session, userSettingsUri,
+                              presetsPath, onlyWhileAlone](bool success)
     {
         std::shared_ptr<DocumentBroker> selfLifecycle = selfWeak.lock();
         if (!selfLifecycle)
             return;
 
         loadTimings().record("presetsInstallEnd");
+
+        // The fetch went to the host and came back, and a view can have joined
+        // while it was away. What was asked for alone is applied alone: the
+        // files are in the jail either way, but the kit is not told to read
+        // them under somebody else's document.
+        if (success && onlyWhileAlone && _sessions.size() != 1)
+        {
+            LOG_DBG("Not applying the settings read for ["
+                    << session->getId() << "]: the document now has " << _sessions.size()
+                    << " sessions");
+            UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerPresetsInstallEnd(success));
+            return;
+        }
 
         if (success)
         {

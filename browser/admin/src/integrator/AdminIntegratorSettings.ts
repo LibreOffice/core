@@ -105,6 +105,10 @@ interface AIProvider {
 interface SaveAllResult {
 	aiJustConfigured: boolean;
 	aiKeyMissing: boolean;
+	// Whether the document settings were written. A document reads those when
+	// it opens, so the one in front of the user can only take them by being
+	// told to read them again.
+	documentSettings: boolean;
 	// The view settings as the user entered them, captured before the upload
 	// re-fetch redacts the in-memory copy. Applied to the live session so a
 	// freshly entered secret is not lost.
@@ -212,6 +216,7 @@ const onMessage = (e) => {
 								browserSettings: result.browserSettings,
 								aiJustConfigured: result.aiJustConfigured,
 								aiKeyMissing: result.aiKeyMissing,
+								documentSettings: result.documentSettings,
 							}),
 							parentTargetOrigin(),
 						);
@@ -1113,8 +1118,10 @@ class SettingIframe {
 		}
 
 		// Document settings (XCU)
+		let documentSettings = false;
 		if (this.xcuEditor) {
 			saves.push(this.xcuEditor.generateXcuAndUpload());
+			documentSettings = true;
 		}
 
 		// View settings
@@ -1127,7 +1134,13 @@ class SettingIframe {
 
 		await Promise.all(saves);
 
-		return { aiJustConfigured, aiKeyMissing, viewSettings, browserSettings };
+		return {
+			aiJustConfigured,
+			aiKeyMissing,
+			documentSettings,
+			viewSettings,
+			browserSettings,
+		};
 	}
 
 	init(): void {

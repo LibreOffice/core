@@ -801,11 +801,20 @@ public:
     void timeoutNotLoaded(std::chrono::steady_clock::time_point now);
 
 #if !MOBILEAPP
+    /// Reads this user's settings into the jail again and has the kit apply them,
+    /// so a change made in the dialog takes hold without reopening the document.
+    /// Only while they are the one session: see the body.
+    void reinstallUserPresets(const std::shared_ptr<ClientSession>& session);
+
+    /// Fetches this user's configuration from the host into the jail and asks
+    /// the kit to read it. With onlyWhileAlone the result is dropped unless the
+    /// document still has the one session it had when the fetch began.
     void asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
                              const std::string& configId,
                              const std::string& userSettingsUri,
                              const std::string& presetsPath,
-                             std::map<std::string, std::string> groupOverridePath);
+                             std::map<std::string, std::string> groupOverridePath,
+                             bool onlyWhileAlone = false);
 
     static void getBrowserSettingSync(const std::shared_ptr<ClientSession>& session,
                                       const std::string& userSettingsUri);
@@ -2056,6 +2065,8 @@ private:
     // configId for the user-level preset stream; empty when no integrator userSettingsUri is in
     // play:
     std::string _userConfigId;
+    /// Where this document's configuration was read from, so it can be read again.
+    std::string _userSettingsUri;
 
     std::shared_ptr<ChildProcess> _childProcess;
 

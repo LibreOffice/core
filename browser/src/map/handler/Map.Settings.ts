@@ -225,6 +225,14 @@ window.L.Map.Settings = window.L.Handler.extend({
 			this._iframeDialog.postMessage(data);
 		} else if (data.MessageId === 'settings-save-complete') {
 			this.removeIframe();
+			// A document reads the document settings when it opens, so ask the
+			// server to read them again. It does that only when this is the
+			// one session on the document: with anyone else on it, the
+			// settings in force are whoever opened it's and pulling them out
+			// from under the others would be worse than waiting. The apps
+			// apply the file as the shell writes it and have no such command.
+			if (data.documentSettings && !window.ThisIsAMobileApp)
+				app.socket.sendMessage('reloadconfig');
 			if (data.browserSettings) this.applyBrowserSettings(data.browserSettings);
 			// updateviewsettings applies these to the session (e.g. AI credentials
 			// so the AI assistant can authenticate). The apps persist settings

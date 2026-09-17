@@ -234,6 +234,14 @@ public:
         return _userSettingsPersistenceAvailable;
     }
 
+    /// True when the configuration this document is running with is this
+    /// user's own. One document is one kit and one configuration, installed
+    /// for the session that opened it, so a later joiner's settings are saved
+    /// but take effect only in a document they open themselves.
+    void setUserPresetsApplied(bool bApplied) { _userPresetsApplied = bApplied; }
+
+    bool areUserPresetsApplied() const { return _userPresetsApplied; }
+
     void setUserExtraInfo(const std::string& userExtraInfo) { _userExtraInfo = userExtraInfo; }
 
     void setUserPrivateInfo(const std::string& userPrivateInfo) { _userPrivateInfo = userPrivateInfo; }
@@ -509,6 +517,7 @@ private:
     /// Defaults false: batch/convert brokers that skip
     /// updateSessionWithWopiInfo inherit a safe "no persistence" answer.
     bool _userSettingsPersistenceAvailable = false;
+    bool _userPresetsApplied = false;
 
     /// True if we have been disconnected.
     std::atomic<bool> _disconnected;

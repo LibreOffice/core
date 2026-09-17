@@ -1693,7 +1693,16 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         // On the desktop apps this is how the native settings reach the session.
         return handleUpdateViewSettings(firstLine);
     }
+
 #if !MOBILEAPP
+    else if (tokens.equals(0, "reloadconfig"))
+    {
+        // The settings dialog has just written this user's document settings.
+        // They are read when a document opens, so the document in front of
+        // them is still running with what it read then. The apps have a path
+        // of their own for this, taken when the shell writes the file.
+        docBroker->reinstallUserPresets(client_from_this());
+    }
     else if (tokens.equals(0, "routetokensanitycheck"))
     {
         Admin::instance().routeTokenSanityCheck();
