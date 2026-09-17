@@ -2284,7 +2284,11 @@ SwXText::convertToSwTable(
             {
                 static constexpr auto vDenylist = frozen::make_unordered_set<std::u16string_view>({
                     u"BottomBorder",
+                    u"CellInteropGrabBag",
                     u"CharAutoKerning",
+                    u"CharColor",
+                    u"CharComplexColor",
+                    u"CharFontFamily",
                     u"CharFontName",
                     u"CharFontNameAsian",
                     u"CharFontNameComplex",
@@ -2300,6 +2304,8 @@ SwXText::convertToSwTable(
                     u"ParaAdjust",
                     u"ParaBottomMargin",
                     u"ParaIsHyphenation",
+                    u"ParaKeepTogether",
+                    u"ParaLastLineAdjust",
                     u"ParaLineSpacing",
                     u"ParaOrphans",
                     u"ParaTopMargin",
