@@ -96,6 +96,34 @@ CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStyleAliasAsPreviewName)
     CPPUNIT_ASSERT_MESSAGE("Character style preview is blank", lcl_HasContent(aPreview));
 }
 
+// A document lists Standard under the name shown in the UI, Default Paragraph
+// Style, while the seeded default styles list it under its programmatic name.
+// Both must end up as one entry.
+CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testDefaultStyleNotListedTwice)
+{
+    loadFromFile(u"nospacing.docx");
+    SfxObjectShell* pDocShell = SfxObjectShell::Current();
+    CPPUNIT_ASSERT(pDocShell);
+
+    // seeded the way StylesPreviewToolBoxControl does it, with the display name
+    StylePreviewList aDefaults{ { u"Standard"_ustr, u"Default Paragraph Style"_ustr,
+                                  SfxStyleFamily::Para },
+                                { u"Heading 1"_ustr, u"Heading 1"_ustr, SfxStyleFamily::Para } };
+
+    const StylePreviewList aStyles = StylesPreviewWindow_Base::GetStyleList(pDocShell, aDefaults);
+
+    const auto nShown
+        = std::count_if(aStyles.begin(), aStyles.end(), [](const StylePreviewDescriptor& r) {
+              return r.translatedName == "Default Paragraph Style";
+          });
+    // Without the fix the document entry and the seeded default were both kept.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), static_cast<sal_Int32>(nShown));
+
+    // The style the document does not recommend stays out.
+    CPPUNIT_ASSERT_MESSAGE("No Spacing is not a quick style here",
+                           !lcl_HasStyle(aStyles, u"No Spacing"));
+}
+
 // The document sets the DOCX style pane filter to "Recommended" (visibleStyles).
 // The preview then lists the recommended (qFormat) styles and hides plain custom
 // ones that are neither recommended nor otherwise selected.

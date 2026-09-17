@@ -736,12 +736,19 @@ OUString lcl_GetStyleAlias(const SfxStyleSheetBase& rStyle)
 inline void lcl_AppendStyle(StylePreviewList& rAllStyles, const OUString& rName,
                             const OUString& rDisplayName, SfxStyleFamily eFamily)
 {
-    const auto aFound = std::find_if(rAllStyles.begin(), rAllStyles.end(),
-                                     [&rName, eFamily](const StylePreviewDescriptor& element) {
-                                         return element.eFamily == eFamily
-                                                && (element.commonName == rName
-                                                    || element.translatedName == rName);
-                                     });
+    // The same style reaches us under its programmatic name and under the name
+    // shown in the UI, because the document lists it one way and the default
+    // styles the other. Standard is shown as Default Paragraph Style, so
+    // matching only the programmatic name let it through twice. Compare both
+    // names we were given against both names the entry carries.
+    const auto aFound
+        = std::find_if(rAllStyles.begin(), rAllStyles.end(),
+                       [&rName, &rDisplayName, eFamily](const StylePreviewDescriptor& element) {
+                           return element.eFamily == eFamily
+                                  && (element.commonName == rName || element.translatedName == rName
+                                      || element.commonName == rDisplayName
+                                      || element.translatedName == rDisplayName);
+                       });
 
     if (aFound == rAllStyles.end())
         rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rDisplayName, eFamily });
