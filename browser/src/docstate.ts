@@ -16,6 +16,11 @@
 		* var cellFillSection = new app.definitions.CellFillMarkerSection();
 */
 (window.app as any) = {
+	// The sequence number for the next input message, see app.file.inputSequence.
+	nextInputSequence(): number {
+		this.file.inputSequence += 1;
+		return this.file.inputSequence;
+	},
 	/*
 	 * These are from <vcl/keycodes.h>. Correspond to the published
 	 * com::sun::star::awt::KeyModifier constants, left-shifted by 12.
@@ -117,6 +122,9 @@
 			rectangle: null, // SimpleRectangle.
 			logical: null, // { paragraph, index } once a cursor message carries it.
 		},
+		// The sequence number of the newest key, mouse, textinput or removetextcontext message sent
+		// to the server, 0 before any was sent.
+		inputSequence: 0,
 		fileBasedView: false, // (draw-impress only) Default is false. For read-only documents, user can view all parts at once. In that case, this variable is set to "true".
 		writer: {
 			pageRectangleList: [], // Array of arrays: [x, y, w, h] (as usual) // twips only. Pixels will be calculated on the fly. Corresponding pixels may change too often.

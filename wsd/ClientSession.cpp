@@ -1898,7 +1898,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
             // Suppress Ctrl+q, which exits Core immediately.
             // key type=input char=0 key=8720
-            if (tokens.size() == 4 && tokens.equals(2, "char=0") && tokens.equals(3, "key=8720"))
+            if (tokens.size() >= 4 && tokens.equals(2, "char=0") && tokens.equals(3, "key=8720"))
             {
                 LOG_DBG("Suppressing Ctrl+q");
                 return true;

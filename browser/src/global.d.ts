@@ -119,6 +119,7 @@ declare namespace L {
 */
 
 interface AppInterface {
+	nextInputSequence(): number;
 	sectionContainer: CanvasSectionContainer;
 	zoomControl: ZoomControl;
 	LOUtil: typeof LOUtil;
@@ -210,6 +211,7 @@ interface AppInterface {
 		permission: string;
 		viewModeExtensions: string;
 		disableSidebar: boolean;
+		inputSequence: number;
 		textCursor: {
 			visible: boolean;
 			rectangle: null | cool.SimpleRectangle;

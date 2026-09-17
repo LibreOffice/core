@@ -362,9 +362,31 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
     messages tells the answers of one command of the family from those of
     another. A command too malformed to say what it was for names neither.
 
-key type=<type> char=<charcode> key=<keycode>
+key type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
 
     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.
+
+    sequence is an optional number that the client increments for every
+    key, mouse, textinput and removetextcontext message. The kit reports
+    the newest one it has applied, so the client can tell which of its
+    inputs a message reflects. The invalidatecursor payload has it as its
+    inputSequence field. The vector primitives frames have it in their
+    header line:
+    zstdvectorprimitives: inputSequence=<sequence>
+    zstdvectorprimitivesdelta: inputSequence=<sequence>
+    and an uncompressed response has it after the command name:
+    commandvalues: inputSequence=<sequence> {...}
+
+textinput id=<windowId> text=<text> [sequence=<sequence>]
+
+    Inserts <text>, which is URI encoded, at the caret of the window
+    <windowId>, 0 for the document itself. sequence is the optional
+    input sequence number, see the key message.
+
+windowkey id=<windowId> type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
+
+    The key message for the window <windowId>, such as a dialog.
+    sequence is the optional input sequence number, see the key message.
 
 load <pathname>
 
@@ -438,9 +460,10 @@ coolclient <major.minor[-patch]> [ <timestamp> <perfcounter> ]
             The timestamp and perfcounter are used by the server to translate performance
             counter values from the client for Trace Event logging into absolute timestamps.
 
-mouse type=<type> x=<x> y=<y> count=<count>
+mouse type=<type> x=<x> y=<y> count=<count> [buttons=<buttons>] [modifier=<modifier>] [sequence=<sequence>]
 
     <type> is 'buttondown', 'buttonup' or 'move', others are numbers.
+    sequence is the optional input sequence number, see the key message.
 
 ping
 
@@ -896,13 +919,14 @@ getslidesections
     Returns the slide sections for an Impress presentation as a JSON array.
     Response: slidesections: [{name, id, startIndex, slideCount}, ...]
 
-removetextcontext id=<windowId> before=<before_position> after=<after_position>
+removetextcontext id=<windowId> before=<before_position> after=<after_position> [sequence=<sequence>]
 
     This protocol is used to remove text context from a specified location in a document. It allows the deletion of multiple characters within a range by specifying the positions before and after the deletion.
 
     - id=<windowId> : Specifies the ID of the window where the text removal operation is occurring.
     - before=<before_position> : The position before the deletion starts.
     - after=<after_position> : The position after the deletion ends.
+    - sequence=<sequence> : Optional input sequence number, see the key message.
 
 browsersetting action=update [upload=false] json=<JSON>
 
@@ -1317,6 +1341,8 @@ invalidatecursor: <payload>
 
     The payload contains a rectangle describing the cursor position
     and the id of the view which triggered the invalidation. JSON payload.
+    When the client numbers its inputs, the payload also carries
+    inputSequence, the newest input applied before the cursor was placed.
 
     The communication between the parent process (the one keeping open the
     Websocket connections to the clients) and a child process (handling

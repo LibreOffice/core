@@ -303,9 +303,9 @@ public:
         return _isVectorRendering && _vectorParts.contains(partId);
     }
 
-    /// Sends a vector primitives delta: the compressed frame when there is one, otherwise the
-    /// payload as a command values text frame.
-    void sendVectorDelta(const std::vector<char>& frame, const std::string& payload);
+    /// Sends a vector primitives delta: the compressed delta behind this session's own header
+    /// line when there is one, otherwise the payload as a command values text frame.
+    void sendVectorDelta(const std::vector<char>& compressed, const std::string& payload);
 
 private:
     bool askSignatureStatus(const char* buffer, int length, const StringVector& tokens);
@@ -351,6 +351,9 @@ private:
 
     void updateCursorPosition(const std::string &rect);
     void updateCursorPositionJSON(const std::string &payload);
+    void noteInputSequence(const StringVector& tokens);
+    std::string inputSequenceToken() const;
+    std::string withInputSequence(const std::string& json) const;
     std::string getJailDocRoot() const;
     static std::string getZoomPercent(const std::string &payload);
 
@@ -381,6 +384,7 @@ public:
             << "\n\tisDocPasswordToModifyEntered: " << _isDocPasswordToModifyEntered
             << "\n\tisVectorRendering: " << _isVectorRendering
             << "\n\tvectorParts: " << _vectorParts.size()
+            << "\n\tinputSequence: " << _inputSequence
             << "\n\tdocType: " << _docType
             << "\n\tcopyingToClipboard: " << _copyToClipboard
             << "\n\tdocType: " << _docType
@@ -431,6 +435,9 @@ private:
     bool _isVectorRendering = false;
     /// The ids of the vector parts a primitives response served this session.
     std::set<std::string> _vectorParts;
+    /// The sequence number of the newest textinput, key, mouse or removetextcontext message applied
+    /// to the document, 0 before any.
+    int _inputSequence = 0;
 
     std::string _docType;
 

@@ -1576,11 +1576,23 @@ bool ChildSession::sendZstdFrame(std::string_view headerName, const char* data, 
     return sendBinaryFrame(output.data(), output.size());
 }
 
-void ChildSession::sendVectorDelta(const std::vector<char>& frame, const std::string& payload)
+void ChildSession::sendVectorDelta(const std::vector<char>& compressed, const std::string& payload)
 {
-    // Without a compressed frame the JSON goes as a command values text frame.
-    const bool sent = frame.empty() ? sendTextFrame("commandvalues: " + payload)
-                                    : sendBinaryFrame(frame.data(), frame.size());
+    bool sent;
+    if (compressed.empty())
+    {
+        // Without a compressed delta the JSON goes as a command values text frame.
+        sent = sendTextFrame("commandvalues:" + inputSequenceToken() + ' ' + payload);
+    }
+    else
+    {
+        // The compressed delta is shared by every session that holds the part, so this session's
+        // input sequence goes in its own header line.
+        std::string header("zstdvectorprimitivesdelta:" + inputSequenceToken() + '\n');
+        std::vector<char> frame(header.begin(), header.end());
+        frame.insert(frame.end(), compressed.begin(), compressed.end());
+        sent = sendBinaryFrame(frame.data(), frame.size());
+    }
     // The engine moved the mark for the part when it wrote the delta, so a failed send is
     // logged.
     if (!sent)
@@ -1652,12 +1664,13 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
             if (!partId.empty())
                 _vectorParts.insert(partId);
         }
-        const std::string_view header = isFont
-                                            ? std::string_view("zstdvectorrenderingfont:\n")
-                                            : std::string_view("zstdvectorprimitives:\n");
+        // A primitive tree reflects every input applied so far, so it carries the input sequence.
+        const std::string sequence = isFont ? std::string() : inputSequenceToken();
+        const std::string header = isFont ? std::string("zstdvectorrenderingfont:\n")
+                                          : "zstdvectorprimitives:" + sequence + '\n';
         success = sendZstdFrame(header, json.data(), json.size());
         if (!success)
-            success = sendTextFrame("commandvalues: " + json);
+            success = sendTextFrame("commandvalues:" + sequence + ' ' + json);
     }
     else
     {
@@ -3502,6 +3515,7 @@ bool ChildSession::extTextInputEvent(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT, decodedText.c_str());
     getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT_END, decodedText.c_str());
+    noteInputSequence(tokens);
 
     return true;
 }
@@ -3528,7 +3542,10 @@ bool ChildSession::keyEvent(const StringVector& tokens,
             expectedTokens++;
     }
 
-    if (tokens.size() != expectedTokens ||
+    // A trailing sequence= token is optional.
+    const bool hasSequence = tokens.size() == expectedTokens + 1 &&
+                             tokens.startsWith(expectedTokens, "sequence=");
+    if ((tokens.size() != expectedTokens && !hasSequence) ||
         !getTokenKeyword(tokens[counter++], "type",
                          {{"input", COKitKeyEventType::DOWN}, {"up", COKitKeyEventType::UP}},
                          type) ||
@@ -3571,6 +3588,7 @@ bool ChildSession::keyEvent(const StringVector& tokens,
     }
     else if (winId != 0)
         getLOKitDocument()->postWindowKeyEvent(winId, type, charcode, keycode);
+    noteInputSequence(tokens);
 
     return true;
 }
@@ -3678,6 +3696,7 @@ bool ChildSession::mouseEvent(const StringVector& tokens,
     default:
         assert(false && "Unsupported mouse target type");
     }
+    noteInputSequence(tokens);
 
     return true;
 }
@@ -4987,6 +5006,7 @@ bool ChildSession::removeTextContext(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->removeTextContext(id, before, after);
+    noteInputSequence(tokens);
 
     return true;
 }
@@ -5440,7 +5460,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         updateSpeed();
         updateCursorPositionJSON(payload);
-        sendTextFrame("invalidatecursor: " + payload);
+        sendTextFrame("invalidatecursor: " + withInputSequence(payload));
         break;
     case COKitCallbackType::TEXT_SELECTION:
         sendTextFrame("textselection: " + payload);
@@ -6271,6 +6291,38 @@ void ChildSession::updateCursorPositionJSON(const std::string &rect)
     const Poco::Dynamic::Var result = parser.parse(rect);
     const auto& command = result.extract<Poco::JSON::Object::Ptr>();
     updateCursorPosition(command->get("rectangle").toString());
+}
+
+void ChildSession::noteInputSequence(const StringVector& tokens)
+{
+    int sequence = 0;
+    if (getTokenInteger(tokens, "sequence", sequence) && sequence > _inputSequence)
+        _inputSequence = sequence;
+}
+
+// Inputs are applied while their messages are handled, and the callbacks they raise are sent after
+// the whole batch, each built from the document as the batch left it. So the current sequence
+// covers every input a payload reflects.
+std::string ChildSession::inputSequenceToken() const
+{
+    return _inputSequence > 0 ? " inputSequence=" + std::to_string(_inputSequence) : std::string();
+}
+
+// The caret payload is a JSON object, so the sequence is one of its fields. The JSON is compact, so
+// the closing brace follows the last value directly. A payload that is not a JSON object is
+// returned unchanged.
+std::string ChildSession::withInputSequence(const std::string& json) const
+{
+    if (_inputSequence <= 0)
+        return json;
+    const size_t close = json.rfind('}');
+    if (close == std::string::npos)
+        return json;
+    const bool empty = close > 0 && json[close - 1] == '{';
+    std::string stamped = json;
+    stamped.insert(close, (empty ? "\"inputSequence\":" : ",\"inputSequence\":") +
+                              std::to_string(_inputSequence));
+    return stamped;
 }
 
 std::string ChildSession::getZoomPercent(const std::string &payload)

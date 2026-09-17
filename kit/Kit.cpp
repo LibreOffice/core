@@ -2857,21 +2857,19 @@ void Document::deliverVectorDelta(const std::string& payload)
     const std::string partId = payload.substr(0, newline);
     const std::string json = payload.substr(newline + 1);
 
-    // Every session that holds the part reads the same delta, so it is compressed once, for
-    // the first session that takes it, and the frame is handed to each of them. A session that
-    // draws bitmap tiles, or was never served this part, has no use for it. An inactive or
-    // disconnected session is sent no delta.
-    std::optional<std::vector<char>> frame;
+    // Every session that holds the part reads the same delta, so it is compressed once and the
+    // bytes are handed to each session. A session that draws bitmap tiles or was never served this
+    // part has no use for it, and an inactive or disconnected session gets none.
+    std::optional<std::vector<char>> compressed;
     for (const auto& it : _sessions)
     {
         ChildSession& session = *it.second;
         if (session.isCloseFrame() || session.isDisconnected() || !session.isActive() ||
             !session.holdsVectorPart(partId))
             continue;
-        if (!frame)
-            frame = ChildSession::zstdFrame("zstdvectorprimitivesdelta:\n", json.data(),
-                                            json.size());
-        session.sendVectorDelta(*frame, json);
+        if (!compressed)
+            compressed = ChildSession::zstdFrame("", json.data(), json.size());
+        session.sendVectorDelta(*compressed, json);
     }
 }
 

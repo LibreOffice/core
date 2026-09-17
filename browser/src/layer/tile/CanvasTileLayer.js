@@ -1335,12 +1335,22 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._map.fire('tabstoplistupdate', json);
 	},
 
+	// Vector primitives can name the newest input they reflect before the JSON. Copy it into
+	// the parsed values.
+	_readInputSequence: function (textMsg, values) {
+		const header = textMsg.substring(0, textMsg.indexOf('{'));
+		const sequence = parseInt(header.split('inputSequence=')[1]);
+		if (!isNaN(sequence))
+			values.inputSequence = sequence;
+	},
+
 	_onCommandValuesMsg: function (textMsg) {
 		var jsonIdx = textMsg.indexOf('{');
 		if (jsonIdx === -1) {
 			return;
 		}
 		var obj = JSON.parse(textMsg.substring(jsonIdx));
+		this._readInputSequence(textMsg, obj);
 		if (obj.commandName === '.uno:DocumentRepair') {
 			this._onDocumentRepair(obj);
 		}
@@ -2811,9 +2821,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (this._map.contextToolbar)
 			this._map.contextToolbar.setLastInputEventType({input: "mouse", type: type});
 
+		// A click moves the caret, so it is numbered like a keystroke. The caret update
+		// after it then reports the click, not an earlier keystroke.
 		app.socket.sendMessage('mouse type=' + type +
 				' x=' + x + ' y=' + y + ' count=' + count +
-				' buttons=' + buttons + ' modifier=' + modifier);
+				' buttons=' + buttons + ' modifier=' + modifier +
+				' sequence=' + app.nextInputSequence());
 
 
 		const tempPageLinks = this._map['stateChangeHandler'].getItemValue('PageLinks');

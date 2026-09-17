@@ -71,6 +71,8 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testRemoveTextBlockedByKeyMessage);
     CPPUNIT_TEST(testRemoveTextBlockedByTextInput);
     CPPUNIT_TEST(testRemoveTextDifferentId);
+    CPPUNIT_TEST(testTextInputCombinedKeepsNewestSequence);
+    CPPUNIT_TEST(testRemoveTextCombinedKeepsNewestSequence);
     CPPUNIT_TEST(testCallbackStateChangedDedup);
     CPPUNIT_TEST(testCallbackStateChangedDifferentCommands);
     CPPUNIT_TEST(testCallbackStateChangedNoEquals);
@@ -124,6 +126,8 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testRemoveTextBlockedByKeyMessage();
     void testRemoveTextBlockedByTextInput();
     void testRemoveTextDifferentId();
+    void testTextInputCombinedKeepsNewestSequence();
+    void testRemoveTextCombinedKeepsNewestSequence();
     void testCallbackStateChangedDedup();
     void testCallbackStateChangedDifferentCommands();
     void testCallbackStateChangedNoEquals();
@@ -1474,6 +1478,45 @@ void KitQueueTests::testRemoveTextDifferentId()
 
     // Different ids should not combine.
     LOK_ASSERT_EQUAL(static_cast<size_t>(2), queue.size());
+}
+
+void KitQueueTests::testTextInputCombinedKeepsNewestSequence()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    queue.put("sess textinput id=0 text=a sequence=7");
+    queue.put("sess textinput id=0 text=b sequence=8");
+
+    // The combined message carries the newest sequence number.
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
+    KitQueue::Payload p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=ab sequence=8",
+                         std::string_view(p.data(), p.size()));
+
+    // Messages without a sequence number combine into one without a sequence.
+    queue.put("sess textinput id=0 text=c");
+    queue.put("sess textinput id=0 text=d");
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=cd", std::string_view(p.data(), p.size()));
+}
+
+void KitQueueTests::testRemoveTextCombinedKeepsNewestSequence()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    queue.put("sess removetextcontext id=0 before=1 after=0 sequence=3");
+    queue.put("sess removetextcontext id=0 before=1 after=0 sequence=4");
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
+    KitQueue::Payload p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=2 after=0 sequence=4",
+                         std::string_view(p.data(), p.size()));
 }
 
 void KitQueueTests::testCallbackStateChangedDedup()

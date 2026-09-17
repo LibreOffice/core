@@ -1352,7 +1352,8 @@ window.L.TextInput = window.L.Layer.extend({
 		app.socket.sendMessage(
 			'removetextcontext id=' + windowId +
 			' before=' + before +
-			' after=' + after
+			' after=' + after +
+			' sequence=' + app.nextInputSequence()
 		);
 	},
 
@@ -1389,7 +1390,8 @@ window.L.TextInput = window.L.Layer.extend({
 			var winId = this._map.getWinId();
 			this._followMyCursor();
 			app.socket.sendMessage(
-				'textinput id=' + winId + ' text=' + encodedText);
+				'textinput id=' + winId + ' text=' + encodedText +
+				' sequence=' + app.nextInputSequence());
 		}
 	},
 
@@ -1402,7 +1404,8 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 		if (this._map.editorHasFocus() || this._hasFormulaBarFocus()) {
 			app.socket.sendMessage(
-				'key type=' + type + ' char=' + charCode + ' key=' + unoKeyCode + '\n'
+				'key type=' + type + ' char=' + charCode + ' key=' + unoKeyCode +
+				' sequence=' + app.nextInputSequence() + '\n'
 			);
 		} else {
 			app.socket.sendMessage(
@@ -1414,6 +1417,7 @@ window.L.TextInput = window.L.Layer.extend({
 				charCode +
 				' key=' +
 				unoKeyCode +
+				' sequence=' + app.nextInputSequence() +
 				'\n'
 			);
 		}

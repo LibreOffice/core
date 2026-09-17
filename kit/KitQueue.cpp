@@ -60,6 +60,18 @@ namespace {
         }
         return false;
     }
+
+    /// A combined message carries the sequence number of the newest input it merges, the one being
+    /// combined in.
+    void appendInputSequence(const StringVector& tokens, std::string& message)
+    {
+        std::string sequence;
+        if (COOLProtocol::getTokenString(tokens, "sequence", sequence))
+        {
+            message.append(" sequence=");
+            message.append(sequence);
+        }
+    }
 }
 
 void KitQueue::put(const Payload& value)
@@ -743,6 +755,7 @@ std::string KitQueue::combineTextInput(const StringVector& tokens)
             newMsg.append(" text=");
             newMsg.append(queuedText);
             newMsg.append(text);
+            appendInputSequence(tokens, newMsg);
 
             LOG_TRC("Combined [" << queuedMessage << "] with current message to [" << newMsg
                     << ']');
@@ -865,6 +878,7 @@ std::string KitQueue::combineRemoveText(const StringVector& tokens)
             std::string newMsg = queuedTokens[0] + " removetextcontext id=" + id +
                 " before=" + std::to_string(queuedBefore + before) +
                 " after=" + std::to_string(queuedAfter + after);
+            appendInputSequence(tokens, newMsg);
 
             LOG_TRC("Combined [" << queuedMessage << "] with current message to [" << newMsg << "]");
 
