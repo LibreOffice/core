@@ -4,12 +4,12 @@ const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
 const a11yHelper = require('../../common/a11y_helper');
 
-describe(['tagdesktop'], 'Accessibility notebookbar shortcut tests', { testIsolation: false }, function () {
+describe(['tagdesktop'], 'Accessibility Calc notebookbar shortcut tests', { testIsolation: false }, function () {
 	let tabs;
 	let targets;
 
 	before(function () {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('calc/help_dialog.ods');
 		desktopHelper.switchUIToNotebookbar();
 
 		cy.cGet('.notebookbar-tabs-container').should('be.visible');
