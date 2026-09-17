@@ -161,6 +161,8 @@ private:
     void            ClearValueList  ( size_t nList );
     void            UpdateColorList ( size_t nList );
     size_t          GetFieldSelPos  ( SCCOL nField );
+    // tdf#82008 - remove a single query entry and keep the following criteria
+    void            RemoveQueryEntry( SCSIZE nRowToDelete, size_t nOffset );
     ScQueryItem*    GetOutputItem   ();
     void            SetValString    ( const OUString& rQueryStr,
                                       const ScQueryEntry::Item& rItem,

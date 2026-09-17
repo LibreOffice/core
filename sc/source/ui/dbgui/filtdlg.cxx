@@ -919,48 +919,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     {
         if ( m_xLbField1->get_active() == 0 )
         {
-            m_xLbConnect2->set_active(-1);
-            m_xLbConnect3->set_active(-1);
-            m_xLbConnect4->set_active(-1);
-            m_xLbField2->set_active( 0 );
-            m_xLbField3->set_active( 0 );
-            m_xLbField4->set_active( 0 );
-            m_xLbCond2->set_active( 0 );
-            m_xLbCond3->set_active( 0 );
-            m_xLbCond4->set_active( 0 );
-            ClearValueList( 1 );
-            ClearValueList( 2 );
-            ClearValueList( 3 );
-            ClearValueList( 4 );
-
-            m_xLbConnect2->set_sensitive(false);
-            m_xLbConnect3->set_sensitive(false);
-            m_xLbConnect4->set_sensitive(false);
-            m_xLbField2->set_sensitive(false);
-            m_xLbField3->set_sensitive(false);
-            m_xLbField4->set_sensitive(false);
-            m_xLbCond2->set_sensitive(false);
-            m_xLbCond3->set_sensitive(false);
-            m_xLbCond4->set_sensitive(false);
-            m_xEdVal2->set_sensitive(false);
-            m_xEdVal3->set_sensitive(false);
-            m_xEdVal4->set_sensitive(false);
-            m_xLbColor2->set_sensitive(false);
-            m_xLbColor3->set_sensitive(false);
-            m_xLbColor4->set_sensitive(false);
-            m_xBtnRemove2->set_sensitive(false);
-            m_xBtnRemove3->set_sensitive(false);
-            m_xBtnRemove4->set_sensitive(false);
-            SCSIZE nCount = theQueryData.GetEntryCount();
-            if (maRefreshExceptQuery.size() < nCount + 1)
-                maRefreshExceptQuery.resize(nCount + 1, false);
-            for (SCSIZE i = nOffset; i < nCount; ++i)
-            {
-                theQueryData.GetEntry(i).bDoQuery = false;
-                maRefreshExceptQuery[i] = false;
-                theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
-            }
-            maRefreshExceptQuery[nOffset] = true;
+            // tdf#82008 - remove a single query entry and keep the following criteria
+            RemoveQueryEntry(nOffset, nOffset);
         }
         else
         {
@@ -979,40 +939,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     {
         if ( m_xLbField2->get_active() == 0 )
         {
-            m_xLbConnect3->set_active(-1);
-            m_xLbConnect4->set_active(-1);
-            m_xLbField3->set_active( 0 );
-            m_xLbField4->set_active( 0 );
-            m_xLbCond3->set_active( 0 );
-            m_xLbCond4->set_active( 0 );
-            ClearValueList( 2 );
-            ClearValueList( 3 );
-            ClearValueList( 4 );
-
-            m_xLbConnect3->set_sensitive(false);
-            m_xLbConnect4->set_sensitive(false);
-            m_xLbField3->set_sensitive(false);
-            m_xLbField4->set_sensitive(false);
-            m_xLbCond3->set_sensitive(false);
-            m_xLbCond4->set_sensitive(false);
-            m_xEdVal3->set_sensitive(false);
-            m_xEdVal4->set_sensitive(false);
-            m_xLbColor3->set_sensitive(false);
-            m_xLbColor4->set_sensitive(false);
-            m_xBtnRemove3->set_sensitive(false);
-            m_xBtnRemove4->set_sensitive(false);
-
-            sal_uInt16 nTemp=nOffset+1;
-            SCSIZE nCount = theQueryData.GetEntryCount();
-            if (maRefreshExceptQuery.size() < nCount)
-                maRefreshExceptQuery.resize(nCount, false);
-            for (SCSIZE i= nTemp; i< nCount; i++)
-            {
-                theQueryData.GetEntry(i).bDoQuery = false;
-                maRefreshExceptQuery[i] = false;
-                theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
-            }
-            maRefreshExceptQuery[nTemp] = true;
+            // tdf#82008 - remove a single query entry and keep the following criteria
+            RemoveQueryEntry(nOffset + 1, nOffset);
         }
         else
         {
@@ -1032,30 +960,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     {
         if ( m_xLbField3->get_active() == 0 )
         {
-            m_xLbConnect4->set_active(-1);
-            m_xLbField4->set_active( 0 );
-            m_xLbCond4->set_active( 0 );
-            ClearValueList( 3 );
-            ClearValueList( 4 );
-
-            m_xLbConnect4->set_sensitive(false);
-            m_xLbField4->set_sensitive(false);
-            m_xLbCond4->set_sensitive(false);
-            m_xEdVal4->set_sensitive(false);
-            m_xLbColor4->set_sensitive(false);
-            m_xBtnRemove4->set_sensitive(false);
-
-            sal_uInt16 nTemp=nOffset+2;
-            SCSIZE nCount = theQueryData.GetEntryCount();
-            if (maRefreshExceptQuery.size() < nCount)
-                maRefreshExceptQuery.resize(nCount, false);
-            for (SCSIZE i = nTemp; i < nCount; ++i)
-            {
-                theQueryData.GetEntry(i).bDoQuery = false;
-                maRefreshExceptQuery[i] = false;
-                theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
-            }
-            maRefreshExceptQuery[nTemp] = true;
+            // tdf#82008 - remove a single query entry and keep the following criteria
+            RemoveQueryEntry(nOffset + 2, nOffset);
         }
         else
         {
@@ -1077,18 +983,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     {
         if ( m_xLbField4->get_active() == 0 )
         {
-            ClearValueList( 4 );
-            sal_uInt16 nTemp=nOffset+3;
-            SCSIZE nCount = theQueryData.GetEntryCount();
-            if (maRefreshExceptQuery.size() < nCount)
-                maRefreshExceptQuery.resize(nCount, false);
-            for (SCSIZE i = nTemp; i < nCount; ++i)
-            {
-                theQueryData.GetEntry(i).bDoQuery = false;
-                maRefreshExceptQuery[i] = false;
-                theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
-            }
-            maRefreshExceptQuery[nTemp] = true;
+            // tdf#82008 - remove a single query entry and keep the following criteria
+            RemoveQueryEntry(nOffset + 3, nOffset);
         }
         else
         {
@@ -1321,13 +1217,17 @@ IMPL_LINK( ScFilterDlg, BtnRemoveHdl, weld::Button&, rBtn, void )
         nButtonIndex = 2;
     if ( &rBtn == m_xBtnRemove4.get() )
         nButtonIndex = 3;
-    SCSIZE nRowToDelete = nOffset + nButtonIndex;
+    // tdf#82008 - remove a single query entry and keep the following criteria
+    RemoveQueryEntry(nOffset + nButtonIndex, nOffset);
+}
 
+void ScFilterDlg::RemoveQueryEntry(SCSIZE nRowToDelete, size_t nOffset)
+{
     // Check that the index is sensible
     SCSIZE nCount = theQueryData.GetEntryCount();
     if (nRowToDelete >= nCount)
     {
-        SAL_WARN( "sc", "ScFilterDlg::BtnRemoveHdl: could not delete row - invalid index.");
+        SAL_WARN( "sc", "ScFilterDlg::RemoveQueryEntry: could not delete row - invalid index.");
         return;
     }
 
