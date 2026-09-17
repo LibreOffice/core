@@ -284,6 +284,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Position and size of the selection start (as if there would be a cursor caret there).
 
 		this._lastValidPart = -1;
+		// Parts picked by scrolling in the stacked view, until the server confirms them.
+		this._scrollPickedParts = [];
 		// Cursor marker
 		this._cursorMarker = null;
 
@@ -4216,6 +4218,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var partToSelect = this._getMostVisiblePart(queue);
 			if (this._selectedPart !== partToSelect) {
 				this._selectedPart = partToSelect;
+				this._scrollPickedParts.push(this.getSelectedPart());
 				app.socket.sendMessage('setclientpart part=' + this.getSelectedPart());
 				this._map.fire('setpart', {
 					selectedPart: this._selectedPart,

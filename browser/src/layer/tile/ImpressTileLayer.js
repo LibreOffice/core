@@ -326,6 +326,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	_switchToPartBasedView: function () {
 		app.file.fileBasedView = false;
+		this._scrollPickedParts = [];
 		this._fbCachedFileSize = null;
 
 		// Collapse the stacked canvas back to a single slide
@@ -434,7 +435,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		// selects nothing. The status that follows carries the selection.
 		const part = app.socket.parseServerCmd(textMsg).part || '';
 		const partIndex = this.getIndexFromPart(part);
-		if (partIndex >= 0 && partIndex !== this._selectedPart) {
+		// A late confirmation of a part picked by scrolling leaves the view where it is.
+		const pickedIndex = this._scrollPickedParts.indexOf(part);
+		if (pickedIndex >= 0) {
+			this._scrollPickedParts.splice(0, pickedIndex + 1);
+		} else if (partIndex >= 0 && partIndex !== this._selectedPart) {
 			this._map.deselectAll(); // Deselect all first. This is a single selection.
 			this._map.setPart(partIndex, true);
 		}
@@ -585,6 +590,9 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 					app.map.stateChangeHandler.setItemValue('.uno:GridVisible', 'true');
 
 				app.impress.partList = Object.assign([], statusJSON.parts);
+				// A pick of a slide that is gone gets no confirmation, so it is dropped.
+				this._scrollPickedParts = this._scrollPickedParts.filter(
+					(part) => this.getIndexFromPart(part, statusJSON.parts) >= 0);
 				var refreshAnnotation = this._documentInfo !== textMsg;
 
 				this._documentInfo = textMsg;
