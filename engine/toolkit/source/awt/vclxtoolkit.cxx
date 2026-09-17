@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/FocusEvent.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
@@ -439,25 +440,15 @@ class VCLXToolkit : public comphelper::WeakComponentImplHelper<
     cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
 
     ::comphelper::OInterfaceContainerHelper4<css::awt::XTopWindowListener> m_aTopWindowListeners;
-    ::comphelper::OInterfaceContainerHelper4<css::awt::XKeyHandler> m_aKeyHandlers;
-    ::comphelper::OInterfaceContainerHelper4<css::awt::XFocusListener> m_aFocusListeners;
     ::Link<VclSimpleEvent&,void> m_aEventListenerLink;
-    ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
     bool m_bEventListener;
-    bool m_bKeyListener;
 
     DECL_LINK(eventListenerHandler, ::VclSimpleEvent&, void);
-
-    DECL_LINK(keyListenerHandler, ::VclWindowEvent&, bool);
 
     void callTopWindowListeners(
         ::VclSimpleEvent const * pEvent,
         void (css::awt::XTopWindowListener::* pFn)(
             css::lang::EventObject const &));
-
-    bool callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
-
-    void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
 
 protected:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -513,11 +504,6 @@ public:
 
     // css::awt::XExtendedToolkit:
 
-    virtual ::sal_Int32 getTopWindowCount() override;
-
-    virtual cpo::uno::Reference< css::awt::XTopWindow >
-    getTopWindow(::sal_Int32 nIndex) override;
-
     virtual cpo::uno::Reference< css::awt::XTopWindow >
     getActiveTopWindow() override;
 
@@ -528,30 +514,6 @@ public:
     virtual void removeTopWindowListener(
         cpo::uno::Reference<
         css::awt::XTopWindowListener > const & rListener) override;
-
-    virtual void addKeyHandler(
-        cpo::uno::Reference<
-        css::awt::XKeyHandler > const & rHandler) override;
-
-    virtual void removeKeyHandler(
-        cpo::uno::Reference<
-        css::awt::XKeyHandler > const & rHandler) override;
-
-    virtual void addFocusListener(
-        cpo::uno::Reference<
-        css::awt::XFocusListener > const & rListener) override;
-
-    virtual void removeFocusListener(
-        cpo::uno::Reference<
-        css::awt::XFocusListener > const & rListener) override;
-
-    virtual void fireFocusGained(
-        cpo::uno::Reference<
-        cpo::uno::XInterface > const & source) override;
-
-    virtual void fireFocusLost(
-        cpo::uno::Reference<
-        cpo::uno::XInterface > const & source) override;
 
     // css::awt::XReschedule:
     virtual void reschedule() override;
@@ -883,9 +845,7 @@ static void ToolkitWorkerFunction( void* pArgs )
 // constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
     m_aEventListenerLink(LINK(this, VCLXToolkit, eventListenerHandler)),
-    m_aKeyListenerLink(LINK(this, VCLXToolkit, keyListenerHandler)),
-    m_bEventListener(false),
-    m_bKeyListener(false)
+    m_bEventListener(false)
 {
 #ifndef IOS
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
@@ -923,16 +883,9 @@ void VCLXToolkit::disposing(std::unique_lock<std::mutex>& rGuard)
         ::Application::RemoveEventListener(m_aEventListenerLink);
         m_bEventListener = false;
     }
-    if (m_bKeyListener)
-    {
-        ::Application::RemoveKeyListener(m_aKeyListenerLink);
-        m_bKeyListener = false;
-    }
     css::lang::EventObject aEvent(
         getXWeak());
     m_aTopWindowListeners.disposeAndClear(rGuard, aEvent);
-    m_aKeyHandlers.disposeAndClear(rGuard, aEvent);
-    m_aFocusListeners.disposeAndClear(rGuard, aEvent);
 }
 
 
@@ -2097,24 +2050,6 @@ cpo::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 // css::awt::XExtendedToolkit:
 
 // virtual
-::sal_Int32 VCLXToolkit::getTopWindowCount()
-{
-    return static_cast< ::sal_Int32 >(::Application::GetTopWindowCount());
-        // XXX  numeric overflow
-}
-
-// virtual
-cpo::uno::Reference< css::awt::XTopWindow >
-VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
-{
-    vcl::Window * p = ::Application::GetTopWindow(static_cast< tools::Long >(nIndex));
-        // XXX  numeric overflow
-    return cpo::uno::Reference< css::awt::XTopWindow >(
-        p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
-        cpo::uno::UNO_QUERY);
-}
-
-// virtual
 cpo::uno::Reference< css::awt::XTopWindow >
 VCLXToolkit::getActiveTopWindow()
 {
@@ -2152,95 +2087,12 @@ void VCLXToolkit::removeTopWindowListener(
     std::unique_lock aGuard(m_aMutex);
     if (!m_bDisposed
         && m_aTopWindowListeners.removeInterface(aGuard, rListener) == 0
-        && m_aFocusListeners.getLength(aGuard) == 0 && m_bEventListener)
+        && m_bEventListener)
     {
         ::Application::RemoveEventListener(m_aEventListenerLink);
         m_bEventListener = false;
     }
 }
-
-// virtual
-void VCLXToolkit::addKeyHandler(
-    cpo::uno::Reference< css::awt::XKeyHandler > const & rHandler)
-{
-    OSL_ENSURE(rHandler.is(), "Null rHandler");
-    std::unique_lock aGuard(m_aMutex);
-    if (m_bDisposed)
-    {
-        aGuard.unlock();
-        rHandler->disposing(
-            css::lang::EventObject(
-                getXWeak()));
-    }
-    else if (m_aKeyHandlers.addInterface(aGuard, rHandler) == 1 && !m_bKeyListener)
-    {
-        m_bKeyListener = true;
-        ::Application::AddKeyListener(m_aKeyListenerLink);
-    }
-}
-
-// virtual
-void VCLXToolkit::removeKeyHandler(
-    cpo::uno::Reference< css::awt::XKeyHandler > const & rHandler)
-{
-    std::unique_lock aGuard(m_aMutex);
-    if (!m_bDisposed
-        && m_aKeyHandlers.removeInterface(aGuard, rHandler) == 0 && m_bKeyListener)
-    {
-        ::Application::RemoveKeyListener(m_aKeyListenerLink);
-        m_bKeyListener = false;
-    }
-}
-
-// virtual
-void VCLXToolkit::addFocusListener(
-    cpo::uno::Reference< css::awt::XFocusListener > const & rListener)
-{
-    OSL_ENSURE(rListener.is(), "Null rListener");
-    std::unique_lock aGuard(m_aMutex);
-    if (m_bDisposed)
-    {
-        aGuard.unlock();
-        rListener->disposing(
-            css::lang::EventObject(
-                getXWeak()));
-    }
-    else if (m_aFocusListeners.addInterface(aGuard, rListener) == 1
-             && !m_bEventListener)
-    {
-        m_bEventListener = true;
-        ::Application::AddEventListener(m_aEventListenerLink);
-    }
-}
-
-// virtual
-void VCLXToolkit::removeFocusListener(
-    cpo::uno::Reference< css::awt::XFocusListener > const & rListener)
-{
-    std::unique_lock aGuard(m_aMutex);
-    if (!m_bDisposed
-        && m_aFocusListeners.removeInterface(aGuard, rListener) == 0
-        && m_aTopWindowListeners.getLength(aGuard) == 0 && m_bEventListener)
-    {
-        ::Application::RemoveEventListener(m_aEventListenerLink);
-        m_bEventListener = false;
-    }
-}
-
-// virtual
-void VCLXToolkit::fireFocusGained(
-    cpo::uno::Reference<
-    cpo::uno::XInterface > const &)
-{
-}
-
-// virtual
-void VCLXToolkit::fireFocusLost(
-    cpo::uno::Reference<
-    cpo::uno::XInterface > const &)
-{
-}
-
 
 IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
 {
@@ -2267,10 +2119,8 @@ IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
             &rEvent, &css::awt::XTopWindowListener::windowClosing);
         break;
     case VclEventId::WindowGetFocus:
-        callFocusListeners(&rEvent, true);
         break;
     case VclEventId::WindowLoseFocus:
-        callFocusListeners(&rEvent, false);
         break;
     case VclEventId::WindowMinimize:
         callTopWindowListeners(
@@ -2282,19 +2132,6 @@ IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
         break;
     default: break;
     }
-}
-
-IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
-{
-    switch (rEvent.GetId())
-    {
-    case VclEventId::WindowKeyInput:
-        return callKeyHandlers(&rEvent, true);
-    case VclEventId::WindowKeyUp:
-        return callKeyHandlers(&rEvent, false);
-    default: break;
-    }
-    return false;
 }
 
 void VCLXToolkit::callTopWindowListeners(
@@ -2319,95 +2156,6 @@ void VCLXToolkit::callTopWindowListeners(
             try
             {
                 (xListener.get()->*pFn)(aAwtEvent);
-            }
-            catch (const cpo::uno::RuntimeException &)
-            {
-                DBG_UNHANDLED_EXCEPTION("toolkit");
-            }
-        });
-}
-
-bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
-                                  bool bPressed)
-{
-    std::unique_lock aGuard(m_aMutex);
-
-    if (m_aKeyHandlers.getLength(aGuard) != 0)
-    {
-        vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-
-        // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
-        ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
-            static_cast< ::VclWindowEvent const * >(pEvent)->GetData());
-        css::awt::KeyEvent aAwtEvent(
-            static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
-            (pKeyEvent->GetKeyCode().IsShift()
-             ? css::awt::KeyModifier::SHIFT : 0)
-            | (pKeyEvent->GetKeyCode().IsMod1()
-               ? css::awt::KeyModifier::MOD1 : 0)
-            | (pKeyEvent->GetKeyCode().IsMod2()
-               ? css::awt::KeyModifier::MOD2 : 0)
-            | (pKeyEvent->GetKeyCode().IsMod3()
-               ? css::awt::KeyModifier::MOD3 : 0),
-            pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
-            sal::static_int_cast< sal_Int16 >(
-                pKeyEvent->GetKeyCode().GetFunction()));
-        comphelper::OInterfaceIteratorHelper4 aIt(aGuard, m_aKeyHandlers);
-        aGuard.unlock();
-        while (aIt.hasMoreElements())
-        {
-            css::awt::XKeyHandler* pL = aIt.next().get();
-            try
-            {
-                if (bPressed ? pL->keyPressed(aAwtEvent)
-                             : pL->keyReleased(aAwtEvent))
-                    return true;
-            }
-            catch (const cpo::uno::RuntimeException &)
-            {
-                DBG_UNHANDLED_EXCEPTION("toolkit");
-            }
-        }
-    }
-    return false;
-}
-
-void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
-                                     bool bGained)
-{
-    vcl::Window * pWindow
-          = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-    if (!pWindow->IsTopWindow())
-        return;
-
-    std::unique_lock aGuard(m_aMutex);
-    if (m_aFocusListeners.getLength(aGuard) == 0)
-        return;
-
-    // Ignore the interior of compound controls when determining the
-    // window that gets the focus next (see implementation in
-    // vclxwindow.cxx for mapping between VCL and UNO AWT event):
-    cpo::uno::Reference< cpo::uno::XInterface > xNext;
-    vcl::Window * pFocus = ::Application::GetFocusWindow();
-    for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
-        if (!p->IsCompoundControl())
-        {
-            pFocus = p;
-            break;
-        }
-    if (pFocus != nullptr)
-        xNext = pFocus->GetComponentInterface();
-    css::awt::FocusEvent aAwtEvent(
-        static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
-        static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
-        xNext, false);
-    m_aFocusListeners.forEach(aGuard,
-        [bGained, &aAwtEvent] (const cpo::uno::Reference<css::awt::XFocusListener> & xListener)
-        {
-            try
-            {
-                bGained ? xListener->focusGained(aAwtEvent)
-                    : xListener->focusLost(aAwtEvent);
             }
             catch (const cpo::uno::RuntimeException &)
             {

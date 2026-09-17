@@ -896,17 +896,9 @@ module com {
     published interface XTopWindowListener;
     /** @deprecated */ published interface XExtendedToolkit {
      interface ::cpo::uno::XInterface;
-     long getTopWindowCount();
-     ::com::sun::star::awt::XTopWindow getTopWindow([in] long nIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
      ::com::sun::star::awt::XTopWindow getActiveTopWindow();
      void addTopWindowListener([in] ::com::sun::star::awt::XTopWindowListener xListener);
      void removeTopWindowListener([in] ::com::sun::star::awt::XTopWindowListener xListener);
-     void addKeyHandler([in] ::com::sun::star::awt::XKeyHandler xHandler);
-     void removeKeyHandler([in] ::com::sun::star::awt::XKeyHandler xHandler);
-     void addFocusListener([in] ::com::sun::star::awt::XFocusListener xListener);
-     void removeFocusListener([in] ::com::sun::star::awt::XFocusListener xListener);
-     void fireFocusGained([in] ::cpo::uno::XInterface source);
-     void fireFocusLost([in] ::cpo::uno::XInterface source);
     };
     published interface XMessageBox;
     published interface XMessageBoxFactory {
