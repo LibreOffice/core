@@ -1207,8 +1207,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell& rSourceShell,
             else
             {
                 xProgressDlg = std::make_shared<PrintMonitor>(pSourceWindow->GetFrameWeld());
-                static_cast<PrintMonitor*>(xProgressDlg.get())->set_title(
-                    pSourceDocSh->GetTitle(22));
+                xProgressDlg->set_title(pSourceDocSh->GetTitle(22));
             }
             weld::DialogController::runAsync(xProgressDlg, [this, &xProgressDlg](sal_Int32 nResult){
                 if (nResult == RET_CANCEL)
