@@ -27,9 +27,11 @@
 #include <config.h>
 
 #include "QtClipboard.hpp"
+#include "PortalFileTransfer.hpp"
 
 #include <COKit/COKit.hxx>
 
+#include <common/ClipboardData.hpp>
 #include <common/MobileApp.hpp>
 
 #include <QApplication>
@@ -43,6 +45,7 @@
 #include <QString>
 #include <QStringList>
 #include <QThread>
+#include <QUrl>
 
 #include <atomic>
 #include <functional>
@@ -193,7 +196,19 @@ QStringList engineMimeTypes(const QMimeData* data)
     }
     if (havePlainText)
         types.append(QStringLiteral("text/plain;charset=utf-8"));
+    // The portal key resolves to the copied files under paths this process can read.
+    if (hasPortalFileTransfer(data))
+        types.append(QLatin1String(ReadableUriListMimeType));
     return types;
+}
+
+// GUI thread only. Empty when the portal gives no files.
+QByteArray portalUriList(const QMimeData* data)
+{
+    QByteArray uriList;
+    for (const QString& file : filesFromPortalTransfer(data))
+        uriList += QUrl::fromLocalFile(file).toEncoded() + "\r\n";
+    return uriList;
 }
 
 /**
@@ -279,6 +294,8 @@ bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData
                     // the platform holds; toUtf8() matches the advertise.
                     if (type == QLatin1String("text/plain;charset=utf-8"))
                         snapshot.insert(type, data->text().toUtf8());
+                    else if (type == QLatin1String(ReadableUriListMimeType))
+                        snapshot.insert(type, portalUriList(data));
                     else
                         snapshot.insert(type, data->data(type));
                 }

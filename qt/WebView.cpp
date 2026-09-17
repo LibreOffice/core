@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include "WebView.hpp"
+#include "PortalFileTransfer.hpp"
 #include "StandaloneWindow.hpp"
 #include "TabbedWindow.hpp"
 #include "TabManager.hpp"
@@ -418,11 +419,9 @@ bool hasOnlyImageFiles(const QStringList& files)
     return true;
 }
 
-constexpr const char* PORTAL_FILETRANSFER_MIME = "application/vnd.portal.filetransfer";
-
 bool hasDroppableFiles(const QMimeData* mimeData)
 {
-    if (mimeData && mimeData->hasFormat(PORTAL_FILETRANSFER_MIME))
+    if (hasPortalFileTransfer(mimeData))
         return true;
 
     if (!mimeData || !mimeData->hasUrls())
@@ -434,33 +433,6 @@ bool hasDroppableFiles(const QMimeData* mimeData)
             return true;
     }
     return false;
-}
-
-// Resolve a FileTransfer drag payload into sandbox-accessible paths.
-QStringList filesFromPortalTransfer(const QMimeData* mimeData)
-{
-    if (mimeData && mimeData->hasFormat(PORTAL_FILETRANSFER_MIME))
-    {
-        // The payload is the transfer key, it can contain a trailing NUL.
-        const QString key =
-            QString::fromUtf8(mimeData->data(PORTAL_FILETRANSFER_MIME)).remove(QChar('\0'));
-        if (!key.isEmpty())
-        {
-            QDBusMessage message = QDBusMessage::createMethodCall(
-                "org.freedesktop.portal.Documents", "/org/freedesktop/portal/documents",
-                "org.freedesktop.portal.FileTransfer", "RetrieveFiles");
-            message.setArguments(QVariantList{ key, QVariantMap{} });
-
-            QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(message);
-            if (reply.isValid())
-                return reply.value();
-            else
-                LOG_WRN("FileTransfer portal RetrieveFiles failed: "
-                        << reply.error().message().toStdString());
-        }
-    }
-
-    return {};
 }
 
 QStringList hostDisplayUris(const QStringList& portalFiles, const QMimeData* mimeData)

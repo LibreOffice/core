@@ -20,6 +20,11 @@
 #include <string>
 #include <vector>
 
+/// The pasted file list under paths this process can read, one file: URL
+/// per line. A provider offers it when the source's own text/uri-list names
+/// paths the process cannot open, as under the flatpak. The kit prefers it.
+constexpr const char* ReadableUriListMimeType = "text/x-coda-readable-uri-list";
+
 struct ClipboardData
 {
     std::vector<std::string> _mimeTypes;
