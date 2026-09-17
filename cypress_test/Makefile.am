@@ -76,6 +76,7 @@ SUPPORT_FILE_ABS = $(abs_srcdir)/support/index.js
 SUPPORT_FILE = $(if $(findstring $(abs_srcdir),$(abs_builddir)),support/index.js,$(SUPPORT_FILE_ABS))
 
 LIGHTHOUSE_USER_AGENT = "cypress"
+LIGHTHOUSE_BROWSER = chrome
 LIGHTHOUSE_TEST_FOLDER = $(abs_srcdir)/integration_tests/lighthouse
 LIGHTHOUSE_DATA_FOLDER = $(DESKTOP_DATA_FOLDER)
 LIGHTHOUSE_DATA_WORKDIR = $(DESKTOP_DATA_WORKDIR)
@@ -159,6 +160,9 @@ MOBILE_TEST_FILES_DONE= \
 DESKTOP_TEST_FILES_DONE= \
 	$(foreach test_file,$(DESKTOP_TEST_FILES),$(DESKTOP_TRACK_FOLDER)/$(test_file).done)
 
+LIGHTHOUSE_TEST_FILES_DONE= \
+	$(foreach test_file,$(LIGHTHOUSE_TEST_FILES),$(LIGHTHOUSE_TRACK_FOLDER)/$(test_file).done)
+
 IDLE_TEST_FILES_DONE= \
 	$(foreach test_file,$(IDLE_TEST_FILES),$(IDLE_TRACK_FOLDER)/$(test_file).done)
 
@@ -220,6 +224,16 @@ $(DESKTOP_TEST_FILES_DONE): $(PID_FILE)
 		$(V)mkdir -p $(dir $@) && touch $@\
 		,\
 		$(V)$(foreach done_file,$(DESKTOP_TEST_FILES_DONE),mkdir -p $(dir $(done_file)) && touch $(done_file) &&) true\
+	)
+
+$(LIGHTHOUSE_TEST_FILES_DONE): $(PID_FILE)
+	$(if $(PARALLEL_BUILD),\
+		$(call run_lighthouse_tests,$(subst $(LIGHTHOUSE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_lighthouse_tests))
+	$(if $(PARALLEL_BUILD),\
+		$(V)mkdir -p $(dir $@) && touch $@\
+		,\
+		$(V)$(foreach done_file,$(LIGHTHOUSE_TEST_FILES_DONE),mkdir -p $(dir $(done_file)) && touch $(done_file) &&) true\
 	)
 
 $(MULTIUSER_TESTS_DONE): $(PID_FILE) $(MOBILE_TEST_FILES_DONE) $(IDLE_TEST_FILES_DONE)
@@ -428,9 +442,23 @@ endef
 check-lighthouse: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
-	$(call start_coolwsd)
-	$(call run_lighthouse_tests,$(spec))
+# the .done targets start coolwsd themselves
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),,$(call start_coolwsd))
+# with -jN and no single spec, run one cypress process per spec
+	$(if $(and $(PARALLEL_BUILD), $(if $(spec),,yes)),\
+		trap '$(KILL_COMMAND) || true' EXIT; \
+		$(MAKE) $(LIGHTHOUSE_TEST_FILES_DONE),\
+		$(call run_lighthouse_tests,$(spec)))
 	$(V)$(KILL_COMMAND) || true
+# run_buffered.sh always exits 0 and records failures in ERROR_LOG
+	$(V)test ! -f $(ERROR_LOG) || (cat $(ERROR_LOG) && false)
+
+run-lighthouse: BROWSER := $(LIGHTHOUSE_BROWSER)
+run-lighthouse: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	$(call cleanup_before_run)
+	$(call run_JS_error_check)
+	$(call start_coolwsd)
+	$(call run_interactive,lighthouse,$(LIGHTHOUSE_INCLUDE_TAGS),$(LIGHTHOUSE_CONFIG),$(LIGHTHOUSE_ENV),$(LIGHTHOUSE_TEST_FOLDER))
 
 LIGHTHOUSE_CONFIG = \
 	specPattern=$(LIGHTHOUSE_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(LIGHTHOUSE_USER_AGENT)
@@ -444,6 +472,7 @@ LIGHTHOUSE_INCLUDE_TAGS = \
 # Run lighthouse accessibility tests with Chrome browser.
 # Parameters:
 # 1 - spec (optional):	test file to run, if not specified all lighthouse tests are run.
+# 2 - log (optional):	log file for cypress run, needed for parallel build only.
 define run_lighthouse_tests
 	$(V)echo $(if $(1),"Running lighthouse test: $(1)","Running all lighthouse accessibility tests...")
 	$(V)echo
@@ -451,18 +480,22 @@ define run_lighthouse_tests
 	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
 	$(V)echo
 	$(eval export CYPRESS_INCLUDE_TAGS)
-	$(eval LIGHTHOUSE_BROWSER=chrome)
-	$(eval SPEC_FILE=$(if $(1),$(LIGHTHOUSE_TEST_FOLDER)/$(1)))
-	$(if $(1),$(call check_spec_existence,$(1),lighthouse))
-	$(SETSID) $(CYPRESS_BINARY) run \
-		--browser $(LIGHTHOUSE_BROWSER) \
-		--headless \
-		--config-file $(CYPRESS_CONFIG) \
-		--project $(abs_srcdir) \
-		--config $(LIGHTHOUSE_CONFIG) \
-		--env $(LIGHTHOUSE_ENV) \
-		$(if $(SPEC_FILE),--spec=$(SPEC_FILE)) \
-		|| ($(KILL_COMMAND) && false)
+	$(if $(and $(PARALLEL_BUILD), $(1)),\
+		$(V)$(call run_test_buffered,\
+			$(LIGHTHOUSE_CONFIG),$(LIGHTHOUSE_ENV),$(1),lighthouse,$(2),$(LIGHTHOUSE_BROWSER))\
+	,\
+		$(eval SPEC_FILE=$(if $(1),$(LIGHTHOUSE_TEST_FOLDER)/$(1)))\
+		$(if $(1),$(call check_spec_existence,$(1),lighthouse))\
+		$(SETSID) $(CYPRESS_BINARY) run \
+			--browser $(LIGHTHOUSE_BROWSER) \
+			--headless \
+			--config-file $(CYPRESS_CONFIG) \
+			--project $(abs_srcdir) \
+			--config $(LIGHTHOUSE_CONFIG) \
+			--env $(LIGHTHOUSE_ENV) \
+			$(if $(SPEC_FILE),--spec=$(SPEC_FILE)) \
+			|| ($(KILL_COMMAND) && false)\
+	)
 endef
 
 ################
@@ -957,11 +990,11 @@ endef
 # 3 - spec:   test file path (e.g. cypress' --spec argument)
 # 4 - type:   test type (e.g. mobile, desktop, multi-user)
 # 5 - log:    log file path
-# 6 - config-file: cypress configuration file (e.g. cypress.config.ts)
+# 6 - browser (optional): browser to run, defaults to $(BROWSER)
 define run_test_buffered
 	$(CYPRESS_FONTCONFIG) \
 	$(BUFFERED_SCRIPT) \
-		--browser $(BROWSER) \
+		--browser $(if $(6),$(6),$(BROWSER)) \
 		--config $(1) \
 		--env $(2) \
 		--spec $(3) \

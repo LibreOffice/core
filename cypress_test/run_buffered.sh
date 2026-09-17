@@ -12,6 +12,7 @@ CYPRESS_BINARY="${BUILDDIR}/node_modules/cypress/bin/cypress"
 DESKTOP_TEST_FOLDER="${DIR}/integration_tests/desktop/"
 MOBILE_TEST_FOLDER="${DIR}/integration_tests/mobile/"
 MULTIUSER_TEST_FOLDER="${DIR}/integration_tests/multiuser/"
+LIGHTHOUSE_TEST_FOLDER="${DIR}/integration_tests/lighthouse/"
 ERROR_LOG="${BUILDDIR}/workdir/error.log"
 SPEC_TIMINGS="${BUILDDIR}/workdir/spec-timings.txt"
 
@@ -62,6 +63,8 @@ elif [ "${TEST_TYPE}" = "mobile" -o "${TEST_TYPE}" = "interfer-mobile" ]; then
     TEST_FILE_PATH=${MOBILE_TEST_FOLDER}${TEST_FILE};
 elif [ "${TEST_TYPE}" = "multi-user" ]; then
     TEST_FILE_PATH=${MULTIUSER_TEST_FOLDER}${TEST_FILE};
+elif [ "${TEST_TYPE}" = "lighthouse" ]; then
+    TEST_FILE_PATH=${LIGHTHOUSE_TEST_FOLDER}${TEST_FILE};
 elif [ "${TEST_TYPE}" = "interfer" ]; then
     TEST_FILE_PATH="${DIR}/integration_tests/common/"${TEST_FILE};
 fi
