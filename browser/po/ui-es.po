@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-17 03:07+0000\n"
+"PO-Revision-Date: 2026-09-17 23:35+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fito@libreoffice.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
@@ -1172,7 +1172,7 @@ msgstr "Configuración de proveedor no válida"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3355
 msgid "None (disable image generation)"
-msgstr "Ninguno (inhabilitar la generación de imágenes)"
+msgstr "Ninguno (desactivar generación de imágenes)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3372
 msgid "Fetch models to select"
@@ -1382,7 +1382,7 @@ msgstr "Estilos de tabla"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Predeterminar"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
@@ -1652,7 +1652,7 @@ msgstr "Haz que el siguiente texto sea más conciso"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr ""
+msgstr "Hacer más conciso"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
@@ -1660,7 +1660,7 @@ msgstr "Resume los puntos clave de este texto"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Summarize this text"
-msgstr ""
+msgstr "Resumir este texto"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Expand and add more detail to this text"
@@ -1668,7 +1668,7 @@ msgstr "Amplíe y añada más detalles a este texto"
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Expand this text"
-msgstr ""
+msgstr "Expandir este texto"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Fix grammar, spelling, and punctuation errors"
@@ -1676,7 +1676,7 @@ msgstr "Corrige errores de gramática, ortografía y puntuación"
 
 #: src/control/Control.AIChatSidebar.ts:149
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Corregir gramática y ortografía"
 
 #: src/control/Control.AIChatSidebar.ts:164
 msgid "Natural"
@@ -2030,7 +2030,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Mensaje demasiado extenso"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
@@ -2095,7 +2095,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Documento no disponible"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
@@ -2119,7 +2119,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "No se generó ninguna imagen"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
@@ -2151,7 +2151,7 @@ msgstr "Pensando…"
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Trabajando…"
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
@@ -2295,7 +2295,7 @@ msgstr[1] ""
 
 #: src/control/Control.AIChatSidebar.ts:2661
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "aplicar la plantilla de diseño «%1»"
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "This will: %1."
@@ -2382,7 +2382,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3236
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Continuar sin plantilla diseñada"
 
 #: src/control/Control.AIChatSidebar.ts:3302
 msgid ""
@@ -2400,15 +2400,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3397
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Título de diapositiva %1"
 
 #: src/control/Control.AIChatSidebar.ts:3403
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Descripción de diapositiva %1"
 
 #: src/control/Control.AIChatSidebar.ts:3409
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Quitar diapositiva %1"
 
 #: src/control/Control.AIChatSidebar.ts:3457
 msgid "Slide title"
@@ -2920,7 +2920,7 @@ msgstr ""
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Abrir archivo del equipo"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
@@ -2972,7 +2972,7 @@ msgstr "Desconecta esta nube"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
-msgstr ""
+msgstr "Se añadió una cuenta nueva correctamente"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
@@ -3686,7 +3686,7 @@ msgstr "Archivo HTML (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Etiqueta de seguridad"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4480,11 +4480,11 @@ msgstr ""
 
 #: src/control/Control.Notebookbar.js:595
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Estilo de punta de flecha inicial"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Estilo de punta de flecha final"
 
 #: src/control/Control.Notebookbar.js:670
 msgid "Line Width"
@@ -4492,7 +4492,7 @@ msgstr ""
 
 #: src/control/Control.Notebookbar.js:695
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Transparencia de línea:"
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:783
@@ -5164,11 +5164,11 @@ msgstr "Espaciado y color"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Importar diapositivas"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Actualizar enlaces"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5342,7 +5342,7 @@ msgstr "Introduzca el nombre nuevo de la sección:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Importe sus diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
@@ -5416,11 +5416,11 @@ msgstr "{0} seleccionado"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Abriendo archivo…"
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Insertando diapositivas…"
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
@@ -5463,7 +5463,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Localizar archivo"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
@@ -5475,11 +5475,11 @@ msgstr "Mostrar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Recargar diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Seleccionar todas las diapositivas"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
@@ -5487,11 +5487,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Quitar de la lista"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Alternar {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
@@ -5499,7 +5499,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
-msgstr ""
+msgstr "Mantener diseño original"
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
@@ -5524,7 +5524,7 @@ msgstr ""
 
 #: src/slideimport/SlideImportSession.ts:308
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Falló la importación de las diapositivas."
 
 #: src/slideimport/SlideLinks.ts:171
 msgid "No slide of this presentation is linked to another file."
@@ -5838,7 +5838,7 @@ msgstr "Escriba el nombre nuevo de la hoja"
 
 #: src/control/Control.Tabs.js:753
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Proteger hoja"
 
 #: src/control/Control.Tabs.js:753
 msgid "Enter a password to protect the sheet"
@@ -5846,7 +5846,7 @@ msgstr ""
 
 #: src/control/Control.Tabs.js:757
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Desproteger hoja"
 
 #: src/control/Control.Tabs.js:757
 msgid "Enter the password to unprotect the sheet"
@@ -6223,7 +6223,7 @@ msgstr "Editar localmente"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Los cambios se sincronizan al guardar"
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
@@ -6235,11 +6235,11 @@ msgstr ""
 
 #: src/control/Permission.js:460
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Seguir viendo copia local"
 
 #: src/control/Permission.js:461
 msgid "Continue with your version"
-msgstr ""
+msgstr "Continuar con su versión"
 
 #: src/control/Permission.js:469
 msgid "Join collaborative editing"
@@ -7575,14 +7575,14 @@ msgstr "Fuera de la tabla"
 #: src/layer/marker/A11yTextInput.js:359
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n fila"
+msgstr[1] "%n filas"
 
 #: src/layer/marker/A11yTextInput.js:360
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n columna"
+msgstr[1] "%n columnas"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
@@ -7958,15 +7958,15 @@ msgstr "Reanudar"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animación: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animación: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Transición: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8021,11 +8021,11 @@ msgstr "Alejar"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Previsualización de la diapositiva actual"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Previsualización de la próxima diapositiva"
 
 #: src/slideshow/PresenterConsole.js:211
 msgid "Preview Slide {1}"
@@ -8037,7 +8037,7 @@ msgstr ""
 
 #: src/slideshow/PresenterConsole.js:835
 msgid "The link is not valid."
-msgstr ""
+msgstr "El enlace no es válido."
 
 #: src/slideshow/PresenterConsole.js:1167
 #: src/slideshow/SlideShowPresenter.ts:934
