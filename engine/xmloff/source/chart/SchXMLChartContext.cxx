@@ -935,7 +935,9 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     }
     else
     {
-        SAL_WARN("xmloff.chart", "Must not get here" );
+        // The data stays in the document that holds the chart, and every series names the
+        // range it reads from. Neither merging series nor reading one rectangular range
+        // applies to a chart of that kind, so its data is already where it belongs.
     }
 
     if (maChartTypeServiceName == "com.sun.star.chart2.HistogramChartType")
