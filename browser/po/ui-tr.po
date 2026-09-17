@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-17 03:07+0000\n"
+"PO-Revision-Date: 2026-09-17 23:35+0000\n"
 "Last-Translator: Halis ŞİMŞEK <halis.simsek@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/tr/>\n"
@@ -424,6 +424,8 @@ msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
+"Belgeler güvenli bir şekilde sınırlandırılamıyor: Yetkiler, isim alanları ve "
+"landlock bileşenleri eksik."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -431,6 +433,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"Potansiyel risk taşıyan sistem çağrılarının BPF ile filtrelenmesi (seccomp) "
+"etkinleştirilmedi; bu durum güvenlik riski oluşturmaktadır."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -456,6 +460,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Bazı istemciler, kullanımdan kaldırılması planlanan eski WebSocket URL "
+"biçimiyle bağlandı. Vekil sunucunuzun (proxy) sıkıştırılmış biçimi doğrudan "
+"ilettiğini doğrulayın."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:4051
@@ -465,7 +472,7 @@ msgstr "Hata"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Ayrıntılı bilgi alın"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -488,42 +495,44 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Invalid request"
-msgstr ""
+msgstr "Geçersiz istek"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Geçersiz API anahtarı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API anahtarı izinleri eksik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Bu yapay zekâ ana bilgisayarı izin verilenler listesinde (lok_allow.host) "
+"yok. İzin vermesi için sistem yöneticinize başvurun."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Hız sınırına ulaşıldı - lütfen bir süre bekleyin ve tekrar deneyin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API sunucu hatası - daha sonra tekrar deneyin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Servis geçici olarak kullanım dışı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:625
 msgid "Signature Certificate"
-msgstr ""
+msgstr "İmza Sertifikası"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:626
 msgid "Signature Key"
@@ -547,24 +556,24 @@ msgstr "API Anahtarı"
 #: admin/src/integrator/AdminIntegratorSettings.ts:630
 #: admin/src/integrator/AdminIntegratorSettings.ts:635
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:631
 #: admin/src/integrator/AdminIntegratorSettings.ts:634
 msgid "Base URL"
-msgstr ""
+msgstr "Ana URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:636
 msgid "Image Size"
-msgstr ""
+msgstr "Resim boyutu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:637
 msgid "Request Timeout (seconds)"
-msgstr ""
+msgstr "İstek Zaman Aşımı (saniye)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:640
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Belge İçi Ekran Okuyucu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:641
 #: src/control/Control.Menubar.ts:184 src/control/Control.Menubar.ts:526
@@ -580,27 +589,27 @@ msgstr "Karanlık Kip"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Otomatik Yazım Denetimi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Bu sunucunun yakınlaştırma ayarlarını kullan"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Akıllı Yakınlaştırma"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:645
 msgid "Default Zoom"
-msgstr ""
+msgstr "Varsayılan Ölçek"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Yumuşak kaydırma"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 msgid "Compact layout"
-msgstr ""
+msgstr "Sıkışık Düzen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:648
 #, fuzzy
@@ -614,7 +623,7 @@ msgstr "Cetveli Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:650
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Biçimlendirme İşaretlerini Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:651
 #: src/control/Control.NotebookbarWriter.js:2355
@@ -625,7 +634,7 @@ msgstr "Yorumları Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:652
 msgid "Accessibility Checker"
-msgstr ""
+msgstr "Erişilebilirlik Denetleyicisi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:653
 #: src/control/Control.NavigatorPanel.ts:47
@@ -635,11 +644,11 @@ msgstr "Gezinti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:654
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Kenar Çubuğunu Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:655
 msgid "Custom Animation"
-msgstr ""
+msgstr "Özel Animasyon"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:658
 #, fuzzy
@@ -651,18 +660,18 @@ msgstr "Stil dizisi"
 #: src/control/Control.NotebookbarDraw.js:560
 #: src/control/Control.NotebookbarImpress.js:759
 msgid "Grid"
-msgstr ""
+msgstr "Izgara"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:662
 #: src/control/Control.BackstageView.ts:177
 msgid "Print"
-msgstr ""
+msgstr "Yazdır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:663
 #: src/control/backstage/CloudProviderKinds.ts:66
 #: src/control/backstage/CloudProviderKinds.ts:85
 msgid "Other"
-msgstr ""
+msgstr "Diğeri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:664
 #: src/control/Control.NotebookbarImpress.js:768
@@ -681,8 +690,9 @@ msgid "Size to grid"
 msgstr "Izgarayı Yakala"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:667
+#, fuzzy
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Eksenleri Senkronize Et"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:668
 #, fuzzy
@@ -691,11 +701,11 @@ msgstr "Izgarayı Yakala"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:669
 msgid "Empty Pages"
-msgstr ""
+msgstr "Boş Sayfalar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:670
 msgid "Force Breaks"
-msgstr ""
+msgstr "Kesmeleri Zorunlu Kıl"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:671
 #: src/control/Control.Menubar.ts:877 src/control/Control.TopToolbar.js:144
@@ -705,7 +715,7 @@ msgstr "Tüm Sayfalar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:673
 msgid "Content"
-msgstr ""
+msgstr "İçerik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:674
 msgid "Display"
@@ -725,31 +735,31 @@ msgstr ""
 #: src/control/Control.NotebookbarDraw.js:1553
 #: src/control/Control.NotebookbarWriter.js:1279
 msgid "Page"
-msgstr ""
+msgstr "Sayfa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:678
 msgid "Fit to page"
-msgstr ""
+msgstr "Sayfaya sığdır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:679
 msgid "Tile pages"
-msgstr ""
+msgstr "Sayfaları döşe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:680
 msgid "Booklet"
-msgstr ""
+msgstr "Kitapçık"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:681
 msgid "Booklet front"
-msgstr ""
+msgstr "Kitapçık önü"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:682
 msgid "Booklet back"
-msgstr ""
+msgstr "Kitapçık arkası"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:683
 msgid "Page name"
-msgstr ""
+msgstr "Sayfa adı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:684
 #: src/control/Control.NotebookbarCalc.js:859
@@ -765,11 +775,11 @@ msgstr "Zaman"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:686
 msgid "Hidden pages"
-msgstr ""
+msgstr "Gizli sayfalar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:687
 msgid "From printer setup"
-msgstr ""
+msgstr "Yazıcı ayarlarından"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:688
 #: src/control/Control.BackstageView.ts:850
@@ -783,7 +793,7 @@ msgstr "Notlar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:690
 msgid "Handouts"
-msgstr ""
+msgstr "Dinleyici notları"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:691
 #: src/control/Control.NavigatorPanel.ts:231
@@ -793,52 +803,51 @@ msgstr "Anahat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:692
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Yatay Dinleyici Notları"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:693
 msgid "Images"
-msgstr ""
+msgstr "Görseller"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:694
-#, fuzzy
 msgid "Tables"
-msgstr "Tablo"
+msgstr "Tablolar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:695
 msgid "Controls"
-msgstr ""
+msgstr "Denetimler"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:696
 msgid "Background"
-msgstr ""
+msgstr "Arkaplan"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:697
 msgid "Print Black"
-msgstr ""
+msgstr "Siyah olarak yazdır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:698
 msgid "Hidden text"
-msgstr ""
+msgstr "Gizli metin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:699
 msgid "Placeholders"
-msgstr ""
+msgstr "Yer tutucular"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:700
 msgid "Left pages"
-msgstr ""
+msgstr "Sol sayfalar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:701
 msgid "Right pages"
-msgstr ""
+msgstr "Sağ sayfalar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:702
 msgid "Brochure"
-msgstr ""
+msgstr "Broşür"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:703
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Sağdan sola broşür"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:952
 msgid "Invalid JSON file"
@@ -858,7 +867,7 @@ msgid ""
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
 "Yeniden kullanılabilir metin parçacağı (.bau) yükleyin. Metni belgenize "
-"ekleyebilmek için, bir AutoText girdisi için kısayol tuşunu girin ve F3'e "
+"ekleyebilmek için, bir HazırMetin girdisi için kısayol tuşunu girin ve F3'e "
 "basın."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:976
