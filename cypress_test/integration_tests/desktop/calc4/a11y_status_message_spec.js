@@ -1,6 +1,7 @@
 /* global describe it cy before expect require */
 
 const helper = require('../../common/helper');
+const desktopHelper = require('../../common/desktop_helper');
 const a11yHelper = require('../../common/a11y_helper');
 
 // A message with nothing to press has no widget to hand the focus to, so the
@@ -8,24 +9,40 @@ const a11yHelper = require('../../common/a11y_helper');
 // there, and Escape goes to the document instead of closing it.
 describe(['tagdesktop'], 'Status message accessibility', { testIsolation: false }, function () {
 	let win;
-	let ready;
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('calc/switch.ods');
+		// The sidecar advertises EnableShare with nothing behind it, which is
+		// what puts the button in the File tab and leaves the postMessage
+		// handshake unanswered.
+		helper.setupAndLoadDocument('calc/switch.ods', false, true);
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;
 		});
+
+		desktopHelper.switchUIToNotebookbar();
+		cy.cGet('#File-tab-label').click();
+		cy.cGet('#File-container').should('be.visible');
 	});
 
+	function shareControl() {
+		return win.document.querySelector(
+			'#File-container [modelId*="shareas"], #File-container .shareas');
+	}
+
 	it('a message with no buttons is announced and closes on Escape', function () {
-		// The message appears when the host advertised Share but never completed
-		// the postMessage handshake, which is the state this forces.
+		cy.wrap(null).should(function () {
+			expect(shareControl(), 'the Share button the host advertised')
+				.to.not.equal(null);
+		});
+
+		// The sidecar buys the button, not the silence behind it: debug.html
+		// answers the handshake that the whitebox host leaves hanging, so the
+		// one thing the harness cannot be is a host that never replies.
 		cy.then(function () {
-			ready = win.WOPIPostmessageReady;
 			win.WOPIPostmessageReady = false;
-			win.app.map.openShare();
+			shareControl().click();
 		});
 
 		cy.cGet('.jsdialog-window.modalpopup').should('be.visible');
@@ -43,9 +60,5 @@ describe(['tagdesktop'], 'Status message accessibility', { testIsolation: false 
 
 		cy.realPress('Escape');
 		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
-
-		cy.then(function () {
-			win.WOPIPostmessageReady = ready;
-		});
 	});
 });

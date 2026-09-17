@@ -1,0 +1,6 @@
+{
+    "_comment": "Only used when setupAndLoadDocument is called with copyCertificates=true. Advertises share and rename the way the accessibility whitebox host does, with no backend behind them.",
+    "EnableShare": true,
+    "SupportsRename": true,
+    "UserCanRename": true
+}
