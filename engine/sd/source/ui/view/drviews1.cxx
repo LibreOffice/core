@@ -411,6 +411,12 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             }
         }
 
+        // The identifier read at the start of this function names a tab of the list the view is
+        // leaving, so the list just built holds no tab under it. The page this view sits on is the
+        // one to come back to, and every view keeps its own.
+        if (maTabControl->GetPagePos(nActualPageId) == TabBar::PAGE_NOT_FOUND && mpActualPage)
+            nActualPageId = mpActualPage->getPageId();
+
         maTabControl->SetCurPageId(nActualPageId);
 
         SwitchPage(maTabControl->GetPagePos(nActualPageId));
@@ -957,6 +963,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
         if (bAllowChangeFocus && !KitHelper::isSettingView())
             mpDrawView->SdrEndTextEdit();
 
+        SdPage* pPreviousPage = mpActualPage;
         mpActualPage = nullptr;
 
         if (meEditMode == EditMode::Page)
@@ -966,10 +973,26 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
         else
         {
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
+            sal_uInt16 nPageCount = GetDoc()->GetSdPageCount(mePageKind);
+
+            // Under COOL the selection is a property of the document that every view writes, so
+            // the page this view was on comes first when it fits to the masterpage.
+            if (comphelper::COKit::isActive())
+            {
+                for (sal_uInt16 i = 0; i < nPageCount; i++)
+                {
+                    SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
+                    if (pPage && pPage == pPreviousPage
+                        && pMaster == &(pPage->TRG_GetMasterPage()))
+                    {
+                        mpActualPage = pPage;
+                        break;
+                    }
+                }
+            }
 
             // does the selected page fit to the masterpage?
-            sal_uInt16 nPageCount = GetDoc()->GetSdPageCount(mePageKind);
-            for (sal_uInt16 i = 0; i < nPageCount; i++)
+            for (sal_uInt16 i = 0; !mpActualPage && i < nPageCount; i++)
             {
                 SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
                 if(pPage && pPage->IsSelected() && pMaster == &(pPage->TRG_GetMasterPage()))

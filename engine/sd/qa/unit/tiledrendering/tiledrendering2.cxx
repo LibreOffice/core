@@ -11,6 +11,7 @@
 #include <unotools/tempfile.hxx>
 #include <sdtiledrenderingtest.hxx>
 
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -1203,6 +1204,60 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testExportPages)
     CPPUNIT_ASSERT(pWholeDocument);
     CPPUNIT_ASSERT_EQUAL(nPages, pWholeDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
     xWhole->dispose();
+}
+
+// Leaving the master view puts the view back on the slide it was on, not on the first slide.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideKeptWhenLeavingMasterView)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getPart());
+
+    pXImpressDocument->setEditMode(1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+
+    pXImpressDocument->setEditMode(0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getEditMode());
+
+    // Without the fix the view came back on the first slide.
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getPart());
+}
+
+// A view that goes through the master view comes back on its own slide, even when another view
+// selected a different slide in the meantime.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideKeptWhenLeavingMasterViewTwoViews)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    const int nView1 = KitHelper::getCurrentView();
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    const int nView2 = KitHelper::getCurrentView();
+    pXImpressDocument->setPart(0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+
+    KitHelper::setView(nView1);
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getPart());
+
+    pXImpressDocument->setEditMode(1);
+    Scheduler::ProcessEventsToIdle();
+    pXImpressDocument->setEditMode(0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix the first view followed the second view's selection to the first slide.
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getEditMode());
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getPart());
+
+    KitHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

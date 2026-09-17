@@ -466,9 +466,9 @@ public:
     /// @see vcl::ITiledRenderable::setPartMode().
     virtual void setPartMode( COKitPartMode ePartMode ) override;
     /// @see vcl::ITiledRenderable::getEditMode().
-    virtual int getEditMode() override;
+    SD_DLLPUBLIC virtual int getEditMode() override;
     /// @see vcl::ITiledRenderable::setEditMode().
-    virtual void setEditMode(int) override;
+    SD_DLLPUBLIC virtual void setEditMode(int) override;
 
     /// @see vcl::ITiledRenderable::setDrawnFromModel().
     virtual void setDrawnFromModel(bool bDrawnFromModel) override;
