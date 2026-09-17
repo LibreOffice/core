@@ -73,7 +73,7 @@ class TableFunctionSet;
 
 //= TableControl_Impl
 
-class TableControl_Impl : public ITableControl, public ITableModelListener
+class TableControl_Impl : public ITableModelListener
 {
     friend class TableGeometry;
     friend class TableRowGeometry;
@@ -241,9 +241,21 @@ public:
     void commitTableEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue,
                           const css::uno::Any& i_oldValue);
 
-    // ITableControl
-    virtual void hideCursor() override;
-    virtual void showCursor() override;
+    /** hides the cell cursor
+
+        The method cares for successive calls, that is, for every call to
+        ->hideCursor(), you need one call to ->showCursor. Only if the number
+        of both calls matches, the cursor is really shown.
+
+        @see showCursor
+    */
+    void hideCursor();
+
+    /** shows the cell cursor
+
+        @see hideCursor
+    */
+    void showCursor();
 
     /** dispatches an action to the table control
 
@@ -257,25 +269,59 @@ public:
     */
     bool dispatchAction(TableControlAction _eAction);
 
-    virtual SelectionEngine* getSelEngine() override;
-    virtual PTableModel getModel() const override;
-    virtual ColPos getCurrentColumn() const override;
-    virtual RowPos getCurrentRow() const override;
-    virtual void activateCell(ColPos const i_col, RowPos const i_row) override;
-    virtual ::Size getTableSizePixel() const override;
-    virtual void setPointer(PointerStyle i_pointer) override;
-    virtual void captureMouse() override;
-    virtual void releaseMouse() override;
-    virtual void invalidate(TableArea const i_what) override;
-    virtual tools::Long pixelWidthToAppFont(tools::Long const i_pixels) const override;
-    virtual void hideTracking() override;
-    virtual void showTracking(tools::Rectangle const& i_location,
-                              ShowTrackFlags const i_flags) override;
+    /** returns selection engine*/
+    SelectionEngine* getSelEngine();
+
+    /** returns the table model
+
+        The returned model is guaranteed to not be <NULL/>.
+    */
+    PTableModel getModel() const;
+
+    /// returns the index of the currently active column
+    ColPos getCurrentColumn() const;
+
+    /// returns the index of the currently active row
+    RowPos getCurrentRow() const;
+
+    /// activates the given cell
+    void activateCell(ColPos const i_col, RowPos const i_row);
+
+    /// retrieves the size of the table window, in pixels
+    Size getTableSizePixel() const;
+
+    /// sets a new mouse pointer for the table window
+    void setPointer(PointerStyle i_pointer);
+
+    /// captures the mouse to the table window
+    void captureMouse();
+
+    /// releases the mouse, after it had previously been captured
+    void releaseMouse();
+
+    /// invalidates the table window
+    void invalidate(TableArea const i_what);
+
+    /// calculates a width, given in pixels, into an AppFont-based width
+    tools::Long pixelWidthToAppFont(tools::Long const i_pixels) const;
+
+    /// hides a previously shown tracking rectangle
+    void hideTracking();
+
+    /// shows a tracking rectangle
+    void showTracking(tools::Rectangle const& i_location, ShowTrackFlags const i_flags);
+
     RowPos getRowAtPoint(const Point& rPoint) const;
     ColPos getColAtPoint(const Point& rPoint) const;
-    virtual TableCell hitTest(const Point& rPoint) const override;
-    virtual ColumnMetrics getColumnMetrics(ColPos const i_column) const override;
-    virtual bool isRowSelected(RowPos i_row) const override;
+
+    /// does a hit test for the given pixel coordinates
+    TableCell hitTest(const Point& rPoint) const;
+
+    /// retrieves the metrics for a given column
+    ColumnMetrics getColumnMetrics(ColPos const i_column) const;
+
+    /// determines whether a given row is selected
+    bool isRowSelected(RowPos i_row) const;
 
     tools::Long appFontWidthToPixel(tools::Long const i_appFontUnits) const;
 
