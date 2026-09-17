@@ -1427,7 +1427,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
         std::shared_ptr< Data::Implementation > impl =
             std::make_shared<Data::Implementation>(
                 name, readLegacyRdbString(uri, implKey, u"UNO/ACTIVATOR"_ustr),
-                readLegacyRdbString(uri, implKey, u"UNO/LOCATION"_ustr), "", "", "", false,
+                readLegacyRdbString(uri, implKey, u"UNO/LOCATION"_ustr), u""_ustr, u""_ustr, u""_ustr, false,
                 cpo::uno::Reference< cpo::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {

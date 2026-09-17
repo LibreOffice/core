@@ -256,7 +256,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         cpo::uno::Environment env(getEnvironment(environment, implementation));
         if (!(curEnv.is() && env.is())) {
             throw css::loader::CannotActivateFactoryException(
-                "cannot get environments",
+                u"cannot get environments"_ustr,
                 cpo::uno::Reference<cpo::uno::XInterface>());
         }
         if (curEnv.get() != env.get()) {

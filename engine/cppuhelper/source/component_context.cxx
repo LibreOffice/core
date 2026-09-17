@@ -549,7 +549,7 @@ Reference< XComponentContext > createComponentContext(
     Reference< XComponentContext > const & xDelegate )
 {
     cpo::uno::Environment curr_env(Environment::getCurrent());
-    cpo::uno::Environment source_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    cpo::uno::Environment source_env(u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr);
 
     cpo::uno::Mapping curr2source(curr_env, source_env);
     cpo::uno::Mapping source2curr(source_env, curr_env);

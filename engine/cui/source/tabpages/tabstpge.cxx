@@ -94,8 +94,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(weld::Container* pPage, weld::DialogCon
     m_aCenterWin.SetTabStyle(sal_uInt16(RULER_TAB_CENTER|WB_HORZ));
     m_aDezWin.SetTabStyle(sal_uInt16(RULER_TAB_DECIMAL|WB_HORZ));
     //upper radiobuttons
-    m_xLeftTab = m_xBuilder->weld_radio_button(SvtCJKOptions::IsAsianTypographyEnabled() ? "radiobuttonST_LEFTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_LEFT");
-    m_xRightTab = m_xBuilder->weld_radio_button(SvtCJKOptions::IsAsianTypographyEnabled() ? "radiobuttonST_RIGHTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_RIGHT");
+    m_xLeftTab = m_xBuilder->weld_radio_button(SvtCJKOptions::IsAsianTypographyEnabled() ? u"radiobuttonST_LEFTTAB_ASIAN"_ustr : u"radiobuttonBTN_TABTYPE_LEFT"_ustr);
+    m_xRightTab = m_xBuilder->weld_radio_button(SvtCJKOptions::IsAsianTypographyEnabled() ? u"radiobuttonST_RIGHTTAB_ASIAN"_ustr : u"radiobuttonBTN_TABTYPE_RIGHT"_ustr);
     m_xLeftTab->show();
     m_xRightTab->show();
 

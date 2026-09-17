@@ -143,7 +143,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
                                                         s_get_service_names() ));
 
     cpo::uno::Environment curr_env(Environment::getCurrent());
-    cpo::uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    cpo::uno::Environment target_env(u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr);
 
     cpo::uno::Mapping target2curr(target_env, curr_env);
 

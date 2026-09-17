@@ -481,7 +481,7 @@ void SvxHatchTabPage::runNameDialog(VclPtr<AbstractSvxNameDialog> pDlg, tools::L
 
         // Offer to try again
         std::shared_ptr<weld::MessageDialogController> xWarnBox = std::make_shared<weld::MessageDialogController>(GetFrameWeld(),
-                "cui/ui/queryduplicatedialog.ui", "DuplicateNameDialog");
+                u"cui/ui/queryduplicatedialog.ui"_ustr, u"DuplicateNameDialog"_ustr);
         weld::DialogController::runAsync(xWarnBox, [pDlg, nCount, this](sal_Int32 nWarnResult) {
             if (nWarnResult == RET_OK)
                 runNameDialog(pDlg, nCount);

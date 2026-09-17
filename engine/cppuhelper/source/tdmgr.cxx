@@ -639,7 +639,7 @@ bool installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
 {
     cpo::uno::Environment curr_env(Environment::getCurrent());
-    cpo::uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    cpo::uno::Environment target_env(u"" CPPU_CURRENT_LANGUAGE_BINDING_NAME ""_ustr);
 
     cpo::uno::Mapping curr2target(curr_env, target_env);
 

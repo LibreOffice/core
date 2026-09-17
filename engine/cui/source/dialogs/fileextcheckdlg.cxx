@@ -26,10 +26,10 @@
 
 FileExtCheckDialog::FileExtCheckDialog(weld::Window* pParent, const OUString& sTitle,
                                        const OUString& sMsg)
-    : GenericDialogController(pParent, "cui/ui/fileextcheckdialog.ui", "FileExtCheckDialog")
-    , m_pText(m_xBuilder->weld_label("lbText"))
-    , m_pPerformCheck(m_xBuilder->weld_check_button("cbPerformCheck"))
-    , m_pOk(m_xBuilder->weld_button("btnOk"))
+    : GenericDialogController(pParent, u"cui/ui/fileextcheckdialog.ui"_ustr, u"FileExtCheckDialog"_ustr)
+    , m_pText(m_xBuilder->weld_label(u"lbText"_ustr))
+    , m_pPerformCheck(m_xBuilder->weld_check_button(u"cbPerformCheck"_ustr))
+    , m_pOk(m_xBuilder->weld_button(u"btnOk"_ustr))
 {
     m_pPerformCheck->set_active(true);
     m_pOk->connect_clicked(LINK(this, FileExtCheckDialog, OnOkClick));

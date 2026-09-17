@@ -509,7 +509,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
 {
     auto xSet = std::make_shared<SfxItemSetFixed<SID_AUTOSPELL_CHECK,SID_AUTOSPELL_CHECK>>( SfxGetpApp()->GetPool() );
     m_xOptionsDlg = std::make_shared<SfxSingleTabDialogController>(
-        m_xDialog.get(), xSet.get(), "content", "cui/ui/spelloptionsdialog.ui", "SpellOptionsDialog");
+        m_xDialog.get(), xSet.get(), u"content"_ustr, u"cui/ui/spelloptionsdialog.ui"_ustr, u"SpellOptionsDialog"_ustr);
 
     std::unique_ptr<SfxTabPage> xPage = SvxLinguTabPage::Create(m_xOptionsDlg->get_content_area(), m_xOptionsDlg.get(), xSet.get());
     static_cast<SvxLinguTabPage*>(xPage.get())->HideModulesGroup();
