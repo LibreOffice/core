@@ -13258,7 +13258,6 @@ toolkit/inc/controls/table/AccessibleGridControlHeader.hxx
 toolkit/inc/controls/table/AccessibleGridControlHeaderCell.hxx
 toolkit/inc/controls/table/AccessibleGridControlTable.hxx
 toolkit/inc/controls/table/AccessibleGridControlTableBase.hxx
-toolkit/inc/controls/table/defaultinputhandler.hxx
 toolkit/inc/controls/table/gridtablerenderer.hxx
 toolkit/inc/controls/table/tablecontrolinterface.hxx
 toolkit/inc/controls/table/tablemodel.hxx
@@ -13326,7 +13325,6 @@ toolkit/source/controls/table/AccessibleGridControlTable.cxx
 toolkit/source/controls/table/AccessibleGridControlTableBase.cxx
 toolkit/source/controls/table/cellvalueconversion.cxx
 toolkit/source/controls/table/cellvalueconversion.hxx
-toolkit/source/controls/table/defaultinputhandler.cxx
 toolkit/source/controls/table/gridtablerenderer.cxx
 toolkit/source/controls/table/mousefunction.cxx
 toolkit/source/controls/table/tabledatawindow.cxx

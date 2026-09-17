@@ -29,33 +29,31 @@ class MouseEvent;
 
 namespace svt::table
 {
+class DefaultInputHandler final
+{
+public:
+    DefaultInputHandler();
+    ~DefaultInputHandler();
 
-    class DefaultInputHandler final
-    {
-    public:
-        DefaultInputHandler();
-        ~DefaultInputHandler();
+    // all those methods have the same semantics as the equal-named methods of ->Window,
+    // with the additional option to return a boolean value indicating whether
+    // the event should be further processed by the ->Window implementations (<FALSE/>),
+    // or whether it has been sufficiently handled by this class  (<FALSE/>).
+    bool MouseMove(ITableControl& _rControl, const MouseEvent& rMEvt);
+    bool MouseButtonDown(ITableControl& _rControl, const MouseEvent& rMEvt);
+    bool MouseButtonUp(ITableControl& _rControl, const MouseEvent& rMEvt);
 
-        // all those methods have the same semantics as the equal-named methods of ->Window,
-        // with the additional option to return a boolean value indicating whether
-        // the event should be further processed by the ->Window implementations (<FALSE/>),
-        // or whether it has been sufficiently handled by this class  (<FALSE/>).
-        bool MouseMove(ITableControl& _rControl, const MouseEvent& rMEvt);
-        bool MouseButtonDown(ITableControl& _rControl, const MouseEvent& rMEvt);
-        bool MouseButtonUp(ITableControl& _rControl, const MouseEvent& rMEvt);
+private:
+    bool delegateMouseEvent(ITableControl& i_control, const MouseEvent& i_event,
+                            FunctionResult (MouseFunction::*i_handlerMethod)(ITableControl&,
+                                                                             const MouseEvent&));
 
-    private:
-        bool delegateMouseEvent( ITableControl& i_control, const MouseEvent& i_event,
-            FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) );
+    rtl::Reference<MouseFunction> pActiveFunction;
+    std::vector<rtl::Reference<MouseFunction>> aMouseFunctions;
+};
 
-        rtl::Reference< MouseFunction >  pActiveFunction;
-        std::vector< rtl::Reference< MouseFunction > >  aMouseFunctions;
-    };
-
-    typedef std::shared_ptr<DefaultInputHandler> PTableInputHandler;
+typedef std::shared_ptr<DefaultInputHandler> PTableInputHandler;
 
 } // namespace svt::table
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
