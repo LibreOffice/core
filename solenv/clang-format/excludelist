@@ -13343,8 +13343,6 @@ toolkit/source/controls/unocontrolcontainer.cxx
 toolkit/source/controls/unocontrolcontainermodel.cxx
 toolkit/source/controls/unocontrolmodel.cxx
 toolkit/source/controls/unocontrols.cxx
-toolkit/source/controls/unocontroltablemodel.cxx
-toolkit/source/controls/unocontroltablemodel.hxx
 toolkit/source/controls/unogridcolumnfacade.cxx
 toolkit/source/controls/unogridcolumnfacade.hxx
 toolkit/source/hatchwindow/documentcloser.cxx
