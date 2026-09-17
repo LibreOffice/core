@@ -295,7 +295,7 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     return OUString();
 }
 
-// --- XCalendar3 ------------------------------------------------------------
+// --- XCalendar ------------------------------------------------------------
 
 css::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
 {

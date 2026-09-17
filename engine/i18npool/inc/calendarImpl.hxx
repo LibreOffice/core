@@ -70,8 +70,6 @@ public:
     virtual cpo::uno::Sequence < css::i18n::CalendarItem > getDays() override;
     virtual OUString getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
     virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
-
-    // XCalendar3
     virtual css::i18n::Calendar2 getLoadedCalendar2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getDays2() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > getMonths2() override;

@@ -220,6 +220,29 @@ published interface XCalendar : cpo::uno::XInterface
             date is assembled.
      */
     string  getDisplayString( [in] long nCalendarDisplayCode, [in] short nNativeNumberMode );
+
+    /// Get the currently loaded Calendar2.
+    Calendar2   getLoadedCalendar2();
+
+    /** returns a sequence of CalendarItem2 describing the
+        day names.
+     */
+    sequence< CalendarItem2 >    getDays2();
+
+    /** returns a sequence of CalendarItem2 describing the
+        month names.
+     */
+    sequence< CalendarItem2 >    getMonths2();
+
+    /** returns a sequence of CalendarItem2 describing the
+        genitive case month names.
+     */
+    sequence< CalendarItem2 >    getGenitiveMonths2();
+
+    /** returns a sequence of CalendarItem2 describing the
+        partitive case month names.
+     */
+    sequence< CalendarItem2 >    getPartitiveMonths2();
 };
 
 }; }; }; };

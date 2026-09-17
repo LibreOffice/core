@@ -15,10 +15,10 @@ module com { module sun { module star { module i18n {
 /** This interface provides access to locale specific calendar
     systems.
 
-    <p> It is derived from ::com::sun::star::i18n::XCalendar3 and
+    <p> It is derived from ::com::sun::star::i18n::XCalendar and
     provides additional methods to set and get the local time. </p>
  */
-interface XCalendar4 : com::sun::star::i18n::XCalendar3
+interface XCalendar4 : com::sun::star::i18n::XCalendar
 {
     /** Set the local date/time as an offset to the start of the
         calendar at 1-Jan-1970 00:00. The integer part represents the

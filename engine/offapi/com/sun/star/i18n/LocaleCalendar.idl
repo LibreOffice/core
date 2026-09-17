@@ -22,7 +22,7 @@ module com { module sun { module star { module i18n {
 
 
 /// Access a locale specific calendar.
-published service LocaleCalendar : XCalendar3;
+published service LocaleCalendar : XCalendar;
 
 }; }; }; };
 

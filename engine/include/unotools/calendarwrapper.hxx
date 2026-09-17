@@ -88,9 +88,6 @@ public:
     sal_Int16 getNumberOfDaysInWeek() const;
     OUString getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
     OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
-
-    // wrapper implementations of XCalendar3
-
     css::i18n::Calendar2 getLoadedCalendar() const;
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getDays() const;
     cpo::uno::Sequence< css::i18n::CalendarItem2 > getMonths() const;

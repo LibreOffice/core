@@ -2598,7 +2598,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	WordType \
 	XBreakIterator \
 	XCalendar \
-	XCalendar3 \
 	XCalendar4 \
 	XCharacterClassification \
 	XCollator \
