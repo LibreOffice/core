@@ -114,7 +114,7 @@ public:
                             ScNoteData aNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0  );
 
     /** Removes the caption object from drawing layer, if this note is its owner. */
-                        ~ScPostIt();
+   SC_DLLPUBLIC         ~ScPostIt();
 
     /** Clones this note and its caption object, if specified.
 
