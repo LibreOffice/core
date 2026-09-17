@@ -94,10 +94,12 @@ extract_sboms() {
     pinned="$1"
     docker pull -q "$pinned" >/dev/null
     container=$(docker create "$pinned")
-    docker cp -q "$container:/usr/share/sbom/collabora-online.cdx.json" \
+    # no 'docker cp -q': that flag only exists from Docker 25, and the
+    # builders run older versions
+    docker cp "$container:/usr/share/sbom/collabora-online.cdx.json" \
         "$WORKDIR/sbom.cdx.json"
-    docker cp -q "$container:/usr/share/sbom/collabora-online-image-sbom.spdx.json" \
-        "$WORKDIR/sbom.spdx.json" || true
+    docker cp "$container:/usr/share/sbom/collabora-online-image-sbom.spdx.json" \
+        "$WORKDIR/sbom.spdx.json" 2>/dev/null || true
     docker rm -f "$container" >/dev/null
 }
 
