@@ -689,7 +689,7 @@ void SvxBulletPickTabPage::FillDocumentBullets()
     for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
     {
         const SvxDocumentBullet& rBullet = maDocumentBullets[nBullet];
-        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet);
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet, aPreviewSize);
         Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(nBullet);
         OUString sText = rBullet.aBulletCharacter;
@@ -1288,7 +1288,8 @@ void SvxBitmapPickTabPage::FillDocumentBullets()
     // to announce.
     for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
     {
-        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(maDocumentBullets[nBullet]);
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(maDocumentBullets[nBullet],
+                                                                  Size(150, 200));
         Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(nBullet);
         OUString sText = CuiResId(RID_CUISTR_DOCUMENT_BULLET_ENTRY)

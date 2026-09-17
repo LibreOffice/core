@@ -174,7 +174,7 @@ void NumberingPopup::FillDocumentBullets()
     for (size_t nBullet = 0; nBullet < maDocumentBullets.size(); ++nBullet)
     {
         const SvxDocumentBullet& rBullet = maDocumentBullets[nBullet];
-        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet);
+        auto pVDev = SvxBmpNumIconView::CreateCustomBulletPreview(rBullet, Size(80, 100));
         Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(nBullet);
         OUString sText = rBullet.IsGraphic() ? SvxResId(RID_SVXSTR_DOCUMENT_BULLET_IMAGE)

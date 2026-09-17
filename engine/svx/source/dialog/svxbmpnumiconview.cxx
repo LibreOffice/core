@@ -421,10 +421,11 @@ ScopedVclPtr<VirtualDevice> SvxBmpNumIconView::CreatePreviewFromUserDraw(
 }
 
 ScopedVclPtr<VirtualDevice>
-SvxBmpNumIconView::CreateCustomBulletPreview(const SvxDocumentBullet& rBullet)
+SvxBmpNumIconView::CreateCustomBulletPreview(const SvxDocumentBullet& rBullet,
+                                             const Size& rPreviewSize)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
-    Size aSize(80, 100);
+    const Size aSize(rPreviewSize);
     pVDev->SetOutputSizePixel(aSize);
 
     const Color aBackColor(COL_WHITE);

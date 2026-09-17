@@ -48,7 +48,8 @@ public:
 
     /// Draws one bullet of the document, the character in its own font or the image scaled into
     /// the same box, on the three sample lines the other previews use.
-    static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const SvxDocumentBullet& rBullet);
+    static ScopedVclPtr<VirtualDevice> CreateCustomBulletPreview(const SvxDocumentBullet& rBullet,
+                                                                 const Size& rPreviewSize);
     static OUString GetNumberingDescription(NumberingPageType ePageType, sal_Int32 nIndex);
 
     static void SetNumberingSettings(
