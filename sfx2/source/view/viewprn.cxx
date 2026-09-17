@@ -90,7 +90,7 @@ public:
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
                           bool i_bApi, bool i_bDirect,
-                          SfxViewShell* pView,
+                          SfxViewShell& rView,
                           const uno::Sequence< beans::PropertyValue >& rProps
                         );
 
@@ -109,15 +109,15 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
                                             bool i_bApi, bool i_bDirect,
-                                            SfxViewShell* pView,
+                                            SfxViewShell& rView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
-    : PrinterController(i_rPrinter, pView ? pView->GetFrameWeld() : nullptr)
+    : PrinterController(i_rPrinter, rView.GetFrameWeld())
     , maCompleteSelection(std::move( i_Complete ))
     , maSelection(std::move( i_Selection ))
     , mxRenderable( i_xRender )
     , mpLastPrinter( nullptr )
-    , mpViewShell( pView )
+    , mpViewShell(&rView)
     , mpObjectShell(nullptr)
     , m_bJobStarted( false )
     , m_bOrigStatus( false )
@@ -125,12 +125,9 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     , m_bApi(i_bApi)
     , m_bTempPrinter( i_rPrinter )
 {
-    if ( mpViewShell )
-    {
-        StartListening( *mpViewShell );
-        mpObjectShell = mpViewShell->GetObjectShell();
-        StartListening( *mpObjectShell );
-    }
+    StartListening(*mpViewShell);
+    mpObjectShell = mpViewShell->GetObjectShell();
+    StartListening(*mpObjectShell);
 
     // initialize extra ui options
     if( mxRenderable.is() )
@@ -606,16 +603,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     }
 
     std::shared_ptr<vcl::PrinterController> xNewController(std::make_shared<SfxPrinterController>(
-                                                                               aPrt,
-                                                                               aComplete,
-                                                                               aSelection,
-                                                                               aViewProp,
-                                                                               GetRenderable(),
-                                                                               bIsAPI,
-                                                                               bIsDirect,
-                                                                               this,
-                                                                               rProps
-                                                                               ));
+        aPrt, aComplete, aSelection, aViewProp, GetRenderable(), bIsAPI, bIsDirect, *this, rProps));
     pImpl->m_xPrinterController = xNewController;
 
     // When no JobName was specified via com::sun::star::view::PrintOptions::JobName ,
