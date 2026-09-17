@@ -105,11 +105,24 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
 
         if (failed)
         {
-            _state = unauthorized ? State::Unauthorized : State::Fail;
-            if (unauthorized)
+            // Getting no answer is not the same as getting one we don't like.
+            // A host that is merely slow may well answer the next request, so
+            // callers can retry a timeout where they could not retry a refusal.
+            if (httpResponse->state() == http::Response::State::Timeout)
+            {
+                _state = State::Timedout;
+                LOG_ERR("Timed-out CheckFileInfo [" << uriAnonym << ']');
+            }
+            else if (unauthorized)
+            {
+                _state = State::Unauthorized;
                 LOG_ERR("Access denied to CheckFileInfo [" << uriAnonym << ']');
+            }
             else
-                LOG_ERR("Failed or timed-out CheckFileInfo [" << uriAnonym << ']');
+            {
+                _state = State::Fail;
+                LOG_ERR("Failed CheckFileInfo [" << uriAnonym << ']');
+            }
         }
         else
         {
