@@ -1,0 +1,73 @@
+# Option titles for the Brazilian Portuguese sentence checker.
+#
+# The author's rule source was never published: the package reached us as
+# a built extension, so there is no .dat here and no option list in this
+# file either. The options and their defaults come from the shipped
+# lightproof_opts_pt_BR.py, and only the titles are recovered here, out
+# of the extension's own dialog resources (dialog/pt_BR_*.properties).
+#
+# Format is the usual one: "id=label", and a line of help after a \n.
+
+[en_US=Grammar Checking (Portuguese)]
+
+spelling=Grammar checking
+punctuation=Punctuation
+others=Others
+grammar=Grave accent\nIdentify use of grave accent
+cap=Capitalization\nCheck missing capitalization of sentences.
+dup=Word duplication\nCheck repeated words.
+pair=Parentheses\nCheck missing or extra parentheses and quotation marks.
+spaces=Word spacing\nCheck single spaces between words.
+mdash=Em-dash\nForce unspaced em dash instead of spaced en dash.
+quotation=Quotation marks\nCheck double quotation marks: "x" → “x”
+times=Multiplication sign\nCheck true multiplication sign: 5x5 → 5×5
+spaces2=Sentence spacing\nCheck single spaces between sentences.
+ndash=En-dash\nForce spaced en dash instead of unspaced em dash.
+apostrophe=Apostrophes\nChange typewriter apostrophe, single quotation marks and correct double primes.
+ellipsis=Ellipsis\nReplace three dots with ellipsis.
+spaces3=More spaces\nCheck more than two extra space characters between words and sentences.
+minus=Minus sign\nChange hyphen characters to real minus signs.
+metric=Pleonasms\nIdentify redundant terms: "criar novo", "subir para cima", "beco sem saída", "regra geral".
+gerund=Gerundisms\nInadequate use of gerund: "estarei trabalhando", "vou estar fazendo".
+nonmetric=Cacophonous sound\nUgly or unpleasant sound: "por cada".
+paronimo=Paronyms\nWords that are pronounced or written in a similar way but which have different lexical meanings.
+composto=Compound terms\nCompound words written separatedly: "auto escola", "sub contratado".
+malmau="Mal" or "Mau"\nUse of "mal" or "mau".
+aha="Há" or "a"\nUse of há or a.
+meiameio="Meia" or "meio"\nUse of "meia" or "meio".
+verbo=Verbal agreement\nCheck verbal agreement.
+pronominal=Pronominal placement\nPosition that personal pronouns occupy in relation to the verb.
+pronome=Use of pronouns\nUse of pronoun.
+porque=Use of "porquê"\nCheck for "porque", "por que", "porquê" and "por quê".
+
+[pt_BR=Corretor Gramatical (Português - Brasil)]
+
+spelling=Verificação gramatical
+punctuation=Sinais e Pontuação
+others=Outros
+grammar=Crase\nIdentificar o uso de crase.
+cap=Maiúsculas\nProcurar pela falta de letra maiúscula no inicio das frases.
+dup=Palavras duplicadas\nProcurar palavras repetidas.
+pair=Parênteses\nProcurar parênteses ou aspas a mais ou a menos.
+spaces=Espaço entre palavras\nVerificar espaços entre palavras.
+mdash=Travessão\nForçar travessão não espaçado em vez de meio-traço espaçado.
+quotation=Aspas Duplas\nVerificar aspas duplas: "x" → “x”
+times=Sinal de multiplicação\nVerificar verdadeiro sinal de multiplicação: 5x5 → 5×5
+spaces2=Espaço entre frases\nVerificar espaços entre frases.
+ndash=Meio-traço\nForçar meio-traço espaçado em vez de travessão não espaçado.
+apostrophe=Aspas simples\nAlterar apóstrofo de máquina de escrever, aspas simples e corrigir primos duplos.
+ellipsis=Reticências\nAlterar três pontos seguidos por reticências.
+spaces3=Espaços adicionais\nVerificar por mais de dois espaços em branco entre palavras e frases.
+minus=Sinal de menos\nTrocar hífen pelo verdadeiro sinal de menos.
+metric=Pleonasmos\nIdentificação de redundância de termos: Subir pra cima, encarar de frente, regra geral.
+gerund=Gerundismos\nEmprego inapropriado do gerúndio: estarei trabalhando, vou estar fazendo.
+nonmetric=Cacofonias\nSom feio ou desagradável: por cada.
+paronimo=Parônimos\nPalavras parecidas na grafia ou na pronúncia, mas com significados diferentes.
+composto=Termos compostos\nIdentifica termos compostos escritos separados. Ex.: auto escola, sub contratado.
+malmau=Mal ou Mau\nEmprego de mal ou mau.
+aha=Há ou a\nEmprego de há ou a.
+meiameio=Meia ou meio\nEmprego de meia ou meio.
+verbo=Concordância verbal\nVerifica a concordância verbal.
+pronominal=Colocação Pronominal\nPosição que os pronomes pessoais ocupam em relação ao verbo.
+pronome=Uso de pronome\nEmprego de pronome.
+porque=Emprego do porquê\nIdentifica uso de porque, por que, porquê e por quê.

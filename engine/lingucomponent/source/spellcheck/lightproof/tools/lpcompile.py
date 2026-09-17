@@ -22,7 +22,7 @@
 # is committed rather than generated because integrators set these keys, so
 # the node names are an interface and should not move under anyone's feet.
 #
-# --emit-labels prints the same options as settingLabels entries for
+# --emit-titles prints the same options as settingTitles entries for
 # browser/admin/src/integrator/AdminIntegratorSettings.ts.
 
 import argparse
@@ -942,31 +942,66 @@ def compile_package(dictdir, pkg, out_path, verbose=False):
                          % (pkg, len(rule_records), len(option_records), len(writer.consts), cursor))
 
 
-def read_option_labels(dictdir, pkg):
-    """The English option labels, from the package's rule source.
+def read_option_titles(dictdir, pkg):
+    """The option titles of a package, as {locale: {id: (label, help)}}.
 
     A title in a .dlg is "id=label", optionally followed by a line of help
-    after a literal \\n. Only the label is wanted here.
+    after a literal \\n, and the titles come in one block per language headed
+    [locale=...].
     """
-    labels = {}
+    blocks = {}
     path = os.path.join(dictdir, "lightproof", "%s.dlg" % pkg)
     if not os.path.exists(path):
-        return labels
-    # A .dlg carries one block of titles per language, headed [locale=...].
-    # The English one is what the dialog is written in; the rest are the
-    # package's own translations, which the browser gets through its po files
-    # instead.
-    in_english = False
+        return blocks
+    current = None
     for line in open(path, encoding="utf-8"):
         line = line.strip()
         if line.startswith("["):
-            in_english = line.startswith("[en_US=") or line.startswith("[en=")
+            current = {}
+            blocks[line[1:line.index("=")]] = current
             continue
-        if not in_english or not line or line.startswith("#") or "=" not in line:
+        if current is None or not line or line.startswith("#") or "=" not in line:
             continue
-        name, _, label = line.partition("=")
-        labels[name.strip()] = label.split("\\n")[0].strip()
-    return labels
+        name, _, title = line.partition("=")
+        label, _, help_text = title.partition("\\n")
+        current[name.strip()] = (label.strip(), help_text.strip())
+    return blocks
+
+
+def pick_titles(blocks, pkg, locale):
+    """The titles of one language, by exact tag then by its language part."""
+    if locale in blocks:
+        return blocks[locale]
+    language = locale.partition("_")[0]
+    for tag, titles in blocks.items():
+        if tag.partition("_")[0] == language:
+            return titles
+    return {}
+
+
+def read_option_labels(dictdir, pkg):
+    """The English option labels, for the configuration schema.
+
+    The schema is what an integrator setting these keys through the xcu
+    reads, and that reader is not necessarily a speaker of the language the
+    package checks, so the schema stays English.
+    """
+    titles = pick_titles(read_option_titles(dictdir, pkg), pkg, "en_US")
+    return dict((name, label) for name, (label, _help) in titles.items())
+
+
+def read_native_titles(dictdir, pkg):
+    """The option titles in the language the package checks.
+
+    They are shown as they are, never translated: the options name the
+    grammatical notions of one language, and the person who has a reason to
+    set them is the person reading that language. Where the package gives an
+    option no help of its own the label serves as both, which still says more
+    than nothing when a narrow panel has cut the label short.
+    """
+    titles = pick_titles(read_option_titles(dictdir, pkg), pkg, pkg)
+    return dict((name, (label, help_text or label))
+                for name, (label, help_text) in titles.items())
 
 
 def escape(text):
@@ -1000,24 +1035,29 @@ def emit_schema(dictdir, pkg):
     print("\n".join(out))
 
 
-def emit_labels(dictdir, pkg):
+def quote(text):
+    return text.replace("\\", "\\\\").replace("'", "\\'")
+
+
+def emit_titles(dictdir, pkg):
     opts = read_module_assignments(
         os.path.join(dictdir, "pythonpath", "lightproof_opts_%s.py" % pkg),
         {"lopts"})
-    labels = read_option_labels(dictdir, pkg)
+    titles = read_native_titles(dictdir, pkg)
     # The key is the package and the option, because packages share option
-    # names and the dialog's label map is flat.
+    # names and the dialog's title map is flat.
     print("\t\t// %s" % pkg)
     for name in opts.get("lopts", {}).get(pkg, []):
-        print("\t\t'%s-%s': _('%s')," % (pkg, name, labels.get(name, name).replace("'", "\\'")))
+        label, help_text = titles.get(name, (name, name))
+        print("\t\t'%s-%s': ['%s', '%s']," % (pkg, name, quote(label), quote(help_text)))
 
 
 def main():
     parser = argparse.ArgumentParser(description="Compile a Lightproof rule package")
     parser.add_argument("--emit-schema", action="store_true",
                         help="print the officecfg option group instead of compiling")
-    parser.add_argument("--emit-labels", action="store_true",
-                        help="print the option labels for the browser settings dialog")
+    parser.add_argument("--emit-titles", action="store_true",
+                        help="print the option titles for the browser settings dialog")
     parser.add_argument("--verbose", action="store_true",
                         help="report what was compiled; warnings are printed either way")
     parser.add_argument("dictdir", help="the package's directory under dictionaries/")
@@ -1027,8 +1067,8 @@ def main():
 
     if args.emit_schema:
         emit_schema(args.dictdir, args.package)
-    elif args.emit_labels:
-        emit_labels(args.dictdir, args.package)
+    elif args.emit_titles:
+        emit_titles(args.dictdir, args.package)
     elif args.output:
         compile_package(args.dictdir, args.package, args.output, args.verbose)
     else:
