@@ -98,8 +98,9 @@ void pick(const OUString& rTitle, const std::vector<Filter>& rFilters,
         pContext->aFilters.push_back({ pName, pContext->aStrings.back().getStr() });
     }
 
-    getProvider()->pick(pTitle, pContext->aFilters.data(), pContext->aFilters.size(),
-                        pickedCallback, pContext.release());
+    auto* filters = pContext->aFilters.data();
+    auto nfilters = pContext->aFilters.size();
+    getProvider()->pick(pTitle, filters, nfilters, pickedCallback, pContext.release());
 }
 
 bool requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,
