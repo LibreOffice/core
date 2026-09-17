@@ -2625,10 +2625,13 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData, const ScfProperty
         bool bAutoBase = !rScaleData.TimeIncrement.TimeResolution.has< cssc::TimeIncrement >();
         ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOBASE, bAutoBase );
 
-        // ...but get the current base time unit from the property of the old chart API
+        // ...but get the current base time unit from the property of the old chart API. An
+        // axis that works its own base unit out states none, which is what the automatic flag
+        // above says, and days stand in for it.
         sal_Int32 nApiTimeUnit = 0;
         bool bValidBaseUnit = aTimeIncrement.TimeResolution >>= nApiTimeUnit;
-        OSL_ENSURE( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot get base time unit" );
+        OSL_ENSURE( bValidBaseUnit || bAutoBase,
+                    "XclExpChLabelRange::Convert - cannot get base time unit" );
         maDateData.mnBaseUnit = bValidBaseUnit ? lclGetTimeUnit( nApiTimeUnit ) : EXC_CHDATERANGE_DAYS;
 
         /*  Min/max values depend on base time unit, they specify the number of
