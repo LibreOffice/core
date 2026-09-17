@@ -2158,6 +2158,12 @@ private:
     /// is unknown and we may have to recognise them in storage. Empty otherwise.
     std::string _lastUploadedFileHash;
 
+    /// Earliest time at which we may ask storage what it holds after an upload
+    /// failure. Set ahead of now only when the upload got no response, to give
+    /// a host that is still writing our bytes time to finish. Default-constructed
+    /// (the clock's epoch) when there is nothing to wait for.
+    std::chrono::steady_clock::time_point _checkFileInfoNotBefore;
+
     /// True for file that COOLWSD::IsViewFileExtension return true.
     /// These files, such as PDF, don't have a reliable ModifiedStatus.
     bool _isViewFileExtension;

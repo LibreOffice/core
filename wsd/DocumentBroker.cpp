@@ -437,7 +437,22 @@ void DocumentBroker::pollThread()
     while (!_stop && _poll->continuePolling() && !SigUtil::getTerminationFlag())
     {
         // Poll more frequently while unloading to cleanup sooner.
-        _poll->poll(isUnloading() ? SocketPoll::DefaultPollTimeoutMicroS / 16 : defaultPollTimeout);
+        auto pollTimeout =
+            isUnloading() ? SocketPoll::DefaultPollTimeoutMicroS / 16 : defaultPollTimeout;
+
+        // Don't sleep through a grace we are waiting out; without this the poll
+        // could sit here for its full timeout and turn a short wait into a long
+        // one. Nothing else wakes us, as the upload we are reconciling is over.
+        if (const auto untilCheckFileInfo =
+                _checkFileInfoNotBefore - std::chrono::steady_clock::now();
+            untilCheckFileInfo > std::chrono::steady_clock::duration::zero())
+        {
+            pollTimeout = std::min<std::chrono::microseconds>(
+                pollTimeout,
+                std::chrono::duration_cast<std::chrono::microseconds>(untilCheckFileInfo));
+        }
+
+        _poll->poll(pollTimeout);
 
         // Consolidate updates across multiple processed events.
         processBatchUpdates();
@@ -738,7 +753,16 @@ void DocumentBroker::pollThread()
                 assert(!isAsyncUploading() && "Unexpected async-upload in progress");
 
 #if !MOBILEAPP
-                if (!_checkFileInfo)
+                if (now < _checkFileInfoNotBefore)
+                {
+                    // Waiting out the grace given to a host that may still be
+                    // writing an upload we never got a response to.
+                    LOG_TRC("Deferring CheckFileInfo for ["
+                            << _docKey << "] for another "
+                            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                                   _checkFileInfoNotBefore - now));
+                }
+                else if (!_checkFileInfo)
                 {
                     const auto session = getFirstAuthorizedSession();
                     if (!session)
@@ -3846,12 +3870,24 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
         // re-sync the document's last modified timestamp.
         _lastUploadDefinitelyFailed = uploadResult.isDefiniteFailure();
         _lastUploadedFileHash.clear();
+        _checkFileInfoNotBefore = std::chrono::steady_clock::time_point();
         if (!_lastUploadDefinitelyFailed)
         {
             // Our upload may have landed. Hash what we sent now, while the file
             // we sent it from is still on disk, so that we can tell our own
             // version from somebody else's when we ask storage what it holds.
             _lastUploadedFileHash = FileUtil::sha256Base64(_storage->getRootFilePathUploading());
+
+            // The host never answered, so it may still be writing what we sent.
+            // Give it a moment before asking what it holds, or we read the state
+            // from before our upload and re-send the whole document for nothing.
+            // The throttle is the same waiting period expressed for the retry,
+            // and it is what bounds the cost of waiting: we could not have
+            // re-uploaded any sooner than this anyway.
+            const std::chrono::milliseconds grace = _storageManager.minTimeBetweenUploads();
+            _checkFileInfoNotBefore = std::chrono::steady_clock::now() + grace;
+            LOG_DBG("Upload of [" << _docKey << "] got no response; deferring CheckFileInfo by "
+                                  << grace << " to let the host finish writing our upload");
         }
 
         endActivity(); // Probably in Activity::Upload.
@@ -7133,6 +7169,12 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  canUpload: " << name(canUploadToStorage());
     os << "\n  isStorageOutdated: " << isStorageOutdated();
     os << "\n  needToUpload: " << name(needToUploadToStorage());
+    os << "\n  checkFileInfo grace: ";
+    if (_checkFileInfoNotBefore > now)
+        os << "waiting "
+           << std::chrono::duration_cast<std::chrono::milliseconds>(_checkFileInfoNotBefore - now);
+    else
+        os << "none";
     os << "\n  lastActivityTime: " << Util::getTimeForLog(now, _lastActivityTime);
     os << "\n  haveActivityAfterSaveRequest: " << haveActivityAfterSaveRequest();
     os << "\n  lastModifyActivityTime: " << Util::getTimeForLog(now, _lastModifyActivityTime);

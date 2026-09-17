@@ -1270,8 +1270,7 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitWOPIFailUploadLockMismatch(), new UnitWOPIFailUploadBare409(),
             new UnitWOPIFailUploadChangedStorage(),
             new UnitWOPIFailUploadTimeoutChangedStorage(), new UnitWOPITimeoutHashMatches(),
-            new UnitWOPITimeoutHashDiffersSameSize(),
-            new UnitWOPINoLastKnownTimestamp(), nullptr
+            new UnitWOPITimeoutHashDiffersSameSize(), new UnitWOPINoLastKnownTimestamp(), nullptr
     };
 }
 
