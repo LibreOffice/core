@@ -441,6 +441,17 @@ class CanvasSectionContainer {
 		return [point[0] - section.myTopLeft[0], point[1] - section.myTopLeft[1]];
 	}
 
+	// Bound sections can have different origins: a document object section moves with the document.
+	private convertPositionBetweenSections (from: CanvasSectionObject, to: CanvasSectionObject, position: Array<number>): cool.SimplePoint {
+		if (!position)
+			return null;
+
+		return cool.SimplePoint.fromCorePixels([
+			position[0] + from.myTopLeft[0] - to.myTopLeft[0],
+			position[1] + from.myTopLeft[1] - to.myTopLeft[1],
+		]);
+	}
+
 	private convertPositionToCanvasLocale (e: any): Array<number> {
 		var rect: any = this.canvas.getBoundingClientRect();
 		var x: number, y: number;
@@ -789,7 +800,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (let i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					deliver(section.boundsList[i], (position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+					deliver(section.boundsList[i], this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -822,7 +833,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onDoubleClick(position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]) : null, e);
+					section.boundsList[i].onDoubleClick(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -845,7 +856,7 @@ class CanvasSectionContainer {
 
 		for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 			if (section.boundsList[i].interactable)
-				section.boundsList[i].onMouseLeave((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+				section.boundsList[i].onMouseLeave(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 			if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 				break; // Stop propagation.
@@ -859,7 +870,7 @@ class CanvasSectionContainer {
 
 		for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 			if (section.boundsList[i].interactable)
-				section.boundsList[i].onMouseEnter((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+				section.boundsList[i].onMouseEnter(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 			if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 				break; // Stop propagation.
@@ -883,7 +894,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onMouseMove((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), dragDistance, e);
+					section.boundsList[i].onMouseMove(this.convertPositionBetweenSections(section, section.boundsList[i], position), dragDistance, e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -910,7 +921,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onMouseDown((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+					section.boundsList[i].onMouseDown(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -935,7 +946,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onMouseUp((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+					section.boundsList[i].onMouseUp(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -960,7 +971,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onContextMenu(cool.SimplePoint.fromCorePixels([position[0], position[1]]), e);
+					section.boundsList[i].onContextMenu(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -985,7 +996,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onMouseWheel((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), delta, e);
+					section.boundsList[i].onMouseWheel(this.convertPositionBetweenSections(section, section.boundsList[i], position), delta, e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -1034,7 +1045,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onMultiTouchMove((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), distance, e);
+					section.boundsList[i].onMultiTouchMove(this.convertPositionBetweenSections(section, section.boundsList[i], position), distance, e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
@@ -1083,7 +1094,7 @@ class CanvasSectionContainer {
 		if (propagate) {
 			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onDrop((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+					section.boundsList[i].onDrop(this.convertPositionBetweenSections(section, section.boundsList[i], position), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
