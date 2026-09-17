@@ -216,10 +216,18 @@ void PropertyMapper::getValueMap(
     }
     else
     {
+        // A map names every property the target can carry, and the object read from carries
+        // only the ones that apply to it. Asking it for one of the others throws, so it says
+        // first which it has.
+        const uno::Reference<css::beans::XPropertySetInfo> xSourceInfo(
+            xSourceProp.is() ? xSourceProp->getPropertySetInfo()
+                             : uno::Reference<css::beans::XPropertySetInfo>());
         for (auto const& elem : rNameMap)
         {
             const OUString & rTarget = elem.first;
             const OUString & rSource = elem.second;
+            if (xSourceInfo.is() && !xSourceInfo->hasPropertyByName(rSource))
+                continue;
             try
             {
                 cpo::uno::Any aAny( xSourceProp->getPropertyValue(rSource) );
