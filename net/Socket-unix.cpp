@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <arpa/inet.h>
 #include <sysexits.h>
 
 #include <common/Log.hpp>
@@ -177,8 +178,9 @@ bool isUnrecoverableAcceptError(const int cause)
     }
 }
 
-int acceptConnection(int descriptor, struct sockaddr_in6& clientInfo)
+int acceptConnection(int descriptor, PeerAddress& peer)
 {
+    struct sockaddr_in6 clientInfo;
     socklen_t addrlen = sizeof(clientInfo);
     const int rc = Syscall::accept_cloexec_nonblock(
         descriptor, reinterpret_cast<struct sockaddr*>(&clientInfo), &addrlen);
@@ -188,6 +190,27 @@ int acceptConnection(int descriptor, struct sockaddr_in6& clientInfo)
             Util::forcedExit(EX_SOFTWARE);
         return -1;
     }
+
+    const void* inAddr;
+    if (clientInfo.sin6_family == AF_INET)
+    {
+        const struct sockaddr_in* ipv4 = reinterpret_cast<const struct sockaddr_in*>(&clientInfo);
+        inAddr = &(ipv4->sin_addr);
+        peer.type = Socket::Type::IPv4;
+    }
+    else
+    {
+        const struct sockaddr_in6* ipv6 = &clientInfo;
+        inAddr = &(ipv6->sin6_addr);
+        peer.type = Socket::Type::IPv6;
+    }
+
+    // inet_ntop leaves the buffer alone when it fails, so start from an empty string.
+    char address[INET6_ADDRSTRLEN] = {};
+    ::inet_ntop(clientInfo.sin6_family, inAddr, address, sizeof(address));
+    peer.address = address;
+    peer.port = clientInfo.sin6_port;
+    peer.family = clientInfo.sin6_family;
 
     return rc;
 }

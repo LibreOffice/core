@@ -73,8 +73,6 @@ namespace Poco
     class URI;
 }
 
-struct sockaddr_in6;
-
 namespace net
 {
     /// Shut down both directions of a socket that has a real descriptor underneath.
@@ -95,10 +93,6 @@ namespace net
     /// to one worth retrying. Logs either way.
     bool isUnrecoverableAcceptError(int cause);
 
-    /// Take a waiting connection from a real listening socket and say where it came from. Returns
-    /// the descriptor, -1 when there is nothing to take, and stops the process when the listening
-    /// socket is unusable.
-    int acceptConnection(int descriptor, struct sockaddr_in6& clientInfo);
 
     /// Close a descriptor that came from this build's socket layer, which is a real socket in the
     /// server and a fake one in the app.
@@ -550,6 +544,24 @@ namespace net
     /// Give a real socket the given port, on every address when publicly is true and on the
     /// loopback address otherwise. Returns true on success only.
     bool bindToPort(int descriptor, Socket::Type socketType, bool publicly, int port);
+
+    /// Where a connection came from.
+    struct PeerAddress
+    {
+        /// The kind of socket the connection arrived on.
+        Socket::Type type = Socket::Type::All;
+        /// The address in its printable form, empty when the platform could not render it.
+        std::string address;
+        /// The port, in the byte order the platform reported it in.
+        unsigned int port = 0;
+        /// The address family the platform reported.
+        int family = 0;
+    };
+
+    /// Take a waiting connection from a real listening socket and fill in where it came from.
+    /// Returns the descriptor, -1 when there is nothing to take, and stops the process when the
+    /// listening socket is unusable.
+    int acceptConnection(int descriptor, PeerAddress& peer);
 }
 
 class StreamSocket;

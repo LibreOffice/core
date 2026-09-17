@@ -1076,47 +1076,35 @@ std::shared_ptr<Socket> ServerSocket::accept()
 {
     // Accept a connection (if any) and set it to non-blocking.
     // There still need the client's address to filter request from POST(call from REST) here.
-#if !MOBILEAPP
-    assert(_type != Socket::Type::Unix);
-
     UnitWSD* const unitWsd = UnitWSD::isUnitTesting() ? &UnitWSD::get() : nullptr;
-    if (UNITWSD_CALL_INSTANCE(unitWsd, simulateExternalAcceptError()))
-        return nullptr; // Recoverable error, ignore to retry
 
-    struct sockaddr_in6 clientInfo;
-    const int rc = net::acceptConnection(getFD(), clientInfo);
-    if (rc < 0)
-        return nullptr;
-#else
-    const int rc = fakeSocketAccept4(getFD());
-#endif
-    LOG_TRC("Accepted socket #" << rc << ", creating socket object.");
-
-#if !MOBILEAPP
-    char addrstr[INET6_ADDRSTRLEN];
-
-    Socket::Type type;
-    const void *inAddr;
-    if (clientInfo.sin6_family == AF_INET)
+    net::PeerAddress peer;
+    int rc;
+    if (!Util::isMobileApp())
     {
-        struct sockaddr_in *ipv4 = reinterpret_cast<struct sockaddr_in *>(&clientInfo);
-        inAddr = &(ipv4->sin_addr);
-        type = Socket::Type::IPv4;
+        assert(Socket::type() != Socket::Type::Unix);
+
+        if (UNITWSD_CALL_INSTANCE(unitWsd, simulateExternalAcceptError()))
+            return nullptr; // Recoverable error, ignore to retry
+
+        rc = net::acceptConnection(getFD(), peer);
+        if (rc < 0)
+            return nullptr;
     }
     else
-    {
-        struct sockaddr_in6 *ipv6 = &clientInfo;
-        inAddr = &(ipv6->sin6_addr);
-        type = Socket::Type::IPv6;
-    }
-    ::inet_ntop(clientInfo.sin6_family, inAddr, addrstr, sizeof(addrstr));
+        rc = fakeSocketAccept4(getFD());
+
+    LOG_TRC("Accepted socket #" << rc << ", creating socket object.");
+
+    if (Util::isMobileApp())
+        return createSocketFromAccept(rc, Socket::Type::Unix);
 
     const size_t extConnCount = StreamSocket::getExternalConnectionCount();
     if (net::Defaults.maxExtConnections > 0 && extConnCount >= net::Defaults.maxExtConnections)
     {
         LOG_WRN("Limiter rejected extConn[" << extConnCount << "/" << net::Defaults.maxExtConnections << "]: #"
                 << rc << " has family "
-                << clientInfo.sin6_family << ", address " << addrstr << ":" << clientInfo.sin6_port);
+                << peer.family << ", address " << peer.address << ":" << peer.port);
         net::closeSocketDescriptor(rc);
         return nullptr;
     }
@@ -1124,13 +1112,13 @@ std::shared_ptr<Socket> ServerSocket::accept()
     try
     {
         // Create a socket object using the factory.
-        std::shared_ptr<Socket> socket = createSocketFromAccept(rc, type);
+        std::shared_ptr<Socket> socket = createSocketFromAccept(rc, peer.type);
         UNITWSD_CALL_INSTANCE(unitWsd, simulateExternalSocketCtorException(socket));
 
-        socket->setClientAddress(addrstr, clientInfo.sin6_port);
+        socket->setClientAddress(peer.address, peer.port);
 
-        LOG_TRC("Accepted socket #" << socket->getFD() << " has family " << clientInfo.sin6_family
-                                    << ", " << *socket);
+        LOG_TRC("Accepted socket #" << socket->getFD() << " has family " << peer.family << ", "
+                                    << *socket);
         return socket;
     }
     catch (const std::exception& ex)
@@ -1138,9 +1126,6 @@ std::shared_ptr<Socket> ServerSocket::accept()
         LOG_ERR("Failed to create client socket #" << rc << ". Error: " << ex.what());
     }
     return nullptr;
-#else
-    return createSocketFromAccept(rc, Socket::Type::Unix);
-#endif
 }
 
 

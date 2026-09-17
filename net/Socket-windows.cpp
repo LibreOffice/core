@@ -82,7 +82,7 @@ bool isUnrecoverableAcceptError(int)
     Util::forcedExit(EX_SOFTWARE);
 }
 
-int acceptConnection(int, struct sockaddr_in6&)
+int acceptConnection(int, PeerAddress&)
 {
     LOG_FTL("Accepting on a real listening socket is not implemented for this platform.");
     Util::forcedExit(EX_SOFTWARE);
