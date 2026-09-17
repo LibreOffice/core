@@ -74,8 +74,8 @@ namespace sdr::properties
 
         void AttributeProperties::ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            // test if old StyleSheet is cleared, else it would be lost
-            // after this method -> memory leak (!)
+            // the style sheet held so far has to be let go of first, because letting go of it is
+            // what ends the listening on it and on its pool
             DBG_ASSERT(!mpStyleSheet, "Old style sheet not deleted before setting new one (!)");
 
             if(!pNewStyleSheet)
@@ -155,11 +155,9 @@ namespace sdr::properties
             }
             else
             {
-                // copy existing one
-                mpStyleSheet = rProps.GetStyleSheet();
-
-                // add StyleSheet && establish the parent-links in the SfxItemSet
-                ImpAddStyleSheet(mpStyleSheet, true);
+                // take on the style sheet of the one copied from, which also listens to it and
+                // establishes the parent links in the item set
+                ImpAddStyleSheet(rProps.GetStyleSheet(), true);
             }
         }
 
