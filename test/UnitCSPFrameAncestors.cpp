@@ -49,6 +49,7 @@ public:
     void invokeWSDTest() override
     {
         testDocumentPage();
+        testRelayOriginIsTakenFromTheConfiguredList();
         testSettingsPageWithoutIntegrator();
         testSettingsPageWithIntegrator();
         testSettingsPageWithMalformedIntegrator();
@@ -120,6 +121,44 @@ private:
         const std::string frameAncestors = getFrameAncestors(response);
         assertHasAncestor(frameAncestors, kPinnedAncestor, "cool.html");
         assertHasAncestor(frameAncestors, coolwsdAncestor(), "cool.html");
+    }
+
+    /// The document page, requested the way a relay requests it: the form carries the origin of
+    /// the page that would sit between the document page and the WOPI host.
+    std::string getDocumentPageWithRelayOrigin(const std::string& relayOrigin)
+    {
+        http::Request request("/browser/dist/cool.html", http::Request::VERB_POST);
+        request.setBody("relay_origin=" + Uri::encode(relayOrigin),
+                        "application/x-www-form-urlencoded");
+
+        const std::shared_ptr<http::Session> session =
+            http::Session::create(helpers::getTestServerURI());
+        const std::shared_ptr<const http::Response> response =
+            session->syncRequest(request, http::Session::getDefaultTimeout());
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+
+        constexpr std::string_view attribute = "data-relay-origin = \"";
+        const std::string& body = response->getBody();
+        const std::size_t start = body.find(attribute);
+        LOK_ASSERT_MESSAGE("The document page must carry a data-relay-origin attribute",
+                           start != std::string::npos);
+
+        const std::size_t valueStart = start + attribute.size();
+        const std::size_t end = body.find('"', valueStart);
+        LOK_ASSERT_MESSAGE("The data-relay-origin attribute must be closed",
+                           end != std::string::npos);
+        return body.substr(valueStart, end - valueStart);
+    }
+
+    /// Only an origin the administrator listed in frame-ancestors is handed to the page as the
+    /// relay, whatever origin the form asks for.
+    void testRelayOriginIsTakenFromTheConfiguredList()
+    {
+        LOK_ASSERT_EQUAL_STR(kPinnedAncestor, getDocumentPageWithRelayOrigin(kPinnedAncestor));
+
+        LOK_ASSERT_EQUAL_STR("", getDocumentPageWithRelayOrigin("https://elsewhere.example"));
+        LOK_ASSERT_EQUAL_STR("", getDocumentPageWithRelayOrigin("pinned.example"));
+        LOK_ASSERT_EQUAL_STR("", getDocumentPageWithRelayOrigin(std::string()));
     }
 
     /// The regression: the settings page used to emit the configured list verbatim, so an

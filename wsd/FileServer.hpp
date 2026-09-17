@@ -223,6 +223,14 @@ private:
 
     static std::string checkFileInfoToJSON(const std::string& checkfileFileInfo);
 
+    /// The origin of the relay page that sits between the document page and the WOPI host.
+    /// value is the "relay_origin" field of the document page request, and
+    /// configuredFrameAncestors is the space-separated list of sources the administrator wrote in
+    /// the configuration. Returns value when that list holds it exactly, and an empty string
+    /// otherwise.
+    static std::string relayOriginFromForm(const std::string& value,
+                                           const std::string& configuredFrameAncestors);
+
     static std::string cssVarsToStyle(const std::string& cssVars);
 
 public:

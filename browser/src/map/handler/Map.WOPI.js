@@ -18,6 +18,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	// So use '*' because we still needs to send 'close' message to the parent frame which
 	// wouldn't be possible otherwise.
 	PostMessageOrigin: window.postmessageOriginExt || '*',
+	// The host origin the relay page has been told so far, empty until the first message.
+	_relayHostOrigin: '',
 	BaseFileName: '',
 	BreadcrumbDocName: '',
 	DocumentLoadedTime: false,
@@ -356,6 +358,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		// cache - to avoid regexps.
 		if (this._cachedGoodOrigin && this._cachedGoodOrigin === e.origin)
 			return true;
+
+		// The relay page is the parent this page talks to, so its messages are accepted.
+		if (window.relayOrigin && e.origin === window.relayOrigin) {
+			this._cachedGoodOrigin = e.origin;
+			return true;
+		}
 
 		try {
 			if (e.origin === window.parent.origin)
@@ -1196,7 +1204,24 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				'SendTime': Date.now(),
 				'Values': values
 			};
-			window.parent.postMessage(JSON.stringify(msg), this.PostMessageOrigin);
+			// With a relay page in between, every message goes to the relay page, and
+			// the relay page posts it on to the WOPI host. The relay page has to name the
+			// origin of the host in that post, so this page sends it a Relay_HostOrigin
+			// message with PostMessageOrigin before the first message, and again each time
+			// PostMessageOrigin changes, as it does when CheckFileInfo sets it.
+			if (window.relayOrigin && this._relayHostOrigin !== this.PostMessageOrigin) {
+				this._relayHostOrigin = this.PostMessageOrigin;
+				const relayMessage = {
+					'MessageId': 'Relay_HostOrigin',
+					'SendTime': Date.now(),
+					'Values': {
+						PostMessageOrigin: this.PostMessageOrigin
+					}
+				};
+				window.parent.postMessage(JSON.stringify(relayMessage), window.relayOrigin);
+			}
+			const targetOrigin = window.relayOrigin ? window.relayOrigin : this.PostMessageOrigin;
+			window.parent.postMessage(JSON.stringify(msg), targetOrigin);
 		}
 	},
 

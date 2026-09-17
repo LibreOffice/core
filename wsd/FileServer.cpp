@@ -1610,6 +1610,7 @@ const std::string UI_THEME = "%UI_THEME%";
 const std::string VERSION = "%VERSION%";
 const std::string WOPI_HOST_ID = "%WOPI_HOST_ID%";
 const std::string EXPERIMENTAL_FEATURES = "%EXPERIMENTAL_FEATURES%";
+const std::string RELAY_ORIGIN = "%RELAY_ORIGIN%";
 
 namespace
 {
@@ -2033,6 +2034,19 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
 
     // Frame ancestors: Allow coolwsd host, wopi host and anything configured.
     const std::string configFrameAncestor = getConfiguredFrameAncestors(config);
+
+    // The relay_origin field names the page allowed to sit between this page and the WOPI host,
+    // so it is taken only from the administrator's own list of frame ancestors.
+    const std::string requestedRelayOrigin = form.get("relay_origin", "");
+    const std::string relayOrigin = relayOriginFromForm(requestedRelayOrigin, configFrameAncestor);
+    if (relayOrigin.empty() && !requestedRelayOrigin.empty())
+    {
+        LOG_WRN("Serving the document page with no relay origin, because relay_origin ["
+                << requestedRelayOrigin << "] is not one of the configured frame ancestors ["
+                << configFrameAncestor << ']');
+    }
+
+    Poco::replaceInPlace(preprocess, RELAY_ORIGIN, Uri::encode(relayOrigin, "'"));
 
     std::string frameAncestors = configFrameAncestor;
     Poco::URI uriHost(cnxDetails.getWebSocketUrl());

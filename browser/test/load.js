@@ -90,6 +90,7 @@ data = data.replace(/%ACCESS_TOKEN%/g, '');
 data = data.replace(/%ACCESS_TOKEN_TTL%/g, '0');
 data = data.replace(/%ACCESS_HEADER%/g, '');
 data = data.replace(/%POSTMESSAGE_ORIGIN%/g, '');
+data = data.replace(/%RELAY_ORIGIN%/g, '');
 data = data.replace(/%BROWSER_LOGGING%/g, 'true');
 data = data.replace(/%COOLWSD_VERSION%/g, 'loadjs');
 data = data.replace(/%ENABLE_WELCOME_MSG%/g, 'false');

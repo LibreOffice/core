@@ -335,6 +335,33 @@ std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefa
     return oss.str();
 }
 
+std::string
+FileServerRequestHandler::relayOriginFromForm(const std::string& value,
+                                              const std::string& configuredFrameAncestors)
+{
+    if (value.empty())
+        return std::string();
+
+    // The sources are separated by spaces, and the configuration file may wrap a long list over
+    // several lines, so every kind of blank ends a source.
+    constexpr std::string_view blanks = " \t\r\n";
+    std::size_t start = configuredFrameAncestors.find_first_not_of(blanks);
+    while (start != std::string::npos)
+    {
+        const std::size_t end = configuredFrameAncestors.find_first_of(blanks, start);
+        const std::size_t length = end == std::string::npos ? std::string::npos : end - start;
+        if (configuredFrameAncestors.compare(start, length, value) == 0)
+            return value;
+
+        if (end == std::string::npos)
+            break;
+
+        start = configuredFrameAncestors.find_first_not_of(blanks, end);
+    }
+
+    return std::string();
+}
+
 std::string FileServerRequestHandler::checkFileInfoToJSON(const std::string& checkfileInfo)
 {
     static std::string previousCheckFileInfo;

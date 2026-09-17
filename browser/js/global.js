@@ -280,6 +280,7 @@ class InitializerBase {
 		window.protocolDebug = false;
 		window.enableDebug = false;
 		window.frameAncestors = "";
+		window.relayOrigin = "";
 		window.socketProxy = false;
 		window.uiDefaults = {};
 		window.useStatusbarSaveIndicator = false;
@@ -461,6 +462,9 @@ class BrowserInitializer extends InitializerBase {
 		window.protocolDebug = element.dataset.protocolDebug.toLowerCase().trim() === "true";
 		window.enableDebug = element.dataset.enableDebug.toLowerCase().trim() === "true";
 		window.frameAncestors = decodeURIComponent(element.dataset.frameAncestors);
+		// The origin of the page that relays messages between this page and the
+		// WOPI host. Empty when the WOPI host embeds this page directly.
+		window.relayOrigin = element.dataset.relayOrigin || "";
 		window.socketProxy = element.dataset.socketProxy.toLowerCase().trim() === "true";
 		window.uiDefaults = JSON.parse(atob(element.dataset.uiDefaults));
 		// The server administrator can choose the opening zoom for every text

@@ -220,6 +220,11 @@
       frame-src 'self' server-to-inject-iframe-from.xyz;
       connect-src 'self' server-to-inject-js-from.io;
       frame-ancestors server-embedding-collabora-online-iframe
+
+      A page that relays messages between the document page and the WOPI host is named in
+      frame-ancestors here too, and only a source named here is accepted as a relay. Write it
+      as the browser writes an origin, with the scheme and without a path, for example
+      https://relay.example.com, because the page posts to exactly that text.
       -->
       </content_security_policy>
       <frame_ancestors desc="OBSOLETE: Use content_security_policy. Specify who is allowed to embed the Collabora Online iframe (coolwsd and WOPI host are always allowed). Separate multiple hosts by space."></frame_ancestors>

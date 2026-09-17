@@ -39,6 +39,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testPreProcessedFile);
     CPPUNIT_TEST(testPreProcessedFileRoundtrip);
     CPPUNIT_TEST(testPreProcessedFileSubstitution);
+    CPPUNIT_TEST(testOnlyAConfiguredOriginRelaysMessages);
     CPPUNIT_TEST(testCSPMergeNewlines);
     CPPUNIT_TEST(testCSPKeepsOutBadSources);
     CPPUNIT_TEST(testSettingsUploadFileId);
@@ -49,6 +50,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testPreProcessedFile();
     void testPreProcessedFileRoundtrip();
     void testPreProcessedFileSubstitution();
+    void testOnlyAConfiguredOriginRelaysMessages();
     void testCSPMergeNewlines();
     void testCSPKeepsOutBadSources();
     void testSettingsUploadFileId();
@@ -416,6 +418,7 @@ void FileServeTests::preProcessedFileSubstitution(
             replaceIfExist(orig, std::string("<!--%CSS_VARIABLES%-->"), "CSS_VARIABLES", variables);
             replaceIfExist(orig, std::string("%POSTMESSAGE_ORIGIN%"), "POSTMESSAGE_ORIGIN",
                            variables);
+            replaceIfExist(orig, std::string("%RELAY_ORIGIN%"), "RELAY_ORIGIN", variables);
             replaceIfExist(orig, std::string("%BRANDING_THEME%"), "BRANDING_THEME", variables);
             replaceIfExist(orig, std::string("<!--%BRANDING_JS%-->"), "BRANDING_JS", variables);
             replaceIfExist(orig, std::string("%FOOTER%"), "FOOTER", variables);
@@ -455,6 +458,7 @@ void FileServeTests::testPreProcessedFileSubstitution()
         { "CSS_VARIABLES",
           "<style>:root {--co-somestyle-text:#123456;--co-somestyle-size:15px;}</style>" },
         { "POSTMESSAGE_ORIGIN", "https://www.example.com:8080" },
+        { "RELAY_ORIGIN", "https://relay.example.com" },
         { "BRANDING_THEME", "cool_brand" },
         { "BRANDING_JS", "branding.js" },
         { "FOOTER", "<div><b>blah blah footer</b></div>" },
@@ -465,6 +469,50 @@ void FileServeTests::testPreProcessedFileSubstitution()
     preProcessedFileSubstitution(testname, variables);
     preProcessedFileSubstitution(std::string(testname) + "_empty",
                                  Util::UnorderedStringMap<std::string>());
+}
+
+void FileServeTests::testOnlyAConfiguredOriginRelaysMessages()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The configured list arrives with its sources separated by spaces, and a leading one.
+    const std::string configured = " https://relay.example.com https://other.example.com:8443";
+
+    // A source the administrator wrote is taken as it stands.
+    LOK_ASSERT_EQUAL_STR("https://relay.example.com",
+                         FileServerRequestHandler::relayOriginFromForm("https://relay.example.com",
+                                                                      configured));
+    LOK_ASSERT_EQUAL_STR("https://other.example.com:8443",
+                         FileServerRequestHandler::relayOriginFromForm(
+                             "https://other.example.com:8443", configured));
+
+    // Anything that is not one of those sources, character for character, is dropped.
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm("relay.example.com",
+                                                                          configured));
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm(
+                                 "https://relay.example.com/", configured));
+    LOK_ASSERT_EQUAL_STR(
+        "", FileServerRequestHandler::relayOriginFromForm("http://relay.example.com", configured));
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm(
+                                 "https://relay.example.com:443", configured));
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm(
+                                 "https://evil.relay.example.com", configured));
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm("", configured));
+
+    // The host a WOPISrc points at is no ground for relaying, so an origin that only appears
+    // there is dropped as well.
+    LOK_ASSERT_EQUAL_STR(
+        "", FileServerRequestHandler::relayOriginFromForm("https://wopi.example.net", configured));
+
+    // With no source configured at all nothing is accepted.
+    LOK_ASSERT_EQUAL_STR("", FileServerRequestHandler::relayOriginFromForm(
+                                 "https://relay.example.com", std::string()));
+
+    // A list wrapped over several lines in the configuration file still names its sources.
+    LOK_ASSERT_EQUAL_STR("https://relay.example.com",
+                         FileServerRequestHandler::relayOriginFromForm(
+                             "https://relay.example.com",
+                             "https://other.example.com:8443\n   https://relay.example.com"));
 }
 
 void FileServeTests::testCSPMergeNewlines()
