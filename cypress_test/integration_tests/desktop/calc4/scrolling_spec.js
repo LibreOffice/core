@@ -301,6 +301,68 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		helper.processToIdle(this.win);
 	});
 
+	// A formula takes the addresses of the cells the user clicks. To reach a cell that is
+	// not on screen the user scrolls the sheet first, and the view then stays where it was
+	// scrolled to while the cell is clicked. The click puts the address in the formula and
+	// moves the caret inside the edited cell, which is now off screen, so before the fix the
+	// view followed that caret back to the edited cell.
+	it('The view stays where it was scrolled while a formula reference is clicked', function() {
+		helper.typeIntoDocument('=');
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-canvas').should(() => {
+			expect(this.win.app.file.textCursor.visible, 'the cell is being edited')
+				.to.equal(true);
+		});
+
+		// A mouse wheel or a scroll bar drag reaches core through this same layout scroll;
+		// driving it directly keeps the test free of wheel-animation timing. A whole frame
+		// height takes the edited cell off screen.
+		cy.then(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			layout.scroll(0, layout.frameSize.pY, true);
+		});
+		helper.processToIdle(this.win);
+
+		let scrolledTop;
+		cy.then(() => {
+			scrolledTop = this.win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			expect(scrolledTop, 'the view scrolled').to.be.greaterThan(0);
+			expect(this.win.app.calc.cellCursorRectangle.pY2,
+				'the edited cell is off screen').to.be.lessThan(scrolledTop);
+		});
+
+		// Click a cell in the middle of the part of the sheet the view now shows.
+		// A Cypress click on the canvas moves the browser focus, and the client
+		// saves the pending cell edit when the window loses focus, so the click
+		// goes to the section that handles it instead.
+		cy.then(() => {
+			const mouseControl = this.win.app.sectionContainer
+				.getSectionWithName('mouse-control');
+			const frame = this.win.app.activeDocument.activeLayout.frameSize;
+			const middleOfTheView = this.win.cool.SimplePoint.fromCorePixels(
+				[frame.pX / 2, frame.pY / 2]);
+
+			mouseControl.onClick(middleOfTheView,
+				new this.win.MouseEvent('click', { buttons: 1 }));
+		});
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-canvas').should(() => {
+			expect(this.win.app.file.textCursor.visible, 'the cell edit goes on')
+				.to.equal(true);
+			expect(this.win.app.map._docLayer._references.empty(),
+				'the clicked cell is marked as a reference').to.equal(false);
+			expect(this.win.app.activeDocument.activeLayout.viewedRectangle.pY1,
+				'the view after the click').to.equal(scrolledTop);
+		});
+
+		// Leave the cell without writing the formula into the sheet, so the tests below
+		// start from the document as it was loaded.
+		helper.typeIntoDocument('{esc}');
+		helper.processToIdle(this.win);
+	});
+
 	// The scrollbar positions the tests above check are pixel positions of the thumb,
 	// which the thumb takes from how much of the sheet can be scrolled. Jumping to the
 	// last used column here changes that for the rest of the file, so this test sits

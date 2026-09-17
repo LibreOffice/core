@@ -277,6 +277,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		app.calc.cellCursorVisible = false;
 		this._prevCellCursorAddress = null;
+		this._mousePressedDuringCellEdit = false;
 		this._scrollFreePaneToTopOnA1 = false;
 		this._shapeGridOffset = new cool.SimplePoint(0, 0);
 
@@ -1761,12 +1762,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			( !URLPopUpSection.isOpen() || updateCursor || isHyperlinkChanged))
 			URLPopUpSection.showURLPopUP(obj.hyperlink.link, new cool.SimplePoint(app.file.textCursor.rectangle.x1, app.file.textCursor.rectangle.y1));
 
+		const followCaret = updateCursor && weAreModifier &&
+			!this._mousePressedDuringCellEdit;
+
 		// If modifier view is different than the current view
 		// we'll keep the caret position at the same point relative to screen.
 		// In the multi-page layout the pages sit in fixed screen slots, so the
 		// view stays where it is.
 		this._onUpdateCursor(
-			/* scroll */ updateCursor && weAreModifier,
+			/* scroll */ followCaret,
 			/* zoom */ undefined,
 			/* keepCaretPositionRelativeToScreen */ !weAreModifier && !this._isMultiPageView());
 
@@ -2713,6 +2717,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
+		if (this.isCalc() && buttons === app.LOButtons.left)
+			this._mousePressedDuringCellEdit = app.file.textCursor.visible;
+
 		const verticalOffset = this.getFiledBasedViewVerticalOffset();
 		if (verticalOffset) {
 			y -= verticalOffset;
@@ -2797,6 +2804,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	postKeyboardEvent: function(type, charCode, unoKeyCode) {
 		if (!this._map._docLoaded)
 			return;
+
+		this._mousePressedDuringCellEdit = false;
 
 		if (window.L.Browser.mac) {
 			// Map Mac standard shortcuts to the LO shortcuts for the corresponding
