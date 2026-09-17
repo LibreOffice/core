@@ -72,7 +72,14 @@ namespace cool {
 			// Every run of the run's object.
 			readonly objectRuns: TextRun[],
 			readonly measurer: TextMeasurer,
+			// The id of the run's object, when the tree has ids.
+			readonly objectId?: number,
 		) {}
+
+		/// True when the position ends its run, which at a line break also starts the next.
+		get atEnd(): boolean {
+			return this.offset > 0 && this.offset === this.positions.length - 1;
+		}
 
 		/// The caret at this position, in slide twips.
 		geometry(): CaretGeometry {

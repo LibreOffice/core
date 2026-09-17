@@ -989,7 +989,8 @@ window.L.TextInput = window.L.Layer.extend({
 		// this._logCharCodeSequence(text);
 		this._fancyLog('send-text-to-coolwsd', text);
 
-		// Show plain typed text in the vector view before the server re-renders.
+		// Predict the text. It is recorded under the next message's number, so send it
+		// right after.
 		if (RenderManager.isVectorRendering() && cool.canPredictText(text)) {
 			RenderManager.predictTextInsert(text);
 		}
@@ -1339,7 +1340,8 @@ window.L.TextInput = window.L.Layer.extend({
 			window.app.console.log('Remove ' + before + ' before, and ' + after + ' after');
 		}
 
-		// Show the deletion in the vector view before the server re-renders.
+		// Predict the deletion. It is recorded under the next message's number, so send it
+		// right after.
 		if (RenderManager.isVectorRendering())
 			RenderManager.predictTextDelete(before, after);
 

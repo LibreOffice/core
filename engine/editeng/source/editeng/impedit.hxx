@@ -325,6 +325,8 @@ private:
     // repaints of the EditView(s)
     EditViewCallbacks* mpEditViewCallbacks;
     std::unique_ptr<KitSpecialPositioning> mpKitSpecialPositioning;
+    // The unique id of the drawing object whose text this view edits, or 0 for none.
+    sal_uInt64 mnKitTextObjectId;
     bool mbBroadcastKitViewCursor:1;
     bool mbSuppressKitMessages:1;
     bool mbNegativeX:1;
@@ -348,6 +350,11 @@ private:
     void SetBroadcastKitViewCursor(bool bSet)
     {
         mbBroadcastKitViewCursor = bSet;
+    }
+
+    void SetKitTextObjectId(sal_uInt64 nObjectId)
+    {
+        mnKitTextObjectId = nObjectId;
     }
 
 protected:

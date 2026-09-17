@@ -213,6 +213,8 @@ public:
     ::Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void            SetBroadcastKitViewCursor(bool bSet);
+    /// The unique id of the drawing object whose text this view edits, or 0 for none.
+    void SetKitTextObjectId(sal_uInt64 nObjectId);
     tools::Rectangle       GetEditCursor() const;
     void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true, bool bActivate = false );
     void            HideCursor( bool bDeactivate = false );

@@ -242,6 +242,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().predictTextDelete(before, after);
 	}
 
+	static keepPredictedCaret(update: cool.CaretUpdate): boolean {
+		return RenderManager.ensureInstance().keepPredictedCaret(update);
+	}
+
 	static canPredictAtCaret(): boolean {
 		return RenderManager.ensureInstance().canPredictAtCaret();
 	}

@@ -14,10 +14,12 @@
  */
 
 namespace cool {
-	/// The caret from the server: a paragraph and an offset into its text.
+	/// The caret from the server: a paragraph and an offset into its text. At a boundary of two
+	/// runs, atEnd is true when the offset ends the first run.
 	export interface LogicalCaret {
 		paragraph: number;
 		index: number;
+		atEnd?: boolean;
 	}
 
 	// True when the caret's height overlaps the run's line.
@@ -83,9 +85,10 @@ namespace cool {
 			.sort((a, b) => a.baseline - b.baseline || a.x - b.x);
 	}
 
-	// The run and offset for a paragraph index, or null. At a line break the index ends one
-	// run and starts the next, and the run on the caret's line wins. An index past the end
-	// goes to the end of the last run. An index before the first run, such as before a
+	// The run and offset for a paragraph index, or null. At a line break the index ends one run
+	// and starts the next, and the run on the caret's line wins. Without a baseline (NaN),
+	// atEnd picks the run that ends there, otherwise the one that starts there. An index past
+	// the end goes to the end of the last run. An index before the first run, such as before a
 	// leading tab, has none.
 	function locateLogical(
 		siblings: TextRun[],
@@ -103,7 +106,8 @@ namespace cool {
 			if (logical.index >= run.start && logical.index <= run.end) {
 				const candidate = { run, offset: logical.index - run.start };
 				if (run.baseline === caretBaseline) return candidate;
-				if (!fallback) fallback = candidate;
+				if (!fallback || (isNaN(caretBaseline) && !logical.atEnd))
+					fallback = candidate;
 			}
 			// For the fallback below.
 			if (run.start <= logical.index) previous = run;
@@ -149,9 +153,10 @@ namespace cool {
 			let bestDelta = Infinity;
 			// The runs of the target's object. An edit shifts only these.
 			let siblings: TextRun[] = [];
+			let targetObjectId: number | undefined;
 
-			for (const objectId of this.data.order) {
-				const object = this.data.objects.get(objectId);
+			for (const id of this.data.order) {
+				const object = this.data.objects.get(id);
 				if (!object) continue;
 				const runs = TextRun.collect(object.primitives);
 				for (const run of runs) {
@@ -172,6 +177,7 @@ namespace cool {
 						bestDelta = delta;
 						target = { run, positions };
 						siblings = runs;
+						targetObjectId = object.id;
 					}
 				}
 			}
@@ -204,6 +210,29 @@ namespace cool {
 				positions,
 				siblings,
 				this.measurer,
+				targetObjectId,
+			);
+		}
+
+		/// The position of a logical caret in the object with the given id, or null. It
+		/// needs no rectangle, so a recorded caret works in a tree the server replaced.
+		caretIn(objectId: number, logical: LogicalCaret): CaretPosition | null {
+			const object = this.data.objects.get(objectId);
+			if (!object) return null;
+			const runs = TextRun.collect(object.primitives);
+			const located = locateLogical(runs, logical, NaN);
+			if (!located) return null;
+			const positions = located.run.characterPositions(this.measurer);
+			const rightward = collectRightward(runs, located.run);
+			if (rightward === null) return null;
+			return new CaretPosition(
+				located.run,
+				Math.max(0, Math.min(located.offset, positions.length - 1)),
+				rightward,
+				positions,
+				runs,
+				this.measurer,
+				objectId,
 			);
 		}
 

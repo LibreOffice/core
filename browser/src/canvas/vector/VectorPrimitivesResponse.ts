@@ -24,6 +24,9 @@ namespace cool {
 		epoch?: number;
 		/// The version the part is at once everything in this response is applied.
 		version?: number;
+		/// The newest input of this view that the content reflects, when
+		/// known.
+		inputSequence?: number;
 		/// In a delta, the version it was compared against. The delta carries the objects that
 		/// changed after that version.
 		from?: number;

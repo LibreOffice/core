@@ -12,12 +12,15 @@
 describe('text prediction caret lookup', function () {
 	const {
 		measure,
+		partOf,
+		objectAt,
 		makeSlide,
 		runOf,
 		runsOf,
 		wrapRun,
 		makeWrapSlide,
 		makeTwoParaSlide,
+		makeTwoIdSlide,
 		makeSharedWrapSlide,
 	} = predictionTest;
 
@@ -293,5 +296,79 @@ describe('text prediction caret lookup', function () {
 		nodeassert.ok(onLine2);
 		nodeassert.strictEqual(onLine2.run.start, 5);
 		nodeassert.strictEqual(onLine2.offset, 0);
+	});
+
+	it('inserts into the object named by id without a caret rectangle', function () {
+		const data = makeTwoIdSlide();
+		// The zeros point at neither box. The id picks the second one and the logical
+		// position places the edit.
+		const advance = predictionTest.predictTextInsert(
+			data,
+			0,
+			0,
+			0,
+			'x',
+			measure,
+			{ paragraph: 0, index: 2 },
+			9,
+		);
+		nodeassert.strictEqual(advance, 100);
+		const texts = [objectAt(data, 0), objectAt(data, 1)].map(
+			(object: any) => object.primitives[0].children[0].text,
+		);
+		nodeassert.deepStrictEqual(texts, ['Hi', 'Hix']);
+	});
+
+	it('reports the id of the object the caret sits in', function () {
+		const data = makeTwoIdSlide();
+		const position = predictionTest.findCaretPosition(
+			data,
+			1200,
+			4800,
+			5050,
+			measure,
+			{
+				paragraph: 0,
+				index: 2,
+			},
+		);
+		nodeassert.ok(position);
+		nodeassert.strictEqual(position.objectId, 9);
+	});
+
+	it('does nothing for an object id the tree does not carry', function () {
+		const data = makeTwoIdSlide();
+		const advance = predictionTest.predictTextInsert(
+			data,
+			0,
+			0,
+			0,
+			'x',
+			measure,
+			{ paragraph: 0, index: 2 },
+			42,
+		);
+		nodeassert.strictEqual(advance, 0);
+	});
+
+	it('places an edit found by id at a line break on the line that starts there', function () {
+		// Index 5 ends "line1" and starts "line2". Without a caret rectangle the edit goes
+		// to the start of the next line, where the caret sits after a wrap.
+		const data = makeSharedWrapSlide('line1line2', [
+			{ start: 0, length: 5, f: 0 },
+			{ start: 5, length: 5, f: 400 },
+		]);
+		const position = predictionTest.findCaretPosition(
+			data,
+			0,
+			0,
+			0,
+			measure,
+			{ paragraph: 0, index: 5 },
+			1,
+		);
+		nodeassert.ok(position);
+		nodeassert.strictEqual(position.run.start, 5);
+		nodeassert.strictEqual(position.offset, 0);
 	});
 });

@@ -1778,8 +1778,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_onInvalidateCursorMsg: function (textMsg) {
+		// The local caret stays while predicted edits are ahead of this update.
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
+		const keepPredictedCaret = RenderManager.keepPredictedCaret(obj);
 		var recCursor = this._getEditCursorRectangle(obj);
 		if (recCursor === undefined || this.persistCursorPositionInWriter) {
 			this.persistCursorPositionInWriter = false;
@@ -1800,16 +1802,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Remember the last position of the caret (in core pixels).
 		this._cursorPreviousPositionCorePixels = app.file.textCursor.rectangle.clone();
 
-		app.file.textCursor.rectangle = new cool.SimpleRectangle(recCursor.getTopLeft().x, recCursor.getTopLeft().y, recCursor.getSize().x, recCursor.getSize().y);
+		if (!keepPredictedCaret) {
+			app.file.textCursor.rectangle = new cool.SimpleRectangle(recCursor.getTopLeft().x, recCursor.getTopLeft().y, recCursor.getSize().x, recCursor.getSize().y);
 
-		// The caret's logical position, or null when the message does not carry it. The
-		// message sends every value as a string, so the numbers are parsed.
-		const cursorParagraph = obj.paragraph !== undefined ? parseInt(obj.paragraph) : NaN;
-		const cursorIndex = obj.index !== undefined ? parseInt(obj.index) : NaN;
-		if (!isNaN(cursorParagraph) && !isNaN(cursorIndex))
-			app.file.textCursor.logical = { paragraph: cursorParagraph, index: cursorIndex };
-		else
-			app.file.textCursor.logical = null;
+			// The logical caret, parsed from strings, or null when missing.
+			const cursorParagraph = obj.paragraph !== undefined ? parseInt(obj.paragraph) : NaN;
+			const cursorIndex = obj.index !== undefined ? parseInt(obj.index) : NaN;
+			if (!isNaN(cursorParagraph) && !isNaN(cursorIndex))
+				app.file.textCursor.logical = { paragraph: cursorParagraph, index: cursorIndex };
+			else
+				app.file.textCursor.logical = null;
+		}
 
 		if (this.isWriter()) {
 			app.sectionContainer.onCursorPositionChanged();

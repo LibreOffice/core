@@ -20,6 +20,25 @@
  * a vector-rendered document has no bitmap tile grid.
  */
 
+/// The inserted text, or the code points deleted before and after the caret.
+interface PredictedChange {
+	text?: string;
+	deleteBefore?: number;
+	deleteAfter?: number;
+}
+
+/// A predicted edit the server has not acknowledged yet.
+interface PredictedTextEdit extends PredictedChange {
+	/// The sequence number of the edit's input message.
+	sequence: number;
+	partId: cool.VectorPartGuid;
+	/// The id of the edited entry.
+	objectId: number;
+	/// The caret before and after the edit.
+	caretBefore: cool.LogicalCaret;
+	caretAfter: cool.LogicalCaret;
+}
+
 /// The cached tree and caret that a predicted edit works on.
 interface EditTarget {
 	tree: cool.PredictionTree;
@@ -607,6 +626,7 @@ class VectorManager extends RenderManagerBase {
 		const drained = this._drainDrawable(partId);
 		if (this._isDrawable(data)) this._redrawRenderedPreviews(partId, drained);
 		if (mode === cool.VectorMode.MasterPages) this._onMasterArrived(partId);
+		this._reconcile(partId, values.inputSequence);
 		this._fireChanged();
 		this.setVisualsReady();
 	}
@@ -622,17 +642,28 @@ class VectorManager extends RenderManagerBase {
 		}
 	}
 
+	/// Apply a pushed delta and replay the pending edits on the objects it
+	/// replaced.
+	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+		const partId = values.partId;
+		if (partId === undefined) return;
+		const replaced = this._applyDelta(values);
+		if (!replaced) return;
+		this._reconcile(partId, values.inputSequence, replaced);
+	}
+
 	/// Apply a delta to a cached part. The objects it carries replace
 	/// theirs and the rest keep what was cached. A delta not newer than
 	/// the cache is ignored. A part that is not cached, a delta that starts
 	/// above the version held, or an order that names content the client
-	/// never had, falls back to a full re-fetch.
-	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+	/// never had, falls back to a full re-fetch. Returns the ids of the
+	/// objects it replaced, or null when the cached tree is unchanged.
+	private _applyDelta(values: cool.VectorPrimitivesResponse): number[] | null {
 		const partId = values.partId;
-		if (partId === undefined) return;
+		if (partId === undefined) return null;
 
 		const cached = this._cache.get(partId);
-		if (!cached) return;
+		if (!cached) return null;
 
 		// A delta is also what answers a request that said which version the
 		// client holds, and only a client that holds the page says that.
@@ -642,7 +673,7 @@ class VectorManager extends RenderManagerBase {
 		// it says nothing about what is cached and the part is fetched whole.
 		if (cached.epoch !== values.epoch) {
 			this.clearCachedPart(partId);
-			return;
+			return null;
 		}
 
 		// Every later delta is checked against the version, so a delta without
@@ -653,7 +684,7 @@ class VectorManager extends RenderManagerBase {
 					partId +
 					' carries no version and is ignored',
 			);
-			return;
+			return null;
 		}
 
 		// A delta computed against an older version can arrive after a
@@ -664,7 +695,7 @@ class VectorManager extends RenderManagerBase {
 			values.version !== undefined &&
 			values.version <= cached.version
 		)
-			return;
+			return null;
 
 		// A delta that starts at or below the version held carries every object that changed
 		// since, and each entry replaces a whole object, so it is applied as it is. A delta that
@@ -676,7 +707,7 @@ class VectorManager extends RenderManagerBase {
 			values.from > cached.version
 		) {
 			this.clearCachedPart(partId);
-			return;
+			return null;
 		}
 
 		const carried = values.objects || [];
@@ -690,7 +721,7 @@ class VectorManager extends RenderManagerBase {
 				)
 			) {
 				this.clearCachedPart(partId);
-				return;
+				return null;
 			}
 		}
 		for (const object of carried) {
@@ -715,7 +746,7 @@ class VectorManager extends RenderManagerBase {
 			for (const id of values.order) {
 				if (!cached.objects.has(id)) {
 					this.clearCachedPart(partId);
-					return;
+					return null;
 				}
 			}
 			const live = new Set(values.order);
@@ -736,9 +767,11 @@ class VectorManager extends RenderManagerBase {
 		this._redrawRenderedPreviews(partId);
 		if (cached.mode === cool.VectorMode.MasterPages)
 			this._onMasterArrived(partId);
-		this._fireChanged(
-			carried.flatMap((object) => (object.id === undefined ? [] : [object.id])),
+		const replaced = carried.flatMap((object) =>
+			object.id === undefined ? [] : [object.id],
 		);
+		this._fireChanged(replaced);
+		return replaced;
 	}
 
 	// Shared off-screen 2d context for measuring text, created on first use.
@@ -781,6 +814,10 @@ class VectorManager extends RenderManagerBase {
 		return this._textMeasurer;
 	}
 
+	private _treeOf(data: cool.VectorPrimitivesData): cool.PredictionTree {
+		return new cool.PredictionTree(data, this._measurer());
+	}
+
 	/// The id of the page in the edit view, or undefined while the page list
 	/// does not name it.
 	private _selectedPartId(): cool.VectorPartGuid | undefined {
@@ -814,13 +851,20 @@ class VectorManager extends RenderManagerBase {
 		const data = partId === undefined ? undefined : this._cache.get(partId);
 		if (!data) return null;
 		return {
-			tree: new cool.PredictionTree(
-				this._asThisViewEditsIt(data),
-				this._measurer(),
-			),
+			tree: this._treeOf(this._asThisViewEditsIt(data)),
 			caret: cursor.rectangle,
 			logical: cursor.logical ?? null,
 		};
+	}
+
+	// The caret position in the edit target, or null.
+	private _lookUpCaret(target: EditTarget): cool.CaretPosition | null {
+		return target.tree.caretAt(
+			target.caret.x1,
+			target.caret.y1,
+			target.caret.y2,
+			target.logical ?? undefined,
+		);
 	}
 
 	/// True when a keystroke at the caret can be predicted. The tree stays
@@ -833,7 +877,7 @@ class VectorManager extends RenderManagerBase {
 	/// Insert typed text into the cached tree so it shows before the server
 	/// re-renders. Returns true when the tree changed.
 	predictTextInsert(text: string): boolean {
-		return this._predictEdit((position) => {
+		return this._predictEdit({ text }, (position) => {
 			const advance = position.insert(text);
 			return advance > 0
 				? { indexShift: text.length, caretShift: advance }
@@ -844,30 +888,21 @@ class VectorManager extends RenderManagerBase {
 	/// Delete before characters left of the caret and after characters right of
 	/// it in the cached tree. Returns true when the tree changed.
 	predictTextDelete(before: number, after: number): boolean {
-		return this._predictEdit((position) => {
-			const result = position.delete(before, after);
-			return result.removed > 0
-				? { indexShift: -result.removedBefore, caretShift: result.caretShift }
-				: null;
-		});
-	}
-
-	// The caret position in the tree of the edit target, or null when no run
-	// there is editable.
-	private _lookUpCaret(target: EditTarget): cool.CaretPosition | null {
-		return target.tree.caretAt(
-			target.caret.x1,
-			target.caret.y1,
-			target.caret.y2,
-			target.logical ?? undefined,
+		return this._predictEdit(
+			{ deleteBefore: before, deleteAfter: after },
+			(position) => {
+				const result = position.delete(before, after);
+				return result.removed > 0
+					? { indexShift: -result.removedBefore, caretShift: result.caretShift }
+					: null;
+			},
 		);
 	}
 
-	// Run a predicted edit at the caret: find the edit target and the caret
-	// position, apply the edit, then place the caret and redraw. The edit
-	// returns how far the caret's index and x moved, or null when it changed
-	// nothing. Returns true when the tree changed.
+	// Apply an edit at the caret, record it for replay and move the caret. The
+	// edit returns how far the caret moved, or null when nothing changed.
 	private _predictEdit(
+		change: PredictedChange,
 		apply: (
 			position: cool.CaretPosition,
 		) => { indexShift: number; caretShift: number } | null,
@@ -878,12 +913,22 @@ class VectorManager extends RenderManagerBase {
 		if (!position) return false;
 		const moved = apply(position);
 		if (!moved) return false;
-		// Advance the logical caret so the next keystroke predicts from there.
-		if (target.logical)
-			target.logical.index = Math.max(
-				0,
-				target.logical.index + moved.indexShift,
+		if (target.logical) {
+			// The caret stays in its run, so atEnd still holds.
+			const caretAfter = {
+				paragraph: target.logical.paragraph,
+				index: Math.max(0, target.logical.index + moved.indexShift),
+				atEnd: position.atEnd,
+			};
+			this._recordEdit(
+				target.tree.data.partId,
+				position,
+				target.logical,
+				caretAfter,
+				change,
 			);
+			target.logical.index = caretAfter.index;
+		}
 		this._placeCaret(target, moved.caretShift);
 		this.changedHere();
 		return true;
@@ -897,13 +942,7 @@ class VectorManager extends RenderManagerBase {
 		if (target.logical) {
 			const geometry = this._lookUpCaret(target)?.geometry();
 			if (geometry) {
-				app.file.textCursor.rectangle = new cool.SimpleRectangle(
-					geometry.x,
-					geometry.top,
-					0,
-					geometry.height,
-				);
-				(this._docLayer as any)._onUpdateCursor();
+				this._setCaretRectangle(geometry);
 				return;
 			}
 		}
@@ -914,6 +953,178 @@ class VectorManager extends RenderManagerBase {
 		if (shift === 0) return;
 		caret.moveBy([shift, 0]);
 		(this._docLayer as any)._onUpdateCursor();
+	}
+
+	private _setCaretRectangle(geometry: cool.CaretGeometry): void {
+		app.file.textCursor.rectangle = new cool.SimpleRectangle(
+			geometry.x,
+			geometry.top,
+			0,
+			geometry.height,
+		);
+		(this._docLayer as any)._onUpdateCursor();
+	}
+
+	// The pending edits, oldest first.
+	private _pendingEdits: PredictedTextEdit[] = [];
+
+	private _hasPendingEdits(partId: cool.VectorPartGuid): boolean {
+		return this._pendingEdits.some((edit) => edit.partId === partId);
+	}
+
+	private _dropEdits(partId: cool.VectorPartGuid | null): void {
+		this._pendingEdits =
+			partId === null
+				? []
+				: this._pendingEdits.filter((edit) => edit.partId !== partId);
+	}
+
+	// Drop the part's edits and ask for the whole part again, as the cached tree
+	// still holds the predicted text. A full response replaces every object,
+	// where a delta replaces only those the server changed. The cached tree
+	// stays drawn until the response arrives.
+	private _abandonEdits(partId: cool.VectorPartGuid): void {
+		this._dropEdits(partId);
+		const data = this._cache.get(partId);
+		if (!data) return;
+		this._inFlightParts.add(partId);
+		this._sendVectorPrimitivesRequest(partId, data.mode);
+	}
+
+	// Record an edit for replay under the next input's sequence number. An edit
+	// without an object id cannot be replayed and is not recorded.
+	private _recordEdit(
+		partId: cool.VectorPartGuid,
+		position: cool.CaretPosition,
+		caretBefore: cool.LogicalCaret,
+		caretAfter: cool.LogicalCaret,
+		change: PredictedChange,
+	): void {
+		const objectId = position.objectId;
+		if (objectId === undefined) return;
+		const sequence = app.file.inputSequence + 1;
+		this._pendingEdits.push({
+			sequence,
+			partId,
+			objectId,
+			caretBefore: { ...caretBefore, atEnd: position.atEnd },
+			caretAfter,
+			...change,
+		});
+	}
+
+	// Drop the edits the content includes and replay the rest, only on the
+	// replaced objects when given. Content without a sequence drops all of the
+	// part's edits. An edit that no longer fits drops them too and re-fetches
+	// the part, as the edits replayed before it stay in the tree.
+	private _reconcile(
+		partId: cool.VectorPartGuid,
+		inputSequence: number | undefined,
+		replaced?: number[],
+	): void {
+		if (!this._hasPendingEdits(partId)) return;
+		const acknowledged = inputSequence === undefined ? Infinity : inputSequence;
+		this._pendingEdits = this._pendingEdits.filter(
+			(edit) => edit.partId !== partId || edit.sequence > acknowledged,
+		);
+		const remaining = this._pendingEdits.filter(
+			(edit) => edit.partId === partId,
+		);
+		const toReplay = replaced
+			? remaining.filter((edit) => replaced.includes(edit.objectId))
+			: remaining;
+		if (!toReplay.length) return;
+		const data = this._cache.get(partId);
+		if (!data) {
+			this._dropEdits(partId);
+			return;
+		}
+		let treeChanged = false;
+		for (const edit of toReplay) {
+			if (!this._replayEdit(data, edit)) {
+				this._abandonEdits(partId);
+				treeChanged = false;
+				break;
+			}
+			treeChanged = true;
+		}
+		if (treeChanged) {
+			// The newest edit set the caret, replayed or not.
+			const newest = remaining[remaining.length - 1];
+			const geometry = this._treeOf(data)
+				.caretIn(newest.objectId, newest.caretAfter)
+				?.geometry();
+			if (geometry) this._setCaretRectangle(geometry);
+			app.file.textCursor.logical = {
+				paragraph: newest.caretAfter.paragraph,
+				index: newest.caretAfter.index,
+			};
+		}
+		this.changedHere();
+	}
+
+	// Apply a recorded edit. Returns true when the tree changed.
+	private _replayEdit(
+		data: cool.VectorPrimitivesData,
+		edit: PredictedTextEdit,
+	): boolean {
+		const position = this._treeOf(data).caretIn(
+			edit.objectId,
+			edit.caretBefore,
+		);
+		if (!position) return false;
+		if (edit.text !== undefined) return position.insert(edit.text) > 0;
+		return (
+			position.delete(edit.deleteBefore ?? 0, edit.deleteAfter ?? 0).removed > 0
+		);
+	}
+
+	/// True when the update is older than the newest edit, so the local caret
+	/// stays. A current update that puts the caret elsewhere, as after
+	/// autocorrect, drops the edits and re-fetches the part.
+	keepPredictedCaret(update: cool.CaretUpdate): boolean {
+		const partId = this._selectedPartId();
+		if (partId === undefined) return false;
+		const pending = this._pendingEdits.filter((edit) => edit.partId === partId);
+		if (!pending.length) return false;
+		const inputSequence = VectorManager._numberOf(update.inputSequence);
+		if (inputSequence === undefined) return false;
+		const newest = pending[pending.length - 1];
+		if (inputSequence < newest.sequence) return true;
+		const expected = newest.caretAfter;
+		const paragraph = VectorManager._numberOf(update.paragraph);
+		const index = VectorManager._numberOf(update.index);
+		const objectId = VectorManager._numberOf(update.object);
+		// A running edit's entry keeps its id across objects, so compare with
+		// the edited object.
+		const otherObject =
+			objectId !== undefined &&
+			objectId !== this._editedObjectOf(partId, newest.objectId);
+		const elsewhere =
+			paragraph !== undefined &&
+			index !== undefined &&
+			(paragraph !== expected.paragraph || index !== expected.index);
+		if (otherObject || elsewhere) this._abandonEdits(partId);
+		return false;
+	}
+
+	// The edited object: a running edit entry's parent, or the entry itself.
+	private _editedObjectOf(
+		partId: cool.VectorPartGuid,
+		objectId: number,
+	): number {
+		const entry = this._cache.get(partId)?.objects.get(objectId);
+		return entry?.kind === 'texteditoverlay' && entry.parent !== undefined
+			? entry.parent
+			: objectId;
+	}
+
+	// A message string as a number, or undefined when missing or empty.
+	private static _numberOf(value: unknown): number | undefined {
+		if (value === undefined || value === null) return undefined;
+		if (typeof value === 'string' && value.trim() === '') return undefined;
+		const number = Number(value);
+		return isNaN(number) ? undefined : number;
 	}
 
 	/// Handle a fetched bitmap: cache it and re-render the previews
@@ -1055,7 +1266,7 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	/// Drop cached data for a page and any in-flight state, and the bitmaps
-	/// no other cached page uses.
+	/// no other cached page uses. The predicted edits stay pending.
 	clearCachedPart(partId: cool.VectorPartGuid): void {
 		this._cache.delete(partId);
 		this._staleParts.delete(partId);
@@ -1067,7 +1278,8 @@ class VectorManager extends RenderManagerBase {
 
 	/// Drop the cached primitive trees for every part so the views
 	/// re-fetch them. Decoded bitmaps stay cached, since an image that
-	/// actually changed comes back under a new checksum anyway.
+	/// actually changed comes back under a new checksum anyway. The
+	/// predicted edits stay pending.
 	clearAllParts(): void {
 		this._cache.clear();
 		this._staleParts.clear();
@@ -1079,7 +1291,8 @@ class VectorManager extends RenderManagerBase {
 
 	/// Drop the decoded bitmaps and the primitive trees that reference
 	/// them, so the next paint re-fetches what it draws. The loaded
-	/// fonts stay registered, since they are few and small.
+	/// fonts stay registered, since they are few and small. The predicted
+	/// edits stay pending.
 	reclaimGraphicsMemory(): void {
 		this._bitmaps.clear();
 		this._cache.clear();
@@ -1096,6 +1309,7 @@ class VectorManager extends RenderManagerBase {
 		this._staleParts.clear();
 		this._inFlightParts.clear();
 		this._pendingPreviews.clear();
+		this._dropEdits(null);
 		this._bitmaps.clear();
 		this._renderedPreviews.clear();
 		this._renderer.releaseScratchCanvases();

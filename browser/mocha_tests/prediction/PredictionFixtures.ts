@@ -22,7 +22,7 @@ namespace predictionTest {
 		return new cool.PredictionTree(data, new cool.TextMeasurer(measureWith));
 	}
 
-	// The caret position in a part, from the caret rectangle and the logical caret.
+	// The caret position in a part, by rectangle or by object id.
 	export function findCaretPosition(
 		data: cool.VectorPrimitivesData,
 		caretX: number,
@@ -30,13 +30,12 @@ namespace predictionTest {
 		caretYBottom: number,
 		measureWith: cool.TextRunMeasure,
 		logical?: cool.LogicalCaret,
+		objectId?: number,
 	): cool.CaretPosition | null {
-		return treeOf(data, measureWith).caretAt(
-			caretX,
-			caretYTop,
-			caretYBottom,
-			logical,
-		);
+		const tree = treeOf(data, measureWith);
+		if (objectId !== undefined)
+			return logical ? tree.caretIn(objectId, logical) : null;
+		return tree.caretAt(caretX, caretYTop, caretYBottom, logical);
 	}
 
 	// Inserts text at the caret and returns the inserted width, 0 when nothing changed.
@@ -48,6 +47,7 @@ namespace predictionTest {
 		text: string,
 		measureWith: cool.TextRunMeasure,
 		logical?: cool.LogicalCaret,
+		objectId?: number,
 	): number {
 		const position = findCaretPosition(
 			data,
@@ -56,6 +56,7 @@ namespace predictionTest {
 			caretYBottom,
 			measureWith,
 			logical,
+			objectId,
 		);
 		return position ? position.insert(text) : 0;
 	}
@@ -70,6 +71,7 @@ namespace predictionTest {
 		after: number,
 		measureWith: cool.TextRunMeasure,
 		logical?: cool.LogicalCaret,
+		objectId?: number,
 	): cool.PredictedDeletion {
 		const position = findCaretPosition(
 			data,
@@ -78,6 +80,7 @@ namespace predictionTest {
 			caretYBottom,
 			measureWith,
 			logical,
+			objectId,
 		);
 		return position
 			? position.delete(before, after)
@@ -92,6 +95,7 @@ namespace predictionTest {
 		caretYBottom: number,
 		logical: cool.LogicalCaret | undefined,
 		measureWith: cool.TextRunMeasure,
+		objectId?: number,
 	): cool.CaretGeometry | null {
 		const position = findCaretPosition(
 			data,
@@ -100,23 +104,25 @@ namespace predictionTest {
 			caretYBottom,
 			measureWith,
 			logical,
+			objectId,
 		);
 		return position ? position.geometry() : null;
 	}
 
-	// A part from a fixture that lists its objects. The objects get ids from one in list order
-	// and are drawn in that order.
+	// A part from a fixture listing its objects in drawing order. Objects without an id are
+	// numbered from one.
 	export function partOf(fixture: any): cool.VectorPrimitivesData {
 		const objects = fixture.objects as cool.SlideObject[];
+		const ids = objects.map((object, index) => object.id ?? index + 1);
 		return {
 			...fixture,
 			objects: new Map(
 				objects.map((object, index): [number, cool.SlideObject] => [
-					index + 1,
+					ids[index],
 					object,
 				]),
 			),
-			order: objects.map((_object, index) => index + 1),
+			order: ids,
 		};
 	}
 
@@ -324,6 +330,37 @@ namespace predictionTest {
 			paragraph,
 		});
 		return boxPart([run('Hello', 0, 0), run('World', 400, 1)]);
+	}
+
+	// Two text boxes that only their object ids tell apart.
+	export function makeTwoIdSlide(): cool.VectorPrimitivesData {
+		const box = (id: number, y: number): any => ({
+			id,
+			primitives: [
+				{
+					type: 'transform',
+					matrix: [1, 0, 0, 1, 1000, y],
+					children: [
+						{
+							type: 'textSimplePortion',
+							text: 'Hi',
+							textPosition: 0,
+							textLength: 2,
+							matrix: [1, 0, 0, 1, 0, 0],
+							fontSize: 360,
+							familyname: 'Arial',
+							paragraph: 0,
+						},
+					],
+				},
+			],
+		});
+		return partOf({
+			slideWidth: 10000,
+			slideHeight: 7500,
+			masterPage: [],
+			objects: [box(7, 2000), box(9, 5000)],
+		});
 	}
 
 	// A paragraph whose runs share one buffer, as the engine's portions do, in a box at (1000,

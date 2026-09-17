@@ -1343,6 +1343,9 @@ invalidatecursor: <payload>
     and the id of the view which triggered the invalidation. JSON payload.
     When the client numbers its inputs, the payload also carries
     inputSequence, the newest input applied before the cursor was placed.
+    While a drawing object's text is edited, object is the unique id of
+    the object that holds the caret, as the vector primitives name it.
+    For a shape in a group, it is the group member being edited.
 
     The communication between the parent process (the one keeping open the
     Websocket connections to the clients) and a child process (handling

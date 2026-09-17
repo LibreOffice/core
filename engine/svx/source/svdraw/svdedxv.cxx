@@ -1364,6 +1364,13 @@ std::unique_ptr<SdrUndoManager> SdrObjEditView::createLocalTextUndoManager()
     return std::unique_ptr<SdrUndoManager>();
 }
 
+void SdrObjEditView::ImpSetKitTextObjectId(OutlinerView& rView) const
+{
+    rtl::Reference<SdrTextObj> pEdited = mxWeakTextEditObj.get();
+    if (pEdited.is())
+        rView.GetEditView().SetKitTextObjectId(pEdited->GetUniqueID());
+}
+
 bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::Window* pWin,
                                       bool bIsNewObj, SdrOutliner* pGivenOutliner,
                                       OutlinerView* pGivenOutlinerView, bool bDontDeleteOutliner,
@@ -1538,6 +1545,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             AdjustMarkHdl();
 
             mpTextEditOutlinerView = ImpMakeOutlinerView(pWin, pGivenOutlinerView);
+            if (mpTextEditOutlinerView)
+                ImpSetKitTextObjectId(*mpTextEditOutlinerView);
 
             if (!comphelper::COKit::isActive() && mpTextEditOutlinerView)
             {
@@ -2071,6 +2080,7 @@ void SdrObjEditView::SetTextEditWin(vcl::Window* pWin)
             mpTextEditOutlinerView->HideCursor();
         }
         mpTextEditOutlinerView = pNewView;
+        ImpSetKitTextObjectId(*pNewView);
         mpTextEditWin = pWin;
         pWin->GrabFocus(); // Make the cursor blink here as well
         pNewView->ShowCursor();

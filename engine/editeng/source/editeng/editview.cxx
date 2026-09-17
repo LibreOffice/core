@@ -592,6 +592,11 @@ void EditView::SetBroadcastKitViewCursor(bool bSet)
     getImpl().SetBroadcastKitViewCursor(bSet);
 }
 
+void EditView::SetKitTextObjectId(sal_uInt64 nObjectId)
+{
+    getImpl().SetKitTextObjectId(nObjectId);
+}
+
 tools::Rectangle EditView::GetEditCursor() const
 {
     return getImpl().GetEditCursor();

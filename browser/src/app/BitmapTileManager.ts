@@ -2425,6 +2425,10 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	public keepPredictedCaret(_update: cool.CaretUpdate): boolean {
+		return false;
+	}
+
 	public canPredictAtCaret(): boolean {
 		return false;
 	}

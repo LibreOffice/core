@@ -198,6 +198,7 @@ ImpEditView::ImpEditView(EditView* pView, EditEngine& rEditEngine, vcl::Window* 
     , meSelectionMode(EESelectionMode::Std)
     , meAnchorMode(EEAnchorMode::TopLeft)
     , mpEditViewCallbacks(nullptr)
+    , mnKitTextObjectId(0)
     , mbBroadcastKitViewCursor(comphelper::COKit::isActive())
     , mbSuppressKitMessages(false)
     , mbNegativeX(false)
@@ -1547,6 +1548,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // offset within that paragraph.
                 aMessageParams.put("paragraph", nPara);
                 aMessageParams.put("index", aPaM.GetIndex());
+                // The drawing object whose text holds the caret, so the
+                // position is unambiguous when several objects have text.
+                if (mnKitTextObjectId != 0)
+                    aMessageParams.put("object", mnKitTextObjectId);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
                 KitHelper::notifyOtherView(*pThisShell, pThisShell,

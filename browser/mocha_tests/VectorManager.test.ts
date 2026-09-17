@@ -1610,4 +1610,440 @@ describe('VectorManager', function () {
 			);
 		});
 	});
+
+	// The manager measures text with a stub, so widths do not depend on a
+	// canvas. The document state is set up as during a text edit.
+	describe('predicted text edits', function () {
+		const measure: cool.TextRunMeasure = (_run, text) => text.length * 100;
+		class TestManager extends VectorManager {
+			protected _textMeasure(): cool.TextRunMeasure {
+				return measure;
+			}
+		}
+
+		// One text box with id 5 at (1000, 2000) holding one run of text.
+		function textBox(text: string): any {
+			return {
+				id: 5,
+				primitives: [
+					{
+						type: 'transform',
+						matrix: [1, 0, 0, 1, 1000, 2000],
+						children: [
+							{
+								type: 'textSimplePortion',
+								text,
+								textPosition: 0,
+								textLength: text.length,
+								matrix: [1, 0, 0, 1, 0, 0],
+								fontSize: 360,
+								familyname: 'Arial',
+								paragraph: 0,
+							},
+						],
+					},
+				],
+			};
+		}
+
+		function textOf(manager: VectorManager): string {
+			const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+			return data.objects.get(5).primitives[0].children[0].text;
+		}
+
+		let savedMap: any;
+		let savedSelections: any;
+		let savedCursor: any;
+		let savedSequence: number;
+		beforeEach(function () {
+			const anyApp = app as any;
+			savedMap = anyApp.map;
+			savedSelections = (window as any).TextSelections;
+			savedCursor = app.file.textCursor;
+			savedSequence = app.file.inputSequence;
+			anyApp.map = {
+				_docLayer: { _selectedPart: 0, _onUpdateCursor: function () {} },
+			};
+			(window as any).TextSelections = { isActive: () => false };
+			// The caret sits at the end of "Hi", which spans 1000..1200.
+			app.file.textCursor = {
+				visible: true,
+				rectangle: new cool.SimpleRectangle(1200, 1800, 0, 250),
+				logical: { paragraph: 0, index: 2 },
+			};
+			app.file.inputSequence = 10;
+		});
+		afterEach(function () {
+			(app as any).map = savedMap;
+			(window as any).TextSelections = savedSelections;
+			app.file.textCursor = savedCursor;
+			app.file.inputSequence = savedSequence;
+		});
+
+		function managerWith(text: string): VectorManager {
+			const manager = new TestManager();
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				version: 1,
+				objects: [textBox(text)],
+			});
+			return manager;
+		}
+
+		// A manager that holds "Hi" and predicted the 'a' sent as input 11.
+		function afterTypingA(): VectorManager {
+			const manager = managerWith('Hi');
+			manager.predictTextInsert('a');
+			app.file.inputSequence = 11;
+			return manager;
+		}
+
+		// Sends a delta that holds the text box with that text and reflects that input.
+		function sendDelta(
+			manager: VectorManager,
+			inputSequence: number,
+			text: string,
+			version = 2,
+		): void {
+			manager.handleVectorPrimitivesDelta({
+				partId: 'S0',
+				version,
+				inputSequence,
+				order: [5],
+				objects: [textBox(text)],
+			});
+		}
+
+		// A text box with id 5 holding "line1" and "line2" on two lines of one paragraph,
+		// split by a line break, so index 5 is the end of the first run and the start of the
+		// second.
+		function twoLineBox(first = 'line1'): any {
+			const text = first + 'line2';
+			const run = (start: number, length: number, f: number): any => ({
+				type: 'textSimplePortion',
+				text,
+				textPosition: start,
+				textLength: length,
+				matrix: [1, 0, 0, 1, 0, f],
+				fontSize: 360,
+				familyname: 'Arial',
+				paragraph: 0,
+			});
+			return {
+				id: 5,
+				primitives: [
+					{
+						type: 'transform',
+						matrix: [1, 0, 0, 1, 1000, 2000],
+						children: [run(0, first.length, 0), run(first.length, 5, 400)],
+					},
+				],
+			};
+		}
+
+		// A caret update for that input that puts the caret in paragraph 0 at that index, in
+		// the object with that id when one is given.
+		function caretUpdate(
+			inputSequence: number,
+			index: number,
+			objectId?: number,
+		): cool.CaretUpdate {
+			const values: cool.CaretUpdate = {
+				inputSequence,
+				paragraph: '0',
+				index: String(index),
+			};
+			if (objectId !== undefined) values.object = String(objectId);
+			return values;
+		}
+
+		// The typed character is input 11. A delta for input 10 does not
+		// include it, so the edit is replayed and the caret stays after it.
+		it('keeps a predicted character when a delta predates it', function () {
+			const manager = managerWith('Hi');
+			nodeassert.ok(manager.predictTextInsert('a'));
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+			app.file.inputSequence = 11;
+
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+			nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+				paragraph: 0,
+				index: 3,
+			});
+			nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1300);
+		});
+
+		// Content for the edit's own input includes it, so the edit is dropped
+		// and later content stands as it is.
+		it('shows later content unchanged once the server includes the edit', function () {
+			const manager = afterTypingA();
+
+			sendDelta(manager, 11, 'Hia');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+			// Another view appended text. Nothing is replayed on top.
+			sendDelta(manager, 11, 'Hia!', 3);
+			nodeassert.strictEqual(textOf(manager), 'Hia!');
+		});
+
+		// Content for the first of several keystrokes keeps the later ones, in
+		// order.
+		it('keeps the keystrokes a delta does not include yet, in order', function () {
+			const manager = afterTypingA();
+			manager.predictTextInsert('b');
+			app.file.inputSequence = 12;
+			manager.predictTextDelete(1, 0);
+			app.file.inputSequence = 13;
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+
+			sendDelta(manager, 11, 'Hia');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+			nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+				paragraph: 0,
+				index: 3,
+			});
+		});
+
+		// A part dropped from the cache comes back in full, and the keystroke that the
+		// full response does not include yet shows on it again.
+		it('keeps a predicted character on a part fetched again in full', function () {
+			const manager = afterTypingA();
+			manager.clearCachedPart('S0');
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				version: 2,
+				inputSequence: 10,
+				objects: [textBox('Hi')],
+			});
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+		});
+
+		// A full response without an input sequence stands as it is, and the
+		// edits are dropped.
+		it('takes content without an input sequence as it is', function () {
+			const manager = afterTypingA();
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				version: 2,
+				objects: [textBox('Hi')],
+			});
+			nodeassert.strictEqual(textOf(manager), 'Hi');
+		});
+
+		// A caret update for an input older than a predicted edit leaves the
+		// local caret after the typed text. The update that reflects the edit
+		// applies.
+		it('keeps the local caret while a caret update lags behind a predicted edit', function () {
+			const manager = afterTypingA();
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret(caretUpdate(10, 2)),
+				true,
+			);
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret(caretUpdate(11, 3)),
+				false,
+			);
+			// The edit is still pending, so a stale delta still replays it.
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+		});
+
+		// A caret elsewhere for the same input means the server changed the
+		// text differently, so the predicted edits are dropped and the server's
+		// content stands.
+		it('shows the server text when the server put the caret elsewhere', function () {
+			const manager = afterTypingA();
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret(caretUpdate(11, 5)),
+				false,
+			);
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hi');
+		});
+
+		// A server that ignored the keystroke sends no delta for it, so the client
+		// asks for the whole part, and its answer replaces the predicted text.
+		it('replaces the predicted text with the whole part when the server put the caret elsewhere', function () {
+			const manager = afterTypingA();
+			const sent: string[] = [];
+			(app as any).socket.sendMessage = (message: string) => sent.push(message);
+			manager.keepPredictedCaret(caretUpdate(11, 2));
+			(app as any).socket.sendMessage = function () {};
+			nodeassert.deepStrictEqual(sent, [
+				'commandvalues command=.uno:VectorPrimitives?partid=S0&mode=' +
+					String(cool.VectorMode.Slides),
+			]);
+
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				version: 1,
+				inputSequence: 11,
+				objects: [textBox('Hi')],
+			});
+			nodeassert.strictEqual(textOf(manager), 'Hi');
+		});
+
+		// When a predicted edit no longer fits the server's text, the client asks
+		// for the whole part again.
+		it('asks for the whole part when a replayed edit no longer fits', function () {
+			const manager = afterTypingA();
+			const sent: string[] = [];
+			(app as any).socket.sendMessage = (message: string) => sent.push(message);
+			// The server's text box has no paragraph 0, where the edit was typed.
+			const moved = textBox('Hi');
+			moved.primitives[0].children[0].paragraph = 1;
+			manager.handleVectorPrimitivesDelta({
+				partId: 'S0',
+				version: 2,
+				inputSequence: 10,
+				order: [5],
+				objects: [moved],
+			});
+			(app as any).socket.sendMessage = function () {};
+			nodeassert.deepStrictEqual(sent, [
+				'commandvalues command=.uno:VectorPrimitives?partid=S0&mode=' +
+					String(cool.VectorMode.Slides),
+			]);
+		});
+
+		// A caret in another text box for the same input drops the predicted
+		// edits, even though the position inside that box matches.
+		it('shows the server text when the caret is in another object', function () {
+			const manager = afterTypingA();
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret(caretUpdate(11, 3, 9)),
+				false,
+			);
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hi');
+		});
+
+		// The same input in the edited object confirms the caret.
+		it('keeps the predicted text when the caret update names the edited object', function () {
+			const manager = afterTypingA();
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret(caretUpdate(11, 3, 5)),
+				false,
+			);
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+		});
+
+		// During a running text edit the typed text sits in an entry whose
+		// parent is the edited object. A caret update naming that object keeps
+		// the edits, and one naming another object drops them.
+		it('keeps text typed in a running edit for a caret in the edited object, and shows the server text for a caret in another object', function () {
+			const editEntry = (text: string): any => ({
+				...textBox(text),
+				id: -2,
+				kind: 'texteditoverlay',
+				viewId: 0,
+				parent: 5,
+			});
+			const editText = (manager: VectorManager): string => {
+				const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+				return data.objects.get(-2).primitives[0].children[0].text;
+			};
+			const managerEditing = (): VectorManager => {
+				const manager = new TestManager();
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S0',
+					version: 1,
+					objects: [{ id: 5, primitives: [], textEdit: true }, editEntry('Hi')],
+				});
+				return manager;
+			};
+			const delta = (): any => ({
+				partId: 'S0',
+				version: 2,
+				inputSequence: 10,
+				order: [5, -2],
+				objects: [editEntry('Hi')],
+			});
+
+			const confirmed = managerEditing();
+			confirmed.predictTextInsert('a');
+			app.file.inputSequence = 11;
+			confirmed.keepPredictedCaret(caretUpdate(11, 3, 5));
+			confirmed.handleVectorPrimitivesDelta(delta());
+			nodeassert.strictEqual(editText(confirmed), 'Hia');
+
+			app.file.inputSequence = 10;
+			app.file.textCursor.rectangle = new cool.SimpleRectangle(
+				1200,
+				1800,
+				0,
+				250,
+			);
+			app.file.textCursor.logical = { paragraph: 0, index: 2 };
+			const moved = managerEditing();
+			moved.predictTextInsert('a');
+			app.file.inputSequence = 11;
+			moved.keepPredictedCaret(caretUpdate(11, 3, 9));
+			moved.handleVectorPrimitivesDelta(delta());
+			nodeassert.strictEqual(editText(moved), 'Hi');
+		});
+
+		// The caret ends "line1", where index 5 also starts "line2". After the replay the
+		// caret stays at the end of the first line, at 1000 plus the six characters of
+		// "line1x", with its top 288 above the first baseline.
+		it('keeps the caret on its line after replaying an edit at a line break', function () {
+			const manager = new TestManager();
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				version: 1,
+				objects: [twoLineBox()],
+			});
+			app.file.textCursor.rectangle = new cool.SimpleRectangle(
+				1500,
+				1800,
+				0,
+				250,
+			);
+			app.file.textCursor.logical = { paragraph: 0, index: 5 };
+			nodeassert.ok(manager.predictTextInsert('x'));
+			app.file.inputSequence = 11;
+
+			manager.handleVectorPrimitivesDelta({
+				partId: 'S0',
+				version: 2,
+				inputSequence: 10,
+				order: [5],
+				objects: [twoLineBox()],
+			});
+			const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+			nodeassert.strictEqual(
+				data.objects.get(5).primitives[0].children[0].text,
+				'line1xline2',
+			);
+			nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1600);
+			nodeassert.strictEqual(app.file.textCursor.rectangle.y1, 1712);
+		});
+
+		// An empty index says nothing about where the server put the caret, so the edit
+		// stays pending and a later delta that predates it replays it.
+		it('keeps the predicted text when a caret update has an empty index', function () {
+			const manager = afterTypingA();
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret({
+					inputSequence: 11,
+					paragraph: '0',
+					index: '',
+				}),
+				false,
+			);
+			sendDelta(manager, 10, 'Hi');
+			nodeassert.strictEqual(textOf(manager), 'Hia');
+		});
+
+		// A caret update without a sequence cannot be compared, so it applies.
+		it('moves the caret for a caret update without an input sequence', function () {
+			const manager = managerWith('Hi');
+			manager.predictTextInsert('a');
+			nodeassert.strictEqual(
+				manager.keepPredictedCaret({ paragraph: '0', index: '2' }),
+				false,
+			);
+		});
+	});
 });
