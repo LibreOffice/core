@@ -70,6 +70,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdotext.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -121,6 +122,7 @@ public:
     void testInsertFileAsPageKeepDesign();
     void testInsertFileAsPageKeepDesignSameMasterName();
     void testInsertFileAsPageKeepDesignSameMasterNameAndDesign();
+    void testSlideImportRoundTripKeepsMasterBackground();
     void testInsertFileAsPageKeepDesignTwiceSharesMaster();
     void testInsertFileAsPageLinkRecordsSource();
     void testInsertFileAsPageLinkWithoutSourceRecordsMedium();
@@ -171,6 +173,7 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageKeepDesign);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignSameMasterName);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignSameMasterNameAndDesign);
+    CPPUNIT_TEST(testSlideImportRoundTripKeepsMasterBackground);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwiceSharesMaster);
     CPPUNIT_TEST(testInsertFileAsPageLinkRecordsSource);
     CPPUNIT_TEST(testInsertFileAsPageLinkWithoutSourceRecordsMedium);
@@ -1752,6 +1755,55 @@ void SdMiscTest::testInsertFileAsPageKeepDesignSameMasterNameAndDesign()
     CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
     CPPUNIT_ASSERT_EQUAL(u"Default"_ustr,
                          SdDrawDocument::GetBaseLayoutName(pInserted->GetLayoutName()));
+}
+
+void SdMiscTest::testSlideImportRoundTripKeepsMasterBackground()
+{
+    // A slide travels to another presentation in a file written out of its own deck. Its
+    // background comes from the master page, and it shows the same background at the far end,
+    // although both presentations name their master page "Default".
+    createSdImpressDoc("slide-import-same-master-name-source.odp");
+    SdXImpressDocument* pSource = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pSource);
+    SdDrawDocument* pSourceDoc = pSource->GetDoc();
+
+    utl::TempFileNamed aStaged(u"", true, u".odp");
+    aStaged.EnableKillingFile();
+    CPPUNIT_ASSERT(pSource->exportPages({ 0 }, aStaged.GetURL()));
+
+    // Writing the file leaves the presentation the slide came from as it was.
+    CPPUNIT_ASSERT_EQUAL(u"Default"_ustr,
+                         pSourceDoc->GetMasterSdPage(0, PageKind::Standard)->GetName());
+
+    createSdImpressDoc("slide-import-same-master-name-target.odp");
+    SdXImpressDocument* pDestination = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDestination);
+    SdDrawDocument* pDoc = pDestination->GetDoc();
+    CPPUNIT_ASSERT(pDestination->insertPagesFromFile(
+        aStaged.GetURL(),
+        "{\"slides\":[0],\"at\":1,\"keepDesign\":true,\"link\":true,"
+        "\"source\":\"deck.odp\"}"_ostr));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+    SfxStyleSheet* pBackground
+        = pInserted->TRG_GetMasterPage().getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pBackground);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         pBackground->GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000),
+                         pBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
+
+    // The presentation's own slide keeps the background it had.
+    SfxStyleSheet* pOwnBackground = pDoc->GetSdPage(0, PageKind::Standard)
+                                        ->TRG_GetMasterPage()
+                                        .getSdrPageProperties()
+                                        .GetStyleSheet();
+    CPPUNIT_ASSERT(pOwnBackground);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00),
+                         pOwnBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
 }
 
 void SdMiscTest::testInsertFileAsPageKeepDesignTwiceSharesMaster()

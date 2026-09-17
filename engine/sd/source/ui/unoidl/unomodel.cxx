@@ -7529,6 +7529,20 @@ bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const
     pTarget->CreateFirstPages();
     pTarget->StopWorkStartupDelay();
 
+    // The pages travel with the design they carry here, and they keep the name that design
+    // holds in this presentation. The master page the new document starts with is named
+    // "Default", as most designs are, so it is moved to a name that neither presentation uses
+    // and leaves the name to the design that arrives.
+    if (SdPage* pStockMaster = pTarget->GetMasterSdPage(0, PageKind::Standard))
+    {
+        const OUString aStockName
+            = SdDrawDocument::GetBaseLayoutName(pStockMaster->GetLayoutName());
+        pTarget->RenameLayoutTemplate(
+            pStockMaster->GetLayoutName(),
+            SdDrawDocument::GetUnusedLayoutName(
+                *pTarget, mpDoc, {}, SdDrawDocument::GenerateNewLayoutName(aStockName)));
+    }
+
     const sal_uInt16 nPagesBefore = pTarget->GetSdPageCount(PageKind::Standard);
     InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(/*bKeepDesign=*/true);
     if (!pTarget->InsertFileAsPage(aPageNames, /*pExchangeList=*/nullptr, aOptions,
@@ -7547,6 +7561,9 @@ bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const
         if (nPageNum < pTarget->GetPageCount())
             pTarget->RemovePage(nPageNum);
     }
+
+    // The master page the new document started with has lost the page that used it.
+    pTarget->RemoveUnnecessaryMasterPages(nullptr, false, /*bUndo=*/false);
 
     const sal_uInt16 nWritten = pTarget->GetSdPageCount(PageKind::Standard);
     if (aPageNames.size() == static_cast<size_t>(nWritten))
