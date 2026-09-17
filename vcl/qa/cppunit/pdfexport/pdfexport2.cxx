@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf121615)
     CPPUNIT_ASSERT_EQUAL(tools::Long(300), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     // tdf#121615 was caused by broken handling of data width with 8bit color,
-    // so the test image has some black in the bottomright corner, check it's there
+    // so the test image has some black in the bottom-right corner, check it's there
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 299));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(199, 0));
@@ -634,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReduceSmallImage)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16
     // - Actual  : 6
-    // i.e. the image was scaled down to 300 DPI, even if it had tiny size.
+    // i.e. the image was scaled down to 300 DPI, even though it had a tiny size.
     CPPUNIT_ASSERT_EQUAL(16, nWidth);
     CPPUNIT_ASSERT_EQUAL(16, nHeight);
 }
@@ -833,7 +833,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testLinkWrongPage)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testLinkWrongPagePartial)
 {
     // Given a Draw document with 3 pages, a link on the 2nd page:
-    // When exporting that the 2nd and 3rd page to pdf:
+    // When exporting the 2nd and 3rd page to pdf:
     uno::Sequence<beans::PropertyValue> aFilterData = {
         comphelper::makePropertyValue(u"PageRange"_ustr, u"2-3"_ustr),
     };
@@ -842,7 +842,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testLinkWrongPagePartial)
     loadFromFile(u"link-wrong-page-partial.odg");
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Then make sure the we have a link on the 1st page, but not on the 2nd one:
+    // Then make sure that we have a link on the 1st page, but not on the 2nd one:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -998,8 +998,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
 
-    // Add a title to avoid
-    // The Metadata stream as specified in ISO 32000-2:2020,
+    // Add a title, because
+    // the Metadata stream as specified in ISO 32000-2:2020,
     // 14.3 in the document catalog dictionary shall contain a dc:title entry
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
         mxComponent, uno::UNO_QUERY);
@@ -1092,7 +1092,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 
 // Check round-trip of importing and exporting the PDF with PDFium filter,
 // which imports the PDF document as multiple PDFs as graphic object.
-// Each page in the document has one PDF graphic object which content is
+// Each page in the document has one PDF graphic object whose content is
 // the corresponding page in the PDF. When such a document is exported,
 // the PDF graphic gets embedded into the exported PDF document (as a
 // Form XObject).
@@ -1934,7 +1934,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf136805)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157517)
 {
-    // Only reproduced with PPDF-A/2 / bDF-A/3b and PDF/UA.
+    // Only reproduced with PDF/A-2 / PDF/A-3b and PDF/UA.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         { "PDFUACompliance", uno::Any(true) },
         { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(3)) },
@@ -2708,7 +2708,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // The document has one page.
+    // The document has two pages.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
 
