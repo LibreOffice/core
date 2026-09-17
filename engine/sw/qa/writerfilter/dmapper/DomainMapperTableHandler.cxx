@@ -335,6 +335,29 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHidemark)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
     CPPUNIT_ASSERT(!pPage2->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleContextualSpacing)
+{
+    // Given a document with a table style that turns on contextual spacing, while the default
+    // paragraph style sets a spacing below the paragraph:
+    // When loading that document:
+    loadFromFile(u"table-style-contextual-spacing.docx");
+
+    // Then make sure the in-table paragraph gets the contextual spacing of the table style:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xText->createEnumeration();
+    uno::Reference<text::XTextTable> xTable(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xCell(xTable->getCellByName(u"A1"_ustr),
+                                                        uno::UNO_QUERY);
+    xParaEnum = xCell->createEnumeration();
+    uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
+    bool bContextMargin{};
+    xParaProps->getPropertyValue(u"ParaContextMargin"_ustr) >>= bContextMargin;
+    // Without the accompanying fix in place, this test would have failed, because the contextual
+    // spacing of the table style never reached the paragraphs of the cells.
+    CPPUNIT_ASSERT(bContextMargin);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
