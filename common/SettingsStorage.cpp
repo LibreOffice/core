@@ -29,7 +29,7 @@
 namespace Desktop
 {
 
-void uploadSettings(const std::string& payload)
+bool uploadSettings(const std::string& payload)
 {
     try
     {
@@ -50,13 +50,18 @@ void uploadSettings(const std::string& payload)
         {
             LOG_ERR("uploadSettings failed: Could not open " << target.toString()
                                                              << " for writing");
-            return;
+            return false;
         }
         out << content;
+
+        // The group is the directory the file sits in, the way fetchSettingsConfig()
+        // keys it.
+        return target.depth() > 0 && target.directory(target.depth() - 1) == "xcu";
     }
     catch (const std::exception& ex)
     {
         LOG_ERR("uploadSettings failed: " << ex.what());
+        return false;
     }
 }
 

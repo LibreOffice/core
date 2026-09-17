@@ -31,7 +31,10 @@ namespace Desktop
     Poco::Path getConfigPath();
     std::string getDataDir();
 
-    void uploadSettings(const std::string& payload);
+    // Stores one settings file the Options dialog has uploaded. Returns whether
+    // it belongs to the xcu group, the one the engine reads, so the caller knows
+    // whether there is anything to apply to the open documents.
+    bool uploadSettings(const std::string& payload);
 
     FileResult fetchSettingsFile(const std::string& relPath);
 

@@ -825,7 +825,7 @@ static std::atomic<int> appDocIdCounter(1);
 }
 
 + (void)uploadSettings:(NSString *)payload {
-    Desktop::uploadSettings(std::string([payload UTF8String]));
+    uploadAndApplySettings(std::string([payload UTF8String]));
 }
 
 + (void)syncSettingsWith:(Document *)document {

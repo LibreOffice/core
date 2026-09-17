@@ -940,7 +940,7 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "UPLOADSETTINGS"))
     {
-        Desktop::uploadSettings(tokens.substrFromToken(1));
+        uploadAndApplySettings(tokens.substrFromToken(1));
         return {};
     }
     else if (tokens.equals(0, "FETCHSETTINGSFILE"))

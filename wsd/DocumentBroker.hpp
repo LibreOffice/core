@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/Authorization.hpp>
+#include <common/Common.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
 #include <common/Rectangle.hpp>
@@ -332,6 +333,12 @@ public:
     /// Keep where this session was looking, so the next view of the document opens there.
     /// A value the session never reported keeps what the session before it reported.
     void rememberViewPosition(const ClientSession& session);
+
+#if APP_HAS_SETTINGS_STORE
+    /// Reads the user's own configuration and asks this document's kit to apply it.
+    /// Returns whether there was any. Runs on the polling thread.
+    bool installUserPresets();
+#endif
 
     virtual ~DocumentBroker();
 
@@ -2193,6 +2200,11 @@ std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDoc
 /// End a document that was left loaded with no views of its own. Does nothing when the
 /// document is not in that state, because closing its last session ends it instead.
 void closeDetachedDocument(unsigned mobileAppDocId);
+
+/// Stores one settings file the Options dialog has uploaded, and, when the engine is the
+/// one that reads it, applies it to every open document, so a setting saved now takes
+/// effect without reopening them. Called from the app's own thread.
+void uploadAndApplySettings(const std::string& payload);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

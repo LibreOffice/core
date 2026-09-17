@@ -4111,7 +4111,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s.starts_with(L"UPLOADSETTINGS "))
         {
-            Desktop::uploadSettings(Util::wide_string_to_string(s.substr(strlen("UPLOADSETTINGS "))));
+            uploadAndApplySettings(Util::wide_string_to_string(s.substr(strlen("UPLOADSETTINGS "))));
         }
         else if (s.starts_with(L"SETDARKMODE "))
         {

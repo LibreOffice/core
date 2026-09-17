@@ -4688,12 +4688,11 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerAddSession(_docKey, session));
 
 #if APP_HAS_SETTINGS_STORE
-        // The desktop apps have no settings host to fetch presets from, and no
-        // jail to stage them into: the engine reads the user's own profile,
-        // which is where the dialog writes. Send the same message the online
-        // build sends once a view is there to carry it.
-        if (count == 1 && Poco::File(Desktop::getUserConfigRoot()).exists())
-            forwardToChild(session, "addconfig");
+        // The apps have no settings host to fetch presets from and no jail to
+        // stage into: the engine reads the user's own profile, which is where
+        // the dialog writes. Send the message once a view is there to carry it.
+        if (count == 1)
+            installUserPresets();
 #endif
 
         // Sent unconditionally - anonymous sessions explicitly say "false"
@@ -7627,6 +7626,60 @@ std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDoc
 
     return nullptr;
 }
+
+#if APP_HAS_SETTINGS_STORE
+
+bool DocumentBroker::installUserPresets()
+{
+    ASSERT_CORRECT_THREAD();
+
+    // The message goes to the kit through a session's channel, and the kit applies the
+    // whole preset directory, so any one session carries it for the document.
+    if (_sessions.empty())
+        return false;
+
+    // Nothing is staged: an app has no jail, and the engine reads the
+    // configuration out of the profile the dialog wrote it to.
+    if (!Poco::File(Desktop::getUserConfigRoot()).exists())
+    {
+        LOG_TRC("installUserPresets: no configuration at "
+                << Desktop::getUserConfigRoot().toString());
+        return false;
+    }
+
+    return forwardToChild(_sessions.begin()->second, "addconfig");
+}
+
+void uploadAndApplySettings(const std::string& payload)
+{
+    if (!Desktop::uploadSettings(payload))
+        return;
+
+    std::vector<std::shared_ptr<DocumentBroker>> brokers;
+    {
+        std::lock_guard<std::mutex> lock(DocBrokersMutex);
+        brokers.reserve(DocBrokers.size());
+        for (const auto& it : DocBrokers)
+        {
+            if (it.second)
+                brokers.push_back(it.second);
+        }
+    }
+
+    // Every open document reads the same store, so they all take the change.
+    for (const std::shared_ptr<DocumentBroker>& broker : brokers)
+    {
+        // The callback runs on the broker's own poll, so it holds the broker weakly and
+        // does nothing once the broker is gone.
+        broker->addCallback([weakBroker = std::weak_ptr<DocumentBroker>(broker)]
+        {
+            if (auto docBroker = weakBroker.lock())
+                docBroker->installUserPresets();
+        });
+    }
+}
+
+#endif // APP_HAS_SETTINGS_STORE
 
 void closeDetachedDocument(unsigned mobileAppDocId)
 {
