@@ -2142,6 +2142,9 @@ lcl_ApplyCellProperties(
             {
                 static const std::initializer_list<std::u16string_view> vDenylist = {
                     u"LeftMargin",
+                    // states whether the row hides the mark that ends a cell, which is read
+                    // off the row while it is built and is nothing a cell itself holds
+                    u"CellHideMark",
                     u"ParaTopBorder",
                     u"ParaTopBorderDistance",
                     u"ParaTopBorderComplexColor",
