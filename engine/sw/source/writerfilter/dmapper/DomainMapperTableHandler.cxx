@@ -443,6 +443,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 {
                     aGrabBag[u"TableStyleRightBorder"_ustr] <<= aBorderLine;
                 }
+                // Remember the alignment the style gives, so that the export can tell it
+                // apart from alignment the table itself carries and does not have to write
+                // the style's own value back as direct formatting.
+                if (pMergedProperties)
+                {
+                    if (const std::optional<PropertyMap::Property> oStyleHoriOrient
+                            = pMergedProperties->getProperty(PROP_HORI_ORIENT))
+                    {
+                        sal_Int16 nStyleHoriOrient{};
+                        if (oStyleHoriOrient->second >>= nStyleHoriOrient)
+                            aGrabBag[u"TableStyleHoriOrient"_ustr] <<= nStyleHoriOrient;
+                    }
+                }
 
 #ifdef DBG_UTIL
                 TagLogger::getInstance().startElement("mergedProps");

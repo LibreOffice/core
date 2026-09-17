@@ -589,6 +589,7 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
     cpo::uno::Sequence<beans::PropertyValue> aTableInd;
     cpo::uno::Sequence<beans::PropertyValue> aTableBorders;
     cpo::uno::Sequence<beans::PropertyValue> aTableCellMar;
+    OUString aJc;
     std::optional<sal_Int32> oTableStyleRowBandSize;
     std::optional<sal_Int32> oTableStyleColBandSize;
     for (const auto& rProp : rTablePr)
@@ -597,6 +598,8 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
             oTableStyleRowBandSize = rProp.Value.get<sal_Int32>();
         else if (rProp.Name == "tblStyleColBandSize")
             oTableStyleColBandSize = rProp.Value.get<sal_Int32>();
+        else if (rProp.Name == "jc")
+            aJc = rProp.Value.get<OUString>();
         else if (rProp.Name == "tblInd")
             aTableInd = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tblBorders")
@@ -610,6 +613,9 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(
     if (oTableStyleColBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleColBandSize, FSNS(XML_w, XML_val),
                                        OString::number(*oTableStyleColBandSize));
+    // w:jc precedes w:tblInd in CT_TblPrBase.
+    if (!aJc.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), aJc);
     tableStyleTableInd(aTableInd);
     tableStyleTcBorders(aTableBorders, XML_tblBorders);
     tableStyleTableCellMar(aTableCellMar);
@@ -625,6 +631,7 @@ void DocxTableStyleExport::Impl::tableStyleTrPr(
 
     m_pSerializer->startElementNS(XML_w, XML_trPr);
 
+    OUString aJc;
     for (const auto& rProp : rTrPr)
     {
         if (rProp.Name == "tblHeader")
@@ -633,7 +640,12 @@ void DocxTableStyleExport::Impl::tableStyleTrPr(
             if (!m_sCurrentStyle.isEmpty())
                 m_vStylesWithTblHeaderInFirstRow.push_back(m_sCurrentStyle);
         }
+        else if (rProp.Name == "jc")
+            aJc = rProp.Value.get<OUString>();
     }
+    // w:jc follows w:tblHeader in CT_TrPrBase.
+    if (!aJc.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), aJc);
 
     m_pSerializer->endElementNS(XML_w, XML_trPr);
 }
@@ -729,6 +741,7 @@ void DocxTableStyleExport::Impl::TableStyle(const cpo::uno::Sequence<beans::Prop
     cpo::uno::Sequence<beans::PropertyValue> aPPr;
     cpo::uno::Sequence<beans::PropertyValue> aRPr;
     cpo::uno::Sequence<beans::PropertyValue> aTablePr;
+    cpo::uno::Sequence<beans::PropertyValue> aTrPr;
     cpo::uno::Sequence<beans::PropertyValue> aTcPr;
     std::vector<cpo::uno::Sequence<beans::PropertyValue>> aTableStylePrs;
     m_sCurrentStyle.clear();
@@ -760,6 +773,8 @@ void DocxTableStyleExport::Impl::TableStyle(const cpo::uno::Sequence<beans::Prop
             aRPr = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tblPr")
             aTablePr = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
+        else if (rProp.Name == "trPr")
+            aTrPr = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tcPr")
             aTcPr = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
         else if (rProp.Name == "tblStylePr")
@@ -794,6 +809,8 @@ void DocxTableStyleExport::Impl::TableStyle(const cpo::uno::Sequence<beans::Prop
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);
     tableStyleTablePr(aTablePr);
+    // w:trPr sits between w:tblPr and w:tcPr in CT_Style.
+    tableStyleTrPr(aTrPr);
     tableStyleTcPr(aTcPr);
     for (const cpo::uno::Sequence<beans::PropertyValue>& i : aTableStylePrs)
         tableStyleTableStylePr(i);

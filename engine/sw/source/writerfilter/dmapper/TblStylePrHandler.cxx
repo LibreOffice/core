@@ -31,6 +31,27 @@ using namespace css;
 
 namespace writerfilter::dmapper {
 
+namespace
+{
+/// The w:val of a table style's w:jc, kept as written so the style round-trips unchanged.
+OUString lcl_getTableJustification( sal_Int32 nIntValue )
+{
+    switch ( nIntValue )
+    {
+        case NS_ooxml::LN_Value_ST_Jc_center:
+            return u"center"_ustr;
+        case NS_ooxml::LN_Value_ST_Jc_right:
+            return u"right"_ustr;
+        case NS_ooxml::LN_Value_ST_Jc_end:
+            return u"end"_ustr;
+        case NS_ooxml::LN_Value_ST_Jc_start:
+            return u"start"_ustr;
+        default:
+            return u"left"_ustr;
+    }
+}
+}
+
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
 LoggedProperties("TblStylePrHandler"),
 m_rDMapper( rDMapper ),
@@ -165,15 +186,20 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TrPrBase_jc:
         case NS_ooxml::LN_CT_TblPrBase_jc:
         {
+            const Value* pValue = rSprm.getValue();
+            const sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
             // Table alignment: keep it as a property, the TablePropertyMap value that
             // TablePropertiesHandler sets does not survive the copy into a style entry.
             // Whole table only, the conditional formats (w:tblStylePr) feed cells.
             if ( m_nType == TblStyleType::Unknown || m_nType == TblStyleType::WholeTable )
             {
-                const Value* pValue = rSprm.getValue();
                 m_pProperties->Insert( PROP_HORI_ORIENT, cpo::uno::Any(
-                    ConversionHelper::convertTableJustification( pValue ? pValue->getInt() : 0 ) ) );
+                    ConversionHelper::convertTableJustification( nIntValue ) ) );
             }
+            // Also keep it in the grab bag of whichever of the two Word spells it in, so the
+            // style can be written back with that same one instead of the table having to
+            // carry the alignment as direct formatting.
+            appendInteropGrabBag( u"jc"_ustr, lcl_getTableJustification( nIntValue ) );
         }
             break;
         case NS_ooxml::LN_CT_TrPrBase_tblHeader:

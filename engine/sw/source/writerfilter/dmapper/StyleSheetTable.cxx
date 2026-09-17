@@ -564,6 +564,21 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         }
         break;
         case NS_ooxml::LN_CT_Style_trPr:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties && m_pCurrentEntry->m_nStyleTypeCode == StyleType::Table)
+            {
+                auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>(m_rDMapper);
+                pProperties->resolve(*pTblStylePrHandler);
+                StyleSheetEntry* pEntry = m_pCurrentEntry.get();
+                TableStyleSheetEntry& rTableEntry = dynamic_cast<TableStyleSheetEntry&>(*pEntry);
+                rTableEntry.AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag(u"trPr"_ustr));
+
+                // This is a <w:trPr> directly under <w:style>, so it affects the whole table.
+                // Word spells a table's own alignment either way, in w:tblPr or in w:trPr.
+                rTableEntry.m_pProperties->InsertProps(pTblStylePrHandler->getProperties());
+            }
+        }
         break;
         case NS_ooxml::LN_CT_Style_aliases:
             // Alternate style name. Kept in the style model as a dedicated

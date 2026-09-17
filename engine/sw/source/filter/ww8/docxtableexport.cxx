@@ -63,6 +63,20 @@ OString lcl_padStartToLength(OString const& aString, sal_Int32 nLen, char cFill)
         return aString;
 }
 
+/// The w:val a table's horizontal orientation is written as.
+std::string_view lcl_TableJcValue(sal_Int16 nHoriOrient, bool bEcma)
+{
+    switch (nHoriOrient)
+    {
+        case text::HoriOrientation::CENTER:
+            return "center";
+        case text::HoriOrientation::RIGHT:
+            return bEcma ? "right" : "end";
+        default:
+            return bEcma ? "left" : "start";
+    }
+}
+
 /// Writes w:tblLook from a table's current live style settings.
 void lcl_WriteTblLook(const FSHelperPtr& pSerializer, const SwTableStyleSettings& rSettings)
 {
@@ -304,8 +318,14 @@ void DocxAttributeOutput::TableDefinition(
     // Extract properties from grab bag
     bool bHasGrabBagStyleName = false;
     bool bHasGrabBagStyleLook = false;
+    std::optional<sal_Int16> oStyleHoriOrient;
     for (const auto& rGrabBagElement : rGrabBag)
     {
+        if (rGrabBagElement.first == "TableStyleHoriOrient")
+        {
+            oStyleHoriOrient = rGrabBagElement.second.get<sal_Int16>();
+            continue;
+        }
         if (rGrabBagElement.first == "TableStyleName")
         {
             bHasGrabBagStyleName = true;
@@ -489,7 +509,15 @@ void DocxAttributeOutput::TableDefinition(
             break;
         }
     }
-    m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), pJcVal);
+    // The alignment a table style sets is applied to the table on import, so it is
+    // indistinguishable here from alignment of the table's own. Writing it back
+    // unconditionally would turn the style's alignment into direct formatting, and a later
+    // edit of the style would no longer move the table; skip it when the style already
+    // gives this very value.
+    const bool bStyleGivesJc
+        = oStyleHoriOrient && lcl_TableJcValue(*oStyleHoriOrient, bEcma) == std::string_view(pJcVal);
+    if (!bStyleGivesJc)
+        m_pSerializer->singleElementNS(XML_w, XML_jc, FSNS(XML_w, XML_val), pJcVal);
 
     // Output the table background color (although cell value still needs to be specified)
     const SvxBrushItem* pColorProp

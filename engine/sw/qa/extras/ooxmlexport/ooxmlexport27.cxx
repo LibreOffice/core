@@ -328,7 +328,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkKeepsNoEmptyStyledSpan)
 CPPUNIT_TEST_FIXTURE(Test, testTableAlignmentFromTableStyle)
 {
     // The first table takes its alignment from the w:jc of its table style, the second one
-    // overrides the w:jc of its style with a direct one.
+    // overrides the w:jc of its style with a direct one, and the third one takes it from a
+    // style that spells the very same thing as w:trPr/w:jc instead of w:tblPr/w:jc.
     auto verify = [this]() {
         uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
@@ -343,12 +344,49 @@ CPPUNIT_TEST_FIXTURE(Test, testTableAlignmentFromTableStyle)
         CPPUNIT_ASSERT_EQUAL(
             text::HoriOrientation::LEFT_AND_WIDTH,
             getProperty<sal_Int16>(xTables->getByName(u"Table2"_ustr), u"HoriOrient"_ustr));
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2
+        // - Actual  : 7
+        // i.e. a w:trPr directly under a w:style was dropped whole, so the row spelling of
+        // the table's alignment never reached the style.
+        CPPUNIT_ASSERT_EQUAL(
+            text::HoriOrientation::CENTER,
+            getProperty<sal_Int16>(xTables->getByName(u"Table3"_ustr), u"HoriOrient"_ustr));
     };
 
     createSwDoc("table-style-jc.docx");
     verify();
     saveAndReload(TestFilter::DOCX);
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableStyleJcStaysInStyle)
+{
+    createSwDoc("table-style-jc.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed, as the table style
+    // was written back without its w:jc, the alignment having been dropped from the style.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CenteredTable']/w:tblPr/w:jc", "val",
+                u"center");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='RightTable']/w:tblPr/w:jc", "val",
+                u"right");
+    // Word spells a table's alignment either in w:tblPr or in w:trPr; a style is written back
+    // with the one it was written with, rather than having it moved to the other.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='RowCenteredTable']/w:trPr/w:jc", "val",
+                u"center");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='RowCenteredTable']/w:tblPr/w:jc", 0);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // The first table's alignment comes from its style, so the table itself must not claim it:
+    // that would leave the style no longer in charge of the alignment it defines. Without the
+    // fix there was a <w:jc w:val="center"/> here.
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr/w:jc", 0);
+    // The second table really does override its style, so this one stays direct formatting.
+    assertXPath(pXmlDoc, "//w:tbl[2]/w:tblPr/w:jc", "val", u"start");
+    // The third table's alignment comes from its style too, whichever way the style spells it.
+    assertXPath(pXmlDoc, "//w:tbl[3]/w:tblPr/w:jc", 0);
 }
 
 } // end of anonymous namespace
