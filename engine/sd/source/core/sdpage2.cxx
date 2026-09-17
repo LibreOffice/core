@@ -518,8 +518,11 @@ void SdPage::setTransitionDuration ( double fTransitionDuration )
     ActionChanged();
 }
 
-bool SdPage::Equals(const SdPage& rOtherPage) const
+bool SdPage::Equals(const SdPage& rOtherPage, bool bIgnoreLayoutName) const
 {
+    if (!bIgnoreLayoutName && maLayoutName != rOtherPage.maLayoutName)
+        return false;
+
     if (GetObjCount() != rOtherPage.GetObjCount() ||
         mePageKind != rOtherPage.mePageKind ||
         meAutoLayout != rOtherPage.meAutoLayout ||
@@ -527,7 +530,6 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
         !rtl::math::approxEqual(mfTime, rOtherPage.mfTime) ||
         mbSoundOn != rOtherPage.mbSoundOn ||
         mbExcluded != rOtherPage.mbExcluded ||
-        maLayoutName != rOtherPage.maLayoutName ||
         !maSoundLink.sameLink(rOtherPage.maSoundLink) ||
         mbLoopSound != rOtherPage.mbLoopSound ||
         mbStopSound != rOtherPage.mbStopSound ||
@@ -541,6 +543,21 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
         mbTransitionDirection != rOtherPage.mbTransitionDirection ||
         mnTransitionFadeColor != rOtherPage.mnTransitionFadeColor ||
         !rtl::math::approxEqual(mfTransitionDuration, rOtherPage.mfTransitionDuration))
+        return false;
+
+    // The background of a page is held partly as hard attributes on the page and partly in the
+    // background style sheet the page points at. Two pages count as the same only when both
+    // sides of that agree, and the sheets are compared by their contents because each page
+    // carries the sheet of the document it belongs to.
+    if (!getSdrPageProperties().GetItemSet().Equals(
+            rOtherPage.getSdrPageProperties().GetItemSet(), false))
+        return false;
+
+    SfxStyleSheet* pBackground = getSdrPageProperties().GetStyleSheet();
+    SfxStyleSheet* pOtherBackground = rOtherPage.getSdrPageProperties().GetStyleSheet();
+    if (bool(pBackground) != bool(pOtherBackground))
+        return false;
+    if (pBackground && !pBackground->GetItemSet().Equals(pOtherBackground->GetItemSet(), false))
         return false;
 
     for(size_t i = 0; i < GetObjCount(); ++i)

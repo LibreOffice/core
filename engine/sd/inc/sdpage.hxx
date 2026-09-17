@@ -417,7 +417,10 @@ public:
         return maLinkAnnotations;
     }
 
-    bool Equals(const SdPage&) const;
+    // True when the two pages hold the same content, the same background and the same page
+    // settings. With bIgnoreLayoutName the name of the layout is left out of the comparison,
+    // which is what tells whether two master pages hold one design under two names.
+    bool Equals(const SdPage&, bool bIgnoreLayoutName = false) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     sal_uInt16 getPageId() const { return mnPageId; }
 
