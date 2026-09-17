@@ -109,12 +109,6 @@ bool PointerBool::TraverseCXXFunctionalCastExpr(CXXFunctionalCastExpr* expr)
 
 bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
 {
-    std::string fn(handler.getMainFileName());
-    loplugin::normalizeDotDotInFilePath(fn);
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/soltools/cpp")
-        || loplugin::hasPathnamePrefix(fn, SRCDIR "/soltools/mkdepend"))
-        return true;
-
     if (ignoreLocation(callExpr))
         return true;
     // TODO this doesn't currently work, the args and the params don't seem to line up
