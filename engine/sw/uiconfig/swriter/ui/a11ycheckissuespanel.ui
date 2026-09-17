@@ -36,7 +36,6 @@
             <property name="receives-default">True</property>
             <property name="halign">end</property>
             <property name="valign">center</property>
-            <property name="hexpand">True</property>
             <property name="use-underline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="bOptions-atkobject">

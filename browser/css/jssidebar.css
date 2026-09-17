@@ -162,7 +162,9 @@ img.sidebar.ui-image {
 
 .sidebar.ui-panel-content {
 	padding-inline: 10px;
-	width: 300px;
+	/* A panel is as wide as the deck that holds it, and its own padding comes
+	   off that width. */
+	width: auto;
 	line-height: var(--default-height);
 }
 
@@ -200,7 +202,9 @@ img.sidebar.ui-image {
 
 .sidebar.ui-expander-content {
 	padding-inline: 10px;
-	width: 300px;
+	/* A section is as wide as the panel or the section that holds it, and each
+	   level of nesting takes its own padding off that width. */
+	width: auto;
 	line-height: var(--default-height);
 }
 

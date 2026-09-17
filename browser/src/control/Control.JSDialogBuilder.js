@@ -1236,6 +1236,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		builder._stressAccessKey(buttonLink, accKey);
 
 		buttonLink.id = data.id;
+
+		// Follow the horizontal text alignment the link button asks for, the
+		// same way a fixed text label does.
+		if (data.xalign)
+			buttonLink.style.textAlign = data.xalign;
+
 		if (data.style && data.style.length) {
 			window.L.DomUtil.addClass(buttonLink, data.style);
 		} else {

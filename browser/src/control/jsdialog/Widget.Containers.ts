@@ -91,12 +91,19 @@ JSDialog.grid = function (
 	let hasSizeGroup = false;
 	let hasVexpandChild = false;
 	for (const child of data.children || []) {
-		if (child.hexpand && child.left !== undefined)
+		// A widget that is not shown takes up no space, so a column or row that
+		// holds only hidden widgets stays at its content width or height instead
+		// of claiming a share of the leftover space.
+		const isShown = !(
+			child.visible === false || (child.visible as unknown) === 'false'
+		);
+		if (isShown && child.hexpand && child.left !== undefined)
 			expandCols.add(parseInt(child.left));
 		if (child.sizeGroupId) hasSizeGroup = true;
 		if (child.vexpand) {
 			hasVexpandChild = true;
-			if (child.top !== undefined) expandRows.add(parseInt(child.top));
+			if (isShown && child.top !== undefined)
+				expandRows.add(parseInt(child.top));
 		}
 	}
 
