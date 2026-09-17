@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string_view>
@@ -81,7 +82,10 @@ protected:
             getCurrentController()->getFrame());
     }
 
-    void runScript(OUString const & url, std::u16string_view entry) {
+    void runScript(
+        OUString const & url, std::u16string_view entry,
+        std::function<void(OUString const &)> proxyCallHook)
+    {
         OUString gasUrl;
         auto const rc = osl::FileBase::getFileURLFromSystemPath(
             u"" SRC_ROOT "/../browser/extensions/gas-kit-runner.js"_ustr, gasUrl);
@@ -101,7 +105,7 @@ protected:
                         std::cout << msg << std::endl;
                     }
                 },
-                {}, nullptr);
+                proxyCallHook, nullptr);
         } catch (jsuno::Exception const & e) {
             std::ostringstream buf;
             buf << e.name << ": " << e.message;
@@ -114,13 +118,53 @@ protected:
     }
 };
 
+// Pull the "callId" value out of a proxy-call JSON payload of the shape
+//
+//   {"proxyId":"...","callId":"...","method":"...","args":[...]}
+//
+// or return empty when the caller did not attach one (a void-returning method):
+std::u16string_view extractCallId(std::u16string_view payload) {
+    // The JsonWriter emits '"callId": "..."' with a space after the colon; step over the opening
+    // quote of the value rather than fixing the space count in the search key:
+    static std::u16string_view const key = u"\"callId\":";
+    auto const start = payload.find(key);
+    if (start == std::u16string_view::npos) {
+        return {};
+    }
+    auto from = payload.find(u'"', start + key.size());
+    if (from == std::u16string_view::npos) {
+        return {};
+    }
+    ++from;
+    auto const end = payload.find(u'"', from);
+    if (end == std::u16string_view::npos) {
+        return {};
+    }
+    return payload.substr(from, end - from);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     loadActiveDocument(u"document-test.rtf");
-    runScript(createFileURL(u"document-test.js"), u"documentTest");
+    runScript(createFileURL(u"document-test.js"), u"documentTest", {});
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
-    runScript(createFileURL(u"utilities-test.js"), u"utilitiesTest");
+    runScript(createFileURL(u"utilities-test.js"), u"utilitiesTest", {});
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
+    // The gas-kit-runner's PropertiesService facade calls XClientRuntime.userPropGetProperty for
+    // every property read; the proxy hook plays the client side of that call and returns an absent
+    // Optional<string> so `getProperty` should hand back null:
+    runScript(
+        createFileURL(u"propertiesservice-test.js"), u"propertiesServiceTest",
+        [](OUString const & payload) {
+            auto const callId = extractCallId(payload);
+            if (!callId.empty()) {
+                jsuno::deliverProxyResult(
+                    OUString(callId), u"{\"IsPresent\":false,\"Value\":\"\"}"_ustr);
+            }
+        });
 }
 
 }
