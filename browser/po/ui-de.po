@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-17 03:07+0000\n"
+"PO-Revision-Date: 2026-09-17 23:35+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -423,13 +423,12 @@ msgstr "Dein WOPI Server ist nicht sicher: SSL Verifizierung fehlgeschlagen"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Dokumente sind nicht wirklich enthalten: fehlende Funktionen oder "
-"Namensräume."
+"Dokumente sind nicht effektiv abgegrenzt: fehlende Funktionen, Namensräume "
+"und Landlock."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
