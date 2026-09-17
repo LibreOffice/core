@@ -159,7 +159,7 @@ void RTL_Impl_CreatePropertySet( SbxArray& rPar )
     xPropAcc->setPropertyValues( *pArg );
 
     // Build a SbUnoObject and return it
-    auto xUnoObj = tools::make_ref<SbUnoObject>( "stardiv.uno.beans.PropertySet", Any(xInterface) );
+    auto xUnoObj = tools::make_ref<SbUnoObject>( u"stardiv.uno.beans.PropertySet"_ustr, Any(xInterface) );
     if( xUnoObj->getUnoAny().hasValue() )
     {
         // Return object

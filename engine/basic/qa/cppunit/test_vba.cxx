@@ -210,13 +210,13 @@ void VBATest::testMiscOLEStuff()
     if( xContext.is() )
     {
         uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-        xOLEFactory.set( xSMgr->createInstanceWithContext( "com.sun.star.bridge.OleObjectFactory", xContext ),
+        xOLEFactory.set( xSMgr->createInstanceWithContext( u"com.sun.star.bridge.OleObjectFactory"_ustr, xContext ),
                          uno::UNO_QUERY );
     }
     bool bOk = false;
     if( xOLEFactory.is() )
     {
-        uno::Reference< cpo::uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
+        uno::Reference< cpo::uno::XInterface > xADODB = xOLEFactory->createInstance( u"ADODB.Connection"_ustr );
         bOk = xADODB.is();
     }
     if ( !bOk )
@@ -261,7 +261,7 @@ void VBATest::testMiscOLEStuff()
         OUString sMacroURL = sMacroPathURL
                            + OUString::createFromAscii( macroSource[ i ] );
         MacroSnippet myMacro;
-        myMacro.LoadSourceFromFile("TestModule", sMacroURL);
+        myMacro.LoadSourceFromFile(u"TestModule"_ustr, sMacroURL);
         SbxVariableRef pReturn = myMacro.Run( aArgs );
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
         fprintf(stderr, "macro result for %s\n", macroSource[i]);

@@ -870,7 +870,7 @@ void SbiParser::AddConstants()
     addStringConst( aPublics, u"vbFormFeed"_ustr, u"\x0C"_ustr );
     addStringConst( aPublics, u"vbLf"_ustr, u"\x0A"_ustr );
 #ifdef _WIN32
-    addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
+    addStringConst( aPublics, u"vbNewLine"_ustr, u"\x0D\x0A"_ustr );
 #else
     addStringConst( aPublics, u"vbNewLine"_ustr, u"\x0A"_ustr );
 #endif

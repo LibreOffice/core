@@ -807,7 +807,7 @@ namespace basctl
         if ( _rxStatusIndicator.is() )
         {
             aArgs = ::comphelper::InitPropertySequence({
-                { "StatusIndicator", Any(_rxStatusIndicator) }
+                { u"StatusIndicator"_ustr, Any(_rxStatusIndicator) }
             });
         }
 

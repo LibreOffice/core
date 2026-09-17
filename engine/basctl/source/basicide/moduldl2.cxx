@@ -1123,8 +1123,8 @@ void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLib
     OUString fullPath = aLibName
                       + "/" ;
     auto attribs(::comphelper::InitPropertySequence({
-        { "FullPath", Any(fullPath) },
-        { "MediaType", Any(u"application/vnd.sun.star.basic-library"_ustr) }
+        { u"FullPath"_ustr, Any(fullPath) },
+        { u"MediaType"_ustr, Any(u"application/vnd.sun.star.basic-library"_ustr) }
     }));
     manifest.push_back( attribs );
 
