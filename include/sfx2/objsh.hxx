@@ -534,7 +534,7 @@ public:
     // Naming Interface
     void                        SetTitle( const OUString& rTitle );
     /* Small non-zero values of nMaxLen don't mean length, but have a magic meaning:
-       0 (default)
+       0 (==SFX_TITLE_TITLE) (default)
        the title itself, as it is
 
        1 (==SFX_TITLE_FILENAME)
@@ -572,7 +572,7 @@ public:
        file name including the path
        (remote => css::util::URL)
     */
-    OUString                    GetTitle( sal_uInt16 nMaxLen = 0 ) const;
+    OUString GetTitle(sal_uInt16 nMaxLen = SFX_TITLE_TITLE) const;
     void                        InvalidateName();  // Re-set to unnamed
 
 #if defined(_WIN32)
