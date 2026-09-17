@@ -1382,7 +1382,7 @@ std::shared_ptr<Socket> ServerSocket::accept()
         LOG_WRN("Limiter rejected extConn[" << extConnCount << "/" << net::Defaults.maxExtConnections << "]: #"
                 << rc << " has family "
                 << clientInfo.sin6_family << ", address " << addrstr << ":" << clientInfo.sin6_port);
-        ::close(rc);
+        net::closeSocketDescriptor(rc);
         return nullptr;
     }
 

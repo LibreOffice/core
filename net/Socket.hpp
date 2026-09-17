@@ -88,6 +88,15 @@ namespace net
     /// Send each packet on a real socket as soon as it is ready, without waiting to aggregate
     /// several of them.
     void disableNagleAlgorithm(int descriptor);
+    /// Close a descriptor that came from this build's socket layer, which is a real socket in the
+    /// server and a fake one in the app.
+    inline void closeSocketDescriptor(int descriptor)
+    {
+        if (!Util::isMobileApp())
+            closeDescriptor(descriptor);
+        else
+            fakeSocketClose(descriptor);
+    }
 }
 
 class Socket;
@@ -452,10 +461,7 @@ private:
             return;
 
             // Doesn't block on sockets; no error handling needed.
-        if (Util::isMobileApp())
-            fakeSocketClose(_fd);
-        else
-            net::closeDescriptor(_fd);
+        net::closeSocketDescriptor(_fd);
 
         LOG_DBG("Closed socket " << toStringImpl()); // Should be logged exactly once.
 
