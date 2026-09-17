@@ -22,4 +22,7 @@
     <string name="use_odf">ODF-Format verwenden</string>
     <string name="use_text">Textformat verwenden</string>
     <string name="cant_open_the_document">Das Dokument konnte nicht geöffnet werden</string>
+    <string name="all_files_access_title">Im schreibgeschützten Modus geöffnet</string>
+    <string name="all_files_access_grant">Zugriff zulassen</string>
+    <string name="do_not_ask_again">Nicht erneut nachfragen</string>
 </resources>
