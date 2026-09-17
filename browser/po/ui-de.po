@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-08-27 10:51+0000\n"
-"Last-Translator: Loto-dev1 <loto-dev1@proton.me>\n"
+"PO-Revision-Date: 2026-09-17 03:07+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -151,7 +151,7 @@ msgstr "WOPI-Host"
 
 #: admin/admin.strings.js:44
 msgid "Kill"
-msgstr "Beenden"
+msgstr "Abwürgen"
 
 #: admin/admin.strings.js:45
 msgid "Graphs"
@@ -501,17 +501,17 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Invalid request"
-msgstr ""
+msgstr "Ungültige Anfrage"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Ungültiger API-Schlüssel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "Dem API-Schlüssel fehlen Berechtigungen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid ""
@@ -527,12 +527,12 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API-Serverfehler – später erneut versuchen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Dienst vorübergehend nicht verfügbar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:625
 msgid "Signature Certificate"
@@ -608,7 +608,7 @@ msgstr "Standardzoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Sanfter Bildlauf"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 msgid "Compact layout"
@@ -926,7 +926,7 @@ msgstr "Upload-Erweiterung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Sicherheitsrichtlinien"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
@@ -1386,7 +1386,7 @@ msgstr "Tabellenstile"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Als Standard festlegen"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
@@ -1540,7 +1540,7 @@ msgstr "Aktuelle Version"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n weitere"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1680,7 +1680,7 @@ msgstr "Grammatik-, Rechtschreib- und Zeichensetzungsfehler korrigieren"
 
 #: src/control/Control.AIChatSidebar.ts:149
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Grammatik und Rechtschreibung korrigieren"
 
 #: src/control/Control.AIChatSidebar.ts:164
 msgid "Natural"
@@ -1708,7 +1708,7 @@ msgstr "Lässig"
 
 #: src/control/Control.AIChatSidebar.ts:411
 msgid "Best"
-msgstr ""
+msgstr "Beste"
 
 #: src/control/Control.AIChatSidebar.ts:413
 #: src/control/Control.NotebookbarCalc.js:1072
@@ -1717,7 +1717,7 @@ msgstr "Gut"
 
 #: src/control/Control.AIChatSidebar.ts:415
 msgid "Poor"
-msgstr ""
+msgstr "Dürftig"
 
 #: src/control/Control.AIChatSidebar.ts:417
 msgid "Unknown"
@@ -2023,7 +2023,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Ungültiges Anfrageformat"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
@@ -2031,27 +2031,27 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Keine Nachrichten bereitgestellt"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Nachricht zu lang"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "KI-Funktionen sind vom Administrator deaktiviert"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "KI steht Gästen nicht zur Verfügung"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "KI-Funktionen sind für dieses Dokument deaktiviert"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "KI-Einstellungen nicht konfiguriert"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
@@ -2076,7 +2076,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "Keine Antwort von der KI"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
@@ -2100,7 +2100,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "Dokument nicht verfügbar"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
@@ -2112,19 +2112,19 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "KI-Bildeinstellungen nicht konfiguriert"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Bildmodell nicht konfiguriert"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Bildgenerierung fehlgeschlagen: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Kein Bild generiert"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
@@ -2132,47 +2132,47 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "Der KI-Anbieter wies die Anfrage als ungültig zurück"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API-Fehler ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Linkziele werden extrahiert ..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Formel wird ausgewertet ..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Funktionskatalog wird geladen ..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Nachdenken ..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Arbeiten ..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Formeln werden festgelegt ..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Folie {0} von {1} wird gebaut ..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Folie {0} wird übersprungen ..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Bild {0} von {1} wird generiert ..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
@@ -2197,11 +2197,12 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} Folie(n) konnte(n) nicht gebaut werden und wurde(n) übersprungen."
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
 msgstr ""
+"{0} Bild(er) konnten nicht generiert werden und zeigen einen Platzhalter an."
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -2236,32 +2237,32 @@ msgstr "Der KI-Assistent"
 #: src/control/Control.AIChatSidebar.ts:2572
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Folie einfügen"
+msgstr[1] "%n Folien einfügen"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Folie löschen"
+msgstr[1] "%n Folien löschen"
 
 #: src/control/Control.AIChatSidebar.ts:2580
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Folie duplizieren"
+msgstr[1] "%n Folien duplizieren"
 
 #: src/control/Control.AIChatSidebar.ts:2586
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Folie verschieben"
+msgstr[1] "%n Folien verschieben"
 
 #: src/control/Control.AIChatSidebar.ts:2589
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Folie umbenennen"
+msgstr[1] "%n Folien umbenennen"
 
 #: src/control/Control.AIChatSidebar.ts:2594
 msgid "change %n layout"
@@ -2282,10 +2283,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/control/Control.AIChatSidebar.ts:2614
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Generiertes Bild"
+msgstr[0] "%n Bild generieren"
+msgstr[1] "%n Bilder generieren"
 
 #: src/control/Control.AIChatSidebar.ts:2622
 msgid "run %n document command"
@@ -2296,8 +2297,8 @@ msgstr[1] ""
 #: src/control/Control.AIChatSidebar.ts:2653
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n %1 Befehl ausführen"
+msgstr[1] "%n %1 Befehle ausführen"
 
 #: src/control/Control.AIChatSidebar.ts:2661
 msgid "apply the design template '%1'"
@@ -2305,7 +2306,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "This will: %1."
-msgstr ""
+msgstr "Dies wird: %1."
 
 #: src/control/Control.AIChatSidebar.ts:2678
 msgid "Do you want to proceed?"
@@ -2406,19 +2407,19 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3397
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Titel von Folie %1"
 
 #: src/control/Control.AIChatSidebar.ts:3403
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Beschreibung von Folie %1"
 
 #: src/control/Control.AIChatSidebar.ts:3409
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Folie %1 entfernen"
 
 #: src/control/Control.AIChatSidebar.ts:3457
 msgid "Slide title"
-msgstr ""
+msgstr "Folientitel"
 
 #: src/control/Control.AIChatSidebar.ts:3469
 msgid "What this slide should cover"
@@ -2426,7 +2427,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3494
 msgid "Add slide"
-msgstr ""
+msgstr "Folie hinzufügen"
 
 #: src/control/Control.AIChatSidebar.ts:3532
 msgid "Outline approved - building %1 slides."
@@ -2438,7 +2439,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3577
 msgid "Building slides..."
-msgstr ""
+msgstr "Folien werden gebaut ..."
 
 #: src/control/Control.AIChatSidebar.ts:3611
 msgid "Formula analysis timeout"
@@ -2766,7 +2767,7 @@ msgstr "Signatur"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -2930,35 +2931,35 @@ msgstr ""
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Datei vom Computer öffnen"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Cloud + hinzufügen"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Konto bearbeiten"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Neues Konto hinzufügen"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Server-URL"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Server-URL eingeben"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Anzeigename"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Anzeigename eingeben"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
@@ -2966,23 +2967,23 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Konto hinzufügen"
 
 #: src/control/backstage/CloudDialogs.tsx:183
 msgid "Remove account"
-msgstr ""
+msgstr "Konto entfernen"
 
 #: src/control/backstage/CloudDialogs.tsx:185
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Trennt diese Cloud"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
-msgstr ""
+msgstr "Neues Konto erfolgreich hinzugefügt"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
@@ -2990,11 +2991,11 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:241
 msgid "Open Files"
-msgstr ""
+msgstr "Dateien öffnen"
 
 #: src/control/backstage/CloudDialogs.tsx:267
 msgid "Remove this account?"
-msgstr ""
+msgstr "Dieses Konto entfernen?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
@@ -3002,16 +3003,16 @@ msgstr ""
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Datei zum Öffnen ablegen"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Diese mobile Ansicht ist nicht vollständig barrierefrei."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Erklärung zur Barrierefreiheit"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:115
@@ -3722,7 +3723,7 @@ msgstr "Reparieren"
 #: src/control/Control.Menubar.ts:147 src/control/Control.Menubar.ts:505
 #: src/control/Control.Menubar.ts:710 src/control/Control.Menubar.ts:893
 msgid "Find"
-msgstr "Finden"
+msgstr "Suchen"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Compare Changes"
@@ -4011,11 +4012,11 @@ msgstr "Verteilen"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Folien aus Datei einfügen ..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Verlinkte Folien aktualisieren ..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4263,11 +4264,11 @@ msgstr "Ergebnisse"
 
 #: src/control/Control.NavigatorPanel.ts:317
 msgid "Maximize to grid"
-msgstr ""
+msgstr "An Raster maximieren"
 
 #: src/control/Control.NavigatorPanel.ts:629
 msgid "Find and Replace"
-msgstr ""
+msgstr "Suchen und ersetzen"
 
 #: src/control/Control.NavigatorPanel.ts:638
 #: src/control/jsdialog/Widget.Combobox.js:497
@@ -4288,7 +4289,7 @@ msgstr "Tabellengestaltung"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Werkzeuge"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4479,41 +4480,40 @@ msgstr "Schützen"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Bildunterschrift"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
 msgstr "Animationen"
 
 #: src/control/Control.Notebookbar.js:582
-#, fuzzy
 msgid "Start:"
-msgstr "Start"
+msgstr "Start:"
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
-msgstr ""
+msgstr "Ende:"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Pfeilspitzenstil starten"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Pfeilspitzenstil beenden"
 
 #: src/control/Control.Notebookbar.js:670
 msgid "Line Width"
-msgstr ""
+msgstr "Linienbreite"
 
 #: src/control/Control.Notebookbar.js:695
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Linientransparenz:"
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:783
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Ungespeicherte Änderungen. Speichern"
 
 #: src/control/Control.NotebookbarBuilder.js:266
 msgid "Click to expand"
@@ -4553,7 +4553,7 @@ msgstr "Bild (.png)"
 
 #: src/control/Control.NotebookbarBuilder.js:781
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Ungespeicherte Änderungen."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -5017,7 +5017,7 @@ msgstr "Verfolgen"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Kommentar zur Änderung"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5179,11 +5179,11 @@ msgstr "Abstand und Farbe"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Folien importieren"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Links aktualisieren"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5277,7 +5277,7 @@ msgstr "Änderungen ansehen"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "In den Bearbeitungsmodus wechseln"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5285,9 +5285,8 @@ msgid "Paste"
 msgstr "Einfügen"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Leere Folie"
+msgstr "Folie entlinken"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5295,19 +5294,19 @@ msgstr "Abschnitt hinzufügen"
 
 #: src/control/Control.PartsPreview.js:745
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "Vorschau von Seite %1, verlinkt mit %2 in %3"
 
 #: src/control/Control.PartsPreview.js:749
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Folie %1, verlinkt mit %2 in %3"
 
 #: src/control/Control.PartsPreview.js:759
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "Vorschau von Seite %1, verlinkt mit %2"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Folie %1, verlinkt mit %2"
 
 #: src/control/Control.PartsPreview.js:764
 msgid "preview of page %1"
@@ -5362,27 +5361,27 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Fehlt"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Kein Zugriff"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Fehlgeschlagen"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Verlinkt"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Nicht verlinkt"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Diese Datei ist nicht verfügbar."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
@@ -5390,41 +5389,40 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Diese Datei konnte nicht geöffnet werden."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Folien werden gelesen ..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 Folie eingefügt"
 
 #: src/control/Control.SlideImportPane.tsx:683
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} Folien eingefügt"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Folie {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
 msgid "Insert 1 slide"
-msgstr ""
+msgstr "1 Folie einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
-msgstr ""
+msgstr "{0} Folien einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Formen einfügen"
+msgstr "Folien einfügen"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} Folien"
 
 #: src/control/Control.SlideImportPane.tsx:724
 #: src/layer/marker/A11yTextInput.js:434
@@ -5433,15 +5431,15 @@ msgstr "{0} ausgewählt"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Datei wird geöffnet ..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Folien werden eingefügt ..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Folien importieren"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
@@ -5455,11 +5453,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Präsentation hinzufügen ..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
-msgstr ""
+msgstr "Noch keine Präsentation"
 
 #: src/control/Control.SlideImportPane.tsx:841
 msgid ""
@@ -5468,7 +5466,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "Recently imported from"
-msgstr ""
+msgstr "Kürzlich importiert aus"
 
 #: src/control/Control.SlideImportPane.tsx:861
 msgid "Presentations to import from"
@@ -5476,43 +5474,43 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:950
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Aktionen für {0}"
 
 #: src/control/Control.SlideImportPane.tsx:968
 msgid "Locate file"
-msgstr ""
+msgstr "Datei ausfindig machen"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Folien ausblenden"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Folien anzeigen"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Folien neu laden"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Alle Folien auswählen"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Die mit dieser Datei verlinkten Folien aktualisieren"
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Aus der Liste entfernen"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "{0} umschalten"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Folien in {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1131
 msgid "Keep original design"
@@ -5520,7 +5518,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1143
 msgid "Link to the source file"
-msgstr ""
+msgstr "Link zur Quelldatei"
 
 #: src/control/Control.SlideImportPane.tsx:1154
 msgid "Link slides to the position in a source file"
@@ -5579,23 +5577,23 @@ msgstr ""
 
 #: src/slideimport/SlideLinks.ts:529
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Es wurde keine Folie von {0} aktualisiert."
 
 #: src/slideimport/SlideLinks.ts:533
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 Folie wurde von {0} aktualisiert."
 
 #: src/slideimport/SlideLinks.ts:537
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} Folien von {1} aktualisiert."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "{0} could not be read."
-msgstr ""
+msgstr "{0} konnte nicht gelesen werden."
 
 #: src/slideimport/SlideLinks.ts:566
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Keine Folie dieser Präsentation ist mit {0} verlinkt."
 
 #: src/slideimport/SlideLinks.ts:572
 msgid "Another update is still running. Ask for {0} again in a moment."
@@ -5771,7 +5769,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:292
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Seite an die Fensterbreite anpassen."
 
 #: src/control/Control.StatusBar.js:297
 msgid "Status Bar Menu"
@@ -5836,7 +5834,7 @@ msgstr "Tabellen kopieren…"
 
 #: src/control/Control.Tabs.js:364
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, geschützt"
 
 #: src/control/Control.Tabs.js:704
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -5852,7 +5850,7 @@ msgstr "Neuen Tabellennamen eingeben"
 
 #: src/control/Control.Tabs.js:753
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Blatt schützen"
 
 #: src/control/Control.Tabs.js:753
 msgid "Enter a password to protect the sheet"
@@ -5880,7 +5878,7 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Dokument in %1 ms neu berechnet"
 
 #: src/control/Control.TopToolbar.js:143
 msgid "Active Sheet"
@@ -5904,9 +5902,8 @@ msgid "Insert connectors"
 msgstr "Verbinder einfügen"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Haupt"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
@@ -5932,11 +5929,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2805
 msgid "Confirm password"
-msgstr ""
+msgstr "Passwort bestätigen"
 
 #: src/control/Control.UIManager.ts:2851
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Die Bestätigung stimmt nicht mit dem Passwort überein"
 
 #: src/control/Control.UIManager.ts:3069
 msgid "Copy error details"
@@ -6216,9 +6213,8 @@ msgstr ""
 "Sie haben ein falsches Kennwort eingegeben. Bitte versuchen Sie es erneut."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Das Dokument benötigt ein Kennwort zum Ansehen."
+msgstr "Das Dokument benötigt ein Passwort zum Bearbeiten."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6235,7 +6231,7 @@ msgstr ""
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
-msgstr ""
+msgstr "Lokal bearbeiten"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
@@ -6243,15 +6239,15 @@ msgstr ""
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Gemeinsame Bearbeitung"
 
 #: src/control/Permission.js:438 src/control/Permission.js:470
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Zusammen in Echtzeit bearbeiten"
 
 #: src/control/Permission.js:460
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Weiterhin die lokale Kopie ansehen"
 
 #: src/control/Permission.js:461
 msgid "Continue with your version"
@@ -6667,7 +6663,7 @@ msgstr "sehr weit"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Markdown kopieren"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -6690,26 +6686,24 @@ msgid "All users"
 msgstr "Alle Benutzer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Markieren Sie Zellen mit …"
+msgstr "Zellen hervorheben mit"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Regeln oben/unten…"
+msgstr "Regeln oben/unten"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Farbskala"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Datenleiste"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Symbolsatz"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -6851,47 +6845,47 @@ msgstr "Notiz einfügen"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Dunkel 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Hell 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Dunkel 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Hell 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Akzent 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Akzent 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Akzent 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Akzent 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Akzent 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Akzent 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hyperlink"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
@@ -6899,11 +6893,11 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% heller"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% dunkler"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7066,11 +7060,11 @@ msgstr "Funktionen für Tabellenzellen"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Größe der ausgewählten Form"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Formgröße"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -7098,7 +7092,7 @@ msgstr "Zellumrandung"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Neuer Tabellenstil ..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
@@ -7282,7 +7276,7 @@ msgstr ""
 
 #: src/app/Socket.ts:2628
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Das Dokument konnte nicht bearbeitbar gemacht werden."
 
 #: src/app/Socket.ts:2696 src/app/Socket.ts:2707
 msgid "Missing Fonts"
@@ -7602,9 +7596,8 @@ msgstr ""
 "Das Dokument kann nicht exportiert werden. Bitte versuchen Sie es erneut."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Folien"
+msgstr "Folie"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -7613,20 +7606,20 @@ msgstr "Außerhalb der Tabelle"
 #: src/layer/marker/A11yTextInput.js:359
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Zeile"
+msgstr[1] "%n Zeilen"
 
 #: src/layer/marker/A11yTextInput.js:360
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Spalte"
+msgstr[1] "%n Spalten"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:363
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabelle mit {0} und {1}"
 
 #: src/layer/marker/A11yTextInput.js:368
 msgid "Row {0} through {1}"
@@ -7989,26 +7982,24 @@ msgid "End Show"
 msgstr "Ende"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Pause"
+msgstr "Pausiert"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Fortsetzen"
+msgstr "Fortgesetzt"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animation: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animation: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Übergang: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8063,11 +8054,11 @@ msgstr "Herauszoomen"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Vorschau der aktuellen Folie"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Vorschau der nächsten Folie"
 
 #: src/slideshow/PresenterConsole.js:211
 msgid "Preview Slide {1}"
@@ -8079,7 +8070,7 @@ msgstr ""
 
 #: src/slideshow/PresenterConsole.js:835
 msgid "The link is not valid."
-msgstr ""
+msgstr "Der Link ist nicht gültig."
 
 #: src/slideshow/PresenterConsole.js:1167
 #: src/slideshow/SlideShowPresenter.ts:934
@@ -8095,10 +8086,10 @@ msgid "No Notes"
 msgstr "Keine Anmerkungen"
 
 #: src/slideshow/PresenterConsole.js:1708
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Wiederholung in {0} Sekunden"
+msgstr[0] "In %n Sekunde wiederholen"
+msgstr[1] "In %n Sekunden wiederholen"
 
 #: src/slideshow/PresenterConsole.js:1715
 #: src/slideshow/SlideShowPresenter.ts:678
@@ -8127,7 +8118,7 @@ msgstr "Moderner Geschäftsbrief (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Moderner Geschäftsbrief"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
@@ -8243,11 +8234,11 @@ msgstr "Gelbe Idee"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Willkommen bei der Tabellenkalkulation"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Willkommen bei der Präsentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
