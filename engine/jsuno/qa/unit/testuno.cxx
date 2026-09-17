@@ -84,30 +84,60 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.log(v);
     console.assert(v === -12);
     console.assert(test.isByte(-12));
+    try {
+        test.isByte(NaN);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof RangeError);
+    }
 }
 {
     const v = test.getShort();
     console.log(v);
     console.assert(v === -1234);
     console.assert(test.isShort(-1234));
+    try {
+        test.isShort(NaN);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof RangeError);
+    }
 }
 {
     const v = test.getUnsignedShort();
     console.log(v);
     console.assert(v === 54321);
     console.assert(test.isUnsignedShort(54321));
+    try {
+        test.isUnsignedShort(NaN);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof RangeError);
+    }
 }
 {
     const v = test.getLong();
     console.log(v);
     console.assert(v === -123456);
     console.assert(test.isLong(-123456));
+    try {
+        test.isLong(NaN);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof RangeError);
+    }
 }
 {
     const v = test.getUnsignedLong();
     console.log(v);
     console.assert(v === 3456789012);
     console.assert(test.isUnsignedLong(3456789012));
+    try {
+        test.isUnsignedLong(NaN);
+        console.assert(false);
+    } catch (e) {
+        console.assert(e instanceof RangeError);
+    }
 }
 {
     const v = test.getHyper();

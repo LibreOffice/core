@@ -2127,7 +2127,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < SAL_MIN_INT8 || n > SAL_MAX_UINT8)
+            if (std::isnan(n) || n < SAL_MIN_INT8 || n > SAL_MAX_UINT8)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO byte val %f", n);
                 throw JsException();
@@ -2143,7 +2143,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < SAL_MIN_INT16 || n > SAL_MAX_INT16)
+            if (std::isnan(n) || n < SAL_MIN_INT16 || n > SAL_MAX_INT16)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO short value %f", n);
                 throw JsException();
@@ -2159,7 +2159,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < 0 || n > SAL_MAX_UINT16)
+            if (std::isnan(n) || n < 0 || n > SAL_MAX_UINT16)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO unsigned short value %f", n);
                 throw JsException();
@@ -2175,7 +2175,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
+            if (std::isnan(n) || n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO short value %f", n);
                 throw JsException();
@@ -2191,7 +2191,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 throw JsException();
             }
             n = std::trunc(n);
-            if (n < 0 || n > SAL_MAX_UINT32)
+            if (std::isnan(n) || n < 0 || n > SAL_MAX_UINT32)
             {
                 JS_ThrowRangeError(ctx, "Bad UNO unsigned long value %f", n);
                 throw JsException();
