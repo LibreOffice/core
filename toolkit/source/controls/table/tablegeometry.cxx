@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tablegeometry.hxx"
-#include "tablecontrol_impl.hxx"
 
+#include <controls/table/tablecontrol_impl.hxx>
 
 namespace svt::table
 {

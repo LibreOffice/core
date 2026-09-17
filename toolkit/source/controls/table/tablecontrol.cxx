@@ -18,8 +18,8 @@
  */
 
 #include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 
-#include "tablecontrol_impl.hxx"
 #include "tabledatawindow.hxx"
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

@@ -18,9 +18,9 @@
  */
 
 #include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 
 #include "tabledatawindow.hxx"
-#include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
 
 #include <vcl/help.hxx>

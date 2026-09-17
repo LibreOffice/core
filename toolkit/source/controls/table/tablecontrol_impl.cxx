@@ -19,11 +19,11 @@
 
 #include <controls/table/AccessibleGridControl.hxx>
 #include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 #include <controls/table/defaultinputhandler.hxx>
 #include <controls/table/tablemodel.hxx>
 
 #include "tabledatawindow.hxx"
-#include "tablecontrol_impl.hxx"
 #include "tablegeometry.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
