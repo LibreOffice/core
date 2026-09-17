@@ -84,6 +84,7 @@
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -3122,24 +3123,24 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
             aFillStyle = FillStyle_NONE;
     }
 
+    // A part of a chart that carries no colour of a theme of its own hands back the one its
+    // series holds, so a part given a flat colour would be written as the theme colour beneath
+    // it. Only a colour the part states for itself is taken.
     model::ComplexColor aComplexColor;
-    if (GetProperty(xPropSet, u"FillComplexColor"_ustr)) {
+    uno::Reference<beans::XPropertyState> xPropState(xPropSet, uno::UNO_QUERY);
+    if (GetDirectProperty(xPropSet, xPropState, u"FillComplexColor"_ustr)) {
         uno::Reference<util::XComplexColor> xCC;
         mAny >>= xCC;
         aComplexColor = model::color::getFromXComplexColor(xCC);
     }
 
-    // The following restriction to solidFill is not correct. Any color that's
-    // the default scheme color (e.g., as a gradient fill stop) shouldn't be
-    // exported. However, we lose transforms on gradient fills (and maybe other
-    // color usage), so we can't tell what should be equivalent to the default
-    // scheme color in that context. See FillProperties::pushToPropMap(). So
-    // play it safe and don't try to handle that here. TODO
-    if (aFillStyle == FillStyle_SOLID &&
-            aComplexColor.getType() == model::ColorType::Theme &&
-            aComplexColor.getTransformations().empty()) {
-        // If we're dealing with a theme color, then we don't want to export the
-        // explicit value. We want it to remain implicit, as a theme.
+    // A chart carries nothing behind its own parts that a colour could fall back on, so a colour
+    // that names a slot of the theme is written as that slot, and the flat colour it resolves to
+    // is left out. Only a solid fill is handled: a gradient loses the shades a stop applies, so
+    // there is no telling which of its colours the theme would give back.
+    if (aFillStyle == FillStyle_SOLID && aComplexColor.getType() == model::ColorType::Theme
+        && WriteSchemeColor(u"FillComplexColor"_ustr, xPropSet))
+    {
         return;
     }
 

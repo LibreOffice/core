@@ -1442,6 +1442,31 @@ CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
                 "val", u"dash");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testChartKeepsTheColoursOfItsTheme)
+{
+    createSwDoc("Chart_BorderLine_Style.docx");
+    save(TestFilter::DOCX);
+
+    // A chart travels through its own storage, where a colour that names a slot of the theme is
+    // written beside the flat colour it resolves to. Reading it back kept only the flat one, so
+    // the axis text and the grid lines of a chart came out of a save fixed to whatever the theme
+    // in force at the time made of them.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
+
+    static constexpr char aAxisText[]
+        = "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:p/a:pPr/a:defRPr/a:solidFill"
+          "/a:schemeClr";
+    assertXPath(pXmlDoc, aAxisText, "val", u"tx1");
+    assertXPath(pXmlDoc, OString(OString::Concat(aAxisText) + "/a:lumMod"), "val", u"65000");
+    assertXPath(pXmlDoc, OString(OString::Concat(aAxisText) + "/a:lumOff"), "val", u"35000");
+
+    static constexpr char aGridLine[]
+        = "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:majorGridlines/c:spPr/a:ln/a:solidFill"
+          "/a:schemeClr";
+    assertXPath(pXmlDoc, OString(OString::Concat(aGridLine) + "/a:lumMod"), "val", u"15000");
+    assertXPath(pXmlDoc, OString(OString::Concat(aGridLine) + "/a:lumOff"), "val", u"85000");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
 {
     createSwDoc("Chart_Plot_BorderLine_Style.docx");

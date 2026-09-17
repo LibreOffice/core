@@ -22,6 +22,8 @@
 
 #include "XMLSymbolImageContext.hxx"
 #include "XMLLabelSeparatorContext.hxx"
+#include <xmloff/XMLComplexColorContext.hxx>
+#include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlprmap.hxx>
 
@@ -54,6 +56,10 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContex
             return new XMLSymbolImageContext( GetImport(), nElement, rProp, rProperties );
         case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
             return new XMLLabelSeparatorContext( GetImport(), nElement, rProp, rProperties );
+        // a chart reaches the shape and text properties through the mappers it chains, so a
+        // colour of a theme reaches it the same way and is read here the way they read it
+        case CTF_COMPLEX_COLOR:
+            return new XMLPropertyComplexColorContext( GetImport(), nElement, xAttrList, rProp, rProperties );
     }
 
     // default / no context yet: create child context by base class
