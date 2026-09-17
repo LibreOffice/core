@@ -230,6 +230,13 @@ for ref in "$@"; do
     fi
 done
 
-echo "done. verify with:"
-echo "  cosign verify --key docker/cosign.pub <ref>"
-echo "  cosign verify-attestation --key docker/cosign.pub --type cyclonedx <ref>"
+# Signatures and attestations are attached to the per-platform digests, which
+# is what ZenDiS does too and the only thing that makes sense: the SBOM of an
+# arm64 image is not the SBOM of the amd64 one. A multi-arch tag points at the
+# index, whose digest carries neither, so verification names a platform.
+echo "done. verify a per-platform reference, not a multi-arch tag:"
+for ref in "$@"; do
+    echo "  cosign verify --key docker/cosign.pub $ref"
+    echo "  cosign verify-attestation --key docker/cosign.pub --type cyclonedx $ref"
+    break
+done
