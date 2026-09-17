@@ -37,8 +37,12 @@ private:
     static QWebEngineProfile* globalProfile;
     static RecentFiles recentFiles;
     static std::unique_ptr<Prefs> prefs;
-    static QSslKey embedKey;
-    static QSslCertificate embedCert;
+    /// Constructing a QSslKey or QSslCertificate reaches into Qt Network's
+    /// TLS backend registry, which is a Q_APPLICATION_STATIC, so it has to
+    /// happen after the QApplication is up.  Function-local statics keep it
+    /// out of static initialization.
+    static QSslKey& embedKeyRef();
+    static QSslCertificate& embedCertRef();
 
 public:
     static void initialize();

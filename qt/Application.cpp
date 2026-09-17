@@ -45,8 +45,18 @@
 QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
 std::unique_ptr<Prefs> Application::prefs;
-QSslKey Application::embedKey;
-QSslCertificate Application::embedCert;
+
+QSslKey& Application::embedKeyRef()
+{
+    static QSslKey key;
+    return key;
+}
+
+QSslCertificate& Application::embedCertRef()
+{
+    static QSslCertificate cert;
+    return cert;
+}
 
 namespace
 {
@@ -137,7 +147,7 @@ void Application::initialize()
         // our cert only - the integrator's HTTPS origin is still
         // validated against the system trust store as normal.
         QByteArray spkiHash;
-        generateEmbedCert(embedKey, embedCert, spkiHash);
+        generateEmbedCert(embedKeyRef(), embedCertRef(), spkiHash);
         if (!spkiHash.isEmpty())
         {
             // Append, so the switches the environment already carries stay in force.
@@ -267,8 +277,8 @@ RecentFiles& Application::getRecentFiles() { return recentFiles; }
 
 Prefs& Application::getPrefs() { return *prefs; }
 
-const QSslKey& Application::getEmbedKey() { return embedKey; }
+const QSslKey& Application::getEmbedKey() { return embedKeyRef(); }
 
-const QSslCertificate& Application::getEmbedCert() { return embedCert; }
+const QSslCertificate& Application::getEmbedCert() { return embedCertRef(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
