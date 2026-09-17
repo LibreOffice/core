@@ -3373,6 +3373,13 @@ void Shape::cloneFillProperties()
     pFillProperties->assignUsed(*mpFillPropertiesPtr);
     mpFillPropertiesPtr = std::move(pFillProperties);
 }
+
+void Shape::cloneLineProperties()
+{
+    auto pLineProperties = std::make_shared<LineProperties>();
+    pLineProperties->assignUsed(*mpLinePropertiesPtr);
+    mpLinePropertiesPtr = std::move(pLineProperties);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

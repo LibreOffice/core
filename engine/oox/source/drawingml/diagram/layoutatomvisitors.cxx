@@ -184,6 +184,9 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     // Fill properties have to be changed as sometimes only the presentation node contains the blip
     // fill, unshare those.
     mpShape->cloneFillProperties();
+    // The colour a Diagram gives a shape as a line goes on the line properties, and each shape
+    // of a run takes a colour of its own, so unshare those as well.
+    mpShape->cloneLineProperties();
 
     // add/set ModelID from current node to allow later association
     if (mxCurrentNode)

@@ -1258,6 +1258,67 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_noLineWhereTheStyleGivesNone
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nWithoutText);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_everyItemTakesItsOwnLineColor)
+{
+    // The file holds a diagram of type "Vertical Chevron List" with four items. Its colors
+    // give the style label of the chevrons a list of two colors with the standard method, so
+    // the four of them take a line color spread over that list, as their fill is.
+    // The cached drawing of the diagram has been taken out of the file, so that the diagram
+    // is laid out and colored here rather than read back.
+    loadFromFile(u"VerticalChevronList.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSmartArt(xDrawPage->getByIndex(0),
+                                                      uno::UNO_QUERY_THROW);
+
+    // The colors the cached drawing of the original file gives the four chevrons.
+    const std::pair<OUString, ::Color> aExpected[]
+        = { { u"One"_ustr, ::Color(0xE97132) },
+            { u"Two"_ustr, ::Color(0xCBC11E) },
+            { u"Three"_ustr, ::Color(0x56991D) },
+            { u"Four"_ustr, ::Color(0x196B24) } };
+
+    // Each item sits in a group of its own, so look for the chevrons below those.
+    std::function<uno::Reference<beans::XPropertySet>(
+        const uno::Reference<container::XIndexAccess>&, const OUString&)>
+        aFind = [&aFind](const uno::Reference<container::XIndexAccess>& rShapes,
+                         const OUString& rText) -> uno::Reference<beans::XPropertySet> {
+        for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
+        {
+            uno::Reference<container::XIndexAccess> xChildren(rShapes->getByIndex(i),
+                                                              uno::UNO_QUERY);
+            if (xChildren.is())
+            {
+                uno::Reference<beans::XPropertySet> xFound(aFind(xChildren, rText));
+                if (xFound.is())
+                    return xFound;
+                continue;
+            }
+
+            uno::Reference<text::XText> xText(rShapes->getByIndex(i), uno::UNO_QUERY);
+            if (xText.is() && xText->getString().startsWith(rText))
+                return uno::Reference<beans::XPropertySet>(xText, uno::UNO_QUERY);
+        }
+
+        return uno::Reference<beans::XPropertySet>();
+    };
+
+    for (const auto& [rText, rColor] : aExpected)
+    {
+        const OString aMessage(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+        uno::Reference<beans::XPropertySet> xProps(aFind(xSmartArt, rText));
+        CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xProps.is());
+
+        ::Color nLineColor;
+        xProps->getPropertyValue(u"LineColor"_ustr) >>= nLineColor;
+        // Shapes copied from one layout template shared a single set of line properties, so
+        // the item laid out last decided the color of them all.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rColor, nLineColor);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
