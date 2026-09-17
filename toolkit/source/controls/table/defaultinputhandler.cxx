@@ -45,16 +45,16 @@ bool DefaultInputHandler::delegateMouseEvent(
         bool furtherHandler = false;
         switch ((pActiveFunction.get()->*i_handlerMethod)(i_control, i_event))
         {
-            case ActivateFunction:
+            case FunctionResult::ActivateFunction:
                 OSL_ENSURE(false,
                            "lcl_delegateMouseEvent: unexpected - function already *is* active!");
                 break;
-            case ContinueFunction:
+            case FunctionResult::ContinueFunction:
                 break;
-            case DeactivateFunction:
+            case FunctionResult::DeactivateFunction:
                 pActiveFunction.clear();
                 break;
-            case SkipFunction:
+            case FunctionResult::SkipFunction:
                 furtherHandler = true;
                 break;
         }
@@ -75,16 +75,16 @@ bool DefaultInputHandler::delegateMouseEvent(
 
         switch ((mouseFunction.get()->*i_handlerMethod)(i_control, i_event))
         {
-            case ActivateFunction:
+            case FunctionResult::ActivateFunction:
                 pActiveFunction = mouseFunction;
                 handled = true;
                 break;
-            case ContinueFunction:
-            case DeactivateFunction:
+            case FunctionResult::ContinueFunction:
+            case FunctionResult::DeactivateFunction:
                 OSL_ENSURE(false, "lcl_delegateMouseEvent: unexpected: inactive handler cannot be "
                                   "continued or deactivated!");
                 break;
-            case SkipFunction:
+            case FunctionResult::SkipFunction:
                 handled = false;
                 break;
         }

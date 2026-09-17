@@ -31,7 +31,7 @@ class ITableControl;
 
 //= FunctionResult
 
-enum FunctionResult
+enum class FunctionResult
 {
     ActivateFunction,
     ContinueFunction,

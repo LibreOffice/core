@@ -44,7 +44,7 @@ FunctionResult ColumnResize::handleMouseMove(ITableControl& i_tableControl,
         }
         i_tableControl.setPointer(aNewPointer);
 
-        return SkipFunction; // TODO: is this correct?
+        return FunctionResult::SkipFunction; // TODO: is this correct?
     }
 
     ::Size const tableSize = i_tableControl.getTableSizePixel();
@@ -67,7 +67,7 @@ FunctionResult ColumnResize::handleMouseMove(ITableControl& i_tableControl,
     i_tableControl.showTracking(tools::Rectangle(Point(aPoint.X(), 0), Size(1, tableSize.Height())),
                                 ShowTrackFlags::Split | ShowTrackFlags::TrackWindow);
 
-    return ContinueFunction;
+    return FunctionResult::ContinueFunction;
 }
 
 FunctionResult ColumnResize::handleMouseDown(ITableControl& i_tableControl,
@@ -78,7 +78,7 @@ FunctionResult ColumnResize::handleMouseDown(ITableControl& i_tableControl,
         OSL_ENSURE(
             false,
             "ColumnResize::handleMouseDown: suspicious: MouseButtonDown while still tracking?");
-        return ContinueFunction;
+        return FunctionResult::ContinueFunction;
     }
 
     TableCell const tableCell(i_tableControl.hitTest(i_event.GetPosPixel()));
@@ -88,17 +88,17 @@ FunctionResult ColumnResize::handleMouseDown(ITableControl& i_tableControl,
         {
             m_nResizingColumn = tableCell.nColumn;
             i_tableControl.captureMouse();
-            return ActivateFunction;
+            return FunctionResult::ActivateFunction;
         }
     }
 
-    return SkipFunction;
+    return FunctionResult::SkipFunction;
 }
 
 FunctionResult ColumnResize::handleMouseUp(ITableControl& i_tableControl, MouseEvent const& i_event)
 {
     if (m_nResizingColumn == COL_INVALID)
-        return SkipFunction;
+        return FunctionResult::SkipFunction;
 
     Point const aPoint = i_event.GetPosPixel();
 
@@ -143,14 +143,14 @@ FunctionResult ColumnResize::handleMouseUp(ITableControl& i_tableControl, MouseE
     i_tableControl.releaseMouse();
 
     m_nResizingColumn = COL_INVALID;
-    return DeactivateFunction;
+    return FunctionResult::DeactivateFunction;
 }
 
 //= RowSelection
 
 FunctionResult RowSelection::handleMouseMove(ITableControl&, MouseEvent const&)
 {
-    return SkipFunction;
+    return FunctionResult::SkipFunction;
 }
 
 FunctionResult RowSelection::handleMouseDown(ITableControl& i_tableControl,
@@ -174,7 +174,7 @@ FunctionResult RowSelection::handleMouseDown(ITableControl& i_tableControl,
 
     if (handled)
         m_bActive = true;
-    return handled ? ActivateFunction : SkipFunction;
+    return handled ? FunctionResult::ActivateFunction : FunctionResult::SkipFunction;
 }
 
 FunctionResult RowSelection::handleMouseUp(ITableControl& i_tableControl, MouseEvent const& i_event)
@@ -190,16 +190,16 @@ FunctionResult RowSelection::handleMouseUp(ITableControl& i_tableControl, MouseE
     if (m_bActive)
     {
         m_bActive = false;
-        return DeactivateFunction;
+        return FunctionResult::DeactivateFunction;
     }
-    return SkipFunction;
+    return FunctionResult::SkipFunction;
 }
 
 //= ColumnSortHandler
 
 FunctionResult ColumnSortHandler::handleMouseMove(ITableControl&, MouseEvent const&)
 {
-    return SkipFunction;
+    return FunctionResult::SkipFunction;
 }
 
 FunctionResult ColumnSortHandler::handleMouseDown(ITableControl& i_tableControl,
@@ -209,28 +209,28 @@ FunctionResult ColumnSortHandler::handleMouseDown(ITableControl& i_tableControl,
     {
         OSL_ENSURE(false,
                    "ColumnSortHandler::handleMouseDown: called while already active - suspicious!");
-        return ContinueFunction;
+        return FunctionResult::ContinueFunction;
     }
 
     if (i_tableControl.getModel()->getSortAdapter() == nullptr)
         // no sorting support at the model
-        return SkipFunction;
+        return FunctionResult::SkipFunction;
 
     TableCell const tableCell(i_tableControl.hitTest(i_event.GetPosPixel()));
     if ((tableCell.nRow != ROW_COL_HEADERS) || (tableCell.nColumn < 0))
-        return SkipFunction;
+        return FunctionResult::SkipFunction;
 
     // TODO: ensure the column header is rendered in some special way, indicating its current state
 
     m_nActiveColumn = tableCell.nColumn;
-    return ActivateFunction;
+    return FunctionResult::ActivateFunction;
 }
 
 FunctionResult ColumnSortHandler::handleMouseUp(ITableControl& i_tableControl,
                                                 MouseEvent const& i_event)
 {
     if (m_nActiveColumn == COL_INVALID)
-        return SkipFunction;
+        return FunctionResult::SkipFunction;
 
     TableCell const tableCell(i_tableControl.hitTest(i_event.GetPosPixel()));
     if ((tableCell.nRow == ROW_COL_HEADERS) && (tableCell.nColumn == m_nActiveColumn))
@@ -238,7 +238,7 @@ FunctionResult ColumnSortHandler::handleMouseUp(ITableControl& i_tableControl,
         ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
         ENSURE_OR_RETURN(pSort != nullptr,
                          "ColumnSortHandler::handleMouseUp: somebody is mocking with us!",
-                         DeactivateFunction);
+                         FunctionResult::DeactivateFunction);
         // in handleMousButtonDown, the model claimed to have sort support ...
 
         ColumnSortDirection eSortDirection = ColumnSortAscending;
@@ -253,7 +253,7 @@ FunctionResult ColumnSortHandler::handleMouseUp(ITableControl& i_tableControl,
     }
 
     m_nActiveColumn = COL_INVALID;
-    return DeactivateFunction;
+    return FunctionResult::DeactivateFunction;
 }
 
 } // namespace svt::table
