@@ -27,7 +27,7 @@
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <com/sun/star/awt/XGraphics2.hpp>
+#include <com/sun/star/awt/XGraphics.hpp>
 
 #include <memory>
 
@@ -51,7 +51,7 @@ namespace o3tl
 
 
 class VCLXGraphics final : public cppu::WeakImplHelper<
-                        css::awt::XGraphics2>
+                        css::awt::XGraphics>
 {
 private:
     // used to return same reference on each call to getDevice()

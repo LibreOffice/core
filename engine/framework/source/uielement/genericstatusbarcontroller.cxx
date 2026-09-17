@@ -27,7 +27,7 @@
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/ImageDrawMode.hpp>
-#include <com/sun/star/awt/XGraphics2.hpp>
+#include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
 using namespace ::com::sun::star;
@@ -119,9 +119,7 @@ void GenericStatusbarController::paint(
 {
     SolarMutexGuard aGuard;
 
-    const Reference< awt::XGraphics2 > xGraphics2(xGraphics, UNO_QUERY);
-
-    if ( !m_xStatusbarItem.is() || !xGraphics2.is() )
+    if ( !m_xStatusbarItem.is() || !xGraphics.is() )
         return;
 
     Reference< beans::XPropertySet > xGraphicProps( m_xGraphic, UNO_QUERY );
@@ -137,7 +135,7 @@ void GenericStatusbarController::paint(
         aPos.X = ( rOutputRectangle.Width + nOffset ) / 2 - aGraphicSize.Width / 2;
         aPos.Y = rOutputRectangle.Height / 2 - aGraphicSize.Height / 2;
 
-        xGraphics2->drawImage( rOutputRectangle.X + aPos.X,
+        xGraphics->drawImage( rOutputRectangle.X + aPos.X,
                               rOutputRectangle.Y + aPos.Y,
                               aGraphicSize.Width,
                               aGraphicSize.Height,
@@ -146,7 +144,7 @@ void GenericStatusbarController::paint(
     }
     else
     {
-        xGraphics2->clear( rOutputRectangle );
+        xGraphics->clear( rOutputRectangle );
     }
 }
 

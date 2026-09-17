@@ -217,6 +217,43 @@ published interface XGraphics: cpo::uno::XInterface
              [in] long Y,
              [in] string Text,
              [in] sequence<long> Longs );
+
+    /** clears the given rectangle on the device
+     */
+    void clear( [in] Rectangle aRect );
+
+
+    /** draws a com::sun::star::graphic::XGraphic
+        in the output device.
+
+        <p>Note that some devices may not support this operation.</p>
+
+        @param  nX
+            the X coordinate on the device where the graphic will be drawn
+
+        @param  nY
+            the Y coordinate on the device where the graphic will be drawn
+
+        @param  nWidth
+            the width of the region on the device
+
+        @param  nHeight
+            the height of the region on the device
+
+        @param  nStyle
+            the style used to draw the image.
+            See com::sun::star::awt::ImageDrawMode.
+
+        @param  aGraphic
+            the com::sun::star::graphic::XGraphic
+            to be drawn onto the device
+     */
+    void drawImage( [in] long nX,
+                             [in] long nY,
+                             [in] long nWidth,
+                             [in] long nHeight,
+                             [in] short nStyle,
+                             [in] ::com::sun::star::graphic::XGraphic aGraphic );
 };
 
 

@@ -2066,9 +2066,6 @@ module com {
      void drawGradient([in] long nX, [in] long nY, [in] long nWidth, [in] long Height, [in] ::com::sun::star::awt::Gradient aGradient);
      void drawText([in] long X, [in] long Y, [in] string Text);
      void drawTextArray([in] long X, [in] long Y, [in] string Text, [in] sequence< long > Longs);
-    };
-    published interface XGraphics2 {
-     interface ::com::sun::star::awt::XGraphics;
      void clear([in] ::com::sun::star::awt::Rectangle aRect);
      void drawImage([in] long nX, [in] long nY, [in] long nWidth, [in] long nHeight, [in] short nStyle, [in] ::com::sun::star::graphic::XGraphic aGraphic);
     };

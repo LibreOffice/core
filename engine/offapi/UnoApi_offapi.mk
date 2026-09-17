@@ -1709,7 +1709,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XFontMappingUse \
 	XFontMappingUseItem \
 	XGraphics \
-	XGraphics2 \
 	XImageButton \
 	XImageConsumer \
 	XImageProducer \
