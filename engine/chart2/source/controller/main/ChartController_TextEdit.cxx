@@ -188,7 +188,7 @@ cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController
         bool bNextPara = (aEdit.GetParagraphCount() > 1 && rSection.mnParagraph != aEdit.GetParagraphCount() - 1 &&
             aEdit.GetTextLen(rSection.mnParagraph) <= rSection.mnEnd);
 
-        uno::Reference< chart2::XFormattedString2 > xFmtStr = chart2::FormattedString::create(m_xCC);
+        uno::Reference< chart2::XFormattedString > xFmtStr = chart2::FormattedString::create(m_xCC);
         if (bNextPara)
             aNewString += OUStringChar('\n');
         xFmtStr->setString(aNewString);

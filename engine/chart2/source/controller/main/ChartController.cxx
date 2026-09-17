@@ -2029,8 +2029,7 @@ static void lcl_SetOrGetThemeToOrFromElement(bool bSet, ChartThemeType& aTheme,
                 xProperties.pop_back();
                 for (int i = 0; i < aStrings.getLength(); i++)
                 {
-                    Reference<beans::XPropertySet> xTitlePropSet(aStrings[i], uno::UNO_QUERY);
-                    xProperties.push_back(xTitlePropSet);
+                    xProperties.push_back(aStrings[i]);
                 }
             }
         }

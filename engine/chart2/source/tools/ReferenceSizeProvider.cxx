@@ -78,8 +78,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
             for( uno::Reference< XFormattedString > const & formattedStr : aStrSeq )
             {
                 RelativeSizeHelper::adaptFontSizes(
-                    Reference< beans::XPropertySet >( formattedStr, uno::UNO_QUERY ),
-                    aOldRefSize, getPageSize());
+                    formattedStr, aOldRefSize, getPageSize());
             }
         }
 

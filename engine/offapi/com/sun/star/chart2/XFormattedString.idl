@@ -26,11 +26,20 @@ module star
 module chart2
 {
 
-interface XFormattedString : ::cpo::uno::XInterface
+interface XFormattedString
 {
     string getString();
 
     void setString( [in] string String );
+
+    /** Access to various character properties.
+
+        Supports the properties of the
+        com::sun::star::style::CharacterProperties service, and also optionally
+        those of the com::sun::star::style::CharacterPropertiesAsian and
+        com::sun::star::style::CharacterPropertiesComplex services.
+     */
+    interface com::sun::star::beans::XPropertySet;
 };
 
 } ; // chart2

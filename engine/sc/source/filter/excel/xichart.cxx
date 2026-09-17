@@ -880,7 +880,7 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
     {
         for( XclImpStringIterator aIt( *mxString ); aIt.Is(); ++aIt )
         {
-            Reference< css::chart2::XFormattedString2 > xFmtStr = css::chart2::FormattedString::create( comphelper::getProcessComponentContext() );
+            Reference< css::chart2::XFormattedString > xFmtStr = css::chart2::FormattedString::create( comphelper::getProcessComponentContext() );
             // set text data
             xFmtStr->setString( aIt.GetPortionText() );
 

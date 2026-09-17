@@ -2652,12 +2652,11 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
     {
         pFS->startElement(FSNS(XML_a, XML_r));
-        Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
         {
             WriteRunInput aInput;
             aInput.bCheckDirect = true;
             aInput.bUseTextSchemeColors = true;
-            WriteRunProperties(xRunPropSet, XML_rPr, aInput);
+            WriteRunProperties(rxFS, XML_rPr, aInput);
         }
         pFS->startElement(FSNS(XML_a, XML_t));
 

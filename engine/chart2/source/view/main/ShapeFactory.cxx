@@ -2140,8 +2140,7 @@ rtl::Reference<SvxShapeText>
                     xShape->insertString( xInsertCursor, xFormattedString[nN]->getString(), false );
                     bNotEmpty = true;
                     xSelectionCursor->gotoEnd( true ); // select current paragraph
-                    uno::Reference< beans::XPropertySet > xStringProperties( xFormattedString[nN], uno::UNO_QUERY );
-                    PropertyMapper::setMappedProperties( xSelectionProp, xStringProperties,
+                    PropertyMapper::setMappedProperties( xSelectionProp, xFormattedString[nN],
                         PropertyMapper::getPropertyNameMapForTextShapeProperties() );
                 }
             }
@@ -2249,9 +2248,8 @@ rtl::Reference<SvxShapeText>
                         OUString aLabel = ShapeFactory::getStackedString(rxFS->getString(), bStackCharacters);
                         if (nLBreaks-- > 0)
                             aLabel += OUStringChar('\r');
-                        uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
                         cpo::uno::Sequence<beans::PropertyValue> aPropVals =
-                            PropertyMapper::getPropVals(xSourceProps,
+                            PropertyMapper::getPropVals(rxFS,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
                         xShape->appendTextPortion(aLabel, aPropVals);
                     }
@@ -2263,9 +2261,8 @@ rtl::Reference<SvxShapeText>
                 {
                     if (!rxFS->getString().isEmpty())
                     {
-                        uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
                         cpo::uno::Sequence<beans::PropertyValue> aPropVals =
-                            PropertyMapper::getPropVals(xSourceProps,
+                            PropertyMapper::getPropVals(rxFS,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
                         xShape->appendTextPortion(rxFS->getString(), aPropVals);
                     }

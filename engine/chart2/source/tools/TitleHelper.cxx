@@ -392,7 +392,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
     }
     else
     {
-        uno::Reference< chart2::XFormattedString2 > xFormattedString =
+        uno::Reference< chart2::XFormattedString > xFormattedString =
             chart2::FormattedString::create( xContext );
 
         xFormattedString->setString( aNewText );

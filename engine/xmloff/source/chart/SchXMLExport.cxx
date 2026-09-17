@@ -3929,8 +3929,7 @@ void SchXMLExportHelper_Impl::CollectAutoTextStyle( const cpo::uno::Reference< b
         {
             for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
             {
-                Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
-                mrExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xRunPropSet);
+                mrExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, rxFS);
             }
         }
     }

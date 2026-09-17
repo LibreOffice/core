@@ -1919,7 +1919,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	XDiagram \
 	XDiagramProvider \
 	XFormattedString \
-	XFormattedString2 \
 	XInternalDataProvider \
 	XLabeled \
 	XLegend \

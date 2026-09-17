@@ -33,7 +33,7 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-    css::chart2::XDataPointCustomLabelField, // inherits from XFormattedString2
+    css::chart2::XDataPointCustomLabelField, // inherits from XFormattedString
     css::lang::XServiceInfo,
     css::util::XCloneable,
     css::util::XModifyBroadcaster,

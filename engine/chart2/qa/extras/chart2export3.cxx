@@ -860,7 +860,7 @@ void checkCharacterProps(Reference<beans::XPropertySet> const & xTitleProp)
     {
         const OUString aText = xFormattedSubTitle[i]->getString();
         CPPUNIT_ASSERT_EQUAL(aValues[i], aText);
-        Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle[i], uno::UNO_QUERY);
+        Reference< beans::XPropertySet > xRunPropSet(xFormattedSubTitle[i]);
         // common props
         cpo::uno::Any aAny = xRunPropSet->getPropertyValue(u"CharFontName"_ustr);
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(u"Aptos Narrow"_ustr), aAny);

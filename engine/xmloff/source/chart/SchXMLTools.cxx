@@ -639,9 +639,8 @@ void exportFormattedText( SvXMLExport& rExport, const uno::Reference< beans::XPr
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedTitle)
         {
-            Reference< beans::XPropertySet > xRunPropSet(rxFS, uno::UNO_QUERY);
             bool bIsUICharStyle, bHasAutoStyle = false;
-            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(xRunPropSet, bIsUICharStyle, bHasAutoStyle);
+            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(rxFS, bIsUICharStyle, bHasAutoStyle);
             if (!sStyle.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
@@ -671,13 +670,13 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
         {
             // these are the properties from the textshape object - needs to apply them
             // to all the string parts firstly - (necessary for backward compatibility)
-            xFullTextTitleProps.set(xFullTextTitle.getArray()[0], uno::UNO_QUERY);
+            xFullTextTitleProps = xFullTextTitle.getArray()[0];
         }
 
         for (auto aRIt = std::begin(rTitle); aRIt != std::end(rTitle); ++aRIt)
         {
-            Reference< chart2::XFormattedString2 > xNewFmtStr;
-            xNewFmtStr = chart2::FormattedString::create(rImport.GetComponentContext());
+            Reference< chart2::XFormattedString > xNewFmtStr
+                = chart2::FormattedString::create(rImport.GetComponentContext());
 
             if (xFullTextTitleProps.is())
             {
