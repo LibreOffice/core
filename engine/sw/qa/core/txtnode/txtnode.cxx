@@ -18,7 +18,13 @@
 #include <vcl/scheduler.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <test/kitcallback.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <fmtautofmt.hxx>
+#include <ndhints.hxx>
 
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -754,6 +760,54 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPageCrossrefUpdate)
     // - Actual  : 3
     // i.e. the reference to that bookmark was not updated for the new page number.
     CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aExpand);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHtmlKeepsBoldDropsColor)
+{
+    // Given an empty Writer document with the merged-paste flag on:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    pDoc->SetInMergedPaste(true);
+    comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
+
+    // When importing an HTML file with a bold, red run into it:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the pasted run's autoformat keeps bold but drops the red colour:
+    SwTextNode* pTextNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText().startsWith(u"bold"))
+        {
+            pTextNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    CPPUNIT_ASSERT(pTextNode->HasHints());
+    const SwpHints& rHints = pTextNode->GetSwpHints();
+    const SwFormatAutoFormat* pAutoFmt = nullptr;
+    for (size_t i = 0; i < rHints.Count(); ++i)
+    {
+        const SwTextAttr* pHint = rHints.Get(i);
+        if (pHint->Which() == RES_TXTATR_AUTOFMT)
+        {
+            pAutoFmt = &pHint->GetAutoFormat();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pAutoFmt);
+    const SfxItemSet& rSet = *pAutoFmt->GetStyleHandle();
+    // Bold is kept, color is not:
+    const SvxWeightItem* pWeight = rSet.GetItemIfSet(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(pWeight);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pWeight->GetWeight());
+    // Without the accompanying fix in place, this test would have failed, color was kept.
+    CPPUNIT_ASSERT(!rSet.GetItemIfSet(RES_CHRATR_COLOR));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

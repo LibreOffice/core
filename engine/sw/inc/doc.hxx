@@ -338,6 +338,8 @@ private:
     bool mbColumnSelection       : 1;    //< TRUE: this content has been created by a column selection (clipboard docs only)
     bool mbIsPrepareSelAll       : 1;
     bool mbDontCorrectBookmarks = false;
+    /// Is in the process of receiving a merged paste.
+    bool mbInMergedPaste = false;
 
     enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
     MissingDictionary meDictionaryMissing;
@@ -987,6 +989,9 @@ public:
 
     bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsInMergedPaste() const { return mbInMergedPaste; }
+    void SetInMergedPaste(bool bNew) { mbInMergedPaste = bNew; }
 
     bool IsInWriting() const { return mbInWriting; }
     void SetInWriting(bool bNew) { mbInWriting = bNew; }

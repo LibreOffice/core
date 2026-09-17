@@ -31,6 +31,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>
 #include <fmtfld.hxx>
@@ -1186,7 +1187,39 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
                         sal_Int32 nStt, sal_Int32 nEnd )
 {
     IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
-    const std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle( rSet, IStyleAccess::AUTO_STYLE_CHAR );
+    std::shared_ptr<SfxItemSet> pAutoStyle;
+    if (rDoc.IsInMergedPaste())
+    {
+        // Merged paste: keep target character properties and only merge selected properties from
+        // source.
+        SfxItemSet aFiltered(rSet);
+        SfxWhichIter aIter(aFiltered);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            switch (nWhich)
+            {
+                // Bold
+                case sal_uInt16(RES_CHRATR_WEIGHT):
+                case sal_uInt16(RES_CHRATR_CJK_WEIGHT):
+                case sal_uInt16(RES_CHRATR_CTL_WEIGHT):
+                // Italic
+                case sal_uInt16(RES_CHRATR_POSTURE):
+                case sal_uInt16(RES_CHRATR_CJK_POSTURE):
+                case sal_uInt16(RES_CHRATR_CTL_POSTURE):
+                // Underline
+                case sal_uInt16(RES_CHRATR_UNDERLINE):
+                    continue;
+                default:
+                    aFiltered.ClearItem(nWhich);
+                    break;
+            }
+        }
+        pAutoStyle = rStyleAccess.getAutomaticStyle(aFiltered, IStyleAccess::AUTO_STYLE_CHAR);
+    }
+    else
+    {
+        pAutoStyle = rStyleAccess.getAutomaticStyle(rSet, IStyleAccess::AUTO_STYLE_CHAR);
+    }
     SwFormatAutoFormat aNewAutoFormat;
     aNewAutoFormat.SetStyleHandle( pAutoStyle );
     SwTextAttr* pNew = MakeTextAttr( rDoc, aNewAutoFormat, nStt, nEnd );

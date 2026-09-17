@@ -400,6 +400,19 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
 
+                    // See if we should do a merged paste.
+                    bool bMerged = false;
+                    const SfxBoolItem* pMerged = rReq.GetArg<SfxBoolItem>(FN_PARAM_4);
+                    if (pMerged)
+                        bMerged = pMerged->GetValue();
+                    SwDoc* pDoc = rSh.GetDoc();
+                    if (bMerged)
+                    {
+                        pDoc->SetInMergedPaste(true);
+                    }
+                    comphelper::ScopeGuard g(
+                        [pDoc, bMerged] { if (bMerged) pDoc->SetInMergedPaste(false); });
+
                     SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable);
 
                     if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
