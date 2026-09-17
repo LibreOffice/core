@@ -30,6 +30,7 @@
 #include "types.hxx"
 #include "rangelst.hxx"
 #include <osl/mutex.hxx>
+#include <formula/token.hxx>
 #include <formula/types.hxx>
 #include <tools/solar.h>
 
