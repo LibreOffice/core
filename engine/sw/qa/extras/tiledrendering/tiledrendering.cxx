@@ -498,6 +498,22 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentSizeChanged)
     CPPUNIT_ASSERT(aSize.getHeight() > m_aDocumentSize.getHeight());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentSizeChangedOutsideAction)
+{
+    // The view learns the document size also when the layout reports it outside an action.
+    SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    m_aDocumentSize = Size();
+
+    // A cursor placed on a page that is formatted only then reports the size like this, after
+    // the action around the cursor move has ended.
+    CPPUNIT_ASSERT(!pWrtShell->ActionPend());
+    pWrtShell->SizeChgNotify();
+
+    CPPUNIT_ASSERT_EQUAL(pXTextDocument->getDocumentSize(), m_aDocumentSize);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAll)
 {
     createDoc("search.odt");

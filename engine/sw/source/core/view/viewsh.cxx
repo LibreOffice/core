@@ -1020,6 +1020,25 @@ void SwViewShell::SetFirstVisPageInvalid()
     }
 }
 
+// Sends the current document size, with the document border on each side, to the kit view of
+// a cursor shell.
+static void lcl_NotifyKitDocumentSize(const SwViewShell& rShell)
+{
+    if (!comphelper::COKit::isActive() || dynamic_cast<const SwCursorShell*>(&rShell) == nullptr)
+        return;
+
+    SfxViewShell* pNotifySh = rShell.GetSfxViewShell();
+    if (!pNotifySh)
+        return;
+
+    Size aDocSize = rShell.GetDocSize();
+    OString sPayload = OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) +
+        ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
+
+    SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
+    KitHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);
+}
+
 void SwViewShell::SizeChgNotify()
 {
     if ( !mpWin )
@@ -1031,22 +1050,17 @@ void SwViewShell::SizeChgNotify()
         if ( !Imp()->IsCalcLayoutProgress() && dynamic_cast<const SwCursorShell*>( this ) !=  nullptr )
         {
             PageNumNotify(*this);
-
-            if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
-            {
-                Size aDocSize = GetDocSize();
-                OString sPayload = OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) +
-                    ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
-
-                SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
-                KitHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);
-            }
+            lcl_NotifyKitDocumentSize(*this);
         }
     }
     else
     {
         mbDocSizeChgd = false;
         ::SizeNotify( *this, GetDocSize() );
+        // The layout can also grow while no action is pending, for example when the cursor is
+        // placed on a page that is formatted only now. The kit view learns the new size here
+        // too.
+        lcl_NotifyKitDocumentSize(*this);
     }
 }
 

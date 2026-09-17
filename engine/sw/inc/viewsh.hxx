@@ -309,7 +309,7 @@ public:
     void MakeVisible( const SwRect &, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
 
     // At nearest occasion pass new document size to UI.
-    void SizeChgNotify();
+    SW_DLLPUBLIC void SizeChgNotify();
     void UISizeNotify();            // Passing of current size.
 
     Point GetPagePos( sal_uInt16 nPageNum ) const;
