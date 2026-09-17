@@ -68,15 +68,15 @@ bool ConvertBufferToFormat( void* pBuf,
         {
             uno::Reference < graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(comphelper::getProcessComponentContext()));
             cpo::uno::Sequence< beans::PropertyValue > aMediaProperties{ comphelper::makePropertyValue(
-                "InputStream", xIn) };
+                u"InputStream"_ustr, xIn) };
             uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
             if( xGraphic.is() )
             {
                 SvMemoryStream aNewStream( 65535, 65535 );
                 uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                 cpo::uno::Sequence< beans::PropertyValue > aOutMediaProperties{
-                    comphelper::makePropertyValue("OutputStream", xOut),
-                    comphelper::makePropertyValue("MimeType", aMimeType)
+                    comphelper::makePropertyValue(u"OutputStream"_ustr, xOut),
+                    comphelper::makePropertyValue(u"MimeType"_ustr, aMimeType)
                 };
 
                 xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );

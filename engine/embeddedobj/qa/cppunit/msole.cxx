@@ -42,7 +42,7 @@ class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/embeddedobj/qa/cppunit/data/")
+        : UnoApiXmlTest(u"/embeddedobj/qa/cppunit/data/"_ustr)
     {
     }
 };
@@ -85,7 +85,7 @@ void OdtExportThread::run()
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr),
     };
     xStorable->storeToURL(maURL, aStoreProperties);
 }

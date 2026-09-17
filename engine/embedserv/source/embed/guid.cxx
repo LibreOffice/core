@@ -96,36 +96,36 @@ std::u16string_view getServiceNameFromGUID_Impl( GUID const & guid )
 OUString getFilterNameFromGUID_Impl( GUID const & guid )
 {
     if ( guid == OID_WriterTextServer )
-        return "StarOffice XML (Writer)";
+        return u"StarOffice XML (Writer)"_ustr;
 
     if ( guid == OID_WriterOASISTextServer )
-        return "writer8";
+        return u"writer8"_ustr;
 
     if ( guid == OID_CalcServer )
-        return "StarOffice XML (Calc)";
+        return u"StarOffice XML (Calc)"_ustr;
 
     if ( guid == OID_CalcOASISServer )
-        return "calc8";
+        return u"calc8"_ustr;
 
     if ( guid == OID_DrawingServer )
-        return "StarOffice XML (Draw)";
+        return u"StarOffice XML (Draw)"_ustr;
 
     if ( guid == OID_DrawingOASISServer )
-        return "draw8";
+        return u"draw8"_ustr;
 
     if ( guid == OID_PresentationServer )
-        return "StarOffice XML (Impress)";
+        return u"StarOffice XML (Impress)"_ustr;
 
     if ( guid == OID_PresentationOASISServer )
-        return "impress8";
+        return u"impress8"_ustr;
 
     if ( guid == OID_MathServer )
-        return "StarOffice XML (Math)";
+        return u"StarOffice XML (Math)"_ustr;
 
     if ( guid == OID_MathOASISServer )
-        return "math8";
+        return u"math8"_ustr;
 
-    return OUString();
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -865,7 +865,7 @@ void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
         try {
             if ( !m_pOleComponent )
-                throw cpo::uno::RuntimeException("Null reference to OLE component");
+                throw cpo::uno::RuntimeException(u"Null reference to OLE component"_ustr);
 
             // ==== the STAMPIT related solution =============================
             m_aVerbExecutionController.StartControlExecution();

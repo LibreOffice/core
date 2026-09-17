@@ -75,7 +75,7 @@ EmbedServer_Impl::~EmbedServer_Impl()
 
 OUString EmbedServer_Impl::getImplementationName()
 {
-    return "com.sun.star.comp.ole.EmbedServer";
+    return u"com.sun.star.comp.ole.EmbedServer"_ustr;
 }
 
 bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
@@ -86,7 +86,7 @@ bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
 cpo::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
 {
     return cpo::uno::Sequence<OUString>{
-        "com.sun.star.document.OleEmbeddedServerRegistration"};
+        u"com.sun.star.document.OleEmbeddedServerRegistration"_ustr};
 }
 
 // EmbedProviderFactory_Impl

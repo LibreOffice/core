@@ -169,7 +169,7 @@ Interceptor::dispatch(
                 }
 
                 uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                    URL, "_self", 0 );
+                    URL, u"_self"_ustr, 0 );
                 if ( xDispatch.is() )
                     xDispatch->dispatch( URL, aNewArgs );
             }

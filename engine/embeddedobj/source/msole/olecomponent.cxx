@@ -143,28 +143,28 @@ public:
         m_aSupportedGraphFormats = {
 
         datatransfer::DataFlavor(
-            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"",
-            "Windows Enhanced Metafile",
+            u"application/x-openoffice-emf;windows_formatname=\"Image EMF\""_ustr,
+            u"Windows Enhanced Metafile"_ustr,
             cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
-            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
-            "Windows Metafile",
+            u"application/x-openoffice-wmf;windows_formatname=\"Image WMF\""_ustr,
+            u"Windows Metafile"_ustr,
             cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
-            "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
-            "Bitmap",
+            u"application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""_ustr,
+            u"Bitmap"_ustr,
             cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
-            "image/png",
-            "PNG",
+            u"image/png"_ustr,
+            u"PNG"_ustr,
             cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
-            "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
-            "GDIMetafile",
+            u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr,
+            u"GDIMetafile"_ustr,
             cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() )
         };
     }
@@ -1462,7 +1462,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
+            m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.AsyncCallback"_ustr, m_xContext),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), cpo::uno::Any() );
     }
@@ -1482,7 +1482,7 @@ void OleComponent::OnClose_Impl()
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.AsyncCallback", m_xContext),
+            m_xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.AsyncCallback"_ustr, m_xContext),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), cpo::uno::Any() );
     }

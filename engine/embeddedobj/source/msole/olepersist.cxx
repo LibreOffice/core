@@ -192,7 +192,7 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
 static void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue("MediaType", cpo::uno::Any( aMediaType ) );
+    xPropSet->setPropertyValue(u"MediaType"_ustr, cpo::uno::Any( aMediaType ) );
 }
 #endif
 
@@ -900,7 +900,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         // The view is changed while the object is in running state, save the new object
         m_xCachedVisualRepresentation.clear();
         SaveObject_Impl();
-        MakeEventListenerNotification_Impl( "OnVisAreaChanged", aGuard );
+        MakeEventListenerNotification_Impl( u"OnVisAreaChanged"_ustr, aGuard );
     }
 
 }
@@ -1178,7 +1178,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xTargetStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( xTargetStream, "application/vnd.sun.star.oleobject" );
+        SetStreamMediaType_Impl( xTargetStream, u"application/vnd.sun.star.oleobject"_ustr );
         uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
@@ -1442,7 +1442,7 @@ void OleEmbeddedObject::setPersistentEntry(
 
             if ( aURL.isEmpty() )
                 throw lang::IllegalArgumentException(
-                                    "Empty URL is provided in the media descriptor!",
+                                    u"Empty URL is provided in the media descriptor!"_ustr,
                                     static_cast< ::cppu::OWeakObject* >(this),
                                     4 );
 
@@ -1464,7 +1464,7 @@ void OleEmbeddedObject::setPersistentEntry(
             //TODO:
         //}
         else
-            throw lang::IllegalArgumentException( "Wrong connection mode is provided!",
+            throw lang::IllegalArgumentException( u"Wrong connection mode is provided!"_ustr,
                                         static_cast< ::cppu::OWeakObject* >(this),
                                         3 );
     }
@@ -1748,7 +1748,7 @@ void OleEmbeddedObject::storeOwn()
         if ( !m_xObjectStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( m_xObjectStream, "application/vnd.sun.star.oleobject" );
+        SetStreamMediaType_Impl( m_xObjectStream, u"application/vnd.sun.star.oleobject"_ustr );
         uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied

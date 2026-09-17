@@ -621,7 +621,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, 
     {
         try
         {
-            xStorable->storeToURL( "private:stream",
+            xStorable->storeToURL( u"private:stream"_ustr,
                                         fillArgsForStoring_Impl( xTempOut ) );
             hr = copyXTempOutToIStream( xTempOut, pTargetStream );
             if ( SUCCEEDED( hr ) )
