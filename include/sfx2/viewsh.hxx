@@ -201,6 +201,9 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
+    // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
+    void StartPrint(const css::uno::Sequence<css::beans::PropertyValue>&, bool, bool);
+
     LOKDocumentFocusListener& GetLOKDocumentFocusListener();
     const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
     bool lokReadOnlyView : 1 = false; // When true, this is a LOK readonly view
@@ -335,8 +338,6 @@ public:
                                                            css::ui::ContextMenuExecuteEvent aEvent);
 
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
-    // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
-    void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     const std::shared_ptr< vcl::PrinterController >& GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
