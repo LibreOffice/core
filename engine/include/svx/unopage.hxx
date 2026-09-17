@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svxdllapi.h>
 #include <svx/svdobjkind.hxx>
 #include <rtl/ref.hxx>
@@ -55,7 +55,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
                                                css::lang::XServiceInfo,
                                                css::lang::XUnoTunnel,
                                                css::lang::XComponent,
-                                               css::form::XFormsSupplier2>
+                                               css::form::XFormsSupplier>
 
 {
  protected:
@@ -132,8 +132,6 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
 
     // XFormsSupplier
     virtual cpo::uno::Reference< css::container::XNameContainer > getForms() override;
-
-    // XFormsSupplier2
     virtual bool hasForms() override;
 };
 

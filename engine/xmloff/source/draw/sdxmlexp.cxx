@@ -41,7 +41,7 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
-#include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -2468,7 +2468,7 @@ void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
     if( !xDrawPage.is() )
         return;
 
-    Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, UNO_QUERY );
+    Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
     if ( xFormsSupplier.is() && xFormsSupplier->hasForms() )
     {
         // write masterpage

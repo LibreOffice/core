@@ -5234,6 +5234,7 @@ module com {
     published interface XFormsSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameContainer getForms();
+     boolean hasForms();
     };
    };
    module drawing {

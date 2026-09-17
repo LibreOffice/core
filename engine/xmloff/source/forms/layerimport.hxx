@@ -26,7 +26,7 @@
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <rtl/ref.hxx>
 #include "formattributes.hxx"
 #include "eventimport.hxx"
@@ -51,7 +51,7 @@ namespace xmloff
         OAttribute2Property                 m_aAttributeMetaData;
 
         /// the supplier for the forms of the currently imported page
-        cpo::uno::Reference< css::form::XFormsSupplier2 >
+        cpo::uno::Reference< css::form::XFormsSupplier >
                                             m_xCurrentPageFormsSupp;
         rtl::Reference<SvXMLStylesContext>  m_xAutoStyles;
 

@@ -2343,7 +2343,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form,\
 	XFormController \
 	XFormControllerListener \
 	XFormsSupplier \
-	XFormsSupplier2 \
 	XGrid \
 	XGridColumnFactory \
 	XGridControl \

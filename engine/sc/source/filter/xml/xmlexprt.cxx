@@ -129,7 +129,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
@@ -594,7 +594,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
             if (xDrawPage.is())
             {
                 GetShapeExport()->seekShapes(xDrawPage);
-                uno::Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
                 if( xFormsSupplier.is() && xFormsSupplier->hasForms() )
                 {
                     GetFormExport()->examineForms(xDrawPage);

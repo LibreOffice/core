@@ -876,7 +876,7 @@ cpo::uno::Reference< css::container::XNameContainer > SvxDrawPage::getForms()
     return xForms;
 }
 
-// XFormsSupplier2
+// XFormsSupplier
 bool SvxDrawPage::hasForms()
 {
     SolarMutexGuard g;
