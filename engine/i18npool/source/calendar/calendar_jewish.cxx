@@ -295,7 +295,7 @@ void Calendar_jewish::mapToGregorian()
     fieldSet |= FIELDS;
 }
 
-// Methods in XExtendedCalendar
+// Methods in XCalendar
 OUString
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 /*nNativeNumberMode*/ )
 {

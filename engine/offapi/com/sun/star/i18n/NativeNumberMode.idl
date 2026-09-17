@@ -23,7 +23,7 @@ module com { module sun { module star { module i18n {
 
 /**
     Constants to use with
-    XExtendedCalendar::getDisplayString() and the
+    XCalendar::getDisplayString() and the
     XNativeNumberSupplier methods.
 
     <p> The constants have different meanings if used with different
@@ -34,7 +34,7 @@ module com { module sun { module star { module i18n {
     <p> Where available, the corresponding Microsoft Excel (tm) DBNum
     number format code modifier is listed. </p>
 
-    <p> Modifiers supported by XExtendedCalendar::getDisplayString() are
+    <p> Modifiers supported by XCalendar::getDisplayString() are
     marked with CAL: for the specific language and the corresponding
     DBNum modifier and the NatNum values used for Y/M/D are listed </p>
  */

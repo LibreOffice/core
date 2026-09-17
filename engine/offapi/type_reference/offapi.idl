@@ -7956,13 +7956,10 @@ module com {
      sequence< ::com::sun::star::i18n::CalendarItem > getMonths();
      sequence< ::com::sun::star::i18n::CalendarItem > getDays();
      string getDisplayName([in] short nCalendarDisplayIndex, [in] short nIdx, [in] short nNameType);
-    };
-    published interface XExtendedCalendar {
-     interface ::com::sun::star::i18n::XCalendar;
      string getDisplayString([in] long nCalendarDisplayCode, [in] short nNativeNumberMode);
     };
     published interface XCalendar3 {
-     interface ::com::sun::star::i18n::XExtendedCalendar;
+     interface ::com::sun::star::i18n::XCalendar;
      ::com::sun::star::i18n::Calendar2 getLoadedCalendar2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getDays2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths2();

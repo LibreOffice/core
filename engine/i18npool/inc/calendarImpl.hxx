@@ -69,8 +69,6 @@ public:
     virtual cpo::uno::Sequence < css::i18n::CalendarItem > getMonths() override;
     virtual cpo::uno::Sequence < css::i18n::CalendarItem > getDays() override;
     virtual OUString getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
-
-    // Methods in XExtendedCalendar
     virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 
     // XCalendar3

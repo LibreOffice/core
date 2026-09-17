@@ -2602,7 +2602,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	XCalendar4 \
 	XCharacterClassification \
 	XCollator \
-	XExtendedCalendar \
 	XExtendedIndexEntrySupplier \
 	XExtendedInputSequenceChecker \
 	XExtendedTextConversion \

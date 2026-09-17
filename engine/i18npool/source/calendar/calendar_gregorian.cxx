@@ -894,7 +894,7 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
     return aStr;
 }
 
-// Methods in XExtendedCalendar
+// Methods in XCalendar
 OUString
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
@@ -1041,7 +1041,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
     return aOUStr;
 }
 
-// Methods in XExtendedCalendar
+// Methods in XCalendar
 OUString
 Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {

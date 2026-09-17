@@ -279,7 +279,7 @@ OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_I
     return OUString();
 }
 
-// --- XExtendedCalendar -----------------------------------------------------
+// --- XCalendar -----------------------------------------------------
 
 OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
 {

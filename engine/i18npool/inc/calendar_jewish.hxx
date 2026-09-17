@@ -31,7 +31,7 @@ public:
     // Constructors
     Calendar_jewish();
 
-    // Methods in XExtendedCalendar
+    // Methods in XCalendar
     virtual OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) override;
 
 private:

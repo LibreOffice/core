@@ -17,12 +17,12 @@ module com { module sun { module star { module i18n {
     systems.
 
     <p> It is derived from
-    ::com::sun::star::i18n::XExtendedCalendar and
+    ::com::sun::star::i18n::Calendar and
     provides additional methods to obtain Calendar2 items
     that include the possessive genitive case month names and sequences 
     of CalendarItem2 items... </p>
  */
-published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
+published interface XCalendar3 : com::sun::star::i18n::XCalendar
 {
     /// Get the currently loaded Calendar2.
     Calendar2   getLoadedCalendar2();

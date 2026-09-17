@@ -19,7 +19,7 @@ package ifc.i18n;
 
 import com.sun.star.i18n.CalendarDisplayCode;
 import com.sun.star.i18n.NativeNumberMode;
-import com.sun.star.i18n.XExtendedCalendar;
+import com.sun.star.i18n.XCalendar;
 import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.UnoRuntime;
@@ -33,7 +33,7 @@ import lib.MultiMethodTest;
  *
  */
 public class _XExtendedCalendar extends MultiMethodTest {
-    public XExtendedCalendar oObj = null;
+    public XCalendar oObj = null;
     boolean useUSENLocale = false;
     /**
      * Load a calendar
