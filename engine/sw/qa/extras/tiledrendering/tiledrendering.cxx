@@ -4371,6 +4371,21 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOverlaySelectionViewSwitch)
     CPPUNIT_ASSERT_EQUAL(aPrimitiveRange, aFastRange);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetClientZoomWithoutView)
+{
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwView* pView = pDocShell->GetView();
+    CPPUNIT_ASSERT(pView);
+
+    // As when the view the shell names is destroyed
+    pDocShell->SetView(nullptr);
+    comphelper::ScopeGuard aGuard([pDocShell, pView] { pDocShell->SetView(pView); });
+
+    // Without the fix, this crashed
+    pXTextDocument->setClientZoom(256, 256, 1920, 1920);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

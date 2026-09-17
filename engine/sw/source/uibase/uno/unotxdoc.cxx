@@ -3521,15 +3521,28 @@ void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight_*/,
                                     int nTileTwipWidth_, int /*nTileTwipHeight_*/)
 {
+    if (!m_pDocShell)
+    {
+        SAL_WARN("sw.uno", "no DocShell when attempting to setClientZoom");
+        return;
+    }
+
+    const SwView* pView = m_pDocShell->GetView();
+    if (!pView)
+    {
+        SAL_WARN("sw.uno", "no view when attempting to setClientZoom");
+        return;
+    }
+
     // Here we set the zoom value as it has been set by the user in the client.
     // This value is used in postMouseEvent and setGraphicSelection methods
     // for in place chart editing. We assume that x and y scale is roughly
     // the same.
-    SfxInPlaceClient* pIPClient = m_pDocShell->GetView()->GetIPClient();
+    SfxInPlaceClient* pIPClient = pView->GetIPClient();
     if (!pIPClient)
         return;
 
-    SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
+    SwViewShell* pWrtViewShell = &pView->GetWrtShell();
     double fScale = 100.0 * nTilePixelWidth_ / nTileTwipWidth_
                     * o3tl::convert(1.0, o3tl::Length::px, o3tl::Length::twip);
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
