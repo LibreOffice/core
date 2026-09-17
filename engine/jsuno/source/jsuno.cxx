@@ -2177,7 +2177,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
             n = std::trunc(n);
             if (std::isnan(n) || n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
             {
-                JS_ThrowRangeError(ctx, "Bad UNO short value %f", n);
+                JS_ThrowRangeError(ctx, "Bad UNO long value %f", n);
                 throw JsException();
             }
             return cpo::uno::Any(static_cast<sal_Int32>(n));
