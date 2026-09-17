@@ -4,10 +4,21 @@ var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var writerHelper = require('../../common/writer_helper.js');
 
+// The tests below jump to the far end of the eight page document right after
+// the load. Each view has to know every page first, or the jump stops at the
+// last page the view has heard of.
+function waitForAllPages(frames) {
+	frames.forEach(function(frame) {
+		cy.cSetActiveFrame(frame);
+		writerHelper.waitForPageCount(8);
+	});
+}
+
 describe(['tagmultiuser'], 'Check cursor and view behavior', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/cursor_jump.odt', true);
+		waitForAllPages(['#iframe1', '#iframe2']);
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -165,6 +176,7 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 		// separate and one user's view state does not leak into the other.
 		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined,
 			'userid1=1&userid2=2');
+		waitForAllPages(['#iframe1', '#iframe2']);
 		desktopHelper.switchUIToNotebookbar();
 	});
 
@@ -310,6 +322,7 @@ describe(['tagmultiuser'], 'A user with two connections', function() {
 
 		cy.cSetActiveFrame('#iframe3');
 		helper.documentChecks(true);
+		waitForAllPages(['#iframe1', '#iframe2', '#iframe3']);
 
 		cy.cSetActiveFrame('#iframe1');
 		desktopHelper.switchUIToNotebookbar();
