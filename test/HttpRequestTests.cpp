@@ -53,6 +53,8 @@ class HttpRequestTests final : public CPPUNIT_NS::TestFixture
 {
     CPPUNIT_TEST_SUITE(HttpRequestTests);
 
+    CPPUNIT_TEST(testTransientStatusCodes);
+    CPPUNIT_TEST(testParseRetryAfter);
     CPPUNIT_TEST(testSslHostname);
     CPPUNIT_TEST(testInvalidURI);
     CPPUNIT_TEST(testIPv6Host);
@@ -74,6 +76,8 @@ class HttpRequestTests final : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST_SUITE_END();
 
+    void testTransientStatusCodes();
+    void testParseRetryAfter();
     void testSslHostname();
     void testInvalidURI();
     void testIPv6Host();
@@ -820,6 +824,79 @@ void HttpRequestTests::testPost()
     }
 }
 
+
+void HttpRequestTests::testTransientStatusCodes()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The host is busy or broken in a way that may pass: worth coming back for.
+    LOK_ASSERT(http::isTransientStatusCode(http::StatusCode::TooManyRequests));      // 429
+    LOK_ASSERT(http::isTransientStatusCode(http::StatusCode::InternalServerError));  // 500
+    LOK_ASSERT(http::isTransientStatusCode(http::StatusCode::BadGateway));           // 502
+    LOK_ASSERT(http::isTransientStatusCode(http::StatusCode::ServiceUnavailable));   // 503
+    LOK_ASSERT(http::isTransientStatusCode(http::StatusCode::GatewayTimeout));       // 504
+
+    // The rest of 5xx is a settled condition. Retrying only adds load to a host
+    // that has already told us what it thinks, so widening this to the whole
+    // 5xx range would be a regression, not a generalization.
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::NotImplemented));      // 501
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::HTTPVersionNotSupported)); // 505
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::InsufficientStorage)); // 507
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::LoopDetected));        // 508
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::NotExtended));         // 510
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::NetworkAuthenticationRequired));
+
+    // Success and the client's own mistakes are answers, not invitations.
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::OK));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::BadRequest));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::Unauthorized));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::Forbidden));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::NotFound));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::Conflict));
+    LOK_ASSERT(!http::isTransientStatusCode(http::StatusCode::PayloadTooLarge));
+
+    // A transient status must never also read as an authorization failure, or
+    // the upload path would invalidate a perfectly good token.
+    LOK_ASSERT(!http::isUnauthorizedStatusCode(http::StatusCode::ServiceUnavailable));
+    LOK_ASSERT(!http::isUnauthorizedStatusCode(http::StatusCode::InternalServerError));
+}
+
+void HttpRequestTests::testParseRetryAfter()
+{
+    constexpr std::string_view testname = __func__;
+
+    constexpr auto Max = http::MaxRetryAfter;
+
+    // Bind each result before asserting on it: .value() on a temporary optional
+    // hands out a reference into an object that is already gone.
+    const auto parse = [](const std::string& value)
+    { return http::parseRetryAfter(value).value_or(std::chrono::seconds(-1)); };
+
+    // The delta-seconds form, which is what hosts under load actually send.
+    LOK_ASSERT_EQUAL(std::chrono::seconds(0), parse("0"));
+    LOK_ASSERT_EQUAL(std::chrono::seconds(1), parse("1"));
+    LOK_ASSERT_EQUAL(std::chrono::seconds(30), parse("30"));
+
+    // Clamped, so a host cannot hold the document for as long as it likes.
+    LOK_ASSERT_EQUAL(Max, parse(std::to_string(Max.count())));
+    LOK_ASSERT_EQUAL(Max, parse("3600"));
+    LOK_ASSERT_EQUAL(Max, parse("999999999999999999999"));
+
+    // The range that parses cleanly but has no signed counterpart: clamped as
+    // any other long wait, not wrapped into a negative one.
+    LOK_ASSERT_EQUAL(Max, parse("9223372036854775807")); // int64 max.
+    LOK_ASSERT_EQUAL(Max, parse("9223372036854775808")); // One past it.
+    LOK_ASSERT_EQUAL(Max, parse("18446744073709551615")); // uint64 max.
+
+    // No answer, so the caller keeps its own pacing. The HTTP-date form lands
+    // here too: we would rather decline than guess across two clocks.
+    LOK_ASSERT(!http::parseRetryAfter("").has_value());
+    LOK_ASSERT(!http::parseRetryAfter("Wed, 21 Oct 2026 07:28:00 GMT").has_value());
+    LOK_ASSERT(!http::parseRetryAfter("later").has_value());
+    LOK_ASSERT(!http::parseRetryAfter("-5").has_value());
+    LOK_ASSERT(!http::parseRetryAfter("12s").has_value());
+    LOK_ASSERT(!http::parseRetryAfter(" 12").has_value());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HttpRequestTests);
 

@@ -1590,9 +1590,315 @@ public:
     }
 };
 
+/// A host that rejects an upload with 503 and a Retry-After is telling us both
+/// that it may or may not have written the file, and how long to leave it alone.
+/// We must wait the period it asked for before asking what it holds, rather than
+/// our own much shorter pacing.
+class UnitWOPIRetryAfterHonoured : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload,
+               WaitSuccessfulUpload, Done)
+    _phase;
+
+    /// What we ask the client to wait. Comfortably longer than the throttle
+    /// below, so that honouring it is distinguishable from ignoring it.
+    static constexpr int RetryAfterSeconds = 2;
+
+    /// The pacing we would fall back on had the host not asked for anything.
+    static constexpr int ThrottleMs = 100;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ModifiedDocContent = "aOriginal contents\n";
+
+    /// When we rejected the upload, to measure the wait against.
+    std::chrono::steady_clock::time_point _rejectedAt;
+
+public:
+    UnitWOPIRetryAfterHonoured()
+        : WopiTestServer("UnitWOPIRetryAfterHonoured", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", ThrottleMs);
+        config.setUInt("per_document.min_time_between_uploads_ms", ThrottleMs);
+        config.setUInt("per_document.limit_store_failures", 10);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        if (getCountPutFile() == 1)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+
+            TST_LOG("PutFile #1: rejecting with 503 and Retry-After: " << RetryAfterSeconds);
+            _rejectedAt = std::chrono::steady_clock::now();
+
+            TRANSITION_STATE(_phase, Phase::WaitSuccessfulUpload);
+
+            auto response =
+                std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+            response->add("Retry-After", std::to_string(RetryAfterSeconds));
+            return response;
+        }
+
+        TST_LOG("PutFile #" << getCountPutFile() << ": accepting");
+        LOK_ASSERT_STATE(_phase, Phase::WaitSuccessfulUpload);
+
+        return nullptr; // Success.
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        // The one that follows the rejected upload is the one under test; the
+        // first is the ordinary one at load.
+        if (_rejectedAt.time_since_epoch().count() && getCountCheckFileInfo() > 1)
+        {
+            const auto waited = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - _rejectedAt);
+
+            TST_LOG("CheckFileInfo after the rejected upload came " << waited << " later");
+
+            // Allow for the poll's own granularity, but stay far above the
+            // throttle we would have used had Retry-After been ignored.
+            constexpr std::chrono::milliseconds least(RetryAfterSeconds * 1000 - 250);
+            LOK_ASSERT_MESSAGE("Expected to wait the Retry-After the host asked for, not our "
+                               "own much shorter pacing; waited only " +
+                                   std::to_string(waited.count()) + "ms",
+                               waited >= least);
+        }
+
+        return nullptr; // Success.
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        // Storage was never touched, so there is nothing to conflict with.
+        LOK_ASSERT_MESSAGE("Unexpected documentconflict after a 503: " + message,
+                           !message.starts_with("error: cmd=storage kind=documentconflict"));
+
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure") << ", PutFile count "
+                                       << getCountPutFile());
+
+        if (!success)
+            return;
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSuccessfulUpload);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected the modified document in storage",
+                                 std::string(ModifiedDocContent), getFileContent());
+
+        passTest("Waited the Retry-After the host asked for, then uploaded");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::WaitSuccessfulUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
+/// A host that answers 500 has not told us whether it wrote the file. It may
+/// have committed our bytes and fallen over afterwards, which is exactly what a
+/// host too slow to answer in time does as well. Treating the error as proof it
+/// did not write means calling our own upload somebody else's work and asking
+/// the user to resolve a conflict that never happened.
+///
+/// Here storage ends up holding precisely what we sent, and the hash says so.
+class UnitWOPITransientUploadLanded : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload, WaitRecovery,
+               Done)
+    _phase;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ModifiedDocContent = "aOriginal contents\n";
+
+public:
+    UnitWOPITransientUploadLanded()
+        : WopiTestServer("UnitWOPITransientUploadLanded", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("per_document.limit_store_failures", 3);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SHA256", getFileContentSha256Base64());
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        if (getCountPutFile() == 1)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+
+            // Commit the write, then fail the request. The harness only stores
+            // the body on a successful response, so do it here to stand for a
+            // host that got as far as writing and then fell over on the way back.
+            TST_LOG("PutFile #1: writing the document, then answering 500");
+            setFileContent(ModifiedDocContent);
+
+            TRANSITION_STATE(_phase, Phase::WaitRecovery);
+
+            return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
+        }
+
+        // Recognizing our own upload spares the user a conflict; it does not yet
+        // spare us the re-upload, which happens here as it does after a timeout.
+        TST_LOG("PutFile #" << getCountPutFile() << ": accepting");
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        // savefailed is honest - the request did fail. A conflict is not: the
+        // document in storage is the one we just sent.
+        LOK_ASSERT_MESSAGE("Reported a conflict over our own upload: " + message,
+                           !message.starts_with("error: cmd=storage kind=documentconflict"));
+
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure") << ", PutFile count "
+                                       << getCountPutFile());
+
+        if (!success)
+            return;
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitRecovery);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected our own upload to be left in storage",
+                                 std::string(ModifiedDocContent), getFileContent());
+
+        passTest("Recognized our own upload behind a 500 instead of raising a conflict");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitRecovery:
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [12]
+    return new UnitBase* [14]
     {
         new UnitWOPIFailUploadIntactStorage(http::StatusCode::Locked),
             new UnitWOPIFailUploadIntactStorage(http::StatusCode::InternalServerError),
@@ -1601,7 +1907,9 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitWOPIFailUploadTimeoutChangedStorage(), new UnitWOPITimeoutHashMatches(),
             new UnitWOPITimeoutHashDiffersSameSize(), new UnitWOPINoLastKnownTimestamp(),
             new UnitWOPINoUploadWhileConflicted(),
-            new UnitWOPIUploadAfterJoinConflict(), nullptr
+            new UnitWOPIUploadAfterJoinConflict(),
+            new UnitWOPIRetryAfterHonoured(),
+            new UnitWOPITransientUploadLanded(), nullptr
     };
 }
 

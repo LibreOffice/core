@@ -3895,13 +3895,19 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
             // version from somebody else's when we ask storage what it holds.
             _lastUploadedFileHash = FileUtil::sha256Base64(_storage->getRootFilePathUploading());
 
-            // The host never answered, so it may still be writing what we sent.
-            // Give it a moment before asking what it holds, or we read the state
-            // from before our upload and re-send the whole document for nothing.
-            // The throttle is the same waiting period expressed for the retry,
-            // and it is what bounds the cost of waiting: we could not have
-            // re-uploaded any sooner than this anyway.
-            const std::chrono::milliseconds grace = _storageManager.minTimeBetweenUploads();
+            // The host either never answered or asked us to come back later, so
+            // it may still be writing what we sent. Give it a moment before
+            // asking what it holds, or we read the state from before our upload
+            // and re-send the whole document for nothing.
+            //
+            // Prefer the delay the host asked for; it knows how busy it is. Our
+            // own throttle is the fallback, and it is what bounds the cost of
+            // waiting: we could not have re-uploaded any sooner than that anyway.
+            const std::chrono::milliseconds grace =
+                uploadResult.getRetryAfter()
+                    ? std::chrono::duration_cast<std::chrono::milliseconds>(
+                          *uploadResult.getRetryAfter())
+                    : _storageManager.minTimeBetweenUploads();
             _checkFileInfoNotBefore = std::chrono::steady_clock::now() + grace;
             LOG_DBG("Upload of [" << _docKey << "] got no response; deferring CheckFileInfo by "
                                   << grace << " to let the host finish writing our upload");

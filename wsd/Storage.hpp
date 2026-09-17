@@ -249,11 +249,23 @@ public:
 
         bool isDefiniteFailure() const { return _definiteFailure; }
 
+        /// Records how long the host asked us to wait before coming back, when
+        /// it said so in Retry-After. Empty when it didn't, leaving the caller
+        /// to fall back on its own pacing.
+        void setRetryAfter(std::optional<std::chrono::seconds> retryAfter)
+        {
+            _retryAfter = retryAfter;
+        }
+
+        std::optional<std::chrono::seconds> getRetryAfter() const { return _retryAfter; }
+
     private:
         std::string _saveAsName;
         std::string _saveAsUrl;
         std::string _reason;
         Result _result;
+        /// How long the host asked us to wait, if it asked at all.
+        std::optional<std::chrono::seconds> _retryAfter;
         /// Whether we know for certain that the upload did not reach storage.
         bool _definiteFailure = false;
     };

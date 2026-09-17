@@ -905,7 +905,9 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
                                           httpResponse->statusLine().statusCode(),
                                           isSaveAs,
                                           isRename,
-                                          httpResponse->header().has("X-WOPI-Lock") };
+                                          httpResponse->header().has("X-WOPI-Lock"),
+                                          http::parseRetryAfter(
+                                              httpResponse->get("Retry-After")) };
 
             // Handle the response.
             StorageBase::UploadResult res =
@@ -972,10 +974,14 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
 
     // An Invalid status category means we never got a response: the request
     // timed out or the connection was dropped, and the host may or may not have
-    // written the file. Any other status is an answer from the host, and an
-    // answer that isn't success means it did not write the file.
-    result.setDefiniteFailure(http::StatusLine(details.httpResponseCode).statusCategory() !=
-                              http::StatusLine::StatusCodeClass::Invalid);
+    // written the file. A transient status is the host asking us to come back
+    // later, which says just as little: it may have written the file and failed
+    // afterwards, or never got that far. Only a settled answer that isn't
+    // success tells us the file was not written.
+    const bool answered = http::StatusLine(details.httpResponseCode).statusCategory() !=
+                          http::StatusLine::StatusCodeClass::Invalid;
+    result.setDefiniteFailure(answered && !http::isTransientStatusCode(details.httpResponseCode));
+    result.setRetryAfter(details.retryAfter);
     try
     {
         // Save a copy of the response because we might need to anonymize.

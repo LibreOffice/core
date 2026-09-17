@@ -314,6 +314,8 @@ protected:
         /// storage. The lock token itself is of no use to us: we only ever hold
         /// one lock per document and we don't take over somebody else's.
         const bool hasWopiLockHeader;
+        /// The host's Retry-After, when it asked us to come back later.
+        const std::optional<std::chrono::seconds> retryAfter;
     };
 
     /// Handles the response from the server when uploading the document.
