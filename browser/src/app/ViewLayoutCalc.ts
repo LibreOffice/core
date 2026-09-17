@@ -245,12 +245,13 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	// scroll (wheel, scrollbar, auto-scroll). In RTL a rightward screen delta
 	// moves the document the other way, so mirror X here - at the screen-input
 	// boundary - and keep the document-space core direction-agnostic.
-	public override scroll(pX: number, pY: number): any {
+	public override scroll(pX: number, pY: number): boolean {
 		if (this.isRTL()) pX = -pX;
-		this.scrollByDocumentDelta(pX, pY);
+		const scrolled = this.scrollByDocumentDelta(pX, pY);
 
 		// Following our own cursor only holds while the cursor is on screen.
 		app.updateFollowingUsers();
+		return scrolled;
 	}
 
 	// The scroll position is scrollProperties.viewX and viewY, in canvas (core)
@@ -302,8 +303,9 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	// pX, pY are document-space scroll deltas in canvas (core) pixels (no RTL
 	// mirroring). Clamps to the scrollable range, moves the scroll position and
 	// refreshes headers/cursor/tiles. Both scroll() (screen input) and
-	// scrollTo() (absolute document position) funnel through here.
-	private scrollByDocumentDelta(pX: number, pY: number): void {
+	// scrollTo() (absolute document position) funnel through here. Returns true
+	// when the scroll position changed.
+	private scrollByDocumentDelta(pX: number, pY: number): boolean {
 		const documentAnchor = this.getDocumentAnchorSection();
 
 		const prevX = this.scrollProperties.viewX;
@@ -321,7 +323,7 @@ class ViewLayoutCalc extends ViewLayoutBase {
 			newY = Math.max(0, Math.min(maxView, prevY + pY));
 		}
 
-		if (newX === prevX && newY === prevY) return;
+		if (newX === prevX && newY === prevY) return false;
 
 		this.scrollProperties.viewX = newX;
 		this.scrollProperties.viewY = newY;
@@ -344,6 +346,7 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		this.refreshTiles();
 
 		this.onViewMoved();
+		return true;
 	}
 
 	// Refresh the visible-tile list from the viewed rectangle and hand it to
