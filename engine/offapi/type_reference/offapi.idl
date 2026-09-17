@@ -937,8 +937,23 @@ module com {
     };
     published interface XDevice;
     published interface XRegion;
-    published interface XToolkit {
+    published struct XFontMappingUseItem {
+     string originalFont;
+     sequence< string > usedFonts;
+     long count;
+    };
+    published interface XFontMappingUse {
      interface ::cpo::uno::XInterface;
+     void startTrackingFontMappingUse();
+     sequence< ::com::sun::star::awt::XFontMappingUseItem > finishTrackingFontMappingUse();
+    };
+    published interface XToolkit {
+     interface ::com::sun::star::awt::XDataTransferProviderAccess;
+     interface ::com::sun::star::awt::XSystemChildFactory;
+     interface ::com::sun::star::awt::XMessageBoxFactory;
+     interface ::com::sun::star::awt::XExtendedToolkit;
+     interface ::com::sun::star::awt::XReschedule;
+     interface ::com::sun::star::awt::XFontMappingUse;
      ::com::sun::star::awt::XWindowPeer getDesktopWindow();
      ::com::sun::star::awt::Rectangle getWorkArea();
      ::com::sun::star::awt::XWindowPeer createWindow([in] ::com::sun::star::awt::WindowDescriptor Descriptor) raises (::com::sun::star::lang::IllegalArgumentException);
@@ -946,15 +961,7 @@ module com {
      ::com::sun::star::awt::XDevice createScreenCompatibleDevice([in] long Width, [in] long Height);
      ::com::sun::star::awt::XRegion createRegion();
     };
-    published interface XToolkit2 {
-     interface ::com::sun::star::awt::XToolkit;
-     interface ::com::sun::star::awt::XDataTransferProviderAccess;
-     interface ::com::sun::star::awt::XSystemChildFactory;
-     interface ::com::sun::star::awt::XMessageBoxFactory;
-     interface ::com::sun::star::awt::XExtendedToolkit;
-     interface ::com::sun::star::awt::XReschedule;
-    };
-    published service Toolkit: ::com::sun::star::awt::XToolkit2;
+    published service Toolkit: ::com::sun::star::awt::XToolkit;
     published interface XActionListener;
     published interface XButton {
      interface ::cpo::uno::XInterface;
@@ -2025,16 +2032,6 @@ module com {
      long getStringWidthArray([in] string str, [out] sequence< long > aDXArray);
      boolean hasGlyphs([in] string aText);
     };
-    published struct XFontMappingUseItem {
-     string originalFont;
-     sequence< string > usedFonts;
-     long count;
-    };
-    published interface XFontMappingUse {
-     interface ::cpo::uno::XInterface;
-     void startTrackingFontMappingUse();
-     sequence< ::com::sun::star::awt::XFontMappingUseItem > finishTrackingFontMappingUse();
-    };
     published interface XGraphics {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::awt::XDevice getDevice();
@@ -2206,10 +2203,6 @@ module com {
     published interface XTextListener {
      interface ::com::sun::star::lang::XEventListener;
      void textChanged([in] ::com::sun::star::awt::TextEvent rEvent);
-    };
-    published interface XToolkit3 {
-     interface ::com::sun::star::awt::XToolkit2;
-     interface ::com::sun::star::awt::XFontMappingUse;
     };
     published interface XTopWindowListener {
      interface ::com::sun::star::lang::XEventListener;

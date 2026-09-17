@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module awt {
     of the toolkit should be one-way. Too many synchronous calls kill the
     remote performance.</p>
  */
-published service Toolkit : XToolkit2;
+published service Toolkit : XToolkit;
 
 
 }; }; }; };

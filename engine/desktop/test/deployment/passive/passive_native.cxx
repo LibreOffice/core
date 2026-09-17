@@ -205,7 +205,7 @@ void Dispatch::dispatch(
     cpo::uno::Reference< css::frame::XDesktop > xDesktop = css::frame::Desktop::create(context_);
     cpo::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
     cpo::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), cpo::uno::UNO_QUERY_THROW );
-    cpo::uno::Reference< css::awt::XToolkit2 >    xToolkit = css::awt::Toolkit::create(context_);
+    cpo::uno::Reference< css::awt::XToolkit >    xToolkit = css::awt::Toolkit::create(context_);
     cpo::uno::Reference< css::awt::XMessageBox > box(
         xToolkit->createMessageBox(
             xWindowPeer,

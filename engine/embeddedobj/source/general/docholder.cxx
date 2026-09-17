@@ -427,7 +427,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
                                                 awt::Rectangle(),//aOwnRectangle,
                                                 awt::WindowAttribute::SHOW | awt::VclWindowPeerAttribute::CLIPCHILDREN );
 
-        uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(m_xContext);
+        uno::Reference< awt::XToolkit > xToolkit = awt::Toolkit::create(m_xContext);
 
         uno::Reference< awt::XWindowPeer > xNewWinPeer = xToolkit->createWindow( aOwnWinDescriptor );
         uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY_THROW );

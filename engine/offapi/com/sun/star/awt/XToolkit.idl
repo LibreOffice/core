@@ -26,8 +26,20 @@
 
     <p>This is similar to the abstract window toolkit (AWT) in Java.</p>
  */
-published interface XToolkit: cpo::uno::XInterface
+published interface XToolkit
 {
+
+    interface com::sun::star::awt::XDataTransferProviderAccess;
+
+    interface com::sun::star::awt::XSystemChildFactory;
+
+    interface com::sun::star::awt::XMessageBoxFactory;
+
+    interface com::sun::star::awt::XExtendedToolkit;
+
+    interface com::sun::star::awt::XReschedule;
+
+    interface com::sun::star::awt::XFontMappingUse;
 
     /** returns the desktop window.
      */

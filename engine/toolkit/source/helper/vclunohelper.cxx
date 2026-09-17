@@ -56,7 +56,7 @@ using namespace ::cpo;
 uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
     const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference< awt::XToolkit> xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XToolkit> xToolkit( awt::Toolkit::create(xContext), uno::UNO_SET_THROW );
     return xToolkit;
 }
 

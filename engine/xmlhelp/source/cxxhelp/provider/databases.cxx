@@ -906,7 +906,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
         if ( aCSS == "default" )
         {
             // #i50760: "default" needs to adapt HC mode
-            uno::Reference< awt::XToolkit2 > xToolkit =
+            uno::Reference< awt::XToolkit > xToolkit =
                    awt::Toolkit::create( ::comphelper::getProcessComponentContext() );
             uno::Reference< awt::XTopWindow > xTopWindow = xToolkit->getActiveTopWindow();
             if ( xTopWindow.is() )

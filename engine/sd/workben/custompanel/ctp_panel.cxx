@@ -70,7 +70,7 @@ namespace sd::colortoolpanel
             {
                 ENSURE_OR_THROW( i_rContext.is(), "illegal component context" );
                 Reference< XMultiComponentFactory > xFactory( i_rContext->getServiceManager(), UNO_SET_THROW );
-                Reference< XToolkit2 > xToolkit = Toolkit::create(i_rContext);
+                Reference< XToolkit > xToolkit = Toolkit::create(i_rContext);
 
                 WindowDescriptor aWindow;
                 aWindow.Type = WindowClass_SIMPLE;

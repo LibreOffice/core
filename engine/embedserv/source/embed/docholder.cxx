@@ -263,7 +263,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             HWND                          hWndxWinParent(nullptr);
             uno::Reference<awt::XWindow>  xWin;
 
-            uno::Reference<awt::XToolkit2> xToolkit =
+            uno::Reference<awt::XToolkit> xToolkit =
                 awt::Toolkit::create(comphelper::getComponentContext(m_xFactory));
 
             // create system window wrapper for hwnd
@@ -1189,7 +1189,7 @@ cpo::uno::Reference< css::awt::XWindow> DocumentHolder::getContainerWindow()
 
     uno::Reference<awt::XWindow> xWin;
 
-    uno::Reference<awt::XToolkit2> xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xFactory) );
+    uno::Reference<awt::XToolkit> xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xFactory) );
 
     if(m_pIOleIPFrame) {
         HWND hWnd;

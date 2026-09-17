@@ -418,7 +418,7 @@ namespace dlgprov
             }
 
             // create a peer
-            Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+            Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_SET_THROW );
             xDialogControl->createPeer( xToolkit, xPeer );
         }
 

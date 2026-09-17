@@ -3104,7 +3104,7 @@ void XFrameImpl::implts_startWindowListening()
     {
         xTopWindow->addTopWindowListener( xTopWindowListener );
 
-        cpo::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
+        cpo::uno::Reference< css::awt::XToolkit > xToolkit = css::awt::Toolkit::create( m_xContext );
         cpo::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
         if( xDropTarget.is() )
         {
@@ -3141,7 +3141,7 @@ void XFrameImpl::implts_stopWindowListening()
 
     xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-    cpo::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
+    cpo::uno::Reference< css::awt::XToolkit > xToolkit = css::awt::Toolkit::create( m_xContext );
     cpo::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
         xToolkit->getDropTarget( xContainerWindow );
     if( xDropTarget.is() )

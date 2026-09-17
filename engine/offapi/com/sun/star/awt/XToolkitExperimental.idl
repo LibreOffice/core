@@ -12,7 +12,7 @@ module com {  module sun {  module star {  module awt {
 /** Work in progress, don't use unless you know what you are doing.
  */
 
-interface XToolkitExperimental : XToolkit3
+interface XToolkitExperimental : XToolkit
 {
     /** Process all pending idle events
      */
