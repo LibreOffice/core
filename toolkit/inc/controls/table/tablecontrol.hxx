@@ -62,6 +62,8 @@ class TableControl_Impl;
 class TableControl final : public Control
 {
 private:
+    // ownership is shared due to TableControl_Impl
+    // using std::enable_shared_from_this::shared_from_this()
     std::shared_ptr<TableControl_Impl> m_pImpl;
 
 public:
