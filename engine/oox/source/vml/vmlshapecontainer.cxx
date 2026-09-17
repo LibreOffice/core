@@ -41,8 +41,9 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
         OSL_ENSURE( !rShapeId.isEmpty(), "lclMapShapesById - missing shape identifier" );
         if( !rShapeId.isEmpty() )
         {
-            OSL_ENSURE(orMap.find(rShapeId) == orMap.end() || orMap[rShapeId] == elem,
-                       "lclMapShapesById - shape identifier already used");
+            // An identifier names at most one shape here. A file repeats one freely, giving
+            // every inline picture the same identifier and restating a shape template beside
+            // each shape that follows it, so the last shape to carry it is the one kept.
             orMap[ rShapeId ] = elem;
         }
     }
