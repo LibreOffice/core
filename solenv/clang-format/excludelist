@@ -13326,7 +13326,6 @@ toolkit/source/controls/table/AccessibleGridControlTableBase.cxx
 toolkit/source/controls/table/cellvalueconversion.cxx
 toolkit/source/controls/table/cellvalueconversion.hxx
 toolkit/source/controls/table/gridtablerenderer.cxx
-toolkit/source/controls/table/mousefunction.cxx
 toolkit/source/controls/table/tabledatawindow.cxx
 toolkit/source/controls/table/tabledatawindow.hxx
 toolkit/source/controls/table/tablegeometry.cxx
