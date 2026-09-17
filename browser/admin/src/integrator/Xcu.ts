@@ -27,7 +27,6 @@ const defaultXcuObj: Record<string, any> = {
 			ShowGrid: false,
 			Option: {
 				SnapToGrid: false,
-				SizeToGrid: true,
 				Synchronize: true,
 			},
 		},
@@ -47,9 +46,6 @@ const defaultXcuObj: Record<string, any> = {
 			Option: {
 				SnapToGrid: true,
 				Synchronize: false,
-			},
-			SnapGrid: {
-				Size: true,
 			},
 		},
 		Print: {
@@ -78,9 +74,6 @@ const defaultXcuObj: Record<string, any> = {
 			Option: {
 				SnapToGrid: true,
 				Synchronize: false,
-			},
-			SnapGrid: {
-				Size: true,
 			},
 		},
 		Print: {
@@ -118,8 +111,6 @@ const defaultXcuObj: Record<string, any> = {
 		Print: {
 			Content: {
 				Graphic: true,
-				Table: true,
-				Drawing: true,
 				Control: true,
 				Background: true,
 				PrintBlack: false,
@@ -129,12 +120,8 @@ const defaultXcuObj: Record<string, any> = {
 			Page: {
 				LeftPage: true,
 				RightPage: true,
-				Reversed: false,
 				Brochure: false,
 				BrochureRightToLeft: false,
-			},
-			Output: {
-				SinglePrintJob: false,
 			},
 			Papertray: {
 				FromPrinterSetup: false,
