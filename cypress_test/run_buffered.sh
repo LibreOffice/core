@@ -13,6 +13,7 @@ DESKTOP_TEST_FOLDER="${DIR}/integration_tests/desktop/"
 MOBILE_TEST_FOLDER="${DIR}/integration_tests/mobile/"
 MULTIUSER_TEST_FOLDER="${DIR}/integration_tests/multiuser/"
 ERROR_LOG="${BUILDDIR}/workdir/error.log"
+SPEC_TIMINGS="${BUILDDIR}/workdir/spec-timings.txt"
 
 print_help ()
 {
@@ -142,6 +143,8 @@ print_error() {
 mkdir -p `dirname ${TEST_LOG}`
 touch ${TEST_LOG}
 rm -rf ${TEST_ERROR}
+START_TIME=`date +%s`
+SECOND_CHANCE_RAN=no
 echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" > ${TEST_LOG} 2>&1
 
 # Cypress's own retries only re-run failed test bodies, not whole-spec
@@ -150,8 +153,16 @@ echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" > ${TEST_L
 if [ -f ${TEST_ERROR} ] && [ ${SECOND_CHANCE} = true ]; then
     echo "Second chance!" > ${TEST_LOG}
     rm -rf ${TEST_ERROR}
+    SECOND_CHANCE_RAN=yes
     echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" >> ${TEST_LOG} 2>&1
 fi
+
+# A spec's console output is flushed in one block when it finishes, so these
+# are the only real per-spec times.
+END_TIME=`date +%s`
+printf '%s %s %s %s %s %s\n' "${START_TIME}" "${END_TIME}" \
+    "$((END_TIME - START_TIME))" "${SECOND_CHANCE_RAN}" "${TEST_TYPE}" \
+    "${TEST_FILE}" >> ${SPEC_TIMINGS}
 
 if [ ! -f ${TEST_ERROR} ];
     then cat ${TEST_LOG};
