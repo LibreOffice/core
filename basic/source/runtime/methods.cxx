@@ -2367,36 +2367,28 @@ static bool implCheckWildcard(std::u16string_view rName, SbiRTLData const& rRTLD
     return bMatch;
 }
 
-
 static bool isRootDir( std::u16string_view aDirURLStr )
 {
     INetURLObject aDirURLObj( aDirURLStr );
-    bool bRoot = false;
 
     // Check if it's a root directory
     sal_Int32 nCount = aDirURLObj.getSegmentCount();
 
     // No segment means Unix root directory "file:///"
-    if( nCount == 0 )
-    {
-        bRoot = true;
-    }
+    if (nCount == 0)
+        return true;
+
+    // More than one segment can never be root
+    if (nCount != 1)
+        return false;
+
     // Exactly one segment needs further checking, because it
     // can be Unix "file:///foo/" -> no root
     // or Windows  "file:///c:/"  -> root
-    else if( nCount == 1 )
-    {
-        OUString aSeg1 = aDirURLObj.getName( 0, true,
-                                             INetURLObject::DecodeMechanism::WithCharset );
-        if( aSeg1.getLength() > 1 && aSeg1[1] == ':' )
-        {
-            bRoot = true;
-        }
-    }
-    // More than one segments can never be root
-    // so bRoot remains false
+    OUString aSeg1 = aDirURLObj.getName( 0, true,
+                                         INetURLObject::DecodeMechanism::WithCharset );
 
-    return bRoot;
+    return aSeg1.getLength() > 1 && aSeg1[1] == ':';
 }
 
 void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
