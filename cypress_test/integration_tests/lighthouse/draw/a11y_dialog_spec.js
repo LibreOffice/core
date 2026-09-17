@@ -26,7 +26,7 @@ const excludedCommonDialogs = [
 	'.uno:SplitCell', // needs a table cell selected, which draw has no fixture for
 ];
 
-describe(['tagdesktop'], 'Accessibility Draw Dialog Tests', { testIsolation: false }, function () {
+describe(['taglighthouse'], 'Accessibility Draw Dialog Tests', { testIsolation: false }, function () {
 	let win;
 	let hasLinguisticData = false;
 

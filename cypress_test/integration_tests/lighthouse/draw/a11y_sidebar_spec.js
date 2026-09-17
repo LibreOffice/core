@@ -4,7 +4,7 @@ const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
 const a11yHelper = require('../../common/a11y_helper');
 
-describe(['tagdesktop'], 'Accessibility Draw Sidebar Tests', { testIsolation: false }, function () {
+describe(['taglighthouse'], 'Accessibility Draw Sidebar Tests', { testIsolation: false }, function () {
 	let win;
 
 	function getWin() {

@@ -49,7 +49,7 @@ const excludedCommonDialogs = [
     '.uno:SpellDialog'
 ];
 
-describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: false }, function () {
+describe(['taglighthouse'], 'Accessibility Writer Dialog Tests', { testIsolation: false }, function () {
     let win;
     let hasLinguisticData = false;
 

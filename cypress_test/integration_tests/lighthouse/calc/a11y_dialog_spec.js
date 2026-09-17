@@ -73,7 +73,7 @@ const excludedCommonDialogs = [
 const buggyCalcDialogs = [
 ];
 
-describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: false }, function () {
+describe(['taglighthouse'], 'Accessibility Calc Dialog Tests', { testIsolation: false }, function () {
     let win;
     let hasLinguisticData = false;
 

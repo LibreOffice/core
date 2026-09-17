@@ -22,7 +22,7 @@ const excludedCommonDialogs = [
     '.uno:StyleNewByExample', // command dispatches but does not surface a dialog in impress
 ];
 
-describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: false }, function () {
+describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolation: false }, function () {
     let win;
     let hasLinguisticData = false;
 
