@@ -37,8 +37,8 @@ DefaultInputHandler::DefaultInputHandler()
 DefaultInputHandler::~DefaultInputHandler() {}
 
 bool DefaultInputHandler::delegateMouseEvent(
-    ITableControl& i_control, const MouseEvent& i_event,
-    FunctionResult (MouseFunction::*i_handlerMethod)(ITableControl&, const MouseEvent&))
+    TableControl_Impl& i_control, const MouseEvent& i_event,
+    FunctionResult (MouseFunction::*i_handlerMethod)(TableControl_Impl&, const MouseEvent&))
 {
     if (pActiveFunction.is())
     {
@@ -92,17 +92,19 @@ bool DefaultInputHandler::delegateMouseEvent(
     return handled;
 }
 
-bool DefaultInputHandler::MouseMove(ITableControl& i_tableControl, const MouseEvent& i_event)
+bool DefaultInputHandler::MouseMove(TableControl_Impl& i_tableControl, const MouseEvent& i_event)
 {
     return delegateMouseEvent(i_tableControl, i_event, &MouseFunction::handleMouseMove);
 }
 
-bool DefaultInputHandler::MouseButtonDown(ITableControl& i_tableControl, const MouseEvent& i_event)
+bool DefaultInputHandler::MouseButtonDown(TableControl_Impl& i_tableControl,
+                                          const MouseEvent& i_event)
 {
     return delegateMouseEvent(i_tableControl, i_event, &MouseFunction::handleMouseDown);
 }
 
-bool DefaultInputHandler::MouseButtonUp(ITableControl& i_tableControl, const MouseEvent& i_event)
+bool DefaultInputHandler::MouseButtonUp(TableControl_Impl& i_tableControl,
+                                        const MouseEvent& i_event)
 {
     return delegateMouseEvent(i_tableControl, i_event, &MouseFunction::handleMouseUp);
 }

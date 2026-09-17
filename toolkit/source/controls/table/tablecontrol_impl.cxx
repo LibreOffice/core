@@ -62,10 +62,10 @@ namespace
 class SuppressCursor
 {
 private:
-    ITableControl& m_rTable;
+    TableControl_Impl& m_rTable;
 
 public:
-    explicit SuppressCursor(ITableControl& _rTable)
+    explicit SuppressCursor(TableControl_Impl& _rTable)
         : m_rTable(_rTable)
     {
         m_rTable.hideCursor();
