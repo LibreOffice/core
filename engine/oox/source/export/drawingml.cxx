@@ -1264,8 +1264,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 }
             }
 
-            SAL_WARN_IF(nLineWidth < 0,
-                        "oox.shape", "while writing outline - custom dash - line width was < 0  : " << nLineWidth);
             SAL_WARN_IF(aLineDash.Dashes < 0,
                         "oox.shape", "while writing outline - custom dash - number of dashes was < 0  : " << aLineDash.Dashes);
             SAL_WARN_IF(aLineDash.Dashes > 0 && aLineDash.DashLen < 0,
