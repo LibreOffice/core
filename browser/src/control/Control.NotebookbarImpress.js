@@ -129,7 +129,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'text': _('Table'),
 				'name': 'Table',
 				'context': 'Table',
-				'accessibility': { focusBack: false, combination: 'T', de: null }
+				'accessibility': { focusBack: false, combination: 'TB', de: null }
 			},
 			{
 				'id': 'Shape-tab-label',
@@ -3278,9 +3278,11 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			},
 			{ type: 'separator', id: 'picture-leavegroup-break', orientation: 'vertical' },
 			{
+				'id': 'picture-crop',
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:Crop'),
 				'command': '.uno:Crop',
+				'accessibility': { focusBack: true, combination: 'CR', de: null },
 				'context': 'Graphic'
 			},
 			{ type: 'separator', id: 'picture-crop-break', orientation: 'vertical' },

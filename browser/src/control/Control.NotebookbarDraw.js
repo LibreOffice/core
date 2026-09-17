@@ -101,7 +101,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'text': _('Table'),
 				'name': 'Table',
 				'context': 'Table',
-				'accessibility': { focusBack: true, combination: 'T', de: null }
+				'accessibility': { focusBack: true, combination: 'TB', de: null }
 			},
 			{
 				'id': 'Shape-tab-label',

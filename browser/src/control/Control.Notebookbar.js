@@ -761,6 +761,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 									'max': 100,
 									'step': 5,
 									'labelledBy': p + '-translabel',
+									'accessibility': { focusBack: true, combination: 'LT', de: null },
 									'top': '0',
 									'left': '1'
 								}

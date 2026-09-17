@@ -2378,7 +2378,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 						'type': 'toolbox',
 						'children': [
 							{
-								'id': 'formula-calculate',
+								'id': 'formula-calculate:CalculateMenu',
 								'type': 'menubutton',
 								'text': _UNO('.uno:Calculate', 'spreadsheet'),
 								'noLabel': true,
@@ -3638,9 +3638,11 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			},
 			{ type: 'separator', id: 'picture-leavegroup-break', orientation: 'vertical' },
 			{
+				'id': 'picture-crop',
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:Crop'),
 				'command': '.uno:Crop',
+				'accessibility': { focusBack: true, combination: 'CR', de: null },
 				'context': 'Graphic'
 			},
 		];

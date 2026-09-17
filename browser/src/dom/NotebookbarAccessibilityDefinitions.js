@@ -18,6 +18,14 @@ var NotebookbarAccessibilityDefinitions = function() {
 		return id.substr(0, separatorPos);
 	};
 
+	this.itemName = function(item) {
+		if (item.id)
+			return item.id;
+		if (item.command)
+			return item.command.replace('.uno:', '');
+		return item.id;
+	};
+
 	this.sidebarCombinations = {
 		presentation: {
 			'paperformat-input': 'KF',
@@ -96,7 +104,7 @@ var NotebookbarAccessibilityDefinitions = function() {
 			for (var i = 0; i < rawList.length; i++) {
 				if (rawList[i].accessibility) {
 					var combination = language && rawList[i].accessibility[language] ? rawList[i].accessibility[language]: rawList[i].accessibility.combination;
-					var id = this.cleanMenuName(rawList[i].id);
+					var id = this.cleanMenuName(this.itemName(rawList[i]));
 
 					var overflow = document.querySelector('#' + id + '.ui-overflow-group');
 					var arrow = document.querySelector('#' + id + ' .arrowbackground');
