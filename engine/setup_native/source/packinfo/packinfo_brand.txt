@@ -29,14 +29,3 @@ destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 provides = "libreoffice"
 End
-
-Start
-module = "gid_Module_Langpack_Brand"
-packagename = "%UNIXPACKAGENAME-%LANGUAGESTRING"
-requires = "%UNIXPACKAGENAME %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION,%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-vendor = "Collabora Productivity Ltd."
-description = "Brand language module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End

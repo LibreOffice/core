@@ -54,17 +54,6 @@ Module gid_Module_Root_Brand
 	     gid_Brand_File_Desktophelper_Txt);
 End
 
-// Language specific brand module
-
-Module gid_Module_Langpack_Brand_Template
-    ParentID = gid_Module_Langpack_Languageroot;
-    Name = "gid_Module_Langpack_Brand_Template";
-    Description = "gid_Module_Langpack_Brand_Template";
-    Styles = (TEMPLATEMODULE);
-    InstallOrder = "1050";
-    Dirs = (gid_Brand_Dir_Program_Shell);
-End
-
 // Directories
 
 Directory gid_Brand_Dir_Program

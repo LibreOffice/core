@@ -644,7 +644,7 @@ def gen_packages(packinfos, ziplist, languages, product):
             if gid not in ("gid_Module_Root", "gid_Module_Helppack_Help", "gid_Module_Root_SDK"):
                 continue
         if sys.platform == "darwin":
-            if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis", "gid_Module_Langpack_Brand", "gid_Module_Root_SDK"):
+            if gid not in ("gid_Module_Root", "gid_Module_Langpack_Basis", "gid_Module_Root_SDK"):
                 continue
         name_pi = package["packagename"]
         name = pattern.sub(replace, name_pi)
