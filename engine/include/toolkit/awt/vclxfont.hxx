@@ -22,7 +22,7 @@
 #include <config_options.h>
 #include <memory>
 #include <toolkit/dllapi.h>
-#include <com/sun/star/awt/XFont2.hpp>
+#include <com/sun/star/awt/XFont.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
 #include <vcl/font.hxx>
@@ -36,7 +36,7 @@ class FontMetric;
 
 class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXFont final :
                         public cppu::WeakImplHelper<
-                            css::awt::XFont2>
+                            css::awt::XFont>
 {
     std::mutex    maMutex;
     cpo::uno::Reference< css::awt::XDevice> mxDevice;
@@ -59,10 +59,7 @@ public:
     cpo::uno::Sequence< sal_Int16 >    getCharWidths( sal_Unicode nFirst, sal_Unicode nLast ) override;
     sal_Int32                                       getStringWidth( const OUString& str ) override;
     sal_Int32                                       getStringWidthArray( const OUString& str, cpo::uno::Sequence< sal_Int32 >& rDXArray ) override;
-    void                                            getKernPairs( cpo::uno::Sequence< sal_Unicode >& rnChars1, cpo::uno::Sequence< sal_Unicode >& rnChars2, cpo::uno::Sequence< sal_Int16 >& rnKerns ) override;
-
-    // css::lang::XFont2
-    bool                                        hasGlyphs( const OUString& aText ) override;
+    bool                               hasGlyphs( const OUString& aText ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

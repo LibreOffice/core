@@ -2023,7 +2023,7 @@ module com {
      sequence< short > getCharWidths([in] char nFirst, [in] char nLast);
      long getStringWidth([in] string str);
      long getStringWidthArray([in] string str, [out] sequence< long > aDXArray);
-     void getKernPairs([out] sequence< char > Chars1, [out] sequence< char > Chars2, [out] sequence< short > Kerns);
+     boolean hasGlyphs([in] string aText);
     };
     published struct XFontMappingUseItem {
      string originalFont;

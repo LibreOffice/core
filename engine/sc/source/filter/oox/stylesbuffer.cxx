@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XFont2.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -856,7 +855,7 @@ void Font::finalizeImport()
         if( !xDevice.is() )
             return;
 
-        Reference< XFont2 > xFont( xDevice->getFont(aGlyphDesc), UNO_QUERY );
+        Reference< XFont > xFont( xDevice->getFont(aGlyphDesc) );
         if( !xFont.is() )
             return;
 

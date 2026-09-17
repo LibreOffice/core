@@ -1706,7 +1706,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XFixedText \
 	XFocusListener \
 	XFont \
-	XFont2 \
 	XFontMappingUse \
 	XFontMappingUseItem \
 	XGraphics \

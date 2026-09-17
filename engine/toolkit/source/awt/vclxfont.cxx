@@ -155,12 +155,6 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, cpo::uno::Sequence
     return nRet;
 }
 
-void VCLXFont::getKernPairs( cpo::uno::Sequence< sal_Unicode >& /*rnChars1*/, cpo::uno::Sequence< sal_Unicode >& /*rnChars2*/, cpo::uno::Sequence< sal_Int16 >& /*rnKerns*/ )
-{
-    // NOTE: this empty method is just used for keeping the related UNO-API stable
-}
-
-// css::awt::XFont2
 bool VCLXFont::hasGlyphs( const OUString& aText )
 {
     std::unique_lock aGuard( maMutex );
