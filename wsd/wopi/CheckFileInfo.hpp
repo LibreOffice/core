@@ -33,7 +33,7 @@ class CheckFileInfo : public std::enable_shared_from_this<CheckFileInfo>
 {
 public:
     /// The CheckFileInfo State.
-    STATE_ENUM(State, None, Active, Timedout, Unauthorized, Fail, Pass);
+    STATE_ENUM(State, None, Active, NoAnswer, Unauthorized, Fail, Pass);
 
     /// Create an instance with a SocketPoll and a RequestDetails instance.
     CheckFileInfo(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& url,

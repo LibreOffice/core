@@ -234,7 +234,7 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
             shutdown();
             break;
         }
-        case CheckFileInfo::State::Timedout:
+        case CheckFileInfo::State::NoAnswer:
         {
             LOG_ERR("Collab: CheckFileInfo timed out for WOPISrc: "
                     << Anonymizer::anonymizeUrl(_wopiSrc));

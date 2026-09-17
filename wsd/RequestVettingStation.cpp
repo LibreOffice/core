@@ -338,7 +338,7 @@ void RequestVettingStation::handleRequest(const std::string& id,
             }
             else if (_checkFileInfo == nullptr ||
                      _checkFileInfo->state() == CheckFileInfo::State::None ||
-                     _checkFileInfo->state() == CheckFileInfo::State::Timedout)
+                     _checkFileInfo->state() == CheckFileInfo::State::NoAnswer)
             {
                 // We haven't tried or we timed-out. Retry.
                 _checkFileInfo.reset();

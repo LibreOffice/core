@@ -7017,7 +7017,7 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
             }
             else
             {
-                assert(checkFileInfo.state() == CheckFileInfo::State::Timedout ||
+                assert(checkFileInfo.state() == CheckFileInfo::State::NoAnswer ||
                        checkFileInfo.state() == CheckFileInfo::State::Fail);
                 LOG_INF("CheckFileInfo on ["
                         << _docKey << "] for session #"

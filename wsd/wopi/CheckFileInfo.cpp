@@ -107,11 +107,16 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
         {
             // Getting no answer is not the same as getting one we don't like.
             // A host that is merely slow may well answer the next request, so
-            // callers can retry a timeout where they could not retry a refusal.
-            if (httpResponse->state() == http::Response::State::Timeout)
+            // callers can retry where they could not retry a refusal. A connection
+            // dropped before the answer arrived (State::Error, which covers a
+            // reset, an early EOF and a reply we couldn't parse) tells us exactly
+            // as little as one that never came, so it belongs here too.
+            if (httpResponse->state() == http::Response::State::Timeout ||
+                httpResponse->state() == http::Response::State::Error)
             {
-                _state = State::Timedout;
-                LOG_ERR("Timed-out CheckFileInfo [" << uriAnonym << ']');
+                _state = State::NoAnswer;
+                LOG_ERR("No answer to CheckFileInfo [" << uriAnonym
+                                                       << "]: " << httpResponse->state());
             }
             else if (unauthorized)
             {
@@ -161,7 +166,10 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
         if (!selfLifecycle)
             return;
 
-        _state = State::Fail;
+        // We never reached the host - it is down, unresolvable, or refusing
+        // connections. That is no more an answer about this document, or about
+        // this user's access to it, than a request that timed out in flight.
+        _state = State::NoAnswer;
         LOG_ERR("Failed to start an async CheckFileInfo request");
 
         if (_onFinishCallback)
