@@ -707,6 +707,8 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
 
         const OUString gType = aRelDefinition.getOrDefault(u"Type"_ustr, OUString{});
         OOXMLStream::StreamType_t nType(OOXMLStream::StreamType_t::UNKNOWN);
+        // A part that has no kind of its own is reached by the relationship that names it.
+        bool bByRelation = false;
         if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings"_ustr)
         {
             nType = OOXMLStream::StreamType_t::SETTINGS;
@@ -737,6 +739,19 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
             nType = OOXMLStream::StreamType_t::FONTTABLE;
             aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"_ustr);
         }
+        else if (gType == u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"_ustr || gType == u"http://purl.oclc.org/ooxml/officeDocument/relationships/numbering"_ustr)
+        {
+            nType = OOXMLStream::StreamType_t::NUMBERING;
+            aRelDefinition.put(sContentType, u"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"_ustr);
+        }
+        else if (gType == u"http://schemas.microsoft.com/office/2007/relationships/stylesWithEffects"_ustr)
+        {
+            // A second copy of the styles, written for a reader that knows the effects the 2007
+            // extensions add. Nothing here reads it, and it is carried over beside the styles it
+            // stands next to, which are carried over as they were read.
+            bByRelation = true;
+            aRelDefinition.put(sContentType, u"application/vnd.ms-word.stylesWithEffects+xml"_ustr);
+        }
         else if (aRelDefinition.getOrDefault(u"TargetMode"_ustr, OUString{}) != "External")
         {
             // Some internal relation, but we don't create a DOM for it here yet?
@@ -747,11 +762,15 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
             continue;
         }
 
-        if (nType != OOXMLStream::StreamType_t::UNKNOWN)
+        if (nType != OOXMLStream::StreamType_t::UNKNOWN || bByRelation)
         {
             try
             {
-                auto gStream = OOXMLDocumentFactory::createStream(pStream, nType);
+                auto gStream
+                    = bByRelation
+                          ? OOXMLDocumentFactory::createStream(
+                                pStream, aRelDefinition.getOrDefault<OUString>(sId, {}))
+                          : OOXMLDocumentFactory::createStream(pStream, nType);
                 uno::Reference xInputStream = gStream->getDocumentStream();
                 uno::Reference xContext(pStream->getContext());
                 uno::Reference xDomBuilder(xml::dom::DocumentBuilder::create(xContext));

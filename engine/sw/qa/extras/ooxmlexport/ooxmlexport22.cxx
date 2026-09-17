@@ -56,6 +56,41 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
     parseExport(u"word/glossary/footnotes.xml"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testGlossaryKeepsItsNumbering)
+{
+    createSwDoc("content-control-grab-bag.docx");
+    save(TestFilter::DOCX);
+
+    // The building blocks of a document number their lists from a part of their own. That part
+    // was never read, so it was gone on the way out and every list in them lost the definition
+    // it counts by.
+    xmlDocUniquePtr pXmlNumbering = parseExport(u"word/glossary/numbering.xml"_ustr);
+    assertXPath(pXmlNumbering, "//w:abstractNum", 1);
+    assertXPath(pXmlNumbering, "//w:abstractNum/w:lvl", 9);
+
+    // and the building blocks say where they read it from
+    xmlDocUniquePtr pXmlRels = parseExport(u"word/glossary/_rels/document.xml.rels"_ustr);
+    assertXPath(pXmlRels,
+                "/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/"
+                "officeDocument/2006/relationships/numbering' and @Target='numbering.xml']");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGlossaryKeepsTheSecondCopyOfItsStyles)
+{
+    createSwDoc("combobox-control.docx");
+    save(TestFilter::DOCX);
+
+    // The building blocks carry a second copy of their styles, the one that states the effects a
+    // reader of the 2007 extensions draws. It was dropped along with the entry that reaches it.
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/glossary/stylesWithEffects.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlStyles);
+
+    xmlDocUniquePtr pXmlRels = parseExport(u"word/glossary/_rels/document.xml.rels"_ustr);
+    assertXPath(pXmlRels,
+                "/rels:Relationships/rels:Relationship[@Type='http://schemas.microsoft.com/office/"
+                "2007/relationships/stylesWithEffects' and @Target='stylesWithEffects.xml']");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePos)
 {
     // Given a document with an image at the bottom-right placed there by simplePos
