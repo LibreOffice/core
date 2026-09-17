@@ -641,6 +641,14 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         mrWriter.put("textAreaWidth", rPrimitive.getTextAreaWidth() * mfScaleFactor);
     if (rPrimitive.getTextAreaHeight() > 0.0)
         mrWriter.put("textAreaHeight", rPrimitive.getTextAreaHeight() * mfScaleFactor);
+
+    // Where this portion's line starts in the text area before alignment, and
+    // the width it wraps at.
+    if (rPrimitive.getLineWidth() > 0.0)
+    {
+        mrWriter.put("lineIndent", rPrimitive.getLineIndent() * mfScaleFactor);
+        mrWriter.put("lineWidth", rPrimitive.getLineWidth() * mfScaleFactor);
+    }
 }
 
 // Write matrix as 6 elements. Scale all components (unit conversion).

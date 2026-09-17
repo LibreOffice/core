@@ -14,10 +14,15 @@
  */
 
 namespace cool {
-	// The wrap area in local space, taken from the top line before an edit.
+	// The wrap area in local space, taken from the top line before an edit. A line starts at
+	// areaLeft plus its indent. The first line has its own indent and width, for a first-line
+	// indent or a bullet, and the later lines share another pair.
 	export interface ParagraphBox {
-		left: number;
-		width: number;
+		areaLeft: number;
+		firstIndent: number;
+		firstWidth: number;
+		restIndent: number;
+		restWidth: number;
 		firstBaseline: number;
 		lineHeight: number;
 		align: 'left' | 'right' | 'center' | 'justify';
@@ -85,12 +90,14 @@ namespace cool {
 			return runs;
 		}
 
+		// A run without line geometry wraps at the whole text area. A one-line paragraph
+		// gives its indent and width to the later lines.
 		private static captureBox(
 			runs: TextRun[],
 			measurer: TextMeasurer,
 		): ParagraphBox {
 			const template = runs[0].primitive;
-			const width = template.textAreaWidth ?? 0;
+			const areaWidth = template.textAreaWidth ?? 0;
 			const lineHeight = template.lineHeight ?? 0;
 			const align = template.align ?? 'left';
 
@@ -101,11 +108,41 @@ namespace cool {
 				...topLine.map((run) => run.localX + run.width(measurer)),
 			);
 
-			let left = topLeft;
-			if (align === 'right') left = topRight - width;
-			else if (align === 'center') left = (topLeft + topRight) / 2 - width / 2;
+			const firstIndent = template.lineIndent ?? 0;
+			const firstWidth = template.lineWidth ?? areaWidth;
+			const later = runs.find((run) => run.localBaseline !== firstBaseline);
+			const restIndent = later
+				? (later.primitive.lineIndent ?? 0)
+				: firstIndent;
+			const restWidth = later
+				? (later.primitive.lineWidth ?? areaWidth)
+				: firstWidth;
 
-			return { left, width, firstBaseline, lineHeight, align, template };
+			// The area's left edge follows from where the aligned top line sits.
+			let areaLeft = topLeft - firstIndent;
+			if (align === 'right') areaLeft = topRight - firstIndent - firstWidth;
+			else if (align === 'center')
+				areaLeft = (topLeft + topRight) / 2 - firstIndent - firstWidth / 2;
+
+			return {
+				areaLeft,
+				firstIndent,
+				firstWidth,
+				restIndent,
+				restWidth,
+				firstBaseline,
+				lineHeight,
+				align,
+				template,
+			};
+		}
+
+		// The start x and the width of the line at the given index.
+		private lineBox(index: number): { left: number; width: number } {
+			const box = this.box;
+			const indent = index === 0 ? box.firstIndent : box.restIndent;
+			const width = index === 0 ? box.firstWidth : box.restWidth;
+			return { left: box.areaLeft + indent, width };
 		}
 
 		get lineCount(): number {
@@ -121,12 +158,13 @@ namespace cool {
 			return this.runs[this.runs.length - 1].end;
 		}
 
-		/// True when text of the given width no longer fits on the caret's line. A
-		/// justified line is compared by its natural width.
+		/// True when text of the given width no longer fits on the caret's line, at the
+		/// line's own width. A justified line is compared by its natural width.
 		lineOverflows(position: CaretPosition, advance: number): boolean {
+			const wrapWidth = position.run.primitive.lineWidth ?? this.box.firstWidth;
 			if (this.box.align === 'justify')
-				return position.naturalLineWidth() + advance > this.box.width;
-			return position.lineExtent() + advance > this.box.width;
+				return position.naturalLineWidth() + advance > wrapWidth;
+			return position.lineExtent() + advance > wrapWidth;
 		}
 
 		/// Re-wraps the paragraph and rebuilds it as one run per font span on each line.
@@ -142,6 +180,7 @@ namespace cool {
 					newRuns,
 					paragraphText,
 					lineCharacters,
+					index,
 					baseline,
 					index === lines.length - 1,
 				);
@@ -201,8 +240,8 @@ namespace cool {
 			return width;
 		}
 
-		// Breaks lines at the last space that fits. A longer word gets a line of its own.
-		// The spaces at a break are dropped, as the server hangs them.
+		// Breaks lines at the last space that fits each line's width. A longer word gets a
+		// line of its own. The spaces at a break are dropped, as the server hangs them.
 		private wrap(characters: ParagraphCharacter[]): ParagraphCharacter[][] {
 			const lines: ParagraphCharacter[][] = [];
 			let current: ParagraphCharacter[] = [];
@@ -212,7 +251,8 @@ namespace cool {
 				current.push(entry);
 				currentWidth += entry.width;
 				if (entry.character === ' ') lastSpace = current.length - 1;
-				if (currentWidth <= this.box.width || lastSpace <= 0) continue;
+				const width = this.lineBox(lines.length).width;
+				if (currentWidth <= width || lastSpace <= 0) continue;
 				let breakStart = lastSpace;
 				while (breakStart > 0 && current[breakStart - 1].character === ' ')
 					breakStart--;
@@ -291,50 +331,64 @@ namespace cool {
 			return spans;
 		}
 
-		// Appends the runs of one line, placed by the alignment. Only a single-span
-		// justified line is stretched.
+		// Appends the runs of one line, placed by its indent and the alignment. Only a
+		// single-span justified line is stretched. Every run carries the line's indent and
+		// width.
 		private appendLineRuns(
 			out: Primitive[],
 			paragraphText: string,
 			lineCharacters: ParagraphCharacter[],
+			lineIndex: number,
 			baseline: number,
 			isLastLine: boolean,
 		): void {
 			const box = this.box;
+			const line = this.lineBox(lineIndex);
+			const stamp = (
+				run: TextSimplePortionPrimitive,
+			): TextSimplePortionPrimitive => {
+				run.lineIndent = line.left - box.areaLeft;
+				run.lineWidth = line.width;
+				return run;
+			};
 			const spans = Paragraph.lineSpans(lineCharacters);
 			if (!spans.length) {
 				out.push(
-					Paragraph.makeSpanRun(
-						box.template,
-						paragraphText,
-						0,
-						0,
-						box.left,
-						baseline,
-						undefined,
+					stamp(
+						Paragraph.makeSpanRun(
+							box.template,
+							paragraphText,
+							0,
+							0,
+							line.left,
+							baseline,
+							undefined,
+						),
 					),
 				);
 				return;
 			}
 
 			const width = Paragraph.lineWidth(lineCharacters);
-			let x = box.left;
-			if (box.align === 'right') x = box.left + box.width - width;
-			else if (box.align === 'center') x = box.left + (box.width - width) / 2;
+			let x = line.left;
+			if (box.align === 'right') x = line.left + line.width - width;
+			else if (box.align === 'center') x = line.left + (line.width - width) / 2;
 			const stretched =
 				box.align === 'justify' && !isLastLine && spans.length === 1;
 
 			for (const span of spans) {
-				if (stretched) Paragraph.stretch(span, box.width);
+				if (stretched) Paragraph.stretch(span, line.width);
 				out.push(
-					Paragraph.makeSpanRun(
-						span.source,
-						paragraphText,
-						span.start,
-						span.text.length,
-						x,
-						baseline,
-						span.advances,
+					stamp(
+						Paragraph.makeSpanRun(
+							span.source,
+							paragraphText,
+							span.start,
+							span.text.length,
+							x,
+							baseline,
+							span.advances,
+						),
 					),
 				);
 				for (const advance of span.advances) x += advance;

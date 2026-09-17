@@ -185,6 +185,15 @@ private:
     /// is known.
     double mfTextAreaHeight{ 0.0 };
 
+    /// The x in the text area where this portion's line starts before
+    /// alignment: the paragraph indent, plus the first-line indent or the
+    /// bullet on a first line. Zero means the line geometry is unknown.
+    double mfLineIndent{ 0.0 };
+
+    /// The width this portion's line wraps at, after the indents on both sides.
+    /// Zero means the line geometry is unknown.
+    double mfLineWidth{ 0.0 };
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -239,6 +248,13 @@ public:
     void setLineAscent(double fLineAscent) { mfLineAscent = fLineAscent; }
     double getTextAreaWidth() const { return mfTextAreaWidth; }
     double getTextAreaHeight() const { return mfTextAreaHeight; }
+    double getLineIndent() const { return mfLineIndent; }
+    double getLineWidth() const { return mfLineWidth; }
+    void setLineArea(double fIndent, double fWidth)
+    {
+        mfLineIndent = fIndent;
+        mfLineWidth = fWidth;
+    }
     void setTextArea(double fWidth, double fHeight)
     {
         mfTextAreaWidth = fWidth;

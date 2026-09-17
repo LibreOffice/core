@@ -34,6 +34,11 @@ private:
     boost::container::vector<bool> maKashidaPositions;
     sal_Int32 mnTextWidth = 0;
     sal_Int32 mnStartPosX = 0;
+    // The x of the line's text in the text area before alignment: the paragraph's left indent,
+    // plus the first-line indent or the bullet on a first line.
+    sal_Int32 mnIndentX = 0;
+    // The width left for the line's text: the text area minus the indents on both sides.
+    sal_Int32 mnMaxWidth = 0;
     sal_Int32 mnNextLinePosXDiff = 0;
     sal_Int32 mnStart = 0; // could be replaced by nStartPortion
     sal_Int32 mnEnd = 0; // could be replaced by nEndPortion
@@ -105,6 +110,10 @@ public:
 
     sal_Int32 GetStartPosX() const { return mnStartPosX; }
     void SetStartPosX(sal_Int32 nStart);
+    sal_Int32 GetIndentX() const { return mnIndentX; }
+    void SetIndentX(sal_Int32 nIndentX) { mnIndentX = nIndentX; }
+    sal_Int32 GetMaxWidth() const { return mnMaxWidth; }
+    void SetMaxWidth(sal_Int32 nMaxWidth) { mnMaxWidth = nMaxWidth; }
     sal_Int32 GetNextLinePosXDiff() const { return mnNextLinePosXDiff; }
     void SetNextLinePosXDiff(sal_Int32 nDiff) { mnNextLinePosXDiff = nDiff; }
     Size CalcTextSize(ParaPortion& rParaPortion);

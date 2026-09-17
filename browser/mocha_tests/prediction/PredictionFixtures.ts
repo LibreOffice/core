@@ -354,4 +354,39 @@ namespace predictionTest {
 		}));
 		return boxPart(runs);
 	}
+
+	// One line of an indented paragraph: the window of the buffer it shows, its local origin
+	// e and f, and the indent and width the engine reports for it.
+	export interface IndentedLine {
+		start: number;
+		length: number;
+		e: number;
+		f: number;
+		indent: number;
+		width: number;
+	}
+
+	// A paragraph whose runs carry the engine's line indent and width, in a text area of the
+	// given width.
+	export function makeIndentedSlide(
+		full: string,
+		lines: IndentedLine[],
+		areaWidth: number,
+	): cool.VectorPrimitivesData {
+		const runs = lines.map((line) => ({
+			type: 'textSimplePortion',
+			text: full,
+			textPosition: line.start,
+			textLength: line.length,
+			matrix: [1, 0, 0, 1, line.e, line.f],
+			fontSize: 360,
+			familyname: 'Arial',
+			paragraph: 0,
+			textAreaWidth: areaWidth,
+			lineHeight: 400,
+			lineIndent: line.indent,
+			lineWidth: line.width,
+		}));
+		return boxPart(runs);
+	}
 }

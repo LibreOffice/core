@@ -72,6 +72,13 @@ public:
     // Distance from the top of the line to the baseline. Zero when the
     // producing path has no line geometry.
     sal_uInt16 mnLineAscent;
+    // The x in the text area where the line's text starts before alignment:
+    // the paragraph indent, plus the first-line indent or the bullet on a
+    // first line. Zero means the line geometry is unknown.
+    sal_Int32 mnLineIndent;
+    // The width left for the line's text after the indents on both sides.
+    // Zero means the line geometry is unknown.
+    sal_Int32 mnLineWidth;
 
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
@@ -83,7 +90,8 @@ public:
                     bool bEndOfBullet, const com::sun::star::lang::Locale* pLocale,
                     const Color& rOverlineColor, const Color& rTextLineColor,
                     sal_uInt16 nLineMaxAscent = 0, sal_uInt16 nLineHeight = 0,
-                    sal_uInt16 nLineAscent = 0)
+                    sal_uInt16 nLineAscent = 0, sal_Int32 nLineIndent = 0,
+                    sal_Int32 nLineWidth = 0)
         : mrStartPos(rPos)
         , maText(std::move(aTxt))
         , mnTextStart(nTxtStart)
@@ -104,6 +112,8 @@ public:
         , mnLineMaxAscent(nLineMaxAscent)
         , mnLineHeight(nLineHeight)
         , mnLineAscent(nLineAscent)
+        , mnLineIndent(nLineIndent)
+        , mnLineWidth(nLineWidth)
     {
     }
 };

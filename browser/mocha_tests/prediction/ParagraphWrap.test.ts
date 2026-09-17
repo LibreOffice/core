@@ -10,8 +10,14 @@
  */
 
 describe('text prediction paragraph wrap', function () {
-	const { measure, runsOf, wrapRun, makeWrapSlide, makeSharedWrapSlide } =
-		predictionTest;
+	const {
+		measure,
+		runsOf,
+		wrapRun,
+		makeWrapSlide,
+		makeSharedWrapSlide,
+		makeIndentedSlide,
+	} = predictionTest;
 
 	it('re-wraps a paragraph to a new line when an insert overflows', function () {
 		// "aaa bbb" fills the 700-wide area exactly. Typing 'x' at the end pushes the
@@ -464,5 +470,69 @@ describe('text prediction paragraph wrap', function () {
 		nodeassert.strictEqual(runs[0].matrix[5], 0);
 		nodeassert.strictEqual(runs[1].matrix[5], 0);
 		nodeassert.strictEqual(runs[1].matrix[4], 1000);
+	});
+
+	it('wraps an indented paragraph at the width its line reports', function () {
+		// The text area is 700 wide, but the line is indented by 200 and has 500, which
+		// "aaa b" fills. Typing 'x' overflows the line though it would fit the area, so the
+		// paragraph wraps and both lines start at the indent.
+		const data = makeIndentedSlide(
+			'aaa b',
+			[{ start: 0, length: 5, e: 200, f: 0, indent: 200, width: 500 }],
+			700,
+		);
+		const advance = predictionTest.predictTextInsert(
+			data,
+			1700,
+			1800,
+			2050,
+			'x',
+			measure,
+			{
+				paragraph: 0,
+				index: 5,
+			},
+		);
+		nodeassert.strictEqual(advance, 100);
+		const runs = runsOf(data);
+		nodeassert.strictEqual(runs.map(cool.visibleText).join('|'), 'aaa|bx');
+		nodeassert.strictEqual(runs[0].matrix[4], 200);
+		nodeassert.strictEqual(runs[1].matrix[4], 200);
+		nodeassert.strictEqual(runs[1].matrix[5], 400);
+		nodeassert.strictEqual(runs[1].lineIndent, 200);
+		nodeassert.strictEqual(runs[1].lineWidth, 500);
+	});
+
+	it('keeps a hanging indent on the lines after the first through a re-wrap', function () {
+		// The first line starts at the area's left with all 700. The second hangs 200 in
+		// with 500. Deleting one 'b' leaves "aaaa bbb" too wide for one line, so the
+		// paragraph rebuilds with the second line at its own indent.
+		const data = makeIndentedSlide(
+			'aaaa bbbb',
+			[
+				{ start: 0, length: 5, e: 0, f: 0, indent: 0, width: 700 },
+				{ start: 5, length: 4, e: 200, f: 400, indent: 200, width: 500 },
+			],
+			700,
+		);
+		const result = predictionTest.predictTextDelete(
+			data,
+			1600,
+			2200,
+			2450,
+			1,
+			0,
+			measure,
+			{
+				paragraph: 0,
+				index: 9,
+			},
+		);
+		nodeassert.strictEqual(result.removed, 1);
+		const runs = runsOf(data);
+		nodeassert.strictEqual(runs.map(cool.visibleText).join('|'), 'aaaa|bbb');
+		nodeassert.strictEqual(runs[0].matrix[4], 0);
+		nodeassert.strictEqual(runs[1].matrix[4], 200);
+		nodeassert.strictEqual(runs[1].lineIndent, 200);
 	});
 });

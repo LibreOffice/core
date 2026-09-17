@@ -46,6 +46,7 @@
 
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/viewsh.hxx>
@@ -343,10 +344,11 @@ protected:
     OString m_aLastVectorJson;
 
     /// Add a text box to the first slide. Newlines in rText start new
-    /// paragraphs. When oAdjust is set, it becomes the paragraph
-    /// alignment.
+    /// paragraphs. oAdjust sets the paragraph alignment, and
+    /// oLeftIndentTwips sets the left indent.
     void addTextBox(const tools::Rectangle& rRect, const OUString& rText,
-                    std::optional<SvxAdjust> oAdjust = std::nullopt)
+                    std::optional<SvxAdjust> oAdjust = std::nullopt,
+                    std::optional<sal_Int32> oLeftIndentTwips = std::nullopt)
     {
         SdrPage* pPage = page(1);
         rtl::Reference<SdrRectObj> pText
@@ -356,6 +358,12 @@ protected:
         pText->SetText(rText);
         if (oAdjust)
             pText->SetMergedItem(SvxAdjustItem(*oAdjust, EE_PARA_JUST));
+        if (oLeftIndentTwips)
+        {
+            pText->SetMergedItem(SvxLRSpaceItem(SvxIndentValue::twips(*oLeftIndentTwips),
+                                                SvxIndentValue::zero(), SvxIndentValue::zero(),
+                                                EE_PARA_LRSPACE));
+        }
         pPage->NbcInsertObject(pText.get());
     }
 
@@ -2318,6 +2326,32 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAreaSize)
                            oPortion->getDouble("textAreaWidth").value_or(0.0) > 0.0);
     CPPUNIT_ASSERT_MESSAGE("text area height missing",
                            oPortion->getDouble("textAreaHeight").value_or(0.0) > 0.0);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testLineIndentAndWidth)
+{
+    // An indented paragraph reports its line indent and line width, which add
+    // up to the text area width.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Indented line"_ustr,
+               std::nullopt, 1000);
+
+    getVectorPrimitives(u"testLineIndentAndWidth");
+
+    const auto oPortion = findTextPortion("Indented line"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
+    const auto oIndent = oPortion->getDouble("lineIndent");
+    const auto oWidth = oPortion->getDouble("lineWidth");
+    const double fArea = oPortion->getDouble("textAreaWidth").value_or(0.0);
+    CPPUNIT_ASSERT_MESSAGE("line width missing", oWidth.has_value());
+    CPPUNIT_ASSERT_MESSAGE("line width not positive", *oWidth > 0.0);
+    const OString sValues = "line indent " + OString::number(oIndent.value_or(-1.0))
+                            + ", line width " + OString::number(*oWidth)
+                            + ", text area width " + OString::number(fArea);
+    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), oIndent.has_value());
+    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), *oIndent > 0.0);
+    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), *oWidth < fArea);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sValues.getStr(), fArea, *oIndent + *oWidth, 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

@@ -252,6 +252,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
         pPortion->setAlign(eAlign);
         pPortion->setLineHeight(rInfo.mnLineHeight);
         pPortion->setLineAscent(rInfo.mnLineAscent);
+        pPortion->setLineArea(rInfo.mnLineIndent, rInfo.mnLineWidth);
         pPortion->setTextArea(rTextArea.Width(), rTextArea.Height());
     }
 
@@ -583,7 +584,8 @@ void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSp
         m_rInfo.mnBiDiLevel, nullptr, /* no spelling in subportion, handled outside */
         nullptr, /* no field in subportion, handled outside */
         false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
-        m_rInfo.mnLineMaxAscent, m_rInfo.mnLineHeight, m_rInfo.mnLineAscent);
+        m_rInfo.mnLineMaxAscent, m_rInfo.mnLineHeight, m_rInfo.mnLineAscent, m_rInfo.mnLineIndent,
+        m_rInfo.mnLineWidth);
 
     CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
                                                    aInfo, m_eAlign, m_aTextArea);

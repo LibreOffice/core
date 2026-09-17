@@ -61,6 +61,11 @@ namespace cool {
 		/// Size of the area the text wraps within, in twips.
 		textAreaWidth?: number;
 		textAreaHeight?: number;
+		/// Where this portion's line starts in the text area before alignment,
+		/// and the width it wraps at, in twips. The indent is the paragraph
+		/// indent, plus the first-line indent or the bullet on a first line.
+		lineIndent?: number;
+		lineWidth?: number;
 	}
 
 	export namespace TextSimplePortionPrimitive {
