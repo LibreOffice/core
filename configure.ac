@@ -1735,35 +1735,44 @@ if test "$ENABLE_RUNTIME_OPTIMIZATIONS" != no; then
     AC_DEFINE([ENABLE_RUNTIME_OPTIMIZATIONS],1,[Define to 1 if this is not a sanitizers build.])
 fi
 
-# Check for C++20 support.
+# Check for >= C++20 support.
 HAVE_CXXSTD=
 CXXFLAGS_CXXSTD=
 if test "$external_toolchain_app" != "yes"; then
-    AC_MSG_CHECKING([whether $CXX supports C++20])
-    for flag in -std=c++20 -std=c++2a ; do
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $flag -Werror"
-        AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-            #include <algorithm>
-            #include <functional>
-            #include <vector>
-            void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
-                std::sort(v.begin(), v.end(), fn);
-            }
-            ]])],[CXXFLAGS_CXXSTD=$flag])
-        AC_LANG_POP([C++])
-        CXXFLAGS=$save_CXXFLAGS
-        if test -n "$CXXFLAGS_CXXSTD"; then
-            HAVE_CXXSTD=TRUE
-            break
-        fi
-    done
-    if test "$HAVE_CXXSTD" = TRUE; then
-        AC_MSG_RESULT([yes ($CXXFLAGS_CXXSTD)])
+    engine_config_host_mk="${engine_builddir:-$ENGINE_BUILDDIR}/config_host.mk"
+    if test -f "$engine_config_host_mk"; then
+        CXXFLAGS_CXXSTD=`sed -n 's/^export CXXFLAGS_CXX11=//p' "$engine_config_host_mk"`
+    fi
+    if test -n "$CXXFLAGS_CXXSTD"; then
+        HAVE_CXXSTD=TRUE
+        AC_MSG_NOTICE([taking the C++ standard from the engine: $CXXFLAGS_CXXSTD])
     else
-        AC_MSG_RESULT([no])
-        AC_MSG_ERROR(Compiler doesn't support C++20)
+        AC_MSG_CHECKING([whether $CXX supports C++20])
+        for flag in -std=c++20 -std=c++2a ; do
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $flag -Werror"
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+                #include <algorithm>
+                #include <functional>
+                #include <vector>
+                void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
+                    std::sort(v.begin(), v.end(), fn);
+                }
+                ]])],[CXXFLAGS_CXXSTD=$flag])
+            AC_LANG_POP([C++])
+            CXXFLAGS=$save_CXXFLAGS
+            if test -n "$CXXFLAGS_CXXSTD"; then
+                HAVE_CXXSTD=TRUE
+                break
+            fi
+        done
+        if test "$HAVE_CXXSTD" = TRUE; then
+            AC_MSG_RESULT([yes ($CXXFLAGS_CXXSTD)])
+        else
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR(Compiler doesn't support C++20)
+        fi
     fi
 fi
 
