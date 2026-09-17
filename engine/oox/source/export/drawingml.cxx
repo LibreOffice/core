@@ -47,6 +47,8 @@
 #include <basegfx/utils/gradienttools.hxx>
 
 #include <numeric>
+#include <functional>
+#include <map>
 #include <string_view>
 #include <set>
 
@@ -5041,7 +5043,9 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     return;
 }
 
-bool IsValidOOXMLFormula(std::u16string_view sFormula)
+// True when the formula states one operation of the OOXML grammar over pieces that are whole
+// numbers, the built-in measures of a shape, or guides written before it.
+bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>& rGuideNames)
 {
     // Accepted Formulas
     // "val n1"
@@ -5074,6 +5078,7 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
             OUString sVal = strTokens[i];
             sal_Int64 nVal = sVal.toInt64();
             if (builtInVariables.find(sVal) == builtInVariables.end()
+                && rGuideNames.find(sVal) == rGuideNames.end()
                 && OUString::number(nVal) != sVal)
                 return false;
         }
@@ -5082,52 +5087,313 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
     return false;
 }
 
-OUString GetFormula(const OUString& sEquation)
+// A shape states its geometry as a list of equations, and one equation reaches the ones before
+// it by number. The OOXML grammar names a guide instead, so every equation a formula rests on
+// is written as a guide of its own and named from there.
+typedef std::function<OString(sal_Int32)> EquationNamer;
+// Takes a formula, writes a guide holding it and hands back the name of that guide.
+typedef std::function<OString(const OString&)> HelperGuideWriter;
+
+// Reads one piece of a formula: a whole number, the width or the height of the shape, or one
+// of the equations. A piece the writer cannot express reads as an empty string.
+OString lclReadAtom(const OUString& rAtom, const EquationNamer& rNameEquation)
 {
-    assert(!sEquation.isEmpty() && "surely an equation would never be empty...");
-    // TODO: This needs to be completely re-written. It is extremely simplistic/minimal.
-    // What is needed here is the reverse of convertToOOEquation.
-
-    // If the equation is numerical
-    sal_Int64 nValue = sEquation.toInt64();
-    if (OUString::number(nValue) == sEquation)
-        return "val " + sEquation;
-
-    OUString sFormula = sEquation;
-
-    /* replace LO native placeholders with OOXML placeholders
-     * #1: e.g. 'logwidth'
-     * #2: e.g. 'logwidth/2'
-     * #3: e.g. '1234*logwidth/5678'
-     */
-
-    if (sEquation == "logwidth") // #1
-        return u"val w"_ustr;
-    if (sEquation == "logheight")
-        return u"val h"_ustr;
-    if (sEquation.startsWith("logwidth/")) // #2
-        sFormula = u"*/ 1 w "_ustr + sEquation.subView(9);
-    else if (sEquation.startsWith("logheight/"))
-        sFormula = u"*/ 1 h "_ustr + sEquation.subView(10);
-    else
+    if (rAtom.isEmpty())
+        return {};
+    if (rAtom == "logwidth")
+        return "w"_ostr;
+    if (rAtom == "logheight")
+        return "h"_ostr;
+    if (rAtom[0] == '?')
     {
-        size_t nPos = sFormula.indexOf("*logwidth/"); //#3
-        if (nPos != std::string::npos)
-            sFormula = "*/ " + sFormula.replaceAt(nPos, 10, u" w "_ustr);
-        else
+        const OUString aIndex = rAtom.copy(1);
+        const sal_Int32 nIndex = aIndex.toInt32();
+        if (aIndex.isEmpty() || OUString::number(nIndex) != aIndex)
+            return {};
+        return rNameEquation(nIndex);
+    }
+    const sal_Int64 nValue = rAtom.toInt64();
+    if (OUString::number(nValue) != rAtom)
+        return {};
+    return OString::number(nValue);
+}
+
+// Hands back where the given character joins the two halves of an expression, outside any pair
+// of brackets, or -1. The rightmost such place is taken, so that a row of them is read from the
+// left, and the first character is never one, because a sign there belongs to the number after
+// it.
+sal_Int32 lclFindOperator(const OUString& rText, sal_Unicode cOperator)
+{
+    static constexpr std::u16string_view aSigned = u"+-*/(,";
+    sal_Int32 nDepth = 0;
+    sal_Int32 nFound = -1;
+    for (sal_Int32 nPos = 0; nPos < rText.getLength(); ++nPos)
+    {
+        const sal_Unicode cChar = rText[nPos];
+        if (cChar == '(')
+            ++nDepth;
+        else if (cChar == ')')
+            --nDepth;
+        else if (cChar == cOperator && nDepth == 0 && nPos > 0
+                 && aSigned.find(rText[nPos - 1]) == std::u16string_view::npos)
         {
-            nPos = sFormula.indexOf("*logheight/");
-            if (nPos != std::string::npos)
-                sFormula = "*/ " + sFormula.replaceAt(nPos, 11, u" h "_ustr);
+            // A character that follows another operator is the sign of the number after it.
+            nFound = nPos;
+        }
+    }
+    return nFound;
+}
+
+// True when the brackets around the whole expression are one pair, so that dropping them
+// leaves the expression whole.
+bool lclIsWrappedInBrackets(const OUString& rText)
+{
+    if (rText.getLength() < 2 || rText[0] != '(' || rText[rText.getLength() - 1] != ')')
+        return false;
+    sal_Int32 nDepth = 0;
+    for (sal_Int32 nPos = 0; nPos < rText.getLength() - 1; ++nPos)
+    {
+        if (rText[nPos] == '(')
+            ++nDepth;
+        else if (rText[nPos] == ')' && --nDepth == 0)
+            return false;
+    }
+    return true;
+}
+
+// Splits the arguments of a call on the commas that lie outside any pair of brackets.
+std::vector<OUString> lclSplitArguments(const OUString& rText)
+{
+    std::vector<OUString> aParts;
+    sal_Int32 nDepth = 0;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 nPos = 0; nPos < rText.getLength(); ++nPos)
+    {
+        const sal_Unicode cChar = rText[nPos];
+        if (cChar == '(')
+            ++nDepth;
+        else if (cChar == ')')
+            --nDepth;
+        else if (cChar == ',' && nDepth == 0)
+        {
+            aParts.push_back(rText.copy(nStart, nPos - nStart));
+            nStart = nPos + 1;
+        }
+    }
+    aParts.push_back(rText.copy(nStart));
+    return aParts;
+}
+
+OString lclConvertEquation(const OUString& rEquation, const EquationNamer& rNameEquation,
+                           const HelperGuideWriter& rWriteHelper, sal_Int32 nDepth);
+
+// Hands back the name of a piece a formula can carry: a number, the width or the height, or
+// the name of a guide that holds the rest of the expression.
+OString lclConvertOperand(const OUString& rText, const EquationNamer& rNameEquation,
+                          const HelperGuideWriter& rWriteHelper, sal_Int32 nDepth)
+{
+    const OString aAtom = lclReadAtom(rText, rNameEquation);
+    if (!aAtom.isEmpty())
+        return aAtom;
+    const OString aFormula = lclConvertEquation(rText, rNameEquation, rWriteHelper, nDepth + 1);
+    if (aFormula.isEmpty())
+        return {};
+    return rWriteHelper(aFormula);
+}
+
+// Turns one equation of a shape into a formula of the OOXML grammar, which states one
+// operation over three pieces at a time. An expression that holds more than that is broken up
+// over guides of its own. An equation the writer cannot express yields an empty formula.
+OString lclConvertEquation(const OUString& rEquation, const EquationNamer& rNameEquation,
+                           const HelperGuideWriter& rWriteHelper, sal_Int32 nDepth)
+{
+    // A shape whose equations run deeper than this is beyond what the writer unpicks.
+    if (nDepth > 16)
+        return {};
+
+    OUString aText = rEquation.replaceAll(" ", "");
+    while (lclIsWrappedInBrackets(aText))
+        aText = aText.copy(1, aText.getLength() - 2);
+    if (aText.isEmpty())
+        return {};
+
+    static constexpr struct
+    {
+        std::u16string_view aCall;
+        std::string_view aToken;
+        int nArguments;
+    } aCalls[] = {
+        { u"if(", "?:", 3 }, { u"min(", "min", 2 }, { u"max(", "max", 2 },
+        { u"abs(", "abs", 1 }, { u"sqrt(", "sqrt", 1 },
+    };
+    for (const auto& rCall : aCalls)
+    {
+        if (!aText.startsWith(rCall.aCall) || !aText.endsWith(u")"))
+            continue;
+        const sal_Int32 nInside = rCall.aCall.size();
+        const OUString aArguments = aText.copy(nInside, aText.getLength() - nInside - 1);
+        const std::vector<OUString> aParts = lclSplitArguments(aArguments);
+        if (static_cast<int>(aParts.size()) != rCall.nArguments)
+            return {};
+        OString aFormula(rCall.aToken);
+        for (const OUString& rPart : aParts)
+        {
+            const OString aOperand = lclConvertOperand(rPart, rNameEquation, rWriteHelper, nDepth);
+            if (aOperand.isEmpty())
+                return {};
+            aFormula += " " + aOperand;
+        }
+        return aFormula;
+    }
+
+    // The sum and the difference share one operation, which takes the first piece, adds the
+    // second and takes the third away.
+    sal_Int32 nPlus = lclFindOperator(aText, '+');
+    if (nPlus >= 0)
+    {
+        const OUString aRest = aText.copy(nPlus + 1);
+        const sal_Int32 nMinus = lclFindOperator(aRest, '-');
+        const OUString aFirst = aText.copy(0, nPlus);
+        const OUString aSecond = nMinus >= 0 ? aRest.copy(0, nMinus) : aRest;
+        const OUString aThird = nMinus >= 0 ? aRest.copy(nMinus + 1) : u"0"_ustr;
+        const OString aOne = lclConvertOperand(aFirst, rNameEquation, rWriteHelper, nDepth);
+        const OString aTwo = lclConvertOperand(aSecond, rNameEquation, rWriteHelper, nDepth);
+        const OString aThree = lclConvertOperand(aThird, rNameEquation, rWriteHelper, nDepth);
+        if (aOne.isEmpty() || aTwo.isEmpty() || aThree.isEmpty())
+            return {};
+        return "+- " + aOne + " " + aTwo + " " + aThree;
+    }
+    const sal_Int32 nMinus = lclFindOperator(aText, '-');
+    if (nMinus >= 0)
+    {
+        const OString aOne
+            = lclConvertOperand(aText.copy(0, nMinus), rNameEquation, rWriteHelper, nDepth);
+        const OString aTwo
+            = lclConvertOperand(aText.copy(nMinus + 1), rNameEquation, rWriteHelper, nDepth);
+        if (aOne.isEmpty() || aTwo.isEmpty())
+            return {};
+        return "+- " + aOne + " 0 " + aTwo;
+    }
+
+    // The product and the quotient share one operation, which takes the first piece, multiplies
+    // by the second and divides by the third.
+    const sal_Int32 nTimes = lclFindOperator(aText, '*');
+    if (nTimes >= 0)
+    {
+        const OUString aRest = aText.copy(nTimes + 1);
+        const sal_Int32 nOver = lclFindOperator(aRest, '/');
+        const OString aOne
+            = lclConvertOperand(aText.copy(0, nTimes), rNameEquation, rWriteHelper, nDepth);
+        const OString aTwo = lclConvertOperand(nOver >= 0 ? aRest.copy(0, nOver) : aRest,
+                                               rNameEquation, rWriteHelper, nDepth);
+        const OString aThree = nOver >= 0 ? lclConvertOperand(aRest.copy(nOver + 1), rNameEquation,
+                                                              rWriteHelper, nDepth)
+                                          : "1"_ostr;
+        if (aOne.isEmpty() || aTwo.isEmpty() || aThree.isEmpty())
+            return {};
+        return "*/ " + aOne + " " + aTwo + " " + aThree;
+    }
+    const sal_Int32 nOver = lclFindOperator(aText, '/');
+    if (nOver >= 0)
+    {
+        const OString aOne
+            = lclConvertOperand(aText.copy(0, nOver), rNameEquation, rWriteHelper, nDepth);
+        const OString aTwo
+            = lclConvertOperand(aText.copy(nOver + 1), rNameEquation, rWriteHelper, nDepth);
+        if (aOne.isEmpty() || aTwo.isEmpty())
+            return {};
+        return "*/ " + aOne + " 1 " + aTwo;
+    }
+
+    const OString aAtom = lclReadAtom(aText, rNameEquation);
+    if (aAtom.isEmpty())
+        return {};
+    return "val " + aAtom;
+}
+
+// Writes the equations a shape carries as guides, one guide to an equation, so that a formula
+// can name the equations it rests on. An equation is written the first time it is asked for,
+// after the ones it rests on, and a formula the writer cannot express is left out entirely.
+class EquationGuides
+{
+    const cpo::uno::Sequence<OUString>& mrEquations;
+    std::vector<Guide>& mrGuideList;
+    std::set<OUString> maNames;
+    std::map<sal_Int32, OString> maWritten;
+    std::set<sal_Int32> maUnderway;
+    sal_Int32 mnHelperCount = 0;
+
+    OString Write(const OString& rName, const OString& rFormula)
+    {
+        if (!IsValidOOXMLFormula(OUString::fromUtf8(rFormula), maNames))
+            return {};
+        mrGuideList.push_back({ rName, rFormula });
+        maNames.insert(OUString::fromUtf8(rName));
+        return rName;
+    }
+
+    OString WriteHelper(const OString& rFormula)
+    {
+        return Write("gdHelper" + OString::number(mnHelperCount++), rFormula);
+    }
+
+    // Drops the guides written since the list held nSize of them, so that an equation the writer
+    // gives up on leaves nothing of its own behind.
+    void RollBackTo(size_t nSize)
+    {
+        while (mrGuideList.size() > nSize)
+        {
+            maNames.erase(OUString::fromUtf8(mrGuideList.back().sName));
+            mrGuideList.pop_back();
         }
     }
 
-    if (IsValidOOXMLFormula(sFormula))
-        return sFormula;
-    else SAL_WARN("oox.shape","invalid OOXML formula["<<sFormula<<"]");
+    OString Name(sal_Int32 nIndex)
+    {
+        if (nIndex < 0 || nIndex >= mrEquations.getLength())
+            return {};
+        // The answer for an equation is kept, whether it was written or given up on, so that an
+        // equation many others rest on is walked once.
+        const auto aFound = maWritten.find(nIndex);
+        if (aFound != maWritten.end())
+            return aFound->second;
+        // An equation that reaches itself, around however many others, has no value to write.
+        if (!maUnderway.insert(nIndex).second)
+            return {};
+        const size_t nWritten = mrGuideList.size();
+        const OString aFormula = Convert(mrEquations[nIndex]);
+        maUnderway.erase(nIndex);
+        OString aName;
+        if (!aFormula.isEmpty())
+            aName = Write("gdEquation" + OString::number(nIndex), aFormula);
+        if (aName.isEmpty())
+            RollBackTo(nWritten);
+        maWritten.emplace(nIndex, aName);
+        return aName;
+    }
 
-    return OUString();
-}
+public:
+    EquationGuides(const cpo::uno::Sequence<OUString>& rEquations, std::vector<Guide>& rGuideList)
+        : mrEquations(rEquations)
+        , mrGuideList(rGuideList)
+    {
+        for (const Guide& rGuide : rGuideList)
+            maNames.insert(OUString::fromUtf8(rGuide.sName));
+    }
+
+    OString Convert(const OUString& rEquation)
+    {
+        const size_t nWritten = mrGuideList.size();
+        OString aFormula = lclConvertEquation(
+            rEquation, [this](sal_Int32 nIndex) { return Name(nIndex); },
+            [this](const OString& rFormula) { return WriteHelper(rFormula); }, 0);
+        if (!IsValidOOXMLFormula(OUString::fromUtf8(aFormula), maNames))
+            aFormula.clear();
+        if (aFormula.isEmpty())
+            RollBackTo(nWritten);
+        return aFormula;
+    }
+};
 
 void prepareGluePoints(std::vector<Guide>& rGuideList,
                        const cpo::uno::Sequence<OUString>& aEquations,
@@ -5136,6 +5402,7 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
 {
     if (rGluePoints.hasElements())
     {
+        EquationGuides aGuides(aEquations, rGuideList);
         sal_Int32 nIndex = 0;
         for (auto const& rGluePoint : rGluePoints)
         {
@@ -5172,16 +5439,16 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
             Guide aGuideY;
             if (bValidIdx1)
             {
-                aGuideX.sFormula = GetFormula(aEquations[nIdx1]).toUtf8();
-                if (aGuideX.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                aGuideX.sFormula = aGuides.Convert(aEquations[nIdx1]);
+                if (aGuideX.sFormula.isEmpty())
                     continue;
             }
             else
                 aGuideX.sFormula = "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
             if (bValidIdx2)
             {
-                aGuideY.sFormula = GetFormula(aEquations[nIdx2]).toUtf8();
-                if (aGuideY.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                aGuideY.sFormula = aGuides.Convert(aEquations[nIdx2]);
+                if (aGuideY.sFormula.isEmpty())
                     continue;
             }
             else
@@ -5384,9 +5651,11 @@ bool DrawingML::WriteCustomGeometry(
     else
     {
         mpFS->startElementNS(XML_a, XML_gdLst);
+        std::set<OUString> aGuideNames;
         for (auto const& elem : aGuideList)
         {
-            assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula)));
+            assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula), aGuideNames));
+            aGuideNames.insert(OUString::fromUtf8(elem.sName));
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         }
         mpFS->endElementNS(XML_a, XML_gdLst);

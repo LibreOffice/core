@@ -1609,6 +1609,46 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPlaceHolderFitHeightToText)
     CPPUNIT_ASSERT_MESSAGE("PlaceHolder Fit height to text should be true.", bTextAutoGrowHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomShapeKeepsItsGluePoints)
+{
+    // A shape whose glue points sit at a share of its width or of its height.
+    createSdImpressDoc("pptx/cshapes.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix the share was written the one way round only, so a shape that states it
+    // the other way lost every glue point that reads that way.
+    assertXPath(pXmlDoc,
+                "//p:sp[p:nvSpPr/p:cNvPr[@name='dodecagon']]//a:gd[starts-with(@name,'GluePoint')]",
+                24);
+    assertXPath(pXmlDoc,
+                "//p:sp[p:nvSpPr/p:cNvPr[@name='irregularSeal2']]//a:gd[@name='GluePoint1X']",
+                "fmla", u"*/ w 9722 21600");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomShapeKeepsGluePointsPlacedByEquations)
+{
+    // A shape whose glue points are placed by equations that rest on other equations of it.
+    createSdImpressDoc("pptx/cshapes.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix one equation could not name another, so every glue point placed that way
+    // was left out and the shape reached the file with none at all.
+    assertXPath(pXmlDoc,
+                "//p:sp[p:nvSpPr/p:cNvPr[@name='mathPlus']]//a:gd[starts-with(@name,'GluePoint')]",
+                8);
+    assertXPath(pXmlDoc, "//p:sp[p:nvSpPr/p:cNvPr[@name='mathPlus']]//a:gd[@name='GluePoint1X']",
+                "fmla", u"+- gdEquation5 gdEquation1 0");
+    // The equations it names stand as guides of their own.
+    assertXPath(pXmlDoc, "//p:sp[p:nvSpPr/p:cNvPr[@name='mathPlus']]//a:gd[@name='gdEquation5']",
+                1);
+    assertXPath(pXmlDoc, "//p:sp[p:nvSpPr/p:cNvPr[@name='mathPlus']]//a:gd[@name='gdEquation1']",
+                1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
