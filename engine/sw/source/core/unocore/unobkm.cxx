@@ -231,8 +231,9 @@ void SwXBookmark::attachToRangeEx(
     // if the PaM isn't a valid one for cross-reference bookmarks.
     if (!m_pImpl->m_pRegisteredBookmark)
     {
-        OSL_FAIL("<SwXBookmark::attachToRange(..)>"
-            " - could not create Mark.");
+        // The range names where the bookmark would go, and a range a bookmark of this kind
+        // cannot sit on leaves the document without one. Saying so is what the exception is
+        // for, and a caller that asks on the off chance catches it.
         throw lang::IllegalArgumentException();
     }
 }
