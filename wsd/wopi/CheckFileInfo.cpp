@@ -118,6 +118,11 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
                 LOG_ERR("No answer to CheckFileInfo [" << uriAnonym
                                                        << "]: " << httpResponse->state());
             }
+            else if (http::isTransientStatusCode(statusCode))
+            {
+                _state = State::Transient;
+                LOG_ERR("Transient failure of CheckFileInfo [" << uriAnonym << "]: " << statusCode);
+            }
             else if (unauthorized)
             {
                 _state = State::Unauthorized;

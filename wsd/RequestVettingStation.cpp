@@ -338,9 +338,12 @@ void RequestVettingStation::handleRequest(const std::string& id,
             }
             else if (_checkFileInfo == nullptr ||
                      _checkFileInfo->state() == CheckFileInfo::State::None ||
-                     _checkFileInfo->state() == CheckFileInfo::State::NoAnswer)
+                     _checkFileInfo->state() == CheckFileInfo::State::NoAnswer ||
+                     _checkFileInfo->state() == CheckFileInfo::State::Transient)
             {
-                // We haven't tried or we timed-out. Retry.
+                // We haven't tried, or the host didn't answer in time or asked
+                // us to come back later. Either way it hasn't refused us, so
+                // retry rather than report the user as unauthorized.
                 _checkFileInfo.reset();
                 checkFileInfo(uriPublic, HTTP_REDIRECTION_LIMIT);
             }

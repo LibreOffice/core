@@ -235,7 +235,11 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
             break;
         }
         case CheckFileInfo::State::NoAnswer:
+        case CheckFileInfo::State::Transient:
         {
+            // The host either didn't answer in time or asked us to come back
+            // later. Report it as a timeout rather than a load failure: nothing
+            // is wrong with the document or the user's access to it.
             LOG_ERR("Collab: CheckFileInfo timed out for WOPISrc: "
                     << Anonymizer::anonymizeUrl(_wopiSrc));
             sendTextMessage("error: cmd=internal kind=timeout");

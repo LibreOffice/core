@@ -260,6 +260,17 @@ constexpr bool isUnauthorizedStatusCode(StatusCode code)
            code == StatusCode::NotFound;
 }
 
+/// Returns true for status codes where the host is asking us to come back later,
+/// rather than giving us its answer (429, 500, 502, 503, 504). The rest of 5xx is
+/// a settled condition - unimplemented, unsupported, out of space - and retrying
+/// it only adds load to a host that has already told us what it thinks.
+constexpr bool isTransientStatusCode(StatusCode code)
+{
+    return code == StatusCode::TooManyRequests || code == StatusCode::InternalServerError ||
+           code == StatusCode::BadGateway || code == StatusCode::ServiceUnavailable ||
+           code == StatusCode::GatewayTimeout;
+}
+
 /// Returns the Reason Phrase for a given HTTP Status Code.
 /// If not defined, "Unknown" is returned.
 /// The Reason Phrase is informational only, but it helps
