@@ -20,7 +20,7 @@
 #include <collatorImpl.hxx>
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <com/sun/star/i18n/LocaleData2.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <numeric>
 
@@ -34,7 +34,7 @@ namespace i18npool {
 
 CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
-    mxLocaleData.set( LocaleData2::create(rxContext) );
+    mxLocaleData.set( LocaleData::create(rxContext) );
 }
 
 CollatorImpl::~CollatorImpl()

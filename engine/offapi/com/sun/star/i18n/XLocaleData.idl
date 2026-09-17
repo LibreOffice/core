@@ -93,6 +93,29 @@ published interface XLocaleData: cpo::uno::XInterface
     /** returns all available locales.
      */
     sequence<com::sun::star::lang::Locale> getAllInstalledLocaleNames();
+
+    /** returns all LC_CURRENCY currencies for a locale.
+     */
+    sequence< Currency2 >   getAllCurrencies2(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    /** returns all LC_CALENDAR calendars for a locale.
+     */
+    sequence< Calendar2 >   getAllCalendars2(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    /** returns a sequence of date acceptance patterns for a locale
+
+        <p> Patterns with input combinations that are accepted as
+        incomplete date input, such as <b>M/D</b> or <b>D.M.</b>
+     */
+    sequence< string >  getDateAcceptancePatterns(
+                                [in] com::sun::star::lang::Locale aLocale );
+
+    /** returns an instance of com::sun::star::i18n::LocaleDataItem2 for
+        a Locale.
+     */
+    com::sun::star::i18n::LocaleDataItem2   getLocaleItem2( [in] com::sun::star::lang::Locale Locale );
 };
 
 }; }; }; };

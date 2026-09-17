@@ -29,7 +29,7 @@
 #include <mutex>
 #include <utility>
 
-namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace com::sun::star::i18n { struct FormatElement; }
 namespace cpo::uno { class XComponentContext; }
 
@@ -56,7 +56,7 @@ public:
 
 private:
     std::mutex maMutex;
-    cpo::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
+    cpo::uno::Reference < css::i18n::XLocaleData > m_xLocaleData;
     typedef std::pair< css::lang::Locale, cpo::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
     std::deque < FormatElementCacheItem > m_aFormatElementCache;
 

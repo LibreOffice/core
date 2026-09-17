@@ -1559,8 +1559,7 @@ Sequence< OUString >
 LocaleDataImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet {
-        u"com.sun.star.i18n.LocaleData"_ustr,
-        u"com.sun.star.i18n.LocaleData2"_ustr
+        u"com.sun.star.i18n.LocaleData"_ustr
     };
     return aRet;
 }

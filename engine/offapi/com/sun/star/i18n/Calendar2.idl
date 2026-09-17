@@ -13,7 +13,7 @@ module com { module sun { module star { module i18n {
 
 /**
     Calendar items as returned in a sequence by
-    XLocaleData3::getAllCalendars2().
+    XLocaleData::getAllCalendars2().
 
     <p> Similar to
     ::com::sun::star::i18n::Calendar this provides

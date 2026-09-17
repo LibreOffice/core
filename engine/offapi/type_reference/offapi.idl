@@ -7988,6 +7988,9 @@ module com {
      string LongDateMonthSeparator;
      string LongDateYearSeparator;
     };
+    published struct LocaleDataItem2 : LocaleDataItem {
+        string decimalSeparatorAlternative;
+    };
     published interface XLocaleData {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::i18n::LanguageCountryInfo getLanguageCountryInfo([in] ::com::sun::star::lang::Locale aLocale);
@@ -8002,20 +8005,12 @@ module com {
      ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters([in] ::com::sun::star::lang::Locale aLocale);
      sequence< string > getReservedWord([in] ::com::sun::star::lang::Locale aLocale);
      sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames();
-    };
-    published interface XLocaleData2 {
-     interface ::com::sun::star::i18n::XLocaleData;
      sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies2([in] ::com::sun::star::lang::Locale aLocale);
-    };
-    published interface XLocaleData3 {
-     interface ::com::sun::star::i18n::XLocaleData2;
      sequence< ::com::sun::star::i18n::Calendar2 > getAllCalendars2([in] ::com::sun::star::lang::Locale aLocale);
-    };
-    published interface XLocaleData4 {
-     interface ::com::sun::star::i18n::XLocaleData3;
      sequence< string > getDateAcceptancePatterns([in] ::com::sun::star::lang::Locale aLocale);
+     com::sun::star::i18n::LocaleDataItem2 getLocaleItem2( [in] com::sun::star::lang::Locale Locale );
     };
-    published service LocaleData: ::com::sun::star::i18n::XLocaleData4;
+    published service LocaleData: ::com::sun::star::i18n::XLocaleData;
     /** @deprecated */ published constants LocaleItem {
      const short COUNT = 17;
      const short COUNT2 = 18;

@@ -35,7 +35,7 @@
 #include <string_view>
 
 namespace com::sun::star::i18n { class XCharacterClassification; }
-namespace com::sun::star::i18n { class XLocaleData4; }
+namespace com::sun::star::i18n { class XLocaleData; }
 
 namespace com::sun::star
 {
@@ -142,7 +142,7 @@ namespace connectivity
         sal_Int32                   m_nDateFormatKey;
         cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         cpo::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
-        static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>>& getLocaleData();
+        static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData>>& getLocaleData();
 
         // convert a string into double trim it to scale of _nscale and then transform it back to string
         OUString stringToDouble(const OUString& _rValue,sal_Int16 _nScale);

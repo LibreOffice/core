@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/i18n/XLocaleData5.hpp>
+#include <com/sun/star/i18n/XLocaleData.hpp>
 
 
 #include <cppuhelper/implbase.hxx>
@@ -68,7 +68,7 @@ struct LocaleDataLookupTableItem
 
 class LocaleDataImpl final : public cppu::WeakImplHelper
 <
-    css::i18n::XLocaleData5,
+    css::i18n::XLocaleData,
     css::lang::XServiceInfo
 >
 {
@@ -111,11 +111,7 @@ public:
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
-
-    // XLocaleData4
     virtual cpo::uno::Sequence< OUString > getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
-
-    // XLocaleData5
     virtual css::i18n::LocaleDataItem2 getLocaleItem2( const css::lang::Locale& rLocale ) override;
 
     // following methods are used by indexentry service

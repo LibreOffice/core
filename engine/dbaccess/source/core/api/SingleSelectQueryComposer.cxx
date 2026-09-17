@@ -232,7 +232,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
     m_aLocale = m_aParseContext.getPreferredLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, true, m_aContext );
-    Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext) );
+    Reference< XLocaleData > xLocaleData( LocaleData::create(m_aContext) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");

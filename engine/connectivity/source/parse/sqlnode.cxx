@@ -1484,9 +1484,9 @@ OSQLParser::OSQLParser(cpo::uno::Reference< cpo::uno::XComponentContext > xConte
 }
 
 //static
-tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>>& OSQLParser::getLocaleData()
+tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData>>& OSQLParser::getLocaleData()
 {
-    static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>> s_xLocaleData(tools::DeleteOnDeinitFlag::Empty);
+    static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData>> s_xLocaleData(tools::DeleteOnDeinitFlag::Empty);
     return s_xLocaleData;
 }
 

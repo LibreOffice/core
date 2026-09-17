@@ -20,14 +20,14 @@
 #include <numberformatcode.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
-#include <com/sun/star/i18n/LocaleData2.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
             const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext )
 {
-        m_xLocaleData.set( css::i18n::LocaleData2::create( rxContext ) );
+        m_xLocaleData.set( css::i18n::LocaleData::create( rxContext ) );
 }
 
 

@@ -28,7 +28,7 @@
 
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XNativeNumberSupplier; }
-namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace i18npool { class Transliteration_casemapping; }
 
 
@@ -129,7 +129,7 @@ private:
 
     /// used for parser only
     css::lang::Locale    aParserLocale;
-    cpo::uno::Reference < css::i18n::XLocaleData5 > mxLocaleData;
+    cpo::uno::Reference < css::i18n::XLocaleData > mxLocaleData;
     cpo::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;

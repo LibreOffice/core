@@ -28,7 +28,7 @@
 #include <vector>
 #include <optional>
 
-namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
@@ -95,7 +95,7 @@ private:
     // Service Factory
     cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     // lang::Locale Data
-    cpo::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
+    cpo::uno::Reference < css::i18n::XLocaleData >      mxLocaleData;
 
     /// @throws cpo::uno::RuntimeException
     bool createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,

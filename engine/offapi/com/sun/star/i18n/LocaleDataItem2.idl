@@ -14,7 +14,7 @@ module com { module sun { module star { module i18n {
     alternative input decimal separator.
  */
 
-struct LocaleDataItem2 : LocaleDataItem
+published struct LocaleDataItem2 : LocaleDataItem
 {
     /** Alternative input decimal separator, for example, <b>"."</b> if
         the regular locale dependent separator usually is not present on

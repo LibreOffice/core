@@ -49,7 +49,7 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     i18npool/inc/localedata.hxx:
     # Base class needs complete type
-    - com/sun/star/i18n/XLocaleData5.hpp
+    - com/sun/star/i18n/XLocaleData.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     i18npool/inc/numberformatcode.hxx:
     # Base class needs complete type

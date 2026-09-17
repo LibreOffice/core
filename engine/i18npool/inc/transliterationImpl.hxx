@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/types.h>
 
-namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace cpo::uno { class XComponentContext; }
 
 namespace i18npool {
@@ -87,7 +87,7 @@ private:
     sal_Int16 numCascade;
     bool caseignoreOnly;
     cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    cpo::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
+    cpo::uno::Reference< css::i18n::XLocaleData > mxLocaledata;
     cpo::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws cpo::uno::RuntimeException

@@ -215,7 +215,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/i18n,\
 	InputSequenceChecker \
 	LocaleCalendar \
 	LocaleData \
-	LocaleData2 \
 	NativeNumberSupplier \
 	NativeNumberSupplier2 \
 	NumberFormatMapper \
@@ -2607,10 +2606,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	XIndexEntrySupplier \
 	XInputSequenceChecker \
 	XLocaleData \
-	XLocaleData2 \
-	XLocaleData3 \
-	XLocaleData4 \
-	XLocaleData5 \
 	XNativeNumberSupplier \
 	XNativeNumberSupplier2 \
 	XNumberFormatCode \

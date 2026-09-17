@@ -31,7 +31,7 @@
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
-#include <com/sun/star/i18n/LocaleData2.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 
@@ -88,7 +88,7 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         m_xContext( rxContext ),
-        xLD( LocaleData2::create(rxContext) ),
+        xLD( LocaleData::create(rxContext) ),
         maLanguageTag(std::move( aLanguageTag ))
 {
     loadData();
@@ -101,7 +101,7 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         m_xContext( comphelper::getProcessComponentContext() ),
-        xLD( LocaleData2::create(m_xContext) ),
+        xLD( LocaleData::create(m_xContext) ),
         maLanguageTag(std::move( aLanguageTag ))
 {
     loadData();
@@ -1482,7 +1482,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     }
 }
 
-// --- XLocaleData3 ----------------------------------------------------------
+// --- XLocaleData ----------------------------------------------------------
 
 cpo::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
 {
@@ -1497,7 +1497,7 @@ cpo::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
     return {};
 }
 
-// --- XLocaleData4 ----------------------------------------------------------
+// --- XLocaleData ----------------------------------------------------------
 
 const cpo::uno::Sequence< OUString > & LocaleDataWrapper::getDateAcceptancePatterns() const
 {

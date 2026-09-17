@@ -25,7 +25,7 @@
 
 namespace cpo::uno { class Any; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::i18n { class XLocaleData4; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace com::sun::star::sdbc { class XConnection; }
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
@@ -48,7 +48,7 @@ namespace dbtools
                 m_xConnection;
         cpo::uno::Reference< css::util::XNumberFormatter >
                 m_xFormatter;
-        cpo::uno::Reference< css::i18n::XLocaleData4 >
+        cpo::uno::Reference< css::i18n::XLocaleData >
                 m_xLocaleData;
 
         ::connectivity::OSQLParser

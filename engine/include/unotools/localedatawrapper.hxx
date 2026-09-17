@@ -35,7 +35,7 @@
 #include <string_view>
 
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { class XLocaleData; }
 namespace com::sun::star::i18n { struct Calendar2; }
 namespace com::sun::star::i18n { struct Currency2; }
 namespace com::sun::star::i18n { struct FormatElement; }
@@ -77,7 +77,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    cpo::uno::Reference< css::i18n::XLocaleData5 >     xLD;
+    cpo::uno::Reference< css::i18n::XLocaleData >      xLD;
     LanguageTag                                        maLanguageTag;
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
     std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
@@ -158,11 +158,11 @@ public:
     // Wrapper implementations of service LocaleData
 
     SAL_DLLPRIVATE css::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
-    /// NOTE: this wraps XLocaleData5::getLocaleItem2() in fact.
+    /// NOTE: this wraps XLocaleData::getLocaleItem2() in fact.
     const css::i18n::LocaleDataItem2& getLocaleItem() const;
-    /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
+    /// NOTE: this wraps XLocaleData::getAllCalendars2() in fact.
     cpo::uno::Sequence< css::i18n::Calendar2 > getAllCalendars() const;
-    /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
+    /// NOTE: this wraps XLocaleData::getAllCurrencies2() in fact.
     cpo::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
     cpo::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;

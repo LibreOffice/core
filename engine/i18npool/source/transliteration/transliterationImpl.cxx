@@ -21,7 +21,7 @@
 #include <transliterationImpl.hxx>
 #include <servicename.hxx>
 
-#include <com/sun/star/i18n/LocaleData2.hpp>
+#include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
@@ -168,7 +168,7 @@ TransliterationImpl::TransliterationImpl(const Reference <XComponentContext>& xC
     numCascade = 0;
     caseignoreOnly = true;
 
-    mxLocaledata.set(LocaleData2::create(xContext));
+    mxLocaledata.set(LocaleData::create(xContext));
 }
 
 TransliterationImpl::~TransliterationImpl()
