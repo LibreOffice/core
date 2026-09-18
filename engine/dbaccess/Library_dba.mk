@@ -116,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/dataaccess/SharedConnection \
     dbaccess/source/core/misc/apitools \
     dbaccess/source/core/misc/ContainerMediator \
-    dbaccess/source/core/misc/DatabaseDataProvider \
     dbaccess/source/core/misc/dsntypes \
     dbaccess/source/core/misc/objectnameapproval \
     dbaccess/source/core/misc/PropertyForward \

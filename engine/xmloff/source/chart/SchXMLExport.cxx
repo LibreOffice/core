@@ -89,11 +89,11 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -1246,12 +1246,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             OUString aDataProviderURL(  u".."_ustr  );
             if( xNewDoc->hasInternalDataProvider() )
                 aDataProviderURL = u"."_ustr;
-            else //special handling for data base data provider necessary
-            {
-                Reference< chart2::data::XDatabaseDataProvider > xDBDataProvider( xNewDoc->getDataProvider(), uno::UNO_QUERY );
-                if( xDBDataProvider.is() )
-                    aDataProviderURL = u"."_ustr;
-            }
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
             mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         }
