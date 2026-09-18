@@ -199,6 +199,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     bool bOle = GetViewFrame().GetFrame().IsInPlace();
 
     SCTAB nTabSelCount = rMark.GetSelectCount();
+    SCTAB nCountVisible = 0;
+    const SCTAB nTabCount = rDoc.GetTableCount();
 
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
@@ -275,6 +277,13 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_CURRENTTAB:
                 // Table for Basic is 1-based
                 rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().GetTabNumber()) + 1 ) );
+
+                // enabled only if several sheets are visible
+                for ( SCTAB i = 0; nCountVisible < 2 && i < nTabCount ; i++ )
+                    if ( rDoc.IsVisible( i ) )
+                        ++nCountVisible;
+                if ( nCountVisible < 2 )
+                    rSet.DisableItem( nWhich );
                 break;
 
             case SID_CURRENTDOC:

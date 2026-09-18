@@ -13,6 +13,8 @@
   <menu:menuitem menu:id=".uno:RenameTable"/>
   <menu:menuitem menu:id=".uno:DuplicateSheet"/>
   <menu:menuitem menu:id=".uno:Move"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:JumpToTable"/>
   <menu:menuitem menu:id=".uno:TableSelectAll"/>
   <menu:menuitem menu:id=".uno:TableDeselectAll"/>
   <menu:menuseparator/>
