@@ -257,6 +257,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf148703CopyFooterAcrossDocuments)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertString(xCursor, u"test"_ustr, /*bAbsorb=*/false);
+
+    // Avoid the source document's window leaking past DeInitVCL().
+    xSrcComponent->dispose();
 }
 
 static const SwPageDesc* lcl_getLastPagePageDesc(SwDoc& rDoc)
