@@ -100,7 +100,7 @@ public:
         SAL_WNODEPRECATED_DECLARATIONS_PUSH // SecKeychainCreate etc. (macOS 10.10)
         SecKeychainRef pKeychain
             = nullptr;
-        constexpr char pPassword[] = "test";
+        static constexpr char pPassword[] = "test";
         CPPUNIT_ASSERT_EQUAL(OSStatus(errSecSuccess),
                              SecKeychainCreate(aKeychainPathUtf8.getStr(), strlen(pPassword),
                                                pPassword, false, nullptr, &pKeychain));
