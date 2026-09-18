@@ -188,7 +188,7 @@ TableControl_Impl::TableControl_Impl(TableControl& _rAntiImpl)
     , m_pHScroll(nullptr)
     , m_pScrollCorner(nullptr)
     , m_aSelectedRows()
-    , m_pTableFunctionSet(new TableFunctionSet(this))
+    , m_pTableFunctionSet(new TableFunctionSet(*this))
     , m_nAnchor(-1)
     , m_bUpdatingColWidths(false)
 {

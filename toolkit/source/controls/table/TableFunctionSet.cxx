@@ -22,8 +22,8 @@
 
 namespace svt::table
 {
-TableFunctionSet::TableFunctionSet(TableControl_Impl* _pTableControl)
-    : m_pTableControl(_pTableControl)
+TableFunctionSet::TableFunctionSet(TableControl_Impl& rTableControl)
+    : m_rTableControl(rTableControl)
     , m_nCurrentRow(ROW_INVALID)
 {
 }
@@ -32,90 +32,90 @@ TableFunctionSet::~TableFunctionSet() {}
 
 void TableFunctionSet::BeginDrag() {}
 
-void TableFunctionSet::CreateAnchor() { m_pTableControl->setAnchor(m_pTableControl->getCurRow()); }
+void TableFunctionSet::CreateAnchor() { m_rTableControl.setAnchor(m_rTableControl.getCurRow()); }
 
-void TableFunctionSet::DestroyAnchor() { m_pTableControl->setAnchor(ROW_INVALID); }
+void TableFunctionSet::DestroyAnchor() { m_rTableControl.setAnchor(ROW_INVALID); }
 
 void TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor)
 {
     // newRow is the row which includes the point, getCurRow() is the last selected row, before the mouse click
-    sal_Int32 newRow = m_pTableControl->getRowAtPoint(rPoint);
+    sal_Int32 newRow = m_rTableControl.getRowAtPoint(rPoint);
     if (newRow == ROW_COL_HEADERS)
-        newRow = m_pTableControl->getTopRow();
+        newRow = m_rTableControl.getTopRow();
 
-    sal_Int32 newCol = m_pTableControl->getColAtPoint(rPoint);
+    sal_Int32 newCol = m_rTableControl.getColAtPoint(rPoint);
     if (newCol == COL_ROW_HEADERS)
-        newCol = m_pTableControl->getLeftColumn();
+        newCol = m_rTableControl.getLeftColumn();
 
     if ((newRow == ROW_INVALID) || (newCol == COL_INVALID))
         return;
 
     if (bDontSelectAtCursor)
     {
-        if (m_pTableControl->GetSelectedRowCount() > 1)
-            m_pTableControl->getSelEngine()->AddAlways(true);
+        if (m_rTableControl.GetSelectedRowCount() > 1)
+            m_rTableControl.getSelEngine()->AddAlways(true);
     }
-    else if (m_pTableControl->getAnchor() == m_pTableControl->getCurRow())
+    else if (m_rTableControl.getAnchor() == m_rTableControl.getCurRow())
     {
         //selected region lies above the last selection
-        if (m_pTableControl->getCurRow() >= newRow)
+        if (m_rTableControl.getCurRow() >= newRow)
         {
             //put selected rows in vector
-            while (m_pTableControl->getAnchor() >= newRow)
+            while (m_rTableControl.getAnchor() >= newRow)
             {
-                m_pTableControl->markRowAsSelected(m_pTableControl->getAnchor());
-                m_pTableControl->setAnchor(m_pTableControl->getAnchor() - 1);
+                m_rTableControl.markRowAsSelected(m_rTableControl.getAnchor());
+                m_rTableControl.setAnchor(m_rTableControl.getAnchor() - 1);
             }
-            m_pTableControl->setAnchor(m_pTableControl->getAnchor() + 1);
+            m_rTableControl.setAnchor(m_rTableControl.getAnchor() + 1);
         }
         //selected region lies beneath the last selected row
         else
         {
-            while (m_pTableControl->getAnchor() <= newRow)
+            while (m_rTableControl.getAnchor() <= newRow)
             {
-                m_pTableControl->markRowAsSelected(m_pTableControl->getAnchor());
-                m_pTableControl->setAnchor(m_pTableControl->getAnchor() + 1);
+                m_rTableControl.markRowAsSelected(m_rTableControl.getAnchor());
+                m_rTableControl.setAnchor(m_rTableControl.getAnchor() + 1);
             }
-            m_pTableControl->setAnchor(m_pTableControl->getAnchor() - 1);
+            m_rTableControl.setAnchor(m_rTableControl.getAnchor() - 1);
         }
-        m_pTableControl->invalidateSelectedRegion(m_pTableControl->getCurRow(), newRow);
+        m_rTableControl.invalidateSelectedRegion(m_rTableControl.getCurRow(), newRow);
     }
     //no region selected
     else
     {
-        if (!m_pTableControl->hasRowSelection())
-            m_pTableControl->markRowAsSelected(newRow);
+        if (!m_rTableControl.hasRowSelection())
+            m_rTableControl.markRowAsSelected(newRow);
         else
         {
-            if (m_pTableControl->getSelEngine()->GetSelectionMode() == SelectionMode::Single)
+            if (m_rTableControl.getSelEngine()->GetSelectionMode() == SelectionMode::Single)
             {
                 DeselectAll();
-                m_pTableControl->markRowAsSelected(newRow);
+                m_rTableControl.markRowAsSelected(newRow);
             }
             else
             {
-                m_pTableControl->markRowAsSelected(newRow);
+                m_rTableControl.markRowAsSelected(newRow);
             }
         }
-        if (m_pTableControl->GetSelectedRowCount() > 1
-            && m_pTableControl->getSelEngine()->GetSelectionMode() != SelectionMode::Single)
-            m_pTableControl->getSelEngine()->AddAlways(true);
+        if (m_rTableControl.GetSelectedRowCount() > 1
+            && m_rTableControl.getSelEngine()->GetSelectionMode() != SelectionMode::Single)
+            m_rTableControl.getSelEngine()->AddAlways(true);
 
-        m_pTableControl->invalidateRow(newRow);
+        m_rTableControl.invalidateRow(newRow);
     }
-    m_pTableControl->GoToCell(newCol, newRow);
+    m_rTableControl.GoToCell(newCol, newRow);
 }
 
 bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
 {
-    m_pTableControl->getSelEngine()->AddAlways(false);
-    if (!m_pTableControl->hasRowSelection())
+    m_rTableControl.getSelEngine()->AddAlways(false);
+    if (!m_rTableControl.hasRowSelection())
         return false;
     else
     {
-        sal_Int32 curRow = m_pTableControl->getRowAtPoint(rPoint);
-        m_pTableControl->setAnchor(ROW_INVALID);
-        bool selected = m_pTableControl->IsRowSelected(curRow);
+        sal_Int32 curRow = m_rTableControl.getRowAtPoint(rPoint);
+        m_rTableControl.setAnchor(ROW_INVALID);
+        bool selected = m_rTableControl.IsRowSelected(curRow);
         m_nCurrentRow = curRow;
         return selected;
     }
@@ -123,21 +123,21 @@ bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
 
 void TableFunctionSet::DeselectAtPoint(const Point&)
 {
-    m_pTableControl->invalidateRow(m_nCurrentRow);
-    m_pTableControl->markRowAsDeselected(m_nCurrentRow);
+    m_rTableControl.invalidateRow(m_nCurrentRow);
+    m_rTableControl.markRowAsDeselected(m_nCurrentRow);
 }
 
 void TableFunctionSet::DeselectAll()
 {
-    if (m_pTableControl->hasRowSelection())
+    if (m_rTableControl.hasRowSelection())
     {
-        for (size_t i = 0; i < m_pTableControl->GetSelectedRowCount(); ++i)
+        for (size_t i = 0; i < m_rTableControl.GetSelectedRowCount(); ++i)
         {
-            sal_Int32 const rowIndex = m_pTableControl->GetSelectedRowIndex(i);
-            m_pTableControl->invalidateRow(rowIndex);
+            sal_Int32 const rowIndex = m_rTableControl.GetSelectedRowIndex(i);
+            m_rTableControl.invalidateRow(rowIndex);
         }
 
-        m_pTableControl->markAllRowsAsDeselected();
+        m_rTableControl.markAllRowsAsDeselected();
     }
 }
 

@@ -31,11 +31,11 @@ class TableControl_Impl;
 class TableFunctionSet : public FunctionSet
 {
 private:
-    TableControl_Impl* m_pTableControl;
+    TableControl_Impl& m_rTableControl;
     sal_Int32 m_nCurrentRow;
 
 public:
-    explicit TableFunctionSet(TableControl_Impl* _pTableControl);
+    explicit TableFunctionSet(TableControl_Impl& rTableControl);
     virtual ~TableFunctionSet() override;
 
     virtual void BeginDrag() override;
