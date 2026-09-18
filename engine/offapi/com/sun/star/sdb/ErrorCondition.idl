@@ -96,8 +96,6 @@ constants ErrorCondition
         with a name which contains one of the possible database quote characters.
         This is an error since query names can potentially be used in
         <code>SELECT</code> statements, where quote identifiers would render the statement invalid.</p>
-
-        @see com::sun::star::sdb::tools::XDataSourceMetaData::supportsQueriesInFrom
     */
     const long DB_QUERY_NAME_WITH_QUOTES = 302;
 
@@ -112,7 +110,6 @@ constants ErrorCondition
         name of an already existing object of the same type.</p>
 
         @see com::sun::star::sdb::application::DatabaseObject
-        @see com::sun::star::sdb::tools::XDataSourceMetaData::supportsQueriesInFrom
     */
     const long DB_OBJECT_NAME_IS_USED = 303;
 

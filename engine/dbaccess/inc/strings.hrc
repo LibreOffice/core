@@ -93,7 +93,6 @@
 #define STR_BASENAME_QUERY                          NC_("STR_BASENAME_QUERY", "Query")
 #define STR_CONN_WITHOUT_QUERIES_OR_TABLES          NC_("STR_CONN_WITHOUT_QUERIES_OR_TABLES", "The given connection is no valid query and/or tables supplier.")
 #define STR_NO_TABLE_OBJECT                         NC_("STR_NO_TABLE_OBJECT", "The given object is no table object.")
-#define STR_INVALID_COMPOSITION_TYPE                NC_("STR_INVALID_COMPOSITION_TYPE", "Invalid composition type - need a value from com.sun.star.sdb.tools.CompositionType.")
 #define STR_INVALID_COMMAND_TYPE                    NC_("STR_INVALID_COMMAND_TYPE", "Invalid command type - only TABLE and QUERY from com.sun.star.sdb.CommandType are allowed.")
 
 #define STR_STATEMENT_WITHOUT_RESULT_SET            NC_("STR_STATEMENT_WITHOUT_RESULT_SET", "The query does not create a result set, and thus cannot be part of another query.")

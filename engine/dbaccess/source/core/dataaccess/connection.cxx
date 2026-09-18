@@ -61,9 +61,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::dbtools;
 
-using ::com::sun::star::sdb::tools::XTableName;
 using ::com::sun::star::sdb::tools::XObjectNames;
-using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 
 namespace dbaccess
 {
@@ -678,15 +676,6 @@ void OConnection::impl_loadConnectionTools_throw()
     m_xConnectionTools = css::sdb::tools::ConnectionTools::createWithConnection( m_aContext, this );
 }
 
-Reference< XTableName > OConnection::createTableName(  )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-    impl_loadConnectionTools_throw();
-
-    return m_xConnectionTools->createTableName();
-}
-
 Reference< XObjectNames > OConnection::getObjectNames(  )
 {
     MutexGuard aGuard(m_aMutex);
@@ -696,15 +685,6 @@ Reference< XObjectNames > OConnection::getObjectNames(  )
     return m_xConnectionTools->getObjectNames();
 }
 
-Reference< XDataSourceMetaData > OConnection::getDataSourceMetaData(  )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-    impl_loadConnectionTools_throw();
-
-    return m_xConnectionTools->getDataSourceMetaData();
-}
-
 Reference< css::container::XNameAccess > OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, cpo::uno::Reference< css::lang::XComponent >& keepFieldsAlive )
 {
     MutexGuard aGuard(m_aMutex);
@@ -712,15 +692,6 @@ Reference< css::container::XNameAccess > OConnection::getFieldsByCommandDescript
     impl_loadConnectionTools_throw();
 
     return m_xConnectionTools->getFieldsByCommandDescriptor(commandType,command,keepFieldsAlive);
-}
-
-Reference< XSingleSelectQueryComposer > OConnection::getComposer( ::sal_Int32 commandType, const OUString& command )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-    impl_loadConnectionTools_throw();
-
-    return m_xConnectionTools->getComposer(commandType,command);
 }
 
 void OConnection::impl_checkTableQueryNames_nothrow()

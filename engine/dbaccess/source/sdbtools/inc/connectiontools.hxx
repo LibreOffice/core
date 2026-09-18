@@ -50,11 +50,8 @@ namespace sdbtools
         explicit ConnectionTools( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext );
 
         // XConnectionTools
-        virtual cpo::uno::Reference< css::sdb::tools::XTableName > createTableName() override;
         virtual cpo::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames() override;
-        virtual cpo::uno::Reference< css::sdb::tools::XDataSourceMetaData > getDataSourceMetaData() override;
         virtual cpo::uno::Reference< css::container::XNameAccess > getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, cpo::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
-        virtual cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > getComposer( ::sal_Int32 commandType, const OUString& command ) override;
 
         // XServiceInfo
         virtual OUString getImplementationName() override;

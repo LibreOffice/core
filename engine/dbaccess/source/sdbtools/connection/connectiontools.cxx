@@ -18,15 +18,14 @@
  */
 
 #include <connectiontools.hxx>
-#include "tablename.hxx"
 #include "objectnames.hxx"
-#include "datasourcemetadata.hxx"
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/statementcomposer.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace sdbtools
 {
@@ -35,9 +34,7 @@ namespace sdbtools
     using namespace ::cpo::uno;
 using namespace cpo::uno;
     using ::cpo::uno::Reference;
-    using ::com::sun::star::sdb::tools::XTableName;
     using ::com::sun::star::sdb::tools::XObjectNames;
-    using ::com::sun::star::sdb::tools::XDataSourceMetaData;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::XInterface;
     using ::cpo::uno::Any;
@@ -55,23 +52,12 @@ using namespace cpo::uno;
     {
     }
 
-    Reference< XTableName > ConnectionTools::createTableName()
-    {
-        EntryGuard aGuard( *this );
-        return new TableName( getContext(), getConnection() );
-    }
-
     Reference< XObjectNames > ConnectionTools::getObjectNames()
     {
         EntryGuard aGuard( *this );
         return new ObjectNames( getContext(), getConnection() );
     }
 
-    Reference< XDataSourceMetaData > ConnectionTools::getDataSourceMetaData()
-    {
-        EntryGuard aGuard( *this );
-        return new DataSourceMetaData( getContext(), getConnection() );
-    }
     Reference< container::XNameAccess > ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive )
     {
         EntryGuard aGuard( *this );
@@ -80,13 +66,6 @@ using namespace cpo::uno;
         if ( aErrorInfo.isValid() )
             aErrorInfo.doThrow();
         return xRet;
-    }
-    Reference< sdb::XSingleSelectQueryComposer > ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command )
-    {
-        EntryGuard aGuard( *this );
-        dbtools::StatementComposer aComposer(getConnection(), command, commandType, true );
-        aComposer.setDisposeComposer(false);
-        return aComposer.getComposer();
     }
 
     OUString ConnectionTools::getImplementationName()

@@ -2945,15 +2945,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb/application,\
 	XTableUIProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb/tools,\
-	CompositionType \
 	XConnectionSupplier \
 	XConnectionTools \
-	XDataSourceMetaData \
 	XIndexAlteration \
 	XKeyAlteration \
 	XObjectNames \
 	XTableAlteration \
-	XTableName \
 	XTableRename \
 	XViewAccess \
 ))

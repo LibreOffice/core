@@ -38,9 +38,7 @@ $(eval $(call gb_Library_set_componentfile,sdbt,dbaccess/util/sdbt,services))
 
 $(eval $(call gb_Library_add_exception_objects,sdbt,\
     dbaccess/source/sdbtools/connection/connectiontools \
-    dbaccess/source/sdbtools/connection/datasourcemetadata \
     dbaccess/source/sdbtools/connection/objectnames \
-    dbaccess/source/sdbtools/connection/tablename \
 ))
 
 # vim: set noet sw=4 ts=4:

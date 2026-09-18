@@ -180,11 +180,8 @@ public:
     virtual cpo::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
     // XConnectionTools
-    virtual cpo::uno::Reference< css::sdb::tools::XTableName > createTableName(  ) override;
     virtual cpo::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames(  ) override;
-    virtual cpo::uno::Reference< css::sdb::tools::XDataSourceMetaData > getDataSourceMetaData(  ) override;
     virtual cpo::uno::Reference< css::container::XNameAccess > getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, cpo::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
-    virtual cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > getComposer( ::sal_Int32 commandType, const OUString& command ) override;
 
     // XTableUIProvider
     virtual cpo::uno::Reference< css::graphic::XGraphic > getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
