@@ -1755,6 +1755,13 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             {
                 nUpper = 0;
             }
+            else if (m_rThis.IsInTab() && pAttrs->GetULSpace().GetContext()
+                     && lcl_IdenticalStyles(m_rThis.FindPrevCnt(), &m_rThis))
+            {
+                // Contextual spacing reaches across a cell boundary, so the paragraph that starts
+                // a cell drops its space above when the previous paragraph uses the same style.
+                nUpper = 0;
+            }
             else
                 lcl_PartiallyCollapseUpper(*pOwn, nUpper); // possibly modifies nUpper
         }
@@ -1982,7 +1989,15 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
 
         if (_pAttrs)
         {
-            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+            // Contextual spacing reaches across a cell boundary, so the paragraph that ends a
+            // cell drops its space below when the next paragraph uses the same style.
+            const bool bContextualSpacing
+                = _pAttrs->GetULSpace().GetContext()
+                  && lcl_IdenticalStyles(pFrame, pFrame ? pFrame->FindNextCnt() : nullptr);
+            if (!bContextualSpacing)
+            {
+                nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+            }
 
             if (rIDSA.get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS))
             {

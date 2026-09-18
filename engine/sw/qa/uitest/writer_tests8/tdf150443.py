@@ -26,7 +26,7 @@ class tdf150443(UITestCase):
                 xsearch = xDialog.getChild("search")
                 xsearch.executeAction("CLICK", tuple())  #first search
                 xToolkit.processEventsToIdle()
-                self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "4")
+                self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
 
 # Disable this for now. It seems like sometimes, depending on load, the manage changes dialog box will not
 # appear, and then the getChild call will fail. Either that or the wrong window is top-level.

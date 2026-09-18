@@ -2758,6 +2758,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15691_headerTextWrapsAroundImage)
     }
 }
 
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTableStyleContextualSpacingRows)
+{
+    // Given a table whose style turns on contextual spacing, with one paragraph per cell and the
+    // same paragraph style in every cell, while that style sets 18pt of space below a paragraph:
+    createSwDoc("table-style-contextual-spacing-rows.docx");
+
+    // Then make sure a row is no taller than its single line of text:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nParaSpacing = 360;
+    const sal_Int32 nRowHeight
+        = getXPath(pXmlDoc, "/root/page/body/tab/row[1]/infos/bounds", "height").toInt32();
+    // Without the fix in place, this test would have failed, because the paragraph that ends a
+    // cell kept its space below, so every row was at least the 18pt of that spacing taller.
+    CPPUNIT_ASSERT_LESS(nParaSpacing, nRowHeight);
+}
+
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTableStyleContextualSpacingRowsBefore)
+{
+    // Given the same table, with the paragraph style setting 18pt of space above a paragraph
+    // instead of below it:
+    createSwDoc("table-style-contextual-spacing-rows-before.docx");
+
+    // Then make sure a row is no taller than its single line of text:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nParaSpacing = 360;
+    const sal_Int32 nRowHeight
+        = getXPath(pXmlDoc, "/root/page/body/tab/row[2]/infos/bounds", "height").toInt32();
+    // Without the fix in place, this test would have failed, because the paragraph that starts a
+    // cell kept its space above, so every row was at least the 18pt of that spacing taller.
+    CPPUNIT_ASSERT_LESS(nParaSpacing, nRowHeight);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
