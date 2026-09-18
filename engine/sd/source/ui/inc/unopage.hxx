@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XShapeCombiner.hpp>
-#include <com/sun/star/drawing/XShapeBinder.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -47,7 +46,6 @@ OUString GetPresObjShapeType(PresObjKind eKind);
 class SdGenericDrawPage : public SvxDrawPage,
                           public SdUnoSearchReplaceShape,
                           public css::drawing::XShapeCombiner,
-                          public css::drawing::XShapeBinder,
                           public css::container::XNamed,
                           public css::beans::XPropertySet,
                           public css::beans::XMultiPropertySet,
@@ -125,10 +123,6 @@ public:
     // XShapeCombiner
     virtual cpo::uno::Reference< css::drawing::XShape > SAL_CALL combine( const cpo::uno::Reference< css::drawing::XShapes >& xShapes ) override;
     virtual void SAL_CALL split( const cpo::uno::Reference< css::drawing::XShape >& xGroup ) override;
-
-    // XShapeBinder
-    virtual cpo::uno::Reference< css::drawing::XShape > SAL_CALL bind( const cpo::uno::Reference< css::drawing::XShapes >& xShapes ) override;
-    virtual void SAL_CALL unbind( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XPropertySet
     virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;

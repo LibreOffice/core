@@ -47,7 +47,6 @@ import util.ShapeDsc;
  * Object implements the following interfaces :
  * <ul>
  *  <li> <code>com::sun::star::drawing::GenericDrawPage</code></li>
- *  <li> <code>com::sun::star::drawing::XShapeBinder</code></li>
  *  <li> <code>com::sun::star::drawing::XShapeGrouper</code></li>
  *  <li> <code>com::sun::star::drawing::XShapes</code></li>
  *  <li> <code>com::sun::star::lang::XServiceInfo</code></li>
@@ -63,7 +62,6 @@ import util.ShapeDsc;
  * threads concurrently.
  *
  * @see com.sun.star.drawing.GenericDrawPage
- * @see com.sun.star.drawing.XShapeBinder
  * @see com.sun.star.drawing.XShapeGrouper
  * @see com.sun.star.drawing.XShapes
  * @see com.sun.star.lang.XServiceInfo
@@ -74,7 +72,6 @@ import util.ShapeDsc;
  * @see com.sun.star.container.XNamed
  * @see com.sun.star.drawing.XShapeCombiner
  * @see ifc.drawing._GenericDrawPage
- * @see ifc.drawing._XShapeBinder
  * @see ifc.drawing._XShapeGrouper
  * @see ifc.drawing._XShapes
  * @see ifc.lang._XServiceInfo

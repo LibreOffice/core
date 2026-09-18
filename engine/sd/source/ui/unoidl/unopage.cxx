@@ -566,10 +566,6 @@ Any SdGenericDrawPage::queryInterface(const cpo::uno::Type & rType)
     {
         aAny <<= Reference<drawing::XShapeCombiner>(this);
     }
-    else if (rType == cppu::UnoType<drawing::XShapeBinder>::get())
-    {
-        aAny <<= Reference<drawing::XShapeBinder>(this);
-    }
     else if (rType == cppu::UnoType<beans::XMultiPropertySet>::get())
     {
         aAny <<= Reference<beans::XMultiPropertySet>(this);
@@ -1776,55 +1772,6 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
     GetModel()->SetModified();
 }
 
-Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< drawing::XShapes >& xShapes )
-{
-    ::SolarMutexGuard aGuard;
-
-    throwIfDisposed();
-
-    uno::Reference< drawing::XShape > xShape;
-    if(mpView==nullptr||!xShapes.is()||GetPage()==nullptr)
-        return xShape;
-
-    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
-
-    SelectObjectsInView( xShapes, pPageView );
-
-    mpView->CombineMarkedObjects();
-
-    mpView->AdjustMarkHdl();
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() == 1 )
-    {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( pObj )
-            xShape.set( pObj->getUnoShape(), UNO_QUERY );
-    }
-
-    mpView->HideSdrPage();
-
-    GetModel()->SetModified();
-
-    return xShape;
-}
-
-void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xShape )
-{
-    ::SolarMutexGuard aGuard;
-
-    throwIfDisposed();
-
-    if(mpView==nullptr||!xShape.is()||GetPage()==nullptr)
-        return;
-
-    SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
-    SelectObjectInView( xShape, pPageView );
-    mpView->DismantleMarkedObjects( true );
-    mpView->HideSdrPage();
-
-    GetModel()->SetModified();
-}
-
 void SdGenericDrawPage::SetLeftBorder( sal_Int32 nValue )
 {
     if( nValue == GetPage()->GetLeftBorder() )
@@ -2246,7 +2193,6 @@ Sequence< cpo::uno::Type > SAL_CALL SdDrawPage::getTypes()
         aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
         aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
         aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
-        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
         aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
         aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )
@@ -2850,7 +2796,6 @@ Sequence< cpo::uno::Type > SAL_CALL SdMasterPage::getTypes()
         aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
         aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
         aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
-        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
         aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
         aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )

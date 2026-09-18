@@ -44,7 +44,6 @@ import cpo.uno.XInterface;
 * Object implements the following interfaces :
 * <ul>
 *  <li> <code>com::sun::star::drawing::GenericDrawPage</code></li>
-*  <li> <code>com::sun::star::drawing::XShapeBinder</code></li>
 *  <li> <code>com::sun::star::drawing::XShapeGrouper</code></li>
 *  <li> <code>com::sun::star::drawing::XShapes</code></li>
 *  <li> <code>com::sun::star::lang::XServiceInfo</code></li>
@@ -56,7 +55,6 @@ import cpo.uno.XInterface;
 * </ul>
 * @see com.sun.star.drawing.MasterPage
 * @see com.sun.star.drawing.GenericDrawPage
-* @see com.sun.star.drawing.XShapeBinder
 * @see com.sun.star.drawing.XShapeGrouper
 * @see com.sun.star.drawing.XShapes
 * @see com.sun.star.lang.XServiceInfo
@@ -66,7 +64,6 @@ import cpo.uno.XInterface;
 * @see com.sun.star.drawing.XShapeCombiner
 * @see com.sun.star.container.XNamed
 * @see ifc.drawing._GenericDrawPage
-* @see ifc.drawing._XShapeBinder
 * @see ifc.drawing._XShapeGrouper
 * @see ifc.drawing._XShapes
 * @see ifc.lang._XServiceInfo
@@ -111,7 +108,6 @@ public class SdMasterPage extends TestCase {
     * Object relations created :
     * <ul>
     *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing._XShapeBinder}, {@link ifc.drawing._XShapeGrouper},
     *      {@link ifc.drawing._XShapeCombiner}( the draw page of the retrieved
     *      master page)</li>
     *  <li> <code>'Shape'</code> for

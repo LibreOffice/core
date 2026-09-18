@@ -6,8 +6,6 @@
 "SdDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"combine()"
 "SdDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"split()"
 "SdDrawPage";"com::sun::star::form::XFormsSupplier#optional";"getForms()"
-"SdDrawPage";"com::sun::star::drawing::XShapeBinder#optional";"bind()"
-"SdDrawPage";"com::sun::star::drawing::XShapeBinder#optional";"unbind()"
 "SdDrawPage";"com::sun::star::container::XElementAccess";"getElementType()"
 "SdDrawPage";"com::sun::star::container::XElementAccess";"hasElements()"
 "SdDrawPage";"com::sun::star::drawing::XMasterPageTarget";"getMasterPage()"

@@ -6,8 +6,6 @@
 "SvxDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"combine()"
 "SvxDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"split()"
 "SvxDrawPage";"com::sun::star::form::XFormsSupplier#optional";"getForms()"
-"SvxDrawPage";"com::sun::star::drawing::XShapeBinder#optional";"bind()"
-"SvxDrawPage";"com::sun::star::drawing::XShapeBinder#optional";"unbind()"
 "SvxDrawPage";"com::sun::star::container::XElementAccess";"getElementType()"
 "SvxDrawPage";"com::sun::star::container::XElementAccess";"hasElements()"
 "SvxDrawPage";"com::sun::star::drawing::XMasterPageTarget";"getMasterPage()"

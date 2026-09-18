@@ -5167,11 +5167,6 @@ module com {
     published typedef sequence< double > DoubleSequence;
     published typedef sequence< ::com::sun::star::drawing::DoubleSequence > DoubleSequenceSequence;
     published interface XShapes;
-    published interface XShapeBinder {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::drawing::XShape bind([in] ::com::sun::star::drawing::XShapes xShapes);
-     void unbind([in] ::com::sun::star::drawing::XShape xShape);
-    };
     published interface XShapeCombiner {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::drawing::XShape combine([in] ::com::sun::star::drawing::XShapes xShapes);
@@ -5200,7 +5195,6 @@ module com {
      interface ::com::sun::star::drawing::XShapes;
      interface ::com::sun::star::drawing::XShapeGrouper;
      [optional] interface ::com::sun::star::drawing::XShapeCombiner;
-     [optional] interface ::com::sun::star::drawing::XShapeBinder;
      [optional] interface ::com::sun::star::container::XNamed;
      [optional] interface ::com::sun::star::beans::XPropertySet;
      [property, optional] long BorderBottom;

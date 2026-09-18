@@ -60,11 +60,6 @@ published service GenericDrawPage
      */
     [optional] interface com::sun::star::drawing::XShapeCombiner;
 
-    /** With this interface you can bind/unbind a collection of
-                Shapes.
-     */
-    [optional] interface com::sun::star::drawing::XShapeBinder;
-
     /** Gets or sets the name of this page.
 
                 <p>Duplicated page names inside a document are not allowed.

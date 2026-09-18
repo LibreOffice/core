@@ -47,7 +47,6 @@ import cpo.uno.XInterface;
 * Object implements the following interfaces :
 * <ul>
 *  <li> <code>com::sun::star::drawing::GenericDrawPage</code></li>
-*  <li> <code>com::sun::star::drawing::XShapeBinder</code></li>
 *  <li> <code>com::sun::star::drawing::XShapeGrouper</code></li>
 *  <li> <code>com::sun::star::drawing::XShapes</code></li>
 *  <li> <code>com::sun::star::lang::XServiceInfo</code></li>
@@ -60,7 +59,6 @@ import cpo.uno.XInterface;
 * </ul>
 * @see com.sun.star.drawing.DrawPage
 * @see com.sun.star.drawing.GenericDrawPage
-* @see com.sun.star.drawing.XShapeBinder
 * @see com.sun.star.drawing.XShapeGrouper
 * @see com.sun.star.drawing.XShapes
 * @see com.sun.star.lang.XServiceInfo
@@ -71,7 +69,6 @@ import cpo.uno.XInterface;
 * @see com.sun.star.container.XNamed
 * @see com.sun.star.drawing.XShapeCombiner
 * @see ifc.drawing._GenericDrawPage
-* @see ifc.drawing._XShapeBinder
 * @see ifc.drawing._XShapeGrouper
 * @see ifc.drawing._XShapes
 * @see ifc.lang._XServiceInfo
@@ -119,7 +116,6 @@ public class SdDrawPage extends TestCase {
     *  <li> <code>'Shape'</code> for
     *      {@link ifc.drawing._XShapes}( the created rectangle shape )</li>
     *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing._XShapeBinder}, {@link ifc.drawing._XShapeGrouper},
     *      {@link ifc.drawing._XShapeCombiner}( the retrieved draw page )</li>
     *  <li> <code>'MasterPageSupplier'</code> for
     *      {@link ifc.drawing._XMasterPageTarget}(the obtained master pages
