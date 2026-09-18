@@ -868,9 +868,9 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     if (pAccessibleView == nullptr)
         return;
 
-    ::accessibility::AccessibleSlideSorterObject* pChild
-            = pAccessibleView->GetAccessibleChildImplementation(nPageIndex);
-    if (pChild == nullptr || pChild->GetPage() == nullptr)
+    rtl::Reference<::accessibility::AccessibleSlideSorterObject> pChild
+        = pAccessibleView->GetAccessibleChildImplementation(nPageIndex);
+    if (!pChild.is() || pChild->GetPage() == nullptr)
         return;
 
     OUString sNewName (pChild->GetPage()->GetName());

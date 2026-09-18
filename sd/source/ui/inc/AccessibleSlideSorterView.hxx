@@ -62,7 +62,7 @@ public:
         @param nIndex
             Index of the child for which to return the implementation object.
     */
-    AccessibleSlideSorterObject* GetAccessibleChildImplementation (sal_Int32 nIndex);
+    rtl::Reference<AccessibleSlideSorterObject> GetAccessibleChildImplementation(sal_Int32 nIndex);
 
     //=====  XAccessibleContext  ==============================================
 

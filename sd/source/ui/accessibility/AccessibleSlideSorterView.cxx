@@ -78,8 +78,8 @@ public:
     void RequestUpdateChildren();
     void Clear();
     sal_Int32 GetVisibleChildCount() const;
-    AccessibleSlideSorterObject* GetAccessibleChild (sal_Int32 nIndex);
-    AccessibleSlideSorterObject* GetVisibleChild (sal_Int32 nIndex);
+    rtl::Reference<AccessibleSlideSorterObject> GetAccessibleChild(sal_Int32 nIndex);
+    rtl::Reference<AccessibleSlideSorterObject> GetVisibleChild(sal_Int32 nIndex);
 
     void ConnectListeners();
     void ReleaseListeners();
@@ -143,10 +143,10 @@ void SAL_CALL AccessibleSlideSorterView::disposing()
     mpImpl.reset();
 }
 
-AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplementation (
-    sal_Int32 nIndex)
+rtl::Reference<AccessibleSlideSorterObject>
+AccessibleSlideSorterView::GetAccessibleChildImplementation(sal_Int32 nIndex)
 {
-    AccessibleSlideSorterObject* pResult = nullptr;
+    rtl::Reference<AccessibleSlideSorterObject> pResult;
     ::osl::MutexGuard aGuard (m_aMutex);
 
     if (nIndex>=0 && nIndex<mpImpl->GetVisibleChildCount())
@@ -348,8 +348,8 @@ void SAL_CALL AccessibleSlideSorterView::selectAccessibleChild (sal_Int64 nChild
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild == nullptr)
+    rtl::Reference<AccessibleSlideSorterObject> pChild = mpImpl->GetAccessibleChild(nChildIndex);
+    if (!pChild.is())
         throw lang::IndexOutOfBoundsException();
 
     mrSlideSorter.GetController().GetPageSelector().SelectPage(pChild->GetPageNumber());
@@ -364,8 +364,8 @@ sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int6
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild == nullptr)
+    rtl::Reference<AccessibleSlideSorterObject> pChild = mpImpl->GetAccessibleChild(nChildIndex);
+    if (!pChild.is())
         throw lang::IndexOutOfBoundsException();
 
     bIsSelected = mrSlideSorter.GetController().GetPageSelector().IsPageSelected(
@@ -437,8 +437,8 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int64 nChi
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild == nullptr)
+    rtl::Reference<AccessibleSlideSorterObject> pChild = mpImpl->GetAccessibleChild(nChildIndex);
+    if (!pChild.is())
         throw lang::IndexOutOfBoundsException();
 
     mrSlideSorter.GetController().GetPageSelector().DeselectPage(pChild->GetPageNumber());
@@ -551,18 +551,18 @@ sal_Int32 AccessibleSlideSorterView::Implementation::GetVisibleChildCount() cons
         return 0;
 }
 
-AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetVisibleChild (
-    sal_Int32 nIndex)
+rtl::Reference<AccessibleSlideSorterObject>
+AccessibleSlideSorterView::Implementation::GetVisibleChild(sal_Int32 nIndex)
 {
     assert(nIndex>=0 && nIndex<GetVisibleChildCount());
 
     return GetAccessibleChild(nIndex+mnFirstVisibleChild);
 }
 
-AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAccessibleChild (
-    sal_Int32 nIndex)
+rtl::Reference<AccessibleSlideSorterObject>
+AccessibleSlideSorterView::Implementation::GetAccessibleChild(sal_Int32 nIndex)
 {
-    AccessibleSlideSorterObject* pChild = nullptr;
+    rtl::Reference<AccessibleSlideSorterObject> pChild;
 
     if (nIndex>=0 && o3tl::make_unsigned(nIndex)<maPageObjects.size())
     {
@@ -585,7 +585,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
 
         }
 
-        pChild = maPageObjects[nIndex].get();
+        pChild = maPageObjects[nIndex];
     }
     else
     {
@@ -742,8 +742,8 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener, 
 
     if (mnFocusedIndex >= 0)
     {
-        AccessibleSlideSorterObject* pObject = GetAccessibleChild(mnFocusedIndex);
-        if (pObject != nullptr)
+        rtl::Reference<AccessibleSlideSorterObject> pObject = GetAccessibleChild(mnFocusedIndex);
+        if (pObject.is())
         {
             pObject->FireAccessibleEvent(
                 AccessibleEventId::STATE_CHANGED,
@@ -754,8 +754,8 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener, 
     }
     if (nNewFocusedIndex >= 0)
     {
-        AccessibleSlideSorterObject* pObject = GetAccessibleChild(nNewFocusedIndex);
-        if (pObject != nullptr)
+        rtl::Reference<AccessibleSlideSorterObject> pObject = GetAccessibleChild(nNewFocusedIndex);
+        if (pObject.is())
         {
             pObject->FireAccessibleEvent(
                 AccessibleEventId::STATE_CHANGED,
