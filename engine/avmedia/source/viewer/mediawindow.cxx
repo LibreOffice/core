@@ -223,9 +223,9 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     if (o_pbLink != nullptr && sfx2::COKitFilePicker::isAvailable())
     {
         std::vector<sfx2::COKitFilePicker::Filter> aPickerFilters;
+        OUStringBuffer aWildcards;
         for (const auto& rFilter : getMediaFilters())
         {
-            OUStringBuffer aWildcards;
             for (sal_Int32 nIndex = 0; nIndex >= 0;)
             {
                 if (!aWildcards.isEmpty())
@@ -233,8 +233,11 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
                 aWildcards.append(OUString::Concat(u"*.")
                                   + o3tl::getToken(rFilter.second, 0, ';', nIndex));
             }
-            aPickerFilters.push_back({ rFilter.first, aWildcards.makeStringAndClear() });
         }
+
+        // FIXME: We should use a translation of "Media files" here and not an empty string.
+        if (!aWildcards.isEmpty())
+            aPickerFilters.push_back({ u""_ustr, aWildcards.makeStringAndClear() });
 
         if (sfx2::COKitFilePicker::requestAndRedispatch(u".uno:InsertAVMedia"_ustr, u"URL"_ustr,
                                                         aPickerFilters,

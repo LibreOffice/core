@@ -134,9 +134,9 @@ std::vector<Filter> graphicImportFilters()
     std::vector<Filter> aFilters;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
+    OUStringBuffer aWildcards;
     for (sal_uInt16 nFormat = 0; nFormat < rGraphicFilter.GetImportFormatCount(); ++nFormat)
     {
-        OUStringBuffer aWildcards;
         for (sal_Int32 nEntry = 0;; ++nEntry)
         {
             const OUString sWildcard = rGraphicFilter.GetImportWildcard(nFormat, nEntry);
@@ -146,11 +146,10 @@ std::vector<Filter> graphicImportFilters()
                 aWildcards.append(';');
             aWildcards.append(sWildcard);
         }
-
-        if (!aWildcards.isEmpty())
-            aFilters.push_back(
-                { rGraphicFilter.GetImportFormatName(nFormat), aWildcards.makeStringAndClear() });
     }
+    // FIXME: We should use a translation of "Images" here and not an empty string.
+    if (!aWildcards.isEmpty())
+        aFilters.push_back({ u""_ustr, aWildcards.makeStringAndClear() });
 
     return aFilters;
 }
@@ -161,13 +160,21 @@ std::vector<Filter> documentImportFilters(const OUString& rFactoryName)
     SfxFilterMatcher aMatcher(rFactoryName);
     SfxFilterMatcherIter aIter(aMatcher, SfxFilterFlags::IMPORT);
 
+    OUStringBuffer aWildcards;
     for (std::shared_ptr<const SfxFilter> pFilter = aIter.First(); pFilter;
          pFilter = aIter.Next())
     {
         const OUString& sGlob = pFilter->GetWildcard().getGlob();
         if (!sGlob.isEmpty())
-            aFilters.push_back({ pFilter->GetUIName(), sGlob });
+        {
+            if (!aWildcards.isEmpty())
+                aWildcards.append(';');
+            aWildcards.append(sGlob);
+        }
     }
+    // FIXME: We should use a translation of "Documents" here and not an empty string.
+    if (!aWildcards.isEmpty())
+        aFilters.push_back({ u""_ustr, aWildcards.makeStringAndClear() });
 
     return aFilters;
 }
