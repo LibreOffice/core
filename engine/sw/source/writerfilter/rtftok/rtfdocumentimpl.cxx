@@ -1929,6 +1929,17 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
     {
         Buf_t aTuple(rBuffer.front());
         rBuffer.pop_front();
+        if (std::get<0>(aTuple) == RTFBufferTypes::CellEnd)
+        {
+            assert(pSprms && pAttributes);
+            auto pValue = new RTFValue(1);
+            pSprms->set(NS_ooxml::LN_tblCell, pValue);
+            writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
+                new RTFReferenceProperties(*pAttributes, *pSprms));
+            Mapper().props(pTableCellProperties);
+            tableBreak();
+            break;
+        }
         if (std::get<0>(aTuple) == RTFBufferTypes::Props
             || std::get<0>(aTuple) == RTFBufferTypes::PropsChar)
         {
@@ -1950,17 +1961,6 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
 
             sendProperties(rRowBuffer.GetParaProperties(), rRowBuffer.GetFrameProperties(),
                            rRowBuffer.GetRowProperties());
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::CellEnd)
-        {
-            assert(pSprms && pAttributes);
-            auto pValue = new RTFValue(1);
-            pSprms->set(NS_ooxml::LN_tblCell, pValue);
-            writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
-                new RTFReferenceProperties(*pAttributes, *pSprms));
-            Mapper().props(pTableCellProperties);
-            tableBreak();
-            break;
         }
         else if (std::get<0>(aTuple) == RTFBufferTypes::StartRun)
             Mapper().startCharacterGroup();
