@@ -164,7 +164,33 @@ function createCustomField(
 	);
 
 	const spinfield = row.querySelector('input.spinfield') as HTMLInputElement;
-	if (spinfield) spinfield.tabIndex = -1;
+	if (!spinfield) return;
+
+	spinfield.tabIndex = -1;
+
+	const onTab = function (event: KeyboardEvent) {
+		if (event.key !== 'Tab') return;
+
+		const inField = row.contains(event.target as Node);
+
+		const target = (
+			!inField
+				? spinfield
+				: event.shiftKey
+					? JSDialog.FindNextFocusableSiblingElement(row, 'previous')
+					: JSDialog.FindFocusableWithin(row.parentElement, 'next')
+		) as HTMLElement | null;
+		if (!target) return;
+
+		target.focus();
+		event.preventDefault();
+		event.stopPropagation();
+	};
+
+	app.layoutingService.appendLayoutingTask(function () {
+		const list = row.parentElement;
+		if (list) list.addEventListener('keydown', onTab, true);
+	});
 }
 
 JSDialog.LineWidthCustom = function (
