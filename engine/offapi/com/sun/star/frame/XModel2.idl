@@ -47,30 +47,6 @@ interface XModel2 : com::sun::star::frame::XModel
      */
     com::sun::star::container::XEnumeration getControllers();
 
-    /** provides the available names of the factory to be used to create views.
-
-        <p>The names are usually logical view names. The following names have
-        a defined meaning, i.e. every concrete implementation which returns such
-        a name must ensure it has the same meaning, and if a concrete implementation
-        has a view with the given meaning, it must give it the name as defined here:
-        <ul>
-            <li><b>Default</b> specifies the default view of the document.</li>
-            <li><b>Preview</b> specifies a preview of the document. A minimal implementation of such a view
-                is a <em>Default</em> view which is read-only.</li>
-            <li><b>PrintPreview</b> specifies a print preview of the document.</li>
-        </ul>
-        </p>
-
-        <p>Implementations of this interface might decide to support additional
-        view names, which then are documented in the respective service descriptions.</p>
-
-        @see createView
-
-        @returns
-            a sequence of names of all supported views for this document.
-     */
-    sequence< string > getAvailableViewControllerNames();
-
     /** creates the default view instance for this model.
 
         <p>Effectively, this method is equivalent to calling createView() with

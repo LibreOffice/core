@@ -42,9 +42,6 @@ public:
     OUString      GetLegacyViewName() const;
 
     /** returns an API-compatible view name.
-
-        For details on which view names are specified, see the XModel2.getAvailableViewControllerNames
-        documentation.
     */
     OUString      GetAPIViewName() const;
 

@@ -314,7 +314,6 @@ public:
 
     // XModel2
     virtual cpo::uno::Reference< css::container::XEnumeration > getControllers(  ) override ;
-    virtual cpo::uno::Sequence< OUString > getAvailableViewControllerNames(  ) override ;
     virtual cpo::uno::Reference< css::frame::XController2 > createDefaultViewController( const cpo::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual cpo::uno::Reference< css::frame::XController2 > createViewController( const OUString& ViewName, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const cpo::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual void setArgs(const cpo::uno::Sequence<css::beans::PropertyValue>& aArgs) override;

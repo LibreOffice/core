@@ -88,10 +88,6 @@ public class PopupMenuControllerFactory extends TestCase {
         // register one controller, so it can be instantiated
         XUIControllerRegistration xReg = UnoRuntime.queryInterface(XUIControllerRegistration.class, xInst);
 
-        xReg.registerController(".uno:MyCommandUrl", "", "com.sun.star.comp.framework.FooterMenuController");
-        tEnv.addObjRelation("XUIControllerRegistration.RegisteredController", ".uno:MyCommandUrl");
-        tEnv.addObjRelation("XMultiComponentFactory.ServiceNames", new String[]{".uno:MyCommandUrl"});
-
         return tEnv;
     }
 }

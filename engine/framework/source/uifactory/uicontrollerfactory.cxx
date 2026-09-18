@@ -56,8 +56,6 @@ public:
 
     // XUIControllerRegistration
     virtual bool hasController( const OUString& aCommandURL, const OUString& aModuleName ) override;
-    virtual void registerController( const OUString& aCommandURL, const OUString& aModuleName, const OUString& aControllerImplementationName ) override;
-    virtual void deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) override;
 
 protected:
     UIControllerFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, std::u16string_view rUINode  );
@@ -192,41 +190,6 @@ bool UIControllerFactory::hasController(
     }
 
     return ( !m_pConfigAccess->getServiceFromCommandModule( aCommandURL, aModuleName ).isEmpty() );
-}
-
-void UIControllerFactory::registerController(
-    const OUString& aCommandURL,
-    const OUString& aModuleName,
-    const OUString& aControllerImplementationName )
-{
-    // SAFE
-    std::unique_lock g(m_aMutex);
-
-    if ( !m_bConfigRead )
-    {
-        m_bConfigRead = true;
-        m_pConfigAccess->readConfigurationData();
-    }
-
-    m_pConfigAccess->addServiceToCommandModule( aCommandURL, aModuleName, aControllerImplementationName );
-    // SAFE
-}
-
-void UIControllerFactory::deregisterController(
-    const OUString& aCommandURL,
-    const OUString& aModuleName )
-{
-    // SAFE
-    std::unique_lock g(m_aMutex);
-
-    if ( !m_bConfigRead )
-    {
-        m_bConfigRead = true;
-        m_pConfigAccess->readConfigurationData();
-    }
-
-    m_pConfigAccess->removeServiceFromCommandModule( aCommandURL, aModuleName );
-    // SAFE
 }
 
 class PopupMenuControllerFactory :  public UIControllerFactory

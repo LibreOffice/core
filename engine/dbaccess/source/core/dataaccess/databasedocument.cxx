@@ -2020,12 +2020,6 @@ Reference< XEnumeration > ODatabaseDocument::getControllers(  )
     return new ::comphelper::OAnyEnumeration(aController);
 }
 
-Sequence< OUString > ODatabaseDocument::getAvailableViewControllerNames(  )
-{
-    Sequence< OUString > aNames { SERVICE_SDB_APPLICATIONCONTROLLER };
-    return aNames;
-}
-
 Reference< XController2 > ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& Frame )
 {
     return createViewController( u"Default"_ustr, Sequence< PropertyValue >(), Frame);

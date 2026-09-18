@@ -50,35 +50,6 @@ published interface XUIControllerRegistration : cpo::uno::XInterface
     */
     boolean hasController( [in] string aCommandURL, [in] string aModelName );
 
-    /** function to create an association between a user interface controller implementation
-        and a command URL and optional module.
-
-        @param aCommandURL
-            a command URL which specifies an action which should be associated with a user
-            interface controller.
-
-        @param aModelName
-            an optional name of an OpenOffice model service. This value can remain empty if
-            no model service name was specified.
-
-        @param aControllerImplementationName
-            a UNO implementation name that can be used to create a user interface controller
-            with the OpenOffice service manager.
-    */
-    void registerController( [in] string aCommandURL, [in] string aModelName, [in] string aControllerImplementationName );
-
-    /** function to remove a previously defined association between a user interface controller
-        implementation and a command URL and optional module.
-
-        @param aCommandURL
-            a command URL which specifies an action which should be associated with a user
-            interface controller.
-
-        @param aModelName
-            an optional name of an OpenOffice model service. This value can remain empty if
-            no model service name was specified.
-    */
-    void deregisterController( [in] string aCommandURL, [in] string aModelName );
 };
 
 }; }; }; };

@@ -7375,8 +7375,6 @@ module com {
     published interface XUIControllerRegistration {
      interface ::cpo::uno::XInterface;
      boolean hasController([in] string aCommandURL, [in] string aModelName);
-     void registerController([in] string aCommandURL, [in] string aModelName, [in] string aControllerImplementationName);
-     void deregisterController([in] string aCommandURL, [in] string aModelName);
     };
     published service ProtocolHandler {
      interface ::com::sun::star::frame::XDispatchProvider;

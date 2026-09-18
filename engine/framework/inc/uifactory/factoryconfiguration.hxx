@@ -53,8 +53,6 @@ public:
 
     OUString getServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
     OUString getValueFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
-    void          addServiceToCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule, const OUString& rServiceSpecifier );
-    void          removeServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule );
 
     // container.XContainerListener
     virtual void elementInserted( const css::container::ContainerEvent& Event ) override;

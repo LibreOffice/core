@@ -429,7 +429,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/frame/_XStatusListener \
     qadevOOo/tests/java/ifc/frame/_XStorable \
     qadevOOo/tests/java/ifc/frame/_XSynchronousFrameLoader \
-    qadevOOo/tests/java/ifc/frame/_XUIControllerRegistration \
     qadevOOo/tests/java/ifc/i18n/_XBreakIterator \
     qadevOOo/tests/java/ifc/i18n/_XCalendar \
     qadevOOo/tests/java/ifc/i18n/_XCharacterClassification \

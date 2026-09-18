@@ -115,27 +115,6 @@ OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( std::
     return OUString();
 }
 
-void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
-    std::u16string_view rCommandURL,
-    std::u16string_view rModule,
-    const OUString& rServiceSpecifier )
-{
-    std::unique_lock g(m_mutex);
-
-    OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
-    m_aMenuControllerMap.emplace( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) );
-}
-
-void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
-    std::u16string_view rCommandURL,
-    std::u16string_view rModule )
-{
-    std::unique_lock g(m_mutex);
-
-    OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
-    m_aMenuControllerMap.erase( aHashKey );
-}
-
 // container.XContainerListener
 void ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent )
 {

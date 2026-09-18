@@ -198,8 +198,6 @@ inline constexpr OUString SERVICE_NAME_REPORT_COLLECTION = u"com.sun.star.sdb.Re
 inline constexpr OUString SERVICE_NAME_QUERY_COLLECTION = u"com.sun.star.sdb.Queries"_ustr;
 inline constexpr OUString SERVICE_NAME_SINGLESELECTQUERYCOMPOSER
     = u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr;
-inline constexpr OUString SERVICE_SDB_APPLICATIONCONTROLLER
-    = u"org.openoffice.comp.dbu.OApplicationController"_ustr;
 
 // info properties
 inline constexpr OUString INFO_JDBCDRIVERCLASS = u"JavaDriverClass"_ustr;

@@ -4183,22 +4183,6 @@ Reference< container::XEnumeration > SfxBaseModel::getControllers()
 
 
 // frame::XModel2
-Sequence< OUString > SfxBaseModel::getAvailableViewControllerNames()
-{
-    SfxModelGuard aGuard( *this );
-
-    const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const sal_Int16 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
-
-    Sequence< OUString > aViewNames( nViewFactoryCount );
-    auto aViewNamesRange = asNonConstRange(aViewNames);
-    for ( sal_Int16 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
-        aViewNamesRange[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
-    return aViewNames;
-}
-
-
-// frame::XModel2
 Reference< frame::XController2 > SfxBaseModel::createDefaultViewController( const Reference< frame::XFrame >& i_rFrame )
 {
     SfxModelGuard aGuard( *this );
