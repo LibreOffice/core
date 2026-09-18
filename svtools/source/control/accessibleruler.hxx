@@ -36,8 +36,8 @@ class Ruler;
 class SvtRulerAccessible final : public comphelper::OAccessible
 {
 public:
-    SvtRulerAccessible(
-        css::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
+    SvtRulerAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                       Ruler& rRepresentation, OUString aName);
 
     //=====  XAccessibleComponent  ============================================
 

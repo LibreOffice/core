@@ -37,11 +37,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-
-SvtRulerAccessible::SvtRulerAccessible(uno::Reference<XAccessible> xParent, Ruler& rRepr,
-                                       OUString aName)
+SvtRulerAccessible::SvtRulerAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                       Ruler& rRepr, OUString aName)
     : msName(std::move(aName))
-    , mxParent(std::move(xParent))
+    , mxParent(rpParent)
     , mpRepr(&rRepr)
 {
 }
