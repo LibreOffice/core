@@ -1723,13 +1723,19 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 
     RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+    // Text sent directly from a footnote destination gets no run group of its own.
+    const bool bRunGroup
+        = pCurrentBuffer || m_aStates.top().getDestination() != Destination::FOOTNOTE;
 
-    if (!pCurrentBuffer && m_aStates.top().getDestination() != Destination::FOOTNOTE)
-        Mapper().startCharacterGroup();
-    else if (pCurrentBuffer)
+    if (bRunGroup)
     {
-        RTFValue::Pointer_t pValue;
-        pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, pValue, nullptr);
+        if (!pCurrentBuffer)
+            Mapper().startCharacterGroup();
+        else
+        {
+            RTFValue::Pointer_t pValue;
+            pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, pValue, nullptr);
+        }
     }
 
     if (m_aStates.top().getDestination() == Destination::NORMAL
@@ -1747,12 +1753,15 @@ void RTFDocumentImpl::text(OUString& rString)
 
     m_bNeedCr = true;
 
-    if (!pCurrentBuffer && m_aStates.top().getDestination() != Destination::FOOTNOTE)
-        Mapper().endCharacterGroup();
-    else if (pCurrentBuffer)
+    if (bRunGroup)
     {
-        RTFValue::Pointer_t pValue;
-        pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, pValue, nullptr);
+        if (!pCurrentBuffer)
+            Mapper().endCharacterGroup();
+        else
+        {
+            RTFValue::Pointer_t pValue;
+            pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, pValue, nullptr);
+        }
     }
 }
 
