@@ -440,7 +440,7 @@ void SVTXGridControl::impl_checkTableModelInit()
     if ( !pTable )
         return;
 
-    pTable->SetModel( PTableModel( m_xTableModel ) );
+    pTable->SetModel(m_xTableModel);
 
     m_bTableModelInitCompleted = true;
 
