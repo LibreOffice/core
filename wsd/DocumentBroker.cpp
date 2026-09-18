@@ -2992,7 +2992,24 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
 
     // Finally, see if we have a newer version than storage.
     if (isStorageOutdated())
+    {
+        if (_documentChangedInStorage && !_storageManager.lastUploadSuccessful())
+        {
+            // Our last upload was refused and storage has moved on, so the two
+            // versions have genuinely diverged and the user has been asked which
+            // one to keep. Sending ours again before they answer would decide it
+            // for them. Their answer comes back as a forced upload, which does
+            // not pass through here.
+            //
+            // A conflict found any other way - a peer joining a document whose
+            // timestamp moved, say - leaves our uploads working: giving up on
+            // them would mean the next edit is silently never stored.
+            LOG_TRC("Not uploading: our last upload was refused and the conflict is unresolved");
+            return NeedToUpload::No;
+        }
+
         return NeedToUpload::Yes; // Timestamp changed, upload.
+    }
 
     return NeedToUpload::No; // No reason to upload, seems up-to-date.
 }

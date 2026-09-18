@@ -1261,16 +1261,347 @@ public:
     }
 };
 
+/// A conflict must stop us uploading of our own accord. Once storage has changed
+/// under us, what we hold is no longer a newer version of what is there: it is a
+/// competing one, and sending it would overwrite the other writer without the
+/// user ever choosing to. The only upload allowed from that point on is the one
+/// the user asks for, which arrives as a forced upload and does not come through
+/// the usual "is there a newer version to send?" path.
+///
+/// The retry throttle alone is not what protects us here, so the throttle is set
+/// low enough that an unguarded retry would fire well inside the settle window.
+class UnitWOPINoUploadWhileConflicted : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload, WaitConflict,
+               SettleNoUpload, Done)
+    _phase;
+
+    /// How long to let wsd run after the conflict, watching for an upload it
+    /// should not make. Many times the upload throttle set in configure().
+    static constexpr std::chrono::seconds SettleDuration{ 2 };
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ConflictingDocContent = "Someone else's contents";
+
+    /// When the settle window ends and we can conclude no upload was attempted.
+    std::chrono::steady_clock::time_point _settleUntil;
+
+public:
+    UnitWOPINoUploadWhileConflicted()
+        : WopiTestServer("UnitWOPINoUploadWhileConflicted", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        // Retry promptly, so an upload we must not make has every chance to
+        // happen within the settle window rather than being merely throttled.
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("per_document.limit_store_failures", 10);
+
+        // always_save_on_exit deliberately uploads through a conflict; that is a
+        // different decision from the one under test here.
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        // Only the first upload reaches here. Any further one carries the
+        // timestamp from before storage changed, so the host rejects it on the
+        // timestamp guard without consulting us. Those attempts are counted
+        // though, and the settle window below is what checks for them.
+        LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+        LOK_ASSERT_EQUAL_MESSAGE("Expected this to be the first upload", std::size_t(1),
+                                 getCountPutFile());
+
+        TST_LOG("PutFile #1: changing the document in storage and rejecting the upload");
+        setFileContent(ConflictingDocContent);
+
+        TRANSITION_STATE(_phase, Phase::WaitConflict);
+
+        return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        if (message.starts_with("error: cmd=storage kind=savefailed"))
+        {
+            return true;
+        }
+
+        LOK_ASSERT_MESSAGE("Expected a documentconflict error: " + message,
+                           message.starts_with("error: cmd=storage kind=documentconflict"));
+
+        if (_phase == Phase::WaitConflict)
+        {
+            TRANSITION_STATE(_phase, Phase::SettleNoUpload);
+
+            // Leave the conflict unresolved, as a user who has not answered the
+            // dialog yet would, and watch what wsd does on its own.
+            _settleUntil = std::chrono::steady_clock::now() + SettleDuration;
+            TST_LOG("Conflict raised; watching for " << SettleDuration
+                                                     << " that no upload follows");
+        }
+
+        return true;
+    }
+
+    // onDataLoss is left to the base, which fails the test: discarding via
+    // closedocument must not be reported as losing the user's work.
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << ']');
+        LOK_ASSERT_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected storage to keep the other writer's contents",
+                                 std::string(ConflictingDocContent), getFileContent());
+
+        passTest("No upload attempted while the conflict was unresolved");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::SettleNoUpload:
+            {
+                if (std::chrono::steady_clock::now() < _settleUntil)
+                {
+                    break;
+                }
+
+                // Any upload beyond the first is one we made of our own accord
+                // while the user had not resolved the conflict.
+                LOK_ASSERT_EQUAL_MESSAGE(
+                    "Expected no upload while the conflict was unresolved, but the document "
+                    "was sent to storage again, overwriting the other writer",
+                    std::size_t(1), getCountPutFile());
+
+                TRANSITION_STATE(_phase, Phase::Done);
+
+                TST_LOG("Discarding own changes via closedocument");
+                WSD_CMD("closedocument");
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::WaitConflict:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
+
+/// A conflict does not always mean our own upload was refused. A peer joining a
+/// document whose timestamp moved raises one too, and there the upload path is
+/// still perfectly good. Giving up on uploads for the rest of the document's
+/// life would mean every later edit is silently never stored: no upload, no
+/// error, and a broker that exits believing it has nothing to save.
+class UnitWOPIUploadAfterJoinConflict : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, JoinPeer, WaitConflict,
+               WaitUploadAttempt, Done)
+    _phase;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ForeignDocContent = "Someone else's contents";
+
+    /// How long to wait for the upload before calling it lost. Many times the
+    /// upload throttle, so only a document that will never upload runs out.
+    static constexpr std::chrono::seconds UploadDeadline{ 4 };
+
+    /// When we asked for the save that must reach storage.
+    std::chrono::steady_clock::time_point _savedAt;
+
+public:
+    UnitWOPIUploadAfterJoinConflict()
+        : WopiTestServer("UnitWOPIUploadAfterJoinConflict", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("per_document.limit_store_failures", 10);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        // The upload we must still be making. Which version wins is for the
+        // host to arbitrate from the timestamp we send; the point here is that
+        // we ask at all.
+        TST_LOG("PutFile #" << getCountPutFile() << ": the upload path is still alive");
+
+        // The verdict is left to invokeWSDTest, which owns _phase; deciding it
+        // from this thread races with the deadline check below.
+        return nullptr; // Success.
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoadStatus)
+            return true; // The peer's load, which we don't drive from here.
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+
+        if (_phase != Phase::WaitModifiedStatus)
+            return true; // The document stays dirty until an upload lands.
+
+        TRANSITION_STATE(_phase, Phase::JoinPeer);
+
+        // Somebody else writes the document while we hold unsaved changes, then
+        // a second view joins and notices the timestamp has moved.
+        TST_LOG("Changing the document in storage, then joining a second view");
+        setFileContent(ForeignDocContent);
+
+        addWebSocket();
+        WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        if (!message.starts_with("error: cmd=storage kind=documentconflict"))
+            return true;
+
+        if (_phase == Phase::JoinPeer || _phase == Phase::WaitConflict)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUploadAttempt);
+
+            // The conflict is raised and left unresolved, as a user who has not
+            // answered the dialog would leave it. Saving must still try.
+            TST_LOG("Conflict raised on join; saving must still reach storage");
+            _savedAt = std::chrono::steady_clock::now();
+            WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Done:
+            {
+                if (getCountPutFile() > 0)
+                    passTest("Uploads still work after a conflict raised by a joining peer");
+                break;
+            }
+            case Phase::WaitUploadAttempt:
+            {
+                if (getCountPutFile() > 0)
+                {
+                    TRANSITION_STATE(_phase, Phase::Done);
+                    break;
+                }
+
+                if (std::chrono::steady_clock::now() - _savedAt < UploadDeadline)
+                    break;
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                failTest("The document was never uploaded after a conflict raised by a joining "
+                         "peer: the save produced no PutFile and no error, so the edit would be "
+                         "lost when the document unloads");
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::JoinPeer:
+            case Phase::WaitConflict:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [10]
+    return new UnitBase* [12]
     {
         new UnitWOPIFailUploadIntactStorage(http::StatusCode::Locked),
             new UnitWOPIFailUploadIntactStorage(http::StatusCode::InternalServerError),
             new UnitWOPIFailUploadLockMismatch(), new UnitWOPIFailUploadBare409(),
             new UnitWOPIFailUploadChangedStorage(),
             new UnitWOPIFailUploadTimeoutChangedStorage(), new UnitWOPITimeoutHashMatches(),
-            new UnitWOPITimeoutHashDiffersSameSize(), new UnitWOPINoLastKnownTimestamp(), nullptr
+            new UnitWOPITimeoutHashDiffersSameSize(), new UnitWOPINoLastKnownTimestamp(),
+            new UnitWOPINoUploadWhileConflicted(),
+            new UnitWOPIUploadAfterJoinConflict(), nullptr
     };
 }
 
