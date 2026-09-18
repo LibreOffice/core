@@ -13,10 +13,8 @@ describe('Plural', function () {
 	// The rule parser and _n() from js/plural.js. In the browser `window` is
 	// the global object, so a call site just writes _n(); under mocha the two
 	// are separate and only the window carries what plural.js installed.
-	const PluralForms = (window as any).PluralForms;
-	const _n: (singular: string, plural: string, count: number) => string = (
-		window as any
-	)._n;
+	const PluralForms = window.PluralForms;
+	const _n = window._n;
 
 	// Plural-Forms headers as they stand in po/ui-*.po today.
 	const RULES: { [lang: string]: string } = {

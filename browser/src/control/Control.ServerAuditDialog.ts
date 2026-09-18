@@ -23,7 +23,7 @@ interface AuditEntry {
 
 class ClientAuditor {
 	private static checkPostMessages(entries: Array<AuditEntry>) {
-		if ((window as any).WOPIPostmessageReady)
+		if (window.WOPIPostmessageReady)
 			entries.push({ code: 'postmessage', status: 'ok' });
 		else entries.push({ code: 'postmessage', status: 'hostnotready' });
 	}

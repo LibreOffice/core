@@ -286,26 +286,17 @@ var getElementsFromId = function (
 	builder: any,
 ) {
 	if (id === 'iconset')
-		return (window as any).getConditionalFormatMenuElements(
-			'iconsetoverlay',
-			true,
-		);
+		return window.getConditionalFormatMenuElements('iconsetoverlay', true);
 	else if (id === 'scaleset')
-		return (window as any).getConditionalColorScaleMenuElements(
-			'iconsetoverlay',
-			true,
-		);
+		return window.getConditionalColorScaleMenuElements('iconsetoverlay', true);
 	else if (id === 'databarset')
-		return (window as any).getConditionalDataBarMenuElements(
-			'iconsetoverlay',
-			true,
-		);
+		return window.getConditionalDataBarMenuElements('iconsetoverlay', true);
 	else if (id === 'inserttablepopup')
-		return (window as any).getInsertTablePopupElements(closeCallback);
+		return window.getInsertTablePopupElements(closeCallback);
 	else if (id === 'insertshapespopup')
-		return (window as any).getShapesPopupElements(closeCallback);
+		return window.getShapesPopupElements(closeCallback);
 	else if (id === 'insertconnectorspopup')
-		return (window as any).getConnectorsPopupElements(closeCallback);
+		return window.getConnectorsPopupElements(closeCallback);
 	else if (id === 'userslistpopup')
 		return window.L.control.createUserListWidget();
 	else if (id === 'slideuserspopup')

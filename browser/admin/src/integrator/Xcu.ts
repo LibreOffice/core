@@ -366,9 +366,9 @@ class Xcu {
 				) as HTMLElement;
 				contentsContainer.innerHTML = '';
 				if (this.xcuDataObj && this.xcuDataObj[tab.label]) {
-					const renderedTree = (
-						window as any
-					).settingIframe.renderSettingsOption(this.xcuDataObj[tab.label]);
+					const renderedTree = window.settingIframe.renderSettingsOption(
+						this.xcuDataObj[tab.label],
+					);
 					renderedTree.classList.add('xcu-settings-grid');
 					contentsContainer.appendChild(renderedTree);
 				} else {

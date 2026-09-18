@@ -14,7 +14,7 @@ describe('Dispatcher ext: routing', function () {
 	// guard at the top of dispatch() to run without touching anything else;
 	// _extensions is what the ext: branch actually reads.
 	function newDispatcher(): Dispatcher {
-		(window as any).mode = { isSmallScreenDevice: () => false };
+		(window.mode as any) = { isSmallScreenDevice: () => false };
 		app.map = {
 			dialog: { hasOpenedDialog: () => false, blinkOpenDialog: () => {} },
 			_extensions: {} as { [id: string]: any },

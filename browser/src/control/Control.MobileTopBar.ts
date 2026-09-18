@@ -111,7 +111,7 @@ class MobileTopBar extends JSDialog.Toolbar {
 		const state: string = e.state;
 
 		if (this.map.isEditMode() && (state === 'enabled' || state === 'disabled')) {
-			const id: string = (window as any).unoCmdToToolbarId(commandName);
+			const id: string = window.unoCmdToToolbarId(commandName);
 
 			if (state === 'enabled') {
 				this.enableItem(id, true);

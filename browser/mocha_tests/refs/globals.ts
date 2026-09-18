@@ -163,7 +163,7 @@ globalThis.document = globalThis.window.document;
 	control: {},
 };
 
-(globalThis.window as any).L = (globalThis as any).L;
+globalThis.window.L = (globalThis as any).L;
 
 // Old-style Leaflet factory inheritance: `window.L.Control.Foo = window.L.Control.extend({...})`
 // creates a subclass whose prototype is the given methods/properties object. The Handler stub

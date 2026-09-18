@@ -307,4 +307,4 @@ class RenderManager {
 	}
 }
 
-(window as any).RenderManager = RenderManager;
+window.RenderManager = RenderManager;

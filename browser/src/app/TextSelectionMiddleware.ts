@@ -163,4 +163,4 @@ class TextSelections {
 	}
 }
 
-(window as any).TextSelections = TextSelections;
+window.TextSelections = TextSelections;

@@ -39,7 +39,7 @@ class Logger {
 
 		// Limit memory usage of log by only keeping the latest entries
 		let maxEntries = 100;
-		if ((window as any).enableDebug || this._cypressTest) maxEntries = 1000;
+		if (window.enableDebug || this._cypressTest) maxEntries = 1000;
 
 		if (time - this.startTime < 60 * 1000 /* ms */) maxEntries = 500; // enough to capture early start.
 		while (this._logs.length > maxEntries) this._logs.shift();

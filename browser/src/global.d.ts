@@ -347,6 +347,11 @@ interface ErrorMessages {
 	};
 }
 
+interface PluralParseRule {
+	nplurals: number;
+	select: (n: number) => 0 | 1;
+}
+
 // Accessibility validator interface for Cypress tests
 interface A11yValidator {
 	checkWidget(type: string, element: HTMLElement): void;
@@ -391,6 +396,12 @@ interface Window {
 		seedDarkModeDefault(): boolean;
 	};
 	KeyboardShortcuts: KeyboardShortcuts;
+
+	PluralForms: {
+		parseRule: (header: string) => null | PluralParseRule;
+		defaultRule: PluralParseRule;
+	};
+	_n: (singular: string, plural: string, count: number) => string;
 
 	// The theme and the document background the load message carried.
 	themeSentWithLoad?: { theme: boolean; background: boolean };
@@ -450,6 +461,7 @@ interface Window {
 	wopiHostId: string;
 	vendor: string;
 	copyrightYear: string;
+	WOPIPostmessageReady: boolean;
 
 	socket: SockInterface;
 	errorMessages: ErrorMessages;
@@ -478,6 +490,29 @@ interface Window {
 	) => string;
 	getUNOCommand: (unoData: UnoCommand) => string;
 	getColorPickerData: (type: string) => any;
+	getConditionalFormatMenuElements: (
+		more: string,
+		dropdown: boolean,
+	) => HTMLElement;
+	getConditionalColorScaleMenuElements: (
+		more: string,
+		dropdown: boolean,
+	) => HTMLElement;
+	getConditionalDataBarMenuElements: (
+		more: string,
+		dropdown: boolean,
+	) => HTMLElement;
+	getConnectorsPopupElements: (
+		callback: EventListenerOrEventListenerObject,
+	) => HTMLElement;
+	getInsertTablePopupElements: (
+		callback: EventListenerOrEventListenerObject,
+	) => HTMLElement;
+	getShapesPopupElements: (
+		callback: EventListenerOrEventListenerObject,
+	) => HTMLElement;
+	editorUpdate: (e: Event) => void;
+	unoCmdToToolbarId: (name: string) => string;
 	L: any;
 	createWebSocket(url: string): SockInterface;
 	getAccessibilityState(): boolean;
@@ -486,6 +521,9 @@ interface Window {
 
 	removeAccessKey(text: string): string;
 	contextMenuWizard: boolean;
+
+	RenderManager: typeof RenderManager;
+	TextSelections: typeof TextSelections;
 }
 
 // For localization
