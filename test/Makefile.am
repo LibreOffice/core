@@ -68,6 +68,7 @@ all_la_unit_tests = \
 	unit-initial-load-fail.la \
 	unit-insert-delete.la \
 	unit-slidelink.la \
+	unit-compare-documents-url.la \
 	unit-uno-command.la \
 	unit-collab.la \
 	unit-collab-protocol.la \
@@ -475,6 +476,8 @@ unit_insert_delete_la_SOURCES = UnitInsertDelete.cpp
 unit_insert_delete_la_LIBADD = $(CPPUNIT_LIBS)
 unit_slidelink_la_SOURCES = UnitSlideLink.cpp
 unit_slidelink_la_LIBADD = $(CPPUNIT_LIBS)
+unit_compare_documents_url_la_SOURCES = UnitCompareDocumentsUrl.cpp
+unit_compare_documents_url_la_LIBADD = $(CPPUNIT_LIBS)
 unit_close_la_SOURCES = UnitClose.cpp
 unit_close_la_LIBADD = $(CPPUNIT_LIBS)
 unit_bad_doc_load_la_SOURCES = UnitBadDocLoad.cpp

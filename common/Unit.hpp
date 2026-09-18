@@ -703,6 +703,14 @@ public:
         return false;
     }
 
+    /// The UNO command that an insert request turned into, with its arguments as a JSON object.
+    /// Returns true to stop the command from reaching the engine.
+    virtual bool filterInsertCommand(const std::string& /* command */,
+                                     const std::string& /* arguments */)
+    {
+        return false;
+    }
+
     /// Before the kit process poll callback executes
     virtual void preKitPollCallback() {}
 

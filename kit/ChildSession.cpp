@@ -2197,6 +2197,8 @@ std::string ChildSession::writeFileToJail(const std::string& path, const char* d
 void ChildSession::postInsertCommand(const std::string& type, const std::string& url,
                                      int multimedia_width, int multimedia_height)
 {
+    const std::string escapedUrl = JsonUtil::escapeJSONValue(url);
+
     std::string command;
     std::string arguments;
     if (type == "multimedia" || type == "multimediaurl") {
@@ -2204,7 +2206,7 @@ void ChildSession::postInsertCommand(const std::string& type, const std::string&
         arguments = "{"
             "\"URL\":{"
                 "\"type\":\"string\","
-                "\"value\":\"" + url + "\""
+                "\"value\":\"" + escapedUrl + "\""
             "},"
             "\"IsLink\":{"
                 "\"type\":\"boolean\","
@@ -2236,20 +2238,23 @@ void ChildSession::postInsertCommand(const std::string& type, const std::string&
         arguments = "{"
             "\"URL\":{"
                 "\"type\":\"string\","
-                "\"value\":\"" + url + "\""
+                "\"value\":\"" + escapedUrl + "\""
             "}}";
     } else {
         command = (type == "selectbackground" ? ".uno:SelectBackground" : ".uno:InsertGraphic");
         arguments = "{"
             "\"FileName\":{"
                 "\"type\":\"string\","
-                "\"value\":\"" + url + "\""
+                "\"value\":\"" + escapedUrl + "\""
             "}}";
     }
 
     getLOKitDocument()->setView(_viewId);
 
     LOG_TRC("Inserting " << type << ": " << command << ' ' << arguments.c_str());
+
+    if (!Util::isMobileApp() && UnitKit::get().filterInsertCommand(command, arguments))
+        return;
 
     // Inserting a remote multimedia URL downloads the file here and can
     // block for a while, so ask to be told when the command finishes.
