@@ -28,6 +28,7 @@
 #include "tablegeometry.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
@@ -2260,6 +2261,183 @@ void TableControl_Impl::disposeAccessible()
     if (m_xAccessibleTable.is())
         m_xAccessibleTable->dispose();
     m_xAccessibleTable.clear();
+}
+
+sal_Int32 TableControl_Impl::getAccessibleControlCount() const
+{
+    // TC_TABLE is always defined, no matter whether empty or not
+    sal_Int32 count = 1;
+    if (m_pModel->hasRowHeaders())
+        ++count;
+    if (m_pModel->hasColumnHeaders())
+        ++count;
+    return count;
+}
+
+OUString TableControl_Impl::getAccessibleObjectName(AccessibleTableControlObjType eObjType,
+                                                    sal_Int32 nRow, sal_Int32 nCol) const
+{
+    OUString sRetText;
+    //Window* pWin;
+    switch (eObjType)
+    {
+        case AccessibleTableControlObjType::GRIDCONTROL:
+            sRetText = "Grid control";
+            break;
+        case AccessibleTableControlObjType::TABLE:
+            sRetText = "Grid control";
+            break;
+        case AccessibleTableControlObjType::ROWHEADERBAR:
+            sRetText = "RowHeaderBar";
+            break;
+        case AccessibleTableControlObjType::COLUMNHEADERBAR:
+            sRetText = "ColumnHeaderBar";
+            break;
+        case AccessibleTableControlObjType::TABLECELL:
+            //the name of the cell consists of column name and row name if defined
+            //if the name is equal to cell content, it'll be read twice
+            if (m_pModel->hasColumnHeaders())
+            {
+                sRetText = getColumnName(nCol) + " , ";
+            }
+            if (m_pModel->hasRowHeaders())
+            {
+                sRetText += getRowName(nRow) + " , ";
+            }
+            //aRetText = GetAccessibleCellText(_nRow, _nCol);
+            break;
+        case AccessibleTableControlObjType::ROWHEADERCELL:
+            sRetText = getRowName(nRow);
+            break;
+        case AccessibleTableControlObjType::COLUMNHEADERCELL:
+            sRetText = getColumnName(nCol);
+            break;
+        default:
+            OSL_FAIL("GridControl::GetAccessibleName: invalid enum!");
+    }
+    return sRetText;
+}
+
+OUString
+TableControl_Impl::getAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const
+{
+    OUString sRetText;
+    switch (eObjType)
+    {
+        case AccessibleTableControlObjType::GRIDCONTROL:
+            sRetText = "Grid control description";
+            break;
+        case AccessibleTableControlObjType::TABLE:
+            sRetText = "TABLE description";
+            break;
+        case AccessibleTableControlObjType::ROWHEADERBAR:
+            sRetText = "ROWHEADERBAR description";
+            break;
+        case AccessibleTableControlObjType::COLUMNHEADERBAR:
+            sRetText = "COLUMNHEADERBAR description";
+            break;
+        case AccessibleTableControlObjType::TABLECELL:
+            // the description of the cell consists of column name and row name if defined
+            // if the name is equal to cell content, it'll be read twice
+            if (m_pModel->hasColumnHeaders())
+            {
+                sRetText = getColumnName(getCurrentColumn()) + " , ";
+            }
+            if (m_pModel->hasRowHeaders())
+            {
+                sRetText += getRowName(getCurrentRow());
+            }
+            break;
+        case AccessibleTableControlObjType::ROWHEADERCELL:
+            sRetText = "ROWHEADERCELL description";
+            break;
+        case AccessibleTableControlObjType::COLUMNHEADERCELL:
+            sRetText = "COLUMNHEADERCELL description";
+            break;
+    }
+    return sRetText;
+}
+
+void TableControl_Impl::fillAccessibleStateSet(sal_Int64& rStateSet,
+                                               AccessibleTableControlObjType eObjType) const
+{
+    switch (eObjType)
+    {
+        case AccessibleTableControlObjType::GRIDCONTROL:
+        case AccessibleTableControlObjType::TABLE:
+
+            rStateSet |= css::accessibility::AccessibleStateType::FOCUSABLE;
+
+            if (m_pSelEngine->GetSelectionMode() == SelectionMode::Multiple)
+                rStateSet |= css::accessibility::AccessibleStateType::MULTI_SELECTABLE;
+
+            if (m_rAntiImpl.HasChildPathFocus())
+                rStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
+
+            if (m_rAntiImpl.IsActive())
+                rStateSet |= css::accessibility::AccessibleStateType::ACTIVE;
+
+            if (getDataWindow().IsEnabled())
+            {
+                rStateSet |= css::accessibility::AccessibleStateType::ENABLED;
+                rStateSet |= css::accessibility::AccessibleStateType::SENSITIVE;
+            }
+
+            if (m_rAntiImpl.IsReallyVisible())
+                rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+
+            if (eObjType == AccessibleTableControlObjType::TABLE)
+                rStateSet |= css::accessibility::AccessibleStateType::MANAGES_DESCENDANTS;
+            break;
+
+        case AccessibleTableControlObjType::COLUMNHEADERBAR:
+        case AccessibleTableControlObjType::ROWHEADERBAR:
+            rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+            rStateSet |= css::accessibility::AccessibleStateType::MANAGES_DESCENDANTS;
+            break;
+
+        case AccessibleTableControlObjType::TABLECELL:
+        {
+            rStateSet |= css::accessibility::AccessibleStateType::FOCUSABLE;
+            if (m_rAntiImpl.HasChildPathFocus())
+                rStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
+            rStateSet |= css::accessibility::AccessibleStateType::ACTIVE;
+            rStateSet |= css::accessibility::AccessibleStateType::TRANSIENT;
+            rStateSet |= css::accessibility::AccessibleStateType::SELECTABLE;
+            rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+            rStateSet |= css::accessibility::AccessibleStateType::SHOWING;
+            if (isRowSelected(getCurrentRow()))
+                // Hmm? Wouldn't we expect the affected row to be a parameter to this function?
+                rStateSet |= css::accessibility::AccessibleStateType::SELECTED;
+        }
+        break;
+
+        case AccessibleTableControlObjType::ROWHEADERCELL:
+            rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+            rStateSet |= css::accessibility::AccessibleStateType::TRANSIENT;
+            break;
+
+        case AccessibleTableControlObjType::COLUMNHEADERCELL:
+            rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+            break;
+    }
+}
+
+void TableControl_Impl::fillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
+                                                      sal_uInt16) const
+{
+    if (isRowSelected(nRow))
+        rStateSet |= css::accessibility::AccessibleStateType::SELECTED;
+    if (m_rAntiImpl.HasChildPathFocus())
+        rStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
+    else // only transient when column is not focused
+        rStateSet |= css::accessibility::AccessibleStateType::TRANSIENT;
+
+    rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
+    rStateSet |= css::accessibility::AccessibleStateType::SHOWING;
+    rStateSet |= css::accessibility::AccessibleStateType::ENABLED;
+    rStateSet |= css::accessibility::AccessibleStateType::SENSITIVE;
+    rStateSet |= css::accessibility::AccessibleStateType::ACTIVE;
 }
 
 void TableControl_Impl::impl_commitAccessibleEvent(sal_Int16 const i_eventID, Any const& i_newValue)

@@ -348,6 +348,13 @@ public:
     const rtl::Reference<accessibility::AccessibleGridControl>&
     getAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent);
     void disposeAccessible();
+    sal_Int32 getAccessibleControlCount() const;
+    OUString getAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 nRow,
+                                     sal_Int32 nCol) const;
+    OUString getAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const;
+    void fillAccessibleStateSet(sal_Int64& rStateSet, AccessibleTableControlObjType eObjType) const;
+    void fillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
+                                       sal_uInt16 nColumnPos) const;
 
     // ITableModelListener
     virtual void rowsInserted(RowPos first, RowPos last) override;

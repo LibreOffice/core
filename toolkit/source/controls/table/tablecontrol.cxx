@@ -263,84 +263,12 @@ rtl::Reference<comphelper::OAccessible> TableControl::CreateAccessible()
 OUString TableControl::GetAccessibleObjectName(AccessibleTableControlObjType eObjType,
                                                sal_Int32 _nRow, sal_Int32 _nCol) const
 {
-    OUString aRetText;
-    //Window* pWin;
-    switch (eObjType)
-    {
-        case AccessibleTableControlObjType::GRIDCONTROL:
-            aRetText = "Grid control";
-            break;
-        case AccessibleTableControlObjType::TABLE:
-            aRetText = "Grid control";
-            break;
-        case AccessibleTableControlObjType::ROWHEADERBAR:
-            aRetText = "RowHeaderBar";
-            break;
-        case AccessibleTableControlObjType::COLUMNHEADERBAR:
-            aRetText = "ColumnHeaderBar";
-            break;
-        case AccessibleTableControlObjType::TABLECELL:
-            //the name of the cell consists of column name and row name if defined
-            //if the name is equal to cell content, it'll be read twice
-            if (GetModel()->hasColumnHeaders())
-            {
-                aRetText = GetColumnName(_nCol) + " , ";
-            }
-            if (GetModel()->hasRowHeaders())
-            {
-                aRetText += GetRowName(_nRow) + " , ";
-            }
-            //aRetText = GetAccessibleCellText(_nRow, _nCol);
-            break;
-        case AccessibleTableControlObjType::ROWHEADERCELL:
-            aRetText = GetRowName(_nRow);
-            break;
-        case AccessibleTableControlObjType::COLUMNHEADERCELL:
-            aRetText = GetColumnName(_nCol);
-            break;
-        default:
-            OSL_FAIL("GridControl::GetAccessibleName: invalid enum!");
-    }
-    return aRetText;
+    return m_pImpl->getAccessibleObjectName(eObjType, _nRow, _nCol);
 }
 
 OUString TableControl::GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const
 {
-    OUString aRetText;
-    switch (eObjType)
-    {
-        case AccessibleTableControlObjType::GRIDCONTROL:
-            aRetText = "Grid control description";
-            break;
-        case AccessibleTableControlObjType::TABLE:
-            aRetText = "TABLE description";
-            break;
-        case AccessibleTableControlObjType::ROWHEADERBAR:
-            aRetText = "ROWHEADERBAR description";
-            break;
-        case AccessibleTableControlObjType::COLUMNHEADERBAR:
-            aRetText = "COLUMNHEADERBAR description";
-            break;
-        case AccessibleTableControlObjType::TABLECELL:
-            // the description of the cell consists of column name and row name if defined
-            // if the name is equal to cell content, it'll be read twice
-            if (GetModel()->hasColumnHeaders())
-            {
-                aRetText = GetColumnName(GetCurrentColumn()) + " , ";
-            }
-            if (GetModel()->hasRowHeaders())
-            {
-                aRetText += GetRowName(GetCurrentRow());
-            }
-            break;
-        case AccessibleTableControlObjType::ROWHEADERCELL:
-            aRetText = "ROWHEADERCELL description";
-            break;
-        case AccessibleTableControlObjType::COLUMNHEADERCELL:
-            aRetText = "COLUMNHEADERCELL description";
-            break;
-    }
-    return aRetText;
+    return m_pImpl->getAccessibleObjectDescription(eObjType);
 }
 
 OUString TableControl::GetRowName(sal_Int32 _nIndex) const { return m_pImpl->getRowName(_nIndex); }
@@ -358,66 +286,7 @@ OUString TableControl::GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nCol
 void TableControl::FillAccessibleStateSet(sal_Int64& rStateSet,
                                           AccessibleTableControlObjType eObjType) const
 {
-    switch (eObjType)
-    {
-        case AccessibleTableControlObjType::GRIDCONTROL:
-        case AccessibleTableControlObjType::TABLE:
-
-            rStateSet |= AccessibleStateType::FOCUSABLE;
-
-            if (m_pImpl->getSelEngine()->GetSelectionMode() == SelectionMode::Multiple)
-                rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
-
-            if (HasChildPathFocus())
-                rStateSet |= AccessibleStateType::FOCUSED;
-
-            if (IsActive())
-                rStateSet |= AccessibleStateType::ACTIVE;
-
-            if (m_pImpl->getDataWindow().IsEnabled())
-            {
-                rStateSet |= AccessibleStateType::ENABLED;
-                rStateSet |= AccessibleStateType::SENSITIVE;
-            }
-
-            if (IsReallyVisible())
-                rStateSet |= AccessibleStateType::VISIBLE;
-
-            if (eObjType == AccessibleTableControlObjType::TABLE)
-                rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
-            break;
-
-        case AccessibleTableControlObjType::COLUMNHEADERBAR:
-        case AccessibleTableControlObjType::ROWHEADERBAR:
-            rStateSet |= AccessibleStateType::VISIBLE;
-            rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
-            break;
-
-        case AccessibleTableControlObjType::TABLECELL:
-        {
-            rStateSet |= AccessibleStateType::FOCUSABLE;
-            if (HasChildPathFocus())
-                rStateSet |= AccessibleStateType::FOCUSED;
-            rStateSet |= AccessibleStateType::ACTIVE;
-            rStateSet |= AccessibleStateType::TRANSIENT;
-            rStateSet |= AccessibleStateType::SELECTABLE;
-            rStateSet |= AccessibleStateType::VISIBLE;
-            rStateSet |= AccessibleStateType::SHOWING;
-            if (IsRowSelected(GetCurrentRow()))
-                // Hmm? Wouldn't we expect the affected row to be a parameter to this function?
-                rStateSet |= AccessibleStateType::SELECTED;
-        }
-        break;
-
-        case AccessibleTableControlObjType::ROWHEADERCELL:
-            rStateSet |= AccessibleStateType::VISIBLE;
-            rStateSet |= AccessibleStateType::TRANSIENT;
-            break;
-
-        case AccessibleTableControlObjType::COLUMNHEADERCELL:
-            rStateSet |= AccessibleStateType::VISIBLE;
-            break;
-    }
+    m_pImpl->fillAccessibleStateSet(rStateSet, eObjType);
 }
 
 void TableControl::commitCellEvent(sal_Int16 const i_eventID, const Any& i_newValue,
@@ -438,13 +307,7 @@ bool TableControl::HasColHeader() { return m_pImpl->hasColumnHeader(); }
 
 sal_Int32 TableControl::GetAccessibleControlCount() const
 {
-    // TC_TABLE is always defined, no matter whether empty or not
-    sal_Int32 count = 1;
-    if (GetModel()->hasRowHeaders())
-        ++count;
-    if (GetModel()->hasColumnHeaders())
-        ++count;
-    return count;
+    return m_pImpl->getAccessibleControlCount();
 }
 
 sal_Int32 TableControl::GetRowCount() const { return m_pImpl->getRowCount(); }
@@ -458,20 +321,9 @@ bool TableControl::ConvertPointToCellAddress(sal_Int32& _rnRow, sal_Int32& _rnCo
 }
 
 void TableControl::FillAccessibleStateSetForCell(sal_Int64& _rStateSet, sal_Int32 _nRow,
-                                                 sal_uInt16) const
+                                                 sal_uInt16 _nColumnPos) const
 {
-    if (IsRowSelected(_nRow))
-        _rStateSet |= AccessibleStateType::SELECTED;
-    if (HasChildPathFocus())
-        _rStateSet |= AccessibleStateType::FOCUSED;
-    else // only transient when column is not focused
-        _rStateSet |= AccessibleStateType::TRANSIENT;
-
-    _rStateSet |= AccessibleStateType::VISIBLE;
-    _rStateSet |= AccessibleStateType::SHOWING;
-    _rStateSet |= AccessibleStateType::ENABLED;
-    _rStateSet |= AccessibleStateType::SENSITIVE;
-    _rStateSet |= AccessibleStateType::ACTIVE;
+    return m_pImpl->fillAccessibleStateSetForCell(_rStateSet, _nRow, _nColumnPos);
 }
 
 tools::Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar)
