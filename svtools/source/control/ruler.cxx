@@ -2764,8 +2764,8 @@ void Ruler::DrawTicks()
 
 rtl::Reference<comphelper::OAccessible> Ruler::CreateAccessible()
 {
-    uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
-    if( xAccParent.is() )
+    rtl::Reference<comphelper::OAccessible> pAccParent = GetAccessibleParent();
+    if (pAccParent.is())
     {
         OUString aStr;
         if ( mnWinStyle & WB_HORZ )
@@ -2776,7 +2776,7 @@ rtl::Reference<comphelper::OAccessible> Ruler::CreateAccessible()
         {
             aStr = SvtResId(STR_SVT_ACC_RULER_VERT_NAME);
         }
-        return new SvtRulerAccessible(xAccParent, *this, aStr);
+        return new SvtRulerAccessible(pAccParent, *this, aStr);
     }
     else
         return {};
