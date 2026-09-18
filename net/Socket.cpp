@@ -1088,11 +1088,12 @@ std::shared_ptr<Socket> ServerSocket::accept()
             return nullptr; // Recoverable error, ignore to retry
 
         rc = net::acceptConnection(getFD(), peer);
-        if (rc < 0)
-            return nullptr;
     }
     else
         rc = fakeSocketAccept4(getFD());
+
+    if (rc < 0)
+        return nullptr;
 
     LOG_TRC("Accepted socket #" << rc << ", creating socket object.");
 
