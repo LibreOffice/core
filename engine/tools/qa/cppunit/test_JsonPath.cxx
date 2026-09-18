@@ -13,6 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <tools/JsonPath.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 namespace
 {

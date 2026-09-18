@@ -14,7 +14,7 @@
 #include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 #include <memory>
 #include <optional>

@@ -48,6 +48,7 @@
 #include <unomodel.hxx>
 
 #include <osl/file.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 #include <cmath>
 #include <fstream>
