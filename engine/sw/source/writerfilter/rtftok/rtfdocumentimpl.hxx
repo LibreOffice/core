@@ -828,6 +828,8 @@ private:
     void replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSprms,
                          ::std::deque<RTFSprms>& rCellsAttributes, int nCells);
     void replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* pSprms, RTFSprms const* pAttributes);
+    /// Sends one buffer entry to the dmapper.
+    void sendBufferEntry(Buf_t aTuple);
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
