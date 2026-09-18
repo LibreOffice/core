@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
 "PO-Revision-Date: 2026-09-19 05:24+0000\n"
-"Last-Translator: Mike Schulte <ich@mike-schulte.de>\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -517,14 +517,14 @@ msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
-"Dieser KI Host steht nicht in der Liste der erlaubten Hosts für diesen "
-"Server (lok_allow.host). Bitte Deinen Administrator das zu erlauben."
+"Dieser KI-Host ist nicht in der Liste der zugelassenen Hosts des Servers "
+"(lok_allow.host) enthalten. Bitten Sie Ihren Administrator, ihn zuzulassen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
 msgstr ""
-"Anfragefrequenz begrenzt – bitte warte einen Moment und versuche es erneut"
+"Ratenbegrenzung – bitte warten Sie einen Moment und versuchen Sie es erneut"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
@@ -598,7 +598,7 @@ msgstr "Automatische Rechtschreibprüfung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Use this server's zoom settings"
-msgstr "Verwende die Zoom-Einstellungen dieses Servers"
+msgstr "Zoom-Einstellungen dieses Servers verwenden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid "Smart Zoom"
@@ -921,8 +921,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
-"Laden Sie eine gepackte Erweiterung als .zip-Datei hoch; ihr Inhalt "
-"(manifest.json, ...) wird auf dem Server entpackt."
+"Laden Sie eine gepackte Erweiterung als ZIP-Datei hoch. Deren Inhalt "
+"(manifest.json ...) wird auf dem Server entpackt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1018
 msgid "Upload Extension"
@@ -938,8 +938,8 @@ msgid ""
 "categories available when applying a security label to a document."
 msgstr ""
 "Laden Sie SPIF-Sicherheitsrichtlinien (.xml) hoch. Diese legen die "
-"Klassifizierungen und Kategorien fest, die bei der Zuweisung eines "
-"Sicherheits-Labels zu einem Dokument zur Verfügung stehen."
+"Klassifizierungen und Kategorien fest, die bei der Vergabe einer "
+"Sicherheitskennzeichnung für ein Dokument zur Verfügung stehen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
@@ -975,7 +975,7 @@ msgstr "Standardeinstellungen für die Schnittstelle festlegen."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1412
 #: admin/src/integrator/AdminIntegratorSettings.ts:3529
 msgid "Zoom Behaviour"
-msgstr "Zoom Verhalten"
+msgstr "Zoom-Verhalten"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1557
 msgid ""
@@ -1133,7 +1133,7 @@ msgstr "z. B."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2693
 msgid "Leave empty if your server does not require one"
-msgstr "Leer lassen, wenn der Server keine benötigt"
+msgstr "Leer lassen, wenn Ihr Server keine benötigt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2712
 msgid ""
@@ -1668,7 +1668,7 @@ msgstr "Den folgenden Text prägnanter formulieren"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr "Fasse es prägnanter zusammen"
+msgstr "Formulieren Sie es prägnanter"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
@@ -2031,7 +2031,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "Anfrage zu groß"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
@@ -2039,7 +2039,7 @@ msgstr "Ungültiges Anfrageformat"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Anfrage durch eine neuere Anfrage ersetzt"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
@@ -2068,23 +2068,28 @@ msgstr "KI-Einstellungen nicht konfiguriert"
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
 msgstr ""
+"Die URL des KI-Anbieters ist ungültig. Überprüfen Sie die KI-Einstellungen"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
 msgstr ""
+"Die URL des KI-Bildanbieters ist ungültig. Überprüfen Sie die KI-"
+"Einstellungen"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Host „{0}“ ist nicht in der Liste der zulässigen Hosts enthalten. "
+"Kontaktieren Sie Ihren Administrator"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Netzwerkfehler – bitte überprüfen Sie Ihre Verbindung"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Es konnte keine Verbindung zum KI-Anbieter hergestellt werden"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
@@ -2190,18 +2195,26 @@ msgstr "Bild {0} von {1} wird generiert ..."
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Dieses Dokument ist zu umfangreich, um es vollständig zu lesen. Wählen Sie "
+"einen Abschnitt aus, auf den Sie sich konzentrieren möchten:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Dieses Blatt ist zu groß, um es vollständig zu lesen. Um die Auswahl "
+"einzugrenzen, können Sie:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
 msgstr ""
+"Wählen Sie einen Zellbereich im Blatt aus und stellen Sie Ihre Frage dann "
+"erneut"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
 msgstr ""
+"Mit einem Bereich antworten, auf den man sich konzentrieren soll, z. B. "
+"'A1:D100'"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
@@ -2314,7 +2327,7 @@ msgstr[1] "%n %1 Befehle ausführen"
 
 #: src/control/Control.AIChatSidebar.ts:2661
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "Die Designvorlage '%1' anwenden"
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "This will: %1."
@@ -2401,7 +2414,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3236
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Ohne Designvorlage fortfahren"
 
 #: src/control/Control.AIChatSidebar.ts:3302
 msgid ""
@@ -2411,11 +2424,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3363
 msgid "Reject outline"
-msgstr ""
+msgstr "Gliederung ablehnen"
 
 #: src/control/Control.AIChatSidebar.ts:3369
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Versehen Sie jede hinzugefügte Folie mit einem Titel zur Genehmigung."
 
 #: src/control/Control.AIChatSidebar.ts:3397
 msgid "Slide %1 title"
@@ -2435,7 +2448,7 @@ msgstr "Folientitel"
 
 #: src/control/Control.AIChatSidebar.ts:3469
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Was diese Folie behandeln sollte"
 
 #: src/control/Control.AIChatSidebar.ts:3494
 msgid "Add slide"
@@ -2939,7 +2952,7 @@ msgstr "Weitere Informationen zur Eigenschaft"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Dokument von Ihrem Computer oder einem Cloud-Speicherort öffnen."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
@@ -2971,7 +2984,7 @@ msgstr "Anzeigename"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr "Anzeigename eingeben"
+msgstr "Anzeigenamen eingeben"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
@@ -2999,7 +3012,7 @@ msgstr "Neues Konto erfolgreich hinzugefügt"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Sie können nun über diese Cloud auf Ihre Dateien zugreifen."
 
 #: src/control/backstage/CloudDialogs.tsx:241
 msgid "Open Files"
@@ -3011,7 +3024,7 @@ msgstr "Dieses Konto entfernen?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Sie werden von diesem Cloud-Konto abgemeldet."
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
@@ -3713,7 +3726,7 @@ msgstr "HTML-Datei (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Sicherheitskennzeichnung"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -5358,10 +5371,10 @@ msgid "Expand All Sections"
 msgstr "Alle Abschnitte erweitern"
 
 #: src/control/Control.PartsPreview.js:1192
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Abschnitt „%1“ und dazugehörige %2 Folie(n) löschen?"
+msgstr[0] "Abschnitt „%1“ und dazugehörige %2 Folie löschen?"
+msgstr[1] "Abschnitt „%1“ und dazugehörige %2 Folien löschen?"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Enter new section name:"
@@ -5369,7 +5382,7 @@ msgstr "Geben Sie den Namen des neuen Abschnitts ein:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Ihre Folien importieren"
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
@@ -5397,7 +5410,7 @@ msgstr "Diese Datei ist nicht verfügbar."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "Diese Datei kann nicht geöffnet werden."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
@@ -5461,7 +5474,7 @@ msgstr ""
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:801
 msgid "Close slide import"
-msgstr ""
+msgstr "Folienimport schließen"
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
