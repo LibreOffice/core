@@ -44,7 +44,8 @@
 #if USING_X11
 #define UNIX_DESKTOP_DETECT 1
 #include <unx/desktops.hxx>
-#else
+#elif !(defined ANDROID || defined MACOSX || defined _WIN32 || defined __EMSCRIPTEN__ \
+    || defined iOS)
 #define UNIX_DESKTOP_DETECT 0
 #endif
 #endif
