@@ -769,11 +769,21 @@ const sidebarKeyboard = {
 		});
 	},
 
-	/// The engine reports a cursor move by putting the DOM selection in the
-	/// hidden contenteditable, which focuses it. Moving the cursor with a uno
+	/// The engine reports a change of table cell by putting the DOM selection in
+	/// the hidden contenteditable, which focuses it. Moving the cursor with a uno
 	/// command reproduces that without typing, so the focus is provably still
 	/// where the keyboard left it and not where a race put it.
+	///
+	/// The cursor jumps into a table first and then to the next cell of that
+	/// table. The sidebar context stays Table, so core keeps the deck as it is.
 	assertCursorMoveKeepsFocus: function (getWin) {
+		cy.then(function () {
+			getWin().app.map.sendUnoCommand('.uno:JumpToNextTable');
+			return helper.processToIdle(getWin());
+		});
+		// core enables DeleteTable only while the cursor is inside a table
+		helper.waitForMapState('.uno:DeleteTable', 'enabled');
+
 		cy.realPress('F6');
 
 		cy.then(function () {
@@ -782,7 +792,16 @@ const sidebarKeyboard = {
 			expect(win.app.map.sidebar.wrapper.contains(before),
 				'the focus entered the deck').to.equal(true);
 
-			win.app.map.sendUnoCommand('.uno:GoToNextPara');
+			// the text input remembers the cell the engine last reported
+			const textInput = win.app.map._textInput;
+			const cellBefore = [textInput._lastRowIndex, textInput._lastColIndex];
+
+			win.app.map.sendUnoCommand('.uno:JumpToNextCell');
+
+			cy.cGet('div.clipboard').should(function () {
+				expect([textInput._lastRowIndex, textInput._lastColIndex],
+					'the engine reported the new cell').to.not.deep.equal(cellBefore);
+			});
 
 			cy.then(function () { return helper.processToIdle(win); });
 

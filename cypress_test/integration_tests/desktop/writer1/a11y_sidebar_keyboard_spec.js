@@ -8,6 +8,10 @@ var a11yHelper = require('../../common/a11y_helper');
 // Tab key has to walk the widgets of the open deck. The checks are shared with
 // the other modules and read every expectation from the DOM, so each spec
 // follows whatever core describes for its own property deck.
+//
+// The document holds a table whose cells hold text. The cursor move check needs
+// the engine to report a change of table cell. A jump between two cells of one
+// table keeps the sidebar context, so core keeps the deck too.
 describe(['tagdesktop'], 'Writer sidebar keyboard navigation', { testIsolation: false }, function () {
 	let win;
 
@@ -17,7 +21,7 @@ describe(['tagdesktop'], 'Writer sidebar keyboard navigation', { testIsolation: 
 
 	before(function () {
 		cy.viewport(1920, 1080);
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
+		helper.setupAndLoadDocument('writer/table_accessibility.odt');
 
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;
