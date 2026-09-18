@@ -268,7 +268,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	},
 
 	// The scrollable area only reaches the cells this view has been to, so a position
-	// outside it cannot be scrolled to until the area covers it.
+	// outside it cannot be scrolled to until the area covers it. The area grows here even
+	// while the document size is frozen, because the scroll happens right away. One grow
+	// to a given position does not lead to another, so the freeze is not needed for it.
 	extendDocumentSizeToInclude: function (position) {
 		if (!this.sheetGeometry)
 			return;
@@ -280,6 +282,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		const frameSize = app.activeDocument.activeLayout.frameSize;
 		const newWidth = Math.min(maxDocumentSize.x, Math.max(fileSize.x, position.x + frameSize.x));
 		const newHeight = Math.min(maxDocumentSize.y, Math.max(fileSize.y, position.y + frameSize.y));
+
+		// A size waiting for the freeze to end replaces the current one, so it has to
+		// cover the position as well.
+		if (this._pendingDocumentSize) {
+			this._pendingDocumentSize.x = Math.max(this._pendingDocumentSize.x, newWidth);
+			this._pendingDocumentSize.y = Math.max(this._pendingDocumentSize.y, newHeight);
+		}
 
 		if (newWidth === fileSize.x && newHeight === fileSize.y)
 			return;
