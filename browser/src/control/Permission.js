@@ -38,18 +38,24 @@ window.L.Map.include({
 		// Fall back to the document URL which ends with the file name.
 		var fileName = this['wopi'].BaseFileName || this.options.doc || '';
 		var isPDF = fileName.toLowerCase().endsWith('.pdf');
-		if (!isPDF && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
+		const mobileLayout = window.mode.isSmallScreenDevice() || window.mode.isTablet();
+		if (!isPDF && mobileLayout) {
 			button.css('display', 'flex');
 		} else {
 			button.hide();
 		}
 		var that = this;
 		if (perm === 'edit') {
-			// Only apply the opt-in gate when the doc is first opened;
-			// later setPermission calls (reload, save-as, server perm
-			// changes) honor what was asked.
-			var firstOpen = this._permission === undefined;
-			if (firstOpen && (this._shouldStartReadOnly() || window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
+			// The opt-in gate applies when the doc is first opened. Later
+			// calls honor what was asked, except that on a mobile layout a
+			// view in the read-only stage stays there with its edit button.
+			const firstOpen = this._permission === undefined;
+			const stayReadOnly = !firstOpen && this._permission === 'readonly' && mobileLayout;
+			if (this.options.canTryLock) {
+				// This is a success response to an attempt to lock using mobile-edit-button
+				this._switchToEditMode();
+			}
+			else if ((firstOpen && (this._shouldStartReadOnly() || mobileLayout)) || stayReadOnly) {
 				button.on('click', function () {
 					that._switchToEditMode();
 				});
@@ -57,16 +63,21 @@ window.L.Map.include({
 				// temporarily, before the user touches the floating action button
 				this._enterReadOnlyMode('readonly');
 			}
-			else if (this.options.canTryLock) {
-				// This is a success response to an attempt to lock using mobile-edit-button
-				this._switchToEditMode();
-			}
 			else {
+				// Edit mode has no use for the button.
+				button.hide();
 				this._enterEditMode(perm);
 			}
 		}
 		else if (perm === 'view' || perm === 'readonly') {
-			if (this.isLockedReadOnlyUser()) {
+			// View mode during an outage or a migration ends with the
+			// reconnect, which chooses the mode again. The button stays
+			// hidden until then.
+			const reconnectPending = window.migrating || (app.socket && !app.socket.connected());
+			if (perm === 'view' && reconnectPending) {
+				button.hide();
+			}
+			else if (this.isLockedReadOnlyUser()) {
 				button.on('click', function () {
 					that.openUnlockPopup();
 				});
@@ -77,7 +88,7 @@ window.L.Map.include({
 				});
 			} else if (!window.ThisIsAMobileApp && !this['wopi'].UserCanWrite) {
 				$('#mobile-edit-button').hide();
-			} else if (window.mode.isSmallScreenDevice() || window.mode.isTablet()) {
+			} else if (mobileLayout) {
 				// Writeable user stepped back from edit to readonly: keep the FAB
 				// visible so they can re-enter edit mode.
 				button.on('click', function () {
