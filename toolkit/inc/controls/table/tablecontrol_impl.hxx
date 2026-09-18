@@ -206,6 +206,9 @@ public:
 
     void checkCursorPosition();
 
+    sal_Int32 getRowCount() const;
+    sal_Int32 getColumnCount() const;
+
     OUString getRowName(sal_Int32 nIndex) const;
     OUString getColumnName(sal_Int32 nIndex) const;
     bool hasRowHeader();

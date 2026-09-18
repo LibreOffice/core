@@ -447,9 +447,9 @@ sal_Int32 TableControl::GetAccessibleControlCount() const
     return count;
 }
 
-sal_Int32 TableControl::GetRowCount() const { return GetModel()->getRowCount(); }
+sal_Int32 TableControl::GetRowCount() const { return m_pImpl->getRowCount(); }
 
-sal_Int32 TableControl::GetColumnCount() const { return GetModel()->getColumnCount(); }
+sal_Int32 TableControl::GetColumnCount() const { return m_pImpl->getColumnCount(); }
 
 bool TableControl::ConvertPointToCellAddress(sal_Int32& _rnRow, sal_Int32& _rnColPos,
                                              const Point& _rPoint)

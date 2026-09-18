@@ -2003,6 +2003,10 @@ TableSize TableControl_Impl::impl_scrollColumns(TableSize const i_columnDelta)
 
 SelectionEngine* TableControl_Impl::getSelEngine() { return m_pSelEngine.get(); }
 
+sal_Int32 TableControl_Impl::getRowCount() const { return m_pModel->getRowCount(); }
+
+sal_Int32 TableControl_Impl::getColumnCount() const { return m_pModel->getColumnCount(); }
+
 OUString TableControl_Impl::getRowName(sal_Int32 nIndex) const
 {
     OUString sRowName;
