@@ -3,8 +3,6 @@
 "SdMasterPage";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
 "SdMasterPage";"com::sun::star::lang::XServiceInfo";"supportsService()"
 "SdMasterPage";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"SdMasterPage";"com::sun::star::drawing::XShapeCombiner#optional";"combine()"
-"SdMasterPage";"com::sun::star::drawing::XShapeCombiner#optional";"split()"
 "SdMasterPage";"com::sun::star::container::XElementAccess";"getElementType()"
 "SdMasterPage";"com::sun::star::container::XElementAccess";"hasElements()"
 "SdMasterPage";"com::sun::star::drawing::XShapes";"add()"

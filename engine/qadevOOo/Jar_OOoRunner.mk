@@ -342,7 +342,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_XMasterPagesSupplier \
     qadevOOo/tests/java/ifc/drawing/_XMasterPageTarget \
     qadevOOo/tests/java/ifc/drawing/_XShape \
-    qadevOOo/tests/java/ifc/drawing/_XShapeCombiner \
     qadevOOo/tests/java/ifc/drawing/_XShapeDescriptor \
     qadevOOo/tests/java/ifc/drawing/_XShapeGroup \
     qadevOOo/tests/java/ifc/drawing/_XShapeGrouper \

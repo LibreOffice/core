@@ -55,11 +55,6 @@ published service GenericDrawPage
      */
     interface com::sun::star::drawing::XShapeGrouper;
 
-    /** With this interface you can combine/split a collection of
-                Shapes.
-     */
-    [optional] interface com::sun::star::drawing::XShapeCombiner;
-
     /** Gets or sets the name of this page.
 
                 <p>Duplicated page names inside a document are not allowed.

@@ -3,8 +3,6 @@
 "SwXDrawPage";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
 "SwXDrawPage";"com::sun::star::lang::XServiceInfo";"supportsService()"
 "SwXDrawPage";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"SwXDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"combine()"
-"SwXDrawPage";"com::sun::star::drawing::XShapeCombiner#optional";"split()"
 "SwXDrawPage";"com::sun::star::container::XElementAccess";"getElementType()"
 "SwXDrawPage";"com::sun::star::container::XElementAccess";"hasElements()"
 "SwXDrawPage";"com::sun::star::drawing::XShapes";"add()"

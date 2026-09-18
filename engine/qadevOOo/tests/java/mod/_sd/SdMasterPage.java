@@ -50,7 +50,6 @@ import cpo.uno.XInterface;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::container::XIndexAccess</code></li>
 *  <li> <code>com::sun::star::container::XElementAccess</code></li>
-*  <li> <code>com::sun::star::drawing::XShapeCombiner</code></li>
 *  <li> <code>com::sun::star::container::XNamed</code></li>
 * </ul>
 * @see com.sun.star.drawing.MasterPage
@@ -61,7 +60,6 @@ import cpo.uno.XInterface;
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.container.XIndexAccess
 * @see com.sun.star.container.XElementAccess
-* @see com.sun.star.drawing.XShapeCombiner
 * @see com.sun.star.container.XNamed
 * @see ifc.drawing._GenericDrawPage
 * @see ifc.drawing._XShapeGrouper
@@ -70,7 +68,6 @@ import cpo.uno.XInterface;
 * @see ifc.beans._XPropertySet
 * @see ifc.container._XIndexAccess
 * @see ifc.container._XElementAccess
-* @see ifc.drawing._XShapeCombiner
 * @see ifc.container._XNamed
 */
 public class SdMasterPage extends TestCase {
@@ -107,9 +104,6 @@ public class SdMasterPage extends TestCase {
     * <code>com.sun.star.drawing.MasterPage</code>.
     * Object relations created :
     * <ul>
-    *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing._XShapeCombiner}( the draw page of the retrieved
-    *      master page)</li>
     *  <li> <code>'Shape'</code> for
     *      {@link ifc.drawing._XShapes}(the created rectangle shape)</li>
     * </ul>

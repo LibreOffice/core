@@ -50,7 +50,6 @@ import cpo.uno.XInterface;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 *  <li> <code>com::sun::star::container::XIndexAccess</code></li>
 *  <li> <code>com::sun::star::container::XElementAccess</code></li>
-*  <li> <code>com::sun::star::drawing::XShapeCombiner</code></li>
 *  <li> <code>com::sun::star::container::XNamed</code></li>
 * </ul>
 * @see com.sun.star.drawing.GenericDrawPage
@@ -60,7 +59,6 @@ import cpo.uno.XInterface;
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.container.XIndexAccess
 * @see com.sun.star.container.XElementAccess
-* @see com.sun.star.drawing.XShapeCombiner
 * @see com.sun.star.container.XNamed
 * @see ifc.drawing._GenericDrawPage
 * @see ifc.drawing._XShapeGrouper
@@ -69,7 +67,6 @@ import cpo.uno.XInterface;
 * @see ifc.beans._XPropertySet
 * @see ifc.container._XIndexAccess
 * @see ifc.container._XElementAccess
-* @see ifc.drawing._XShapeCombiner
 * @see ifc.container._XNamed
 */
 public class SdGenericDrawPage extends TestCase {
@@ -108,8 +105,6 @@ public class SdGenericDrawPage extends TestCase {
     * <ul>
     *  <li> <code>'Shape'</code> for
     *      {@link ifc.drawing._XShapes}( the created rectangle shape )</li>
-    *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing._XShapeCombiner}( the retrieved draw page )</li>
     * </ul>
     * @see com.sun.star.drawing.DrawPage
     * @see com.sun.star.drawing.XDrawPagesSupplier

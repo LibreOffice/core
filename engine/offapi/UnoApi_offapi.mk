@@ -2225,7 +2225,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XMasterPagesSupplier \
 	XSelectionFunction \
 	XShape \
-	XShapeCombiner \
 	XShapeDescriptor \
 	XShapeGroup \
 	XShapeGrouper \

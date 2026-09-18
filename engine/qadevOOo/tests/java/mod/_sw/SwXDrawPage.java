@@ -49,7 +49,6 @@ import cpo.uno.XInterface;
  *  <li> <code>com::sun::star::container::XElementAccess</code></li>
  *  <li> <code>com::sun::star::drawing::XMasterPageTarget</code></li>
  *  <li> <code>com::sun::star::container::XNamed</code></li>
- *  <li> <code>com::sun::star::drawing::XShapeCombiner</code></li>
  * </ul> <p>
  * This object test <b> is NOT </b> designed to be run in several
  * threads concurrently.
@@ -62,7 +61,6 @@ import cpo.uno.XInterface;
  * @see com.sun.star.container.XElementAccess
  * @see com.sun.star.drawing.XMasterPageTarget
  * @see com.sun.star.container.XNamed
- * @see com.sun.star.drawing.XShapeCombiner
  * @see ifc.drawing._GenericDrawPage
  * @see ifc.drawing._XShapeGrouper
  * @see ifc.drawing._XShapes
@@ -72,7 +70,6 @@ import cpo.uno.XInterface;
  * @see ifc.container._XElementAccess
  * @see ifc.drawing._XMasterPageTarget
  * @see ifc.container._XNamed
- * @see ifc.drawing._XShapeCombiner
  */
 public class SwXDrawPage extends TestCase {
     XTextDocument xTextDoc;
@@ -104,7 +101,6 @@ public class SwXDrawPage extends TestCase {
     *  <li> <code>'Shape'</code> for
     *      {@link ifc.drawing._XShapes} : shape creator. </li>
     *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing._XShapeCombiner},
     *      {@link ifc.drawing._XShapeGrouper} : DrawPage component we are
     *      testing.</li>
     * </ul>

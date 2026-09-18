@@ -55,7 +55,6 @@ import util.ShapeDsc;
  *  <li> <code>com::sun::star::container::XElementAccess</code></li>
  *  <li> <code>com::sun::star::drawing::XMasterPageTarget</code></li>
  *  <li> <code>com::sun::star::container::XNamed</code></li>
- *  <li> <code>com::sun::star::drawing::XShapeCombiner</code></li>
  * </ul> <p>
  *
  * This object test <b> is NOT </b> designed to be run in several
@@ -70,7 +69,6 @@ import util.ShapeDsc;
  * @see com.sun.star.container.XElementAccess
  * @see com.sun.star.drawing.XMasterPageTarget
  * @see com.sun.star.container.XNamed
- * @see com.sun.star.drawing.XShapeCombiner
  * @see ifc.drawing._GenericDrawPage
  * @see ifc.drawing._XShapeGrouper
  * @see ifc.drawing._XShapes
@@ -80,7 +78,6 @@ import util.ShapeDsc;
  * @see ifc.container._XElementAccess
  * @see ifc.drawing._XMasterPageTarget
  * @see ifc.container._XNamed
- * @see ifc.drawing._XShapeCombiner
  */
 public class SvxDrawPage extends TestCase {
     static XSpreadsheetDocument xDoc = null;
