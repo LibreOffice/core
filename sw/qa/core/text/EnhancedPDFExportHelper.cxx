@@ -291,6 +291,70 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaPlacement)
     // one anchored to the page is tagged under the document, where it is a block of its own
     CPPUNIT_ASSERT_EQUAL("Block"_ostr, aOnThePage);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testLayoutAttributeUnits)
+{
+    createSwDoc("layout-attribute-units.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    maTempFile.CloseStream();
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // the indented paragraph, the one whose first line hangs, and the first data cell; a
+    // header cell carries an array of two dictionaries instead, the layout one and the table one
+    vcl::filter::PDFDictionaryElement* pIndented = nullptr;
+    vcl::filter::PDFDictionaryElement* pHanging = nullptr;
+    vcl::filter::PDFDictionaryElement* pCell = nullptr;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        auto pAttributes
+            = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
+        if (!pType || !pAttributes)
+            continue;
+
+        // of the paragraphs only the indented one has a right margin; the table has one too,
+        // which is why the type is asked for as well
+        if (!pIndented && pType->GetValue() == "Standard"
+            && pAttributes->LookupElement("EndIndent"_ostr))
+            pIndented = pAttributes;
+        else if (!pHanging && pType->GetValue() == "Standard"
+                 && pAttributes->LookupElement("TextIndent"_ostr))
+            pHanging = pAttributes;
+        else if (!pCell && pType->GetValue() == "TD")
+            pCell = pAttributes;
+    }
+    CPPUNIT_ASSERT(pIndented);
+    CPPUNIT_ASSERT(pHanging);
+    CPPUNIT_ASSERT(pCell);
+
+    const auto getLength = [](vcl::filter::PDFDictionaryElement* pAttributes, const OString& rKey) {
+        auto pNumber
+            = dynamic_cast<vcl::filter::PDFNumberElement*>(pAttributes->LookupElement(rKey));
+        CPPUNIT_ASSERT(pNumber);
+        return pNumber->GetValue();
+    };
+
+    // Without the fix these carried the twips the layout works in, where ISO 32000-2 14.8.5.4
+    // asks for default user space units - a fiftieth of the length they name.
+    // 0.5in, 0.4in and 0.25in of indent, and 0.2in above the paragraph
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, getLength(pIndented, "StartIndent"_ostr), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(28.8, getLength(pIndented, "EndIndent"_ostr), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(18.0, getLength(pIndented, "TextIndent"_ostr), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(14.4, getLength(pIndented, "SpaceBefore"_ostr), 0.01);
+    // a hanging first line, the one length that is negative
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-18.0, getLength(pHanging, "TextIndent"_ostr), 0.01);
+    // the 1.5in column the cell sits in
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(108.0, getLength(pCell, "Width"_ostr), 0.01);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1211,6 +1211,11 @@ public:
     the value; if the check fails, the function returns False and the attribute
     remains unchanged.
 
+    The attributes the standard measures in default user space units - the indents, the
+    spacings, the width, the height, the line height and the baseline shift - take their
+    value in the current map mode, the way a bounding box is given. The rest are counts
+    and identifiers, which no map mode applies to.
+
     @param eAttr
     denotes what attribute to change
 

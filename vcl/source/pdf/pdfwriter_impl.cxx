@@ -148,6 +148,27 @@ bool isPDF17OnlyType(StructElement eType)
     }
 }
 
+// the attributes this writer can set that ISO 32000-2 14.8.5.4 measures in user space units;
+// every numerical layout attribute prints as thousandths of a point, so a new one belongs here
+bool isLengthAttribute(PDFWriter::StructAttribute eAttr)
+{
+    switch (eAttr)
+    {
+        case PDFWriter::SpaceBefore:
+        case PDFWriter::SpaceAfter:
+        case PDFWriter::StartIndent:
+        case PDFWriter::EndIndent:
+        case PDFWriter::TextIndent:
+        case PDFWriter::Width:
+        case PDFWriter::Height:
+        case PDFWriter::LineHeight:
+        case PDFWriter::BaselineShift:
+            return true;
+        default:
+            return false;
+    }
+}
+
 constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const char*>({
     { StructElement::NonStructElement, "NonStruct" },
     { StructElement::Document, "Document" },
@@ -10994,6 +11015,21 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
     return bInsert;
 }
 
+sal_Int32 PDFWriterImpl::convertStructureAttribute(enum PDFWriter::StructAttribute eAttr,
+                                                   sal_Int32 nValue)
+{
+    if (!isLengthAttribute(eAttr))
+        return nValue;
+
+    const Size aSize(
+        convert(m_aGraphicsStack.front().m_aMapMode, m_aMapMode, this, Size(nValue, nValue)));
+    // the map mode can scale X and Y differently
+    const bool bHorizontal(eAttr == PDFWriter::StartIndent || eAttr == PDFWriter::EndIndent
+                           || eAttr == PDFWriter::TextIndent || eAttr == PDFWriter::Width);
+
+    return bHorizontal ? aSize.Width() : aSize.Height();
+}
+
 bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue )
 {
     if( ! m_aContext.Tagged )
@@ -11133,7 +11169,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
         else
         {
             m_aStructure[m_nCurrentStructElement].m_aAttributes[eAttr]
-                = PDFStructureAttribute(nValue);
+                = PDFStructureAttribute(convertStructureAttribute(eAttr, nValue));
         }
     }
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )

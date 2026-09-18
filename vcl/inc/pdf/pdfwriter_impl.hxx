@@ -912,6 +912,9 @@ private:
     void enableStringEncryption( sal_Int32 nObject );
 
 private:
+    sal_Int32 convertStructureAttribute(enum pdf::PDFWriter::StructAttribute eAttr,
+                                        sal_Int32 nValue);
+
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance* pFont, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
     void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
