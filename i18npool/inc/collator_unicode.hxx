@@ -62,11 +62,61 @@ public:
 
 private:
     std::unique_ptr<icu::RuleBasedCollator> uca_base, collator;
-#ifndef DISABLE_DYNLOADING
-    oslModule hModule;
-#endif
 };
 
+}
+
+extern "C" {
+    // The generated functions have names that
+    // start with get_collator_data_ to avoid clashing with a few
+    // functions in the generated libindex_data that are called just
+    // get_zh_pinyin for instance.
+
+    const sal_uInt8* get_collator_data_ca_charset();
+    const sal_uInt8* get_collator_data_cu_charset();
+    const sal_uInt8* get_collator_data_dz_charset();
+    const sal_uInt8* get_collator_data_hu_charset();
+    const sal_uInt8* get_collator_data_ja_charset();
+    const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_first();
+    const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_last();
+    const sal_uInt8* get_collator_data_ko_charset();
+    const sal_uInt8* get_collator_data_ku_alphanumeric();
+    const sal_uInt8* get_collator_data_ln_charset();
+    const sal_uInt8* get_collator_data_my_dictionary();
+    const sal_uInt8* get_collator_data_ne_charset();
+    const sal_uInt8* get_collator_data_sid_charset();
+    const sal_uInt8* get_collator_data_vro_alphanumeric();
+    const sal_uInt8* get_collator_data_zh_TW_charset();
+    const sal_uInt8* get_collator_data_zh_TW_radical();
+    const sal_uInt8* get_collator_data_zh_TW_stroke();
+    const sal_uInt8* get_collator_data_zh_charset();
+    const sal_uInt8* get_collator_data_zh_pinyin();
+    const sal_uInt8* get_collator_data_zh_radical();
+    const sal_uInt8* get_collator_data_zh_stroke();
+    const sal_uInt8* get_collator_data_zh_zhuyin();
+
+    size_t get_collator_data_ca_charset_length();
+    size_t get_collator_data_cu_charset_length();
+    size_t get_collator_data_dz_charset_length();
+    size_t get_collator_data_hu_charset_length();
+    size_t get_collator_data_ja_charset_length();
+    size_t get_collator_data_ja_phonetic_alphanumeric_first_length();
+    size_t get_collator_data_ja_phonetic_alphanumeric_last_length();
+    size_t get_collator_data_ko_charset_length();
+    size_t get_collator_data_ku_alphanumeric_length();
+    size_t get_collator_data_ln_charset_length();
+    size_t get_collator_data_my_dictionary_length();
+    size_t get_collator_data_ne_charset_length();
+    size_t get_collator_data_sid_charset_length();
+    size_t get_collator_data_vro_alphanumeric_length();
+    size_t get_collator_data_zh_TW_charset_length();
+    size_t get_collator_data_zh_TW_radical_length();
+    size_t get_collator_data_zh_TW_stroke_length();
+    size_t get_collator_data_zh_charset_length();
+    size_t get_collator_data_zh_pinyin_length();
+    size_t get_collator_data_zh_radical_length();
+    size_t get_collator_data_zh_stroke_length();
+    size_t get_collator_data_zh_zhuyin_length();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

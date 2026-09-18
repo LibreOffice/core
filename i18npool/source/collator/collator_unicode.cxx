@@ -45,78 +45,13 @@ Collator_Unicode::Collator_Unicode()
 {
     collator = nullptr;
     uca_base = nullptr;
-#ifndef DISABLE_DYNLOADING
-    hModule = nullptr;
-#endif
 }
 
 Collator_Unicode::~Collator_Unicode()
 {
     collator.reset();
     uca_base.reset();
-#ifndef DISABLE_DYNLOADING
-    if (hModule) osl_unloadModule(hModule);
-#endif
 }
-
-#ifdef DISABLE_DYNLOADING
-
-extern "C" {
-
-// For DISABLE_DYNLOADING the generated functions have names that
-// start with get_collator_data_ to avoid clashing with a few
-// functions in the generated libindex_data that are called just
-// get_zh_pinyin for instance.
-
-const sal_uInt8* get_collator_data_ca_charset();
-const sal_uInt8* get_collator_data_cu_charset();
-const sal_uInt8* get_collator_data_dz_charset();
-const sal_uInt8* get_collator_data_hu_charset();
-const sal_uInt8* get_collator_data_ja_charset();
-const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_first();
-const sal_uInt8* get_collator_data_ja_phonetic_alphanumeric_last();
-const sal_uInt8* get_collator_data_ko_charset();
-const sal_uInt8* get_collator_data_ku_alphanumeric();
-const sal_uInt8* get_collator_data_ln_charset();
-const sal_uInt8* get_collator_data_my_dictionary();
-const sal_uInt8* get_collator_data_ne_charset();
-const sal_uInt8* get_collator_data_sid_charset();
-const sal_uInt8* get_collator_data_vro_alphanumeric();
-const sal_uInt8* get_collator_data_zh_TW_charset();
-const sal_uInt8* get_collator_data_zh_TW_radical();
-const sal_uInt8* get_collator_data_zh_TW_stroke();
-const sal_uInt8* get_collator_data_zh_charset();
-const sal_uInt8* get_collator_data_zh_pinyin();
-const sal_uInt8* get_collator_data_zh_radical();
-const sal_uInt8* get_collator_data_zh_stroke();
-const sal_uInt8* get_collator_data_zh_zhuyin();
-
-size_t get_collator_data_ca_charset_length();
-size_t get_collator_data_cu_charset_length();
-size_t get_collator_data_dz_charset_length();
-size_t get_collator_data_hu_charset_length();
-size_t get_collator_data_ja_charset_length();
-size_t get_collator_data_ja_phonetic_alphanumeric_first_length();
-size_t get_collator_data_ja_phonetic_alphanumeric_last_length();
-size_t get_collator_data_ko_charset_length();
-size_t get_collator_data_ku_alphanumeric_length();
-size_t get_collator_data_ln_charset_length();
-size_t get_collator_data_my_dictionary_length();
-size_t get_collator_data_ne_charset_length();
-size_t get_collator_data_sid_charset_length();
-size_t get_collator_data_vro_alphanumeric_length();
-size_t get_collator_data_zh_TW_charset_length();
-size_t get_collator_data_zh_TW_radical_length();
-size_t get_collator_data_zh_TW_stroke_length();
-size_t get_collator_data_zh_charset_length();
-size_t get_collator_data_zh_pinyin_length();
-size_t get_collator_data_zh_radical_length();
-size_t get_collator_data_zh_stroke_length();
-size_t get_collator_data_zh_zhuyin_length();
-
-}
-
-#endif
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
@@ -131,12 +66,6 @@ Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), str1.getLength(),
                              reinterpret_cast<const UChar *>(str2.getStr()), str2.getLength());
 }
-
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void thisModule() {} }
-
-#endif
 
 sal_Int32 SAL_CALL
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
@@ -156,46 +85,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             const sal_uInt8* (*func)() = nullptr;
             size_t (*funclen)() = nullptr;
 
-#ifndef DISABLE_DYNLOADING
-            static constexpr OUString sModuleName( u"" SVLIBRARY( "i18npool" ) ""_ustr );
-            hModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_DEFAULT );
-            if (hModule) {
-                OUStringBuffer aBuf("get_collator_data_" + rLocale.Language + "_");
-                if ( rLocale.Language == "zh" ) {
-                    OUString func_base = aBuf.makeStringAndClear();
-                    if (u"TW HK MO"_ustr.indexOf(rLocale.Country) >= 0)
-                    {
-                        func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule,
-                                    OUString(func_base + "TW_" + rAlgorithm).pData));
-                        funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(hModule,
-                                    OUString(func_base + "TW_" + rAlgorithm + "_length").pData));
-                    }
-                    if (!func)
-                    {
-                        func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(
-                                hModule, OUString(func_base + rAlgorithm).pData));
-                        funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(
-                                hModule, OUString(func_base + rAlgorithm + "_length").pData));
-                    }
-                } else {
-                    if ( rLocale.Language == "ja" ) {
-                        // replace algorithm name to implementation name.
-                        if (rAlgorithm == "phonetic (alphanumeric first)")
-                            aBuf.append("phonetic_alphanumeric_first");
-                        else if (rAlgorithm == "phonetic (alphanumeric last)")
-                            aBuf.append("phonetic_alphanumeric_last");
-                        else
-                            aBuf.append(rAlgorithm);
-                    } else {
-                        aBuf.append(rAlgorithm);
-                    }
-                    OUString func_base = aBuf.makeStringAndClear();
-                    OUString funclen_base = func_base + "_length";
-                    func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule, func_base.pData));
-                    funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(hModule, funclen_base.pData));
-                }
-            }
-#else
             if (false) {
                 ;
 #if WITH_LOCALE_ALL || WITH_LOCALE_ca
@@ -342,7 +231,6 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 }
 #endif
             }
-#endif // DISABLE_DYNLOADING
             if (func && funclen) {
                 const sal_uInt8* ruleImage=func();
                 size_t ruleImageSize = funclen();
