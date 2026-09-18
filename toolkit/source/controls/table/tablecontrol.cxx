@@ -212,43 +212,10 @@ bool TableControl::IsRowSelected(sal_Int32 const i_rowIndex) const
 
 void TableControl::SelectRow(sal_Int32 const i_rowIndex, bool const i_select)
 {
-    ENSURE_OR_RETURN_VOID((i_rowIndex >= 0) && (i_rowIndex < m_pImpl->getModel()->getRowCount()),
-                          "TableControl::SelectRow: invalid row index!");
-
-    if (i_select)
-    {
-        if (!m_pImpl->markRowAsSelected(i_rowIndex))
-            // nothing to do
-            return;
-    }
-    else
-    {
-        m_pImpl->markRowAsDeselected(i_rowIndex);
-    }
-
-    m_pImpl->invalidateRowRange(i_rowIndex, i_rowIndex);
-    Select();
+    m_pImpl->selectRow(i_rowIndex, i_select);
 }
 
-void TableControl::SelectAllRows(bool const i_select)
-{
-    if (i_select)
-    {
-        if (!m_pImpl->markAllRowsAsSelected())
-            // nothing to do
-            return;
-    }
-    else
-    {
-        if (!m_pImpl->markAllRowsAsDeselected())
-            // nothing to do
-            return;
-    }
-
-    Invalidate();
-    // TODO: can't we do better than this, and invalidate only the rows which changed?
-    Select();
-}
+void TableControl::SelectAllRows(bool const i_select) { m_pImpl->selectAllRows(i_select); }
 
 SelectionEngine* TableControl::getSelEngine() { return m_pImpl->getSelEngine(); }
 

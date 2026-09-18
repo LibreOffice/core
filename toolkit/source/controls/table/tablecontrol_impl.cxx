@@ -2049,6 +2049,46 @@ int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selecte
     return -1;
 }
 
+void TableControl_Impl::selectRow(sal_Int32 nRowIndex, bool bSelect)
+{
+    ENSURE_OR_RETURN_VOID((nRowIndex >= 0) && (nRowIndex < m_pModel->getRowCount()),
+                          "TableControl::SelectRow: invalid row index!");
+
+    if (bSelect)
+    {
+        if (!markRowAsSelected(nRowIndex))
+            // nothing to do
+            return;
+    }
+    else
+    {
+        markRowAsDeselected(nRowIndex);
+    }
+
+    invalidateRowRange(nRowIndex, nRowIndex);
+    m_rAntiImpl.Select();
+}
+
+void TableControl_Impl::selectAllRows(bool bSelect)
+{
+    if (bSelect)
+    {
+        if (!markAllRowsAsSelected())
+            // nothing to do
+            return;
+    }
+    else
+    {
+        if (!markAllRowsAsDeselected())
+            // nothing to do
+            return;
+    }
+
+    m_rAntiImpl.Invalidate();
+    // TODO: can't we do better than this, and invalidate only the rows which changed?
+    m_rAntiImpl.Select();
+}
+
 ColPos TableControl_Impl::impl_getColumnForOrdinate(tools::Long const i_ordinate) const
 {
     if ((m_aColumnWidths.empty()) || (i_ordinate < 0))

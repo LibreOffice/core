@@ -331,6 +331,9 @@ public:
     /// determines whether a given row is selected
     bool isRowSelected(RowPos i_row) const;
 
+    void selectRow(sal_Int32 nRowIndex, bool bSelect);
+    void selectAllRows(bool bSelect);
+
     tools::Long appFontWidthToPixel(tools::Long const i_appFontUnits) const;
 
     TableDataWindow& getDataWindow() { return *m_pDataWindow; }
