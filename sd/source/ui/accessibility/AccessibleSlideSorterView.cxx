@@ -282,17 +282,16 @@ Reference<XAccessible> SAL_CALL
     AccessibleSlideSorterView::getAccessibleAtPoint (const awt::Point& aPoint)
 {
     ThrowIfDisposed();
-    Reference<XAccessible> xAccessible;
+    rtl::Reference<AccessibleSlideSorterObject> pAccessible;
     const SolarMutexGuard aSolarGuard;
 
     const Point aTestPoint (aPoint.X, aPoint.Y);
     ::sd::slidesorter::model::SharedPageDescriptor pHitDescriptor (
         mrSlideSorter.GetController().GetPageAt(aTestPoint));
     if (pHitDescriptor)
-        xAccessible = mpImpl->GetAccessibleChild(
-            (pHitDescriptor->GetPage()->GetPageNum()-1)/2);
+        pAccessible = mpImpl->GetAccessibleChild((pHitDescriptor->GetPage()->GetPageNum() - 1) / 2);
 
-    return xAccessible;
+    return pAccessible;
 }
 
 awt::Rectangle AccessibleSlideSorterView::implGetBounds()
