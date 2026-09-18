@@ -98,7 +98,7 @@ public:
         OString aKeychainPathUtf8 = OUStringToOString(aKeychainPath, RTL_TEXTENCODING_UTF8);
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH // SecKeychainCreate etc. (macOS 10.10)
-            SecKeychainRef pKeychain
+        SecKeychainRef pKeychain
             = nullptr;
         constexpr char pPassword[] = "test";
         CPPUNIT_ASSERT_EQUAL(OSStatus(errSecSuccess),
