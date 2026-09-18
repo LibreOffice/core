@@ -49,7 +49,7 @@ AccessibleGridControlBase::AccessibleGridControlBase(
     const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
     AccessibleTableControlObjType eObjType)
     : m_pParent(rpParent)
-    , m_aTable(rTable)
+    , m_rTable(rTable)
     , m_eObjType(eObjType)
 {
 }
@@ -79,7 +79,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
     SolarMutexGuard g;
 
     ensureAlive();
-    return m_aTable.GetAccessibleObjectDescription(m_eObjType);
+    return m_rTable.GetAccessibleObjectDescription(m_eObjType);
 }
 
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
@@ -87,7 +87,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
     SolarMutexGuard g;
 
     ensureAlive();
-    return m_aTable.GetAccessibleObjectName(m_eObjType, 0, 0);
+    return m_rTable.GetAccessibleObjectName(m_eObjType, 0, 0);
 }
 
 css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
@@ -155,7 +155,7 @@ sal_Int64 AccessibleGridControlBase::implCreateStateSet()
         if( implIsShowing() )
             nStateSet |= AccessibleStateType::SHOWING;
         // GridControl fills StateSet with states depending on object type
-        m_aTable.FillAccessibleStateSet( nStateSet, getType() );
+        m_rTable.FillAccessibleStateSet(nStateSet, getType());
     }
     else
         nStateSet |= AccessibleStateType::DEFUNC;
@@ -212,15 +212,15 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
     ensureAlive();
 
     Color nColor;
-    if (m_aTable.IsControlForeground())
-        nColor = m_aTable.GetControlForeground();
+    if (m_rTable.IsControlForeground())
+        nColor = m_rTable.GetControlForeground();
     else
     {
         vcl::Font aFont;
-        if (m_aTable.IsControlFont() )
-            aFont = m_aTable.GetControlFont();
+        if (m_rTable.IsControlFont())
+            aFont = m_rTable.GetControlFont();
         else
-            aFont = m_aTable.GetFont();
+            aFont = m_rTable.GetFont();
         nColor = aFont.GetColor();
     }
     return sal_Int32(nColor);
@@ -232,10 +232,10 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 
     ensureAlive();
     Color nColor;
-    if (m_aTable.IsControlBackground())
-        nColor = m_aTable.GetControlBackground();
+    if (m_rTable.IsControlBackground())
+        nColor = m_rTable.GetControlBackground();
     else
-        nColor = m_aTable.GetBackground().GetColor();
+        nColor = m_rTable.GetBackground().GetColor();
     return sal_Int32(nColor);
 }
 

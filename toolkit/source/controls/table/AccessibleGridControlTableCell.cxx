@@ -65,7 +65,7 @@ void SAL_CALL AccessibleGridControlCell::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
 
-    m_aTable.GoToCell(m_nColPos, m_nRowPos);
+    m_rTable.GoToCell(m_nColPos, m_nRowPos);
 }
 
 OUString SAL_CALL AccessibleGridControlCell::getAccessibleName()
@@ -73,20 +73,20 @@ OUString SAL_CALL AccessibleGridControlCell::getAccessibleName()
     SolarMutexGuard g;
 
     ensureAlive();
-    return m_aTable.GetAccessibleObjectName(m_eObjType, m_nRowPos, m_nColPos);
+    return m_rTable.GetAccessibleObjectName(m_eObjType, m_nRowPos, m_nColPos);
 }
 
 // implementation of a table cell
 OUString AccessibleGridControlTableCell::implGetText()
 {
     ensureAlive();
-    return m_aTable.GetAccessibleCellText(getRowPos(), getColumnPos());
+    return m_rTable.GetAccessibleCellText(getRowPos(), getColumnPos());
 }
 
 css::lang::Locale AccessibleGridControlTableCell::implGetLocale()
 {
     ensureAlive();
-    return m_aTable.GetAccessible()->getLocale();
+    return m_rTable.GetAccessible()->getLocale();
 }
 
 void AccessibleGridControlTableCell::implGetSelection(sal_Int32& nStartIndex, sal_Int32& nEndIndex)
@@ -111,7 +111,7 @@ css::awt::Rectangle SAL_CALL AccessibleGridControlTableCell::getCharacterBounds(
     if (!implIsValidIndex(nIndex, implGetText().getLength()))
         throw IndexOutOfBoundsException();
 
-    return vcl::unohelper::ConvertToAWTRect(m_aTable.GetCharacterBounds(nIndex));
+    return vcl::unohelper::ConvertToAWTRect(m_rTable.GetCharacterBounds(nIndex));
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint(const css::awt::Point& _aPoint)
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint(const css::aw
 
     ensureAlive();
 
-    return m_aTable.GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(_aPoint));
+    return m_rTable.GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(_aPoint));
 }
 
 /** @return  The count of visible children. */
@@ -145,7 +145,7 @@ sal_Int64 AccessibleGridControlTableCell::implCreateStateSet()
         if (implIsShowing())
             nStateSet |= AccessibleStateType::SHOWING;
 
-        m_aTable.FillAccessibleStateSetForCell(nStateSet, getRowPos(),
+        m_rTable.FillAccessibleStateSetForCell(nStateSet, getRowPos(),
                                                static_cast<sal_uInt16>(getColumnPos()));
     }
     else
@@ -162,7 +162,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()
 
     ensureAlive();
 
-    return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(m_aTable.GetColumnCount()))
+    return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(m_rTable.GetColumnCount()))
            + getColumnPos();
 }
 
@@ -269,8 +269,8 @@ sal_Bool SAL_CALL AccessibleGridControlTableCell::scrollSubstringTo(sal_Int32, s
 
 AbsoluteScreenPixelRectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
 {
-    AbsoluteScreenPixelRectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();
-    tools::Rectangle aCellRect = m_aTable.calcCellRect(getRowPos(), getColumnPos());
+    AbsoluteScreenPixelRectangle aGridRect = m_rTable.GetWindowExtentsAbsolute();
+    tools::Rectangle aCellRect = m_rTable.calcCellRect(getRowPos(), getColumnPos());
     tools::Long nX = aGridRect.Left() + aCellRect.Left();
     tools::Long nY = aGridRect.Top() + aCellRect.Top();
     AbsoluteScreenPixelRectangle aCell(AbsoluteScreenPixelPoint(nX, nY), aCellRect.GetSize());

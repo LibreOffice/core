@@ -61,7 +61,9 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int64 nChildIndex )
     }
     if(!m_aCellVector[nChildIndex].is())
     {
-        m_aCellVector[nChildIndex].set(new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount()));
+        m_aCellVector[nChildIndex].set(new AccessibleGridControlTableCell(
+            this, m_rTable, nChildIndex / m_rTable.GetColumnCount(),
+            nChildIndex % m_rTable.GetColumnCount()));
     }
     return m_aCellVector[nChildIndex];
 }
@@ -71,9 +73,9 @@ sal_Int64 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
     SolarMutexGuard aSolarGuard;
 
     ensureAlive();
-    if(m_aTable.HasRowHeader() && m_aTable.HasColHeader())
+    if (m_rTable.HasRowHeader() && m_rTable.HasColHeader())
         return 0;
-    else if(m_aTable.HasRowHeader() != m_aTable.HasColHeader())
+    else if (m_rTable.HasRowHeader() != m_rTable.HasColHeader())
         return 1;
     else
         return 2;
@@ -93,7 +95,7 @@ AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
     Point aPosInTableControl = vcl::unohelper::ConvertToVCLPoint(rPoint) + implGetBoundingBox().TopLeft();
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
-    if (m_aTable.ConvertPointToCellAddress(nRow, nColumnPos, aPosInTableControl))
+    if (m_rTable.ConvertPointToCellAddress(nRow, nColumnPos, aPosInTableControl))
         return getAccessibleCellAt(nRow, nColumnPos);
     return nullptr;
 }
@@ -103,7 +105,7 @@ void SAL_CALL AccessibleGridControlTable::grabFocus()
     SolarMutexGuard aSolarGuard;
 
     ensureAlive();
-    m_aTable.GrabFocus();
+    m_rTable.GrabFocus();
 }
 
 // XAccessibleTable -----------------------------------------------------------
@@ -131,7 +133,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlTable::getAccessible
     SolarMutexGuard g;
 
     ensureAlive();
-    if(m_aTable.HasColHeader())
+    if (m_rTable.HasColHeader())
         return implGetHeaderBar( 1 );
     else
         return implGetHeaderBar( 0 );
@@ -184,7 +186,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
 
     ensureAlive();
     ensureIsValidAddress( nRow, nColumn );
-    sal_Int64 nChildIndex = static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(m_aTable.GetColumnCount()) + nColumn;
+    sal_Int64 nChildIndex = static_cast<sal_Int64>(nRow) * static_cast<sal_Int64>(m_rTable.GetColumnCount()) + nColumn;
     return getAccessibleChild(nChildIndex);
 }
 
@@ -204,9 +206,9 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int64 nChil
 
     ensureAlive();
     ensureIsValidIndex( nChildIndex );
-    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nColumns = m_rTable.GetColumnCount();
     sal_Int32 nRow = nChildIndex / nColumns;
-    m_aTable.SelectRow( nRow, true );
+    m_rTable.SelectRow(nRow, true);
 }
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
@@ -214,7 +216,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int
 
     ensureAlive();
     ensureIsValidIndex( nChildIndex );
-    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nColumns = m_rTable.GetColumnCount();
     sal_Int32 nRow = nChildIndex / nColumns;
     return isAccessibleRowSelected(nRow);
 }
@@ -223,7 +225,7 @@ void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     SolarMutexGuard aSolarGuard;
 
     ensureAlive();
-    m_aTable.SelectAllRows( false );
+    m_rTable.SelectAllRows(false);
 }
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
 {
@@ -232,7 +234,7 @@ void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     ensureAlive();
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
     auto selectedRowsRange = asNonConstRange(selectedRows);
-    for(tools::Long i=0; i<m_aTable.GetRowCount(); i++)
+    for (tools::Long i = 0; i < m_rTable.GetRowCount(); i++)
         selectedRowsRange[i]=i;
 }
 sal_Int64 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
@@ -241,7 +243,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
 
     ensureAlive();
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
-    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nColumns = m_rTable.GetColumnCount();
     return static_cast<sal_Int64>(selectedRows.getLength()) * static_cast<sal_Int64>(nColumns);
 }
 Reference< XAccessible > SAL_CALL
@@ -296,7 +298,7 @@ void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno:
 
             if (aChange.Type == AccessibleTableModelChangeType::ROWS_REMOVED)
             {
-                int nColCount = m_aTable.GetColumnCount();
+                int nColCount = m_rTable.GetColumnCount();
                 // check valid index - entries are inserted lazily
                 size_t const nStart = nColCount * aChange.FirstRow;
                 size_t const nEnd = nColCount * aChange.LastRow;
@@ -317,8 +319,8 @@ void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno:
 
 AbsoluteScreenPixelRectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute());
-    tools::Rectangle aTableRect( m_aTable.calcTableRect() );
+    tools::Rectangle aGridRect(m_rTable.GetWindowExtentsAbsolute());
+    tools::Rectangle aTableRect(m_rTable.calcTableRect());
     tools::Long nX = aGridRect.Left() + aTableRect.Left();
     tools::Long nY = aGridRect.Top() + aTableRect.Top();
     tools::Long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();

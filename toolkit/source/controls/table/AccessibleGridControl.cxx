@@ -68,7 +68,7 @@ void SAL_CALL AccessibleGridControl::disposing()
 
 sal_Int64 AccessibleGridControl::implGetAccessibleChildCount()
 {
-    return m_aTable.GetAccessibleControlCount();
+    return m_rTable.GetAccessibleControlCount();
 }
 
 // css::accessibility::XAccessibleContext ---------------------------------------------------------
@@ -93,21 +93,21 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
     css::uno::Reference< css::accessibility::XAccessible > xChild;
     if (isAlive())
     {
-        if(nChildIndex == 0 && m_aTable.HasColHeader())
+        if (nChildIndex == 0 && m_rTable.HasColHeader())
         {
             if(!m_xColumnHeaderBar.is())
             {
                 m_xColumnHeaderBar = new AccessibleGridControlHeader(
-                    this, m_aTable, AccessibleTableControlObjType::COLUMNHEADERBAR);
+                    this, m_rTable, AccessibleTableControlObjType::COLUMNHEADERBAR);
             }
             xChild = m_xColumnHeaderBar.get();
         }
-        else if(m_aTable.HasRowHeader() && (nChildIndex == 1 || nChildIndex == 0))
+        else if (m_rTable.HasRowHeader() && (nChildIndex == 1 || nChildIndex == 0))
         {
             if(!m_xRowHeaderBar.is())
             {
                 m_xRowHeaderBar = new AccessibleGridControlHeader(
-                    this, m_aTable, AccessibleTableControlObjType::ROWHEADERBAR);
+                    this, m_rTable, AccessibleTableControlObjType::ROWHEADERBAR);
             }
             xChild = m_xRowHeaderBar.get();
         }
@@ -115,7 +115,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
         {
             if(!m_xTable.is())
             {
-                m_xTable = new AccessibleGridControlTable(this, m_aTable);
+                m_xTable = new AccessibleGridControlTable(this, m_rTable);
             }
             xChild = m_xTable.get();
         }
@@ -163,14 +163,14 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
     ensureAlive();
-    m_aTable.GrabFocus();
+    m_rTable.GrabFocus();
 }
 
 // internal virtual methods ---------------------------------------------------
 
 AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
-    return m_aTable.GetWindowExtentsAbsolute();
+    return m_rTable.GetWindowExtentsAbsolute();
 }
 
 // internal helper methods ----------------------------------------------------
@@ -185,7 +185,7 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
         if (css::uno::Reference<css::accessibility::XAccessible>(m_xTable) == xAccessible)
         {
             Reference<XAccessible> xCell = m_xTable->getAccessibleCellAt(
-                m_aTable.GetCurrentRow(), m_aTable.GetCurrentColumn());
+                m_rTable.GetCurrentRow(), m_rTable.GetCurrentColumn());
             AccessibleGridControlTableCell* pCell
                 = static_cast<AccessibleGridControlTableCell*>(xCell.get());
             pCell->commitEvent(_nEventId, _rNewValue, _rOldValue);
@@ -200,8 +200,8 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 
     if(_nEventId == AccessibleEventId::ACTIVE_DESCENDANT_CHANGED)
     {
-        const sal_Int32 nCurrentRow = m_aTable.GetCurrentRow();
-        const sal_Int32 nCurrentCol = m_aTable.GetCurrentColumn();
+        const sal_Int32 nCurrentRow = m_rTable.GetCurrentRow();
+        const sal_Int32 nCurrentCol = m_rTable.GetCurrentColumn();
         css::uno::Reference< css::accessibility::XAccessible > xChild;
         if (nCurrentRow > -1 && nCurrentCol > -1)
             xChild = m_xTable->getAccessibleCellAt(nCurrentRow, nCurrentCol);
