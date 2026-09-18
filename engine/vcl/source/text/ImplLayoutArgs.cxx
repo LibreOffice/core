@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <memory>
 #include <utility>
+#include <iomanip>
 
 namespace vcl::text
 {

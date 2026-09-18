@@ -138,6 +138,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>
 #include <tools/helpers.hxx>
+#include <iomanip>
 #include <tools/json_writer.hxx>
 #include <TransitionPreset.hxx>
 

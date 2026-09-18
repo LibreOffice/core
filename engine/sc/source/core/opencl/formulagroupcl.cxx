@@ -62,6 +62,7 @@ const char* const publicFunc =
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include <iomanip>
 
 using namespace formula;
 

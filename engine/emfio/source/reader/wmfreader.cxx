@@ -41,6 +41,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
+#include <iomanip>
 
 namespace
 {

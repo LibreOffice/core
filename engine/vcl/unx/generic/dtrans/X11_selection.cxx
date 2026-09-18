@@ -72,6 +72,7 @@
 #include <officecfg/VCL.hxx>
 
 #include <algorithm>
+#include <iomanip>
 
 constexpr auto DRAG_EVENT_MASK = ButtonPressMask |
                               ButtonReleaseMask |

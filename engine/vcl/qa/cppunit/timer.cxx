@@ -21,6 +21,7 @@
 #include <vcl/scheduler.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <iomanip>
 
 // #define TEST_WATCHDOG
 

@@ -24,6 +24,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 #include <optional>
+#include <iomanip>
 
 void btn_clicked(GtkWidget* pButton, gpointer)
 {

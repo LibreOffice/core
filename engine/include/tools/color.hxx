@@ -470,11 +470,14 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, traits>& rStream, const Color& rColor)
 {
     std::ios_base::fmtflags nOrigFlags = rStream.flags();
-    rStream << "rgba[" << std::hex << std::setfill ('0')
-            << std::setw(2) << static_cast<int>(rColor.GetRed())
-            << std::setw(2) << static_cast<int>(rColor.GetGreen())
-            << std::setw(2) << static_cast<int>(rColor.GetBlue())
-            << std::setw(2) << static_cast<int>(rColor.GetAlpha()) << "]";
+    charT cOrigFill = rStream.fill(rStream.widen('0'));
+    rStream << "rgba[" << std::hex;
+    rStream.width(2); rStream << static_cast<int>(rColor.GetRed());
+    rStream.width(2); rStream << static_cast<int>(rColor.GetGreen());
+    rStream.width(2); rStream << static_cast<int>(rColor.GetBlue());
+    rStream.width(2); rStream << static_cast<int>(rColor.GetAlpha());
+    rStream << "]";
+    rStream.fill(cOrigFill);
     rStream.setf(nOrigFlags);
     return rStream;
 }

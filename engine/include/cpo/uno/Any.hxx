@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <iomanip>
 #include <ostream>
 #include <utility>
 
@@ -624,8 +623,9 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
             std::ios_base::fmtflags flgs = o.setf(
                 std::ios_base::hex, std::ios_base::basefield);
             charT fill = o.fill('0');
-            o << " U+" << std::setw(4)
-              << unsigned(*static_cast<sal_Unicode const *>(any.getValue()));
+            o << " U+";
+            o.width(4);
+            o << unsigned(*static_cast<sal_Unicode const *>(any.getValue()));
             o.setf(flgs);
             o.fill(fill);
             break;

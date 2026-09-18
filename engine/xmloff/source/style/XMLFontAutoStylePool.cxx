@@ -44,6 +44,7 @@
 #include <XMLBase64Export.hxx>
 #include <AutoStyleEntry.hxx>
 #include <comphelper/hash.hxx>
+#include <iomanip>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
