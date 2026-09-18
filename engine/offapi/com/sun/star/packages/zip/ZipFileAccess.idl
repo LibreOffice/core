@@ -24,7 +24,7 @@ module com {  module sun {  module star {   module packages {  module zip {
 
 /** allows to get reading access to non-encrypted entries inside zip file.
  */
-service ZipFileAccess : XZipFileAccess2
+service ZipFileAccess : XZipFileAccess
 {
     createWithURL([in] string URL)
         raises ( com::sun::star::io::IOException,

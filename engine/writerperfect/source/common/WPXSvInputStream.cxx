@@ -9,7 +9,7 @@
 
 #include <WPXSvInputStream.hxx>
 
-#include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
+#include <com/sun/star/packages/zip/XZipFileAccess.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -703,7 +703,7 @@ bool WPXSvInputStream::isZip()
         {
             const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                         UNO_SET_THROW);
-            const Reference<packages::zip::XZipFileAccess2> xZip(
+            const Reference<packages::zip::XZipFileAccess> xZip(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     u"com.sun.star.packages.zip.ZipFileAccess"_ustr, { Any(mxStream) }, xContext),
                 UNO_QUERY_THROW);

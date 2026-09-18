@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     xmlDocUniquePtr pRelsDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
             comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     // 1st picture: marker effect

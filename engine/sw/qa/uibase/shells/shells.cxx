@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
     // Save the document and see if we get the previews.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), {});
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
 
@@ -168,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOlePreviewUpdate)
     // Then make sure the preview is no longer a 0-sized stream:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), {});
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(

@@ -1100,7 +1100,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     // Now import this back and check the ODT result.
     ImportFromReqif(maTempFile.GetURL());
     save(TestFilter::ODT);
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(u"Object 2"_ustr),
@@ -1123,7 +1123,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
 
     // Save it as ODT to inspect the result of the OLE1 -> OLE2 conversion.
     save(TestFilter::ODT);
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(u"Object 2"_ustr),

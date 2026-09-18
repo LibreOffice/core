@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlPictureInTextframe)
 {
     createSwDoc("dml-picture-in-textframe.docx");
     saveAndReload(TestFilter::DOCX);
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/media/image1.gif"_ustr));
     // This was also true, image was written twice.
     CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/media/image2.gif"_ustr));

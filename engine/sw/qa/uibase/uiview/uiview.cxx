@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     xStorable->storeSelf(aNoArgs);
 
     // Check the contents of the updated copy and verify that ObjectReplacements are there
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xFactory),
                                                       maTempFile.GetURL());
 
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
 
     // Check the contents of the updated copy.
     uno::Reference<cpo::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(xContext, maTempFile.GetURL());
 
     // Without the accompanying fix in place, this test would have failed, because the embedded

@@ -62,7 +62,7 @@ namespace
         uno::Reference<cpo::uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
 
-        uno::Reference<packages::zip::XZipFileAccess2> xZip(
+        uno::Reference<packages::zip::XZipFileAccess> xZip(
             xSvcMgr->createInstanceWithArgumentsAndContext(
                 u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs, xCxt),
             uno::UNO_QUERY);
@@ -79,7 +79,7 @@ namespace
     {
         try
         {
-            uno::Reference<css::packages::zip::XZipFileAccess2> xZip(
+            uno::Reference<css::packages::zip::XZipFileAccess> xZip(
                 css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rURL));
             return xZip.is();
         }
@@ -216,7 +216,7 @@ namespace
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
 
         // Without Zip64 support, it would crash here
-        uno::Reference<packages::zip::XZipFileAccess2> xZip2(
+        uno::Reference<packages::zip::XZipFileAccess> xZip2(
             xSvcMgr->createInstanceWithArgumentsAndContext(
                 u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs2, xCxt),
             uno::UNO_QUERY);

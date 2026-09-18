@@ -1505,7 +1505,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool15769MinimalDBRanges)
     createScDoc("ods/cool15769_minimal_DB_ranges.ods");
     save(TestFilter::XLSX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     // without the fix degenerate tables would have been exported to XLSX

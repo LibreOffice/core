@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115005)
     save(TestFilter::ODP);
 
     // additional checks of the output file
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
@@ -407,7 +407,7 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
     save(TestFilter::ODP);
 
     // additional checks of the output file
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
@@ -448,7 +448,7 @@ struct SvgPngCounts
 };
 
 SvgPngCounts
-countSvgAndPngInPictures(const cpo::uno::Reference<css::packages::zip::XZipFileAccess2>& xZip)
+countSvgAndPngInPictures(const cpo::uno::Reference<css::packages::zip::XZipFileAccess>& xZip)
 {
     SvgPngCounts aCounts;
     const cpo::uno::Sequence<OUString> aNames = xZip->getElementNames();
@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testSvgPngFallbackOdf14)
     createSdImpressDoc("odp/SvgImageTest.odp");
     save(TestFilter::ODP);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xZip
+    uno::Reference<packages::zip::XZipFileAccess> xZip
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     const SvgPngCounts aCounts = countSvgAndPngInPictures(xZip);
@@ -495,7 +495,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testSvgPngFallbackOdf13)
     createSdImpressDoc("odp/SvgImageTest.odp");
     save(TestFilter::ODP);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xZip
+    uno::Reference<packages::zip::XZipFileAccess> xZip
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     const SvgPngCounts aCounts = countSvgAndPngInPictures(xZip);
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf148478_transitionMusic)
     save(TestFilter::PPTX);
 
     // an MD5-based ascii replacement was substituted for the unicode name. This now opens in MS PP.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xStrm;
@@ -1243,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952_multiple_OLEs)
 
     // Without the fix two of the three OLE objects would get lost, and only oleObject1.bin
     // would exist
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/embeddings/oleObject1.bin"_ustr));

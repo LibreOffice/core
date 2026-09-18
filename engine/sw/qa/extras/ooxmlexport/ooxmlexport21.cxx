@@ -1151,7 +1151,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
     xText->insertString(xCursor, u"test"_ustr, false);
     save(TestFilter::DOCX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(

@@ -40,7 +40,7 @@ namespace
 class EPUBExportTest : public UnoApiXmlTest
 {
 protected:
-    uno::Reference<packages::zip::XZipFileAccess2> mxZipFile;
+    uno::Reference<packages::zip::XZipFileAccess> mxZipFile;
     OUString maFilterOptions;
 
 public:

@@ -1125,7 +1125,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf74670)
     createSdImpressDoc("odp/tdf74670.odp");
     save(TestFilter::PPTX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
@@ -1513,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
                                         "schemas.openxmlformats.org/officeDocument/2006/"
                                         "relationships/slideLayout'])/@Target");
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
 

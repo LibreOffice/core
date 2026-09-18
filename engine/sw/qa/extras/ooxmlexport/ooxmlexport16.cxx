@@ -833,7 +833,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/media/image1.jpeg"_ustr));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false
@@ -1021,7 +1021,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainCommentDateUtc)
     // Without the accompanying fix in place, this test would have failed: the part with the
     // moments was only written along with the one for resolved comments and replies, which this
     // document has no need of.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/commentsExtended.xml"_ustr));
@@ -1193,7 +1193,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 
     saveAndReload(TestFilter::DOCX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
@@ -1215,7 +1215,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 
     saveAndReload(TestFilter::DOCX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
@@ -1249,7 +1249,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoWebSettings)
     // no word/webSettings.xml to roundtrip in this document
     createSwDoc("cloud.docx");
     save(TestFilter::DOCX);
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/webSettings.xml"_ustr));

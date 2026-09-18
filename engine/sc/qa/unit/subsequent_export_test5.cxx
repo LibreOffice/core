@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf91286)
     createScDoc("ods/tdf91286.ods");
     save(TestFilter::XLSX);
 
-    Reference<packages::zip::XZipFileAccess2> xNameAccess
+    Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     const Sequence<OUString> aNames(xNameAccess->getElementNames());

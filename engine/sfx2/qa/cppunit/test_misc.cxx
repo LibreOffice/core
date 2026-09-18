@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
         comphelper::InitPropertySequence({ { u"NoThumbnail"_ustr, cpo::uno::Any(true) } }));
     osl::File::remove(maTempFile.GetURL());
     xStorable->storeToURL(maTempFile.GetURL(), aProperties);
-    uno::Reference<packages::zip::XZipFileAccess2> xZipFile
+    uno::Reference<packages::zip::XZipFileAccess> xZipFile
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
     CPPUNIT_ASSERT(!xZipFile->hasByName(u"Thumbnails/thumbnail.png"_ustr));
 

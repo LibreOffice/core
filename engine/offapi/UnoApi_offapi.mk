@@ -2742,7 +2742,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/packages/manifest,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/packages/zip,\
 	XZipFileAccess \
-	XZipFileAccess2 \
 	ZipConstants \
 	ZipEntry \
 	ZipException \

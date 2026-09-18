@@ -429,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     // This failed, the header was lost. It's still referenced at an incorrect

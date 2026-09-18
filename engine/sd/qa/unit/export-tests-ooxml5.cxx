@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testConvertWithMasterDeduplication)
     createSdImpressDoc("odp/dupmastermultlayouts.odp");
     saveAndReload(TestFilter::PPTX);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
 

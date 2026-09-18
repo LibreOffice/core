@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPFILEACCESS_HXX
 #define INCLUDED_PACKAGE_INC_ZIPFILEACCESS_HXX
 
-#include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
+#include <com/sun/star/packages/zip/XZipFileAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -35,7 +35,7 @@
 #include <optional>
 
 class OZipFileAccess final : public ::cppu::WeakImplHelper<
-                        css::packages::zip::XZipFileAccess2,
+                        css::packages::zip::XZipFileAccess,
                         css::lang::XInitialization,
                         css::lang::XComponent,
                         css::lang::XServiceInfo >

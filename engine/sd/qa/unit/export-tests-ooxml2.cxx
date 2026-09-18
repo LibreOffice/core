@@ -1118,7 +1118,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPptmVBAStream)
     createSdImpressDoc("pptm/macro.pptm");
     save(TestFilter::PPTM);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     // This failed: VBA stream was not roundtripped
@@ -1311,7 +1311,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
     CPPUNIT_ASSERT_EQUAL(u"vnd.sun.star.Package:ppt/media/media1.avi"_ustr, pMediaObj->getURL());
 
     // additional checks of the output file
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     // check that the document contains the video stream

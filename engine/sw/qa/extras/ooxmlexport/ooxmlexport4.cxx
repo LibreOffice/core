@@ -481,7 +481,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
     assertXPath(pXmlChart1Rels,
         "//rels:Relationship[@Target='../embeddings/Microsoft_Excel_Worksheet1.xlsx']");
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     CPPUNIT_ASSERT(xNameAccess->hasByName(u"word/charts/chart2.xml"_ustr)); // first page footer
@@ -560,7 +560,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:object", 2);
 
     // finally check the embedded files are present in the zipped document
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     const cpo::uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSheetFiles = 0;
     int nImageFiles = 0;
@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74792)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/diagrams/_rels/data1.xml.rels"_ustr);
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship", 4);
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved (formally OOXDiagramDataRels1_0.jpeg, DogWatchingMice, fill of 1st Node)
@@ -673,7 +673,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77718)
     assertXPath(pXmlDataRels1,"/rels:Relationships/rels:Relationship", 4);
     assertXPath(pXmlDataRels2,"/rels:Relationships/rels:Relationship", 4);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved (formally OOXDiagramDataRels1_0.jpeg, lighthouse, fill of BGImage)
@@ -1167,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
     createSwDoc("tdf83227.docx");
     saveAndReload(TestFilter::DOCX);
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"word/media/image1.png"_ustr));
     // This was also true, image was written twice.
     CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"word/media/image2.png"_ustr));
@@ -1179,7 +1179,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103001)
     saveAndReload(TestFilter::DOCX);
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: header reused the RelId of the body text, even if RelIds
     // are local to their stream.
     CPPUNIT_ASSERT(xNameAccess->hasByName(u"word/_rels/header2.xml.rels"_ustr));

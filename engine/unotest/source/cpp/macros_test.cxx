@@ -163,7 +163,7 @@ std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,
 {
     const uno::Reference<cpo::uno::XComponentContext>& xComponentContext
         = comphelper::getProcessComponentContext();
-    uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
+    uno::Reference<packages::zip::XZipFileAccess> const xZipNames(
         packages::zip::ZipFileAccess::createWithURL(xComponentContext, url));
     uno::Reference<io::XInputStream> const xInputStream(xZipNames->getByName(rStreamName),
                                                         uno::UNO_QUERY);

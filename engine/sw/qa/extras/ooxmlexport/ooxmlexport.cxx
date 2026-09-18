@@ -841,7 +841,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89791)
     properties.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Titre"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(false, xNameAccess->hasByName(u"docProps/custom.xml"_ustr));
 }
 

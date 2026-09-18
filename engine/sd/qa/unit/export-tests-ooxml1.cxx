@@ -1192,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf112633)
                 u"../media/hdphoto1.wdp");
 
     // Check the .wdp file exists
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, xNameAccess->hasByName(u"ppt/media/hdphoto1.wdp"_ustr));
