@@ -685,7 +685,9 @@ window.L.Map.include({
 	_sendViewReadOnly: function (readOnly) {
 		if (app.isReadOnly())
 			return;
-		if (app.socket)
+		// Only a live view takes the message. The reconnect sets the state
+		// of a reloaded view.
+		if (app.socket && app.socket.connected())
 			app.socket.sendMessage('setviewreadonly value=' + readOnly);
 	},
 

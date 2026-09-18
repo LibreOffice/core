@@ -2141,9 +2141,15 @@ class Socket {
 		// Never make the permission more permissive than it originally was.
 		if (!app.isReadOnly()) app.setPermission(perm);
 
-		if (this._map._docLayer) this._map.setPermission(app.file.permission);
+		this.applyFilePermission();
 
 		app.file.disableSidebar = app.isReadOnly();
+	}
+
+	// Give a loaded view the file permission. A loading view gets it with its status reply.
+	private applyFilePermission(): void {
+		if (this._map._docLayer && this._map._docLoaded)
+			this._map.setPermission(app.file.permission);
 	}
 
 	// 'filemode:' message.
@@ -2155,9 +2161,7 @@ class Socket {
 			app.setPermission('readonly');
 		}
 
-		if (this._map._docLayer) {
-			this._map.setPermission(app.file.permission);
-		}
+		this.applyFilePermission();
 
 		// Store the view mode extensions list from server configuration
 		if (json.viewModeExtensions) {
