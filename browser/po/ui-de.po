@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-17 23:35+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-09-19 05:24+0000\n"
+"Last-Translator: Mike Schulte <ich@mike-schulte.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -517,11 +517,14 @@ msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Dieser KI Host steht nicht in der Liste der erlaubten Hosts für diesen "
+"Server (lok_allow.host). Bitte Deinen Administrator das zu erlauben."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
 msgstr ""
+"Anfragefrequenz begrenzt – bitte warte einen Moment und versuche es erneut"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
@@ -595,7 +598,7 @@ msgstr "Automatische Rechtschreibprüfung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Verwende die Zoom-Einstellungen dieses Servers"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid "Smart Zoom"
@@ -918,6 +921,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Laden Sie eine gepackte Erweiterung als .zip-Datei hoch; ihr Inhalt "
+"(manifest.json, ...) wird auf dem Server entpackt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1018
 msgid "Upload Extension"
@@ -932,10 +937,13 @@ msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Laden Sie SPIF-Sicherheitsrichtlinien (.xml) hoch. Diese legen die "
+"Klassifizierungen und Kategorien fest, die bei der Zuweisung eines "
+"Sicherheits-Labels zu einem Dokument zur Verfügung stehen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Sicherheitsrichtlinie für Uploads"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -967,13 +975,16 @@ msgstr "Standardeinstellungen für die Schnittstelle festlegen."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1412
 #: admin/src/integrator/AdminIntegratorSettings.ts:3529
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Zoom Verhalten"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1557
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Ist diese Option aktiviert, werden Textdokumente mit der vom Server "
+"festgelegten Zoomstufe geöffnet. Deaktivieren Sie sie, um die Zoomstufe "
+"selbst zu wählen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1563
 msgid ""
@@ -1122,7 +1133,7 @@ msgstr "z. B."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2693
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Leer lassen, wenn der Server keine benötigt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2712
 msgid ""
@@ -1185,6 +1196,8 @@ msgstr "Modelle zum Auswählen abrufen"
 #: src/control/Control.AIChatSidebar.ts:2190
 msgid "API quota exceeded - check your plan and billing details"
 msgstr ""
+"API-Kontingent überschritten – überprüfen Sie Ihren Tarif und Ihre "
+"Abrechnungsdaten"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3428
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
@@ -1389,7 +1402,7 @@ msgstr "Als Standard festlegen"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Stil duplizieren"
 
 #: src/canvas/sections/CommentListSection.ts:2029
 #: src/canvas/sections/CommentListSection.ts:2042
@@ -1655,7 +1668,7 @@ msgstr "Den folgenden Text prägnanter formulieren"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr ""
+msgstr "Fasse es prägnanter zusammen"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
