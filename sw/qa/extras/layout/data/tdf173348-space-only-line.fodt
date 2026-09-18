@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:generator>LibreOfficeDev/27.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/643aab12aa0946fd268eb99094a98b3ad46ece1b</meta:generator><dc:title>Gl Variable form ODUMP Binder.pdf</dc:title><meta:creation-date>2026-09-18T08:43:28.599605244</meta:creation-date><meta:editing-cycles>1</meta:editing-cycles><meta:editing-duration>P0D</meta:editing-duration><meta:document-statistic meta:table-count="0" meta:image-count="0" meta:object-count="0" meta:page-count="1" meta:paragraph-count="4" meta:word-count="22" meta:character-count="130" meta:non-whitespace-character-count="82"/><meta:template xlink:type="simple" xlink:actuate="onRequest" xlink:title="" xlink:href="../Downloads/CG91251014.odt/Normal.dotm"/></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial Narrow" svg:font-family="'Arial Narrow'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Times New Roman" svg:font-family="'Times New Roman'" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.028in" svg:stroke-color="#1c334e" svg:stroke-linecap="butt" draw:fill-color="#4f81bd" fo:wrap-option="wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:writing-mode="lr-tb" style:flow-with-text="false"/>
+   <style:paragraph-properties fo:line-height="100%" fo:text-align="left" style:text-autospace="none" style:line-break="strict" loext:tab-stop-distance="0in" style:font-independent-line-spacing="false" loext:paragraph-composer="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="11pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="false" style:font-name-asian="Calibri" style:font-size-asian="11pt" style:language-asian="en" style:country-asian="US" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" loext:font-optical-sizing="auto"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="left" style:justify-single-word="false" fo:keep-together="auto" fo:orphans="0" fo:widows="0" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:break-before="auto" fo:break-after="auto" fo:background-color="transparent" fo:padding="0in" fo:border="none" style:shadow="none" fo:keep-with-next="auto" text:number-lines="true" text:line-number="0" style:text-autospace="none" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.5in" style:vertical-align="auto" style:snap-to-layout-grid="true" style:writing-mode="lr-tb" loext:paragraph-composer="false">
+    <style:background-image/>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Calibri" fo:font-size="11pt" fo:letter-spacing="normal" fo:language="en" fo:country="US" fo:font-style="normal" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="false" fo:background-color="transparent" style:font-name-asian="Calibri" style:font-size-asian="11pt" style:language-asian="en" style:country-asian="US" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="11pt" style:language-complex="ar" style:country-complex="SA" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:text-combine="none" style:text-scale="100%" style:font-relief="none" loext:font-optical-sizing="auto" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2" loext:hyphenation-compound-push-char-count="2" loext:hyphenation-level="50%"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Normal" style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false"/>
+   <style:text-properties style:font-name="Arial Narrow" fo:font-family="'Arial Narrow'" style:font-family-generic="swiss" style:font-pitch="variable" style:font-name-asian="Arial Narrow" style:font-family-asian="'Arial Narrow'" style:font-family-generic-asian="swiss" style:font-pitch-asian="variable" style:font-name-complex="Arial Narrow" style:font-family-complex="'Arial Narrow'" style:font-family-generic-complex="swiss" style:font-pitch-complex="variable" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2" loext:hyphenation-compound-push-char-count="2" loext:hyphenation-level="50%"/>
+  </style:style>
+  <style:style style:name="Default_20_Paragraph_20_Font" style:display-name="Default Paragraph Font" style:family="text"/>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" loext:num-list-format="%2%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" loext:num-list-format="%3%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" loext:num-list-format="%4%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" loext:num-list-format="%5%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"/>
+    </style:list-level-properties>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <style:default-page-layout>
+   <style:page-layout-properties fo:border="none" fo:padding="0in" style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+  </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Normal" style:master-page-name="MP0">
+   <loext:graphic-properties draw:fill="none"/>
+   <style:paragraph-properties fo:margin-left="4.6252in" fo:margin-right="0in" fo:margin-top="0.0307in" fo:margin-bottom="0in" style:contextual-spacing="false" fo:line-height="0.1752in" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="false" fo:text-indent="0in" style:auto-text-indent="false" style:page-number="auto" fo:background-color="transparent">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Arial" fo:font-size="10pt" style:font-size-asian="10pt" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit" loext:hyphenation-compound-remain-char-count="2" loext:hyphenation-compound-push-char-count="2" loext:hyphenation-level="50%"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Normal">
+   <style:paragraph-properties fo:margin-left="0.0693in" fo:margin-right="0in" fo:margin-top="0.1598in" fo:margin-bottom="0in" style:contextual-spacing="false" fo:text-indent="0in" style:auto-text-indent="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="10pt" fo:letter-spacing="-0.0016in" fo:font-weight="bold" style:font-size-asian="10pt" style:font-weight-asian="bold" style:font-size-complex="10pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0035in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0016in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T4" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0016in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T5" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0035in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T6" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0008in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="T7" style:family="text">
+   <style:text-properties fo:color="#231f20" loext:opacity="100%" style:font-name="Arial" fo:font-size="9pt" fo:letter-spacing="-0.0008in" fo:font-weight="bold" style:font-size-asian="9pt" style:font-weight-asian="bold" style:font-size-complex="9pt" style:font-weight-complex="bold" style:text-scale="105%"/>
+  </style:style>
+  <style:style style:name="Sect1" style:family="section">
+   <style:section-properties style:writing-mode="lr-tb" fo:margin-left="0in" fo:margin-right="0in" style:editable="false">
+    <style:columns fo:column-count="3">
+     <style:column style:rel-width="1711*" fo:start-indent="0in" fo:end-indent="0.1209in"/>
+     <style:column style:rel-width="6970*" fo:start-indent="0.1217in" fo:end-indent="0.2409in"/>
+     <style:column style:rel-width="1619*" fo:start-indent="0.2417in" fo:end-indent="0in"/>
+    </style:columns>
+   </style:section-properties>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.278in" style:layout-grid-ruby-height="0.139in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.278in" style:layout-grid-snap-to="true" style:footnote-max-height="0in" loext:margin-gutter="0in">
+    <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1" style:print-orientation="portrait" fo:margin-top="0.4028in" fo:margin-bottom="0.1945in" fo:margin-left="0.6807in" fo:margin-right="0.6665in" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.278in" style:layout-grid-ruby-height="0.139in" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.278in" style:layout-grid-snap-to="true" style:footnote-max-height="0in" loext:margin-gutter="0in">
+    <style:footnote-sep style:width="0.0071in" style:line-style="solid" style:adjustment="left" style:rel-width="33%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1" loext:is-first-page-header-enabled="true" loext:is-first-page-footer-enabled="true"/>
+  <style:master-page style:name="MP0" style:page-layout-name="pm2" draw:style-name="dp1" loext:is-first-page-header-enabled="true" loext:is-first-page-footer-enabled="true"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:user-field-decls>
+    </text:user-field-decls>
+   <text:p text:style-name="P1"><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T1"/></text:span></text:p>
+   <text:section text:style-name="Sect1" text:name="Sect1">
+    <text:p text:style-name="P2"><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T2"><text:s text:c="26"/>CG</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T3"> </text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T4">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T5">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T6"> </text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T7">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T5">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T6"> </text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T7">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T5">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T6"> </text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T7">1</text:span></text:span><text:span text:style-name="Default_20_Paragraph_20_Font"><text:span text:style-name="T5">1</text:span></text:span></text:p>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>
