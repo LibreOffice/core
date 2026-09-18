@@ -1321,17 +1321,21 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     }
 }
 
-bool RTFDocumentImpl::bufferShapeInsertion(uno::Reference<drawing::XShape> const& rShape,
-                                           bool const bClose)
+void RTFDocumentImpl::insertShape(uno::Reference<drawing::XShape> const& rShape, bool const bClose)
 {
-    RTFBuffer_t* pBuffer = m_aStates.empty() ? nullptr : m_aStates.top().getCurrentBuffer();
-    if (!pBuffer)
-        return false;
-
-    pBuffer->emplace_back(RTFBufferTypes::InsertShape, new RTFValue(rShape), nullptr);
+    bufferOrSend(RTFBufferTypes::InsertShape, new RTFValue(rShape));
     if (bClose)
-        pBuffer->emplace_back(RTFBufferTypes::EndShape, nullptr, nullptr);
-    return true;
+        bufferOrSend(RTFBufferTypes::EndShape);
+}
+
+void RTFDocumentImpl::bufferOrResolveSubstream(std::size_t nPos, Id nId,
+                                               OUString const& rCustomMark)
+{
+    RTFSprms aAttributes;
+    aAttributes.set(Id(0), new RTFValue(nPos));
+    aAttributes.set(Id(1), new RTFValue(nId));
+    aAttributes.set(Id(2), new RTFValue(rCustomMark));
+    bufferOrSend(RTFBufferTypes::ResolveSubstream, new RTFValue(aAttributes));
 }
 
 RTFError RTFDocumentImpl::resolveChars(char ch)

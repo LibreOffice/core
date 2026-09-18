@@ -87,7 +87,7 @@ enum class RTFBufferTypes
     /// Imports a shape.
     ResolveShape,
     EndShape,
-    /// Inserts an already built shape, see RTFDocumentImpl::bufferShapeInsertion().
+    /// Starts an already built shape.
     InsertShape,
     ResolveSubstream,
     /// Restores RTFParserState::aPicture.
@@ -761,7 +761,8 @@ public:
         shape has to wait for the cell it belongs to. Returns false when nothing is being buffered
         and the caller should insert the shape itself.
     */
-    bool bufferShapeInsertion(cpo::uno::Reference<css::drawing::XShape> const& rShape, bool bClose);
+    /// Starts an already built shape in the dmapper, and ends it too when bClose is set.
+    void insertShape(cpo::uno::Reference<css::drawing::XShape> const& rShape, bool bClose);
 
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();
@@ -836,6 +837,9 @@ private:
     /// Appends the entry to the current buffer, or sends it to the dmapper when there is none.
     void bufferOrSend(RTFBufferTypes eType,
                       RTFValue::Pointer_t const& pValue = RTFValue::Pointer_t());
+    /// Resolves a footnote, endnote or annotation substream, or buffers that until the buffer is
+    /// replayed.
+    void bufferOrResolveSubstream(std::size_t nPos, Id nId, OUString const& rCustomMark);
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
