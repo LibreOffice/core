@@ -51,6 +51,7 @@
 #include "GraphicImport.hxx"
 #include "OLEHandler.hxx"
 #include "FFDataHandler.hxx"
+#include "SdtHelper.hxx"
 #include "SmartTagHandler.hxx"
 #include "FormControlHelper.hxx"
 #include <unoidx.hxx>
@@ -272,6 +273,7 @@ struct SubstreamContext
     /// If the current paragraph is inside a structured document element.
     bool bSdt = false;
     css::uno::Reference<css::text::XTextRange> xSdtEntryStart;
+    SdtHelper m_aSdtHelper;
     OUString sCurrentParaStyleName; ///< highly inaccurate. Overwritten by "overlapping" paragraphs like flys.
     bool bHasFootnoteStyle = false;
     bool bCheckFootnoteStyle = false;
@@ -289,6 +291,12 @@ struct SubstreamContext
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     std::deque<FieldContextPtr> m_aFieldStack;
+
+    explicit SubstreamContext(DomainMapper_Impl& rDM_Impl,
+                              css::uno::Reference<css::uno::XComponentContext> xContext)
+        : m_aSdtHelper(rDM_Impl, std::move(xContext))
+    {
+    }
 };
 
 /// Information about a paragraph to be finished after a field end.
@@ -819,6 +827,7 @@ public:
     void SetSymbolFont( OUString const &rName ) { m_aSymbolData.sFont = rName; }
     const SymbolData & GetSymbolData() const { return m_aSymbolData;}
 
+    SdtHelper& GetSdtHelper();
     void SetSdt(bool bSdt);
 
     void PushSdt();
@@ -1192,8 +1201,6 @@ public:
 
     /// If we're importing autotext.
     bool IsReadGlossaries() const { return m_bIsReadGlossaries;}
-
-    tools::SvRef<SdtHelper> m_pSdtHelper;
 
     /// Document background color, applied to every page style.
     std::optional<sal_Int32> m_oBackgroundColor;

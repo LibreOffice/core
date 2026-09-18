@@ -82,6 +82,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138027_pageBreakAfterShape, "tdf138027_pageBreak
     assertXPath(pDump, "/root/page[1]/sorted_objs/fly", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf158349_SDTstreamStateStack, "tdf158349_SDTstreamStateStack.docx")
+{
+    // should load and reload without reporting a corrupt document
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf168607_tabstopZero)
 {
     // Given a 1 page document, where the default tab-stop length is zero

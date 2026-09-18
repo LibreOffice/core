@@ -400,7 +400,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsActualParagraphFramed( false ),
         m_bSaxError(false)
 {
-    m_StreamStateStack.emplace(); // add state for document body
+    m_StreamStateStack.emplace(*this, m_xComponentContext); // add state for document body
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString());
     if (m_aBaseUrl.isEmpty()) {
@@ -424,8 +424,6 @@ DomainMapper_Impl::DomainMapper_Impl(
 
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = !comphelper::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
-
-    m_pSdtHelper = new SdtHelper(*this, m_xComponentContext);
 
     m_aRedlines.push(std::vector<RedlineParamsPtr>());
 
@@ -981,6 +979,11 @@ void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
     m_StreamStateStack.top().bParaSectpr = bParaSectpr;
 }
 
+SdtHelper& DomainMapper_Impl::GetSdtHelper()
+{
+    return m_StreamStateStack.top().m_aSdtHelper;
+}
+
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     // Empty run level SDTs before starting a block level SDT
@@ -1032,7 +1035,7 @@ void DomainMapper_Impl::PushSdt()
     m_xSdtStarts.push({bStart, OUString(), xCursor->getStart()});
 
     // It is captured while the SDT's content run is imported and consumed in PopSdt().
-    m_pSdtHelper->SetPlaceholderCharStyle(OUString());
+    GetSdtHelper().SetPlaceholderCharStyle(OUString());
 }
 
 const std::stack<BookmarkInsertPosition>& DomainMapper_Impl::GetSdtStarts() const
@@ -1100,7 +1103,7 @@ void DomainMapper_Impl::PopSdt()
         // while the intention is to keep start/end inside the same paragraph for run SDTs.
         rtl::Reference<SwXTextCursor> xParagraphCursor = dynamic_cast<SwXTextCursor*>(xCursor.get());
         if (xParagraphCursor.is()
-            && m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
+            && GetSdtHelper().GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
         {
             xCursor->gotoRange(xEnd, /*bExpand=*/false);
             xParagraphCursor->gotoStartOfParagraph(/*bExpand=*/false);
@@ -1113,9 +1116,8 @@ void DomainMapper_Impl::PopSdt()
     }
     xCursor->gotoRange(xEnd, /*bExpand=*/true);
 
-    std::optional<OUString> oData = m_pSdtHelper->getValueFromDataBinding();
-    if (oData.has_value()
-        && m_pSdtHelper->getControlType() != SdtControlType::picture)
+    std::optional<OUString> oData = GetSdtHelper().getValueFromDataBinding();
+    if (oData.has_value() && GetSdtHelper().getControlType() != SdtControlType::picture)
     {
         // Data binding has a value for us, prefer that over the in-document value.
         // But not for picture content controls: their sdtContent has the rendered
@@ -1131,7 +1133,7 @@ void DomainMapper_Impl::PopSdt()
         // that formatting is meaningful and Word keeps it, so only reset the
         // char style in the placeholder case.
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        if (m_pSdtHelper->GetShowingPlcHdr())
+        if (GetSdtHelper().GetShowingPlcHdr())
         {
             uno::Reference<beans::XPropertyState> xPropertyState(xCursor, uno::UNO_QUERY);
             if (xPropertyState.is())
@@ -1139,7 +1141,7 @@ void DomainMapper_Impl::PopSdt()
                 xPropertyState->setPropertyToDefault(u"CharStyleName"_ustr);
             }
         }
-        else if (!m_pSdtHelper->GetPlaceholderCharStyle().isEmpty() && xCursorProps.is())
+        else if (!GetSdtHelper().GetPlaceholderCharStyle().isEmpty() && xCursorProps.is())
         {
             OUString sCurrentCharStyle;
             xCursorProps->getPropertyValue(u"CharStyleName"_ustr) >>= sCurrentCharStyle;
@@ -1147,97 +1149,94 @@ void DomainMapper_Impl::PopSdt()
             if (sCurrentCharStyle.isEmpty())
             {
                 xCursorProps->setPropertyValue(
-                    u"CharStyleName"_ustr, uno::Any(m_pSdtHelper->GetPlaceholderCharStyle()));
+                    u"CharStyleName"_ustr, uno::Any(GetSdtHelper().GetPlaceholderCharStyle()));
             }
         }
     }
 
     rtl::Reference<SwXContentControl> xContentControl( m_xTextDocument->createContentControl());
-    if (m_pSdtHelper->GetShowingPlcHdr())
+    if (GetSdtHelper().GetShowingPlcHdr())
     {
         xContentControl->setPropertyValue(u"ShowingPlaceHolder"_ustr,
-                                               uno::Any(m_pSdtHelper->GetShowingPlcHdr()));
+                                          uno::Any(GetSdtHelper().GetShowingPlcHdr()));
     }
 
-    if (!m_pSdtHelper->GetPlaceholderDocPart().isEmpty())
+    if (!GetSdtHelper().GetPlaceholderDocPart().isEmpty())
     {
         xContentControl->setPropertyValue(u"PlaceholderDocPart"_ustr,
-                                               uno::Any(m_pSdtHelper->GetPlaceholderDocPart()));
+                                          uno::Any(GetSdtHelper().GetPlaceholderDocPart()));
     }
 
-    if (!m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
+    if (!GetSdtHelper().GetDataBindingPrefixMapping().isEmpty())
     {
         xContentControl->setPropertyValue(u"DataBindingPrefixMappings"_ustr,
-                                               uno::Any(m_pSdtHelper->GetDataBindingPrefixMapping()));
+                                          uno::Any(GetSdtHelper().GetDataBindingPrefixMapping()));
     }
-    if (!m_pSdtHelper->GetDataBindingXPath().isEmpty())
+    if (!GetSdtHelper().GetDataBindingXPath().isEmpty())
     {
         xContentControl->setPropertyValue(u"DataBindingXpath"_ustr,
-                                               uno::Any(m_pSdtHelper->GetDataBindingXPath()));
+                                          uno::Any(GetSdtHelper().GetDataBindingXPath()));
     }
-    if (!m_pSdtHelper->GetDataBindingStoreItemID().isEmpty())
+    if (!GetSdtHelper().GetDataBindingStoreItemID().isEmpty())
     {
         xContentControl->setPropertyValue(u"DataBindingStoreItemID"_ustr,
-                                               uno::Any(m_pSdtHelper->GetDataBindingStoreItemID()));
+                                          uno::Any(GetSdtHelper().GetDataBindingStoreItemID()));
     }
 
-    if (!m_pSdtHelper->GetColor().isEmpty())
+    if (!GetSdtHelper().GetColor().isEmpty())
     {
-        xContentControl->setPropertyValue(u"Color"_ustr,
-                                               uno::Any(m_pSdtHelper->GetColor()));
+        xContentControl->setPropertyValue(u"Color"_ustr, uno::Any(GetSdtHelper().GetColor()));
     }
 
-    if (!m_pSdtHelper->GetAppearance().isEmpty())
+    if (!GetSdtHelper().GetAppearance().isEmpty())
     {
         xContentControl->setPropertyValue(u"Appearance"_ustr,
-                                               uno::Any(m_pSdtHelper->GetAppearance()));
+                                          uno::Any(GetSdtHelper().GetAppearance()));
     }
 
-    if (!m_pSdtHelper->GetAlias().isEmpty())
+    if (!GetSdtHelper().GetAlias().isEmpty())
     {
-        xContentControl->setPropertyValue(u"Alias"_ustr,
-                                               uno::Any(m_pSdtHelper->GetAlias()));
+        xContentControl->setPropertyValue(u"Alias"_ustr, uno::Any(GetSdtHelper().GetAlias()));
     }
 
-    if (!m_pSdtHelper->GetTag().isEmpty())
+    if (!GetSdtHelper().GetTag().isEmpty())
     {
-        xContentControl->setPropertyValue(u"Tag"_ustr,
-                                               uno::Any(m_pSdtHelper->GetTag()));
+        xContentControl->setPropertyValue(u"Tag"_ustr, uno::Any(GetSdtHelper().GetTag()));
     }
 
-    if (m_pSdtHelper->GetId())
+    if (GetSdtHelper().GetId())
     {
-        xContentControl->setPropertyValue(u"Id"_ustr, uno::Any(m_pSdtHelper->GetId()));
+        xContentControl->setPropertyValue(u"Id"_ustr, uno::Any(GetSdtHelper().GetId()));
     }
 
-    if (m_pSdtHelper->GetTabIndex())
+    if (GetSdtHelper().GetTabIndex())
     {
-        xContentControl->setPropertyValue(u"TabIndex"_ustr, uno::Any(m_pSdtHelper->GetTabIndex()));
+        xContentControl->setPropertyValue(u"TabIndex"_ustr, uno::Any(GetSdtHelper().GetTabIndex()));
     }
 
-    if (!m_pSdtHelper->GetLock().isEmpty())
+    if (!GetSdtHelper().GetLock().isEmpty())
     {
-        xContentControl->setPropertyValue(u"Lock"_ustr, uno::Any(m_pSdtHelper->GetLock()));
+        xContentControl->setPropertyValue(u"Lock"_ustr, uno::Any(GetSdtHelper().GetLock()));
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
+    if (GetSdtHelper().getControlType() == SdtControlType::checkBox)
     {
         xContentControl->setPropertyValue(u"Checkbox"_ustr, uno::Any(true));
 
-        xContentControl->setPropertyValue(u"Checked"_ustr, uno::Any(m_pSdtHelper->GetChecked()));
+        xContentControl->setPropertyValue(u"Checked"_ustr, uno::Any(GetSdtHelper().GetChecked()));
 
         xContentControl->setPropertyValue(u"CheckedState"_ustr,
-                                               uno::Any(m_pSdtHelper->GetCheckedState()));
+                                          uno::Any(GetSdtHelper().GetCheckedState()));
 
         xContentControl->setPropertyValue(u"UncheckedState"_ustr,
-                                               uno::Any(m_pSdtHelper->GetUncheckedState()));
+                                          uno::Any(GetSdtHelper().GetUncheckedState()));
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::dropDown
-        || m_pSdtHelper->getControlType() == SdtControlType::comboBox)
+    if (GetSdtHelper().getControlType() == SdtControlType::dropDown
+        || GetSdtHelper().getControlType() == SdtControlType::comboBox)
     {
-        std::vector<OUString>& rDisplayTexts = m_pSdtHelper->getDropDownDisplayTexts();
-        std::vector<OUString>& rValues = m_pSdtHelper->getDropDownItems();
+        std::vector<OUString>& rDisplayTexts = GetSdtHelper().getDropDownDisplayTexts();
+        std::vector<OUString>& rValues = GetSdtHelper().getDropDownItems();
         if (rDisplayTexts.size() == rValues.size())
         {
             uno::Sequence<beans::PropertyValues> aItems(rValues.size());
@@ -1250,7 +1249,7 @@ void DomainMapper_Impl::PopSdt()
                 };
             }
             xContentControl->setPropertyValue(u"ListItems"_ustr, uno::Any(aItems));
-            if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+            if (GetSdtHelper().getControlType() == SdtControlType::dropDown)
             {
                 xContentControl->setPropertyValue(u"DropDown"_ustr, uno::Any(true));
             }
@@ -1261,21 +1260,21 @@ void DomainMapper_Impl::PopSdt()
         }
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::picture)
+    if (GetSdtHelper().getControlType() == SdtControlType::picture)
     {
         xContentControl->setPropertyValue(u"Picture"_ustr, uno::Any(true));
     }
 
     bool bDateFromDataBinding = false;
-    if (m_pSdtHelper->getControlType() == SdtControlType::datePicker)
+    if (GetSdtHelper().getControlType() == SdtControlType::datePicker)
     {
         xContentControl->setPropertyValue(u"Date"_ustr, uno::Any(true));
-        OUString aDateFormat = m_pSdtHelper->getDateFormat().makeStringAndClear();
+        OUString aDateFormat = GetSdtHelper().getDateFormat().makeStringAndClear();
         xContentControl->setPropertyValue(u"DateFormat"_ustr,
                                                uno::Any(aDateFormat.replaceAll("'", "\"")));
         xContentControl->setPropertyValue(u"DateLanguage"_ustr,
-                                               uno::Any(m_pSdtHelper->getLocale().makeStringAndClear()));
-        OUString aCurrentDate = m_pSdtHelper->getDate().makeStringAndClear();
+                                          uno::Any(GetSdtHelper().getLocale().makeStringAndClear()));
+        OUString aCurrentDate = GetSdtHelper().getDate().makeStringAndClear();
         if (oData.has_value())
         {
             aCurrentDate = SdtHelper::AdjustDateString(*oData, aDateFormat);
@@ -1285,7 +1284,7 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(aCurrentDate));
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::plainText)
+    if (GetSdtHelper().getControlType() == SdtControlType::plainText)
     {
         xContentControl->setPropertyValue(u"PlainText"_ustr, uno::Any(true));
     }
@@ -1300,7 +1299,7 @@ void DomainMapper_Impl::PopSdt()
             xCursor->setString(aDateString);
     }
 
-    m_pSdtHelper->clear();
+    GetSdtHelper().clear();
 }
 
 void DomainMapper_Impl::PushProperties(ContextType eId)
@@ -9758,10 +9757,11 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         bHasGrabBag = xPropertySetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr);
         // In case we're outside a paragraph, then the SDT properties are stored in the paragraph grab-bag, not the frame one.
-        if (!m_pSdtHelper->isInteropGrabBagEmpty() && bHasGrabBag && !m_pSdtHelper->isOutsideAParagraph())
+        if (!GetSdtHelper().isInteropGrabBagEmpty() && bHasGrabBag
+            && !GetSdtHelper().isOutsideAParagraph())
         {
             comphelper::SequenceAsHashMap aFrameGrabBag(xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr));
-            aFrameGrabBag[u"SdtPr"_ustr] <<= m_pSdtHelper->getInteropGrabBagAndClear();
+            aFrameGrabBag[u"SdtPr"_ustr] <<= GetSdtHelper().getInteropGrabBagAndClear();
             xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr, uno::Any(aFrameGrabBag.getAsConstPropertyValueList()));
         }
     }
@@ -9782,11 +9782,11 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         }
     }
 
-    if (m_pSdtHelper->getControlType() == SdtControlType::plainText
+    if (GetSdtHelper().getControlType() == SdtControlType::plainText
         && (m_StreamStateStack.top().bSdt || GetSdtStarts().size()))
     {
         // plainText controls cannot contain pictures or shapes
-        m_pSdtHelper->setControlType(SdtControlType::richText);
+        GetSdtHelper().setControlType(SdtControlType::richText);
     }
 
 
@@ -10372,7 +10372,7 @@ void DomainMapper_Impl::substream(Id rName,
 
     // Save "has footnote" state, which is specific to a section in the body
     // text, so state from substreams is not relevant.
-    m_StreamStateStack.emplace();
+    m_StreamStateStack.emplace(*this, m_xComponentContext);
 
     //import of page header/footer
     //Ensure that only one header/footer per section is pushed
