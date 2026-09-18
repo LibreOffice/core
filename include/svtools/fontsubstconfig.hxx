@@ -36,6 +36,7 @@ namespace svtools
     SVT_DLLPUBLIC std::vector<SubstitutionStruct> GetFontSubstitutions();
     SVT_DLLPUBLIC void                        SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const &);
     SVT_DLLPUBLIC void                        ApplyFontSubstitutionsToVcl();
+    SVT_DLLPUBLIC bool                        GetFontSubstitute(std::u16string_view sFontName, OUString& rFontName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -151,6 +151,20 @@ void ApplyFontSubstitutionsToVcl()
     OutputDevice::EndFontSubstitution();
 }
 
+bool GetFontSubstitute(std::u16string_view sFontName, OUString& rFontName)
+{
+    std::vector<SubstitutionStruct> aFontSubs = svtools::GetFontSubstitutions();
+    for (auto const & sub: aFontSubs)
+    {
+        if (sub.sFont == sFontName)
+        {
+            rFontName = sub.sReplaceBy;
+            return true;
+        }
+    }
+    return false;
+}
+
 } // namespace svtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

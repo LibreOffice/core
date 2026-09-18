@@ -1128,7 +1128,9 @@
 #define RID_SVXSTR_MORE                                     NC_("RID_SVXSTR_MORE", "More Options...")
 // This is duplicated in GenericCommands.xcu in officecfg.
 #define RID_SVXSTR_CHARFONTNAME                             NC_("RID_SVXSTR_CHARFONTNAME", "Font Name")
-#define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE                NC_("RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE", "Font Name. The current font is not available and will be substituted.")
+#define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE                NC_("RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE", "The current font '%1' is not available and will be substituted by '%2'.")
+#define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_HASSUBST       NC_("RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_HASSUBST", "The current font '%1' and its substitute '%2' are not available.")
+#define RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_NOSUBST        NC_("RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_NOSUBST", "The current font '%1' is not available.")
 #define RID_SVXSTR_CUSTOM_PAL                               NC_("RID_SVXSTR_CUSTOM_PAL", "Custom")
 #define RID_SVXSTR_DOC_COLORS                               NC_("RID_SVXSTR_DOC_COLORS", "Document colors")
 #define RID_SVXSTR_THEME_COLORS                             NC_("RID_SVXSTR_THEME_COLORS", "Theme colors")
