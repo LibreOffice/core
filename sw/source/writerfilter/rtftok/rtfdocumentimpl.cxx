@@ -1944,95 +1944,100 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             tableBreak();
             break;
         }
-        if (std::get<0>(aTuple) == RTFBufferTypes::Props
-            || std::get<0>(aTuple) == RTFBufferTypes::PropsChar)
-        {
-            // Construct properties via getProperties() and not directly, to take care of deduplication.
-            writerfilter::Reference<Properties>::Pointer_t const pProp(
-                getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
-                              std::get<0>(aTuple) == RTFBufferTypes::PropsChar
-                                  ? NS_ooxml::LN_Value_ST_StyleType_character
-                                  : 0,
-                              std::get<0>(aTuple) == RTFBufferTypes::PropsChar));
-            Mapper().props(pProp);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::NestRow)
-        {
-            TableRowBuffer& rRowBuffer(*std::get<2>(aTuple));
-
-            replayRowBuffer(rRowBuffer.GetBuffer(), rRowBuffer.GetCellsSprms(),
-                            rRowBuffer.GetCellsAttributes(), rRowBuffer.GetCells());
-
-            sendProperties(rRowBuffer.GetParaProperties(), rRowBuffer.GetFrameProperties(),
-                           rRowBuffer.GetRowProperties());
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::StartRun)
-            Mapper().startCharacterGroup();
-        else if (std::get<0>(aTuple) == RTFBufferTypes::Text)
-        {
-            sal_uInt8 const nValue = std::get<1>(aTuple)->getInt();
-            Mapper().text(&nValue, 1);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::UText)
-        {
-            OUString const aString(std::get<1>(aTuple)->getString());
-            Mapper().utext(aString.getStr(), aString.getLength());
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::EndRun)
-            Mapper().endCharacterGroup();
-        else if (std::get<0>(aTuple) == RTFBufferTypes::PAR)
-            parBreak();
-        else if (std::get<0>(aTuple) == RTFBufferTypes::StartShape)
-        {
-            // The shape belongs where the replay stands, not in the buffer being replayed.
-            RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
-            m_aStates.top().setCurrentBuffer(nullptr);
-            m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
-            m_aStates.top().setCurrentBuffer(pCurrentBuffer);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveShape)
-        {
-            // Make sure there is no current buffer while replaying the shape,
-            // otherwise it gets re-buffered.
-            RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
-            m_aStates.top().setCurrentBuffer(nullptr);
-
-            // Set current shape during replay, needed by e.g. wrap in
-            // background.
-            RTFShape aShape = m_aStates.top().getShape();
-            m_aStates.top().getShape() = std::get<1>(aTuple)->getShape();
-
-            m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
-            m_aStates.top().getShape() = std::move(aShape);
-            m_aStates.top().setCurrentBuffer(pCurrentBuffer);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::EndShape)
-            m_pSdrImport->close();
-        else if (std::get<0>(aTuple) == RTFBufferTypes::InsertShape)
-        {
-            uno::Reference<drawing::XShape> xShape;
-            std::get<1>(aTuple)->getAny() >>= xShape;
-            if (xShape.is())
-                m_pSdrImport->open(xShape);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveSubstream)
-        {
-            RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();
-            std::size_t nPos = rAttributes.find(0)->getInt();
-            Id nId = rAttributes.find(1)->getInt();
-            OUString aCustomMark = rAttributes.find(2)->getString();
-            resolveSubstream(nPos, nId, aCustomMark);
-        }
-        else if (std::get<0>(aTuple) == RTFBufferTypes::Picture)
-            m_aStates.top().getPicture() = std::get<1>(aTuple)->getPicture();
-        else if (std::get<0>(aTuple) == RTFBufferTypes::SetStyle)
-        {
-            if (!m_aStates.empty())
-                m_aStates.top().setCurrentStyleIndex(std::get<1>(aTuple)->getInt());
-        }
-        else
-            assert(false);
+        sendBufferEntry(aTuple);
     }
+}
+
+void RTFDocumentImpl::sendBufferEntry(Buf_t aTuple)
+{
+    if (std::get<0>(aTuple) == RTFBufferTypes::Props
+        || std::get<0>(aTuple) == RTFBufferTypes::PropsChar)
+    {
+        // Construct properties via getProperties() and not directly, to take care of deduplication.
+        writerfilter::Reference<Properties>::Pointer_t const pProp(
+            getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
+                          std::get<0>(aTuple) == RTFBufferTypes::PropsChar
+                              ? NS_ooxml::LN_Value_ST_StyleType_character
+                              : 0,
+                          std::get<0>(aTuple) == RTFBufferTypes::PropsChar));
+        Mapper().props(pProp);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::NestRow)
+    {
+        TableRowBuffer& rRowBuffer(*std::get<2>(aTuple));
+
+        replayRowBuffer(rRowBuffer.GetBuffer(), rRowBuffer.GetCellsSprms(),
+                        rRowBuffer.GetCellsAttributes(), rRowBuffer.GetCells());
+
+        sendProperties(rRowBuffer.GetParaProperties(), rRowBuffer.GetFrameProperties(),
+                       rRowBuffer.GetRowProperties());
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::StartRun)
+        Mapper().startCharacterGroup();
+    else if (std::get<0>(aTuple) == RTFBufferTypes::Text)
+    {
+        sal_uInt8 const nValue = std::get<1>(aTuple)->getInt();
+        Mapper().text(&nValue, 1);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::UText)
+    {
+        OUString const aString(std::get<1>(aTuple)->getString());
+        Mapper().utext(aString.getStr(), aString.getLength());
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::EndRun)
+        Mapper().endCharacterGroup();
+    else if (std::get<0>(aTuple) == RTFBufferTypes::PAR)
+        parBreak();
+    else if (std::get<0>(aTuple) == RTFBufferTypes::StartShape)
+    {
+        // The shape belongs where the replay stands, not in the buffer being replayed.
+        RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+        m_aStates.top().setCurrentBuffer(nullptr);
+        m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
+        m_aStates.top().setCurrentBuffer(pCurrentBuffer);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveShape)
+    {
+        // Make sure there is no current buffer while replaying the shape,
+        // otherwise it gets re-buffered.
+        RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+        m_aStates.top().setCurrentBuffer(nullptr);
+
+        // Set current shape during replay, needed by e.g. wrap in
+        // background.
+        RTFShape aShape = m_aStates.top().getShape();
+        m_aStates.top().getShape() = std::get<1>(aTuple)->getShape();
+
+        m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
+        m_aStates.top().getShape() = std::move(aShape);
+        m_aStates.top().setCurrentBuffer(pCurrentBuffer);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::EndShape)
+        m_pSdrImport->close();
+    else if (std::get<0>(aTuple) == RTFBufferTypes::InsertShape)
+    {
+        uno::Reference<drawing::XShape> xShape;
+        std::get<1>(aTuple)->getAny() >>= xShape;
+        if (xShape.is())
+            m_pSdrImport->open(xShape);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::ResolveSubstream)
+    {
+        RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();
+        std::size_t nPos = rAttributes.find(0)->getInt();
+        Id nId = rAttributes.find(1)->getInt();
+        OUString aCustomMark = rAttributes.find(2)->getString();
+        resolveSubstream(nPos, nId, aCustomMark);
+    }
+    else if (std::get<0>(aTuple) == RTFBufferTypes::Picture)
+        m_aStates.top().getPicture() = std::get<1>(aTuple)->getPicture();
+    else if (std::get<0>(aTuple) == RTFBufferTypes::SetStyle)
+    {
+        if (!m_aStates.empty())
+            m_aStates.top().setCurrentStyleIndex(std::get<1>(aTuple)->getInt());
+    }
+    else
+        assert(false);
 }
 
 bool findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
