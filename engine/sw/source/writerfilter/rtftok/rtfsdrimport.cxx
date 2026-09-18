@@ -66,7 +66,6 @@ RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
     , m_bTextFrame(false)
     , m_bTextGraphicObject(false)
     , m_bFakePict(false)
-    , m_bOpenInMapper(false)
 {
     if (xDstDoc)
         m_aParents.push(xDstDoc->getDrawPage());
@@ -1222,18 +1221,6 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     rShape.getProperties().clear();
 
     m_xShape = std::move(xShape);
-}
-
-void RTFSdrImport::open(uno::Reference<drawing::XShape> const& xShape)
-{
-    m_rImport.Mapper().startShape(xShape);
-    m_bOpenInMapper = true;
-}
-
-void RTFSdrImport::close()
-{
-    m_rImport.Mapper().endShape();
-    m_bOpenInMapper = false;
 }
 
 void RTFSdrImport::append(std::u16string_view aKey, std::u16string_view aValue)

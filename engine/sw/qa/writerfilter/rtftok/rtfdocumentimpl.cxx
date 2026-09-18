@@ -150,6 +150,22 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeInHeaderTableRow)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetSpzFrameFormats()->size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedShapeInHeaderTableRow)
+{
+    // A shape inside the text of another shape, both in a header table row. The paragraph mark
+    // that replays the row buffer sits in the outer text, in the inner text, or in both.
+    for (const char* pFile : { "nested-shape-in-header-table-row-par-outer.rtf",
+                               "nested-shape-in-header-table-row-par-inner.rtf",
+                               "nested-shape-in-header-table-row-par-both.rtf" })
+    {
+        createSwDoc(pFile);
+
+        // Both shapes load, and the header leaves the context stack as deep as it found it.
+        SwDoc* pDoc = getSwDoc();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDoc->GetSpzFrameFormats()->size());
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
