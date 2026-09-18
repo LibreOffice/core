@@ -7193,6 +7193,10 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  canUpload: " << name(canUploadToStorage());
     os << "\n  isStorageOutdated: " << isStorageOutdated();
     os << "\n  needToUpload: " << name(needToUploadToStorage());
+    os << "\n  documentChangedInStorage: " << _documentChangedInStorage;
+    os << "\n  lastUploadDefinitelyFailed: " << _lastUploadDefinitelyFailed;
+    os << "\n  lastUploadedFileHash: "
+       << (_lastUploadedFileHash.empty() ? "<none>" : _lastUploadedFileHash);
     os << "\n  checkFileInfo grace: ";
     if (_checkFileInfoNotBefore > now)
         os << "waiting "
@@ -7221,6 +7225,33 @@ void DocumentBroker::dumpState(std::ostream& os)
 
     if (_limitLifeSeconds > std::chrono::seconds::zero())
         os << "\n  life limit in seconds: " << _limitLifeSeconds.count();
+    os << "\n  upload in flight: " << bool(_uploadRequest);
+    os << "\n  lock update in flight: " << bool(_lockStateUpdateRequest);
+#if !MOBILEAPP
+    os << "\n  checkFileInfo in flight: " << bool(_checkFileInfo);
+    os << "\n  presets install in flight: " << bool(_asyncInstallTask);
+#endif
+    os << "\n  configId: " << _configId;
+    os << "\n  userConfigId: " << _userConfigId;
+    os << "\n  orig uri: " << Anonymizer::anonymizeUrl(_uriOrig);
+    os << "\n  lastEditingSessionId: "
+       << (_lastEditingSessionId.empty() ? "<none>" : _lastEditingSessionId);
+    os << "\n  renameSessionId: " << (_renameSessionId.empty() ? "<none>" : _renameSessionId);
+    os << "\n  isViewSettingsUpdated: " << _isViewSettingsUpdated;
+    os << "\n  migrateMsgReceived: " << _migrateMsgReceived;
+    os << "\n  firstTileSent: " << _firstTileSent;
+    os << "\n  loadStampsSent: " << _loadStampsSent;
+    os << "\n  tileVersion: " << _tileVersion;
+    os << "\n  renderedTileCount: " << _debugRenderedTileCount;
+    os << "\n  lastNotifiedActivityTime: " << Util::getTimeForLog(now, _lastNotifiedActivityTime);
+    // Counts only: the contents are per-document data, and a state dump is not
+    // the place to spill it.
+    os << "\n  registeredDownloadLinks: " << _registeredDownloadLinks.size();
+    os << "\n  embeddedMedia: " << _embeddedMedia.size();
+    os << "\n  initialStateSet: " << _isInitialStateSet.size();
+#if !MOBILEAPP
+    os << "\n  presetTimestamps: " << _presetTimestamp.size();
+#endif
     os << "\n  idle time: " << getIdleTime();
     os << "\n  cursor X: " << _cursorPosX << ", Y: " << _cursorPosY << ", W: " << _cursorWidth
        << ", H: " << _cursorHeight;
