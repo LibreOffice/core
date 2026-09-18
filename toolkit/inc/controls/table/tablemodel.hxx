@@ -90,7 +90,7 @@ namespace svt::table
                 the index of the last newly inserted row. Must not be smaller
                 than ->first
         */
-        virtual void    rowsInserted( RowPos first, RowPos last ) = 0;
+        virtual void rowsInserted(sal_Int32 first, sal_Int32 last) = 0;
 
         /** notifies the listener that one or more rows have been removed from
             the table
@@ -102,7 +102,7 @@ namespace svt::table
                 the old index of the last removed row. Must not be smaller
                 than ->first
         */
-        virtual void    rowsRemoved( RowPos first, RowPos last ) = 0;
+        virtual void rowsRemoved(sal_Int32 first, sal_Int32 last) = 0;
 
         /** notifies the listener that one or more columns have been inserted into
             the table
@@ -125,7 +125,7 @@ namespace svt::table
             they have about the cells in question, in particular any possibly
             cached cell values.
         */
-        virtual void    cellsUpdated( RowPos const i_firstRow, RowPos const i_lastRow ) = 0;
+        virtual void cellsUpdated(sal_Int32 const i_firstRow, sal_Int32 const i_lastRow) = 0;
 
         /** notifies the listener that attributes of a given column changed
 
@@ -135,7 +135,9 @@ namespace svt::table
                 a combination of one or more <code>COL_ATTRS_*</code> flags, denoting the attribute group(s)
                 in which changes occurred.
         */
-        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) = 0;
+        virtual void columnChanged(sal_Int32 const i_column,
+                                   ColumnAttributeGroup const i_attributeGroup)
+            = 0;
 
         /** notifies the listener that the metrics of the table changed.
 
@@ -275,7 +277,7 @@ namespace svt::table
             @return
                 the model of the column in question. Must not be <NULL/>
         */
-        virtual PColumnModel    getColumnModel( ColPos column ) = 0;
+        virtual PColumnModel getColumnModel(sal_Int32 column) = 0;
 
         /** returns a renderer which is able to paint the table represented
             by this table model
@@ -338,7 +340,9 @@ namespace svt::table
 
         /** retrieves the content of the given cell
         */
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) = 0;
+        virtual void getCellContent(sal_Int32 const i_col, sal_Int32 const i_row,
+                                    css::uno::Any& o_cellContent)
+            = 0;
 
         /** returns an object which should be displayed as tooltip for the given cell
 
@@ -355,11 +359,13 @@ namespace svt::table
             @param o_cellToolTip
                 takes the tooltip object upon return.
         */
-        virtual void getCellToolTip( ColPos const i_col, RowPos const i_row, css::uno::Any & o_cellToolTip ) = 0;
+        virtual void getCellToolTip(sal_Int32 const i_col, sal_Int32 const i_row,
+                                    css::uno::Any& o_cellToolTip)
+            = 0;
 
         /** retrieves title of a given row
         */
-        virtual css::uno::Any      getRowHeading( RowPos const i_rowPos ) const = 0;
+        virtual css::uno::Any getRowHeading(sal_Int32 const i_rowPos) const = 0;
 
         /** returns the color to be used for rendering the grid lines.
 

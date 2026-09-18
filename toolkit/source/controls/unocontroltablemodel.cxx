@@ -136,7 +136,7 @@ void UnoControlTableModel::setColumnHeaders(bool _bColumnHeaders)
     impl_notifyTableMetricsChanged();
 }
 
-PColumnModel UnoControlTableModel::getColumnModel(ColPos column)
+PColumnModel UnoControlTableModel::getColumnModel(sal_Int32 column)
 {
     DBG_TESTSOLARMUTEX();
     ENSURE_OR_RETURN((column >= 0) && (column < getColumnCount()),
@@ -150,7 +150,7 @@ void UnoControlTableModel::appendColumn(Reference<XGridColumn> const& i_column)
     insertColumn(aColumns.size(), i_column);
 }
 
-void UnoControlTableModel::insertColumn(ColPos const i_position,
+void UnoControlTableModel::insertColumn(sal_Int32 const i_position,
                                         Reference<XGridColumn> const& i_column)
 {
     DBG_TESTSOLARMUTEX();
@@ -168,7 +168,7 @@ void UnoControlTableModel::insertColumn(ColPos const i_position,
     }
 }
 
-void UnoControlTableModel::removeColumn(ColPos const i_position)
+void UnoControlTableModel::removeColumn(sal_Int32 const i_position)
 {
     DBG_TESTSOLARMUTEX();
     ENSURE_OR_RETURN_VOID((i_position >= 0) && (o3tl::make_unsigned(i_position) <= aColumns.size()),
@@ -370,7 +370,7 @@ Reference<XGridColumnModel> UnoControlTableModel::getColumnModel() const
 
 bool UnoControlTableModel::hasColumnModel() const { return getColumnModel().is(); }
 
-void UnoControlTableModel::getCellContent(ColPos const i_col, RowPos const i_row,
+void UnoControlTableModel::getCellContent(sal_Int32 const i_col, sal_Int32 const i_row,
                                           Any& o_cellContent)
 {
     DBG_TESTSOLARMUTEX();
@@ -413,7 +413,7 @@ void UnoControlTableModel::getCellContent(ColPos const i_col, RowPos const i_row
     }
 }
 
-void UnoControlTableModel::getCellToolTip(ColPos const i_col, RowPos const i_row,
+void UnoControlTableModel::getCellToolTip(sal_Int32 const i_col, sal_Int32 const i_row,
                                           Any& o_cellToolTip)
 {
     DBG_TESTSOLARMUTEX();
@@ -430,7 +430,7 @@ void UnoControlTableModel::getCellToolTip(ColPos const i_col, RowPos const i_row
     }
 }
 
-Any UnoControlTableModel::getRowHeading(RowPos const i_rowPos) const
+Any UnoControlTableModel::getRowHeading(sal_Int32 const i_rowPos) const
 {
     DBG_TESTSOLARMUTEX();
 
@@ -615,10 +615,10 @@ void UnoControlTableModel::setVerticalAlign(VerticalAlignment _xAlign)
     m_eVerticalAlign = _xAlign;
 }
 
-ColPos UnoControlTableModel::getColumnPos(UnoGridColumnFacade const& i_column) const
+sal_Int32 UnoControlTableModel::getColumnPos(UnoGridColumnFacade const& i_column) const
 {
     DBG_TESTSOLARMUTEX();
-    ColPos nPos = 0;
+    sal_Int32 nPos = 0;
     for (auto const& col : aColumns)
     {
         if (&i_column == col.get())
@@ -651,7 +651,7 @@ void UnoControlTableModel::setEnabled(bool _bEnabled)
     bEnabled = _bEnabled;
 }
 
-void UnoControlTableModel::sortByColumn(ColPos const i_column,
+void UnoControlTableModel::sortByColumn(sal_Int32 const i_column,
                                         ColumnSortDirection const i_sortDirection)
 {
     DBG_TESTSOLARMUTEX();
@@ -687,7 +687,7 @@ ColumnSort UnoControlTableModel::getCurrentSortOrder() const
     return currentSort;
 }
 
-void UnoControlTableModel::notifyColumnChange(ColPos const i_columnPos,
+void UnoControlTableModel::notifyColumnChange(sal_Int32 const i_columnPos,
                                               ColumnAttributeGroup const i_attributeGroup) const
 {
     DBG_TESTSOLARMUTEX();
@@ -749,8 +749,8 @@ void UnoControlTableModel::notifyRowsRemoved(GridDataEvent const& i_event) const
 
 void UnoControlTableModel::notifyDataChanged(css::awt::grid::GridDataEvent const& i_event) const
 {
-    RowPos const firstRow = i_event.FirstRow == -1 ? 0 : i_event.FirstRow;
-    RowPos const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;
+    sal_Int32 const firstRow = i_event.FirstRow == -1 ? 0 : i_event.FirstRow;
+    sal_Int32 const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;
 
     ModellListeners aListeners(m_aListeners);
     for (auto const& listener : aListeners)

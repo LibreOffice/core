@@ -32,7 +32,7 @@ class TableFunctionSet : public FunctionSet
 {
 private:
     TableControl_Impl* m_pTableControl;
-    RowPos m_nCurrentRow;
+    sal_Int32 m_nCurrentRow;
 
 public:
     explicit TableFunctionSet(TableControl_Impl* _pTableControl);

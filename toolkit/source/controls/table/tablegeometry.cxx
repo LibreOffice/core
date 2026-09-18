@@ -29,7 +29,7 @@ namespace svt::table
 
 
     TableRowGeometry::TableRowGeometry( TableControl_Impl const & _rControl, tools::Rectangle const & _rBoundaries,
-            RowPos const _nRow, bool const i_allowVirtualRows )
+            sal_Int32 const _nRow, bool const i_allowVirtualRows )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nRowPos( _nRow )
         ,m_bAllowVirtualRows( i_allowVirtualRows )
@@ -57,8 +57,7 @@ namespace svt::table
             m_aRect.SetEmpty();
     }
 
-
-    bool TableRowGeometry::impl_isValidRow( RowPos const i_row ) const
+    bool TableRowGeometry::impl_isValidRow(sal_Int32 const i_row) const
     {
         return m_bAllowVirtualRows || ( i_row < m_rControl.m_pModel->getRowCount() );
     }
@@ -86,7 +85,7 @@ namespace svt::table
 
 
     TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, tools::Rectangle const & _rBoundaries,
-            ColPos const _nCol )
+            sal_Int32 const _nCol )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nColPos( _nCol )
     {
@@ -104,13 +103,13 @@ namespace svt::table
 
     void TableColumnGeometry::impl_initRect()
     {
-        ColPos nLeftColumn = m_rControl.m_nLeftColumn;
+        sal_Int32 nLeftColumn = m_rControl.m_nLeftColumn;
         if ( ( m_nColPos >= nLeftColumn ) && impl_isValidColumn( m_nColPos ) )
         {
             m_aRect.SetLeft( m_rControl.m_nRowHeaderWidthPixel );
             // TODO: take into account any possibly frozen columns
 
-            for ( ColPos col = nLeftColumn; col < m_nColPos; ++col )
+            for (sal_Int32 col = nLeftColumn; col < m_nColPos; ++col)
                 m_aRect.AdjustLeft(m_rControl.m_aColumnWidths[ col ].getWidth() );
             m_aRect.SetRight( m_aRect.Left() + m_rControl.m_aColumnWidths[ m_nColPos ].getWidth() - 1 );
         }
@@ -118,10 +117,9 @@ namespace svt::table
             m_aRect.SetEmpty();
     }
 
-
-    bool TableColumnGeometry::impl_isValidColumn( ColPos const i_column ) const
+    bool TableColumnGeometry::impl_isValidColumn(sal_Int32 const i_column) const
     {
-        return i_column < ColPos( m_rControl.m_aColumnWidths.size() );
+        return i_column < sal_Int32(m_rControl.m_aColumnWidths.size());
     }
 
 

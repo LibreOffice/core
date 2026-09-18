@@ -39,11 +39,11 @@ void TableFunctionSet::DestroyAnchor() { m_pTableControl->setAnchor(ROW_INVALID)
 void TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor)
 {
     // newRow is the row which includes the point, getCurRow() is the last selected row, before the mouse click
-    RowPos newRow = m_pTableControl->getRowAtPoint(rPoint);
+    sal_Int32 newRow = m_pTableControl->getRowAtPoint(rPoint);
     if (newRow == ROW_COL_HEADERS)
         newRow = m_pTableControl->getTopRow();
 
-    ColPos newCol = m_pTableControl->getColAtPoint(rPoint);
+    sal_Int32 newCol = m_pTableControl->getColAtPoint(rPoint);
     if (newCol == COL_ROW_HEADERS)
         newCol = m_pTableControl->getLeftColumn();
 
@@ -113,7 +113,7 @@ bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
         return false;
     else
     {
-        RowPos curRow = m_pTableControl->getRowAtPoint(rPoint);
+        sal_Int32 curRow = m_pTableControl->getRowAtPoint(rPoint);
         m_pTableControl->setAnchor(ROW_INVALID);
         bool selected = m_pTableControl->isRowSelected(curRow);
         m_nCurrentRow = curRow;
@@ -133,7 +133,7 @@ void TableFunctionSet::DeselectAll()
     {
         for (size_t i = 0; i < m_pTableControl->getSelectedRowCount(); ++i)
         {
-            RowPos const rowIndex = m_pTableControl->getSelectedRowIndex(i);
+            sal_Int32 const rowIndex = m_pTableControl->getSelectedRowIndex(i);
             m_pTableControl->invalidateRow(rowIndex);
         }
 

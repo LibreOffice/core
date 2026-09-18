@@ -81,11 +81,11 @@ namespace svt::table
 
     struct TableCell
     {
-        ColPos          nColumn;
-        RowPos          nRow;
+        sal_Int32 nColumn;
+        sal_Int32 nRow;
         TableCellArea   eArea;
 
-        TableCell( ColPos const i_column, RowPos const i_row )
+        TableCell( sal_Int32 const i_column, sal_Int32 const i_row )
             :nColumn( i_column )
             ,nRow( i_row )
             ,eArea( CellContent )

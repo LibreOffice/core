@@ -38,7 +38,7 @@ namespace svt::table
 
     struct ColumnSort
     {
-        ColPos              nColumnPos;
+        sal_Int32 nColumnPos;
         ColumnSortDirection eSortDirection;
 
         ColumnSort()
@@ -59,7 +59,9 @@ namespace svt::table
     public:
         /** sorts the rows in the model by the given column's data, in the given direction.
         */
-        virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection ) = 0;
+        virtual void sortByColumn(sal_Int32 const i_column,
+                                  ColumnSortDirection const i_sortDirection)
+            = 0;
 
         /** retrieves the current sort order of the data
 

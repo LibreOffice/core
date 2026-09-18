@@ -106,7 +106,7 @@ namespace svt::table
     struct GridTableRenderer_Impl
     {
         ITableModel&        rModel;
-        RowPos              nCurrentRow;
+        sal_Int32 nCurrentRow;
         bool                bUseGridLines;
         CachedSortIndicator aSortIndicator;
         CellValueConversion aStringConverter;
@@ -144,7 +144,8 @@ namespace svt::table
             return aTextArea;
         }
 
-        DrawTextFlags lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
+        DrawTextFlags lcl_getAlignmentTextDrawFlags(GridTableRenderer_Impl const& i_impl,
+                                                    sal_Int32 const i_columnPos)
         {
             DrawTextFlags nVertFlag = DrawTextFlags::Top;
             VerticalAlignment const eVertAlign = i_impl.rModel.getVerticalAlign();
@@ -235,11 +236,9 @@ namespace svt::table
         rRenderContext.DrawLine(_rArea.BottomRight(), _rArea.TopRight());
     }
 
-
-    void GridTableRenderer::PaintColumnHeader(
-        ColPos _nCol,
-        vcl::RenderContext& rRenderContext,
-        const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
+    void GridTableRenderer::PaintColumnHeader(sal_Int32 _nCol, vcl::RenderContext& rRenderContext,
+                                              const tools::Rectangle& _rArea,
+                                              const StyleSettings& _rStyle)
     {
         auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR);
 
@@ -293,9 +292,10 @@ namespace svt::table
         }
     }
 
-
-    void GridTableRenderer::PrepareRow(RowPos _nRow, bool i_hasControlFocus, bool _bSelected, vcl::RenderContext& rRenderContext,
-                                       const tools::Rectangle& _rRowArea, const StyleSettings& _rStyle)
+    void GridTableRenderer::PrepareRow(sal_Int32 _nRow, bool i_hasControlFocus, bool _bSelected,
+                                       vcl::RenderContext& rRenderContext,
+                                       const tools::Rectangle& _rRowArea,
+                                       const StyleSettings& _rStyle)
     {
         // remember the row for subsequent calls to the other ->ITableRenderer methods
         m_pImpl->nCurrentRow = _nRow;
@@ -386,12 +386,12 @@ namespace svt::table
         OutputDevice&           rDevice;
         tools::Rectangle const         aContentArea;
         StyleSettings const &   rStyle;
-        ColPos const            nColumn;
+        sal_Int32 const nColumn;
         bool const              bSelected;
         bool const              bHasControlFocus;
 
         CellRenderContext( OutputDevice& i_device, tools::Rectangle const & i_contentArea,
-            StyleSettings const & i_style, ColPos const i_column, bool const i_selected, bool const i_hasControlFocus )
+            StyleSettings const & i_style, sal_Int32 const i_column, bool const i_selected, bool const i_hasControlFocus )
             :rDevice( i_device )
             ,aContentArea( i_contentArea )
             ,rStyle( i_style )
@@ -402,9 +402,9 @@ namespace svt::table
         }
     };
 
-
-    void GridTableRenderer::PaintCell(ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
-                                      vcl::RenderContext& rRenderContext, const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
+    void GridTableRenderer::PaintCell(sal_Int32 const i_column, bool _bSelected,
+                                      bool i_hasControlFocus, vcl::RenderContext& rRenderContext,
+                                      const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 

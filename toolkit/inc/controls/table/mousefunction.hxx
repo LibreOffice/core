@@ -82,7 +82,7 @@ public:
                                          MouseEvent const& i_event) override;
 
 private:
-    ColPos m_nResizingColumn;
+    sal_Int32 m_nResizingColumn;
 };
 
 //= RowSelection
@@ -128,7 +128,7 @@ public:
                                          MouseEvent const& i_event) override;
 
 private:
-    ColPos m_nActiveColumn;
+    sal_Int32 m_nActiveColumn;
 };
 
 } // namespace svt::table

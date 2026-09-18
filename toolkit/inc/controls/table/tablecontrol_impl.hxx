@@ -104,10 +104,10 @@ private:
     /// the number of rows in the table control. Cached model value.
     TableSize m_nRowCount;
 
-    ColPos m_nCurColumn;
-    RowPos m_nCurRow;
-    ColPos m_nLeftColumn;
-    RowPos m_nTopRow;
+    sal_Int32 m_nCurColumn;
+    sal_Int32 m_nCurRow;
+    sal_Int32 m_nLeftColumn;
+    sal_Int32 m_nTopRow;
 
     sal_Int32 m_nCursorHidden;
 
@@ -125,11 +125,11 @@ private:
     //selection engine - for determining selection range, e.g. single, multiple
     std::unique_ptr<SelectionEngine> m_pSelEngine;
     //vector which contains the selected rows
-    std::vector<RowPos> m_aSelectedRows;
+    std::vector<sal_Int32> m_aSelectedRows;
     //part of selection engine
     std::unique_ptr<TableFunctionSet> m_pTableFunctionSet;
     //part of selection engine
-    RowPos m_nAnchor;
+    sal_Int32 m_nAnchor;
     bool m_bUpdatingColWidths;
 
     rtl::Reference<accessibility::AccessibleGridControl> m_xAccessibleTable;
@@ -139,13 +139,13 @@ public:
 
     const PTableInputHandler& getInputHandler() const { return m_pInputHandler; }
 
-    RowPos getCurRow() const { return m_nCurRow; }
+    sal_Int32 getCurRow() const { return m_nCurRow; }
 
-    RowPos getAnchor() const { return m_nAnchor; }
-    void setAnchor(RowPos const i_anchor) { m_nAnchor = i_anchor; }
+    sal_Int32 getAnchor() const { return m_nAnchor; }
+    void setAnchor(sal_Int32 const i_anchor) { m_nAnchor = i_anchor; }
 
-    RowPos getTopRow() const { return m_nTopRow; }
-    ColPos getLeftColumn() const { return m_nLeftColumn; }
+    sal_Int32 getTopRow() const { return m_nTopRow; }
+    sal_Int32 getLeftColumn() const { return m_nLeftColumn; }
 
     const TableControl& getAntiImpl() const { return m_rAntiImpl; }
     TableControl& getAntiImpl() { return m_rAntiImpl; }
@@ -166,7 +166,7 @@ public:
         To ease the caller's code, the coordinates must not necessarily denote a
         valid position. If they don't, <FALSE/> will be returned.
     */
-    bool goTo(ColPos _nColumn, RowPos _nRow);
+    bool goTo(sal_Int32 _nColumn, sal_Int32 _nRow);
 
     /** ensures that the given coordinate is visible
         @param _nColumn
@@ -176,19 +176,20 @@ public:
             the row position which should be visibleMust be non-negative, and smaller
             than the row count.
     */
-    void ensureVisible(ColPos _nColumn, RowPos _nRow);
+    void ensureVisible(sal_Int32 _nColumn, sal_Int32 _nRow);
 
     /** retrieves the content of the given cell, converted to a string
         */
-    OUString getCellContentAsString(RowPos const i_row, ColPos const i_col);
+    OUString getCellContentAsString(sal_Int32 const i_row, sal_Int32 const i_col);
 
     /** returns the position of the current row in the selection vector */
-    static int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+    static int getRowSelectedNumber(const ::std::vector<sal_Int32>& selectedRows,
+                                    sal_Int32 current);
 
     void invalidateRect(const tools::Rectangle& rInvalidateRect);
 
     /** ??? */
-    void invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow);
+    void invalidateSelectedRegion(sal_Int32 _nPrevRow, sal_Int32 _nCurRow);
 
     /** invalidates the part of the data window which is covered by the given rows
         @param i_firstRow
@@ -197,10 +198,10 @@ public:
             the index of the last row to include in the invalidation, or ROW_INVALID if the invalidation
             should happen down to the bottom of the data window.
     */
-    void invalidateRowRange(RowPos const i_firstRow, RowPos const i_lastRow);
+    void invalidateRowRange(sal_Int32 const i_firstRow, sal_Int32 const i_lastRow);
 
     /** invalidates the part of the data window which is covered by the given row */
-    void invalidateRow(RowPos const i_row) { invalidateRowRange(i_row, i_row); }
+    void invalidateRow(sal_Int32 const i_row) { invalidateRowRange(i_row, i_row); }
 
     /** invalidates all selected rows */
     void invalidateSelectedRows();
@@ -217,20 +218,20 @@ public:
 
     bool hasRowSelection() const { return !m_aSelectedRows.empty(); }
     size_t getSelectedRowCount() const { return m_aSelectedRows.size(); }
-    RowPos getSelectedRowIndex(size_t const i_selectionIndex) const;
+    sal_Int32 getSelectedRowIndex(size_t const i_selectionIndex) const;
 
     /** removes the given row index from m_aSelectedRows
 
         @return
             <TRUE/> if and only if the row was previously marked as selected
     */
-    bool markRowAsDeselected(RowPos const i_rowIndex);
+    bool markRowAsDeselected(sal_Int32 const i_rowIndex);
 
     /** marks the given row as selected, by putting it into m_aSelectedRows
         @return
             <TRUE/> if and only if the row was previously <em>not</em> marked as selected
     */
-    bool markRowAsSelected(RowPos const i_rowIndex);
+    bool markRowAsSelected(sal_Int32 const i_rowIndex);
 
     /** marks all rows as deselected
         @return
@@ -288,13 +289,13 @@ public:
     PTableModel getModel() const;
 
     /// returns the index of the currently active column
-    ColPos getCurrentColumn() const;
+    sal_Int32 getCurrentColumn() const;
 
     /// returns the index of the currently active row
-    RowPos getCurrentRow() const;
+    sal_Int32 getCurrentRow() const;
 
     /// activates the given cell
-    void activateCell(ColPos const i_col, RowPos const i_row);
+    void activateCell(sal_Int32 const i_col, sal_Int32 const i_row);
 
     /// retrieves the size of the table window, in pixels
     Size getTableSizePixel() const;
@@ -320,17 +321,17 @@ public:
     /// shows a tracking rectangle
     void showTracking(tools::Rectangle const& i_location, ShowTrackFlags const i_flags);
 
-    RowPos getRowAtPoint(const Point& rPoint) const;
-    ColPos getColAtPoint(const Point& rPoint) const;
+    sal_Int32 getRowAtPoint(const Point& rPoint) const;
+    sal_Int32 getColAtPoint(const Point& rPoint) const;
 
     /// does a hit test for the given pixel coordinates
     TableCell hitTest(const Point& rPoint) const;
 
     /// retrieves the metrics for a given column
-    ColumnMetrics getColumnMetrics(ColPos const i_column) const;
+    ColumnMetrics getColumnMetrics(sal_Int32 const i_column) const;
 
     /// determines whether a given row is selected
-    bool isRowSelected(RowPos i_row) const;
+    bool isRowSelected(sal_Int32 i_row) const;
 
     void selectRow(sal_Int32 nRowIndex, bool bSelect);
     void selectAllRows(bool bSelect);
@@ -361,13 +362,13 @@ public:
                                        sal_uInt16 nColumnPos) const;
 
     // ITableModelListener
-    virtual void rowsInserted(RowPos first, RowPos last) override;
-    virtual void rowsRemoved(RowPos first, RowPos last) override;
+    virtual void rowsInserted(sal_Int32 first, sal_Int32 last) override;
+    virtual void rowsRemoved(sal_Int32 first, sal_Int32 last) override;
     virtual void columnInserted() override;
     virtual void columnRemoved() override;
     virtual void allColumnsRemoved() override;
-    virtual void cellsUpdated(RowPos const i_firstRow, RowPos const i_lastRow) override;
-    virtual void columnChanged(ColPos const i_column,
+    virtual void cellsUpdated(sal_Int32 const i_firstRow, sal_Int32 const i_lastRow) override;
+    virtual void columnChanged(sal_Int32 const i_column,
                                ColumnAttributeGroup const i_attributeGroup) override;
     virtual void tableMetricsChanged() override;
 
@@ -422,7 +423,7 @@ private:
             the index of a column up to which all columns should be considered as inflexible, or
             <code>COL_INVALID</code>.
     */
-    void impl_ni_relayout(ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID);
+    void impl_ni_relayout(sal_Int32 const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID);
 
     /** calculates the new width of our columns, taking into account their min and max widths, and their relative
         flexibility.
@@ -440,7 +441,7 @@ private:
             the overall width of the grid, which is available for columns
     */
     tools::Long
-    impl_ni_calculateColumnWidths(ColPos const i_assumeInflexibleColumnsUpToIncluding,
+    impl_ni_calculateColumnWidths(sal_Int32 const i_assumeInflexibleColumnsUpToIncluding,
                                   bool const i_assumeVerticalScrollbar,
                                   ::std::vector<tools::Long>& o_newColWidthsPixel) const;
 
@@ -498,14 +499,14 @@ private:
     tools::Rectangle impl_getAllVisibleDataCellArea() const;
 
     /** retrieves the column which covers the given ordinate */
-    ColPos impl_getColumnForOrdinate(tools::Long const i_ordinate) const;
+    sal_Int32 impl_getColumnForOrdinate(tools::Long const i_ordinate) const;
 
     /** retrieves the row which covers the given abscissa
         */
-    RowPos impl_getRowForAbscissa(tools::Long const i_abscissa) const;
+    sal_Int32 impl_getRowForAbscissa(tools::Long const i_abscissa) const;
 
     /// invalidates the window area occupied by the given column
-    void impl_invalidateColumn(ColPos const i_column);
+    void impl_invalidateColumn(sal_Int32 const i_column);
 
     DECL_LINK(OnScroll, ScrollBar*, void);
     DECL_LINK(OnUpdateScrollbars, void*, void);

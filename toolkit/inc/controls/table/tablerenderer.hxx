@@ -106,9 +106,9 @@ namespace svt::table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintColumnHeader( ColPos _nCol,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
-                            const StyleSettings& _rStyle ) = 0;
+        virtual void PaintColumnHeader(sal_Int32 _nCol, vcl::RenderContext& _rDevice,
+                                       const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
+            = 0;
 
         /** prepares a row for painting
 
@@ -141,9 +141,10 @@ namespace svt::table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rRowArea,
-                            const StyleSettings& _rStyle ) = 0;
+        virtual void PrepareRow(sal_Int32 _nRow, bool i_hasControlFocus, bool _bSelected,
+                                vcl::RenderContext& _rDevice, const tools::Rectangle& _rRowArea,
+                                const StyleSettings& _rStyle)
+            = 0;
 
         /** paints the header of a row
 
@@ -187,10 +188,10 @@ namespace svt::table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintCell( ColPos const i_col,
-                            bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
-                            const StyleSettings& _rStyle ) = 0;
+        virtual void PaintCell(sal_Int32 const i_col, bool i_hasControlFocus, bool _bSelected,
+                               vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                               const StyleSettings& _rStyle)
+            = 0;
 
         /** draws a cell cursor in the given rectangle
 

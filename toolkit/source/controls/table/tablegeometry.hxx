@@ -67,21 +67,21 @@ namespace svt::table
         TableRowGeometry(
             TableControl_Impl const & _rControl,
             tools::Rectangle const & _rBoundaries,
-            RowPos const _nRow,
+            sal_Int32 const _nRow,
             bool const i_allowVirtualRows = false
                 // allow rows >= getRowCount()?
         );
 
         // status
-        RowPos              getRow() const  { return m_nRowPos; }
+        sal_Int32 getRow() const { return m_nRowPos; }
         // operations
         bool                moveDown();
 
     private:
         void    impl_initRect();
-        bool    impl_isValidRow( RowPos const i_row ) const;
+        bool impl_isValidRow(sal_Int32 const i_row) const;
 
-        RowPos  m_nRowPos;
+        sal_Int32 m_nRowPos;
         bool    m_bAllowVirtualRows;
     };
 
@@ -91,22 +91,19 @@ namespace svt::table
     class TableColumnGeometry final : public TableGeometry
     {
     public:
-        TableColumnGeometry(
-            TableControl_Impl const & _rControl,
-            tools::Rectangle const & _rBoundaries,
-            ColPos const _nCol
-        );
+        TableColumnGeometry(TableControl_Impl const& _rControl,
+                            tools::Rectangle const& _rBoundaries, sal_Int32 const _nCol);
 
         // status
-        ColPos              getCol() const  { return m_nColPos; }
+        sal_Int32 getCol() const { return m_nColPos; }
         // operations
         bool                moveRight();
 
     private:
         void    impl_initRect();
-        bool    impl_isValidColumn( ColPos const i_column ) const;
+        bool impl_isValidColumn(sal_Int32 const i_column) const;
 
-        ColPos  m_nColPos;
+        sal_Int32 m_nColPos;
     };
 
 
@@ -124,8 +121,8 @@ namespace svt::table
         TableCellGeometry(
                 TableControl_Impl const & _rControl,
                 tools::Rectangle const & _rBoundaries,
-                ColPos const _nCol,
-                RowPos const _nRow
+                sal_Int32 const _nCol,
+                sal_Int32 const _nRow
             )
             :m_aRow( _rControl, _rBoundaries, _nRow, false/*allowVirtualCells*/ )
             ,m_aCol( _rControl, _rBoundaries, _nCol )
@@ -134,7 +131,7 @@ namespace svt::table
 
         TableCellGeometry(
                 const TableRowGeometry& _rRow,
-                ColPos _nCol
+                sal_Int32 _nCol
             )
             :m_aRow( _rRow )
             ,m_aCol( _rRow.getControl(), _rRow.getRect(), _nCol )
@@ -142,7 +139,7 @@ namespace svt::table
         }
 
         tools::Rectangle   getRect() const     { return m_aRow.getRect().GetIntersection( m_aCol.getRect() ); }
-        ColPos      getColumn() const   { return m_aCol.getCol(); }
+        sal_Int32 getColumn() const { return m_aCol.getCol(); }
         bool        isValid() const     { return !getRect().IsEmpty(); }
 
         bool        moveRight()     {return m_aCol.moveRight(); }

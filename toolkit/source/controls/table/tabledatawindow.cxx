@@ -73,8 +73,8 @@ namespace svt::table
         QuickHelpFlags nHelpStyle = QuickHelpFlags::NONE;
 
         Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
-        RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
-        ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
+        sal_Int32 const hitRow = m_rTableControl.getRowAtPoint(aMousePos);
+        sal_Int32 const hitCol = m_rTableControl.getColAtPoint(aMousePos);
 
         PTableModel const pTableModel( m_rTableControl.getModel() );
         if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
@@ -149,7 +149,7 @@ namespace svt::table
         impl_hideTipWindow();
 
         Point const aPoint = rMEvt.GetPosPixel();
-        RowPos const hitRow = m_rTableControl.getRowAtPoint( aPoint );
+        sal_Int32 const hitRow = m_rTableControl.getRowAtPoint(aPoint);
         bool const wasRowSelected = m_rTableControl.isRowSelected( hitRow );
         size_t const nPrevSelRowCount = m_rTableControl.getSelectedRowCount();
 

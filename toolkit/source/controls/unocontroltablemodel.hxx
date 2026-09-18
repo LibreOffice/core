@@ -47,7 +47,7 @@ public:
     virtual TableSize getRowCount() const override;
     virtual bool hasColumnHeaders() const override;
     virtual bool hasRowHeaders() const override;
-    virtual PColumnModel getColumnModel(ColPos column) override;
+    virtual PColumnModel getColumnModel(sal_Int32 column) override;
     virtual PTableRenderer getRenderer() const override;
     virtual PTableInputHandler getInputHandler() const override;
     virtual TableMetrics getRowHeight() const override;
@@ -59,11 +59,11 @@ public:
     addTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener) override;
     virtual void
     removeTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener) override;
-    virtual void getCellContent(ColPos const i_col, RowPos const i_row,
+    virtual void getCellContent(sal_Int32 const i_col, sal_Int32 const i_row,
                                 css::uno::Any& o_cellContent) override;
-    virtual void getCellToolTip(ColPos const i_col, RowPos const i_row,
+    virtual void getCellToolTip(sal_Int32 const i_col, sal_Int32 const i_row,
                                 css::uno::Any& o_cellToolTip) override;
-    virtual css::uno::Any getRowHeading(RowPos const i_rowPos) const override;
+    virtual css::uno::Any getRowHeading(sal_Int32 const i_rowPos) const override;
     virtual ::std::optional<::Color> getLineColor() const override;
     virtual ::std::optional<::Color> getHeaderBackgroundColor() const override;
     virtual ::std::optional<::Color> getHeaderTextColor() const override;
@@ -79,15 +79,15 @@ public:
     virtual bool isEnabled() const override;
 
     // ITableDataSort overridables
-    virtual void sortByColumn(ColPos const i_column,
+    virtual void sortByColumn(sal_Int32 const i_column,
                               ColumnSortDirection const i_sortDirection) override;
     virtual ColumnSort getCurrentSortOrder() const override;
 
     // column write access
     void appendColumn(css::uno::Reference<css::awt::grid::XGridColumn> const& i_column);
-    void insertColumn(ColPos const i_position,
+    void insertColumn(sal_Int32 const i_position,
                       css::uno::Reference<css::awt::grid::XGridColumn> const& i_column);
-    void removeColumn(ColPos const i_position);
+    void removeColumn(sal_Int32 const i_position);
     void removeAllColumns();
 
     // other operations
@@ -129,10 +129,10 @@ public:
     void notifyDataChanged(css::awt::grid::GridDataEvent const& i_event) const;
 
     /// retrieves the index of a column within the model
-    ColPos getColumnPos(UnoGridColumnFacade const& i_column) const;
+    sal_Int32 getColumnPos(UnoGridColumnFacade const& i_column) const;
 
     /// notifies a change in a column belonging to the model
-    void notifyColumnChange(ColPos const i_columnPos,
+    void notifyColumnChange(sal_Int32 const i_columnPos,
                             ColumnAttributeGroup const i_attributeGroup) const;
 
     /** notifies a change in all data represented by the model. To be used if you cannot specified the changed data

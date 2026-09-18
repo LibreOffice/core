@@ -28,23 +28,17 @@ namespace svt::table
     /// a value denoting the size of a table
     typedef sal_Int32   TableSize;
 
-    /// a value denoting a column position within a table
-    typedef sal_Int32   ColPos;
-    /// a value denoting a row position within a table
-    typedef sal_Int32   RowPos;
-
     typedef sal_Int32   TableMetrics;
 
 /// denotes the column containing the row headers
-#define COL_ROW_HEADERS         (::svt::table::ColPos(-1))
+#define COL_ROW_HEADERS (sal_Int32(-1))
 /// denotes the row containing the column headers
-#define ROW_COL_HEADERS         (::svt::table::RowPos(-1))
+#define ROW_COL_HEADERS (sal_Int32(-1))
 
 /// denotes an invalid column index
-#define COL_INVALID             (::svt::table::ColPos(-2))
+#define COL_INVALID (sal_Int32(-2))
 /// denotes an invalid row index
-#define ROW_INVALID             (::svt::table::RowPos(-2))
-
+#define ROW_INVALID (sal_Int32(-2))
 
 } // namespace svt::table
 
