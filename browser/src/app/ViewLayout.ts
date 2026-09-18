@@ -844,8 +844,6 @@ class ViewLayoutBase {
 	protected onViewMoved(): void {
 		RenderManager.resetPreFetching(true);
 
-		app.updateFollowingUsers();
-
 		app.events.fire('viewmoved', null);
 	}
 

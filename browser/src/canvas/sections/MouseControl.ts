@@ -288,10 +288,12 @@ class MouseControl extends CanvasSectionObject {
 			this.containerObject.stopAnimating();
 	}
 
-	// Scrolls by a core pixel distance. Returns true when the view position changed.
+	// Scrolls by a core pixel distance, as a scroll the user makes with a finger. Returns
+	// true when the view position changed.
 	private scrollViewBy(pX: number, pY: number): boolean {
 		Util.ensureValue(app.activeDocument);
-		return app.activeDocument.activeLayout.scroll(pX, pY);
+		const userIsScrolling = true;
+		return app.activeDocument.activeLayout.scroll(pX, pY, userIsScrolling);
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {

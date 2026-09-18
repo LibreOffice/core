@@ -245,12 +245,16 @@ class ViewLayoutCalc extends ViewLayoutBase {
 	// scroll (wheel, scrollbar, auto-scroll). In RTL a rightward screen delta
 	// moves the document the other way, so mirror X here - at the screen-input
 	// boundary - and keep the document-space core direction-agnostic.
-	public override scroll(pX: number, pY: number): boolean {
+	public override scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): boolean {
 		if (this.isRTL()) pX = -pX;
 		const scrolled = this.scrollByDocumentDelta(pX, pY);
 
 		// Following our own cursor only holds while the cursor is on screen.
-		app.updateFollowingUsers();
+		if (userIsScrolling) app.updateFollowingUsers();
 		return scrolled;
 	}
 

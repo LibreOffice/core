@@ -363,6 +363,33 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		helper.processToIdle(this.win);
 	});
 
+	// The view scrolls by itself to keep a selection that grows past the bottom edge in
+	// sight. The cell cursor stays on the cell the selection started from, so that scroll
+	// takes it off screen, but the user did not scroll away from it, so the view keeps
+	// following it.
+	it('The view keeps following the cell cursor when a keyboard selection scrolls it away', function() {
+		// Click on a cell near the bottom edge of the view.
+		cy.cGet('#map')
+		.then(function(items) {
+			expect(items).to.have.lengthOf(1);
+			var XPos = items[0].getBoundingClientRect().right - 280;
+			var YPos = items[0].getBoundingClientRect().bottom - 60;
+			cy.cGet('body').click(XPos, YPos);
+		});
+		helper.processToIdle(this.win);
+
+		helper.typeIntoDocument('{shift}{pagedown}');
+		helper.processToIdle(this.win);
+
+		cy.then(() => {
+			const app = this.win.app;
+			expect(app.calc.cellCursorRectangle.pY2, 'the cell cursor is above the view')
+				.to.be.lessThan(app.activeDocument.activeLayout.viewedRectangle.pY1);
+			// Without the fix in place, this test would have failed with following turned off.
+			expect(app.isFollowingOff(), 'following after the selection').to.be.false;
+		});
+	});
+
 	// The scrollbar positions the tests above check are pixel positions of the thumb,
 	// which the thumb takes from how much of the sheet can be scrolled. Jumping to the
 	// last used column here changes that for the rest of the file, so this test sits
