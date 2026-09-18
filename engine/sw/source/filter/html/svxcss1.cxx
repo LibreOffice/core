@@ -32,6 +32,8 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/blinkitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -283,6 +285,7 @@ struct SvxCSS1ItemIds
     sal_uInt16 nCaseMap;
     sal_uInt16 nBlink;
     sal_uInt16 nOpticalSizing;
+    sal_uInt16 nCharHidden;
 
     sal_uInt16 nLineSpacing;
     sal_uInt16 nAdjust;
@@ -739,6 +742,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     aItemIds.nCaseMap = initTrueWhich( SID_ATTR_CHAR_CASEMAP );
     aItemIds.nBlink = initTrueWhich( SID_ATTR_FLASH );
     aItemIds.nOpticalSizing = initTrueWhich( SID_ATTR_CHAR_OPTICAL_SIZING );
+    aItemIds.nCharHidden = initTrueWhich( SID_ATTR_CHAR_HIDDEN );
 
     aItemIds.nLineSpacing = initTrueWhich( SID_ATTR_PARA_LINESPACE );
     aItemIds.nAdjust = initTrueWhich( SID_ATTR_PARA_ADJUST );
@@ -3075,6 +3079,18 @@ static void ParseCSS1_visibility(const CSS1Expression* pExpr, SfxItemSet& /*rIte
     rPropInfo.m_bVisible = pExpr->GetString() != "hidden";
 }
 
+static void ParseCSS1_display(const CSS1Expression* pExpr, SfxItemSet& rItemSet,
+                              SvxCSS1PropertyInfo& /*rPropInfo*/, const SvxCSS1Parser& /*rParser*/)
+{
+    if (pExpr->GetType() != CSS1_IDENT)
+    {
+        return;
+    }
+
+    if (o3tl::equalsIgnoreAsciiCase(pExpr->GetString(), sCSS1_PV_none))
+        rItemSet.Put(SvxCharHiddenItem(true, aItemIds.nCharHidden));
+}
+
 static void ParseCSS1_white_space(const CSS1Expression* pExpr, SfxItemSet& /*rItemSet*/,
                                   SvxCSS1PropertyInfo& rPropInfo, const SvxCSS1Parser& /*rParser*/)
 {
@@ -3119,6 +3135,7 @@ CSS1PropEntry constexpr aCSS1PropFnTab[] =
     { sCSS1_P_color, ParseCSS1_color },
     { sCSS1_P_column_count, ParseCSS1_column_count },
     { sCSS1_P_direction, ParseCSS1_direction },
+    { sCSS1_P_display, ParseCSS1_display },
     { sCSS1_P_float, ParseCSS1_float },
     { sCSS1_P_font, ParseCSS1_font },
     { sCSS1_P_font_family, ParseCSS1_font_family },

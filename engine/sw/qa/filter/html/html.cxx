@@ -13,6 +13,10 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 
 #include <editeng/brushitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <fmtautofmt.hxx>
+#include <ndhints.hxx>
+#include <txatbase.hxx>
 #include <vcl/gdimtf.hxx>
 
 #include <docsh.hxx>
@@ -310,6 +314,40 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     OUString aContent = getXPathContent(pHtmlDoc, "/html/body/p/text()");
     CPPUNIT_ASSERT_EQUAL(u"content"_ustr, aContent.trim());
 }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDisplayNoneImport)
+{
+    // Given an HTML document with a "display: none" span:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    // When importing that document:
+    createSwDoc("hidden-text.html");
+
+    // Then make sure the pasted run is imported as hidden text
+    // (SvxCharHiddenItem, i.e. RES_CHRATR_HIDDEN):
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    // Without the accompanying fix in place, this test would have failed, the paragraph had no
+    // spans with direct char formats.
+    CPPUNIT_ASSERT(pTextNode->HasHints());
+    const SwpHints& rHints = pTextNode->GetSwpHints();
+    const SwFormatAutoFormat* pAutoFmt = nullptr;
+    for (size_t i = 0; i < rHints.Count(); ++i)
+    {
+        const SwTextAttr* pHint = rHints.Get(i);
+        if (pHint->Which() == RES_TXTATR_AUTOFMT)
+        {
+            pAutoFmt = &pHint->GetAutoFormat();
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pAutoFmt);
+    const SfxItemSet& rSet = *pAutoFmt->GetStyleHandle();
+    const SvxCharHiddenItem* pHidden = rSet.GetItemIfSet(RES_CHRATR_HIDDEN);
+    CPPUNIT_ASSERT(pHidden);
+    CPPUNIT_ASSERT(pHidden->GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
