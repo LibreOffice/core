@@ -117,6 +117,15 @@
         }));
         window.__gasScriptSources = sources;
         window.__gasScriptNames = scriptNames;
+        // Extract top-level function names so gas-shim.js can expose them under Object.keys on
+        // google.script.run (client libraries such as gas-client enumerate that to discover the
+        // callable server functions, and the enumeration would otherwise come back empty):
+        const nameRe = /\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g;
+        const names = new Set();
+        for (const src of sources) {
+            for (const m of src.matchAll(nameRe)) names.add(m[1]);
+        }
+        window.__gasFunctionNames = Array.from(names);
         const rawHtml = await fetchText(sidebarUrl);
         const html = await expandScriptlets(rawHtml);
         const doc = new DOMParser().parseFromString(html, 'text/html');

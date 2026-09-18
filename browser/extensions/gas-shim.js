@@ -23,9 +23,12 @@
         then: 1, catch: 1, finally: 1,
         toString: 1, toJSON: 1, valueOf: 1, constructor: 1, inspect: 1
     });
+    // The chain-configuration method names, exposed under ownKeys so an add-on that uses
+    // Object.keys on google.script.run to discover callable server functions (as the gas-client
+    // library does) sees the same shape the real Google API exposes:
+    const chainMethods = ['withSuccessHandler', 'withFailureHandler', 'withUserObject'];
     function makeChain(state) {
-        const target = function() {};
-        return new Proxy(target, {
+        return new Proxy({}, {
             get: function(_target, prop) {
                 if (prop === 'withSuccessHandler') {
                     return function(fn) { state.success = fn; return makeChain(state); };
@@ -70,6 +73,12 @@
                         }
                     });
                 };
+            },
+            ownKeys: function() {
+                return (window.__gasFunctionNames || []).concat(chainMethods);
+            },
+            getOwnPropertyDescriptor: function() {
+                return { enumerable: true, configurable: true, value: undefined };
             }
         });
     }
