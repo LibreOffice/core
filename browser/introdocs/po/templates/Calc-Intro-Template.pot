@@ -122,7 +122,7 @@ msgid ""
 msgstr ""
 
 #. content.xml (sheet '👋 Introduction')
-msgid "Collaboration tools "
+msgid "Collaboration tools"
 msgstr ""
 
 #. content.xml (sheet '👋 Introduction')
@@ -294,7 +294,7 @@ msgid "📋 Tables"
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
-msgid "📋Create a table "
+msgid "📋Create a table"
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -442,7 +442,7 @@ msgid ""
 "The pivot table (formerly known as DataPilot) allows you to combine, "
 "compare, and analyse large amounts of data. You can view different summaries"
 " of the source data, you can display the details of areas of interest, and "
-"you can create reports. "
+"you can create reports."
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -526,7 +526,7 @@ msgid "📊 Charts"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
-msgid "📊Create a chart "
+msgid "📊Create a chart"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
@@ -540,7 +540,7 @@ msgstr ""
 msgid ""
 "In this example we will learn how to create chart and explore the different "
 "types of charts available. On the other side, you can see an example table "
-"that can be used as a data source for creating charts. "
+"that can be used as a data source for creating charts."
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
@@ -608,7 +608,7 @@ msgid "3. Choose the chart type and style that best fits your data"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
-msgid "<1>4. Click </1><2>Next</2><3> </3>"
+msgid "<1>4. Click </1><2>Next</2>"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')

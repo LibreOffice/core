@@ -50,7 +50,7 @@ msgid "🎬 Slide Transitions"
 msgstr ""
 
 #. content.xml (slide 'page1'); content.xml (slide 'page6')
-msgid "🎤 Presenting "
+msgid "🎤 Presenting"
 msgstr ""
 
 #. content.xml (slide 'page1'); content.xml (slide 'page7')
@@ -58,7 +58,7 @@ msgid "🤝 Productivity & Collaboration"
 msgstr ""
 
 #. content.xml (slide 'page2')
-msgid "Every presentation is a sequence of slides. "
+msgid "Every presentation is a sequence of slides."
 msgstr ""
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
@@ -138,7 +138,7 @@ msgid ""
 msgstr ""
 
 #. content.xml (slide 'page5')
-msgid "Next Chapter: 🎤 Presenting "
+msgid "Next Chapter: 🎤 Presenting"
 msgstr ""
 
 #. content.xml (slide 'page6')
@@ -188,7 +188,7 @@ msgstr ""
 #. content.xml (slide 'page7')
 msgid ""
 "Want to keep learning? Short video introductions cover additional features "
-"and help you build on what you’ve learned. "
+"and help you build on what you’ve learned."
 msgstr ""
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
