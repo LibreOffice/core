@@ -33,7 +33,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <unotools/resmgr.hxx>
 #include <sfx2/app.hxx>
 #include <osl/diagnose.h>
@@ -182,8 +181,7 @@ IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebug
                 Reference< script::XLibraryContainer > xModLibContainer = aDocument.getLibraryContainer( E_SCRIPTS );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {
-                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                    if ( xModLibContainer->isLibraryPasswordProtected( aOULibName ) && !xModLibContainer->isLibraryPasswordVerified( aOULibName ) )
                     {
                            // a step-out should get me out of the protected area...
                         nRet = BasicDebugFlags::StepOut;

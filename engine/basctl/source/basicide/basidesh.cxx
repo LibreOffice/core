@@ -67,7 +67,6 @@
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <svx/xmlsecctrl.hxx>
@@ -697,8 +696,7 @@ void Shell::UpdateWindows()
                 Reference< script::XLibraryContainer > xModLibContainer( doc.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
-                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
+                    if ( xModLibContainer->isLibraryPasswordProtected( aLibName ) && !xModLibContainer->isLibraryPasswordVerified( aLibName ) )
                     {
                         bProtected = true;
                     }

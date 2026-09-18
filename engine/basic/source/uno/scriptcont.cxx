@@ -344,7 +344,7 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 
 // Storing with password encryption
 
-// Methods XLibraryContainerPassword
+// Methods XLibraryContainer
 bool SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );

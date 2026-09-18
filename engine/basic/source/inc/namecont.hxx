@@ -24,10 +24,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/script/XLibraryContainerExport.hpp>
-#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
-#include <com/sun/star/script/XLibraryContainer3.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
@@ -151,11 +148,7 @@ class SfxLibrary;
 typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
     css::script::XStorageBasedLibraryContainer,
-    css::script::XLibraryContainerPassword,
-    css::script::XLibraryContainerExport,
-    css::script::XLibraryContainer3,
     css::container::XContainer,
-    css::script::XLibraryQueryExecutable,
     css::script::vba::XVBACompatibility,
     css::lang::XServiceInfo,
     css::beans::XPropertySet> SfxLibraryContainer_BASE;
@@ -373,17 +366,15 @@ public:
     virtual OUString getContainerLocationName() override;
     virtual void storeLibraries(  ) override;
 
-    //Methods XLibraryContainer3
+    //Methods XLibraryContainer
     virtual OUString getOriginalLibraryLinkURL( const OUString& Name ) override;
 
-    // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
+    // Methods XLibraryContainer (base of XPersistentLibraryContainer)
     virtual bool isLibraryLink( const OUString& Name ) override;
     virtual OUString getLibraryLinkURL( const OUString& Name ) override;
     virtual bool isLibraryReadOnly( const OUString& Name ) override;
     virtual void setLibraryReadOnly( const OUString& Name, bool bReadOnly ) override;
     virtual void renameLibrary( const OUString& Name, const OUString& NewName ) override;
-
-    // Methods XLibraryContainer (base of XLibraryContainer2)
     virtual cpo::uno::Reference< css::container::XNameContainer >
         createLibrary( const OUString& Name ) override;
     virtual cpo::uno::Reference< css::container::XNameAccess > createLibraryLink
@@ -396,7 +387,7 @@ public:
     virtual void initialize( const cpo::uno::Sequence<
         cpo::uno::Any >& aArguments ) override;
 
-    // Methods XLibraryContainerPassword
+    // Methods XLibraryContainer
     virtual bool isLibraryPasswordProtected( const OUString& Name ) override;
     virtual bool isLibraryPasswordVerified( const OUString& Name ) override;
     virtual bool verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
@@ -409,7 +400,7 @@ public:
     virtual void removeContainerListener( const cpo::uno::Reference<
         css::container::XContainerListener >& xListener ) override;
 
-    // Methods XLibraryContainerExport
+    // Methods XLibraryContainer
     virtual void exportLibrary( const OUString& Name, const OUString& URL,
         const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 

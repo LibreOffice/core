@@ -24,7 +24,6 @@
 #include <bitmaps.hlst>
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <string_view>
@@ -61,8 +60,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
-            Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+            if ( xModLibContainer->isLibraryPasswordProtected( aOULibName ) && !xModLibContainer->isLibraryPasswordVerified( aOULibName ) )
             {
                 OUString aPassword;
                 bOK = QueryPassword(m_pTopLevel, xModLibContainer, aOULibName, aPassword);

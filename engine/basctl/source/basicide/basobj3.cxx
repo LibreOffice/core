@@ -36,7 +36,6 @@
 #include <localizationmgr.hxx>
 #include <dlged.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sfx2/app.hxx>
@@ -397,8 +396,7 @@ tools::Long HandleBasicError( StarBASIC const * pBasic )
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {
-                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                    if ( xModLibContainer->isLibraryPasswordProtected( aOULibName ) && !xModLibContainer->isLibraryPasswordVerified( aOULibName ) )
                     {
                         bProtected = true;
                     }

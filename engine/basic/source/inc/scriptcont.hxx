@@ -83,13 +83,12 @@ public:
     SfxScriptLibraryContainer( const cpo::uno::Reference< css::embed::XStorage >& xStorage );
 
 
-    // Methods XLibraryContainerPassword
+    // Methods XLibraryContainer
     virtual bool isLibraryPasswordProtected( const OUString& Name ) override;
     virtual bool isLibraryPasswordVerified( const OUString& Name ) override;
     virtual bool verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
     virtual void changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword ) override;
-    // XLibraryQueryExecutable
     virtual bool HasExecutableCode(const OUString&) override;
     // Methods XServiceInfo
     virtual OUString getImplementationName( ) override;

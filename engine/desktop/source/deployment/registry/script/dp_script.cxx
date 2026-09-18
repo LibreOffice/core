@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/script/XLibraryContainer3.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <memory>
 #include <string_view>
 
@@ -332,7 +332,7 @@ lcl_maybeRemoveScript(
         bool const bExists,
         OUString const& rName,
         std::u16string_view rScriptURL,
-        Reference<css::script::XLibraryContainer3> const& xScriptLibs)
+        Reference<css::script::XLibraryContainer> const& xScriptLibs)
 {
     if (bExists && xScriptLibs.is() && xScriptLibs->hasByName(rName))
     {
@@ -347,7 +347,7 @@ lcl_maybeAddScript(
         bool const bExists,
         OUString const& rName,
         OUString const& rScriptURL,
-        Reference<css::script::XLibraryContainer3> const& xScriptLibs)
+        Reference<css::script::XLibraryContainer> const& xScriptLibs)
 {
     if (!bExists || !xScriptLibs)
         return false;
@@ -394,10 +394,10 @@ void BackendImpl::PackageImpl::processPackage_(
     Reference<XComponentContext> const & xComponentContext = that->getComponentContext();
 
     bool bScript = !m_scriptURL.isEmpty();
-    Reference<css::script::XLibraryContainer3> xScriptLibs;
+    Reference<css::script::XLibraryContainer> xScriptLibs;
 
     bool bDialog = !m_dialogURL.isEmpty();
-    Reference<css::script::XLibraryContainer3> xDialogLibs;
+    Reference<css::script::XLibraryContainer> xDialogLibs;
 
     bool bRunning = !startup && office_is_running();
     if( bRunning )

@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
@@ -445,9 +444,8 @@ void SwMacrosTest::testFdo68983()
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
-    Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"Library1"_ustr));
-    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"Library1"_ustr, u"foo"_ustr));
+    CPPUNIT_ASSERT(xStorBasLib->isLibraryPasswordProtected(u"Library1"_ustr));
+    CPPUNIT_ASSERT(xStorBasLib->verifyLibraryPassword(u"Library1"_ustr, u"foo"_ustr));
     xBasLib->loadLibrary(u"Library1"_ustr);
     CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"Library1"_ustr));
 }
@@ -461,11 +459,10 @@ void SwMacrosTest::testFdo87530()
         Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
-        Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
         Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary(u"BarLibrary"_ustr));
         xLibrary->insertByName(u"BarModule"_ustr,
                 cpo::uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
-        xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
+        xStorBasLib->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
     // Password protected documents can't be validated
@@ -478,9 +475,8 @@ void SwMacrosTest::testFdo87530()
         Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
         Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
         Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
-        Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"BarLibrary"_ustr));
-        CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"BarLibrary"_ustr, u"foo"_ustr));
+        CPPUNIT_ASSERT(xStorBasLib->isLibraryPasswordProtected(u"BarLibrary"_ustr));
+        CPPUNIT_ASSERT(xStorBasLib->verifyLibraryPassword(u"BarLibrary"_ustr, u"foo"_ustr));
         xBasLib->loadLibrary(u"BarLibrary"_ustr);
         CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"BarLibrary"_ustr));
         Reference<container::XNameContainer> xLibrary(xBasLib->getByName(u"BarLibrary"_ustr), UNO_QUERY);
@@ -491,7 +487,7 @@ void SwMacrosTest::testFdo87530()
         Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary(u"FooLibrary"_ustr));
         xFooLib->insertByName(u"FooModule"_ustr,
                 cpo::uno::Any(u"Sub Main\nEnd Sub\n"_ustr));
-        xBasLibPwd->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
+        xStorBasLib->changeLibraryPassword(u"FooLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
     saveAndReload(TestFilter::ODT);
@@ -500,9 +496,8 @@ void SwMacrosTest::testFdo87530()
     Reference<document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
     Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
-    Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected(u"FooLibrary"_ustr));
-    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword(u"FooLibrary"_ustr, u"foo"_ustr));
+    CPPUNIT_ASSERT(xStorBasLib->isLibraryPasswordProtected(u"FooLibrary"_ustr));
+    CPPUNIT_ASSERT(xStorBasLib->verifyLibraryPassword(u"FooLibrary"_ustr, u"foo"_ustr));
     xBasLib->loadLibrary(u"FooLibrary"_ustr);
     CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(u"FooLibrary"_ustr));
     Reference<container::XNameContainer> xLibrary(xBasLib->getByName(u"FooLibrary"_ustr), UNO_QUERY);

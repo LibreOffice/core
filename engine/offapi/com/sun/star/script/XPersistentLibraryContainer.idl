@@ -33,7 +33,7 @@ module com { module sun { module star { module script {
 interface XPersistentLibraryContainer
 {
     interface ::com::sun::star::util::XModifiable;
-    interface XLibraryContainer2;
+    interface XLibraryContainer;
 
     /** denotes the root location associated with the container.
 

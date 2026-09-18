@@ -86,7 +86,7 @@ namespace basctl
     using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::task::XStatusIndicator;
     using ::cpo::uno::Any;
-    using ::com::sun::star::script::XLibraryContainer2;
+    using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
     using ::com::sun::star::uri::XUriReference;
@@ -912,7 +912,7 @@ namespace basctl
         bool bIsShared = false;
         try
         {
-            Reference< XLibraryContainer2 > xLibContainer( getLibraryContainer( _eType ), UNO_QUERY_THROW );
+            Reference< XLibraryContainer > xLibContainer( getLibraryContainer( _eType ), UNO_QUERY_THROW );
 
             if ( !xLibContainer->hasByName( _rLibName ) || !xLibContainer->isLibraryLink( _rLibName ) )
                 return false;

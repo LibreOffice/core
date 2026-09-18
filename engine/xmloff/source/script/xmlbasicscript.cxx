@@ -188,7 +188,7 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
 // BasicEmbeddedLibraryElement
 
 BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement(
-    SvXMLImport& rImport, const Reference<script::XLibraryContainer2>& rxLibContainer,
+    SvXMLImport& rImport, const Reference<script::XLibraryContainer>& rxLibContainer,
     OUString aLibName, bool bReadOnly)
     : BasicElementBase(rImport)
     , m_xLibContainer(rxLibContainer)

@@ -59,7 +59,7 @@
 #include <com/sun/star/script/XStarBasicModuleInfo.hpp>
 #include <com/sun/star/script/XStarBasicDialogInfo.hpp>
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
@@ -1385,13 +1385,12 @@ bool BasicManager::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >
 {
     try
     {
-        uno::Reference< container::XNameAccess > xScripts( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
-        uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
+        uno::Reference< script::XLibraryContainer > xScripts( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
         const cpo::uno::Sequence< OUString > aNames( xScripts->getElementNames() );
         for ( auto const & scriptElementName : aNames )
         {
-            if( !xPassword->isLibraryPasswordProtected( scriptElementName ) )
+            if( !xScripts->isLibraryPasswordProtected( scriptElementName ) )
                 continue;
 
             StarBASIC* pBasicLib = GetLib( scriptElementName );

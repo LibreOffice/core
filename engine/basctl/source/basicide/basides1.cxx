@@ -36,8 +36,7 @@
 #include <basctl/basctldllpublic.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <svl/srchdefs.hxx>
@@ -600,8 +599,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
-                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
+                    if ( xModLibContainer->isLibraryPasswordProtected( aLibName ) && !xModLibContainer->isLibraryPasswordVerified( aLibName ) )
                     {
                         OUString aPassword;
                         bOK = QueryPassword(rReq.GetFrameWeld(), xModLibContainer, aLibName, aPassword);
@@ -1307,8 +1305,8 @@ void Shell::GetState(SfxItemSet &rSet)
             case SID_BASICIDE_NEWMODULE:
             case SID_BASICIDE_NEWDIALOG:
             {
-                Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
-                Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
+                Reference< script::XLibraryContainer > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
+                Reference< script::XLibraryContainer > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
                 if ( ( xModLibContainer.is() && xModLibContainer->hasByName( m_aCurLibName ) && xModLibContainer->isLibraryReadOnly( m_aCurLibName ) ) ||
                      ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( m_aCurLibName ) && xDlgLibContainer->isLibraryReadOnly( m_aCurLibName ) ) )
                     rSet.DisableItem(nWh);

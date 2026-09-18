@@ -45,8 +45,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
@@ -403,13 +402,11 @@ void ScriptContainersListBox::Insert(
 
             OUString aLibName = m_xTreeView->get_text(*xNewEntryIter);
 
-            cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+            cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                 aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName))
             {
-                cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
-                    xModLibContainer, cpo::uno::UNO_QUERY);
-                if (xPasswd.is() && xPasswd->isLibraryPasswordProtected(aLibName))
+                if (xModLibContainer->isLibraryPasswordProtected(aLibName))
                 {
                     // password protected
                     m_xTreeView->set_image(*xNewEntryIter, RID_CUIBMP_LOCKED);
@@ -560,7 +557,7 @@ IMPL_LINK(ScriptContainersListBox, QueryTooltip, const weld::TreeIter&, rEntryIt
             if (!aDocument.isAlive())
                 return OUString();
 
-            cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+            cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                 aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             // check for linked library
             OUString aLibName = m_xTreeView->get_text(rEntryIter);
@@ -593,14 +590,12 @@ IMPL_LINK(ScriptContainersListBox, ExpandingHdl, const weld::TreeIter&, rEntryIt
             OUString aLibName = m_xTreeView->get_text(rEntryIter);
 
             // check if the library is password protected
-            cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+            cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                 aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName))
             {
-                cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
-                    xModLibContainer, cpo::uno::UNO_QUERY);
-                if (xPasswd.is() && xPasswd->isLibraryPasswordProtected(aLibName)
-                    && !xPasswd->isLibraryPasswordVerified(aLibName))
+                if (xModLibContainer->isLibraryPasswordProtected(aLibName)
+                    && !xModLibContainer->isLibraryPasswordVerified(aLibName))
                 {
                     // ensure selection before password dialog is shown
                     m_xTreeView->select(rEntryIter);
@@ -948,7 +943,7 @@ void MacroManagerDialog::UpdateUI()
             if (aDocument.isAlive())
             {
                 // if this is a Basic linked library use the link url name for the description string
-                cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+                cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                     aDocument.getLibraryContainer(basctl::E_SCRIPTS));
                 OUString aLibName = rTreeView.get_text(*xSelectedIter);
                 if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
@@ -1045,8 +1040,8 @@ void MacroManagerDialog::CheckButtons()
                 OUString aLibName = m_xScriptContainersListBox->GetSelectedEntryContainerName(
                     ScriptContainerType::LIBRARY);
 
-                cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
-                    aDocument.getLibraryContainer(basctl::E_SCRIPTS), cpo::uno::UNO_QUERY);
+                cpo::uno::Reference<css::script::XLibraryContainer> xPasswd(
+                    aDocument.getLibraryContainer(basctl::E_SCRIPTS));
 
                 if (xPasswd.is() && xPasswd->isLibraryPasswordProtected(aLibName)
                     && !xPasswd->isLibraryPasswordVerified(aLibName))
@@ -1060,7 +1055,7 @@ void MacroManagerDialog::CheckButtons()
                 else
                 {
                     // check, if library is readonly
-                    cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+                    cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                         aDocument.getLibraryContainer(basctl::E_SCRIPTS));
 
                     bool bReadOnly = xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
@@ -1094,9 +1089,9 @@ void MacroManagerDialog::CheckButtons()
                     OUString aLibName = m_xScriptContainersListBox->GetSelectedEntryContainerName(
                         ScriptContainerType::LIBRARY);
 
-                    cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+                    cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                         aDocument.getLibraryContainer(basctl::E_SCRIPTS));
-                    cpo::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
+                    cpo::uno::Reference<css::script::XLibraryContainer> xDlgLibContainer(
                         aDocument.getLibraryContainer(basctl::E_DIALOGS));
 
                     bool bReadOnly
@@ -1241,7 +1236,7 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
         // tdf#151741 - store all libraries to the file system, otherwise they
         // cannot be renamed/moved since the SfxLibraryContainer::renameLibrary
         // moves the folders/files on the file system
-        cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+        cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
             rDocument.getLibraryContainer(basctl::E_SCRIPTS));
         cpo::uno::Reference<css::script::XPersistentLibraryContainer> xModPersLibContainer(
             xModLibContainer, cpo::uno::UNO_QUERY);
@@ -1422,8 +1417,8 @@ IMPL_LINK(MacroManagerDialog, CheckPasswordHdl, SvxPasswordDialog*, pDlg, bool)
 
     bool bRet = false;
 
-    cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
-        aDocument.getLibraryContainer(basctl::E_SCRIPTS), cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::XLibraryContainer> xPasswd(
+        aDocument.getLibraryContainer(basctl::E_SCRIPTS));
 
     if (xPasswd.is())
     {
@@ -1626,9 +1621,9 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
 bool MacroManagerDialog::IsLibraryReadOnlyOrFailedPasswordQuery(
     const basctl::ScriptDocument& rDocument, const weld::TreeIter* pIter)
 {
-    cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+    cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
         rDocument.getLibraryContainer(basctl::E_SCRIPTS));
-    cpo::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
+    cpo::uno::Reference<css::script::XLibraryContainer> xDlgLibContainer(
         rDocument.getLibraryContainer(basctl::E_DIALOGS));
 
     OUString aLibName
@@ -1655,10 +1650,8 @@ bool MacroManagerDialog::IsLibraryReadOnlyOrFailedPasswordQuery(
     {
         bool bOK = true;
         // check password
-        cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xModLibContainer,
-                                                                            cpo::uno::UNO_QUERY);
-        if (xPasswd.is() && xPasswd->isLibraryPasswordProtected(aLibName)
-            && !xPasswd->isLibraryPasswordVerified(aLibName))
+        if (xModLibContainer->isLibraryPasswordProtected(aLibName)
+            && !xModLibContainer->isLibraryPasswordVerified(aLibName))
         {
             OUString sPassword;
             bOK = basctl::QueryPassword(m_xDialog.get(), xModLibContainer, aLibName, sPassword,
@@ -1714,11 +1707,11 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
         bool bSuccess = true;
         try
         {
-            cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+            cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
                 rDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(sOldName))
                 xModLibContainer->renameLibrary(sOldName, sNewName);
-            cpo::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
+            cpo::uno::Reference<css::script::XLibraryContainer> xDlgLibContainer(
                 rDocument.getLibraryContainer(basctl::E_DIALOGS));
             if (xDlgLibContainer.is() && xDlgLibContainer->hasByName(sOldName))
                 xDlgLibContainer->renameLibrary(sOldName, sNewName);
@@ -1802,9 +1795,9 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogDelete(
 
         // check, if library is link
         bool bIsLibraryLink = false;
-        cpo::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
+        cpo::uno::Reference<css::script::XLibraryContainer> xModLibContainer(
             rDocument.getLibraryContainer(basctl::E_SCRIPTS));
-        cpo::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
+        cpo::uno::Reference<css::script::XLibraryContainer> xDlgLibContainer(
             rDocument.getLibraryContainer(basctl::E_DIALOGS));
         if ((xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
              && xModLibContainer->isLibraryLink(aLibName))
@@ -1915,38 +1908,33 @@ void MacroManagerDialog::BasicScriptsLibraryPassword(const basctl::ScriptDocumen
     // check if library is password protected --> this is for setting and removing password
     if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName))
     {
-        cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xModLibContainer,
-                                                                            cpo::uno::UNO_QUERY);
-        if (xPasswd.is())
+        if (xModLibContainer->isLibraryPasswordProtected(aLibName)
+            && !xModLibContainer->isLibraryPasswordVerified(aLibName))
         {
-            if (xPasswd->isLibraryPasswordProtected(aLibName)
-                && !xPasswd->isLibraryPasswordVerified(aLibName))
+            // password not verified
+            OUString sPassword;
+            if (basctl::QueryPassword(m_xDialog.get(), xModLibContainer, aLibName, sPassword,
+                                      true, true))
             {
-                // password not verified
-                OUString sPassword;
-                if (basctl::QueryPassword(m_xDialog.get(), xModLibContainer, aLibName, sPassword,
-                                          true, true))
-                {
-                    CheckButtons();
-                }
-                return;
+                CheckButtons();
             }
-
-            // set/change password dialog
-            SvxPasswordDialog aDlg(m_xDialog.get(), !xPasswd->isLibraryPasswordProtected(aLibName));
-            aDlg.SetCheckPasswordHdl(LINK(this, MacroManagerDialog, CheckPasswordHdl));
-
-            if (aDlg.run() == RET_OK)
-            {
-                if (xPasswd->isLibraryPasswordProtected(aLibName))
-                    rTreeView.set_image(*xSelectedIter, RID_CUIBMP_LOCKED);
-                else
-                    rTreeView.set_image(*xSelectedIter, RID_CUIBMP_LIB);
-                basctl::MarkDocumentModified(rDocument);
-            }
-
-            rTreeView.grab_focus();
+            return;
         }
+
+        // set/change password dialog
+        SvxPasswordDialog aDlg(m_xDialog.get(), !xModLibContainer->isLibraryPasswordProtected(aLibName));
+        aDlg.SetCheckPasswordHdl(LINK(this, MacroManagerDialog, CheckPasswordHdl));
+
+        if (aDlg.run() == RET_OK)
+        {
+            if (xModLibContainer->isLibraryPasswordProtected(aLibName))
+                rTreeView.set_image(*xSelectedIter, RID_CUIBMP_LOCKED);
+            else
+                rTreeView.set_image(*xSelectedIter, RID_CUIBMP_LIB);
+            basctl::MarkDocumentModified(rDocument);
+        }
+
+        rTreeView.grab_focus();
     }
 }
 

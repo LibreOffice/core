@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -40,7 +40,7 @@ public:
 class BasicLibrariesElement : public BasicElementBase
 {
 private:
-    cpo::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
+    cpo::uno::Reference<css::script::XLibraryContainer> m_xLibContainer;
 
 public:
     BasicLibrariesElement(SvXMLImport& rImport,
@@ -54,7 +54,7 @@ public:
 class BasicEmbeddedLibraryElement : public BasicElementBase
 {
 private:
-    cpo::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
+    cpo::uno::Reference<css::script::XLibraryContainer> m_xLibContainer;
     cpo::uno::Reference<css::container::XNameContainer> m_xLib;
     OUString const m_aLibName;
     bool const m_bReadOnly;
@@ -62,7 +62,7 @@ private:
 public:
     BasicEmbeddedLibraryElement(
         SvXMLImport& rImport,
-        const cpo::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
+        const cpo::uno::Reference<css::script::XLibraryContainer>& rxLibContainer,
         OUString aLibName, bool bReadOnly);
 
     virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(

@@ -48,7 +48,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/propertyvalue.hxx>
@@ -182,7 +182,7 @@ void scriptCat(const Reference< XModel >& xDoc )
     }
 
     // ignore xScriptAccess->getDialogLibraries() for now
-    Reference< css::script::XLibraryContainer2 > xLibraries(
+    Reference< css::script::XLibraryContainer > xLibraries(
         xScriptAccess->getBasicLibraries() );
 
     if ( !xLibraries.is() )

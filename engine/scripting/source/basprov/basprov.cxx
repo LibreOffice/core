@@ -40,7 +40,7 @@
 #include <sfx2/app.hxx>
 
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
@@ -84,15 +84,14 @@ namespace basprov
     {
         bool bIsShared = false;
 
-        Reference< script::XLibraryContainer2 > xLibContainer( rxLibContainer, UNO_QUERY );
-        if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) && xLibContainer->isLibraryLink( rLibName ) )
+        if ( rxLibContainer.is() && rxLibContainer->hasByName( rLibName ) && rxLibContainer->isLibraryLink( rLibName ) )
         {
             OUString aFileURL;
             if ( m_xContext.is() )
             {
                 Reference< uri::XUriReferenceFactory > xUriFac( uri::UriReferenceFactory::create( m_xContext ) );
 
-                OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
+                OUString aLinkURL( rxLibContainer->getLibraryLinkURL( rLibName ) );
                 Reference<  uri::XUriReference > xUriRef = xUriFac->parse( aLinkURL );
 
                 if ( xUriRef.is() )

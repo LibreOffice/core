@@ -24,8 +24,7 @@
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xml_helper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -132,7 +131,7 @@ bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDe
                 m_xHandler->ignorableWhitespace( OUString() );
                 m_xHandler->startElement( aLibContElementName, pLibContElement );
 
-                Reference< script::XLibraryContainer2 > xLibContainer;
+                Reference< script::XLibraryContainer > xLibContainer;
 
                 // try the XEmbeddedScripts interface
                 Reference< document::XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
@@ -207,8 +206,7 @@ bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDe
                                 }
 
                                 // TODO: password protected libraries
-                                Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
-                                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) )
+                                if ( xLibContainer->isLibraryPasswordProtected( rLibName ) )
                                     continue;
 
                                 // <ooo/script:library-embedded...

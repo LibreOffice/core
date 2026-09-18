@@ -32,7 +32,6 @@
 #include "iderdll2.hxx"
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
@@ -810,11 +809,10 @@ bool QueryPassword(weld::Widget* pDialogParent, const Reference< script::XLibrar
         {
             if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) )
             {
-                Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
-                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
+                if ( xLibContainer->isLibraryPasswordProtected( rLibName ) && !xLibContainer->isLibraryPasswordVerified( rLibName ) )
                 {
                     rPassword = aDlg.GetPassword();
-                    bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
+                    bOK = xLibContainer->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )
                     {

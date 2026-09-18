@@ -2840,11 +2840,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/script,\
 	ModuleType \
 	NativeObjectWrapper \
 	XLibraryContainer \
-	XLibraryContainer2 \
-	XLibraryContainer3 \
-	XLibraryContainerExport \
-	XLibraryContainerPassword \
-	XLibraryQueryExecutable \
 	XPersistentLibraryContainer \
 	XStorageBasedLibraryContainer \
 ))

@@ -46,7 +46,6 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <editeng/brushitem.hxx>
 
 using namespace ::com::sun::star;
@@ -311,10 +310,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
     cpo::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
     cpo::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
                                                             UNO_QUERY_THROW);
-    cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
-    CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
-    CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, u"password"_ustr));
+    CPPUNIT_ASSERT(xLC->isLibraryPasswordProtected(sLibName));
+    CPPUNIT_ASSERT(!xLC->isLibraryPasswordVerified(sLibName));
+    CPPUNIT_ASSERT(xLC->verifyLibraryPassword(sLibName, u"password"_ustr));
     xLC->loadLibrary(sLibName);
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
 
@@ -354,10 +352,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
     cpo::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
     cpo::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
         UNO_QUERY_THROW);
-    cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
-    CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
-    CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, u"password"_ustr));
+    CPPUNIT_ASSERT(xLC->isLibraryPasswordProtected(sLibName));
+    CPPUNIT_ASSERT(!xLC->isLibraryPasswordVerified(sLibName));
+    CPPUNIT_ASSERT(xLC->verifyLibraryPassword(sLibName, u"password"_ustr));
     xLC->loadLibrary(sLibName);
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
 

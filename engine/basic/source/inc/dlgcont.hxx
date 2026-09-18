@@ -77,7 +77,6 @@ public:
     // Methods XServiceInfo
     virtual OUString getImplementationName( ) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override;
-    // XLibraryQueryExecutable
     virtual bool HasExecutableCode(const OUString&) override;
 };
 

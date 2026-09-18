@@ -2406,7 +2406,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
     pImplLib->implSetModified(false, guard);
 }
 
-// Methods XLibraryContainer2
+// Methods XLibraryContainer
 bool SfxLibraryContainer::isLibraryLink( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -2665,7 +2665,7 @@ void SfxLibraryContainer::disposing(std::unique_lock<std::mutex>& guard)
     mxOwnerDocument.clear();
 }
 
-// Methods XLibraryContainerPassword
+// Methods XLibraryContainer
 bool SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
 {
     return false;
@@ -2701,7 +2701,7 @@ void SfxLibraryContainer::removeContainerListener( const Reference< XContainerLi
     maNameContainer.removeContainerListener(xListener, guard);
 }
 
-// Methods XLibraryContainerExport
+// Methods XLibraryContainer
 void SfxLibraryContainer::exportLibrary( const OUString& Name, const OUString& URL,
     const Reference< XInteractionHandler >& Handler )
 {
@@ -2756,7 +2756,7 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
-//XLibraryContainer3
+//XLibraryContainer
 OUString SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );

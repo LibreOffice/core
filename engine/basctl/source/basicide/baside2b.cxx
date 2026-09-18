@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
@@ -1126,7 +1126,7 @@ void EditorWindow::CreateEditEngine()
     // set readonly mode for readonly libraries
     ScriptDocument aDocument(rModulWindow.GetDocument());
     OUString aOULibName(rModulWindow.GetLibName());
-    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
+    Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
     if (xModLibContainer.is()
      && xModLibContainer->hasByName(aOULibName)
      && xModLibContainer->isLibraryReadOnly(aOULibName))
