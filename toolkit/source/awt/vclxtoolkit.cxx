@@ -97,7 +97,7 @@
 
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/calendar.hxx>

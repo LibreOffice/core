@@ -22,7 +22,7 @@
 #include "AccessibleGridControlBase.hxx"
 #include "AccessibleGridControlHeader.hxx"
 #include "AccessibleGridControlTable.hxx"
-#include "tablecontrol_impl.hxx"
+#include "TableControl.hxx"
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>

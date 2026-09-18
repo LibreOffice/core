@@ -21,7 +21,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlBase.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

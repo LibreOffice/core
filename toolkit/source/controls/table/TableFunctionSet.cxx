@@ -18,7 +18,7 @@
  */
 
 #include <controls/table/TableFunctionSet.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 
 namespace svt::table
 {

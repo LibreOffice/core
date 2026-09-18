@@ -21,7 +21,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/gridtablerenderer.hxx>
 #include "unocontroltablemodel.hxx"

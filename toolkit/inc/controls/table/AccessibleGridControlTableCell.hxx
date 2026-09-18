@@ -19,7 +19,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlBase.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>

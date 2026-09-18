@@ -18,7 +18,7 @@
  */
 
 #include <controls/table/mousefunction.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 #include <controls/table/tablesort.hxx>
 
 #include <comphelper/diagnose_ex.hxx>

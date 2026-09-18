@@ -21,7 +21,7 @@
 #pragma once
 
 #include <controls/table/AccessibleTableControlObjType.hxx>
-#include <controls/table/tablecontrol_impl.hxx>
+#include <controls/table/TableControl.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
