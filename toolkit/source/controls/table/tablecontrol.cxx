@@ -454,9 +454,7 @@ sal_Int32 TableControl::GetColumnCount() const { return m_pImpl->getColumnCount(
 bool TableControl::ConvertPointToCellAddress(sal_Int32& _rnRow, sal_Int32& _rnColPos,
                                              const Point& _rPoint)
 {
-    _rnRow = m_pImpl->getRowAtPoint(_rPoint);
-    _rnColPos = m_pImpl->getColAtPoint(_rPoint);
-    return _rnRow >= 0;
+    return m_pImpl->convertPointToCellAddress(_rnRow, _rnColPos, _rPoint);
 }
 
 void TableControl::FillAccessibleStateSetForCell(sal_Int64& _rStateSet, sal_Int32 _nRow,

@@ -338,6 +338,7 @@ public:
     ScrollBar* getHorzScrollbar() { return m_pHScroll; }
     ScrollBar* getVertScrollbar() { return m_pVScroll; }
 
+    bool convertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos, const Point& rPoint);
     tools::Rectangle calcHeaderRect(bool bColHeader);
     tools::Rectangle calcHeaderCellRect(bool bColHeader, sal_Int32 nPos);
     tools::Rectangle calcTableRect() const;

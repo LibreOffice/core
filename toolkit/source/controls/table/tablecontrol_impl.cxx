@@ -2180,6 +2180,14 @@ void TableControl_Impl::commitTableEvent(sal_Int16 const i_eventID, const Any& i
         m_xAccessibleTable->commitTableEvent(i_eventID, i_newValue, i_oldValue);
 }
 
+bool TableControl_Impl::convertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos,
+                                                  const Point& rPoint)
+{
+    rRow = getRowAtPoint(rPoint);
+    rColPos = getColAtPoint(rPoint);
+    return rRow >= 0;
+}
+
 tools::Rectangle TableControl_Impl::calcHeaderRect(bool bColHeader)
 {
     tools::Rectangle const aRectTableWithHeaders(impl_getAllVisibleCellsArea());
