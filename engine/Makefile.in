@@ -224,10 +224,12 @@ clean-host-except-workdir:
 
 # Deleting the build directory takes about a minute on Windows where renaming it takes no time.
 # stage-clean does the rest of a clean and moves the workdir aside, and the build then deletes it as
-# one of its parallel jobs, so "make stage-clean check" overlaps the delete with the compile.
+# one of its parallel jobs, so "make stage-clean check" overlaps the delete with the compile. The
+# rename needs every file under the workdir closed, where a delete in place copes with one left open
+# by an interrupted build, so fall back to deleting in place.
 stage-clean: clean-host-except-workdir clean-build
 	rm -fr $(WORKDIR).deleting
-	if test -d $(WORKDIR); then mv $(WORKDIR) $(WORKDIR).deleting; fi
+	if test -d $(WORKDIR); then mv $(WORKDIR) $(WORKDIR).deleting || rm -fr $(WORKDIR); fi
 
 clean-build:
 ifneq ($(CROSS_COMPILING),)
