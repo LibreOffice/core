@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <controls/table/AccessibleTableControlObjType.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/tablemodel.hxx>
 
@@ -26,17 +27,6 @@
 #include <vcl/seleng.hxx>
 
 #include <memory>
-
-enum class AccessibleTableControlObjType
-{
-    GRIDCONTROL, /// The GridControl itself.
-    TABLE, /// The data table.
-    ROWHEADERBAR, /// The row header bar.
-    COLUMNHEADERBAR, /// The horizontal column header bar.
-    TABLECELL, /// A cell of the data table.
-    ROWHEADERCELL, /// A cell of the row header bar.
-    COLUMNHEADERCELL, /// A cell of the column header bar.
-};
 
 namespace svt::table
 {

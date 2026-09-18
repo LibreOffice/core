@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <controls/table/AccessibleTableControlObjType.hxx>
 #include <controls/table/tablecontrol.hxx>
 
 #include <rtl/ustring.hxx>

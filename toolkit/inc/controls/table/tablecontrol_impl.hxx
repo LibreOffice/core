@@ -20,6 +20,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControl.hxx>
+#include <controls/table/AccessibleTableControlObjType.hxx>
 #include <controls/table/tablemodel.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 
