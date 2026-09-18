@@ -303,17 +303,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().setDestination(Destination::FOOTNOTE);
                     Mapper().startCharacterGroup();
                     runProps();
-                    if (!m_aStates.top().getCurrentBuffer())
-                        resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
-                    else
-                    {
-                        RTFSprms aAttributes;
-                        aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
-                        aAttributes.set(Id(1), new RTFValue(nId));
-                        aAttributes.set(Id(2), new RTFValue(aCustomMark));
-                        m_aStates.top().getCurrentBuffer()->push_back(Buf_t(
-                            RTFBufferTypes::ResolveSubstream, new RTFValue(aAttributes), nullptr));
-                    }
+                    bufferOrResolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
                     if (bCustomMark)
                     {
                         m_aStates.top().getCharacterAttributes().clear();
@@ -346,19 +336,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTFKeyword::ANNOTATION:
                 if (!m_pSuperstream)
                 {
-                    if (!m_aStates.top().getCurrentBuffer())
-                    {
-                        resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
-                    }
-                    else
-                    {
-                        RTFSprms aAttributes;
-                        aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
-                        aAttributes.set(Id(1), new RTFValue(NS_ooxml::LN_annotation));
-                        aAttributes.set(Id(2), new RTFValue(OUString()));
-                        m_aStates.top().getCurrentBuffer()->push_back(Buf_t(
-                            RTFBufferTypes::ResolveSubstream, new RTFValue(aAttributes), nullptr));
-                    }
+                    bufferOrResolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation,
+                                             OUString());
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
                 else
