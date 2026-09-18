@@ -738,43 +738,11 @@ void ChartModel::storeToStorage(
 void ChartModel::switchToStorage( const Reference< embed::XStorage >& xStorage )
 {
     m_xStorage = xStorage;
-    impl_notifyStorageChangeListeners();
 }
 
 Reference< embed::XStorage > ChartModel::getDocumentStorage()
 {
     return m_xStorage;
-}
-
-void ChartModel::impl_notifyStorageChangeListeners()
-{
-    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
-    if( m_aLifeTimeManager.m_aStorageChangeListeners.getLength(aGuard) )
-    {
-        m_aLifeTimeManager.m_aStorageChangeListeners.forEach(aGuard,
-            [this](const uno::Reference<document::XStorageChangeListener>& l)
-            {
-                l->notifyStorageChange( static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
-            });
-    }
-}
-
-void ChartModel::addStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
-{
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
-        return; //behave passive if already disposed or closed
-
-    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
-    m_aLifeTimeManager.m_aStorageChangeListeners.addInterface( aGuard, xListener );
-}
-
-void ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
-{
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
-        return; //behave passive if already disposed or closed
-
-    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
-    m_aLifeTimeManager.m_aStorageChangeListeners.removeInterface(aGuard, xListener );
 }
 
 } //  namespace chart

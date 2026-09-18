@@ -22,7 +22,6 @@
 #include <osl/conditn.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 
-namespace com::sun::star::document { class XStorageChangeListener; }
 namespace com::sun::star::lang { class XComponent; }
 namespace com::sun::star::lang { class XEventListener; }
 namespace com::sun::star::util { class CloseVetoException; }
@@ -48,7 +47,6 @@ public:
     mutable std::mutex                    m_aAccessMutex;
     ::comphelper::OInterfaceContainerHelper4<css::util::XCloseListener> m_aCloseListeners;
     ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_aModifyListeners;
-    ::comphelper::OInterfaceContainerHelper4<css::document::XStorageChangeListener> m_aStorageChangeListeners;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
     ::comphelper::OInterfaceContainerHelper4<css::view::XSelectionChangeListener> m_aSelectionChangeListeners;
 

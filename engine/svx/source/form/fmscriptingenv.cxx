@@ -479,7 +479,6 @@ namespace svxform
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.document.XEventBroadcaster",u"addEventListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.document.XEventBroadcaster",u"removeEventListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.document.XEventListener",u"notifyEvent"),
-            pair<std::u16string_view,std::u16string_view>(u"com.sun.star.document.XStorageChangeListener",u"notifyStorageChange"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.drawing.XControlShape",u"setControl"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.form.XApproveActionBroadcaster",u"addApproveActionListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.form.XApproveActionBroadcaster",u"removeApproveActionListener"),

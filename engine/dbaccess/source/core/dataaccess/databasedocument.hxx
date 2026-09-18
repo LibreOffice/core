@@ -171,7 +171,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
 
     ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>                        m_aModifyListeners;
     ::comphelper::OInterfaceContainerHelper3<css::util::XCloseListener>                         m_aCloseListener;
-    ::comphelper::OInterfaceContainerHelper3<css::document::XStorageChangeListener>             m_aStorageListeners;
 
     std::unique_ptr<DocumentEvents>                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
@@ -223,16 +222,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             const StoreType _eType,
             DocumentGuard& _rGuard
          );
-
-    /** notifies our storage change listeners that our underlying storage changed
-
-        @param _rxNewRootStorage
-            the new root storage to be notified. If <NULL/>, it is assumed that no storage change actually
-            happened, and the listeners are not notified.
-    */
-    void    impl_notifyStorageChange_nolck_nothrow(
-                const cpo::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
-            );
 
     /// write a single XML stream into the package
     void WriteThroughComponent(
@@ -389,8 +378,6 @@ public:
     virtual void storeToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
     virtual void switchToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual cpo::uno::Reference< css::embed::XStorage > getDocumentStorage(  ) override;
-    virtual void addStorageChangeListener( const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
-    virtual void removeStorageChangeListener( const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
 
     // XEmbeddedScripts
     virtual cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > getBasicLibraries() override;

@@ -220,9 +220,6 @@ private:
     /// @throws cpo::uno::RuntimeException
     void
         impl_notifyCloseListeners();
-    /// @throws cpo::uno::RuntimeException
-    void
-        impl_notifyStorageChangeListeners();
 
     void impl_store(
         const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
@@ -458,10 +455,6 @@ public:
     virtual void switchToStorage(
         const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual cpo::uno::Reference< css::embed::XStorage > getDocumentStorage() override;
-    virtual void addStorageChangeListener(
-        const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
-    virtual void removeStorageChangeListener(
-        const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
 
     // for SvNumberFormatsSupplierObj
     // ____ XUnoTunnel ___

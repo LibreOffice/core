@@ -20,7 +20,6 @@
 #include <LifeTime.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/document/XStorageChangeListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -133,7 +132,6 @@ bool LifeTimeManager::dispose()
             lang::EventObject aEvent( xComponent );
             m_aCloseListeners.disposeAndClear( aGuard, aEvent );
             m_aModifyListeners.disposeAndClear( aGuard, aEvent );
-            m_aStorageChangeListeners.disposeAndClear( aGuard, aEvent );
             m_aEventListeners.disposeAndClear( aGuard, aEvent );
             m_aSelectionChangeListeners.disposeAndClear( aGuard, aEvent );
         }

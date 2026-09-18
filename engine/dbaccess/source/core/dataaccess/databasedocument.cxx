@@ -135,7 +135,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,ODatabaseDocument_OfficeDocument( getMutex() )
             ,m_aModifyListeners( getMutex() )
             ,m_aCloseListener( getMutex() )
-            ,m_aStorageListeners( getMutex() )
             ,m_pEventContainer( new DocumentEvents( *this, getMutex(), _pImpl->getDocumentEvents() ) )
             ,m_aEventNotifier( *this, getMutex() )
             ,m_aViewMonitor( m_aEventNotifier )
@@ -487,8 +486,6 @@ void ODatabaseDocument::initNew(  )
     // <- SYNCHRONIZED
 
     m_aEventNotifier.notifyDocumentEvent( u"OnCreate"_ustr, nullptr, Any() );
-
-    impl_notifyStorageChange_nolck_nothrow( xTempStor );
 }
 
 void ODatabaseDocument::load( const Sequence< PropertyValue >& Arguments )
@@ -1101,10 +1098,6 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     // reset our "modified" flag, and clear the guard
     impl_setModified_nothrow( false, _rGuard );
     // <- SYNCHRONIZED
-
-    // notify storage listeners
-    if ( xNewRootStorage.is() )
-        impl_notifyStorageChange_nolck_nothrow( xNewRootStorage );
 }
 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUString& _rURL ) const
@@ -1768,16 +1761,6 @@ Sequence< OUString > ODatabaseDocument::getDocumentSubStoragesNames(  )
     return xStorageAccess->getDocumentSubStoragesNames();
 }
 
-void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference< XStorage >& xNewRootStorage )
-{
-    Reference< XInterface > xMe( *this );
-
-    m_aStorageListeners.forEach(
-        [&xMe, &xNewRootStorage] (uno::Reference<XStorageChangeListener> const& xListener) {
-            return xListener->notifyStorageChange(xMe, xNewRootStorage);
-        });
-}
-
 void ODatabaseDocument::disposing()
 {
     if ( !m_pImpl.is() )
@@ -1797,7 +1780,6 @@ void ODatabaseDocument::disposing()
     lang::EventObject aDisposeEvent(static_cast<XWeak*>(this));
     m_aModifyListeners.disposeAndClear( aDisposeEvent );
     m_aCloseListener.disposeAndClear( aDisposeEvent );
-    m_aStorageListeners.disposeAndClear( aDisposeEvent );
 
     // this is the list of objects which we currently hold as member. Upon resetting
     // those members, we can (potentially) release the last reference to them, in which
@@ -1954,25 +1936,12 @@ void ODatabaseDocument::switchToStorage( const Reference< XStorage >& _rxNewRoot
     Reference< XStorage > xNewRootStorage( m_pImpl->switchToStorage( _rxNewRootStorage ) );
 
     aGuard.clear();
-    impl_notifyStorageChange_nolck_nothrow( xNewRootStorage );
 }
 
 Reference< XStorage > ODatabaseDocument::getDocumentStorage(  )
 {
     DocumentGuard aGuard(*this, DocumentGuard::MethodUsedDuringInit);
     return m_pImpl->getOrCreateRootStorage();
-}
-
-void ODatabaseDocument::addStorageChangeListener( const Reference< XStorageChangeListener >& Listener )
-{
-    DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
-    m_aStorageListeners.addInterface( Listener );
-}
-
-void ODatabaseDocument::removeStorageChangeListener( const Reference< XStorageChangeListener >& Listener )
-{
-    DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
-    m_aStorageListeners.removeInterface( Listener );
 }
 
 Reference< XStorageBasedLibraryContainer > ODatabaseDocument::getBasicLibraries()

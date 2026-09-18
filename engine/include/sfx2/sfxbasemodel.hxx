@@ -425,13 +425,6 @@ public:
 
     virtual cpo::uno::Reference< css::embed::XStorage > getDocumentStorage() override;
 
-    virtual void addStorageChangeListener(
-            const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
-
-    virtual void removeStorageChangeListener(
-            const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
-
-
     //  XVisualObject
 
 

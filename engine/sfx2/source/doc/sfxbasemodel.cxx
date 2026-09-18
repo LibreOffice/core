@@ -43,7 +43,6 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/document/XStorageChangeListener.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -211,7 +210,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     comphelper::OInterfaceContainerHelper3<util::XModifyListener>  m_aModifyListeners;
     comphelper::OInterfaceContainerHelper3<document::XEventListener>  m_aDocumentEventListeners1;
     comphelper::OInterfaceContainerHelper3<document::XDocumentEventListener>  m_aDocumentEventListeners2;
-    comphelper::OInterfaceContainerHelper3<document::XStorageChangeListener>  m_aStorageChangeListeners;
     comphelper::OInterfaceContainerHelper3<util::XCloseListener>  m_aCloseListeners;
     std::unordered_map<cpo::uno::Reference< css::drawing::XShape >,
                        std::vector<cpo::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
@@ -249,7 +247,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_aModifyListeners      ( rMutex    )
             ,   m_aDocumentEventListeners1( rMutex  )
             ,   m_aDocumentEventListeners2( rMutex  )
-            ,   m_aStorageChangeListeners ( rMutex  )
             ,   m_aCloseListeners       ( rMutex    )
             ,   m_nControllerLockCount  ( 0         )
             ,   m_bClosed               ( false     )
@@ -781,7 +778,6 @@ void SfxBaseModel::dispose()
     m_pData->m_aModifyListeners.disposeAndClear( aEvent );
     m_pData->m_aDocumentEventListeners1.disposeAndClear( aEvent );
     m_pData->m_aDocumentEventListeners2.disposeAndClear( aEvent );
-    m_pData->m_aStorageChangeListeners.disposeAndClear( aEvent );
     m_pData->m_aCloseListeners.disposeAndClear( aEvent );
 
     m_pData->m_xDocumentProperties.clear();
@@ -3987,22 +3983,6 @@ Reference< embed::XStorage > SfxBaseModel::getDocumentStorage()
         throw io::IOException(); // TODO
 
     return m_pData->m_pObjectShell->GetStorage();
-}
-
-void SfxBaseModel::addStorageChangeListener(
-            const Reference< document::XStorageChangeListener >& xListener )
-{
-    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-
-    m_pData->m_aStorageChangeListeners.addInterface( xListener );
-}
-
-void SfxBaseModel::removeStorageChangeListener(
-            const Reference< document::XStorageChangeListener >& xListener )
-{
-    SfxModelGuard aGuard( *this );
-
-    m_pData->m_aStorageChangeListeners.removeInterface( xListener );
 }
 
 void SfxBaseModel::impl_getPrintHelper()
