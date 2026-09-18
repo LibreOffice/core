@@ -59,7 +59,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
 
     Reference< XPresentationSupplier > xPresentationSupplier( rImport.GetModel(), UNO_QUERY );
     if( xPresentationSupplier.is() )
-        mxPresProps.set( xPresentationSupplier->getPresentation(), UNO_QUERY );
+        mxPresProps = xPresentationSupplier->getPresentation();
 
     if( !mxPresProps.is() )
         return;

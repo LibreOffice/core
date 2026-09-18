@@ -23,7 +23,7 @@
 
 /** interface to control a running slide show.
 
-    @see XPresentation2
+    @see XPresentation
 */
 interface XSlideShowController
 {
@@ -31,7 +31,7 @@ interface XSlideShowController
     /** returns true if the slide show is still running.
         If this returns false, this component is already disposed.
         You can start a new slide show and get a new instance
-        of XSlideShowController from XPresentation2
+        of XSlideShowController from XPresentation
     */
     boolean isRunning();
 

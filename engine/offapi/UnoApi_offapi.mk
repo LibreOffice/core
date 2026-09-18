@@ -939,7 +939,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/presentation,\
 	OutlinerShape \
 	PageShape \
 	Presentation \
-	Presentation2 \
 	PresentationDocument \
 	PresentationView \
 	PreviewView \
@@ -2763,7 +2762,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/presentation,\
 	XCustomPresentationSupplier \
 	XHandoutMasterSupplier \
 	XPresentation \
-	XPresentation2 \
 	XPresentationPage \
 	XPresentationSupplier \
 	XShapeEventListener \

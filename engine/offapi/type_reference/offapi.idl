@@ -9328,7 +9328,7 @@ module com {
      service ::com::sun::star::drawing::PageShape;
     };
     published interface XPresentation {
-     interface ::cpo::uno::XInterface;
+     interface ::com::sun::star::beans::XPropertySet;
     };
     published service Presentation {
      interface ::com::sun::star::presentation::XPresentation;

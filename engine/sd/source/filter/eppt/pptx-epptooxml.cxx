@@ -1879,8 +1879,7 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor,
 
 void PowerPointExport::WritePresentationProps()
 {
-    Reference<beans::XPropertySet> xPresentationProps(mXModel->getPresentation(),
-                                                      uno::UNO_QUERY);
+    Reference<beans::XPropertySet> xPresentationProps(mXModel->getPresentation());
     bool bEndlessVal = xPresentationProps->getPropertyValue(u"IsEndless"_ustr).get<bool>();
     bool bChangeManually = xPresentationProps->getPropertyValue(u"IsAutomatic"_ustr).get<bool>();
     OUString sFirstPage = xPresentationProps->getPropertyValue(u"FirstPage"_ustr).get<OUString>();

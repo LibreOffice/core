@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <rtl/ref.hxx>
@@ -72,7 +72,7 @@ enum AnimationMode
     ANIMATIONMODE_PREVIEW
 };
 
-typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation2, css::lang::XServiceInfo > SlideshowBase;
+typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation, css::lang::XServiceInfo > SlideshowBase;
 
 class SlideShow final : public SlideshowBase
 {

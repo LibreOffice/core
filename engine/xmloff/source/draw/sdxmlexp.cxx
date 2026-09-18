@@ -1907,7 +1907,7 @@ void SdXMLExport::exportPresentationSettings()
         if( !xPresSupplier.is() )
             return;
 
-        Reference< XPropertySet > xPresProps( xPresSupplier->getPresentation(), UNO_QUERY );
+        Reference< XPropertySet > xPresProps = xPresSupplier->getPresentation();
         if( !xPresProps.is() )
             return;
 

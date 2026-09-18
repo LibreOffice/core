@@ -41,7 +41,7 @@
 namespace com::sun::star::xml::dom { class XNode; }
 namespace editeng { class SvxFieldItemUpdater; }
 namespace vcl { class Font; }
-namespace com::sun::star::presentation { class XPresentation2; }
+namespace com::sun::star::presentation { class XPresentation; }
 class SdOutliner;
 class Timer;
 class SfxObjectShell;

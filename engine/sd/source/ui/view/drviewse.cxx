@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <i18nutil/unicode.hxx>

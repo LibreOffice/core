@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module presentation {
     be displayed simultaneously on multiple targets.<p>
 
     Note: To control a running slide show inside a presentation, please
-    use XPresentation2 and XSlideShowController.
+    use XPresentation and XSlideShowController.
  */
 interface XSlideShow : ::cpo::uno::XInterface
 {

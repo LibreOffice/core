@@ -148,7 +148,7 @@ excludelist:
     sd/source/ui/inc/slideshow.hxx:
     # typedef needs a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/presentation/XPresentation2.hpp
+    - com/sun/star/presentation/XPresentation.hpp
     sd/source/ui/inc/unosrch.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XReplaceDescriptor.hpp
