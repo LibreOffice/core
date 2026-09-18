@@ -4381,7 +4381,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\ttile size Twips: " << _tileWidthTwips << 'x' << _tileHeightTwips
        << "\n\t\tclientZoomPercent: " << _clientZoomPercent
        << "\n\t\tclientEditMode: "
-       << (_clientEditMode ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
+       << (_clientEditMode.has_value() ? (*_clientEditMode ? "editing" : "viewing") : "unknown")
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
