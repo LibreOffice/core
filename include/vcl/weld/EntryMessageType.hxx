@@ -14,6 +14,7 @@ namespace weld
 enum class EntryMessageType
 {
     Normal,
+    Info,
     Warning,
     Error,
 };

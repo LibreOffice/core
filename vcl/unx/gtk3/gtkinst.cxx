@@ -12802,6 +12802,7 @@ namespace
         switch (eType)
         {
             case weld::EntryMessageType::Normal:
+            case weld::EntryMessageType::Info:
                 break;
             case weld::EntryMessageType::Warning:
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -12833,6 +12834,9 @@ namespace
                 break;
             case weld::EntryMessageType::Error:
                 gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+                break;
+            case weld::EntryMessageType::Info:
+                gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-information");
                 break;
         }
     }

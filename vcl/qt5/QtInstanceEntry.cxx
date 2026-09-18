@@ -143,6 +143,10 @@ void QtInstanceEntry::setMessageType(QLineEdit& rLineEdit, weld::EntryMessageTyp
             case weld::EntryMessageType::Normal:
                 // don't do anything special
                 return;
+            case weld::EntryMessageType::Info:
+                rLineEdit.addAction(QIcon::fromTheme("dialog-information"),
+                                    QLineEdit::TrailingPosition);
+                return;
             case weld::EntryMessageType::Warning:
                 rLineEdit.addAction(QIcon::fromTheme("dialog-warning"),
                                     QLineEdit::TrailingPosition);

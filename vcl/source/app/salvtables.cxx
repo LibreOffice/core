@@ -3217,19 +3217,24 @@ void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
             pEntry->SetControlForeground();
             pEntry->SetControlBackground();
             break;
+        case weld::EntryMessageType::Info:
+            pEntry->SetForceControlBackground(true);
+            pEntry->SetControlForeground(COL_BLACK);
+            pEntry->SetControlBackground(0xb4c7dc); // light blue 3
+            break;
         case weld::EntryMessageType::Warning:
             // tdf#114603: enable setting the background to a different color;
             // relevant for GTK; see also #i75179#
             pEntry->SetForceControlBackground(true);
             pEntry->SetControlForeground(COL_BLACK);
-            pEntry->SetControlBackground(0xffff38); // "light yellow 1"
+            pEntry->SetControlBackground(0xffffa6); // "light yellow 3"
             break;
         case weld::EntryMessageType::Error:
             // tdf#114603: enable setting the background to a different color;
             // relevant for GTK; see also #i75179#
             pEntry->SetForceControlBackground(true);
             pEntry->SetControlForeground(COL_BLACK); // contrast of 5.87 to the red background
-            pEntry->SetControlBackground(0xff3838); // "light red 1"
+            pEntry->SetControlBackground(0xffa6a6); // "light red 3"
             break;
     }
 }
