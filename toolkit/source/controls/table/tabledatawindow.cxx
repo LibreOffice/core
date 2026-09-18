@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <controls/table/tablecontrol.hxx>
 #include <controls/table/tablecontrol_impl.hxx>
 
 #include "tabledatawindow.hxx"
@@ -33,7 +32,7 @@ namespace svt::table
     using css::uno::Any;
 
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
-        :Window( &_rTableControl.getAntiImpl() )
+        :Window(&_rTableControl)
         ,m_rTableControl( _rTableControl )
     {
         // by default, use the background as determined by the style settings
@@ -173,7 +172,7 @@ namespace svt::table
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
 
-        m_rTableControl.getAntiImpl().GrabFocus();
+        m_rTableControl.GrabFocus();
     }
 
 

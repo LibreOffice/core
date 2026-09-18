@@ -49,7 +49,7 @@ using namespace ::vcl;
 // = AccessibleGridControlCell
 
 AccessibleGridControlCell::AccessibleGridControlCell(
-    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& _rTable,
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl_Impl& _rTable,
     sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleTableControlObjType _eType)
     : AccessibleGridControlBase(rpParent, _rTable, _eType)
     , m_nRowPos(_nRowPos)
@@ -96,8 +96,8 @@ void AccessibleGridControlTableCell::implGetSelection(sal_Int32& nStartIndex, sa
 }
 
 AccessibleGridControlTableCell::AccessibleGridControlTableCell(
-    const rtl::Reference<AccessibleGridControlTable>& rpParent, svt::table::TableControl& _rTable,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos)
+    const rtl::Reference<AccessibleGridControlTable>& rpParent,
+    svt::table::TableControl_Impl& _rTable, sal_Int32 _nRowPos, sal_uInt16 _nColPos)
     : ImplInheritanceHelper(rpParent, _rTable, _nRowPos, _nColPos,
                             AccessibleTableControlObjType::TABLECELL)
 {

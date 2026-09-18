@@ -42,7 +42,7 @@ namespace svt::table
 
     //= ITableRenderer
 
-    /** interface to implement by components rendering a ->TableControl
+    /** interface to implement by components rendering a ->TableControl_Impl
     */
     class SAL_NO_VTABLE ITableRenderer
     {

@@ -28,6 +28,7 @@
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
 #include <sal/types.h>
+#include <vcl/vclptr.hxx>
 
 #include <optional>
 #include <memory>
@@ -330,12 +331,12 @@ namespace svt::table
 
         /** adds a listener to be notified of changes in the table model
         */
-        virtual void addTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener)
+        virtual void addTableModelListener(const VclPtr<TableControl_Impl>& i_listener)
             = 0;
 
         /** remove a listener to be notified of changes in the table model
         */
-        virtual void removeTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener)
+        virtual void removeTableModelListener(const VclPtr<TableControl_Impl>& i_listener)
             = 0;
 
         /** retrieves the content of the given cell

@@ -22,7 +22,7 @@
 #include "AccessibleGridControlBase.hxx"
 #include "AccessibleGridControlHeader.hxx"
 #include "AccessibleGridControlTable.hxx"
-#include "tablecontrol.hxx"
+#include "tablecontrol_impl.hxx"
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
@@ -65,7 +65,7 @@ namespace accessibility {
 
 public:
     AccessibleGridControl(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                          svt::table::TableControl& _rTable);
+                          svt::table::TableControl_Impl& _rTable);
 
     // helper functions
 

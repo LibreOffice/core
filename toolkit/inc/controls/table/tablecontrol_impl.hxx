@@ -19,18 +19,24 @@
 
 #pragma once
 
-#include <controls/table/AccessibleGridControl.hxx>
 #include <controls/table/AccessibleTableControlObjType.hxx>
+#include <controls/table/tabledatawindow.hxx>
 #include <controls/table/tablemodel.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
 
 #include <vector>
 
 class ScrollBar;
 class ScrollBarBox;
+
+namespace accessibility
+{
+class AccessibleGridControl;
+}
 
 namespace svt::table
 {
@@ -68,14 +74,24 @@ struct ColumnInfoPositionLess
 
 typedef ::std::vector<MutableColumnMetrics> ColumnPositions;
 
-class TableControl;
-class TableDataWindow;
 class TableFunctionSet;
 
-//= TableControl_Impl
+/** a basic control which manages table-like data, i.e. a number of cells
+    organized in <code>m</code> rows and <code>n</code> columns.
 
-class TableControl_Impl : public ITableModelListener,
-                          public std::enable_shared_from_this<TableControl_Impl>
+    The control itself does not do any assumptions about the concrete data
+    it displays, this is encapsulated in an instance supporting the
+    ->ITableModel interface.
+
+    Also, the control does not do any assumptions about how the model's
+    content is rendered. This is the responsibility of a component
+    supporting the ->ITableRenderer interface (the renderer is obtained from
+    the model).
+
+    The control supports the concept of a <em>current</em> (or <em>active</em>
+    cell).
+*/
+class TableControl_Impl final : public Control, public ITableModelListener
 {
     friend class TableGeometry;
     friend class TableRowGeometry;
@@ -83,8 +99,6 @@ class TableControl_Impl : public ITableModelListener,
     friend class SuspendInvariants;
 
 private:
-    /// the control whose impl-instance we implement
-    TableControl& m_rAntiImpl;
     /// the model of the table control
     PTableModel m_pModel;
     /// the input handler to use, usually the input handler as provided by ->m_pModel
@@ -136,6 +150,7 @@ private:
     rtl::Reference<accessibility::AccessibleGridControl> m_xAccessibleTable;
 
 public:
+    /// sets a new table model
     void SetModel(const PTableModel& _pModel);
 
     const PTableInputHandler& getInputHandler() const { return m_pInputHandler; }
@@ -148,16 +163,26 @@ public:
     sal_Int32 getTopRow() const { return m_nTopRow; }
     sal_Int32 getLeftColumn() const { return m_nLeftColumn; }
 
-    const TableControl& getAntiImpl() const { return m_rAntiImpl; }
-    TableControl& getAntiImpl() { return m_rAntiImpl; }
-
 public:
-    explicit TableControl_Impl(TableControl& _rAntiImpl);
+    explicit TableControl_Impl(vcl::Window* pParent, WinBits nStyle);
     virtual ~TableControl_Impl() override;
+    virtual void dispose() override;
+
+    // Window overridables
+    virtual void GetFocus() override;
+    virtual void LoseFocus() override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void StateChanged(StateChangedType i_nStateChange) override;
+    virtual void Resize() override;
+
+    /** Creates and returns the accessible object of the whole GridControl. */
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     /** to be called when the anti-impl instance has been resized
         */
     void onResize();
+
+    void Select();
 
     /** paints the table control content which intersects with the given rectangle */
     void doPaintContent(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rUpdateRect);
@@ -247,6 +272,10 @@ public:
     bool markAllRowsAsSelected();
 
     void commitAccessibleEvent(sal_Int16 const i_eventID);
+    // temporary methods
+    // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
+    // firing those events should be an implementation internal to the TableControl_Impl,
+    // instead of something triggered externally.
     void commitCellEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue,
                          const css::uno::Any& i_oldValue);
     void commitTableEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue,
@@ -289,10 +318,26 @@ public:
     */
     PTableModel GetModel() const;
 
-    /// returns the index of the currently active column
+    /** retrieves the current column
+
+        The current col is the one which contains the active cell.
+
+        @return
+            the column index of the active cell, or ->COL_INVALID
+            if there is no active cell, e.g. because the table does
+            not contain any rows or columns.
+    */
     sal_Int32 GetCurrentColumn() const;
 
-    /// returns the index of the currently active row
+    /** retrieves the current row
+
+        The current row is the one which contains the active cell.
+
+        @return
+            the row index of the active cell, or ->ROW_INVALID
+            if there is no active cell, e.g. because the table does
+            not contain any rows or columns.
+    */
     sal_Int32 GetCurrentRow() const;
 
     /// activates the given cell
@@ -511,6 +556,8 @@ private:
 
     DECL_LINK(OnScroll, ScrollBar*, void);
     DECL_LINK(OnUpdateScrollbars, void*, void);
+
+    DECL_LINK(ImplSelectHdl, LinkParamNone*, void);
 };
 
 } // namespace svt::table

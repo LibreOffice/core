@@ -110,7 +110,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/table/defaultinputhandler \
     toolkit/source/controls/table/gridtablerenderer \
     toolkit/source/controls/table/mousefunction \
-    toolkit/source/controls/table/tablecontrol \
     toolkit/source/controls/table/tablecontrol_impl \
     toolkit/source/controls/table/tabledatawindow \
     toolkit/source/controls/table/TableFunctionSet \

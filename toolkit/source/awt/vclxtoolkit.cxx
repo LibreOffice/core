@@ -97,7 +97,7 @@
 
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
-#include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/calendar.hxx>
@@ -1778,7 +1778,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else if (aServiceName == "grid")
                 {
-                    pNewWindow = VclPtr<::svt::table::TableControl>::Create(pParent, nWinBits);
+                    pNewWindow = VclPtr<svt::table::TableControl_Impl>::Create(pParent, nWinBits);
                     *ppNewComp = new SVTXGridControl;
                 }
             break;

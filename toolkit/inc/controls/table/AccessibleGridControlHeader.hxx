@@ -21,7 +21,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlTableBase.hxx>
-#include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 
 namespace accessibility {
 
@@ -37,7 +37,7 @@ public:
          @param eObjType  One of the two allowed types AccessibleTableControlObjType::ROWHEADERBAR or
                           AccessibleTableControlObjType::COLUMNHEADERBAR. */
     AccessibleGridControlHeader(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                                svt::table::TableControl& rTable,
+                                svt::table::TableControl_Impl& rTable,
                                 AccessibleTableControlObjType eObjType);
 
 private:

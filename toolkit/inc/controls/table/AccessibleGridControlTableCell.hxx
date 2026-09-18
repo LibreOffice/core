@@ -19,7 +19,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlBase.hxx>
-#include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -49,7 +49,7 @@ public:
 
 protected:
     AccessibleGridControlCell(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                              svt::table::TableControl& _rTable, sal_Int32 _nRowPos,
+                              svt::table::TableControl_Impl& _rTable, sal_Int32 _nRowPos,
                               sal_uInt16 _nColPos, AccessibleTableControlObjType _eType);
 
     virtual ~AccessibleGridControlCell() override = default;
@@ -74,7 +74,7 @@ private:
 
 public:
     AccessibleGridControlTableCell(const rtl::Reference<AccessibleGridControlTable>& rpParent,
-                                   svt::table::TableControl& _rTable, sal_Int32 _nRowId,
+                                   svt::table::TableControl_Impl& _rTable, sal_Int32 _nRowId,
                                    sal_uInt16 _nColId);
 
     /** @return  The index of this object among the parent's children. */
