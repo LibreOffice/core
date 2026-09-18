@@ -104,7 +104,7 @@ FunctionResult ColumnResize::handleMouseUp(TableControl_Impl& i_tableControl,
     Point const aPoint = i_event.GetPosPixel();
 
     i_tableControl.hideTracking();
-    PColumnModel const pColumn = i_tableControl.getModel()->getColumnModel(m_nResizingColumn);
+    PColumnModel const pColumn = i_tableControl.GetModel()->getColumnModel(m_nResizingColumn);
     tools::Long const maxWidthLogical = pColumn->getMaxWidth();
     tools::Long const minWidthLogical = pColumn->getMinWidth();
 
@@ -214,7 +214,7 @@ FunctionResult ColumnSortHandler::handleMouseDown(TableControl_Impl& i_tableCont
         return FunctionResult::ContinueFunction;
     }
 
-    if (i_tableControl.getModel()->getSortAdapter() == nullptr)
+    if (i_tableControl.GetModel()->getSortAdapter() == nullptr)
         // no sorting support at the model
         return FunctionResult::SkipFunction;
 
@@ -237,7 +237,7 @@ FunctionResult ColumnSortHandler::handleMouseUp(TableControl_Impl& i_tableContro
     TableCell const tableCell(i_tableControl.hitTest(i_event.GetPosPixel()));
     if ((tableCell.nRow == ROW_COL_HEADERS) && (tableCell.nColumn == m_nActiveColumn))
     {
-        ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
+        ITableDataSort* pSort = i_tableControl.GetModel()->getSortAdapter();
         ENSURE_OR_RETURN(pSort != nullptr,
                          "ColumnSortHandler::handleMouseUp: somebody is mocking with us!",
                          FunctionResult::DeactivateFunction);

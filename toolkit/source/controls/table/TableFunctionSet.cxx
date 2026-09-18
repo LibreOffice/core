@@ -52,7 +52,7 @@ void TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtC
 
     if (bDontSelectAtCursor)
     {
-        if (m_pTableControl->getSelectedRowCount() > 1)
+        if (m_pTableControl->GetSelectedRowCount() > 1)
             m_pTableControl->getSelEngine()->AddAlways(true);
     }
     else if (m_pTableControl->getAnchor() == m_pTableControl->getCurRow())
@@ -97,13 +97,13 @@ void TableFunctionSet::SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtC
                 m_pTableControl->markRowAsSelected(newRow);
             }
         }
-        if (m_pTableControl->getSelectedRowCount() > 1
+        if (m_pTableControl->GetSelectedRowCount() > 1
             && m_pTableControl->getSelEngine()->GetSelectionMode() != SelectionMode::Single)
             m_pTableControl->getSelEngine()->AddAlways(true);
 
         m_pTableControl->invalidateRow(newRow);
     }
-    m_pTableControl->goTo(newCol, newRow);
+    m_pTableControl->GoToCell(newCol, newRow);
 }
 
 bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
@@ -115,7 +115,7 @@ bool TableFunctionSet::IsSelectionAtPoint(const Point& rPoint)
     {
         sal_Int32 curRow = m_pTableControl->getRowAtPoint(rPoint);
         m_pTableControl->setAnchor(ROW_INVALID);
-        bool selected = m_pTableControl->isRowSelected(curRow);
+        bool selected = m_pTableControl->IsRowSelected(curRow);
         m_nCurrentRow = curRow;
         return selected;
     }
@@ -131,9 +131,9 @@ void TableFunctionSet::DeselectAll()
 {
     if (m_pTableControl->hasRowSelection())
     {
-        for (size_t i = 0; i < m_pTableControl->getSelectedRowCount(); ++i)
+        for (size_t i = 0; i < m_pTableControl->GetSelectedRowCount(); ++i)
         {
-            sal_Int32 const rowIndex = m_pTableControl->getSelectedRowIndex(i);
+            sal_Int32 const rowIndex = m_pTableControl->GetSelectedRowIndex(i);
             m_pTableControl->invalidateRow(rowIndex);
         }
 

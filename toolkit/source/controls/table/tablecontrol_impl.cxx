@@ -208,7 +208,7 @@ TableControl_Impl::~TableControl_Impl()
     m_pSelEngine.reset();
 }
 
-void TableControl_Impl::setModel(const PTableModel& _pModel)
+void TableControl_Impl::SetModel(const PTableModel& _pModel)
 {
     SuppressCursor aHideCursor(*this);
 
@@ -269,7 +269,7 @@ void TableControl_Impl::rowsInserted(sal_Int32 i_first, sal_Int32 i_last)
 
     // if the rows have been inserted before the current row, adjust this
     if (i_first <= m_nCurRow)
-        goTo(m_nCurColumn, m_nCurRow + insertedRows);
+        GoToCell(m_nCurColumn, m_nCurRow + insertedRows);
 
     // relayout, since the scrollbar need might have changed
     impl_ni_relayout();
@@ -324,7 +324,7 @@ void TableControl_Impl::rowsRemoved(sal_Int32 i_first, sal_Int32 i_last)
     if (m_nCurRow >= m_nRowCount)
     {
         if (m_nRowCount > 0)
-            goTo(m_nCurColumn, m_nRowCount - 1);
+            GoToCell(m_nCurColumn, m_nRowCount - 1);
         else
         {
             m_nCurRow = ROW_INVALID;
@@ -369,7 +369,7 @@ void TableControl_Impl::columnRemoved()
     if (m_nCurColumn >= m_nColumnCount)
     {
         if (m_nColumnCount > 0)
-            goTo(m_nCurColumn - 1, m_nCurRow);
+            GoToCell(m_nCurColumn - 1, m_nCurRow);
         else
             m_nCurColumn = COL_INVALID;
     }
@@ -1114,9 +1114,9 @@ void TableControl_Impl::onResize()
 void TableControl_Impl::doPaintContent(vcl::RenderContext& rRenderContext,
                                        const tools::Rectangle& _rUpdateRect)
 {
-    if (!getModel())
+    if (!GetModel())
         return;
-    PTableRenderer pRenderer = getModel()->getRenderer();
+    PTableRenderer pRenderer = GetModel()->getRenderer();
     DBG_ASSERT(!!pRenderer, "TableDataWindow::doPaintContent: invalid renderer!");
     if (!pRenderer)
         return;
@@ -1178,7 +1178,7 @@ void TableControl_Impl::doPaintContent(vcl::RenderContext& rRenderContext,
     }
 
     // draw the table content row by row
-    TableSize colCount = getModel()->getColumnCount();
+    TableSize colCount = GetModel()->getColumnCount();
 
     // paint all rows
     tools::Rectangle const aAllDataCellsArea(impl_getAllVisibleDataCellArea());
@@ -1189,7 +1189,7 @@ void TableControl_Impl::doPaintContent(vcl::RenderContext& rRenderContext,
             continue;
 
         bool const isControlFocused = m_rAntiImpl.HasControlFocus();
-        bool const isSelectedRow = isRowSelected(aRowIterator.getRow());
+        bool const isSelectedRow = IsRowSelected(aRowIterator.getRow());
 
         tools::Rectangle const aRect = aRowIterator.getRect().GetIntersection(aAllDataCellsArea);
 
@@ -1262,7 +1262,7 @@ bool TableControl_Impl::dispatchAction(TableControlAction _eAction)
             else
             {
                 if (m_nCurRow < m_nRowCount - 1)
-                    bSuccess = goTo(m_nCurColumn, m_nCurRow + 1);
+                    bSuccess = GoToCell(m_nCurColumn, m_nCurRow + 1);
             }
             break;
 
@@ -1292,59 +1292,59 @@ bool TableControl_Impl::dispatchAction(TableControlAction _eAction)
             else
             {
                 if (m_nCurRow > 0)
-                    bSuccess = goTo(m_nCurColumn, m_nCurRow - 1);
+                    bSuccess = GoToCell(m_nCurColumn, m_nCurRow - 1);
             }
             break;
         case TableControlAction::cursorLeft:
             if (m_nCurColumn > 0)
-                bSuccess = goTo(m_nCurColumn - 1, m_nCurRow);
+                bSuccess = GoToCell(m_nCurColumn - 1, m_nCurRow);
             else if ((m_nCurColumn == 0) && (m_nCurRow > 0))
-                bSuccess = goTo(m_nColumnCount - 1, m_nCurRow - 1);
+                bSuccess = GoToCell(m_nColumnCount - 1, m_nCurRow - 1);
             break;
 
         case TableControlAction::cursorRight:
             if (m_nCurColumn < m_nColumnCount - 1)
-                bSuccess = goTo(m_nCurColumn + 1, m_nCurRow);
+                bSuccess = GoToCell(m_nCurColumn + 1, m_nCurRow);
             else if ((m_nCurColumn == m_nColumnCount - 1) && (m_nCurRow < m_nRowCount - 1))
-                bSuccess = goTo(0, m_nCurRow + 1);
+                bSuccess = GoToCell(0, m_nCurRow + 1);
             break;
 
         case TableControlAction::cursorToLineStart:
-            bSuccess = goTo(0, m_nCurRow);
+            bSuccess = GoToCell(0, m_nCurRow);
             break;
 
         case TableControlAction::cursorToLineEnd:
-            bSuccess = goTo(m_nColumnCount - 1, m_nCurRow);
+            bSuccess = GoToCell(m_nColumnCount - 1, m_nCurRow);
             break;
 
         case TableControlAction::cursorToFirstLine:
-            bSuccess = goTo(m_nCurColumn, 0);
+            bSuccess = GoToCell(m_nCurColumn, 0);
             break;
 
         case TableControlAction::cursorToLastLine:
-            bSuccess = goTo(m_nCurColumn, m_nRowCount - 1);
+            bSuccess = GoToCell(m_nCurColumn, m_nRowCount - 1);
             break;
 
         case TableControlAction::cursorPageUp:
         {
             sal_Int32 nNewRow = ::std::max(sal_Int32(0), m_nCurRow - impl_getVisibleRows(false));
-            bSuccess = goTo(m_nCurColumn, nNewRow);
+            bSuccess = GoToCell(m_nCurColumn, nNewRow);
         }
         break;
 
         case TableControlAction::cursorPageDown:
         {
             sal_Int32 nNewRow = ::std::min(m_nRowCount - 1, m_nCurRow + impl_getVisibleRows(false));
-            bSuccess = goTo(m_nCurColumn, nNewRow);
+            bSuccess = GoToCell(m_nCurColumn, nNewRow);
         }
         break;
 
         case TableControlAction::cursorTopLeft:
-            bSuccess = goTo(0, 0);
+            bSuccess = GoToCell(0, 0);
             break;
 
         case TableControlAction::cursorBottomRight:
-            bSuccess = goTo(m_nColumnCount - 1, m_nRowCount - 1);
+            bSuccess = GoToCell(m_nColumnCount - 1, m_nRowCount - 1);
             break;
 
         case TableControlAction::cursorSelectRow:
@@ -1549,7 +1549,7 @@ bool TableControl_Impl::dispatchAction(TableControlAction _eAction)
                 //put the rows in vector
                 while (iter >= 0)
                 {
-                    if (!isRowSelected(iter))
+                    if (!IsRowSelected(iter))
                         m_aSelectedRows.push_back(iter);
                     --iter;
                 }
@@ -1575,7 +1575,7 @@ bool TableControl_Impl::dispatchAction(TableControlAction _eAction)
             //put the rows in the vector
             while (iter <= m_nRowCount)
             {
-                if (!isRowSelected(iter))
+                if (!IsRowSelected(iter))
                     m_aSelectedRows.push_back(iter);
                 ++iter;
             }
@@ -1646,11 +1646,11 @@ ColumnMetrics TableControl_Impl::getColumnMetrics(sal_Int32 const i_column) cons
     return m_aColumnWidths[i_column];
 }
 
-PTableModel TableControl_Impl::getModel() const { return m_pModel; }
+PTableModel TableControl_Impl::GetModel() const { return m_pModel; }
 
-sal_Int32 TableControl_Impl::getCurrentColumn() const { return m_nCurColumn; }
+sal_Int32 TableControl_Impl::GetCurrentColumn() const { return m_nCurColumn; }
 
-sal_Int32 TableControl_Impl::getCurrentRow() const { return m_nCurRow; }
+sal_Int32 TableControl_Impl::GetCurrentRow() const { return m_nCurRow; }
 
 ::Size TableControl_Impl::getTableSizePixel() const { return m_pDataWindow->GetOutputSizePixel(); }
 
@@ -1700,7 +1700,7 @@ void TableControl_Impl::showTracking(tools::Rectangle const& i_location,
 
 void TableControl_Impl::activateCell(sal_Int32 const i_col, sal_Int32 const i_row)
 {
-    goTo(i_col, i_row);
+    GoToCell(i_col, i_row);
 }
 
 void TableControl_Impl::invalidateSelectedRegion(sal_Int32 _nPrevRow, sal_Int32 _nCurRow)
@@ -1819,7 +1819,7 @@ TableSize TableControl_Impl::impl_getVisibleColumns(bool _bAcceptPartialCol) con
         _bAcceptPartialCol);
 }
 
-bool TableControl_Impl::goTo(sal_Int32 _nColumn, sal_Int32 _nRow)
+bool TableControl_Impl::GoToCell(sal_Int32 _nColumn, sal_Int32 _nRow)
 {
     // TODO: give veto listeners a chance
 
@@ -1869,7 +1869,7 @@ void TableControl_Impl::ensureVisible(sal_Int32 _nColumn, sal_Int32 _nRow)
     }
 }
 
-OUString TableControl_Impl::getCellContentAsString(sal_Int32 const i_row, sal_Int32 const i_col)
+OUString TableControl_Impl::GetAccessibleCellText(sal_Int32 const i_row, sal_Int32 const i_col)
 {
     Any aCellValue;
     m_pModel->getCellContent(i_col, i_row, aCellValue);
@@ -2009,33 +2009,33 @@ TableSize TableControl_Impl::impl_scrollColumns(TableSize const i_columnDelta)
 
 SelectionEngine* TableControl_Impl::getSelEngine() { return m_pSelEngine.get(); }
 
-sal_Int32 TableControl_Impl::getRowCount() const { return m_pModel->getRowCount(); }
+sal_Int32 TableControl_Impl::GetRowCount() const { return m_pModel->getRowCount(); }
 
-sal_Int32 TableControl_Impl::getColumnCount() const { return m_pModel->getColumnCount(); }
+sal_Int32 TableControl_Impl::GetColumnCount() const { return m_pModel->getColumnCount(); }
 
-OUString TableControl_Impl::getRowName(sal_Int32 nIndex) const
+OUString TableControl_Impl::GetRowName(sal_Int32 nIndex) const
 {
     OUString sRowName;
     m_pModel->getRowHeading(nIndex) >>= sRowName;
     return sRowName;
 }
 
-OUString TableControl_Impl::getColumnName(sal_Int32 nIndex) const
+OUString TableControl_Impl::GetColumnName(sal_Int32 nIndex) const
 {
     return m_pModel->getColumnModel(nIndex)->getName();
 }
 
-bool TableControl_Impl::hasRowHeader() { return m_pModel->hasRowHeaders(); }
+bool TableControl_Impl::HasRowHeader() { return m_pModel->hasRowHeaders(); }
 
-bool TableControl_Impl::hasColumnHeader() { return m_pModel->hasColumnHeaders(); }
+bool TableControl_Impl::HasColumnHeader() { return m_pModel->hasColumnHeaders(); }
 
-bool TableControl_Impl::isRowSelected(sal_Int32 i_row) const
+bool TableControl_Impl::IsRowSelected(sal_Int32 i_row) const
 {
     return ::std::find(m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row)
            != m_aSelectedRows.end();
 }
 
-sal_Int32 TableControl_Impl::getSelectedRowIndex(size_t const i_selectionIndex) const
+sal_Int32 TableControl_Impl::GetSelectedRowIndex(size_t const i_selectionIndex) const
 {
     if (i_selectionIndex < m_aSelectedRows.size())
         return m_aSelectedRows[i_selectionIndex];
@@ -2054,7 +2054,7 @@ int TableControl_Impl::getRowSelectedNumber(const ::std::vector<sal_Int32>& sele
     return -1;
 }
 
-void TableControl_Impl::selectRow(sal_Int32 nRowIndex, bool bSelect)
+void TableControl_Impl::SelectRow(sal_Int32 nRowIndex, bool bSelect)
 {
     ENSURE_OR_RETURN_VOID((nRowIndex >= 0) && (nRowIndex < m_pModel->getRowCount()),
                           "TableControl::SelectRow: invalid row index!");
@@ -2074,7 +2074,7 @@ void TableControl_Impl::selectRow(sal_Int32 nRowIndex, bool bSelect)
     m_rAntiImpl.Select();
 }
 
-void TableControl_Impl::selectAllRows(bool bSelect)
+void TableControl_Impl::SelectAllRows(bool bSelect)
 {
     if (bSelect)
     {
@@ -2142,7 +2142,7 @@ bool TableControl_Impl::markRowAsDeselected(sal_Int32 const i_rowIndex)
 
 bool TableControl_Impl::markRowAsSelected(sal_Int32 const i_rowIndex)
 {
-    if (isRowSelected(i_rowIndex))
+    if (IsRowSelected(i_rowIndex))
         return false;
 
     SelectionMode const eSelMode = getSelEngine()->GetSelectionMode();
@@ -2192,7 +2192,7 @@ bool TableControl_Impl::markAllRowsAsSelected()
         for (TableSize row = 0; row < m_pModel->getRowCount(); ++row)
         {
             OSL_ENSURE(
-                isRowSelected(row),
+                IsRowSelected(row),
                 "TableControl_Impl::markAllRowsAsSelected: inconsistency in the selected rows!");
         }
 #endif
@@ -2226,7 +2226,7 @@ void TableControl_Impl::commitTableEvent(sal_Int16 const i_eventID, const Any& i
         m_xAccessibleTable->commitTableEvent(i_eventID, i_newValue, i_oldValue);
 }
 
-bool TableControl_Impl::convertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos,
+bool TableControl_Impl::ConvertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos,
                                                   const Point& rPoint)
 {
     rRow = getRowAtPoint(rPoint);
@@ -2308,7 +2308,7 @@ void TableControl_Impl::disposeAccessible()
     m_xAccessibleTable.clear();
 }
 
-sal_Int32 TableControl_Impl::getAccessibleControlCount() const
+sal_Int32 TableControl_Impl::GetAccessibleControlCount() const
 {
     // TC_TABLE is always defined, no matter whether empty or not
     sal_Int32 count = 1;
@@ -2319,7 +2319,7 @@ sal_Int32 TableControl_Impl::getAccessibleControlCount() const
     return count;
 }
 
-OUString TableControl_Impl::getAccessibleObjectName(AccessibleTableControlObjType eObjType,
+OUString TableControl_Impl::GetAccessibleObjectName(AccessibleTableControlObjType eObjType,
                                                     sal_Int32 nRow, sal_Int32 nCol) const
 {
     OUString sRetText;
@@ -2343,19 +2343,19 @@ OUString TableControl_Impl::getAccessibleObjectName(AccessibleTableControlObjTyp
             //if the name is equal to cell content, it'll be read twice
             if (m_pModel->hasColumnHeaders())
             {
-                sRetText = getColumnName(nCol) + " , ";
+                sRetText = GetColumnName(nCol) + " , ";
             }
             if (m_pModel->hasRowHeaders())
             {
-                sRetText += getRowName(nRow) + " , ";
+                sRetText += GetRowName(nRow) + " , ";
             }
             //aRetText = GetAccessibleCellText(_nRow, _nCol);
             break;
         case AccessibleTableControlObjType::ROWHEADERCELL:
-            sRetText = getRowName(nRow);
+            sRetText = GetRowName(nRow);
             break;
         case AccessibleTableControlObjType::COLUMNHEADERCELL:
-            sRetText = getColumnName(nCol);
+            sRetText = GetColumnName(nCol);
             break;
         default:
             OSL_FAIL("GridControl::GetAccessibleName: invalid enum!");
@@ -2364,7 +2364,7 @@ OUString TableControl_Impl::getAccessibleObjectName(AccessibleTableControlObjTyp
 }
 
 OUString
-TableControl_Impl::getAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const
+TableControl_Impl::GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const
 {
     OUString sRetText;
     switch (eObjType)
@@ -2386,11 +2386,11 @@ TableControl_Impl::getAccessibleObjectDescription(AccessibleTableControlObjType 
             // if the name is equal to cell content, it'll be read twice
             if (m_pModel->hasColumnHeaders())
             {
-                sRetText = getColumnName(getCurrentColumn()) + " , ";
+                sRetText = GetColumnName(GetCurrentColumn()) + " , ";
             }
             if (m_pModel->hasRowHeaders())
             {
-                sRetText += getRowName(getCurrentRow());
+                sRetText += GetRowName(GetCurrentRow());
             }
             break;
         case AccessibleTableControlObjType::ROWHEADERCELL:
@@ -2403,7 +2403,7 @@ TableControl_Impl::getAccessibleObjectDescription(AccessibleTableControlObjType 
     return sRetText;
 }
 
-void TableControl_Impl::fillAccessibleStateSet(sal_Int64& rStateSet,
+void TableControl_Impl::FillAccessibleStateSet(sal_Int64& rStateSet,
                                                AccessibleTableControlObjType eObjType) const
 {
     switch (eObjType)
@@ -2451,7 +2451,7 @@ void TableControl_Impl::fillAccessibleStateSet(sal_Int64& rStateSet,
             rStateSet |= css::accessibility::AccessibleStateType::SELECTABLE;
             rStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
             rStateSet |= css::accessibility::AccessibleStateType::SHOWING;
-            if (isRowSelected(getCurrentRow()))
+            if (IsRowSelected(GetCurrentRow()))
                 // Hmm? Wouldn't we expect the affected row to be a parameter to this function?
                 rStateSet |= css::accessibility::AccessibleStateType::SELECTED;
         }
@@ -2468,10 +2468,10 @@ void TableControl_Impl::fillAccessibleStateSet(sal_Int64& rStateSet,
     }
 }
 
-void TableControl_Impl::fillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
+void TableControl_Impl::FillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
                                                       sal_uInt16) const
 {
-    if (isRowSelected(nRow))
+    if (IsRowSelected(nRow))
         rStateSet |= css::accessibility::AccessibleStateType::SELECTED;
     if (m_rAntiImpl.HasChildPathFocus())
         rStateSet |= css::accessibility::AccessibleStateType::FOCUSED;

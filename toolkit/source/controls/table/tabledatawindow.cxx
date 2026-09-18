@@ -76,7 +76,7 @@ namespace svt::table
         sal_Int32 const hitRow = m_rTableControl.getRowAtPoint(aMousePos);
         sal_Int32 const hitCol = m_rTableControl.getColAtPoint(aMousePos);
 
-        PTableModel const pTableModel( m_rTableControl.getModel() );
+        PTableModel const pTableModel(m_rTableControl.GetModel());
         if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
         {
             if ( hitRow == ROW_COL_HEADERS )
@@ -150,8 +150,8 @@ namespace svt::table
 
         Point const aPoint = rMEvt.GetPosPixel();
         sal_Int32 const hitRow = m_rTableControl.getRowAtPoint(aPoint);
-        bool const wasRowSelected = m_rTableControl.isRowSelected( hitRow );
-        size_t const nPrevSelRowCount = m_rTableControl.getSelectedRowCount();
+        bool const wasRowSelected = m_rTableControl.IsRowSelected(hitRow);
+        size_t const nPrevSelRowCount = m_rTableControl.GetSelectedRowCount();
 
         if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
         {
@@ -159,8 +159,8 @@ namespace svt::table
             return;
         }
 
-        bool const isRowSelected = m_rTableControl.isRowSelected( hitRow );
-        size_t const nCurSelRowCount = m_rTableControl.getSelectedRowCount();
+        bool const isRowSelected = m_rTableControl.IsRowSelected(hitRow);
+        size_t const nCurSelRowCount = m_rTableControl.GetSelectedRowCount();
         if ( isRowSelected != wasRowSelected || nCurSelRowCount != nPrevSelRowCount )
         {
             m_aSelectHdl.Call( nullptr );

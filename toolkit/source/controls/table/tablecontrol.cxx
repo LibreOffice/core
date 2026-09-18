@@ -61,7 +61,7 @@ void TableControl::dispose()
 {
     CallEventListeners(VclEventId::ObjectDying);
 
-    m_pImpl->setModel(PTableModel());
+    m_pImpl->SetModel(PTableModel());
     m_pImpl->disposeAccessible();
     m_pImpl.reset();
     Control::dispose();
@@ -182,40 +182,40 @@ void TableControl::Resize()
     m_pImpl->onResize();
 }
 
-void TableControl::SetModel(const PTableModel& _pModel) { m_pImpl->setModel(_pModel); }
+void TableControl::SetModel(const PTableModel& _pModel) { m_pImpl->SetModel(_pModel); }
 
-PTableModel TableControl::GetModel() const { return m_pImpl->getModel(); }
+PTableModel TableControl::GetModel() const { return m_pImpl->GetModel(); }
 
-sal_Int32 TableControl::GetCurrentRow() const { return m_pImpl->getCurrentRow(); }
+sal_Int32 TableControl::GetCurrentRow() const { return m_pImpl->GetCurrentRow(); }
 
-sal_Int32 TableControl::GetCurrentColumn() const { return m_pImpl->getCurrentColumn(); }
+sal_Int32 TableControl::GetCurrentColumn() const { return m_pImpl->GetCurrentColumn(); }
 
 void TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
 {
-    m_pImpl->goTo(_nColPos, _nRowPos);
+    m_pImpl->GoToCell(_nColPos, _nRowPos);
 }
 
 sal_Int32 TableControl::GetSelectedRowCount() const
 {
-    return sal_Int32(m_pImpl->getSelectedRowCount());
+    return sal_Int32(m_pImpl->GetSelectedRowCount());
 }
 
 sal_Int32 TableControl::GetSelectedRowIndex(sal_Int32 const i_selectionIndex) const
 {
-    return m_pImpl->getSelectedRowIndex(i_selectionIndex);
+    return m_pImpl->GetSelectedRowIndex(i_selectionIndex);
 }
 
 bool TableControl::IsRowSelected(sal_Int32 const i_rowIndex) const
 {
-    return m_pImpl->isRowSelected(i_rowIndex);
+    return m_pImpl->IsRowSelected(i_rowIndex);
 }
 
 void TableControl::SelectRow(sal_Int32 const i_rowIndex, bool const i_select)
 {
-    m_pImpl->selectRow(i_rowIndex, i_select);
+    m_pImpl->SelectRow(i_rowIndex, i_select);
 }
 
-void TableControl::SelectAllRows(bool const i_select) { m_pImpl->selectAllRows(i_select); }
+void TableControl::SelectAllRows(bool const i_select) { m_pImpl->SelectAllRows(i_select); }
 
 SelectionEngine* TableControl::getSelEngine() { return m_pImpl->getSelEngine(); }
 
@@ -230,30 +230,30 @@ rtl::Reference<comphelper::OAccessible> TableControl::CreateAccessible()
 OUString TableControl::GetAccessibleObjectName(AccessibleTableControlObjType eObjType,
                                                sal_Int32 _nRow, sal_Int32 _nCol) const
 {
-    return m_pImpl->getAccessibleObjectName(eObjType, _nRow, _nCol);
+    return m_pImpl->GetAccessibleObjectName(eObjType, _nRow, _nCol);
 }
 
 OUString TableControl::GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const
 {
-    return m_pImpl->getAccessibleObjectDescription(eObjType);
+    return m_pImpl->GetAccessibleObjectDescription(eObjType);
 }
 
-OUString TableControl::GetRowName(sal_Int32 _nIndex) const { return m_pImpl->getRowName(_nIndex); }
+OUString TableControl::GetRowName(sal_Int32 _nIndex) const { return m_pImpl->GetRowName(_nIndex); }
 
 OUString TableControl::GetColumnName(sal_Int32 _nIndex) const
 {
-    return m_pImpl->getColumnName(_nIndex);
+    return m_pImpl->GetColumnName(_nIndex);
 }
 
 OUString TableControl::GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    return m_pImpl->getCellContentAsString(_nRowPos, _nColPos);
+    return m_pImpl->GetAccessibleCellText(_nRowPos, _nColPos);
 }
 
 void TableControl::FillAccessibleStateSet(sal_Int64& rStateSet,
                                           AccessibleTableControlObjType eObjType) const
 {
-    m_pImpl->fillAccessibleStateSet(rStateSet, eObjType);
+    m_pImpl->FillAccessibleStateSet(rStateSet, eObjType);
 }
 
 void TableControl::commitCellEvent(sal_Int16 const i_eventID, const Any& i_newValue,
@@ -268,29 +268,29 @@ void TableControl::commitTableEvent(sal_Int16 const i_eventID, const Any& i_newV
     m_pImpl->commitTableEvent(i_eventID, i_newValue, i_oldValue);
 }
 
-bool TableControl::HasRowHeader() { return m_pImpl->hasRowHeader(); }
+bool TableControl::HasRowHeader() { return m_pImpl->HasRowHeader(); }
 
-bool TableControl::HasColHeader() { return m_pImpl->hasColumnHeader(); }
+bool TableControl::HasColumnHeader() { return m_pImpl->HasColumnHeader(); }
 
 sal_Int32 TableControl::GetAccessibleControlCount() const
 {
-    return m_pImpl->getAccessibleControlCount();
+    return m_pImpl->GetAccessibleControlCount();
 }
 
-sal_Int32 TableControl::GetRowCount() const { return m_pImpl->getRowCount(); }
+sal_Int32 TableControl::GetRowCount() const { return m_pImpl->GetRowCount(); }
 
-sal_Int32 TableControl::GetColumnCount() const { return m_pImpl->getColumnCount(); }
+sal_Int32 TableControl::GetColumnCount() const { return m_pImpl->GetColumnCount(); }
 
 bool TableControl::ConvertPointToCellAddress(sal_Int32& _rnRow, sal_Int32& _rnColPos,
                                              const Point& _rPoint)
 {
-    return m_pImpl->convertPointToCellAddress(_rnRow, _rnColPos, _rPoint);
+    return m_pImpl->ConvertPointToCellAddress(_rnRow, _rnColPos, _rPoint);
 }
 
 void TableControl::FillAccessibleStateSetForCell(sal_Int64& _rStateSet, sal_Int32 _nRow,
                                                  sal_uInt16 _nColumnPos) const
 {
-    return m_pImpl->fillAccessibleStateSetForCell(_rStateSet, _nRow, _nColumnPos);
+    return m_pImpl->FillAccessibleStateSetForCell(_rStateSet, _nRow, _nColumnPos);
 }
 
 tools::Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar)

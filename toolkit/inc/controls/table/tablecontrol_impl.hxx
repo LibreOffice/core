@@ -135,7 +135,7 @@ private:
     rtl::Reference<accessibility::AccessibleGridControl> m_xAccessibleTable;
 
 public:
-    void setModel(const PTableModel& _pModel);
+    void SetModel(const PTableModel& _pModel);
 
     const PTableInputHandler& getInputHandler() const { return m_pInputHandler; }
 
@@ -166,7 +166,7 @@ public:
         To ease the caller's code, the coordinates must not necessarily denote a
         valid position. If they don't, <FALSE/> will be returned.
     */
-    bool goTo(sal_Int32 _nColumn, sal_Int32 _nRow);
+    bool GoToCell(sal_Int32 _nColumn, sal_Int32 _nRow);
 
     /** ensures that the given coordinate is visible
         @param _nColumn
@@ -180,7 +180,7 @@ public:
 
     /** retrieves the content of the given cell, converted to a string
         */
-    OUString getCellContentAsString(sal_Int32 const i_row, sal_Int32 const i_col);
+    OUString GetAccessibleCellText(sal_Int32 const i_row, sal_Int32 const i_col);
 
     /** returns the position of the current row in the selection vector */
     static int getRowSelectedNumber(const ::std::vector<sal_Int32>& selectedRows,
@@ -208,17 +208,17 @@ public:
 
     void checkCursorPosition();
 
-    sal_Int32 getRowCount() const;
-    sal_Int32 getColumnCount() const;
+    sal_Int32 GetRowCount() const;
+    sal_Int32 GetColumnCount() const;
 
-    OUString getRowName(sal_Int32 nIndex) const;
-    OUString getColumnName(sal_Int32 nIndex) const;
-    bool hasRowHeader();
-    bool hasColumnHeader();
+    OUString GetRowName(sal_Int32 nIndex) const;
+    OUString GetColumnName(sal_Int32 nIndex) const;
+    bool HasRowHeader();
+    bool HasColumnHeader();
 
     bool hasRowSelection() const { return !m_aSelectedRows.empty(); }
-    size_t getSelectedRowCount() const { return m_aSelectedRows.size(); }
-    sal_Int32 getSelectedRowIndex(size_t const i_selectionIndex) const;
+    size_t GetSelectedRowCount() const { return m_aSelectedRows.size(); }
+    sal_Int32 GetSelectedRowIndex(size_t const i_selectionIndex) const;
 
     /** removes the given row index from m_aSelectedRows
 
@@ -286,13 +286,13 @@ public:
 
         The returned model is guaranteed to not be <NULL/>.
     */
-    PTableModel getModel() const;
+    PTableModel GetModel() const;
 
     /// returns the index of the currently active column
-    sal_Int32 getCurrentColumn() const;
+    sal_Int32 GetCurrentColumn() const;
 
     /// returns the index of the currently active row
-    sal_Int32 getCurrentRow() const;
+    sal_Int32 GetCurrentRow() const;
 
     /// activates the given cell
     void activateCell(sal_Int32 const i_col, sal_Int32 const i_row);
@@ -331,10 +331,10 @@ public:
     ColumnMetrics getColumnMetrics(sal_Int32 const i_column) const;
 
     /// determines whether a given row is selected
-    bool isRowSelected(sal_Int32 i_row) const;
+    bool IsRowSelected(sal_Int32 i_row) const;
 
-    void selectRow(sal_Int32 nRowIndex, bool bSelect);
-    void selectAllRows(bool bSelect);
+    void SelectRow(sal_Int32 nRowIndex, bool bSelect);
+    void SelectAllRows(bool bSelect);
 
     tools::Long appFontWidthToPixel(tools::Long const i_appFontUnits) const;
 
@@ -343,7 +343,7 @@ public:
     ScrollBar* getHorzScrollbar() { return m_pHScroll; }
     ScrollBar* getVertScrollbar() { return m_pVScroll; }
 
-    bool convertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos, const Point& rPoint);
+    bool ConvertPointToCellAddress(sal_Int32& rRow, sal_Int32& rColPos, const Point& rPoint);
     tools::Rectangle calcHeaderRect(bool bColHeader);
     tools::Rectangle calcHeaderCellRect(bool bColHeader, sal_Int32 nPos);
     tools::Rectangle calcTableRect() const;
@@ -353,12 +353,12 @@ public:
     const rtl::Reference<accessibility::AccessibleGridControl>&
     getAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent);
     void disposeAccessible();
-    sal_Int32 getAccessibleControlCount() const;
-    OUString getAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 nRow,
+    sal_Int32 GetAccessibleControlCount() const;
+    OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 nRow,
                                      sal_Int32 nCol) const;
-    OUString getAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const;
-    void fillAccessibleStateSet(sal_Int64& rStateSet, AccessibleTableControlObjType eObjType) const;
-    void fillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
+    OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const;
+    void FillAccessibleStateSet(sal_Int64& rStateSet, AccessibleTableControlObjType eObjType) const;
+    void FillAccessibleStateSetForCell(sal_Int64& rStateSet, sal_Int32 nRow,
                                        sal_uInt16 nColumnPos) const;
 
     // ITableModelListener

@@ -73,9 +73,9 @@ sal_Int64 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
     SolarMutexGuard aSolarGuard;
 
     ensureAlive();
-    if (m_rTable.HasRowHeader() && m_rTable.HasColHeader())
+    if (m_rTable.HasRowHeader() && m_rTable.HasColumnHeader())
         return 0;
-    else if (m_rTable.HasRowHeader() != m_rTable.HasColHeader())
+    else if (m_rTable.HasRowHeader() != m_rTable.HasColumnHeader())
         return 1;
     else
         return 2;
@@ -133,7 +133,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlTable::getAccessible
     SolarMutexGuard g;
 
     ensureAlive();
-    if (m_rTable.HasColHeader())
+    if (m_rTable.HasColumnHeader())
         return implGetHeaderBar( 1 );
     else
         return implGetHeaderBar( 0 );

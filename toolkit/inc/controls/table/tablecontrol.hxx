@@ -143,7 +143,7 @@ public:
     OUString GetRowName(sal_Int32 _nIndex) const;
     OUString GetColumnName(sal_Int32 _nIndex) const;
     bool HasRowHeader();
-    bool HasColHeader();
+    bool HasColumnHeader();
     OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
 
     sal_Int32 GetSelectedRowCount() const;

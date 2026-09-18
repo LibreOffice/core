@@ -93,7 +93,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
     css::uno::Reference< css::accessibility::XAccessible > xChild;
     if (isAlive())
     {
-        if (nChildIndex == 0 && m_rTable.HasColHeader())
+        if (nChildIndex == 0 && m_rTable.HasColumnHeader())
         {
             if(!m_xColumnHeaderBar.is())
             {
