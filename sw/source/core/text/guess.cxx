@@ -817,6 +817,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             // If a field has been expanded, we do not want to delete any
             // blanks inside the field portion. This would cause an unwanted
             // underflow
+            TextFrameIndex nOriginalX = m_nBreakPos;
             TextFrameIndex nX = m_nBreakPos;
             while (nX > rInf.GetLineStart()
                    && (CH_TXTATR_BREAKWORD != cFieldChr || nX > rInf.GetIdx())
@@ -824,6 +825,13 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                        || CH_FULL_BLANK == rInf.GetChar(nX)))
             {
                 m_nBreakPos = nX;
+            }
+
+            // tdf#173348: Do not delete blanks at the end of a line which only
+            // contains blanks. This also causes unwanted underflow.
+            if (m_nBreakPos == rInf.GetLineStart())
+            {
+                m_nBreakPos = nOriginalX;
             }
 
             if( m_nBreakPos > rInf.GetIdx() )

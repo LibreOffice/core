@@ -2736,6 +2736,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15691_headerTextWrapsAroundImageLa
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf173348SpaceOnlyLine)
+{
+    // Test fix for regression in line breaking after a whitespace-only line.
+    createSwDoc("tdf173348-space-only-line.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix, the C would be moved to the previous column
+    assertXPath(pXmlDoc, "//column[2]//SwLineLayout", "portion", u"CG 11 11 11 11");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
