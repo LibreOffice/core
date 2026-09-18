@@ -73,7 +73,8 @@ class TableFunctionSet;
 
 //= TableControl_Impl
 
-class TableControl_Impl : public ITableModelListener
+class TableControl_Impl : public ITableModelListener,
+                          public std::enable_shared_from_this<TableControl_Impl>
 {
     friend class TableGeometry;
     friend class TableRowGeometry;

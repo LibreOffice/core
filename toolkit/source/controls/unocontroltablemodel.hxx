@@ -55,8 +55,10 @@ public:
     virtual TableMetrics getRowHeaderWidth() const override;
     virtual ScrollbarVisibility getVerticalScrollbarVisibility() const override;
     virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const override;
-    virtual void addTableModelListener(const PTableModelListener& i_listener) override;
-    virtual void removeTableModelListener(const PTableModelListener& i_listener) override;
+    virtual void
+    addTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener) override;
+    virtual void
+    removeTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener) override;
     virtual void getCellContent(ColPos const i_col, RowPos const i_row,
                                 css::uno::Any& o_cellContent) override;
     virtual void getCellToolTip(ColPos const i_col, RowPos const i_row,
@@ -141,7 +143,7 @@ public:
 private:
     void impl_notifyTableMetricsChanged() const;
 
-    typedef ::std::vector<PTableModelListener> ModellListeners;
+    typedef ::std::vector<std::shared_ptr<TableControl_Impl>> ModellListeners;
     typedef ::std::vector<PColumnModel> ColumnModels;
 
     ColumnModels aColumns;

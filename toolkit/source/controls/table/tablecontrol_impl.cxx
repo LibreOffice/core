@@ -111,8 +111,8 @@ public:
     {
         return ScrollbarShowNever;
     }
-    virtual void addTableModelListener(const PTableModelListener&) override {}
-    virtual void removeTableModelListener(const PTableModelListener&) override {}
+    virtual void addTableModelListener(const std::shared_ptr<TableControl_Impl>&) override {}
+    virtual void removeTableModelListener(const std::shared_ptr<TableControl_Impl>&) override {}
     virtual ::std::optional<::Color> getLineColor() const override
     {
         return ::std::optional<::Color>();

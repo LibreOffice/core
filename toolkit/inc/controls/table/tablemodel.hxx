@@ -78,7 +78,7 @@ namespace svt::table
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
-    class SAL_NO_VTABLE ITableModelListener : public std::enable_shared_from_this< ITableModelListener >
+    class SAL_NO_VTABLE ITableModelListener
     {
     public:
         /** notifies the listener that one or more rows have been inserted into
@@ -147,7 +147,6 @@ namespace svt::table
         /// deletes the listener instance
         virtual ~ITableModelListener(){};
     };
-    typedef std::shared_ptr< ITableModelListener > PTableModelListener;
 
 
     //= IColumnModel
@@ -329,11 +328,13 @@ namespace svt::table
 
         /** adds a listener to be notified of changes in the table model
         */
-        virtual void addTableModelListener( const PTableModelListener& i_listener ) = 0;
+        virtual void addTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener)
+            = 0;
 
         /** remove a listener to be notified of changes in the table model
         */
-        virtual void removeTableModelListener( const PTableModelListener& i_listener ) = 0;
+        virtual void removeTableModelListener(const std::shared_ptr<TableControl_Impl>& i_listener)
+            = 0;
 
         /** retrieves the content of the given cell
         */

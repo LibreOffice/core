@@ -22,6 +22,7 @@
 
 #include <controls/table/defaultinputhandler.hxx>
 #include <controls/table/gridtablerenderer.hxx>
+#include <controls/table/tablecontrol_impl.hxx>
 
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/util/Color.hpp>
@@ -305,14 +306,16 @@ ScrollbarVisibility UnoControlTableModel::getHorizontalScrollbarVisibility() con
     return eHScrollMode;
 }
 
-void UnoControlTableModel::addTableModelListener(const PTableModelListener& i_listener)
+void UnoControlTableModel::addTableModelListener(
+    const std::shared_ptr<TableControl_Impl>& i_listener)
 {
     DBG_TESTSOLARMUTEX();
     ENSURE_OR_RETURN_VOID(!!i_listener, "illegal NULL listener");
     m_aListeners.push_back(i_listener);
 }
 
-void UnoControlTableModel::removeTableModelListener(const PTableModelListener& i_listener)
+void UnoControlTableModel::removeTableModelListener(
+    const std::shared_ptr<TableControl_Impl>& i_listener)
 {
     DBG_TESTSOLARMUTEX();
     auto lookup = std::find(m_aListeners.begin(), m_aListeners.end(), i_listener);
