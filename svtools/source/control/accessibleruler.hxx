@@ -88,8 +88,7 @@ private:
     OUString                            msName;
 
     /// Reference to the parent object.
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
     /// pointer to internal representation
     VclPtr<Ruler>                       mpRepr;
