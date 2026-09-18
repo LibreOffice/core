@@ -180,12 +180,11 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent(
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    Reference<XAccessible> xParent;
 
-    if (mpContentWindow != nullptr)
-        xParent = mpContentWindow->GetAccessibleParent();
+    if (!mpContentWindow)
+        return {};
 
-    return xParent;
+    return mpContentWindow->GetAccessibleParent();
 }
 
 sal_Int64 SAL_CALL AccessibleSlideSorterView::getAccessibleIndexInParent()
