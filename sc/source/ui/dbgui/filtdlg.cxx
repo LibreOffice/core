@@ -1051,31 +1051,29 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
     else if (&rLb == m_xLbColor1.get() || &rLb == m_xLbColor2.get() || &rLb == m_xLbColor3.get()
              || &rLb == m_xLbColor4.get())
     {
-        sal_uInt16 nQ = 0;
-        if (&rLb == m_xLbColor1.get())
+        // Index the widget arrays by the visible row and not by the query entry
+        sal_uInt16 nRow = 0;
+        if (&rLb == m_xLbColor2.get())
         {
-            nQ = nOffset;
-        }
-        else if (&rLb == m_xLbColor2.get())
-        {
-            nQ = 1 + nOffset;
+            nRow = 1;
         }
         else if (&rLb == m_xLbColor3.get())
         {
-            nQ = 2 + nOffset;
+            nRow = 2;
         }
         else if (&rLb == m_xLbColor4.get())
         {
-            nQ = 3 + nOffset;
+            nRow = 3;
         }
+        const sal_uInt16 nQ = nRow + nOffset;
 
         ScQueryEntry& aEntry = theQueryData.GetEntry(nQ);
-        Color aColor = Color::STRtoRGB(maColorLbArr[nQ]->get_active_id());
-        if (maCondLbArr[nQ]->get_active_text() == aStrFontColor)
+        Color aColor = Color::STRtoRGB(rLb.get_active_id());
+        if (maCondLbArr[nRow]->get_active_text() == aStrFontColor)
         {
             aEntry.SetQueryByTextColor(aColor);
         }
-        else if (maCondLbArr[nQ]->get_active_text() == aStrBackgroundColor)
+        else if (maCondLbArr[nRow]->get_active_text() == aStrBackgroundColor)
         {
             aEntry.SetQueryByBackgroundColor(aColor);
         }
