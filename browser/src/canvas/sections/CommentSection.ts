@@ -508,9 +508,9 @@ export class Comment extends CanvasSectionObject {
 			// Content taller than the viewport would otherwise cut the content.
 			const marginY = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
 			maxHeight = Math.round(canvasContainerBounds.bottom - top - marginY) + 'px';
-		} else if (this.isSelected()) {
-			this.sectionProperties.container.style.zIndex = 14;
 		} else if (this.isEdit()) {
+			this.sectionProperties.container.style.zIndex = 14;
+		} else if (this.isSelected()) {
 			this.sectionProperties.container.style.zIndex = 13;
 		} else {
 			this.sectionProperties.container.style.zIndex = ''; // Default for .cool-annotation is 12
