@@ -390,14 +390,11 @@ awt::Rectangle SvxRectCtlAccessibleContext::implGetBounds()
 }
 
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
-    const Reference<XAccessible>&   rxParent,
-    OUString               aName,
-    OUString               aDescription,
-    const tools::Rectangle& rBoundingBox,
-    tools::Long nIndexInParent )
+    const rtl::Reference<comphelper::OAccessible>& rpParent, OUString aName, OUString aDescription,
+    const tools::Rectangle& rBoundingBox, tools::Long nIndexInParent)
     : msDescription(std::move( aDescription ))
     , msName(std::move( aName ))
-    , mxParent(rxParent)
+    , mxParent(rpParent)
     , maBoundingBox( rBoundingBox )
     , mnIndexInParent( nIndexInParent )
     , mbIsChecked( false )

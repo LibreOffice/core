@@ -123,11 +123,10 @@ class SvxRectCtlChildAccessibleContext final
                                          css::accessibility::XAccessibleAction>
 {
 public:
-    SvxRectCtlChildAccessibleContext(
-        const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
-        OUString aName, OUString aDescription,
-        const tools::Rectangle& rBoundingBox,
-        tools::Long nIndexInParent );
+    SvxRectCtlChildAccessibleContext(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                                     OUString aName, OUString aDescription,
+                                     const tools::Rectangle& rBoundingBox,
+                                     tools::Long nIndexInParent);
 
     // XAccessibleComponent
     virtual void SAL_CALL grabFocus() override;
