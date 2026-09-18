@@ -28,7 +28,7 @@ namespace svt::table
     //= TableRowGeometry
 
 
-    TableRowGeometry::TableRowGeometry( TableControl_Impl const & _rControl, tools::Rectangle const & _rBoundaries,
+    TableRowGeometry::TableRowGeometry( TableControl const & _rControl, tools::Rectangle const & _rBoundaries,
             sal_Int32 const _nRow, bool const i_allowVirtualRows )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nRowPos( _nRow )
@@ -84,7 +84,7 @@ namespace svt::table
     //= TableColumnGeometry
 
 
-    TableColumnGeometry::TableColumnGeometry( TableControl_Impl const & _rControl, tools::Rectangle const & _rBoundaries,
+    TableColumnGeometry::TableColumnGeometry( TableControl const & _rControl, tools::Rectangle const & _rBoundaries,
             sal_Int32 const _nCol )
         :TableGeometry( _rControl, _rBoundaries )
         ,m_nColPos( _nCol )

@@ -31,15 +31,17 @@ namespace accessibility
 
     AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(
         sal_Int32 _nColumnRowId, const rtl::Reference<AccessibleGridControlHeader>& rpParent,
-        svt::table::TableControl_Impl& rTable, AccessibleTableControlObjType eObjType)
-    : AccessibleGridControlCell(rpParent, rTable,
-                            (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
-                            (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
-                            eObjType)
-    , m_nColumnRowId(_nColumnRowId)
-{
-    assert(eObjType == AccessibleTableControlObjType::ROWHEADERCELL || eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL);
-}
+        svt::table::TableControl& rTable, AccessibleTableControlObjType eObjType)
+        : AccessibleGridControlCell(
+              rpParent, rTable,
+              (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
+              (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
+              eObjType)
+        , m_nColumnRowId(_nColumnRowId)
+    {
+        assert(eObjType == AccessibleTableControlObjType::ROWHEADERCELL
+               || eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL);
+    }
 
 /** Return a bitset of states of the current object.
 */

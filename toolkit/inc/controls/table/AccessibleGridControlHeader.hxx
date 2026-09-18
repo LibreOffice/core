@@ -37,7 +37,7 @@ public:
          @param eObjType  One of the two allowed types AccessibleTableControlObjType::ROWHEADERBAR or
                           AccessibleTableControlObjType::COLUMNHEADERBAR. */
     AccessibleGridControlHeader(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                                svt::table::TableControl_Impl& rTable,
+                                svt::table::TableControl& rTable,
                                 AccessibleTableControlObjType eObjType);
 
 private:

@@ -1778,7 +1778,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else if (aServiceName == "grid")
                 {
-                    pNewWindow = VclPtr<svt::table::TableControl_Impl>::Create(pParent, nWinBits);
+                    pNewWindow = VclPtr<svt::table::TableControl>::Create(pParent, nWinBits);
                     *ppNewComp = new SVTXGridControl;
                 }
             break;

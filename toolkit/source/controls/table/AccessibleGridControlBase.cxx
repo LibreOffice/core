@@ -46,7 +46,7 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleGridControlBase::AccessibleGridControlBase(
-    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl_Impl& rTable,
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
     AccessibleTableControlObjType eObjType)
     : m_pParent(rpParent)
     , m_rTable(rTable)

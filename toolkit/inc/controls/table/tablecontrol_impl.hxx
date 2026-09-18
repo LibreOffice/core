@@ -91,7 +91,7 @@ class TableFunctionSet;
     The control supports the concept of a <em>current</em> (or <em>active</em>
     cell).
 */
-class TableControl_Impl final : public Control, public ITableModelListener
+class TableControl final : public Control, public ITableModelListener
 {
     friend class TableGeometry;
     friend class TableRowGeometry;
@@ -164,8 +164,8 @@ public:
     sal_Int32 getLeftColumn() const { return m_nLeftColumn; }
 
 public:
-    explicit TableControl_Impl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~TableControl_Impl() override;
+    explicit TableControl(vcl::Window* pParent, WinBits nStyle);
+    virtual ~TableControl() override;
     virtual void dispose() override;
 
     // Window overridables
@@ -274,7 +274,7 @@ public:
     void commitAccessibleEvent(sal_Int16 const i_eventID);
     // temporary methods
     // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
-    // firing those events should be an implementation internal to the TableControl_Impl,
+    // firing those events should be an implementation internal to the TableControl,
     // instead of something triggered externally.
     void commitCellEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue,
                          const css::uno::Any& i_oldValue);

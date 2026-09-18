@@ -45,7 +45,7 @@ public:
         @param rTable    The Table control.
         @param eObjType  Type of table control object */
     AccessibleGridControlTableBase(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                                   svt::table::TableControl_Impl& rTable,
+                                   svt::table::TableControl& rTable,
                                    AccessibleTableControlObjType eObjType);
 
 protected:

@@ -65,7 +65,7 @@ namespace accessibility {
 
 public:
     AccessibleGridControl(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                          svt::table::TableControl_Impl& _rTable);
+                          svt::table::TableControl& _rTable);
 
     // helper functions
 

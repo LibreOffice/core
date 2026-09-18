@@ -524,8 +524,8 @@ public:
 };
 
 namespace svt::table {
-    class TableControl_Impl;
-    class UnoControlTableModel;
+class TableControl;
+class UnoControlTableModel;
 }
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXWindow
@@ -588,8 +588,10 @@ private:
     void    impl_updateColumnsFromModel_nothrow();
     void    impl_checkTableModelInit();
 
-    void    impl_checkColumnIndex_throw(svt::table::TableControl_Impl const & i_table, sal_Int32 const i_columnIndex ) const;
-    void    impl_checkRowIndex_throw(svt::table::TableControl_Impl const & i_table, sal_Int32 const i_rowIndex ) const;
+    void impl_checkColumnIndex_throw(svt::table::TableControl const& i_table,
+                                     sal_Int32 const i_columnIndex) const;
+    void impl_checkRowIndex_throw(svt::table::TableControl const& i_table,
+                                  sal_Int32 const i_rowIndex) const;
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     void            ImplCallItemListeners();

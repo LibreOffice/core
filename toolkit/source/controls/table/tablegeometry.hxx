@@ -26,7 +26,7 @@ namespace svt::table
 {
 
 
-    class TableControl_Impl;
+    class TableControl;
 
 
     //= TableGeometry
@@ -34,13 +34,13 @@ namespace svt::table
     class TableGeometry
     {
     protected:
-        const TableControl_Impl&    m_rControl;
+        const TableControl&    m_rControl;
         const tools::Rectangle&            m_rBoundaries;
         tools::Rectangle                   m_aRect;
 
     protected:
         TableGeometry(
-                const TableControl_Impl& _rControl,
+                const TableControl& _rControl,
                 const tools::Rectangle& _rBoundaries
             )
             :m_rControl( _rControl )
@@ -51,7 +51,7 @@ namespace svt::table
 
     public:
         // attribute access
-        const TableControl_Impl&    getControl() const      { return m_rControl; }
+        const TableControl&    getControl() const      { return m_rControl; }
 
         // status
         const tools::Rectangle&    getRect() const { return m_aRect; }
@@ -65,7 +65,7 @@ namespace svt::table
     {
     public:
         TableRowGeometry(
-            TableControl_Impl const & _rControl,
+            TableControl const & _rControl,
             tools::Rectangle const & _rBoundaries,
             sal_Int32 const _nRow,
             bool const i_allowVirtualRows = false
@@ -91,7 +91,7 @@ namespace svt::table
     class TableColumnGeometry final : public TableGeometry
     {
     public:
-        TableColumnGeometry(TableControl_Impl const& _rControl,
+        TableColumnGeometry(TableControl const& _rControl,
                             tools::Rectangle const& _rBoundaries, sal_Int32 const _nCol);
 
         // status
@@ -119,7 +119,7 @@ namespace svt::table
 
     public:
         TableCellGeometry(
-                TableControl_Impl const & _rControl,
+                TableControl const & _rControl,
                 tools::Rectangle const & _rBoundaries,
                 sal_Int32 const _nCol,
                 sal_Int32 const _nRow

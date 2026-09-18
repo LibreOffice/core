@@ -30,7 +30,7 @@ namespace accessibility
     public:
         AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
                                         const rtl::Reference<AccessibleGridControlHeader>& rpParent,
-                                        svt::table::TableControl_Impl& _rTable,
+                                        svt::table::TableControl& _rTable,
                                         AccessibleTableControlObjType _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

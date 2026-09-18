@@ -50,7 +50,7 @@ public:
         @param rTable    The Table control.
         @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                              svt::table::TableControl_Impl& rTable,
+                              svt::table::TableControl& rTable,
                               AccessibleTableControlObjType eObjType);
 
 protected:
@@ -158,7 +158,7 @@ protected:
     /** The parent accessible object. */
     rtl::Reference<comphelper::OAccessible> m_pParent;
     /** The SVT Table control. */
-    svt::table::TableControl_Impl& m_rTable;
+    svt::table::TableControl& m_rTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
     AccessibleTableControlObjType m_eObjType;
 };

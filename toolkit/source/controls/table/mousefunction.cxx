@@ -28,7 +28,7 @@ namespace svt::table
 {
 //= ColumnResize
 
-FunctionResult ColumnResize::handleMouseMove(TableControl_Impl& i_tableControl,
+FunctionResult ColumnResize::handleMouseMove(TableControl& i_tableControl,
                                              MouseEvent const& i_event)
 {
     Point const aPoint = i_event.GetPosPixel();
@@ -70,7 +70,7 @@ FunctionResult ColumnResize::handleMouseMove(TableControl_Impl& i_tableControl,
     return FunctionResult::ContinueFunction;
 }
 
-FunctionResult ColumnResize::handleMouseDown(TableControl_Impl& i_tableControl,
+FunctionResult ColumnResize::handleMouseDown(TableControl& i_tableControl,
                                              MouseEvent const& i_event)
 {
     if (m_nResizingColumn != COL_INVALID)
@@ -95,8 +95,7 @@ FunctionResult ColumnResize::handleMouseDown(TableControl_Impl& i_tableControl,
     return FunctionResult::SkipFunction;
 }
 
-FunctionResult ColumnResize::handleMouseUp(TableControl_Impl& i_tableControl,
-                                           MouseEvent const& i_event)
+FunctionResult ColumnResize::handleMouseUp(TableControl& i_tableControl, MouseEvent const& i_event)
 {
     if (m_nResizingColumn == COL_INVALID)
         return FunctionResult::SkipFunction;
@@ -149,12 +148,12 @@ FunctionResult ColumnResize::handleMouseUp(TableControl_Impl& i_tableControl,
 
 //= RowSelection
 
-FunctionResult RowSelection::handleMouseMove(TableControl_Impl&, MouseEvent const&)
+FunctionResult RowSelection::handleMouseMove(TableControl&, MouseEvent const&)
 {
     return FunctionResult::SkipFunction;
 }
 
-FunctionResult RowSelection::handleMouseDown(TableControl_Impl& i_tableControl,
+FunctionResult RowSelection::handleMouseDown(TableControl& i_tableControl,
                                              MouseEvent const& i_event)
 {
     bool handled = false;
@@ -178,8 +177,7 @@ FunctionResult RowSelection::handleMouseDown(TableControl_Impl& i_tableControl,
     return handled ? FunctionResult::ActivateFunction : FunctionResult::SkipFunction;
 }
 
-FunctionResult RowSelection::handleMouseUp(TableControl_Impl& i_tableControl,
-                                           MouseEvent const& i_event)
+FunctionResult RowSelection::handleMouseUp(TableControl& i_tableControl, MouseEvent const& i_event)
 {
     TableCell const tableCell = i_tableControl.hitTest(i_event.GetPosPixel());
     if (tableCell.nRow >= 0)
@@ -199,12 +197,12 @@ FunctionResult RowSelection::handleMouseUp(TableControl_Impl& i_tableControl,
 
 //= ColumnSortHandler
 
-FunctionResult ColumnSortHandler::handleMouseMove(TableControl_Impl&, MouseEvent const&)
+FunctionResult ColumnSortHandler::handleMouseMove(TableControl&, MouseEvent const&)
 {
     return FunctionResult::SkipFunction;
 }
 
-FunctionResult ColumnSortHandler::handleMouseDown(TableControl_Impl& i_tableControl,
+FunctionResult ColumnSortHandler::handleMouseDown(TableControl& i_tableControl,
                                                   MouseEvent const& i_event)
 {
     if (m_nActiveColumn != COL_INVALID)
@@ -228,7 +226,7 @@ FunctionResult ColumnSortHandler::handleMouseDown(TableControl_Impl& i_tableCont
     return FunctionResult::ActivateFunction;
 }
 
-FunctionResult ColumnSortHandler::handleMouseUp(TableControl_Impl& i_tableControl,
+FunctionResult ColumnSortHandler::handleMouseUp(TableControl& i_tableControl,
                                                 MouseEvent const& i_event)
 {
     if (m_nActiveColumn == COL_INVALID)

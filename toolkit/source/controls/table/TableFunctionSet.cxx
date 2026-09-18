@@ -22,7 +22,7 @@
 
 namespace svt::table
 {
-TableFunctionSet::TableFunctionSet(TableControl_Impl& rTableControl)
+TableFunctionSet::TableFunctionSet(TableControl& rTableControl)
     : m_rTableControl(rTableControl)
     , m_nCurrentRow(ROW_INVALID)
 {

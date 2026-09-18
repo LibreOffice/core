@@ -29,7 +29,7 @@ class MouseEvent;
 
 namespace svt::table
 {
-class TableControl_Impl;
+class TableControl;
 
 class DefaultInputHandler final
 {
@@ -41,13 +41,13 @@ public:
     // with the additional option to return a boolean value indicating whether
     // the event should be further processed by the ->Window implementations (<FALSE/>),
     // or whether it has been sufficiently handled by this class  (<FALSE/>).
-    bool MouseMove(TableControl_Impl& _rControl, const MouseEvent& rMEvt);
-    bool MouseButtonDown(TableControl_Impl& _rControl, const MouseEvent& rMEvt);
-    bool MouseButtonUp(TableControl_Impl& _rControl, const MouseEvent& rMEvt);
+    bool MouseMove(TableControl& _rControl, const MouseEvent& rMEvt);
+    bool MouseButtonDown(TableControl& _rControl, const MouseEvent& rMEvt);
+    bool MouseButtonUp(TableControl& _rControl, const MouseEvent& rMEvt);
 
 private:
-    bool delegateMouseEvent(TableControl_Impl& i_control, const MouseEvent& i_event,
-                            FunctionResult (MouseFunction::*i_handlerMethod)(TableControl_Impl&,
+    bool delegateMouseEvent(TableControl& i_control, const MouseEvent& i_event,
+                            FunctionResult (MouseFunction::*i_handlerMethod)(TableControl&,
                                                                              const MouseEvent&));
 
     rtl::Reference<MouseFunction> pActiveFunction;

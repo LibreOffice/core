@@ -31,9 +31,9 @@ namespace svt::table
 {
     using css::uno::Any;
 
-    TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
-        :Window(&_rTableControl)
-        ,m_rTableControl( _rTableControl )
+    TableDataWindow::TableDataWindow(TableControl& _rTableControl)
+        : Window(&_rTableControl)
+        , m_rTableControl(_rTableControl)
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );

@@ -37,7 +37,7 @@ class AccessibleGridControlTable final
 {
 public:
     AccessibleGridControlTable(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                               svt::table::TableControl_Impl& rTable);
+                               svt::table::TableControl& rTable);
 
 private:
     virtual ~AccessibleGridControlTable() override = default;

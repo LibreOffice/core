@@ -37,7 +37,7 @@ using namespace ::vcl;
 namespace accessibility {
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(
-    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl_Impl& rTable,
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& rTable,
     AccessibleTableControlObjType eObjType)
     : AccessibleGridControlTableBase(rpParent, rTable, eObjType)
 {

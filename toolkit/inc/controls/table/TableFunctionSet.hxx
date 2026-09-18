@@ -25,17 +25,17 @@
 
 namespace svt::table
 {
-class TableControl_Impl;
+class TableControl;
 
 //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
 class TableFunctionSet : public FunctionSet
 {
 private:
-    TableControl_Impl& m_rTableControl;
+    TableControl& m_rTableControl;
     sal_Int32 m_nCurrentRow;
 
 public:
-    explicit TableFunctionSet(TableControl_Impl& rTableControl);
+    explicit TableFunctionSet(TableControl& rTableControl);
     virtual ~TableFunctionSet() override;
 
     virtual void BeginDrag() override;

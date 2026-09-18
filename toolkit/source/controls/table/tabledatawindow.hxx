@@ -24,7 +24,7 @@
 
 namespace svt::table
 {
-    class TableControl_Impl;
+    class TableControl;
 
     /** the window containing the content area (including headers) of
         a table control
@@ -32,11 +32,11 @@ namespace svt::table
     class TableDataWindow : public vcl::Window
     {
     private:
-        TableControl_Impl&  m_rTableControl;
+        TableControl&  m_rTableControl;
         Link<LinkParamNone*,void> m_aSelectHdl;
 
     public:
-        explicit TableDataWindow( TableControl_Impl& _rTableControl );
+        explicit TableDataWindow( TableControl& _rTableControl );
         virtual ~TableDataWindow() override;
         virtual void dispose() override;
 
