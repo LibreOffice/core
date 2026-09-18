@@ -165,7 +165,7 @@ void SAL_CALL SVTXGridControl::goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 
     impl_checkColumnIndex_throw( *pTable, i_columnIndex );
     impl_checkRowIndex_throw( *pTable, i_rowIndex );
 
-    pTable->GoTo( i_columnIndex, i_rowIndex );
+    pTable->GoToCell(i_columnIndex, i_rowIndex);
 }
 
 

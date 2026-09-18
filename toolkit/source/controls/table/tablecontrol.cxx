@@ -190,8 +190,6 @@ sal_Int32 TableControl::GetCurrentRow() const { return m_pImpl->getCurrentRow();
 
 sal_Int32 TableControl::GetCurrentColumn() const { return m_pImpl->getCurrentColumn(); }
 
-void TableControl::GoTo(ColPos _nColumn, RowPos _nRow) { m_pImpl->goTo(_nColumn, _nRow); }
-
 void TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
 {
     m_pImpl->goTo(_nColPos, _nRowPos);

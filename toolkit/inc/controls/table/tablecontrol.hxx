@@ -98,10 +98,6 @@ public:
     */
     sal_Int32 GetCurrentColumn() const;
 
-    /** activates the cell at the given position
-        */
-    void GoTo(ColPos _nColumnPos, RowPos _nRow);
-
     virtual void Resize() override;
     void Select();
 
