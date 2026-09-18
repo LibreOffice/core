@@ -404,7 +404,7 @@ Reference<XAccessible > SAL_CALL
     if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    Reference<XAccessible> xChild;
+    rtl::Reference<AccessibleSlideSorterObject> pChild;
 
     ::sd::slidesorter::controller::PageSelector& rSelector (
         mrSlideSorter.GetController().GetPageSelector());
@@ -415,16 +415,16 @@ Reference<XAccessible > SAL_CALL
         {
             if (nSelectedCount == nSelectedChildIndex)
             {
-                xChild = mpImpl->GetAccessibleChild(i);
+                pChild = mpImpl->GetAccessibleChild(i);
                 break;
             }
             ++nSelectedCount;
         }
 
-    if ( ! xChild.is() )
+    if (!pChild.is())
         throw lang::IndexOutOfBoundsException();
 
-    return xChild;
+    return pChild;
 }
 
 void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int64 nChildIndex)
