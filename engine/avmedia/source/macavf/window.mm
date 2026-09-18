@@ -151,73 +151,73 @@ void Window::setFocus()
 }
 
 
-void Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void Window::addWindowListener( const cpo::uno::Reference< awt::XWindowListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void Window::removeWindowListener( const cpo::uno::Reference< awt::XWindowListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void Window::addFocusListener( const cpo::uno::Reference< awt::XFocusListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void Window::removeFocusListener( const cpo::uno::Reference< awt::XFocusListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void Window::addKeyListener( const cpo::uno::Reference< awt::XKeyListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void Window::removeKeyListener( const cpo::uno::Reference< awt::XKeyListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void Window::addMouseListener( const cpo::uno::Reference< awt::XMouseListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void Window::removeMouseListener( const cpo::uno::Reference< awt::XMouseListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void Window::addMouseMotionListener( const cpo::uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void Window::removeMouseMotionListener( const cpo::uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void Window::addPaintListener( const cpo::uno::Reference< awt::XPaintListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void Window::removePaintListener( const cpo::uno::Reference< awt::XPaintListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
@@ -230,13 +230,13 @@ void Window::dispose(  )
 }
 
 
-void Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void Window::addEventListener( const cpo::uno::Reference< lang::XEventListener >& xListener )
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 
-void Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void Window::removeEventListener( const cpo::uno::Reference< lang::XEventListener >& xListener )
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }

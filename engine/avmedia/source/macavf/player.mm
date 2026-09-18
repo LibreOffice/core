@@ -312,7 +312,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+cpo::uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // get the preferred window size
     const awt::Size aSize( getPreferredPlayerWindowSize() );
@@ -331,7 +331,7 @@ uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const cpo::
 }
 
 
-uno::Reference< media::XFrameGrabber > Player::createFrameGrabber()
+cpo::uno::Reference< media::XFrameGrabber > Player::createFrameGrabber()
 {
     rtl::Reference<FrameGrabber> pGrabber = new FrameGrabber();
     AVAsset* pMovie = [[mpPlayer currentItem] asset];

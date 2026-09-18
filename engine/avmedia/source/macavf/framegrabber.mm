@@ -61,9 +61,9 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< graphic::XGraphic > FrameGrabber::grabFrame( double fMediaTime )
+cpo::uno::Reference< graphic::XGraphic > FrameGrabber::grabFrame( double fMediaTime )
 {
-    uno::Reference< graphic::XGraphic > xRet;
+    cpo::uno::Reference< graphic::XGraphic > xRet;
     if( !mpImageGen )
         return xRet;
 

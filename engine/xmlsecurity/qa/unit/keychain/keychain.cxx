@@ -48,8 +48,8 @@ constexpr std::u16string_view TEST_SIGNER_SUBJECT = u"Keychain Test Signer";
 class KeychainSigningTest : public UnoApiXmlTest
 {
 protected:
-    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
-    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
+    cpo::uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
+    cpo::uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
 public:
     KeychainSigningTest()
@@ -144,12 +144,12 @@ public:
     }
 
     /// Returns the test certificate provided by the temporary keychain.
-    uno::Reference<security::XCertificate>
+    cpo::uno::Reference<security::XCertificate>
     getKeychainCertificate(DocumentSignatureManager& rSignatureManager)
     {
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
+        cpo::uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
             = rSignatureManager.getSecurityEnvironment();
-        const cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+        const cpo::uno::Sequence<cpo::uno::Reference<security::XCertificate>> aCertificates
             = xSecurityEnvironment->getPersonalCertificates();
         for (const auto& xCertificate : aCertificates)
         {
@@ -168,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testKeychainCertificateListed)
 
     // The keychain identity has to show up in the personal certificates, marked as having a
     // private key (which lives in the keychain, not in the NSS database).
-    uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
+    cpo::uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nCharacters
         = aManager.getSecurityEnvironment()->getCertificateCharacters(xCertificate);
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testODFSignWithKeychain)
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    uno::Reference<embed::XStorage> xStorage
+    cpo::uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testODFSignWithKeychain)
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // When signing with the Keychain identity (XAdES, so SHA-256):
-    uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
+    cpo::uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nSecurityId;
     svl::crypto::SigningContext aSigningContext;
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testOOXMLSignWithKeychain)
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    uno::Reference<embed::XStorage> xStorage
+    cpo::uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, maTempFile.GetURL(), embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testOOXMLSignWithKeychain)
     aManager.getSignatureHelper().SetStorage(xStorage, u"1.2");
 
     // When signing with the Keychain identity (non-XAdES, so RSA-SHA1):
-    uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
+    cpo::uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nSecurityId;
     svl::crypto::SigningContext aSigningContext;
@@ -249,12 +249,12 @@ CPPUNIT_TEST_FIXTURE(KeychainSigningTest, testPDFSignWithKeychain)
     CPPUNIT_ASSERT(aManager.init());
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(
         maTempFile.GetURL(), StreamMode::READ | StreamMode::WRITE));
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    cpo::uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     CPPUNIT_ASSERT(xStream.is());
     aManager.setSignatureStream(xStream);
 
     // When signing with the Keychain identity (the CMS is produced by the Security framework):
-    uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
+    cpo::uno::Reference<security::XCertificate> xCertificate = getKeychainCertificate(aManager);
     CPPUNIT_ASSERT(xCertificate.is());
     sal_Int32 nSecurityId;
     svl::crypto::SigningContext aSigningContext;
