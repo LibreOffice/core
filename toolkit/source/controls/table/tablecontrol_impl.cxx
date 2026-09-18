@@ -2003,6 +2003,22 @@ TableSize TableControl_Impl::impl_scrollColumns(TableSize const i_columnDelta)
 
 SelectionEngine* TableControl_Impl::getSelEngine() { return m_pSelEngine.get(); }
 
+OUString TableControl_Impl::getRowName(sal_Int32 nIndex) const
+{
+    OUString sRowName;
+    m_pModel->getRowHeading(nIndex) >>= sRowName;
+    return sRowName;
+}
+
+OUString TableControl_Impl::getColumnName(sal_Int32 nIndex) const
+{
+    return m_pModel->getColumnModel(nIndex)->getName();
+}
+
+bool TableControl_Impl::hasRowHeader() { return m_pModel->hasRowHeaders(); }
+
+bool TableControl_Impl::hasColumnHeader() { return m_pModel->hasColumnHeaders(); }
+
 bool TableControl_Impl::isRowSelected(RowPos i_row) const
 {
     return ::std::find(m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row)

@@ -206,6 +206,11 @@ public:
 
     void checkCursorPosition();
 
+    OUString getRowName(sal_Int32 nIndex) const;
+    OUString getColumnName(sal_Int32 nIndex) const;
+    bool hasRowHeader();
+    bool hasColumnHeader();
+
     bool hasRowSelection() const { return !m_aSelectedRows.empty(); }
     size_t getSelectedRowCount() const { return m_aSelectedRows.size(); }
     RowPos getSelectedRowIndex(size_t const i_selectionIndex) const;

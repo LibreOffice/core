@@ -345,16 +345,11 @@ OUString TableControl::GetAccessibleObjectDescription(AccessibleTableControlObjT
     return aRetText;
 }
 
-OUString TableControl::GetRowName(sal_Int32 _nIndex) const
-{
-    OUString sRowName;
-    GetModel()->getRowHeading(_nIndex) >>= sRowName;
-    return sRowName;
-}
+OUString TableControl::GetRowName(sal_Int32 _nIndex) const { return m_pImpl->getRowName(_nIndex); }
 
 OUString TableControl::GetColumnName(sal_Int32 _nIndex) const
 {
-    return GetModel()->getColumnModel(_nIndex)->getName();
+    return m_pImpl->getColumnName(_nIndex);
 }
 
 OUString TableControl::GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const
@@ -439,9 +434,9 @@ void TableControl::commitTableEvent(sal_Int16 const i_eventID, const Any& i_newV
     m_pImpl->commitTableEvent(i_eventID, i_newValue, i_oldValue);
 }
 
-bool TableControl::HasRowHeader() { return GetModel()->hasRowHeaders(); }
+bool TableControl::HasRowHeader() { return m_pImpl->hasRowHeader(); }
 
-bool TableControl::HasColHeader() { return GetModel()->hasColumnHeaders(); }
+bool TableControl::HasColHeader() { return m_pImpl->hasColumnHeader(); }
 
 sal_Int32 TableControl::GetAccessibleControlCount() const
 {
