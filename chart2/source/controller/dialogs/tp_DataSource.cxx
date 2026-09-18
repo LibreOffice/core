@@ -183,7 +183,6 @@ DataSourceTabPage::DataSourceTabPage(weld::Container* pPage, weld::DialogControl
                                  m_xLB_ROLE->get_height_rows(5));
     m_xFT_CAPTION->set_visible(!bHideDescription);
 
-    m_aFixedTextRange = m_xFT_RANGE->get_label();
     SetPageTitle(SchResId(STR_OBJECT_DATASERIES_PLURAL));
 
     // set handlers
@@ -473,15 +472,9 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl, weld::ItemView&, voi
     OUString aSelectedRoleUI = lcl_GetSelectedRole( *m_xLB_ROLE, true );
     OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_xLB_ROLE );
 
-    // replace role in fixed text label
-    static constexpr OUString aReplacementStr( u"%VALUETYPE"_ustr );
-    sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
-    if( nIndex != -1 )
-    {
-        m_xFT_RANGE->set_label(
-            m_aFixedTextRange.replaceAt(
-                        nIndex, aReplacementStr.getLength(), aSelectedRoleUI ));
-    }
+    // add the role in fixed text label
+    m_xFT_RANGE->set_label(
+        SchResId(STR_RANGE_FOR_VALUETYPE).replaceFirst(u"%VALUETYPE", aSelectedRoleUI));
 
     m_xEDT_RANGE->set_text(aSelectedRange);
     isValid();

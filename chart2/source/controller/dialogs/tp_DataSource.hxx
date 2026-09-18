@@ -121,8 +121,6 @@ private:
 
     std::vector<std::unique_ptr<SeriesEntry>> m_aEntries;
 
-    OUString       m_aFixedTextRange;
-
     ChartTypeTemplateProvider * m_pTemplateProvider;
     DialogModel &               m_rDialogModel;
     weld::Entry*                m_pCurrentRangeChoosingField;
