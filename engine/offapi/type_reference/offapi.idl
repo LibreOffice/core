@@ -4127,10 +4127,6 @@ module com {
      sequence< ::com::sun::star::datatransfer::DataFlavor > getTransferDataFlavors();
      boolean isDataFlavorSupported([in] ::com::sun::star::datatransfer::DataFlavor aFlavor);
     };
-    published interface XTransferableEx {
-     interface ::cpo::uno::XInterface;
-     sequence< ::com::sun::star::datatransfer::DataFlavor > queryTransferDataFlavors([in] sequence< ::com::sun::star::datatransfer::DataFlavor > requestedFlavors);
-    };
     published interface XTransferableSource {
      interface ::cpo::uno::XInterface;
      string getDataSourceDescription();

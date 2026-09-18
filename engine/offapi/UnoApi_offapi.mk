@@ -1987,7 +1987,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/datatransfer,\
 	XTransferDataAccess \
 	XTransferable \
 	XTransferable2 \
-	XTransferableEx \
 	XTransferableSource \
 	XTransferableSupplier \
 	XTransferableTextSupplier \
