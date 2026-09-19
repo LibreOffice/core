@@ -218,8 +218,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
 {
-    uno::Reference< accessibility::XAccessible > xRet;
-    return xRet;
+    return {};
 }
 
 awt::Rectangle ValueItemAcc::implGetBounds()
