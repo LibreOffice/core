@@ -2045,13 +2045,14 @@ void ScAccessibleDocument::AddChild(const rtl::Reference<comphelper::OAccessible
     }
 }
 
-void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)
+void ScAccessibleDocument::RemoveChild(const rtl::Reference<comphelper::OAccessible>& pAcc,
+                                       bool bFireEvent)
 {
     OSL_ENSURE(mpTempAcc.is(), "this object should be added before");
-    if (!xAcc.is())
+    if (!pAcc.is())
         return;
 
-    OSL_ENSURE(xAcc.get() == mpTempAcc.get(), "only the same object should be removed");
+    OSL_ENSURE(pAcc == mpTempAcc, "only the same object should be removed");
     if( bFireEvent )
         CommitChange(AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(mpTempAcc)),
                      uno::Any());

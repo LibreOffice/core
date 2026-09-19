@@ -198,7 +198,7 @@ private:
     bool IsDefunc(sal_Int64 nParentStates);
 
     void AddChild(const rtl::Reference<comphelper::OAccessible>& pAcc, bool bFireEvent);
-    void RemoveChild(const css::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
+    void RemoveChild(const rtl::Reference<comphelper::OAccessible>& pAcc, bool bFireEvent);
 
     OUString GetCurrentCellName() const;
     static const OUString & GetCurrentCellDescription();
