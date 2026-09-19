@@ -467,7 +467,7 @@ public:
         SetBackground(rStyleSettings.GetFaceColor());
 
         m_xListButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_SHEETSLIST));
-        m_xFirstButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
+        m_xFirstButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOHOME));
         m_xPrevButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT));
         m_xNextButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
         m_xLastButton->set_accessible_name(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND));
