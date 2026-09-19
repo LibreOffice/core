@@ -1110,18 +1110,16 @@ rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSe
 
     if (pData && mpAccessibleDocument)
     {
-        uno::Reference<XAccessible> xAccessible = mpAccessibleDocument->GetAccessibleSpreadsheet(); // should be the current table
-        if (pData->xRelationCell && xAccessible.is())
+        // should be the current table
+        rtl::Reference<ScAccessibleSpreadsheet> pSpreadsheet = mpAccessibleDocument->GetAccessibleSpreadsheet();
+        uno::Reference<XAccessible> xAccessible = pSpreadsheet;
+        if (pData->xRelationCell && pSpreadsheet.is())
         {
             sal_Int32 nRow = pData->xRelationCell->Row();
             sal_Int32 nColumn = pData->xRelationCell->Col();
             bool bPositionUnset = nRow == -1 && nColumn == -1;
             if (!bPositionUnset)
-            {
-                uno::Reference<XAccessibleTable> xAccTable(xAccessible->getAccessibleContext(), uno::UNO_QUERY);
-                if (xAccTable.is())
-                    xAccessible = xAccTable->getAccessibleCellAt(nRow, nColumn);
-            }
+                xAccessible = pSpreadsheet->getAccessibleCellAt(nRow, nColumn);
         }
         AccessibleRelation aRelation;
         aRelation.TargetSet = { xAccessible };
