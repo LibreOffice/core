@@ -173,6 +173,13 @@ public:
 
         tools::Rectangle maPaintedBox;
         basegfx::B2DHomMatrix maTransformation;
+        /// The name the object carries, empty for an entry that stands for no object.
+        OUString maName;
+        /// The layer the entry draws with, nothing for an entry that belongs to no object. For
+        /// the entry of a running text edit it is the layer of the object the edit runs on.
+        std::optional<sal_Int32> moLayer;
+        /// True for a placeholder that holds none of its own content yet.
+        bool mbEmptyPlaceholder = false;
         /// True while a text edit runs on the object. It is compared along with the rest so
         /// that an edit which ends without changing the text still reaches the client.
         bool mbTextEdit = false;
@@ -187,10 +194,11 @@ public:
         bool operator==(const VectorObjectContent& rOther) const
         {
             return maPaintedBox == rOther.maPaintedBox
-                   && maTransformation == rOther.maTransformation
+                   && maTransformation == rOther.maTransformation && maName == rOther.maName
+                   && moLayer == rOther.moLayer && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder
                    && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
-                   && maAutoColor == rOther.maAutoColor
-                   && maDrawn == rOther.maDrawn && maAids == rOther.maAids;
+                   && maAutoColor == rOther.maAutoColor && maDrawn == rOther.maDrawn
+                   && maAids == rOther.maAids;
         }
     };
 
@@ -224,6 +232,9 @@ public:
 
     /// Drops what was recorded for an object that is no longer on the part.
     void forgetVectorObject(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId);
+
+    /// The ids everything the part has recorded is keyed by, in no particular order.
+    std::vector<sal_uInt64> getVectorRecordedIds(sal_Int32 nPart, sal_Int32 nMode) const;
 
     /// Records the order the objects of the part paint in. When it differs from the order
     /// recorded before, counts the part's version up, remembers that version as the one the

@@ -192,8 +192,9 @@ protected:
         return false;
     }
 
-    /// True when every entry that names a parent names one the same response
-    /// reports, so a client can always resolve a member to its group.
+    /// True when every positive parent id names an entry of the same response. Zero is the page
+    /// and minus one is no parent. This holds for a whole page only, since a delta carries just
+    /// the entries that changed and their parents can lie outside it.
     static bool everyParentResolves(const tools::JsonPath& rJson)
     {
         const size_t nCount = rJson.getSize("/objects").value_or(0);
@@ -212,7 +213,7 @@ protected:
                 = rJson.getInt(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nIndex))
                                                 + "/parent"))
                       .value_or(0);
-            if (nParent != 0 && !aReported.contains(nParent))
+            if (nParent > 0 && !aReported.contains(nParent))
                 return false;
         }
 
@@ -675,7 +676,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextEditEntryNamesItsView)
     CPPUNIT_ASSERT(oEntry.has_value());
     CPPUNIT_ASSERT_EQUAL(sal_Int64(nViewId), oEntry->getInt("viewId").value_or(-1));
     // Below zero, where no object and no page can reach.
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(-1 - nViewId), oEntry->getInt("id").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(-2 - nViewId), oEntry->getInt("id").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()), oEntry->getInt("parent").value_or(-1));
 }
 
@@ -745,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEmptyTextEditKeepsItsEntry)
     auto aDelta = getVectorPrimitives(u"testEmptyEditDelta", nAtBegin);
     // Since before the edit began, so the order the edit added its entry to travels.
     auto aFull = getVectorPrimitives(u"testEmptyEditSinceBase", nBase);
-    const sal_Int64 nEntryId = -1 - sal_Int64(SfxViewShell::Current()->GetViewShellId().get());
+    const sal_Int64 nEntryId = -2 - sal_Int64(SfxViewShell::Current()->GetViewShellId().get());
 
     pView->SdrEndTextEdit();
 
@@ -923,6 +924,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPageIsServedInItsOwnMode)
     // page keeps the placeholders a blank slide has none of.
     assertJsonPath(aNotes, "/objects/0/kind", "page");
     CPPUNIT_ASSERT(aNotes.getSize("/objects").value_or(0) > 1);
+    CPPUNIT_ASSERT(everyParentResolves(aNotes));
 
     // The slide at the same index is blank apart from its page entry, so the
     // two modes really are different pages.
@@ -1783,7 +1785,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAdvancesAreRelative)
     const size_t nCount = oPortion->getSize("advances").value_or(0);
     CPPUNIT_ASSERT_EQUAL(size_t(8), nCount);
 
-    sal_Int64 nTotal = 0;
+    sal_Int64 nFirst = 0;
     sal_Int64 nLast = 0;
     for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
     {
@@ -1791,13 +1793,13 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAdvancesAreRelative)
                     ->getInt(rtl::Concat2View("advances/" + OString::number(sal_Int32(nIndex))))
                     .value_or(0);
         CPPUNIT_ASSERT_MESSAGE("an advance is not a forward step", nLast > 0);
-        nTotal += nLast;
+        if (nIndex == 0)
+            nFirst = nLast;
     }
 
-    // Measured from the start of the run the last value would be the whole
-    // width. As a step it is one glyph's worth of it.
-    CPPUNIT_ASSERT_MESSAGE("the advances read as distances from the start",
-                           nLast < nTotal / 2);
+    // Every step is one glyph's worth of the run, so the last one stays close to the first.
+    // Measured from the start of the run the eighth value would be around eight times the first.
+    CPPUNIT_ASSERT_LESS(nFirst * 3, nLast);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextLineMetrics)

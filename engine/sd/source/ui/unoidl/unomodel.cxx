@@ -2310,6 +2310,20 @@ void SdXImpressDocument::forgetVectorObject(sal_Int32 nPart, sal_Int32 nMode, sa
     aIterator->second.maObjectChangeVersions.erase(nObjectId);
 }
 
+std::vector<sal_uInt64> SdXImpressDocument::getVectorRecordedIds(sal_Int32 nPart,
+                                                                 sal_Int32 nMode) const
+{
+    auto aIterator = maVectorParts.find({ nPart, nMode });
+    if (aIterator == maVectorParts.end())
+        return {};
+
+    std::vector<sal_uInt64> aIds;
+    aIds.reserve(aIterator->second.maObjectContent.size());
+    for (const auto& rRecorded : aIterator->second.maObjectContent)
+        aIds.push_back(rRecorded.first);
+    return aIds;
+}
+
 bool SdXImpressDocument::recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
                                                 const std::vector<sal_uInt64>& rOrder)
 {
@@ -2331,14 +2345,23 @@ namespace
 /// zero as its parent.
 constexpr sal_Int64 constPageEntryId = 0;
 
+/// The parent an entry names when it sits under nothing. No entry carries this id, so a walk
+/// up the parents ends here.
+constexpr sal_Int64 constNoParentId = -1;
+
 /// The id of the entry carrying the text of the edit running in the view with the given id.
-/// An object's unique id counts up from 1 and the page is zero, so a negative id collides with
-/// neither. Several views can edit at once, even the same object, so the id comes from the view.
-constexpr sal_Int64 textEditEntryId(sal_Int32 nViewId) { return -1 - sal_Int64(nViewId); }
+/// An object's unique id counts up from 1, the page is zero and minus one stands for no parent,
+/// so these start below that and collide with none of them. Several views can edit at once,
+/// even the same object, so the id comes from the view.
+constexpr sal_Int64 textEditEntryId(sal_Int32 nViewId) { return -2 - sal_Int64(nViewId); }
 constexpr sal_uInt64 textEditEntryKey(sal_Int32 nViewId)
 {
     return sal_uInt64(textEditEntryId(nViewId));
 }
+
+/// True for the key of an entry that carries a running text edit. An object's unique id counts
+/// up from 1 and the page is zero, so such an entry is the only one with a negative id.
+constexpr bool isTextEditEntryKey(sal_uInt64 nKey) { return sal_Int64(nKey) < 0; }
 
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
@@ -2465,19 +2488,16 @@ void markPageObjectsDirty(SdXImpressDocument::VectorPartState& rState, const Sdr
 /// Marks the objects a change touched, so the next write looks at them again and counts the
 /// part's version up for those that differ. A hint for a group covers the objects inside it,
 /// and an object that moves marks the groups above it, whose boxes move with it. An insertion
-/// or a removal counts the version up at once, since no comparison of one object shows it.
+/// or a removal shows in the paint order, which the next write compares as a whole, so it is
+/// the write that counts the version up for it.
 void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject,
                         SdrHintKind eKind)
 {
     if (eKind == SdrHintKind::ObjectRemoved)
     {
-        recordOrderChange(rState);
         forgetSubtree(rState, pObject);
         return;
     }
-
-    if (eKind == SdrHintKind::ObjectInserted)
-        recordOrderChange(rState);
 
     markSubtreeDirty(rState, pObject);
 
@@ -2944,8 +2964,9 @@ private:
         rWriter.put("id", constPageEntryId);
         rWriter.put("name", pPage->GetName());
         // An object on the page gives zero as its parent, which is this entry, so it reads as
-        // a child of the page. The page sits under nothing, which leaves it its own parent.
-        rWriter.put("parent", sal_Int64(0));
+        // a child of the page. The page sits under nothing and names no parent of its own, so
+        // a walk up the parents of an entry ends at it.
+        rWriter.put("parent", constNoParentId);
         rWriter.put("kind", "page");
         const sal_Int64 nWidth = sal_Int64(pPage->GetWidth() * constTwipConversionFactor);
         const sal_Int64 nHeight = sal_Int64(pPage->GetHeight() * constTwipConversionFactor);
@@ -3209,11 +3230,30 @@ private:
             aContent.maAids = sd::createPlaceholderDecoration(rObject, false);
 
             for (const auto& rPrimitive : aContent.maPrimitives)
-                rPrimitive->get2DDecomposition(aContent.maDrawn, maViewInformation);
+            {
+                // A page preview shows another page, and a field inside it reads against that
+                // page rather than against the one being drawn, so the preview names the page
+                // it shows as the visualized one.
+                const auto* pPreview
+                    = dynamic_cast<const drawinglayer::primitive2d::PagePreviewPrimitive2D*>(
+                        rPrimitive.get());
+                if (!pPreview)
+                {
+                    rPrimitive->get2DDecomposition(aContent.maDrawn, maViewInformation);
+                    continue;
+                }
+
+                drawinglayer::geometry::ViewInformation2D aShownPage(maViewInformation);
+                aShownPage.setVisualizedPage(pPreview->getXDrawPage());
+                rPrimitive->get2DDecomposition(aContent.maDrawn, aShownPage);
+            }
         }
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
+        aContent.maName = rObject.GetName();
+        aContent.moLayer = sal_Int32(rObject.GetLayer().get());
+        aContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
         aContent.mbTextEdit = hasActiveTextEdit(&rObject);
         const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
         aContent.mnParentId = pParent ? pParent->GetUniqueID() : 0;
@@ -3337,9 +3377,7 @@ private:
             const SdrObject* pEdited = rView.mpView->GetTextEditObject();
             writeEntry(rWriter, textEditEntryId(rView.mnViewId),
                        pEdited ? pEdited->GetUniqueID() : 0, "texteditoverlay",
-                       textEditContentOf(rView), rView.mnViewId,
-                       pEdited ? std::optional<sal_Int32>(pEdited->GetLayer().get())
-                               : std::nullopt);
+                       textEditContentOf(rView), rView.mnViewId);
         }
     }
 
@@ -3363,10 +3401,13 @@ private:
         aContent.maDrawn = aContent.maPrimitives;
         aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
         aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
-        // The entry names the object the edit runs on as its parent, so moving the edit to
-        // another object is a change of the entry.
+        // The entry names the object the edit runs on as its parent and draws on that object's
+        // layer, so moving the edit to another object, or that object to another layer, is a
+        // change of the entry.
         const SdrObject* pEdited = rView.GetTextEditObject();
         aContent.mnParentId = pEdited ? pEdited->GetUniqueID() : 0;
+        if (pEdited)
+            aContent.moLayer = sal_Int32(pEdited->GetLayer().get());
         return aContent;
     }
 
@@ -3374,9 +3415,11 @@ private:
     /// way a changed object does. An edit that has ended leaves nothing recorded behind it.
     void resolveTextEditEntry(SdPage* pPage)
     {
+        std::unordered_set<sal_uInt64> aLiveKeys;
         for (const EditingView& rView : viewsOfDocument(pPage))
         {
             const sal_uInt64 nKey = textEditEntryKey(rView.mnViewId);
+            aLiveKeys.insert(nKey);
 
             // A view that stopped editing, or moved to another page, leaves nothing behind.
             if (!rView.mpView)
@@ -3384,6 +3427,14 @@ private:
             else
                 mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, nKey,
                                                    textEditContentOf(rView));
+        }
+
+        // A view that closed while its edit ran is gone from the list of views, so its entry
+        // is dropped by the key rather than by the view.
+        for (const sal_uInt64 nKey : mpModel->getVectorRecordedIds(mnResolvedPage, mnMode))
+        {
+            if (isTextEditEntryKey(nKey) && !aLiveKeys.contains(nKey))
+                mpModel->forgetVectorObject(mnResolvedPage, mnMode, nKey);
         }
     }
 
@@ -3479,12 +3530,13 @@ private:
     {
         auto pObjectNode = rWriter.startStruct();
         rWriter.put("id", sal_Int64(rObject.GetUniqueID()));
-        rWriter.put("name", rObject.GetName());
+        rWriter.put("name", rContent.maName);
         // The group the object sits in, 0 for an object directly on the page.
         rWriter.put("parent", sal_Int64(nParentId));
-        rWriter.put("layer", sal_Int32(rObject.GetLayer().get()));
+        if (rContent.moLayer)
+            rWriter.put("layer", *rContent.moLayer);
         // A placeholder that holds no content of its own yet.
-        if (rObject.IsEmptyPresObj())
+        if (rContent.mbEmptyPlaceholder)
             rWriter.put("emptyPlaceholder", true);
         // A text edit is running on the object, so it is showing none of its own text and the
         // entry for the edit carries what has been typed.
@@ -3495,12 +3547,10 @@ private:
     }
 
     /// An entry that stands for something other than an object on the page, named by a kind
-    /// rather than by a layer and a name of its own.
+    /// rather than by a name of its own.
     void writeEntry(tools::JsonWriter& rWriter, sal_Int64 nId, sal_uInt64 nParentId,
-                    const char* pKind,
-                    const SdXImpressDocument::VectorObjectContent& rContent,
-                    std::optional<sal_Int32> oViewId = std::nullopt,
-                    std::optional<sal_Int32> oLayer = std::nullopt)
+                    const char* pKind, const SdXImpressDocument::VectorObjectContent& rContent,
+                    std::optional<sal_Int32> oViewId = std::nullopt)
     {
         auto pEntryNode = rWriter.startStruct();
         rWriter.put("id", nId);
@@ -3510,8 +3560,8 @@ private:
         if (oViewId)
             rWriter.put("viewId", sal_Int32(*oViewId));
         // The layer of the object the entry belongs to, so the entry is hidden with it.
-        if (oLayer)
-            rWriter.put("layer", *oLayer);
+        if (rContent.moLayer)
+            rWriter.put("layer", *rContent.moLayer);
 
         writeEntryGeometry(rWriter, rContent);
     }

@@ -32,9 +32,10 @@ namespace cool {
 		/// carries, so a reader can tell its own from another user's.
 		viewId?: number;
 		/// Id of the group the object sits in, 0 for an object directly
-		/// on the slide. A group's members follow it in the object list
-		/// and draw its content, so a group with members has no
-		/// primitives of its own.
+		/// on the slide and -1 on the entry of kind "page", which sits
+		/// under nothing, so a walk up the parents ends there. A group's
+		/// members follow it in the object list and draw its content, so
+		/// a group with members has no primitives of its own.
 		parent?: number;
 		/// Id of the layer the object is on.
 		layer?: number;

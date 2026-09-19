@@ -21,7 +21,7 @@
 	after the section that paints the page and before the overlay, so the cursors, selections and
 	handles the overlay draws stay on top.
 
-	The debug panel's "Debug Overlays" tool adds and removes the section.
+	The debug panel's "Render Geometry" tool adds and removes the section.
 */
 
 /* global app RenderManager */
@@ -34,7 +34,8 @@ class RenderGeometrySection extends CanvasSectionObject {
 	interactable: boolean = false;
 
 	// True once the class listens to the vector cache. The section comes and goes with the
-	// debug tool, so the listener belongs to the class and is registered once.
+	// debug tool while the listener stays for the life of the page, so the listener belongs
+	// to the class and is registered once.
 	private static _listening = false;
 
 	constructor() {
@@ -63,13 +64,18 @@ class RenderGeometrySection extends CanvasSectionObject {
 		object's scale is.
 	*/
 	public static unitRectangleCorners(transform: number[]): number[][] {
-		const [a, b, c, d, e, f] = transform;
+		const matrix = cool.Matrix2D.fromArray(transform);
+		if (!matrix) return [];
+
 		return [
-			[e, f],
-			[a + e, b + f],
-			[a + c + e, b + d + f],
-			[c + e, d + f],
-		];
+			[0, 0],
+			[1, 0],
+			[1, 1],
+			[0, 1],
+		].map(([x, y]: number[]) => {
+			const corner = matrix.apply(x, y);
+			return [corner.x, corner.y];
+		});
 	}
 
 	onDraw(): void {
@@ -78,6 +84,8 @@ class RenderGeometrySection extends CanvasSectionObject {
 		if (this.containerObject.isInZoomAnimation()) return;
 
 		const docLayer = app.map._docLayer;
+		// The file based view stacks every page of the document on screen, while these are the
+		// rectangles of the one page a view shows, so they are drawn outside that view only.
 		if (!docLayer || app.file.fileBasedView) return;
 		Util.ensureValue(app.activeDocument);
 

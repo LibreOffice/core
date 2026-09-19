@@ -345,7 +345,7 @@ class DebugManager {
 			RenderManager.isVectorRendering()
 		)
 			this._addDebugTool({
-				name: 'Debug Overlays',
+				name: 'Render Geometry',
 				category: 'Display',
 				startsOn: false,
 				onAdd: function () {

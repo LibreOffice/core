@@ -1654,11 +1654,9 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
 
     for (const auto& [nPart, nMode] : aParts)
     {
-        // Computing the delta at delivery time reads the document after
-        // the change that triggered the invalidation has fully landed.
-        // The command tracks the version last pushed to this view and
-        // returns the delta since it, so the mark advances only for a
-        // delta that is handed to the client.
+        // Computing the delta at delivery time reads the document after the change that triggered
+        // the invalidation has fully landed. The command returns the delta since the version last
+        // pushed to this view, and moves that mark to the version it just read.
         const OString aCommand = ".uno:VectorPrimitives?part=" + OString::number(nPart)
                                  + "&mode=" + OString::number(nMode)
                                  + "&pushdelta=1&viewid=" + OString::number(m_viewId);
