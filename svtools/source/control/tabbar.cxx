@@ -820,7 +820,7 @@ void TabBar::ImplInitControls()
     {
         Link<weld::Button&,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
         mpImpl->mxButtonBox->m_xAddRepeater = std::make_shared<weld::ButtonPressRepeater>(
-                    *mpImpl->mxButtonBox->m_xAddButton, aLink, aContextLink);
+                    *mpImpl->mxButtonBox->m_xAddButton, aLink );
         mpImpl->mxButtonBox->m_xAddButton->show();
 
         aLink = LINK( this, TabBar, ImplListClickHandler );
