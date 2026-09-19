@@ -1131,7 +1131,7 @@ void SwXStyleFamily::replaceByName(const OUString& rProgName, const cpo::uno::An
     {
         // handle cell styles, don't call on assigned cell styles (TableStyle child)
         TableStyleName sParent;
-        SwBoxAutoFormat* pBoxAutoFormat = SwXTextCellStyle::GetBoxAutoFormat(m_pDocShell, sStyleName, &sParent);
+        SwBoxAutoFormat* pBoxAutoFormat = SwXTextCellStyle::GetBoxAutoFormat(*m_pDocShell->GetDoc(), sStyleName, &sParent);
         if (pBoxAutoFormat && sParent.isEmpty())// if parent exists then this style is assigned to a table style. Don't replace.
         {
             uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
@@ -4834,7 +4834,7 @@ void SwXTextCellStyle::SetPhysical()
 {
     if (!m_bPhysical)
     {
-        SwBoxAutoFormat* pBoxAutoFormat = GetBoxAutoFormat(m_pDocShell, m_sName, &m_sTableStyleUIName);
+        SwBoxAutoFormat* pBoxAutoFormat = GetBoxAutoFormat(*m_pDocShell->GetDoc(), m_sName, &m_sTableStyleUIName);
         if (pBoxAutoFormat)
         {
             m_bPhysical = true;
@@ -4854,12 +4854,12 @@ bool SwXTextCellStyle::IsPhysical() const
     return m_bPhysical;
 }
 
-SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const UIName& sName, TableStyleName* pParentName)
+SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDoc& rDoc, const UIName& sName, TableStyleName* pParentName)
 {
     if (sName.isEmpty())
         return nullptr;
 
-    SwBoxAutoFormat* pBoxAutoFormat = pDocShell->GetDoc()->GetCellStyles().GetBoxFormat(sName);
+    SwBoxAutoFormat* pBoxAutoFormat = rDoc.GetCellStyles().GetBoxFormat(sName);
     if (!pBoxAutoFormat)
     {
         sal_Int32 nTemplateIndex;
@@ -4881,7 +4881,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
 
         UIName sParentUIName;
         SwStyleNameMapper::FillUIName(ProgName(sParentProgName), sParentUIName, SwGetPoolIdFromName::TableStyle);
-        SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(TableStyleName(sParentUIName.toString()));
+        SwTableAutoFormat* pTableAutoFormat = rDoc.GetTableStyles().FindAutoFormat(TableStyleName(sParentUIName.toString()));
         if (!pTableAutoFormat)
             return nullptr;
 
@@ -4901,7 +4901,7 @@ rtl::Reference<SwXTextCellStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShe
     if (!sName.isEmpty()) // create a cell style for a physical box
     {
         TableStyleName sParentName;
-        SwBoxAutoFormat* pBoxFormat = GetBoxAutoFormat(pDocShell, sName, &sParentName);
+        SwBoxAutoFormat* pBoxFormat = GetBoxAutoFormat(*pDocShell->GetDoc(), sName, &sParentName);
 
         // something went wrong but we don't want a crash
         if (!pBoxFormat)

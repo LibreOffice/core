@@ -40,6 +40,7 @@
 #include <memory>
 #include <map>
 
+class SwDoc;
 class SwDocShell;
 class SwAutoStylesEnumImpl;
 class SfxItemSet;
@@ -353,12 +354,12 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
 
     /**
     * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.
-    * @param pDocShell pointer to a SwDocShell.
+    * @param rDoc the document whose table and cell styles are searched.
     * @param sName Name of a SwBoxAutoFormat to look for.
     * @param pParentName Optional output. Pointer to an OUString where parsed parent name will be returned.
     * @return Pointer to a SwBoxAutoFormat, nullptr if not found.
     */
-    static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const UIName& sName, TableStyleName* pParentName);
+    static SwBoxAutoFormat* GetBoxAutoFormat(SwDoc& rDoc, const UIName& sName, TableStyleName* pParentName);
     /// returns box format assigned to this style
     SwBoxAutoFormat* GetBoxFormat();
     /// Sets the address of SwBoxAutoFormat this style is bound to. Usable only when style is physical.

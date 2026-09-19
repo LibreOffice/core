@@ -44,6 +44,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <docstyle.hxx>
+#include <unostyle.hxx>
 #include <docary.hxx>
 #include <ccoll.hxx>
 #include <doc.hxx>
@@ -514,27 +515,7 @@ static SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const TableStyleName& 
 
 static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const UIName& rName, SwDocStyleSheet *pStyle)
 {
-    const SwBoxAutoFormat* pFormat = rDoc.GetCellStyles().GetBoxFormat(rName);
-
-    if (!pFormat)
-    {
-        const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
-        for (size_t i=0; i < rTableStyles.size() && !pFormat; ++i)
-        {
-            const SwTableAutoFormat& rTableStyle = rTableStyles[i];
-            for (size_t nBoxFormat=0; nBoxFormat < aTableTemplateMap.size() && !pFormat; ++nBoxFormat)
-            {
-                    const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
-                    const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
-                    ProgName sBoxFormatName;
-                    SwStyleNameMapper::FillProgName(UIName(rTableStyle.GetName().toString()), sBoxFormatName, SwGetPoolIdFromName::TableStyle);
-                    OUString sTmp = sBoxFormatName.toString() + rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
-                    if (rName == sTmp)
-                        pFormat = &rBoxFormat;
-            }
-        }
-    }
+    const SwBoxAutoFormat* pFormat = SwXTextCellStyle::GetBoxAutoFormat(rDoc, rName, nullptr);
 
     if(pStyle)
     {
