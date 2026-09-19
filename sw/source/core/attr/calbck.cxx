@@ -307,6 +307,7 @@ void sw::ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet
 }
 
 template class sw::ClientBase<SwModify>;
+template class sw::ClientBase<SwFormat>;
 template class sw::ClientBase<SwFrameFormat>;
 template bool SwModify::HasOnlySpecificWriterListeners<SwFrame>() const;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

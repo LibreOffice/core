@@ -163,7 +163,7 @@ public:
 };
 
 // helper class to receive changed attribute sets
-class SwUndoFormatAttrHelper final : public SwClient
+class SwUndoFormatAttrHelper final : public sw::ClientBase<SwFormat>
 {
     SwFormat& m_rFormat;
     std::unique_ptr<SwUndoFormatAttr> m_pUndo;

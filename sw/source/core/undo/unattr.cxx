@@ -66,7 +66,7 @@
 
 
 SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
-    : SwClient(&rFormat)
+    : sw::ClientBase<SwFormat>(&rFormat)
     , m_rFormat(rFormat)
     , m_bSaveDrawPt(bSvDrwPt)
 {
