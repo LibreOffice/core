@@ -456,19 +456,18 @@ uno::Sequence<sal_Int32> SAL_CALL AccessibleDrawDocumentView::getGroupPosition(
     return aRet;
 }
 
-OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
+OUString AccessibleDrawDocumentView::getObjectLink(
+    const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible)
 {
     SolarMutexGuard g;
 
     OUString aRet;
     //get the xShape of the current selected drawing object
-    uno::Reference<XAccessibleContext> xAccContent;
-    rAny >>= xAccContent;
-    if ( !xAccContent.is() )
+    if (!rxAccessible.is())
     {
         return aRet;
     }
-    AccessibleShape* pAcc = comphelper::getFromUnoTunnel<AccessibleShape>( xAccContent );
+    AccessibleShape* pAcc = comphelper::getFromUnoTunnel<AccessibleShape>(rxAccessible);
     if ( !pAcc )
     {
         return aRet;

@@ -1084,7 +1084,7 @@ AccessibleShape::getGroupPosition(const css::uno::Reference<css::accessibility::
     return aRet;
 }
 
-OUString AccessibleShape::getObjectLink( const uno::Any& )
+OUString AccessibleShape::getObjectLink(const css::uno::Reference<css::accessibility::XAccessible>&)
 {
     OUString aRet;
 
@@ -1098,7 +1098,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( maShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY );
         if (xGroupPosition.is())
         {
-            aRet = xGroupPosition->getObjectLink( uno::Any( getAccessibleContext() ) );
+            aRet = xGroupPosition->getObjectLink(this);
         }
     }
     return aRet;

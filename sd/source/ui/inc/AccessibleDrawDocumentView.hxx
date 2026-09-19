@@ -81,7 +81,8 @@ public:
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence<sal_Int32> SAL_CALL getGroupPosition(
         const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible) override;
-    virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject ) override;
+    virtual OUString SAL_CALL getObjectLink(
+        const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible) override;
 
 private:
 

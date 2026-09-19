@@ -25,7 +25,7 @@ interface XAccessibleGroupPosition : ::com::sun::star::uno::XInterface
     sequence<long> getGroupPosition( [in] XAccessible accObject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /* Returns the hyperlink URL info of the object */
-    string getObjectLink( [in] any accoject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    string getObjectLink( [in] XAccessible accObject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };
