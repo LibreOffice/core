@@ -89,7 +89,7 @@ nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
 GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
 coda_qt_LDADD = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
-EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
+EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB) Makefile
 
 if ENABLE_SSL
 coda_qt_LDADD += $(OPENSSL_LIBS)
