@@ -18,6 +18,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/dlgctrl.hxx>
 #include <swmodule.hxx>
+#include <uitool.hxx>
 #include <usrpref.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/weld/Builder.hxx>
@@ -189,7 +190,7 @@ void TableEditPanel::InitRowHeightToolitem()
     Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, RowHeightMofiyHdl);
     m_aRowHeightEdit.connect_value_changed(aLink);
 
-    FieldUnit eFieldUnit = SwModule::get()->GetFieldUnit();
+    FieldUnit eFieldUnit = ::GetDfltMetric(false);
     m_aRowHeightEdit.SetFieldUnit(eFieldUnit);
 
     m_aRowHeightEdit.set_min(MINLAY, FieldUnit::TWIP);
@@ -203,7 +204,7 @@ void TableEditPanel::InitColumnWidthToolitem()
     Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, ColumnWidthMofiyHdl);
     m_aColumnWidthEdit.connect_value_changed(aLink);
 
-    FieldUnit eFieldUnit = SwModule::get()->GetFieldUnit();
+    FieldUnit eFieldUnit = ::GetDfltMetric(false);
     m_aColumnWidthEdit.SetFieldUnit(eFieldUnit);
 
     m_aColumnWidthEdit.set_min(MINLAY, FieldUnit::TWIP);
@@ -230,7 +231,7 @@ void TableEditPanel::InitAlignmentControls()
     m_xAlignment->append(OUString::number(text::HoriOrientation::NONE),
                          SwResId(STR_TABLE_PANEL_ALIGN_MANUAL));
 
-    FieldUnit eFieldUnit = SwModule::get()->GetFieldUnit();
+    FieldUnit eFieldUnit = ::GetDfltMetric(false);
     m_aLeftSpacingEdit.SetFieldUnit(eFieldUnit);
     m_aRightSpacingEdit.SetFieldUnit(eFieldUnit);
 }
