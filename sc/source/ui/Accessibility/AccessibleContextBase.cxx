@@ -57,7 +57,7 @@ ScAccessibleContextBase::~ScAccessibleContextBase()
 void ScAccessibleContextBase::Init()
 {
     // hold reference to make sure that the destructor is not called
-    uno::Reference< XAccessibleContext > xKeepAlive(this);
+    rtl::Reference<ScAccessibleContextBase> pKeepAlive(this);
 
     msName = createAccessibleName();
     msDescription = createAccessibleDescription();
@@ -68,7 +68,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     SolarMutexGuard aGuard;
 
     // hold reference to make sure that the destructor is not called
-    uno::Reference< XAccessibleContext > xKeepAlive(this);
+    rtl::Reference<ScAccessibleContextBase> pKeepAlive(this);
 
     OAccessible::disposing();
 
