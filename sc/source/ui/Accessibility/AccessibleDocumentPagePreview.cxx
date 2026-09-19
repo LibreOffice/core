@@ -1246,7 +1246,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleAtPoint( const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
@@ -1254,8 +1254,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 
         if ( mpViewShell )
         {
-            xAccessible = GetShapeChildren()->GetForegroundShapeAt(rPoint);
-            if (!xAccessible.is())
+            pAccessible = GetShapeChildren()->GetForegroundShapeAt(rPoint);
+            if (!pAccessible.is())
             {
                 const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
                 ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
@@ -1271,11 +1271,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 if (mpTable.is()
                     && vcl::unohelper::ConvertToVCLRect(mpTable->getBounds())
                            .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint)))
-                    xAccessible = mpTable.get();
+                    pAccessible = mpTable.get();
             }
-            if (!xAccessible.is())
-                xAccessible = GetNotesChildren()->GetAt(rPoint);
-            if (!xAccessible.is())
+            if (!pAccessible.is())
+                pAccessible = GetNotesChildren()->GetAt(rPoint);
+            if (!pAccessible.is())
             {
                 if (!mpHeader.is() || !mpFooter.is())
                 {
@@ -1295,16 +1295,16 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 Point aPoint(vcl::unohelper::ConvertToVCLPoint(rPoint));
 
                 if (vcl::unohelper::ConvertToVCLRect(mpHeader->getBounds()).Contains(aPoint))
-                    xAccessible = mpHeader.get();
+                    pAccessible = mpHeader.get();
                 else if (vcl::unohelper::ConvertToVCLRect(mpFooter->getBounds()).Contains(aPoint))
-                    xAccessible = mpFooter.get();
+                    pAccessible = mpFooter.get();
             }
-            if (!xAccessible.is())
-                xAccessible = GetShapeChildren()->GetBackgroundShapeAt(rPoint);
+            if (!pAccessible.is())
+                pAccessible = GetShapeChildren()->GetBackgroundShapeAt(rPoint);
         }
     }
 
-    return xAccessible;
+    return pAccessible;
 }
 
 void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
