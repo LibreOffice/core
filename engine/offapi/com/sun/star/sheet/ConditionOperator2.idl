@@ -11,7 +11,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** is used to specify the type of XSheetCondition2.
+/** is used to specify the type of XSheetCondition.
  */
 constants ConditionOperator2
 {

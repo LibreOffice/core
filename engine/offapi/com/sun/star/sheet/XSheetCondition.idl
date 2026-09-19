@@ -89,6 +89,14 @@ published interface XSheetCondition: cpo::uno::XInterface
     void setSourcePosition(
             [in] com::sun::star::table::CellAddress aSourcePosition );
 
+    /** returns the operator in the condition
+     */
+    long getConditionOperator();
+
+    /** sets the operator in the condition
+     */
+    void setConditionOperator(
+            [in] long nOperator );
 };
 
 

@@ -3257,7 +3257,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XSheetCellRangeContainer \
 	XSheetCellRanges \
 	XSheetCondition \
-	XSheetCondition2 \
 	XSheetConditionalEntries \
 	XSheetConditionalEntry \
 	XSheetFilterDescriptor \

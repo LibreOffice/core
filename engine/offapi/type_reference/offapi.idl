@@ -12634,6 +12634,8 @@ module com {
      void setFormula2([in] string aFormula2);
      ::com::sun::star::table::CellAddress getSourcePosition();
      void setSourcePosition([in] ::com::sun::star::table::CellAddress aSourcePosition);
+     long getConditionOperator();
+     void setConditionOperator([in] long nOperator);
     };
     published interface XSheetConditionalEntry {
      interface ::cpo::uno::XInterface;

@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/sheet/XSheetCondition2.hpp>
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -111,7 +111,7 @@ public:
 };
 
 class ScTableConditionalEntry final : public cppu::WeakImplHelper<
-                            css::sheet::XSheetCondition2,
+                            css::sheet::XSheetCondition,
                             css::sheet::XSheetConditionalEntry,
                             css::lang::XServiceInfo >
 {
@@ -148,7 +148,7 @@ public:
 };
 
 class SC_DLLPUBLIC ScTableValidationObj final : public cppu::WeakImplHelper<
-                            css::sheet::XSheetCondition2,
+                            css::sheet::XSheetCondition,
                             css::sheet::XMultiFormulaTokens,
                             css::beans::XPropertySet,
                             css::lang::XServiceInfo >

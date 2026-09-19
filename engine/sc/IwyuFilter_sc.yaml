@@ -165,7 +165,7 @@ excludelist:
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/FormulaToken.hpp
-    - com/sun/star/sheet/XSheetCondition2.hpp
+    - com/sun/star/sheet/XSheetCondition.hpp
     - com/sun/star/sheet/XMultiFormulaTokens.hpp
     - com/sun/star/sheet/XSheetConditionalEntries.hpp
     - com/sun/star/sheet/XSheetConditionalEntry.hpp
