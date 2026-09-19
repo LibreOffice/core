@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-16 07:52+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-09-20 07:56+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -545,7 +545,7 @@ msgstr "Handtekening CA"
 #: admin/src/integrator/AdminIntegratorSettings.ts:628
 #: admin/src/integrator/AdminIntegratorSettings.ts:632
 msgid "Provider"
-msgstr "Leverancier"
+msgstr "Aanbieder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:629
 #: admin/src/integrator/AdminIntegratorSettings.ts:633
@@ -1201,7 +1201,7 @@ msgstr "Documentinstellingen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3704
 msgid "Upload Xcu"
-msgstr "Upload Xcu"
+msgstr "Xcu uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3865
 msgid "Enter {0}"
@@ -4639,7 +4639,7 @@ msgstr "Vonklijn"
 #: src/control/Control.NotebookbarWriter.js:115
 #: src/control/Control.ServerAuditDialog.ts:334
 msgid "Help"
-msgstr "Help"
+msgstr "Hulp"
 
 #: src/control/Control.NotebookbarCalc.js:209
 #: src/control/Control.NotebookbarDraw.js:223
@@ -4970,7 +4970,7 @@ msgstr "Functie invoegen"
 
 #: src/control/Control.NotebookbarCalc.js:2157
 msgid "Function Library"
-msgstr "Functie-bibliotheek"
+msgstr "Functiebilbliotheek"
 
 #: src/control/Control.NotebookbarCalc.js:2171
 msgid "AutoSum"
