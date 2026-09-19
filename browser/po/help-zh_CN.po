@@ -4,8 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
 "PO-Revision-Date: 2026-09-20 07:56+0000\n"
-"Last-Translator: QuietCedar47 <quietcedar47@users.noreply.hosted.weblate.org>"
-"\n"
+"Last-Translator: blueskyxxz <xinxizhe@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/help/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -405,7 +404,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
 msgid "Select to the left word by word"
-msgstr "按单词选择至左边的单词"
+msgstr "逐词向左选择"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
@@ -451,7 +450,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
 msgid "Go to start of the next word"
-msgstr "转到下一个词的起始位置"
+msgstr "转到下一个词的开头"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
@@ -467,7 +466,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
 msgid "Select to the right word by word"
-msgstr "按词选择到右边的单词"
+msgstr "逐词向右选择"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
@@ -513,7 +512,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
 msgid "Move cursor to beginning of the previous paragraph"
-msgstr "将光标移到上一段落的起始位置"
+msgstr "将光标移动到上一段的开头"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
@@ -575,7 +574,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
 msgid "Move cursor to beginning of the next paragraph"
-msgstr "将光标移到下一段落的起始位置"
+msgstr "将光标移动到下一段的开头"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
@@ -591,7 +590,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
 msgid "Select to end of paragraph"
-msgstr "选择至段落末尾"
+msgstr "选择到段落结尾"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
@@ -655,7 +654,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
 msgid "Go and select text to start of document"
-msgstr "选择至文档起始位置"
+msgstr "跳转并选择文本到文档开头"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
@@ -673,20 +672,20 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
 msgid "Go to end of line"
-msgstr "转到行末"
+msgstr "跳转到行尾"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
 msgid "End"
-msgstr "End"
+msgstr "结束"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
 msgid "Go and select to the end of a line"
-msgstr "前往并选择至行末"
+msgstr "跳转并选择到行尾"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
@@ -703,7 +702,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
 msgid "Go to end of document"
-msgstr "转到文档结束位置"
+msgstr "跳转到文档末尾"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
@@ -719,7 +718,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
 msgid "Go and select text to end of document"
-msgstr "选择至文档末尾"
+msgstr "跳转并选择文本到文档末尾"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
@@ -755,7 +754,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
 msgid "Extend the selection up one page"
-msgstr "向上延伸选择一页"
+msgstr "向上扩展选择一页"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 msgid ""
