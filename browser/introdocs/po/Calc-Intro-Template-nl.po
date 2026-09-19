@@ -3,63 +3,72 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-09-20 07:57+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
+"calc-intro-template/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #. content.xml (validation title)
 msgid "Try formatting"
-msgstr ""
+msgstr "Probeer opmaak toe te passen"
 
 #. content.xml (validation help message)
 msgid "Explore the Format tab to customize your data with styles and formats."
 msgstr ""
+"Verken het tabblad Opmaak om uw gegevens met stijlen en opmaak aan te passen."
 
 #. content.xml (validation title)
 msgid "Help"
-msgstr ""
+msgstr "Hulp"
 
 #. content.xml (validation help message)
 msgid ""
 "For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
 "Stock\"."
 msgstr ""
+"Voor Medium Stock gebruiksvoorwaarde \"Waarden tussen: 20-80\" en stijl "
+"\"Medium Stock\"."
 
 #. content.xml (validation title)
 msgid "Use other options"
-msgstr ""
+msgstr "Gebruik andere opties"
 
 #. content.xml (validation help message)
 msgid ""
 "Use Standard or Advanced Filter to narrow down your data more precisely"
 msgstr ""
+"Gebruik standaard of geavanceerd filter om uw gegevens nauwkeuriger te "
+"beperken"
 
 #. content.xml (validation title)
 msgid "Share document link"
-msgstr ""
+msgstr "Document-link delen"
 
 #. content.xml (validation help message)
 msgid ""
 "Share a direct link with people who already have access to the document for "
 "quick and easy access."
 msgstr ""
+"Deel een directe link met mensen die al toegang hebben tot het document voor "
+"snelle en eenvoudige toegang."
 
 #. content.xml (sheet name)
 msgid "👋 Introduction"
-msgstr ""
+msgstr "👋 Introductie"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "<1>Next Chapter: ✚</1><2> Formulas & Functions</2>"
-msgstr ""
+msgstr "<1>Volgend hoofdstuk: ✚</1><2> Formules & Functies</2>"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "👋General information"
-msgstr ""
+msgstr "👋Algemene informatie"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
@@ -67,206 +76,232 @@ msgid ""
 "your data. This introduction template will help you get started and explore "
 "some of the main features of the product."
 msgstr ""
+"Collabora Office-spreadsheet kan worden gebruikt om uw gegevens te "
+"berekenen, analyseren en beheren. Deze introductiesjabloon helpt u op weg "
+"met de verkenning van de belangrijkste kenmerken van het product."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Calc features – key features you can explore"
-msgstr ""
+msgstr "Calc-functies – belangrijkste functies die u kunt verkennen"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Calculations (Formulas & Functions)"
-msgstr ""
+msgstr "Berekeningen (Formules & Functies)"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Use built-in functions to perform calculations on your data. Create formulas"
 " easily and get help with the Function Wizard."
 msgstr ""
+"Gebruik ingebouwde functies om berekeningen uit te voeren op uw gegevens. "
+"Maak eenvoudig formules en krijg hulp met de Functie-assistent."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Tables"
-msgstr ""
+msgstr "Tabellen"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Organise your data into structured tables. Quickly edit, sort, and filter "
 "information to keep everything clear and easy to manage."
 msgstr ""
+"Organiseer uw gegevens in gestructureerde tabellen. Snel informatie "
+"bewerken, sorteren en filteren om alles overzichtelijk en beheersbaar te "
+"houden."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Charts"
-msgstr ""
+msgstr "Diagrammen"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Visualise your data with different chart types. Quickly create and customise"
 " charts to better understand trends and comparisons."
 msgstr ""
+"Visualiseer uw gegevens met verschillende diagramtypen. Maak en pas snel "
+"grafieken aan om trends en vergelijkingen beter te begrijpen."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Sorting & filtering"
-msgstr ""
+msgstr "Sortering & filtering"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Find what matters faster by sorting and filtering your data. Focus only on "
 "the information you need."
 msgstr ""
+"Zoek sneller wat belangrijk is door uw gegevens te sorteren en te filteren. "
+"Focus alleen op de informatie die u nodig heeft."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Data formatting"
-msgstr ""
+msgstr "Gegevensopmaak"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Format your data to improve clarity and readability. Use colours, styles, "
 "and number formats to highlight key information."
 msgstr ""
+"Geef uw gegevens opmaak om de duidelijkheid en leesbaarheid te verbeteren. "
+"Gebruik kleuren, stijlen en cijferformaten om belangrijke informatie te "
+"markeren."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Collaboration tools"
-msgstr ""
+msgstr "Hulpmiddelen voor samenwerking"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Work together in real time. Share, comment, and track changes directly in "
 "the document."
 msgstr ""
+"Gelijktijdig samenwerken. Deel, becommentarieer en volg wijzigingen "
+"rechtstreeks in het document."
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Accessibility"
-msgstr ""
+msgstr "Toegankelijkheid"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
 "Calc is designed with accessibility in mind, helping ensure that everyone "
 "can easily create, edit, and work with spreadsheets."
 msgstr ""
+"Calc is ontworpen met het oog op toegankelijkheid en zorgt ervoor dat "
+"iedereen eenvoudig spreadsheets kan maken, bewerken en ermee kan werken."
 
 #. content.xml (sheet name)
 msgid "✚ Formulas & Functions"
-msgstr ""
+msgstr "✚ Formules & Functies"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "✚Using simple functions"
-msgstr ""
+msgstr "✚Eenvoudige functies gebruiken"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "We will look at a practical case to learn how to use basic Calc features and"
 " simple functions."
 msgstr ""
+"We bekijken een praktijksituatie om te leren hoe we de basisfuncties van "
+"Calc en eenvoudige functies kunnen gebruiken."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Step-by-step guide – Adding values"
-msgstr ""
+msgstr "Stapsgewijze handleiding – Waarden toevoegen"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "In this example we want to calculate the total number of items in stock. The"
 " SUM function allows you to quickly add numbers together."
 msgstr ""
+"In dit voorbeeld willen we het totaal aantal artikelen in voorraad "
+"berekenen. Met de functie SUM kunt u snel getallen bij elkaar optellen."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Writing formula into cell"
-msgstr ""
+msgstr "Formule in cel schrijven"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Item"
-msgstr ""
+msgstr "Item"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Quantity [pcs]"
-msgstr ""
+msgstr "Hoeveelheid [ex.]"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "1. Click on the cell below the Quantity column"
-msgstr ""
+msgstr "1. Klik op de cel onder de kolom Hoeveelheid"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts')
 msgid "Laptop"
-msgstr ""
+msgstr "Laptop"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '📊 Charts')
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Type the formula </1><2>=SUM(E9:E11)</2>"
-msgstr ""
+msgstr "<1>2. Typ de formule </1><2>=SUM(E9:E11)</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts')
 msgid "Mouse"
-msgstr ""
+msgstr "Muis"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts')
 msgid "20"
-msgstr ""
+msgstr "20"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>3. Press </1><2>Enter</2><3> to calculate the total number of items</3>"
 msgstr ""
+"<1>3. Druk op </1><2>Enter</2><3> om het totale aantal items te berekenen</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts')
 msgid "Notebook"
-msgstr ""
+msgstr "Notebook"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
 #. (sheet '📊 Charts')
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab – Formula wizard"
-msgstr ""
+msgstr "Formule invoegen via tabblad Formules – Formule-assistent"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Open </1><2>Formulas tab</2><3> in Notebook bar</3>"
-msgstr ""
+msgstr "<1>2. Open </1><2>tabblad Formules</2><3> in de Notebookbalk</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>Insert Function</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>Functie invoegen</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>4. Choose SUM from the list of functions, </1><2>=SUM ( )</2><3> should "
 "appear</3>"
 msgstr ""
+"<1>4. Kies SUM uit de lijst met functies, </1><2>=SUM ()</2><3> zou moeten "
+"verschijnen</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "5. Select the cells containing the values you want to add"
-msgstr ""
+msgstr "5. Selecteer de cellen met de waarden die u wilt optellen"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>6. Click </1><2>OK</2><3> to insert the formula</3>"
-msgstr ""
+msgstr "<1>6. Klik op </1><2>OK</2><3> om de formule in te voegen</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab chosen from Category"
-msgstr ""
+msgstr "Formule invoegen via tabblad Formules gekozen uit Categorie"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>AutoSum</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>AutoSum</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Formulas Structure"
-msgstr ""
+msgstr "Formulestructuur"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
@@ -275,28 +310,35 @@ msgid ""
 " what type of calculation will be performed. The </5><6>brackets</6><7> "
 "contain the cells that the formula will use for its calculation.</7>"
 msgstr ""
+"<1>Formules in Calc beginnen altijd met het gelijkteken </1><2>=</2><3>. "
+"Daarna komt de functienaam (bijv. </3><4>sum</4><5>), die definieert welk "
+"type berekening zal worden uitgevoerd. De </5><6>haakjes</6><7> omvatten de "
+"cellen die de formule voor de berekening zal gebruiken.</7>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Function Library"
-msgstr ""
+msgstr "Functiebilbliotheek"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "Collabora Office Calc provides a large library of built-in functions that "
 "help you perform different types of calculations and data analysis."
 msgstr ""
+"Collabora Office Calc biedt een grote bibliotheek met ingebouwde functies "
+"waarmee u verschillende soorten berekeningen en gegevensanalyse kunt "
+"uitvoeren."
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
-msgstr ""
+msgstr "Volgend hoofdstuk: 📋 Tabellen"
 
 #. content.xml (sheet name)
 msgid "📋 Tables"
-msgstr ""
+msgstr "📋 Tabellen"
 
 #. content.xml (sheet '📋 Tables')
 msgid "📋Create a table"
-msgstr ""
+msgstr "📋Tabel aanmaken"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -304,119 +346,125 @@ msgid ""
 "structured way. They make it easier to manage data, perform calculations, "
 "and visualise information."
 msgstr ""
+"Tabellen helpen u grote hoeveelheden informatie op een duidelijke en "
+"gestructureerde manier te organiseren. Ze maken het gemakkelijker om "
+"gegevens te beheren, berekeningen uit te voeren en informatie te "
+"visualiseren."
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
 #. filtering')
 msgid "Step-by-step guide"
-msgstr ""
+msgstr "Stapsgewijze handleiding"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "In this example we will learn how to create and use tables to organise data "
 "in a spreadsheet."
 msgstr ""
+"In dit voorbeeld leren we hoe we tabellen kunnen maken en gebruiken om "
+"gegevens in een spreadsheet te ordenen."
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from existing data"
-msgstr ""
+msgstr "Maak een tabel op basis van bestaande gegevens"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Category"
-msgstr ""
+msgstr "Categorie"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Supplier"
-msgstr ""
+msgstr "Leverancier"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts'); content.xml
 #. (sheet '🔍 Data & filtering')
 msgid ""
 "1. Select the range of cells that contains your data (including headers)"
-msgstr ""
+msgstr "1. Selecteer het cellenbereik dat uw gegevens bevat (inclusief koppen)"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Electronics"
-msgstr ""
+msgstr "Elektronica"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Dell"
-msgstr ""
+msgstr "Dell"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
-msgstr ""
+msgstr "<1>2. Open het tabblad </1><2>Invoegen</2><3> in de werkbalk</3>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Logitech"
-msgstr ""
+msgstr "Logitech"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>3. Click </1><2>Table</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>Tabel</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Office supplies"
-msgstr ""
+msgstr "Kantoorbenodigdheden"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Staples"
-msgstr ""
+msgstr "Staples"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>4. Click </1><2>OK</2>"
-msgstr ""
+msgstr "<1>4. Klik op </1><2>OK</2>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts')
 msgid "Keyboard"
-msgstr ""
+msgstr "Toetsenbord"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts')
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your data is now organised as a table"
-msgstr ""
+msgstr "5. Uw gegevens zijn nu georganiseerd als een tabel"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts')
 msgid "Pen"
-msgstr ""
+msgstr "Pen"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
 #. Formatting'); content.xml (sheet '📊 Charts')
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Bic"
-msgstr ""
+msgstr "Bic"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from scratch"
-msgstr ""
+msgstr "Vanuit niets een tabel aanmaken"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
-msgstr ""
+msgstr "<1>1. Open het tabblad </1><2>Invoegen</2><3> in de werkbalk</3>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Click </1><2>Table</2>"
-msgstr ""
+msgstr "<1>2. Klik op </1><2>Tabel</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "3. Select the range of cells where you want to create the table"
-msgstr ""
+msgstr "3. Selecteer het bereik van cellen waar u de tabel wilt maken"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your table is now ready to be filled with data"
-msgstr ""
+msgstr "5. Uw tabel is nu klaar om gevuld te worden met gegevens"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Editing tables"
-msgstr ""
+msgstr "Tabellen bewerken"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -427,16 +475,24 @@ msgid ""
 "rows, and filter buttons, depending on how you want to display and work with"
 " your data."
 msgstr ""
+"Wanneer een tabel wordt gemaakt, komen er extra hulpmiddelen beschikbaar in "
+"de werkbalk. Hiermee kunt u uw tabel gemakkelijker aanpassen en beheren. U "
+"kunt verschillende tabelstijlen toepassen om de visuele weergave van uw "
+"gegevens te verbeteren. U kunt ook opties zoals koprijen, afwisselende rijen "
+"en filterknoppen in- of uitschakelen, afhankelijk van hoe u uw gegevens wilt "
+"weergeven en ermee wilt werken."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "<1>➜Try it: </1><2>Select your table, open tab Tables that appears in "
 "toolbar and explore.</2>"
 msgstr ""
+"<1>➜Probeer het: </1><2>Selecteer uw tabel, open tab Tabellen die in de "
+"werkbalk verschijnt en verken.</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Pivot table"
-msgstr ""
+msgstr "Draaitabel"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -445,24 +501,30 @@ msgid ""
 " of the source data, you can display the details of areas of interest, and "
 "you can create reports."
 msgstr ""
+"Met de draaitabel (voorheen bekend als DataPilot) kunt u grote hoeveelheden "
+"gegevens combineren, vergelijken en analyseren. U kunt verschillende "
+"samenvattingen van de brongegevens bekijken, u kunt de details van "
+"interessegebieden weergeven en u kunt rapporten maken."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "<1>➜Try it: </1><2>Go to the Insert tab and click Pivot Table to create one "
 "from your data.</2>"
 msgstr ""
+"<1>➜Probeer het: </1><2>Ga naar het tabblad Invoegen en klik op Draaitabel "
+"om er een te maken op basis van uw gegevens.</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Next Chapter: 🎨 Conditional Formatting"
-msgstr ""
+msgstr "Volgend hoofdstuk: 🎨 Voorwaardelijke opmaak"
 
 #. content.xml (sheet name)
 msgid "🎨 Conditional Formatting"
-msgstr ""
+msgstr "🎨 Voorwaardelijke opmaak"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "🎨Conditional formatting"
-msgstr ""
+msgstr "🎨Voorwaardelijke opmaak"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -470,6 +532,9 @@ msgid ""
 "highlight important values, show patterns, and improve readability using "
 "colours, styles, and rules."
 msgstr ""
+"Geef uw gegevens opmaak om deze duidelijker en begrijpelijker te maken. U "
+"kunt belangrijke waarden benadrukken, patronen weergeven en de leesbaarheid "
+"verbeteren met behulp van kleuren, stijlen en regels."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -477,38 +542,41 @@ msgid ""
 "values in the data and make important information easier to spot at a "
 "glance."
 msgstr ""
+"In dit voorbeeld zullen we voorwaardelijke opmaak toepassen om de "
+"belangrijkste waarden in de gegevens te benadrukken en belangrijke "
+"informatie in één oogopslag gemakkelijker te herkennen te maken."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "Apply conditional formatting"
-msgstr ""
+msgstr "Voorwaardelijke opmaak toepassen"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "1. Select the range of cells you want to format"
-msgstr ""
+msgstr "1. Selecteer het bereik van cellen die u wilt opmaken"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>2. Open the </1><2>Format tab</2><3> in the toolbar</3>"
-msgstr ""
+msgstr "<1>2. Open het tabblad </1><2>Opmaak</2><3> in de werkbalk</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>3. Click </1><2>Conditional formatting</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>Voorwaardelijke opmaak</2>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>4. Select the </1><2>rule</2><3> you want to apply</3>"
-msgstr ""
+msgstr "<1>4. Selecteer de </1><2>regel</2><3> die u wilt toepassen</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "5. Set the condition and select a cell style"
-msgstr ""
+msgstr "5. Stel de voorwaarde in en selecteer een celstijl"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "<1>6. Click </1><2>OK</2><3> to apply</3>"
-msgstr ""
+msgstr "<1>6. Klik op </1><2>OK</2><3> om toe te passen</3>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "➜Try it: Inventory stock overview"
-msgstr ""
+msgstr "➜Probeer het eens: Voorraadoverzicht"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -517,18 +585,22 @@ msgid ""
 "in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
 "tab</9><10>.</10>"
 msgstr ""
+"<1>💡Nuttige tip: </1><2>Om de opmaak te verwijderen, gebruikt u </2><3>"
+"Opmaak wissen</3><4> in het tabblad </4><5>Start</5><6> of u kunt regels "
+"beheren en verwijderen in </6><7>Voorwaardelijke opmaak beheren</7><8> van "
+"het tabblad </8><9>Opmaak</9><10>.</10>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "Next Chapter: 📊 Charts"
-msgstr ""
+msgstr "Volgend hoofdstuk: 📊 Diagrammen"
 
 #. content.xml (sheet name)
 msgid "📊 Charts"
-msgstr ""
+msgstr "📊 Diagrammen"
 
 #. content.xml (sheet '📊 Charts')
 msgid "📊Create a chart"
-msgstr ""
+msgstr "📊Diagram aanmaken"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -536,6 +608,10 @@ msgid ""
 "can visually compare data series and view trends in the data. You can insert"
 " charts into spreadsheets, text documents, drawings and presentations."
 msgstr ""
+"Met Collabora Office kunt u gegevens grafisch presenteren in een diagram, "
+"zodat u gegevensreeksen visueel kunt vergelijken en trends in de gegevens "
+"kunt bestuderen. U kunt diagrammen invoegen in spreadsheets, "
+"tekstdocumenten, tekeningen en presentaties."
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -543,91 +619,97 @@ msgid ""
 "types of charts available. On the other side, you can see an example table "
 "that can be used as a data source for creating charts."
 msgstr ""
+"In dit voorbeeld leren we hoe we diagrammen kunnen maken en de verschillende "
+"soorten beschikbare diagrammen kunnen verkennen. Daarbij ziet u een "
+"voorbeeldtabel die kan worden gebruikt als gegevensbron voor het maken van "
+"diagrammen."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart from existing data"
-msgstr ""
+msgstr "Maak een diagram op basis van bestaande gegevens"
 
 #. content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Price per piece [£]"
-msgstr ""
+msgstr "Prijs per stuk [€]"
 
 #. content.xml (sheet '📊 Charts')
 msgid "900"
-msgstr ""
+msgstr "900"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
-msgstr ""
+msgstr "<1>2. Open het tabblad </1><2>Invoegen </2><3>in de werkbalk</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "15"
-msgstr ""
+msgstr "15"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>3. Click </1><2>Chart</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>Diagram</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #. content.xml (sheet '📊 Charts')
 msgid "4. Choose the chart type and style that best fits your data"
 msgstr ""
+"4. Kies het type diagram en de stijl die het beste bij uw gegevens passen"
 
 #. content.xml (sheet '📊 Charts')
 msgid "40"
-msgstr ""
+msgstr "40"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr ""
+msgstr "<1>5. Klik op </1><2>Voltooien</2><3> om het diagram </3> in te voegen"
 
 #. content.xml (sheet '📊 Charts')
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #. content.xml (sheet '📊 Charts')
 msgid "6. Your data is now displayed as a chart"
-msgstr ""
+msgstr "6. Uw gegevens worden nu weergegeven als een diagram"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart via Insert tab"
-msgstr ""
+msgstr "Een diagram maken via het tabblad Invoegen"
 
 #. content.xml (sheet '📊 Charts')
 msgid "1. Open the Insert tab in the toolbar"
-msgstr ""
+msgstr "1. Open het tabblad Invoegen in de werkbalk"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>2. Click </1><2>Chart</2>"
-msgstr ""
+msgstr "<1>2. Klik op </1><2>Diagram</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "3. Choose the chart type and style that best fits your data"
 msgstr ""
+"3. Kies het type diagram en de stijl die het beste bij uw gegevens passen"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>4. Click </1><2>Next</2>"
-msgstr ""
+msgstr "<1>4. Klik op </1><2>Volgende</2>"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
 "5. Select the range of cells that contains your data (including headers)"
-msgstr ""
+msgstr "5. Selecteer het cellenbereik dat uw gegevens bevat (inclusief koppen)"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>6. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr ""
+msgstr "<1>6. Klik op </1><2>Voltooien</2><3> om het diagram in te voegen</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "7. Your data is now displayed as a chart"
-msgstr ""
+msgstr "7. Uw gegevens worden nu weergegeven als een diagram"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Editing charts"
-msgstr ""
+msgstr "Diagrammen bewerken"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -635,14 +717,18 @@ msgid ""
 " you can use the options in the sidebar or open the context menu (right "
 "click) to modify the chart."
 msgstr ""
+"Om een diagram te bewerken, dubbelklikt u erop om de bewerkingsmodus te "
+"activeren. Eenmaal geselecteerd, kunt u de opties in de zijbalk gebruiken of "
+"het contextmenu openen (klik met de rechtermuisknop) om het diagram te "
+"wijzigen."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
-msgstr ""
+msgstr "Volgend hoofdstuk:🔍 Gegevens & filtering"
 
 #. content.xml (sheet name); content.xml (sheet '🔍 Data & filtering')
 msgid "🔍 Data & filtering"
-msgstr ""
+msgstr "🔍 Gegevens & filtering"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -650,32 +736,37 @@ msgid ""
 "efficiently. You can quickly sort information or apply filters to focus only"
 " on the data that matters."
 msgstr ""
+"Gegevens- en filtertools helpen u uw gegevens efficiënter te organiseren en "
+"te verkennen. U kunt snel informatie sorteren of filters toepassen om alleen "
+"te focussen op de gegevens die er toe doen."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "In this example, we will learn how to filter data to quickly find specific "
 "items in an inventory list."
 msgstr ""
+"In dit voorbeeld leren we hoe we gegevens kunnen filteren om snel specifieke "
+"items in een inventarislijst te vinden."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Enable filtering"
-msgstr ""
+msgstr "Filtering inschakelen"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
-msgstr ""
+msgstr "<1>2. Open het tabblad </1><2>Gegevens </2><3>in de werkbalk</3>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "<1>3. Click </1><2>Auto Filter</2>"
-msgstr ""
+msgstr "<1>3. Klik op </1><2>Autofilter</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Find low stock items"
-msgstr ""
+msgstr "➜Probeer het: Vind artikelen met een lage voorraad"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
-msgstr ""
+msgstr "➜Probeer het: Toon alleen elektronica-items"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -683,33 +774,40 @@ msgid ""
 "filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
 "Filter</5><6>. All data will be visible again.</6>"
 msgstr ""
+"<1>💡Nuttige tip: </1><2>Om het filter uit te schakelen, selecteert u een "
+"cel binnen de gefilterde gegevens en gaat u vervolgens naar het tabblad</2>"
+"<3> Gegevens</3><4> en klikt u op </4><5>Filtering uitschakelen</5><6>. Alle "
+"gegevens zullen weer zichtbaar zijn.</6>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Other filtering options"
-msgstr ""
+msgstr "Overige filteropties"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Additional filtering options give you more control over your data."
-msgstr ""
+msgstr "Extra filteropties geven u meer controle over uw gegevens."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
-msgstr ""
+msgstr "Laatste hoofdstuk: 🤝 Productiviteit & samenwerking"
 
 #. content.xml (sheet name); content.xml (sheet '🤝 Productivity &
 #. collaboration')
 msgid "🤝 Productivity & collaboration"
-msgstr ""
+msgstr "🤝 Productiviteit & samenwerking"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
 "A range of features helps you stay productive and collaborate with others, "
 "making it easier to organise work and share information in real time."
 msgstr ""
+"Een reeks functies helpt u productief te blijven en met anderen samen te "
+"werken, waardoor het gemakkelijker wordt om het werk te organiseren en "
+"informatie te delen."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Document sharing"
-msgstr ""
+msgstr "Documenten delen"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -717,34 +815,37 @@ msgid ""
 "document simultaneously, making it easy to share ideas, review changes, and "
 "stay aligned."
 msgstr ""
+"Gelijktijdige samenwerking met anderen. Meerdere gebruikers kunnen hetzelfde "
+"document tegelijkertijd bewerken, waardoor het gemakkelijk wordt om ideeën "
+"te delen, wijzigingen te beoordelen en op één lijn te blijven."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
-msgstr ""
+msgstr "Begin met het delen van uw document"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "1. Create new document or open existing one"
-msgstr ""
+msgstr "1. Maak een nieuw document aan of open een bestaand document"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
-msgstr ""
+msgstr "<1>2. Klik op de knop </1><2>Delen</2><3> aan de rechterkant</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "<1>3. </1><2>Share</2><3> your document with others</3>"
-msgstr ""
+msgstr "<1>3. Uw document </1><2>Delen</2><3> met anderen</3>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: Internal shares"
-msgstr ""
+msgstr "➜Probeer het eens: Intern delen"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
-msgstr ""
+msgstr "➜Probeer het eens: Extern delen"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
-msgstr ""
+msgstr "Sneltoetsen"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -753,6 +854,10 @@ msgid ""
 "copying, formatting, or navigating through your document, making your "
 "workflow more efficient."
 msgstr ""
+"Sneltoetsen helpen u sneller te werken door het gebruik van menu's en kliks "
+"te verminderen. Ze stellen u in staat om vaak-gebruikte acties snel uit te "
+"voeren, zoals kopiëren, formatteren of navigeren door uw document, waardoor "
+"uw werk efficiënter wordt."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -760,10 +865,13 @@ msgid ""
 "</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
 "can also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
+"<1>💡Nuttige tip: </1><2>Om een lijst met alle sneltoetsen te vinden, gaat u "
+"naar het tabblad </2><3>Hulp</3><4> en klikt u op </4><5>Sneltoetsen</5><6>. "
+"U kunt ook de zoekoptie gebruiken om snel specifieke sneltoets te vinden.</6>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "⏯Video tutorials"
-msgstr ""
+msgstr "⏯ Video-instructies"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -772,3 +880,7 @@ msgid ""
 " what you’ve learned, so you can become more confident and efficient in your"
 " work."
 msgstr ""
+"Om verder te leren, kunt u korte video-introducties over aanvullende "
+"functies bestuderen. Deze video's bieden snelle begeleiding en helpen u "
+"voort te bouwen op wat u heeft geleerd, zodat u zelfverzekerder en "
+"efficiënter kunt worden in uw werk."
