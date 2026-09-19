@@ -9,9 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/kit.hxx>
@@ -799,6 +803,29 @@ DECLARE_OOXMLEXPORT_TEST(testFieldMarkFormat, "fontsize-field-separator.docx")
     // - Actual  : 42
     // i.e. the field content has the properties of the field marks
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, u"CharHeight"_ustr));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf168474, "tdf168474.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFields(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xFields(
+        xTextFields->getTextFields()->createEnumeration());
+    sal_Int32 nPageNumberFields = 0;
+    while (xFields->hasMoreElements())
+    {
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY_THROW);
+        if (!xServiceInfo->supportsService(u"com.sun.star.text.TextField.PageNumber"_ustr))
+            continue;
+
+        uno::Reference<text::XTextContent> xTextContent(aField, uno::UNO_QUERY_THROW);
+        // Without the fix this was FontSlant_NONE, as the plain field command run was used.
+        CPPUNIT_ASSERT_EQUAL(
+            awt::FontSlant_ITALIC,
+            getProperty<awt::FontSlant>(xTextContent->getAnchor(), u"CharPosture"_ustr));
+        ++nPageNumberFields;
+    }
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nPageNumberFields);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf167527_title_letters_cut_from_below)

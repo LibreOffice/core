@@ -356,8 +356,12 @@ private:
 
     FFDataHandler::Pointer_t m_pFFDataHandler;
     FormControlHelper::Pointer_t m_pFormControlHelper;
-    /// (Character) properties of the field itself.
-    PropertyMapPtr m_pProperties;
+    /// Field metadata which is independent of command and result run formatting.
+    PropertyMapPtr m_pFieldProperties;
+    /// Character properties copied from the first command w:r (run).
+    PropertyMapPtr m_pCommandFirstRunProperties;
+    /// Character properties copied from the first non-empty result w:r (run).
+    PropertyMapPtr m_pResultFirstRunProperties;
 
     std::vector<FieldParagraph> m_aParagraphsToFinish;
 
@@ -414,7 +418,19 @@ public:
 
     void setFormControlHelper(const FormControlHelper::Pointer_t& pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
     const FormControlHelper::Pointer_t& getFormControlHelper() const { return m_pFormControlHelper; }
-    const PropertyMapPtr& getProperties() const { return m_pProperties; }
+    const PropertyMapPtr& getFieldProperties() const { return m_pFieldProperties; }
+    const PropertyMapPtr& getCommandFirstRunProperties() const
+    {
+        return m_pCommandFirstRunProperties;
+    }
+    /// Select run formatting, not field metadata; result formatting is known at PopFieldContext().
+    const PropertyMapPtr& getRunProperties() const
+    {
+        if (m_pResultFirstRunProperties)
+            return m_pResultFirstRunProperties;
+        return m_pCommandFirstRunProperties;
+    }
+    void captureResultFirstRunProperties(const PropertyMapPtr& pProperties);
 
     ::std::vector<OUString> GetCommandParts() const;
 
