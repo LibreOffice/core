@@ -100,6 +100,9 @@ Const cstBUILTINTOOLBAR			= 0		&apos;	Standard toolbar
 Const cstCUSTOMTOOLBAR			= 1		&apos;	Toolbar added by user and stored in the LibreOffice application
 Const cstCUSTOMDOCTOOLBAR		= 2		&apos;	Toolbar added by user solely for a single document
 
+&apos;	Password management
+Const cstPASSWORD				= &quot;*&quot;
+
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
@@ -531,7 +534,9 @@ Public Function EnterValue(Optional ByRef Prompt As Variant _
 
 Dim vEnterValue As Variant			&apos;	Return value
 Dim oDialog As Object				&apos;	A SFDialogs.SF_Dialog class instance
-Dim oControl As Object				&apos;	A SFDialogs.SF_DialogControl class instance
+Dim oControl As Object				&apos;	The input field as a SFDialogs.SF_DialogControl class instance
+Dim oPasswordButton As Object		&apos;	The password button as a SFDialogs.SF_DialogControl class instance
+Dim oPasswordField As Object		&apos;	The readable password as a SFDialogs.SF_DialogControl class instance
 Dim oTime As Object					&apos;	An alternative SFDialogs.SF_DialogControl class instance to represent a TimeField
 Dim oButton As Object				&apos;	A button SFDialogs.SF_DialogControl class instance
 Dim iExecute As Integer				&apos;	dialog.Execute() return value
@@ -560,6 +565,7 @@ Const LEFTMARGIN = 10 _
 Const INTERVAL = 3
 &apos;	One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
 Const TEXTHEIGHT = 8, TEXTWIDTH = 4, TEXTOFFSET = 2, MAXTEXTLENGTH = 70
+Const MAXPASSWORDLENGTH = 30, PASSWORDWIDTH = 20
 Const NUMERICWIDTH = 150, CHECKBOXWIDTH = 8, DATEWIDTH = 50, TIMEWIDTH = 50
 Const TABSIZE = 4
 Const LISTWIDTH = 20, MAXLISTCOUNT = 8
@@ -605,13 +611,15 @@ Try:
 	Next sPrompt
 	lPromptWidth = lPromptWidth * TEXTWIDTH
 	If lPromptWidth &gt; lDialogWidth Then lDialogWidth = lPromptWidth
-	lPromptHeight = ((UBound(vPrompt) + 1) * (TEXTHEIGHT + TEXTOFFSET)) - TEXTOFFSET
+	lPromptHeight = ((UBound(vPrompt) + 1) * (TEXTHEIGHT + TEXTOFFSET))
 
 	&apos;	Compute dialog control size
 	lControlHeight = TEXTHEIGHT
 	Select Case UCase(ValueType)
-		Case &quot;STRING&quot;, &quot;PASSWORD&quot;
+		Case &quot;STRING&quot;&apos;, &quot;PASSWORD&quot;
 			lControlWidth = TEXTWIDTH * MAXTEXTLENGTH
+		Case &quot;PASSWORD&quot;
+			lControlWidth = TEXTWIDTH * MAXPASSWORDLENGTH + TEXTOFFSET + PASSWORDWIDTH
 		Case &quot;BOOL&quot;
 			lControlHeight = lPromptHeight
 		Case &quot;INTEGER&quot;, &quot;FLOAT&quot;
@@ -661,12 +669,27 @@ Try:
 	&apos;	Setup of enabled control(s)
 	lControlY = TOPMARGIN + lPromptHeight + INTERVAL
 	Select Case UCase(ValueType)
-		Case &quot;STRING&quot;, &quot;PASSWORD&quot;
+		Case &quot;STRING&quot;
 			Set oControl = oDialog.CreateTextField(&quot;InputField&quot; _
 					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
 					, MultiLine := False _
-					, PasswordCharacter := Iif(UCase(ValueType) = &quot;PASSWORD&quot;, &quot;*&quot;, &quot;&quot;))
+					, PasswordCharacter := &quot;&quot;)
 			If VarType(Default) = V_STRING Then oControl.Value = Default
+		Case &quot;PASSWORD&quot;
+			Set oControl = oDialog.CreateTextField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth - TEXTOFFSET - PASSWORDWIDTH, TEXTHEIGHT) _
+					, MultiLine := False _
+					, PasswordCharacter := cstPASSWORD)
+			Set oPasswordField = oDialog.CreateTextField(&quot;HiddenField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth - TEXTOFFSET - PASSWORDWIDTH, TEXTHEIGHT) _
+					, MultiLine := False _
+					, PasswordCharacter := &quot;&quot;)
+			oPasswordField.Visible = False
+			Set oPasswordButton = oDialog.CreateButton(&quot;PasswordButton&quot; _
+					, Place := Array(oControl.X + oControl.Width + TEXTOFFSET, lControlY, PASSWORDWIDTH, BUTTONHEIGHT))
+			If VarType(Default) = V_STRING Then oControl.Value = Default
+			oPasswordButton.Caption = Chr(8644)		&apos;	⇄	Unicode rightwards arrow over leftwards arrow
+			oPasswordButton.OnActionPerformed = &quot;vnd.sun.star.script:ScriptForge.SF_UI._RunPasswordButton?language=Basic&amp;location=application&quot;
 		Case &quot;INTEGER&quot;, &quot;FLOAT&quot;
 			Set oControl = oDialog.CreateFormattedField(&quot;InputField&quot; _
 					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
@@ -765,8 +788,10 @@ Try:
 	iExecute = oDialog.Execute(Modal := True)
 	If iExecute = oDialog.OKBUTTON Then
 		Select Case UCase(ValueType)
-			Case &quot;STRING&quot;, &quot;PASSWORD&quot;, &quot;DATE&quot;, &quot;TIME&quot;, &quot;COMBO&quot;, &quot;LIST&quot;
+			Case &quot;STRING&quot;, &quot;DATE&quot;, &quot;TIME&quot;, &quot;COMBO&quot;, &quot;LIST&quot;
 				vEnterValue = oControl.Value
+			Case &quot;PASSWORD&quot;
+				If oControl.Visible Then vEnterValue = oControl.Value Else vEnterValue = oPasswordField.Value
 			Case &quot;INTEGER&quot;
 				vEnterValue = CLng(oControl.Value)
 			Case &quot;FLOAT&quot;
@@ -1855,6 +1880,49 @@ Private Function _Repr() As String
 	_Repr = &quot;[UI]&quot;
 
 End Function	&apos;	ScriptForge.SF_UI._Repr
+
+REM -----------------------------------------------------------------------------
+Private Sub _RunPasswordButton(ByRef Optional poEvent As Object)
+&apos;&apos;&apos;	Activated by clicking on the password button defined in the EnterValue dialog box
+&apos;&apos;&apos;	Enable/Disable the echo character of the password control
+&apos;&apos;&apos;		Changing dynamically the EchoChar property in the model, view or peer has no effect,
+&apos;&apos;&apos;		hence	- swap the readable and the not readable fields alternatively
+&apos;&apos;&apos;				- set the focus on the newly visible control
+&apos;&apos;&apos;				- put the caret at the current position
+
+Dim oDialog As Object				&apos;	The EnterValue dialog as a SFDialogs.Dialog class instance
+Dim oPasswordControl As Object		&apos;	The password control as a SFDialogs.DialogControl class instance
+Dim oHiddenControl As Object		&apos;	The readable control as a SFDialogs.DialogControl class instance (initially hidden)
+
+	On Local Error GoTo Finally		&apos;	Never interrupt
+	If Not IsNull(poEvent) Then
+		Set oDialog = CreateScriptService(&quot;SFDialogs.DialogEvent&quot;, poEvent).Parent
+		Set oPasswordControl = oDialog.Controls(&quot;InputField&quot;)
+		Set oHiddenControl = oDialog.Controls(&quot;HiddenField&quot;)
+		&apos;	Alternate swap
+		If oPasswordControl.Visible Then
+			With oHiddenControl
+				.Value = oPasswordControl.Value
+				oPasswordControl.Visible = False
+				.Visible = True
+				.SetFocus()
+				.XControlView.AccessibleContext.setCaretPosition(oPasswordControl.XControlView.AccessibleContext.CaretPosition)
+			End With
+		Else
+			With oPasswordControl
+				.Value = oHiddenControl.Value
+				oHiddenControl.Visible = False
+				.Visible = True
+				.SetFocus()
+				.XControlView.AccessibleContext.setCaretPosition(oHiddenControl.XControlView.AccessibleContext.CaretPosition)
+			End With
+		End If
+	End If
+
+Finally:
+	On Error GoTo 0
+	Exit Sub
+End Sub			&apos;   ScriptForge.SF_UI._RunPasswordButton
 
 REM ============================================ END OF SCRIPTFORGE.SF_UI
 </script:module>
