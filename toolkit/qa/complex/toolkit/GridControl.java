@@ -472,6 +472,8 @@ public class GridControl
         dataModel.removeRow( rowCount - 1 );
         assertEquals( "removed the last and active row, active row was not adjusted!",
             rowCount - 2, gridControl.getCurrentRow() );
+
+        impl_dispose(gridControl);
     }
 
 
