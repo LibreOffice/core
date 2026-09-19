@@ -25,6 +25,7 @@
 
 #include <chrono>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -317,6 +318,7 @@ public:
                    UNSUPPORTED, ///< Locking is not supported on this host.
                    OK, ///< Succeeded to either lock or unlock (see LockContext).
                    UNAUTHORIZED, ///< 401, 403, 404.
+                   TRANSIENT, ///< 429, 500, 502, 503, 504: ask again shortly.
                    FAILED ///< Other failures.
         );
 
@@ -344,8 +346,18 @@ public:
 
         LockState requestedLockState() const { return _requestedLockState; }
 
+        /// Records how long the host asked us to wait before trying again, when
+        /// it said so in Retry-After. Empty when it didn't.
+        void setRetryAfter(std::optional<std::chrono::seconds> retryAfter)
+        {
+            _retryAfter = retryAfter;
+        }
+
+        std::optional<std::chrono::seconds> getRetryAfter() const { return _retryAfter; }
+
     private:
         std::string _reason;
+        std::optional<std::chrono::seconds> _retryAfter;
         Status _status;
         LockState _requestedLockState;
     };
@@ -683,12 +695,19 @@ class LockContext final
     bool _supportsLocks;
     /// Do we own the (leased) lock currently
     StorageBase::LockState _lockState;
+    /// Consecutive transient failures to refresh the lock we hold.
+    std::size_t _transientFailures;
+    /// Earliest time of the next refresh attempt. Set while riding out a
+    /// transient failure, when waiting a whole refresh period would be far too
+    /// long: the lease we hold expires long before that.
+    std::chrono::steady_clock::time_point _retryNotBefore;
 
 public:
     LockContext()
         : _refreshSeconds(ConfigUtil::getConfigValue<int>("storage.wopi.locking.refresh", 900))
         , _supportsLocks(false)
         , _lockState(StorageBase::LockState::UNLOCK)
+        , _transientFailures(0)
     {
         LOG_DBG("Lock will refresh every " << _refreshSeconds);
     }
@@ -713,11 +732,36 @@ public:
     void setState(StorageBase::LockState state)
     {
         _lockState = state;
+        _transientFailures = 0;
+        _retryNotBefore = std::chrono::steady_clock::time_point();
         bumpTimer();
     }
 
     /// wait another refresh cycle
     void bumpTimer() { _lastLockTime = std::chrono::steady_clock::now(); }
+
+    /// Records a transient failure and asks for another attempt after @delay,
+    /// rather than at the end of the refresh period. Returns how many
+    /// consecutive transient failures we have now had.
+    std::size_t deferRetry(std::chrono::seconds delay)
+    {
+        _retryNotBefore = std::chrono::steady_clock::now() + delay;
+        return ++_transientFailures;
+    }
+
+    /// How many consecutive transient failures we have ridden out.
+    std::size_t transientFailures() const { return _transientFailures; }
+
+    /// Forgets a deferred retry, so that refreshing goes back to its period.
+    /// Must be called on every outcome that isn't a deferral: while a retry is
+    /// pending, needsRefresh() answers from it alone and never consults the
+    /// period again, so a deferral left behind by a failure we gave up on asks
+    /// for a refresh on every pass of the poll for the life of the document.
+    void clearRetry()
+    {
+        _retryNotBefore = std::chrono::steady_clock::time_point();
+        _transientFailures = 0;
+    }
 
     /// do we need to refresh our lock ?
     bool needsRefresh(std::chrono::steady_clock::time_point now) const;

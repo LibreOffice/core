@@ -550,21 +550,25 @@ void WopiStorage::updateLockStateAsync(const Authorization& auth, LockContext& l
 
         std::string failureReason = httpResponse->get("X-WOPI-LockFailureReason", "");
 
-        const bool unauthorized =
-            http::isUnauthorizedStatusCode(httpResponse->statusLine().statusCode());
+        const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+        const bool unauthorized = http::isUnauthorizedStatusCode(statusCode);
+        const bool transient = !unauthorized && http::isTransientStatusCode(statusCode);
 
         const StorageBase::LockUpdateResult::Status status =
             unauthorized ? LockUpdateResult::Status::UNAUTHORIZED
-                         : LockUpdateResult::Status::FAILED;
+                         : (transient ? LockUpdateResult::Status::TRANSIENT
+                                      : LockUpdateResult::Status::FAILED);
 
         LOG_ERR("Un-successful " << wopiLog << " with " << (unauthorized ? "expired token, " : "")
-                                 << "HTTP status " << httpResponse->statusLine().statusCode()
-                                 << ", failure reason: [" << failureReason << "] and response: ["
-                                 << responseString << ']');
+                                 << "HTTP status " << statusCode << ", failure reason: ["
+                                 << failureReason << "] and response: [" << responseString << ']');
+
+        LockUpdateResult result(status, lock, std::move(failureReason));
+        if (transient)
+            result.setRetryAfter(http::parseRetryAfter(httpResponse->get("Retry-After")));
 
         return asyncLockStateCallback(
-            AsyncLockUpdate(AsyncLockUpdate::State::Error,
-                            LockUpdateResult(status, lock, std::move(failureReason))));
+            AsyncLockUpdate(AsyncLockUpdate::State::Error, std::move(result)));
     };
 
     _lockHttpSession->setFinishedHandler(std::move(finishedCallback));

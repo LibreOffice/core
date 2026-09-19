@@ -203,6 +203,16 @@ std::atomic<unsigned> DocumentBroker::DocBrokerId(1);
 namespace
 {
 DocumentBroker::BrokerFactory GlobalBrokerFactory;
+
+/// How long to wait before asking again, when a host is too busy to refresh a
+/// lock we already hold. Used only when the host doesn't say in Retry-After.
+constexpr std::chrono::seconds LockRetryDelay(30);
+
+/// How many such failures to ride out before telling the user. The lease has a
+/// refresh period's worth of life left, so a few unanswered attempts cost us
+/// nothing; carrying on indefinitely would mean editing against a lock that has
+/// quietly expired.
+constexpr std::size_t MaxLockRetries = 3;
 }
 
 void DocumentBroker::setBrokerFactory(BrokerFactory factory)
@@ -2904,6 +2914,7 @@ bool DocumentBroker::handleLockResult(ClientSession& session,
     switch (result.getStatus())
     {
         case StorageBase::LockUpdateResult::Status::UNSUPPORTED:
+            _lockCtx->clearRetry();
             LOG_DBG("Locks on docKey [" << _docKey << "] are unsupported while trying to "
                                         << StorageBase::nameShort(requestedLock));
             return true; // Not an error.
@@ -2918,6 +2929,7 @@ bool DocumentBroker::handleLockResult(ClientSession& session,
 
         case StorageBase::LockUpdateResult::Status::UNAUTHORIZED:
         {
+            _lockCtx->clearRetry();
             LOG_ERR("Failed to " << StorageBase::nameShort(requestedLock) << " docKey [" << _docKey
                                  << "]. Invalid or expired access token. Notifying client and "
                                     "invalidating the authorization token of session ["
@@ -2931,8 +2943,37 @@ bool DocumentBroker::handleLockResult(ClientSession& session,
         }
         break;
 
+        case StorageBase::LockUpdateResult::Status::TRANSIENT:
+        {
+            // A lock we already hold is worth keeping hold of. The host is busy,
+            // not refusing us, and our lease still has most of the refresh period
+            // left to run, so ask again shortly rather than taking the document
+            // away from someone who is in the middle of editing it.
+            if (_lockCtx->isLocked() && requestedLock == StorageBase::LockState::LOCK)
+            {
+                const std::chrono::seconds delay =
+                    result.getRetryAfter().value_or(LockRetryDelay);
+                const std::size_t failures = _lockCtx->deferRetry(delay);
+                if (failures <= MaxLockRetries)
+                {
+                    LOG_INF("Failed to refresh the lock on docKey ["
+                            << _docKey << "] with reason [" << reason << "]; attempt " << failures
+                            << " of " << MaxLockRetries << ", trying again in " << delay);
+                    return true; // Not an error yet.
+                }
+
+                LOG_ERR("Failed to refresh the lock on docKey ["
+                        << _docKey << "] " << failures << " times, the last with reason [" << reason
+                        << "]. Giving up and making session [" << session.getId()
+                        << "] read-only");
+            }
+
+            [[fallthrough]];
+        }
+
         case StorageBase::LockUpdateResult::Status::FAILED:
         {
+            _lockCtx->clearRetry();
             LOG_ERR("Failed to " << StorageBase::nameShort(requestedLock) << " docKey [" << _docKey
                                  << "] with reason [" << reason
                                  << "]. Notifying client and making session [" << session.getId()
@@ -4117,11 +4158,13 @@ void DocumentBroker::refreshLock()
     if (!session)
     {
         LOG_ERR("No write-able session to refresh lock with");
+        _lockCtx->clearRetry();
         _lockCtx->bumpTimer();
     }
     else if (!session->getAuthorization().isValid())
     {
         LOG_ERR("No write-able session with valid authorization to refresh lock with");
+        _lockCtx->clearRetry();
         _lockCtx->bumpTimer();
     }
     else
