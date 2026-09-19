@@ -116,14 +116,12 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 
-    Reference< XAccessible >    xRet;
-
     tools::Long nChild = mpRepr ? PointToIndex(mpRepr->GetApproxRPFromPixPt(rPoint)) : NOCHILDSELECTED;
 
     if (nChild != NOCHILDSELECTED)
-        xRet = getAccessibleChild( nChild );
+        return getAccessibleChild(nChild);
 
-    return xRet;
+    return {};
 }
 
 // XAccessibleContext
