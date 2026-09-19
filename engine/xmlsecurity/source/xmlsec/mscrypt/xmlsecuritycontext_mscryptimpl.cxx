@@ -130,7 +130,7 @@ void SAL_CALL XMLSecurityContext_MSCryptImpl::setDefaultSecurityEnvironmentIndex
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_MSCryptImpl::getImplementationName() {
-    return "com.sun.star.xml.crypto.XMLSecurityContext" ;
+    return u"com.sun.star.xml.crypto.XMLSecurityContext"_ustr;
 }
 
 /* XServiceInfo */
@@ -140,7 +140,7 @@ bool SAL_CALL XMLSecurityContext_MSCryptImpl::supportsService( const OUString& s
 
 /* XServiceInfo */
 cpo::uno::Sequence< OUString > SAL_CALL XMLSecurityContext_MSCryptImpl::getSupportedServiceNames() {
-    return { "com.sun.star.xml.crypto.XMLSecurityContext" };
+    return { u"com.sun.star.xml.crypto.XMLSecurityContext"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*

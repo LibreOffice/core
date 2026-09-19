@@ -34,7 +34,7 @@ XSECXMLSEC_DLLPUBLIC void initXmlSec()
 #ifdef XMLSEC_CRYPTO_MSCRYPTO
     if( xmlSecMSCngInit() < 0 ) {
         xmlSecShutdown();
-        throw cpo::uno::RuntimeException("Failed to initialize XML Security (xmlsec) for Microsoft crypto engine library");
+        throw cpo::uno::RuntimeException(u"Failed to initialize XML Security (xmlsec) for Microsoft crypto engine library"_ustr);
     }
 #endif
 #ifdef XMLSEC_CRYPTO_NSS

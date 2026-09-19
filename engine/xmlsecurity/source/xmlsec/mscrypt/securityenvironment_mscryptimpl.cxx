@@ -162,7 +162,7 @@ SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() {
-    return "com.sun.star.xml.crypto.SecurityEnvironment";
+    return u"com.sun.star.xml.crypto.SecurityEnvironment"_ustr;
 }
 
 /* XServiceInfo */
@@ -171,7 +171,7 @@ bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& 
 }
 /* XServiceInfo */
 cpo::uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
-    return { "com.sun.star.xml.crypto.SecurityEnvironment" };
+    return { u"com.sun.star.xml.crypto.SecurityEnvironment"_ustr };
 }
 
 HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() {
@@ -1033,7 +1033,7 @@ static rtl::Reference<X509Certificate_MSCryptImpl> MswcryCertContextToXCert( PCC
 
 OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation()
 {
-    return "Microsoft Crypto API";
+    return u"Microsoft Crypto API"_ustr;
 }
 
 xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {

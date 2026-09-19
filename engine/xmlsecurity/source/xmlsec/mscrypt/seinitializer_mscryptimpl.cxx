@@ -149,7 +149,7 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Referen
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
 {
-    return "com.sun.star.xml.crypto.SEInitializer";
+    return u"com.sun.star.xml.crypto.SEInitializer"_ustr;
 }
 
 bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
@@ -159,7 +159,7 @@ bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServi
 
 cpo::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.crypto.SEInitializer" };
+    return { u"com.sun.star.xml.crypto.SEInitializer"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*

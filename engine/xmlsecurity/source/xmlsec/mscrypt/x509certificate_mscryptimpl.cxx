@@ -758,7 +758,7 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
 /* XServiceInfo */
 OUString SAL_CALL X509Certificate_MSCryptImpl::getImplementationName()
 {
-    return "com.sun.star.xml.security.gpg.XCertificate_MsCryptImpl";
+    return u"com.sun.star.xml.security.gpg.XCertificate_MsCryptImpl"_ustr;
 }
 
 /* XServiceInfo */

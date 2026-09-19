@@ -233,7 +233,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 
     // limit possible key data to valid X509 certificates only, no KeyValues
     if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecMSCngKeyDataX509GetKlass()) < 0)
-        throw RuntimeException("failed to limit allowed key data");
+        throw RuntimeException(u"failed to limit allowed key data"_ustr);
 
     //Verify signature
     //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)
@@ -285,7 +285,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() {
-    return "com.sun.star.xml.crypto.XMLSignature";
+    return u"com.sun.star.xml.crypto.XMLSignature"_ustr;
 }
 
 /* XServiceInfo */
@@ -295,7 +295,7 @@ return cppu::supportsService(this, serviceName);
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl::getSupportedServiceNames() {
-    return { "com.sun.star.xml.crypto.XMLSignature" };
+    return { u"com.sun.star.xml.crypto.XMLSignature"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
