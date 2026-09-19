@@ -76,7 +76,7 @@ private:
     css::uno::Reference<css::awt::XWindow> mxNotesBorderWindow;
     ::rtl::Reference<AccessibleObject> mpAccessiblePreview;
     ::rtl::Reference<AccessibleObject> mpAccessibleNotes;
-    css::uno::Reference<css::accessibility::XAccessible> mxAccessibleParent;
+    rtl::Reference<comphelper::OAccessible> mpAccessibleParent;
 
     void UpdateAccessibilityHierarchy (
         const css::uno::Reference<css::awt::XWindow>& rxPreviewContentWindow,

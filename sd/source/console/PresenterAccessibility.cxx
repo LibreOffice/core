@@ -96,7 +96,7 @@ PresenterAccessible::PresenterAccessible(
     if (VclPtr<vcl::Window> pMainPaneWin = VCLUnoHelper::GetWindow(mxMainWindow))
     {
         pMainPaneWin->SetAccessible(this);
-        mxAccessibleParent = pMainPaneWin->GetAccessibleParent();
+        mpAccessibleParent = pMainPaneWin->GetAccessibleParent();
     }
 }
 
@@ -274,7 +274,7 @@ PresenterAccessible::Create(const rtl::Reference<PresenterController>& xPresente
     pPresenterAcc->UpdateStateSet();
 
     pPresenterAcc->SetWindow(pPresenterAcc->mxMainWindow, nullptr);
-    pPresenterAcc->SetAccessibleParent(pPresenterAcc->mxAccessibleParent);
+    pPresenterAcc->SetAccessibleParent(pPresenterAcc->mpAccessibleParent);
     pPresenterAcc->UpdateAccessibilityHierarchy();
 
     return pPresenterAcc;
