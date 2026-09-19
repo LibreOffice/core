@@ -1210,20 +1210,13 @@ std::vector<std::pair<sal_uInt16, OUString>> SwDocStyleSheet::GetItemPresentatio
     std::vector<std::pair<sal_uInt16, OUString>> aResult;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
 
-    // Get parent item set for comparison
-    const SfxItemSet* pParentSet = nullptr;
-    SfxStyleSheetBase* pParentStyle = nullptr;
-    if (!GetParent().isEmpty())
-    {
-        pParentStyle = m_pPool->Find(GetParent(), nFamily);
-        if (pParentStyle)
-            pParentSet = &pParentStyle->GetItemSet();
-    }
-
     if (SfxStyleFamily::Page == nFamily)
     {
         if (!pSet)
             GetItemSet();
+
+        // tdf#172128: use the ItemSet parent instead of the shared object returned by Find(parent)
+        const SfxItemSet* pParentSet = pSet->GetParent();
 
         SfxItemIter aIter(*pSet);
 
@@ -1308,6 +1301,7 @@ std::vector<std::pair<sal_uInt16, OUString>> SwDocStyleSheet::GetItemPresentatio
             GetItemSet();
 
         const SfxItemSet* pCheckSet = pWorkingSet ? pWorkingSet : pSet;
+        const SfxItemSet* pParentSet = pCheckSet->GetParent();
 
         const drawing::FillStyle eFillStyle(pCheckSet->Get(XATTR_FILLSTYLE).GetValue());
         const bool bUseFloatTransparence(pCheckSet->Get(XATTR_FILLFLOATTRANSPARENCE).IsEnabled());
@@ -2714,6 +2708,12 @@ void SwDocStyleSheet::SetPhysical(bool bPhys)
         m_pColl    = nullptr;
         m_pFrameFormat  = nullptr;
         m_pDesc    = nullptr;
+        // tdf#172128: SwDocStyleSheetPool::Find() reuses one sheet object. Clear the
+        // cached ItemSet so attributes from the previously represented style cannot
+        // leak into the next style (and then be exported as direct overrides).
+        m_aCoreSet.ClearItem();
+        m_aCoreSet.SetParent(nullptr);
+        pSet = nullptr;
     }
 }
 

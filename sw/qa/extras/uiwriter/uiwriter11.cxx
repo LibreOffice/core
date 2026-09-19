@@ -45,6 +45,15 @@
 #include <flyfrm.hxx>
 
 #include <workctrl.hxx>
+#include <docstyle.hxx>
+#include <fmtcol.hxx>
+#include <hintids.hxx>
+#include <editeng/colritem.hxx>
+#include <svl/itemset.hxx>
+#include <tools/color.hxx>
+#include <tools/mapunit.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <poolfmt.hxx>
 
 namespace
 {
@@ -1238,6 +1247,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testNavigateByHyperlinkOrder)
                          /*bBasicCall=*/false);
         CPPUNIT_ASSERT_EQUAL(rString, pCursor->GetText());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf172128_sharedStyleSheetCache)
+{
+    // tdf#172128: SwDocStyleSheetPool::Find() reuses one sheet. Loading Heading 1
+    // into that sheet, then finding Default Paragraph Style, must not leave
+    // Heading 1's direct attributes (e.g. color) SET on the shared ItemSet —
+    // otherwise ODF export writes them onto unrelated parent styles.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    auto& rStyles = pDoc->getIDocumentStylePoolAccess();
+
+    SwTextFormatColl* pHeading1 = rStyles.GetTextCollFromPool(SwPoolFormatId::COLL_HEADLINE1);
+    CPPUNIT_ASSERT(pHeading1);
+    pDoc->SetAttr(SvxColorItem(COL_RED, RES_CHRATR_COLOR), *pHeading1);
+
+    SwTextFormatColl* pStandard = rStyles.GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
+    CPPUNIT_ASSERT(pStandard);
+    // Ensure Standard does not already carry a direct color override
+    pStandard->ResetFormatAttr(RES_CHRATR_COLOR);
+
+    SfxStyleSheetBasePool* pPool = getSwDocShell()->GetStyleSheetPool();
+    CPPUNIT_ASSERT(pPool);
+
+    const OUString aHeadingName = pHeading1->GetName().toString();
+    const OUString aStandardName = pStandard->GetName().toString();
+
+    SfxStyleSheetBase* pSheet = pPool->Find(aHeadingName, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pSheet);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET,
+                         pSheet->GetItemSet().GetItemState(RES_CHRATR_COLOR, false));
+
+    // Property-chip path used to Find(parent) here and pollute the shared sheet
+    rtl::Reference<SwDocStyleSheet> xTmp(
+        new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pSheet)));
+    (void)xTmp->GetItemPresentation(MapUnit::MapTwip);
+
+    pSheet = pPool->Find(aStandardName, SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pSheet);
+    // Without the fix, residual Heading 1 color remained SET on this ItemSet
+    CPPUNIT_ASSERT_MESSAGE(
+        "Shared style sheet cache leaked Heading 1 color onto Default Paragraph Style",
+        pSheet->GetItemSet().GetItemState(RES_CHRATR_COLOR, false) != SfxItemState::SET);
+
+    CPPUNIT_ASSERT(pStandard->GetItemState(RES_CHRATR_COLOR, false) != SfxItemState::SET);
 }
 
 } // end of anonymous namespace
