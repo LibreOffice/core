@@ -49,7 +49,6 @@ cmake_list= \
             ../wsd/RequestDetails.cpp \
             ../wsd/RequestVettingStation.cpp \
             ../wsd/Storage.cpp \
-            ../wsd/TileCache.cpp \
             ../wsd/WSDGlobals.cpp \
             ../wsd/coolwsd-fork.cpp
 
