@@ -2092,9 +2092,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDe
     xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (!xPropSetInfo.is())
-        throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
-                    uno::Reference< uno::XInterface >
-                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+        throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr, getXWeak());
 
     // build sequence of available properties to check
     uno::Sequence< beans::Property > aProperties;
@@ -2178,9 +2176,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRu
     xPropSet->SetSelection( MakeSelection( nIndex ) );
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (!xPropSetInfo.is())
-        throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,
-                                    uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+        throw uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr, getXWeak());
 
     // build sequence of available properties to check
     uno::Sequence< beans::Property > aProperties;

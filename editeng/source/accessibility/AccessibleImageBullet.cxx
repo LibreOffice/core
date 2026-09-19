@@ -168,9 +168,7 @@ awt::Rectangle AccessibleImageBullet::implGetBounds(  )
 
 void SAL_CALL AccessibleImageBullet::grabFocus(  )
 {
-    throw uno::RuntimeException(u"Not focusable"_ustr,
-                                uno::Reference< uno::XInterface >
-                                ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+    throw uno::RuntimeException(u"Not focusable"_ustr, getXWeak());
 }
 
 sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
