@@ -993,8 +993,8 @@ struct XShapePosCompareHelper
 //end of group position
 
 // XAccessibleGroupPosition
-uno::Sequence< sal_Int32 > SAL_CALL
-AccessibleShape::getGroupPosition( const uno::Any& )
+uno::Sequence<sal_Int32> SAL_CALL
+AccessibleShape::getGroupPosition(const css::uno::Reference<css::accessibility::XAccessible>&)
 {
     // we will return the:
     // [0] group level
@@ -1033,7 +1033,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( xParent,uno::UNO_QUERY );
         if ( xGroupPosition.is() )
         {
-            aRet = xGroupPosition->getGroupPosition( uno::Any( getAccessibleContext() ) );
+            aRet = xGroupPosition->getGroupPosition(this);
         }
         return aRet;
     }

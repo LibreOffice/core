@@ -22,7 +22,7 @@ module com { module sun { module star { module accessibility {
 interface XAccessibleGroupPosition : ::com::sun::star::uno::XInterface
 {
     /* Returns the group position of the object */
-    sequence<long> getGroupPosition( [in] any accoject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    sequence<long> getGroupPosition( [in] XAccessible accObject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /* Returns the hyperlink URL info of the object */
     string getObjectLink( [in] any accoject ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
