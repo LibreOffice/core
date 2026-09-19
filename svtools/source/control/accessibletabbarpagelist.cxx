@@ -559,18 +559,13 @@ Reference< XAccessible > AccessibleTabBarPageList::getSelectedAccessibleChild( s
     if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
-
     for ( sal_Int64 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
     {
         if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
-        {
-            xChild = getAccessibleChild( i );
-            break;
-        }
+            return getAccessibleChild(i);
     }
 
-    return xChild;
+    return {};
 }
 
 
