@@ -369,11 +369,10 @@ Reference< XAccessible > AccessibleTabBarPageList::getAccessibleParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    Reference< XAccessible > xParent;
     if ( m_pTabBar )
-        xParent = m_pTabBar->GetAccessible();
+        return m_pTabBar->GetAccessible();
 
-    return xParent;
+    return {};
 }
 
 
