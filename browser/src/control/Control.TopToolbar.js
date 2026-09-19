@@ -465,10 +465,21 @@ class TopToolbar extends JSDialog.Toolbar {
 					el.setAttribute('disabled', 'true');
 			}
 		});
+
+		if (this.map['wopi']) {
+			var hideSave = this.map['wopi'].HideSaveOption || e.detail.perm !== 'edit';
+			this.showItem('save', !hideSave && this.map.uiManager.isButtonVisible('save'));
+			if (window.mode.isDesktop() && hideSave && this.map['wopi'].HidePrintOption) {
+				this.showItem('savebreak', false);
+			} else if (window.mode.isDesktop()) {
+				this.showItem('savebreak', true);
+			}
+		}
 	}
 
 	onWopiProps(e) {
-		if (e.HideSaveOption) {
+		var hideSave = e.HideSaveOption || this.map.isReadOnlyMode();
+		if (hideSave) {
 			this.showItem('save', false);
 		}
 		if (e.HidePrintOption) {
@@ -478,7 +489,7 @@ class TopToolbar extends JSDialog.Toolbar {
 		// On desktop we only have Save and Print buttons before the first
 		// splitter/break. Hide the splitter if we hid both save and print.
 		// TODO: Apply the same logic to mobile/tablet to avoid beginning with a splitter.
-		if (window.mode.isDesktop() && e.HideSaveOption && e.HidePrintOption) {
+		if (window.mode.isDesktop() && hideSave && e.HidePrintOption) {
 			this.showItem('savebreak', false);
 		}
 

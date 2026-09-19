@@ -258,7 +258,7 @@ class BackstageView extends window.L.Class {
 		const wopi = this.map['wopi'] || {};
 		const featureFlags: Record<string, boolean> = {
 			share: !!wopi.EnableShare,
-			save: !wopi.HideSaveOption,
+			save: !wopi.HideSaveOption && !this.map.isReadOnlyMode(),
 			saveAs:
 				!wopi.UserCanNotWriteRelative ||
 				window.ThisIsTheQtApp ||

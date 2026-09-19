@@ -19,7 +19,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 
 	getShortcutsBarData: function() {
 		return [
-			!this.map['wopi'].HideSaveOption ?
+			!this.map['wopi'].HideSaveOption && !this.map.isReadOnlyMode() ?
 				{
 					'id': 'shortcutstoolbox',
 					'type': 'toolbox',
@@ -219,7 +219,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 
 	getFileTab: function() {
 		var content = [];
-		var hasSave = !this.map['wopi'].HideSaveOption;
+		var hasSave = !this.map['wopi'].HideSaveOption && !this.map.isReadOnlyMode();
 		var hasSaveAs = !this.map['wopi'].UserCanNotWriteRelative;
 		var hasShare = this.map['wopi'].EnableShare;
 		var hasRevisionHistory = window.L.Params.revHistoryEnabled;

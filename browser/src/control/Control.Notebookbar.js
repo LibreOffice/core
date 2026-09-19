@@ -818,7 +818,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	},
 
 	getShortcutsBarData: function() {
-		var hasSave = !this._map['wopi'].HideSaveOption;
+		var hasSave = !this._map['wopi'].HideSaveOption && !this._map.isReadOnlyMode();
 		return [
 			{
 				'id': 'shortcutstoolbox',
