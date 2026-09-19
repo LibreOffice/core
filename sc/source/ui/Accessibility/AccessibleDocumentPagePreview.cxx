@@ -92,8 +92,8 @@ public:
     void Init(const tools::Rectangle& rVisRect, sal_Int32 nOffset);
 
     sal_Int32 GetChildrenCount() const { return mnParagraphs;}
-    uno::Reference<XAccessible> GetChild(sal_Int32 nIndex) const;
-    uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
+    rtl::Reference<comphelper::OAccessible> GetChild(sal_Int32 nIndex) const;
+    rtl::Reference<comphelper::OAccessible> GetAt(const awt::Point& rPoint) const;
 
     void DataChanged(const tools::Rectangle& rVisRect);
 
@@ -222,7 +222,7 @@ struct ScParaFound
 
 }
 
-uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
+rtl::Reference<comphelper::OAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
 {
     rtl::Reference<comphelper::OAccessible> pAccessible;
 
@@ -283,9 +283,9 @@ struct ScPointFound
 
 }
 
-uno::Reference<XAccessible> ScNotesChildren::GetAt(const awt::Point& rPoint) const
+rtl::Reference<comphelper::OAccessible> ScNotesChildren::GetAt(const awt::Point& rPoint) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
 
     ScPointFound aPointFound(Point(rPoint.X, rPoint.Y));
 
@@ -300,10 +300,10 @@ uno::Reference<XAccessible> ScNotesChildren::GetAt(const awt::Point& rPoint) con
     {
         if (!aItr->mpTextHelper)
             aItr->mpTextHelper = CreateTextHelper(aItr->maNoteText, aItr->maRect, aItr->maNoteCell, aItr->mbMarkNote, aPointFound.mnParagraphs + mnOffset);
-        xAccessible = aItr->mpTextHelper->GetAt(rPoint);
+        pAccessible = aItr->mpTextHelper->GetAt(rPoint);
     }
 
-    return xAccessible;
+    return pAccessible;
 }
 
 sal_Int8 ScNotesChildren::CompareCell(const ScAddress& aCell1, const ScAddress& aCell2)
