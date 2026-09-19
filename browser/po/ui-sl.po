@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-11 07:54+0000\n"
+"PO-Revision-Date: 2026-09-20 07:56+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/sl/>\n"
-"Language: \n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
 "X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -921,17 +921,19 @@ msgstr "Naloži razširitev"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1025
 msgid "Security policies"
-msgstr ""
+msgstr "Varnostna pravila"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1027
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Naložite varnostna pravila SPIF (.xml). Ta določajo razpoložljive "
+"klasifikacije in kategorije pri uveljavljanju varnostnih oznak dokumentom."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1033
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Naloži varnostna pravila"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1122
 msgid "Settings are only available to signed-in users."
@@ -2050,14 +2052,16 @@ msgstr "URL ponudnika slik UI ni veljaven, preverite nastavitve UI"
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Gostitelj {0} ni na seznamu dovoljenih gostiteljev, obrnite se na svojega "
+"skrbnika"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Omrežna napaka - preverite svojo povezavo"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Povezave s ponudnikom UI ni možno vzpostaviti"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
@@ -2133,7 +2137,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Nalaganje kataloga funkcij ..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
@@ -2145,11 +2149,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Poteka nastavljanje formul ..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Izdelovanje prosojnice {0} od {1} ..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
@@ -4480,9 +4484,8 @@ msgid "Animations"
 msgstr "Animacije"
 
 #: src/control/Control.Notebookbar.js:582
-#, fuzzy
 msgid "Start:"
-msgstr "Začetek"
+msgstr "Začetek:"
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
@@ -5276,9 +5279,8 @@ msgid "Paste"
 msgstr "Prilepi"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Prazna prosojnica"
+msgstr "Razveži prosojnico"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5402,18 +5404,16 @@ msgid "Slide {0}"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:695
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "vstavi %n prosojnic"
+msgstr "Vstavi 1 prosojnico"
 
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Insert {0} slides"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Vstavi like"
+msgstr "Vstavi prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
@@ -5844,19 +5844,19 @@ msgstr "Vnesite ime za nov delovni list"
 
 #: src/control/Control.Tabs.js:753
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Zaščiti delovni list"
 
 #: src/control/Control.Tabs.js:753
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Vnesite geslo za zaščito delovnega lista"
 
 #: src/control/Control.Tabs.js:757
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Odstrani zaščito delovnega lista"
 
 #: src/control/Control.Tabs.js:757
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Vnesite geslo za odstranitev zaščite delovnega lista"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -6208,9 +6208,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Vnesli ste napačno geslo. Poskusite znova."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Za ogled dokumenta je potrebno geslo."
+msgstr "Za urejanje dokumenta je zahtevano geslo."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -7569,9 +7568,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Dokumenta ni možno izvoziti. Poskusite znova."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Prosojnice"
+msgstr "Prosojnica"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
