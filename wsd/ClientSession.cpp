@@ -2326,7 +2326,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
     try
     {
         std::string timestamp;
-        int loadPart = -1;
+        std::string loadPart;
         parseDocOptions(tokens, loadPart, timestamp);
         overrideDocOption();
 
@@ -2361,6 +2361,14 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             return false;
         }
 #endif
+
+        // If an earlier view of this document recorded a part, this view opens on that part.
+        const DocumentBroker::ViewPosition& lastPosition = docBroker->getLastViewPosition();
+        if (loadPart.empty() && lastPosition.hasPart())
+        {
+            loadPart = lastPosition.part;
+            LOG_DBG("Loading on part " << loadPart << ", where the last view of this document was");
+        }
 
 #if defined(QTAPP) || defined(MACOSAPP)
         // The kit reads SignatureCert/Key/Ca from authorprivateinfo (set at load
@@ -2470,7 +2478,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " isAllowManageRedlines=true";
         }
 
-        if (loadPart >= 0)
+        if (!loadPart.empty())
         {
             oss << " part=" << loadPart;
         }

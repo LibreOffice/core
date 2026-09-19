@@ -1094,7 +1094,7 @@ bool ChildSession::loadDocument(const StringVector& tokens)
 {
     KitLoadTimings.record("loadDocumentStart");
 
-    int part = -1;
+    std::string part;
     if (tokens.size() < 2)
     {
         sendTextFrameAndLogError("error: cmd=load kind=syntax");
@@ -1185,12 +1185,18 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     _docType = LOKitHelper::getDocumentTypeAsString(getLOKitDocument().get());
-    if (_docType != "text" && part != -1)
+    if (_docType != "text" && !part.empty())
     {
-        // The load option names the part by its index in document order, while
-        // the document boundary names parts by their part identifiers. Resolve
-        // the index to the identifier before selecting it.
-        const std::string partId = getLOKitDocument()->getPartId(part, 0);
+        // The load option normally names the part by its index in document order, except when
+        // reattaching, where it is already the part identifier. The document boundary names parts
+        // by their identifiers, so resolve an index to the identifier before selecting it.
+        std::string partId;
+        int index = 0;
+        if (part[0] == '{')
+            partId = part;
+        else if (COOLProtocol::stringToInteger(part, index))
+            partId = getLOKitDocument()->getPartId(index, 0);
+
         if (!partId.empty())
             getLOKitDocument()->setPart(partId.c_str());
     }

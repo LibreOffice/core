@@ -338,9 +338,11 @@ load <pathname>
 
     Deprecated.
 
-load [part=<partNumber>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [options=<options>]
+load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [options=<options>]
 
-    part is an optional parameter. <partNumber> is a number.
+    part is an optional parameter. <part> is a page identifier, or the
+    part's index in document order written in decimal form. The view opens
+    on that part.
 
     timestamp is an optional parameter.  <time> is provided in microseconds
     since the Unix epoch - midnight, January 1, 1970.
@@ -463,9 +465,9 @@ pages or the handout master page. Every message that
 names a part uses these identifiers for such documents - the tile,
 tilecombine, setclientpart, selectclientpart and getslide requests, and
 the tile:, delta:, invalidatetiles:, setpart:, curpart: and status:
-(selectedpart) responses. The one exception is the load message's part
-option, which keeps a positional index. Text and spreadsheet documents
-use plain part indexes throughout, written in decimal form.
+(selectedpart) responses. The load message's part option takes either
+form, a page identifier or a positional index. Text and spreadsheet
+documents use plain part indexes throughout, written in decimal form.
 
 moveselectedclientparts position=<positionNumber>
 

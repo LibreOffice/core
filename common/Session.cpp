@@ -88,15 +88,11 @@ bool Session::sendBinaryFrame(const char *buffer, int length)
     return _protocol->sendBinaryMessage(std::string_view(buffer, length)) >= length;
 }
 
-void Session::parseDocOptions(const StringVector& tokens, int& part, std::string& timestamp)
+void Session::parseDocOptions(const StringVector& tokens, std::string& part,
+                              std::string& timestamp)
 {
     // First token is the "load" command itself.
     std::size_t offset = 1;
-    if (tokens.size() > 2 && tokens[1].find("part=") == 0)
-    {
-        (void)getTokenInteger(tokens[1], "part", part);
-        ++offset;
-    }
 
     for (std::size_t i = offset; i < tokens.size(); ++i)
     {
@@ -108,7 +104,15 @@ void Session::parseDocOptions(const StringVector& tokens, int& part, std::string
             continue;
         }
 
-        if (name == "url")
+        if (name == "part")
+        {
+            if (COOLProtocol::isValidPartId(value))
+                part = std::move(value);
+            else
+                LOG_WRN("Ignoring load option with a malformed part [" << value << ']');
+            ++offset;
+        }
+        else if (name == "url")
         {
             _docURL = std::move(value);
             ++offset;
