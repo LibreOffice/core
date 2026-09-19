@@ -839,10 +839,10 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
 
     if (rRuler.IsVisible())
     {
-        css::uno::Reference<css::accessibility::XAccessible> xAccObj = rRuler.GetAccessible();
-        if( xAccObj.is() )
+        rtl::Reference<ScAccessibleCsvControl> pAccObj = rRuler.GetAccessible();
+        if (pAccObj.is())
         {
-            Sequence<Reference<css::accessibility::XAccessible>> aSeq{ xAccObj };
+            Sequence<Reference<css::accessibility::XAccessible>> aSeq{ pAccObj };
             pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType_CONTROLLED_BY, aSeq ) );
         }
     }
