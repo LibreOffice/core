@@ -23,7 +23,7 @@ endif
 # liblibpng.a / libzstd.a (system shared libraries in the Flatpak and Snap
 # builds).  The static libpng pulls in zlib symbols, so it must precede
 # $(ZLIB_LIBS) on the link line for the linker to resolve them.
-AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl ${PNG_LIBS} $(ZSTD_LIBS) $(POCO_LIBS) $(ZLIB_LIBS)
+AM_LDFLAGS = -pthread ${QT6_LIBS} -ldl ${PNG_LIBS} $(ZSTD_LIBS) $(ZLIB_LIBS)
 
 # Android's CMakefile list re-worked:
 
@@ -41,7 +41,6 @@ cmake_list= \
             ../kit/Kit.cpp \
             ../kit/KitWebSocket.cpp \
             ../net/FakeSocket.cpp \
-            ../net/Socket.cpp \
             ../wsd/AIChatSession.cpp \
             ../wsd/ClientSession.cpp \
             ../wsd/DocumentBroker.cpp \
@@ -95,7 +94,8 @@ GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
 # the first archive member that has them, extracting server-only objects that
 # collide with the mobile copies of the same sources built above. Naming
 # libstdc++ first resolves them from the shared runtime instead.
-coda_qt_LDADD = -lstdc++ $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
+# The engine's static Poco archives come after the gbuild libraries that reference them.
+coda_qt_LDADD = -lstdc++ $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB) $(POCO_LIBS)
 EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB) Makefile
 
 if ENABLE_SSL
