@@ -43,10 +43,10 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 AccessibleTabBarPage::AccessibleTabBarPage(TabBar* pTabBar, sal_uInt16 nPageId,
-                                           const Reference<XAccessible>& rxParent)
+                                           const rtl::Reference<comphelper::OAccessible>& rpParent)
     : AccessibleTabBarBase(pTabBar)
     , m_nPageId(nPageId)
-    , m_xParent(rxParent)
+    , m_pParent(rpParent)
 {
     m_bShowing  = IsShowing();
     m_bSelected = IsSelected();
@@ -212,7 +212,7 @@ Reference< XAccessible > AccessibleTabBarPage::getAccessibleParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    return m_xParent;
+    return m_pParent;
 }
 
 

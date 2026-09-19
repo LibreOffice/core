@@ -37,7 +37,7 @@ private:
     bool                    m_bSelected;
     OUString                m_sPageText;
 
-    css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
+    rtl::Reference<comphelper::OAccessible> m_pParent;
 
     bool                    IsEnabled();
     bool                    IsShowing() const;
@@ -56,8 +56,8 @@ private:
     virtual void SAL_CALL   disposing() override;
 
 public:
-    AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
-                          const css::uno::Reference< css::accessibility::XAccessible >& rxParent );
+    AccessibleTabBarPage(TabBar* pTabBar, sal_uInt16 nPageId,
+                         const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
