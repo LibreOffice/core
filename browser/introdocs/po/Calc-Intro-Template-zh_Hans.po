@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-19 07:22+0000\n"
+"PO-Revision-Date: 2026-09-20 07:57+0000\n"
 "Last-Translator: QuietCedar47 <quietcedar47@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -108,7 +108,7 @@ msgid ""
 "Visualise your data with different chart types. Quickly create and customise"
 " charts to better understand trends and comparisons."
 msgstr ""
-"使用不同的图表类型实现数据可视化。快速创建并自定义图表，以更好地理解趋势与对"
+"使用不同的图表类型实现数据可视化。快速创建并自定义图表，以更好地理解趋势或对"
 "比。"
 
 #. content.xml (sheet '👋 Introduction')
@@ -119,7 +119,9 @@ msgstr "排序与筛选"
 msgid ""
 "Find what matters faster by sorting and filtering your data. Focus only on "
 "the information you need."
-msgstr "通过对数据进行排序和筛选，更快找到重点内容。仅关注您需要的信息。"
+msgstr ""
+"通过对数据进行排序和筛选，更快找到重点内容。通过使用排序和筛选，您可以聚焦于"
+"您需要的信息。"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Data formatting"
@@ -139,11 +141,11 @@ msgstr "协作工具"
 msgid ""
 "Work together in real time. Share, comment, and track changes directly in "
 "the document."
-msgstr "实时协同工作。直接在文档中进行共享、添加批注及追踪修订。"
+msgstr "支持实时多人协作，可直接在文档内进行共享、发表批注及追踪修改。"
 
 #. content.xml (sheet '👋 Introduction')
 msgid "Accessibility"
-msgstr "辅助功能"
+msgstr "无障碍"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
@@ -165,7 +167,7 @@ msgstr "✚使用简单函数"
 msgid ""
 "We will look at a practical case to learn how to use basic Calc features and"
 " simple functions."
-msgstr "我们将通过一个实际案例，学习如何使用 Calc 的基本功能和简单函数。"
+msgstr "我们将通过一个例子，学习如何使用 Calc 的基本功能和简单函数。"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Step-by-step guide – Adding values"
@@ -243,11 +245,11 @@ msgstr "50"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab – Formula wizard"
-msgstr "通过“公式”选项卡插入公式 – 函数向导"
+msgstr "使用“公式”选项卡中的“插入函数”（函数向导）插入公式"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Open </1><2>Formulas tab</2><3> in Notebook bar</3>"
-msgstr "<1>2. 打开标签页栏中的 </1><2>公式选项卡</2><3></3>"
+msgstr "<1>2. 打开</1><3>选项卡栏中的</3><2>公式选项卡</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>Insert Function</2>"
@@ -257,19 +259,19 @@ msgstr "<1>3. 单击 </1><2>插入函数</2>"
 msgid ""
 "<1>4. Choose SUM from the list of functions, </1><2>=SUM ( )</2><3> should "
 "appear</3>"
-msgstr "<1>4. 从函数列表中选择 SUM，应该会显示 </1><2>=SUM ( )</2><3></3>"
+msgstr "<1>4. 从函数列表中选择 SUM，<3>应该会显示</3> </1><2>=SUM ( )</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "5. Select the cells containing the values you want to add"
-msgstr "5. 选择包含要相加数值的单元格"
+msgstr "5. 选择包含待求和数值的单元格"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>6. Click </1><2>OK</2><3> to insert the formula</3>"
-msgstr "<1>6. 单击 </1><2>确定</2><3> 插入公式</3>"
+msgstr "<1>6. 单击 </1><2>确定</2><3> 以插入公式</3>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab chosen from Category"
-msgstr "通过“公式”选项卡按类别选择并插入公式"
+msgstr "在“公式”选项卡中按类别选择函数并插入公式"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>3. Click on </1><2>AutoSum</2>"
@@ -286,8 +288,8 @@ msgid ""
 " what type of calculation will be performed. The </5><6>brackets</6><7> "
 "contain the cells that the formula will use for its calculation.</7>"
 msgstr ""
-"<1>Calc 中的公式始终以等号 </1><2>=</2><3> 开头。后面是函数名称（例如 </3><4>"
-"SUM</4><5>），用于定义将要执行的计算类型。</5><6>括号</6><7> 内包含公式计算所"
+"<1>Calc 中的公式始终以等号 </1><2>=</2><3>开头。后面是函数名称（例如 </3><4>"
+"sum</4><5>），用于定义将要执行的计算类型。</5><6>括号</6><7> 内包含公式计算所"
 "引用的单元格。</7>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -337,7 +339,7 @@ msgstr "在本例中，我们将学习如何创建和使用表来组织电子表
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from existing data"
-msgstr "根据现有数据创建表"
+msgstr "基于现有数据创建表"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Category"
@@ -414,7 +416,7 @@ msgstr "比克"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Create a table from scratch"
-msgstr "从空白开始创建表"
+msgstr "从头开始创建表"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
@@ -426,11 +428,11 @@ msgstr "<1>2. 单击 </1><2>表</2>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "3. Select the range of cells where you want to create the table"
-msgstr "3. 选择要在其中创建表的单元格区域"
+msgstr "3. 选择要创建表的单元格区域"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your table is now ready to be filled with data"
-msgstr "5. 您的表现已准备就绪，可以填充数据"
+msgstr "5. 表已创建完成，可填入数据"
 
 #. content.xml (sheet '📋 Tables')
 msgid "Editing tables"
@@ -445,9 +447,9 @@ msgid ""
 "rows, and filter buttons, depending on how you want to display and work with"
 " your data."
 msgstr ""
-"创建表后，工具栏中将提供更多工具。这些工具可让您更轻松地自定义和管理表。您可"
-"以应用不同的表样式来改善数据的外观；还可以根据显示和处理数据的方式，启用或禁"
-"用标题行、镶边行和筛选按钮等选项。"
+"创建数据表后，工具栏将自动调出专属工具，便于您更轻松地自定义与管理表格。您可"
+"以应用多样化的表格样式以优化数据的视觉呈现；也可根据数据展示与操作需求，灵活"
+"开启或关闭标题行、镶边行以及筛选按钮等功能选项。"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -466,15 +468,15 @@ msgid ""
 " of the source data, you can display the details of areas of interest, and "
 "you can create reports."
 msgstr ""
-"数据透视表（旧称数据透视/DataPilot）允许您组合、对比和分析海量数据。您可以查"
-"看源数据的不同汇总摘要，显示感兴趣区域的详细信息，以及创建报表。"
+"数据透视表（旧称 DataPilot）可用于合并、对比及分析海量数据。您可以多视角查看"
+"源数据的汇总信息，深入展开特定区域的数据明细，并生成各类分析报告。"
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "<1>➜Try it: </1><2>Go to the Insert tab and click Pivot Table to create one "
 "from your data.</2>"
 msgstr ""
-"<1>➜动手试试：</1><2>前往“插入”选项卡，单击“数据透视表”以根据您的数据创建透视"
+"<1>➜动手试试：</1><2>前往“插入”选项卡，单击“数据透视表”以基于您的数据创建透视"
 "表。</2>"
 
 #. content.xml (sheet '📋 Tables')
@@ -495,15 +497,15 @@ msgid ""
 "highlight important values, show patterns, and improve readability using "
 "colours, styles, and rules."
 msgstr ""
-"格式化数据使其更加清晰易懂。您可以使用颜色、样式和规则来突出显示重要数值、展"
-"示模式规律并提高可读性。"
+"通过格式化数据使其更加清晰易懂。您可以借助颜色、样式与规则来突出重要数值、呈"
+"现数据规律，从而提升可读性。"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "In this example, we will apply conditional formatting to highlight key "
 "values in the data and make important information easier to spot at a "
 "glance."
-msgstr "在本例中，我们将应用条件格式来突出显示数据中的关键值，使重要信息一目了然。"
+msgstr "在本示例中，我们将应用条件格式来高亮数据中的关键值，使重要信息一目了然。"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "Apply conditional formatting"
@@ -566,8 +568,8 @@ msgid ""
 "can visually compare data series and view trends in the data. You can insert"
 " charts into spreadsheets, text documents, drawings and presentations."
 msgstr ""
-"Collabora Office 允许您在图表中以图形化方式呈现数据，以便直观对比数据系列并查"
-"看数据趋势。您可以将图表插入到电子表格、文本文档、绘图和演示文稿中。"
+"Collabora Office 支持将数据转化为直观的图表，便于进行数据系列对比与趋势分析。"
+"您可以将图表无缝插入电子表格、文本文档、绘图及演示文稿中。"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
@@ -575,12 +577,12 @@ msgid ""
 "types of charts available. On the other side, you can see an example table "
 "that can be used as a data source for creating charts."
 msgstr ""
-"在本例中，我们将学习如何创建图表并探索可用的不同图表类型。另一侧展示了一个可"
-"作为图表数据源的示例表。"
+"本示例将引导您学习图表的创建方法，并了解各种图表类型。页面右侧提供了一张示例"
+"数据表，可直接用作生成图表的数据源。"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart from existing data"
-msgstr "根据现有数据创建图表"
+msgstr "基于现有数据创建图表"
 
 #. content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Price per piece [£]"
@@ -616,7 +618,7 @@ msgstr "40"
 
 #. content.xml (sheet '📊 Charts')
 msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr "<1>5. 单击 </1><2>完成</2><3> 插入图表</3>"
+msgstr "<1>5. 单击 </1><2>完成</2><3> 以插入图表</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "1"
@@ -624,7 +626,7 @@ msgstr "1"
 
 #. content.xml (sheet '📊 Charts')
 msgid "6. Your data is now displayed as a chart"
-msgstr "6. 您的数据现已显示为图表"
+msgstr "6. 图表生成完毕，数据已通过图表呈现"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Create a chart via Insert tab"
@@ -657,7 +659,7 @@ msgstr "<1>6. 单击 </1><2>完成</2><3> 插入图表</3>"
 
 #. content.xml (sheet '📊 Charts')
 msgid "7. Your data is now displayed as a chart"
-msgstr "7. 您的数据现已显示为图表"
+msgstr "7. 图表生成完毕，数据已通过图表呈现"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Editing charts"
@@ -669,8 +671,8 @@ msgid ""
 " you can use the options in the sidebar or open the context menu (right "
 "click) to modify the chart."
 msgstr ""
-"若要编辑图表，请双击图表以激活编辑模式。选中后，您可以使用侧边栏中的选项或打"
-"开右键菜单（右键单击）来修改图表。"
+"双击图表即可激活编辑模式。选中图表后，您可以通过侧边栏中的选项或打开右键快捷"
+"菜单来修改图表。"
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
@@ -686,8 +688,8 @@ msgid ""
 "efficiently. You can quickly sort information or apply filters to focus only"
 " on the data that matters."
 msgstr ""
-"数据和筛选工具可帮助您更高效地组织与探索数据。您可以快速对信息排序或应用筛选"
-"，以仅关注核心数据。"
+"数据与筛选工具可帮助您更高效地组织并浏览数据。您可以快速对信息进行排序，或应"
+"用筛选以仅关注关键数据。"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -709,7 +711,7 @@ msgstr "<1>3. 单击 </1><2>自动筛选</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Find low stock items"
-msgstr "➜动手试试：查找低库存项目"
+msgstr "➜动手试试：查找低库存商品"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
@@ -731,7 +733,7 @@ msgstr "其他筛选选项"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Additional filtering options give you more control over your data."
-msgstr "其他筛选选项可让您更全面地掌控数据。"
+msgstr "更多筛选选项可让您更精准地掌控数据。"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
@@ -747,8 +749,8 @@ msgid ""
 "A range of features helps you stay productive and collaborate with others, "
 "making it easier to organise work and share information in real time."
 msgstr ""
-"一系列功能可帮助您保持高效并与他人协作，使组织工作和实时共享信息变得更加轻松"
-"。"
+"一系列丰富的功能可助力您提升工作效率并开展团队协作，让工作组织与实时信息共享"
+"变得更加轻松。"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Document sharing"
@@ -760,8 +762,8 @@ msgid ""
 "document simultaneously, making it easy to share ideas, review changes, and "
 "stay aligned."
 msgstr ""
-"实时与他人协同工作。多名用户可同时编辑同一份文档，便于分享想法、审查更改并保"
-"持进度一致。"
+"支持与他人实时协作。多名用户可同时编辑同一文档，轻松分享创意、审查修订，并保"
+"持团队信息对齐。"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
@@ -798,8 +800,8 @@ msgid ""
 "copying, formatting, or navigating through your document, making your "
 "workflow more efficient."
 msgstr ""
-"快捷键可通过减少菜单使用和点击次数来加快工作速度。它们允许您快速执行常见操作"
-"（如复制、格式化或在文档中导航），从而使工作流程更高效。"
+"快捷键可减少对菜单和鼠标点击的依赖，助力提升操作速度。通过快捷键，您可以快速"
+"执行复制、格式化或文档导航等常见操作，从而让工作流程更高效。"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -807,8 +809,8 @@ msgid ""
 "</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
 "can also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
-"<1>💡实用提示：</1><2>若要查找所有快捷键列表，请前往 </2><3>帮助选项卡</3>"
-"<4> 并单击 </4><5>快捷键</5><6>。您还可以使用搜索选项快速查找特定快捷键。</6>"
+"<1>💡实用提示：</1><2>若要查看全部快捷键，请前往 </2><3>帮助选项卡</3><4> 并"
+"单击 </4><5>快捷键</5><6>。您还可以使用搜索选项快速查找特定快捷键。</6>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "⏯Video tutorials"
@@ -821,5 +823,5 @@ msgid ""
 " what you’ve learned, so you can become more confident and efficient in your"
 " work."
 msgstr ""
-"想深入学习？请探索涵盖扩展功能的简短介绍视频。这些视频提供快速指导，帮助您在"
-"现有基础上进一步提升，从而在工作中更加自如高效。"
+"如需深入学习，可观看涵盖更多功能的短视频。这些视频提供快速指引，帮助您巩固与"
+"延伸所学知识，从而在工作中更加得心应手、高效顺畅。"
