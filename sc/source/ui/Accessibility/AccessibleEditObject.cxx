@@ -495,20 +495,18 @@ tools::Rectangle ScAccessibleEditControlObject::GetBoundingBox()
 {
     tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
 
-    uno::Reference<XAccessibleContext> xContext = getAccessibleContext();
-    if ( xContext.is() )
+    uno::Reference<XAccessible> xParent(getAccessibleParent());
+    if (xParent.is())
     {
-        uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );
-        if ( xParent.is() )
+        uno::Reference<XAccessibleComponent> xParentComponent(xParent->getAccessibleContext(),
+                                                              uno::UNO_QUERY);
+        if (xParentComponent.is())
         {
-            uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
-            if ( xParentComponent.is() )
-            {
-                Point aScreenLoc = aBounds.TopLeft();
-                awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
-                Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
-                aBounds.SetPos( aPos );
-            }
+            Point aScreenLoc = aBounds.TopLeft();
+            awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
+            Point aPos(aScreenLoc.getX() - aParentScreenLoc.X,
+                       aScreenLoc.getY() - aParentScreenLoc.Y);
+            aBounds.SetPos(aPos);
         }
     }
 
