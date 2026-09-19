@@ -1496,6 +1496,7 @@ if test "$_os" != "WINNT"; then
     # Clang 12.0.1 occasionally SEGVs on some of the test invocations during AC_PROG_CC with -O2):
     save_CFLAGS=$CFLAGS
     CFLAGS=-g
+    ac_cv_prog_cc_c23=no
     AC_PROG_CC
     CFLAGS=$save_CFLAGS
     if test -z "$CC_BASE"; then
