@@ -504,6 +504,11 @@ public:
 
     // css::awt::XExtendedToolkit:
 
+    virtual ::sal_Int32 getTopWindowCount() override;
+
+    virtual cpo::uno::Reference< css::awt::XTopWindow >
+    getTopWindow(::sal_Int32 nIndex) override;
+
     virtual cpo::uno::Reference< css::awt::XTopWindow >
     getActiveTopWindow() override;
 
@@ -2048,6 +2053,24 @@ cpo::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 }
 
 // css::awt::XExtendedToolkit:
+
+// virtual
+::sal_Int32 VCLXToolkit::getTopWindowCount()
+{
+    return static_cast< ::sal_Int32 >(::Application::GetTopWindowCount());
+        // XXX  numeric overflow
+}
+
+// virtual
+cpo::uno::Reference< css::awt::XTopWindow >
+VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
+{
+    vcl::Window * p = ::Application::GetTopWindow(static_cast< tools::Long >(nIndex));
+        // XXX  numeric overflow
+    return cpo::uno::Reference< css::awt::XTopWindow >(
+        p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
+        cpo::uno::UNO_QUERY);
+}
 
 // virtual
 cpo::uno::Reference< css::awt::XTopWindow >

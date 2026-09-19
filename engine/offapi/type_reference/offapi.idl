@@ -896,6 +896,8 @@ module com {
     published interface XTopWindowListener;
     /** @deprecated */ published interface XExtendedToolkit {
      interface ::cpo::uno::XInterface;
+     long getTopWindowCount();
+     ::com::sun::star::awt::XTopWindow getTopWindow([in] long nIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
      ::com::sun::star::awt::XTopWindow getActiveTopWindow();
      void addTopWindowListener([in] ::com::sun::star::awt::XTopWindowListener xListener);
      void removeTopWindowListener([in] ::com::sun::star::awt::XTopWindowListener xListener);
