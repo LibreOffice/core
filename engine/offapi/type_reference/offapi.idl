@@ -11251,10 +11251,18 @@ module com {
      double NumericValue;
      string StringValue;
     };
+    published struct DataPilotTablePositionData {
+     long PositionType;
+     any PositionData;
+    };
     published interface XDataPilotTable {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::table::CellRangeAddress getOutputRange();
      void refresh();
+     sequence< sequence< any > > getDrillDownData( [in] com::sun::star::table::CellAddress aAddr );
+     DataPilotTablePositionData getPositionData( [in] com::sun::star::table::CellAddress aAddr );
+     void insertDrillDownSheet( [in] com::sun::star::table::CellAddress aAddr );
+     com::sun::star::table::CellRangeAddress getOutputRangeByType( [in] long nType ) raises (com::sun::star::lang::IllegalArgumentException);
     };
     published service DataPilotTable {
      interface ::com::sun::star::sheet::XDataPilotDescriptor;

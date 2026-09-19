@@ -3201,7 +3201,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XDataPilotMemberResults \
 	XDataPilotResults \
 	XDataPilotTable \
-	XDataPilotTable2 \
 	XDataPilotTables \
 	XDataPilotTablesSupplier \
 	XDatabaseRange \

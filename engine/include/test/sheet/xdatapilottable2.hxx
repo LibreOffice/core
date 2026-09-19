@@ -13,7 +13,7 @@
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XDataPilotTable2.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <cpo/uno/Sequence.h>
 
@@ -40,9 +40,9 @@ protected:
 private:
     static void checkDrillDownSheetContent(cpo::uno::Reference< css::sheet::XSpreadsheet > const & xSheet, const cpo::uno::Sequence< cpo::uno::Sequence < cpo::uno::Any > >& aData);
 
-    void getOutputRanges(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
-    void buildDataFields(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
-    void buildResultCells(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
+    void getOutputRanges(cpo::uno::Reference< css::sheet::XDataPilotTable > const &);
+    void buildDataFields(cpo::uno::Reference< css::sheet::XDataPilotTable > const &);
+    void buildResultCells(cpo::uno::Reference< css::sheet::XDataPilotTable > const &);
 
     std::vector< css::table::CellAddress > maResultCells;
     std::vector< sal_Int32 > maDataFieldDims;

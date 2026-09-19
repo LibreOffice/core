@@ -25,8 +25,8 @@ module com {  module sun {  module star {  module sheet {
 
     A service that acts as a DataPilot data source can optionally implement this
     interface to allow drill-down of result data.  The method this interface provides
-    is used internally when calling XDataPilotTable2::getDrillDownData()
-    or XDataPilotTable2::insertDrillDownSheet().  If the data source
+    is used internally when calling XDataPilotTable::getDrillDownData()
+    or XDataPilotTable::insertDrillDownSheet().  If the data source
     service does not implement this interface, then the aforementioned two methods
     will have no effect.
 
@@ -45,7 +45,7 @@ interface XDrillDownDataSupplier: cpo::uno::XInterface
         a string value for a string cell.
 
         @see com::sun::star::sheet::DataPilotFieldFilter
-        @see com::sun::star::sheet::XDataPilotTable2
+        @see com::sun::star::sheet::XDataPilotTable
      */
     sequence< sequence< any > > getDrillDownData(
         [in] sequence< com::sun::star::sheet::DataPilotFieldFilter > aFilters );

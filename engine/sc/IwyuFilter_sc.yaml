@@ -79,7 +79,7 @@ excludelist:
     - com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.hpp
     - com/sun/star/sheet/XDataPilotFieldGrouping.hpp
     - com/sun/star/sheet/XDataPilotField.hpp
-    - com/sun/star/sheet/XDataPilotTable2.hpp
+    - com/sun/star/sheet/XDataPilotTable.hpp
     - com/sun/star/sheet/XDataPilotTables.hpp
     sc/inc/datauno.hxx:
     # base class has to be a complete type

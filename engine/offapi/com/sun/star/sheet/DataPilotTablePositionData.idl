@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module sheet {
     @see com::sun::star::sheet::DataPiotTableResultData
     @see com::sun::star::sheet::DataPiotTableHeaderData
  */
-struct DataPilotTablePositionData
+published struct DataPilotTablePositionData
 {
 
     /** This parameter specifies which sub-area of a DataPilot table a given

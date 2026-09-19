@@ -8,7 +8,7 @@
  */
 
 #include <test/sheet/xdatapilottable2.hxx>
-#include <com/sun/star/sheet/XDataPilotTable2.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/DataPilotTableResultData.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -35,7 +35,7 @@ XDataPilotTable2::~XDataPilotTable2()
 
 void XDataPilotTable2::testGetPositionData()
 {
-    uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(initDP2(), UNO_QUERY_THROW);
     getOutputRanges(xDPTable);
     table::CellAddress aAddr;
 
@@ -58,7 +58,7 @@ void XDataPilotTable2::testGetPositionData()
 
 void XDataPilotTable2::testGetDrillDownData()
 {
-    uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(initDP2(), UNO_QUERY_THROW);
 
     getOutputRanges(xDPTable);
     buildDataFields(xDPTable);
@@ -96,7 +96,7 @@ void XDataPilotTable2::testGetDrillDownData()
 
 void XDataPilotTable2::testGetOutputRangeByType()
 {
-    uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(initDP2(), UNO_QUERY_THROW);
     getOutputRanges(xDPTable);
 
     // check for wrong arguments
@@ -143,7 +143,7 @@ void XDataPilotTable2::testGetOutputRangeByType()
 
 void XDataPilotTable2::testInsertDrillDownSheet()
 {
-    uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(initDP2(), UNO_QUERY_THROW);
     sal_Int32 nCellCount = maResultCells.size();
 
     uno::Reference< sheet::XSpreadsheets > xSheets(getSheets(), UNO_QUERY_THROW);
@@ -183,7 +183,7 @@ void XDataPilotTable2::testInsertDrillDownSheet()
     }
 }
 
-void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable)
+void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable > const & xDPTable)
 {
     getOutputRanges(xDPTable);
     maResultCells.clear();
@@ -206,14 +206,14 @@ void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable2
     }
 }
 
-void XDataPilotTable2::getOutputRanges( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable)
+void XDataPilotTable2::getOutputRanges( uno::Reference< sheet::XDataPilotTable > const & xDPTable)
 {
     maRangeWhole = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::WHOLE);
     maRangeTable = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
     maRangeResult = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::RESULT);
 }
 
-void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable )
+void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable > const & xDPTable )
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDesc(xDPTable, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex(xDesc->getDataPilotFields(), UNO_SET_THROW);

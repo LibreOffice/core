@@ -37,7 +37,7 @@
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/XDataPilotField.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
-#include <com/sun/star/sheet/XDataPilotTable2.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -224,7 +224,7 @@ public:
 };
 
 class ScDataPilotTableObj final : public ScDataPilotDescriptorBase,
-                            public css::sheet::XDataPilotTable2,
+                            public css::sheet::XDataPilotTable,
                             public css::util::XModifyBroadcaster
 {
 private:
@@ -257,7 +257,6 @@ public:
     virtual css::table::CellRangeAddress getOutputRange() override;
     virtual void   refresh() override;
 
-                            // XDataPilotTable2
     virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         getDrillDownData(const css::table::CellAddress& aAddr) override;
 

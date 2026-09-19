@@ -17,7 +17,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
-#include <com/sun/star/sheet/XDataPilotTable2.hpp>
+#include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -83,7 +83,7 @@ public:
 
 ScDataPilotTablesObj::ScDataPilotTablesObj()
     : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
-    , XElementAccess(cppu::UnoType<sheet::XDataPilotTable2>::get())
+    , XElementAccess(cppu::UnoType<sheet::XDataPilotTable>::get())
     , XIndexAccess(1)
     , XNameAccess(u"DataPilotTable"_ustr)
     , XServiceInfo(u"ScDataPilotTablesObj"_ustr, u"com.sun.star.sheet.DataPilotTables"_ustr)

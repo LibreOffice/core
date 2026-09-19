@@ -494,12 +494,12 @@ Any ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
     rtl::Reference<ScDataPilotTableObj> xTable(GetObjectByIndex_Impl(nIndex));
     if (!xTable.is())
         throw IndexOutOfBoundsException();
-    return Any( Reference<XDataPilotTable2>(xTable) );
+    return Any( Reference<XDataPilotTable>(xTable) );
 }
 
 cpo::uno::Type ScDataPilotTablesObj::getElementType()
 {
-    return cppu::UnoType<XDataPilotTable2>::get();
+    return cppu::UnoType<XDataPilotTable>::get();
 }
 
 bool ScDataPilotTablesObj::hasElements()
@@ -516,7 +516,7 @@ Any ScDataPilotTablesObj::getByName( const OUString& aName )
     rtl::Reference<ScDataPilotTableObj> xTable(GetObjectByName_Impl(aName));
     if (!xTable.is())
         throw NoSuchElementException();
-    return Any( Reference<XDataPilotTable2>(xTable) );
+    return Any( Reference<XDataPilotTable>(xTable) );
 }
 
 Sequence<OUString> ScDataPilotTablesObj::getElementNames()
@@ -999,11 +999,8 @@ ScDataPilotTableObj::~ScDataPilotTableObj()
 
 Any ScDataPilotTableObj::queryInterface( const cpo::uno::Type& rType )
 {
-    // since we manually do resolve the query for XDataPilotTable2
-    // we also need to do the same for XDataPilotTable
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                     static_cast<XDataPilotTable*>(this),
-                    static_cast<XDataPilotTable2*>(this),
                     static_cast<XModifyBroadcaster*>(this));
     if ( aReturn.hasValue() )
         return aReturn;
@@ -1027,7 +1024,7 @@ Sequence< cpo::uno::Type > ScDataPilotTableObj::getTypes()
         ScDataPilotDescriptorBase::getTypes(),
         Sequence< cpo::uno::Type >
         {
-            cppu::UnoType<XDataPilotTable2>::get(),
+            cppu::UnoType<XDataPilotTable>::get(),
             cppu::UnoType<XModifyBroadcaster>::get()
         } );
 }

@@ -23,10 +23,10 @@ module com { module sun { module star { module sheet {
 /** specifies region type of DataPilot table range
 
     <p>This constant set is used to indicate the type of output range desired when
-    XDataPilotTable2::getOutputRangeByType() is called, which
+    XDataPilotTable::getOutputRangeByType() is called, which
     returns a different cell range depending upon the value passed to it as the argument.</p>
 
-    @see com::sun::star::sheet::XDataPilotTable2
+    @see com::sun::star::sheet::XDataPilotTable
  */
 constants DataPilotOutputRangeType
 {
