@@ -818,6 +818,9 @@ private:
     void replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* pSprms, RTFSprms const* pAttributes);
     /// Sends one buffer entry to the dmapper.
     void sendBufferEntry(Buf_t aTuple);
+    /// Appends the entry to the current buffer, or sends it to the dmapper when there is none.
+    void bufferOrSend(RTFBufferTypes eType,
+                      RTFValue::Pointer_t const& pValue = RTFValue::Pointer_t());
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.

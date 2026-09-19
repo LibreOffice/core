@@ -1464,33 +1464,14 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
-    sal_uInt8 sValue[] = { nValue };
-    RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
-
-    if (!pCurrentBuffer)
-    {
-        Mapper().startCharacterGroup();
-    }
-    else
-    {
-        pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, nullptr, nullptr);
-    }
+    bufferOrSend(RTFBufferTypes::StartRun);
 
     // Should we send run properties?
     if (bRunProps)
         runProps();
 
-    if (!pCurrentBuffer)
-    {
-        Mapper().text(sValue, 1);
-        Mapper().endCharacterGroup();
-    }
-    else
-    {
-        auto pValue = new RTFValue(*sValue);
-        pCurrentBuffer->emplace_back(RTFBufferTypes::Text, pValue, nullptr);
-        pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, nullptr, nullptr);
-    }
+    bufferOrSend(RTFBufferTypes::Text, new RTFValue(nValue));
+    bufferOrSend(RTFBufferTypes::EndRun);
 }
 
 void RTFDocumentImpl::handleFontTableEntry()
@@ -1732,41 +1713,19 @@ void RTFDocumentImpl::text(OUString& rString)
         = pCurrentBuffer || m_aStates.top().getDestination() != Destination::FOOTNOTE;
 
     if (bRunGroup)
-    {
-        if (!pCurrentBuffer)
-            Mapper().startCharacterGroup();
-        else
-        {
-            RTFValue::Pointer_t pValue;
-            pCurrentBuffer->emplace_back(RTFBufferTypes::StartRun, pValue, nullptr);
-        }
-    }
+        bufferOrSend(RTFBufferTypes::StartRun);
 
     if (m_aStates.top().getDestination() == Destination::NORMAL
         || m_aStates.top().getDestination() == Destination::FIELDRESULT
         || m_aStates.top().getDestination() == Destination::SHAPETEXT)
         runProps();
 
-    if (!pCurrentBuffer)
-        Mapper().utext(rString.getStr(), rString.getLength());
-    else
-    {
-        auto pValue = new RTFValue(rString);
-        pCurrentBuffer->emplace_back(RTFBufferTypes::UText, pValue, nullptr);
-    }
+    bufferOrSend(RTFBufferTypes::UText, new RTFValue(rString));
 
     m_bNeedCr = true;
 
     if (bRunGroup)
-    {
-        if (!pCurrentBuffer)
-            Mapper().endCharacterGroup();
-        else
-        {
-            RTFValue::Pointer_t pValue;
-            pCurrentBuffer->emplace_back(RTFBufferTypes::EndRun, pValue, nullptr);
-        }
-    }
+        bufferOrSend(RTFBufferTypes::EndRun);
 }
 
 void RTFDocumentImpl::set_tblInd(RTFSprms& tableRowSprms, int val)
@@ -1955,6 +1914,15 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
         }
         sendBufferEntry(aTuple);
     }
+}
+
+void RTFDocumentImpl::bufferOrSend(RTFBufferTypes eType, RTFValue::Pointer_t const& pValue)
+{
+    RTFBuffer_t* pCurrentBuffer = m_aStates.empty() ? nullptr : m_aStates.top().getCurrentBuffer();
+    if (pCurrentBuffer)
+        pCurrentBuffer->emplace_back(eType, pValue, nullptr);
+    else
+        sendBufferEntry(Buf_t(eType, pValue, nullptr));
 }
 
 void RTFDocumentImpl::sendBufferEntry(Buf_t aTuple)
