@@ -42,8 +42,6 @@
 
 #include <Poco/MemoryStream.h>
 
-#include "litecask.h"
-
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
 #include <common/ConfigUtil.hpp>
@@ -118,12 +116,6 @@ struct WindowData
     std::thread app2js;
 };
 
-struct PersistedDocumentWindowSize
-{
-    POINT size;
-    WPARAM resizeType;
-};
-
 static std::map<HWND, WindowData> windowData;
 
 static bool enableWebDriver = false;
@@ -183,9 +175,6 @@ struct FilePickerRequest
 };
 
 static HMONITOR primaryMonitor;
-
-static litecask::Datastore persistentWindowSizeStore;
-static bool persistentWindowSizeStoreOK;
 
 static RecentFiles recentFiles;
 
@@ -1803,26 +1792,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 RECT bounds;
                 GetClientRect(hWnd, &bounds);
                 windowData[hWnd].webViewController->put_Bounds(bounds);
-
-                if (!windowData[hWnd].isFullScreen &&
-                    persistentWindowSizeStoreOK &&
-                    (wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED))
-                {
-                    std::vector<uint8_t> value(sizeof(PersistedDocumentWindowSize));
-                    PersistedDocumentWindowSize* p = reinterpret_cast<PersistedDocumentWindowSize*>(value.data());
-                    if (wParam == SIZE_RESTORED)
-                    {
-                        p->size.x = LOWORD(lParam);
-                        p->size.y = HIWORD(lParam);
-                        windowData[hWnd].previousSize = p->size;
-                    }
-                    else
-                    {
-                        p->size = windowData[hWnd].previousSize;
-                    }
-                    p->resizeType = wParam;
-                    persistentWindowSizeStore.put(windowData[hWnd].filenameAndUri.uri.c_str(), value);
-                }
             };
             break;
 
@@ -1883,14 +1852,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             if (windowData[hWnd].app2js.joinable())
                 windowData[hWnd].app2js.join();
             if (DocumentData::count() == 0)
-            {
-                if (persistentWindowSizeStoreOK)
-                {
-                    persistentWindowSizeStoreOK = false;
-                    persistentWindowSizeStore.close();
-                }
                 stopServer();
-            }
             break;
 
         case WM_NCDESTROY:
@@ -2420,96 +2382,65 @@ static void registerOdfShellExtensions()
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
 {
-    bool havePersistedSize = false;
-
     int width, height;
     int welcomeX = CW_USEDEFAULT, welcomeY = CW_USEDEFAULT;
     bool maximize = false;
 
-    if (mode != DocumentMode::WELCOME && mode != DocumentMode::STARTER && persistentWindowSizeStoreOK)
+    // Set size of document window to be 90% of monitor width and height. For the welcome
+    // slideshow always set width:height to 16:9 because we know it is that aspect ratio.
+
+    // The welcome slideshow is displayed without decorations.
+
+    // FIXME: Should we actually, at least for text documents, ideally peek into the document and
+    // check what its page size is, and in the common case of a portrait orientation text document,
+    // make the document window also (if the monitor is large enough) higher than wider? On small
+    // monitors (1280x768 or less?) we should probably default to making the document window
+    // full-screen?
+
+    // FIXME: My initial assumption that the COOL window would open up on the monitor where the
+    // file section dialog was is incorrect.
+
+    MONITORINFO monitorInfo;
+
+    monitorInfo.cbSize = sizeof(monitorInfo);
+    if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
     {
-        std::vector<uint8_t> value;
-        if (persistentWindowSizeStore.get(filenameAndUri.uri.c_str(), value) == litecask::Status::Ok)
+        if (mode == DocumentMode::WELCOME)
         {
-            if (value.size() == sizeof(POINT))
+            double aspectRatio =
+                (double)(monitorInfo.rcWork.right - monitorInfo.rcWork.left) / (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+            if (aspectRatio < 16.0/9.0)
             {
-                // We used to store just the size
-                const POINT* p = reinterpret_cast<POINT*>(value.data());
-                width = p->x;
-                height = p->y;
-                havePersistedSize = true;
-            }
-            else if (value.size() == sizeof(PersistedDocumentWindowSize))
-            {
-                // Currently we also store the last wParam in the WM_SIZE message
-                const PersistedDocumentWindowSize* p = reinterpret_cast<PersistedDocumentWindowSize*>(value.data());
-                width = p->size.x;
-                height = p->size.y;
-                if (p->resizeType == SIZE_MAXIMIZED)
-                    maximize = true;
-                havePersistedSize = true;
-            }
-        }
-    }
-
-    if (!havePersistedSize)
-    {
-        // Set size of document window to be 90% of monitor width and height. For the welcome
-        // slideshow always set width:height to 16:9 because we know it is that aspect ratio.
-
-        // The welcome slideshow is displayed without decorations.
-
-        // FIXME: Should we actually, at least for text documents, ideally peek into the document and
-        // check what its page size is, and in the common case of a portrait orientation text document,
-        // make the document window also (if the monitor is large enough) higher than wider? On small
-        // monitors (1280x768 or less?) we should probably default to making the document window
-        // full-screen?
-
-        // FIXME: My initial assumption that the COOL window would open up on the monitor where the
-        // file section dialog was is incorrect.
-
-        MONITORINFO monitorInfo;
-
-        monitorInfo.cbSize = sizeof(monitorInfo);
-        if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
-        {
-            if (mode == DocumentMode::WELCOME)
-            {
-                double aspectRatio =
-                    (double)(monitorInfo.rcWork.right - monitorInfo.rcWork.left) / (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-                if (aspectRatio < 16.0/9.0)
-                {
-                    width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-                    welcomeX = monitorInfo.rcWork.left + 0.05 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-                    height = width / (16.0/9.0);
-                    welcomeY = monitorInfo.rcWork.top + ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - height) / 2;
-                }
-                else
-                {
-                    height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-                    welcomeY = monitorInfo.rcWork.top + 0.05 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-                    width = (16.0/9.0) * height;
-                    welcomeX = monitorInfo.rcWork.left + ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - width) / 2;
-                }
+                width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+                welcomeX = monitorInfo.rcWork.left + 0.05 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+                height = width / (16.0/9.0);
+                welcomeY = monitorInfo.rcWork.top + ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - height) / 2;
             }
             else
             {
-                width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
                 height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+                welcomeY = monitorInfo.rcWork.top + 0.05 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+                width = (16.0/9.0) * height;
+                welcomeX = monitorInfo.rcWork.left + ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - width) / 2;
             }
         }
         else
         {
-            if (mode == DocumentMode::WELCOME)
-            {
-                width = 1280;
-                height = 720;
-            }
-            else
-            {
-                width = 1200;
-                height = 900;
-            }
+            width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+            height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+        }
+    }
+    else
+    {
+        if (mode == DocumentMode::WELCOME)
+        {
+            width = 1280;
+            height = 720;
+        }
+        else
+        {
+            width = 1200;
+            height = 900;
         }
     }
 
@@ -3942,11 +3873,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
         loglevel = COOLWSD_LOGLEVEL;
     Log::initialize("CODA", loglevel);
     ProcUtil::setThreadName("main");
-
-    persistentWindowSizeStoreOK =
-        (persistentWindowSizeStore.open
-         (Util::string_to_wide_string(localAppData +
-                                      "\\persistentWindowSizes")) == litecask::Status::Ok);
 
     recentFiles.load(localAppData + "\\recentFiles.txt", 10);
 
