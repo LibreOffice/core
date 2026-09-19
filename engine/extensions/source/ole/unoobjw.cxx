@@ -1314,8 +1314,8 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
     InvocationInfo info;
     if( ! getInvocationInfoForCall( id, info))
         throw BridgeRuntimeError(
-                  "[automation bridge]InterfaceOleWrapper::convertDispparamsArgs \n"
-                  "Could not obtain type information for current call.");
+                  u"[automation bridge]InterfaceOleWrapper::convertDispparamsArgs \n"
+                  "Could not obtain type information for current call."_ustr);
 
     // Size rSeq according to the number of expected parameters.
     const int expectedArgs = info.aParamTypes.getLength() + (info.eMemberType == MemberType_PROPERTY ? 1 : 0);
@@ -1335,7 +1335,7 @@ void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
 
         // But otherwise too many parameters is an error
         if ( outgoingArgIndex >= expectedArgs )
-            throw BridgeRuntimeError( "[automation bridge] Too many parameters" );
+            throw BridgeRuntimeError( u"[automation bridge] Too many parameters"_ustr );
 
         if (info.eMemberType == MemberType_METHOD &&
             info.aParamModes[ outgoingArgIndex ] == ParamMode_OUT)
@@ -1533,7 +1533,7 @@ void InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments )
             m_sImplementationName = xServiceInfo->getImplementationName();
 
         SAL_INFO("extensions.olebridge", this << "@InterfaceOleWrapper::initialize for "
-                 << (m_sImplementationName.isEmpty()?"an unknown implementation":m_sImplementationName));
+                 << (m_sImplementationName.isEmpty()?u"an unknown implementation"_ustr:m_sImplementationName));
         break;
     }
 
@@ -1968,7 +1968,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMembe
     }
     catch(...)
     {
-        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::Invoke : \nUnexpected exception");
+        writeExcepinfo(pexcepinfo, u"InterfaceOleWrapper::Invoke : \nUnexpected exception"_ustr);
         ret = DISP_E_EXCEPTION;
     }
 
@@ -2053,7 +2053,7 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
     }
     catch( ... )
      {
-        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::doInvoke : \nUnexpected exception");
+        writeExcepinfo(pexcepinfo, u"InterfaceOleWrapper::doInvoke : \nUnexpected exception"_ustr);
         ret = DISP_E_EXCEPTION;
      }
     return ret;
@@ -2089,7 +2089,7 @@ HRESULT InterfaceOleWrapper::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
     }
     catch( ... )
     {
-        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::doInvoke : \nUnexpected exception");
+        writeExcepinfo(pexcepinfo, u"InterfaceOleWrapper::doInvoke : \nUnexpected exception"_ustr);
         ret = DISP_E_EXCEPTION;
     }
     return  ret;
@@ -2829,8 +2829,8 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
 
             if (!createUnoTypeWrapper(arg.bstrVal, pvarResult))
             {
-                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper::InvokeGeneral\n"
-                                           "Could not initialize UnoTypeWrapper object!");
+                writeExcepinfo(pexcepinfo, u"[automation bridge] InterfaceOleWrapper::InvokeGeneral\n"
+                                           "Could not initialize UnoTypeWrapper object!"_ustr);
                 return DISP_E_EXCEPTION;
             }
         }
@@ -2879,7 +2879,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
     }
     catch( ... )
      {
-        writeExcepinfo(pexcepinfo, "InterfaceOleWrapper::InvokeGeneral : \nUnexpected exception");
+        writeExcepinfo(pexcepinfo, u"InterfaceOleWrapper::InvokeGeneral : \nUnexpected exception"_ustr);
         ret = DISP_E_EXCEPTION;
      }
     return ret;
@@ -3346,7 +3346,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID di
     }
     catch(...)
     {
-        writeExcepinfo(pexcepinfo, "UnoObjectWrapperRemoteOpt::Invoke : \nUnexpected exception");
+        writeExcepinfo(pexcepinfo, u"UnoObjectWrapperRemoteOpt::Invoke : \nUnexpected exception"_ustr);
         ret = DISP_E_EXCEPTION;
     }
 

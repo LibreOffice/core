@@ -68,7 +68,7 @@ OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFact
     , m_factoryHandle(0)
     , m_smgr(smgr)
 {
-    Reference<XInterface> xInt = m_smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
+    Reference<XInterface> xInt = m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr);
 
     if (xInt.is())
     {
@@ -309,10 +309,10 @@ cpo::uno::Sequence<OUString> OleConverter::getSupportedServiceNames()
     if (m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
     {
         return cpo::uno::Sequence<OUString>{
-            "com.sun.star.bridge.OleBridgeSupplier2",
-            "com.sun.star.bridge.oleautomation.BridgeSupplier"};
+            u"com.sun.star.bridge.OleBridgeSupplier2"_ustr,
+            u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr};
     }
-    return {"com.sun.star.bridge.OleBridgeSupplierVar1"};
+    return {u"com.sun.star.bridge.OleBridgeSupplierVar1"_ustr};
 }
 
 // XInitialize ------------------------------------------------------------------------------
@@ -379,7 +379,7 @@ Sequence< OUString >    OleClient::getAvailableServiceNames()
 
 OUString OleClient::getImplementationName()
 {
-    return "com.sun.star.comp.ole.OleClient";
+    return u"com.sun.star.comp.ole.OleClient"_ustr;
 }
 
 bool OleClient::supportsService(OUString const & ServiceName)
@@ -390,8 +390,8 @@ bool OleClient::supportsService(OUString const & ServiceName)
 cpo::uno::Sequence<OUString> OleClient::getSupportedServiceNames()
 {
     return cpo::uno::Sequence<OUString>{
-        "com.sun.star.bridge.OleObjectFactory",
-        "com.sun.star.bridge.oleautomation.Factory"};
+        u"com.sun.star.bridge.OleObjectFactory"_ustr,
+        u"com.sun.star.bridge.oleautomation.Factory"_ustr};
 }
 
 Reference<XInterface> OleClient::createInstance(const OUString& ServiceSpecifier)
@@ -449,7 +449,7 @@ Reference< XInterface > OleClient::createComWrapperInstance( )
 OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
     m_smgr( smgr)
 {
-    Reference<XInterface> xInt = m_smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
+    Reference<XInterface> xInt = m_smgr->createInstance(u"com.sun.star.bridge.oleautomation.BridgeSupplier"_ustr);
 
     if (xInt.is())
     {
@@ -466,7 +466,7 @@ OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
     (void) provideInstance( [&]
                             {
                                 // We want just one SwVbaGlobals for all Automation clients
-                                static const Reference<XInterface> xWordGlobals = m_smgr->createInstance("ooo.vba.word.Globals");
+                                static const Reference<XInterface> xWordGlobals = m_smgr->createInstance(u"ooo.vba.word.Globals"_ustr);
                                 const Reference<ooo::vba::XHelperInterface> xHelperInterface(xWordGlobals, UNO_QUERY);
                                 Any aApplication = xHelperInterface->Application();
                                 Reference<XInterface> xApplication;
@@ -478,7 +478,7 @@ OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
     (void) provideInstance( [&]
                             {
                                 // Ditto for sc
-                                static const Reference<XInterface> xCalcGlobals = m_smgr->createInstance("ooo.vba.excel.Globals");
+                                static const Reference<XInterface> xCalcGlobals = m_smgr->createInstance(u"ooo.vba.excel.Globals"_ustr);
                                 const Reference<ooo::vba::XHelperInterface> xHelperInterface(xCalcGlobals, UNO_QUERY);
                                 Any aApplication = xHelperInterface->Application();
                                 Reference<XInterface> xApplication;
@@ -500,7 +500,7 @@ OleServer::~OleServer()
 
 OUString OleServer::getImplementationName()
 {
-    return "com.sun.star.comp.ole.OleServer";
+    return u"com.sun.star.comp.ole.OleServer"_ustr;
 }
 
 bool OleServer::supportsService(OUString const & ServiceName)
@@ -511,8 +511,8 @@ bool OleServer::supportsService(OUString const & ServiceName)
 cpo::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
 {
     return cpo::uno::Sequence<OUString>{
-        "com.sun.star.bridge.OleApplicationRegistration",
-        "com.sun.star.bridge.oleautomation.ApplicationRegistration"};
+        u"com.sun.star.bridge.OleApplicationRegistration"_ustr,
+        u"com.sun.star.bridge.oleautomation.ApplicationRegistration"_ustr};
 }
 
 bool OleServer::provideInstance(std::function<const Reference<XInterface>()> xInstFunction, GUID const * guid)

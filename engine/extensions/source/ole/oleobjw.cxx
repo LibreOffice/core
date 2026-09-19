@@ -210,7 +210,7 @@ Any IUnknownWrapper::invoke( const OUString& aFunctionName,
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
 
     Any ret;
@@ -259,8 +259,8 @@ Any IUnknownWrapper::invoke( const OUString& aFunctionName,
     }
     catch(...)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-                  "IUnknownWrapper::Invoke !");
+        throw RuntimeException(u"[automation bridge] unexpected exception in "
+                  "IUnknownWrapper::Invoke !"_ustr);
     }
     return ret;
 }
@@ -271,7 +271,7 @@ void IUnknownWrapper::setValue( const OUString& aPropertyName,
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
     try
     {
@@ -379,15 +379,15 @@ void IUnknownWrapper::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException("call to OLE object failed", static_cast<XInterface*>(
+            throw CannotConvertException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw IllegalArgumentException("call to OLE object failed", static_cast<XInterface*>(
+            throw IllegalArgumentException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                             static_cast<XWeak*>(this)), ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr )) ;
             break;
         case DISP_E_TYPEMISMATCH:
-            throw CannotConvertException("call to OLE object failed", static_cast<XInterface*>(
+            throw CannotConvertException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::UNKNOWN, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_UNKNOWNINTERFACE:
@@ -397,7 +397,7 @@ void IUnknownWrapper::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw CannotConvertException("call to OLE object failed",static_cast<XInterface*>(
+            throw CannotConvertException(u"call to OLE object failed"_ustr,static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
         default:
@@ -429,8 +429,8 @@ void IUnknownWrapper::setValue( const OUString& aPropertyName,
     catch (...)
     {
         throw RuntimeException(
-            "[automation bridge] unexpected exception in "
-            "IUnknownWrapper::setValue !");
+            u"[automation bridge] unexpected exception in "
+            "IUnknownWrapper::setValue !"_ustr);
     }
 }
 
@@ -441,7 +441,7 @@ Any IUnknownWrapper::getValue( const OUString& aPropertyName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
     Any ret;
     try
@@ -574,8 +574,8 @@ Any IUnknownWrapper::getValue( const OUString& aPropertyName )
     catch (...)
     {
         throw RuntimeException(
-            "[automation bridge] unexpected exception in "
-            "IUnknownWrapper::getValue !");
+            u"[automation bridge] unexpected exception in "
+            "IUnknownWrapper::getValue !"_ustr);
     }
     return ret;
 }
@@ -585,7 +585,7 @@ bool IUnknownWrapper::hasMethod( const OUString& aName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
     bool ret = false;
 
@@ -624,8 +624,8 @@ bool IUnknownWrapper::hasMethod( const OUString& aName )
     }
     catch (...)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-            "IUnknownWrapper::hasMethod !");
+        throw RuntimeException(u"[automation bridge] unexpected exception in "
+            "IUnknownWrapper::hasMethod !"_ustr);
     }
     return ret;
 }
@@ -634,8 +634,8 @@ bool IUnknownWrapper::hasProperty( const OUString& aName )
 {
     if ( ! m_spDispatch )
     {
-        throw RuntimeException("[automation bridge] The object does not have an "
-            "IDispatch interface");
+        throw RuntimeException(u"[automation bridge] The object does not have an "
+            "IDispatch interface"_ustr);
     }
     bool ret = false;
     try
@@ -676,8 +676,8 @@ bool IUnknownWrapper::hasProperty( const OUString& aName )
     }
     catch (...)
     {
-        throw RuntimeException("[automation bridge] unexpected exception in "
-            "IUnknownWrapper::hasProperty !");
+        throw RuntimeException(u"[automation bridge] unexpected exception in "
+            "IUnknownWrapper::hasProperty !"_ustr);
     }
     return ret;
 }
@@ -970,10 +970,10 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                             CComDispatchDriver dispDriver( pDisp);
                             if(FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
                                 throw BridgeRuntimeError(
-                                    "[automation bridge]IUnknownWrapper::"
+                                    u"[automation bridge]IUnknownWrapper::"
                                     "invokeWithDispIdUnoTlb\n"
                                     "Could not set property \"0\" for the in/out "
-                                    "param!");
+                                    "param!"_ustr);
 
                         }
                     }
@@ -1110,7 +1110,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     }
 
     if( !bConvRet) // conversion of return or out parameter failed
-        throw CannotConvertException("Call to COM object failed. Conversion of return or out value failed",
+        throw CannotConvertException(u"Call to COM object failed. Conversion of return or out value failed"_ustr,
                                       Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
                                       FailReason::UNKNOWN, 0);// lookup error code
     // conversion of return or out parameter failed
@@ -1134,15 +1134,15 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw IllegalArgumentException();
         break;
     case DISP_E_OVERFLOW:
-        throw CannotConvertException("call to OLE object failed", static_cast<XInterface*>(
+        throw CannotConvertException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
         break;
     case DISP_E_PARAMNOTFOUND:
-        throw IllegalArgumentException("call to OLE object failed", static_cast<XInterface*>(
+        throw IllegalArgumentException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                            static_cast<XWeak*>(this)), ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
         break;
     case DISP_E_TYPEMISMATCH:
-        throw CannotConvertException("call to OLE object failed",static_cast<XInterface*>(
+        throw CannotConvertException(u"call to OLE object failed"_ustr,static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
         break;
     case DISP_E_UNKNOWNINTERFACE:
@@ -1152,7 +1152,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw RuntimeException() ;
         break;
     case DISP_E_PARAMNOTOPTIONAL:
-        throw CannotConvertException("call to OLE object failed", static_cast<XInterface*>(
+        throw CannotConvertException(u"call to OLE object failed"_ustr, static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
                 break;
     default:
@@ -1252,7 +1252,7 @@ cpo::uno::Any IUnknownWrapper::directInvoke( const OUString& aName, const cpo::u
     if ( !m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
 
     o2u_attachCurrentThread();
@@ -1336,7 +1336,7 @@ cpo::uno::Any IUnknownWrapper::directInvoke( const OUString& aName, const cpo::u
             else if (hr == DISP_E_UNKNOWNNAME)
             {
                  throw IllegalArgumentException(
-                     "[automation bridge]One of the named arguments is wrong!",
+                     u"[automation bridge]One of the named arguments is wrong!"_ustr,
                      Reference<XInterface>(), 0);
             }
             else
@@ -1426,14 +1426,14 @@ cpo::uno::Any IUnknownWrapper::directInvoke( const OUString& aName, const cpo::u
             case S_OK:
                 break;
             case DISP_E_BADPARAMCOUNT:
-                throw IllegalArgumentException("[automation bridge] Wrong "
-                      "number of arguments. Object returned DISP_E_BADPARAMCOUNT.",
+                throw IllegalArgumentException(u"[automation bridge] Wrong "
+                      "number of arguments. Object returned DISP_E_BADPARAMCOUNT."_ustr,
                       nullptr, 0);
                 break;
             case DISP_E_BADVARTYPE:
-                throw RuntimeException("[automation bridge] One or more "
+                throw RuntimeException(u"[automation bridge] One or more "
                       "arguments have the wrong type. Object returned "
-                      "DISP_E_BADVARTYPE.", nullptr);
+                      "DISP_E_BADVARTYPE."_ustr, nullptr);
                 break;
             case DISP_E_EXCEPTION:
                     message = OUString::Concat("[automation bridge]: ")
@@ -1448,36 +1448,36 @@ cpo::uno::Any IUnknownWrapper::directInvoke( const OUString& aName, const cpo::u
                 throw IllegalArgumentException(message, nullptr, 0);
                 break;
             case DISP_E_NONAMEDARGS:
-                throw IllegalArgumentException("[automation bridge] Object "
-                      "returned DISP_E_NONAMEDARGS",nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
+                throw IllegalArgumentException(u"[automation bridge] Object "
+                      "returned DISP_E_NONAMEDARGS"_ustr,nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
                 break;
             case DISP_E_OVERFLOW:
-                throw CannotConvertException("[automation bridge] Call failed.",
+                throw CannotConvertException(u"[automation bridge] Call failed."_ustr,
                                              static_cast<XInterface*>(
                     static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
                 break;
             case DISP_E_PARAMNOTFOUND:
-                throw IllegalArgumentException("[automation bridge]Call failed."
-                                               "Object returned DISP_E_PARAMNOTFOUND.",
+                throw IllegalArgumentException(u"[automation bridge]Call failed."
+                                               "Object returned DISP_E_PARAMNOTFOUND."_ustr,
                                                nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
                 break;
             case DISP_E_TYPEMISMATCH:
-                throw CannotConvertException("[automation bridge] Call  failed. "
-                                             "Object returned DISP_E_TYPEMISMATCH",
+                throw CannotConvertException(u"[automation bridge] Call  failed. "
+                                             "Object returned DISP_E_TYPEMISMATCH"_ustr,
                     static_cast<XInterface*>(
                     static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
                 break;
             case DISP_E_UNKNOWNINTERFACE:
-                throw RuntimeException("[automation bridge] Call failed. "
-                                           "Object returned DISP_E_UNKNOWNINTERFACE.",nullptr);
+                throw RuntimeException(u"[automation bridge] Call failed. "
+                                           "Object returned DISP_E_UNKNOWNINTERFACE."_ustr,nullptr);
                 break;
             case DISP_E_UNKNOWNLCID:
-                throw RuntimeException("[automation bridge] Call failed. "
-                                           "Object returned DISP_E_UNKNOWNLCID.",nullptr);
+                throw RuntimeException(u"[automation bridge] Call failed. "
+                                           "Object returned DISP_E_UNKNOWNLCID."_ustr,nullptr);
                 break;
             case DISP_E_PARAMNOTOPTIONAL:
-                throw CannotConvertException("[automation bridge] Call failed."
-                      "Object returned DISP_E_PARAMNOTOPTIONAL",
+                throw CannotConvertException(u"[automation bridge] Call failed."
+                      "Object returned DISP_E_PARAMNOTOPTIONAL"_ustr,
                             static_cast<XInterface*>(static_cast<XWeak*>(this)),
                                   TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
                 break;
@@ -1495,7 +1495,7 @@ bool IUnknownWrapper::hasMember( const OUString& aName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface");
+            u"[automation bridge] The object does not have an IDispatch interface"_ustr);
     }
 
     o2u_attachCurrentThread();
@@ -1709,7 +1709,7 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     if (::sal::static_int_cast< sal_uInt32, int >( nUnoArgs ) > dispparams.cArgs)
     {
         throw IllegalArgumentException(
-            "[automation bridge] There are too many arguments for this method",
+            u"[automation bridge] There are too many arguments for this method"_ustr,
             Reference<XInterface>(), static_cast<sal_Int16>(dispparams.cArgs));
     }
 
@@ -1785,7 +1785,7 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
         else if (hr == DISP_E_UNKNOWNNAME)
         {
              throw IllegalArgumentException(
-                 "[automation bridge]One of the named arguments is wrong!",
+                 u"[automation bridge]One of the named arguments is wrong!"_ustr,
                  Reference<XInterface>(), 0);
         }
         else
@@ -2050,14 +2050,14 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
-            throw IllegalArgumentException("[automation bridge] Wrong "
-                  "number of arguments. Object returned DISP_E_BADPARAMCOUNT.",
+            throw IllegalArgumentException(u"[automation bridge] Wrong "
+                  "number of arguments. Object returned DISP_E_BADPARAMCOUNT."_ustr,
                   nullptr, 0);
             break;
         case DISP_E_BADVARTYPE:
-            throw RuntimeException("[automation bridge] One or more "
+            throw RuntimeException(u"[automation bridge] One or more "
                   "arguments have the wrong type. Object returned "
-                  "DISP_E_BADVARTYPE.", nullptr);
+                  "DISP_E_BADVARTYPE."_ustr, nullptr);
             break;
         case DISP_E_EXCEPTION:
                 message = OUString::Concat("[automation bridge]: ")
@@ -2073,36 +2073,36 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             throw IllegalArgumentException(message, nullptr, 0);
             break;
         case DISP_E_NONAMEDARGS:
-            throw IllegalArgumentException("[automation bridge] Object "
-                  "returned DISP_E_NONAMEDARGS",nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
+            throw IllegalArgumentException(u"[automation bridge] Object "
+                  "returned DISP_E_NONAMEDARGS"_ustr,nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException("[automation bridge] Call failed.",
+            throw CannotConvertException(u"[automation bridge] Call failed."_ustr,
                                          static_cast<XInterface*>(
                 static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw IllegalArgumentException("[automation bridge]Call failed."
-                                           "Object returned DISP_E_PARAMNOTFOUND.",
+            throw IllegalArgumentException(u"[automation bridge]Call failed."
+                                           "Object returned DISP_E_PARAMNOTFOUND."_ustr,
                                            nullptr, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_TYPEMISMATCH:
-            throw CannotConvertException("[automation bridge] Call  failed. "
-                                         "Object returned DISP_E_TYPEMISMATCH",
+            throw CannotConvertException(u"[automation bridge] Call  failed. "
+                                         "Object returned DISP_E_TYPEMISMATCH"_ustr,
                 static_cast<XInterface*>(
                 static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
             break;
         case DISP_E_UNKNOWNINTERFACE:
-            throw RuntimeException("[automation bridge] Call failed. "
-                                       "Object returned DISP_E_UNKNOWNINTERFACE.",nullptr);
+            throw RuntimeException(u"[automation bridge] Call failed. "
+                                       "Object returned DISP_E_UNKNOWNINTERFACE."_ustr,nullptr);
             break;
         case DISP_E_UNKNOWNLCID:
-            throw RuntimeException("[automation bridge] Call failed. "
-                                       "Object returned DISP_E_UNKNOWNLCID.",nullptr);
+            throw RuntimeException(u"[automation bridge] Call failed. "
+                                       "Object returned DISP_E_UNKNOWNLCID."_ustr,nullptr);
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw CannotConvertException("[automation bridge] Call failed."
-                  "Object returned DISP_E_PARAMNOTOPTIONAL",
+            throw CannotConvertException(u"[automation bridge] Call failed."
+                  "Object returned DISP_E_PARAMNOTOPTIONAL"_ustr,
                         static_cast<XInterface*>(static_cast<XWeak*>(this)),
                               TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
@@ -2326,7 +2326,7 @@ VARTYPE IUnknownWrapper::getUserDefinedElementType( ITypeInfo* pTypeInfo, const 
                 // We use the type of the first enum value.
                 if ( attr->cVars == 0 )
                 {
-                    throw BridgeRuntimeError("[automation bridge] Could not obtain type description");
+                    throw BridgeRuntimeError(u"[automation bridge] Could not obtain type description"_ustr);
                 }
                 VarDesc var( spRefInfo );
                 spRefInfo->GetVarDesc( 0, &var );
@@ -2347,7 +2347,7 @@ VARTYPE IUnknownWrapper::getUserDefinedElementType( ITypeInfo* pTypeInfo, const 
             }
             else
             {
-                throw BridgeRuntimeError( "[automation bridge] Unhandled user defined type." );
+                throw BridgeRuntimeError( u"[automation bridge] Unhandled user defined type."_ustr );
             }
         }
     }
@@ -2464,7 +2464,7 @@ ITypeInfo* IUnknownWrapper::getTypeInfo()
 {
     if( !m_spDispatch)
     {
-        throw BridgeRuntimeError("The object has no IDispatch interface!");
+        throw BridgeRuntimeError(u"The object has no IDispatch interface!"_ustr);
     }
 
     if( !m_spTypeInfo )
@@ -2475,8 +2475,8 @@ ITypeInfo* IUnknownWrapper::getTypeInfo()
             CComPtr< ITypeInfo > spType;
             if( !SUCCEEDED( m_spDispatch->GetTypeInfo( 0, LOCALE_USER_DEFAULT, &spType.p)))
             {
-                throw BridgeRuntimeError("[automation bridge]The dispatch object does not "
-                                         "support ITypeInfo!");
+                throw BridgeRuntimeError(u"[automation bridge]The dispatch object does not "
+                                         "support ITypeInfo!"_ustr);
             }
 
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
@@ -2493,8 +2493,8 @@ ITypeInfo* IUnknownWrapper::getTypeInfo()
                     if (!SUCCEEDED(spType->GetRefTypeOfImplType(::sal::static_int_cast< UINT, int >( -1 ), &refDispatch)))
                     {
                         throw BridgeRuntimeError(
-                            "[automation bridge] Could not obtain type information "
-                            "for dispatch interface." );
+                            u"[automation bridge] Could not obtain type information "
+                            "for dispatch interface."_ustr );
                     }
                     CComPtr<ITypeInfo> spTypeDisp;
                     if (SUCCEEDED(spType->GetRefTypeInfo(refDispatch, & spTypeDisp)))
@@ -2507,8 +2507,8 @@ ITypeInfo* IUnknownWrapper::getTypeInfo()
                 else
                 {
                     throw BridgeRuntimeError(
-                        "[automation bridge] Automation object does not "
-                        "provide type information.");
+                        u"[automation bridge] Automation object does not "
+                        "provide type information."_ustr);
                 }
             }
         }

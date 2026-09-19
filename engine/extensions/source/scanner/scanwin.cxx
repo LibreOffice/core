@@ -590,7 +590,7 @@ bool ScannerManager::configureScannerAndScan(
     cpo::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
+        throw ScannerException(u"Scanner does not exist"_ustr, xThis, ScanError_InvalidContext);
 
     ReleaseData();
 
@@ -619,7 +619,7 @@ void ScannerManager::startScan(const ScannerContext& rContext,
     cpo::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
+        throw ScannerException(u"Scanner does not exist"_ustr, xThis, ScanError_InvalidContext);
 
     ReleaseData();
     aTwain.PerformTransfer(*this, rxListener, ImplGetActiveFrameWindow());
@@ -631,7 +631,7 @@ ScanError ScannerManager::getError(const ScannerContext& rContext)
     cpo::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
+        throw ScannerException(u"Scanner does not exist"_ustr, xThis, ScanError_InvalidContext);
 
     return ((aTwain.GetState() == TWAIN_STATE_CANCELED) ? ScanError_ScanCanceled
                                                         : ScanError_ScanErrorNone);

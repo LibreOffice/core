@@ -357,9 +357,9 @@ namespace abp
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     cpo::uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
-                        {"TargetStorage", cpo::uno::Any(xStorage)},
-                        {"StreamRelPath", cpo::uno::Any(aStreamRelPath)},
-                        {"BaseURI", cpo::uno::Any(aOwnURL)}
+                        {u"TargetStorage"_ustr, cpo::uno::Any(xStorage)},
+                        {u"StreamRelPath"_ustr, cpo::uno::Any(aStreamRelPath)},
+                        {u"BaseURI"_ustr, cpo::uno::Any(aOwnURL)}
                     });
                     xStorable->storeAsURL(sTmpName, aSequence);
                     m_pImpl->sName = sTmpName;

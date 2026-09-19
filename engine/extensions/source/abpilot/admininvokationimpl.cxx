@@ -67,9 +67,9 @@ using namespace cpo::uno;
             // the parameters for the call
             Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                {"ParentWindow", Any(m_pMessageParent->GetXWindow())},
-                {"Title", Any(compmodule::ModuleRes(RID_STR_ADMINDIALOGTITLE))},
-                {"InitialSelection", Any(m_xDataSource)}, // the name of the new data source
+                {u"ParentWindow"_ustr, Any(m_pMessageParent->GetXWindow())},
+                {u"Title"_ustr, Any(compmodule::ModuleRes(RID_STR_ADMINDIALOGTITLE))},
+                {u"InitialSelection"_ustr, Any(m_xDataSource)}, // the name of the new data source
             }));
 
 

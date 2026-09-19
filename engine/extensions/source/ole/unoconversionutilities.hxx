@@ -305,13 +305,13 @@ cpo::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T
         m_smgrRemote.is() )
     {
         if(  ! m_xInvocationFactoryRemote.is() )
-            m_xInvocationFactoryRemote.set(m_smgrRemote->createInstance( INVOCATION_SERVICE), cpo::uno::UNO_QUERY);
+            m_xInvocationFactoryRemote.set(m_smgrRemote->createInstance( u"" INVOCATION_SERVICE ""_ustr), cpo::uno::UNO_QUERY);
         retVal= m_xInvocationFactoryRemote;
     }
     else
     {
         if( ! m_xInvocationFactoryLocal.is() )
-            m_xInvocationFactoryLocal.set(m_smgr->createInstance(INVOCATION_SERVICE ), cpo::uno::UNO_QUERY);
+            m_xInvocationFactoryLocal.set(m_smgr->createInstance(u"" INVOCATION_SERVICE ""_ustr ), cpo::uno::UNO_QUERY);
         retVal= m_xInvocationFactoryLocal;
     }
     return retVal;
@@ -617,8 +617,8 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge] unexpected exception in "
-                  "UnoConversionUtilities<T>::variantToAny !");
+                  u"[automation bridge] unexpected exception in "
+                  "UnoConversionUtilities<T>::variantToAny !"_ustr);
     }
 }
 
@@ -701,8 +701,8 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
-                  "Unexpected exception occurred.");
+                  u"[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
+                  "Unexpected exception occurred."_ustr);
     }
 }
 
@@ -968,13 +968,13 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             CComVariant var;
             if (!createUnoTypeWrapper(type.getTypeName(), & var))
                 throw BridgeRuntimeError(
-                          "[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
-                          "Error during conversion of UNO type to Automation object!");
+                          u"[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
+                          "Error during conversion of UNO type to Automation object!"_ustr);
 
             if (FAILED(VariantCopy(pVariant, &var)))
                 throw BridgeRuntimeError(
-                          "[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
-                          "Unexpected error!");
+                          u"[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
+                          "Unexpected error!"_ustr);
             break;
         }
         default:
@@ -988,10 +988,10 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             //TypeClass_UNKNOWN:
             //TypeClass_MODULE:
             throw css::script::CannotConvertException(
-                      "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
+                      u"[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
                       "There is no conversion for this UNO type to an Automation type."
                       "The destination type class is the type class of the UNO "
-                      "argument which was to be converted.",
+                      "argument which was to be converted."_ustr,
                 cpo::uno::Reference<cpo::uno::XInterface>(), rAny.getValueTypeClass(),
                 css::script::FailReason::TYPE_NOT_SUPPORTED, 0);
 
@@ -1027,8 +1027,8 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
-                  "Unexpected exception occurred. " );
+                  u"[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
+                  "Unexpected exception occurred. "_ustr );
     }
 }
 
@@ -1040,12 +1040,12 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::
 {
     if (rSeq.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE)
         throw css::lang::IllegalArgumentException(
-                  "[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper \n"
-                  "The any does not contain a sequence!", nullptr, 0);
+                  u"[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper \n"
+                  "The any does not contain a sequence!"_ustr, nullptr, 0);
     if (elemtype == VT_NULL  ||  elemtype == VT_EMPTY)
         throw css::lang::IllegalArgumentException(
-                  "[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper \n"
-                  "No element type supplied!",nullptr, -1);
+                  u"[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper \n"
+                  "No element type supplied!"_ustr,nullptr, -1);
     SAFEARRAY*  pArray= nullptr;
     // Get the dimensions. This is done by examining the type name string
     // The count of brackets determines the dimensions.
@@ -1310,8 +1310,8 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::
 
     if( rSeq.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE )
         throw css::lang::IllegalArgumentException(
-                  "[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper\n"
-                  "The UNO argument is not a sequence", nullptr, -1);
+                  u"[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper\n"
+                  "The UNO argument is not a sequence"_ustr, nullptr, -1);
 
     uno_Sequence * punoSeq= *static_cast<uno_Sequence* const *>(rSeq.getValue());
 
@@ -1375,16 +1375,16 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
     cpo::uno::TypeClass tc = rObj.getValueTypeClass();
     if (tc != cpo::uno::TypeClass_INTERFACE && tc != cpo::uno::TypeClass_STRUCT)
         throw css::lang::IllegalArgumentException(
-                  "[automation bridge]UnoConversionUtilities<T>::createUnoObjectWrapper \n"
+                  u"[automation bridge]UnoConversionUtilities<T>::createUnoObjectWrapper \n"
                   "Cannot create an Automation interface for a UNO type which is not "
-                  "a struct or interface!", nullptr, -1);
+                  "a struct or interface!"_ustr, nullptr, -1);
 
     if (rObj.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
     {
         if (! (rObj >>= xInt))
             throw css::lang::IllegalArgumentException(
-                  "[automation bridge] UnoConversionUtilities<T>::createUnoObjectWrapper\n "
-                  "Could not create wrapper object for UNO object!", nullptr, -1);
+                  u"[automation bridge] UnoConversionUtilities<T>::createUnoObjectWrapper\n "
+                  "Could not create wrapper object for UNO object!"_ustr, nullptr, -1);
         //If XInterface is NULL, which is a valid value, then simply return NULL.
         if ( ! xInt.is())
         {
@@ -1550,8 +1550,8 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno:
                         CComBSTR sName;
                         if (FAILED(spType->get_Name(&sName)))
                             throw BridgeRuntimeError(
-                                    "[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
-                                    "Failed to get the type name from a UnoTypeWrapper!");
+                                    u"[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
+                                    "Failed to get the type name from a UnoTypeWrapper!"_ustr);
                         cpo::uno::Type type;
                         if (!getType(sName, type))
                         {
@@ -1640,8 +1640,8 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno:
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge] unexpected exception in "
-                  "UnoConversionUtilities<T>::variantToAny !");
+                  u"[automation bridge] unexpected exception in "
+                  "UnoConversionUtilities<T>::variantToAny !"_ustr);
     }
 
 }
@@ -1674,8 +1674,8 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     //To allow passing "Nothing" in VS 2008 we need to accept VT_EMPTY
     if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH && pVar->vt != VT_EMPTY)
         throw css::lang::IllegalArgumentException(
-                  "[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
-                  "The VARIANT does not contain an object type! ", nullptr, -1);
+                  u"[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
+                  "The VARIANT does not contain an object type! "_ustr, nullptr, -1);
 
     osl::MutexGuard guard( getBridgeMutex());
 
@@ -1819,8 +1819,8 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     cpo::uno::Reference<cpo::uno::XInterface> xIntNewProxy= createComWrapperInstance();
     if ( ! xIntNewProxy.is())
         throw BridgeRuntimeError(
-                  "[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
-                  "Could not create proxy object for COM object!");
+                  u"[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
+                  "Could not create proxy object for COM object!"_ustr);
 
     // initialize the COM wrapper
     cpo::uno::Reference<css::lang::XInitialization> xInit( xIntNewProxy, cpo::uno::UNO_QUERY);
@@ -1855,7 +1855,7 @@ cpo::uno::Reference<cpo::uno::XInterface> UnoConversionUtilities<T>::createAdapt
                                     const cpo::uno::Reference<cpo::uno::XInterface>& receiver)
 {
     cpo::uno::Reference< cpo::uno::XInterface> xIntAdapterFac;
-    xIntAdapterFac= m_smgr->createInstance(INTERFACE_ADAPTER_FACTORY);
+    xIntAdapterFac= m_smgr->createInstance(u"" INTERFACE_ADAPTER_FACTORY ""_ustr);
     // We create an adapter object that does not only implement the required type but also
     // all types that the COM object pretends to implement. A COM object must therefore
     // support the property "_implementedInterfaces".
@@ -1868,8 +1868,8 @@ cpo::uno::Reference<cpo::uno::XInterface> UnoConversionUtilities<T>::createAdapt
     if( !xIntAdapted.is())
     {
         throw BridgeRuntimeError(
-                  "[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
-                  "Could not create a proxy for COM object! Creation of adapter failed.");
+                  u"[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
+                  "Could not create a proxy for COM object! Creation of adapter failed."_ustr);
     }
 
     // Put the pointer to the wrapper object and the interface pointer of the adapted interface
@@ -1937,7 +1937,7 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, cpo::
 
         if (bFail)
             throw BridgeRuntimeError(
-                "[automation bridge] Conversion of ValueObject failed ");
+                u"[automation bridge] Conversion of ValueObject failed "_ustr);
     }
     catch (const BridgeRuntimeError &)
     {
@@ -1952,8 +1952,8 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, cpo::
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge] unexpected exception in "
-                  "UnoConversionUtilities<T>::convertValueObject !");
+                  u"[automation bridge] unexpected exception in "
+                  "UnoConversionUtilities<T>::convertValueObject !"_ustr);
     }
     return ret;
 }
@@ -1964,14 +1964,14 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
     try
     {
         if( pvar->vt != VT_DISPATCH)
-            throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                     "Conversion of dispatch object to Sequence failed!");
+            throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                     "Conversion of dispatch object to Sequence failed!"_ustr);
         IDispatchEx* pdispEx;
         HRESULT hr;
         if( FAILED( hr= pvar->pdispVal->QueryInterface( IID_IDispatchEx,
                                                         reinterpret_cast<void**>( &pdispEx))))
-            throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                     "Conversion of dispatch object to Sequence failed!");
+            throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                     "Conversion of dispatch object to Sequence failed!"_ustr);
 
         DISPID dispid;
         DISPPARAMS param= {nullptr,nullptr,0,0};
@@ -1982,15 +1982,15 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         // Get the length of the array. Can also be obtained through GetNextDispID. The
         // method only returns DISPIDs of the array data. Their names are like "0", "1" etc.
         if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, const_cast<OLECHAR **>(&sLength), 1, LOCALE_USER_DEFAULT, &dispid)))
-            throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                     "Conversion of dispatch object to Sequence failed!");
+            throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                     "Conversion of dispatch object to Sequence failed!"_ustr);
         if( FAILED( hr= pdispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                           &param, &result, nullptr, nullptr)))
-            throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                     "Conversion of dispatch object to Sequence failed!");
+            throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                     "Conversion of dispatch object to Sequence failed!"_ustr);
         if( FAILED( VariantChangeType( &result, &result, 0, VT_I4)))
-            throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                     "Conversion of dispatch object to Sequence failed!");
+            throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                     "Conversion of dispatch object to Sequence failed!"_ustr);
         LONG length= result.lVal;
 
         result.Clear();
@@ -2024,14 +2024,14 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 
             if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))
             {
-                throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                         "Conversion of dispatch object to Sequence failed!");
+                throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                         "Conversion of dispatch object to Sequence failed!"_ustr);
             }
             if( FAILED( hr= pdispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                               &param, &result, nullptr, nullptr)))
             {
-                throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
-                                         "Conversion of dispatch object to Sequence failed!");
+                throw BridgeRuntimeError(u"[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
+                                         "Conversion of dispatch object to Sequence failed!"_ustr);
             }
 
             // If the result is VT_DISPATCH than the Sequence's element type could be Sequence
@@ -2087,8 +2087,8 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
     catch(...)
     {
         throw BridgeRuntimeError(
-                  "[automation bridge] unexpected exception in "
-                  "UnoConversionUtilities<T>::convertValueObject !");
+                  u"[automation bridge] unexpected exception in "
+                  "UnoConversionUtilities<T>::convertValueObject !"_ustr);
     }
 }
 
@@ -2346,7 +2346,7 @@ cpo::uno::Reference<css::script::XTypeConverter> UnoConversionUtilities<T>::getT
         if ( ! m_typeConverter.is())
         {
             cpo::uno::Reference<cpo::uno::XInterface> xIntConverter =
-                m_smgr->createInstance("com.sun.star.script.Converter");
+                m_smgr->createInstance(u"com.sun.star.script.Converter"_ustr);
             if (xIntConverter.is())
                 m_typeConverter.set(xIntConverter, cpo::uno::UNO_QUERY);
         }
