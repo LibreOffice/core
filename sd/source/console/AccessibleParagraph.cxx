@@ -127,21 +127,15 @@ Reference<XAccessibleRelationSet> SAL_CALL
 
     rtl::Reference<AccessibleRelationSet> pSet (new AccessibleRelationSet);
 
-    if (mxParentAccessible.is())
+    if (mpParentAccessible.is())
     {
-        Reference<XAccessibleContext> xParentContext (mxParentAccessible->getAccessibleContext());
-        if (xParentContext.is())
-        {
-            if (mnParagraphIndex>0)
-                pSet->AddRelation(
-                    AccessibleRelationType_CONTENT_FLOWS_FROM,
-                    xParentContext->getAccessibleChild(mnParagraphIndex-1));
+        if (mnParagraphIndex > 0)
+            pSet->AddRelation(AccessibleRelationType_CONTENT_FLOWS_FROM,
+                              mpParentAccessible->getAccessibleChild(mnParagraphIndex - 1));
 
-            if (mnParagraphIndex<xParentContext->getAccessibleChildCount()-1)
-                pSet->AddRelation(
-                    AccessibleRelationType_CONTENT_FLOWS_TO,
-                    xParentContext->getAccessibleChild(mnParagraphIndex+1));
-        }
+        if (mnParagraphIndex < mpParentAccessible->getAccessibleChildCount() - 1)
+            pSet->AddRelation(AccessibleRelationType_CONTENT_FLOWS_TO,
+                              mpParentAccessible->getAccessibleChild(mnParagraphIndex + 1));
     }
 
     return pSet;

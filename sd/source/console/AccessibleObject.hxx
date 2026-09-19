@@ -120,7 +120,7 @@ protected:
     const sal_Int16 mnRole;
     sal_Int64 mnStateSet;
     bool mbIsFocused;
-    css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
+    rtl::Reference<comphelper::OAccessible> mpParentAccessible;
     ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
 
     // OAccessible

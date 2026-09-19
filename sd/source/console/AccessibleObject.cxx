@@ -69,7 +69,7 @@ void AccessibleObject::SetWindow (
 void AccessibleObject::SetAccessibleParent(
     const rtl::Reference<comphelper::OAccessible>& rpAccessibleParent)
 {
-    mxParentAccessible = rpAccessibleParent;
+    mpParentAccessible = rpAccessibleParent;
 }
 
 void SAL_CALL AccessibleObject::disposing()
@@ -105,7 +105,7 @@ Reference<XAccessible> SAL_CALL
 {
     ensureAlive();
 
-    return mxParentAccessible;
+    return mpParentAccessible;
 }
 
 sal_Int64 SAL_CALL
@@ -114,14 +114,12 @@ sal_Int64 SAL_CALL
     ensureAlive();
 
     const Reference<XAccessible> xThis (this);
-    if (mxParentAccessible.is())
+    if (mpParentAccessible.is())
     {
-        const Reference<XAccessibleContext> xContext (mxParentAccessible->getAccessibleContext());
-        for (sal_Int64 nIndex = 0, nCount=xContext->getAccessibleChildCount();
-             nIndex<nCount;
-             ++nIndex)
+        for (sal_Int64 nIndex = 0, nCount = mpParentAccessible->getAccessibleChildCount();
+             nIndex < nCount; ++nIndex)
         {
-            if (xContext->getAccessibleChild(nIndex) == xThis)
+            if (mpParentAccessible->getAccessibleChild(nIndex) == xThis)
                 return nIndex;
         }
     }
@@ -174,11 +172,9 @@ lang::Locale SAL_CALL
 {
     ensureAlive();
 
-    if (mxParentAccessible.is())
+    if (mpParentAccessible.is())
     {
-        Reference<XAccessibleContext> xParentContext (mxParentAccessible->getAccessibleContext());
-        if (xParentContext.is())
-            return xParentContext->getLocale();
+        return mpParentAccessible->getLocale();
     }
     return css::lang::Locale();
 }
