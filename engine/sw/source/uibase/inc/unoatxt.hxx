@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/text/XAutoTextEntry.hpp>
-#include <com/sun/star/text/XAutoTextContainer2.hpp>
+#include <com/sun/star/text/XAutoTextContainer.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
@@ -45,7 +45,7 @@ typedef rtl::Reference<SwDocShell> SwDocShellRef;
 
 class SwXAutoTextContainer final : public cppu::WeakImplHelper
 <
-    css::text::XAutoTextContainer2,
+    css::text::XAutoTextContainer,
     css::lang::XServiceInfo
 >
 {

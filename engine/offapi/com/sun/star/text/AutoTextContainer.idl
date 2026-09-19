@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module text {
 
 /** provides access to groups of text blocks.
  */
-published service AutoTextContainer : XAutoTextContainer2;
+published service AutoTextContainer : XAutoTextContainer;
 
 
 }; }; }; };

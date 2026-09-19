@@ -23,7 +23,7 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/weld.hxx>
 
-#include <com/sun/star/text/XAutoTextContainer2.hpp>
+#include <com/sun/star/text/XAutoTextContainer.hpp>
 
 #include <rtl/ustring.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -44,7 +44,7 @@ class SwGlossaryDlg final : public SfxDialogController
 
     OUString const        m_sReadonlyPath;
 
-    cpo::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
+    cpo::uno::Reference< css::text::XAutoTextContainer > m_xAutoText;
 
     SwGlossaryHdl*  m_pGlossaryHdl;
 

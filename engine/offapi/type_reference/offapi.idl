@@ -13347,14 +13347,11 @@ module com {
     published interface XAutoTextGroup;
     published interface XAutoTextContainer {
      interface ::com::sun::star::container::XNameAccess;
+     interface ::com::sun::star::container::XIndexAccess;
      ::com::sun::star::text::XAutoTextGroup insertNewByName([in] string aGroupName) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException);
      void removeByName([in] string aGroupName) raises (::com::sun::star::container::NoSuchElementException);
     };
-    published interface XAutoTextContainer2 {
-     interface ::com::sun::star::text::XAutoTextContainer;
-     interface ::com::sun::star::container::XIndexAccess;
-    };
-    published service AutoTextContainer: ::com::sun::star::text::XAutoTextContainer2;
+    published service AutoTextContainer: ::com::sun::star::text::XAutoTextContainer;
     /** @deprecated */ published interface XAutoTextEntry {
      interface ::cpo::uno::XInterface;
      void applyTo([in] ::com::sun::star::text::XTextRange xRange);

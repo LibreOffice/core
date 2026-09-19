@@ -22,8 +22,11 @@ module com {  module sun {  module star {  module text {
 /** handles blocks of AutoTextEntry.
     @see AutoTextContainer
 */
-published interface XAutoTextContainer: com::sun::star::container::XNameAccess
+published interface XAutoTextContainer
 {
+    interface com::sun::star::container::XNameAccess;
+    interface com::sun::star::container::XIndexAccess;
+
     /** creates a new AutoText group.
 
     @param aGroupName the name of the AutoTextContainer

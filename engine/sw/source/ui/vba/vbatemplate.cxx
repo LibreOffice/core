@@ -85,7 +85,7 @@ cpo::uno::Any SAL_CALL
 SwVbaTemplate::AutoTextEntries( const cpo::uno::Any& index )
 {
     const uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
+    uno::Reference< text::XAutoTextContainer > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.
     OUString sGroup(u"Normal"_ustr);

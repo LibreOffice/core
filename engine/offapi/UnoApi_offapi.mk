@@ -3495,7 +3495,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	WritingMode \
 	WritingMode2 \
 	XAutoTextContainer \
-	XAutoTextContainer2 \
 	XAutoTextEntry \
 	XAutoTextGroup \
 	XBookmarkInsertTool \
