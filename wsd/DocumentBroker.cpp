@@ -3908,7 +3908,8 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                     ? std::chrono::duration_cast<std::chrono::milliseconds>(
                           *uploadResult.getRetryAfter())
                     : _storageManager.minTimeBetweenUploads();
-            _checkFileInfoNotBefore = std::chrono::steady_clock::now() + grace;
+            _checkFileInfoNotBefore =
+                std::chrono::steady_clock::now() + (isUnloading() ? grace / 4 : grace);
             LOG_DBG("Upload of [" << _docKey << "] got no response; deferring CheckFileInfo by "
                                   << grace << " to let the host finish writing our upload");
         }
