@@ -155,7 +155,6 @@ module com {
      interface ::com::sun::star::awt::XControl;
      interface ::com::sun::star::awt::XWindow;
      interface ::com::sun::star::awt::XView;
-     [optional] interface ::com::sun::star::accessibility::XAccessible;
     };
     published service UnoControlDialogElement {
      [property] long Height;
