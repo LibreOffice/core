@@ -1145,7 +1145,6 @@ function typeIntoInputField(selector, text, clearBefore = true)
 
 	cy.wait(600);
 	cy.cGet(selector).type((clearBefore ? '{selectall}{backspace}' : '') + text + '{enter}');
-	cy.wait(600);
 	cy.cGet(selector).should('have.value', text);
 
 	cy.log('<< typeIntoInputField - end');
