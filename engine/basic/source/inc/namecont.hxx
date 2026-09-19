@@ -27,7 +27,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -164,7 +164,7 @@ class SfxLibraryContainer
     OUString msProjectName;
 protected:
     cpo::uno::Reference< cpo::uno::XComponentContext >       mxContext;
-    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess >       mxSFI;
     cpo::uno::Reference< css::util::XStringSubstitution >    mxStringSubstitution;
     cpo::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
 
@@ -204,7 +204,7 @@ protected:
                             std::u16string_view rName,
                             const cpo::uno::Reference< css::embed::XStorage >& rStorage,
                             std::u16string_view rTargetURL,
-                            const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI,
+                            const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& rToUseSFI,
                             const cpo::uno::Reference< css::task::XInteractionHandler >& rHandler );
 
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
@@ -214,7 +214,7 @@ protected:
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
                                     const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                     std::u16string_view aTargetURL,
-                                    const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI );
+                                    const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& rToUseSFI );
 
     bool implLoadLibraryIndexFile( SfxLibrary* pLib,
                                     ::xmlscript::LibDescriptor& rLib,
@@ -256,7 +256,7 @@ protected:
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const cpo::uno::Reference< css::embed::XStorage >& rStorage,
                         const OUString& aTargetURL,
-                        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler );
+                        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& rToUseSFI, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
@@ -465,7 +465,7 @@ class SfxLibrary
     friend class SfxDialogLibraryContainer;
     friend class SfxScriptLibraryContainer;
 
-    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   mxSFI;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess >    mxSFI;
 
     ModifiableHelper&                                     mrModifiable;
     NameContainer maNameContainer;
@@ -523,12 +523,12 @@ public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const cpo::uno::Type& aType,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xSFI
     );
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const cpo::uno::Type& aType,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xSFI,
         OUString aLibInfoFileURL,
         OUString aStorageURL,
         bool ReadOnly

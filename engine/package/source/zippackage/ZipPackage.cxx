@@ -1557,7 +1557,7 @@ void ZipPackage::commitChanges()
             if( isLocalFile() )
             {
                 // write directly in case of local file
-                uno::Reference< css::ucb::XSimpleFileAccess3 > xSimpleAccess(
+                uno::Reference< css::ucb::XSimpleFileAccess > xSimpleAccess(
                     SimpleFileAccess::create( m_xContext ) );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instantiate SimpleFileAccess service!" );
                 uno::Reference< io::XTruncate > xOrigTruncate;

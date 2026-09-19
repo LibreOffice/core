@@ -33,7 +33,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
 
     // first get the autoload addins in the directory STARTUP
     uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(xContext));
+    uno::Reference<ucb::XSimpleFileAccess> xSFA(ucb::SimpleFileAccess::create(xContext));
     SvtPathOptions aPathOpt;
     // FIXME: temporary the STARTUP path is located in $OO/basic3.1/program/addin
     const OUString& aAddinPath = aPathOpt.GetAddinPath();

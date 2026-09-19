@@ -430,7 +430,7 @@ ErrCode const & SbiStream::Open
 
     if( hasUno() )
     {
-        Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create( comphelper::getProcessComponentContext() ) );
+        Reference< XSimpleFileAccess > xSFI( SimpleFileAccess::create( comphelper::getProcessComponentContext() ) );
         try
         {
 

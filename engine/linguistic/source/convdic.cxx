@@ -75,7 +75,7 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
     uno::Reference< io::XInputStream > xIn;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xIn = xAccess->openFileRead( rMainURL );
     }
     catch (const cpo::uno::Exception &)
@@ -214,7 +214,7 @@ void ConvDic::Save()
     uno::Reference< io::XStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
     catch (const cpo::uno::Exception &)

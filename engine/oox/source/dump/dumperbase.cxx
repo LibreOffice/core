@@ -95,7 +95,7 @@ Reference< XInputStream > InputOutputHelper::openInputStream(
     Reference< XInputStream > xInStrm;
     if( rxContext.is() ) try
     {
-        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
+        Reference<XSimpleFileAccess> xFileAccess(SimpleFileAccess::create(rxContext));
         xInStrm = xFileAccess->openFileRead( rFileName );
     }
     catch( cpo::uno::Exception& )
@@ -112,7 +112,7 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
     Reference< XOutputStream > xOutStrm;
     if( rxContext.is() ) try
     {
-        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
+        Reference<XSimpleFileAccess> xFileAccess(SimpleFileAccess::create(rxContext));
         xOutStrm = xFileAccess->openFileWrite( rFileName );
     }
     catch( cpo::uno::Exception& )
@@ -1794,7 +1794,7 @@ void StorageObjectBase::implDump()
     if( bIsRoot ) try
     {
         aSysOutPath += OOX_DUMP_DUMPEXT;
-        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(getContext()));
+        Reference<XSimpleFileAccess> xFileAccess(SimpleFileAccess::create(getContext()));
         xFileAccess->kill( aSysOutPath );
     }
     catch( cpo::uno::Exception& )

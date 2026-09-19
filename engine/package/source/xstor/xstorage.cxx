@@ -5070,7 +5070,7 @@ void OStorage::attachToURL( const OUString& sURL,
     if ( !m_pImpl->m_pSwitchStream )
         throw cpo::uno::RuntimeException();
 
-    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
+    uno::Reference < ucb::XSimpleFileAccess > xAccess(
         ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
 
     try

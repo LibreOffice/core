@@ -64,7 +64,7 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
-                        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+                        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& rToUseSFI, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly,
@@ -126,13 +126,13 @@ public:
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xSFI
     );
 
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly
     );
 

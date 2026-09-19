@@ -623,7 +623,7 @@ void DialogWindow::SaveDialog()
     OUString aSelectedFileURL = xFP->getSelectedFiles()[0];
 
     const Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
-    Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
+    Reference< XSimpleFileAccess > xSFI( SimpleFileAccess::create(xContext) );
 
     Reference< XOutputStream > xOutput;
     try
@@ -816,7 +816,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                 xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext),
                 UNO_QUERY_THROW );
 
-            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
+            Reference< XSimpleFileAccess > xSFI( SimpleFileAccess::create(xContext) );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( rOUCurPath ) )

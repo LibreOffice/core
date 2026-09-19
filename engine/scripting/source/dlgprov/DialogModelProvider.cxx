@@ -48,7 +48,7 @@ void SAL_CALL DialogModelProvider::initialize(const cpo::uno::Sequence< cpo::uno
     if ( !( aArguments[ 0 ] >>= sURL ))
         throw css::lang::IllegalArgumentException();
      // Try any other URL with SimpleFileAccess
-    Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
+    Reference< ucb::XSimpleFileAccess > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
     try
     {

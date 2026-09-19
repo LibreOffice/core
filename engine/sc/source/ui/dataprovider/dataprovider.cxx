@@ -8,7 +8,6 @@
  */
 
 #include <dataprovider.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <o3tl/string_view.hxx>
@@ -60,7 +59,7 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
 
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
+        uno::Reference< ucb::XSimpleFileAccess > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
 
         uno::Reference< io::XInputStream > xStream = xFileAccess->openFileRead( rURL );
 

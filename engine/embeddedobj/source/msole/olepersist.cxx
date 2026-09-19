@@ -72,7 +72,7 @@ bool KillFile_Impl( const OUString& aURL, const uno::Reference< cpo::uno::XCompo
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
+        uno::Reference < ucb::XSimpleFileAccess > xAccess(
                 ucb::SimpleFileAccess::create( xContext ) );
 
         xAccess->kill( aURL );
@@ -121,7 +121,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
     if ( !aResult.isEmpty() )
     {
         try {
-            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                     ucb::SimpleFileAccess::create( xContext ) );
 
             uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
@@ -550,7 +550,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
                 try
                 {
                     // open temporary file for reading
-                    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
+                    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                             ucb::SimpleFileAccess::create( m_xContext ) );
 
                     xStream = xTempAccess->openFileRead( m_aTempURL );
@@ -1051,7 +1051,7 @@ void OleEmbeddedObject::StoreObjectToStream(uno::Reference<io::XOutputStream> co
         throw cpo::uno::RuntimeException();
 
     // open temporary file for reading
-    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
+    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
             ucb::SimpleFileAccess::create( m_xContext ) );
 
     uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );

@@ -414,7 +414,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
 
     auto writeFile = [ this ]( const OUString& SrcName, const OUString& DesName )
     {
-        uno::Reference < ucb::XSimpleFileAccess2 > xWriteAccess( ucb::SimpleFileAccess::create( m_xContext ) );
+        uno::Reference < ucb::XSimpleFileAccess > xWriteAccess( ucb::SimpleFileAccess::create( m_xContext ) );
         uno::Reference < ucb::XSimpleFileAccess > xReadAccess( ucb::SimpleFileAccess::create( m_xContext ) );
 
         try

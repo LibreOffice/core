@@ -199,7 +199,7 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
 
 bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
 {
-    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
+    uno::Reference<ucb::XSimpleFileAccess> xFileAccess
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
 
     // copy the images to the user's additions folder
@@ -687,7 +687,7 @@ AdditionsItem::AdditionsItem(weld::Box* pParentBox, AdditionsDialog* pParentDial
 
 bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
 {
-    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
+    uno::Reference<ucb::XSimpleFileAccess> xFileAccess
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
 
     // copy the extensions' files to the user's additions folder

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <comphelper/fileurl.hxx>
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
@@ -53,7 +53,7 @@ namespace helpdatafileproxy {
         OUString       m_aFileURL;
         std::unique_ptr<StringToDataMap>   m_pStringToDataMap;
         std::unique_ptr<StringToValPosMap> m_pStringToValPosMap;
-        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess >
                             m_xSFA;
 
         cpo::uno::Sequence< sal_Int8 >
@@ -69,7 +69,7 @@ namespace helpdatafileproxy {
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
         Hdf( OUString aFileURL,
-             cpo::uno::Reference< css::ucb::XSimpleFileAccess3 > xSFA )
+             cpo::uno::Reference< css::ucb::XSimpleFileAccess > xSFA )
                 : m_aFileURL( std::move(aFileURL) )
                 , m_xSFA( std::move(xSFA) )
                 , m_nItRead( -1 )

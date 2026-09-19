@@ -33,7 +33,6 @@ import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.PathUtils;
 
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.ucb.XSimpleFileAccess2;
 
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -449,8 +448,8 @@ public class ParcelContainer implements XNameAccess {
             String parcelDesc =
                 PathUtils.make_url(pathToParcel, ParcelDescriptor.PARCEL_DESCRIPTOR_NAME);
 
-            XSimpleFileAccess2 xSFA2 =
-                UnoRuntime.queryInterface(XSimpleFileAccess2.class, m_xSFA);
+            XSimpleFileAccess xSFA2 =
+                UnoRuntime.queryInterface(XSimpleFileAccess.class, m_xSFA);
 
             if (xSFA2 != null) {
                 LogUtils.DEBUG("createParcel() Using XSIMPLEFILEACCESS2 " + parcelDesc);

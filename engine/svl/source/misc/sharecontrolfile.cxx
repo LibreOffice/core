@@ -326,7 +326,7 @@ void ShareControlFile::RemoveFileImpl(std::unique_lock<std::mutex>& /*rGuard*/)
 
     Close();
 
-    uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
+    uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
     xSimpleFileAccess->kill( GetURL() );
 }
 

@@ -239,7 +239,7 @@ namespace dlgprov
             bSingleDialog = true;
 
             // Try any other URL with SimpleFileAccess
-            Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
+            Reference< ucb::XSimpleFileAccess > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
             try
             {

@@ -48,7 +48,7 @@ static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  cpo::uno::Referenc
         {
             return result;
         }
-        cpo::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
+        cpo::uno::Reference < css::ucb::XSimpleFileAccess > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
         result = xSFA->getFolderContents( u"vnd.sun.star.tdoc:/"_ustr, true );
     }
     catch ( cpo::uno::Exception& )

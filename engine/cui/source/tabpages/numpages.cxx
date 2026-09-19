@@ -1140,7 +1140,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
         return;
 
     uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+    uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
                  ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
     if ( !xSimpleFileAccess->exists( aUserImageURL ))
         return;

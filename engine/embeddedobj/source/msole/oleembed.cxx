@@ -789,7 +789,7 @@ namespace
 
             xNativeTempFile.clear();
 
-            uno::Reference < ucb::XSimpleFileAccess3 > xSimpleFileAccess(
+            uno::Reference < ucb::XSimpleFileAccess > xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( xContext ) );
 
             xSimpleFileAccess->setReadOnly(rUrl, true);

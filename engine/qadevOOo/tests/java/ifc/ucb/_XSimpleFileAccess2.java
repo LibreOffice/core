@@ -21,16 +21,16 @@ package ifc.ucb;
 import lib.MultiMethodTest;
 
 import com.sun.star.io.XInputStream;
-import com.sun.star.ucb.XSimpleFileAccess2;
+import com.sun.star.ucb.XSimpleFileAccess;
 
 /**
-* Testing <code>com.sun.star.ucb.XSimpleFileAccess2</code>
+* Testing <code>com.sun.star.ucb.XSimpleFileAccess</code>
 * interface methods. <p>
 * @see com.sun.star.ucb.XSimpleFileAccess2
 */
 public class _XSimpleFileAccess2 extends MultiMethodTest {
 
-    public static XSimpleFileAccess2 oObj = null;
+    public static XSimpleFileAccess oObj = null;
 
     /**
     * Writes <b>XSimpleFileAccess_new.txt</b> to disk, checks

@@ -814,7 +814,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
     uno::Reference< io::XInputStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rFileURL );
     }
     catch (const cpo::uno::Exception &)

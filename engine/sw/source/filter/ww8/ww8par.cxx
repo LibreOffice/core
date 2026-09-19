@@ -4836,7 +4836,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
     cpo::uno::Sequence< OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
-    uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
+    uno::Reference<ucb::XSimpleFileAccess> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, false );

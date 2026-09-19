@@ -645,7 +645,7 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
         xDlgURLObj->setBase( aDlgBase );
     }
 
-    Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+    Reference< XSimpleFileAccess > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
     OUString aModURL( xModURLObj->GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     if ( xSFA->exists( aModURL ) )
@@ -1045,7 +1045,7 @@ void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLib
 
     const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
-    Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
+    Reference< XSimpleFileAccess > xSFA = SimpleFileAccess::create(xContext);
 
     xFP->setTitle(IDEResId(RID_STR_EXPORTPACKAGE));
 

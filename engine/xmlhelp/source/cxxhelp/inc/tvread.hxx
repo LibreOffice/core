@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
@@ -243,7 +243,7 @@ namespace treeview {
 
         std::mutex                                                                  m_aMutex;
         cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess >    m_xSFA;
 
         IteratorState                                                               m_eState;
         OUString                                                               m_aLanguage;

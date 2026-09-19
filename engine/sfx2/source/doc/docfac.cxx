@@ -181,7 +181,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
         sUserTemplateURL += aExt;
 
-        uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+        uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
             ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
 
         OUString aBackupURL;

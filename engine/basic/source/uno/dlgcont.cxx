@@ -477,7 +477,7 @@ Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames( )
 // Ctor
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     OUString aName,
-                                    const Reference< XSimpleFileAccess3 >& xSFI,
+                                    const Reference< XSimpleFileAccess >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
     : SfxDialogLibrary_BASE(_rModifiable, cppu::UnoType<XInputStreamProvider>::get(), xSFI)
     , m_pParent( pParent )
@@ -487,7 +487,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
 
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     OUString aName,
-                                    const Reference< XSimpleFileAccess3 >& xSFI,
+                                    const Reference< XSimpleFileAccess >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     bool ReadOnly,

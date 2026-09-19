@@ -3733,8 +3733,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XRemoteContentProviderDoneListener \
 	XRemoteContentProviderSupplier \
 	XSimpleFileAccess \
-	XSimpleFileAccess2 \
-	XSimpleFileAccess3 \
 	XSortedDynamicResultSetFactory \
 	XSourceInitialization \
 	XUniversalContentBroker \

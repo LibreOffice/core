@@ -102,8 +102,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     bool hasActiveEntry(std::u16string_view url);
     bool activateEntry(std::u16string_view url);
 
-    Reference< ucb::XSimpleFileAccess3 > const & getFileAccess();
-    Reference< ucb::XSimpleFileAccess3 > m_xSFA;
+    Reference< ucb::XSimpleFileAccess > const & getFileAccess();
+    Reference< ucb::XSimpleFileAccess > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
@@ -384,7 +384,7 @@ void BackendImpl::implProcessHelp(
                 const OUString sHelpFolder = createFolder(xCmdEnv);
                 data.dataUrl = sHelpFolder;
 
-                Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
+                Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
                 OUString aHelpURL = xPackage->getURL();
                 OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
@@ -554,7 +554,7 @@ void BackendImpl::implProcessHelp(
 void BackendImpl::implCollectXhpFiles( const OUString& aDir,
     std::vector< OUString >& o_rXhpFileVector )
 {
-    Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
+    Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
 
     // Scan xhp files recursively
     for (auto& aURL : xSFA->getFolderContents(aDir, true))
@@ -576,7 +576,7 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
     }
 }
 
-Reference< ucb::XSimpleFileAccess3 > const & BackendImpl::getFileAccess()
+Reference< ucb::XSimpleFileAccess > const & BackendImpl::getFileAccess()
 {
     if( !m_xSFA.is() )
     {

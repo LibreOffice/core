@@ -48,7 +48,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <vector>
@@ -71,7 +71,7 @@ namespace
 {
 
 // Implementation XSimpleFileAccess
-typedef cppu::WeakImplHelper<XSimpleFileAccess3, css::lang::XServiceInfo>
+typedef cppu::WeakImplHelper<XSimpleFileAccess, css::lang::XServiceInfo>
     FileAccessHelper;
 class OCommandEnvironment;
 

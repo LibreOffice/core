@@ -386,7 +386,7 @@ void OwnView_Impl::CreateNative()
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
+        uno::Reference < ucb::XSimpleFileAccess > xAccess(
                 ucb::SimpleFileAccess::create( m_xContext ) );
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>

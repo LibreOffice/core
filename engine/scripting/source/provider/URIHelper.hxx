@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <rtl/ustring.hxx>
@@ -40,7 +40,7 @@ class ScriptingFrameworkURIHelper :
 {
 private:
 
-    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xSimpleFileAccess;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
     cpo::uno::Reference<css::uri::XUriReferenceFactory> m_xUriReferenceFactory;
 
     OUString m_sLanguage;

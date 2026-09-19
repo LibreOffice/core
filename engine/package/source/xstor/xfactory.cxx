@@ -127,7 +127,7 @@ uno::Reference< cpo::uno::XInterface > OStorageFactory::createInstanceWithArgume
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
+        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
             ucb::SimpleFileAccess::create(
                 m_xContext ) );
 

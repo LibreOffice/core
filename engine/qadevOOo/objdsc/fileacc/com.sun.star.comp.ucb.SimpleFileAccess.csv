@@ -14,4 +14,4 @@
 "SimpleFileAccess";"com::sun::star::ucb::XSimpleFileAccess";"openFileWrite()"
 "SimpleFileAccess";"com::sun::star::ucb::XSimpleFileAccess";"openFileReadWrite()"
 "SimpleFileAccess";"com::sun::star::ucb::XSimpleFileAccess";"setInteractionHandler()"
-"SimpleFileAccess";"com::sun::star::ucb::XSimpleFileAccess2";"writeFile()"
+"SimpleFileAccess";"com::sun::star::ucb::XSimpleFileAccess";"writeFile()"

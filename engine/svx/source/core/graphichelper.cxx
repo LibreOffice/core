@@ -401,7 +401,7 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
 
     if (xGraphStream.is())
     {
-        uno::Reference<ucb::XSimpleFileAccess3> xFileAccess = ucb::SimpleFileAccess::create(xContext);
+        uno::Reference<ucb::XSimpleFileAccess> xFileAccess = ucb::SimpleFileAccess::create(xContext);
         xFileAccess->writeFile(sPath, xGraphStream);
     }
     else if (xComponent.is() && aExportMimeType == "application/pdf")

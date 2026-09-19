@@ -379,7 +379,7 @@ namespace DOM
         // if we failed to parse the URI as a simple file, let's try via a ucb stream.
         // For Android file:///assets/ URLs which must go via the osl/ file API.
         if (pDoc == nullptr) {
-            Reference < XSimpleFileAccess3 > xStreamAccess(
+            Reference < XSimpleFileAccess > xStreamAccess(
                 SimpleFileAccess::create( comphelper::getProcessComponentContext() ) );
             Reference< XInputStream > xInStream = xStreamAccess->openFileRead( sUri );
             if (!xInStream.is())

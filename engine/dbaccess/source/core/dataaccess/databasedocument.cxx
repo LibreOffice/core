@@ -1102,7 +1102,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUString& _rURL ) const
 {
-    Reference< ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext));
+    Reference< ucb::XSimpleFileAccess > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext));
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
     Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
     if ( xTruncate.is() )

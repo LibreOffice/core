@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -242,7 +242,7 @@ protected:
     (
         std::u16string_view Location,
         const OUString& aNameBase,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xFileAccess
     );
 
     /// @throws cpo::uno::Exception
@@ -251,7 +251,7 @@ protected:
     (
         std::u16string_view Location,
         const OUString& aNameBase,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xFileAccess
     );
 
     /// @throws cpo::uno::Exception
@@ -262,7 +262,7 @@ protected:
         std::u16string_view Location,
         const OUString& aNameBase,
         const OUString& aComment,
-        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess >& xFileAccess,
         bool bUsedForStore,
         bool bStoreAll,
         bool bKillAll = false
@@ -412,10 +412,10 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 {
     OUString                                              m_aLocation;
     bool                                                  m_bLocationChanged;
-    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFI;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess >    m_xSFI;
     cpo::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
 
-    const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccessImpl();
+    const cpo::uno::Reference< css::ucb::XSimpleFileAccess > & getFileAccessImpl();
 
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
     virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;

@@ -276,7 +276,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     uno::Reference< io::XInputStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rMainURL );
     }
     catch (const cpo::uno::Exception &)
@@ -466,7 +466,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     try
     {
         pStream.reset();
-        uno::Reference< ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(xContext));
+        uno::Reference< ucb::XSimpleFileAccess > xAccess(ucb::SimpleFileAccess::create(xContext));
         Reference<io::XInputStream> xInputStream(xStream, UNO_QUERY_THROW);
         uno::Reference<io::XSeekable> xSeek(xInputStream, UNO_QUERY_THROW);
         xSeek->seek(0);

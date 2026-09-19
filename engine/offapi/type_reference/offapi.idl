@@ -16126,17 +16126,11 @@ module com {
      ::com::sun::star::io::XOutputStream openFileWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
      ::com::sun::star::io::XStream openFileReadWrite([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
      void setInteractionHandler([in] ::com::sun::star::task::XInteractionHandler Handler);
-    };
-    published interface XSimpleFileAccess2 {
-     interface ::com::sun::star::ucb::XSimpleFileAccess;
      void writeFile([in] string FileURL, [in] ::com::sun::star::io::XInputStream data) raises (::cpo::uno::Exception);
-    };
-    published interface XSimpleFileAccess3 {
-     interface ::com::sun::star::ucb::XSimpleFileAccess2;
      boolean isHidden([in] string FileURL) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
      void setHidden([in] string FileURL, [in] boolean bHidden) raises (::com::sun::star::ucb::CommandAbortedException, ::cpo::uno::Exception);
     };
-    published service SimpleFileAccess: ::com::sun::star::ucb::XSimpleFileAccess3;
+    published service SimpleFileAccess: ::com::sun::star::ucb::XSimpleFileAccess;
     published interface XSortedDynamicResultSetFactory {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::ucb::XDynamicResultSet createSortedDynamicResultSet([in] ::com::sun::star::ucb::XDynamicResultSet Source, [in] sequence< ::com::sun::star::ucb::NumberedSortingInfo > Info, [in] ::com::sun::star::ucb::XAnyCompareFactory CompareFactory);

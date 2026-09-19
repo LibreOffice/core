@@ -544,14 +544,14 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                           const uno::Reference< embed::XStorage >& xStorage,
                                                           const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
-    Reference< XSimpleFileAccess3 > xDummySFA;
+    Reference< XSimpleFileAccess > xDummySFA;
     return implStorePasswordLibrary( pLib, aName, xStorage, OUString(), xDummySFA, xHandler );
 }
 
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                                                           const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                                           const OUString& aTargetURL,
-                                                          const Reference< XSimpleFileAccess3 >& rToUseSFI,
+                                                          const Reference< XSimpleFileAccess >& rToUseSFI,
                                                           const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
@@ -673,7 +673,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     {
         try
         {
-            Reference< XSimpleFileAccess3 > xSFI = mxSFI;
+            Reference< XSimpleFileAccess > xSFI = mxSFI;
             if( rToUseSFI.is() )
             {
                 xSFI = rToUseSFI;
@@ -1106,7 +1106,7 @@ Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames( )
 
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XSimpleFileAccess3 >& xSFI )
+                                    const Reference< XSimpleFileAccess >& xSFI )
     : SfxScriptLibrary_BASE(_rModifiable, cppu::UnoType<OUString>::get(), xSFI)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
@@ -1114,7 +1114,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 }
 
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XSimpleFileAccess3 >& xSFI,
+                                    const Reference< XSimpleFileAccess >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     bool ReadOnly )

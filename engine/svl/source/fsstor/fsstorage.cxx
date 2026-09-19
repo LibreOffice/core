@@ -313,7 +313,7 @@ uno::Reference< io::XStream > FSStorage::openStreamElementImpl(
         {
             if ( aFileURL.GetProtocol() == INetProtocol::File )
             {
-                uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+                uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_xContext ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             }
@@ -1011,7 +1011,7 @@ uno::Reference< embed::XExtendedStorageStream > FSStorage::openStreamElementByHi
         {
             if ( comphelper::isFileUrl( aFileURL ) )
             {
-                uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+                uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( m_xContext ) );
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL );

@@ -37,7 +37,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 // Forward declaration
 
@@ -228,7 +228,7 @@ namespace chelp {
 
         std::mutex                                               m_aMutex;
         cpo::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
-        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess >       m_xSFA;
 
         bool   m_bShowBasic;
 
@@ -332,7 +332,7 @@ namespace chelp {
             const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
         cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess >    m_xSFA;
         Databases&                                            m_rDatabases;
 
         IteratorState                                         m_eState;
