@@ -66,10 +66,10 @@ void AccessibleObject::SetWindow (
     UpdateStateSet();
 }
 
-void AccessibleObject::SetAccessibleParent (
-    const Reference<XAccessible>& rxAccessibleParent)
+void AccessibleObject::SetAccessibleParent(
+    const rtl::Reference<comphelper::OAccessible>& rpAccessibleParent)
 {
-    mxParentAccessible = rxAccessibleParent;
+    mxParentAccessible = rpAccessibleParent;
 }
 
 void SAL_CALL AccessibleObject::disposing()
@@ -331,7 +331,7 @@ void AccessibleObject::AddChild (
 void AccessibleObject::RemoveChild (
     const ::rtl::Reference<AccessibleObject>& rpChild)
 {
-    rpChild->SetAccessibleParent(Reference<XAccessible>());
+    rpChild->SetAccessibleParent({});
     maChildren.erase(::std::find(maChildren.begin(), maChildren.end(), rpChild));
     FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
 }
