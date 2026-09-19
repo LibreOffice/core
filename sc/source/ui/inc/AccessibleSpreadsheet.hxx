@@ -83,6 +83,77 @@ public:
     static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,std::vector<ScMyAddress> &vecRet,int &nSize);
     static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,std::vector<ScMyAddress> &vecRet);
 
+    ///=====  XAccessibleTable  ================================================
+
+    /// Returns the row headers as an AccessibleTable.
+    virtual css::uno::Reference<css::accessibility::XAccessibleTable>
+        SAL_CALL getAccessibleRowHeaders() override;
+
+    /// Returns the column headers as an AccessibleTable.
+    virtual css::uno::Reference<css::accessibility::XAccessibleTable>
+        SAL_CALL getAccessibleColumnHeaders() override;
+
+    /// Returns the selected rows in a table.
+    virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedAccessibleRows() override;
+
+    /// Returns the selected columns in a table.
+    virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedAccessibleColumns() override;
+
+    /// Returns a boolean value indicating whether the specified row is selected.
+    virtual sal_Bool SAL_CALL isAccessibleRowSelected(sal_Int32 nRow) override;
+
+    /// Returns a boolean value indicating whether the specified column is selected.
+    virtual sal_Bool SAL_CALL isAccessibleColumnSelected(sal_Int32 nColumn) override;
+
+    /// Returns the Accessible at a specified row and column in the table.
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn) override;
+
+    /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
+    virtual sal_Bool SAL_CALL isAccessibleSelected(sal_Int32 nRow, sal_Int32 nColumn) override;
+
+    ///=====  XAccessibleComponent  ============================================
+
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleAtPoint(const css::awt::Point& rPoint) override;
+
+    virtual void SAL_CALL grabFocus(  ) override;
+
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+
+    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+
+    ///=====  XAccessibleContext  ==============================================
+
+    /// Return NULL to indicate that an empty relation set.
+    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
+        SAL_CALL getAccessibleRelationSet() override;
+
+    /// Return the set of current states.
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+
+    ///=====  XAccessibleSelection  ===========================================
+
+    virtual void SAL_CALL selectAccessibleChild(sal_Int64 nChildIndex) override;
+
+    virtual void SAL_CALL clearAccessibleSelection() override;
+
+    virtual void SAL_CALL selectAllAccessibleChildren() override;
+
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount() override;
+
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex) override;
+
+    virtual void SAL_CALL deselectAccessibleChild(sal_Int64 nChildIndex) override;
+
+    //=====  XAccessibleTableSelection  ============================================
+
+    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
+    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override;
+    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
+    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
+
 private:
     ScAccessibleSpreadsheet(
         ScAccessibleSpreadsheet& rParent,
@@ -101,90 +172,7 @@ private:
     ///=====  SfxListener  =====================================================
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    ///=====  XAccessibleTable  ================================================
-
-    /// Returns the row headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
-                getAccessibleRowHeaders(  ) override;
-
-    /// Returns the column headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
-                getAccessibleColumnHeaders(  ) override;
-
-    /// Returns the selected rows in a table.
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
-                getSelectedAccessibleRows(  ) override;
-
-    /// Returns the selected columns in a table.
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
-                getSelectedAccessibleColumns(  ) override;
-
-    /// Returns a boolean value indicating whether the specified row is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleRowSelected( sal_Int32 nRow ) override;
-
-    /// Returns a boolean value indicating whether the specified column is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleColumnSelected( sal_Int32 nColumn ) override;
-
-    /// Returns the Accessible at a specified row and column in the table.
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-                getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
-
     rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
-
-    /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
-
-    ///=====  XAccessibleComponent  ============================================
-
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
-        const css::awt::Point& rPoint ) override;
-
-    virtual void SAL_CALL grabFocus(  ) override;
-
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-    ///=====  XAccessibleContext  ==============================================
-
-    /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet() override;
-
-    /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL
-        getAccessibleStateSet() override;
-
-    ///=====  XAccessibleSelection  ===========================================
-
-    virtual void SAL_CALL
-        selectAccessibleChild( sal_Int64 nChildIndex ) override;
-
-    virtual void SAL_CALL
-        clearAccessibleSelection(  ) override;
-
-    virtual void SAL_CALL
-        selectAllAccessibleChildren(  ) override;
-
-    virtual sal_Int64 SAL_CALL
-        getSelectedAccessibleChildCount(  ) override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL
-        getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    virtual void SAL_CALL
-        deselectAccessibleChild( sal_Int64 nChildIndex ) override;
-
-    //=====  XAccessibleTableSelection  ============================================
-
-    virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column ) override;
-    virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
-    virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
     /// Return the object's current bounding box relative to the desktop.
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
