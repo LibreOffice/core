@@ -142,6 +142,15 @@ endif
 
 if HAVE_LO_PATH
 
+SLOWEST_FIRST_LIST=$(srcdir)/slowest-first.txt
+
+# One suite's entries from slowest-first.txt, in file order.
+slowest_in_suite=$(shell sed -n 's/^$(1)  *\([^ ]*\).*/\1/p' $(SLOWEST_FIRST_LIST))
+
+# make -j starts prerequisites in the order written, so the listed ones go first.
+order_slowest_first=$(foreach spec,$(call slowest_in_suite,$(1)),$(filter $(spec),$(2))) \
+	$(filter-out $(call slowest_in_suite,$(1)),$(2))
+
 MOBILE_TEST_FILES=$(subst $(MOBILE_TEST_FOLDER)/,,$(wildcard $(MOBILE_TEST_FOLDER)/*_spec.js) $(wildcard $(MOBILE_TEST_FOLDER)/*/*_spec.js))
 
 LIGHTHOUSE_TEST_FILES=$(subst $(LIGHTHOUSE_TEST_FOLDER)/,,$(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*_spec.js) $(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*/*_spec.js))
@@ -155,13 +164,13 @@ MULTIUSER_TEST_FILES=$(subst $(MULTIUSER_TEST_FOLDER)/,,$(wildcard $(MULTIUSER_T
 REDLINE_TEST_FILES=$(subst $(REDLINE_TEST_FOLDER)/,,$(wildcard $(REDLINE_TEST_FOLDER)/*_spec.js) $(wildcard $(REDLINE_TEST_FOLDER)/*/*_spec.js))
 
 MOBILE_TEST_FILES_DONE= \
-	$(foreach test_file,$(MOBILE_TEST_FILES),$(MOBILE_TRACK_FOLDER)/$(test_file).done)
+	$(foreach test_file,$(call order_slowest_first,mobile,$(MOBILE_TEST_FILES)),$(MOBILE_TRACK_FOLDER)/$(test_file).done)
 
 DESKTOP_TEST_FILES_DONE= \
-	$(foreach test_file,$(DESKTOP_TEST_FILES),$(DESKTOP_TRACK_FOLDER)/$(test_file).done)
+	$(foreach test_file,$(call order_slowest_first,desktop,$(DESKTOP_TEST_FILES)),$(DESKTOP_TRACK_FOLDER)/$(test_file).done)
 
 LIGHTHOUSE_TEST_FILES_DONE= \
-	$(foreach test_file,$(LIGHTHOUSE_TEST_FILES),$(LIGHTHOUSE_TRACK_FOLDER)/$(test_file).done)
+	$(foreach test_file,$(call order_slowest_first,lighthouse,$(LIGHTHOUSE_TEST_FILES)),$(LIGHTHOUSE_TRACK_FOLDER)/$(test_file).done)
 
 IDLE_TEST_FILES_DONE= \
 	$(foreach test_file,$(IDLE_TEST_FILES),$(IDLE_TRACK_FOLDER)/$(test_file).done)
@@ -170,7 +179,7 @@ MULTIUSER_TESTS_DONE= \
 	$(MULTIUSER_TRACK_FOLDER)/multiuser_tests.done
 
 MULTIUSER_TEST_FILES_DONE= \
-	$(foreach test_file,$(MULTIUSER_TEST_FILES),$(MULTIUSER_TRACK_FOLDER)/$(test_file).done)
+	$(foreach test_file,$(call order_slowest_first,multi-user,$(MULTIUSER_TEST_FILES)),$(MULTIUSER_TRACK_FOLDER)/$(test_file).done)
 
 check-local: do-check
 	$(if $(wildcard $(ERROR_LOG)),$(error CypressError: some tests failed!))

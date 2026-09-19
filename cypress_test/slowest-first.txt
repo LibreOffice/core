@@ -1,0 +1,41 @@
+# Cypress specs over a minute, longest first.
+# Seconds from build 16322 of gerrit_cypress_main with jenkins
+# archive of cypress_test/workdir/spec-timings.txt.
+desktop      writer1/annotation_spec.js                         595
+multi-user   writer/annotation_spec.js                          228
+desktop      writer4/track_changes_spec.js                      174
+desktop      writer1/editable_area_spec.js                      147
+desktop      writer1/chart_datatable_spec.js                    143
+desktop      impress/slide_sections_spec.js                     133
+mobile       writer/annotation_spec.js                          130
+desktop      writer4/top_toolbar_spec.js                        120
+desktop      writer3/spinfield_spec.js                          119
+desktop      writer2/notebookbar_spec.js                        112
+desktop      writer4/stylebar_spec.js                           110
+mobile       writer/table_properties_spec.js                    109
+multi-user   writer/copy_paste_cross_session_spec.js            99
+desktop      impress/annotation_spec.js                         97
+mobile       writer/apply_font_spec.js                          94
+desktop      writer3/sidebar_spec.js                            91
+multi-user   impress/annotation_spec.js                         90
+desktop      calc1/annotation_spec.js                           86
+mobile       writer/insert_object_spec.js                       84
+desktop      writer2/form_field_spec.js                         83
+desktop      writer1/copy_paste_spec.js                         81
+desktop      calc4/top_toolbar_spec.js                          78
+desktop      writer2/navigator_spec.js                          74
+desktop      calc1/cell_cursor_spec.js                          72
+desktop      writer1/compare_changes_spec.js                    70
+desktop      writer2/focus_spec.js                              68
+mobile       impress/apply_paragraph_props_text_spec.js         67
+desktop      writer1/aichat_sidebar_spec.js                     65
+desktop      calc1/autofilter_spec.js                           65
+desktop      writer3/scrolling_spec.js                          64
+desktop      writer2/jsdialog_widgets_spec.js                   64
+mobile       writer/shape_properties_spec.js                    62
+mobile       writer/focus_spec.js                               62
+desktop      writer4/table_operation_spec.js                    62
+desktop      calc1/clipboard_spec.js                            61
+multi-user   writer/cursor_spec.js                              60
+desktop      impress/undo_redo_spec.js                          60
+desktop      impress/table_operation_spec.js                    60
