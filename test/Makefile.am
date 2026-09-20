@@ -161,6 +161,7 @@ kit_sources = \
 	../kit/TestStubs.cpp
 
 wsd_sources = \
+	../common/AIHttpTransport.cpp \
 	../common/Crypto.cpp \
 	../wsd/Admin.cpp \
 	../wsd/AdminModel.cpp \

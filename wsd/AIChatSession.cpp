@@ -762,24 +762,26 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     const std::string model = _session.getAIProviderModel();
     std::string baseUrl = _session.getAIProviderURL();
 
-#if !MOBILEAPP
     // The desktop apps have no server-wide admin switch; AI is configured per-user
     // through the Options dialog, so this gate only applies to the WSD server.
-    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
+    if (!Util::isMobileApp())
     {
-        sendChatError("aiDisabled", "AI features are disabled by the administrator",
-                      req.requestId);
-        return true;
-    }
+        if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
+        {
+            sendChatError("aiDisabled", "AI features are disabled by the administrator",
+                          req.requestId);
+            return true;
+        }
 
-    // AI is refused for an anonymous user (for example a public share-link
-    // visitor), so a server-wide provider is not spent on them.
-    if (_session.isAnonymousUser())
-    {
-        sendChatError("aiNotAvailableForGuests", "AI is not available for guests", req.requestId);
-        return true;
+        // AI is refused for an anonymous user (for example a public share-link
+        // visitor), so a server-wide provider is not spent on them.
+        if (_session.isAnonymousUser())
+        {
+            sendChatError("aiNotAvailableForGuests", "AI is not available for guests",
+                          req.requestId);
+            return true;
+        }
     }
-#endif
 
     if (_session.isDisableAISettings())
     {
@@ -1032,7 +1034,6 @@ void AIChatSession::applyDesignToToolLoop(const DesignInfo& design)
         design.artDirection.empty() ? NEUTRAL_ART_DIRECTION : design.artDirection;
 }
 
-#if MOBILEAPP
 void AIChatSession::postViaTransport(
     const std::shared_ptr<DocumentBroker>& docBroker, const std::string& url,
     const std::string& authHeader, std::string body,
@@ -1065,7 +1066,6 @@ void AIChatSession::postViaTransport(
         });
     });
 }
-#endif
 
 namespace
 {
@@ -1091,21 +1091,25 @@ void AIChatSession::callLLMAPI()
         return;
 
 #if !MOBILEAPP
-    const std::string host = AIUtil::hostOfBaseUrl(_toolLoop->requestUrl);
-
-    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
-    // always allowed; any other host goes through the net.lok_allow allowlist.
-    if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
-        HostUtil::isForbiddenKitHost(host))
+    // The desktop apps post through their own HTTP client, which has no allowlist.
+    if (!Util::isMobileApp())
     {
-        LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
-                << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
-        sendChatError("hostNotAllowed",
-                      "Host \"" + host +
-                          "\" is not in the allowed host list, contact your administrator",
-                      _toolLoop->requestId, host);
-        _toolLoop.reset();
-        return;
+        const std::string host = AIUtil::hostOfBaseUrl(_toolLoop->requestUrl);
+
+        // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
+        // always allowed; any other host goes through the net.lok_allow allowlist.
+        if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
+            HostUtil::isForbiddenKitHost(host))
+        {
+            LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
+                    << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
+            sendChatError("hostNotAllowed",
+                          "Host \"" + host +
+                              "\" is not in the allowed host list, contact your administrator",
+                          _toolLoop->requestId, host);
+            _toolLoop.reset();
+            return;
+        }
     }
 #endif
 
@@ -1200,11 +1204,15 @@ void AIChatSession::postChatCompletion(
 
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
 
-#if MOBILEAPP
-    postViaTransport(docBroker, _toolLoop->requestUrl, authHeader, std::move(payloadStr),
-                     [onResponse](int statusCode, std::string body)
-                     { onResponse(statusCode, body, std::string()); });
-#else
+    if (Util::isMobileApp())
+    {
+        postViaTransport(docBroker, _toolLoop->requestUrl, authHeader, std::move(payloadStr),
+                         [onResponse](int statusCode, std::string body)
+                         { onResponse(statusCode, body, std::string()); });
+        return;
+    }
+
+#if !MOBILEAPP
     std::shared_ptr<http::Session> httpSession =
         http::Session::create(_toolLoop->requestUrl);
     if (!httpSession)
@@ -2860,18 +2868,22 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     req.requestUrl = endpointUri.toString();
 
 #if !MOBILEAPP
-    const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
-
-    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
-    // always allowed; any other host goes through the net.lok_allow allowlist.
-    if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
-        HostUtil::isForbiddenKitHost(host))
+    // The desktop apps post through their own HTTP client, which has no allowlist.
+    if (!Util::isMobileApp())
     {
-        req.error =
-            "Host \"" + host + "\" is not in the allowed host list, contact your administrator";
-        req.errorCode = "hostNotAllowed";
-        req.errorArg = host;
-        return req;
+        const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
+
+        // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
+        // always allowed; any other host goes through the net.lok_allow allowlist.
+        if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
+            HostUtil::isForbiddenKitHost(host))
+        {
+            req.error =
+                "Host \"" + host + "\" is not in the allowed host list, contact your administrator";
+            req.errorCode = "hostNotAllowed";
+            req.errorArg = host;
+            return req;
+        }
     }
 #endif
 
@@ -2899,15 +2911,18 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     req.payloadStr = payloadStream.str();
 
 #if !MOBILEAPP
-    req.httpSession = http::Session::create(req.requestUrl);
-    if (!req.httpSession)
+    if (!Util::isMobileApp())
     {
-        req.error = "Failed to create HTTP session";
-        req.errorCode = "connectionFailed";
-        return req;
-    }
+        req.httpSession = http::Session::create(req.requestUrl);
+        if (!req.httpSession)
+        {
+            req.error = "Failed to create HTTP session";
+            req.errorCode = "connectionFailed";
+            return req;
+        }
 
-    req.httpSession->setTimeout(std::chrono::seconds(_session.getAIRequestTimeoutSeconds()));
+        req.httpSession->setTimeout(std::chrono::seconds(_session.getAIRequestTimeoutSeconds()));
+    }
 #endif
     return req;
 }
@@ -3054,10 +3069,14 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
 
-#if MOBILEAPP
-    postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
-                     req.payloadStr, onResponse);
-#else
+    if (Util::isMobileApp())
+    {
+        postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+                         req.payloadStr, onResponse);
+        return true;
+    }
+
+#if !MOBILEAPP
     req.httpSession->setFinishedHandler(
         [onResponse](const std::shared_ptr<http::Session>& session)
     {
@@ -3313,10 +3332,14 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
                                                        << ", prompt: " << gen.prompt);
 
-#if MOBILEAPP
-        postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
-                         req.payloadStr, onResponse);
-#else
+        if (Util::isMobileApp())
+        {
+            postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+                             req.payloadStr, onResponse);
+            return; // async request launched, callbacks will call back into this function
+        }
+
+#if !MOBILEAPP
         req.httpSession->setFinishedHandler(
             [onResponse](const std::shared_ptr<http::Session>& session)
         {

@@ -279,7 +279,6 @@ private:
                                           const std::string& reasonPhrase,
                                           const std::string& body = "");
     Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
-#if MOBILEAPP
     /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
     /// result to \p onResponse on \p docBroker's polling thread (statusCode is an
     /// HTTP code or an ai::Http* sentinel).
@@ -287,7 +286,6 @@ private:
                           const std::string& url, const std::string& authHeader,
                           std::string body,
                           std::function<void(int statusCode, std::string body)> onResponse);
-#endif
     /// Builds the full system prompt and the message list, initialises the
     /// tool loop, and makes the first LLM call. The design carries the picked
     /// template's parts, layouts, art direction, and any tightened budgets;
