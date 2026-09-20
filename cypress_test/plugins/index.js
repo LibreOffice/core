@@ -1,6 +1,7 @@
 /* -*- js-indent-level: 8 -*- */
 /* global require __dirname */
 var process = require('process');
+var fs = require('fs');
 var tasks = require('./tasks');
 var tagify = require('cypress-tags');
 var path = require('path');
@@ -25,6 +26,11 @@ function plugin(on, config) {
 		config.video = true;
 	}
 
+	// Where COOL_SPEC_RESULTS_FILE names a file, append a line per spec:
+	// start and end in seconds since the epoch, the outcome, and the spec
+	// path. A spec with no line did not run, since the abort below can end
+	// a run before its later specs.
+	//
 	// Abort the run after the first spec failure so CI does not waste
 	// time running remaining specs when the build is already doomed.
 	// process.exit(1) is not sufficient: Cypress runs plugins in
@@ -34,6 +40,14 @@ function plugin(on, config) {
 	// group to take down Cypress and the browser it spawned without
 	// affecting the parent shell.
 	on('after:spec', (spec, results) => {
+		if (results && process.env.COOL_SPEC_RESULTS_FILE) {
+			const seconds = (stamp) => Math.round(new Date(stamp).getTime() / 1000);
+			const state = (results.error || results.stats.failures > 0) ? 'failed' : 'passed';
+			fs.appendFileSync(process.env.COOL_SPEC_RESULTS_FILE,
+					  [seconds(results.stats.startedAt),
+					   seconds(results.stats.endedAt),
+					   state, spec.relative].join(' ') + '\n');
+		}
 		if (results && results.stats.failures > 0) {
 			process.kill(0, 'SIGTERM');
 		}

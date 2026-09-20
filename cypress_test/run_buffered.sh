@@ -19,10 +19,11 @@ SPEC_TIMINGS="${BUILDDIR}/workdir/spec-timings.txt"
 
 print_help ()
 {
-    echo "Usage: run_buffered.sh --spec <name_spec.js> OPTIONS"
-    echo "Runs a specified cypress test with output buffered to a log file"
+    echo "Usage: run_buffered.sh --spec <name_spec.js>[,<name_spec.js>...] OPTIONS"
+    echo "Runs the specified cypress tests in one cypress process, with the"
+    echo "output buffered to a log file"
     echo ""
-    echo "   --spec <file>              The test file we need to run"
+    echo "   --spec <files>             The test files to run, separated by commas"
     echo "   --log-file <file>          Log output to this test"
     echo "   --config <string>          Configure options passed to cypress"
     echo "   --env <string>             Cypress own environment variables"
@@ -57,36 +58,71 @@ while test $# -gt 0; do
 done
 TEST_ERROR="${TEST_LOG}.error"
 
-TEST_FILE_PATH=
+# Cypress appends a line here for each spec it finishes.
+SPEC_RESULTS="${TEST_LOG}.results"
+
+TEST_FOLDER=
 if [ "${TEST_TYPE}" = "desktop" -o "${TEST_TYPE}" = "interfer-desktop" ]; then
-    TEST_FILE_PATH=${DESKTOP_TEST_FOLDER}${TEST_FILE};
+    TEST_FOLDER=${DESKTOP_TEST_FOLDER};
 elif [ "${TEST_TYPE}" = "mobile" -o "${TEST_TYPE}" = "interfer-mobile" ]; then
-    TEST_FILE_PATH=${MOBILE_TEST_FOLDER}${TEST_FILE};
+    TEST_FOLDER=${MOBILE_TEST_FOLDER};
 elif [ "${TEST_TYPE}" = "idle" ]; then
-    TEST_FILE_PATH=${IDLE_TEST_FOLDER}${TEST_FILE};
+    TEST_FOLDER=${IDLE_TEST_FOLDER};
 elif [ "${TEST_TYPE}" = "multi-user" ]; then
-    TEST_FILE_PATH=${MULTIUSER_TEST_FOLDER}${TEST_FILE};
+    TEST_FOLDER=${MULTIUSER_TEST_FOLDER};
 elif [ "${TEST_TYPE}" = "lighthouse" ]; then
-    TEST_FILE_PATH=${LIGHTHOUSE_TEST_FOLDER}${TEST_FILE};
+    TEST_FOLDER=${LIGHTHOUSE_TEST_FOLDER};
 elif [ "${TEST_TYPE}" = "interfer" ]; then
-    TEST_FILE_PATH="${DIR}/integration_tests/common/"${TEST_FILE};
+    TEST_FOLDER="${DIR}/integration_tests/common/";
 fi
+
+IFS=',' read -r -a SPECS <<< "${TEST_FILE}"
 
 SETSID_WAIT=
 if setsid --wait true 2>/dev/null; then
     SETSID_WAIT="--wait"
 fi
 
-RUN_COMMAND="setsid ${SETSID_WAIT} ${CYPRESS_BINARY} run \
+run_command ()
+{
+    local paths=
+    local spec=
+    for spec in "$@"; do
+        paths="${paths}${paths:+,}${TEST_FOLDER}${spec}"
+    done
+    echo "setsid ${SETSID_WAIT} ${CYPRESS_BINARY} run \
     --browser ${BROWSER} \
     --headless \
     --config-file ${TEST_CONFIG_FILE}\
     --config ${TEST_CONFIG}\
     --env ${TEST_ENV}\
-    --spec=${TEST_FILE_PATH}"
+    --spec=${paths}"
+}
+
+# Run the specs in one cypress process, appending the output to the log and
+# leaving ${TEST_ERROR} behind when the process failed.
+run_specs ()
+{
+    local command=
+    command=$(run_command "$@")
+    rm -rf ${TEST_ERROR}
+    echo "`echo ${command} && ${command} || touch ${TEST_ERROR}`" >> ${TEST_LOG} 2>&1
+}
+
+# The start, end and outcome cypress recorded for one spec, if it ran. The
+# recorded path is relative to the cypress project, so match it on the
+# suite folder and spec.
+spec_result ()
+{
+    test -f ${SPEC_RESULTS} || return
+    awk -v spec="${TEST_FOLDER#${DIR}/}$1" '
+        { tail = substr($4, length($4) - length(spec))
+          if ($4 == spec || tail == "/" spec) { start = $1; end = $2; state = $3 } }
+        END { if (state != "") print start, end, state }' ${SPEC_RESULTS}
+}
 
 print_error() {
-    SPEC=${TEST_FILE}
+    SPEC=$1
     COMMAND=${TEST_TYPE}
     if [ "${TEST_TYPE}" = "interfer" ]; then
         echo -e "\n\
@@ -135,7 +171,7 @@ print_error() {
         Open the failing test in the interactive test runner:\n\
         \tmake -C cypress_test run-${COMMAND} spec=${SPEC}\n" >> ${ERROR_LOG}
     fi
-    elif [[ ${TEST_FILE} == *"user1"* ]]; then
+    elif [[ $1 == *"user1"* ]]; then
     echo -e "\
     Open the failing test in the interactive test runner:\n\
     \tmake -C cypress_test run-${COMMAND} spec=${SPEC} user=1\n" >> ${ERROR_LOG}
@@ -147,34 +183,89 @@ print_error() {
 }
 
 mkdir -p `dirname ${TEST_LOG}`
-touch ${TEST_LOG}
-rm -rf ${TEST_ERROR}
-START_TIME=`date +%s`
-SECOND_CHANCE_RAN=no
-echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" > ${TEST_LOG} 2>&1
+rm -rf ${TEST_ERROR} ${SPEC_RESULTS}
+: > ${TEST_LOG}
+export COOL_SPEC_RESULTS_FILE=${SPEC_RESULTS}
 
-# Cypress's own retries only re-run failed test bodies, not whole-spec
-# failures like a hook error or a process that dies at launch. Re-run the
-# spec process once before recording it as failed.
-if [ -f ${TEST_ERROR} ] && [ ${SECOND_CHANCE} = true ]; then
-    echo "Second chance!" > ${TEST_LOG}
-    rm -rf ${TEST_ERROR}
-    SECOND_CHANCE_RAN=yes
-    echo "`echo ${RUN_COMMAND} && ${RUN_COMMAND} || touch ${TEST_ERROR}`" >> ${TEST_LOG} 2>&1
+declare -A SPEC_START
+declare -A SPEC_END
+declare -A SPEC_RETRIED
+
+RUN_START=`date +%s`
+run_specs "${SPECS[@]}"
+RUN_END=`date +%s`
+
+# Collect the specs to run again: the ones that failed, and the ones that
+# never started, since a failure takes the whole process down with it.
+RETRY_SPECS=()
+FAILED_IN_RUN=()
+for spec in "${SPECS[@]}"; do
+    read -r start end state <<< "$(spec_result ${spec})"
+    if [ -n "${state}" ]; then
+        SPEC_START[${spec}]=${start}
+        SPEC_END[${spec}]=${end}
+    fi
+    if [ "${state}" = "failed" ]; then
+        FAILED_IN_RUN+=("${spec}")
+    fi
+    if [ -f ${TEST_ERROR} ] && [ "${state}" != "passed" ]; then
+        RETRY_SPECS+=("${spec}")
+    fi
+done
+
+# A process that failed blaming no spec leaves all its specs to run again.
+if [ -f ${TEST_ERROR} ] && [ ${#RETRY_SPECS[@]} -eq 0 ]; then
+    RETRY_SPECS=("${SPECS[@]}")
 fi
 
-# A spec's console output is flushed in one block when it finishes, so these
-# are the only real per-spec times.
-END_TIME=`date +%s`
-printf '%s %s %s %s %s %s\n' "${START_TIME}" "${END_TIME}" \
-    "$((END_TIME - START_TIME))" "${SECOND_CHANCE_RAN}" "${TEST_TYPE}" \
-    "${TEST_FILE}" >> ${SPEC_TIMINGS}
+# Cypress's own retries only re-run failed test bodies, not whole-spec
+# failures like a hook error or a process that dies at launch. Run each spec
+# that has not passed once more, on its own.
+FAILED_SPECS=()
+if [ ${#RETRY_SPECS[@]} -gt 0 ] && [ ${SECOND_CHANCE} = true ]; then
+    for spec in "${RETRY_SPECS[@]}"; do
+        echo "Second chance: ${spec}" >> ${TEST_LOG}
+        retry_start=`date +%s`
+        run_specs "${spec}"
+        retry_end=`date +%s`
+        if [ -n "${SPEC_START[${spec}]:-}" ]; then
+            SPEC_RETRIED[${spec}]=yes
+        else
+            SPEC_START[${spec}]=${retry_start}
+        fi
+        SPEC_END[${spec}]=${retry_end}
+        if [ -f ${TEST_ERROR} ]; then
+            FAILED_SPECS+=("${spec}")
+        fi
+    done
+elif [ ${#RETRY_SPECS[@]} -gt 0 ]; then
+    # Without a second chance the specs that never started are left unrun,
+    # so name the ones that failed, or all of them where none was blamed.
+    FAILED_SPECS=("${FAILED_IN_RUN[@]}")
+    if [ ${#FAILED_SPECS[@]} -eq 0 ]; then
+        FAILED_SPECS=("${SPECS[@]}")
+    fi
+fi
 
-if [ ! -f ${TEST_ERROR} ];
+# A spec's console output is flushed in one block when it finishes, so the
+# times from the plugin are the only per-spec ones. A spec that never ran
+# takes the whole run's times.
+for spec in "${SPECS[@]}"; do
+    start=${SPEC_START[${spec}]:-${RUN_START}}
+    end=${SPEC_END[${spec}]:-${RUN_END}}
+    printf '%s %s %s %s %s %s\n' "${start}" "${end}" "$((end - start))" \
+        "${SPEC_RETRIED[${spec}]:-no}" "${TEST_TYPE}" "${spec}" >> ${SPEC_TIMINGS}
+done
+
+if [ ${#FAILED_SPECS[@]} -eq 0 ];
     then cat ${TEST_LOG};
-    else echo -e "Cypress test failed: ${TEST_FILE}\n" && \
-        cat ${TEST_LOG} >> ${ERROR_LOG} && \
-        print_error;
+    else for spec in "${FAILED_SPECS[@]}"; do
+             echo -e "Cypress test failed: ${spec}\n"
+         done && \
+         cat ${TEST_LOG} >> ${ERROR_LOG} && \
+         for spec in "${FAILED_SPECS[@]}"; do
+             print_error "${spec}"
+         done;
 fi;
 
 # vim:set shiftwidth=4 expandtab:

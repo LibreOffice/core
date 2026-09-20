@@ -113,6 +113,11 @@ REDLINE_DATA_WORKDIR = $(if $(coolwsd),$(REDLINE_DATA_FOLDER),$(abs_builddir)/wo
 USER_INTERFACE = classic
 UPDATE_SCREENSHOT = false
 
+# How many specs one cypress process runs. Starting it costs about four
+# seconds and each spec about two more, so only the start-up is saved, and a
+# bigger group wins little while packing worse into the parallel jobs.
+CYPRESS_GROUP_SIZE = 4
+
 PHP_PROXY_PORT = 9983
 NEXTCLOUD_PORT = 9980
 ALLOWED_PORTS = $(if $(findstring php-proxy, $(CYPRESS_INTEGRATION)),$(PHP_PROXY_PORT),\
@@ -151,6 +156,27 @@ slowest_in_suite=$(shell sed -n 's/^$(1)  *\([^ ]*\).*/\1/p' $(SLOWEST_FIRST_LIS
 order_slowest_first=$(foreach spec,$(call slowest_in_suite,$(1)),$(filter $(spec),$(2))) \
 	$(filter-out $(call slowest_in_suite,$(1)),$(2))
 
+# The spec list $(1), longest first, dealt into groups of CYPRESS_GROUP_SIZE,
+# each one comma-separated word. Group N opens with the Nth longest spec and
+# fills from further down, so the groups start in order and are about equally
+# long.
+group_specs = $(shell echo $(1) | awk -v size=$(CYPRESS_GROUP_SIZE) '{ \
+		groups = int((NF + size - 1) / size); \
+		for (g = 1; g <= groups; g++) { \
+			line = ""; \
+			for (r = 1; r <= size; r++) { \
+				i = (r % 2) ? (r - 1) * groups + g : r * groups + 1 - g; \
+				if (i <= NF) line = line (line ? "," : "") $$i; \
+			} \
+			print line; \
+		} }')
+
+# The spec a group is named after, which is the first one it runs.
+first_spec = $(firstword $(subst $(COMMA),$(SPACE),$(1)))
+
+# The group out of $(2) that is named after the spec $(1).
+group_from = $(filter $(1) $(1)$(COMMA)%,$(2))
+
 MOBILE_TEST_FILES=$(subst $(MOBILE_TEST_FOLDER)/,,$(wildcard $(MOBILE_TEST_FOLDER)/*_spec.js) $(wildcard $(MOBILE_TEST_FOLDER)/*/*_spec.js))
 
 LIGHTHOUSE_TEST_FILES=$(subst $(LIGHTHOUSE_TEST_FOLDER)/,,$(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*_spec.js) $(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*/*_spec.js))
@@ -163,23 +189,33 @@ MULTIUSER_TEST_FILES=$(subst $(MULTIUSER_TEST_FOLDER)/,,$(wildcard $(MULTIUSER_T
 
 REDLINE_TEST_FILES=$(subst $(REDLINE_TEST_FOLDER)/,,$(wildcard $(REDLINE_TEST_FOLDER)/*_spec.js) $(wildcard $(REDLINE_TEST_FOLDER)/*/*_spec.js))
 
+MOBILE_SPEC_GROUPS := $(call group_specs,$(call order_slowest_first,mobile,$(MOBILE_TEST_FILES)))
+
+DESKTOP_SPEC_GROUPS := $(call group_specs,$(call order_slowest_first,desktop,$(DESKTOP_TEST_FILES)))
+
+LIGHTHOUSE_SPEC_GROUPS := $(call group_specs,$(call order_slowest_first,lighthouse,$(LIGHTHOUSE_TEST_FILES)))
+
+IDLE_SPEC_GROUPS := $(call group_specs,$(IDLE_TEST_FILES))
+
+MULTIUSER_SPEC_GROUPS := $(call group_specs,$(call order_slowest_first,multi-user,$(MULTIUSER_TEST_FILES)))
+
 MOBILE_TEST_FILES_DONE= \
-	$(foreach test_file,$(call order_slowest_first,mobile,$(MOBILE_TEST_FILES)),$(MOBILE_TRACK_FOLDER)/$(test_file).done)
+	$(foreach group,$(MOBILE_SPEC_GROUPS),$(MOBILE_TRACK_FOLDER)/$(call first_spec,$(group)).done)
 
 DESKTOP_TEST_FILES_DONE= \
-	$(foreach test_file,$(call order_slowest_first,desktop,$(DESKTOP_TEST_FILES)),$(DESKTOP_TRACK_FOLDER)/$(test_file).done)
+	$(foreach group,$(DESKTOP_SPEC_GROUPS),$(DESKTOP_TRACK_FOLDER)/$(call first_spec,$(group)).done)
 
 LIGHTHOUSE_TEST_FILES_DONE= \
-	$(foreach test_file,$(call order_slowest_first,lighthouse,$(LIGHTHOUSE_TEST_FILES)),$(LIGHTHOUSE_TRACK_FOLDER)/$(test_file).done)
+	$(foreach group,$(LIGHTHOUSE_SPEC_GROUPS),$(LIGHTHOUSE_TRACK_FOLDER)/$(call first_spec,$(group)).done)
 
 IDLE_TEST_FILES_DONE= \
-	$(foreach test_file,$(IDLE_TEST_FILES),$(IDLE_TRACK_FOLDER)/$(test_file).done)
+	$(foreach group,$(IDLE_SPEC_GROUPS),$(IDLE_TRACK_FOLDER)/$(call first_spec,$(group)).done)
 
 MULTIUSER_TESTS_DONE= \
 	$(MULTIUSER_TRACK_FOLDER)/multiuser_tests.done
 
 MULTIUSER_TEST_FILES_DONE= \
-	$(foreach test_file,$(call order_slowest_first,multi-user,$(MULTIUSER_TEST_FILES)),$(MULTIUSER_TRACK_FOLDER)/$(test_file).done)
+	$(foreach group,$(MULTIUSER_SPEC_GROUPS),$(MULTIUSER_TRACK_FOLDER)/$(call first_spec,$(group)).done)
 
 check-local: do-check
 	$(if $(wildcard $(ERROR_LOG)),$(error CypressError: some tests failed!))
@@ -217,7 +253,7 @@ start_short_idle_coolwsd: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS) setup_short_idl
 # SUITE_ONLY drops the desktop ordering dep so check-mobile can run independently
 $(MOBILE_TEST_FILES_DONE): $(PID_FILE) $(if $(SUITE_ONLY),,$(DESKTOP_TEST_FILES_DONE))
 	$(if $(PARALLEL_BUILD),\
-		$(call run_mobile_tests,$(subst $(MOBILE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_mobile_tests,$(call group_from,$(subst $(MOBILE_TRACK_FOLDER)/,,$(basename $@)),$(MOBILE_SPEC_GROUPS)),$(basename $@).log),\
 		$(call run_mobile_tests))
 	$(if $(PARALLEL_BUILD),\
 		$(V)mkdir -p $(dir $@) && touch $@\
@@ -227,7 +263,7 @@ $(MOBILE_TEST_FILES_DONE): $(PID_FILE) $(if $(SUITE_ONLY),,$(DESKTOP_TEST_FILES_
 
 $(DESKTOP_TEST_FILES_DONE): $(PID_FILE)
 	$(if $(PARALLEL_BUILD),\
-		$(call run_desktop_tests,$(subst $(DESKTOP_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_desktop_tests,$(call group_from,$(subst $(DESKTOP_TRACK_FOLDER)/,,$(basename $@)),$(DESKTOP_SPEC_GROUPS)),$(basename $@).log),\
 		$(call run_desktop_tests))
 	$(if $(PARALLEL_BUILD),\
 		$(V)mkdir -p $(dir $@) && touch $@\
@@ -237,7 +273,7 @@ $(DESKTOP_TEST_FILES_DONE): $(PID_FILE)
 
 $(LIGHTHOUSE_TEST_FILES_DONE): $(PID_FILE)
 	$(if $(PARALLEL_BUILD),\
-		$(call run_lighthouse_tests,$(subst $(LIGHTHOUSE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_lighthouse_tests,$(call group_from,$(subst $(LIGHTHOUSE_TRACK_FOLDER)/,,$(basename $@)),$(LIGHTHOUSE_SPEC_GROUPS)),$(basename $@).log),\
 		$(call run_lighthouse_tests))
 	$(if $(PARALLEL_BUILD),\
 		$(V)mkdir -p $(dir $@) && touch $@\
@@ -251,7 +287,7 @@ $(MULTIUSER_TESTS_DONE): $(PID_FILE) $(MOBILE_TEST_FILES_DONE) $(IDLE_TEST_FILES
 
 $(MULTIUSER_TEST_FILES_DONE): $(PID_FILE)
 	$(if $(PARALLEL_BUILD),\
-		$(call run_multiuser_tests,$(subst $(MULTIUSER_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_multiuser_tests,$(call group_from,$(subst $(MULTIUSER_TRACK_FOLDER)/,,$(basename $@)),$(MULTIUSER_SPEC_GROUPS)),$(basename $@).log),\
 		$(call run_multiuser_tests))
 	$(if $(PARALLEL_BUILD),\
 		$(V)mkdir -p $(dir $@) && touch $@\
@@ -261,7 +297,7 @@ $(MULTIUSER_TEST_FILES_DONE): $(PID_FILE)
 
 $(IDLE_TEST_FILES_DONE): start_short_idle_coolwsd
 	$(if $(PARALLEL_BUILD),\
-		$(call run_idle_tests,$(subst $(IDLE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
+		$(call run_idle_tests,$(call group_from,$(subst $(IDLE_TRACK_FOLDER)/,,$(basename $@)),$(IDLE_SPEC_GROUPS)),$(basename $@).log),\
 		$(call run_idle_tests))
 	$(if $(PARALLEL_BUILD),\
 		$(V)mkdir -p $(dir $@) && touch $@\
@@ -426,11 +462,12 @@ MOBILE_ENV = \
 
 # Run one mobile test / all mobile tests in headless mode.
 # Parameters:
-# 1 - spec (optional):	test file to run, if not specified all mobile tests are run.
+# 1 - spec (optional):	test file to run, or several separated by commas in a
+#			parallel run, if not specified all mobile tests are run.
 # 2 - log (optional):	log file for cypress run, needed for parallel build only.
 # 3 - +env (optional):	additional env variables (will be appended to $(MOBILE_ENV).
 define run_mobile_tests
-	$(V)echo $(if $(1),"Running cypress mobile test: $(1)","Running cypress mobile tests...")
+	$(V)echo $(if $(1),"Running cypress mobile tests: $(1)","Running cypress mobile tests...")
 	$(V)echo
 	$(eval ENV_EXTENDED=$(MOBILE_ENV)$(if $(3),$(COMMA)$(3)))
 	$(if $(and $(PARALLEL_BUILD), $(1)),\
@@ -480,10 +517,11 @@ LIGHTHOUSE_INCLUDE_TAGS = \
 
 # Run lighthouse accessibility tests with Chrome browser.
 # Parameters:
-# 1 - spec (optional):	test file to run, if not specified all lighthouse tests are run.
+# 1 - spec (optional):	test file to run, or several separated by commas in a
+#			parallel run, if not specified all lighthouse tests are run.
 # 2 - log (optional):	log file for cypress run, needed for parallel build only.
 define run_lighthouse_tests
-	$(V)echo $(if $(1),"Running lighthouse test: $(1)","Running all lighthouse accessibility tests...")
+	$(V)echo $(if $(1),"Running lighthouse tests: $(1)","Running all lighthouse accessibility tests...")
 	$(V)echo
 	$(eval CYPRESS_INCLUDE_TAGS=$(LIGHTHOUSE_INCLUDE_TAGS))
 	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
@@ -542,11 +580,12 @@ DESKTOP_INCLUDE_TAGS = \
 
 # Run one desktop test / all desktop tests in headless mode.
 # Parameters:
-# 1 - spec (optional):	test file to run, if not specified all desktop tests are run.
+# 1 - spec (optional):	test file to run, or several separated by commas in a
+#			parallel run, if not specified all desktop tests are run.
 # 2 - log (optional):	log file for cypress run, needed for parallel build only.
 # 3 - +env (optional):	additional env variables (will be appended to $(DESKTOP_ENV).
 define run_desktop_tests
-	$(V)echo $(if $(1),"Running cypress desktop mode test: $(1)","Running cypress desktop mode tests...")
+	$(V)echo $(if $(1),"Running cypress desktop mode tests: $(1)","Running cypress desktop mode tests...")
 	$(V)echo
 	$(eval CYPRESS_INCLUDE_TAGS=$(DESKTOP_INCLUDE_TAGS))
 	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
@@ -586,11 +625,12 @@ IDLE_INCLUDE_TAGS = \
 
 # Run one idle test / all idle tests in headless mode.
 # Parameters:
-# 1 - spec (optional):	test file to run, if not specified all idle tests are run.
+# 1 - spec (optional):	test file to run, or several separated by commas in a
+#			parallel run, if not specified all idle tests are run.
 # 2 - log (optional):	log file for cypress run, needed for parallel build only.
 # 3 - +env (optional):	additional env variables (will be appended to $(IDLE_ENV).
 define run_idle_tests
-	$(V)echo $(if $(1),"Running cypress idle test: $(1)","Running cypress idle tests...")
+	$(V)echo $(if $(1),"Running cypress idle tests: $(1)","Running cypress idle tests...")
 	$(V)echo
 	$(eval CYPRESS_INCLUDE_TAGS=$(IDLE_INCLUDE_TAGS))
 	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
@@ -659,11 +699,12 @@ endef
 
 # Run one multi-user test / all multi-user tests in headless mode.
 # Parameters:
-# 1 - spec (optional):	test file to run, if not specified all multi-user tests are run.
+# 1 - spec (optional):	test file to run, or several separated by commas in a
+#			parallel run, if not specified all multi-user tests are run.
 # 2 - log (optional):	log file for cypress run, needed for parallel build only.
 # 3 - +env (optional):	additional env variables (will be appended to $(MULTIUSER_ENV).
 define run_multiuser_tests
-	$(V)echo $(if $(1),"Running cypress multi-user test: $(1)","Running cypress multi-user tests...")
+	$(V)echo $(if $(1),"Running cypress multi-user tests: $(1)","Running cypress multi-user tests...")
 	$(V)echo
 	$(eval ENV_EXTENDED=$(MULTIUSER_ENV)$(if $(3),$(COMMA)$(3)))
 	$(if $(and $(PARALLEL_BUILD), $(1)),\
@@ -996,7 +1037,8 @@ endef
 # Parameters:
 # 1 - config: cypress configuration (e.g. cypress' --config argument).
 # 2 - env:    list of environment variables (e.g. cypress' --env argument).
-# 3 - spec:   test file path (e.g. cypress' --spec argument)
+# 3 - spec:   test file path, or several separated by commas, which one
+#             cypress process then runs one after another
 # 4 - type:   test type (e.g. mobile, desktop, multi-user)
 # 5 - log:    log file path
 # 6 - browser (optional): browser to run, defaults to $(BROWSER)
