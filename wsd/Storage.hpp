@@ -447,8 +447,15 @@ public:
     std::string getFileExtension() const { return Poco::Path(_fileInfo.getFilename()).getExtension(); }
 
     /// Update the locking state (check-in/out) of the associated file synchronously.
+    /// @timeout overrides the default connection timeout; zero to use it.
+    /// @poller, when given, is what the wait polls on, so that the caller's own
+    /// sockets keep being served while the request is outstanding. Must belong
+    /// to the calling thread. A private poll is used when it is null, which
+    /// leaves every other socket unattended until the request returns.
     virtual LockUpdateResult updateLockState(const Authorization& auth, LockContext& lockCtx,
-                                             LockState lock, const Attributes& attribs) = 0;
+                                             LockState lock, const Attributes& attribs,
+                                             std::chrono::seconds timeout,
+                                             SocketPoll* poller) = 0;
 
     /// The asynchronous upload completion callback function.
     using AsyncLockStateCallback = std::function<void(const AsyncLockUpdate&)>;
@@ -642,8 +649,8 @@ public:
     std::unique_ptr<LocalFileInfo> getLocalFileInfo();
 
     LockUpdateResult updateLockState(const Authorization&, LockContext&,
-                                     StorageBase::LockState requestedLockState,
-                                     const Attributes&) override
+                                     StorageBase::LockState requestedLockState, const Attributes&,
+                                     std::chrono::seconds, SocketPoll*) override
     {
         return LockUpdateResult(LockUpdateResult::Status::OK, requestedLockState);
     }

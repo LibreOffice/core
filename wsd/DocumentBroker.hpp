@@ -905,9 +905,12 @@ private:
     void lockIfEditing(const std::shared_ptr<ClientSession>& session);
 
     /// Updates the document's lock in storage to either locked or unlocked.
+    /// @timeout overrides the default connection timeout; zero to use it.
     /// Returns true iff the operation was successful.
     bool updateStorageLockState(ClientSession& session, StorageBase::LockState lock,
-                                std::string& error);
+                                std::string& error,
+                                std::chrono::seconds timeout = std::chrono::seconds::zero(),
+                                SocketPoll* poller = nullptr);
 
     /// Updates the document's lock in storage asynchronously to either locked or unlocked.
     /// Returns false if an error prevented issuing the asynchronous request.

@@ -270,8 +270,8 @@ public:
 
     /// Update the locking state (check-in/out) of the associated file
     LockUpdateResult updateLockState(const Authorization& auth, LockContext& lockCtx,
-                                     StorageBase::LockState lock,
-                                     const Attributes& attribs) override;
+                                     StorageBase::LockState lock, const Attributes& attribs,
+                                     std::chrono::seconds timeout, SocketPoll* poller) override;
 
     void updateLockStateAsync(const Authorization& auth, LockContext& lockCtx, LockState lock,
                               const Attributes& attribs, const std::shared_ptr<SocketPoll>& socketPoll,

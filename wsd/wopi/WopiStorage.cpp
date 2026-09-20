@@ -422,7 +422,9 @@ http::Request WopiStorage::createLockRequest(const Poco::URI& uriObject, const A
 StorageBase::LockUpdateResult WopiStorage::updateLockState(const Authorization& auth,
                                                            LockContext& lockCtx,
                                                            StorageBase::LockState lock,
-                                                           const Attributes& attribs)
+                                                           const Attributes& attribs,
+                                                           std::chrono::seconds timeout,
+                                                           SocketPoll* poller)
 {
     if (!lockCtx.supportsLocks())
         return LockUpdateResult(LockUpdateResult::Status::UNSUPPORTED, lock);
@@ -439,12 +441,16 @@ StorageBase::LockUpdateResult WopiStorage::updateLockState(const Authorization& 
     try
     {
         std::shared_ptr<http::Session> httpSession =
-            StorageConnectionManager::getHttpSession(uriObject);
+            StorageConnectionManager::getHttpSession(uriObject, timeout);
 
         http::Request httpRequest = createLockRequest(uriObject, auth, lockCtx, lock, attribs);
 
+        // Wait on the caller's poll where we have one, so that its sockets keep
+        // being served while we are blocked here. Otherwise the request gets a
+        // private poll and everything else waits with us.
         const std::shared_ptr<const http::Response> httpResponse =
-            httpSession->syncRequest(httpRequest);
+            poller ? httpSession->syncRequest(httpRequest, *poller)
+                   : httpSession->syncRequest(httpRequest);
         const std::string& responseString = httpResponse->getBody();
 
         LOG_INF(wopiLog << " status: " << httpResponse->statusLine().statusCode()

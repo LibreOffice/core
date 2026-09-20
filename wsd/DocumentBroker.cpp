@@ -213,6 +213,12 @@ constexpr std::chrono::seconds LockRetryDelay(30);
 /// nothing; carrying on indefinitely would mean editing against a lock that has
 /// quietly expired.
 constexpr std::size_t MaxLockRetries = 3;
+
+/// How long to wait for the WOPI Unlock we send while unloading. The default
+/// connection timeout is sized for requests a user is waiting on; nobody is
+/// waiting on this one, and the document cannot finish unloading until it
+/// returns, so a host that has stopped answering must not hold up teardown.
+constexpr std::chrono::seconds UnlockTimeoutWhileUnloading(3);
 }
 
 void DocumentBroker::setBrokerFactory(BrokerFactory factory)
@@ -908,7 +914,10 @@ void DocumentBroker::pollThread()
             LOG_INF("Unlocking " << _lockCtx->lockToken() << " with session [" << unlockSessionId
                                  << ']');
             std::string error;
-            if (!updateStorageLockState(*session, StorageBase::LockState::UNLOCK, error))
+            // We are past the polling loop, so this is the only thing driving the
+            // broker's sockets: wait on them rather than leaving them unattended.
+            if (!updateStorageLockState(*session, StorageBase::LockState::UNLOCK, error,
+                                        UnlockTimeoutWhileUnloading, _poll.get()))
             {
                 LOG_ERR("Failed to unlock docKey [" << _docKey << "] with session ["
                                                     << unlockSessionId << "]: " << error);
@@ -2812,7 +2821,8 @@ void DocumentBroker::endRenameFileCommand()
 }
 
 bool DocumentBroker::updateStorageLockState(ClientSession& session, StorageBase::LockState lock,
-                                            std::string& error)
+                                            std::string& error, std::chrono::seconds timeout,
+                                            SocketPoll* poller)
 {
     LOG_TRC("Requesting async " << StorageBase::nameShort(lock) << "ing of [" << _docKey
                                 << "] by session #" << session.getId());
@@ -2837,7 +2847,7 @@ bool DocumentBroker::updateStorageLockState(ClientSession& session, StorageBase:
     }
 
     const StorageBase::LockUpdateResult result = _storage->updateLockState(
-        session.getAuthorization(), *_lockCtx, lock, _currentStorageAttrs);
+        session.getAuthorization(), *_lockCtx, lock, _currentStorageAttrs, timeout, poller);
 
     return handleLockResult(session, result);
 }
