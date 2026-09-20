@@ -122,65 +122,65 @@ public:
     OUString ScaResId(TranslateId aId);
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString getProgrammaticFuntionName( const OUString& aDisplayName ) override;
+    virtual OUString getDisplayFunctionName( const OUString& aProgrammaticName ) override;
+    virtual OUString getFunctionDescription( const OUString& aProgrammaticName ) override;
+    virtual OUString getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString getDisplayCategoryName( const OUString& aProgrammaticName ) override;
 
                                 // XCompatibilityNames
-    virtual cpo::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
+    virtual cpo::uno::Sequence< css::sheet::LocalizedName > getCompatibilityNames( const OUString& aProgrammaticName ) override;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) override;
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual void       setLocale( const css::lang::Locale& eLocale ) override;
+    virtual css::lang::Locale getLocale() override;
 
                                 // XServiceName
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL   supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool   supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //  methods from own interfaces start here
 
                                 // XDateFunctions
-    virtual sal_Int32 SAL_CALL  getDiffWeeks(
+    virtual sal_Int32  getDiffWeeks(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
-    virtual sal_Int32 SAL_CALL  getDiffMonths(
+    virtual sal_Int32  getDiffMonths(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
-    virtual sal_Int32 SAL_CALL  getDiffYears(
+    virtual sal_Int32  getDiffYears(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
-    virtual sal_Int32 SAL_CALL  getIsLeapYear(
+    virtual sal_Int32  getIsLeapYear(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
-    virtual sal_Int32 SAL_CALL  getDaysInMonth(
+    virtual sal_Int32  getDaysInMonth(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
-    virtual sal_Int32 SAL_CALL  getDaysInYear(
+    virtual sal_Int32  getDaysInYear(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
-    virtual sal_Int32 SAL_CALL  getWeeksInYear(
+    virtual sal_Int32  getWeeksInYear(
                                     const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
                                 // XMiscFunctions
-    virtual OUString SAL_CALL getRot13(
+    virtual OUString getRot13(
                                     const OUString& aSrcText ) override;
 };
 

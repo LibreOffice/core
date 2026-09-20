@@ -132,50 +132,50 @@ OUString ScaPricingAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 
 }
 
 // XServiceName
-OUString SAL_CALL ScaPricingAddIn::getServiceName()
+OUString ScaPricingAddIn::getServiceName()
 {
     // name of specific AddIn service
     return MY_SERVICE;
 }
 
 // XServiceInfo
-OUString SAL_CALL ScaPricingAddIn::getImplementationName()
+OUString ScaPricingAddIn::getImplementationName()
 {
     return u"com.sun.star.sheet.addin.PricingFunctionsImpl"_ustr;
 }
 
-bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
+bool ScaPricingAddIn::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames()
 {
     return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XLocalizable
-void SAL_CALL ScaPricingAddIn::setLocale( const lang::Locale& eLocale )
+void ScaPricingAddIn::setLocale( const lang::Locale& eLocale )
 {
     aFuncLoc = eLocale;
     InitData();     // change of locale invalidates resources!
 }
 
-lang::Locale SAL_CALL ScaPricingAddIn::getLocale()
+lang::Locale ScaPricingAddIn::getLocale()
 {
     return aFuncLoc;
 }
 
 // function descriptions start here
 // XAddIn
-OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& )
+OUString ScaPricingAddIn::getProgrammaticFuntionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
     return OUString();
 }
 
-OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProgrammaticName )
+OUString ScaPricingAddIn::getDisplayFunctionName( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -195,7 +195,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProg
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getFunctionDescription( const OUString& aProgrammaticName )
+OUString ScaPricingAddIn::getFunctionDescription( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -207,7 +207,7 @@ OUString SAL_CALL ScaPricingAddIn::getFunctionDescription( const OUString& aProg
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getDisplayArgumentName(
+OUString ScaPricingAddIn::getDisplayArgumentName(
         const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
@@ -226,7 +226,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayArgumentName(
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getArgumentDescription(
+OUString ScaPricingAddIn::getArgumentDescription(
         const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
@@ -245,7 +245,7 @@ OUString SAL_CALL ScaPricingAddIn::getArgumentDescription(
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
+OUString ScaPricingAddIn::getProgrammaticCategoryName(
         const OUString& aProgrammaticName )
 {
     OUString aRet;
@@ -270,14 +270,14 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getDisplayCategoryName(
+OUString ScaPricingAddIn::getDisplayCategoryName(
         const OUString& aProgrammaticName )
 {
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
 // XCompatibilityNames
-cpo::uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
+cpo::uno::Sequence< sheet::LocalizedName > ScaPricingAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName )
 {
     auto fDataIt = std::find_if( pFuncDataList->begin(), pFuncDataList->end(),
@@ -405,7 +405,7 @@ bool getinput_greek(bs::types::Greeks& greek, const cpo::uno::Any& anyval) {
 } // namespace for auxiliary functions
 
 // OPT_BARRIER(...)
-double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
+double ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
@@ -433,7 +433,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
 }
 
 // OPT_TOUCH(...)
-double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
+double ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
@@ -461,7 +461,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
 }
 
 // OPT_PRB_HIT(...)
-double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
+double ScaPricingAddIn::getOptProbHit( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up )
 {
@@ -478,7 +478,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
 }
 
 // OPT_PROB_INMONEY(...)
-double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
+double ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
             const cpo::uno::Any& strikeval, const cpo::uno::Any& put_call )

@@ -143,48 +143,48 @@ OUString ScaDateAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nSt
 }
 
 // XServiceName
-OUString SAL_CALL ScaDateAddIn::getServiceName()
+OUString ScaDateAddIn::getServiceName()
 {
     // name of specific AddIn service
     return MY_SERVICE;
 }
 
 // XServiceInfo
-OUString SAL_CALL ScaDateAddIn::getImplementationName()
+OUString ScaDateAddIn::getImplementationName()
 {
     return u"com.sun.star.sheet.addin.DateFunctionsImpl"_ustr;
 }
 
-bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName )
+bool ScaDateAddIn::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames()
 {
     return { ADDIN_SERVICE, MY_SERVICE };
 }
 
 // XLocalizable
-void SAL_CALL ScaDateAddIn::setLocale( const lang::Locale& eLocale )
+void ScaDateAddIn::setLocale( const lang::Locale& eLocale )
 {
     aFuncLoc = eLocale;
     InitData();     // change of locale invalidates resources!
 }
 
-lang::Locale SAL_CALL ScaDateAddIn::getLocale()
+lang::Locale ScaDateAddIn::getLocale()
 {
     return aFuncLoc;
 }
 
-OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& )
+OUString ScaDateAddIn::getProgrammaticFuntionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
     return OUString();
 }
 
-OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgrammaticName )
+OUString ScaDateAddIn::getDisplayFunctionName( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -204,7 +204,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgrammaticName )
+OUString ScaDateAddIn::getFunctionDescription( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -216,7 +216,7 @@ OUString SAL_CALL ScaDateAddIn::getFunctionDescription( const OUString& aProgram
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
+OUString ScaDateAddIn::getDisplayArgumentName(
         const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
@@ -235,7 +235,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
+OUString ScaDateAddIn::getArgumentDescription(
         const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
@@ -254,7 +254,7 @@ OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
+OUString ScaDateAddIn::getProgrammaticCategoryName(
         const OUString& aProgrammaticName )
 {
     OUString aRet;
@@ -279,14 +279,14 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
     return aRet;
 }
 
-OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
+OUString ScaDateAddIn::getDisplayCategoryName(
         const OUString& aProgrammaticName )
 {
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
 // XCompatibilityNames
-cpo::uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
+cpo::uno::Sequence< sheet::LocalizedName > ScaDateAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName )
 {
     auto fDataIt = std::find_if(pFuncDataList->begin(), pFuncDataList->end(),
@@ -462,7 +462,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
  *
  */
 
-sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
+sal_Int32 ScaDateAddIn::getDiffWeeks(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode )
@@ -493,7 +493,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
  *
  * mode 1 is the difference in calendar month
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
+sal_Int32 ScaDateAddIn::getDiffMonths(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode )
@@ -541,7 +541,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
  *
  * mode 1 is the difference in calendar years
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
+sal_Int32 ScaDateAddIn::getDiffYears(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode )
@@ -568,7 +568,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
 /**
  * Check if a Date is in a leap year in the Gregorian calendar
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
+sal_Int32 ScaDateAddIn::getIsLeapYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate )
 {
@@ -584,7 +584,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
 /**
  * Get the Number of Days in the month for a date
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
+sal_Int32 ScaDateAddIn::getDaysInMonth(
         const uno::Reference<beans::XPropertySet>& xOptions,
         sal_Int32 nDate )
 {
@@ -600,7 +600,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
 /**
  * Get number of days in the year of a date specified
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
+sal_Int32 ScaDateAddIn::getDaysInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate )
 {
@@ -628,7 +628,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  *
  * @see #IsLeapYear #WeekNumber
  */
-sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
+sal_Int32 ScaDateAddIn::getWeeksInYear(
         const uno::Reference< beans::XPropertySet >& xOptions,
         sal_Int32 nDate )
 {
@@ -657,7 +657,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
  * This function rotates each character by 13 in the alphabet.
  * Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
  */
-OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString )
+OUString ScaDateAddIn::getRot13( const OUString& aSrcString )
 {
     OUStringBuffer aBuffer( aSrcString );
     for( sal_Int32 nIndex = 0; nIndex < aBuffer.getLength(); nIndex++ )

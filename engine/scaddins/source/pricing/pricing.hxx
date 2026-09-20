@@ -140,50 +140,50 @@ public:
     OUString ScaResId(TranslateId aResId);
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString getProgrammaticFuntionName( const OUString& aDisplayName ) override;
+    virtual OUString getDisplayFunctionName( const OUString& aProgrammaticName ) override;
+    virtual OUString getFunctionDescription( const OUString& aProgrammaticName ) override;
+    virtual OUString getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString getDisplayCategoryName( const OUString& aProgrammaticName ) override;
 
                                 // XCompatibilityNames
-    virtual cpo::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
+    virtual cpo::uno::Sequence< css::sheet::LocalizedName > getCompatibilityNames( const OUString& aProgrammaticName ) override;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) override;
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual void       setLocale( const css::lang::Locale& eLocale ) override;
+    virtual css::lang::Locale getLocale() override;
 
                                 // XServiceName
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL   supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool   supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 
     //  methods from own interfaces start here
 
 
-    virtual double SAL_CALL getOptBarrier( double spot, double vol,
+    virtual double getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
             const OUString& continuous, const cpo::uno::Any& greek ) override;
 
-   virtual double SAL_CALL getOptTouch( double spot, double vol,
+   virtual double getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
             const OUString& barriercont, const cpo::uno::Any& greekstr ) override;
 
-   virtual double SAL_CALL getOptProbHit( double spot, double vol,
+   virtual double getOptProbHit( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up ) override;
 
-   virtual double SAL_CALL getOptProbInMoney( double spot, double vol,
+   virtual double getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
             const cpo::uno::Any& strikeval, const cpo::uno::Any& put_call ) override;
