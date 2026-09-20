@@ -627,6 +627,8 @@ RUN_GDB = $(if $(GDB_FRONTEND),$(GDB_FRONTEND),gdb --tui --args)
 TEST_APPARMOR=$(shell if test 1 -eq `cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns 2> /dev/null || echo 0`; then echo "enabled"; fi)
 ENABLE_NAMESPACE = $(if $(TEST_APPARMOR),podman unshare,)
 
+LANDLOCK_ENV = COOL_FORCE_LANDLOCK=1
+
 if ENABLE_FUZZERS
 CLEANUP_DEPS=
 else
@@ -720,7 +722,14 @@ check-apparmour-namespaces:
 		(echo "WARNING: to workaround this, either (a) disable with sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 or (b) install podman" && false); \
 	fi
 
-run: setup-wsd check-apparmour-namespaces
+run: setup-wsd
+	$(LANDLOCK_ENV) ./coolwsd $(COMMON_PARAMS) \
+			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
+			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
+			--o:trace_event[@enable]=true \
+			$(RUN_EXTRA)
+
+namespace-run: setup-wsd check-apparmour-namespaces
 	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
@@ -737,7 +746,7 @@ run-nocaps: setup-wsd
 
 if ENABLE_DEBUG
 run-one: setup-wsd
-	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
+	$(LANDLOCK_ENV) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=true --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=true \
 			--singlekit
@@ -773,7 +782,7 @@ sync-impress:
 	browser-sync start --config browsersync-config.js --startPath "browser/96c23f663/debug.html?file_path=/$(abs_top_srcdir)/test/samples/impress-edit.fodp"
 
 run-trace: setup-wsd
-	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
+	$(LANDLOCK_ENV) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=false --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=false \
 			--o:trace[@enable]=true --o:trace.path=${builddir}/trace.txt.gz \
@@ -781,28 +790,28 @@ run-trace: setup-wsd
 
 run-valgrind: setup-wsd
 	@echo "Launching coolwsd under valgrind (but not forkit/coolkit, yet)"
-	$(ENABLE_NAMESPACE) valgrind --tool=memcheck --trace-children=no -v --read-var-info=yes \
+	$(LANDLOCK_ENV) valgrind --tool=memcheck --trace-children=no -v --read-var-info=yes \
 		./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=false --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=false
 
 run-gdb: setup-wsd
 	@echo "Launching coolwsd under gdb"
-	$(ENABLE_NAMESPACE) $(RUN_GDB) \
+	$(LANDLOCK_ENV) $(RUN_GDB) \
 		./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=false --o:logging.level=error \
 			--o:logging_ui_cmd.file[@enable]=false
 
 run-callgrind: setup-wsd
 	@echo "Launching coolwsd under valgrind's callgrind"
-	$(ENABLE_NAMESPACE) valgrind --tool=callgrind --simulate-cache=yes --dump-instr=yes --num-callers=50 --error-limit=no --trace-children=yes \
+	$(LANDLOCK_ENV) valgrind --tool=callgrind --simulate-cache=yes --dump-instr=yes --num-callers=50 --error-limit=no --trace-children=yes \
 		./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=false --o:logging.level=error \
 			--o:logging_ui_cmd.file[@enable]=false
 
 run-strace: setup-wsd
 	@echo "Launching coolwsd under strace"
-	$(ENABLE_NAMESPACE) strace -o strace.log -f -tt -s 256 \
+	$(LANDLOCK_ENV) strace -o strace.log -f -tt -s 256 \
 		./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=false --o:logging.level=error \
 			--o:logging_ui_cmd.file[@enable]=false
@@ -814,7 +823,7 @@ run-tcmalloc: setup-wsd
 		exit 1; \
 	fi
 	@echo see https://gperftools.github.io/gperftools/heapprofile.html for Modifying Runtime Behavior via env variables
-	$(ENABLE_NAMESPACE) LD_PRELOAD=libtcmalloc.so.4 ./coolwsd $(COMMON_PARAMS) \
+	$(LANDLOCK_ENV) LD_PRELOAD=libtcmalloc.so.4 ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
 			--o:trace_event[@enable]=true

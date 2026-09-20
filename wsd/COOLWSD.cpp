@@ -1338,6 +1338,12 @@ bool testLandlock()
                               }) == 1;
 }
 
+bool startWithLandlockJail()
+{
+    static const bool start = std::getenv("COOL_FORCE_LANDLOCK") != nullptr;
+    return start;
+}
+
 } // namespace
 
 // Due to the possibility of enterMountingNS failing at an intermediate stage
@@ -2086,7 +2092,9 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     // Setup the jails.
     bool UseMountNamespaces = true;
 
-    NoCapsForKit = Util::isKitInProcess() ||
+    RequireLandlock = startWithLandlockJail();
+
+    NoCapsForKit = startWithLandlockJail() || Util::isKitInProcess() ||
                    !ConfigUtil::getConfigValue<bool>(conf, "security.capabilities", true);
     if (NoCapsForKit && UseMountNamespaces)
     {
@@ -2275,7 +2283,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 #if !MOBILEAPP
     NoSeccomp =
         Util::isKitInProcess() || !ConfigUtil::getConfigValue<bool>(conf, "security.seccomp", true);
-    NoCapsForKit = Util::isKitInProcess() ||
+    NoCapsForKit = startWithLandlockJail() || Util::isKitInProcess() ||
                    !ConfigUtil::getConfigValue<bool>(conf, "security.capabilities", true);
     AdminEnabled = ConfigUtil::getConfigValue<bool>(conf, "admin_console.enable", true);
     IndirectionServerEnabled =
