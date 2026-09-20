@@ -46,7 +46,6 @@ cmake_list= \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
             ../wsd/ClientRequestDispatcher.cpp \
-            ../wsd/RequestDetails.cpp \
             ../wsd/RequestVettingStation.cpp \
             ../wsd/Storage.cpp \
             ../wsd/WSDGlobals.cpp \
