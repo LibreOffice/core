@@ -2882,6 +2882,7 @@ class Menubar extends window.L.Control {
 				aItem.setAttribute('data-cooltip', iconTooltip);
 			}
 			app.LOUtil.syncDocumentLogoAriaLabel(aItem);
+			window.L.control.attachTooltipEventListener(aItem, this._map);
 
 			if (this._menubarCont != null)
 				this._menubarCont.insertBefore(liItem, this._menubarCont.firstChild);
