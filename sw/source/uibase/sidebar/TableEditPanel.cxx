@@ -125,6 +125,14 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
             }
             break;
         }
+        case SID_ATTR_METRIC:
+        {
+            FieldUnit eFieldUnit = ::GetDfltMetric(false);
+            m_aRowHeightEdit.SetFieldUnit(eFieldUnit);
+            m_aColumnWidthEdit.SetFieldUnit(eFieldUnit);
+            m_aLeftSpacingEdit.SetFieldUnit(eFieldUnit);
+            m_aRightSpacingEdit.SetFieldUnit(eFieldUnit);
+        }
     }
 }
 
@@ -152,6 +160,7 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
     , m_aRightSpacingEdit(m_xBuilder->weld_metric_spin_button(u"rightspace"_ustr, FieldUnit::CM))
     , m_xMisc(m_xBuilder->weld_toolbar(u"misc"_ustr))
     , m_xMiscDispatch(new ToolbarUnoDispatcher(*m_xMisc, *m_xBuilder, rxFrame))
+    , m_aMetricController(SID_ATTR_METRIC, *pBindings, *this)
     , m_aRowHeightController(SID_ATTR_TABLE_ROW_HEIGHT, *pBindings, *this)
     , m_aColumnWidthController(SID_ATTR_TABLE_COLUMN_WIDTH, *pBindings, *this)
     , m_aAlignmentController(SID_ATTR_TABLE_ALIGNMENT, *pBindings, *this)
@@ -275,6 +284,7 @@ TableEditPanel::~TableEditPanel()
     m_aSetOptimalColumnWidthController.dispose();
     m_aDistributeColumnsController.dispose();
     m_aMergeCellsController.dispose();
+    m_aMetricController.dispose();
 }
 
 void TableEditPanel::EnableLeftRight(sal_uInt16 nAlignment)

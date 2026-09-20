@@ -68,6 +68,7 @@ private:
     std::unique_ptr<weld::Toolbar> m_xMisc;
     std::unique_ptr<ToolbarUnoDispatcher> m_xMiscDispatch;
 
+    ::sfx2::sidebar::ControllerItem m_aMetricController;
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
     ::sfx2::sidebar::ControllerItem m_aAlignmentController;
