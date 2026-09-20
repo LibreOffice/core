@@ -809,9 +809,13 @@ public:
             if (_refused == RefreshesToRefuse)
                 TRANSITION_STATE(_phase, Phase::WaitAcceptedRefresh);
 
+            // With a body: the fake host shuts the socket once it has answered,
+            // and a bodiless answer reaches us as a dropped connection, which
+            // is a non-answer carrying no Retry-After to honour.
             auto response =
                 std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
             response->add("Retry-After", std::to_string(RetryAfterSeconds));
+            response->setBody("busy", "text/plain");
             return response;
         }
 
@@ -922,7 +926,10 @@ public:
         {
             ++_refused;
             TST_LOG("Refusing unlock #" << _refused << " with 503");
-            return std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+            auto response =
+                std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+            response->setBody("busy", "text/plain");
+            return response;
         }
 
         TST_LOG("Accepting the unlock after " << _refused << " refusals");
