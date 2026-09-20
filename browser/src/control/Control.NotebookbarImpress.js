@@ -813,7 +813,10 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			{
 				'id': 'view-shapes-deck',
 				'type': 'bigtoolitem',
-				'text': _UNO('.uno:SidebarDeck.ShapesDeck', 'presentation'),
+				// To do: add a fixed row "Open Shapes Sidebar" to the existing
+				//   Home -> "Shapes" dropdown, similarly as we do for the Writer:
+				//   Home -> Styles -> Open Styles Sidebar
+				'text': _('Shapes Sidebar'),
 				'command': '.uno:SidebarDeck.ShapesDeck',
 				'accessibility': { focusBack: true, combination: 'SH', de: null }
 			},
