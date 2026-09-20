@@ -56,7 +56,7 @@ public:
     void acquire( sal_uInt32 nLockCount = 1 );
     sal_uInt32 release( bool bUnlockAll = false );
 
-    virtual bool tryToAcquire();
+    bool tryToAcquire();
 
     // returns true, if the mutex is owned by the current thread
     virtual bool IsCurrentThread() const;
