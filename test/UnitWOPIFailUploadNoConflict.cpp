@@ -1366,11 +1366,12 @@ public:
 
         if (_phase == Phase::WaitConflict)
         {
+            _settleUntil = std::chrono::steady_clock::now() + SettleDuration;
+
             TRANSITION_STATE(_phase, Phase::SettleNoUpload);
 
             // Leave the conflict unresolved, as a user who has not answered the
             // dialog yet would, and watch what wsd does on its own.
-            _settleUntil = std::chrono::steady_clock::now() + SettleDuration;
             TST_LOG("Conflict raised; watching for " << SettleDuration
                                                      << " that no upload follows");
         }
@@ -1532,12 +1533,13 @@ public:
 
         if (_phase == Phase::JoinPeer || _phase == Phase::WaitConflict)
         {
+            _savedAt = std::chrono::steady_clock::now();
+
             TRANSITION_STATE(_phase, Phase::WaitUploadAttempt);
 
             // The conflict is raised and left unresolved, as a user who has not
             // answered the dialog would leave it. Saving must still try.
             TST_LOG("Conflict raised on join; saving must still reach storage");
-            _savedAt = std::chrono::steady_clock::now();
             WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
         }
 
