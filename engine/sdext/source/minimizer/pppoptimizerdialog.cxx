@@ -40,7 +40,7 @@ PPPOptimizerDialog::~PPPOptimizerDialog()
 {
 }
 
-void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
+void PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
@@ -50,22 +50,22 @@ void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments 
         mxController = mxFrame->getController();
 }
 
-OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
+OUString PPPOptimizerDialog::getImplementationName()
 {
     return u"com.sun.star.comp.PresentationMinimizerImp"_ustr;
 }
 
-bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
+bool PPPOptimizerDialog::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
+Sequence< OUString > PPPOptimizerDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.PresentationMinimizer"_ustr };
 }
 
-Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
+Reference< css::frame::XDispatch > PPPOptimizerDialog::queryDispatch(
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ )
 {
     Reference < XDispatch > xRet;
@@ -75,7 +75,7 @@ Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
     return xRet;
 }
 
-Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::queryDispatches(
+Sequence< Reference< css::frame::XDispatch > > PPPOptimizerDialog::queryDispatches(
     const Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< css::frame::XDispatch> > aReturn( aDescripts.getLength() );
@@ -85,7 +85,7 @@ Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::quer
     return aReturn;
 }
 
-void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
+void PPPOptimizerDialog::dispatch( const URL& rURL,
                                             const Sequence< PropertyValue >& rArguments )
 {
 
@@ -131,13 +131,13 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     }
 }
 
-void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusListener >&, const URL& )
+void PPPOptimizerDialog::addStatusListener( const Reference< XStatusListener >&, const URL& )
 {
     // TODO
     // OSL_FAIL( "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
 }
 
-void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatusListener >&, const URL& )
+void PPPOptimizerDialog::removeStatusListener( const Reference< XStatusListener >&, const URL& )
 {
     // TODO
     // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );

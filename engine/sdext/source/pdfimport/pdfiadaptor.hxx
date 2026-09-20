@@ -49,17 +49,17 @@ namespace pdfi
                                           cpo::uno::XComponentContext >& xContext );
 
         // XFilter
-        virtual bool SAL_CALL filter( const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
-        virtual void SAL_CALL cancel() override;
+        virtual bool filter( const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
+        virtual void cancel() override;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDocument ) override;
+        virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
-        OUString SAL_CALL getImplementationName() override;
+        OUString getImplementationName() override;
 
-        bool SAL_CALL supportsService(OUString const & ServiceName) override;
+        bool supportsService(OUString const & ServiceName) override;
 
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     };
 }
 

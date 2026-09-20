@@ -425,7 +425,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
     return xEmbed;
 }
 // XExtendedFilterDetection
-OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
+OUString PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     std::unique_lock guard( m_aMutex );
     bool bSuccess = false;

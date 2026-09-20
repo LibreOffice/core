@@ -50,29 +50,29 @@ public:
     virtual ~PPPOptimizerDialog() override;
 
     // XInitialization
-    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+    virtual bool supportsService( const OUString& sServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XDispatchProvider
-    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(
         const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
 
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches(
         const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL,
+    virtual void dispatch( const css::util::URL& aURL,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
-    virtual void SAL_CALL addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL& aURL ) override;
-    virtual void SAL_CALL removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL& aURL ) override;
 };
 

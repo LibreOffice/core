@@ -46,7 +46,7 @@ PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< cpo::uno::XComponent
 }
 
 // XFilter
-bool SAL_CALL PDFIHybridAdaptor::filter( const cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
+bool PDFIHybridAdaptor::filter( const cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     bool bRet = false;
     if( m_xModel.is() )
@@ -174,12 +174,12 @@ bool SAL_CALL PDFIHybridAdaptor::filter( const cpo::uno::Sequence< beans::Proper
     return bRet;
 }
 
-void SAL_CALL PDFIHybridAdaptor::cancel()
+void PDFIHybridAdaptor::cancel()
 {
 }
 
 //XImporter
-void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument )
+void PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument )
 {
     SAL_INFO("sdext.pdfimport", "PDFIAdaptor::setTargetDocument" );
     m_xModel.set( xDocument, uno::UNO_QUERY );

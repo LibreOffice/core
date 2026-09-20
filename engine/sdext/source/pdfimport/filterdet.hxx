@@ -45,14 +45,14 @@ public:
                                 cpo::uno::XComponentContext > xContext );
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( cpo::uno::Sequence<
+    virtual OUString detect( cpo::uno::Sequence<
                                                css::beans::PropertyValue >& io_rDescriptor ) override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 
