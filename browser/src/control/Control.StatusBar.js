@@ -287,7 +287,7 @@ class StatusBar extends JSDialog.Toolbar {
 			{type: 'customtoolitem',  id: 'overview', command: '.uno:InsertCanvasSlide', text: _('Overview'), dataPriority: 9, visible: !app.isReadOnly(),
 				configLabel: _('Overview'), configPeers: ['overviewbreak']},
 			{type: 'separator', id: 'overviewbreak', orientation: 'vertical', dataPriority: 9, visible: !app.isReadOnly()},
-			{type: 'customtoolitem',  id: 'notespanel', command: 'notespanel', text: _('Notes'), icon: 'lc_notesmode.svg', dataPriority: 9, visible: false,
+			{type: 'customtoolitem',  id: 'notespanel', command: 'notespanel', text: _('Notes'), icon: 'statusbarnotesmode.svg', dataPriority: 9, visible: false,
 				configLabel: _('Notes'), configPeers: ['notespanelbreak']},
 			{type: 'separator', id: 'notespanelbreak', orientation: 'vertical', dataPriority: 9, visible: false},
 		].concat(window.mode.isTablet() ? [] : [
