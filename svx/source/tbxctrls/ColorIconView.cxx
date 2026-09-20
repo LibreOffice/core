@@ -68,8 +68,7 @@ void ColorIconView::set_help_id(const OUString& rName) { m_pIconView->set_help_i
 
 IMPL_LINK(ColorIconView, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)
 {
-    Color aColor = getColor(m_pIconView->get_iter_index_in_parent(rIter));
-    m_aColorActivatedHdl.Call(aColor);
+    m_aColorActivatedHdl.Call(m_pIconView->get_iter_index_in_parent(rIter));
     return true;
 }
 

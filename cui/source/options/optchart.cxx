@@ -344,12 +344,13 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, SelectPaletteLbHdl, weld::ComboBox&, vo
     aPaletteManager.ReloadColorSet(m_aColorIconView);
 }
 
-IMPL_LINK(SvxDefaultColorOptPage, ColorActivatedHdl, const Color&, rColor, void)
+IMPL_LINK(SvxDefaultColorOptPage, ColorActivatedHdl, int, nIndex, void)
 {
     sal_Int32 nIdx = m_xLbChartColors->get_selected_index();
     if (nIdx != -1)
     {
-        const XColorEntry aEntry(rColor, m_xLbChartColors->get_selected_text());
+        const XColorEntry aEntry(m_aColorIconView.getColor(nIndex),
+                                 m_xLbChartColors->get_selected_text());
 
         ModifyColorEntry(aEntry, nIdx);
         m_SvxChartColorTableUniquePtr->replace(nIdx, aEntry);

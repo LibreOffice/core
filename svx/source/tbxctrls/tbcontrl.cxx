@@ -2149,11 +2149,9 @@ ColorWindow::~ColorWindow()
 {
 }
 
-NamedColor ColorWindow::GetSelectEntryColor(const ColorIconView& rColorIconView)
+NamedColor ColorWindow::GetEntryColor(const ColorIconView& rColorIconView, int nIndex)
 {
-    Color aColor = rColorIconView.getColor(rColorIconView.get_selected_index());
-    const OUString sColorName = rColorIconView.getColorName(rColorIconView.get_selected_index());
-    return { aColor, sColorName };
+    return { rColorIconView.getColor(nIndex), rColorIconView.getColorName(nIndex) };
 }
 
 namespace
@@ -2207,27 +2205,27 @@ namespace
 NamedColor ColorWindow::GetSelectEntryColor() const
 {
     if (maColorIconView.get_selected_index() != -1)
-        return GetSelectEntryColor(maColorIconView);
+        return GetEntryColor(maColorIconView, maColorIconView.get_selected_index());
     if (maRecentColorIconView.get_selected_index() != -1)
-        return GetSelectEntryColor(maRecentColorIconView);
+        return GetEntryColor(maRecentColorIconView, maRecentColorIconView.get_selected_index());
     if (mxButtonNoneColor.get() == mpDefaultButton)
         return GetNoneColor();
     return GetAutoColor();
 }
 
-IMPL_LINK_NOARG(ColorWindow, ColorSelectHdl, const Color&, void)
+IMPL_LINK(ColorWindow, ColorSelectHdl, int, nIndex, void)
 {
-    ApplySelectedColor(maColorIconView);
+    ApplyColor(maColorIconView, nIndex);
 }
 
-IMPL_LINK_NOARG(ColorWindow, RecentColorSelectHdl, const Color&, void)
+IMPL_LINK(ColorWindow, RecentColorSelectHdl, int, nIndex, void)
 {
-    ApplySelectedColor(maRecentColorIconView);
+    ApplyColor(maRecentColorIconView, nIndex);
 }
 
-void ColorWindow::ApplySelectedColor(ColorIconView& rColorIconView)
+void ColorWindow::ApplyColor(ColorIconView& rColorIconView, int nIndex)
 {
-    NamedColor aNamedColor = GetSelectEntryColor(rColorIconView);
+    NamedColor aNamedColor = GetEntryColor(rColorIconView, nIndex);
 
     if (&rColorIconView != &maRecentColorIconView)
     {
@@ -2247,10 +2245,9 @@ void ColorWindow::ApplySelectedColor(ColorIconView& rColorIconView)
 
     if (bThemePaletteSelected)
     {
-        const sal_uInt16 nSelectedItemPos = rColorIconView.get_selected_index();
         sal_uInt16 nThemeIndex;
         sal_uInt16 nEffectIndex;
-        if (PaletteManager::GetThemeAndEffectIndex(nSelectedItemPos, nThemeIndex, nEffectIndex))
+        if (PaletteManager::GetThemeAndEffectIndex(nIndex, nThemeIndex, nEffectIndex))
         {
             aNamedColor.m_nThemeIndex = nThemeIndex;
             mxPaletteManager->GetLumModOff(nThemeIndex, nEffectIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
