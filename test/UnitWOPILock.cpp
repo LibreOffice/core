@@ -974,12 +974,104 @@ public:
     }
 };
 
+/// A host that rejects our token on an Unlock has told us the token is no good.
+/// We used to note it in the log and carry on with it, because the synchronous
+/// path reported every failure the same way. Expiring it stops the attempts
+/// that follow from going out under a token the host has already refused.
+class UnitWopiUnlockUnauthorized : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, WaitUnlock, Done) _phase;
+
+    /// Unlocks the host saw. Teardown tries from more than one place, so
+    /// without the token being expired there would be more than one.
+    std::size_t _unlocks;
+
+public:
+    UnitWopiUnlockUnauthorized()
+        : WopiTestServer("UnitWopiUnlockUnauthorized")
+        , _phase(Phase::Load)
+        , _unlocks(0)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SupportsLocks", "true");
+        fileInfo->set("UserCanWrite", "true");
+        fileInfo->set("BaseFileName", "doc.odt");
+    }
+
+    std::unique_ptr<http::Response>
+    assertLockRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        const std::string op = request.get("X-WOPI-Override", std::string());
+        if (op != "UNLOCK")
+            return nullptr; // The lock taken at load.
+
+        ++_unlocks;
+        TST_LOG("Refusing unlock #" << _unlocks << " with 401");
+
+        if (_phase == Phase::WaitUnlock)
+            TRANSITION_STATE(_phase, Phase::Done);
+
+        return std::make_unique<http::Response>(http::StatusCode::Unauthorized);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+
+        TRANSITION_STATE(_phase, Phase::WaitUnlock);
+
+        // Nothing to save, so this unloads straight into the unlock.
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << "] after " << _unlocks << " unlock(s)");
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected the refused token to be expired, stopping the attempts "
+                                 "that follow from reusing it",
+                                 std::size_t(1), _unlocks);
+
+        passTest("Expired the token the host had just refused");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                // Transition first: this runs on a timer, and a second pass
+                // would open another session and another lock to release.
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUnlock:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[8]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
+    return new UnitBase*[9]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
                              new UnitWopiLockFail(), new UnitWopiUnlock(),
                              new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
-                             new UnitWopiUnlockRetry(), nullptr };
+                             new UnitWopiUnlockRetry(),
+                             new UnitWopiUnlockUnauthorized(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
