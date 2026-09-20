@@ -2,12 +2,12 @@
 
 const helper = require('../../common/helper');
 const calcHelper = require('../../common/calc_helper');
-const a11yHelper = require('../../common/a11y_helper');
 
-// What content shown on hover owes the pointer: it can be reached, it can be
-// dismissed, and it stays while the pointer is on it. The three buttons beside
-// Format code are the subject: a dialog does not rebuild itself under the
-// pointer, which is what makes the same check flaky on the sidebar.
+// What a dialog's tooltips owe the pointer in a real browser: the text they
+// carry, a placement that does not cover what they describe, and Escape that
+// takes the tooltip without taking the dialog. When one opens and how long it
+// waits are in the Tooltip mocha tests. The three buttons beside Format code
+// are the subject.
 describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 	let win;
 
@@ -85,43 +85,6 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 		});
 	});
 
-	it('stays while the pointer crosses the gap to it', function () {
-		pointerAway();
-		hover('add');
-
-		cy.then(function () {
-			const rect = widget('add').getBoundingClientRect();
-			const tip = tooltip().getBoundingClientRect();
-			const gap = Math.max(tip.top - rect.bottom, rect.top - tip.bottom, 0);
-
-			expect(gap, 'the tooltip is drawn away from the button').to.be.greaterThan(0);
-		});
-
-		cy.then(function () {
-			a11yHelper.assertTooltipSurvivesTheCrossing(win, widget('add'), 'the Add button');
-		});
-	});
-
-	it('stays while the pointer rests on it', function () {
-		pointerAway();
-
-		// Leaving the widget arms the hide; arriving on the tooltip cancels it.
-		cy.then(function () {
-			const tip = win.app.map.tooltip;
-
-			tip.show(widget('add'));
-			tip.beginHide();
-			tip.mouseEnter();
-		});
-
-		cy.wait(win.app.map.tooltip._options.hoverGrace * 1.5);
-
-		cy.then(function () {
-			expect(shown(), 'the tooltip under the pointer, past the grace period')
-				.to.be.true;
-		});
-	});
-
 	it('hides on Escape, without taking the dialog with it', function () {
 		pointerAway();
 		hover('add');
@@ -146,47 +109,6 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 
 			expect(at && at.closest('#cooltip'),
 				'what owns the point the tooltip is drawn on').to.equal(null);
-		});
-	});
-
-	it('hides only for the widget that armed the hide', function () {
-		pointerAway();
-
-		// Add arms its hide, Edit opens before that hide falls due.
-		cy.then(function () {
-			const tip = win.app.map.tooltip;
-
-			tip.show(widget('add'));
-			tip.beginHide();
-			tip.show(widget('edit'));
-		});
-
-		// Wait for that hide to fall due.
-		helper.waitForTimers(win, 'tooltip');
-
-		cy.then(function () {
-			expect(shown(), 'the tooltip Edit opened').to.be.true;
-			expect(label(), 'and it still says what Edit carries')
-				.to.equal(widget('edit').getAttribute('data-cooltip'));
-		});
-	});
-
-	it('hides after the pointer leaves across a neighbour it never showed', function () {
-		pointerAway();
-
-		// Delete is crossed too fast to show, so the hide it arms is the only
-		// one left to take Add's tooltip down.
-		cy.then(function () {
-			const tip = win.app.map.tooltip;
-
-			tip.show(widget('add'));
-			tip.beginHide();
-			tip.beginShow(widget('delete'));
-			tip.beginHide();
-		});
-
-		cy.wrap(null).should(function () {
-			expect(shown(), 'the tooltip Add opened').to.be.false;
 		});
 	});
 });

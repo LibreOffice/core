@@ -2,12 +2,11 @@
 
 const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
-const a11yHelper = require('../../common/a11y_helper');
 
-// The dialog case is covered by a11y_tooltip_spec; these are the surfaces the
-// auditor found it on instead. Two things are asked of content shown on hover:
-// that it is drawn beside what it describes, and that it survives the pointer
-// travelling to it.
+// The dialog case is covered by a11y_tooltip_spec, which drives the tooltip
+// itself; these are the surfaces the auditor found it on instead. What the
+// pointer has to reach is asked here, and how long the tooltip waits for it in
+// the Tooltip mocha tests.
 describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () {
 	let win;
 
@@ -31,12 +30,19 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 		return win.getComputedStyle(tooltip()).visibility === 'visible';
 	}
 
+	function label() {
+		return tooltip().textContent.trim();
+	}
+
+	// A widget's own root can carry the same text as a wrapper around it, and
+	// only the inner one answers the pointer.
 	function triggerIn(selector) {
 		return Array.from(win.document.querySelectorAll(selector + ' [data-cooltip]'))
-			.filter(function (el) {
+			.find(function (el) {
 				return el.getAttribute('data-cooltip') &&
-					el.checkVisibility({ visibilityProperty: true });
-			})[0];
+					el.checkVisibility({ visibilityProperty: true }) &&
+					!el.querySelector('[data-cooltip]');
+			});
 	}
 
 	// mouseLeave clears the flag that a hover sets to hold the tooltip open, so
@@ -78,20 +84,28 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 		cy.then(function () {
 			el = triggerIn(selector);
 			expect(el, where + ' offers a widget with a tooltip').to.not.be.undefined;
-		});
 
-		cy.then(function () {
-			cy.wrap(el).realHover();
-			cy.then(function () { win.app.map.tooltip.show(el); });
+			const rect = el.getBoundingClientRect();
+
+			cy.cGet('body').realMouseMove(rect.left + rect.width / 2,
+				rect.top + rect.height / 2);
 		});
 
 		cy.wrap(null).should(function () {
-			expect(shown(), where + ': the tooltip opened').to.be.true;
+			expect(shown(), where + ': hovering the widget opened its tooltip')
+				.to.be.true;
 		});
 
 		cy.then(function () { assertBesideItsTrigger(el, where); });
+
 		cy.then(function () {
-			a11yHelper.assertTooltipSurvivesTheCrossing(win, el, where);
+			cy.cGet('body').realMouseMove(win.innerWidth / 2, win.innerHeight / 2);
+		});
+
+		cy.wrap(null).should(function () {
+			expect(shown() && label() === el.getAttribute('data-cooltip'),
+				where + ': its tooltip is still up once the pointer has gone')
+				.to.be.false;
 		});
 	}
 
@@ -101,7 +115,7 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			cy.cGet('#Home-container').should('be.visible');
 		});
 
-		it('a toolitem answers the pointer that comes for its tooltip', function () {
+		it('a toolitem opens its tooltip beside what it describes', function () {
 			checkSurface(this, '#Home-container', 'the Home tab');
 		});
 	});
@@ -111,7 +125,7 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			cy.cGet('#sidebar-dock-wrapper').should('be.visible');
 		});
 
-		it('a sidebar button answers the pointer that comes for its tooltip', function () {
+		it('a sidebar button opens its tooltip beside what it describes', function () {
 			checkSurface(this, '#sidebar-dock-wrapper', 'the sidebar');
 		});
 	});
@@ -123,7 +137,7 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			cy.cGet('#main-menu').should('be.visible');
 		});
 
-		it('a menu entry answers the pointer that comes for its tooltip', function () {
+		it('a menu entry opens its tooltip beside what it describes', function () {
 			checkSurface(this, '#main-menu', 'the menubar');
 		});
 
@@ -141,7 +155,7 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			cy.then(function () { return helper.processToIdle(win); });
 		});
 
-		it('a dialog button answers the pointer that comes for its tooltip', function () {
+		it('a dialog button opens its tooltip beside what it describes', function () {
 			checkSurface(this, '.ui-dialog', 'Standard Filter');
 		});
 	});
