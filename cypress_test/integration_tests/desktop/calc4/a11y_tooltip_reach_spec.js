@@ -2,6 +2,7 @@
 
 const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
+const a11yHelper = require('../../common/a11y_helper');
 
 // The dialog case is covered by a11y_tooltip_spec; these are the surfaces the
 // auditor found it on instead. Two things are asked of content shown on hover:
@@ -61,28 +62,6 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			.to.be.at.most(MAX_GAP);
 	}
 
-	function assertSurvivesTheCrossing(el, where) {
-		const rect = el.getBoundingClientRect();
-		const tip = tooltip().getBoundingClientRect();
-		const samples = [];
-		const x = Math.max(rect.left, Math.min(tip.left + tip.width / 2, rect.right));
-		const y = tip.top > rect.bottom ? rect.bottom + 2 : rect.top - 2;
-
-		cy.cGet('body').realMouseMove(x, y);
-
-		for (let i = 0; i < 3; i++) {
-			cy.wait(150);
-			cy.then(function () {
-				samples.push((i + 1) * 150 + 'ms: ' + (shown() ? 'shown' : 'gone'));
-			});
-		}
-
-		cy.then(function () {
-			expect(samples.join(', '), where + ': the tooltip while the pointer crosses to it')
-				.to.not.contain('gone');
-		});
-	}
-
 	/// A surface that carries no tooltip at all has nothing to ask this of, and
 	/// which surfaces do differs between branches, so say so in the title
 	/// rather than assert a widget that was never there.
@@ -111,7 +90,9 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 		});
 
 		cy.then(function () { assertBesideItsTrigger(el, where); });
-		cy.then(function () { assertSurvivesTheCrossing(el, where); });
+		cy.then(function () {
+			a11yHelper.assertTooltipSurvivesTheCrossing(win, el, where);
+		});
 	}
 
 	describe('in the notebookbar', function () {

@@ -2,6 +2,7 @@
 
 const helper = require('../../common/helper');
 const calcHelper = require('../../common/calc_helper');
+const a11yHelper = require('../../common/a11y_helper');
 
 // What content shown on hover owes the pointer: it can be reached, it can be
 // dismissed, and it stays while the pointer is on it. The three buttons beside
@@ -85,34 +86,19 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 	});
 
 	it('stays while the pointer crosses the gap to it', function () {
-		const samples = [];
-		let gap;
-
 		pointerAway();
 		hover('add');
 
 		cy.then(function () {
 			const rect = widget('add').getBoundingClientRect();
 			const tip = tooltip().getBoundingClientRect();
+			const gap = Math.max(tip.top - rect.bottom, rect.top - tip.bottom, 0);
 
-			gap = Math.max(tip.top - rect.bottom, rect.top - tip.bottom, 0);
 			expect(gap, 'the tooltip is drawn away from the button').to.be.greaterThan(0);
-
-			cy.cGet('body').realMouseMove(rect.left + rect.width / 2,
-				tip.top > rect.bottom ? rect.bottom + 2 : rect.top - 2);
 		});
 
-		for (let i = 0; i < 3; i++) {
-			cy.wait(150);
-			cy.then(function () {
-				samples.push((i + 1) * 150 + 'ms: ' + (shown() ? 'shown' : 'gone'));
-			});
-		}
-
 		cy.then(function () {
-			expect(samples.join(', '),
-				'gap of ' + gap + 'px, the tooltip while the pointer crosses it')
-				.to.not.contain('gone');
+			a11yHelper.assertTooltipSurvivesTheCrossing(win, widget('add'), 'the Add button');
 		});
 	});
 
@@ -128,7 +114,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 			tip.mouseEnter();
 		});
 
-		cy.wait(900);
+		cy.wait(win.app.map.tooltip._options.hoverGrace * 1.5);
 
 		cy.then(function () {
 			expect(shown(), 'the tooltip under the pointer, past the grace period')

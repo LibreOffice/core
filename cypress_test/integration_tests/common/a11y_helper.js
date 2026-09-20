@@ -1471,6 +1471,58 @@ function assertEveryControlHasAShortcut(tabs) {
 		.to.be.empty;
 }
 
+/// Park the pointer in the gap between a widget and its tooltip, and ask that
+/// the tooltip is still there for the whole grace period.
+///
+/// The clock starts before the pointer moves and a sample that lands past the
+/// grace period is left out, so a machine that stretches the sampling answers
+/// with fewer samples rather than with a tooltip that closed too early.
+function assertTooltipSurvivesTheCrossing(win, elem, where) {
+	const tooltip = win.app.map.tooltip;
+	const grace = tooltip._options.hoverGrace;
+	const shown = function () {
+		return win.getComputedStyle(tooltip._container).visibility === 'visible';
+	};
+	let started;
+
+	cy.then(function () {
+		const rect = elem.getBoundingClientRect();
+		const tip = tooltip._container.getBoundingClientRect();
+
+		started = win.performance.now();
+		cy.cGet('body').realMouseMove(
+			Math.max(rect.left, Math.min(tip.left + tip.width / 2, rect.right)),
+			tip.top > rect.bottom ? rect.bottom + 2 : rect.top - 2);
+	});
+
+	cy.then(function () {
+		return new Cypress.Promise(function (resolve) {
+			const samples = [];
+			const tick = win.setInterval(function () {
+				const at = Math.round(win.performance.now() - started);
+
+				if (at > grace) {
+					win.clearInterval(tick);
+					resolve(samples);
+					return;
+				}
+
+				samples.push({ at: at, shown: shown() });
+			}, grace / 12);
+		});
+	}).then(function (samples) {
+		const watched = samples.length ? samples[samples.length - 1].at : 0;
+		const story = samples.map(function (sample) {
+			return sample.at + 'ms: ' + (sample.shown ? 'shown' : 'gone');
+		}).join(', ');
+
+		expect(watched, where + ': the crossing was watched for this long, of ' +
+			grace + 'ms').to.be.at.least(grace / 2);
+		expect(story, where + ': the tooltip while the pointer crosses to it')
+			.to.not.contain('gone');
+	});
+}
+
 module.exports.getFocusedAXNode = getFocusedAXNode;
 module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
 module.exports.getAXNodes = getAXNodes;
@@ -1487,3 +1539,4 @@ module.exports.assertShortcutsAreDistinct = assertShortcutsAreDistinct;
 module.exports.assertEveryControlHasAShortcut = assertEveryControlHasAShortcut;
 module.exports.notebookbarShortcutTargets = notebookbarShortcutTargets;
 module.exports.assertShortcutsFindTheirWidgets = assertShortcutsFindTheirWidgets;
+module.exports.assertTooltipSurvivesTheCrossing = assertTooltipSurvivesTheCrossing;
