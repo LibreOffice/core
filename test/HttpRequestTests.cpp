@@ -873,7 +873,9 @@ void HttpRequestTests::testParseRetryAfter()
     { return http::parseRetryAfter(value).value_or(std::chrono::seconds(-1)); };
 
     // The delta-seconds form, which is what hosts under load actually send.
-    LOK_ASSERT_EQUAL(std::chrono::seconds(0), parse("0"));
+    // Floored: a host asking for no wait at all still gets one, or the next
+    // attempt lands back to back with the one it just turned away.
+    LOK_ASSERT_EQUAL(http::MinRetryAfter, parse("0"));
     LOK_ASSERT_EQUAL(std::chrono::seconds(1), parse("1"));
     LOK_ASSERT_EQUAL(std::chrono::seconds(30), parse("30"));
 

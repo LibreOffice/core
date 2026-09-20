@@ -277,6 +277,11 @@ constexpr bool isTransientStatusCode(StatusCode code)
 /// own fallback is a better answer than obeying an extreme one.
 constexpr std::chrono::seconds MaxRetryAfter(60);
 
+/// The shortest delay we will take from a host's Retry-After. Zero is a valid
+/// answer, and taken at face value it puts the next attempt back to back with
+/// the one a busy host has just turned away.
+constexpr std::chrono::seconds MinRetryAfter(1);
+
 /// The delay a host asked for in its Retry-After header (RFC 9110), clamped to
 /// MaxRetryAfter. Only the delta-seconds form is read: the HTTP-date form needs
 /// a clock the two machines agree on, and every caller has its own default to
@@ -304,7 +309,7 @@ inline std::optional<std::chrono::seconds> parseRetryAfter(const std::string& va
     if (seconds > static_cast<std::uint64_t>(MaxRetryAfter.count()))
         return MaxRetryAfter;
 
-    return std::chrono::seconds(seconds);
+    return std::max<std::chrono::seconds>(std::chrono::seconds(seconds), MinRetryAfter);
 }
 
 /// Returns the Reason Phrase for a given HTTP Status Code.

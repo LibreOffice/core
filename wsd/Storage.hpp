@@ -759,6 +759,19 @@ public:
     /// How many consecutive transient failures we have ridden out.
     std::size_t transientFailures() const { return _transientFailures; }
 
+    /// When the next refresh is due, so the poll can wake for it rather than
+    /// sleeping out its own timeout and rounding a short retry up to it.
+    std::chrono::steady_clock::time_point nextRefresh() const
+    {
+        if (!_supportsLocks || !isLocked() || _refreshSeconds <= std::chrono::seconds::zero())
+            return std::chrono::steady_clock::time_point();
+
+        if (_retryNotBefore != std::chrono::steady_clock::time_point())
+            return _retryNotBefore;
+
+        return _lastLockTime + _refreshSeconds;
+    }
+
     /// Forgets a deferred retry, so that refreshing goes back to its period.
     /// Must be called on every outcome that isn't a deferral: while a retry is
     /// pending, needsRefresh() answers from it alone and never consults the

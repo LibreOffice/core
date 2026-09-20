@@ -469,14 +469,23 @@ void DocumentBroker::pollThread()
         // Don't sleep through a grace we are waiting out; without this the poll
         // could sit here for its full timeout and turn a short wait into a long
         // one. Nothing else wakes us, as the upload we are reconciling is over.
-        if (const auto untilCheckFileInfo =
-                _checkFileInfoNotBefore - std::chrono::steady_clock::now();
-            untilCheckFileInfo > std::chrono::steady_clock::duration::zero())
+        const auto capPollTimeout = [&pollTimeout](std::chrono::steady_clock::time_point until)
         {
-            pollTimeout = std::min<std::chrono::microseconds>(
-                pollTimeout,
-                std::chrono::duration_cast<std::chrono::microseconds>(untilCheckFileInfo));
-        }
+            if (until == std::chrono::steady_clock::time_point())
+                return;
+
+            if (const auto remaining = until - std::chrono::steady_clock::now();
+                remaining > std::chrono::steady_clock::duration::zero())
+            {
+                pollTimeout = std::min<std::chrono::microseconds>(
+                    pollTimeout,
+                    std::chrono::duration_cast<std::chrono::microseconds>(remaining));
+            }
+        };
+
+        capPollTimeout(_checkFileInfoNotBefore);
+        if (_lockCtx)
+            capPollTimeout(_lockCtx->nextRefresh());
 
         _poll->poll(pollTimeout);
 
@@ -950,8 +959,13 @@ void DocumentBroker::pollThread()
                 if (!_lockCtx->isLocked())
                     break;
 
-                const bool retry = status == StorageBase::LockUpdateResult::Status::TRANSIENT &&
-                                   std::chrono::steady_clock::now() < deadline;
+                // Leave room for the attempt itself, or the budget overruns by
+                // as long as one takes.
+                const bool retry =
+                    status == StorageBase::LockUpdateResult::Status::TRANSIENT &&
+                    std::chrono::steady_clock::now() + UnlockTimeoutWhileUnloading +
+                            UnlockRetryDelay <
+                        deadline;
                 if (!retry)
                 {
                     LOG_ERR("Failed to unlock docKey ["
