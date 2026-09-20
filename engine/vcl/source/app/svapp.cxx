@@ -1594,7 +1594,7 @@ Application::createFilePicker( const Reference< cpo::uno::XComponentContext >& x
     return pSVData->mpDefInst->createFilePicker( xSM );
 }
 
-Reference< ui::dialogs::XFolderPicker2 >
+Reference< ui::dialogs::XFolderPicker >
 Application::createFolderPicker( const Reference< cpo::uno::XComponentContext >& xSM )
 {
     ImplSVData* pSVData = ImplGetSVData();

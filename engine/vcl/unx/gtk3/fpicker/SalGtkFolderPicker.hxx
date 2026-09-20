@@ -27,7 +27,7 @@
 
 class SalGtkFolderPicker :
     public SalGtkPicker,
-    public cppu::WeakImplHelper<css::ui::dialogs::XFolderPicker2, css::lang::XInitialization>
+    public cppu::WeakImplHelper<css::ui::dialogs::XFolderPicker, css::lang::XInitialization>
 {
     public:
 

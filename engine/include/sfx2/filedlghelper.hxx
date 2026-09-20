@@ -37,7 +37,7 @@
 namespace com::sun::star::ui::dialogs
 {
     class XFilePicker;
-    class XFolderPicker2;
+    class XFolderPicker;
     struct FilePickerEvent;
     struct DialogClosedEvent;
 }
@@ -300,7 +300,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const cpo::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog );
 
-cpo::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
+cpo::uno::Reference<css::ui::dialogs::XFolderPicker> SFX2_DLLPUBLIC createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 
 ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const cpo::uno::Reference<css::awt::XWindow>& rParent);
 ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet,

@@ -13,7 +13,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(EPUBExportDialog, MediaClickHdl, weld::Button&, void)
 {
-    uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker
+    uno::Reference<ui::dialogs::XFolderPicker> xFolderPicker
         = sfx2::createFolderPicker(m_xContext, m_xDialog.get());
     if (xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
         return;

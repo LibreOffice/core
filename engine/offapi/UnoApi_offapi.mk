@@ -3812,7 +3812,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui/dialogs,\
 	XFilterGroupManager \
 	XFilterManager \
 	XFolderPicker \
-	XFolderPicker2 \
 	XWizard \
 	XWizardController \
 	XWizardPage \

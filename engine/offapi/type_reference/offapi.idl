@@ -16516,16 +16516,13 @@ module com {
      };
      published interface XFolderPicker {
       interface ::com::sun::star::ui::dialogs::XExecutableDialog;
+      interface ::com::sun::star::util::XCancellable;
       void setDisplayDirectory([in] string aDirectory) raises (::com::sun::star::lang::IllegalArgumentException);
       string getDisplayDirectory();
       string getDirectory();
       void setDescription([in] string aDescription);
      };
-     published interface XFolderPicker2 {
-      interface ::com::sun::star::ui::dialogs::XFolderPicker;
-      interface ::com::sun::star::util::XCancellable;
-     };
-     published service FolderPicker: ::com::sun::star::ui::dialogs::XFolderPicker2;
+     published service FolderPicker: ::com::sun::star::ui::dialogs::XFolderPicker;
      /** @deprecated */ published constants ListboxControlActions {
       const short ADD_ITEM = 1;
       const short ADD_ITEMS = 2;

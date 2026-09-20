@@ -1168,7 +1168,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mxFileDlg->addFilePickerListener( this );
 }
 
-cpo::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent)
+cpo::uno::Reference<css::ui::dialogs::XFolderPicker> createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent)
 {
     auto xRet = css::ui::dialogs::FolderPicker::create(rContext);
 

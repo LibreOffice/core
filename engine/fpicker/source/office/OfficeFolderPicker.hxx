@@ -19,14 +19,14 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "commonpicker.hxx"
 
 typedef
     cppu::ImplInheritanceHelper<
-        svt::OCommonPicker, css::ui::dialogs::XFolderPicker2,
+        svt::OCommonPicker, css::ui::dialogs::XFolderPicker,
         css::ui::dialogs::XAsynchronousExecutableDialog,
         css::lang::XServiceInfo >
     SvtFolderPicker_Base;
@@ -45,7 +45,7 @@ public:
     virtual                        ~SvtFolderPicker() override;
 
 
-    // XFolderPicker2 functions
+    // XFolderPicker functions
 
     virtual void           setDisplayDirectory( const OUString& aDirectory ) override;
     virtual OUString       getDisplayDirectory() override;

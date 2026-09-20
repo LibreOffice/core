@@ -122,7 +122,7 @@ sal_Int32 ScVbaFileDialog::Show()
             break;
         case office::MsoFileDialogType::msoFileDialogFolderPicker:
             {
-                uno::Reference< ui::dialogs::XFolderPicker2 > xFolderPicker =
+                uno::Reference< ui::dialogs::XFolderPicker > xFolderPicker =
                         ui::dialogs::FolderPicker::create(mxContext);
 
                 if( !m_sInitialFileName.isEmpty() )

@@ -76,7 +76,7 @@ namespace basegfx { class SystemDependentDataManager; }
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::ui::dialogs {
     class XFilePicker;
-    class XFolderPicker2;
+    class XFolderPicker;
 }
 namespace com::sun::star::awt {
     class XToolkit;
@@ -1266,7 +1266,7 @@ public:
 
      @returns Folder picker if available, otherwise an empty reference.
     */
-    static cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+    static cpo::uno::Reference< css::ui::dialogs::XFolderPicker >
         createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Returns true, if the VCL plugin should run on the system event loop.

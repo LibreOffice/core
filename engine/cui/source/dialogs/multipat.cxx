@@ -30,7 +30,7 @@
 
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/pathoptions.hxx>
@@ -50,7 +50,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 {
     const Reference < cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
+    Reference < XFolderPicker >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
         return;

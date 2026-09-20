@@ -208,7 +208,7 @@ public:
 
     virtual cpo::uno::Reference< css::ui::dialogs::XFilePicker >
         createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& ) override;
-    virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+    virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker >
         createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& ) override;
 
     virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>

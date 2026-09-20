@@ -28,7 +28,7 @@
 #include <svx/galctrl.hxx>
 #include <svx/galmisc.hxx>
 #include <com/sun/star/media/XPlayer.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 
 #include <string_view>
@@ -224,7 +224,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     cpo::uno::Reference< css::media::XPlayer >              xMediaPlayer;
-    cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
+    cpo::uno::Reference< css::ui::dialogs::XFolderPicker >  xFolderPicker;
 
     DialogGalleryPreview m_aWndPreview;
     std::unique_ptr<weld::ComboBox> m_xCbbFileType;

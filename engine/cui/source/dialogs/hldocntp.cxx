@@ -36,7 +36,7 @@
 #include <unotools/ucbhelper.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <cuihyperdlg.hxx>
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
 {
     DisableClose( true );
     const uno::Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, mpDialog->getDialog());
+    uno::Reference < XFolderPicker >  xFolderPicker = sfx2::createFolderPicker(xContext, mpDialog->getDialog());
 
     OUString            aStrURL;
     OUString            aTempStrURL( m_xCbbPath->get_active_text() );

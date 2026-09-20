@@ -29,7 +29,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -46,7 +46,7 @@ namespace vista{
 typedef ::cppu::WeakComponentImplHelper<
                 css::ui::dialogs::XFilePicker,
                 css::ui::dialogs::XFilePreview,
-                css::ui::dialogs::XFolderPicker2,
+                css::ui::dialogs::XFolderPicker,
                 css::lang::XInitialization,
                 css::lang::XServiceInfo >   TVistaFilePickerBase;
 

@@ -47,7 +47,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <sfx2/strings.hrc>
@@ -991,7 +991,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
 void SfxTemplateManagerDlg::OnTemplateExport()
 {
     const uno::Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
-    uno::Reference<XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
+    uno::Reference<XFolderPicker> xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     xFolderPicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
 

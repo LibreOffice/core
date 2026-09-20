@@ -45,7 +45,7 @@
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -1144,7 +1144,7 @@ void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibNa
     EnsureIde();
     // Folder picker
     const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    Reference<XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(xContext, pDialog);
+    Reference<XFolderPicker> xFolderPicker = sfx2::createFolderPicker(xContext, pDialog);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 
     xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC));

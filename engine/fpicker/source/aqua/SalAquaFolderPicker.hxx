@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 
 #include "SalAquaPicker.hxx"
 
@@ -36,7 +36,7 @@
 class SalAquaFolderPicker :
         public SalAquaPicker,
     public cppu::WeakImplHelper<
-    css::ui::dialogs::XFolderPicker2,
+    css::ui::dialogs::XFolderPicker,
     css::lang::XServiceInfo,
     css::lang::XEventListener >
 {

@@ -28,7 +28,7 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
     try
     {
         const uno::Reference < cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference < ui::dialogs::XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDlg->getDialog());
+        uno::Reference < ui::dialogs::XFolderPicker > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDlg->getDialog());
 
         short nRet = xFolderPicker->execute();
 

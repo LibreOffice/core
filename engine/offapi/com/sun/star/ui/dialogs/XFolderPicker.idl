@@ -23,8 +23,15 @@ module com { module sun { module star { module ui { module dialogs {
 /** Specifies a FolderPicker interface.
 */
 
-published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialog
+published interface XFolderPicker
 {
+    interface com::sun::star::ui::dialogs::XExecutableDialog;
+
+    /** For canceling a running dialog instance.
+        <p>This may be useful for automatic test tools for instance.</p>
+    */
+    interface com::sun::star::util::XCancellable;
+
     /** Sets the root directory that the FolderPicker should display.
         It is not specified which root directory the FolderPicker
         chooses if the specified root directory doesn't exist.

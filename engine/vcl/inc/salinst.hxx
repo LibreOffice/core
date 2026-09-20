@@ -33,7 +33,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <memory>
 
 namespace com::sun::star::awt {
@@ -201,8 +201,8 @@ public:
     // if you override this, make sure to override hasNativeFileSelection too.
     virtual cpo::uno::Reference< css::ui::dialogs::XFilePicker > createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
         { return cpo::uno::Reference< css::ui::dialogs::XFilePicker >(); }
-    virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
-        { return cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
+    virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker > createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
+        { return cpo::uno::Reference< css::ui::dialogs::XFolderPicker >(); }
 
     // callbacks for printer updates
     virtual void            updatePrinterUpdate() {}

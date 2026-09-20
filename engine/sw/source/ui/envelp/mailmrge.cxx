@@ -45,7 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -562,7 +562,7 @@ OUString SwMailMergeDlg::GetTargetURL() const
 IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl, weld::Button&, void)
 {
     const uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference < XFolderPicker2 > xFP = sfx2::createFolderPicker(xContext, m_xDialog.get());
+    uno::Reference < XFolderPicker > xFP = sfx2::createFolderPicker(xContext, m_xDialog.get());
     xFP->setDisplayDirectory( GetURLfromPath() );
     if( xFP->execute() == RET_OK ) {
         INetURLObject aURL(xFP->getDirectory());
