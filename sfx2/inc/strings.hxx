@@ -49,6 +49,7 @@ inline constexpr OUString STR_TEMPLATE_NAME31_DEF = u"Simple"_ustr;
 inline constexpr OUString STR_TEMPLATE_NAME32_DEF = u"BPMN"_ustr;
 inline constexpr OUString STR_TEMPLATE_NAME33_DEF = u"Simplified Chinese Normal"_ustr;
 inline constexpr OUString STR_TEMPLATE_NAME34_DEF = u"Japanese Normal"_ustr;
+inline constexpr OUString STR_TEMPLATE_NAME35_DEF = u"MediaWiki"_ustr;
 
 inline constexpr OUString CMIS_TYPE_STRING = u"String"_ustr;
 #define CMIS_TYPE_INTEGER "Integer"

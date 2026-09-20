@@ -40,7 +40,7 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/scripts.xsl,$(gb_
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tables.xsl,$(gb_UnpackedTarball_workdir)/xsltml/tables.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tokens.xsl,$(gb_UnpackedTarball_workdir)/xsltml/tokens.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/odt2mediawiki.xsl,$(SRCDIR)/swext/mediawiki/src/filter/odt2mediawiki.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(SRCDIR)/swext/mediawiki/src/filter/mediawiki.ott))
+$(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(gb_CustomTarget_workdir)/mediawiki/template/mediawiki.ott))
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikisend.xhp,wikisend.xhp))
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikiformats.xhp,wikiformats.xhp))
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikiaccount.xhp,wikiaccount.xhp))
@@ -48,5 +48,46 @@ $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikisettings.xhp,wikisettings.xhp))
 
 $(eval $(call gb_Extension_add_helptreefile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,help.tree,help.tree,com.sun.wiki-publisher))
+
+# Build mediawiki.ott
+define run_zip_template_recipe =
+$(call gb_Output_announce,$(subst $(gb_CustomTarget_workdir)/mediawiki/template/,,$@),$(true),ZIP,2)
+$(call gb_Trace_StartRange,$(subst $(gb_CustomTarget_workdir)/mediawiki/template/,,$@),ZIP)
+cd $(dir $<) && \
+$(call gb_Helper_wsl_path,\
+$(WSL) zip -q0X --filesync --must-match $@ mimetype && \
+$(WSL) zip -qrX --must-match $@ $(subst $(dir $<),,$^) -x mimetype) \
+$(call gb_Helper_make_zip_deterministic,$@)
+$(call gb_Trace_EndRange,$(subst $(gb_CustomTarget_workdir)/mediawiki/template/,,$@),ZIP)
+endef
+
+.SECONDEXPANSION:
+# secondexpansion since the patterns not just cover a filename portion, but also include a
+# directory portion with different number of elements
+# copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
+$(gb_CustomTarget_workdir)/mediawiki/template/% : $(SRCDIR)/swext/mediawiki/src/filter/% \
+        | $$(dir $(gb_CustomTarget_workdir)/mediawiki/template/$$*).dir
+	$(call gb_Output_announce,templates/$*,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/$*,CPY)
+	cp $< $@
+	$(call gb_Trace_EndRange,templates/$*,CPY)
+
+# test and copy xml files
+$(gb_CustomTarget_workdir)/mediawiki/template/%.xml : $(SRCDIR)/swext/mediawiki/src/filter/%.xml \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
+          $$(dir $(gb_CustomTarget_workdir)/mediawiki/template/$$*.xml).dir
+	$(call gb_Output_announce,templates/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,templates/$*.xml,XSL)
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,templates/$*.xml,XSL)
+
+
+$(gb_CustomTarget_workdir)/mediawiki/template/%.ott : \
+        $$(addprefix $(gb_CustomTarget_workdir)/mediawiki/template/$$*/,\
+            mimetype META-INF/manifest.xml content.xml meta.xml styles.xml \
+            settings.xml manifest.rdf Thumbnails/thumbnail.png )
+	$(run_zip_template_recipe)
+
+
 
 # vim: set noet sw=4 ts=4:
