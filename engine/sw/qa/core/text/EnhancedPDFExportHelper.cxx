@@ -356,6 +356,49 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutAttributeUnits)
     // the 1.5in column the cell sits in
     CPPUNIT_ASSERT_DOUBLES_EQUAL(108.0, getLength(pCell, "Width"_ostr), 0.01);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
+{
+    createSwDoc("paragraph-language.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    maTempFile.CloseStream();
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // every structure element that names a language, sorted: they are emitted by object and
+    // not by document order
+    std::vector<OString> aLanguages;
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        auto pLang
+            = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("Lang"_ostr));
+        if (!pType || !pLang)
+            continue;
+
+        aLanguages.push_back(pType->GetValue() + "=" + pLang->GetValue());
+    }
+    std::sort(aLanguages.begin(), aLanguages.end());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aLanguages.size());
+    // the German words in an English paragraph, and the text of the paragraph holding a frame,
+    // which says nothing itself because what is anchored there hangs under it
+    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[0]);
+    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[1]);
+    // Without the fix this was de-DE: the run differs from its paragraph, not from the document
+    CPPUNIT_ASSERT_EQUAL("Span=en-US"_ostr, aLanguages[2]);
+    // and without it neither German paragraph named a language at all
+    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[3]);
+    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[4]);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

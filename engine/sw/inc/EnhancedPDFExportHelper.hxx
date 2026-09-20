@@ -20,6 +20,7 @@
 #pragma once
 
 #include <i18nlangtag/lang.h>
+#include <svl/typedwhich.hxx>
 #include <vcl/pdfwriter.hxx>
 #include "swrect.hxx"
 #include "swtypes.hxx"
@@ -32,6 +33,7 @@ namespace vcl
     class PDFExtOutDevData;
 }
 class OutputDevice;
+class SvxLanguageItem;
 class SwFrame;
 class SwLinePortion;
 class SwPageFrame;
@@ -228,7 +230,8 @@ class SwEnhancedPDFExportHelper
 
     const SwPrintData& mrPrintData;
 
-    void EnhancedPDFExport(LanguageType const eLanguageDefault);
+    void EnhancedPDFExport(LanguageType const eLanguageDefault,
+                           const TypedWhichId<SvxLanguageItem> nLanguageWhich);
 
     /// Exports bibliography entry links.
     void ExportAuthorityEntryLinks();
