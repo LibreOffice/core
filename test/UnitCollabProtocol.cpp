@@ -336,9 +336,93 @@ public:
     }
 };
 
-UnitBase* unit_create_wsd(void)
+
+/// A host answering 503 to CheckFileInfo is busy, not refusing us. We used to
+/// fold every unsuccessful answer together and tell the user their document
+/// had failed to load; a busy host now reads as one that did not answer.
+class UnitCollabCheckFileInfoTransient : public WopiTestServer
 {
-    return new UnitCollabProtocol();
+    enum class Phase { Connect, WaitError, Done } _phase;
+
+    /// CheckFileInfo requests answered with 503.
+    std::size_t _refused;
+
+    std::shared_ptr<http::WebSocketSession> _ws;
+    std::string _wopiSrc;
+
+public:
+    UnitCollabCheckFileInfoTransient()
+        : WopiTestServer("UnitCollabCheckFileInfoTransient")
+        , _phase(Phase::Connect)
+        , _refused(0)
+    {
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        ++_refused;
+        TST_LOG("Refusing CheckFileInfo #" << _refused << " with 503");
+
+        // Give it a body: the fake host shuts the socket after answering, and a
+        // bodiless answer reaches us as a dropped connection rather than as the
+        // status we meant to send.
+        auto response =
+            std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setBody("busy", "text/plain");
+        return response;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Connect:
+            {
+                PHASE_TRANSITION(WaitError);
+
+                const Poco::URI wopiURL(helpers::getTestServerURI() +
+                                        "/wopi/files/0?access_token=anything"
+                                        "&testname=UnitCollabCheckFileInfoTransient");
+                _wopiSrc = Uri::encode(wopiURL.toString());
+
+                _ws = startCollabConnection(socketPoll(), _wopiSrc, "anything");
+                break;
+            }
+            case Phase::WaitError:
+            {
+                const auto response = _ws->waitForMessage("error:", std::chrono::milliseconds(1),
+                                                          "collab");
+                if (response.empty())
+                    break;
+
+                const std::string message(response.data(), response.size());
+                TST_LOG("Received: " << message);
+
+                // "loadfailed" is what a refusal earns. A host that is merely
+                // busy has not refused us and must not be reported as one.
+                LOK_ASSERT_MESSAGE("Reported a busy host as a failure to load: " + message,
+                                   message.find("kind=loadfailed") == std::string::npos);
+                LOK_ASSERT_MESSAGE("Expected a busy host to read as no answer: " + message,
+                                   message.find("kind=timeout") != std::string::npos);
+
+                PHASE_TRANSITION(Done);
+                break;
+            }
+            case Phase::Done:
+            {
+                LOK_ASSERT_MESSAGE("Expected CheckFileInfo to have been asked", _refused > 0);
+                passTest("A busy host reads as no answer, not a failure to load");
+                break;
+            }
+        }
+    }
+};
+
+UnitBase** unit_create_wsd_multi(void)
+{
+    return new UnitBase* [3] { new UnitCollabProtocol(),
+                               new UnitCollabCheckFileInfoTransient(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
