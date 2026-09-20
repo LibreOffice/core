@@ -542,7 +542,8 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
 
     // Update the dynamic files as necessary.
 #if ENABLE_CHILDROOTS
-    const bool sysTemplateIncomplete = !JailUtil::SysTemplate::updateDynamicFiles(sysTemplate);
+    const bool sysTemplateIncomplete =
+        !NoCapsForKit && !JailUtil::SysTemplate::updateDynamicFiles(sysTemplate);
 #else
     const bool sysTemplateIncomplete = false;
 #endif
@@ -1048,11 +1049,15 @@ int forkit_main(int argc, char** argv)
         LOG_ERR("forkit has more than a single thread after pre-init" << Util::ThreadCounter().count());
 
 #if ENABLE_CHILDROOTS
-    // Link the network and system files in sysTemplate, if possible.
-    JailUtil::SysTemplate::setupDynamicFiles(sysTemplate);
+    // A kit that is not chrooted reads the real files, so there is no systemplate to prepare.
+    if (!NoCapsForKit)
+    {
+        // Link the network and system files in sysTemplate, if possible.
+        JailUtil::SysTemplate::setupDynamicFiles(sysTemplate);
 
-    // Make dev/[u]random point to the writable devices in tmp/dev/.
-    JailUtil::SysTemplate::setupRandomDeviceLinks(sysTemplate);
+        // Make dev/[u]random point to the writable devices in tmp/dev/.
+        JailUtil::SysTemplate::setupRandomDeviceLinks(sysTemplate);
+    }
 #endif
 
     if (!Util::isKitInProcess())

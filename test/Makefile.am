@@ -570,6 +570,7 @@ all-local: unittest unithttplib clienttest
 	@if [ -n "$${COOL_SKIP_UNITTESTS}" ]; then \
 	    exit 0; \
 	fi; \
+	$(MAKE) -C $(abs_top_builddir) systemplate || exit 1; \
 	echo; \
 	echo "Running build-time unit tests.  For more thorough testing, please run 'make check'."; \
 	echo "Test output is in `pwd`/test.log and is displayed on failure."; \

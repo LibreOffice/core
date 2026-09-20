@@ -729,7 +729,7 @@ run: setup-wsd
 			--o:trace_event[@enable]=true \
 			$(RUN_EXTRA)
 
-namespace-run: setup-wsd check-apparmour-namespaces
+namespace-run: setup-wsd check-apparmour-namespaces $(SYSTEM_STAMP)
 	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
@@ -834,6 +834,8 @@ SYSTEM_STAMP =
 
 endif
 
+systemplate: $(SYSTEM_STAMP)
+
 if ENABLE_FUZZERS
 ALL_LOCAL_DEPS=build-fuzzer-gbuild-libs
 else
@@ -845,7 +847,7 @@ endif
 endif
 
 if ENABLE_SERVER
-all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
+all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@
 	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
 else
 all-local: $(ALL_LOCAL_DEPS)
@@ -1119,4 +1121,4 @@ sbom-freshness: collabora-online-sbom.spdx.json
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
-.PHONY: cleanup setup-wsd sbom-check sbom-audit sbom-freshness
+.PHONY: cleanup setup-wsd systemplate sbom-check sbom-audit sbom-freshness
