@@ -174,7 +174,7 @@ void NotesPaneModule::notifyConfigurationChange(const ConfigurationChangeEvent& 
     }
 }
 
-void SAL_CALL NotesPaneModule::disposing(const lang::EventObject& rEvent)
+void NotesPaneModule::disposing(const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()
         && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))

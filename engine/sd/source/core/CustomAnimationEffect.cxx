@@ -3023,21 +3023,21 @@ class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 public:
     explicit AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
 
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void changesOccurred( const css::util::ChangesEvent& Event ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 private:
     MainSequence* mpMainSequence;
 };
 
 }
 
-void SAL_CALL AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& )
+void AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& )
 {
     if( mpMainSequence )
         mpMainSequence->startRecreateTimer();
 }
 
-void SAL_CALL AnimationChangeListener::disposing( const css::lang::EventObject& )
+void AnimationChangeListener::disposing( const css::lang::EventObject& )
 {
 }
 

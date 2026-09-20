@@ -58,7 +58,7 @@ public:
         const cpo::uno::Any& rOldValue,
         const cpo::uno::Any& rNewValue);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /** Return the implementation object of the specified child.
         @param nIndex
@@ -69,39 +69,39 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
     /// Return the specified child or throw exception.
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleIndexInParent() override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getAccessibleRole() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleDescription() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
 
     /// Return NULL to indicate that an empty relation set.
     virtual cpo::uno::Reference<
-            css::accessibility::XAccessibleRelationSet> SAL_CALL
+            css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override;
 
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
 
     // OAccessible
@@ -109,49 +109,49 @@ public:
 
     //=====  XAccessibleComponent  ================================================
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleAtPoint (
             const css::awt::Point& aPoint) override;
 
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
 
-    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 getForeground() override;
 
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 getBackground() override;
 
     //===== XAccessibleSelection ==============================================
 
-    virtual void SAL_CALL
+    virtual void
         selectAccessibleChild (sal_Int64 nChildIndex) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
 
-    virtual void SAL_CALL
+    virtual void
         clearAccessibleSelection(  ) override;
 
-    virtual void SAL_CALL
+    virtual void
         selectAllAccessibleChildren(  ) override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getSelectedAccessibleChildCount(  ) override;
 
     virtual cpo::uno::Reference<
-        css::accessibility::XAccessible > SAL_CALL
+        css::accessibility::XAccessible >
         getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
-    virtual void SAL_CALL
+    virtual void
         deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     //=====  XServiceInfo  ====================================================
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
         supportsService (const OUString& sServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     void SwitchViewActivated();

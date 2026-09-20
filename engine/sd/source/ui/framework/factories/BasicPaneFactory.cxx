@@ -293,7 +293,7 @@ void BasicPaneFactory::Listener::notifyConfigurationChange (
 
 //===== lang::XEventListener ==================================================
 
-void SAL_CALL BasicPaneFactory::Listener::disposing (
+void BasicPaneFactory::Listener::disposing (
     const lang::EventObject& rEventObject)
 {
     if (uno::Reference<XInterface>(cppu::getXWeak(mrParent.mxConfigurationControllerWeak.get().get())) == rEventObject.Source)

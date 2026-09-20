@@ -20,7 +20,7 @@ SlideTransitionsToolBoxControl::SlideTransitionsToolBoxControl() {}
 
 SlideTransitionsToolBoxControl::~SlideTransitionsToolBoxControl() {}
 
-void SAL_CALL
+void
 SlideTransitionsToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     SAL_INFO("sd", "initialize called for TransitionToolBoxControl");
@@ -38,7 +38,7 @@ void SlideTransitionsToolBoxControl::disposing(std::unique_lock<std::mutex>& rGu
     svt::ToolboxController::disposing(rGuard);
 }
 
-void SAL_CALL
+void
 SlideTransitionsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
 {
     // Handle status changes if needed
@@ -72,22 +72,22 @@ cpo::uno::Reference<css::awt::XWindow> SlideTransitionsToolBoxControl::createIte
     return xItemWindow;
 }
 
-void SAL_CALL SlideTransitionsToolBoxControl::update()
+void SlideTransitionsToolBoxControl::update()
 {
     // Update logic if needed
 }
 
-OUString SAL_CALL SlideTransitionsToolBoxControl::getImplementationName()
+OUString SlideTransitionsToolBoxControl::getImplementationName()
 {
     return u"com.sun.star.comp.sd.SlideTransitionsToolBoxControl"_ustr;
 }
 
-bool SAL_CALL SlideTransitionsToolBoxControl::supportsService(const OUString& rServiceName)
+bool SlideTransitionsToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SlideTransitionsToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SlideTransitionsToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }

@@ -92,7 +92,7 @@ void AccessibleOutlineView::ViewForwarderChanged()
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int64 SAL_CALL
+sal_Int64
     AccessibleOutlineView::getAccessibleChildCount()
 {
     ensureAlive();
@@ -101,7 +101,7 @@ sal_Int64 SAL_CALL
     return maTextHelper.GetChildCount();
 }
 
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
     AccessibleOutlineView::getAccessibleChild (sal_Int64 nIndex)
 {
     ensureAlive();
@@ -109,7 +109,7 @@ uno::Reference<XAccessible> SAL_CALL
     return maTextHelper.GetChild(nIndex);
 }
 
-OUString SAL_CALL
+OUString
     AccessibleOutlineView::getAccessibleName()
 {
     SolarMutexGuard g;
@@ -138,7 +138,7 @@ OUString SAL_CALL
 
 //=====  XAccessibleEventBroadcaster  ========================================
 
-void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+void AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // delegate listener handling to children manager.
     if (isAlive())
@@ -146,7 +146,7 @@ void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Refe
     AccessibleContextBase::addEventListener(xListener);
 }
 
-void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+void AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // forward
     if (isAlive())
@@ -156,7 +156,7 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 
 // XServiceInfo
 
-OUString SAL_CALL
+OUString
     AccessibleOutlineView::getImplementationName()
 {
     return u"AccessibleOutlineView"_ustr;
@@ -182,7 +182,7 @@ void AccessibleOutlineView::Deactivated()
     maTextHelper.SetFocus(false);
 }
 
-void SAL_CALL AccessibleOutlineView::disposing()
+void AccessibleOutlineView::disposing()
 {
     // dispose children
     maTextHelper.Dispose();
@@ -192,7 +192,7 @@ void SAL_CALL AccessibleOutlineView::disposing()
 
 //=====  XPropertyChangeListener  =============================================
 
-void SAL_CALL
+void
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
 {
     ensureAlive();

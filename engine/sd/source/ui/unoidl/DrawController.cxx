@@ -110,7 +110,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(
 
 // XTypeProvider
 
-Sequence<Type> SAL_CALL DrawController::getTypes()
+Sequence<Type> DrawController::getTypes()
 {
     ThrowIfDisposed();
     // OPropertySetHelper does not provide getTypes, so we have to
@@ -130,7 +130,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(DrawController);
 
 // XComponent
 
-void SAL_CALL DrawController::dispose()
+void DrawController::dispose()
 {
     if( mbDisposing )
         return;
@@ -170,14 +170,14 @@ void SAL_CALL DrawController::dispose()
     SfxBaseController::dispose();
 }
 
-void SAL_CALL DrawController::addEventListener(
+void DrawController::addEventListener(
     const Reference<lang::XEventListener >& xListener)
 {
     ThrowIfDisposed();
     SfxBaseController::addEventListener( xListener );
 }
 
-void SAL_CALL DrawController::removeEventListener (
+void DrawController::removeEventListener (
     const Reference<lang::XEventListener >& aListener)
 {
     if(!rBHelper.bDisposed && !rBHelper.bInDispose && !mbDisposing)
@@ -185,7 +185,7 @@ void SAL_CALL DrawController::removeEventListener (
 }
 
 // XServiceInfo
-OUString SAL_CALL DrawController::getImplementationName(  )
+OUString DrawController::getImplementationName(  )
 {
     // Do not throw an exception at the moment.  This leads to a crash
     // under Solaris on reload.  See issue i70929 for details.
@@ -195,12 +195,12 @@ OUString SAL_CALL DrawController::getImplementationName(  )
 
 constexpr OUString ssServiceName = u"com.sun.star.drawing.DrawingDocumentDrawView"_ustr;
 
-bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
+bool DrawController::supportsService (const OUString& rsServiceName)
 {
     return cppu::supportsService(this, rsServiceName);
 }
 
-Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames()
+Sequence<OUString> DrawController::getSupportedServiceNames()
 {
     ThrowIfDisposed();
     Sequence<OUString> aSupportedServices { ssServiceName };
@@ -208,7 +208,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames()
 }
 
 //------ XSelectionSupplier --------------------------------------------
-bool SAL_CALL DrawController::select (const Any& aSelection)
+bool DrawController::select (const Any& aSelection)
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -219,7 +219,7 @@ bool SAL_CALL DrawController::select (const Any& aSelection)
         return false;
 }
 
-Any SAL_CALL DrawController::getSelection()
+Any DrawController::getSelection()
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -230,7 +230,7 @@ Any SAL_CALL DrawController::getSelection()
         return Any();
 }
 
-void SAL_CALL DrawController::addSelectionChangeListener(
+void DrawController::addSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener)
 {
     if( mbDisposing )
@@ -239,7 +239,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     BroadcastHelperOwner::maBroadcastHelper.addListener (m_aSelectionTypeIdentifier, xListener);
 }
 
-void SAL_CALL DrawController::removeSelectionChangeListener(
+void DrawController::removeSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener )
 {
     if (rBHelper.bDisposed)
@@ -250,14 +250,14 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
 
 //=====  lang::XEventListener  ================================================
 
-void SAL_CALL
+void
     DrawController::disposing (const lang::EventObject& )
 {
 }
 
 //=====  view::XSelectionChangeListener  ======================================
 
-void  SAL_CALL
+void
     DrawController::selectionChanged (const lang::EventObject& rEvent)
 {
     ThrowIfDisposed();
@@ -287,7 +287,7 @@ void  SAL_CALL
 
 // XDrawView
 
-void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )
+void DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -296,7 +296,7 @@ void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPag
         mxSubController->setCurrentPage(xPage);
 }
 
-Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
+Reference< drawing::XDrawPage > DrawController::getCurrentPage()
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
@@ -534,7 +534,7 @@ const rtl::Reference<framework::ModuleController> & DrawController::getModuleCon
 }
 //===== XSlideSorterSelectionSupplier ==============================================================
 
-Any SAL_CALL DrawController::getSlideSorterSelection()
+Any DrawController::getSlideSorterSelection()
 {
     ThrowIfDisposed();
 
@@ -635,7 +635,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
     return xInfo;
 }
 
-uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form )
+uno::Reference< form::runtime::XFormController > DrawController::getFormController( const uno::Reference< form::XForm >& Form )
 {
     SolarMutexGuard aGuard;
 
@@ -650,7 +650,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
     return xController;
 }
 
-bool SAL_CALL DrawController::isFormDesignMode(  )
+bool DrawController::isFormDesignMode(  )
 {
     SolarMutexGuard aGuard;
 
@@ -663,7 +663,7 @@ bool SAL_CALL DrawController::isFormDesignMode(  )
     return bIsDesignMode;
 }
 
-void SAL_CALL DrawController::setFormDesignMode( bool DesignMode )
+void DrawController::setFormDesignMode( bool DesignMode )
 {
     SolarMutexGuard aGuard;
 
@@ -672,7 +672,7 @@ void SAL_CALL DrawController::setFormDesignMode( bool DesignMode )
         pFormShell->SetDesignMode( DesignMode );
 }
 
-uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel )
+uno::Reference< awt::XControl > DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel )
 {
     SolarMutexGuard aGuard;
 

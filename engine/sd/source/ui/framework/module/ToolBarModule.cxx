@@ -232,7 +232,7 @@ void ToolBarModule::UpdateToolbars(const ViewShell* pViewShell)
     }
 }
 
-void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
+void ToolBarModule::disposing (const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()
         && rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))

@@ -134,7 +134,7 @@ namespace sd::colortoolpanel
     {
     }
 
-    Reference< XWindow > SAL_CALL SingleColorPanel::getWindow(  ) throw (RuntimeException)
+    Reference< XWindow > SingleColorPanel::getWindow(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.get() )
@@ -142,7 +142,7 @@ namespace sd::colortoolpanel
         return m_xWindow;
     }
 
-    Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
+    Reference< XAccessible > SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
         (void)i_rParentAccessible;
         return Reference< XAccessible >( m_xWindow, UNO_QUERY );
@@ -150,7 +150,7 @@ namespace sd::colortoolpanel
         // extension only, you'll want to do this correctly...
     }
 
-    Reference< XResourceId > SAL_CALL SingleColorPanel::getResourceId(  ) throw (RuntimeException)
+    Reference< XResourceId > SingleColorPanel::getResourceId(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
@@ -158,7 +158,7 @@ namespace sd::colortoolpanel
         return m_xResourceId;
     }
 
-    bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
+    bool SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
@@ -166,7 +166,7 @@ namespace sd::colortoolpanel
         return false;
     }
 
-    void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
+    void SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
     {
         try
         {
@@ -185,12 +185,12 @@ namespace sd::colortoolpanel
         }
     }
 
-    void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
+    void SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
     {
         (void)i_rSource;
     }
 
-    void SAL_CALL SingleColorPanel::disposing()
+    void SingleColorPanel::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )

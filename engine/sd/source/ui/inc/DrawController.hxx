@@ -153,55 +153,55 @@ public:
     void ReleaseViewShellBase();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-    SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
-    SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    SD_DLLPUBLIC virtual void acquire() noexcept override;
+    SD_DLLPUBLIC virtual void release() noexcept override;
 
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XSelectionSupplier
-    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
-    virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
-    virtual void SAL_CALL addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual bool select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any getSelection(  ) override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XFormLayerAccess
-    virtual cpo::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const cpo::uno::Reference< css::form::XForm >& Form ) override;
-    virtual bool SAL_CALL isFormDesignMode(  ) override;
-    virtual void SAL_CALL setFormDesignMode( bool DesignMode ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormController > getFormController( const cpo::uno::Reference< css::form::XForm >& Form ) override;
+    virtual bool isFormDesignMode(  ) override;
+    virtual void setFormDesignMode( bool DesignMode ) override;
 
     // XControlAccess
-    virtual cpo::uno::Reference< css::awt::XControl > SAL_CALL getControl( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual cpo::uno::Reference< css::awt::XControl > getControl( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
     // XDrawView
-    virtual void SAL_CALL
+    virtual void
         setCurrentPage (
             const cpo::uno::Reference<
             css::drawing::XDrawPage >& xPage) override;
 
     virtual cpo::uno::Reference<
-        css::drawing::XDrawPage > SAL_CALL
+        css::drawing::XDrawPage >
         getCurrentPage() override;
 
     // lang::XEventListener
-    virtual void SAL_CALL
+    virtual void
         disposing (const css::lang::EventObject& rEventObject) override;
 
     // view::XSelectionChangeListener
-    virtual void  SAL_CALL
+    virtual void
         selectionChanged (const css::lang::EventObject& rEvent) override;
 
     SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationController();
@@ -209,13 +209,13 @@ public:
     const rtl::Reference<sd::framework::ModuleController> & getModuleController();
 
     // XSlideSorterSelectionSupplier
-    virtual cpo::uno::Any SAL_CALL getSlideSorterSelection(  ) override;
+    virtual cpo::uno::Any getSlideSorterSelection(  ) override;
 
 private:
     /** This method must return the name to index table. This table
         contains all property names and types of this object.
      */
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     static void FillPropertyTable (
         ::std::vector< css::beans::Property>& rProperties);
@@ -224,7 +224,7 @@ private:
      * The same as getFastPropertyValue, but return the value through
      * rValue and nHandle is always valid.
      */
-    virtual void SAL_CALL getFastPropertyValue(
+    virtual void getFastPropertyValue(
         cpo::uno::Any& rValue,
         sal_Int32 nHandle ) const override;
 
@@ -242,7 +242,7 @@ private:
             <TRUE/> if the value is converted successfully.
         @throws IllegalArgumentException
      */
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual bool convertFastPropertyValue(
         cpo::uno::Any & rConvertedValue,
         cpo::uno::Any & rOldValue,
         sal_Int32 nHandle,
@@ -251,7 +251,7 @@ private:
     /** The same as setFastPropertyValue, but no exception is thrown and nHandle
         is always valid. You must not broadcast the changes in this method.
      */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
         const cpo::uno::Any& rValue ) override;
 

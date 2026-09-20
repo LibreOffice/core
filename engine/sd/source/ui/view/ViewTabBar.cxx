@@ -202,7 +202,7 @@ void ViewTabBar::Listener::notifyConfigurationChange (
 
 //----- XEventListener --------------------------------------------------------
 
-void SAL_CALL ViewTabBar::Listener::disposing(
+void ViewTabBar::Listener::disposing(
     const lang::EventObject& rEvent)
 {
     if (rEvent.Source == cppu::getXWeak(mrParent.mxConfigurationController.get()))

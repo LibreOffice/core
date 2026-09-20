@@ -100,12 +100,12 @@ SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() noexcept
 }
 
 // util::XReplaceable
-uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::createReplaceDescriptor()
+uno::Reference< util::XReplaceDescriptor > SdUnoSearchReplaceShape::createReplaceDescriptor()
 {
     return new SdUnoSearchReplaceDescriptor;
 }
 
-sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< util::XSearchDescriptor >& xDesc )
+sal_Int32 SdUnoSearchReplaceShape::replaceAll( const uno::Reference< util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
     if( pDescr == nullptr )
@@ -180,12 +180,12 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 }
 
 // XSearchable
-uno::Reference< css::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
+uno::Reference< css::util::XSearchDescriptor > SdUnoSearchReplaceShape::createSearchDescriptor(  )
 {
     return new SdUnoSearchReplaceDescriptor;
 }
 
-uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< css::container::XIndexAccess > SdUnoSearchReplaceShape::findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
     if( pDescr == nullptr )
@@ -277,7 +277,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     return xRet;
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SdUnoSearchReplaceShape::findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     uno::Reference< text::XTextRange > xRange( GetCurrentShape(), uno::UNO_QUERY );
     if( xRange.is() )
@@ -297,7 +297,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SdUnoSearchReplaceShape::findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
 
@@ -646,35 +646,35 @@ SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() noexcept
 }
 
 // XSearchDescriptor
-OUString SAL_CALL SdUnoSearchReplaceDescriptor::getSearchString()
+OUString SdUnoSearchReplaceDescriptor::getSearchString()
 {
     return maSearchStr;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setSearchString( const OUString& aString )
+void SdUnoSearchReplaceDescriptor::setSearchString( const OUString& aString )
 {
     maSearchStr = aString;
 }
 
 // XReplaceDescriptor
-OUString SAL_CALL SdUnoSearchReplaceDescriptor::getReplaceString()
+OUString SdUnoSearchReplaceDescriptor::getReplaceString()
 {
     return maReplaceStr;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const OUString& aReplaceString )
+void SdUnoSearchReplaceDescriptor::setReplaceString( const OUString& aReplaceString )
 {
     maReplaceStr = aReplaceString;
 }
 
 // XPropertySet
-uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescriptor::getPropertySetInfo()
+uno::Reference< css::beans::XPropertySetInfo > SdUnoSearchReplaceDescriptor::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -701,7 +701,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
         throw lang::IllegalArgumentException();
 }
 
-cpo::uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -727,10 +727,10 @@ cpo::uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUS
     return aAny;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
+void SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
+void SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
+void SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
+void SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
 
 /* ================================================================= */
 
@@ -744,23 +744,23 @@ SdUnoFindAllAccess::~SdUnoFindAllAccess() noexcept
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
+cpo::uno::Type SdUnoFindAllAccess::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-bool SAL_CALL SdUnoFindAllAccess::hasElements()
+bool SdUnoFindAllAccess::hasElements()
 {
     return maSequence.hasElements();
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SdUnoFindAllAccess::getCount()
+sal_Int32 SdUnoFindAllAccess::getCount()
 {
     return maSequence.getLength();
 }
 
-cpo::uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
+cpo::uno::Any SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
 {
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();

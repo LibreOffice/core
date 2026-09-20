@@ -139,7 +139,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
 
 // XSelectionSupplier
 
-bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
+bool SdUnoDrawView::select( const Any& aSelection )
 {
     bool bOk = true;
 
@@ -228,7 +228,7 @@ bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     return bOk;
 }
 
-Any SAL_CALL SdUnoDrawView::getSelection()
+Any SdUnoDrawView::getSelection()
 {
     Any aAny;
 
@@ -270,11 +270,11 @@ Any SAL_CALL SdUnoDrawView::getSelection()
     return aAny;
 }
 
-void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
+void SdUnoDrawView::addSelectionChangeListener (
     const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
-void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
+void SdUnoDrawView::removeSelectionChangeListener (
     const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
@@ -340,7 +340,7 @@ void SdUnoDrawView::setFastPropertyValue (
     }
 }
 
-Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
+Any SdUnoDrawView::getFastPropertyValue (
     sal_Int32 nHandle)
 {
     Any aValue;
@@ -385,7 +385,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 
 // XDrawView
 
-void SAL_CALL SdUnoDrawView::setCurrentPage (
+void SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
 {
     SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
@@ -403,7 +403,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
     }
 }
 
-Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
+Reference< drawing::XDrawPage > SdUnoDrawView::getCurrentPage()
 {
     Reference< drawing::XDrawPage >  xPage;
 
@@ -517,17 +517,17 @@ Any SdUnoDrawView::getDrawViewMode() const
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoDrawView::getImplementationName(  )
+OUString SdUnoDrawView::getImplementationName(  )
 {
     return u"com.sun.star.comp.sd.SdUnoDrawView"_ustr ;
 }
 
-bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
+bool SdUnoDrawView::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  )
+Sequence< OUString > SdUnoDrawView::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.DrawingDocumentDrawView"_ustr };
 }

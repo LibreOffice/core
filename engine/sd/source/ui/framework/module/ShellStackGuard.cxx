@@ -93,7 +93,7 @@ void ShellStackGuard::notifyConfigurationChange (
     }
 }
 
-void SAL_CALL ShellStackGuard::disposing (
+void ShellStackGuard::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is())

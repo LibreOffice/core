@@ -116,30 +116,30 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase
 }
 
 // XServiceInfo
-OUString SAL_CALL SlideShow::getImplementationName(  )
+OUString SlideShow::getImplementationName(  )
 {
     return u"com.sun.star.comp.sd.SlideShow"_ustr;
 }
 
-bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
+bool SlideShow::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  )
+Sequence< OUString > SlideShow::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.presentation.Presentation"_ustr };
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo()
+Reference< XPropertySetInfo > SlideShow::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
     return xInfo;
  }
 
-void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
@@ -396,7 +396,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         mpDoc->SetChanged();
 }
 
-Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
+Any SlideShow::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
@@ -462,19 +462,19 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
     }
 }
 
-void SAL_CALL SlideShow::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
+void SlideShow::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
+void SlideShow::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
+void SlideShow::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
+void SlideShow::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
 {
 }
 

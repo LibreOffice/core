@@ -45,28 +45,28 @@ SdUnoOutlineView::~SdUnoOutlineView() noexcept
 
 //----- XSelectionSupplier ----------------------------------------------------
 
-bool SAL_CALL SdUnoOutlineView::select( const Any&  )
+bool SdUnoOutlineView::select( const Any&  )
 {
     // todo: add selections for text ranges
     return false;
 }
 
-Any SAL_CALL SdUnoOutlineView::getSelection()
+Any SdUnoOutlineView::getSelection()
 {
     Any aAny;
     return aAny;
 }
 
-void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
+void SdUnoOutlineView::addSelectionChangeListener (
     const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
-void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
+void SdUnoOutlineView::removeSelectionChangeListener (
     const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 //----- XDrawView -------------------------------------------------------------
-void SAL_CALL SdUnoOutlineView::setCurrentPage (
+void SdUnoOutlineView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage)
 {
     SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
@@ -77,7 +77,7 @@ void SAL_CALL SdUnoOutlineView::setCurrentPage (
         mrOutlineViewShell.SetCurrentPage(pSdPage);
 }
 
-Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
+Reference< drawing::XDrawPage > SdUnoOutlineView::getCurrentPage()
 {
     Reference<drawing::XDrawPage>  xPage;
 
@@ -107,7 +107,7 @@ void SdUnoOutlineView::setFastPropertyValue (
     }
 }
 
-Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
+Any SdUnoOutlineView::getFastPropertyValue (
     sal_Int32 nHandle)
 {
     Any aValue;
@@ -132,17 +132,17 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoOutlineView::getImplementationName(  )
+OUString SdUnoOutlineView::getImplementationName(  )
 {
     return u"com.sun.star.comp.sd.SdUnoOutlineView"_ustr;
 }
 
-bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName )
+bool SdUnoOutlineView::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  )
+Sequence< OUString > SdUnoOutlineView::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.presentation.OutlineView"_ustr };
 }

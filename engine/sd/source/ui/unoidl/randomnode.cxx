@@ -73,64 +73,64 @@ public:
     RandomAnimationNode();
 
     // XInitialization
-    void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    void initialize( const Sequence< Any >& aArguments ) override;
 
     // XChild
-    Reference< XInterface > SAL_CALL getParent(  ) override;
-    void SAL_CALL setParent( const Reference< XInterface >& Parent ) override;
+    Reference< XInterface > getParent(  ) override;
+    void setParent( const Reference< XInterface >& Parent ) override;
 
     // XCloneable
-    virtual Reference< XCloneable > SAL_CALL createClone() override;
+    virtual Reference< XCloneable > createClone() override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    OUString getImplementationName() override;
+    Sequence< OUString > getSupportedServiceNames() override;
+    bool supportsService(const OUString& ServiceName) override;
 
     // XAnimationNode
-    ::sal_Int16 SAL_CALL getType() override;
-    Any SAL_CALL getBegin() override;
-    void SAL_CALL setBegin( const Any& _begin ) override;
-    Any SAL_CALL getDuration() override;
-    void SAL_CALL setDuration( const Any& _duration ) override;
-    Any SAL_CALL getEnd() override;
-    void SAL_CALL setEnd( const Any& _end ) override;
-    Any SAL_CALL getEndSync() override;
-    void SAL_CALL setEndSync( const Any& _endsync ) override;
-    Any SAL_CALL getRepeatCount() override;
-    void SAL_CALL setRepeatCount( const Any& _repeatcount ) override;
-    Any SAL_CALL getRepeatDuration() override;
-    void SAL_CALL setRepeatDuration( const Any& _repeatduration ) override;
-    ::sal_Int16 SAL_CALL getFill() override;
-    void SAL_CALL setFill( ::sal_Int16 _fill ) override;
-    ::sal_Int16 SAL_CALL getFillDefault() override;
-    void SAL_CALL setFillDefault( ::sal_Int16 _filldefault ) override;
-    ::sal_Int16 SAL_CALL getRestart() override;
-    void SAL_CALL setRestart( ::sal_Int16 _restart ) override;
-    ::sal_Int16 SAL_CALL getRestartDefault() override;
-    void SAL_CALL setRestartDefault( ::sal_Int16 _restartdefault ) override;
-    double SAL_CALL getAcceleration() override;
-    void SAL_CALL setAcceleration( double _acceleration ) override;
-    double SAL_CALL getDecelerate() override;
-    void SAL_CALL setDecelerate( double _decelerate ) override;
-    bool SAL_CALL getAutoReverse() override;
-    void SAL_CALL setAutoReverse( bool _autoreverse ) override;
-    Sequence< NamedValue > SAL_CALL getUserData() override;
-    void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) override;
+    ::sal_Int16 getType() override;
+    Any getBegin() override;
+    void setBegin( const Any& _begin ) override;
+    Any getDuration() override;
+    void setDuration( const Any& _duration ) override;
+    Any getEnd() override;
+    void setEnd( const Any& _end ) override;
+    Any getEndSync() override;
+    void setEndSync( const Any& _endsync ) override;
+    Any getRepeatCount() override;
+    void setRepeatCount( const Any& _repeatcount ) override;
+    Any getRepeatDuration() override;
+    void setRepeatDuration( const Any& _repeatduration ) override;
+    ::sal_Int16 getFill() override;
+    void setFill( ::sal_Int16 _fill ) override;
+    ::sal_Int16 getFillDefault() override;
+    void setFillDefault( ::sal_Int16 _filldefault ) override;
+    ::sal_Int16 getRestart() override;
+    void setRestart( ::sal_Int16 _restart ) override;
+    ::sal_Int16 getRestartDefault() override;
+    void setRestartDefault( ::sal_Int16 _restartdefault ) override;
+    double getAcceleration() override;
+    void setAcceleration( double _acceleration ) override;
+    double getDecelerate() override;
+    void setDecelerate( double _decelerate ) override;
+    bool getAutoReverse() override;
+    void setAutoReverse( bool _autoreverse ) override;
+    Sequence< NamedValue > getUserData() override;
+    void setUserData( const Sequence< NamedValue >& _userdata ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XEnumerationAccess
-    virtual Reference< XEnumeration > SAL_CALL createEnumeration() override;
+    virtual Reference< XEnumeration > createEnumeration() override;
 
     // XTimeContainer
-    Reference< XAnimationNode > SAL_CALL insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) override;
-    Reference< XAnimationNode > SAL_CALL insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) override;
-    Reference< XAnimationNode > SAL_CALL replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild ) override;
-    Reference< XAnimationNode > SAL_CALL removeChild( const Reference< XAnimationNode >& oldChild ) override;
-    Reference< XAnimationNode > SAL_CALL appendChild( const Reference< XAnimationNode >& newChild ) override;
+    Reference< XAnimationNode > insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) override;
+    Reference< XAnimationNode > insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild ) override;
+    Reference< XAnimationNode > replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild ) override;
+    Reference< XAnimationNode > removeChild( const Reference< XAnimationNode >& oldChild ) override;
+    Reference< XAnimationNode > appendChild( const Reference< XAnimationNode >& newChild ) override;
 
 private:
     // our first, last and only protection from multi-threads!
@@ -195,7 +195,7 @@ RandomAnimationNode::RandomAnimationNode()
 }
 
 // XInitialization
-void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments )
+void RandomAnimationNode::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
@@ -215,221 +215,221 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
 }
 
 // XAnimationNode
-sal_Int16 SAL_CALL RandomAnimationNode::getType()
+sal_Int16 RandomAnimationNode::getType()
 {
     return css::animations::AnimationNodeType::PAR;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getBegin()
+Any RandomAnimationNode::getBegin()
 {
     std::unique_lock aGuard( maMutex );
     return maBegin;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setBegin( const Any& _begin )
+void RandomAnimationNode::setBegin( const Any& _begin )
 {
     std::unique_lock aGuard( maMutex );
     maBegin = _begin;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getDuration()
+Any RandomAnimationNode::getDuration()
 {
     std::unique_lock aGuard( maMutex );
     return maDuration;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setDuration( const Any& _duration )
+void RandomAnimationNode::setDuration( const Any& _duration )
 {
     std::unique_lock aGuard( maMutex );
     maDuration = _duration;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getEnd()
+Any RandomAnimationNode::getEnd()
 {
     std::unique_lock aGuard( maMutex );
     return maEnd;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setEnd( const Any& _end )
+void RandomAnimationNode::setEnd( const Any& _end )
 {
     std::unique_lock aGuard( maMutex );
     maEnd = _end;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getEndSync()
+Any RandomAnimationNode::getEndSync()
 {
     std::unique_lock aGuard( maMutex );
     return maEndSync;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setEndSync( const Any& _endsync )
+void RandomAnimationNode::setEndSync( const Any& _endsync )
 {
     std::unique_lock aGuard( maMutex );
     maEndSync = _endsync;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getRepeatCount()
+Any RandomAnimationNode::getRepeatCount()
 {
     std::unique_lock aGuard( maMutex );
     return maRepeatCount;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setRepeatCount( const Any& _repeatcount )
+void RandomAnimationNode::setRepeatCount( const Any& _repeatcount )
 {
     std::unique_lock aGuard( maMutex );
     maRepeatCount = _repeatcount;
 }
 
 // XAnimationNode
-Any SAL_CALL RandomAnimationNode::getRepeatDuration()
+Any RandomAnimationNode::getRepeatDuration()
 {
     std::unique_lock aGuard( maMutex );
     return maRepeatDuration;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setRepeatDuration( const Any& _repeatduration )
+void RandomAnimationNode::setRepeatDuration( const Any& _repeatduration )
 {
     std::unique_lock aGuard( maMutex );
     maRepeatDuration = _repeatduration;
 }
 
 // XAnimationNode
-sal_Int16 SAL_CALL RandomAnimationNode::getFill()
+sal_Int16 RandomAnimationNode::getFill()
 {
     std::unique_lock aGuard( maMutex );
     return mnFill;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setFill( sal_Int16 _fill )
+void RandomAnimationNode::setFill( sal_Int16 _fill )
 {
     std::unique_lock aGuard( maMutex );
     mnFill = _fill;
 }
 
 // XAnimationNode
-sal_Int16 SAL_CALL RandomAnimationNode::getFillDefault()
+sal_Int16 RandomAnimationNode::getFillDefault()
 {
     std::unique_lock aGuard( maMutex );
     return mnFillDefault;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setFillDefault( sal_Int16 _filldefault )
+void RandomAnimationNode::setFillDefault( sal_Int16 _filldefault )
 {
     std::unique_lock aGuard( maMutex );
     mnFillDefault = _filldefault;
 }
 
 // XAnimationNode
-sal_Int16 SAL_CALL RandomAnimationNode::getRestart()
+sal_Int16 RandomAnimationNode::getRestart()
 {
     std::unique_lock aGuard( maMutex );
     return mnRestart;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setRestart( sal_Int16 _restart )
+void RandomAnimationNode::setRestart( sal_Int16 _restart )
 {
     std::unique_lock aGuard( maMutex );
     mnRestart = _restart;
 }
 
 // XAnimationNode
-sal_Int16 SAL_CALL RandomAnimationNode::getRestartDefault()
+sal_Int16 RandomAnimationNode::getRestartDefault()
 {
     std::unique_lock aGuard( maMutex );
     return mnRestartDefault;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setRestartDefault( sal_Int16 _restartdefault )
+void RandomAnimationNode::setRestartDefault( sal_Int16 _restartdefault )
 {
     std::unique_lock aGuard( maMutex );
     mnRestartDefault = _restartdefault;
 }
 
 // XAnimationNode
-double SAL_CALL RandomAnimationNode::getAcceleration()
+double RandomAnimationNode::getAcceleration()
 {
     std::unique_lock aGuard( maMutex );
     return mfAcceleration;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setAcceleration( double _acceleration )
+void RandomAnimationNode::setAcceleration( double _acceleration )
 {
     std::unique_lock aGuard( maMutex );
     mfAcceleration = _acceleration;
 }
 
 // XAnimationNode
-double SAL_CALL RandomAnimationNode::getDecelerate()
+double RandomAnimationNode::getDecelerate()
 {
     std::unique_lock aGuard( maMutex );
     return mfDecelerate;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setDecelerate( double _decelerate )
+void RandomAnimationNode::setDecelerate( double _decelerate )
 {
     std::unique_lock aGuard( maMutex );
     mfDecelerate = _decelerate;
 }
 
 // XAnimationNode
-bool SAL_CALL RandomAnimationNode::getAutoReverse()
+bool RandomAnimationNode::getAutoReverse()
 {
     std::unique_lock aGuard( maMutex );
     return mbAutoReverse;
 }
 
 // XAnimationNode
-void SAL_CALL RandomAnimationNode::setAutoReverse( bool _autoreverse )
+void RandomAnimationNode::setAutoReverse( bool _autoreverse )
 {
     std::unique_lock aGuard( maMutex );
     mbAutoReverse = _autoreverse;
 }
 
-Sequence< NamedValue > SAL_CALL RandomAnimationNode::getUserData()
+Sequence< NamedValue > RandomAnimationNode::getUserData()
 {
     std::unique_lock aGuard( maMutex );
     return maUserData;
 }
 
-void SAL_CALL RandomAnimationNode::setUserData( const Sequence< NamedValue >& _userdata )
+void RandomAnimationNode::setUserData( const Sequence< NamedValue >& _userdata )
 {
     std::unique_lock aGuard( maMutex );
     maUserData = _userdata;
 }
 
 // XChild
-Reference< XInterface > SAL_CALL RandomAnimationNode::getParent()
+Reference< XInterface > RandomAnimationNode::getParent()
 {
     std::unique_lock aGuard( maMutex );
     return mxParent.get();
 }
 
 // XChild
-void SAL_CALL RandomAnimationNode::setParent( const Reference< XInterface >& Parent )
+void RandomAnimationNode::setParent( const Reference< XInterface >& Parent )
 {
     std::unique_lock aGuard( maMutex );
     mxParent = Parent;
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone()
+Reference< XCloneable > RandomAnimationNode::createClone()
 {
     std::unique_lock aGuard( maMutex );
     Reference< XCloneable > xNewNode( new RandomAnimationNode( *this ) );
@@ -437,19 +437,19 @@ Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone()
 }
 
 // XElementAccess
-Type SAL_CALL RandomAnimationNode::getElementType()
+Type RandomAnimationNode::getElementType()
 {
     return cppu::UnoType<XAnimationNode>::get();
 }
 
 // XElementAccess
-bool SAL_CALL RandomAnimationNode::hasElements()
+bool RandomAnimationNode::hasElements()
 {
     return true;
 }
 
 // XEnumerationAccess
-Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
+Reference< XEnumeration > RandomAnimationNode::createEnumeration()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -492,31 +492,31 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
 }
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
+Reference< XAnimationNode > RandomAnimationNode::insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
 {
     return appendChild( newChild );
 }
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
+Reference< XAnimationNode > RandomAnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
 {
     return appendChild( newChild );
 }
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
+Reference< XAnimationNode > RandomAnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >&  )
 {
     return appendChild( newChild );
 }
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::removeChild( const Reference< XAnimationNode >& oldChild )
+Reference< XAnimationNode > RandomAnimationNode::removeChild( const Reference< XAnimationNode >& oldChild )
 {
     return oldChild;
 }
 
 // XTimeContainer
-Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
+Reference< XAnimationNode > RandomAnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
 {
     Reference< XAnimate > xAnimate( newChild, UNO_QUERY );
     if( xAnimate.is() )

@@ -13,7 +13,7 @@ SlideMasterPagesToolBoxControl::SlideMasterPagesToolBoxControl() {}
 
 SlideMasterPagesToolBoxControl::~SlideMasterPagesToolBoxControl() {}
 
-void SAL_CALL
+void
 SlideMasterPagesToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     SAL_INFO("sd", "initialize called for SlideMasterPagesToolBoxControl");
@@ -21,7 +21,7 @@ SlideMasterPagesToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno::An
     svt::ToolboxController::initialize(rArguments);
 }
 
-void SAL_CALL
+void
 SlideMasterPagesToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
 {
     // Handle status changes if needed
@@ -65,17 +65,17 @@ cpo::uno::Reference<css::awt::XWindow> SlideMasterPagesToolBoxControl::createIte
     return xItemWindow;
 }
 
-OUString SAL_CALL SlideMasterPagesToolBoxControl::getImplementationName()
+OUString SlideMasterPagesToolBoxControl::getImplementationName()
 {
     return u"com.sun.star.comp.sd.SlideMasterPagesToolBoxControl"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SlideMasterPagesToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SlideMasterPagesToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
-bool SAL_CALL SlideMasterPagesToolBoxControl::supportsService(const OUString& rServiceName)
+bool SlideMasterPagesToolBoxControl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }

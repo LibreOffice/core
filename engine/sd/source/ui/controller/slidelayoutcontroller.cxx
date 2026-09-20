@@ -312,7 +312,7 @@ SlideLayoutController::SlideLayoutController(const Reference< cpo::uno::XCompone
 {
 }
 
-void SAL_CALL SlideLayoutController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void SlideLayoutController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -344,7 +344,7 @@ VclPtr<vcl::Window> SlideLayoutController::createVclPopupWindow( vcl::Window* pP
 
 // XServiceInfo
 
-OUString SAL_CALL SlideLayoutController::getImplementationName()
+OUString SlideLayoutController::getImplementationName()
 {
     if( mbInsertPage )
         return InsertSlideController_getImplementationName();
@@ -352,7 +352,7 @@ OUString SAL_CALL SlideLayoutController::getImplementationName()
         return SlideLayoutController_getImplementationName();
 }
 
-Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  )
+Sequence< OUString > SlideLayoutController::getSupportedServiceNames(  )
 {
     if( mbInsertPage )
         return InsertSlideController_getSupportedServiceNames();

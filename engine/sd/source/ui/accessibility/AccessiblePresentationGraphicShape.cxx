@@ -40,7 +40,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape() {}
 
 // XServiceInfo
 
-OUString SAL_CALL AccessiblePresentationGraphicShape::getImplementationName()
+OUString AccessiblePresentationGraphicShape::getImplementationName()
 {
     return u"AccessiblePresentationGraphicShape"_ustr;
 }
@@ -65,7 +65,7 @@ OUString AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
     return sName;
 }
 
-sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole()
+sal_Int16 AccessiblePresentationGraphicShape::getAccessibleRole()
 {
     return AccessibleRole::GRAPHIC;
 }

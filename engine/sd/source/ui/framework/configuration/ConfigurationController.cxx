@@ -117,7 +117,7 @@ ConfigurationController::~ConfigurationController() noexcept
 {
 }
 
-void SAL_CALL ConfigurationController::disposing()
+void ConfigurationController::disposing()
 {
     if (mpImplementation == nullptr)
         return;

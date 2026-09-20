@@ -55,20 +55,20 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
     //=====  XAccessibleEventBroadcaster  ========================================
 
-    virtual void SAL_CALL
+    virtual void
         addAccessibleEventListener (
             const cpo::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeAccessibleEventListener (
             const cpo::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
@@ -76,7 +76,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
     //=====  lang::XEventListener  ============================================
@@ -85,7 +85,7 @@ public:
 
     //=====  XPropertyChangeListener  =========================================
 
-    virtual void SAL_CALL
+    virtual void
         propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
 
 private:
@@ -101,7 +101,7 @@ private:
     AccessibleOutlineView& operator= ( const AccessibleOutlineView& );
 
     // This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString

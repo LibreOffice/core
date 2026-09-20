@@ -87,13 +87,13 @@ public:
         informed about the state change.
         @throws DisposedException
     */
-    virtual void SAL_CALL
+    virtual void
         statusChanged (
             const css::frame::FeatureStateEvent& rState) override;
 
     //=====  lang::XEventListener  ============================================
 
-    virtual void SAL_CALL
+    virtual void
         disposing(const css::lang::EventObject& rEvent) override;
 
 private:

@@ -57,7 +57,7 @@ public:
 
     // XEventListener
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
+    virtual void disposing(const css::lang::EventObject& rEvent) override;
 
 private:
     rtl::Reference<ConfigurationController> mxConfigurationController;

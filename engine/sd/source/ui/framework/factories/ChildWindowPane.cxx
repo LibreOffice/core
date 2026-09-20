@@ -186,7 +186,7 @@ Reference<awt::XWindow> ChildWindowPane::getWindow()
 
 //----- XEventListener --------------------------------------------------------
 
-void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
+void ChildWindowPane::disposing (const lang::EventObject& rEvent)
 {
     {
         std::unique_lock l(m_aMutex);

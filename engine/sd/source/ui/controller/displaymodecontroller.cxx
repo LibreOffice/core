@@ -41,11 +41,11 @@ public:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     void setToolboxItemImage(const OUString& rImage);
 };
@@ -196,7 +196,7 @@ DisplayModeController::DisplayModeController( const cpo::uno::Reference< cpo::un
 {
 }
 
-void SAL_CALL DisplayModeController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void DisplayModeController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
     ToolBox* pToolBox = nullptr;
@@ -242,12 +242,12 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
 
 // XServiceInfo
 
-OUString SAL_CALL DisplayModeController::getImplementationName()
+OUString DisplayModeController::getImplementationName()
 {
     return u"com.sun.star.comp.sd.DisplayModeController"_ustr;
 }
 
-Sequence< OUString > SAL_CALL DisplayModeController::getSupportedServiceNames(  )
+Sequence< OUString > DisplayModeController::getSupportedServiceNames(  )
 {
     cpo::uno::Sequence<OUString> aRet { u"com.sun.star.frame.ToolbarController"_ustr };
     return aRet;

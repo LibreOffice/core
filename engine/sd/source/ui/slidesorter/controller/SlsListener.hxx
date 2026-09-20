@@ -85,16 +85,16 @@ public:
         const SfxHint& rHint) override;
 
     //=====  lang::XEventListener  ============================================
-    virtual void SAL_CALL
+    virtual void
         disposing (const css::lang::EventObject& rEventObject) override;
 
     //=====  document::XEventListener  ========================================
-    virtual void SAL_CALL
+    virtual void
         notifyEvent (
             const css::document::EventObject& rEventObject) override;
 
     //=====  beans::XPropertySetListener  =====================================
-    virtual void SAL_CALL
+    virtual void
         propertyChange (
             const css::beans::PropertyChangeEvent& rEvent) override;
 
@@ -103,7 +103,7 @@ public:
         frame it is listening to.  This usually happens when the view shell
         in the center pane is replaced by another view shell.
     */
-    virtual void SAL_CALL
+    virtual void
         frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;

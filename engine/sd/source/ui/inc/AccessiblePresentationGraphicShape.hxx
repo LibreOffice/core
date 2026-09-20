@@ -41,7 +41,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
     /// Create a name string that contains the accessible name.
@@ -49,7 +49,7 @@ public:
         CreateAccessibleBaseName () override;
 
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole () override;
+    virtual sal_Int16 getAccessibleRole () override;
 };
 
 } // end of namespace accessibility

@@ -39,26 +39,26 @@ public:
     virtual ~SlideTransitionsToolBoxControl() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
     virtual cpo::uno::Reference<css::awt::XWindow>
-        SAL_CALL createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
+        createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // WeakComponentImplHelperBase
     using SlideTransitionsToolBoxControl_Base::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XUpdatable
-    virtual void SAL_CALL update() override;
+    virtual void update() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& rServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

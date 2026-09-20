@@ -112,7 +112,7 @@ void ViewTabBarModule::notifyConfigurationChange (
     }
 }
 
-void SAL_CALL ViewTabBarModule::disposing (
+void ViewTabBarModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()

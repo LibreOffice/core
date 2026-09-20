@@ -173,23 +173,23 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleFamily::getImplementationName()
+OUString SdStyleFamily::getImplementationName()
 {
     return u"SdStyleFamily"_ustr;
 }
 
-bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
+bool SdStyleFamily::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames()
+Sequence< OUString > SdStyleFamily::getSupportedServiceNames()
 {
     return { u"com.sun.star.style.StyleFamily"_ustr };
 }
 
 // XNamed
-OUString SAL_CALL SdStyleFamily::getName()
+OUString SdStyleFamily::getName()
 {
     if( mpImpl->mnFamily == SfxStyleFamily::Page )
     {
@@ -209,20 +209,20 @@ OUString SAL_CALL SdStyleFamily::getName()
     }
 }
 
-void SAL_CALL SdStyleFamily::setName( const OUString& )
+void SdStyleFamily::setName( const OUString& )
 {
 }
 
 // XNameAccess
 
-Any SAL_CALL SdStyleFamily::getByName( const OUString& rName )
+Any SdStyleFamily::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
     return Any( Reference< XStyle >( static_cast<SfxUnoStyleSheet*>(GetSheetByName( rName )) ) );
 }
 
-Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
+Sequence< OUString > SdStyleFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -260,7 +260,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
     }
 }
 
-bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
+bool SdStyleFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -294,12 +294,12 @@ bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
 
 // XElementAccess
 
-Type SAL_CALL SdStyleFamily::getElementType()
+Type SdStyleFamily::getElementType()
 {
     return cppu::UnoType<XStyle>::get();
 }
 
-bool SAL_CALL SdStyleFamily::hasElements()
+bool SdStyleFamily::hasElements()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -322,7 +322,7 @@ bool SAL_CALL SdStyleFamily::hasElements()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SdStyleFamily::getCount()
+sal_Int32 SdStyleFamily::getCount()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -345,7 +345,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount()
     return nCount;
 }
 
-Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
+Any SdStyleFamily::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -383,7 +383,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
 
 // XNameContainer
 
-void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rElement )
+void SdStyleFamily::insertByName( const OUString& rName, const Any& rElement )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -399,7 +399,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
     mpImpl->mxPool->Insert( pStyle );
 }
 
-void SAL_CALL SdStyleFamily::removeByName( const OUString& rName )
+void SdStyleFamily::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -414,7 +414,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName )
 
 // XNameReplace
 
-void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement )
+void SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -428,7 +428,7 @@ void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aE
 
 // XSingleServiceFactory
 
-Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
+Reference< XInterface > SdStyleFamily::createInstance()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -441,24 +441,24 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
         static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mpImpl->mxPool, mpImpl->mnFamily).get()));
 }
 
-Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )
+Reference< XInterface > SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )
 {
     return createInstance();
 }
 
 // XComponent
 
-void SAL_CALL SdStyleFamily::dispose(  )
+void SdStyleFamily::dispose(  )
 {
     if( mpImpl->mxPool.is() )
         mpImpl->mxPool.clear();
 }
 
-void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  )
+void SdStyleFamily::addEventListener( const Reference< XEventListener >&  )
 {
 }
 
-void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListener >&  )
+void SdStyleFamily::removeEventListener( const Reference< XEventListener >&  )
 {
 }
 

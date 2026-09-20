@@ -78,7 +78,7 @@ void ViewShellWrapper::disposing(std::unique_lock<std::mutex>&)
     mpViewShell.reset();
 }
 
-cpo::uno::Any SAL_CALL ViewShellWrapper::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ViewShellWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     if( mpSlideSorterViewShell &&
         rType == cppu::UnoType<view::XSelectionSupplier>::get() )
@@ -104,7 +104,7 @@ bool ViewShellWrapper::isAnchorOnly()
 
 //----- XSelectionSupplier --------------------------------------------------
 
-bool SAL_CALL ViewShellWrapper::select( const cpo::uno::Any& aSelection )
+bool ViewShellWrapper::select( const cpo::uno::Any& aSelection )
 {
     if (!mpSlideSorterViewShell)
         return false;
@@ -137,7 +137,7 @@ bool SAL_CALL ViewShellWrapper::select( const cpo::uno::Any& aSelection )
     return true;
 }
 
-cpo::uno::Any SAL_CALL ViewShellWrapper::getSelection()
+cpo::uno::Any ViewShellWrapper::getSelection()
 {
     Any aResult;
 
@@ -163,11 +163,11 @@ cpo::uno::Any SAL_CALL ViewShellWrapper::getSelection()
     return aResult;
 }
 
-void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
+void ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
 {
 }
 
-void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
+void ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
 {
 }
 
@@ -210,27 +210,27 @@ bool ViewShellWrapper::relocateToAnchor (
 
 //===== awt::XWindowListener ==================================================
 
-void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent&)
+void ViewShellWrapper::windowResized (const awt::WindowEvent&)
 {
     ViewShell* pViewShell (mpViewShell.get());
     if (pViewShell != nullptr)
         pViewShell->Resize();
 }
 
-void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent&) {}
+void ViewShellWrapper::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject&)
+void ViewShellWrapper::windowShown (const lang::EventObject&)
 {
     ViewShell* pViewShell (mpViewShell.get());
     if (pViewShell != nullptr)
         pViewShell->Resize();
 }
 
-void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject&) {}
+void ViewShellWrapper::windowHidden (const lang::EventObject&) {}
 
 //===== XEventListener ========================================================
 
-void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
+void ViewShellWrapper::disposing (const lang::EventObject& rEvent)
 {
     if (rEvent.Source == mxWindow)
         mxWindow = nullptr;

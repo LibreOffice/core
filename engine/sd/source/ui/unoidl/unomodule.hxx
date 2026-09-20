@@ -33,22 +33,22 @@ public:
     SdUnoModule() {}
 
     // XnotifyingDispatch
-    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
+    virtual void dispatchWithNotification( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-    virtual void SAL_CALL removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
     // XDispatchProvider
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
-    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &            aURL            ,
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(  const   css::util::URL &            aURL            ,
                                                             const   OUString &   sTargetFrameName,
                                                                     sal_Int32   eSearchFlags    ) override;
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

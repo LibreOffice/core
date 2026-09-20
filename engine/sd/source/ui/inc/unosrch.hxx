@@ -54,14 +54,14 @@ public:
     virtual ~SdUnoSearchReplaceShape() noexcept;
 
     // XReplaceable
-    virtual cpo::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) override;
-    virtual sal_Int32 SAL_CALL replaceAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< css::util::XReplaceDescriptor > createReplaceDescriptor(  ) override;
+    virtual sal_Int32 replaceAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 
     // XSearchable
-    virtual cpo::uno::Reference< css::util::XSearchDescriptor > SAL_CALL createSearchDescriptor(  ) override;
-    virtual cpo::uno::Reference< css::container::XIndexAccess > SAL_CALL findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< css::util::XSearchDescriptor > createSearchDescriptor(  ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 };
 
 /* ================================================================= */
@@ -89,21 +89,21 @@ public:
     bool IsWords() const { return mbWords; }
 
     // XSearchDescriptor
-    virtual OUString SAL_CALL getSearchString(  ) override;
-    virtual void SAL_CALL setSearchString( const OUString& aString ) override;
+    virtual OUString getSearchString(  ) override;
+    virtual void setSearchString( const OUString& aString ) override;
 
     // XReplaceDescriptor
-    virtual OUString SAL_CALL getReplaceString(  ) override;
-    virtual void SAL_CALL setReplaceString( const OUString& aReplaceString ) override;
+    virtual OUString getReplaceString(  ) override;
+    virtual void setReplaceString( const OUString& aReplaceString ) override;
 
     // XPropertySet
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 };
 
 /* ================================================================= */
@@ -119,12 +119,12 @@ public:
     virtual ~SdUnoFindAllAccess() noexcept override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

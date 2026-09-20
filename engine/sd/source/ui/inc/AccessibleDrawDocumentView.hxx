@@ -59,50 +59,50 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
-    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
 
     //=====  lang::XEventListener  ============================================
 
-    virtual void SAL_CALL
+    virtual void
         disposing (const css::lang::EventObject& rEventObject) override;
 
     //=====  XPropertyChangeListener  =========================================
 
-    virtual void SAL_CALL
+    virtual void
         propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
     //=====  XInterface  ======================================================
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         queryInterface (const cpo::uno::Type & rType) override;
 
-    virtual void SAL_CALL
+    virtual void
         acquire()
         noexcept override;
 
-    virtual void SAL_CALL
+    virtual void
         release()
         noexcept override;
 
     //=====  XAccessibleGroupPosition  =========================================
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 >
         getGroupPosition( const cpo::uno::Any& rAny ) override;
-    virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
+    virtual OUString getObjectLink( const cpo::uno::Any& accoject ) override;
 
 private:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     virtual bool
@@ -134,7 +134,7 @@ private:
 
     // This method is called from the component helper base class while
     // disposing.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /** Create a shape the represents the page as seen on the screen.
     */

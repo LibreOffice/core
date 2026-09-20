@@ -87,7 +87,7 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
     // XEventListener
-    virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
+    virtual void disposing (const lang::EventObject& rEvent) override;
     // ConfigurationChangeListener
     virtual void notifyConfigurationChange (const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
@@ -127,7 +127,7 @@ public:
         is being destroyed.
     */
     using WeakComponentImplHelperBase::disposing;
-    virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
+    virtual void disposing (const lang::EventObject& rEvent) override;
 
     /** This method is called when the ViewShellBase is being destroyed.
     */
@@ -261,7 +261,7 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    virtual void SAL_CALL disposing (const lang::EventObject& rEventObject) override;
+    virtual void disposing (const lang::EventObject& rEventObject) override;
 
 private:
     ::std::shared_ptr<FrameworkHelper> mpHelper;
@@ -720,7 +720,7 @@ void FrameworkHelper::DisposeListener::disposing(std::unique_lock<std::mutex>&)
     mpHelper.reset();
 }
 
-void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
+void FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
 {
     if (mpHelper != nullptr)
         mpHelper->disposing(rEventObject);
@@ -791,7 +791,7 @@ void CallbackCaller::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
+void CallbackCaller::disposing (const lang::EventObject& rEvent)
 {
     if (rEvent.Source == cppu::getXWeak(mxConfigurationController.get()))
     {
@@ -857,7 +857,7 @@ LifetimeController::~LifetimeController()
     OSL_ASSERT(!mbListeningToController && !mbListeningToViewShellBase);
 }
 
-void SAL_CALL LifetimeController::disposing (const lang::EventObject&)
+void LifetimeController::disposing (const lang::EventObject&)
 {
     mbListeningToController = false;
     Update();

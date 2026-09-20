@@ -60,7 +60,7 @@ public:
 
     // lang::XEventListener
 
-    virtual void SAL_CALL disposing (
+    virtual void disposing (
         const css::lang::EventObject& rEventObject) override;
 
 private:

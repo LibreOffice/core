@@ -83,11 +83,11 @@ public:
     bool OnMove( const KeyEvent& rKEvt );
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
+    virtual void changesOccurred( const css::util::ChangesEvent& Event ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    virtual void acquire(  ) noexcept override;
+    virtual void release(  ) noexcept override;
 
 private:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;

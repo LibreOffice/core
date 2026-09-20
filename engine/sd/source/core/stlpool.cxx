@@ -1215,23 +1215,23 @@ void SdStyleSheetPool::throwIfDisposed()
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleSheetPool::getImplementationName()
+OUString SdStyleSheetPool::getImplementationName()
 {
     return u"SdStyleSheetPool"_ustr;
 }
 
-bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )
+bool SdStyleSheetPool::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames()
+Sequence< OUString > SdStyleSheetPool::getSupportedServiceNames()
 {
     return { u"com.sun.star.style.StyleFamilies"_ustr };
 }
 
 // XNameAccess
-Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName )
+Any SdStyleSheetPool::getByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1252,7 +1252,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName )
     throw NoSuchElementException();
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames()
+Sequence< OUString > SdStyleSheetPool::getElementNames()
 {
     throwIfDisposed();
 
@@ -1271,7 +1271,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames()
     return aNames;
 }
 
-bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
+bool SdStyleSheetPool::hasByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1290,28 +1290,28 @@ bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
 
 // XElementAccess
 
-Type SAL_CALL SdStyleSheetPool::getElementType()
+Type SdStyleSheetPool::getElementType()
 {
     throwIfDisposed();
 
     return cppu::UnoType<XNameAccess>::get();
 }
 
-bool SAL_CALL SdStyleSheetPool::hasElements()
+bool SdStyleSheetPool::hasElements()
 {
     return true;
 }
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SdStyleSheetPool::getCount()
+sal_Int32 SdStyleSheetPool::getCount()
 {
     throwIfDisposed();
 
     return maStyleFamilyMap.size() + 3;
 }
 
-Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index )
+Any SdStyleSheetPool::getByIndex( sal_Int32 Index )
 {
     switch( Index )
     {
@@ -1339,7 +1339,7 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index )
 
 // XComponent
 
-void SAL_CALL SdStyleSheetPool::dispose()
+void SdStyleSheetPool::dispose()
 {
     if( !mpDoc )
         return;
@@ -1370,11 +1370,11 @@ void SAL_CALL SdStyleSheetPool::dispose()
     Clear();
 }
 
-void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ )
+void SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ )
 {
 }
 
-void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
+void SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
 {
 }
 

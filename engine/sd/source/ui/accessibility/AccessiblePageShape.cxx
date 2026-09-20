@@ -54,7 +54,7 @@ AccessiblePageShape::~AccessiblePageShape()
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int64 SAL_CALL
+sal_Int64
        AccessiblePageShape::getAccessibleChildCount()
 {
     return 0;
@@ -63,7 +63,7 @@ sal_Int64 SAL_CALL
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
 */
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
     AccessiblePageShape::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException (u"page shape has no children"_ustr,
@@ -133,7 +133,7 @@ awt::Rectangle AccessiblePageShape::implGetBounds()
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
+sal_Int32 AccessiblePageShape::getForeground()
 {
     ensureAlive();
     sal_Int32 nColor (0x0ffffffL);
@@ -157,7 +157,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
 /** Extract the background color from the Background property of the
     draw page or its master page.
 */
-sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
+sal_Int32 AccessiblePageShape::getBackground()
 {
     ensureAlive();
     sal_Int32 nColor (0x01020ffL);
@@ -202,14 +202,14 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
 
 // XServiceInfo
 
-OUString SAL_CALL
+OUString
     AccessiblePageShape::getImplementationName()
 {
     ensureAlive();
     return u"AccessiblePageShape"_ustr;
 }
 
-cpo::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString>
     AccessiblePageShape::getSupportedServiceNames()
 {
     ensureAlive();

@@ -176,7 +176,7 @@ private:
 
         //----- XEventListener ----------------------------------------------------
         using WeakComponentImplHelperBase::disposing;
-        virtual void SAL_CALL disposing(
+        virtual void disposing(
             const css::lang::EventObject& rEvent) override;
     private:
         ViewTabBar& mrParent;

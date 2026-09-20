@@ -40,7 +40,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape() {}
 
 // XServiceInfo
 
-OUString SAL_CALL AccessiblePresentationOLEShape::getImplementationName()
+OUString AccessiblePresentationOLEShape::getImplementationName()
 {
     return u"AccessiblePresentationOLEShape"_ustr;
 }
@@ -72,7 +72,7 @@ OUString AccessiblePresentationOLEShape::CreateAccessibleBaseName()
 }
 
 //  Return this object's role.
-sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole()
+sal_Int16 AccessiblePresentationOLEShape::getAccessibleRole()
 {
     return AccessibleRole::EMBEDDED_OBJECT;
 }

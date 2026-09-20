@@ -95,7 +95,7 @@ void BasicToolBarFactory::Shutdown()
 
 //----- lang::XEventListener --------------------------------------------------
 
-void SAL_CALL BasicToolBarFactory::disposing (
+void BasicToolBarFactory::disposing (
     const lang::EventObject& rEventObject)
 {
     if (rEventObject.Source == cppu::getXWeak(mxConfigurationController.get()))

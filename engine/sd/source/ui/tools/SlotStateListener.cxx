@@ -135,7 +135,7 @@ void SlotStateListener::ReleaseListeners()
 
 //=====  lang::XEventListener  ================================================
 
-void SAL_CALL SlotStateListener::disposing (
+void SlotStateListener::disposing (
     const lang::EventObject& )
 {
 }

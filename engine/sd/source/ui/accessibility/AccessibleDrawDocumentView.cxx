@@ -182,7 +182,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int64 SAL_CALL
+sal_Int64
     AccessibleDrawDocumentView::getAccessibleChildCount()
 {
     ensureAlive();
@@ -196,7 +196,7 @@ sal_Int64 SAL_CALL
     return nChildCount;
 }
 
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int64 nIndex)
 {
     ensureAlive();
@@ -227,7 +227,7 @@ uno::Reference<XAccessible> SAL_CALL
     return pChildrenManager->GetChild (nIndex);
 }
 
-OUString SAL_CALL
+OUString
     AccessibleDrawDocumentView::getAccessibleName()
 {
     SolarMutexGuard g;
@@ -264,7 +264,7 @@ OUString SAL_CALL
 
 //=====  XEventListener  ======================================================
 
-void SAL_CALL
+void
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
 {
     ensureAlive();
@@ -281,7 +281,7 @@ void SAL_CALL
 
 //=====  XPropertyChangeListener  =============================================
 
-void SAL_CALL
+void
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
 {
     ensureAlive();
@@ -333,13 +333,13 @@ void SAL_CALL
 
 // XServiceInfo
 
-OUString SAL_CALL
+OUString
     AccessibleDrawDocumentView::getImplementationName()
 {
     return u"AccessibleDrawDocumentView"_ustr;
 }
 
-cpo::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString>
     AccessibleDrawDocumentView::getSupportedServiceNames()
 {
     ensureAlive();
@@ -352,7 +352,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 
 //=====  XInterface  ==========================================================
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     AccessibleDrawDocumentView::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
@@ -363,20 +363,20 @@ cpo::uno::Any SAL_CALL
     return aReturn;
 }
 
-void SAL_CALL
+void
     AccessibleDrawDocumentView::acquire()
     noexcept
 {
     AccessibleDocumentViewBase::acquire ();
 }
-void SAL_CALL
+void
     AccessibleDrawDocumentView::release()
     noexcept
 {
     AccessibleDocumentViewBase::release ();
 }
 //=====  XAccessibleGroupPosition  =========================================
-cpo::uno::Sequence< sal_Int32 > SAL_CALL
+cpo::uno::Sequence< sal_Int32 >
     AccessibleDrawDocumentView::getGroupPosition( const cpo::uno::Any& rAny )
 {
     SolarMutexGuard g;
@@ -689,7 +689,7 @@ void AccessibleDrawDocumentView::impl_dispose()
 /** This method is called from the component helper base class while
     disposing.
 */
-void SAL_CALL AccessibleDrawDocumentView::disposing()
+void AccessibleDrawDocumentView::disposing()
 {
     // Release resources.
     mpChildrenManager.reset();

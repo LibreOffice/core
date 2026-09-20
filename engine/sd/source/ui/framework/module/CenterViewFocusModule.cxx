@@ -130,7 +130,7 @@ void CenterViewFocusModule::HandleNewView (
     }
 }
 
-void SAL_CALL CenterViewFocusModule::disposing (
+void CenterViewFocusModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is())

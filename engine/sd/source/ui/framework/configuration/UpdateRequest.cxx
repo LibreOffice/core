@@ -35,9 +35,9 @@ void UpdateRequest::execute(const rtl::Reference<Configuration>&)
     // becomes empty.
 }
 
-OUString SAL_CALL UpdateRequest::getName() { return u"UpdateRequest"_ustr; }
+OUString UpdateRequest::getName() { return u"UpdateRequest"_ustr; }
 
-void SAL_CALL UpdateRequest::setName(const OUString&)
+void UpdateRequest::setName(const OUString&)
 {
     // Ignored.
 }

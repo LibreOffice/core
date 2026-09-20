@@ -1151,7 +1151,7 @@ SdrObjClosedKind MotionPathTag::GetMarkedObjectsClosedState() const
 }
 
 // XChangesListener
-void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ )
+void MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ )
 {
     if( mpPathObj && !mbInUpdatePath && (mpEffect->getPath() != msLastPath) )
     {
@@ -1164,13 +1164,13 @@ void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ )
     }
 }
 
-void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ )
+void MotionPathTag::disposing( const EventObject& /*Source*/ )
 {
     if( mpPathObj )
         Dispose();
 }
 
-Any SAL_CALL MotionPathTag::queryInterface( const cpo::uno::Type& aType )
+Any MotionPathTag::queryInterface( const cpo::uno::Type& aType )
 {
     if( aType == cppu::UnoType<XChangesListener>::get() )
         return Any( Reference< XChangesListener >( this ) );
@@ -1182,12 +1182,12 @@ Any SAL_CALL MotionPathTag::queryInterface( const cpo::uno::Type& aType )
     return Any();
 }
 
-void SAL_CALL MotionPathTag::acquire() noexcept
+void MotionPathTag::acquire() noexcept
 {
     SimpleReferenceComponent::acquire();
 }
 
-void SAL_CALL MotionPathTag::release(  ) noexcept
+void MotionPathTag::release(  ) noexcept
 {
     SimpleReferenceComponent::release();
 }

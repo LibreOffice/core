@@ -43,37 +43,37 @@ public:
 
     // XSelectionSupplier
 
-    virtual bool SAL_CALL select (
+    virtual bool select (
         const cpo::uno::Any& aSelection) override;
 
-    virtual cpo::uno::Any SAL_CALL getSelection() override;
+    virtual cpo::uno::Any getSelection() override;
 
-    virtual void SAL_CALL addSelectionChangeListener (
+    virtual void addSelectionChangeListener (
         const cpo::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
 
-    virtual void SAL_CALL removeSelectionChangeListener (
+    virtual void removeSelectionChangeListener (
         const cpo::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
 
     // XDrawView
 
-    virtual void SAL_CALL setCurrentPage (
+    virtual void setCurrentPage (
         const cpo::uno::Reference<css::drawing::XDrawPage >& xPage) override;
 
-    virtual cpo::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawPage> getCurrentPage() override;
 
     // XFastPropertySet
 
-    virtual void SAL_CALL setFastPropertyValue (
+    virtual void setFastPropertyValue (
         sal_Int32 nHandle,
         const cpo::uno::Any& rValue) override;
 
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue (
+    virtual cpo::uno::Any getFastPropertyValue (
         sal_Int32 nHandle) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     /** Return a reference to the active layer object.
         @return

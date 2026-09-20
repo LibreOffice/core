@@ -270,7 +270,7 @@ void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
 }
 
 // XEventListener
-void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent )
+void AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent )
 {
     if( !(aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged") )
         return;
@@ -293,7 +293,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
     UpdateTags();
 }
 
-void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ )
+void AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ )
 {
 }
 

@@ -81,42 +81,42 @@ Annotation::~Annotation()
 {}
 
 // com.sun.star.beans.XPropertySet:
-uno::Reference<beans::XPropertySetInfo> SAL_CALL Annotation::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> Annotation::getPropertySetInfo()
 {
     return ::cppu::PropertySetMixin<office::XAnnotation>::getPropertySetInfo();
 }
 
-void SAL_CALL Annotation::setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue)
+void Annotation::setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::setPropertyValue(aPropertyName, aValue);
 }
 
-cpo::uno::Any SAL_CALL Annotation::getPropertyValue(const OUString & aPropertyName)
+cpo::uno::Any Annotation::getPropertyValue(const OUString & aPropertyName)
 {
     return ::cppu::PropertySetMixin<office::XAnnotation>::getPropertyValue(aPropertyName);
 }
 
-void SAL_CALL Annotation::addPropertyChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XPropertyChangeListener> & xListener)
+void Annotation::addPropertyChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XPropertyChangeListener> & xListener)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::addPropertyChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL Annotation::removePropertyChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XPropertyChangeListener> & xListener)
+void Annotation::removePropertyChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XPropertyChangeListener> & xListener)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::removePropertyChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL Annotation::addVetoableChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XVetoableChangeListener> & xListener)
+void Annotation::addVetoableChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XVetoableChangeListener> & xListener)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::addVetoableChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL Annotation::removeVetoableChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XVetoableChangeListener> & xListener)
+void Annotation::removeVetoableChangeListener(const OUString & aPropertyName, const uno::Reference<beans::XVetoableChangeListener> & xListener)
 {
     ::cppu::PropertySetMixin<office::XAnnotation>::removeVetoableChangeListener(aPropertyName, xListener);
 }
 
-cpo::uno::Any SAL_CALL Annotation::getAnchor()
+cpo::uno::Any Annotation::getAnchor()
 {
     std::unique_lock g(m_aMutex);
     cpo::uno::Any aRet;
@@ -129,13 +129,13 @@ cpo::uno::Any SAL_CALL Annotation::getAnchor()
 }
 
 // css::office::XAnnotation:
-geometry::RealPoint2D SAL_CALL Annotation::getPosition()
+geometry::RealPoint2D Annotation::getPosition()
 {
     std::unique_lock g(m_aMutex);
     return m_Position;
 }
 
-void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
+void Annotation::setPosition(const geometry::RealPoint2D & the_value)
 {
     prepareSet(u"Position"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
@@ -146,13 +146,13 @@ void SAL_CALL Annotation::setPosition(const geometry::RealPoint2D & the_value)
 }
 
 // css::office::XAnnotation:
-geometry::RealSize2D SAL_CALL Annotation::getSize()
+geometry::RealSize2D Annotation::getSize()
 {
     std::unique_lock g(m_aMutex);
     return m_Size;
 }
 
-void SAL_CALL Annotation::setSize(const geometry::RealSize2D & the_value)
+void Annotation::setSize(const geometry::RealSize2D & the_value)
 {
     prepareSet(u"Size"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
@@ -162,13 +162,13 @@ void SAL_CALL Annotation::setSize(const geometry::RealSize2D & the_value)
     }
 }
 
-OUString SAL_CALL Annotation::getAuthor()
+OUString Annotation::getAuthor()
 {
     std::unique_lock g(m_aMutex);
     return m_Author;
 }
 
-void SAL_CALL Annotation::setAuthor(const OUString & the_value)
+void Annotation::setAuthor(const OUString & the_value)
 {
     prepareSet(u"Author"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
@@ -178,13 +178,13 @@ void SAL_CALL Annotation::setAuthor(const OUString & the_value)
     }
 }
 
-OUString SAL_CALL Annotation::getInitials()
+OUString Annotation::getInitials()
 {
     std::unique_lock g(m_aMutex);
     return m_Initials;
 }
 
-void SAL_CALL Annotation::setInitials(const OUString & the_value)
+void Annotation::setInitials(const OUString & the_value)
 {
     prepareSet(u"Initials"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
@@ -194,13 +194,13 @@ void SAL_CALL Annotation::setInitials(const OUString & the_value)
     }
 }
 
-util::DateTime SAL_CALL Annotation::getDateTime()
+util::DateTime Annotation::getDateTime()
 {
     std::unique_lock g(m_aMutex);
     return m_DateTime;
 }
 
-void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
+void Annotation::setDateTime(const util::DateTime & the_value)
 {
     prepareSet(u"DateTime"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {
@@ -210,13 +210,13 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
     }
 }
 
-util::DateTime SAL_CALL Annotation::getDateTimeUTC()
+util::DateTime Annotation::getDateTimeUTC()
 {
     std::unique_lock g(m_aMutex);
     return m_DateTimeUTC;
 }
 
-void SAL_CALL Annotation::setDateTimeUTC(const util::DateTime & the_value)
+void Annotation::setDateTimeUTC(const util::DateTime & the_value)
 {
     prepareSet(u"DateTimeUTC"_ustr, cpo::uno::Any(), cpo::uno::Any(), nullptr);
     {

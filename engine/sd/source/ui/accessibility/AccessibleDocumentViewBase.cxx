@@ -217,7 +217,7 @@ void AccessibleDocumentViewBase::ViewForwarderChanged()
 
 //=====  XAccessibleContext  ==================================================
 
-Reference<XAccessible> SAL_CALL
+Reference<XAccessible>
        AccessibleDocumentViewBase::getAccessibleParent()
 {
     ensureAlive();
@@ -225,7 +225,7 @@ Reference<XAccessible> SAL_CALL
     return AccessibleContextBase::getAccessibleParent();
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
     AccessibleDocumentViewBase::getAccessibleChildCount()
 {
     ensureAlive ();
@@ -236,7 +236,7 @@ sal_Int64 SAL_CALL
         return 0;
 }
 
-Reference<XAccessible> SAL_CALL
+Reference<XAccessible>
     AccessibleDocumentViewBase::getAccessibleChild (sal_Int64 nIndex)
 {
     ensureAlive();
@@ -255,7 +255,7 @@ Reference<XAccessible> SAL_CALL
     within one of their bounding boxes.  Return the first child for which
     this is true.
 */
-uno::Reference<XAccessible > SAL_CALL
+uno::Reference<XAccessible >
     AccessibleDocumentViewBase::getAccessibleAtPoint (
         const awt::Point& aPoint)
 {
@@ -326,7 +326,7 @@ awt::Rectangle AccessibleDocumentViewBase::implGetBounds()
 
 //=====  XInterface  ==========================================================
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
     AccessibleDocumentViewBase::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
@@ -344,14 +344,14 @@ cpo::uno::Any SAL_CALL
     return aReturn;
 }
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::acquire()
     noexcept
 {
     AccessibleContextBase::acquire ();
 }
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::release()
     noexcept
 {
@@ -360,13 +360,13 @@ void SAL_CALL
 
 // XServiceInfo
 
-OUString SAL_CALL
+OUString
     AccessibleDocumentViewBase::getImplementationName()
 {
     return u"AccessibleDocumentViewBase"_ustr;
 }
 
-cpo::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString>
     AccessibleDocumentViewBase::getSupportedServiceNames()
 {
     ensureAlive();
@@ -427,7 +427,7 @@ void AccessibleDocumentViewBase::impl_dispose()
 
 //=====  XEventListener  ======================================================
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
 {
     ensureAlive();
@@ -447,14 +447,14 @@ void SAL_CALL
 
 //=====  XPropertyChangeListener  =============================================
 
-void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
+void AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
 {
     // Empty
 }
 
 //=====  XWindowListener  =====================================================
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::windowResized (const css::awt::WindowEvent& )
 {
     if (!isAlive())
@@ -463,7 +463,7 @@ void SAL_CALL
     ViewForwarderChanged();
 }
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::windowMoved (const css::awt::WindowEvent& )
 {
     if (!isAlive())
@@ -472,7 +472,7 @@ void SAL_CALL
     ViewForwarderChanged();
 }
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::windowShown (const css::lang::EventObject& )
 {
     if (!isAlive())
@@ -481,7 +481,7 @@ void SAL_CALL
     ViewForwarderChanged();
 }
 
-void SAL_CALL
+void
     AccessibleDocumentViewBase::windowHidden (const css::lang::EventObject& )
 {
     if (!isAlive())
@@ -509,7 +509,7 @@ void AccessibleDocumentViewBase::focusLost (const css::awt::FocusEvent& e)
 //=====  protected internal  ==================================================
 
 // This method is called from the component helper base class while disposing.
-void SAL_CALL AccessibleDocumentViewBase::disposing()
+void AccessibleDocumentViewBase::disposing()
 {
     impl_dispose();
 
@@ -588,7 +588,7 @@ void
 {
 }
 
-OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
+OUString AccessibleDocumentViewBase::getExtendedAttributes()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
 
@@ -699,12 +699,12 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     return sValue.makeStringAndClear();
 }
 
-sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
+sal_Int32 AccessibleDocumentViewBase::getForeground(  )
 {
     return sal_Int32(COL_BLACK);
 }
 
-sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
+sal_Int32 AccessibleDocumentViewBase::getBackground(  )
 {
     ensureAlive();
     ::osl::MutexGuard aGuard (m_aMutex);

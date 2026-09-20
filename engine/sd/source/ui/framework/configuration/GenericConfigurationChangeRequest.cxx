@@ -64,7 +64,7 @@ void GenericConfigurationChangeRequest::execute (
     }
 }
 
-OUString SAL_CALL GenericConfigurationChangeRequest::getName()
+OUString GenericConfigurationChangeRequest::getName()
 {
     return OUString::Concat("GenericConfigurationChangeRequest ")
         + (meMode==Activation
@@ -72,7 +72,7 @@ OUString SAL_CALL GenericConfigurationChangeRequest::getName()
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }
 
-void SAL_CALL GenericConfigurationChangeRequest::setName (const OUString&)
+void GenericConfigurationChangeRequest::setName (const OUString&)
 {
     // Ignored.
 }

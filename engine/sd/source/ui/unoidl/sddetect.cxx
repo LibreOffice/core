@@ -49,7 +49,7 @@ SdFilterDetect::~SdFilterDetect()
 {
 }
 
-OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor )
+OUString SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor )
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
     OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
@@ -133,19 +133,19 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 }
 
 // XServiceInfo
-OUString SAL_CALL SdFilterDetect::getImplementationName()
+OUString SdFilterDetect::getImplementationName()
 {
     return u"com.sun.star.comp.draw.FormatDetector"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName )
+bool SdFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames()
+Sequence< OUString > SdFilterDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }

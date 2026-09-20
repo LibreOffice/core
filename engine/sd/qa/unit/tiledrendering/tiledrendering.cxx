@@ -5233,19 +5233,19 @@ public:
         m_aString = OUString(rMarkdown.data(), rMarkdown.size(), RTL_TEXTENCODING_UTF8);
     }
 
-    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         if (rFlavor.MimeType == m_aFlavor.MimeType && rFlavor.DataType == m_aFlavor.DataType)
             return cpo::uno::Any(m_aString);
         return {};
     }
 
-    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> getTransferDataFlavors() override
     {
         return { m_aFlavor };
     }
 
-    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override
+    bool isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override
     {
         return rFlavor.MimeType == m_aFlavor.MimeType && rFlavor.DataType == m_aFlavor.DataType;
     }

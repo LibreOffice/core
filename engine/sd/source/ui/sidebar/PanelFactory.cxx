@@ -55,7 +55,7 @@ PanelFactory::~PanelFactory()
 
 // XUIElementFactory
 
-Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
+Reference<ui::XUIElement> PanelFactory::createUIElement (
     const OUString& rsUIElementResourceURL,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {

@@ -74,25 +74,25 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
 
 //===== XAccessibleContext ====================================================
 
-sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount()
+sal_Int64 AccessibleSlideSorterObject::getAccessibleChildCount()
 {
     ensureAlive();
     return 0;
 }
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int64 )
+Reference<XAccessible> AccessibleSlideSorterObject::getAccessibleChild (sal_Int64 )
 {
     ensureAlive();
     throw lang::IndexOutOfBoundsException();
 }
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent()
+Reference<XAccessible> AccessibleSlideSorterObject::getAccessibleParent()
 {
     ensureAlive();
     return mxParent;
 }
 
-sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
+sal_Int64 AccessibleSlideSorterObject::getAccessibleIndexInParent()
 {
     ensureAlive();
     const SolarMutexGuard aSolarGuard;
@@ -112,19 +112,19 @@ sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
     return nIndexInParent;
 }
 
-sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole()
+sal_Int16 AccessibleSlideSorterObject::getAccessibleRole()
 {
     ensureAlive();
     return AccessibleRole::SHAPE;
 }
 
-OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription()
+OUString AccessibleSlideSorterObject::getAccessibleDescription()
 {
     ensureAlive();
     return SdResId(STR_PAGE);
 }
 
-OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
+OUString AccessibleSlideSorterObject::getAccessibleName()
 {
     ensureAlive();
     const SolarMutexGuard aSolarGuard;
@@ -136,14 +136,14 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
         return OUString();
 }
 
-Reference<XAccessibleRelationSet> SAL_CALL
+Reference<XAccessibleRelationSet>
     AccessibleSlideSorterObject::getAccessibleRelationSet()
 {
     ensureAlive();
     return Reference<XAccessibleRelationSet>();
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
     AccessibleSlideSorterObject::getAccessibleStateSet()
 {
     ensureAlive();
@@ -172,7 +172,7 @@ sal_Int64 SAL_CALL
     return nStateSet;
 }
 
-lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
+lang::Locale AccessibleSlideSorterObject::getLocale()
 {
     ensureAlive();
     // Delegate request to parent.
@@ -188,7 +188,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
 
 //===== XAccessibleComponent ==================================================
 
-Reference<XAccessible> SAL_CALL
+Reference<XAccessible>
     AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
 {
     return nullptr;
@@ -219,12 +219,12 @@ awt::Rectangle AccessibleSlideSorterObject::implGetBounds()
         aBBox.GetHeight());
 }
 
-void SAL_CALL AccessibleSlideSorterObject::grabFocus()
+void AccessibleSlideSorterObject::grabFocus()
 {
     // nothing to do
 }
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
+sal_Int32 AccessibleSlideSorterObject::getForeground()
 {
     ensureAlive();
     svtools::ColorConfig aColorConfig;
@@ -232,7 +232,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
+sal_Int32 AccessibleSlideSorterObject::getBackground()
 {
     ensureAlive();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();

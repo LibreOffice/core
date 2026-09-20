@@ -161,28 +161,28 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoPageBackground::getImplementationName()
+OUString SdUnoPageBackground::getImplementationName()
 {
     return u"SdUnoPageBackground"_ustr;
 }
 
-bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
+bool SdUnoPageBackground::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SdUnoPageBackground::getSupportedServiceNames()
 {
     return { sUNO_Service_PageBackground, sUNO_Service_FillProperties };
 }
 
 // XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL SdUnoPageBackground::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SdUnoPageBackground::getPropertySetInfo()
 {
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void SdUnoPageBackground::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -236,7 +236,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     }
 }
 
-cpo::uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SdUnoPageBackground::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -286,13 +286,13 @@ cpo::uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Pr
     return aAny;
 }
 
-void SAL_CALL SdUnoPageBackground::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoPageBackground::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoPageBackground::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) {}
-void SAL_CALL SdUnoPageBackground::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) {}
+void SdUnoPageBackground::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) {}
+void SdUnoPageBackground::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) {}
+void SdUnoPageBackground::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) {}
+void SdUnoPageBackground::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) {}
 
 // XPropertyState
-beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUString& PropertyName )
+beans::PropertyState SdUnoPageBackground::getPropertyState( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -337,7 +337,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     }
 }
 
-cpo::uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
+cpo::uno::Sequence< beans::PropertyState > SdUnoPageBackground::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -351,7 +351,7 @@ cpo::uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getProp
     return aPropertyStateSequence;
 }
 
-void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& PropertyName )
+void SdUnoPageBackground::setPropertyToDefault( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -374,7 +374,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyToDefault( const OUString& Propert
     }
 }
 
-cpo::uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
+cpo::uno::Any SdUnoPageBackground::getPropertyDefault( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
 

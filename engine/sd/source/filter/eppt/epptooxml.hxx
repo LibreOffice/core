@@ -134,7 +134,7 @@ private:
 
     void AddLayoutIdAndRelation( const ::sax_fastparser::FSHelperPtr& pFS, sal_Int32 nLayoutFileId );
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     /** The placeholder index of a master placeholder shape, allocating one on first use
 

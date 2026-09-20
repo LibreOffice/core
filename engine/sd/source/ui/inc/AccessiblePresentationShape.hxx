@@ -38,7 +38,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
     /// Create a name string that contains the accessible name.

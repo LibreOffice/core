@@ -287,7 +287,7 @@ void SlideSorterModule::HandleResourceRequest(
     }
 }
 
-void SAL_CALL SlideSorterModule::disposing (
+void SlideSorterModule::disposing (
     const lang::EventObject& rEvent)
 {
     if (mxConfigurationController.is()

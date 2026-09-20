@@ -64,7 +64,7 @@ public:
     virtual ~ViewShellWrapper() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
 
     /** This method is typically used
         to obtain a pointer to the wrapped ViewShell object for a given
@@ -81,10 +81,10 @@ public:
 
     // XSelectionSupplier
 
-    virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
-    virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual void SAL_CALL addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual bool select( const cpo::uno::Any& aSelection ) override;
+    virtual cpo::uno::Any getSelection() override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // XRelocatableResource
 
@@ -100,21 +100,21 @@ public:
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized(
+    virtual void windowResized(
         const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved(
+    virtual void windowMoved(
         const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown(
+    virtual void windowShown(
         const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden(
+    virtual void windowHidden(
         const css::lang::EventObject& rEvent) override;
 
     // XEventListener
 
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& rEvent) override;
 
 private:

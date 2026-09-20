@@ -2681,7 +2681,7 @@ DocumentRenderer::~DocumentRenderer()
 
 //----- XRenderable -----------------------------------------------------------
 
-sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
+sal_Int32 DocumentRenderer::getRendererCount (
     const cpo::uno::Any&,
     const cpo::uno::Sequence<css::beans::PropertyValue >& rOptions)
 {
@@ -2689,7 +2689,7 @@ sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
     return mpImpl->GetPrintPageCount();
 }
 
-Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
+Sequence<beans::PropertyValue> DocumentRenderer::getRenderer (
     sal_Int32,
     const cpo::uno::Any&,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rOptions)
@@ -2698,7 +2698,7 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     return mpImpl->GetProperties();
 }
 
-void SAL_CALL DocumentRenderer::render (
+void DocumentRenderer::render (
     sal_Int32 nRenderer,
     const cpo::uno::Any&,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rOptions)
