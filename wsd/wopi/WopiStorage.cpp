@@ -464,13 +464,22 @@ StorageBase::LockUpdateResult WopiStorage::updateLockState(const Authorization& 
 
         failureReason = httpResponse->get("X-WOPI-LockFailureReason", "");
 
-        const bool unauthorized =
-            http::isUnauthorizedStatusCode(httpResponse->statusLine().statusCode());
+        const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+        const bool unauthorized = http::isUnauthorizedStatusCode(statusCode);
+        const bool transient = !unauthorized && http::isTransientStatusCode(statusCode);
 
         LOG_ERR("Un-successful " << wopiLog << " with " << (unauthorized ? "expired token, " : "")
-                                 << "HTTP status " << httpResponse->statusLine().statusCode()
-                                 << ", failure reason: [" << failureReason << "] and response: ["
-                                 << responseString << ']');
+                                 << "HTTP status " << statusCode << ", failure reason: ["
+                                 << failureReason << "] and response: [" << responseString << ']');
+
+        LockUpdateResult result(unauthorized ? LockUpdateResult::Status::UNAUTHORIZED
+                                             : (transient ? LockUpdateResult::Status::TRANSIENT
+                                                          : LockUpdateResult::Status::FAILED),
+                                lock, std::move(failureReason));
+        if (transient)
+            result.setRetryAfter(http::parseRetryAfter(httpResponse->get("Retry-After")));
+
+        return result;
     }
     catch (const std::exception& exc)
     {
