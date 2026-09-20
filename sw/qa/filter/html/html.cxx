@@ -330,6 +330,18 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     OUString aContent = getXPathContent(pHtmlDoc, "/html/body/p/text()");
     CPPUNIT_ASSERT_EQUAL(u"content"_ustr, aContent.trim());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167445EmptyParagraph)
+{
+    createSwDoc();
+    save(TestFilter::HTML_WRITER);
+    xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // as the empty paragraph would have had a <br> element inside.
+    assertXPathChildren(pXmlDoc, "/html/body/p", 0);
+}
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDisplayNoneImport)

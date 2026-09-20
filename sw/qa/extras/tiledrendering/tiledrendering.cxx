@@ -223,11 +223,11 @@ Heading on second page");
 
     static OStringLiteral sExpectedHtml(u8"Heading</h2>\n\
 <p>Let's have text; we need to be able to select the text inside the shape, but also the various individual ones too:</p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
-<p><br/><br/></p>\n\
+<p></p>\n\
+<p></p>\n\
+<p></p>\n\
+<p></p>\n\
+<p></p>\n\
 <h1 class=\"western\">And this is all for Writer shape objects</h1>\n\
 <h2 class=\"western\">Heading on second page</h2>");
 

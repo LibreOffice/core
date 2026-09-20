@@ -2408,7 +2408,8 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         aEndPosLst.OutStartAttrs( rWrt, nStrPos + nOffset );
     }
 
-    bool bWriteBreak = (HtmlTokenId::PREFORMTXT_ON != rWrt.m_nLastParaToken);
+    // tdf#167445 Empty nodes don't need <br> elements
+    bool bWriteBreak = (HtmlTokenId::PREFORMTXT_ON != rWrt.m_nLastParaToken && !rStr.isEmpty());
     if (bWriteBreak && (pNd->GetNumRule() || rWrt.mbReqIF))
     {
         // One line-break is exactly one <br> in the ReqIF case.
