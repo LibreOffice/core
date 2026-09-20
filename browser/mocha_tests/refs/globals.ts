@@ -134,6 +134,10 @@ globalThis.window = (function () {
 
 globalThis.document = globalThis.window.document;
 
+// jsdom keeps these on its own window, and the bundled sources name them bare.
+(globalThis as any).Element = (globalThis.window as any).Element;
+(globalThis as any).CSS = (globalThis.window as any).CSS;
+
 (globalThis.window as any).prefs = {
 	canPersist: false,
 };
@@ -181,6 +185,34 @@ globalThis.window.L = (globalThis as any).L;
 	Sub.prototype.constructor = Sub;
 	(Sub as any).extend = Parent.extend;
 	return Sub;
+};
+
+// jsdom implements no DOMRect.
+(globalThis as any).DOMRect = class _DOMRect {
+	x = 0;
+	y = 0;
+	width = 0;
+	height = 0;
+
+	constructor(x = 0, y = 0, width = 0, height = 0) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+
+	get left() {
+		return this.x;
+	}
+	get top() {
+		return this.y;
+	}
+	get right() {
+		return this.x + this.width;
+	}
+	get bottom() {
+		return this.y + this.height;
+	}
 };
 
 globalThis._ = (input: string) => input;

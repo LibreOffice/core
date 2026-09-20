@@ -25,6 +25,7 @@
 /// <reference path="./sources.ts" />
 /// <reference path="./helper/canvasContainerSetup.ts" />
 /// <reference path="./helper/matchMediaMock.ts" />
+/// <reference path="./helper/fakeClock.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
@@ -66,4 +67,5 @@
 /// <reference path="./SlideLinks.test.ts" />
 /// <reference path="./SlideLinkToolbar.test.ts" />
 /// <reference path="./ExportFormats.test.ts" />
+/// <reference path="./Tooltip.test.ts" />
 // NOTE: reference new tests here ...
