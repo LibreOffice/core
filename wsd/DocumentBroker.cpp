@@ -3467,6 +3467,17 @@ void DocumentBroker::checkAndUploadToStorage(const std::shared_ptr<ClientSession
     {
         uploadToStorage(session, /*force=*/false);
     }
+    else if (_documentChangedInStorage && !_storageManager.lastUploadSuccessful())
+    {
+        // We are holding back because the versions have diverged and the user
+        // has not said which to keep. Saying nothing would have them save, be
+        // told it worked, and find later that storage never had it, so put the
+        // question back to them instead.
+        LOG_INF("Not uploading [" << _docKey
+                                  << "]: the conflict with storage is unresolved. Asking again");
+        handleDocumentConflict("Document changed in storage.\nThe copy in storage is not the one "
+                               "you are editing; choose which to keep.");
+    }
     else if (!isAsyncUploading())
     {
         // If session is disconnected, remove.
