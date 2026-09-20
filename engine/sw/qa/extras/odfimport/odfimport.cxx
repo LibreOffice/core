@@ -54,6 +54,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/scheduler.hxx>
 
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1871,6 +1872,16 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalRuleOldOdf)
     // keeps a document saved before the marker existed rendering the way it was written
     createSwDoc("fdo75872_aoo40.odt");
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"HorizontalRule"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFieldmarkBelowNestedTable)
+{
+    // a fieldmark in a table cell whose first content is a nested table is imported, and the
+    // document it is in loads
+    createSwDoc("fieldmark-below-nested-table.fodt");
+
+    IDocumentMarkAccess& rMarkAccess(*getSwDoc()->getIDocumentMarkAccess());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rMarkAccess.getFieldmarksCount());
 }
 
 } // end of anonymous namespace
