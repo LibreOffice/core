@@ -982,6 +982,27 @@ function domIdsIn(root) {
 	return ids;
 }
 
+/// The same accessibility nodes, each told which element it stands for. The
+/// tree does not always name an element the way the DOM does: a collapsed
+/// select is a menu to the browser, so its values arrive as menu items, and a
+/// disabled one carries no selection state to tell it apart from the items of
+/// a real menu. One DOM fetch answers for the whole set.
+function withDomNames(nodes) {
+	return getDomTree().then(function (root) {
+		const names = {};
+
+		walkDomTree(root, function (node) {
+			names[node.backendNodeId] = node.nodeName;
+		});
+
+		return nodes.map(function (node) {
+			return Object.assign({}, node, {
+				domName: names[node.backendDOMNodeId] || '',
+			});
+		});
+	});
+}
+
 /// The accessibility subtree of the one element of a document that matches a
 /// selector.
 function axNodesWithin(documentNodeId, selector) {
@@ -1454,6 +1475,7 @@ module.exports.getFocusedAXNode = getFocusedAXNode;
 module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
 module.exports.getAXNodes = getAXNodes;
 module.exports.getAXNodesWithin = getAXNodesWithin;
+module.exports.withDomNames = withDomNames;
 module.exports.describeAXNode = describeAXNode;
 module.exports.assertDropdownButtonNamesItsList = assertDropdownButtonNamesItsList;
 module.exports.contrastRatio = contrastRatio;

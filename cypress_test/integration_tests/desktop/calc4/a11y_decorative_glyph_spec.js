@@ -17,11 +17,13 @@ describe(['tagdesktop'], 'Decorative glyphs', { testIsolation: false }, function
 		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
 	});
 
-	// A listbox option's name is its value, and a filter offers = and <= as
-	// values, so only a control that should carry a label is held to this.
+	// The name of a select's value is the value itself, and a filter offers =
+	// and <= as values, so only a control that should carry a label is held to
+	// this. A collapsed select reaches the tree as a menu, which is why the
+	// element is asked rather than the role.
 	function labelled(node) {
 		return !node.ignored && node.name && node.properties.focusable &&
-			node.role !== 'option';
+			node.domName !== 'OPTION';
 	}
 
 	function wordless(name) {
@@ -47,22 +49,25 @@ describe(['tagdesktop'], 'Decorative glyphs', { testIsolation: false }, function
 			this.skip();
 		}
 
-		cy.then(function () { return a11yHelper.getAXNodes(); }).then(function (nodes) {
-			const reachable = nodes.filter(function (node) {
-				return labelled(node);
+		cy.then(function () { return a11yHelper.getAXNodes(); })
+			.then(function (nodes) { return a11yHelper.withDomNames(nodes); })
+			.then(function (nodes) {
+				const reachable = nodes.filter(function (node) {
+					return labelled(node);
+				});
+
+				expect(reachable.length, 'reachable named nodes in the tree')
+					.to.be.greaterThan(0);
+
+				const offenders = reachable.filter(function (node) {
+					return wordless(node.name);
+				}).map(function (node) {
+					return node.role + ' named "' + node.name.trim() + '"';
+				});
+
+				expect(offenders.join(', '), 'controls named only with symbols')
+					.to.be.empty;
 			});
-
-			expect(reachable.length, 'reachable named nodes in the tree')
-				.to.be.greaterThan(0);
-
-			const offenders = reachable.filter(function (node) {
-				return wordless(node.name);
-			}).map(function (node) {
-				return node.role + ' named "' + node.name.trim() + '"';
-			});
-
-			expect(offenders.join(', '), 'controls named only with symbols').to.be.empty;
-		});
 	});
 
 	it('no image beside a label answers the pointer with a native title', function () {
@@ -89,6 +94,7 @@ describe(['tagdesktop'], 'Decorative glyphs', { testIsolation: false }, function
 		openStandardFilter();
 
 		cy.then(function () { return a11yHelper.getAXNodesWithin('.ui-dialog'); })
+			.then(function (nodes) { return a11yHelper.withDomNames(nodes); })
 			.then(function (nodes) {
 				const offenders = nodes.filter(function (node) {
 					return labelled(node) && wordless(node.name);
