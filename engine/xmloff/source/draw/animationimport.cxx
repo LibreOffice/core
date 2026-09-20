@@ -1114,7 +1114,7 @@ void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_SO52, XML_GROUP_ID):
             case XML_ELEMENT(PRESENTATION_OOO, XML_GROUP_ID):
             {
-                aUserData.emplace_back( "group-id", Any( aIter.toInt32() ) );
+                aUserData.emplace_back( u"group-id"_ustr, Any( aIter.toInt32() ) );
             }
             break;
 

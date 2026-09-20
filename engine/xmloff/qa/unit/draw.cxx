@@ -155,8 +155,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
 
-    auto pTheme = std::make_shared<model::Theme>("mytheme");
-    auto pColorSet = std::make_shared<model::ColorSet>("mycolorscheme");
+    auto pTheme = std::make_shared<model::Theme>(u"mytheme"_ustr);
+    auto pColorSet = std::make_shared<model::ColorSet>(u"mycolorscheme"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x0);
     pColorSet->add(model::ThemeColorType::Light1, 0x1);
     pColorSet->add(model::ThemeColorType::Dark2, 0x2);
@@ -920,8 +920,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     uno::Reference<beans::XPropertySet> xMasterPageProps(xDrawPage->getMasterPage(),
                                                          uno::UNO_QUERY);
 
-    auto pTheme = std::make_shared<model::Theme>("Custom");
-    auto pColorSet = std::make_shared<model::ColorSet>("My Colors");
+    auto pTheme = std::make_shared<model::Theme>(u"Custom"_ustr);
+    auto pColorSet = std::make_shared<model::ColorSet>(u"My Colors"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
     pColorSet->add(model::ThemeColorType::Light1, 0xffff11);
     pColorSet->add(model::ThemeColorType::Dark2, 0x002200);

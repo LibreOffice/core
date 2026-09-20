@@ -830,18 +830,18 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
 // the internal property. Those are of kind "LabelFoo".
 // The array is used in methods setStylesToSeries and setStylesToDataPoints.
 const std::pair<OUString, OUString> aApiToLabelFooPairs[]
-    = { { "LineStyle", "LabelBorderStyle" },
-        { "LineWidth", "LabelBorderWidth" },
-        { "LineColor", "LabelBorderColor" },
+    = { { u"LineStyle"_ustr, u"LabelBorderStyle"_ustr },
+        { u"LineWidth"_ustr, u"LabelBorderWidth"_ustr },
+        { u"LineColor"_ustr, u"LabelBorderColor"_ustr },
         // The name "LabelBorderDash" is defined, but the associated API name "LineDash" belongs to
         // the <draw:stroke-dash> element and is not used directly as line property.
         //{"LineDash", "LabelBorderDash"},
-        { "LineDashName", "LabelBorderDashName" },
-        { "LineTransparence", "LabelBorderTransparency" },
-        { "FillStyle", "LabelFillStyle" },
-        { "FillBackground", "LabelFillBackground" },
-        { "FillHatchName", "LabelFillHatchName" },
-        { "FillColor", "LabelFillColor" } };
+        { u"LineDashName"_ustr, u"LabelBorderDashName"_ustr },
+        { u"LineTransparence"_ustr, u"LabelBorderTransparency"_ustr },
+        { u"FillStyle"_ustr, u"LabelFillStyle"_ustr },
+        { u"FillBackground"_ustr, u"LabelFillBackground"_ustr },
+        { u"FillHatchName"_ustr, u"LabelFillHatchName"_ustr },
+        { u"FillColor"_ustr, u"LabelFillColor"_ustr } };
 
 
 //static

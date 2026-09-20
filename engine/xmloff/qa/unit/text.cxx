@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
     cpo::uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
-        { "Text", cpo::uno::Any(u"comment"_ustr) },
+        { u"Text"_ustr, cpo::uno::Any(u"comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aCommentProps);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -1105,7 +1105,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
     // When saving that document to ODT, then make sure no assertion failure happens:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     cpo::uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", cpo::uno::Any(u"writer8"_ustr) },
+        { u"FilterName"_ustr, cpo::uno::Any(u"writer8"_ustr) },
     });
     // Without the accompanying fix in place, this test would have failed, we had duplicated XML
     // attributes.
@@ -1141,8 +1141,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xPageProps(xDrawPage, uno::UNO_QUERY);
 
-    auto pTheme = std::make_shared<model::Theme>("My Theme");
-    auto pColorSet = std::make_shared<model::ColorSet>("My Color Scheme");
+    auto pTheme = std::make_shared<model::Theme>(u"My Theme"_ustr);
+    auto pColorSet = std::make_shared<model::ColorSet>(u"My Color Scheme"_ustr);
     pColorSet->add(model::ThemeColorType::Dark1, 0x101010);
     pColorSet->add(model::ThemeColorType::Light1, 0x202020);
     pColorSet->add(model::ThemeColorType::Dark2, 0x303030);
