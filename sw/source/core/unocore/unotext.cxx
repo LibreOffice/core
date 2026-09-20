@@ -881,9 +881,11 @@ SwXText::setString(const OUString& rString)
 //              Only one of the pointers has to be set!
 bool SwXText::CheckForOwnMember(const SwPaM & rPaM)
 {
-    const rtl::Reference< SwXTextCursor > xOwnCursor(createXTextCursor());
-    const SwStartNode* pOwnStartNode =
-        xOwnCursor->GetPaM()->GetPointNode().StartOfSectionNode();
+    const SwStartNode* pOwnStartNode = GetStartNode();
+    if (!pOwnStartNode)
+    {
+        return false;
+    }
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch (m_eType)
     {

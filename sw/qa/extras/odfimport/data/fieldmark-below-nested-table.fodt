@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table table:name="Outer">
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <table:table table:name="Inner">
+       <table:table-column/>
+       <table:table-row>
+        <table:table-cell office:value-type="string">
+         <text:p>inner cell text</text:p>
+        </table:table-cell>
+       </table:table-row>
+      </table:table>
+      <text:p>before<field:fieldmark-start text:name="__Fieldmark__1" field:type="vnd.oasis.opendocument.field.UNHANDLED"><field:param field:name="vnd.oasis.opendocument.field.code" field:value=" AUTOTEXTLIST  \s \t \* MERGEFORMAT "/><field:param field:name="vnd.oasis.opendocument.field.id" field:value="1"/></field:fieldmark-start><field:fieldmark-separator/>result<field:fieldmark-end/>after</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>body</text:p>
+  </office:text>
+ </office:body>
+</office:document>
