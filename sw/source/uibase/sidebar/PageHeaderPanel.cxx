@@ -84,6 +84,7 @@ PageHeaderPanel::~PageHeaderPanel()
     mxHeaderSpacingLB.reset();
     mxHeaderLayoutLB.reset();
     mxHeaderMarginPresetLB.reset();
+    maMetricController.dispose();
     mxCustomEntry.reset();
 }
 
