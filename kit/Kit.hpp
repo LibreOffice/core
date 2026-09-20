@@ -411,6 +411,7 @@ private:
                                         const std::string& spellOnline,
                                         const std::string& formattingMarks, const std::string& theme,
                                         const std::string& backgroundTheme,
+                                        const std::string& focusRingColor,
                                         const std::string& userPrivateInfo);
 
     /// Returns true iff at least one session is loaded.

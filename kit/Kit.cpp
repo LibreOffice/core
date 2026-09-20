@@ -2305,6 +2305,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     std::string spellOnline = session->getSpellOnline();
     const std::string formattingMarks = session->getFormattingMarks();
+    const std::string focusRingColor = session->getFocusRingColor();
     if (!_loKitDocument)
     {
         // This is the first time we are loading the document
@@ -2501,11 +2502,11 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     // Avoid logging userPrivateInfo till it's not anonymized.
     LOG_INF("Initializing for rendering session [" << sessionId << "] on document url [" <<
-            anonymizeUrl(_url) << "] with: [" << makeRenderParams(_renderOpts, userNameAnonym, spellOnline, formattingMarks, theme, backgroundTheme, "") << "].");
+            anonymizeUrl(_url) << "] with: [" << makeRenderParams(_renderOpts, userNameAnonym, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, "") << "].");
 
     // initializeForRendering() should be called before
     // registerCallback(), as the previous creates a new view in Impress.
-    const std::string renderParams = makeRenderParams(_renderOpts, userName, spellOnline, formattingMarks, theme, backgroundTheme, userPrivateInfo);
+    const std::string renderParams = makeRenderParams(_renderOpts, userName, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, userPrivateInfo);
 
     _loKitDocument->initializeForRendering(renderParams.c_str());
 
@@ -2681,6 +2682,7 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
                                                     const std::string& spellOnline,
                                                     const std::string& formattingMarks, const std::string& theme,
                                                     const std::string& backgroundTheme,
+                                                    const std::string& focusRingColor,
                                                     const std::string& userPrivateInfo)
 {
     Object::Ptr renderOptsObj;
@@ -2721,6 +2723,11 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
     {
         // userName must be decoded already.
         renderOptsObj->set(".uno:Author", makePropertyValue("string", userName));
+    }
+
+    if (!focusRingColor.empty())
+    {
+        renderOptsObj->set(".uno:FocusRingColor", makePropertyValue("string", focusRingColor));
     }
 
     // Extract settings relevant as view options from userPrivateInfo.

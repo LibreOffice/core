@@ -493,6 +493,11 @@ class Socket {
 		this._map.uiManager.rememberThemeSentWithLoad(darkTheme, darkBackground);
 		this._map.uiManager.initDarkBackgroundUI(darkBackground);
 
+		const focusRingColor = window.getFocusRingColor();
+		if (focusRingColor) {
+			msg += ' focusRingColor=' + focusRingColor;
+		}
+
 		msg += ' accessibilityState=' + window.getAccessibilityState();
 
 		msg += ' clientvisiblearea=' + window.makeClientVisibleArea();

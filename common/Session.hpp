@@ -314,6 +314,10 @@ public:
 
     void setDarkTheme(const std::string& val) { _darkTheme = val; }
 
+    const std::string& getFocusRingColor() const { return _focusRingColor; }
+
+    void setFocusRingColor(const std::string& val) { _focusRingColor = val; }
+
     const std::string& getDarkBackground() const { return _darkBackground; }
 
     void setDarkBackground(const std::string& val) { _darkBackground = val; }
@@ -485,6 +489,10 @@ private:
 
     /// The start value for Dark Theme whether it is active or not on start.
     std::string _darkTheme;
+
+    /// The colour the client paints its own focus and selection marks in, as a
+    /// CSS colour, for example "#0b87e7". Empty when the client named none.
+    std::string _focusRingColor;
     ///
     /// The start value for Dark Background whether it is active or not on start.
     std::string _darkBackground;

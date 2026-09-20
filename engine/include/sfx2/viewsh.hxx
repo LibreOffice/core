@@ -183,6 +183,7 @@ friend class SfxPrinterController;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maKitTimezone;
     OUString maKitAuthor;
+    ::Color maKitFocusRingColor;
     bool maKitIsTimezoneSet;
     bool                        mbLOKColorPreviewEnabled;
 
@@ -499,6 +500,10 @@ public:
     const OUString& GetKitAuthor() const { return maKitAuthor; }
     /// Set the server-provided author name of this view.
     void SetKitAuthor(const OUString& rAuthor) { maKitAuthor = rAuthor; }
+
+    /// COL_AUTO when the client of this view named no colour.
+    const ::Color& GetKitFocusRingColor() const { return maKitFocusRingColor; }
+    void SetKitFocusRingColor(const ::Color& rColor) { maKitFocusRingColor = rColor; }
 
     /// Set the COKit locale of this view.
     void SetKitLocale(const OUString& rBcp47LanguageTag);

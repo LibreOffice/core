@@ -525,6 +525,7 @@ interface Window {
 	L: any;
 	createWebSocket(url: string): SockInterface;
 	getAccessibilityState(): boolean;
+	getFocusRingColor(): string;
 	makeClientVisibleArea(): string;
 	postMobileDebug(msg: string): void;
 

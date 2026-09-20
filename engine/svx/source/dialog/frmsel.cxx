@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <svtools/colorcfg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <algorithm>
 #include <math.h>
@@ -736,6 +737,14 @@ void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
     rRenderContext.DrawBitmap(maVirDevPos, mpVirDev->GetBitmap(Point(0, 0), mpVirDev->GetOutputSizePixel()));
 }
 
+static Color lclGetFocusRingColor(const vcl::RenderContext& rRenderContext)
+{
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && pViewShell->GetKitFocusRingColor() != COL_AUTO)
+        return pViewShell->GetKitFocusRingColor();
+    return rRenderContext.GetSettings().GetStyleSettings().GetHighlightColor();
+}
+
 void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
 {
     tools::PolyPolygon aPPoly;
@@ -753,7 +762,7 @@ void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
 
     rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor();
-    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetHighlightColor());
+    rRenderContext.SetLineColor(lclGetFocusRingColor(rRenderContext));
 
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
     {

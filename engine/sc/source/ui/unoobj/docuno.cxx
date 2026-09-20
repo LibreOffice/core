@@ -1780,6 +1780,12 @@ void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans
             if (ScTabViewShell* pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr)
                 pTabViewShell->SetKitAuthor(rValue.Value.get<OUString>());
         }
+        else if (rValue.Name == ".uno:FocusRingColor" && rValue.Value.has<OUString>())
+        {
+            ScViewData* pViewData = ScDocShell::GetViewData();
+            if (ScTabViewShell* pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr)
+                pTabViewShell->SetKitFocusRingColor(::Color::STRtoRGB(rValue.Value.get<OUString>()));
+        }
     }
 
     // show us the text exactly

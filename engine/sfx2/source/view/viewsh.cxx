@@ -2754,6 +2754,7 @@ SfxViewShell::SfxViewShell
 ,   maKitLocale(LANGUAGE_NONE)
 ,   maKitDeviceFormFactor(KitDeviceFormFactor::UNKNOWN)
 ,   mbLOKAccessibilityEnabled(false)
+,   maKitFocusRingColor(COL_AUTO)
 ,   mbLOKColorPreviewEnabled(false)
 {
     SetMargin( rViewFrame.GetMargin_Impl() );

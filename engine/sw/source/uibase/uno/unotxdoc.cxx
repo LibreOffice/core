@@ -3979,6 +3979,8 @@ void SwXTextDocument::initializeForTiledRendering(const cpo::uno::Sequence<css::
             aViewOption.SetHideWhitespaceMode(rValue.Value.get<bool>());
         else if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
             aViewOption.SetAppearanceFlag(ViewOptFlags::Shadow , rValue.Value.get<bool>());
+        else if (rValue.Name == ".uno:FocusRingColor" && rValue.Value.has<OUString>())
+            pView->SetKitFocusRingColor(::Color::STRtoRGB(rValue.Value.get<OUString>()));
         else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
         {
             sAuthor = rValue.Value.get<OUString>();

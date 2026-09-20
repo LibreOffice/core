@@ -6357,6 +6357,9 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
                 pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
                 pViewShell->GetViewShell()->SetKitAuthor(rValue.Value.get<OUString>());
+            else if (rValue.Name == ".uno:FocusRingColor" && rValue.Value.has<OUString>())
+                pViewShell->GetViewShell()->SetKitFocusRingColor(
+                    ::Color::STRtoRGB(rValue.Value.get<OUString>()));
             else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
                 mpDoc->SetOnlineSpell(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:ChangeTheme" && rValue.Value.has<OUString>())
