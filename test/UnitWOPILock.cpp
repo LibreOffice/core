@@ -749,7 +749,7 @@ public:
 /// middle of editing it by dropping their session to read-only.
 class UnitWopiLockRefreshTransient : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitRefusedRefresh, WaitAcceptedRefresh, Done) _phase;
+    STATE_ENUM(Phase, Load, WaitLoad, WaitRefusedRefresh, WaitAcceptedRefresh, Done) _phase;
 
     /// How long the host asks us to wait. Short, so the test doesn't idle, and
     /// it is the value under test: without it we would wait far longer.
@@ -797,7 +797,7 @@ public:
         ++_lockCount;
         TST_LOG("LOCK #" << _lockCount << ": " << op << " in " << name(_phase));
 
-        if (op != "LOCK" || _phase == Phase::Load)
+        if (op != "LOCK" || _phase == Phase::WaitLoad)
             return nullptr; // The initial lock, or an unlock on the way out.
 
         if (_phase == Phase::WaitRefusedRefresh && _refused < RefreshesToRefuse)
@@ -829,7 +829,7 @@ public:
     bool onDocumentLoaded(const std::string& message) override
     {
         TST_LOG("onDocumentLoaded: [" << message << ']');
-        LOK_ASSERT_STATE(_phase, Phase::Load);
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
 
         TRANSITION_STATE(_phase, Phase::WaitRefusedRefresh);
 
@@ -854,6 +854,10 @@ public:
         {
             case Phase::Load:
             {
+                // Transition first: this runs on a timer, and a second pass
+                // would open another session and another lock to refresh.
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
                 TST_LOG("Load: initWebsocket");
                 initWebsocket("/wopi/files/0?access_token=anything");
                 WSD_CMD("load url=" + getWopiSrc());
@@ -866,6 +870,7 @@ public:
                 passTest("Rode out a busy host's refusals without losing the lock");
                 break;
             }
+            case Phase::WaitLoad:
             case Phase::WaitRefusedRefresh:
             case Phase::WaitAcceptedRefresh:
                 break;
@@ -873,12 +878,108 @@ public:
     }
 };
 
+/// A lock we fail to release stays held until the host expires its lease, and
+/// the next person to open the document gets a read-only session for their
+/// trouble. A host that is merely busy is worth asking again.
+class UnitWopiUnlockRetry : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, WaitUnlock, Done) _phase;
+
+    /// Unlocks to refuse with 503 before letting one through. More than the
+    /// handful that teardown attempts of its own accord, so that only the
+    /// retry under test can get past them.
+    static constexpr std::size_t UnlocksToRefuse = 6;
+
+    /// Unlocks refused so far, and whether one has since been accepted.
+    std::size_t _refused;
+    bool _accepted;
+
+public:
+    UnitWopiUnlockRetry()
+        : WopiTestServer("UnitWopiUnlockRetry")
+        , _phase(Phase::Load)
+        , _refused(0)
+        , _accepted(false)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SupportsLocks", "true");
+        fileInfo->set("UserCanWrite", "true");
+        fileInfo->set("BaseFileName", "doc.odt");
+    }
+
+    std::unique_ptr<http::Response>
+    assertLockRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        const std::string op = request.get("X-WOPI-Override", std::string());
+        if (op != "UNLOCK")
+            return nullptr; // The lock taken at load.
+
+        if (_refused < UnlocksToRefuse)
+        {
+            ++_refused;
+            TST_LOG("Refusing unlock #" << _refused << " with 503");
+            return std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        }
+
+        TST_LOG("Accepting the unlock after " << _refused << " refusals");
+        _accepted = true;
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+
+        TRANSITION_STATE(_phase, Phase::WaitUnlock);
+
+        // Nothing to save, so this unloads straight into the unlock.
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                // Transition first: this runs on a timer, and a second pass
+                // would open another session whose disconnect unlocks again.
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Done:
+            {
+                LOK_ASSERT_MESSAGE("Expected the refused unlocks to be retried until one landed",
+                                   _accepted && _refused == UnlocksToRefuse);
+                passTest("Kept asking a busy host until the lock was released");
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUnlock:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[7]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
+    return new UnitBase*[8]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
                              new UnitWopiLockFail(), new UnitWopiUnlock(),
                              new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
-                             nullptr };
+                             new UnitWopiUnlockRetry(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

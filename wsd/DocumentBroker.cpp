@@ -220,6 +220,14 @@ constexpr std::size_t MaxLockRetries = 3;
 /// waiting on this one, and the document cannot finish unloading until it
 /// returns, so a host that has stopped answering must not hold up teardown.
 constexpr std::chrono::seconds UnlockTimeoutWhileUnloading(3);
+
+/// How long to keep trying to unlock while unloading. A lock we fail to release
+/// stays held until the host expires its lease, which costs the next person to
+/// open the document a read-only session, so this is worth a few seconds.
+constexpr std::chrono::seconds UnlockRetryBudget(10);
+
+/// How long to pause between those attempts.
+constexpr std::chrono::microseconds UnlockRetryDelay(std::chrono::milliseconds(500));
 }
 
 void DocumentBroker::setBrokerFactory(BrokerFactory factory)
@@ -915,14 +923,62 @@ void DocumentBroker::pollThread()
             const std::string unlockSessionId = session->getId();
             LOG_INF("Unlocking " << _lockCtx->lockToken() << " with session [" << unlockSessionId
                                  << ']');
-            std::string error;
-            // We are past the polling loop, so this is the only thing driving the
-            // broker's sockets: wait on them rather than leaving them unattended.
-            if (!updateStorageLockState(*session, StorageBase::LockState::UNLOCK, error,
-                                        UnlockTimeoutWhileUnloading, _poll.get()))
+            const auto deadline = std::chrono::steady_clock::now() + UnlockRetryBudget;
+            for (;;)
             {
-                LOG_ERR("Failed to unlock docKey [" << _docKey << "] with session ["
-                                                    << unlockSessionId << "]: " << error);
+                // Re-read it: waiting below drives our poll, which can dispose
+                // the session we started with and take it out of _sessions.
+                const std::shared_ptr<ClientSession> unlocker = getWriteableSession();
+                if (!unlocker || !unlocker->getAuthorization().isValid())
+                {
+                    LOG_ERR("No session left to unlock docKey [" << _docKey << "] with. The lock "
+                            << _lockCtx->lockToken() << " stays held until the host expires it");
+                    break;
+                }
+
+                std::string error;
+                auto status = StorageBase::LockUpdateResult::Status::FAILED;
+                // We are past the polling loop, so this is the only thing driving
+                // the broker's sockets: wait on them rather than leaving them
+                // unattended.
+                if (updateStorageLockState(*unlocker, StorageBase::LockState::UNLOCK, error,
+                                           UnlockTimeoutWhileUnloading, _poll.get(), &status))
+                    break;
+
+                // Polling above may have unlocked it for us by way of the last
+                // editable session disconnecting.
+                if (!_lockCtx->isLocked())
+                    break;
+
+                const bool retry = status == StorageBase::LockUpdateResult::Status::TRANSIENT &&
+                                   std::chrono::steady_clock::now() < deadline;
+                if (!retry)
+                {
+                    LOG_ERR("Failed to unlock docKey ["
+                            << _docKey << "] with session [" << unlocker->getId()
+                            << "]: " << error << ". The lock " << _lockCtx->lockToken()
+                            << " stays held until the host expires it");
+                    break;
+                }
+
+                LOG_INF("Failed to unlock docKey [" << _docKey << "] with session ["
+                                                    << unlocker->getId() << "]: " << error
+                                                    << ". Trying again");
+
+                // Pause on our own poll, so the sockets keep moving meanwhile.
+                // poll() returns on the first event rather than at the end of
+                // its timeout, so keep going until the pause is spent: without
+                // this the attempts run back to back and we hammer a host that
+                // has just told us it is struggling.
+                // Whatever the host asked for in Retry-After is ignored here:
+                // the budget is what we can afford to hold the document open.
+                const auto pauseUntil = std::chrono::steady_clock::now() + UnlockRetryDelay;
+                for (auto now = std::chrono::steady_clock::now(); now < pauseUntil;
+                     now = std::chrono::steady_clock::now())
+                {
+                    _poll->poll(std::chrono::duration_cast<std::chrono::microseconds>(pauseUntil -
+                                                                                      now));
+                }
             }
         }
     }
@@ -2879,7 +2935,8 @@ void DocumentBroker::endRenameFileCommand()
 
 bool DocumentBroker::updateStorageLockState(ClientSession& session, StorageBase::LockState lock,
                                             std::string& error, std::chrono::seconds timeout,
-                                            SocketPoll* poller)
+                                            SocketPoll* poller,
+                                            StorageBase::LockUpdateResult::Status* status)
 {
     LOG_TRC("Requesting async " << StorageBase::nameShort(lock) << "ing of [" << _docKey
                                 << "] by session #" << session.getId());
@@ -2905,6 +2962,9 @@ bool DocumentBroker::updateStorageLockState(ClientSession& session, StorageBase:
 
     const StorageBase::LockUpdateResult result = _storage->updateLockState(
         session.getAuthorization(), *_lockCtx, lock, _currentStorageAttrs, timeout, poller);
+
+    if (status)
+        *status = result.getStatus();
 
     return handleLockResult(session, result);
 }
@@ -5128,8 +5188,14 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
 
         // Unlock the document, if last editable sessions, before we lose a token that can unlock.
         std::string error;
+        // Short wait, as for the unlock while unloading: this can be reached
+        // from underneath that one, where it would otherwise block on a private
+        // poll for the whole connection timeout and strand the outer request.
+        // It keeps that private poll, though. We are inside a poll callback
+        // here, and driving our own poll from within one re-enters it.
         if (lastEditableSession && _lockCtx->isLocked() && _storage &&
-            !updateStorageLockState(*session, StorageBase::LockState::UNLOCK, error))
+            !updateStorageLockState(*session, StorageBase::LockState::UNLOCK, error,
+                                    UnlockTimeoutWhileUnloading))
         {
             LOG_ERR("Failed to unlock docKey [" << _docKey
                                                 << "] before disconnecting last editable session ["

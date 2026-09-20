@@ -947,7 +947,8 @@ private:
     bool updateStorageLockState(ClientSession& session, StorageBase::LockState lock,
                                 std::string& error,
                                 std::chrono::seconds timeout = std::chrono::seconds::zero(),
-                                SocketPoll* poller = nullptr);
+                                SocketPoll* poller = nullptr,
+                                StorageBase::LockUpdateResult::Status* status = nullptr);
 
     /// Updates the document's lock in storage asynchronously to either locked or unlocked.
     /// Returns false if an error prevented issuing the asynchronous request.
