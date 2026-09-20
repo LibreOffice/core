@@ -37,7 +37,7 @@
       <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator> a-i </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator> de </LongDateDaySeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
       <LongDateMonthSeparator> do </LongDateMonthSeparator>
       <LongDateYearSeparator/>
     </Separators>
@@ -87,28 +87,28 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[CURRENCY] #.##0;-[CURRENCY] #.##0</FormatCode>
+      <FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[CURRENCY] #.##0;-[CURRENCY] #.##0</FormatCode>
+      <FormatCode>#.##0,00 [CURRENCY];-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode>#.##0,00 [CURRENCY];[RED]-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>#.##0 CCC</FormatCode>
+      <FormatCode>#.##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
+      <FormatCode>#.##0,-- [CURRENCY];[RED]-#.##0,-- [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNN "a-i" D "de" MMMM "do" YYYY</FormatCode>
+      <FormatCode>NNNND MMMM "do" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD/MM/YY</FormatCode>
@@ -117,31 +117,31 @@
       <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D "de" MMM "do" YY</FormatCode>
+      <FormatCode>D MMM "do" YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D "de" MMM "do" YYYY</FormatCode>
+      <FormatCode>D MMM "do" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>D. MMM. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D "de" MMMM "do" YYYY</FormatCode>
+      <FormatCode>D MMMM "do" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
       <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN "a-i" D "de" MMM "do" YY</FormatCode>
+      <FormatCode>NN "a-i" D MMM "do" YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>NN DD/MMM YY</FormatCode>
+      <FormatCode>NN DD"/"MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN "a-i" D "de" MMMM "do" YYYY</FormatCode>
+      <FormatCode>NN "a-i" D MMMM "do" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNN "a-i" D "de" MMMM "do" YYYY</FormatCode>
+      <FormatCode>NNNND MMMM "do" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-DD</FormatCode>
@@ -157,7 +157,7 @@
       <FormatCode>MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>DD/MMM</FormatCode>
+      <FormatCode>DD"/"MMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
@@ -251,7 +251,7 @@
         <Month>
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>zen</DefaultAbbrvName>
-          <DefaultFullName>zennâ</DefaultFullName>
+          <DefaultFullName>zenâ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
@@ -291,12 +291,12 @@
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>set</DefaultAbbrvName>
-          <DefaultFullName>setembre</DefaultFullName>
+          <DefaultFullName>settembre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>öto</DefaultAbbrvName>
-          <DefaultFullName>ötobre</DefaultFullName>
+          <DefaultAbbrvName>ott</DefaultAbbrvName>
+          <DefaultFullName>ottobre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
@@ -309,6 +309,80 @@
           <DefaultFullName>dexembre</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>de zen</DefaultAbbrvName>
+          <DefaultFullName>de zenâ</DefaultFullName>
+          <DefaultNarrowName>z</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>de fre</DefaultAbbrvName>
+          <DefaultFullName>de frevâ</DefaultFullName>
+          <DefaultNarrowName>f</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>de mar</DefaultAbbrvName>
+          <DefaultFullName>de marso</DefaultFullName>
+          <DefaultNarrowName>m</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>d’arv</DefaultAbbrvName>
+          <DefaultFullName>d’arvî</DefaultFullName>
+          <DefaultNarrowName>a</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>de maz</DefaultAbbrvName>
+          <DefaultFullName>de mazzo</DefaultFullName>
+          <DefaultNarrowName>m</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>de zug</DefaultAbbrvName>
+          <DefaultFullName>de zugno</DefaultFullName>
+          <DefaultNarrowName>z</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>de lug</DefaultAbbrvName>
+          <DefaultFullName>de luggio</DefaultFullName>
+          <DefaultNarrowName>l</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>d’ago</DefaultAbbrvName>
+          <DefaultFullName>d’agosto</DefaultFullName>
+          <DefaultNarrowName>a</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>de set</DefaultAbbrvName>
+          <DefaultFullName>de settembre</DefaultFullName>
+          <DefaultNarrowName>s</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>d’ott</DefaultAbbrvName>
+          <DefaultFullName>d’ottobre</DefaultFullName>
+          <DefaultNarrowName>o</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>de nov</DefaultAbbrvName>
+          <DefaultFullName>de novembre</DefaultFullName>
+          <DefaultNarrowName>n</DefaultNarrowName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>de dex</DefaultAbbrvName>
+          <DefaultFullName>de dexembre</DefaultFullName>
+          <DefaultNarrowName>d</DefaultNarrowName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
@@ -341,12 +415,12 @@
     <ReservedWords>
       <trueWord>veo</trueWord>
       <falseWord>fäso</falseWord>
-      <quarter1Word>1o trimestre</quarter1Word>
-      <quarter2Word>2o trimestre</quarter2Word>
-      <quarter3Word>3o trimestre</quarter3Word>
-      <quarter4Word>4o trimestre</quarter4Word>
-      <aboveWord>sorve</aboveWord>
-      <belowWord>sotta</belowWord>
+      <quarter1Word>1º trimestre</quarter1Word>
+      <quarter2Word>2º trimestre</quarter2Word>
+      <quarter3Word>3º trimestre</quarter3Word>
+      <quarter4Word>4º trimestre</quarter4Word>
+      <aboveWord>de d’ato</aboveWord>
+      <belowWord>da basso</belowWord>
       <quarter1Abbreviation>T1</quarter1Abbreviation>
       <quarter2Abbreviation>T2</quarter2Abbreviation>
       <quarter3Abbreviation>T3</quarter3Abbreviation>
