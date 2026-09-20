@@ -43,7 +43,7 @@ CSmplMailSuppl::~CSmplMailSuppl()
 {
 }
 
-Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
+Reference<XSimpleMailClient> CSmplMailSuppl::querySimpleMailClient()
 {
     /* We just try to load the MAPI dll as a test
        if a mail client is available */
@@ -59,17 +59,17 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 
 // XServiceInfo
 
-OUString SAL_CALL CSmplMailSuppl::getImplementationName()
+OUString CSmplMailSuppl::getImplementationName()
 {
     return u"com.sun.star.sys.shell.SimpleSystemMail"_ustr;
 }
 
-bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
+bool CSmplMailSuppl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
+Sequence<OUString> CSmplMailSuppl::getSupportedServiceNames()
 {
     return { u"com.sun.star.system.SimpleSystemMail"_ustr };
 }

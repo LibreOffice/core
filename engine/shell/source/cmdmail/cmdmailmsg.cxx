@@ -26,91 +26,91 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 
-void SAL_CALL CmdMailMsg::setBody( const OUString& aBody )
+void CmdMailMsg::setBody( const OUString& aBody )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_aBody = aBody;
 }
 
-OUString SAL_CALL CmdMailMsg::getBody(  )
+OUString CmdMailMsg::getBody(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_aBody;
 }
 
-void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
+void CmdMailMsg::setRecipient( const OUString& aRecipient )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_aRecipient = aRecipient;
 }
 
-OUString SAL_CALL CmdMailMsg::getRecipient(  )
+OUString CmdMailMsg::getRecipient(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_aRecipient;
 }
 
-void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
+void CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_CcRecipients = aCcRecipient;
 }
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
+Sequence< OUString > CmdMailMsg::getCcRecipient(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_CcRecipients;
 }
 
-void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
+void CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_BccRecipients = aBccRecipient;
 }
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
+Sequence< OUString > CmdMailMsg::getBccRecipient(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_BccRecipients;
 }
 
-void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
+void CmdMailMsg::setOriginator( const OUString& aOriginator )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_aOriginator = aOriginator;
 }
 
-OUString SAL_CALL CmdMailMsg::getOriginator(  )
+OUString CmdMailMsg::getOriginator(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_aOriginator;
 }
 
-void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
+void CmdMailMsg::setSubject( const OUString& aSubject )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_aSubject = aSubject;
 }
 
-OUString SAL_CALL CmdMailMsg::getSubject(  )
+OUString CmdMailMsg::getSubject(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_aSubject;
 }
 
-void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
+void CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
 {
     std::scoped_lock aGuard( m_aMutex );
     m_Attachments = aAttachment;
 }
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
+Sequence< OUString > CmdMailMsg::getAttachement(  )
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_Attachments;
 }
 
-Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
+Any CmdMailMsg::getByName( const OUString& aName )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -139,7 +139,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
         static_cast < XNameAccess * > (this) );
 }
 
-Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
+Sequence< OUString > CmdMailMsg::getElementNames(  )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -172,7 +172,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     return aRet;
 }
 
- bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
+ bool CmdMailMsg::hasByName( const OUString& aName )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -200,13 +200,13 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     return false;
 }
 
-Type SAL_CALL CmdMailMsg::getElementType(  )
+Type CmdMailMsg::getElementType(  )
 {
     // returning void for multi type container
     return Type();
 }
 
-bool SAL_CALL CmdMailMsg::hasElements(  )
+bool CmdMailMsg::hasElements(  )
 {
     return getElementNames().hasElements();
 }

@@ -312,17 +312,17 @@ cpo::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-OUString SAL_CALL WinInetBackend::getImplementationName()
+OUString WinInetBackend::getImplementationName()
 {
     return u"com.sun.star.comp.configuration.backend.WinInetBackend"_ustr ;
 }
 
-bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
+bool WinInetBackend::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> WinInetBackend::getSupportedServiceNames()
 {
     return { u"com.sun.star.configuration.backend.WinInetBackend"_ustr };
 }

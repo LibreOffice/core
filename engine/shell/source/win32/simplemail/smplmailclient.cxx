@@ -139,7 +139,7 @@ namespace /* private */
     }
 } // namespace private
 
-Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
+Reference<XSimpleMailMessage> CSmplMailClient::createSimpleMailMessage()
 {
     return Reference<XSimpleMailMessage>(new CSmplMailMsg());
 }
@@ -335,7 +335,7 @@ void CSmplMailClient::assembleCommandLine(
 
 }
 
-void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
+void CSmplMailClient::sendSimpleMailMessage(
     const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
 {
     validateParameter(xSimpleMailMessage, aFlag);

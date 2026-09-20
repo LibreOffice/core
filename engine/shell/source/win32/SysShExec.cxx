@@ -297,7 +297,7 @@ OUString checkFile(const OUString& pathname, const OUString& aCommand)
 }
 }
 
-void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
+void CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
 {
     // parameter checking
     if (0 == aCommand.getLength())
@@ -398,17 +398,17 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
 // XServiceInfo
 
-OUString SAL_CALL CSysShExec::getImplementationName(  )
+OUString CSysShExec::getImplementationName(  )
 {
     return u"com.sun.star.sys.shell.SystemShellExecute"_ustr;
 }
 
-bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
+bool CSysShExec::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > CSysShExec::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.system.SystemShellExecute"_ustr };
 }

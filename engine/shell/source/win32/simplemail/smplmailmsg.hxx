@@ -33,39 +33,39 @@ class CSmplMailMsg : public cppu::WeakImplHelper< css::system::XSimpleMailMessag
 public:
     CSmplMailMsg( );
 
-    virtual void SAL_CALL setBody( const OUString& aBody ) override;
+    virtual void setBody( const OUString& aBody ) override;
 
-    virtual OUString SAL_CALL getBody(  ) override;
-
-
-    virtual void SAL_CALL setRecipient( const OUString& aRecipient ) override;
-
-    virtual OUString SAL_CALL getRecipient(  ) override;
+    virtual OUString getBody(  ) override;
 
 
-    virtual void SAL_CALL setCcRecipient( const cpo::uno::Sequence< OUString >& aCcRecipient ) override;
+    virtual void setRecipient( const OUString& aRecipient ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getCcRecipient(  ) override;
-
-
-    virtual void SAL_CALL setBccRecipient( const cpo::uno::Sequence< OUString >& aBccRecipient ) override;
-
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getBccRecipient(  ) override;
+    virtual OUString getRecipient(  ) override;
 
 
-    virtual void SAL_CALL setOriginator( const OUString& aOriginator ) override;
+    virtual void setCcRecipient( const cpo::uno::Sequence< OUString >& aCcRecipient ) override;
 
-    virtual OUString SAL_CALL getOriginator(  ) override;
-
-
-    virtual void SAL_CALL setSubject( const OUString& aSubject ) override;
-
-    virtual OUString SAL_CALL getSubject(  ) override;
+    virtual cpo::uno::Sequence< OUString > getCcRecipient(  ) override;
 
 
-    virtual void SAL_CALL setAttachement( const cpo::uno::Sequence< OUString >& aAttachement ) override;
+    virtual void setBccRecipient( const cpo::uno::Sequence< OUString >& aBccRecipient ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAttachement(  ) override;
+    virtual cpo::uno::Sequence< OUString > getBccRecipient(  ) override;
+
+
+    virtual void setOriginator( const OUString& aOriginator ) override;
+
+    virtual OUString getOriginator(  ) override;
+
+
+    virtual void setSubject( const OUString& aSubject ) override;
+
+    virtual OUString getSubject(  ) override;
+
+
+    virtual void setAttachement( const cpo::uno::Sequence< OUString >& aAttachement ) override;
+
+    virtual cpo::uno::Sequence< OUString > getAttachement(  ) override;
 
 private:
     OUString                        m_aBody;

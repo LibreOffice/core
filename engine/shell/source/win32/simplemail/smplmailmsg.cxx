@@ -29,72 +29,72 @@ CSmplMailMsg::CSmplMailMsg( )
 {
 }
 
-void SAL_CALL CSmplMailMsg::setBody( const OUString& aBody )
+void CSmplMailMsg::setBody( const OUString& aBody )
 {
     m_aBody = aBody;
 }
 
-OUString SAL_CALL CSmplMailMsg::getBody(  )
+OUString CSmplMailMsg::getBody(  )
 {
     return m_aBody;
 }
 
-void SAL_CALL CSmplMailMsg::setRecipient( const OUString& aRecipient )
+void CSmplMailMsg::setRecipient( const OUString& aRecipient )
 {
     m_aRecipient = aRecipient;
 }
 
-OUString SAL_CALL CSmplMailMsg::getRecipient(  )
+OUString CSmplMailMsg::getRecipient(  )
 {
     return m_aRecipient;
 }
 
-void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
+void CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
 {
     m_CcRecipients = aCcRecipient;
 }
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
+Sequence< OUString > CSmplMailMsg::getCcRecipient(  )
 {
     return m_CcRecipients;
 }
 
-void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
+void CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
 {
     m_BccRecipients = aBccRecipient;
 }
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
+Sequence< OUString > CSmplMailMsg::getBccRecipient(  )
 {
     return m_BccRecipients;
 }
 
-void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
+void CSmplMailMsg::setOriginator( const OUString& aOriginator )
 {
     m_aOriginator = aOriginator;
 }
 
-OUString SAL_CALL CSmplMailMsg::getOriginator(  )
+OUString CSmplMailMsg::getOriginator(  )
 {
     return m_aOriginator;
 }
 
-void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
+void CSmplMailMsg::setSubject( const OUString& aSubject )
 {
     m_aSubject = aSubject;
 }
 
-OUString SAL_CALL CSmplMailMsg::getSubject(  )
+OUString CSmplMailMsg::getSubject(  )
 {
     return m_aSubject;
 }
 
-void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< OUString >& aAttachement )
+void CSmplMailMsg::setAttachement( const Sequence< OUString >& aAttachement )
 {
     m_Attachements = aAttachement;
 }
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getAttachement(  )
+Sequence< OUString > CSmplMailMsg::getAttachement(  )
 {
     return m_Attachements;
 }

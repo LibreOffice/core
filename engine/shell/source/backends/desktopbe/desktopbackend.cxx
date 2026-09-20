@@ -62,42 +62,42 @@ public:
 private:
     virtual ~Default() override {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     { return u"com.sun.star.comp.configuration.backend.DesktopBackend"_ustr; }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return ServiceName == getSupportedServiceNames()[0]; }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.backend.DesktopBackend"_ustr }; }
 
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
     getPropertySetInfo() override
     { return cpo::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-    virtual void SAL_CALL setPropertyValue(
+    virtual void setPropertyValue(
         OUString const &, cpo::uno::Any const &) override;
 
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
         OUString const & PropertyName) override;
 
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
         OUString const &,
         cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
     {}
 
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         OUString const &,
         cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
     {}
 
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         OUString const &,
         cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
     {}
 
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         OUString const &,
         cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
     {}

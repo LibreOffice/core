@@ -48,25 +48,25 @@ public:
     // XSimpleMailClientSupplier
 
 
-    virtual cpo::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) override;
+    virtual cpo::uno::Reference< css::system::XSimpleMailClient > querySimpleMailClient(  ) override;
 
 
     // XSimpleMailClient
 
 
-    virtual cpo::uno::Reference< css::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  ) override;
+    virtual cpo::uno::Reference< css::system::XSimpleMailMessage > createSimpleMailMessage(  ) override;
 
-    virtual void SAL_CALL sendSimpleMailMessage( const cpo::uno::Reference< css::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag ) override;
+    virtual void sendSimpleMailMessage( const cpo::uno::Reference< css::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag ) override;
 
 
     // XServiceInfo
 
 
-    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual OUString getImplementationName(  ) override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 #endif

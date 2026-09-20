@@ -57,14 +57,14 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext )
 
 // XSimpleMailClientSupplier
 
-Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
+Reference< XSimpleMailClient > CmdMailSuppl::querySimpleMailClient(  )
 {
     return static_cast < XSimpleMailClient * > (this);
 }
 
 // XSimpleMailClient
 
-Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
+Reference< XSimpleMailMessage > CmdMailSuppl::createSimpleMailMessage(  )
 {
     return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
@@ -110,7 +110,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
 
 }
 
-void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 /*aFlag*/ )
+void CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 /*aFlag*/ )
 {
     if ( ! xSimpleMailMessage.is() )
     {
@@ -263,17 +263,17 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
 // XServiceInfo
 
-OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
+OUString CmdMailSuppl::getImplementationName(  )
 {
     return u"com.sun.star.comp.system.SimpleCommandMail"_ustr;
 }
 
-bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
+bool CmdMailSuppl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
+Sequence< OUString > CmdMailSuppl::getSupportedServiceNames(    )
 {
     return { u"com.sun.star.system.SimpleCommandMail"_ustr };
 }

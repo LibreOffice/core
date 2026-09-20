@@ -79,7 +79,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 {
 }
 
-void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
+void ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
 {
 #ifndef __EMSCRIPTEN__
     OStringBuffer aBuffer, aLaunchBuffer;
@@ -285,17 +285,17 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
 // XServiceInfo
 
-OUString SAL_CALL ShellExec::getImplementationName(  )
+OUString ShellExec::getImplementationName(  )
 {
     return u"com.sun.star.comp.system.SystemShellExecute"_ustr;
 }
 
-bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
+bool ShellExec::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
+Sequence< OUString > ShellExec::getSupportedServiceNames(   )
 {
     return { u"com.sun.star.system.SystemShellExecute"_ustr };
 }

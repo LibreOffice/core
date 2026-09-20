@@ -333,17 +333,17 @@ cpo::uno::Any MacOSXBackend::getPropertyValue(
     }
 }
 
-OUString SAL_CALL MacOSXBackend::getImplementationName(void)
+OUString MacOSXBackend::getImplementationName(void)
 {
     return u"com.sun.star.comp.configuration.backend.MacOSXBackend"_ustr;
 }
 
-bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
+bool MacOSXBackend::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
+cpo::uno::Sequence<OUString> MacOSXBackend::getSupportedServiceNames(void)
 {
     return { u"com.sun.star.configuration.backend.MacOSXBackend"_ustr };
 }
