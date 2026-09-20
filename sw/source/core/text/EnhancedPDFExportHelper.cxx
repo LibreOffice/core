@@ -159,6 +159,8 @@ struct SwEnhancedPDFState
     std::unordered_map<const SwTextNode*, sal_Int32> m_NodeTagIdMap;
 
     LanguageType m_eLanguageDefault;
+    // the language item the application's script uses, which the default was read with
+    TypedWhichId<SvxLanguageItem> m_nLanguageWhich;
 
     struct Span
     {
@@ -192,8 +194,10 @@ struct SwEnhancedPDFState
     // left open for a following portion, innermost last
     std::vector<sal_Int32> m_DeferredTags;
 
-    SwEnhancedPDFState(LanguageType const eLanguageDefault)
+    SwEnhancedPDFState(LanguageType const eLanguageDefault,
+                       const TypedWhichId<SvxLanguageItem> nLanguageWhich)
         : m_eLanguageDefault(eLanguageDefault)
+        , m_nLanguageWhich(nLanguageWhich)
     {
     }
 };
@@ -454,6 +458,25 @@ const SwTextNode* lcl_JumpedToNode(const SwEditShell& rSh, const SwPosition& rBe
 {
     const SwPosition& rPoint = *rSh.GetCursor_()->GetPoint();
     return rPoint == rBeforeJump ? nullptr : rPoint.GetNode().GetTextNode();
+}
+
+// the language a paragraph declares for itself, as against the one a run of text sets
+LanguageType lcl_GetParagraphLanguage(const SwTextFrame& rFrame,
+                                      const TypedWhichId<SvxLanguageItem> nWhich)
+{
+    // what is anchored here is tagged inside the paragraph's element and would inherit a
+    // language put there; the node, not the frame, because a split paragraph is one element
+    if (!rFrame.GetTextNodeFirst()->GetAnchoredFlys().empty())
+        return LANGUAGE_DONTKNOW;
+    return rFrame.GetTextNodeForParaProps()->GetSwAttrSet().Get(nWhich).GetLanguage();
+}
+
+// the language a run of text is measured against
+LanguageType lcl_GetEnclosingLanguage(const SwTextPaintInfo& rInf, const SwEnhancedPDFState& rState)
+{
+    const LanguageType nParagraph(
+        lcl_GetParagraphLanguage(*rInf.GetTextFrame(), rState.m_nLanguageWhich));
+    return LANGUAGE_DONTKNOW == nParagraph ? rState.m_eLanguageDefault : nParagraph;
 }
 
 // the StarMath source of the formula a frame holds, empty for anything else
@@ -955,6 +978,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
         bool bBox = false;
         bool bRowSpan = false;
         bool bAltText = false;
+        bool bLanguage = false;
 
         // Check which attributes to set:
 
@@ -1019,7 +1043,8 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 bStartIndent =
                 bEndIndent =
                 bTextIndent =
-                bTextAlign = true;
+                bTextAlign =
+                bLanguage = true;
                 break;
 
             case vcl::pdf::StructElement::Formula:
@@ -1132,6 +1157,18 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             nVal = rFirstLine.ResolveTextFirstLineOffset({});
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::TextIndent, nVal );
+        }
+
+        if (bLanguage && pFrame->IsTextFrame())
+        {
+            const SwEnhancedPDFState& rState(*mpPDFExtOutDevData->GetSwPDFState());
+            const LanguageType nLanguage(lcl_GetParagraphLanguage(
+                static_cast<const SwTextFrame&>(*pFrame), rState.m_nLanguageWhich));
+            if (LANGUAGE_DONTKNOW != nLanguage && rState.m_eLanguageDefault != nLanguage)
+            {
+                mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                    vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nLanguage));
+            }
         }
 
         if ( bTextAlign )
@@ -1377,9 +1414,10 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
         {
 
             const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
-            const LanguageType nDefaultLang(mpPDFExtOutDevData->GetSwPDFState()->m_eLanguageDefault);
+            const LanguageType nEnclosingLanguage(
+                lcl_GetEnclosingLanguage(rInf, *mpPDFExtOutDevData->GetSwPDFState()));
 
-            if ( nDefaultLang != nCurrentLanguage )
+            if (nEnclosingLanguage != nCurrentLanguage)
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage) );
         }
 
@@ -2331,7 +2369,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
                     const SwFontScript nFont = rInf.GetFont()->GetActual();
-                    const LanguageType nDefaultLang(mpPDFExtOutDevData->GetSwPDFState()->m_eLanguageDefault);
+                    const LanguageType nEnclosingLanguage(
+                        lcl_GetEnclosingLanguage(rInf, *mpPDFExtOutDevData->GetSwPDFState()));
 
                     if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() ||
                          LINESTYLE_NONE    != rInf.GetFont()->GetOverline()  ||
@@ -2339,7 +2378,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                          FontEmphasisMark::NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||
                          SwFontScript::Latin != nFont ||
-                         nCurrentLanguage  != nDefaultLang ||
+                         nCurrentLanguage  != nEnclosingLanguage ||
                          !sStyleName.isEmpty())
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Span);
@@ -2519,7 +2558,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     const SvxLanguageItem& rLangItem = mrSh.GetDoc()->GetDefault( nLangRes );
     auto const eLanguageDefault = rLangItem.GetLanguage();
 
-    EnhancedPDFExport(eLanguageDefault);
+    EnhancedPDFExport(eLanguageDefault, nLangRes);
 }
 
 SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
@@ -2582,7 +2621,8 @@ sal_Int32 SwEnhancedPDFExportHelper::CreateDestination(const SwPageFrame* pCurrP
     return nDestId;
 }
 
-void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDefault)
+void SwEnhancedPDFExportHelper::EnhancedPDFExport(
+    LanguageType const eLanguageDefault, const TypedWhichId<SvxLanguageItem> nLanguageWhich)
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
         dynamic_cast< vcl::PDFExtOutDevData*>( mrOut.GetExtOutDevData() );
@@ -2613,7 +2653,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
     if ( !mbEditEngineOnly )
     {
         assert(pPDFExtOutDevData->GetSwPDFState() == nullptr);
-        pPDFExtOutDevData->SetSwPDFState(new SwEnhancedPDFState(eLanguageDefault));
+        pPDFExtOutDevData->SetSwPDFState(new SwEnhancedPDFState(eLanguageDefault, nLanguageWhich));
 
         // POSTITS
 

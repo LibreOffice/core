@@ -3178,25 +3178,18 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                 auto pKids10010
                     = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject10010->Lookup("K"_ostr));
                 CPPUNIT_ASSERT(pKids10010);
-                // assume there are no MCID ref at this level
+                // the paragraph is wholly in one language, so it names it itself
+                auto pLang10010 = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pObject10010->Lookup("Lang"_ostr));
+                CPPUNIT_ASSERT(pLang10010);
+                CPPUNIT_ASSERT_EQUAL("en-GB"_ostr, pLang10010->GetValue());
+                // and its content needs no span between
                 auto vKids10010 = pKids10010->GetElements();
-                // only one span
-                CPPUNIT_ASSERT_EQUAL(size_t(1), vKids10010.size());
-
-                auto pRefKid100100 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10010[0]);
-                CPPUNIT_ASSERT(pRefKid100100);
-                auto pObject100100 = pRefKid100100->LookupObject();
-                CPPUNIT_ASSERT(pObject100100);
-                auto pType100100 = dynamic_cast<vcl::filter::PDFNameElement*>(
-                    pObject100100->Lookup("Type"_ostr));
-                CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType100100->GetValue());
-                auto pS100100
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject100100->Lookup("S"_ostr));
-                CPPUNIT_ASSERT_EQUAL("Span"_ostr, pS100100->GetValue());
-                // this span exists because of lang
-                auto pLang100100 = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
-                    pObject100100->Lookup("Lang"_ostr));
-                CPPUNIT_ASSERT_EQUAL("en-GB"_ostr, pLang100100->GetValue());
+                CPPUNIT_ASSERT_EQUAL(size_t(8), vKids10010.size());
+                for (const auto pKid : vKids10010)
+                {
+                    CPPUNIT_ASSERT(!dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid));
+                }
 
                 auto pRefKid101 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10[1]);
                 CPPUNIT_ASSERT(pRefKid101);
@@ -3258,6 +3251,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                 auto pKids10110
                     = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject10110->Lookup("K"_ostr));
                 CPPUNIT_ASSERT(pKids10110);
+                // this paragraph is in the language of the document, so it names none
+                CPPUNIT_ASSERT(!pObject10110->Lookup("Lang"_ostr));
                 auto vKids10110 = pKids10110->GetElements();
                 // only MCIDs, no span
                 for (size_t i = 0; i < vKids10110.size(); ++i)
@@ -3326,89 +3321,48 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                 auto pKids10210
                     = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject10210->Lookup("K"_ostr));
                 CPPUNIT_ASSERT(pKids10210);
-                // assume there are no MCID ref at this level
                 auto vKids10210 = pKids10210->GetElements();
-                // 2 span and a hyperlink
-                CPPUNIT_ASSERT_EQUAL(size_t(3), vKids10210.size());
+                CPPUNIT_ASSERT_EQUAL(size_t(8), vKids10210.size());
+                // this paragraph too is wholly in one language and names it itself
+                auto pLang10210 = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pObject10210->Lookup("Lang"_ostr));
+                CPPUNIT_ASSERT(pLang10210);
+                CPPUNIT_ASSERT_EQUAL("en-GB"_ostr, pLang10210->GetValue());
 
-                auto pRefKid102100 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10210[0]);
-                CPPUNIT_ASSERT(pRefKid102100);
-                auto pObject102100 = pRefKid102100->LookupObject();
-                CPPUNIT_ASSERT(pObject102100);
-                auto pType102100 = dynamic_cast<vcl::filter::PDFNameElement*>(
-                    pObject102100->Lookup("Type"_ostr));
-                CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType102100->GetValue());
-                auto pS102100
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject102100->Lookup("S"_ostr));
-                CPPUNIT_ASSERT_EQUAL("Span"_ostr, pS102100->GetValue());
-                auto pKids102100
-                    = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject102100->Lookup("K"_ostr));
-                CPPUNIT_ASSERT(pKids102100);
-                auto vKids102100 = pKids102100->GetElements();
-                for (size_t i = 0; i < vKids102100.size(); ++i)
+                // its own text needs no span, so the only elements left are the two links, and
+                // neither repeats the language
+                std::vector<vcl::filter::PDFObjectElement*> aLinks;
+                for (const auto pKid : vKids10210)
                 {
-                    auto pKid = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids102100[i]);
-                    CPPUNIT_ASSERT(!pKid);
+                    auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid);
+                    if (!pRef)
+                        continue;
+                    auto pLinked = pRef->LookupObject();
+                    CPPUNIT_ASSERT(pLinked);
+                    CPPUNIT_ASSERT_EQUAL(
+                        "StructElem"_ostr,
+                        dynamic_cast<vcl::filter::PDFNameElement*>(pLinked->Lookup("Type"_ostr))
+                            ->GetValue());
+                    CPPUNIT_ASSERT_EQUAL("Link"_ostr, dynamic_cast<vcl::filter::PDFNameElement*>(
+                                                          pLinked->Lookup("S"_ostr))
+                                                          ->GetValue());
+                    CPPUNIT_ASSERT(!pLinked->Lookup("Lang"_ostr));
+                    aLinks.push_back(pLinked);
                 }
+                CPPUNIT_ASSERT_EQUAL(size_t(2), aLinks.size());
 
-                auto pRefKid102101 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10210[1]);
-                CPPUNIT_ASSERT(pRefKid102101);
-                auto pObject102101 = pRefKid102101->LookupObject();
-                CPPUNIT_ASSERT(pObject102101);
-                auto pType102101 = dynamic_cast<vcl::filter::PDFNameElement*>(
-                    pObject102101->Lookup("Type"_ostr));
-                CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType102101->GetValue());
-                auto pS102101
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject102101->Lookup("S"_ostr));
-                CPPUNIT_ASSERT_EQUAL("Link"_ostr, pS102101->GetValue());
-                auto pKids102101
-                    = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject102101->Lookup("K"_ostr));
-                CPPUNIT_ASSERT(pKids102101);
-                auto vKids102101 = pKids102101->GetElements();
-                int nRef(0);
-                for (size_t i = 0; i < vKids102101.size(); ++i)
+                // the hyperlink comes before the footnote in the text, so it is the first
+                // of the two
+                auto pKidsHyperlink
+                    = dynamic_cast<vcl::filter::PDFArrayElement*>(aLinks[0]->Lookup("K"_ostr));
+                CPPUNIT_ASSERT(pKidsHyperlink);
+                int nAnnots(0);
+                for (const auto pKid : pKidsHyperlink->GetElements())
                 {
-                    auto pKid = dynamic_cast<vcl::filter::PDFDictionaryElement*>(vKids102101[i]);
-                    if (pKid)
-                    {
-                        ++nRef; // annotation
-                    }
+                    if (dynamic_cast<vcl::filter::PDFDictionaryElement*>(pKid))
+                        ++nAnnots;
                 }
-                CPPUNIT_ASSERT_EQUAL(1, nRef);
-
-                auto pRefKid102102 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10210[2]);
-                CPPUNIT_ASSERT(pRefKid102102);
-                auto pObject102102 = pRefKid102102->LookupObject();
-                CPPUNIT_ASSERT(pObject102102);
-                auto pType102102 = dynamic_cast<vcl::filter::PDFNameElement*>(
-                    pObject102102->Lookup("Type"_ostr));
-                CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType102102->GetValue());
-                auto pS102102
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject102102->Lookup("S"_ostr));
-                CPPUNIT_ASSERT_EQUAL("Span"_ostr, pS102102->GetValue());
-                auto pKids102102
-                    = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject102102->Lookup("K"_ostr));
-                CPPUNIT_ASSERT(pKids102102);
-                auto vKids102102 = pKids102102->GetElements();
-                // there is a footnote
-                int nFtn(0);
-                for (size_t i = 0; i < vKids102102.size(); ++i)
-                {
-                    auto pKid = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids102102[i]);
-                    if (pKid)
-                    {
-                        auto pObject = pKid->LookupObject();
-                        CPPUNIT_ASSERT(pObject);
-                        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(
-                            pObject->Lookup("Type"_ostr));
-                        CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType->GetValue());
-                        auto pS
-                            = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
-                        CPPUNIT_ASSERT_EQUAL("Link"_ostr, pS->GetValue());
-                        ++nFtn;
-                    }
-                }
-                CPPUNIT_ASSERT_EQUAL(1, nFtn);
+                CPPUNIT_ASSERT_EQUAL(1, nAnnots);
 
                 auto pRefKid103 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids10[3]);
                 CPPUNIT_ASSERT(pRefKid103);
@@ -3467,6 +3421,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                 auto pS10310
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject10310->Lookup("S"_ostr));
                 CPPUNIT_ASSERT_EQUAL("Standard"_ostr, pS10310->GetValue());
+                auto pLang10310 = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pObject10310->Lookup("Lang"_ostr));
+                CPPUNIT_ASSERT(pLang10310);
+                CPPUNIT_ASSERT_EQUAL("en-GB"_ostr, pLang10310->GetValue());
                 auto pKids10310
                     = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject10310->Lookup("K"_ostr));
                 CPPUNIT_ASSERT(pKids10310);
@@ -3498,6 +3456,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
                                      dynamic_cast<vcl::filter::PDFNameElement*>(
                                          pDictA103101->LookupElement("TextDecorationType"_ostr))
                                          ->GetValue());
+                // the span stands for the strikeout, and no longer repeats the language
+                CPPUNIT_ASSERT(!pObject103101->Lookup("Lang"_ostr));
 
                 // now the footnote container - following the list
                 auto pRefKid11 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids1[1]);
