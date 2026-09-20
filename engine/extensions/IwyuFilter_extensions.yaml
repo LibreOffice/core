@@ -37,7 +37,7 @@ excludelist:
     # Actually used
     - com/sun/star/inspection/XObjectInspectorUI.hpp
     # Needed for template
-    - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    - com/sun/star/ui/dialogs/XFilePicker.hpp
     extensions/source/propctrlr/formlinkdialog.cxx:
     # Needed for template
     - com/sun/star/sdb/XSingleSelectQueryComposer.hpp

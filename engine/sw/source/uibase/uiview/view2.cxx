@@ -24,7 +24,7 @@
 #include <o3tl/any.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -423,12 +423,11 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
         pFileDlg->SetContext( FileDialogHelper::WriterInsertImage );
 
-        uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();
-        uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+        uno::Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
         if(nHtmlMode & HTMLMODE_ON)
         {
-            xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(true));
-            xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
+            xFP->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(true));
+            xFP->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, false);
         }
 
         std::vector<OUString> aFormats;
@@ -467,11 +466,11 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
 
-            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+            xFP->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                 ListboxControlActions::ADD_ITEMS , aTemplates );
 
             Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
-            xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+            xFP->setValue( ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                 ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
         }
         catch (const cpo::uno::Exception&)
@@ -500,10 +499,10 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 try
                 {
-                    Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+                    Any aVal = xFP->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
                     OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
                     bAsLink = !aVal.hasValue() || *o3tl::doAccess<bool>(aVal);
-                    Any aTemplateValue = xCtrlAcc->getValue(
+                    Any aTemplateValue = xFP->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                         ListboxControlActions::GET_SELECTED_ITEM );
                     OUString sTmpl;

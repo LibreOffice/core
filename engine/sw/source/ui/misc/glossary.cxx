@@ -39,7 +39,7 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/text/AutoTextContainer.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
@@ -687,7 +687,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, m_xDialog.get());
         aDlgHelper.SetContext(FileDialogHelper::WriterImportAutotext);
-        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
         SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );

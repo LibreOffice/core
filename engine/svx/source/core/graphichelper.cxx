@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
@@ -244,7 +244,7 @@ OUString GraphicHelper::ExportGraphicToTempFile(const Graphic& rGraphic, std::u1
 OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
     sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
-    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
+    uno::Reference<ui::dialogs::XFilePicker> xFilePicker = aDialogHelper.GetFilePicker();
 
     // fish out the graphic's name
     aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
@@ -450,7 +450,7 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
         uno::Reference<beans::XPropertySet> xShapeSet(xShape, uno::UNO_QUERY_THROW);
 
         sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
-        uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDialogHelper.GetFilePicker();
+        uno::Reference<ui::dialogs::XFilePicker> xFilePicker = aDialogHelper.GetFilePicker();
         aDialogHelper.SetContext(sfx2::FileDialogHelper::ExportImage);
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
 

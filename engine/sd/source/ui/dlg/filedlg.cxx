@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <vcl/idle.hxx>
@@ -178,10 +178,10 @@ SdFileDialog_Imp::SdFileDialog_Imp(weld::Window* pParent)
 {
     maUpdateIdle.SetInvokeHandler(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
-    cpo::uno::Reference < css::ui::dialogs::XFilePicker3 > xFileDlg = GetFilePicker();
+    cpo::uno::Reference < css::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
     // get the control access
-    mxControlAccess.set( xFileDlg, cpo::uno::UNO_QUERY );
+    mxControlAccess = xFileDlg;
 
     if( !mxControlAccess.is() )
         return;
@@ -258,7 +258,7 @@ void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 {
     bool bInsertAsLinkSelected = false;
-    cpo::uno::Reference<css::ui::dialogs::XFilePicker3> const xFilePicker(mpImpl->GetFilePicker());
+    cpo::uno::Reference<css::ui::dialogs::XFilePicker> const xFilePicker(mpImpl->GetFilePicker());
     cpo::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const xControlAccess(xFilePicker, cpo::uno::UNO_QUERY_THROW);
     xControlAccess->getValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bInsertAsLinkSelected;
     return bInsertAsLinkSelected;

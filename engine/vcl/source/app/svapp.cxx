@@ -1587,7 +1587,7 @@ void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
 
-Reference< ui::dialogs::XFilePicker2 >
+Reference< ui::dialogs::XFilePicker >
 Application::createFilePicker( const Reference< cpo::uno::XComponentContext >& xSM )
 {
     ImplSVData* pSVData = ImplGetSVData();

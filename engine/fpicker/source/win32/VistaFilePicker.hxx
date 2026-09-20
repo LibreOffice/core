@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -44,8 +44,7 @@ namespace vista{
 
 
 typedef ::cppu::WeakComponentImplHelper<
-                css::ui::dialogs::XFilePicker3,
-                css::ui::dialogs::XFilePickerControlAccess,
+                css::ui::dialogs::XFilePicker,
                 css::ui::dialogs::XFilePreview,
                 css::ui::dialogs::XFolderPicker2,
                 css::lang::XInitialization,
@@ -99,9 +98,6 @@ public:
 
     virtual OUString getDisplayDirectory(  ) override;
 
-    virtual cpo::uno::Sequence< OUString > getFiles(  ) override;
-
-    // XFilePicker2 functions
     virtual cpo::uno::Sequence< OUString > getSelectedFiles(  ) override;
 
 

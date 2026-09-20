@@ -18,7 +18,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 

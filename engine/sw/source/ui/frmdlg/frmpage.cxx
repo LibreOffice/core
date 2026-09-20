@@ -68,7 +68,7 @@
 #include <svx/graphichelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
@@ -2721,9 +2721,8 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
         m_xGrfDlg->SetTitle(m_xLinkFrame->get_label());
     }
     m_xGrfDlg->SetDisplayDirectory(m_xConnectED->get_text());
-    uno::Reference < ui::dialogs::XFilePicker3 > xFP = m_xGrfDlg->GetFilePicker();
-    uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
-    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, cpo::uno::Any(true) );
+    uno::Reference < ui::dialogs::XFilePicker > xFP = m_xGrfDlg->GetFilePicker();
+    xFP->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, cpo::uno::Any(true) );
 
     if ( m_xGrfDlg->Execute() != ERRCODE_NONE )
         return;
@@ -2968,7 +2967,7 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, GetFrameWeld());
-    uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     try
     {

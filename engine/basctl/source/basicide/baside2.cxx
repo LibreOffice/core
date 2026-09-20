@@ -42,7 +42,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
@@ -421,7 +421,7 @@ void ModulWindow::LoadBasic()
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicImportSource);
-    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
+    Reference<XFilePicker> xFP = aDlg.GetFilePicker();
 
     xFP->appendFilter( u"BASIC"_ustr , u"*.bas"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
@@ -465,9 +465,9 @@ void ModulWindow::SaveBasicSource()
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportSource);
-    const Reference<XFilePicker3>& xFP = aDlg.GetFilePicker();
+    const Reference<XFilePicker>& xFP = aDlg.GetFilePicker();
 
-    xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
+    xFP->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
 
     xFP->appendFilter( u"BASIC"_ustr, u"*.bas"_ustr );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );

@@ -35,7 +35,7 @@
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -392,12 +392,11 @@ bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId
 {
     bool bIsEnabled = false;
 
-    uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-    if ( xCtrlAccess.is() )
+    if ( mxFileDlg.is() )
     {
         try
         {
-            xCtrlAccess->enableControl( _nExtendedControlId, _bEnable );
+            mxFileDlg->enableControl( _nExtendedControlId, _bEnable );
             bIsEnabled = _bEnable;
         }
         catch( const IllegalArgumentException& )
@@ -472,24 +471,20 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
 
     if (isInOpenMode())
     {
-        if (auto xCtrlAccess = mxFileDlg.query<XFilePickerControlAccess>())
-        {
-            OUString filter;
-            getRealFilter(filter);
-            bool bChecked = bFilterOptionsEnabled && utl::isShowFilterOptionsDialog(filter);
-            xCtrlAccess->setValue(ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0,
-                                  Any(bChecked));
-        }
+        OUString filter;
+        getRealFilter(filter);
+        bool bChecked = bFilterOptionsEnabled && utl::isShowFilterOptionsDialog(filter);
+        mxFileDlg->setValue(ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0,
+                              Any(bChecked));
     }
 }
 
 void FileDialogHelper_Impl::updateExportButton()
 {
-    uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-    if ( !xCtrlAccess.is() )
+    if ( !mxFileDlg.is() )
         return;
 
-    OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
+    OUString sOldLabel( mxFileDlg->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
 
     // initialize button label; we need the label with the mnemonic char
     if ( maButtonLabel.isEmpty() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
@@ -510,7 +505,7 @@ void FileDialogHelper_Impl::updateExportButton()
     {
         try
         {
-            xCtrlAccess->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK, sLabel );
+            mxFileDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK, sLabel );
         }
         catch( const IllegalArgumentException& )
         {
@@ -539,8 +534,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         mbSelectionFltrEnabled = updateExtendedControl(
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
             ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::SUPPORTSSELECTION ) ) );
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, Any( mbSelection ) );
+        mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, Any( mbSelection ) );
     }
 }
 
@@ -560,18 +554,16 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
 
     if( !bWasEnabled && mbIsPwdEnabled )
     {
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         if( mbPwdCheckBoxState )
-            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( true ) );
+            mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( true ) );
     }
     else if( bWasEnabled && !mbIsPwdEnabled )
     {
         // remember user settings until checkbox is enabled
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+        Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         bool bPassWord = false;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( false ) );
+        mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( false ) );
     }
 }
 
@@ -580,15 +572,9 @@ void FileDialogHelper_Impl::updatePreviewState( bool _bUpdatePreviewWindow )
     if ( !mbHasPreview )
         return;
 
-    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-
-    // check, whether or not we have to display a preview
-    if ( !xCtrlAccess.is() )
-        return;
-
     try
     {
-        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
+        Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
         bool bShowPreview = false;
 
         if ( aValue >>= bShowPreview )
@@ -647,12 +633,11 @@ void FileDialogHelper_Impl::updateVersions()
         }
     }
 
-    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
     try
     {
-        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+        mxFileDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                         ControlActions::DELETE_ITEMS, aValue );
     }
     catch( const IllegalArgumentException& ){}
@@ -663,12 +648,12 @@ void FileDialogHelper_Impl::updateVersions()
     try
     {
         aValue <<= aEntries;
-        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+        mxFileDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                         ControlActions::ADD_ITEMS, aValue );
 
         Any aPos;
         aPos <<= sal_Int32(0);
-        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+        mxFileDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                         ControlActions::SET_SELECT_ITEM, aPos );
     }
     catch( const IllegalArgumentException& ){}
@@ -1171,16 +1156,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         {
             mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) );
         }
-        uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
-        if ( xExtDlg.is() )
+        try
         {
-            try
-            {
-                xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
-                                   SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) );
-            }
-            catch( const IllegalArgumentException& ){}
+            mxFileDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
+                               SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) );
         }
+        catch( const IllegalArgumentException& ){}
     }
 
     // add the event listener
@@ -1237,18 +1218,14 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     {
         const OUString sHelpIdPrefix( INET_HID_SCHEME  );
         // the ids for the single controls
-        uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
-        if ( xControlAccess.is() )
+        while ( *_pControlId )
         {
-            while ( *_pControlId )
-            {
-                DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
-                OUString sId = sHelpIdPrefix +
-                    OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
-                xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, Any( sId ) );
+            DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
+            OUString sId = sHelpIdPrefix +
+                OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
+            mxFileDlg->setValue( *_pControlId, ControlActions::SET_HELP_URL, Any( sId ) );
 
-                ++_pControlId; ++_pHelpId;
-            }
+            ++_pControlId; ++_pHelpId;
         }
     }
     catch( const Exception& )
@@ -1293,12 +1270,8 @@ void FileDialogHelper_Impl::implInitializeFileName( )
     {
         bool bAutoExtChecked = false;
 
-        uno::Reference < XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
-        if  (   xControlAccess.is()
-            &&  (   xControlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 )
-                >>= bAutoExtChecked
-                )
-            )
+        if  ( mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 )
+                    >>= bAutoExtChecked )
         {
             if ( bAutoExtChecked )
             {   // cut the extension
@@ -1430,8 +1403,6 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
     if (!rpURLList.hasElements())
         return ERRCODE_ABORT;
 
-    uno::Reference<XFilePickerControlAccess> xCtrlAccess(mxFileDlg, UNO_QUERY);
-
     // create an itemset if there is no
     if( !rpSet )
         rpSet.emplace( SfxGetpApp()->GetPool() );
@@ -1439,11 +1410,11 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
     // the item should remain only if it was set by the dialog
     rpSet->ClearItem( SID_SELECTION );
 
-    if (mbExport && mbHasSelectionBox && xCtrlAccess)
+    if (mbExport && mbHasSelectionBox)
     {
         try
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+            Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
             bool bSelection = false;
             if ( aValue >>= bSelection )
                 rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
@@ -1458,11 +1429,11 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
     // set the read-only flag. When inserting a file, this flag is always set
     if ( mbInsert )
         rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
-    else if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
+    else if ( FILEOPEN_READONLY_VERSION == m_nDialogType )
     {
         try
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
+            Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
             bool bReadOnly = false;
             if ( ( aValue >>= bReadOnly ) && bReadOnly )
                 rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
@@ -1472,11 +1443,11 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
             TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
         }
     }
-    if ( mbHasVersions && xCtrlAccess.is() )
+    if ( mbHasVersions )
     {
         try
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+            Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                                                 ControlActions::GET_SELECTED_ITEM_INDEX );
             sal_Int32 nVersion = 0;
             if ( ( aValue >>= nVersion ) && nVersion > 0 )
@@ -1492,11 +1463,11 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
     std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
 
     // check, whether or not we have to display a password box
-    if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
+    if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled )
     {
         try
         {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+            Any aValue = mxFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
             bool bPassWord = false;
             if ( ( aValue >>= bPassWord ) && bPassWord )
             {
@@ -1982,9 +1953,7 @@ void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
 
 void FileDialogHelper_Impl::saveConfig()
 {
-    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
-
-    if ( ! xDlg.is() )
+    if ( ! mxFileDlg.is() )
         return;
 
     if ( mbHasPreview )
@@ -1995,12 +1964,12 @@ void FileDialogHelper_Impl::saveConfig()
         {
             // tdf#61358 - remember the last "insert as link" state
             bool bLink = false;
-            xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
+            mxFileDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
             OUString aUserData(u"   "_ustr);
             SetToken(aUserData, 0, ' ', OUString::number(static_cast<sal_Int32>(bLink)));
 
             bool bValue = false;
-            xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0) >>= bValue;
+            mxFileDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0) >>= bValue;
             SetToken( aUserData, 1, ' ', OUString::number( static_cast<sal_Int32>(bValue) ) );
 
             INetURLObject aObj( getPath() );
@@ -2035,7 +2004,7 @@ void FileDialogHelper_Impl::saveConfig()
             try
             {
                 bool bAutoExt = true;
-                xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0) >>= bAutoExt;
+                mxFileDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0) >>= bAutoExt;
                 SetToken( aUserData, 0, ' ', OUString::number( static_cast<sal_Int32>(bAutoExt) ) );
                 bWriteConfig = true;
             }
@@ -2057,7 +2026,7 @@ void FileDialogHelper_Impl::saveConfig()
             try
             {
                 bool bSelection = true;
-                xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bSelection;
+                mxFileDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData += " ";
                 SetToken( aUserData, 2, ' ', OUString::number( static_cast<sal_Int32>(bSelection) ) );
@@ -2130,10 +2099,9 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
 
 void FileDialogHelper_Impl::loadConfig()
 {
-    uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
     Any aValue;
 
-    if ( ! xDlg.is() )
+    if ( ! mxFileDlg.is() )
         return;
 
     if ( mbHasPreview )
@@ -2156,12 +2124,12 @@ void FileDialogHelper_Impl::loadConfig()
                 // respect the last "insert as link" state
                 bool bLink = o3tl::toInt32(o3tl::getToken(aUserData, 0, ' ' ));
                 aValue <<= bLink;
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
+                mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
                 // respect the last "show preview" state
                 bool bShowPreview = o3tl::toInt32(o3tl::getToken(aUserData, 1, ' ' ));
                 aValue <<= bShowPreview;
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
+                mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( maPath.isEmpty() )
                     displayFolder( getInitPath( aUserData, 2 ) );
@@ -2207,7 +2175,7 @@ void FileDialogHelper_Impl::loadConfig()
             aValue <<= static_cast<bool>(nFlag);
             try
             {
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+                mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
             }
             catch( const IllegalArgumentException& ){}
         }
@@ -2218,7 +2186,7 @@ void FileDialogHelper_Impl::loadConfig()
             aValue <<= static_cast<bool>(nFlag);
             try
             {
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );
+                mxFileDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );
             }
             catch( const IllegalArgumentException& ){}
         }
@@ -2652,7 +2620,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
     if (m_oKitPickedFiles)
         return *m_oKitPickedFiles;
 
-    uno::Reference<XFilePicker3> xFileDlg(mpImpl->mxFileDlg, uno::UNO_SET_THROW);
+    uno::Reference<XFilePicker> xFileDlg(mpImpl->mxFileDlg, uno::UNO_SET_THROW);
     return xFileDlg->getSelectedFiles();
 }
 
@@ -2750,7 +2718,7 @@ void FileDialogHelper::SetCurrentFilter( const OUString& rFilter )
     mpImpl->setFilter( sFilter );
 }
 
-const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
+const uno::Reference < XFilePicker >& FileDialogHelper::GetFilePicker() const
 {
     return mpImpl->mxFileDlg;
 }
@@ -2818,7 +2786,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     if (rpSet && nFlags & FileDialogFlags::SignPDF)
         rpSet->Put(SfxBoolItem(SID_DOC_READONLY, true));
 
-    uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pDialog->GetFilePicker(), uno::UNO_QUERY );
+    uno::Reference< ui::dialogs::XFilePicker > xExtFileDlg( pDialog->GetFilePicker() );
     cpo::uno::Any aVal = xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
     if (aVal.has<bool>() && pDialog->CheckCurrentFilterOptionsCapability())
         rShowFilterDialog = aVal.get<bool>();

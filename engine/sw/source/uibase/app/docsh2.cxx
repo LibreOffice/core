@@ -99,7 +99,7 @@
 #include <cmdid.h>
 #include <helpids.h>
 #include <strings.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -564,7 +564,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
                                                     FileDialogFlags::NONE, pDialogParent);
                         aDlgHelper.SetContext(FileDialogHelper::WriterLoadTemplate);
-                        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+                        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                         SfxObjectFactory &rFact = GetFactory();
                         SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
@@ -978,7 +978,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         };
                         aDlgHelper.SetControlHelpIds( nControlIds, aMasterHelpIds );
                     }
-                    uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+                    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;
                     TranslateId pStrId;
@@ -1014,7 +1014,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!bError)
                     {
-                        uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                        uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP);
 
                         bool    bOutline[MAXLEVEL] = {false};
                         const SwOutlineNodes& rOutlNds = m_xDoc->GetNodes().GetOutLineNds();

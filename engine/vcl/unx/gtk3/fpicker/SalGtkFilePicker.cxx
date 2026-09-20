@@ -1568,7 +1568,7 @@ void SalGtkFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArg
     if( !aArguments.hasElements() )
         throw lang::IllegalArgumentException(
             u"no arguments"_ustr,
-            static_cast<XFilePicker2*>( this ), 1 );
+            static_cast<cppu::OWeakObject*>( this ), 1 );
 
     aAny = aArguments[0];
 
@@ -1576,7 +1576,7 @@ void SalGtkFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArg
          (aAny.getValueType() != cppu::UnoType<sal_Int8>::get()) )
          throw lang::IllegalArgumentException(
             u"invalid argument type"_ustr,
-            static_cast<XFilePicker2*>( this ), 1 );
+            static_cast<cppu::OWeakObject*>( this ), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
@@ -1695,7 +1695,7 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
         default:
                 throw lang::IllegalArgumentException(
                 u"Unknown template"_ustr,
-                static_cast< XFilePicker2* >( this ),
+                static_cast< cppu::OWeakObject* >( this ),
                 1 );
     }
 
@@ -1976,10 +1976,10 @@ SalGtkFilePicker::~SalGtkFilePicker()
     gtk_widget_destroy( m_pVBox );
 }
 
-uno::Reference< ui::dialogs::XFilePicker2 >
+uno::Reference< ui::dialogs::XFilePicker >
 GtkInstance::createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext > &xMSF )
 {
-    return uno::Reference< ui::dialogs::XFilePicker2 >(
+    return uno::Reference< ui::dialogs::XFilePicker >(
                 new SalGtkFilePicker( xMSF ) );
 }
 

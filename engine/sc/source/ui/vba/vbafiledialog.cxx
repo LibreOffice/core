@@ -97,7 +97,7 @@ sal_Int32 ScVbaFileDialog::Show()
             break;
         case office::MsoFileDialogType::msoFileDialogFilePicker:
             {
-                uno::Reference<ui::dialogs::XFilePicker3> xFilePicker =
+                uno::Reference<ui::dialogs::XFilePicker> xFilePicker =
                         ui::dialogs::FilePicker::createWithMode(
                                 mxContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 

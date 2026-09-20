@@ -36,7 +36,7 @@
 
 namespace com::sun::star::ui::dialogs
 {
-    class XFilePicker3;
+    class XFilePicker;
     class XFolderPicker2;
     struct FilePickerEvent;
     struct DialogClosedEvent;
@@ -233,7 +233,7 @@ public:
         with the following differences:
         <ul><li>The FileDialogHelper remembers the given file name, and upon execution,
                 strips its extension if the dialog is set up for "automatic file name extension".</li>
-            <li>Exceptions thrown from the <code>XFilePicker3</code> are caught and silenced.</li>
+            <li>Exceptions thrown from the <code>XFilePicker</code> are caught and silenced.</li>
         </ul>
     */
     void                     SetFileName( const OUString& _rFileName );
@@ -242,7 +242,7 @@ public:
     OUString                 GetDisplayDirectory() const;
     ErrCode                  GetGraphic( Graphic& rGraphic ) const;
 
-    const cpo::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
+    const cpo::uno::Reference < css::ui::dialogs::XFilePicker >& GetFilePicker() const;
 
     // XFilePickerListener methods
     void   FileSelectionChanged();

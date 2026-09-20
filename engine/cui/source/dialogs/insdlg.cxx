@@ -26,7 +26,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -91,7 +91,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aHelper.SetContext(sfx2::FileDialogHelper::InsertOLE);
-    const Reference< XFilePicker3 >& xFilePicker = aHelper.GetFilePicker();
+    const Reference< XFilePicker >& xFilePicker = aHelper.GetFilePicker();
 
     // add filter
     try

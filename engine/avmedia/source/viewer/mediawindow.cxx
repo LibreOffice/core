@@ -34,7 +34,7 @@
 #include <com/sun/star/media/XPlayerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
@@ -291,7 +291,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     // add filter for all types
     aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_FILES ), u"*.*"_ustr );
 
-    uno::Reference<ui::dialogs::XFilePicker3> const xFP(aDlg.GetFilePicker());
+    uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
             uno::UNO_QUERY_THROW);
     if (o_pbLink != nullptr)

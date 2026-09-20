@@ -28,7 +28,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
@@ -69,7 +69,7 @@ OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter)
     }
 
     rFilter = aDialog.GetRealFilter();
-    uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDialog.GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
     return xFP->getSelectedFiles().getConstArray()[0];
 }
 

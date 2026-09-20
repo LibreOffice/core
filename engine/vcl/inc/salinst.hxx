@@ -32,7 +32,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <memory>
 
@@ -199,8 +199,8 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     // if you override this, make sure to override hasNativeFileSelection too.
-    virtual cpo::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
-        { return cpo::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }
+    virtual cpo::uno::Reference< css::ui::dialogs::XFilePicker > createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
+        { return cpo::uno::Reference< css::ui::dialogs::XFilePicker >(); }
     virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
         { return cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 

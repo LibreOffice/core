@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <basctl/basctldllpublic.hxx>
 #include <comphelper/processfactory.hxx>
@@ -607,9 +607,9 @@ void DialogWindow::SaveDialog()
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportDialog);
-    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
+    Reference<XFilePicker> xFP = aDlg.GetFilePicker();
 
-    xFP.queryThrow<XFilePickerControlAccess>()->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
+    xFP->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any(true));
     xFP->setDefaultName( GetName() );
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
@@ -792,7 +792,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, pWin);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicImportDialog);
-    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
+    Reference<XFilePicker> xFP = aDlg.GetFilePicker();
 
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
     xFP->appendFilter( aDialogStr, u"*.xdl"_ustr );

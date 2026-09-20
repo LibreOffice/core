@@ -44,7 +44,7 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
@@ -594,7 +594,7 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pDialog);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
-    const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
+    const Reference <XFilePicker>& xFP = aDlg.GetFilePicker();
 
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
 
@@ -1041,7 +1041,7 @@ void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLib
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE,
                                 FileDialogFlags::NONE, pDialog);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
-    const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
+    const Reference <XFilePicker>& xFP = aDlg.GetFilePicker();
 
     const Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );

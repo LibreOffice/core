@@ -25,7 +25,7 @@
 #include <basegfx/range/b2irange.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -362,7 +362,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
                                                              FileDialogFlags::NONE, mpParentWindow);
     aFileDlg.SetContext(sfx2::FileDialogHelper::ScreenshotAnnotation);
 
-    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = aFileDlg.GetFilePicker();
+    const uno::Reference< ui::dialogs::XFilePicker > xFilePicker = aFileDlg.GetFilePicker();
 
     xFilePicker->setTitle(maSaveAsText);
 

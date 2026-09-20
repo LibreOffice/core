@@ -35,7 +35,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <svtools/indexentryres.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <column.hxx>
@@ -96,7 +96,7 @@ static OUString lcl_CreateAutoMarkFileDlg(weld::Window* pParent, const OUString&
     FileDialogHelper aDlgHelper( bOpen ?
                 TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE, pParent);
-    uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     xFP->appendFilter( rFileString, u"*.sdi"_ustr );
     xFP->setCurrentFilter( rFileString ) ;

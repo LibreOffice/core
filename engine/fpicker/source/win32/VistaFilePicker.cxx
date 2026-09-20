@@ -172,18 +172,6 @@ OUString VistaFilePicker::getDisplayDirectory()
     return sDirectory;
 }
 
-// @deprecated can't be supported any longer ... see IDL description for further details
-cpo::uno::Sequence< OUString > VistaFilePicker::getFiles()
-{
-    cpo::uno::Sequence< OUString > lFiles = getSelectedFiles();
-    // multiselection doesn't really work
-    // so just retrieve the first url
-    if (lFiles.getLength() > 1)
-        lFiles.realloc(1);
-    m_lLastFiles = lFiles;
-    return lFiles;
-}
-
 cpo::uno::Sequence< OUString > VistaFilePicker::getSelectedFiles()
 {
     Request rRequest;
@@ -333,7 +321,7 @@ void VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArg
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
                 "XInitialization::initialize() called without arguments.",
-                static_cast< css::ui::dialogs::XFilePicker2* >( this ),
+                static_cast< cppu::OWeakObject* >( this ),
                 1);
 
     sal_Int32         nTemplate = -1;

@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
@@ -40,9 +40,8 @@ struct ElementEntry_Impl;
 
 
 typedef cppu::WeakComponentImplHelper<
-        css::ui::dialogs::XFilePickerControlAccess,
+        css::ui::dialogs::XFilePicker,
         css::ui::dialogs::XFilePreview,
-        css::ui::dialogs::XFilePicker3,
         css::lang::XInitialization
         > SalGtkFilePicker_Base;
 
@@ -74,7 +73,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         virtual OUString getDisplayDirectory(  ) override;
 
-        virtual cpo::uno::Sequence< OUString > getFiles(  ) override;
+        cpo::uno::Sequence< OUString > getFiles(  );
 
         // XFilePicker2 functions
 

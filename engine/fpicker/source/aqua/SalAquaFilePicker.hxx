@@ -22,7 +22,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
@@ -35,8 +35,7 @@
 // Implementation class for the XFilePicker Interface
 
 typedef ::cppu::WeakComponentImplHelper <
-            css::ui::dialogs::XFilePicker3,
-            css::ui::dialogs::XFilePickerControlAccess,
+            css::ui::dialogs::XFilePicker,
             css::lang::XInitialization,
             css::lang::XServiceInfo >  SalAquaFilePicker_Base;
 
@@ -69,8 +68,6 @@ public:
     virtual void setDisplayDirectory( const OUString& aDirectory ) override;
 
     virtual OUString getDisplayDirectory(  ) override;
-
-    virtual cpo::uno::Sequence< OUString > getFiles(  ) override;
 
     virtual cpo::uno::Sequence< OUString > getSelectedFiles(  ) override;
 

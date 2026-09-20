@@ -173,7 +173,7 @@ sal_Int16 SalAquaFilePicker::execute()
         default:
             throw cpo::uno::RuntimeException(
                       u"The dialog returned with an unknown result!"_ustr,
-                      static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
+                      static_cast<cppu::OWeakObject*>( this ) );
             break;
     }
 
@@ -211,17 +211,6 @@ OUString SalAquaFilePicker::getDisplayDirectory()
     OUString retVal = implgetDisplayDirectory();
 
     return retVal;
-}
-
-cpo::uno::Sequence<OUString> SalAquaFilePicker::getFiles()
-{
-    cpo::uno::Sequence< OUString > aSelectedFiles = getSelectedFiles();
-    // multiselection doesn't really work with getFiles
-    // so just retrieve the first url
-    if (aSelectedFiles.getLength() > 1)
-        aSelectedFiles.realloc(1);
-
-    return aSelectedFiles;
 }
 
 cpo::uno::Sequence<OUString> SalAquaFilePicker::getSelectedFiles()
@@ -377,14 +366,14 @@ void SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aAr
     cpo::uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(u"no arguments"_ustr,
-                                             static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
+                                             static_cast<cppu::OWeakObject*>(this), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::cppu::UnoType<sal_Int16>::get() ) &&
         (aAny.getValueType() != ::cppu::UnoType<sal_Int8>::get() ) )
         throw lang::IllegalArgumentException(u"invalid argument type"_ustr,
-                                             static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
+                                             static_cast<cppu::OWeakObject*>(this), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
@@ -438,7 +427,7 @@ void SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aAr
             break;
         default:
             throw lang::IllegalArgumentException(u"Unknown template"_ustr,
-                                                 static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ),
+                                                 static_cast<cppu::OWeakObject*>(this),
                                                  1 );
     }
 

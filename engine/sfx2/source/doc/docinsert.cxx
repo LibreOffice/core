@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <tools/debug.hxx>
@@ -198,9 +198,8 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
     // picker and so no control access, but CreateMedium still wants an itemset
     m_xItemSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
 
-    Reference < XFilePicker3 > xFP = m_pFileDlg->GetFilePicker();
-    Reference < XFilePickerControlAccess > xCtrlAccess( xFP, UNO_QUERY );
-    if ( xCtrlAccess.is() )
+    Reference < XFilePicker > xFP = m_pFileDlg->GetFilePicker();
+    if ( xFP.is() )
     {
         short nDlgType = m_pFileDlg->GetDialogType();
         bool bHasPassword = (
@@ -212,7 +211,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
         {
             try
             {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
+                Any aValue = xFP->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
                 bool bPassWord = false;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
@@ -238,7 +237,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
         {
             try
             {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+                Any aValue = xFP->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
                 bool bSelection = false;
                 if ( aValue >>= bSelection )
                     m_xItemSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
@@ -259,7 +258,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
             {
                 try
                 {
-                    Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
+                    Any aValue = xFP->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
                     bool bReadOnly = false;
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         m_xItemSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
@@ -275,7 +274,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
         {
             try
             {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                Any aValue = xFP->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                                                     ControlActions::GET_SELECTED_ITEM_INDEX );
                 sal_Int32 nVersion = 0;
                 if ( ( aValue >>= nVersion ) && nVersion > 0 )

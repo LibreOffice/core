@@ -3805,8 +3805,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui/dialogs,\
 	XDialogClosedListener \
 	XExecutableDialog \
 	XFilePicker \
-	XFilePicker2 \
-	XFilePicker3 \
 	XFilePickerControlAccess \
 	XFilePickerListener \
 	XFilePickerNotifier \

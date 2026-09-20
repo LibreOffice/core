@@ -16456,23 +16456,21 @@ module com {
       const short LISTBOX_VERSION_LABEL = 207;
       const short PUSHBUTTON_PLAY = 106;
      };
-     published interface XFilePicker {
-      interface ::com::sun::star::ui::dialogs::XExecutableDialog;
-      void setMultiSelectionMode([in] boolean bMode);
-      void setDefaultName([in] string aName);
-      void setDisplayDirectory([in] string aDirectory) raises (::com::sun::star::lang::IllegalArgumentException);
-      string getDisplayDirectory();
-      /** @deprecated */ sequence< string > getFiles();
-     };
-     published interface XFilePicker2 {
-      interface ::com::sun::star::ui::dialogs::XFilePicker;
-      sequence< string > getSelectedFiles();
-     };
      published interface XFilePickerListener;
      published interface XFilePickerNotifier {
       interface ::cpo::uno::XInterface;
       void addFilePickerListener([in] ::com::sun::star::ui::dialogs::XFilePickerListener xListener);
       void removeFilePickerListener([in] ::com::sun::star::ui::dialogs::XFilePickerListener xListener);
+     };
+     published interface XFilterManager {
+      interface ::cpo::uno::XInterface;
+      void appendFilter([in] string aTitle, [in] string aFilter) raises (::com::sun::star::lang::IllegalArgumentException);
+      void setCurrentFilter([in] string aTitle) raises (::com::sun::star::lang::IllegalArgumentException);
+      string getCurrentFilter();
+     };
+     published interface XFilterGroupManager {
+      interface ::cpo::uno::XInterface;
+      void appendFilterGroup([in] string sGroupTitle, [in] sequence< ::com::sun::star::beans::StringPair > aFilters) raises (::com::sun::star::lang::IllegalArgumentException);
      };
      published interface XFilePreview {
       interface ::cpo::uno::XInterface;
@@ -16484,26 +16482,30 @@ module com {
       boolean setShowState([in] boolean bShowState);
       boolean getShowState();
      };
-     published interface XFilterGroupManager {
+     published interface XFilePickerControlAccess {
       interface ::cpo::uno::XInterface;
-      void appendFilterGroup([in] string sGroupTitle, [in] sequence< ::com::sun::star::beans::StringPair > aFilters) raises (::com::sun::star::lang::IllegalArgumentException);
+      void setValue([in] short ControlId, [in] short aControlAction, [in] any aValue);
+      any getValue([in] short aControlId, [in] short aControlAction);
+      void setLabel([in] short aControlId, [in] string aLabel);
+      string getLabel([in] short aControlId);
+      void enableControl([in] short ControlId, [in] boolean bEnable);
      };
-     published interface XFilterManager {
-      interface ::cpo::uno::XInterface;
-      void appendFilter([in] string aTitle, [in] string aFilter) raises (::com::sun::star::lang::IllegalArgumentException);
-      void setCurrentFilter([in] string aTitle) raises (::com::sun::star::lang::IllegalArgumentException);
-      string getCurrentFilter();
-     };
-     published interface XFilePicker3 {
-      interface ::com::sun::star::ui::dialogs::XFilePicker2;
+     published interface XFilePicker {
+      interface ::com::sun::star::ui::dialogs::XExecutableDialog;
+      void setMultiSelectionMode([in] boolean bMode);
+      void setDefaultName([in] string aName);
+      void setDisplayDirectory([in] string aDirectory) raises (::com::sun::star::lang::IllegalArgumentException);
+      string getDisplayDirectory();
+      sequence< string > getSelectedFiles();
       interface ::com::sun::star::ui::dialogs::XFilePickerNotifier;
       interface ::com::sun::star::ui::dialogs::XFilterManager;
       interface ::com::sun::star::ui::dialogs::XFilterGroupManager;
       interface ::com::sun::star::util::XCancellable;
       interface ::com::sun::star::lang::XComponent;
       [optional] interface ::com::sun::star::ui::dialogs::XFilePreview;
+      interface ::com::sun::star::ui::dialogs::XFilePickerControlAccess;
      };
-     published service FilePicker: ::com::sun::star::ui::dialogs::XFilePicker3 {
+     published service FilePicker: ::com::sun::star::ui::dialogs::XFilePicker {
       createWithMode([in] short Mode);
      };
      published struct FilePickerEvent: ::com::sun::star::lang::EventObject {
@@ -16561,14 +16563,6 @@ module com {
       boolean isControlSupported([in] string aControlName);
       sequence< string > getSupportedControlProperties([in] string aControlName) raises (::com::sun::star::lang::IllegalArgumentException);
       boolean isControlPropertySupported([in] string aControlName, [in] string aControlProperty) raises (::com::sun::star::lang::IllegalArgumentException);
-     };
-     published interface XFilePickerControlAccess {
-      interface ::com::sun::star::ui::dialogs::XFilePicker;
-      void setValue([in] short ControlId, [in] short aControlAction, [in] any aValue);
-      any getValue([in] short aControlId, [in] short aControlAction);
-      void setLabel([in] short aControlId, [in] string aLabel);
-      string getLabel([in] short aControlId);
-      void enableControl([in] short ControlId, [in] boolean bEnable);
      };
      published interface XFilePickerListener {
       interface ::com::sun::star::lang::XEventListener;

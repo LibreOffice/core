@@ -23,8 +23,9 @@ module com { module sun { module star { module ui { module dialogs {
 /** Specifies an interface for a FilePicker
 */
 
-published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
+published interface XFilePicker
 {
+    interface com::sun::star::ui::dialogs::XExecutableDialog;
 
     /** Enable/disable multi-selection mode
 
@@ -71,25 +72,48 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     /** Returns a sequence of the selected files including path information in
         URL format, conforming to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
 
-        <p>If the user closed the dialog with cancel an empty sequence will be
-        returned.</p>
+        <p>If the user closed the dialog with cancel an empty sequence will be returned.</p>
         <br/>
-        <p>If the dialog is in execution mode and a single file is selected
-        the complete URL of this file will be returned.</p>
-        <p>If the dialog is in execution mode and the selected file name is false
-        or any other error occurs an empty sequence will be returned.</p>
+
+        <p>If the user closed the dialog with OK a list of all selected files will be returned.</p>
 
         @returns
-        <p> The complete path of the file or directory currently selected
-            in URL format. This always returns only the first entry of the sequence.
-            <br/>
-            <p><strong>Notes for the implementation of a FileSave dialog:</strong>If there exists
-            a checkbox "Automatic File Extension" which is checked and a valid filter is currently selected
-            the dialog may automatically add an extension to the selected file name.</p>
-        </p>
-        @deprecated use com::sun::star::ui::dialogs::XFilePicker2::getSelectedFiles instead
+        <p>A list of all selected file as complete URLs.</p>
+        <br/>
+
+        <p><strong>Notes for the implementation of a FileSave dialog:</strong>If there exists
+        a checkbox "Automatic File Extension" which is checked and a valid filter is currently selected
+        the dialog may automatically add an extension to the selected file name(s).</p>
     */
-    sequence< string > getFiles();
+    sequence< string > getSelectedFiles();
+
+    /** Provides the ability to request notifications about changes.
+    */
+    interface XFilePickerNotifier; // extends XEventListener
+
+    /** Provides the ability to add different filter, query for the current
+        filters and set a current filter
+    */
+    interface XFilterManager;
+
+    /** Provides the ability to show a preview of a selected file
+    */
+    [optional] interface XFilePreview;
+
+    /** An interface which allows manipulation of groups of filters
+    */
+    interface XFilterGroupManager;
+
+    /** For canceling a running dialog instance.
+        <p>This may be useful for automatic test tools for instance.</p>
+    */
+    interface com::sun::star::util::XCancellable;
+
+    /** For shutdown and listener support.
+    */
+    interface com::sun::star::lang::XComponent;
+
+    interface com::sun::star::ui::dialogs::XFilePickerControlAccess;
 };
 
 

@@ -32,7 +32,7 @@
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <tools/urlobj.hxx>
 #include <o3tl/string_view.hxx>
 #include <strings.hrc>
@@ -423,7 +423,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
         sfx2::FileDialogHelper aDlgHelper(TemplateDescription::FILESAVE_SIMPLE,
                                           FileDialogFlags::NONE, m_xDialog.get());
         aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterCreateAddressList);
-        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
         xFP->appendFilter( m_sAddressListFilterName, u"*.csv"_ustr );
         xFP->setCurrentFilter( m_sAddressListFilterName ) ;
 

@@ -22,7 +22,7 @@
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_FILEOPENDIALOG_HXX
 
 #include <vector>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 class FileOpenDialog
@@ -37,7 +37,7 @@ class FileOpenDialog
 
         FilterEntry() : maFlags( 0 ) {}
     };
-    cpo::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFilePicker;
+    cpo::uno::Reference < css::ui::dialogs::XFilePicker > mxFilePicker;
 
     std::vector< FilterEntry > aFilterEntryList;
 

@@ -75,7 +75,7 @@ namespace basegfx { class SystemDependentDataManager; }
 
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::ui::dialogs {
-    class XFilePicker2;
+    class XFilePicker;
     class XFolderPicker2;
 }
 namespace com::sun::star::awt {
@@ -1256,7 +1256,7 @@ public:
 
      @returns File picker if available, otherwise an empty reference.
     */
-    static cpo::uno::Reference< css::ui::dialogs::XFilePicker2 >
+    static cpo::uno::Reference< css::ui::dialogs::XFilePicker >
         createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Create a platform specific folder picker, if one is available, otherwise return an

@@ -43,16 +43,12 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     mxFilePicker = FilePicker::createWithMode( rxContext, TemplateDescription::FILESAVE_AUTOEXTENSION);
     mxFilePicker->setMultiSelectionMode( false );
 
-    Reference< XFilePickerControlAccess > xAccess( mxFilePicker, UNO_QUERY );
-    if ( xAccess.is() )
+    try
     {
-        try
-        {
-            xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any( true ) );
-        }
-        catch( cpo::uno::Exception& )
-        {}
+        mxFilePicker->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any( true ) );
     }
+    catch( cpo::uno::Exception& )
+    {}
 
     // collecting a list of impress filters
     Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(

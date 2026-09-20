@@ -28,7 +28,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     @see com::sun::star::ui::dialogs::FilePicker
 */
-published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFilePicker
+published interface XFilePickerControlAccess : ::cpo::uno::XInterface
 {
 
 /** Set the value of an additional element within a FilePicker.

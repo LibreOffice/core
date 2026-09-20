@@ -31,7 +31,7 @@ module com { module sun { module star { module ui { module dialogs {
     @see XFilePicker
 */
 
-published service FilePicker : XFilePicker3
+published service FilePicker : XFilePicker
 {
 
     /** Provides the ability to choose between different custom templates that

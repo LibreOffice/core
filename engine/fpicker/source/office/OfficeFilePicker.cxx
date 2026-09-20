@@ -518,15 +518,6 @@ Sequence< OUString > SvtFilePicker::getSelectedFiles()
     return comphelper::containerToSequence(m_xDlg->GetPathList());
 }
 
-Sequence< OUString > SvtFilePicker::getFiles()
-{
-    Sequence< OUString > aFiles = getSelectedFiles();
-    if (aFiles.getLength() > 1)
-        aFiles.realloc(1);
-    return aFiles;
-}
-
-
 // XFilePickerControlAccess functions
 
 

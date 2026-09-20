@@ -21,7 +21,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -46,8 +46,7 @@ typedef cpo::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transpo
 // class SvtFilePicker ---------------------------------------------------
 
 typedef cppu::ImplInheritanceHelper <svt::OCommonPicker
-                            ,   css::ui::dialogs::XFilePicker3
-                            ,   css::ui::dialogs::XFilePickerControlAccess
+                            ,   css::ui::dialogs::XFilePicker
                             ,   css::ui::dialogs::XFilePreview
                             ,   css::lang::XServiceInfo
                             ,   css::ui::dialogs::XAsynchronousExecutableDialog
@@ -102,7 +101,6 @@ public:
     virtual void           setDefaultName( const OUString& aName ) override;
     virtual void           setDisplayDirectory( const OUString& aDirectory ) override;
     virtual OUString    getDisplayDirectory() override;
-    virtual cpo::uno::Sequence< OUString > getFiles() override;
     virtual cpo::uno::Sequence< OUString > getSelectedFiles() override;
 
 

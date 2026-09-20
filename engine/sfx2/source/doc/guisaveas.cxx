@@ -18,7 +18,7 @@
  */
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -1000,13 +1000,12 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
         pFileDlg->CreateMatcher( aDocServiceName );
 
-        uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = pFileDlg->GetFilePicker();
-        uno::Reference< ui::dialogs::XFilePickerControlAccess > xControlAccess( xFilePicker, uno::UNO_QUERY );
+        uno::Reference< ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
 
-        if ( xControlAccess.is() )
+        if ( xFilePicker.is() )
         {
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, SfxResId(STR_EXPORTBUTTON) );
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, SfxResId(STR_LABEL_FILEFORMAT) );
+            xFilePicker->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, SfxResId(STR_EXPORTBUTTON) );
+            xFilePicker->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, SfxResId(STR_LABEL_FILEFORMAT) );
         }
     }
     else
@@ -1226,7 +1225,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         }
     }
 
-    uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pFileDlg->GetFilePicker(), uno::UNO_QUERY );
+    uno::Reference< ui::dialogs::XFilePicker > xExtFileDlg( pFileDlg->GetFilePicker() );
     if ( xExtFileDlg.is() )
     {
         if ( SfxStoringHelper::CheckFilterOptionsAppearance( m_pOwner->GetFilterConfiguration(), aFilterName ) )

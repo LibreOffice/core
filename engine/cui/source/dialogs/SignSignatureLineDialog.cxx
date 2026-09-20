@@ -33,7 +33,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 
 using namespace comphelper;
 using namespace css;
@@ -123,7 +123,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
     sfx2::FileDialogHelper aHelper(TemplateDescription::FILEOPEN_PREVIEW, FileDialogFlags::NONE,
                                    m_xDialog.get());
     aHelper.SetContext(sfx2::FileDialogHelper::SignatureLine);
-    Reference<XFilePicker3> xFilePicker = aHelper.GetFilePicker();
+    Reference<XFilePicker> xFilePicker = aHelper.GetFilePicker();
     if (!xFilePicker->execute())
         return;
 

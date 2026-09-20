@@ -20,7 +20,7 @@ excludelist:
     - tools/datetime.hxx
     forms/source/component/ImageControl.cxx:
     # Needed for template
-    - com/sun/star/ui/dialogs/XFilePicker3.hpp
+    - com/sun/star/ui/dialogs/XFilePicker.hpp
     forms/source/component/imgprod.cxx:
     # Actually used
     - com/sun/star/io/XInputStream.hpp

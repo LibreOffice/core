@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -63,8 +63,8 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl(weld::Window* pPreferredParent,
     : aFileDlg(nDialogType, FileDialogFlags::Graphic, pPreferredParent)
     , pDialogParent(pPreferredParent)
 {
-    uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
-    xCtrlAcc.set(xFP, UNO_QUERY);
+    uno::Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
+    xCtrlAcc = xFP;
 }
 
 
