@@ -1447,9 +1447,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			div.classList.add('hidden');
 
 		let enabledTooltip = null;
+		// Set the disabled attribute and the disabled property together, so both describe the
+		// same state.
 		const setDisabled = (disabled) => {
 			if (disabled) {
 				div.setAttribute('disabled', 'true');
+				div.disabled = true;
 				if (button) {
 					button.setAttribute('aria-disabled', true);
 				}
@@ -1458,6 +1461,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				}
 			} else {
 				div.removeAttribute('disabled');
+				div.disabled = false;
 				if (button) {
 					button.removeAttribute('aria-disabled');
 				}

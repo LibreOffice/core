@@ -238,6 +238,7 @@ JSDialog.toolbox = function (
 			if (!toolboxChild) continue;
 			if (enable) {
 				toolboxChild.removeAttribute('disabled');
+				toolboxChild.disabled = false;
 				toolboxChild.classList.remove('disabled');
 			} else {
 				toolboxChild.disabled = true;
