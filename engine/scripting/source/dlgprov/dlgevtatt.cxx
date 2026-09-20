@@ -316,7 +316,7 @@ namespace dlgprov
     // XScriptEventsAttacher
 
 
-    void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
+    void DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
         const cpo::uno::Reference<css::script::XScriptListener>&,
         const Any& Helper )
     {

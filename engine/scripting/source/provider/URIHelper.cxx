@@ -69,7 +69,7 @@ ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
     // currently does nothing
 }
 
-void SAL_CALL
+void
 ScriptingFrameworkURIHelper::initialize(
     const cpo::uno::Sequence < cpo::uno::Any >& args )
 {
@@ -183,7 +183,7 @@ ScriptingFrameworkURIHelper::getLanguagePath(const OUString& rLanguagePart)
     return result;
 }
 
-OUString SAL_CALL
+OUString
 ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
 {
     return
@@ -195,7 +195,7 @@ ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
         m_sLocation;
 }
 
-OUString SAL_CALL
+OUString
 ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
 {
     OUString sLanguagePart;
@@ -215,26 +215,26 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
     return m_sBaseURI + "/" + getLanguagePath(sLanguagePart);
 }
 
-OUString SAL_CALL
+OUString
 ScriptingFrameworkURIHelper::getRootStorageURI()
 {
     return m_sBaseURI;
 }
 
-OUString SAL_CALL
+OUString
 ScriptingFrameworkURIHelper::getImplementationName()
 {
     return
         u"com.sun.star.script.provider.ScriptURIHelper"_ustr;
 }
 
-bool SAL_CALL
+bool
 ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService( this, serviceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.provider.ScriptURIHelper"_ustr };

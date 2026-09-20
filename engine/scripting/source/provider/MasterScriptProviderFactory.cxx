@@ -39,7 +39,7 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 {
 }
 
-Reference< provider::XScriptProvider > SAL_CALL
+Reference< provider::XScriptProvider >
 MasterScriptProviderFactory::createScriptProvider( const Any& context )
 {
     Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_SET_THROW );
@@ -58,12 +58,12 @@ MasterScriptProviderFactory::getActiveMSPList() const
     return m_MSPList;
 }
 
-OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
+OUString MasterScriptProviderFactory::getImplementationName()
 {
     return u"com.sun.star.script.provider.MasterScriptProviderFactory"_ustr;
 }
 
-Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNames()
+Sequence< OUString > MasterScriptProviderFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.provider.MasterScriptProviderFactory"_ustr };
 }

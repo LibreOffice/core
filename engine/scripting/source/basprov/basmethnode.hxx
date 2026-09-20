@@ -59,22 +59,22 @@ namespace basprov
         virtual ~BasicMethodNodeImpl() override;
 
         // XBrowseNode
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
-        virtual bool SAL_CALL hasChildNodes(  ) override;
-        virtual sal_Int16 SAL_CALL getType(  ) override;
+        virtual OUString getName(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > getChildNodes(  ) override;
+        virtual bool hasChildNodes(  ) override;
+        virtual sal_Int16 getType(  ) override;
 
         // XInvocation
-        virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-        virtual cpo::uno::Any SAL_CALL invoke(
+        virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
+        virtual cpo::uno::Any invoke(
             const OUString& aFunctionName,
             const cpo::uno::Sequence< cpo::uno::Any >& aParams,
             cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
             cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
-        virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-        virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-        virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
-        virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
+        virtual void setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+        virtual cpo::uno::Any getValue( const OUString& aPropertyName ) override;
+        virtual bool hasMethod( const OUString& aName ) override;
+        virtual bool hasProperty( const OUString& aName ) override;
     };
 
 

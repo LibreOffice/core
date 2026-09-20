@@ -65,7 +65,7 @@ using namespace ::com::sun::star::document;
 namespace scripting_protocolhandler
 {
 
-void SAL_CALL ScriptProtocolHandler::initialize(
+void ScriptProtocolHandler::initialize(
     const cpo::uno::Sequence < cpo::uno::Any >& aArguments )
 {
     if ( m_bInitialised )
@@ -84,7 +84,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     m_bInitialised = true;
 }
 
-Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
+Reference< XDispatch > ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const OUString&, sal_Int32 )
 {
     Reference< XDispatch > xDispatcher;
@@ -103,7 +103,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     return xDispatcher;
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL
+Sequence< Reference< XDispatch > >
 ScriptProtocolHandler::queryDispatches(
 const Sequence < DispatchDescriptor >& seqDescriptor )
 {
@@ -115,7 +115,7 @@ const Sequence < DispatchDescriptor >& seqDescriptor )
     return lDispatcher;
 }
 
-void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
+void ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
@@ -281,19 +281,19 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
 }
 
-void SAL_CALL ScriptProtocolHandler::dispatch(
+void ScriptProtocolHandler::dispatch(
 const URL& aURL, const Sequence< PropertyValue >& lArgs )
 {
     dispatchWithNotification( aURL, lArgs, Reference< XDispatchResultListener >() );
 }
 
-void SAL_CALL ScriptProtocolHandler::addStatusListener(
+void ScriptProtocolHandler::addStatusListener(
 const Reference< XStatusListener >&, const URL& )
 {
     // implement if status is supported
 }
 
-void SAL_CALL ScriptProtocolHandler::removeStatusListener(
+void ScriptProtocolHandler::removeStatusListener(
 const Reference< XStatusListener >&, const URL& )
 {}
 
@@ -399,19 +399,19 @@ ScriptProtocolHandler::~ScriptProtocolHandler()
 }
 
 /* XServiceInfo */
-OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
+OUString ScriptProtocolHandler::getImplementationName( )
 {
     return u"com.sun.star.comp.ScriptProtocolHandler"_ustr;
 }
 
 /* XServiceInfo */
-bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServiceName )
+bool ScriptProtocolHandler::supportsService(const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
+Sequence< OUString > ScriptProtocolHandler::getSupportedServiceNames()
 {
     return {u"com.sun.star.frame.ProtocolHandler"_ustr};
 }

@@ -116,27 +116,27 @@ namespace dlgprov
         virtual ~DialogProviderImpl() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XDialogProvider
-        virtual cpo::uno::Reference < css::awt::XDialog > SAL_CALL createDialog(
+        virtual cpo::uno::Reference < css::awt::XDialog > createDialog(
             const OUString& URL ) override;
 
         // XDialogProvider2
-        virtual cpo::uno::Reference < css::awt::XDialog > SAL_CALL createDialogWithHandler(
+        virtual cpo::uno::Reference < css::awt::XDialog > createDialogWithHandler(
             const OUString& URL,
             const cpo::uno::Reference< cpo::uno::XInterface >& xHandler ) override;
 
-        virtual cpo::uno::Reference < css::awt::XDialog > SAL_CALL createDialogWithArguments(
+        virtual cpo::uno::Reference < css::awt::XDialog > createDialogWithArguments(
             const OUString& URL,
             const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
 
-        virtual cpo::uno::Reference< css::awt::XWindow > SAL_CALL createContainerWindow(
+        virtual cpo::uno::Reference< css::awt::XWindow > createContainerWindow(
             const OUString& URL, const OUString& WindowType,
             const cpo::uno::Reference< css::awt::XWindowPeer >& xParent,
             const cpo::uno::Reference< cpo::uno::XInterface >& xHandler ) override;

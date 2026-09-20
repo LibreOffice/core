@@ -80,7 +80,7 @@ MasterScriptProvider::~MasterScriptProvider()
 }
 
 
-void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
+void MasterScriptProvider::initialize( const Sequence < Any >& args )
 {
     if ( m_bInitialised )
         return;
@@ -353,7 +353,7 @@ MasterScriptProvider::providerCache()
 }
 
 
-OUString SAL_CALL
+OUString
 MasterScriptProvider::getName()
 {
     if ( !m_bIsPkgMSP )
@@ -382,7 +382,7 @@ MasterScriptProvider::getName()
 }
 
 
-Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+Sequence< Reference< browse::XBrowseNode > >
 MasterScriptProvider::getChildNodes()
 {
     Sequence< Reference< provider::XScriptProvider > > providers = providerCache()->getAllProviders();
@@ -411,14 +411,14 @@ MasterScriptProvider::getChildNodes()
 }
 
 
-bool SAL_CALL
+bool
 MasterScriptProvider::hasChildNodes()
 {
     return true;
 }
 
 
-sal_Int16 SAL_CALL
+sal_Int16
 MasterScriptProvider::getType()
 {
     return browse::BrowseNodeTypes::CONTAINER;
@@ -483,7 +483,7 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
 } // namespace
 
 // Register Package
-void SAL_CALL
+void
 MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
 {
     if ( !m_bIsPkgMSP )
@@ -528,7 +528,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
 
 
 // Revoke Package
-void SAL_CALL
+void
 MasterScriptProvider::removeByName( const OUString& Name )
 {
     if ( !m_bIsPkgMSP )
@@ -567,21 +567,21 @@ MasterScriptProvider::removeByName( const OUString& Name )
 }
 
 
-void SAL_CALL
+void
 MasterScriptProvider::replaceByName( const OUString& /*aName*/, const Any& /*aElement*/ )
 {
     // TODO needs implementing
      throw RuntimeException( u"replaceByName not implemented!!!!"_ustr );
 }
 
-Any SAL_CALL
+Any
 MasterScriptProvider::getByName( const OUString& /*aName*/ )
 {
     // TODO needs to be implemented
     throw RuntimeException( u"getByName not implemented!!!!"_ustr );
 }
 
-bool SAL_CALL
+bool
 MasterScriptProvider::hasByName( const OUString& aName )
 {
     bool result = false;
@@ -620,14 +620,14 @@ MasterScriptProvider::hasByName( const OUString& aName )
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 MasterScriptProvider::getElementNames(  )
 {
     // TODO needs implementing
     throw RuntimeException( u"getElementNames not implemented!!!!"_ustr );
 }
 
-Type SAL_CALL
+Type
 MasterScriptProvider::getElementType(  )
 {
     // TODO needs implementing
@@ -635,25 +635,25 @@ MasterScriptProvider::getElementType(  )
     return t;
 }
 
-bool SAL_CALL MasterScriptProvider::hasElements(  )
+bool MasterScriptProvider::hasElements(  )
 {
     // TODO needs implementing
     throw RuntimeException( u"hasElements not implemented!!!!"_ustr );
 }
 
 
-OUString SAL_CALL MasterScriptProvider::getImplementationName( )
+OUString MasterScriptProvider::getImplementationName( )
 {
     return u"com.sun.star.script.provider.MasterScriptProvider"_ustr;
 }
 
-bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
+bool MasterScriptProvider::supportsService( const OUString& serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
 
-Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
+Sequence< OUString > MasterScriptProvider::getSupportedServiceNames( )
 {
     return {
         u"com.sun.star.script.provider.MasterScriptProvider"_ustr,

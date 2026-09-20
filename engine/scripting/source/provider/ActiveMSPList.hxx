@@ -63,7 +63,7 @@ public:
     //XEventListener
 
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 private:
     void addActiveMSP( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent,

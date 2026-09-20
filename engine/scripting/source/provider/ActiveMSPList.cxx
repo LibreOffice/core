@@ -247,7 +247,7 @@ ActiveMSPList::addActiveMSP( const Reference< cpo::uno::XInterface >& xComponent
 }
 
 
-void SAL_CALL ActiveMSPList::disposing( const css::lang::EventObject& Source )
+void ActiveMSPList::disposing( const css::lang::EventObject& Source )
 
 {
     try

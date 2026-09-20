@@ -428,32 +428,32 @@ public:
     ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName );
     // XNameContainer
 
-    virtual void SAL_CALL insertByName( const OUString&, const Any& ) override
+    virtual void insertByName( const OUString&, const Any& ) override
     {
         throw RuntimeException(u"ReadOnly container"_ustr );
 
     }
-    virtual void SAL_CALL removeByName( const OUString& ) override
+    virtual void removeByName( const OUString& ) override
     {
         throw RuntimeException(u"ReadOnly container"_ustr );
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) override
+    virtual void replaceByName( const OUString&, const Any& ) override
     {
         throw RuntimeException(u"ReadOnly container"_ustr );
 
     }
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual Any getByName( const OUString& aName ) override;
+    virtual Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) override
+    virtual Type getElementType(  ) override
     { return cppu::UnoType<OUString>::get(); }
-    virtual bool SAL_CALL hasElements(  ) override
+    virtual bool hasElements(  ) override
     { return !m_hEvents.empty(); }
 private:
 
@@ -478,7 +478,7 @@ ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUStri
     }
 }
 
-Any SAL_CALL
+Any
 ReadOnlyEventsNameContainer::getByName( const OUString& aName ){
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
@@ -486,13 +486,13 @@ ReadOnlyEventsNameContainer::getByName( const OUString& aName ){
     return it->second;
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 ReadOnlyEventsNameContainer::getElementNames(  )
 {
     return comphelper::mapKeysToSequence(m_hEvents);
 }
 
-bool SAL_CALL
+bool
 ReadOnlyEventsNameContainer::hasByName( const OUString& aName )
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
@@ -510,7 +510,7 @@ public:
     { m_xNameContainer = new ReadOnlyEventsNameContainer( eventMethods, sCodeName ); }
 
     // XScriptEventSupplier
-    virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) override { return m_xNameContainer; }
+    virtual Reference< container::XNameContainer > getEvents(  ) override { return m_xNameContainer; }
 private:
     rtl::Reference< ReadOnlyEventsNameContainer > m_xNameContainer;
 };
@@ -531,15 +531,15 @@ class EventListener final
 public:
     EventListener();
     // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& Source) override;
+    virtual void disposing(const lang::EventObject& Source) override;
     // XScriptListener
-    virtual void SAL_CALL firing(const ScriptEvent& evt) override;
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) override;
+    virtual void firing(const ScriptEvent& evt) override;
+    virtual Any approveFiring(const ScriptEvent& evt) override;
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
+    virtual void queryClosing( const lang::EventObject& Source, bool GetsOwnership ) override;
+    virtual void notifyClosing( const lang::EventObject& Source ) override;
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
     virtual void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
@@ -566,17 +566,17 @@ public:
             setShellFromModel();
     }
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     {
         return u"ooo.vba.EventListener"_ustr;
     }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { getImplementationName() };
     }
@@ -629,13 +629,13 @@ EventListener::disposing(const lang::EventObject&)
 
 //XScriptListener
 
-void SAL_CALL
+void
 EventListener::firing(const ScriptEvent& evt)
 {
     firing_Impl( evt, nullptr );
 }
 
-Any SAL_CALL
+Any
 EventListener::approveFiring(const ScriptEvent& evt)
 {
     Any ret;
@@ -644,13 +644,13 @@ EventListener::approveFiring(const ScriptEvent& evt)
 }
 
 // XCloseListener
-void SAL_CALL
+void
 EventListener::queryClosing( const lang::EventObject& /*Source*/, bool /*GetsOwnership*/ )
 {
     //Nothing to do
 }
 
-void SAL_CALL
+void
 EventListener::notifyClosing( const lang::EventObject& /*Source*/ )
 {
     m_bDocClosed = true;
@@ -662,7 +662,7 @@ EventListener::notifyClosing( const lang::EventObject& /*Source*/ )
 }
 
 // XInitialization
-void SAL_CALL
+void
 EventListener::initialize( const Sequence< Any >& aArguments )
 {
     if ( aArguments.getLength() == 1 )
@@ -883,20 +883,20 @@ public:
     VBAToOOEventDescGen();
 
     // XVBAToOOEventDescGen
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) override;
-    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) override;
+    virtual Sequence< ScriptEventDescriptor > getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) override;
+    virtual Reference< XScriptEventsSupplier > getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) override;
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     {
         return u"ooo.vba.VBAToOOEventDesc"_ustr;
     }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { getImplementationName() };
     }
@@ -907,14 +907,14 @@ public:
 
 VBAToOOEventDescGen::VBAToOOEventDescGen() {}
 
-Sequence< ScriptEventDescriptor > SAL_CALL
+Sequence< ScriptEventDescriptor >
 VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, const OUString& sCodeName )
 {
     ScriptEventHelper evntHelper( sCntrlServiceName );
     return evntHelper.createEvents( sCodeName );
 }
 
-Reference< XScriptEventsSupplier > SAL_CALL
+Reference< XScriptEventsSupplier >
 VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  )
 {
     ScriptEventHelper evntHelper( xControl );

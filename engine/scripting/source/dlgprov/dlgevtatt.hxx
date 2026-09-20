@@ -67,7 +67,7 @@ namespace dlgprov
         virtual ~DialogEventsAttacherImpl() override;
 
         // XScriptEventsAttacher
-        virtual void SAL_CALL attachEvents( const cpo::uno::Sequence<
+        virtual void attachEvents( const cpo::uno::Sequence<
             cpo::uno::Reference< cpo::uno::XInterface > >& Objects,
             const cpo::uno::Reference<css::script::XScriptListener>&,
             const cpo::uno::Any& Helper ) override;
@@ -95,11 +95,11 @@ namespace dlgprov
         virtual ~DialogAllListenerImpl() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XAllListener
-        virtual void SAL_CALL firing( const css::script::AllEventObject& Event ) override;
-        virtual cpo::uno::Any SAL_CALL approveFiring( const css::script::AllEventObject& Event ) override;
+        virtual void firing( const css::script::AllEventObject& Event ) override;
+        virtual cpo::uno::Any approveFiring( const css::script::AllEventObject& Event ) override;
     };
 
 
@@ -119,11 +119,11 @@ namespace dlgprov
         virtual ~DialogScriptListenerImpl() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XScriptListener
-        virtual void SAL_CALL firing( const css::script::ScriptEvent& aScriptEvent ) override;
-        virtual cpo::uno::Any SAL_CALL approveFiring( const css::script::ScriptEvent& aScriptEvent ) override;
+        virtual void firing( const css::script::ScriptEvent& aScriptEvent ) override;
+        virtual cpo::uno::Any approveFiring( const css::script::ScriptEvent& aScriptEvent ) override;
     };
 
 

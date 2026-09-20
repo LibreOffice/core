@@ -66,7 +66,7 @@ namespace basprov
         virtual ~BasicScriptImpl() override;
 
         // XScript
-        virtual cpo::uno::Any SAL_CALL invoke(
+        virtual cpo::uno::Any invoke(
             const cpo::uno::Sequence< cpo::uno::Any >& aParams,
             cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
             cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;

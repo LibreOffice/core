@@ -61,35 +61,35 @@ public:
     virtual ~ScriptProtocolHandler() override;
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& sServiceName ) override;
+    virtual cpo::uno::Sequence < OUString > getSupportedServiceNames() override;
 
     /* Implementation for XDispatchProvider */
-    virtual cpo::uno::Reference < css::frame::XDispatch > SAL_CALL
+    virtual cpo::uno::Reference < css::frame::XDispatch >
     queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName,
                    sal_Int32 eSearchFlags ) override ;
-    virtual cpo::uno::Sequence< cpo::uno::Reference < css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Reference < css::frame::XDispatch > >
     queryDispatches(
         const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
     /* Implementation for X(Notifying)Dispatch */
-    virtual void SAL_CALL dispatchWithNotification(
+    virtual void dispatchWithNotification(
         const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs,
         const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
-    virtual void SAL_CALL dispatch(
+    virtual void dispatch(
         const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
-    virtual void SAL_CALL addStatusListener(
+    virtual void addStatusListener(
         const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
         const css::util::URL& aURL ) override;
-    virtual void SAL_CALL removeStatusListener(
+    virtual void removeStatusListener(
         const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
         const css::util::URL& aURL ) override;
 
     /* Implementation for XInitialization */
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         const cpo::uno::Sequence < cpo::uno::Any >& aArguments ) override;
 };
 

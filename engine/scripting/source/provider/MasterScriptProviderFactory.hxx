@@ -55,17 +55,17 @@ public:
         cpo::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( OUString const & serviceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     // XScriptProviderFactory
     virtual cpo::uno::Reference< css::script::provider::XScriptProvider >
-        SAL_CALL createScriptProvider( const cpo::uno::Any& context ) override;
+        createScriptProvider( const cpo::uno::Any& context ) override;
 };
 
 

@@ -57,10 +57,10 @@ namespace basprov
         virtual ~BasicLibraryNodeImpl() override;
 
         // XBrowseNode
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
-        virtual bool SAL_CALL hasChildNodes(  ) override;
-        virtual sal_Int16 SAL_CALL getType(  ) override;
+        virtual OUString getName(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > getChildNodes(  ) override;
+        virtual bool hasChildNodes(  ) override;
+        virtual sal_Int16 getType(  ) override;
     };
 
 

@@ -41,36 +41,36 @@ public:
     explicit DialogModelProvider(cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 private:
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::container::XElementAccess:
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // css::container::XNameAccess:
-    virtual cpo::uno::Any SAL_CALL getByName(const OUString & aName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName(const OUString & aName) override;
+    virtual cpo::uno::Any getByName(const OUString & aName) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName(const OUString & aName) override;
 
     // css::container::XNameReplace:
-    virtual void SAL_CALL replaceByName(const OUString & aName, const cpo::uno::Any & aElement) override;
+    virtual void replaceByName(const OUString & aName, const cpo::uno::Any & aElement) override;
 
     // css::container::XNameContainer:
-    virtual void SAL_CALL insertByName(const OUString & aName, const cpo::uno::Any & aElement) override;
-    virtual void SAL_CALL removeByName(const OUString & Name) override;
+    virtual void insertByName(const OUString & aName, const cpo::uno::Any & aElement) override;
+    virtual void removeByName(const OUString & Name) override;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString & ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
     DialogModelProvider(const DialogModelProvider &) = delete;

@@ -47,16 +47,16 @@ public:
         cpo::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( OUString const & serviceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     // XBrowseNodeFactory
-    virtual cpo::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
+    virtual cpo::uno::Reference< css::script::browse::XBrowseNode >
         createView( sal_Int16 viewType ) override;
 private:
     /// @throws cpo::uno::RuntimeException

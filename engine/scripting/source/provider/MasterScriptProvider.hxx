@@ -57,32 +57,32 @@ public:
     virtual ~MasterScriptProvider() override;
 
     // XServiceInfo implementation
-    virtual OUString SAL_CALL getImplementationName( ) override;
+    virtual OUString getImplementationName( ) override;
 
     // XBrowseNode implementation
-    virtual OUString SAL_CALL getName() override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
-    virtual bool SAL_CALL hasChildNodes() override;
-    virtual sal_Int16 SAL_CALL getType() override;
+    virtual OUString getName() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > getChildNodes() override;
+    virtual bool hasChildNodes() override;
+    virtual sal_Int16 getType() override;
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override;
 
     // XScriptProvider implementation
-    virtual cpo::uno::Reference < css::script::provider::XScript > SAL_CALL
+    virtual cpo::uno::Reference < css::script::provider::XScript >
         getScript( const OUString& scriptURI ) override;
 
     /**
@@ -91,7 +91,7 @@ public:
      * @param args expected to contain a single OUString
      * containing the URI
      */
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence < cpo::uno::Any > & args ) override;
+    virtual void initialize( const cpo::uno::Sequence < cpo::uno::Any > & args ) override;
 
     // returns context string for this provider, eg
     const OUString& getContextString() const { return m_sCtxString; }

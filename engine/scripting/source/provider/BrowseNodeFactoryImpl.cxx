@@ -73,12 +73,12 @@ public:
     }
 
     virtual OUString
-    SAL_CALL getName() override
+    getName() override
     {
         return m_Name;
     }
 
-    virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+    virtual Sequence< Reference< browse::XBrowseNode > >
     getChildNodes() override
     {
         std::vector<  Sequence< Reference < browse::XBrowseNode > > > seqs;
@@ -115,7 +115,7 @@ public:
         return result;
     }
 
-    virtual bool SAL_CALL
+    virtual bool
     hasChildNodes() override
     {
         for (Reference<XBrowseNode> & xNode : m_Nodes)
@@ -137,7 +137,7 @@ public:
         return false;
     }
 
-    virtual sal_Int16 SAL_CALL getType() override
+    virtual sal_Int16 getType() override
     {
         return browse::BrowseNodeTypes::CONTAINER;
     }
@@ -170,12 +170,12 @@ public:
 
     // XBrowseNode
 
-    virtual OUString SAL_CALL getName() override
+    virtual OUString getName() override
     {
         return m_sNodeName;
     }
 
-    virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+    virtual Sequence< Reference< browse::XBrowseNode > >
     getChildNodes() override
     {
         if ( !m_hBNA )
@@ -196,12 +196,12 @@ public:
         return children;
     }
 
-    virtual bool SAL_CALL hasChildNodes() override
+    virtual bool hasChildNodes() override
     {
         return true;
     }
 
-    virtual sal_Int16 SAL_CALL getType() override
+    virtual sal_Int16 getType() override
     {
         return browse::BrowseNodeTypes::CONTAINER;
     }
@@ -390,7 +390,7 @@ public:
         }
     }
 
-    virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+    virtual Sequence< Reference< browse::XBrowseNode > >
                 getChildNodes() override
     {
         if ( hasChildNodes() )
@@ -425,25 +425,25 @@ public:
         }
     }
 
-    virtual sal_Int16 SAL_CALL getType() override
+    virtual sal_Int16 getType() override
     {
         return m_xWrappedBrowseNode->getType();
     }
 
     virtual OUString
-    SAL_CALL getName() override
+    getName() override
     {
         return m_xWrappedBrowseNode->getName();
     }
 
-    virtual bool SAL_CALL
+    virtual bool
     hasChildNodes() override
     {
         return m_xWrappedBrowseNode->hasChildNodes();
     }
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) override
+    virtual Any queryInterface( const Type& aType ) override
     {
         Any aRet = t_BrowseNodeBase::queryInterface( aType );
         if ( aRet.hasValue() )
@@ -462,11 +462,11 @@ public:
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual Sequence< Type > SAL_CALL getTypes() override
+    virtual Sequence< Type > getTypes() override
     {
         return m_xWrappedTypeProv->getTypes();
     }
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override
+    virtual Sequence< sal_Int8 > getImplementationId() override
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
@@ -493,7 +493,7 @@ public:
         m_Name = u"Root"_ustr;
     }
 
-    virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+    virtual Sequence< Reference< browse::XBrowseNode > >
                 getChildNodes() override
     {
         // no need to sort user, share, doc1...docN
@@ -509,18 +509,18 @@ public:
         return children;
     }
 
-    virtual sal_Int16 SAL_CALL getType() override
+    virtual sal_Int16 getType() override
     {
         return browse::BrowseNodeTypes::ROOT;
     }
 
     virtual OUString
-    SAL_CALL getName() override
+    getName() override
     {
         return m_Name;
     }
 
-    virtual bool SAL_CALL
+    virtual bool
     hasChildNodes() override
     {
         bool result = true;
@@ -545,12 +545,12 @@ public:
     {
     }
 
-    virtual OUString SAL_CALL getName() override
+    virtual OUString getName() override
     {
         return u"Root"_ustr;
     }
 
-    virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
+    virtual Sequence< Reference< browse::XBrowseNode > >
     getChildNodes() override
     {
 
@@ -568,12 +568,12 @@ public:
         return children;
     }
 
-    virtual bool SAL_CALL hasChildNodes() override
+    virtual bool hasChildNodes() override
     {
         return true; // will always be user and share
     }
 
-    virtual sal_Int16 SAL_CALL getType() override
+    virtual sal_Int16 getType() override
     {
         return browse::BrowseNodeTypes::CONTAINER;
     }
@@ -599,7 +599,7 @@ BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
  * The selector hierarchy is the standard hierarchy for organizers with the
  * language nodes removed.
  */
-Reference< browse::XBrowseNode > SAL_CALL
+Reference< browse::XBrowseNode >
 BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
 {
     switch( viewType )
@@ -623,13 +623,13 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy() const
 // Implementation of XServiceInfo
 
 
-OUString SAL_CALL
+OUString
 BrowseNodeFactoryImpl::getImplementationName()
 {
     return u"com.sun.star.script.browse.BrowseNodeFactory"_ustr;
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 BrowseNodeFactoryImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.browse.BrowseNodeFactory"_ustr };
