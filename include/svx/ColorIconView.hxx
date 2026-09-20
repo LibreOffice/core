@@ -28,7 +28,7 @@ class SVXCORE_DLLPUBLIC ColorIconView : public IColorSet
 {
     std::unique_ptr<weld::IconView> m_pIconView;
 
-    Link<const Color&, void> m_aColorActivatedHdl;
+    Link<int, void> m_aColorActivatedHdl;
     Link<const ColorIconView&, void> m_aSelectionChangedHdl;
 
     DECL_LINK(ItemActivatedHdl, const weld::TreeIter&, bool);
@@ -60,10 +60,7 @@ public:
 
     void set_help_id(const OUString& rName);
 
-    void setColorActivatedHdl(const Link<const Color&, void>& rLink)
-    {
-        m_aColorActivatedHdl = rLink;
-    }
+    void setColorActivatedHdl(const Link<int, void>& rLink) { m_aColorActivatedHdl = rLink; }
 
     void setSelectionChangedHdl(const Link<const ColorIconView&, void>& rLink)
     {

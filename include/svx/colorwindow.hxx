@@ -100,16 +100,16 @@ private:
     std::unique_ptr<weld::Widget> mxAutomaticSeparator;
     weld::Button* mpDefaultButton;
 
-    DECL_DLLPRIVATE_LINK(ColorSelectHdl, const Color&, void);
-    DECL_DLLPRIVATE_LINK(RecentColorSelectHdl, const Color&, void);
+    DECL_DLLPRIVATE_LINK(ColorSelectHdl, int, void);
+    DECL_DLLPRIVATE_LINK(RecentColorSelectHdl, int, void);
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
 
     static bool SelectIconViewEntry(ColorIconView& rColorIconView, const Color& rColor);
-    static NamedColor GetSelectEntryColor(const ColorIconView& rColorIconView);
+    static NamedColor GetEntryColor(const ColorIconView& rColorIconView, int nIndex);
     NamedColor GetAutoColor() const;
-    void ApplySelectedColor(ColorIconView& rColorIconView);
+    void ApplyColor(ColorIconView& rColorIconView, int nIndex);
 
 public:
     ColorWindow(OUString  rCommand,

@@ -110,7 +110,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorSelectHdl, const ColorIconView&, void
     m_xDefaultButton->set_active(false);
 }
 
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorActivatedHdl, const Color&, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorActivatedHdl, int, void)
 {
     m_xDialog->response(RET_OK);
 }

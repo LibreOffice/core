@@ -728,8 +728,8 @@ private:
     DECL_LINK(OnMoreColorsClick, weld::Button&, void);
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
-    DECL_LINK(ActivatePaletteColorHdl, const Color&, void);
-    DECL_LINK(ActivateRecentColorHdl, const Color&, void);
+    DECL_LINK(ActivatePaletteColorHdl, int, void);
+    DECL_LINK(ActivateRecentColorHdl, int, void);
     DECL_LINK( SelectColorModeHdl_Impl, weld::Toggleable&, void );
     void UpdateToSelectedColor(const NamedColor& rNamedColor);
     void ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset = true);

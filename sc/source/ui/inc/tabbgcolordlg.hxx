@@ -47,7 +47,7 @@ private:
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK(DefaultButtonToggled, weld::Toggleable&, void);
     DECL_LINK(TabBgColorSelectHdl, const ColorIconView&, void);
-    DECL_LINK(TabBgColorActivatedHdl, const Color&, void);
+    DECL_LINK(TabBgColorActivatedHdl, int, void);
     DECL_LINK(TabBgColorOKHdl_Impl, weld::Button&, void);
 };
 

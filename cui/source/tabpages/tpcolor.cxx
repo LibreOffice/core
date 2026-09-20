@@ -185,7 +185,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
     if (nSelectedIndex < 0)
         return;
 
-    ActivatePaletteColorHdl(m_aColorIconView.getColor(nSelectedIndex));
+    ActivatePaletteColorHdl(nSelectedIndex);
 }
 
 DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
     if (m_aColorIconView.getItemCount() > 0)
     {
         m_aColorIconView.select(0);
-        ActivatePaletteColorHdl(m_aColorIconView.getColor(0));
+        ActivatePaletteColorHdl(0);
     }
     else
     {
@@ -481,20 +481,16 @@ void SvxColorTabPage::UpdateToSelectedColor(const NamedColor& rNamedColor)
     ChangeColor(rNamedColor, false);
 }
 
-IMPL_LINK(SvxColorTabPage, ActivatePaletteColorHdl, const Color&, rColor, void)
+IMPL_LINK(SvxColorTabPage, ActivatePaletteColorHdl, int, nIndex, void)
 {
-    const int nPos = m_aColorIconView.get_selected_index();
-    if (nPos < 0 || m_aColorIconView.getColor(nPos) != rColor)
-        return;
-
     NamedColor aNamedColor;
-    aNamedColor.m_aColor = rColor;
+    aNamedColor.m_aColor = m_aColorIconView.getColor(nIndex);
 
     if (maPaletteManager.IsThemePaletteSelected())
     {
         sal_uInt16 nThemeIndex;
         sal_uInt16 nEffectIndex;
-        if (PaletteManager::GetThemeAndEffectIndex(nPos, nThemeIndex, nEffectIndex))
+        if (PaletteManager::GetThemeAndEffectIndex(nIndex, nThemeIndex, nEffectIndex))
         {
             aNamedColor.m_nThemeIndex = nThemeIndex;
             maPaletteManager.GetLumModOff(nThemeIndex, nEffectIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
@@ -516,10 +512,10 @@ IMPL_LINK(SvxColorTabPage, ActivatePaletteColorHdl, const Color&, rColor, void)
     }
 }
 
-IMPL_LINK(SvxColorTabPage, ActivateRecentColorHdl, const Color&, rColor, void)
+IMPL_LINK(SvxColorTabPage, ActivateRecentColorHdl, int, nIndex, void)
 {
     NamedColor aNamedColor;
-    aNamedColor.m_aColor = rColor;
+    aNamedColor.m_aColor = m_aRecentIconView.getColor(nIndex);
 
     UpdateToSelectedColor(aNamedColor);
 
