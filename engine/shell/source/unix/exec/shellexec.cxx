@@ -270,10 +270,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     cpo::uno::Reference< css::uri::XUriReference > uri(
         css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
     if (!uri.is() || !uri->isAbsolute())
-        throw SystemShellExecuteException("Emscripten can just open absolute URIs.",
+        throw SystemShellExecuteException(u"Emscripten can just open absolute URIs."_ustr,
                                           static_cast<XSystemShellExecute*>(this), 42);
     if (!aParameter.isEmpty())
-        throw SystemShellExecuteException("Emscripten can't process parameters; encode in URI.",
+        throw SystemShellExecuteException(u"Emscripten can't process parameters; encode in URI."_ustr,
                                           static_cast<XSystemShellExecute*>(this), 42);
 
     OUString sEscapedURI(rtl::Uri::encode(aCommand, rtl_UriCharClassUric,

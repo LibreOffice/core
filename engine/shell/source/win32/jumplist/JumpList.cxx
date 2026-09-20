@@ -122,15 +122,16 @@ bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
 void SAL_CALL JumpListImpl::beginList(const OUString& sApplication)
 {
     if (m_isListOpen)
-        throw InvalidStateException("There is already a list open. Close it with 'commitList'");
+        throw InvalidStateException(
+            u"There is already a list open. Close it with 'commitList'"_ustr);
 
     if (sApplication != "Writer" && sApplication != "Calc" && sApplication != "Impress"
         && sApplication != "Draw" && sApplication != "Math" && sApplication != "Base"
         && sApplication != "Startcenter")
     {
         throw IllegalArgumentException(
-            "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
-            "'Math', 'Base', 'Startcenter'.",
+            u"Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
+            "'Math', 'Base', 'Startcenter'."_ustr,
             getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
@@ -155,11 +156,12 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                                            const Sequence<JumpListItem>& aJumpListItems)
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open. Open it with 'beginList'");
+        throw InvalidStateException(u"No list open. Open it with 'beginList'"_ustr);
 
     if (sCategory.isEmpty())
     {
-        throw IllegalArgumentException("Parameter 'category' must not be empty", getXWeak(), 1);
+        throw IllegalArgumentException(u"Parameter 'category' must not be empty"_ustr, getXWeak(),
+                                       1);
     }
 
     try
@@ -240,8 +242,8 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
         if (nItems == 0)
         {
             throw IllegalArgumentException(
-                "No valid items given. `jumpListItems` is either empty, or contains only items "
-                "which were removed by the user. See `XJumpList::getRemovedItems()`.",
+                u"No valid items given. `jumpListItems` is either empty, or contains only items "
+                "which were removed by the user. See `XJumpList::getRemovedItems()`."_ustr,
                 getXWeak(), 1);
         }
 
@@ -258,7 +260,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
 void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItems)
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open. Open it with 'beginList'");
+        throw InvalidStateException(u"No list open. Open it with 'beginList'"_ustr);
 
     try
     {
@@ -329,7 +331,7 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
         ThrowIfFailed(pObjectArray->GetCount(&nItems), "GetCount failed.");
         if (nItems == 0)
         {
-            throw IllegalArgumentException("No valid items given. `jumpListItems` is empty.",
+            throw IllegalArgumentException(u"No valid items given. `jumpListItems` is empty."_ustr,
                                            getXWeak(), 1);
         }
 
@@ -344,7 +346,7 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
 void SAL_CALL JumpListImpl::showRecentFiles()
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open. Open it with 'beginList'");
+        throw InvalidStateException(u"No list open. Open it with 'beginList'"_ustr);
 
     try
     {
@@ -360,7 +362,7 @@ void SAL_CALL JumpListImpl::showRecentFiles()
 void SAL_CALL JumpListImpl::showFrequentFiles()
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open. Open it with 'beginList'");
+        throw InvalidStateException(u"No list open. Open it with 'beginList'"_ustr);
 
     try
     {
@@ -376,7 +378,7 @@ void SAL_CALL JumpListImpl::showFrequentFiles()
 void SAL_CALL JumpListImpl::commitList()
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open. Open it with 'beginList'");
+        throw InvalidStateException(u"No list open. Open it with 'beginList'"_ustr);
 
     try
     {
@@ -392,7 +394,7 @@ void SAL_CALL JumpListImpl::commitList()
 void SAL_CALL JumpListImpl::abortList()
 {
     if (!m_isListOpen)
-        throw InvalidStateException("No list open.");
+        throw InvalidStateException(u"No list open."_ustr);
 
     try
     {
@@ -408,16 +410,16 @@ void SAL_CALL JumpListImpl::abortList()
 void SAL_CALL JumpListImpl::deleteList(const OUString& sApplication)
 {
     if (m_isListOpen)
-        throw InvalidStateException("You are in a list building session. Close it with "
-                                    "'commitList', or abort with 'abortList'");
+        throw InvalidStateException(u"You are in a list building session. Close it with "
+                                    "'commitList', or abort with 'abortList'"_ustr);
 
     if (sApplication != "Writer" && sApplication != "Calc" && sApplication != "Impress"
         && sApplication != "Draw" && sApplication != "Math" && sApplication != "Base"
         && sApplication != "Startcenter")
     {
         throw IllegalArgumentException(
-            "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
-            "'Math', 'Base', 'Startcenter'.",
+            u"Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
+            "'Math', 'Base', 'Startcenter'."_ustr,
             getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
@@ -441,8 +443,8 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
         && sApplication != "Startcenter")
     {
         throw IllegalArgumentException(
-            "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
-            "'Math', 'Base', 'Startcenter'.",
+            u"Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
+            "'Math', 'Base', 'Startcenter'."_ustr,
             getXWeak(), 1);
     }
     OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
@@ -510,7 +512,7 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
 
 OUString SAL_CALL JumpListImpl::getImplementationName()
 {
-    return "com.sun.star.system.windows.JumpListImpl";
+    return u"com.sun.star.system.windows.JumpListImpl"_ustr;
 }
 
 bool SAL_CALL JumpListImpl::supportsService(const OUString& ServiceName)
@@ -520,7 +522,7 @@ bool SAL_CALL JumpListImpl::supportsService(const OUString& ServiceName)
 
 Sequence<OUString> SAL_CALL JumpListImpl::getSupportedServiceNames()
 {
-    return { "com.sun.star.system.windows.JumpList" };
+    return { u"com.sun.star.system.windows.JumpList"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT XInterface*

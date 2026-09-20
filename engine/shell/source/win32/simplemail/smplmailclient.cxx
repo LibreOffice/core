@@ -250,7 +250,7 @@ void CSmplMailClient::assembleCommandLine(
         OUString body = xMessage->getBody();
         if (body.getLength()>0)
         {
-            rCommandArgs.push_back("--body");
+            rCommandArgs.push_back(u"--body"_ustr);
             rCommandArgs.push_back(body);
         }
     }
@@ -258,35 +258,35 @@ void CSmplMailClient::assembleCommandLine(
     OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)
     {
-        rCommandArgs.push_back("--to");
+        rCommandArgs.push_back(u"--to"_ustr);
         rCommandArgs.push_back(to);
     }
 
     const Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
     for (OUString const & s : ccRecipients)
     {
-        rCommandArgs.push_back("--cc");
+        rCommandArgs.push_back(u"--cc"_ustr);
         rCommandArgs.push_back(s);
     }
 
     const Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
     for (OUString const & s : bccRecipients)
     {
-        rCommandArgs.push_back("--bcc");
+        rCommandArgs.push_back(u"--bcc"_ustr);
         rCommandArgs.push_back(s);
     }
 
     OUString from = xSimpleMailMessage->getOriginator();
     if (from.getLength() > 0)
     {
-        rCommandArgs.push_back("--from");
+        rCommandArgs.push_back(u"--from"_ustr);
         rCommandArgs.push_back(from);
     }
 
     OUString subject = xSimpleMailMessage->getSubject();
     if (subject.getLength() > 0)
     {
-        rCommandArgs.push_back("--subject");
+        rCommandArgs.push_back(u"--subject"_ustr);
         rCommandArgs.push_back(subject);
     }
 
@@ -300,28 +300,28 @@ void CSmplMailClient::assembleCommandLine(
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(sTempFileURL, sysPath);
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
-                "Invalid attachment file URL",
+                u"Invalid attachment file URL"_ustr,
                 static_cast<XSimpleMailClient*>(this),
                 1);
 
-        rCommandArgs.push_back("--attach");
+        rCommandArgs.push_back(u"--attach"_ustr);
         rCommandArgs.push_back(sysPath);
         if (!sDisplayName.isEmpty())
         {
-            rCommandArgs.push_back("--attach-name");
+            rCommandArgs.push_back(u"--attach-name"_ustr);
             rCommandArgs.push_back(sDisplayName);
         }
         if (nodelete)
-            rCommandArgs.push_back("--nodelete");
+            rCommandArgs.push_back(u"--nodelete"_ustr);
     }
 
     if (!(aFlag & NO_USER_INTERFACE))
-        rCommandArgs.push_back("--mapi-dialog");
+        rCommandArgs.push_back(u"--mapi-dialog"_ustr);
 
     if (!(aFlag & NO_LOGON_DIALOG))
-        rCommandArgs.push_back("--mapi-logon-ui");
+        rCommandArgs.push_back(u"--mapi-logon-ui"_ustr);
 
-    rCommandArgs.push_back("--langtag");
+    rCommandArgs.push_back(u"--langtag"_ustr);
     rCommandArgs.push_back(SvtSysLocale().GetUILanguageTag().getBcp47());
 
     rtl::Bootstrap aBootstrap;
@@ -329,7 +329,7 @@ void CSmplMailClient::assembleCommandLine(
     aBootstrap.getIniName(sBootstrapPath);
     if (!sBootstrapPath.isEmpty())
     {
-        rCommandArgs.push_back("--bootstrap");
+        rCommandArgs.push_back(u"--bootstrap"_ustr);
         rCommandArgs.push_back(sBootstrapPath);
     }
 
@@ -346,7 +346,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
     const bool bWait = aFlag & NO_USER_INTERFACE;
     if (!executeSenddoc(senddocParams, bWait))
         throw Exception(
-            "Send email failed",
+            u"Send email failed"_ustr,
             static_cast<XSimpleMailClient*>(this));
     // Let the launched senddoc to cleanup the attachments temporary files
     if (!bWait)
@@ -358,7 +358,7 @@ void CSmplMailClient::validateParameter(
 {
     if (!xSimpleMailMessage.is())
         throw IllegalArgumentException(
-            "Empty mail message reference",
+            u"Empty mail message reference"_ustr,
             static_cast<XSimpleMailClient*>(this),
             1);
 
@@ -367,14 +367,14 @@ void CSmplMailClient::validateParameter(
     // check the flags, the allowed range is 0 - (2^n - 1)
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(
-            "Invalid flag value",
+            u"Invalid flag value"_ustr,
             static_cast<XSimpleMailClient*>(this),
             2);
 
     // check if a recipient is specified of the flags NO_USER_INTERFACE is specified
     if ((aFlag & NO_USER_INTERFACE) && !xSimpleMailMessage->getRecipient().getLength())
         throw IllegalArgumentException(
-            "No recipient specified",
+            u"No recipient specified"_ustr,
             static_cast<XSimpleMailClient*>(this),
             1);
 }

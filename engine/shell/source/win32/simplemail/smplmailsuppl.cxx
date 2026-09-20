@@ -61,7 +61,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
 {
-    return "com.sun.star.sys.shell.SimpleSystemMail";
+    return u"com.sun.star.sys.shell.SimpleSystemMail"_ustr;
 }
 
 bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
@@ -71,7 +71,7 @@ bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
 
 Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
 {
-    return { "com.sun.star.system.SimpleSystemMail" };
+    return { u"com.sun.star.system.SimpleSystemMail"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*

@@ -302,13 +302,13 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     // parameter checking
     if (0 == aCommand.getLength())
         throw css::lang::IllegalArgumentException(
-            "Empty command",
+            u"Empty command"_ustr,
             static_cast< css::system::XSystemShellExecute* >( this ),
             1 );
 
     if ((nFlags & ~(NO_SYSTEM_ERROR_MESSAGE | URIS_ONLY)) != 0)
         throw css::lang::IllegalArgumentException(
-            "Invalid Flags specified",
+            u"Invalid Flags specified"_ustr,
             static_cast< css::system::XSystemShellExecute* >( this ),
             3 );
 
@@ -376,7 +376,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             psxErr = MapError(psxErr);
 
         throw css::system::SystemShellExecuteException(
-            "Error executing command",
+            u"Error executing command"_ustr,
             static_cast< css::system::XSystemShellExecute* >(this),
             psxErr);
     }
@@ -400,7 +400,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
 OUString SAL_CALL CSysShExec::getImplementationName(  )
 {
-    return "com.sun.star.sys.shell.SystemShellExecute";
+    return u"com.sun.star.sys.shell.SystemShellExecute"_ustr;
 }
 
 bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
@@ -410,7 +410,7 @@ bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
 
 cpo::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.system.SystemShellExecute" };
+    return { u"com.sun.star.system.SystemShellExecute"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*

@@ -281,7 +281,7 @@ void WinInetBackend::setPropertyValue(
     OUString const &, cpo::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        "setPropertyValue not supported",
+        u"setPropertyValue not supported"_ustr,
         getXWeak(), -1);
 }
 
@@ -314,7 +314,7 @@ cpo::uno::Any WinInetBackend::getPropertyValue(
 
 OUString SAL_CALL WinInetBackend::getImplementationName()
 {
-    return "com.sun.star.comp.configuration.backend.WinInetBackend" ;
+    return u"com.sun.star.comp.configuration.backend.WinInetBackend"_ustr ;
 }
 
 bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
@@ -324,7 +324,7 @@ bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
 
 cpo::uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
 {
-    return { "com.sun.star.configuration.backend.WinInetBackend" };
+    return { u"com.sun.star.configuration.backend.WinInetBackend"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
