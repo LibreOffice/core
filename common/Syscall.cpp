@@ -11,10 +11,6 @@
 
 #include <config.h>
 
-#if MOBILEAPP
-#error This file is not supposed to be compiled in the MOBILEAPP case
-#endif
-
 #include "Syscall.hpp"
 
 #include <cerrno>
@@ -26,9 +22,9 @@
 
 
 /**
- * Internal helper functions.
+ * Internal helper functions, for the fallbacks that the platform makes necessary.
  */
-#if !defined(__linux__)
+#if !defined(__linux__) || !HAVE_PIPE2
 namespace {
 
 
@@ -66,20 +62,6 @@ bool unsafe_set_fd_cloexec_nonblock(int fd, bool cloexec, bool nonblock) {
 }
 
 /**
- * Set FD_CLOEXEC and O_NONBLOCK on one file descriptor.
- */
-bool set_fd_cloexec_nonblock(int fd, bool cloexec, bool nonblock) {
-    bool ret = unsafe_set_fd_cloexec_nonblock(fd, cloexec, nonblock);
-    if (!ret) {
-        int saved_errno = errno;
-        close(fd);
-        errno = saved_errno;
-    }
-
-    return ret;
-}
-
-/**
  * Set CLOEXEC or NONBLOCK on both sides of the pipe/socket/...
  */
 bool set_fds_cloexec_nonblock(int fds[2], bool cloexec, bool nonblock) {
@@ -96,6 +78,26 @@ bool set_fds_cloexec_nonblock(int fds[2], bool cloexec, bool nonblock) {
     }
 
     return true;
+}
+
+}
+#endif
+
+#if !defined(__linux__)
+namespace {
+
+/**
+ * Set FD_CLOEXEC and O_NONBLOCK on one file descriptor.
+ */
+bool set_fd_cloexec_nonblock(int fd, bool cloexec, bool nonblock) {
+    bool ret = unsafe_set_fd_cloexec_nonblock(fd, cloexec, nonblock);
+    if (!ret) {
+        int saved_errno = errno;
+        close(fd);
+        errno = saved_errno;
+    }
+
+    return ret;
 }
 
 }
@@ -138,6 +140,12 @@ int Syscall::get_peer_pid(int socket) {
         return -1;
 
     return pid;
+#elif defined __EMSCRIPTEN__
+    (void) socket;
+
+    // Every socket in the browser build is a fake socket inside this one process, so the peer is
+    // this process itself and there is nothing to look up.
+    return -1;
 #else
 #error Implement for your platform
 #endif

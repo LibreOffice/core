@@ -50,6 +50,7 @@
 		BE5EB5E721401E0F00E0826C /* RequestVettingStation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5E621401E0F00E0826C /* RequestVettingStation.cpp */; };
 		BE6362C22153B5B500F4237E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6362C12153B5B500F4237E /* CoreServices.framework */; };
 		BE7228E22417BC9F000ADABD /* StringVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE7228E02417BC9F000ADABD /* StringVector.cpp */; };
+		BE5C4E062F13A00000848631 /* Syscall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E052F13A00000848631 /* Syscall.cpp */; };
 		BE80E43221AD92F700859C97 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = BE80E43121AD92F600859C97 /* Fonts */; };
 		BE80E45821B68F5700859C97 /* TemplateCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45721B68F5700859C97 /* TemplateCollectionViewController.mm */; };
 		BE80E45E21B6CEF200859C97 /* TemplateSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45D21B6CEF200859C97 /* TemplateSectionHeaderView.m */; };
@@ -686,6 +687,7 @@
 		BE6C48662524A19C0066A166 /* vclxwindows.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclxwindows.cxx; path = "../lobuilddir-symlink/toolkit/source/awt/vclxwindows.cxx"; sourceTree = "<group>"; };
 		BE6C48672524A19C0066A166 /* vclxdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclxdevice.cxx; path = "../lobuilddir-symlink/toolkit/source/awt/vclxdevice.cxx"; sourceTree = "<group>"; };
 		BE7228E02417BC9F000ADABD /* StringVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringVector.cpp; sourceTree = "<group>"; };
+		BE5C4E052F13A00000848631 /* Syscall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Syscall.cpp; sourceTree = "<group>"; };
 		BE7228E12417BC9F000ADABD /* StringVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StringVector.hpp; sourceTree = "<group>"; };
 		BE7D6A2123FA9C2300C2E605 /* winreg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winreg.cxx; path = "../lobuilddir-symlink/configmgr/source/winreg.cxx"; sourceTree = "<group>"; };
 		BE7D6A2223FA9C2300C2E605 /* propertynode.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = propertynode.hxx; path = "../lobuilddir-symlink/configmgr/source/propertynode.hxx"; sourceTree = "<group>"; };
@@ -2312,6 +2314,7 @@
 				BE5EB5BA213FE29900E0826C /* SpookyV2.cpp */,
 				BE7228E12417BC9F000ADABD /* StringVector.hpp */,
 				BE7228E02417BC9F000ADABD /* StringVector.cpp */,
+				BE5C4E052F13A00000848631 /* Syscall.cpp */,
 				BE9ADE3E265D046600BC034A /* TraceEvent.hpp */,
 				BE9ADE3D265D046600BC034A /* TraceEvent.cpp */,
 				BEA283782150172600848631 /* Unit.hpp */,
@@ -3899,6 +3902,7 @@
 				BE5EB5C5213FE29900E0826C /* KitQueue.cpp in Sources */,
 				BE5EB5C5214FE29900E0826C /* LogUI.cpp in Sources */,
 				BE7228E22417BC9F000ADABD /* StringVector.cpp in Sources */,
+				BE5C4E062F13A00000848631 /* Syscall.cpp in Sources */,
 				BE55E0EB2653FCCB007DDF29 /* ConfigUtil.cpp in Sources */,
 				BE55E0EB3653FCCB007DDF29 /* Crypto-stub.cpp in Sources */,
 				BE5EB5E721401E0F00E0826C /* RequestVettingStation.cpp in Sources */,

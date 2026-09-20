@@ -47,6 +47,7 @@ online_SOURCES = \
 	../common/SigUtil-mobile.cpp \
 	../common/Simd.cpp \
 	../common/SpookyV2.cpp \
+	../common/Syscall.cpp \
 	../common/Unit.cpp \
 	../common/Unit-mobile.cpp \
 	../common/Uri.cpp \

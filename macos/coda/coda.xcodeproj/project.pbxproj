@@ -82,6 +82,7 @@
 		BEA263762CBE38E20007435A /* SpookyV2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263622CBE38E20007435A /* SpookyV2.cpp */; };
 		BEA263772CBE38E20007435A /* ConfigUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263552CBE38E20007435A /* ConfigUtil.cpp */; };
 		BEA263782CBE38E20007435A /* StringVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263642CBE38E20007435A /* StringVector.cpp */; };
+		BE5C4E062F13A0000007435A /* Syscall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E052F13A0000007435A /* Syscall.cpp */; };
 		BEA263792CBE38E20007435A /* Protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2635B2CBE38E20007435A /* Protocol.cpp */; };
 		BEA2637A2CBE38E20007435A /* Authorization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263532CBE38E20007435A /* Authorization.cpp */; };
 		BEA264922CBE986C0007435A /* KitQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264902CBE986C0007435A /* KitQueue.cpp */; };
@@ -310,6 +311,7 @@
 		BEA263622CBE38E20007435A /* SpookyV2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpookyV2.cpp; path = SpookyV2.cpp; sourceTree = "<group>"; };
 		BEA263632CBE38E20007435A /* StringVector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = StringVector.hpp; path = StringVector.hpp; sourceTree = "<group>"; };
 		BEA263642CBE38E20007435A /* StringVector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StringVector.cpp; path = StringVector.cpp; sourceTree = "<group>"; };
+		BE5C4E052F13A0000007435A /* Syscall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Syscall.cpp; path = Syscall.cpp; sourceTree = "<group>"; };
 		BEA263652CBE38E20007435A /* TraceEvent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TraceEvent.hpp; path = TraceEvent.hpp; sourceTree = "<group>"; };
 		BEA263662CBE38E20007435A /* TraceEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TraceEvent.cpp; path = TraceEvent.cpp; sourceTree = "<group>"; };
 		BEA263672CBE38E20007435A /* Unit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Unit.hpp; path = Unit.hpp; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 				BEA263622CBE38E20007435A /* SpookyV2.cpp */,
 				BEA263632CBE38E20007435A /* StringVector.hpp */,
 				BEA263642CBE38E20007435A /* StringVector.cpp */,
+				BE5C4E052F13A0000007435A /* Syscall.cpp */,
 				BEA263652CBE38E20007435A /* TraceEvent.hpp */,
 				BEA263662CBE38E20007435A /* TraceEvent.cpp */,
 				BEA263672CBE38E20007435A /* Unit.hpp */,
@@ -1005,6 +1008,7 @@
 				BEA264B32CBE99340007435A /* DocumentBroker.cpp in Sources */,
 				BEA263772CBE38E20007435A /* ConfigUtil.cpp in Sources */,
 				BEA263782CBE38E20007435A /* StringVector.cpp in Sources */,
+				BE5C4E062F13A0000007435A /* Syscall.cpp in Sources */,
 				BEA263792CBE38E20007435A /* Protocol.cpp in Sources */,
 				BEA2637A2CBE38E20007435A /* Authorization.cpp in Sources */,
 				BE44ACC52D7F00B000BFA3B2 /* ClientRequestDispatcher.cpp in Sources */,

@@ -25,6 +25,7 @@ add_library(androidapp SHARED
             ../../../../../common/Session.cpp
             ../../../../../common/SigUtil-mobile.cpp
             ../../../../../common/SpookyV2.cpp
+            ../../../../../common/Syscall.cpp
             ../../../../../common/Unit.cpp
             ../../../../../common/Unit-mobile.cpp
             ../../../../../common/Util.cpp
