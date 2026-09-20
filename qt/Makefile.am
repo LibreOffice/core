@@ -41,7 +41,6 @@ cmake_list= \
             ../kit/Kit.cpp \
             ../kit/KitWebSocket.cpp \
             ../net/FakeSocket.cpp \
-            ../wsd/AIChatSession.cpp \
             ../wsd/ClientSession.cpp \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
