@@ -2668,6 +2668,16 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
                                            std::istream& message,
                                            const std::shared_ptr<StreamSocket>& socket)
 {
+    const std::string shortMessage = "Failed to fetch AI models";
+
+    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
+        !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true))
+    {
+        sendError(http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
+                  "AI settings are turned off");
+        return;
+    }
+
     Poco::Net::HTMLForm form(request, message);
 
     const std::string provider = form.get("provider", std::string());
@@ -2678,8 +2688,6 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     const std::string accessToken = form.get("accessToken", std::string());
     const std::string currentFileUrl = form.get("currentFileUrl", std::string());
     const std::string secretField = form.get("secretField", std::string());
-
-    const std::string shortMessage = "Failed to fetch AI models";
 
     // Restrict the field to the two AI keys so a caller cannot read an arbitrary
     // value out of the stored settings.
