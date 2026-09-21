@@ -116,11 +116,12 @@ struct DocumentTab
     std::thread app2js;
 };
 
-// One top-level window and the state that belongs to it rather than to the document it
-// shows.
+// One top-level window. It holds its documents in the order they were opened, and the
+// window-wide state that belongs to none of them in particular.
 struct WindowState
 {
     HWND hWnd = 0;
+    std::vector<int> tabIds;
     int activeTabId = 0;
     // The transparent window raised over the web view for the duration of a drag from the desktop,
     // and the drop target registered for it. Both are created when the first such drag arrives.
@@ -202,6 +203,9 @@ static const int CODA_WM_EXECUTESCRIPT = WM_APP + 1;
 static const int CODA_WM_LOADNEXTDOCUMENT = WM_APP + 2;
 static const int CODA_WM_POSTWEBMESSAGE = WM_APP + 3;
 static const int CODA_WM_SHOWFILEPICKER = WM_APP + 4;
+// Closes the tab named in the wParam. Posted rather than called, so a web view
+// is never torn down from inside one of its own callbacks.
+static const int CODA_WM_CLOSETAB = WM_APP + 5;
 
 // One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
 // window; the wide strings own the dialog's title and filter text.
@@ -268,6 +272,12 @@ void load_next_document()
 }
 
 static void processMessage(DocumentTab& tab, wil::unique_cotaskmem_string& message);
+
+static void closeTab(WindowState& window, int tabId);
+
+static void layoutTabs(WindowState& window);
+
+static RECT documentArea(const WindowState& window);
 
 [[noreturn]] static void fatal(const std::string& message)
 {
@@ -1417,6 +1427,17 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
     DocumentTab* tab = window ? activeTabOf(*window) : nullptr;
     const bool canInsert = tab && tab->mode == DocumentMode::EDIT && !tab->isConsole;
 
+    // The page places the insert relative to the top left corner of the document view. A drop on
+    // the window frame arrives negative and stays that way, which puts the insert at the cursor
+    // instead.
+    POINT documentPoint = dropPoint;
+    if (window && documentPoint.x >= 0 && documentPoint.y >= 0)
+    {
+        const RECT area = documentArea(*window);
+        documentPoint.x -= area.left;
+        documentPoint.y -= area.top;
+    }
+
     bool anyDocumentToOpen = false;
     const UINT numFiles = DragQueryFileW(drop, 0xFFFFFFFF, NULL, 0);
     for (UINT i = 0; i < numFiles; i++)
@@ -1437,7 +1458,7 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
 
         if (canInsert && isInsertableIntoDocument(mimeType))
         {
-            insertDroppedFile(hWnd, tab->tabId, path.toString(), mimeType, dropPoint);
+            insertDroppedFile(hWnd, tab->tabId, path.toString(), mimeType, documentPoint);
             continue;
         }
 
@@ -1545,12 +1566,11 @@ private:
 // it.
 static void showDropOverlay(WindowState& data)
 {
-    // Where the client area of the document window is on the screen. The overlay is a window of
-    // its own rather than a child window, because only a top-level window can be made transparent
-    // with a layer, and it is owned by the document window, which keeps it above that window and
-    // takes it away when the document window goes.
-    RECT bounds;
-    GetClientRect(data.hWnd, &bounds);
+    // Where the document view of the window is on the screen. The overlay is a window of its own
+    // rather than a child window, because only a top-level window can be made transparent with a
+    // layer, and it is owned by the document window, which keeps it above that window and takes it
+    // away when the document window goes.
+    const RECT bounds = documentArea(data);
     const int width = bounds.right - bounds.left;
     const int height = bounds.bottom - bounds.top;
     POINT topLeft = { bounds.left, bounds.top };
@@ -1843,15 +1863,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
         case WM_SIZE:
             if (WindowState* window = findWindow(hWnd))
-            {
-                DocumentTab* tab = activeTabOf(*window);
-                if (tab && tab->webViewController)
-                {
-                    RECT bounds;
-                    GetClientRect(hWnd, &bounds);
-                    tab->webViewController->put_Bounds(bounds);
-                }
-            }
+                layoutTabs(*window);
             break;
 
         case WM_SETFOCUS:
@@ -1895,24 +1907,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         case WM_CLOSE:
         {
             WindowState* window = findWindow(hWnd);
-            DocumentTab* tab = window ? activeTabOf(*window) : nullptr;
-            if (tab && tab->isConsole)
+            if (window)
             {
-                // The presentation ends with its console: the document comes out of full screen
-                // and forgets the window it was driving.
-                DocumentTab* presenting = findTab(tab->presentingTabId);
-                if (presenting)
-                {
-                    if (WindowState* presentingWindow = findWindow(presenting->hWnd))
-                        leave_full_screen(*presentingWindow);
-                    presenting->hConsoleWnd = 0;
-                }
-            }
-            else if (tab && tab->mode != DocumentMode::STARTER)
-            {
-                do_bye_handling_things(*tab);
-
-                DocumentData::deallocate(tab->appDocId);
+                // Each document gets the goodbye it would get if it were the only one here. The
+                // list shrinks as they go, so always take the one at the front.
+                while (!window->tabIds.empty())
+                    closeTab(*window, window->tabIds.front());
             }
             DestroyWindow(hWnd);
             break;
@@ -1920,33 +1920,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
         case WM_DESTROY:
             if (WindowState* window = findWindow(hWnd))
-            {
                 destroyDropOverlay(*window);
-                DocumentTab* tab = activeTabOf(*window);
-                if (tab && tab->app2js.joinable())
-                    tab->app2js.join();
-            }
             if (DocumentData::count() == 0)
                 stopServer();
             break;
 
         case WM_NCDESTROY:
         {
-            WindowState* window = findWindow(hWnd);
-            if (window)
-            {
-                if (DocumentTab* tab = activeTabOf(*window))
-                {
-                    if (tab->webViewController)
-                    {
-                        tab->webViewController->Close();
-                        tab->webViewController = nullptr;
-                    }
-                    tab->webView = nullptr;
-                    documentTabs.erase(tab->tabId);
-                }
+            if (findWindow(hWnd))
                 windows.erase(hWnd);
-            }
             break;
         }
 
@@ -1974,6 +1956,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 tab->webView->PostWebMessageAsJson(
                     Util::string_to_wide_string(std::string((char*)wParam)).c_str());
             std::free((char*)wParam);
+            break;
+        }
+
+        case CODA_WM_CLOSETAB:
+        {
+            WindowState* window = findWindow(hWnd);
+            if (!window)
+                break;
+            closeTab(*window, (int)wParam);
+            // The window is what is left of the last document, so it goes too.
+            if (window->tabIds.empty())
+                DestroyWindow(hWnd);
             break;
         }
 
@@ -2543,9 +2537,17 @@ static void withWebView2Environment(std::function<void(ICoreWebView2Environment*
             .Get());
 }
 
-// Give the window its document. The caller connects it to the server and gives it a document
-// id, which the backstage and the presenter console, showing no document of their own, do
-// without.
+// The window takes its title from the document it shows.
+static std::wstring windowTitleForTab(const DocumentTab& tab)
+{
+    if (tab.filenameAndUri.filename.empty())
+        return Util::string_to_wide_string(APP_NAME);
+    return Util::string_to_wide_string(tab.filenameAndUri.filename + " - " APP_NAME);
+}
+
+// Give the window one more document, at the end of its tab order. The caller
+// connects it to the server and gives it a document id, which the backstage and
+// the presenter console, showing no document of their own, do without.
 static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenameAndUri,
                               DocumentMode mode)
 {
@@ -2559,9 +2561,155 @@ static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenam
     tab.filenameAndUri = filenameAndUri;
     tab.mode = mode;
 
-    window.activeTabId = tabId;
+    window.tabIds.push_back(tabId);
 
     return tab;
+}
+
+// The part of the window a document is shown in, which for now is all of it.
+static RECT documentArea(const WindowState& window)
+{
+    RECT bounds;
+    GetClientRect(window.hWnd, &bounds);
+    return bounds;
+}
+
+static void layoutTabs(WindowState& window)
+{
+    // Every document keeps the right size, not just the one on show, so a
+    // switch between tabs never lands on a stale layout.
+    const RECT bounds = documentArea(window);
+    for (int tabId : window.tabIds)
+    {
+        DocumentTab* tab = findTab(tabId);
+        if (tab && tab->webViewController)
+            tab->webViewController->put_Bounds(bounds);
+    }
+}
+
+// The keyboard belongs to the document whenever the window brings one to the front.
+static void focusActiveDocument(const WindowState& window)
+{
+    DocumentTab* tab = activeTabOf(window);
+    if (tab && tab->webViewController)
+        tab->webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+}
+
+// Bring one document of the window to the front and leave the rest behind it.
+static void activateTab(WindowState& window, int tabId)
+{
+    DocumentTab* tab = findTab(tabId);
+    if (!tab)
+        return;
+
+    window.activeTabId = tabId;
+
+    for (int otherId : window.tabIds)
+    {
+        DocumentTab* other = findTab(otherId);
+        if (other && other->webViewController)
+            other->webViewController->put_IsVisible(otherId == tabId);
+    }
+
+    focusActiveDocument(window);
+
+    SetWindowTextW(window.hWnd, windowTitleForTab(*tab).c_str());
+}
+
+static void closeTab(WindowState& window, int tabId)
+{
+    DocumentTab* tab = findTab(tabId);
+    if (!tab)
+        return;
+
+    if (tab->isConsole)
+    {
+        // The presentation ends with its console: the document comes out of
+        // full screen and forgets the window it was driving.
+        DocumentTab* presenting = findTab(tab->presentingTabId);
+        if (presenting)
+        {
+            WindowState* presentingWindow = findWindow(presenting->hWnd);
+            if (presentingWindow)
+                leave_full_screen(*presentingWindow);
+            presenting->hConsoleWnd = 0;
+        }
+    }
+    else if (tab->mode != DocumentMode::STARTER)
+    {
+        // A presentation ends with the document driving it: the console window
+        // goes, and the window this document was playing in comes back out of
+        // full screen.
+        if (tab->hConsoleWnd)
+        {
+            PostMessageW(tab->hConsoleWnd, WM_CLOSE, 0, 0);
+            tab->hConsoleWnd = 0;
+        }
+        if (window.isPresFullScreen)
+        {
+            window.isPresFullScreen = false;
+            leave_full_screen(window);
+        }
+
+        // A document whose page never said hello has no forwarding thread to
+        // wake and no socket of its own to close yet.
+        if (tab->app2js.joinable())
+        {
+            do_bye_handling_things(*tab);
+
+            // The goodbye closed the thread's end of the socket, so the thread
+            // is on its way out and joins straight away.
+            tab->app2js.join();
+        }
+
+        DocumentData::deallocate(tab->appDocId);
+    }
+
+    if (tab->webViewController)
+    {
+        tab->webViewController->Close();
+        tab->webViewController = nullptr;
+    }
+    tab->webView = nullptr;
+
+    const auto position = std::find(window.tabIds.begin(), window.tabIds.end(), tabId);
+    size_t index = 0;
+    if (position != window.tabIds.end())
+    {
+        index = static_cast<size_t>(std::distance(window.tabIds.begin(), position));
+        window.tabIds.erase(position);
+    }
+    documentTabs.erase(tabId);
+
+    if (window.tabIds.empty())
+    {
+        window.activeTabId = 0;
+        return;
+    }
+
+    // The document that moved up into the closed one's place, or the last one.
+    if (window.activeTabId == tabId)
+    {
+        activateTab(window, window.tabIds[std::min(index, window.tabIds.size() - 1)]);
+    }
+    else
+    {
+        focusActiveDocument(window);
+    }
+}
+
+static void reorderTab(WindowState& window, int fromIndex, int toIndex)
+{
+    const int count = static_cast<int>(window.tabIds.size());
+    if (fromIndex < 0 || fromIndex >= count || toIndex < 0 || toIndex >= count ||
+        fromIndex == toIndex)
+        return;
+
+    const int tabId = window.tabIds[fromIndex];
+    window.tabIds.erase(window.tabIds.begin() + fromIndex);
+    window.tabIds.insert(window.tabIds.begin() + toIndex, tabId);
+
+    focusActiveDocument(window);
 }
 
 // The web view of one document, in the window its tab belongs to. The document
@@ -2612,10 +2760,14 @@ static void createDocumentView(int tabId)
                         if (settings4)
                             settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
 
-                        // Resize WebView to fit the bounds of the parent window
-                        RECT bounds;
-                        GetClientRect(data->hWnd, &bounds);
-                        controller->put_Bounds(bounds);
+                        // Fit the WebView to the part of the window a document is shown in, and
+                        // show it only if this is the document the window is on.
+                        WindowState* window = findWindow(data->hWnd);
+                        if (window)
+                        {
+                            controller->put_Bounds(documentArea(*window));
+                            controller->put_IsVisible(window->activeTabId == tabId);
+                        }
 
                         EventRegistrationToken token;
                         HRESULT hr;
@@ -2728,6 +2880,7 @@ static void createDocumentView(int tabId)
                                                                         DocumentMode::EDIT);
                                     consoleTab.isConsole = true;
                                     consoleTab.presentingTabId = tabId;
+                                    consoleWindow.activeTabId = consoleTab.tabId;
                                     const int consoleTabId = consoleTab.tabId;
 
                                     ShowWindow(data->hConsoleWnd, appShowMode);
@@ -2927,6 +3080,7 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
         tab.appDocId = generate_new_app_doc_id();
     }
 
+    activateTab(*window, tab.tabId);
     createDocumentView(tab.tabId);
 }
 
@@ -3736,8 +3890,9 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             fakeSocketWriteQueue(data.fakeClientFd, message.c_str(), message.size());
 
             // Update window title with new filename
-            SetWindowTextW(data.hWnd, Util::string_to_wide_string(data.filenameAndUri.filename
-                                                                  + " - " APP_NAME).c_str());
+            if (WindowState* window = findWindow(data.hWnd))
+                if (window->activeTabId == data.tabId)
+                    SetWindowTextW(data.hWnd, windowTitleForTab(data).c_str());
         }
         else if (s == L"uno .uno:Open")
         {
@@ -3763,7 +3918,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             }
             // Close the starter window
             if (data.mode == DocumentMode::STARTER)
-                PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
+                PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
         }
         else if (s == L"uno .uno:SaveAs")
         {
@@ -3789,7 +3944,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s == L"uno .uno:CloseWin")
         {
-            PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
+            PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
         }
         else if (s == L"uno .uno:Quit")
         {
@@ -3836,7 +3991,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 openCOOLWindow({ path.getFileName(), Poco::URI(path).toString() }, DocumentMode::NEW);
             }
             if (data.mode == DocumentMode::STARTER)
-                PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
+                PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
         }
         else if (s.starts_with(L"opendoc "))
         {
@@ -3868,7 +4023,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             load_next_document();
             // Close the starter window
             if (data.mode == DocumentMode::STARTER)
-                PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
+                PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
         }
         else
         {
