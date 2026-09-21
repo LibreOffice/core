@@ -1,8 +1,0 @@
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"getURL()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"open()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"isValid()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"close()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"destroy()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"getRootKey()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"isReadOnly()"
-"SimpleRegistry";"com::sun::star::registry::XSimpleRegistry";"mergeKey()"

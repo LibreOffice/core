@@ -91,7 +91,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	) \
     $(call gb_Helper_optionals_or,HELPTOOLS XMLHELP,helpcompiler) \
     $(call gb_Helper_optional,XMLHELP,xmlhelp) \
-	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

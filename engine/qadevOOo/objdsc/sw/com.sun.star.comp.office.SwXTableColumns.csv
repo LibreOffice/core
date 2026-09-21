@@ -1,6 +1,0 @@
-"SwXTableColumns";"com::sun::star::container::XIndexAccess";"getCount()"
-"SwXTableColumns";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"SwXTableColumns";"com::sun::star::table::XTableColumns";"insertByIndex()"
-"SwXTableColumns";"com::sun::star::table::XTableColumns";"removeByIndex()"
-"SwXTableColumns";"com::sun::star::container::XElementAccess";"getElementType()"
-"SwXTableColumns";"com::sun::star::container::XElementAccess";"hasElements()"

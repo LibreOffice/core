@@ -1,5 +1,0 @@
-"ControlMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
-"ControlMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
-"ControlMenuController";"com::sun::star::lang::XEventListener";"disposing()"
-"ControlMenuController";"com::sun::star::lang::XInitialization";"initialize()"
-"ControlMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"

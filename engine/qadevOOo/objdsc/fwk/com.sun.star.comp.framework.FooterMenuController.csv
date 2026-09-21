@@ -1,5 +1,0 @@
-"FooterMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
-"FooterMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
-"FooterMenuController";"com::sun::star::lang::XEventListener";"disposing()"
-"FooterMenuController";"com::sun::star::lang::XInitialization";"initialize()"
-"FooterMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"

@@ -1,6 +1,0 @@
-"SimpleSystemMail";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
-"SimpleSystemMail";"com::sun::star::lang::XServiceInfo";"supportsService()"
-"SimpleSystemMail";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
-"SimpleSystemMail";"com::sun::star::lang::XTypeProvider";"getTypes()"
-"SimpleSystemMail";"com::sun::star::lang::XTypeProvider";"getImplementationId()"
-"SimpleSystemMail";"com::sun::star::system::XSimpleMailClientSupplier";"querySimpleMailClient()"

@@ -142,7 +142,6 @@ excludeDirs = {
     "osx",
     "pch",
     "postprocess",
-    "qadevOOo",
     "readlicense_oo",
     "remotebridges",
     "ridljar",

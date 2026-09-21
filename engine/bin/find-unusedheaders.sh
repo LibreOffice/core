@@ -37,7 +37,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e osx/ \
                                 -e pch/ \
                                 -e postprocess/ \
-                                -e qadevOOo/ \
                                 -e readlicense_oo/ \
                                 -e remotebridges/ \
                                 -e ridljar/ \

@@ -1,5 +1,0 @@
-"ODBCDriver";"com::sun::star::sdbc::XDriver";"connect()"
-"ODBCDriver";"com::sun::star::sdbc::XDriver";"acceptsURL()"
-"ODBCDriver";"com::sun::star::sdbc::XDriver";"getPropertyInfo()"
-"ODBCDriver";"com::sun::star::sdbc::XDriver";"getMajorVersion()"
-"ODBCDriver";"com::sun::star::sdbc::XDriver";"getMinorVersion()"

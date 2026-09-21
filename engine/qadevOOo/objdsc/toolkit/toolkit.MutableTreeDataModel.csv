@@ -1,8 +1,0 @@
-"MutableTreeDataModel";"com::sun::star::awt::tree::XMutableTreeDataModel";"createNode()"
-"MutableTreeDataModel";"com::sun::star::awt::tree::XMutableTreeDataModel";"setRoot()"
-"MutableTreeDataModel";"com::sun::star::lang::XComponent";"dispose()"
-"MutableTreeDataModel";"com::sun::star::lang::XComponent";"addEventListener()"
-"MutableTreeDataModel";"com::sun::star::lang::XComponent";"removeEventListener()"
-"MutableTreeDataModel";"com::sun::star::awt::tree::XTreeDataModel";"getRoot()"
-"MutableTreeDataModel";"com::sun::star::awt::tree::XTreeDataModel";"addTreeDataModelListener()"
-"MutableTreeDataModel";"com::sun::star::awt::tree::XTreeDataModel";"removeTreeDataModelListener()"
