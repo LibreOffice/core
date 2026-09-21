@@ -22,6 +22,7 @@
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 #include <net/NetUtil.hpp>
+#include <net/Uri.hpp>
 #if !MOBILEAPP
 #include <wsd/HostUtil.hpp>
 #endif // !MOBILEAPP
@@ -37,10 +38,18 @@
 namespace
 {
 
-[[maybe_unused]] void checkHostHeader(const std::string& host)
+/// Rejects a malformed Host header, and drops a port nothing could connect to, such as the -1 a
+/// reverse proxy forwards when the browser sends no explicit port. The host names the server in
+/// every URL built from it, so a port like that makes all of them unusable.
+[[maybe_unused]] void sanitizeHostHeader(std::string& host)
 {
     if (!host.empty() && !net::isValidHost(host))
         throw BadRequestException("Malformed Host header: [" + host + ']');
+
+    const std::string original = host;
+    if (net::stripInvalidPort(host))
+        LOG_WRN("Stripped invalid port from Host header [" << original << "], using [" << host
+                                                           << ']');
 }
 
 std::map<std::string, std::string> getParams(const std::string& uri)
@@ -92,7 +101,7 @@ RequestDetails::RequestDetails(Poco::Net::HTTPRequest &request, const std::strin
     if (!Util::isMobileApp())
     {
         _hostUntrusted = request.getHost();
-        checkHostHeader(_hostUntrusted);
+        sanitizeHostHeader(_hostUntrusted);
     }
 
     processURI();
@@ -119,7 +128,7 @@ RequestDetails::RequestDetails(http::RequestParser& request, const std::string& 
     if (!Util::isMobileApp())
     {
         _hostUntrusted = request.get("Host");
-        checkHostHeader(_hostUntrusted);
+        sanitizeHostHeader(_hostUntrusted);
     }
 
     processURI();

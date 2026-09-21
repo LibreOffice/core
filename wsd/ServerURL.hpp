@@ -17,6 +17,7 @@
 #pragma once
 
 #include <string>
+#include <net/Uri.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/COOLWSD.hpp>
 
@@ -52,7 +53,14 @@ public:
         _schemeAuthority = COOLWSD::ServerName.empty() ? host : COOLWSD::ServerName;
 
         // A well formed ProxyPrefix will override it.
-        const std::string& url = proxyPrefix;
+        applyProxyPrefix(proxyPrefix);
+
+        sanitizeAuthority();
+    }
+
+private:
+    void applyProxyPrefix(const std::string& url)
+    {
         if (url.empty())
             return;
 
@@ -67,22 +75,6 @@ public:
                 _ssl = (schemeProtocol != "http://");
                 _schemeAuthority = url.substr(pos, hostEndPos - pos);
                 _pathPlus = url.substr(hostEndPos);
-                // Strip a non-positive port from the authority. Some reverse
-                // proxies (e.g. Jetty behind HAProxy at the default HTTPS port)
-                // produce a ProxyPrefix with port -1 when the Host header
-                // carries no explicit port number.
-                const auto itColon = _schemeAuthority.rfind(':');
-                if (itColon != std::string::npos)
-                {
-                    const std::string portStr = _schemeAuthority.substr(itColon + 1);
-                    if (!portStr.empty() && portStr[0] == '-')
-                    {
-                        LOG_WRN("Stripping invalid port from ProxyPrefix authority ["
-                                << _schemeAuthority << ']');
-                        _schemeAuthority.erase(itColon);
-                    }
-                }
-                return;
             }
             else
                 LOG_ERR("Unusual proxy prefix '" << url << '\'');
@@ -90,6 +82,19 @@ public:
             LOG_ERR("No http[s]:// in unusual proxy prefix '" << url << '\'');
     }
 
+    /// Every URL we build points at this authority, so a port nothing can connect to breaks all of
+    /// them. Some reverse proxies report port -1 in the ProxyPrefix or in the Host header when the
+    /// browser sends no explicit port. Drop such a port and let the default port of the scheme
+    /// apply instead.
+    void sanitizeAuthority()
+    {
+        const std::string original = _schemeAuthority;
+        if (net::stripInvalidPort(_schemeAuthority))
+            LOG_WRN("Stripped invalid port from authority [" << original << "], using ["
+                                                             << _schemeAuthority << ']');
+    }
+
+public:
     const std::string& getResponseRoot() const
     {
         return _pathPlus;

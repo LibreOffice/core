@@ -75,6 +75,8 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testServerURL_ProxyPrefixNegativePort);
     CPPUNIT_TEST(testServerURL_ProxyPrefixValidPort);
+    CPPUNIT_TEST(testServerURL_HostHeaderNegativePort);
+    CPPUNIT_TEST(testServerURL_HostHeaderIPv6);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -573,6 +575,49 @@ private:
 
         LOK_ASSERT_EQUAL(std::string("https://example.com:8443"), url.getWebSocketUrl());
         LOK_ASSERT_EQUAL(std::string("https://example.com:8443"), url.getWebServerUrl());
+
+        COOLWSD::ServerName = saved;
+    }
+
+    // A proxy that forwards the port it could not read from the browser's Host
+    // header must not make us serve the browser a URL it cannot fetch, such as
+    // the clipboard URL stamped into the copied content.
+    void testServerURL_HostHeaderNegativePort()
+    {
+        constexpr std::string_view testname = __func__;
+        const std::string saved = COOLWSD::ServerName;
+        COOLWSD::ServerName.clear();
+
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET,
+                                       "/cool/ws?WOPISrc=http%3A%2F%2Fexample.com%2Fdoc",
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost("example.com:-1");
+        const RequestDetails details(request, "");
+        const ServerURL url(details);
+
+        LOK_ASSERT_EQUAL(std::string("example.com"), details.getHostUntrusted());
+        LOK_ASSERT(url.getSubURLForEndpoint("/cool/clipboard").find(":-1") == std::string::npos);
+
+        COOLWSD::ServerName = saved;
+    }
+
+    // The colons of an IPv6 literal are not a port separator.
+    void testServerURL_HostHeaderIPv6()
+    {
+        constexpr std::string_view testname = __func__;
+        const std::string saved = COOLWSD::ServerName;
+        COOLWSD::ServerName.clear();
+
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET,
+                                       "/cool/ws?WOPISrc=http%3A%2F%2Fexample.com%2Fdoc",
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost("[::1]:9980");
+        const RequestDetails details(request, "");
+        LOK_ASSERT_EQUAL(std::string("[::1]:9980"), details.getHostUntrusted());
+
+        request.setHost("[::1]");
+        const RequestDetails bare(request, "");
+        LOK_ASSERT_EQUAL(std::string("[::1]"), bare.getHostUntrusted());
 
         COOLWSD::ServerName = saved;
     }
