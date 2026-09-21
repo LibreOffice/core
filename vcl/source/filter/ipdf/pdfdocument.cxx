@@ -637,7 +637,14 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
 
         // Write stream data.
         SvMemoryStream aXRefStream;
-        const size_t nOffsetLen = 3;
+        sal_uInt64 nMaxOffset = 0;
+        for (const auto& rXRef : m_aXRef)
+            if (rXRef.second.GetDirty())
+                nMaxOffset = std::max(nMaxOffset, rXRef.second.GetOffset());
+        // the second field has to hold the largest offset the update writes
+        size_t nOffsetLen = 1;
+        for (sal_uInt64 nRest = nMaxOffset; nRest > 0xff; nRest >>= 8)
+            ++nOffsetLen;
         // 3 additional bytes: predictor, the first and the third field.
         const size_t nLineLength = nOffsetLen + 3;
         // This is the line as it appears before tweaking according to the predictor.
@@ -680,8 +687,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
                 size_t nByte = nOffsetLen - i - 1;
                 // Fields requiring more than one byte are stored with the
                 // high-order byte first.
-                unsigned char nCh = (rEntry.GetOffset() & (0xff << (nByte * 8))) >> (nByte * 8);
-                aOrigLine[nPos++] = nCh;
+                aOrigLine[nPos++] = static_cast<unsigned char>(rEntry.GetOffset() >> (nByte * 8));
             }
 
             // Third field.
@@ -701,8 +707,10 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         }
 
         m_aEditBuffer.WriteNumberAsString(nXRefStreamId);
-        m_aEditBuffer.WriteOString(
-            " 0 obj\n<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode");
+        m_aEditBuffer.WriteOString(" 0 obj\n<</DecodeParms<</Columns ");
+        // the bytes of a row apart from the predictor byte, so it follows /W
+        m_aEditBuffer.WriteNumberAsString(nLineLength - 1);
+        m_aEditBuffer.WriteOString("/Predictor 12>>/Filter/FlateDecode");
 
         // ID.
         auto pID = dynamic_cast<PDFArrayElement*>(m_pXRefStream->Lookup("ID"_ostr));
@@ -780,7 +788,8 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         m_aEditBuffer.WriteOString("/Size ");
         m_aEditBuffer.WriteNumberAsString(m_aXRef.size());
 
-        m_aEditBuffer.WriteOString("/Type/XRef/W[1 3 1]>>\nstream\n");
+        m_aEditBuffer.WriteOString(rtl::Concat2View(
+            "/Type/XRef/W[1 " + OString::number(sal_Int32(nOffsetLen)) + " 1]>>\nstream\n"));
         aXRefStream.Seek(0);
         m_aEditBuffer.WriteStream(aXRefStream);
         m_aEditBuffer.WriteOString("\nendstream\nendobj\n\n");
