@@ -208,7 +208,14 @@ double approxDiff( double a, double b )
         return c;
 
     const double q = aa < ab ? b / a : a / b;
-    const double d = (a * q - b * q) / q;
+    // This second difference carries a rounding error of its own only when
+    // each product is rounded to a double before the subtraction. volatile
+    // makes the compiler store both products, where a fused multiply-add
+    // instruction (the default of GCC on aarch64) keeps a * q exact and
+    // gives d the same error as c.
+    volatile const double aq = a * q;
+    volatile const double bq = b * q;
+    const double d = (aq - bq) / q;
     if (d == c)
         // No differing error, live with the result.
         return c;
