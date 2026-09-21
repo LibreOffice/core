@@ -159,7 +159,6 @@ endif
 COOL_EXTENSIONS_SRC = \
 	$(srcdir)/extensions/cool.js \
 	$(srcdir)/extensions/gas-kit-runner.js \
-	$(srcdir)/extensions/gas-menu.html \
 	$(srcdir)/extensions/gas-shim.js \
 	$(srcdir)/extensions/gas-wrapper.html
 COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))
@@ -1437,13 +1436,7 @@ install-demo-extensions:
 						scripts="$$scripts$${scripts:+,}\"$$name\""; \
 					done; \
 				fi && \
-				sidebar= && \
-				for html in "$$dir"/*.html; do \
-					test -f "$$html" || continue; \
-					sidebar=$$(basename "$$html") && \
-					break; \
-				done && \
-				printf '{"scripts":[%s],"sidebar":"%s"}\n' "$$scripts" "$$sidebar" \
+				printf '{"scripts":[%s]}\n' "$$scripts" \
 					> $(DIST_FOLDER)/extensions/$$id/_cool-gas.json; \
 			fi && \
 			ids="$$ids$${ids:+,}\"$$id\""; \

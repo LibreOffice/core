@@ -308,13 +308,16 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 	// Shared entry used by each doc-type notebookbar's getTabsJSON to build
 	// the "Extensions" tab: one bigcustomtoolitem toggle per loaded manifest
-	// that has a sidebar panel - a commands-only extension (no `entry`) has
-	// nothing for this toggle to open, and reaches the notebookbar solely
+	// that has a sidebar panel, and, only for a GAS add-on carrying
+	// contributes.commands, a menubutton alongside it listing those commands
+	// (mirroring how Google Docs surfaces add-on entries under Extensions >
+	// <AddonName>).  A commands-only native extension reaches the notebookbar
 	// through its own contributed tab(s), see getContributedNotebookbarTabs
 	// below.  Click ids start with "extension-toggle-" so
-	// docdispatcher.dispatch routes them to ext.toggle().  Call
-	// notebookbar.refresh() after loadExtensions resolves to rebuild this
-	// tab against the real extension list.
+	// docdispatcher.dispatch routes them to ext.toggle(); the per-command
+	// actions come back as "ext:<id>:<commandId>" and reach ext.invokeCommand.
+	// Call notebookbar.refresh() after loadExtensions resolves to rebuild
+	// this tab against the real extension list.
 	getExtensionsTab: function() {
 		var exts = app.map._extensions || {};
 		var ids = Object.keys(exts).sort();

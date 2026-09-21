@@ -1090,16 +1090,11 @@ static std::string jsonQuote(std::string const & s) {
 
 // Assemble an Apps Script <id>/_cool-gas.json sidecar body from the extension directory contents:
 //  - `scripts` is a list of (server-side script file name, source text) pairs
-//  - `htmls` is a list of .html/.htm file names
-// Besides the script and sidebar names, the body carries the add-on's display name, the document
-// types it targets, and the menu its onOpen() installs, as far as sniffing the sources finds
+// Besides the script names, the body carries the add-on's display name and the document
+// types it targets, as far as sniffing the source finds
 // them.
-// The client-side tryLoadAppsScriptExtension in Control.Extension.ts reads the body to know
-// which scripts to fetch and which sidebar to load, and picks up an optional display name
-// and target document types the sniffing here can extract:
 static std::string synthesizeGasSidecar(
-    std::vector<std::pair<std::string, std::string>> const & scripts,
-    std::vector<std::string> const & htmls)
+    std::vector<std::pair<std::string, std::string>> const & scripts)
 {
     // Guess the add-on's target document types from the DocumentApp/SpreadsheetApp/SlidesApp
     // mentions:
@@ -1122,25 +1117,6 @@ static std::string synthesizeGasSidecar(
         supports.push_back("presentation");
     }
 
-    // Prefer a well-known entry name so sidebar.css.html doesn't beat sidebar.html alphabetically:
-    std::string sidebar;
-    static char const * const preferred[] = {
-        "sidebar.html", "Sidebar.html", "main.html", "index.html"};
-    for (auto const p: preferred) {
-        for (auto const & h: htmls) {
-            if (h == p) {
-                sidebar = h;
-                break;
-            }
-        }
-        if (!sidebar.empty()) {
-            break;
-        }
-    }
-    if (sidebar.empty() && !htmls.empty()) {
-        sidebar = htmls.front();
-    }
-
     // Guess a display name from setTitle("...") or a NAME_TITLE = "..." constant:
     std::string displayName;
     static const std::regex reSetTitle(R"RE(setTitle\s*\(\s*(?:'([^']+)'|"([^"]+)"))RE");
@@ -1160,26 +1136,6 @@ static std::string synthesizeGasSidecar(
         displayName = tryMatch(reTitleConst);
     }
 
-    // The add-on menu, from the literal addItem() and addSeparator() calls in source order.  A
-    // menu assembled some other way - captions built in a loop, or read from a property - leaves
-    // nothing to find here, and such an add-on keeps the panel that asks the kit for its menu at
-    // display time instead.  An empty caption stands for a separator:
-    std::vector<std::pair<std::string, std::string>> menuItems;
-    static const std::regex reMenuItem(
-        R"RE(addItem\s*\(\s*(?:'([^']*)'|"([^"]*)")\s*,\s*(?:'([^']*)'|"([^"]*)")|addSeparator\s*\(\s*\))RE");
-    for (auto const & [name, src]: scripts) {
-        (void) name;
-        for (std::sregex_iterator it(src.begin(), src.end(), reMenuItem), end; it != end; ++it) {
-            auto const & match = *it;
-            if (match[1].matched || match[2].matched) {
-                menuItems.emplace_back(match[1].matched ? match[1].str() : match[2].str(),
-                                       match[3].matched ? match[3].str() : match[4].str());
-            } else {
-                menuItems.emplace_back(std::string(), std::string());
-            }
-        }
-    }
-
     std::string body = "{\"scripts\":[";
     bool firstScript = true;
     for (auto const & [name, src]: scripts) {
@@ -1189,8 +1145,7 @@ static std::string synthesizeGasSidecar(
         firstScript = false;
         body.append(jsonQuote(name));
     }
-    body.append("],\"sidebar\":");
-    body.append(jsonQuote(sidebar));
+    body.push_back(']');
     if (!displayName.empty()) {
         body.append(",\"name\":");
         body.append(jsonQuote(displayName));
@@ -1204,26 +1159,6 @@ static std::string synthesizeGasSidecar(
             }
             firstSupport = false;
             body.append(jsonQuote(s));
-        }
-        body.push_back(']');
-    }
-    if (!menuItems.empty()) {
-        body.append(",\"menu\":[");
-        bool firstItem = true;
-        for (auto const & [caption, function]: menuItems) {
-            if (!firstItem) {
-                body.push_back(',');
-            }
-            firstItem = false;
-            if (caption.empty()) {
-                body.append("{\"separator\":true}");
-            } else {
-                body.append("{\"caption\":");
-                body.append(jsonQuote(caption));
-                body.append(",\"functionName\":");
-                body.append(jsonQuote(function));
-                body.push_back('}');
-            }
         }
         body.push_back(']');
     }
@@ -1316,12 +1251,11 @@ void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
     indexJson.push_back(']');
     installAsset(prefix + "index.json", std::move(indexJson));
 
-    // Stash a <id>/_cool-gas.json sidecar listing each Apps Script directory's scripts and sidebar:
+    // Stash a <id>/_cool-gas.json sidecar listing each Apps Script directory's scripts:
     for (auto const & id: gasIds) {
         const std::string dirPrefix = prefix + id + "/";
         std::vector<std::pair<std::string, std::string>> scripts;
         std::vector<std::pair<std::string, std::string>> jsScripts;
-        std::vector<std::string> htmls;
         for (auto const & entry: FileHash) {
             auto const & key = entry.first;
             if (!key.starts_with(dirPrefix)) {
@@ -1335,8 +1269,6 @@ void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
                 scripts.emplace_back(name, entry.second.first);
             } else if (name.ends_with(".js")) {
                 jsScripts.emplace_back(name, entry.second.first);
-            } else if (name.ends_with(".html") || name.ends_with(".htm")) {
-                htmls.push_back(name);
             }
         }
         // An Apps Script project's server code is .gs in the web editor, which clasp writes out
@@ -1346,8 +1278,7 @@ void FileServerRequestHandler::synthesizeBuiltinExtensionsIndex()
             scripts = std::move(jsScripts);
         }
         std::sort(scripts.begin(), scripts.end());
-        std::sort(htmls.begin(), htmls.end());
-        installAsset(dirPrefix + "_cool-gas.json", synthesizeGasSidecar(scripts, htmls));
+        installAsset(dirPrefix + "_cool-gas.json", synthesizeGasSidecar(scripts));
     }
 #endif
 }
@@ -1492,7 +1423,6 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         }
         std::vector<std::pair<std::string, std::string>> scripts;
         std::vector<std::pair<std::string, std::string>> jsScripts;
-        std::vector<std::string> htmls;
         try {
             for (Poco::DirectoryIterator it(dirPath), end; it != end; ++it) {
                 if (!it->isFile()) {
@@ -1508,8 +1438,6 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
                     } else {
                         jsScripts.emplace_back(name, std::move(src));
                     }
-                } else if (name.ends_with(".html") || name.ends_with(".htm")) {
-                    htmls.push_back(name);
                 }
             }
         } catch (Poco::Exception const & e) {
@@ -1526,8 +1454,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
             scripts = std::move(jsScripts);
         }
         std::sort(scripts.begin(), scripts.end());
-        std::sort(htmls.begin(), htmls.end());
-        std::string const body = synthesizeGasSidecar(scripts, htmls);
+        std::string const body = synthesizeGasSidecar(scripts);
         response.setContentType("application/json");
         response.add("X-Content-Type-Options", "nosniff");
         response.set("Content-Length", std::to_string(body.size()));

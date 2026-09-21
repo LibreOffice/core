@@ -11,15 +11,21 @@
 
 // The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-kit-runner.js:
 globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) {
-    // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
-    const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
+    // Body must be self-contained; gas-shim.js ships it as source text via fn.toString()
+    // (a null proxyId is for callers with nothing on the client side to serve proxy calls,
+    // like the load-time __coolGasMenu collection, where touching clientRuntime would throw
+    // in the caller's own path rather than route to nowhere):
+    const clientRuntime = proxyId != null
+        ? $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId) : null;
     try {
         function activeDoc() { return cool.getActiveDocument(); }
 
-        // What getUi() collects over one call: the messages an add-on passed to alert(), and the
-        // items it put in its menu.  Both travel back with the call's result:
+        // What getUi() collects over one call: the messages an add-on passed to alert(), the
+        // items it put in its menu, and (if any) the sidebar file it asked us to show.  All
+        // travel back with the call's result:
         const pendingAlerts = [];
         const menuItems = [];
+        let showSidebarFile = null;
 
         // ButtonSet and Button members are objects rather than strings so alert()'s overloads
         // stay distinguishable: alert(title, prompt) and alert(prompt, buttons) both take two
@@ -55,7 +61,9 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         const uiStub = {
             createAddonMenu: menuBuilder,
             createMenu: menuBuilder,
-            showSidebar: function() {},
+            showSidebar: function(html) {
+                showSidebarFile = html && html.__gasSourceFile ? html.__gasSourceFile : null;
+            },
             showDialog: function() {
                 throw new Error(
                     'getUi().showDialog is not yet supported in the COOL Apps Script wrapper');
@@ -307,8 +315,9 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             getUi: function() { return uiStub; }
         };
 
-        function makeHtmlOutput() {
+        function makeHtmlOutput(fileName) {
             const o = {
+                __gasSourceFile: fileName,
                 setTitle: function() { return o; },
                 setWidth: function() { return o; },
                 setHeight: function() { return o; },
@@ -321,8 +330,10 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         }
         globalThis.HtmlService = {
             createHtmlOutputFromFile: makeHtmlOutput,
-            createHtmlOutput: makeHtmlOutput,
-            createTemplateFromFile: function() { return { evaluate: makeHtmlOutput }; },
+            createHtmlOutput: function() { return makeHtmlOutput(); },
+            createTemplateFromFile: function(name) {
+                return { evaluate: function() { return makeHtmlOutput(name); } };
+            },
             SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
         };
 
@@ -440,10 +451,13 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             }
             value = fn.apply(null, callArgs || []);
         }
-        // A result marked __coolGas holds the add-on function's own return value in value, and
-        // every message it passed to getUi().alert() in alerts:
-        return { __coolGas: true, value: value, alerts: pendingAlerts };
+        // A result marked __coolGas holds the add-on function's own return value in value,
+        // every message it passed to getUi().alert() in alerts, and (if any) the sidebar file
+        // it asked us to show through ui.showSidebar in sidebarFile:
+        return {
+            __coolGas: true, value: value, alerts: pendingAlerts, sidebarFile: showSidebarFile
+        };
     } finally {
-        $internal.takeProxy(proxyId);
+        if (proxyId != null) $internal.takeProxy(proxyId);
     }
 };

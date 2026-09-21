@@ -301,7 +301,7 @@ saved (`"download"`, `"filesystem"`). Only the base name of `filename` is used.
 A directory holding an `appsscript.json` instead of a `manifest.json` is a
 Google Apps Script editor add-on, and COOL runs it without any file of ours
 added to it. Discovery synthesizes the manifest such a directory has no room
-for: the entry point becomes the shared `gas-wrapper.html`, the name comes from
+for: the name comes from
 a `setTitle("...")` call or an `APP_TITLE`-style constant in the sources, and
 the target document types come from which of `DocumentApp`, `SpreadsheetApp`
 and `SlidesApp` the sources mention.
@@ -310,10 +310,9 @@ The pieces:
 
 | File | Role |
 |---|---|
-| `gas-wrapper.html` | The page loaded into the sidebar panel. It fetches the add-on's server sources and grafts its sidebar HTML into itself, expanding `<?!= include('name') ?>`. |
+| `gas-wrapper.html` | The page loaded into a sidebar panel. It fetches the add-on's server sources and grafts the requested HTML into itself, expanding `<?!= include('name') ?>`. |
 | `gas-shim.js` | Client half. Exposes `google.script.run` as a Proxy, so a leaf call ships the kit half through `cool.callRemote`. |
 | `gas-kit-runner.js` | Kit half. Shims a subset of the Apps Script services on top of scriptinterop, then calls the named function. |
-| `gas-menu.html` | The panel for an add-on that ships no HTML of its own. |
 
 An Apps Script project keeps its server code in `.gs` files in the web editor,
 which clasp writes out as `.js` on disk. Either is picked up; where a directory
@@ -322,29 +321,18 @@ sidebar to load in the browser.
 
 ### Menu-driven add-ons
 
-Plenty of add-ons have no HTML at all: their `onOpen()` builds an add-on menu,
-and the menu items are the whole user interface. The sidecar synthesis reads
-that menu out of the sources - the literal `addItem()` and `addSeparator()`
-calls, in source order - and each item becomes a contributed command placed in
+An add-on's `onOpen()` builds its menu by calling `createAddonMenu().addItem(...)`.
+Extension load asks the runner for that menu through the reserved name
+`__coolGasMenu`, which runs `onOpen()` and returns the items its
+`createAddonMenu()` built. Each item becomes a contributed command placed in
 `contributes.extensionsMenu`. The add-on's items then sit under its own name in
 the Extensions menu and in the Extensions notebookbar tab, where an editor
-add-on's menu belongs, and such an add-on gets no sidebar panel at all.
+add-on's menu belongs.
 
 Choosing an item ships the runner, the add-on's sources and a call to the item's
 function to the kit as one `executescript` message, the same way any contributed
 command runs. Messages the add-on passes to `getUi().alert()` then arrive as a
-snackbar rather than as the panel banner.
-
-An add-on that builds its menu some other way - captions from a loop, or read
-from a property - leaves nothing for that sniffing to find. It keeps the panel
-instead: `gas-menu.html` shows one button per menu item, asking the kit for the
-menu at display time through the reserved name `__coolGasMenu`, which runs
-`onOpen()` and returns the menu that building it produced. An add-on that has a
-sidebar of its own always keeps it, menu or no menu.
-
-One thing a contributed command cannot do is call back into the iframe, because
-for a menu command there is no iframe: `PropertiesService` and
-`LanguageApp.translate` work from a panel and fail from a menu item.
+snackbar.
 
 ### What the shims cover
 

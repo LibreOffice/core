@@ -122,6 +122,7 @@ interface ExtensionCommand {
 	// id to it as an Extension_Command postMessage; cool.js hands it to
 	// cool.onCommand. For extensions whose logic lives in the panel.
 	panel?: boolean;
+	gasFunctionName?: string;
 }
 
 // One notebookbar button, referencing a command declared in
@@ -245,6 +246,12 @@ interface ExtensionManifest {
 	entry?: string;
 	icon?: string;
 	supports?: string[];
+	isGasExtension?: boolean;
+	gasContext?: {
+		sources: string[];
+		names: string[];
+		runnerExpr: string;
+	};
 	// On disk this is a string naming a separate JSON file (resolved the same way
 	// entry/icon are) holding the ExtensionContributes object - keeping UI wiring
 	// out of manifest.json's own metadata is mandatory, not a choice an extension
@@ -299,6 +306,11 @@ interface ExtensionSaveFileMessage {
 	bytes: number[];
 }
 
+interface ExtensionOpenSidebarMessage {
+	msgId: 'Extension_OpenSidebar';
+	sidebarFile: string;
+}
+
 interface ExtensionDialogCloseMessage {
 	msgId: 'Extension_DialogClose';
 	value: unknown;
@@ -315,7 +327,8 @@ type ExtensionSidebarMessage =
 	| ExtensionTeardownDoneMessage
 	| ExtensionResizeMessage
 	| ExtensionShowDialogMessage
-	| ExtensionSaveFileMessage;
+	| ExtensionSaveFileMessage
+	| ExtensionOpenSidebarMessage;
 
 type ExtensionDialogMessage =
 	| ExtensionDialogCloseMessage
@@ -369,6 +382,9 @@ window.L.Control.Extension = window.L.Control.extend({
 			onError: (err: Error) => void;
 		};
 	} | null,
+	_gasCommandProxies: null as {
+		[proxyId: string]: { [method: string]: (...args: unknown[]) => unknown };
+	} | null,
 	_nextCommandCallId: 0,
 	// One modal dialog per extension at a time.  origRemove holds the un-hooked
 	// L.IFrameDialog.remove so _closeDialog can dismiss without re-entering the
@@ -383,6 +399,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		this.map = map;
 		this._setToolitemHighlight(false);
 		this._pendingCommandCalls = {};
+		this._gasCommandProxies = {};
 		window.addEventListener('message', this._onPostMessage.bind(this));
 		map.on('executescriptresult', this._onScriptResult, this);
 		map.on('proxycall', this._onProxyCall, this);
@@ -448,6 +465,33 @@ window.L.Control.Extension = window.L.Control.extend({
 		method: string;
 		args: unknown[];
 	}) {
+		const handler = this._gasCommandProxies[e.proxyId];
+		if (handler) {
+			const fn = handler[e.method];
+			let value: unknown;
+			try {
+				value = fn ? fn(...e.args) : null;
+			} catch (err) {
+				console.warn(
+					'extension ' +
+						this.options.id +
+						': proxy method ' +
+						e.method +
+						' threw:',
+					err,
+				);
+				value = null;
+			}
+			if (e.callId) {
+				app.socket.sendMessage(
+					'proxyreturn ' +
+						e.callId +
+						' ' +
+						JSON.stringify(value === undefined ? null : value),
+				);
+			}
+			return;
+		}
 		this._postToIframe({
 			msgId: 'Extension_ProxyCall',
 			proxyId: e.proxyId,
@@ -455,6 +499,44 @@ window.L.Control.Extension = window.L.Control.extend({
 			method: e.method,
 			args: e.args,
 		});
+	},
+
+	_makeGasProxyHandlers: function (): {
+		[method: string]: (...args: unknown[]) => unknown;
+	} {
+		const prefix = 'gas-user-props:' + this.options.id + ':';
+		const propKeys = () => {
+			const out: string[] = [];
+			for (let i = 0; i < localStorage.length; ++i) {
+				const k = localStorage.key(i);
+				if (k !== null && k.indexOf(prefix) === 0) {
+					out.push(k.substring(prefix.length));
+				}
+			}
+			return out;
+		};
+		return {
+			translate: () => {
+				throw new Error(
+					'LanguageApp.translate is not supported in the COOL Apps Script wrapper',
+				);
+			},
+			userPropGetProperty: (...args: unknown[]) => {
+				const key = String(args[0]);
+				const raw = localStorage.getItem(prefix + key);
+				return { IsPresent: raw !== null, Value: raw === null ? '' : raw };
+			},
+			userPropSetProperty: (...args: unknown[]) => {
+				localStorage.setItem(prefix + String(args[0]), String(args[1]));
+			},
+			userPropDeleteProperty: (...args: unknown[]) => {
+				localStorage.removeItem(prefix + String(args[0]));
+			},
+			userPropGetKeys: () => propKeys(),
+			userPropDeleteAll: () => {
+				for (const k of propKeys()) localStorage.removeItem(prefix + k);
+			},
+		};
 	},
 
 	// Dispatcher entry point for a contributed menu command (docdispatcher's
@@ -471,6 +553,10 @@ window.L.Control.Extension = window.L.Control.extend({
 			commands && commands.find((c: ExtensionCommand) => c.id === commandId);
 		if (command && command.panel) {
 			this.invokePanelCommand(commandId);
+			return;
+		}
+		if (command && command.gasFunctionName) {
+			this._invokeGasCommand(command);
 			return;
 		}
 		if (!command || command.source === undefined) {
@@ -545,6 +631,91 @@ window.L.Control.Extension = window.L.Control.extend({
 		);
 	},
 
+	_invokeGasCommand: function (command: ExtensionCommand): void {
+		const manifest = this.options.manifest as ExtensionManifest;
+		if (!manifest.gasContext) {
+			console.warn(
+				'extension ' +
+					this.options.id +
+					': command ' +
+					command.id +
+					' has no cached gasContext',
+			);
+			return;
+		}
+		const seq = this._nextCommandCallId++;
+		const callId = 'cmd-' + this.options.id + '-' + seq;
+		const proxyId = 'gas-cmd-proxy-' + this.options.id + '-' + seq;
+		this._gasCommandProxies[proxyId] = this._makeGasProxyHandlers();
+		const releaseProxy = () => {
+			delete this._gasCommandProxies[proxyId];
+		};
+		this._pendingCommandCalls[callId] = {
+			onSuccess: (value: unknown) => {
+				releaseProxy();
+				// Show each getUi().alert() as a snackbar; open the sidebar if a
+				// ui.showSidebar named a file:
+				const envelope = value as {
+					__coolGas?: boolean;
+					alerts?: { title?: string; message?: string }[];
+					sidebarFile?: string;
+				} | null;
+				if (!envelope || envelope.__coolGas !== true) return;
+				for (const alert of envelope.alerts || []) {
+					if (!this.map.uiManager) break;
+					this.map.uiManager.showSnackbar(
+						alert.title ? alert.title + ': ' + alert.message : alert.message,
+					);
+				}
+				if (typeof envelope.sidebarFile === 'string' && envelope.sidebarFile) {
+					this._openPanel(envelope.sidebarFile);
+				}
+			},
+			onError: (err: Error) => {
+				releaseProxy();
+				console.error(
+					'extension ' +
+						this.options.id +
+						': command ' +
+						command.id +
+						' failed:',
+					err,
+				);
+				if (this.map.uiManager) {
+					this.map.uiManager.showSnackbar(
+						_('Extension command failed: %1').replace('%1', err.message),
+					);
+				}
+			},
+		};
+		setTimeout(() => {
+			const pending = this._pendingCommandCalls[callId];
+			if (!pending) return;
+			delete this._pendingCommandCalls[callId];
+			pending.onError(new Error('timed out waiting for a response'));
+		}, 30000);
+		const gc = manifest.gasContext;
+		const args =
+			'[' +
+			JSON.stringify(proxyId) +
+			', ' +
+			JSON.stringify(gc.sources) +
+			', ' +
+			JSON.stringify(gc.names) +
+			', ' +
+			JSON.stringify(command.gasFunctionName) +
+			', []]';
+		app.socket.sendMessage(
+			'executescript ' +
+				callId +
+				' 1 gas-kit-runner.js\n(\n' +
+				gc.runnerExpr +
+				'\n).apply(null, ' +
+				args +
+				');',
+		);
+	},
+
 	// A `panel: true` command: make sure the sidebar panel is showing, then
 	// hand the command id to the iframe. The iframe may still be loading, in
 	// which case the message goes out once it has loaded.
@@ -611,7 +782,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		app.socket.sendMessage('uno .uno:SidebarHide');
 	},
 
-	_showPanel: function () {
+	_showPanel: function (sidebarFile?: string) {
 		const manifest: ExtensionManifest = this.options.manifest;
 
 		const sidebarPanel = document.getElementById('sidebar-panel');
@@ -629,8 +800,29 @@ window.L.Control.Extension = window.L.Control.extend({
 		panel.dataset.extensionId = this.options.id;
 		shell.content.classList.add('extension-panel-body');
 
+		// A GAS add-on has no manifest.entry; the iframe URL comes from gasContext plus the
+		// ui.showSidebar argument the calling menu command captured in sidebarFile:
+		let entryUrl: string;
+		if (manifest.isGasExtension) {
+			if (!manifest.gasContext || !sidebarFile) return;
+			const params = new URLSearchParams();
+			params.set('base', new URL(this.options.baseUrl, document.baseURI).href);
+			if (manifest.gasContext.names.length) {
+				params.set('scripts', manifest.gasContext.names.join(','));
+			}
+			params.set(
+				'sidebar',
+				sidebarFile + (/\.html?$/i.test(sidebarFile) ? '' : '.html'),
+			);
+			entryUrl = new URL(
+				this.options.baseUrl + '../gas-wrapper.html?' + params.toString(),
+				document.baseURI,
+			).href;
+		} else {
+			entryUrl = this.options.baseUrl + manifest.entry;
+		}
 		const iframe = document.createElement('iframe');
-		iframe.src = withUiLanguage(this.options.baseUrl + manifest.entry);
+		iframe.src = withUiLanguage(entryUrl);
 		iframe.setAttribute(
 			'sandbox',
 			'allow-scripts allow-same-origin allow-forms allow-popups',
@@ -768,6 +960,9 @@ window.L.Control.Extension = window.L.Control.extend({
 				break;
 			case 'Extension_SaveFile':
 				this._saveFile(msg);
+				break;
+			case 'Extension_OpenSidebar':
+				this._openPanel(msg.sidebarFile);
 				break;
 			default:
 				console.warn('unexpected msgId: ' + (msg as any).msgId);
@@ -983,6 +1178,17 @@ window.L.Control.Extension = window.L.Control.extend({
 			this.map.uiManager.showLegacyUnoApiSnackbarOnce();
 		}
 	},
+
+	_openPanel: function (sidebarFile?: string): void {
+		const sidebar = this.map.sidebar;
+		if (!sidebar) return;
+		if (sidebar.hasExtensionDeck(this)) return;
+		if (this._panel) this._finishRemovePanel();
+		this._showPanel(sidebarFile);
+		if (!this._panel) return;
+		sidebar.takeExtensionDeckSlot(this);
+		this._setToolitemHighlight(true);
+	},
 });
 
 window.L.control.extension = function (
@@ -1003,89 +1209,57 @@ window.L.control.extension = function (
 // travel as string literals rather than being pasted in, because the runner evaluates each one
 // under its own file name so an exception's frames name the add-on's file.  The runner comes
 // first and nothing is prepended to it, so its line 1 stays line 1.
-async function appsScriptCommandSource(
-	baseRel: string,
-	scriptNames: string[],
-	functionNames: string[],
-): Promise<string> {
-	const urls = [app.LOUtil.getURL(baseRel + '../gas-kit-runner.js')].concat(
-		scriptNames.map((name) => app.LOUtil.getURL(baseRel + name)),
-	);
-	const texts = await Promise.all(
-		urls.map(async (url) => {
-			const resp = await fetch(url);
-			if (!resp.ok) throw new Error(url + ' HTTP ' + resp.status);
-			return await resp.text();
-		}),
-	);
-	return (
-		texts[0] +
-		'\nvar commands = {};\n' +
-		'(function() {\n' +
-		'var sources = ' +
-		JSON.stringify(texts.slice(1)) +
-		';\n' +
-		'var names = ' +
-		JSON.stringify(scriptNames) +
-		';\n' +
-		'var functions = ' +
-		JSON.stringify(functionNames) +
-		';\n' +
-		'for (var i = 0; i !== functions.length; ++i) {\n' +
-		'(function(fn) {\n' +
-		'commands[fn] = function() {\n' +
-		'return globalThis.__gasKitRunner("gascmd-" + fn, sources, names, fn, []);\n' +
-		'};\n' +
-		'})(functions[i]);\n' +
-		'}\n' +
-		'})();\n'
-	);
-}
-
-// If the directory carries appsscript.json, synthesize a manifest that hands the sidebar off
-// to the shared gas-wrapper.html; the _cool-gas.json sidecar lists .gs sources and sidebar file:
+// If the directory carries appsscript.json, synthesize a manifest for its Apps Script
+// add-on from what a __coolGasMenu invocation of the runner brings back at extension-load
+// time; the _cool-gas.json sidecar lists .gs sources:
 async function tryLoadAppsScriptExtension(
 	id: string,
 	baseRel: string,
+	map: any,
 ): Promise<ExtensionManifest | null> {
 	const gasResp = await fetch(app.LOUtil.getURL(baseRel + 'appsscript.json'));
 	if (!gasResp.ok) return null;
 	let listing: {
 		scripts?: string[];
-		sidebar?: string;
 		supports?: string[];
 		name?: string;
 		icon?: string;
-		menu?: { caption?: string; functionName?: string; separator?: boolean }[];
 	} = {};
 	try {
 		const listResp = await fetch(app.LOUtil.getURL(baseRel + '_cool-gas.json'));
 		if (listResp.ok) listing = await listResp.json();
 	} catch {
-		// Missing sidecar is not fatal; the wrapper still loads the sidebar with no scripts.
-	}
-	const params = new URLSearchParams();
-	params.set(
-		'base',
-		new URL(app.LOUtil.getURL(baseRel), document.baseURI).href,
-	);
-	if (listing.sidebar) params.set('sidebar', listing.sidebar);
-	if (listing.scripts && listing.scripts.length) {
-		params.set('scripts', listing.scripts.join(','));
+		// Missing sidecar is not fatal; discovery continues with no scripts.
 	}
 	const manifest: ExtensionManifest = {
 		manifestVersion: '0.1',
 		name: listing.name && listing.name.length ? listing.name : id,
+		isGasExtension: true,
 	};
 	if (listing.icon) manifest.icon = listing.icon;
 	if (listing.supports && listing.supports.length) {
 		manifest.supports = listing.supports;
 	}
+	const scriptNames = listing.scripts || [];
 
-	// The add-on menu the sidecar found in the sources becomes one command per item, offered
-	// under the add-on's name where an editor add-on's menu belongs. Every command carries the
-	// same kit-side text: it defines them all, and which one runs is chosen at invocation.
-	const items = listing.menu || [];
+	let items: {
+		caption?: string;
+		functionName?: string;
+		separator?: boolean;
+	}[] = [];
+	if (scriptNames.length) {
+		try {
+			items = await collectGasAddonMenu(id, baseRel, scriptNames, map);
+		} catch (err) {
+			console.warn(
+				'extension ' + id + ': __coolGasMenu invocation failed:',
+				err,
+			);
+		}
+	}
+
+	// The add-on menu the runner brought back becomes one command per item, offered under
+	// the add-on's name where an editor add-on's menu belongs.
 	const commands: ExtensionCommand[] = [];
 	const placement: ExtensionMenuEntry[] = [];
 	const functionNames: string[] = [];
@@ -1105,7 +1279,7 @@ async function tryLoadAppsScriptExtension(
 			commands.push({
 				id: item.functionName,
 				title: item.caption || item.functionName,
-				script: '../gas-kit-runner.js',
+				gasFunctionName: item.functionName,
 			});
 		}
 		placement.push({ command: item.functionName });
@@ -1113,32 +1287,120 @@ async function tryLoadAppsScriptExtension(
 	while (placement.length && 'separator' in placement[placement.length - 1]) {
 		placement.pop();
 	}
-	if (commands.length) {
+
+	// Cache the runner source and the .gs sources so a menu click doesn't refetch them:
+	if (commands.length && scriptNames.length) {
 		try {
-			const source = await appsScriptCommandSource(
-				baseRel,
-				listing.scripts || [],
-				functionNames,
-			);
-			for (const command of commands) command.source = source;
+			const [runnerExpr, sources] = await Promise.all([
+				loadGasRunnerExpr(baseRel),
+				Promise.all(
+					scriptNames.map(async (name) => {
+						const resp = await fetch(app.LOUtil.getURL(baseRel + name));
+						if (!resp.ok) {
+							throw new Error(baseRel + name + ' HTTP ' + resp.status);
+						}
+						return await resp.text();
+					}),
+				),
+			]);
+			manifest.gasContext = {
+				sources: sources,
+				names: scriptNames,
+				runnerExpr: runnerExpr,
+			};
 			manifest.contributes = { commands: commands, extensionsMenu: placement };
 		} catch (err) {
 			console.warn(
 				'extension ' + id + ': Apps Script sources unreadable:',
 				err,
 			);
-			commands.length = 0;
 		}
 	}
-
-	// A panel is what an add-on with a sidebar of its own shows, and the fallback for one whose
-	// menu could not be read from its sources: gas-menu.html then asks the kit for the menu at
-	// display time.  An add-on whose menu is known needs neither.  The shared wrapper sits one
-	// directory above <id>/ so a leading "../" reaches it:
-	if (listing.sidebar || !commands.length) {
-		manifest.entry = '../gas-wrapper.html?' + params.toString();
-	}
 	return manifest;
+}
+
+// Cached runner function expression, shared across all Apps Script extensions:
+let gasRunnerExpr: Promise<string> | null = null;
+function loadGasRunnerExpr(baseRel: string): Promise<string> {
+	if (gasRunnerExpr !== null) return gasRunnerExpr;
+	// The runner file lives one directory above the extension dir, alongside gas-wrapper.html:
+	const url = app.LOUtil.getURL(baseRel + '../gas-kit-runner.js');
+	gasRunnerExpr = (async () => {
+		const resp = await fetch(url);
+		if (!resp.ok) throw new Error('gas-kit-runner.js HTTP ' + resp.status);
+		const src = await resp.text();
+		// Strip the `globalThis.__gasKitRunner =` prefix and the trailing semicolon so what
+		// remains is a bare `function(...) { ... }` expression the kit can wrap in an
+		// IIFE call, matching how cool.callRemote ships its runner:
+		const m = src.match(
+			/globalThis\.__gasKitRunner\s*=\s*(function[\s\S]*?);\s*$/,
+		);
+		if (!m) {
+			throw new Error('gas-kit-runner.js: __gasKitRunner assignment not found');
+		}
+		return m[1];
+	})();
+	return gasRunnerExpr;
+}
+// Ask the runner for the menu items the add-on's onOpen() puts together, at extension load
+// (a null proxyId keeps the call working so long as onOpen doesn't touch PropertiesService
+// or LanguageApp, since nothing top-side serves those here):
+let nextGasCollectId = 0;
+async function collectGasAddonMenu(
+	id: string,
+	baseRel: string,
+	scriptNames: string[],
+	map: any,
+): Promise<{ caption?: string; functionName?: string; separator?: boolean }[]> {
+	const [runnerExpr, sources] = await Promise.all([
+		loadGasRunnerExpr(baseRel),
+		Promise.all(
+			scriptNames.map(async (s) => {
+				const resp = await fetch(app.LOUtil.getURL(baseRel + s));
+				if (!resp.ok) throw new Error(baseRel + s + ' HTTP ' + resp.status);
+				return await resp.text();
+			}),
+		),
+	]);
+	const callId = 'gas-collect-' + id + '-' + nextGasCollectId++;
+	return new Promise((resolve, reject) => {
+		const handler = (result: any) => {
+			if (result.id !== callId) return;
+			map.off('executescriptresult', handler);
+			if (result.err) {
+				const msg =
+					(result.err && result.err.message) ||
+					String(result.err) ||
+					'GAS collect failed';
+				reject(new Error(msg));
+				return;
+			}
+			// The runner wraps every return in a __coolGas envelope whose value is the menu:
+			const envelope = result.ok as {
+				__coolGas?: boolean;
+				value?: unknown;
+			} | null;
+			const value =
+				envelope && envelope.__coolGas === true ? envelope.value : result.ok;
+			resolve(Array.isArray(value) ? value : []);
+		};
+		map.on('executescriptresult', handler);
+		const args =
+			'[null, ' +
+			JSON.stringify(sources) +
+			', ' +
+			JSON.stringify(scriptNames) +
+			', "__coolGasMenu", []]';
+		app.socket.sendMessage(
+			'executescript ' +
+				callId +
+				' 1 gas-kit-runner.js\n(\n' +
+				runnerExpr +
+				'\n).apply(null, ' +
+				args +
+				');',
+		);
+	});
 }
 
 // --- Localization ------------------------------------------------------------------------------
@@ -1373,7 +1635,11 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 				return { id, baseRel, manifest };
 			} catch (err) {
 				try {
-					const gasManifest = await tryLoadAppsScriptExtension(id, baseRel);
+					const gasManifest = await tryLoadAppsScriptExtension(
+						id,
+						baseRel,
+						map,
+					);
 					if (gasManifest) return { id, baseRel, manifest: gasManifest };
 				} catch (gasErr) {
 					console.warn('extension ' + id + ': failed to load:', gasErr);

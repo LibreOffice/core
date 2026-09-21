@@ -82,13 +82,21 @@
             }
         });
     }
-    // A result marked __coolGas holds the add-on function's own return value in value, and every
-    // message it passed to getUi().alert() in alerts.  Show the messages, return the value:
+    // A result marked __coolGas holds the add-on function's own return value in value, every
+    // message it passed to getUi().alert() in alerts, and (if any) the HtmlOutput file its
+    // ui.showSidebar was called with in sidebarFile.  Show the messages, ask the host to
+    // open the sidebar with that file, return the value:
     function unwrapEnvelope(result) {
         if (!result || result.__coolGas !== true) return result;
         const alerts = Array.isArray(result.alerts) ? result.alerts : [];
         for (const a of alerts) {
             showAlert(a.title, a.message);
+        }
+        if (typeof result.sidebarFile === 'string' && result.sidebarFile) {
+            window.parent.postMessage(JSON.stringify({
+                msgId: 'Extension_OpenSidebar',
+                sidebarFile: result.sidebarFile
+            }), '*');
         }
         return result.value;
     }
@@ -144,7 +152,8 @@
     let nextClientRuntimeId = 0;
 
     // Extension id keyed into localStorage so one add-on's user properties don't see another's:
-    const extensionIdMatch = location.pathname.match(/\/extensions\/([^/]+)\//);
+    const baseParam = new URLSearchParams(location.search).get('base') || '';
+    const extensionIdMatch = baseParam.match(/\/extensions\/([^/]+)\/?$/);
     const propStoragePrefix = 'gas-user-props:'
         + (extensionIdMatch ? extensionIdMatch[1] : 'unknown') + ':';
     function propKeys() {

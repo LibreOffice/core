@@ -51,10 +51,10 @@
     // An add-on with no HTML of its own is driven by the menu its onOpen() builds, and the
     // generic menu panel next to this wrapper stands in for a sidebar:
     const sidebarName = params.get('sidebar') || '';
+    if (!sidebarName) { fail('missing "sidebar" query parameter'); return; }
     const scriptNames = (params.get('scripts') || '').split(',').filter(Boolean);
     const baseUrl = new URL(base, location.href);
-    const sidebarUrl = sidebarName ? new URL(sidebarName, baseUrl)
-        : new URL('gas-menu.html', location.href);
+    const sidebarUrl = new URL(sidebarName, baseUrl);
     async function fetchText(url) {
         const r = await fetch(url);
         if (!r.ok) throw new Error(url + ' HTTP ' + r.status);
