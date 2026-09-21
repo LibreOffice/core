@@ -77,30 +77,6 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
     return xRef;
 }
 
-Reference< XResultSet > ODatabaseMetaData::getCatalogs(  )
-{
-    Reference< XResultSet > xRef;
-    if(!m_bUseCatalog)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCatalogs);
-    }
-    else
-    {
-        try
-        {
-            rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-            xRef = pResult;
-            pResult->openCatalogs();
-        }
-        catch(SQLException&)
-        {
-            xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCatalogs);
-        }
-    }
-
-    return xRef;
-}
-
 OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     OUString aVal;
@@ -108,22 +84,6 @@ OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
 
     return aVal;
-}
-
-Reference< XResultSet > ODatabaseMetaData::getSchemas(  )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openSchemas();
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eSchemas);
-    }
-    return xRef;
 }
 
 Reference< XResultSet > ODatabaseMetaData::getColumnPrivileges(
@@ -180,42 +140,6 @@ Reference< XResultSet > ODatabaseMetaData::getTables(
     return xRef;
 }
 
-Reference< XResultSet > ODatabaseMetaData::getProcedureColumns(
-    const Any& catalog, const OUString& schemaPattern,
-    const OUString& procedureNamePattern, const OUString& columnNamePattern )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openProcedureColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern,columnNamePattern);
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eProcedureColumns);
-    }
-    return xRef;
-}
-
-Reference< XResultSet > ODatabaseMetaData::getProcedures(
-    const Any& catalog, const OUString& schemaPattern,
-    const OUString& procedureNamePattern )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openProcedures(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern);
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eProcedures);
-    }
-    return xRef;
-}
-
 Reference< XResultSet > ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const OUString& schema, const OUString& table )
 {
@@ -243,73 +167,12 @@ Reference< XResultSet > ODatabaseMetaData::getVersionColumns(
     return xRef;
 }
 
-sal_Int32 ODatabaseMetaData::getMaxBinaryLiteralLength(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_BINARY_LITERAL_LEN,nValue,*this);
-    return nValue;
-}
 
-sal_Int32 ODatabaseMetaData::getMaxRowSize(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxCatalogNameLength(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CATALOG_NAME_LEN,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxCharLiteralLength(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CHAR_LITERAL_LEN,nValue,*this);
-    return nValue;
-}
 
 sal_Int32 ODatabaseMetaData::getMaxColumnNameLength(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMN_NAME_LEN,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxColumnsInIndex(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_INDEX,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxCursorNameLength(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CURSOR_NAME_LEN,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxConnections(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_DRIVER_CONNECTIONS/*SQL_ACTIVE_CONNECTIONS*/,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxColumnsInTable(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_TABLE,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxStatementLength(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_STATEMENT_LEN,nValue,*this);
     return nValue;
 }
 
@@ -325,23 +188,6 @@ sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
     return nValue;
-}
-
-Reference< XResultSet > ODatabaseMetaData::getExportedKeys(
-    const Any& catalog, const OUString& schema, const OUString& table )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openExportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eExportedKeys);
-    }
-    return xRef;
 }
 
 Reference< XResultSet > ODatabaseMetaData::getImportedKeys(
@@ -396,24 +242,6 @@ Reference< XResultSet > ODatabaseMetaData::getIndexInfo(
     return xRef;
 }
 
-Reference< XResultSet > ODatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope,
-    bool nullable )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openBestRowIdentifier(m_bUseCatalog ? catalog : Any(),schema,table,scope,nullable);
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eBestRowIdentifier);
-    }
-    return xRef;
-}
-
 Reference< XResultSet > ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern )
 {
@@ -426,73 +254,11 @@ Reference< XResultSet > ODatabaseMetaData::getTablePrivileges(
     return pResult;
 }
 
-Reference< XResultSet > ODatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const OUString& primarySchema,
-    const OUString& primaryTable, const Any& foreignCatalog,
-    const OUString& foreignSchema, const OUString& foreignTable )
-{
-    Reference< XResultSet > xRef;
-    try
-    {
-        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-        xRef = pResult;
-        pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : nullptr,&primaryTable,
-            m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : nullptr,&foreignTable);
-    }
-    catch(SQLException&)
-    {
-        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCrossReference);
-    }
-    return xRef;
-}
-
-bool ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
-{
-    OUString aVal;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE_INCLUDES_LONG,aVal,*this,m_pConnection->getTextEncoding());
-    return aVal.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_LOWER;
-}
-
-bool ODatabaseMetaData::storesLowerCaseIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_LOWER;
-}
-
 bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
-}
-
-bool ODatabaseMetaData::storesMixedCaseIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_MIXED;
-}
-
-bool ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_UPPER;
-}
-
-bool ODatabaseMetaData::storesUpperCaseIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_UPPER;
 }
 
 bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
@@ -511,26 +277,11 @@ bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
             ((nValue & SQL_AT_DROP_COLUMN_RESTRICT) == SQL_AT_DROP_COLUMN_RESTRICT);
 }
 
-sal_Int32 ODatabaseMetaData::getMaxIndexLength(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_INDEX_SIZE,nValue,*this);
-    return nValue;
-}
-
 bool ODatabaseMetaData::supportsNonNullableColumns(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NON_NULLABLE_COLUMNS,nValue,*this);
     return nValue == SQL_NNC_NON_NULL;
-}
-
-OUString ODatabaseMetaData::getCatalogTerm(  )
-{
-    OUString aVal;
-    if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
-    return aVal;
 }
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
@@ -547,13 +298,6 @@ OUString ODatabaseMetaData::getExtraNameCharacters(  )
     return aVal;
 }
 
-bool ODatabaseMetaData::supportsDifferentTableCorrelationNames(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-    return nValue != SQL_CN_NONE;
-}
-
 bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SQLUSMALLINT nValue=0;
@@ -562,95 +306,11 @@ bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
     return nValue == SQL_CL_START;
 }
 
-bool ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
-    return nValue == SQL_TC_DDL_IGNORE;
-}
-
-bool ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
-    return nValue == SQL_TC_DDL_COMMIT;
-}
-
-bool ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
-    return nValue == SQL_TC_DML;
-}
-
-bool ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
-    return nValue == SQL_TC_ALL;
-}
-
-bool ODatabaseMetaData::supportsPositionedDelete(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
-    return (nValue & SQL_CA1_POS_DELETE) == SQL_CA1_POS_DELETE;
-}
-
-bool ODatabaseMetaData::supportsPositionedUpdate(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
-    return (nValue & SQL_CA1_POS_UPDATE) == SQL_CA1_POS_UPDATE;
-}
-
-bool ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
-    return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
-}
-
-bool ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
-    return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
-}
-
-bool ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
-    return nValue == SQL_CB_PRESERVE;
-}
-
-bool ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
-    return nValue == SQL_CB_PRESERVE;
-}
-
-bool ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_ISOLATION_OPTION,nValue,*this);
-    return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
-}
-
 bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_DML_STATEMENTS) == SQL_SU_DML_STATEMENTS;
-}
-
-bool ODatabaseMetaData::supportsANSI92FullSQL(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
-    return static_cast<bool>(nValue & SQL_SC_SQL92_FULL);
 }
 
 bool ODatabaseMetaData::supportsANSI92EntryLevelSQL(  )
@@ -705,13 +365,6 @@ bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
     return (nValue & SQL_CU_DML_STATEMENTS) == SQL_CU_DML_STATEMENTS;
 }
 
-bool ODatabaseMetaData::supportsOuterJoins(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
-    return ((nValue & (SQL_OJ_FULL|SQL_OJ_LEFT|SQL_OJ_RIGHT|SQL_OJ_NESTED|SQL_OJ_NOT_ORDERED|SQL_OJ_ALL_COMPARISON_OPS|SQL_OJ_INNER)) != 0);
-}
-
 Reference< XResultSet > ODatabaseMetaData::getTableTypes(  )
 {
     Reference< XResultSet > xRef;
@@ -735,55 +388,6 @@ sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
     return nValue;
 }
 
-sal_Int32 ODatabaseMetaData::getMaxProcedureNameLength(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_PROCEDURE_NAME_LEN,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxSchemaNameLength(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_SCHEMA_NAME_LEN,nValue,*this);
-    return nValue;
-}
-
-bool ODatabaseMetaData::supportsTransactions(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
-    return nValue != SQL_TC_NONE;
-}
-
-bool ODatabaseMetaData::allProceduresAreCallable(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::supportsStoredProcedures(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::supportsSelectForUpdate(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
-    return (nValue & SQL_CA1_POSITIONED_UPDATE) == SQL_CA1_POSITIONED_UPDATE;
-}
-
-bool ODatabaseMetaData::allTablesAreSelectable(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_TABLES,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
 bool ODatabaseMetaData::isReadOnly(  )
 {
     return m_pConnection->isReadOnly();
@@ -803,211 +407,6 @@ bool ODatabaseMetaData::usesLocalFilePerTable(  )
     return nValue == SQL_FILE_TABLE;
 }
 
-bool ODatabaseMetaData::supportsTypeConversion(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_FUNCTIONS,nValue,*this);
-    return (nValue & SQL_FN_CVT_CONVERT) == SQL_FN_CVT_CONVERT;
-}
-
-bool ODatabaseMetaData::nullPlusNonNullIsNull(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONCAT_NULL_BEHAVIOR,nValue,*this);
-    return nValue == SQL_CB_NULL;
-}
-
-bool ODatabaseMetaData::supportsColumnAliasing(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_COLUMN_ALIAS,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::supportsTableCorrelationNames(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-    return nValue != SQL_CN_NONE;
-}
-
-bool ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType )
-{
-    if(fromType == toType)
-        return true;
-
-    SQLUINTEGER nValue=0;
-    switch(fromType)
-    {
-        case DataType::BIT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BIT,nValue,*this);
-            break;
-        case DataType::TINYINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TINYINT,nValue,*this);
-            break;
-        case DataType::SMALLINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_SMALLINT,nValue,*this);
-            break;
-        case DataType::INTEGER:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_INTEGER,nValue,*this);
-            break;
-        case DataType::BIGINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BIGINT,nValue,*this);
-            break;
-        case DataType::FLOAT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_FLOAT,nValue,*this);
-            break;
-        case DataType::REAL:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_REAL,nValue,*this);
-            break;
-        case DataType::DOUBLE:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DOUBLE,nValue,*this);
-            break;
-        case DataType::NUMERIC:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_NUMERIC,nValue,*this);
-            break;
-        case DataType::DECIMAL:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DECIMAL,nValue,*this);
-            break;
-        case DataType::CHAR:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_CHAR,nValue,*this);
-            break;
-        case DataType::VARCHAR:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARCHAR,nValue,*this);
-            break;
-        case DataType::LONGVARCHAR:
-        case DataType::CLOB:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARCHAR,nValue,*this);
-            break;
-        case DataType::DATE:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DATE,nValue,*this);
-            break;
-        case DataType::TIME:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TIME,nValue,*this);
-            break;
-        case DataType::TIMESTAMP:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TIMESTAMP,nValue,*this);
-            break;
-        case DataType::BINARY:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BINARY,nValue,*this);
-            break;
-        case DataType::VARBINARY:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARBINARY,nValue,*this);
-            break;
-        case DataType::LONGVARBINARY:
-        case DataType::BLOB:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARBINARY,nValue,*this);
-            break;
-        case DataType::SQLNULL:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::OTHER:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::OBJECT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::DISTINCT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::STRUCT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::ARRAY:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::REF:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-    }
-    bool bConvert = false;
-    switch(toType)
-    {
-        case DataType::BIT:
-            bConvert = (nValue & SQL_CVT_BIT) == SQL_CVT_BIT;
-            break;
-        case DataType::TINYINT:
-            bConvert = (nValue & SQL_CVT_TINYINT) == SQL_CVT_TINYINT;
-            break;
-        case DataType::SMALLINT:
-            bConvert = (nValue & SQL_CVT_SMALLINT) == SQL_CVT_SMALLINT;
-            break;
-        case DataType::INTEGER:
-            bConvert = (nValue & SQL_CVT_INTEGER) == SQL_CVT_INTEGER;
-            break;
-        case DataType::BIGINT:
-            bConvert = (nValue & SQL_CVT_BIGINT) == SQL_CVT_BIGINT;
-            break;
-        case DataType::FLOAT:
-            bConvert = (nValue & SQL_CVT_FLOAT) == SQL_CVT_FLOAT;
-            break;
-        case DataType::REAL:
-            bConvert = (nValue & SQL_CVT_REAL) == SQL_CVT_REAL;
-            break;
-        case DataType::DOUBLE:
-            bConvert = (nValue & SQL_CVT_DOUBLE) == SQL_CVT_DOUBLE;
-            break;
-        case DataType::NUMERIC:
-            bConvert = (nValue & SQL_CVT_NUMERIC) == SQL_CVT_NUMERIC;
-            break;
-        case DataType::DECIMAL:
-            bConvert = (nValue & SQL_CVT_DECIMAL) == SQL_CVT_DECIMAL;
-            break;
-        case DataType::CHAR:
-            bConvert = (nValue & SQL_CVT_CHAR) == SQL_CVT_CHAR;
-            break;
-        case DataType::VARCHAR:
-            bConvert = (nValue & SQL_CVT_VARCHAR) == SQL_CVT_VARCHAR;
-            break;
-        case DataType::LONGVARCHAR:
-        case DataType::CLOB:
-            bConvert = (nValue & SQL_CVT_LONGVARCHAR) == SQL_CVT_LONGVARCHAR;
-            break;
-        case DataType::DATE:
-            bConvert = (nValue & SQL_CVT_DATE) == SQL_CVT_DATE;
-            break;
-        case DataType::TIME:
-            bConvert = (nValue & SQL_CVT_TIME) == SQL_CVT_TIME;
-            break;
-        case DataType::TIMESTAMP:
-            bConvert = (nValue & SQL_CVT_TIMESTAMP) == SQL_CVT_TIMESTAMP;
-            break;
-        case DataType::BINARY:
-            bConvert = (nValue & SQL_CVT_BINARY) == SQL_CVT_BINARY;
-            break;
-        case DataType::VARBINARY:
-            bConvert = (nValue & SQL_CVT_VARBINARY) == SQL_CVT_VARBINARY;
-            break;
-        case DataType::LONGVARBINARY:
-        case DataType::BLOB:
-            bConvert = (nValue & SQL_CVT_LONGVARBINARY) == SQL_CVT_LONGVARBINARY;
-            break;
-    }
-
-    return bConvert;
-}
-
-bool ODatabaseMetaData::supportsExpressionsInOrderBy(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_EXPRESSIONS_IN_ORDERBY,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::supportsGroupBy(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
-    return nValue != SQL_GB_NOT_SUPPORTED;
-}
-
-bool ODatabaseMetaData::supportsGroupByBeyondSelect(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
-    return nValue != SQL_GB_GROUP_BY_CONTAINS_SELECT;
-}
-
 bool ODatabaseMetaData::supportsGroupByUnrelated(  )
 {
     SQLUSMALLINT nValue;
@@ -1015,24 +414,10 @@ bool ODatabaseMetaData::supportsGroupByUnrelated(  )
     return nValue == SQL_GB_NO_RELATION;
 }
 
-bool ODatabaseMetaData::supportsMultipleTransactions(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULTIPLE_ACTIVE_TXN,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
 bool ODatabaseMetaData::supportsMultipleResultSets(  )
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULT_RESULT_SETS,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.toChar() == 'Y';
-}
-
-bool ODatabaseMetaData::supportsLikeEscapeClause(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_LIKE_ESCAPE_CLAUSE,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
@@ -1043,60 +428,11 @@ bool ODatabaseMetaData::supportsOrderByUnrelated(  )
     return aValue.toChar() == 'N';
 }
 
-bool ODatabaseMetaData::supportsUnion(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
-    return (nValue & SQL_U_UNION) == SQL_U_UNION;
-}
-
-bool ODatabaseMetaData::supportsUnionAll(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
-    return (nValue & SQL_U_UNION_ALL) == SQL_U_UNION_ALL;
-}
-
-bool ODatabaseMetaData::supportsMixedCaseIdentifiers(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
-    return nValue == SQL_IC_MIXED;
-}
-
 bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
-}
-
-bool ODatabaseMetaData::nullsAreSortedAtEnd(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
-    return nValue == SQL_NC_END;
-}
-
-bool ODatabaseMetaData::nullsAreSortedAtStart(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
-    return nValue == SQL_NC_START;
-}
-
-bool ODatabaseMetaData::nullsAreSortedHigh(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
-    return nValue == SQL_NC_HIGH;
-}
-
-bool ODatabaseMetaData::nullsAreSortedLow(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
-    return nValue == SQL_NC_LOW;
 }
 
 bool ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
@@ -1129,48 +465,6 @@ bool ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
     return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
 }
 
-bool ODatabaseMetaData::supportsCorrelatedSubqueries(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return (nValue & SQL_SQ_CORRELATED_SUBQUERIES) == SQL_SQ_CORRELATED_SUBQUERIES;
-}
-
-bool ODatabaseMetaData::supportsSubqueriesInComparisons(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return (nValue & SQL_SQ_COMPARISON) == SQL_SQ_COMPARISON;
-}
-
-bool ODatabaseMetaData::supportsSubqueriesInExists(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return (nValue & SQL_SQ_EXISTS) == SQL_SQ_EXISTS;
-}
-
-bool ODatabaseMetaData::supportsSubqueriesInIns(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return (nValue & SQL_SQ_IN) == SQL_SQ_IN;
-}
-
-bool ODatabaseMetaData::supportsSubqueriesInQuantifieds(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
-    return (nValue & SQL_SQ_QUANTIFIED) == SQL_SQ_QUANTIFIED;
-}
-
-bool ODatabaseMetaData::supportsANSI92IntermediateSQL(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
-    return static_cast<bool>(nValue & SQL_SC_SQL92_INTERMEDIATE);
-}
-
 OUString ODatabaseMetaData::getURLImpl()
 {
     OUString aValue;
@@ -1195,314 +489,11 @@ OUString ODatabaseMetaData::getUserName(  )
     return aValue;
 }
 
-OUString ODatabaseMetaData::getDriverName(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_NAME,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-OUString ODatabaseMetaData::getDriverVersion()
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-OUString ODatabaseMetaData::getDatabaseProductVersion(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
 OUString ODatabaseMetaData::getDatabaseProductName(  )
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DBMS_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
-}
-
-OUString ODatabaseMetaData::getProcedureTerm(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURE_TERM,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-OUString ODatabaseMetaData::getSchemaTerm(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_TERM,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-sal_Int32 ODatabaseMetaData::getDriverMajorVersion(  ) try
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return o3tl::toInt32(aValue.subView(0,aValue.indexOf('.')));
-}
-catch (const SQLException &)
-{
-    return 0;
-}
-
-sal_Int32 ODatabaseMetaData::getDefaultTransactionIsolation(  )
-{
-    SQLUINTEGER nValue;
-    sal_Int32 nValueTranslated;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DEFAULT_TXN_ISOLATION,nValue,*this);
-    switch(nValue)
-    {
-        case SQL_TXN_READ_UNCOMMITTED:
-            nValueTranslated = css::sdbc::TransactionIsolation::READ_UNCOMMITTED;
-            break;
-        case SQL_TXN_READ_COMMITTED:
-            nValueTranslated = css::sdbc::TransactionIsolation::READ_COMMITTED;
-            break;
-        case SQL_TXN_REPEATABLE_READ:
-            nValueTranslated = css::sdbc::TransactionIsolation::REPEATABLE_READ;
-            break;
-        case  SQL_TXN_SERIALIZABLE:
-            nValueTranslated = css::sdbc::TransactionIsolation::SERIALIZABLE;
-            break;
-        default:
-            nValueTranslated = 0;
-    }
-    return nValueTranslated;
-}
-
-sal_Int32 ODatabaseMetaData::getDriverMinorVersion(  ) try
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return o3tl::toInt32(aValue.subView(0,aValue.lastIndexOf('.')));
-}
-catch (const SQLException &)
-{
-    return 0;
-}
-
-OUString ODatabaseMetaData::getSQLKeywords(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_KEYWORDS,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-OUString ODatabaseMetaData::getSearchStringEscape(  )
-{
-    OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SEARCH_PATTERN_ESCAPE,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue;
-}
-
-OUString ODatabaseMetaData::getStringFunctions(  )
-{
-    SQLUINTEGER nValue;
-    OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_STRING_FUNCTIONS,nValue,*this);
-    if(nValue & SQL_FN_STR_ASCII)
-        aValue.append("ASCII,");
-    if(nValue & SQL_FN_STR_BIT_LENGTH)
-        aValue.append("BIT_LENGTH,");
-    if(nValue & SQL_FN_STR_CHAR)
-        aValue.append("CHAR,");
-    if(nValue & SQL_FN_STR_CHAR_LENGTH)
-        aValue.append("CHAR_LENGTH,");
-    if(nValue & SQL_FN_STR_CHARACTER_LENGTH)
-        aValue.append("CHARACTER_LENGTH,");
-    if(nValue & SQL_FN_STR_CONCAT)
-        aValue.append("CONCAT,");
-    if(nValue & SQL_FN_STR_DIFFERENCE)
-        aValue.append("DIFFERENCE,");
-    if(nValue & SQL_FN_STR_INSERT)
-        aValue.append("INSERT,");
-    if(nValue & SQL_FN_STR_LCASE)
-        aValue.append("LCASE,");
-    if(nValue & SQL_FN_STR_LEFT)
-        aValue.append("LEFT,");
-    if(nValue & SQL_FN_STR_LENGTH)
-        aValue.append("LENGTH,");
-    if(nValue & SQL_FN_STR_LOCATE)
-        aValue.append("LOCATE,");
-    if(nValue & SQL_FN_STR_LOCATE_2)
-        aValue.append("LOCATE_2,");
-    if(nValue & SQL_FN_STR_LTRIM)
-        aValue.append("LTRIM,");
-    if(nValue & SQL_FN_STR_OCTET_LENGTH)
-        aValue.append("OCTET_LENGTH,");
-    if(nValue & SQL_FN_STR_POSITION)
-        aValue.append("POSITION,");
-    if(nValue & SQL_FN_STR_REPEAT)
-        aValue.append("REPEAT,");
-    if(nValue & SQL_FN_STR_REPLACE)
-        aValue.append("REPLACE,");
-    if(nValue & SQL_FN_STR_RIGHT)
-        aValue.append("RIGHT,");
-    if(nValue & SQL_FN_STR_RTRIM)
-        aValue.append("RTRIM,");
-    if(nValue & SQL_FN_STR_SOUNDEX)
-        aValue.append("SOUNDEX,");
-    if(nValue & SQL_FN_STR_SPACE)
-        aValue.append("SPACE,");
-    if(nValue & SQL_FN_STR_SUBSTRING)
-        aValue.append("SUBSTRING,");
-    if(nValue & SQL_FN_STR_UCASE)
-        aValue.append("UCASE,");
-
-
-    if ( !aValue.isEmpty() )
-        aValue.setLength(aValue.getLength()-1);
-
-    return aValue.makeStringAndClear();
-}
-
-OUString ODatabaseMetaData::getTimeDateFunctions(  )
-{
-    SQLUINTEGER nValue;
-    OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TIMEDATE_FUNCTIONS,nValue,*this);
-
-    if(nValue & SQL_FN_TD_CURRENT_DATE)
-        aValue.append("CURRENT_DATE,");
-    if(nValue & SQL_FN_TD_CURRENT_TIME)
-        aValue.append("CURRENT_TIME,");
-    if(nValue & SQL_FN_TD_CURRENT_TIMESTAMP)
-        aValue.append("CURRENT_TIMESTAMP,");
-    if(nValue & SQL_FN_TD_CURDATE)
-        aValue.append("CURDATE,");
-    if(nValue & SQL_FN_TD_CURTIME)
-        aValue.append("CURTIME,");
-    if(nValue & SQL_FN_TD_DAYNAME)
-        aValue.append("DAYNAME,");
-    if(nValue & SQL_FN_TD_DAYOFMONTH)
-        aValue.append("DAYOFMONTH,");
-    if(nValue & SQL_FN_TD_DAYOFWEEK)
-        aValue.append("DAYOFWEEK,");
-    if(nValue & SQL_FN_TD_DAYOFYEAR)
-        aValue.append("DAYOFYEAR,");
-    if(nValue & SQL_FN_TD_EXTRACT)
-        aValue.append("EXTRACT,");
-    if(nValue & SQL_FN_TD_HOUR)
-        aValue.append("HOUR,");
-    if(nValue & SQL_FN_TD_MINUTE)
-        aValue.append("MINUTE,");
-    if(nValue & SQL_FN_TD_MONTH)
-        aValue.append("MONTH,");
-    if(nValue & SQL_FN_TD_MONTHNAME)
-        aValue.append("MONTHNAME,");
-    if(nValue & SQL_FN_TD_NOW)
-        aValue.append("NOW,");
-    if(nValue & SQL_FN_TD_QUARTER)
-        aValue.append("QUARTER,");
-    if(nValue & SQL_FN_TD_SECOND)
-        aValue.append("SECOND,");
-    if(nValue & SQL_FN_TD_TIMESTAMPADD)
-        aValue.append("TIMESTAMPADD,");
-    if(nValue & SQL_FN_TD_TIMESTAMPDIFF)
-        aValue.append("TIMESTAMPDIFF,");
-    if(nValue & SQL_FN_TD_WEEK)
-        aValue.append("WEEK,");
-    if(nValue & SQL_FN_TD_YEAR)
-        aValue.append("YEAR,");
-
-    if ( !aValue.isEmpty() )
-        aValue.setLength(aValue.getLength()-1);
-
-    return aValue.makeStringAndClear();
-}
-
-OUString ODatabaseMetaData::getSystemFunctions(  )
-{
-    SQLUINTEGER nValue;
-    OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SYSTEM_FUNCTIONS,nValue,*this);
-
-    if(nValue & SQL_FN_SYS_DBNAME)
-        aValue.append("DBNAME,");
-    if(nValue & SQL_FN_SYS_IFNULL)
-        aValue.append("IFNULL,");
-    if(nValue & SQL_FN_SYS_USERNAME)
-        aValue.append("USERNAME,");
-
-    if ( !aValue.isEmpty() )
-        aValue.setLength(aValue.getLength()-1);
-
-    return aValue.makeStringAndClear();
-}
-
-OUString ODatabaseMetaData::getNumericFunctions(  )
-{
-    SQLUINTEGER nValue;
-    OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NUMERIC_FUNCTIONS,nValue,*this);
-
-    if(nValue & SQL_FN_NUM_ABS)
-        aValue.append("ABS,");
-    if(nValue & SQL_FN_NUM_ACOS)
-        aValue.append("ACOS,");
-    if(nValue & SQL_FN_NUM_ASIN)
-        aValue.append("ASIN,");
-    if(nValue & SQL_FN_NUM_ATAN)
-        aValue.append("ATAN,");
-    if(nValue & SQL_FN_NUM_ATAN2)
-        aValue.append("ATAN2,");
-    if(nValue & SQL_FN_NUM_CEILING)
-        aValue.append("CEILING,");
-    if(nValue & SQL_FN_NUM_COS)
-        aValue.append("COS,");
-    if(nValue & SQL_FN_NUM_COT)
-        aValue.append("COT,");
-    if(nValue & SQL_FN_NUM_DEGREES)
-        aValue.append("DEGREES,");
-    if(nValue & SQL_FN_NUM_EXP)
-        aValue.append("EXP,");
-    if(nValue & SQL_FN_NUM_FLOOR)
-        aValue.append("FLOOR,");
-    if(nValue & SQL_FN_NUM_LOG)
-        aValue.append("LOGF,");
-    if(nValue & SQL_FN_NUM_LOG10)
-        aValue.append("LOG10,");
-    if(nValue & SQL_FN_NUM_MOD)
-        aValue.append("MOD,");
-    if(nValue & SQL_FN_NUM_PI)
-        aValue.append("PI,");
-    if(nValue & SQL_FN_NUM_POWER)
-        aValue.append("POWER,");
-    if(nValue & SQL_FN_NUM_RADIANS)
-        aValue.append("RADIANS,");
-    if(nValue & SQL_FN_NUM_RAND)
-        aValue.append("RAND,");
-    if(nValue & SQL_FN_NUM_ROUND)
-        aValue.append("ROUND,");
-    if(nValue & SQL_FN_NUM_SIGN)
-        aValue.append("SIGN,");
-    if(nValue & SQL_FN_NUM_SIN)
-        aValue.append("SIN,");
-    if(nValue & SQL_FN_NUM_SQRT)
-        aValue.append("SQRT,");
-    if(nValue & SQL_FN_NUM_TAN)
-        aValue.append("TAN,");
-    if(nValue & SQL_FN_NUM_TRUNCATE)
-        aValue.append("TRUNCATE,");
-
-    if ( !aValue.isEmpty() )
-        aValue.setLength(aValue.getLength()-1);
-
-    return aValue.makeStringAndClear();
-}
-
-bool ODatabaseMetaData::supportsExtendedSQLGrammar(  )
-{
-    SQLUINTEGER nValue;
-    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
-    SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
-                "connectivity.odbc",
-                "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
-    return nValue == SQL_OSC_EXTENDED;
 }
 
 bool ODatabaseMetaData::supportsCoreSQLGrammar(  )
@@ -1516,55 +507,11 @@ bool ODatabaseMetaData::supportsCoreSQLGrammar(  )
     return nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED;
 }
 
-bool ODatabaseMetaData::supportsMinimumSQLGrammar(  )
-{
-    SQLUINTEGER nValue;
-    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
-    SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
-                "connectivity.odbc",
-                "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
-    return nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED;
-}
-
 bool ODatabaseMetaData::supportsFullOuterJoins(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
     return (nValue & SQL_OJ_FULL) == SQL_OJ_FULL;
-}
-
-bool ODatabaseMetaData::supportsLimitedOuterJoins(  )
-{
-    return supportsFullOuterJoins(  );
-}
-
-sal_Int32 ODatabaseMetaData::getMaxColumnsInGroupBy(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_GROUP_BY,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxColumnsInOrderBy(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_ORDER_BY,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxColumnsInSelect(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_SELECT,nValue,*this);
-    return nValue;
-}
-
-sal_Int32 ODatabaseMetaData::getMaxUserNameLength(  )
-{
-    SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_USER_NAME_LEN,nValue,*this);
-    return nValue;
 }
 
 bool ODatabaseMetaData::supportsResultSetType( sal_Int32 setType )
@@ -1606,111 +553,9 @@ bool ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int
     return bRet;
 }
 
-bool ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType )
-{
-    SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
-    switch(setType)
-    {
-        default:
-        case ResultSetType::FORWARD_ONLY:
-            nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_INSENSITIVE:
-            nAskFor = SQL_STATIC_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_SENSITIVE:
-            nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-    }
-
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
-    return (nValue & SQL_CA2_SENSITIVITY_UPDATES) == SQL_CA2_SENSITIVITY_UPDATES;
-}
-
-bool ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType )
-{
-    SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
-    switch(setType)
-    {
-        default:
-        case ResultSetType::FORWARD_ONLY:
-            nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_INSENSITIVE:
-            nAskFor = SQL_STATIC_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_SENSITIVE:
-            nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-    }
-
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
-    return (nValue & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS;
-}
-
-bool ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType )
-{
-    SQLUINTEGER nValue;
-    SQLUSMALLINT nAskFor( SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2 );
-    switch(setType)
-    {
-        default:
-        case ResultSetType::FORWARD_ONLY:
-            nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_INSENSITIVE:
-            nAskFor = SQL_STATIC_CURSOR_ATTRIBUTES2;
-            break;
-        case ResultSetType::SCROLL_SENSITIVE:
-            nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-            break;
-    }
-
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
-    return (nValue & SQL_CA2_SENSITIVITY_ADDITIONS) == SQL_CA2_SENSITIVITY_ADDITIONS;
-}
-
-bool ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType )
-{
-    return ownUpdatesAreVisible(setType);
-}
-
-bool ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType )
-{
-    return ownDeletesAreVisible(setType);
-}
-
-bool ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType )
-{
-    return ownInsertsAreVisible(setType);
-}
-
-bool ODatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ )
-{
-    return false;
-}
-
 bool ODatabaseMetaData::supportsBatchUpdates(  )
 {
     return false;
 }
-
-Reference< XResultSet > ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ )
-{
-    return nullptr;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -100,19 +100,12 @@ namespace connectivity::ado
          OUString get_Version() const;
 
          // special methods
-         ADORecordset* getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
          ADORecordset* getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
          ADORecordset* getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table );
          ADORecordset* getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, std::u16string_view table, bool unique, bool approximate );
          ADORecordset* getTablePrivileges( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern );
-         ADORecordset* getCrossReference( const cpo::uno::Any& primaryCatalog,
-                                              const OUString& primarySchema,
-                                              std::u16string_view primaryTable,
-                                              const cpo::uno::Any& foreignCatalog,
-                                              const OUString& foreignSchema,
-                                              std::u16string_view foreignTable);
          ADORecordset* getProcedures( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view procedureNamePattern );

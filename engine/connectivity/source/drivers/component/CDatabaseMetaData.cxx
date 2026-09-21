@@ -202,29 +202,9 @@ Reference< XResultSet > OComponentDatabaseMetaData::getColumns(
     return pResult;
 }
 
-sal_Int32 OComponentDatabaseMetaData::getMaxBinaryLiteralLength(  )
-{
-    return SAL_MAX_INT32;
-}
-
-sal_Int32 OComponentDatabaseMetaData::getMaxCharLiteralLength(  )
-{
-    return SAL_MAX_INT32;
-}
-
 sal_Int32 OComponentDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return SAL_MAX_INT32;
-}
-
-sal_Int32 OComponentDatabaseMetaData::getMaxColumnsInIndex(  )
-{
-    return 1;
-}
-
-sal_Int32 OComponentDatabaseMetaData::getMaxColumnsInTable(  )
-{
-    return 256;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

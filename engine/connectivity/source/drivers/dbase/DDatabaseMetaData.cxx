@@ -308,29 +308,9 @@ OUString ODbaseDatabaseMetaData::getURL(  )
     return "sdbc:dbase:" + m_pConnection->getURL();
 }
 
-sal_Int32 ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  )
-{
-    return SAL_MAX_INT32;
-}
-
-sal_Int32 ODbaseDatabaseMetaData::getMaxCharLiteralLength(  )
-{
-    return 254;
-}
-
 sal_Int32 ODbaseDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return 10;
-}
-
-sal_Int32 ODbaseDatabaseMetaData::getMaxColumnsInIndex(  )
-{
-    return 1;
-}
-
-sal_Int32 ODbaseDatabaseMetaData::getMaxColumnsInTable(  )
-{
-    return 128;
 }
 
 bool ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )

@@ -164,7 +164,6 @@ namespace
             break;
         }
         // TODO: not all DBMS match column names case-insensitively...
-        // see XDatabaseMetaData::supportsMixedCaseIdentifiers()
         // and XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
         if  (   // table name matches (or no table name)?
                 ( !pTable || pTable->getTokenValue().equalsIgnoreAsciiCase(rParam.sPredicateTableAlias) )

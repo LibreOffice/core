@@ -31,11 +31,7 @@ namespace connectivity::component
     {
         virtual cpo::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
         virtual cpo::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-        virtual sal_Int32 getMaxBinaryLiteralLength(  ) override;
-        virtual sal_Int32 getMaxCharLiteralLength(  ) override;
         virtual sal_Int32 getMaxColumnNameLength(  ) override;
-        virtual sal_Int32 getMaxColumnsInIndex(  ) override;
-        virtual sal_Int32 getMaxColumnsInTable(  ) override;
     protected:
         virtual ~OComponentDatabaseMetaData() override;
     public:

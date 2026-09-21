@@ -67,52 +67,7 @@ OUString MacabDatabaseMetaData::getCatalogSeparator(  )
     return OUString();
 }
 
-sal_Int32 MacabDatabaseMetaData::getMaxBinaryLiteralLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxRowSize(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxCatalogNameLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxCharLiteralLength(  )
-{
-    return 0; // 0 means no limit
-}
-
 sal_Int32 MacabDatabaseMetaData::getMaxColumnNameLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxColumnsInIndex(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxCursorNameLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxConnections(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxColumnsInTable(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxStatementLength(  )
 {
     return 0; // 0 means no limit
 }
@@ -129,37 +84,7 @@ sal_Int32 MacabDatabaseMetaData::getMaxTablesInSelect(  )
     return 1;
 }
 
-bool MacabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::storesLowerCaseIdentifiers(  )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::storesMixedCaseIdentifiers(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     return false;
 }
@@ -174,19 +99,9 @@ bool MacabDatabaseMetaData::supportsAlterTableWithDropColumn(  )
     return false;
 }
 
-sal_Int32 MacabDatabaseMetaData::getMaxIndexLength(  )
-{
-    return 0; // 0 means no limit
-}
-
 bool MacabDatabaseMetaData::supportsNonNullableColumns(  )
 {
     return false;
-}
-
-OUString MacabDatabaseMetaData::getCatalogTerm(  )
-{
-    return OUString();
 }
 
 OUString MacabDatabaseMetaData::getIdentifierQuoteString(  )
@@ -200,77 +115,12 @@ OUString MacabDatabaseMetaData::getExtraNameCharacters(  )
     return OUString();
 }
 
-bool MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::isCatalogAtStart(  )
 {
     return false;
 }
 
-bool MacabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
-{
-    return true;
-}
-
-bool MacabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
-{
-    return true;
-}
-
-bool MacabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
-{
-    return true;
-}
-
-bool MacabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
-{
-    return true;
-}
-
-bool MacabDatabaseMetaData::supportsPositionedDelete(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsPositionedUpdate(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::supportsSchemasInDataManipulation(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsANSI92FullSQL(  )
 {
     return false;
 }
@@ -310,49 +160,9 @@ bool MacabDatabaseMetaData::supportsCatalogsInDataManipulation(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsOuterJoins(  )
-{
-    return false;
-}
-
 sal_Int32 MacabDatabaseMetaData::getMaxStatements(  )
 {
     return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxProcedureNameLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxSchemaNameLength(  )
-{
-    return 0; // 0 means no limit
-}
-
-bool MacabDatabaseMetaData::supportsTransactions(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::allProceduresAreCallable(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsStoredProcedures(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSelectForUpdate(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::allTablesAreSelectable(  )
-{
-    return false;
 }
 
 bool MacabDatabaseMetaData::isReadOnly(  )
@@ -371,52 +181,7 @@ bool MacabDatabaseMetaData::usesLocalFilePerTable(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsTypeConversion(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::nullPlusNonNullIsNull(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsColumnAliasing(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsTableCorrelationNames(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsExpressionsInOrderBy(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsGroupBy(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsGroupByBeyondSelect(  )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::supportsGroupByUnrelated(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsMultipleTransactions(  )
 {
     return false;
 }
@@ -426,52 +191,12 @@ bool MacabDatabaseMetaData::supportsMultipleResultSets(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsLikeEscapeClause(  )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::supportsOrderByUnrelated(  )
 {
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsUnion(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsUnionAll(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsMixedCaseIdentifiers(  )
-{
-    return false;
-}
-
 bool MacabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::nullsAreSortedAtEnd(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::nullsAreSortedAtStart(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::nullsAreSortedHigh(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::nullsAreSortedLow(  )
 {
     return false;
 }
@@ -496,36 +221,6 @@ bool MacabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsCorrelatedSubqueries(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSubqueriesInComparisons(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSubqueriesInExists(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSubqueriesInIns(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSubqueriesInQuantifieds(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  )
-{
-    return false;
-}
-
 OUString MacabDatabaseMetaData::getURL(  )
 {
     // if someday we support more than the default address book,
@@ -538,84 +233,9 @@ OUString MacabDatabaseMetaData::getUserName(  )
     return OUString();
 }
 
-OUString MacabDatabaseMetaData::getDriverName(  )
-{
-    return u"macab"_ustr;
-}
-
-OUString MacabDatabaseMetaData::getDriverVersion()
-{
-    return MACAB_DRIVER_VERSION;
-}
-
-OUString MacabDatabaseMetaData::getDatabaseProductVersion(  )
-{
-    return OUString();
-}
-
 OUString MacabDatabaseMetaData::getDatabaseProductName(  )
 {
     return OUString();
-}
-
-OUString MacabDatabaseMetaData::getProcedureTerm(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getSchemaTerm(  )
-{
-    return OUString();
-}
-
-sal_Int32 MacabDatabaseMetaData::getDriverMajorVersion(  )
-{
-    return MACAB_DRIVER_VERSION_MAJOR;
-}
-
-sal_Int32 MacabDatabaseMetaData::getDefaultTransactionIsolation(  )
-{
-    return TransactionIsolation::NONE;
-}
-
-sal_Int32 MacabDatabaseMetaData::getDriverMinorVersion(  )
-{
-    return MACAB_DRIVER_VERSION_MINOR;
-}
-
-OUString MacabDatabaseMetaData::getSQLKeywords(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getSearchStringEscape(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getStringFunctions(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getTimeDateFunctions(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getSystemFunctions(  )
-{
-    return OUString();
-}
-
-OUString MacabDatabaseMetaData::getNumericFunctions(  )
-{
-    return OUString();
-}
-
-bool MacabDatabaseMetaData::supportsExtendedSQLGrammar(  )
-{
-    return false;
 }
 
 bool MacabDatabaseMetaData::supportsCoreSQLGrammar(  )
@@ -623,39 +243,9 @@ bool MacabDatabaseMetaData::supportsCoreSQLGrammar(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsMinimumSQLGrammar(  )
-{
-    return true;
-}
-
 bool MacabDatabaseMetaData::supportsFullOuterJoins(  )
 {
     return false;
-}
-
-bool MacabDatabaseMetaData::supportsLimitedOuterJoins(  )
-{
-    return false;
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxColumnsInGroupBy(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxColumnsInOrderBy(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxColumnsInSelect(  )
-{
-    return 0; // 0 means no limit
-}
-
-sal_Int32 MacabDatabaseMetaData::getMaxUserNameLength(  )
-{
-    return 0; // 0 means no limit
 }
 
 bool MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setType )
@@ -677,51 +267,6 @@ bool MacabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal
         case ResultSetType::SCROLL_INSENSITIVE:
             return true;
     }
-    return false;
-}
-
-bool MacabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::updatesAreDetected( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::deletesAreDetected( sal_Int32 )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::insertsAreDetected( sal_Int32 )
-{
     return false;
 }
 
@@ -807,16 +352,6 @@ Reference< XResultSet > MacabDatabaseMetaData::getTypeInfo(  )
     }();
     pResult->setRows(std::vector(aRows));
     return pResult;
-}
-
-Reference< XResultSet > MacabDatabaseMetaData::getCatalogs(  )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
-}
-
-Reference< XResultSet > MacabDatabaseMetaData::getSchemas(  )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 
 Reference< XResultSet > MacabDatabaseMetaData::getColumnPrivileges(
@@ -973,20 +508,6 @@ Reference< XResultSet > MacabDatabaseMetaData::getTables(
     return pResult;
 }
 
-Reference< XResultSet > MacabDatabaseMetaData::getProcedureColumns(
-    const Any&, const OUString&,
-    const OUString&, const OUString& )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
-}
-
-Reference< XResultSet > MacabDatabaseMetaData::getProcedures(
-    const Any&, const OUString&,
-    const OUString& )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
-}
-
 Reference< XResultSet > MacabDatabaseMetaData::getVersionColumns(
     const Any&, const OUString&, const OUString& table )
 {
@@ -1017,12 +538,6 @@ Reference< XResultSet > MacabDatabaseMetaData::getVersionColumns(
     return pResult;
 }
 
-Reference< XResultSet > MacabDatabaseMetaData::getExportedKeys(
-    const Any&, const OUString&, const OUString& )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
-}
-
 Reference< XResultSet > MacabDatabaseMetaData::getImportedKeys(
     const Any&, const OUString&, const OUString& )
 {
@@ -1042,32 +557,10 @@ Reference< XResultSet > MacabDatabaseMetaData::getIndexInfo(
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 
-Reference< XResultSet > MacabDatabaseMetaData::getBestRowIdentifier(
-    const Any&, const OUString&, const OUString&, sal_Int32,
-    bool )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
-}
-
 Reference< XResultSet > MacabDatabaseMetaData::getTablePrivileges(
     const Any&, const OUString&, const OUString& )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
-
-Reference< XResultSet > MacabDatabaseMetaData::getCrossReference(
-    const Any&, const OUString&,
-    const OUString&, const Any&,
-    const OUString&, const OUString& )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
-}
-
-Reference< XResultSet > MacabDatabaseMetaData::getUDTs( const Any&, const OUString&, const OUString&, const Sequence< sal_Int32 >& )
-{
-    OSL_FAIL("Not implemented yet!");
-    throw SQLException();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

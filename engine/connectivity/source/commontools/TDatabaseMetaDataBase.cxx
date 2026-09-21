@@ -170,12 +170,6 @@ Reference< XResultSet > ODatabaseMetaDataBase::getTypeInfo(  )
     return pResult;
 }
 
-Reference< XResultSet > ODatabaseMetaDataBase::getExportedKeys(
-        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
-}
-
 Reference< XResultSet > ODatabaseMetaDataBase::getImportedKeys(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
@@ -195,49 +189,15 @@ Reference< XResultSet > ODatabaseMetaDataBase::getIndexInfo(
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 
-Reference< XResultSet > ODatabaseMetaDataBase::getBestRowIdentifier(
-        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/, sal_Int32 /*scope*/,
-        bool /*nullable*/ )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
-}
-
-Reference< XResultSet > ODatabaseMetaDataBase::getCrossReference(
-        const Any& /*primaryCatalog*/, const OUString& /*primarySchema*/,
-        const OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-        const OUString& /*foreignSchema*/, const OUString& /*foreignTable*/ )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
-}
-
 Reference< XConnection > ODatabaseMetaDataBase::getConnection(  )
 {
     return m_xConnection;
-}
-
-Reference< XResultSet > ODatabaseMetaDataBase::getProcedureColumns(
-        const Any& /*catalog*/, const OUString& /*schemaPattern*/,
-        const OUString& /*procedureNamePattern*/, const OUString& /*columnNamePattern*/ )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
-}
-
-Reference< XResultSet > ODatabaseMetaDataBase::getProcedures(
-        const Any& /*catalog*/, const OUString& /*schemaPattern*/,
-        const OUString& /*procedureNamePattern*/ )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 
 Reference< XResultSet > ODatabaseMetaDataBase::getVersionColumns(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
-}
-
-Reference< XResultSet > ODatabaseMetaDataBase::getSchemas(  )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 
 Reference< XResultSet > ODatabaseMetaDataBase::getColumnPrivileges(
@@ -251,11 +211,6 @@ Reference< XResultSet > ODatabaseMetaDataBase::getTablePrivileges(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
-}
-
-Reference< XResultSet > ODatabaseMetaDataBase::getCatalogs(  )
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
 }
 
 OUString ODatabaseMetaDataBase::getIdentifierQuoteString(  )
