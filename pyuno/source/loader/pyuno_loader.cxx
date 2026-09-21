@@ -115,11 +115,7 @@ static PyRef getObjectFromLoaderModule( const char * func )
     return object;
 }
 
-#if PY_VERSION_HEX >= 0x03080000
 static void setPythonHome ( const OUString & pythonHome, PyConfig * config )
-#else
-static void setPythonHome ( const OUString & pythonHome )
-#endif
 {
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
@@ -143,11 +139,7 @@ static void setPythonHome ( const OUString & pythonHome )
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
         return;
     }
-#if PY_VERSION_HEX >= 0x03080000
     config->home = wide;
-#else
-    Py_SetPythonHome(wide);
-#endif
 }
 
 static void prependPythonPath( std::u16string_view pythonPathBootstrap )
@@ -199,17 +191,13 @@ void pythonInit() {
     if ( Py_IsInitialized()) // may be inited by getComponentContext() already
         return;
 
-#if PY_VERSION_HEX >= 0x03080000
     PyConfig config;
-#endif
     OUString pythonPath;
     OUString pythonHome;
     OUString path( u"$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ) ""_ustr);
     rtl::Bootstrap::expandMacros(path); //TODO: detect failure
     rtl::Bootstrap bootstrap(path);
-#if PY_VERSION_HEX >= 0x03080000
     PyConfig_InitPythonConfig( &config );
-#endif
 
     // look for pythonhome
     bootstrap.getFrom( u"PYUNO_LOADER_PYTHONHOME"_ustr, pythonHome );
@@ -218,11 +206,7 @@ void pythonInit() {
     // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
     // sadly, there is no api for setting the pythonpath, we have to use the environment variable
     if( !pythonHome.isEmpty() )
-#if PY_VERSION_HEX >= 0x03080000
         setPythonHome( pythonHome, &config );
-#else
-        setPythonHome( pythonHome );
-#endif
 
     if( !pythonPath.isEmpty() )
         prependPythonPath( pythonPath );
@@ -245,23 +229,10 @@ void pythonInit() {
 #endif
 
     // initialize python
-#if PY_VERSION_HEX >= 0x03080000
     Py_InitializeFromConfig(&config);
-#else
-    Py_Initialize();
-#endif
-#if PY_VERSION_HEX < 0x03090000
-    PyEval_InitThreads();
-#endif
 
     PyThreadState *tstate = PyThreadState_Get();
     PyEval_ReleaseThread( tstate );
-#if PY_VERSION_HEX < 0x030B0000
-    // This tstate is never used again, so delete it here.
-    // This prevents an assertion in PyThreadState_Swap on the
-    // PyThreadAttach below.
-    PyThreadState_Delete(tstate);
-#endif
 }
 
 }
