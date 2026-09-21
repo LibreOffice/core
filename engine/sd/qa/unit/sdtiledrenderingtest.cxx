@@ -259,6 +259,11 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_ShapeSelection = OString(pPayload);
         }
         break;
+        case COKitCallbackType::TEXT_SELECTION:
+        {
+            m_aTextSelections.push_back(OString(pPayload));
+        }
+        break;
         case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         {
             std::stringstream aStream(pPayload);

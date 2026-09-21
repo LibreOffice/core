@@ -1341,6 +1341,67 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPreviewRenderKeepsReportedTextSel
     CPPUNIT_ASSERT_EQUAL(aSelectionOfTheView, m_aSelection[0]);
 }
 
+// Two views edit text on two different slides at the same time. What one of
+// them does reaches every view as a document change, and a view that has a
+// slide with an empty placeholder on it rebuilds its layout tags and with them
+// the handles of what it has marked. A view that is editing text keeps the
+// text it selected through all of that.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextSelectionSurvivesEditingInAnotherView)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->getParts() >= 2);
+
+    // The first view edits the title of the first slide and selects some text.
+    SdTestViewCallback aView1;
+    const int nView1 = KitHelper::getCurrentView();
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    SdrObject* pTitle1 = pViewShell1->GetActualPage()->GetObj(0);
+    pView1->MarkObj(pTitle1, pView1->GetSdrPageView());
+    pView1->SdrBeginTextEdit(pTitle1);
+    CPPUNIT_ASSERT(pView1->GetTextEditObject());
+    pView1->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection(0, 0, 0, 5));
+    CPPUNIT_ASSERT(pView1->GetTextEditOutlinerView()->GetEditView().HasSelection());
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_aTextSelections.clear();
+
+    // The second view sits on the second slide and starts editing the title
+    // there.
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView2;
+    pXImpressDocument->setPart(1);
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    CPPUNIT_ASSERT(pView2 != pView1);
+    SdrObject* pTitle2 = pViewShell2->GetActualPage()->GetObj(0);
+    pView2->MarkObj(pTitle2, pView2->GetSdrPageView());
+    pView2->SdrBeginTextEdit(pTitle2);
+    CPPUNIT_ASSERT(pView2->GetTextEditObject());
+    pView2->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection(0, 0, 0, 6));
+    Scheduler::ProcessEventsToIdle();
+
+    // This failed: the first view was told that its text selection is gone.
+    for (const OString& rSelection : aView1.m_aTextSelections)
+        CPPUNIT_ASSERT_MESSAGE("the first view was told its selection is gone",
+                               !rSelection.isEmpty());
+    CPPUNIT_ASSERT(pView1->GetTextEditObject());
+    CPPUNIT_ASSERT(pView1->GetTextEditOutlinerView()->GetEditView().HasSelection());
+
+    // The same holds the other way round while the first view carries on typing.
+    aView2.m_aTextSelections.clear();
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    for (const OString& rSelection : aView2.m_aTextSelections)
+        CPPUNIT_ASSERT_MESSAGE("the second view was told its selection is gone",
+                               !rSelection.isEmpty());
+    CPPUNIT_ASSERT(pView2->GetTextEditObject());
+    CPPUNIT_ASSERT(pView2->GetTextEditOutlinerView()->GetEditView().HasSelection());
+}
+
 /**
  * tests a cut/paste bug around bullet items in a list and
  * graphic (bitmap) bullet items in a list (Tdf103083, Tdf166882)

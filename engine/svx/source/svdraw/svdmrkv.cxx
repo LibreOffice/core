@@ -977,8 +977,11 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             }
         }
 
-        // hide the text selection too
-        if (pViewShell)
+        // A shape is selected, so the text selection this view showed before belongs to
+        // nothing now and goes away with it. A view that is editing text keeps the text it
+        // selected: the shape reported here is the frame around that very edit, and the edit
+        // reports its own selection as it changes.
+        if (pViewShell && !static_cast<SdrView*>(this)->IsTextEdit())
             pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
     }
 

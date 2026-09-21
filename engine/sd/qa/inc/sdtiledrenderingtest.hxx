@@ -72,6 +72,8 @@ public:
     std::map<int, bool> m_aViewCursorInvalidations;
     std::map<int, bool> m_aViewCursorVisibilities;
     bool m_bViewSelectionSet;
+    /// Every text selection payload this view was sent, in the order they arrived.
+    std::vector<OString> m_aTextSelections;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_ShapeSelection;
     std::vector<std::string> m_aStateChanged;
