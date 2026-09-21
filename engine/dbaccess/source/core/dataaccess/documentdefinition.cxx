@@ -1736,57 +1736,6 @@ Reference< util::XCloseable > ODocumentDefinition::getComponent()
     return impl_getComponent_throw();
 }
 
-namespace
-{
-    Reference< XDatabaseDocumentUI > lcl_getDatabaseDocumentUI( ODatabaseModelImpl const & _rModelImpl )
-    {
-        Reference< XDatabaseDocumentUI > xUI;
-
-        rtl::Reference< ODatabaseDocument > xModel( _rModelImpl.getModel_noCreate() );
-        if ( xModel.is() )
-            xUI.set( xModel->getCurrentController(), UNO_QUERY );
-        return xUI;
-    }
-}
-
-Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bForEditing )
-{
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    if ( !m_pImpl || !m_pImpl->m_pDataSource )
-        throw DisposedException();
-
-    Reference< XComponent > xComponent;
-    try
-    {
-        Reference< XDatabaseDocumentUI > xUI( lcl_getDatabaseDocumentUI( *m_pImpl->m_pDataSource ) );
-        if ( !xUI.is() )
-        {
-            // no XDatabaseDocumentUI -> just execute the respective command
-            m_bOpenInDesign = _bForEditing;
-            xComponent = Reference<XComponent>(onCommandOpenSomething(Any(), true, nullptr), UNO_QUERY);
-            OSL_ENSURE( xComponent.is(), "ODocumentDefinition::impl_openUI_nolck_throw: opening the thingie failed." );
-            return xComponent;
-        }
-
-
-        OUString sName( impl_getHierarchicalName( false ) );
-        sal_Int32 nObjectType = m_bForm ? DatabaseObject::FORM : DatabaseObject::REPORT;
-        aGuard.clear();
-
-        xComponent = xUI->loadComponent(
-            nObjectType, sName, _bForEditing
-        );
-    }
-    catch( const RuntimeException& ) { throw; }
-    catch( const Exception& )
-    {
-        throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
-    }
-
-    return xComponent;
-}
-
 void ODocumentDefinition::impl_store_throw()
 {
     Reference<XEmbedPersist> xPersist( m_xEmbeddedObject, UNO_QUERY );
@@ -1806,31 +1755,6 @@ bool ODocumentDefinition::impl_close_throw()
         bSuccess = m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED;
     }
     return bSuccess;
-}
-
-Reference< XComponent > ODocumentDefinition::open(  )
-{
-    return impl_openUI_nolck_throw( false );
-}
-
-Reference< XComponent > ODocumentDefinition::openDesign(  )
-{
-    return impl_openUI_nolck_throw( true );
-}
-
-void ODocumentDefinition::store(  )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    try
-    {
-        impl_store_throw();
-    }
-    catch( const RuntimeException& ) { throw; }
-    catch( const Exception& )
-    {
-        throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
-    }
 }
 
 bool ODocumentDefinition::close(  )

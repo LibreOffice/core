@@ -110,9 +110,6 @@ public:
     virtual cpo::uno::Reference< css::util::XCloseable > getComponent(  ) override;
 
     // XSubDocument
-    virtual cpo::uno::Reference< css::lang::XComponent > open(  ) override;
-    virtual cpo::uno::Reference< css::lang::XComponent > openDesign(  ) override;
-    virtual void store(  ) override;
     virtual bool close(  ) override;
 
     // XHierarchicalName
@@ -210,11 +207,6 @@ private:
                     const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
                     const cpo::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
-
-    /** opens the UI for this sub document
-    */
-    cpo::uno::Reference< css::lang::XComponent >
-            impl_openUI_nolck_throw( bool _bForEditing );
 
     /** stores our document, if it's already loaded
     */
