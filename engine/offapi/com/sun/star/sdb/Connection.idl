@@ -25,7 +25,6 @@ module com {  module sun {  module star {  module lang {
 
  published interface XSQLQueryComposerFactory;
  published interface XQueriesSupplier;
- published interface XCommandPreparation;
 
 /** extends the
     com::sun::star::sdbc::Connection
@@ -38,10 +37,6 @@ published service Connection
     /** access to the owning data source.
      */
     interface com::sun::star::container::XChild;
-
-    /** interface for complex command execution.
-     */
-    interface XCommandPreparation;
 
     /** access to the database definition information of the connection.
      */

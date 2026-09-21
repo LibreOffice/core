@@ -9631,10 +9631,6 @@ module com {
      const long QUERY = 1;
      const long TABLE = 0;
     };
-    published interface XCommandPreparation {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::sdbc::XPreparedStatement prepareCommand([in] string command, [in] long commandType) raises (::com::sun::star::sdbc::SQLException);
-    };
     published interface XQueriesSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameAccess getQueries();
@@ -9704,7 +9700,6 @@ module com {
      service ::com::sun::star::sdbc::Connection;
      service ::com::sun::star::sdbcx::DatabaseDefinition;
      interface ::com::sun::star::container::XChild;
-     interface ::com::sun::star::sdb::XCommandPreparation;
      interface ::com::sun::star::sdb::XQueriesSupplier;
      interface ::com::sun::star::sdb::XSQLQueryComposerFactory;
      [optional] interface ::com::sun::star::lang::XMultiServiceFactory;

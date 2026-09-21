@@ -560,38 +560,6 @@ Reference< XNameAccess >  OConnection::getQueries()
     return m_xQueries;
 }
 
-// css::sdb::XCommandPreparation
-Reference< XPreparedStatement >  OConnection::prepareCommand( const OUString& command, sal_Int32 commandType )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-
-    OUString aStatement;
-    switch (commandType)
-    {
-        case CommandType::TABLE:
-            {
-                aStatement = u"SELECT * FROM "_ustr;
-
-                OUString sCatalog, sSchema, sTable;
-                ::dbtools::qualifiedNameComponents( getMetaData(), command, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
-                aStatement += ::dbtools::composeTableNameForSelect( this, sCatalog, sSchema, sTable );
-            }
-            break;
-        case CommandType::QUERY:
-            if ( m_xQueries->hasByName(command) )
-            {
-                Reference< XPropertySet > xQuery(m_xQueries->getByName(command),UNO_QUERY);
-                xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aStatement;
-            }
-            break;
-        default:
-            aStatement = command;
-    }
-    // TODO EscapeProcessing
-    return prepareStatement(aStatement);
-}
-
 Reference< XInterface > OConnection::createInstance( const OUString& _sServiceSpecifier )
 {
     Reference< XServiceInfo > xRet;
