@@ -31,7 +31,9 @@
 #       default they are recorded, like the signatures the publishing jobs
 #       make themselves, so that 'cosign verify-attestation' works without
 #       further flags; use this for a private registry, an offline run or a
-#       rehearsal, and verify with --insecure-ignore-tlog=true.
+#       rehearsal, and verify with --insecure-ignore-tlog=true. cosign 3.1
+#       dropped the flag this needs, so there it is refused rather than
+#       quietly doing the opposite.
 #
 # Consumers verify with:
 #   cosign verify              --key docker/cosign.pub <ref>
@@ -110,23 +112,48 @@ extract_sboms() {
     docker rm -f "$container" >/dev/null
 }
 
-# Key-based signing without a transparency log, on the classic sidecar-tag
-# layout (sha256-<digest>.sig / .att) that ZenDiS uses and that registries
-# without the OCI referrers API can serve. cosign >= 3 defaults to the new
-# sigstore bundle format and an implicit signing config, so both have to be
-# switched off there; cosign 2.x has neither flag and behaves this way anyway.
-COSIGN_FLAGS="--yes"
-if [ -n "$NO_TLOG" ]; then
-    COSIGN_FLAGS="$COSIGN_FLAGS --tlog-upload=false"
-fi
-if cosign sign --help 2>&1 | grep -q use-signing-config; then
-    COSIGN_FLAGS="$COSIGN_FLAGS --use-signing-config=false --new-bundle-format=false"
-fi
+# Key-based signing on the classic sidecar-tag layout (sha256-<digest>.sig /
+# .att) that ZenDiS uses and that registries without the OCI referrers API can
+# serve. Which flags that needs depends on the cosign generation, and the sets
+# differ between the subcommands, so every flag is probed on the subcommand it
+# would be passed to rather than assumed:
+#   2.x   --tlog-upload on sign and attest, neither of the v3 flags
+#   3.0   adds --use-signing-config and --new-bundle-format, both defaulting to
+#         the new bundle format, so both have to be switched off
+#   3.1   drops --new-bundle-format and --tlog-upload again
+cosign_has() {
+    cosign "$1" --help 2>&1 | grep -q -- "--$2"
+}
+
+cosign_flags() {
+    subcommand="$1"
+    flags="--yes"
+    if cosign_has "$subcommand" use-signing-config; then
+        flags="$flags --use-signing-config=false"
+    fi
+    if cosign_has "$subcommand" new-bundle-format; then
+        flags="$flags --new-bundle-format=false"
+    fi
+    if [ -n "$NO_TLOG" ]; then
+        if cosign_has "$subcommand" tlog-upload; then
+            flags="$flags --tlog-upload=false"
+        else
+            echo "publish.sh: -T given, but this cosign has no" \
+                 "--tlog-upload on '$subcommand'; refusing rather than" \
+                 "recording signatures in the public log unasked" >&2
+            exit 1
+        fi
+    fi
+    echo "$flags"
+}
+
+SIGN_FLAGS=$(cosign_flags sign)
+ATTEST_FLAGS=$(cosign_flags attest)
 
 attest() {
     pinned="$1"; type="$2"; predicate="$3"
     echo "  attest $type"
-    cosign attest $COSIGN_FLAGS --key "$KEY" --type "$type" \
+    cosign attest $ATTEST_FLAGS --key "$KEY" --type "$type" \
         --predicate "$predicate" "$pinned"
 }
 
@@ -136,7 +163,7 @@ publish_digest() {
     echo "== $pinned"
 
     echo "  sign"
-    cosign sign $COSIGN_FLAGS --key "$KEY" "$pinned"
+    cosign sign $SIGN_FLAGS --key "$KEY" "$pinned"
 
     extract_sboms "$pinned"
     attest "$pinned" cyclonedx "$WORKDIR/sbom.cdx.json"
