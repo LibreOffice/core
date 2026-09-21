@@ -212,9 +212,6 @@ function doZoom(zoomIn) {
 		cy.cGet('#toolbar-down #zoomout').click();
 	}
 
-	// Wait for animation to complete
-	cy.wait(500);
-
 	cy.cGet('#toolbar-down #zoom .unolabel')
 		.should(function(zoomLevel) {
 			expect(zoomLevel.text()).to.not.equal(prevZoom);
