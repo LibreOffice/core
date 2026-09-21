@@ -217,6 +217,9 @@ static const int CODA_WM_SHOWFILEPICKER = WM_APP + 4;
 // Closes the tab named in the wParam. Posted rather than called, so a web view
 // is never torn down from inside one of its own callbacks.
 static const int CODA_WM_CLOSETAB = WM_APP + 5;
+// Brings the next document of the window to the front, or the previous one when the wParam is -1
+// rather than 1. Posted for the same reason the close above is.
+static const int CODA_WM_ACTIVATEADJACENTTAB = WM_APP + 6;
 
 // One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
 // window; the wide strings own the dialog's title and filter text.
@@ -285,6 +288,8 @@ void load_next_document()
 static void processMessage(DocumentTab& tab, wil::unique_cotaskmem_string& message);
 
 static void closeTab(WindowState& window, int tabId);
+
+static void activateAdjacentTab(WindowState& window, int direction);
 
 static void layoutTabs(WindowState& window);
 
@@ -2003,6 +2008,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
         }
 
+        case CODA_WM_ACTIVATEADJACENTTAB:
+        {
+            if (WindowState* window = findWindow(hWnd))
+                activateAdjacentTab(*window, (int)wParam);
+            break;
+        }
+
         case CODA_WM_LOADNEXTDOCUMENT:
             if (filenamesAndUrisToOpen.size() > 0)
             {
@@ -2880,6 +2892,61 @@ static void reorderTab(WindowState& window, int fromIndex, int toIndex)
     focusActiveDocument(window);
 }
 
+// Walk the tab order by one, wrapping at either end, and bring that document to the front.
+static void activateAdjacentTab(WindowState& window, int direction)
+{
+    const int count = static_cast<int>(window.tabIds.size());
+    if (count < 2)
+        return;
+
+    const auto position =
+        std::find(window.tabIds.begin(), window.tabIds.end(), window.activeTabId);
+    if (position == window.tabIds.end())
+        return;
+
+    const int index = static_cast<int>(std::distance(window.tabIds.begin(), position));
+    activateTab(window, window.tabIds[((index + direction) % count + count) % count]);
+}
+
+// Ctrl+Tab and Ctrl+Shift+Tab move between the documents of a window. The app takes those keys
+// rather than leaving them to the page, because a document knows nothing about the other tabs.
+static void installTabSwitchAccelerator(ICoreWebView2Controller* controller, HWND hWnd)
+{
+    EventRegistrationToken token;
+    controller->add_AcceleratorKeyPressed(
+        Microsoft::WRL::Callback<ICoreWebView2AcceleratorKeyPressedEventHandler>(
+            [hWnd](ICoreWebView2Controller* sender,
+                   ICoreWebView2AcceleratorKeyPressedEventArgs* args) -> HRESULT
+            {
+                COREWEBVIEW2_KEY_EVENT_KIND kind;
+                UINT key;
+                if (FAILED(args->get_KeyEventKind(&kind)) ||
+                    FAILED(args->get_VirtualKey(&key)))
+                    return S_OK;
+
+                if (kind != COREWEBVIEW2_KEY_EVENT_KIND_KEY_DOWN &&
+                    kind != COREWEBVIEW2_KEY_EVENT_KIND_SYSTEM_KEY_DOWN)
+                    return S_OK;
+
+                if (key != VK_TAB || !(GetKeyState(VK_CONTROL) & 0x8000))
+                    return S_OK;
+
+                // A window showing a single document has no other tab to move to, so the
+                // key belongs to the document.
+                const WindowState* window = findWindow(hWnd);
+                if (!window || window->tabIds.size() < 2)
+                    return S_OK;
+
+                const int direction = (GetKeyState(VK_SHIFT) & 0x8000) ? -1 : 1;
+                PostMessageW(hWnd, CODA_WM_ACTIVATEADJACENTTAB, (WPARAM)direction, 0);
+
+                args->put_Handled(TRUE);
+                return S_OK;
+            })
+            .Get(),
+        &token);
+}
+
 static void openStarterWindow();
 
 // What the tab strip page asks of the app, as {call, args}.
@@ -2999,6 +3066,8 @@ static void createTabStrip(WindowState& window)
                                 .Get(),
                             &token);
 
+                        installTabSwitchAccelerator(controller, hWnd);
+
                         controller->put_IsVisible(window->stripIsVisible);
                         controller->put_Bounds(stripBounds(*window));
 
@@ -3062,6 +3131,8 @@ static void createDocumentView(int tabId)
                             = settings.try_query<ICoreWebView2Settings4>();
                         if (settings4)
                             settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
+
+                        installTabSwitchAccelerator(controller, data->hWnd);
 
                         // Fit the WebView to the part of the window below the tab strip, and show
                         // it only if this is the document the window is on.
