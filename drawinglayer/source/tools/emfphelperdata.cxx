@@ -1931,6 +1931,16 @@ namespace emfplushelper
                                     "EMF+\t Bezier Draw not support number of points other than 4, 7, "
                                     "10, 13, 16...");
 
+                        const sal_uInt32 nBytesPerPoint = (flags & 0x4000) ? 4 : 8;
+                        const sal_uInt64 nRecordLeft = rMS.Tell() < next ? next - rMS.Tell() : 0;
+                        const sal_uInt64 nMaxPoints = nRecordLeft / nBytesPerPoint;
+                        if (aCount > nMaxPoints)
+                        {
+                            SAL_WARN("drawinglayer.emf", "EMF+\twants " << aCount
+                                     << " points, the record holds " << nMaxPoints);
+                            aCount = static_cast<sal_uInt32>(nMaxPoints);
+                        }
+
                         if (aCount < 4)
                         {
                             SAL_WARN("drawinglayer.emf", "EMF+\t Bezier Draw does not support less "
