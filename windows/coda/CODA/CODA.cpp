@@ -4749,10 +4749,14 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
         wcex.hInstance = hInstance;
         wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_CODA));
         wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-        if (isLightTheme())
-            wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-        else
+        // The window frame shows through until a WebView2 covers it, so it follows the dark mode
+        // the app will use, which is the saved choice where there is one and the system theme
+        // otherwise. The class keeps the brush it is registered with, so a later change of theme
+        // reaches the frame only on the next run.
+        if (darkModeEnabled())
             wcex.hbrBackground = CreateSolidBrush(RGB(0x12, 0x12, 0x12));
+        else
+            wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = NULL;
         wcex.lpszClassName = windowClass;
         wcex.hIconSm = NULL;
