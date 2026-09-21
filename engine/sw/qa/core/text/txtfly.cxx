@@ -29,6 +29,25 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testMinWrapGap)
+{
+    // Given a document with a square-wrapped shape
+    createSwDoc("min-wrap-gap.docx");
+
+    // When layouting that document
+    calcLayout();
+
+    // Then make sure the line starts with the fly portion
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, this test would have failed with:
+    // - Expected: PortionType::Fly
+    // - Actual:   PortionType::Text
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/*[1]", "type",
+                u"PortionType::Fly");
+    // The paragraph below the shape should not be affected
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFixPortion", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreakWrapThrough)
 {
     // Given a document with a clearing break, then a shape in the next paragraph:

@@ -71,6 +71,7 @@ enum class DocumentSettingId
     MS_WORD_COMP_TRAILING_BLANKS,
     // tdf#128197 MS Word in some modes can have line height based on shape height, not on font
     MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY,
+    MS_WORD_COMP_MIN_TEXT_WRAP_GAP,
     UNIX_FORCE_ZERO_EXT_LEADING,
     TABS_RELATIVE_TO_INDENT,
     PROTECT_FORM,

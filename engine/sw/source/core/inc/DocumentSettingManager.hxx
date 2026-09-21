@@ -143,6 +143,7 @@ class DocumentSettingManager final :
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
     bool mbProtectForm                              : 1;
     bool mbMsWordCompTrailingBlanks                 : 1;   // tdf#104349 tdf#104668
+    bool mbMsWordCompMinTextWrapGap                 : 1;
     bool mbMsWordCompMinLineHeightByFly             : 1;
     bool mbInvertBorderSpacing                      : 1;
     bool mbCollapseEmptyCellPara                    : 1;

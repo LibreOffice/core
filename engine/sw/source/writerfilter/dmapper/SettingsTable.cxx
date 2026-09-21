@@ -676,6 +676,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
 
     // Shared between DOCX and RTF, unconditional flags.
     xDocumentSettings->setPropertyValue(u"TableRowKeep"_ustr, cpo::uno::Any(true));
+    xDocumentSettings->setPropertyValue(u"MsWordCompMinTextWrapGap"_ustr, cpo::uno::Any(true));
     xDocumentSettings->setPropertyValue(u"AddVerticalFrameOffsets"_ustr, cpo::uno::Any(true));
     xDocumentSettings->setPropertyValue(u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr,
                                 cpo::uno::Any(true));
