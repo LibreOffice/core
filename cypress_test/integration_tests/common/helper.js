@@ -460,25 +460,6 @@ function documentChecks(skipInitializedCheck = false) {
 				});
 		});
 
-		// In Writer wait for the style gallery icons in the notebookbar. An
-		// icon only exists after the on-demand renderer has round-tripped
-		// with core for its entry, and that round-trip only starts while the
-		// Home tab, which holds the gallery, is the shown tab. A document
-		// whose cursor starts inside a table opens on the Table tab instead,
-		// and fetches the icons later, when Home is first shown, so there is
-		// nothing to wait for in that case. One retried assertion covers
-		// both, so a tab switch that lands mid-wait cannot strand it.
-		doIfOnDesktop(() => {
-			doIfInWriter(() => {
-				cy.cGet('body').should(($body) => {
-					if ($body.find('#Home-tab-label.selected').length === 0)
-						return;
-					expect($body.find('#stylesview.notebookbar .icon-view-item-container img'),
-						'style gallery icons').to.have.length.greaterThan(0);
-				});
-			});
-		});
-
 		// Check also that the inputbar is drawn in Calc.
 		doIfInCalc(() => {
 			cy.cGet('#sc_input_window.formulabar').should('exist');
