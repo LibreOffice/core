@@ -1064,7 +1064,14 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
             SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
 
-            bool bChangeZoom = false;
+            SdPage* pSelectedPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
+
+            // The canvas page and a normal slide are each viewed at their own zoom level, so a
+            // switch between the two kinds of page carries a new zoom. The kind of page being
+            // left is taken from the page this view last showed, which still answers after a
+            // removal has taken that page out of the view.
+            const bool bChangeZoom
+                = mbShowedCanvasPage || (pSelectedPage && pSelectedPage->IsCanvasPage());
 
             if (pCurrentPage)
             {
@@ -1072,12 +1079,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                 const ::tools::Long nCurrentWidth = aCurrentPageSize.Width();
                 const ::tools::Long nCurrentHeight = aCurrentPageSize.Height();
 
-                SdPage* pSelectedPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
                 Size aNewPageSize = pSelectedPage->GetSize();
                 const ::tools::Long nNewWidth = aNewPageSize.Width();
                 const ::tools::Long nNewHeight = aNewPageSize.Height();
-
-                bChangeZoom = pCurrentPage->IsCanvasPage() || pSelectedPage->IsCanvasPage();
 
                 if ((nCurrentWidth != nNewWidth || nCurrentHeight != nNewHeight) && bAllowChangeFocus)
                 {
@@ -1137,6 +1141,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             mpDrawView->HideSdrPage();
             maTabControl->SetCurPageId(maTabControl->GetPageId(nSelectedPage));
             mpDrawView->ShowSdrPage(mpActualPage);
+            mbShowedCanvasPage = mpActualPage->IsCanvasPage();
             if (bAllowChangeFocus)
                 GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
 
@@ -1253,6 +1258,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
 
             sal_uInt16 nNum = pMaster->GetPageNum();
             mpDrawView->ShowSdrPage(mpDrawView->GetModel().GetMasterPage(nNum));
+            mbShowedCanvasPage = false;
 
             if (bAllowChangeFocus)
                 GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(pMaster);

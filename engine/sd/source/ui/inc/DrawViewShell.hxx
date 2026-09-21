@@ -508,6 +508,10 @@ private:
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 
     ::tools::Rectangle  maCanvasPageVisArea;
+
+    /** True when the page this view last showed is the canvas page. It still answers for
+        that page once the page itself has left the document. */
+    bool                mbShowedCanvasPage = false;
 };
 
 /// Merge the background properties together and deposit the result in rMergeAttr
