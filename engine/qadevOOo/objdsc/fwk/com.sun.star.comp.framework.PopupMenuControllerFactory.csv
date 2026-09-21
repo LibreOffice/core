@@ -1,4 +1,3 @@
 "PopupMenuControllerFactory";"com::sun::star::lang::XMultiComponentFactory";"createInstanceWithContext()"
 "PopupMenuControllerFactory";"com::sun::star::lang::XMultiComponentFactory";"createInstanceWithArgumentsAndContext()"
 "PopupMenuControllerFactory";"com::sun::star::lang::XMultiComponentFactory";"getAvailableServiceNames()"
-"PopupMenuControllerFactory";"com::sun::star::frame::XUIControllerRegistration";"hasController()"
