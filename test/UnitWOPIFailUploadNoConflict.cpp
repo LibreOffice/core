@@ -1443,6 +1443,12 @@ public:
 /// still perfectly good. Giving up on uploads for the rest of the document's
 /// life would mean every later edit is silently never stored: no upload, no
 /// error, and a broker that exits believing it has nothing to save.
+///
+/// Note what this does and does not cover. Holding back only while our own
+/// upload was refused leaves this case alone, so the test passes with that
+/// condition absent as well as present. What it guards is the wider version of
+/// the same idea - standing down on any conflict at all - which is the shape a
+/// later fix is most likely to take.
 class UnitWOPIUploadAfterJoinConflict : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, JoinPeer, WaitConflict,
