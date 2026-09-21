@@ -1,4 +1,6 @@
-/* global cy */
+/* global cy require */
+
+var helper = require('./helper');
 
 // Search bar related helper methods for mobile.
 
@@ -30,6 +32,11 @@ function typeIntoSearchField(text) {
 	cy.cGet('#searchnext').should('not.be.disabled');
 	cy.cGet('#cancelsearch').should('not.be.disabled');
 
+	// Typing starts a search. Core answers it before it reports idle.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
+
 	cy.log('<< typeIntoSearchField - end');
 }
 
@@ -37,10 +44,12 @@ function typeIntoSearchField(text) {
 function searchNext() {
 	cy.log('>> searchNext - start');
 
-	cy.wait(1000);
 	cy.cGet('#searchnext').should('not.have.attr', 'disabled');
 	cy.cGet('#searchnext').click();
-	cy.wait(2500); // TODO: test search result arrived
+	// Core answers the search before it reports idle, so the selection is in place.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
 
 	cy.log('<< searchNext - end');
 }
@@ -49,10 +58,12 @@ function searchNext() {
 function searchPrev() {
 	cy.log('>> searchPrev - start');
 
-	cy.wait(1000);
 	cy.cGet('#searchprev').should('not.have.attr', 'disabled');
 	cy.cGet('#searchprev').click();
-	cy.wait(2500); // TODO: test search result arrived
+	// Core answers the search before it reports idle, so the selection is in place.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
 
 	cy.log('<< searchPrev - end');
 }
