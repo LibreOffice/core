@@ -333,6 +333,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
         // Markdown files need an .md suffix to be imported as Markdown and not plain text
         String suffix = null;
         String intentType = getIntent().getType();
+        if (intentType == null)
+            intentType = getContentResolver().getType(documentUri);
         // K-9 mail uses the first, GMail uses the second variant.
         if ("text/comma-separated-values".equals(intentType) || "text/csv".equals(intentType))
             suffix = ".csv";
