@@ -92,7 +92,7 @@ class SwStyleNameMapper final
 public:
     // This gets the UI Name from the programmatic name
     [[nodiscard]]
-    static UIName GetUIName(const ProgName& rName, SwGetPoolIdFromName);
+    SW_DLLPUBLIC static UIName GetUIName(const ProgName& rName, SwGetPoolIdFromName);
     static         void FillUIName(const ProgName& rName, UIName& rFillName,
                             SwGetPoolIdFromName);
 
