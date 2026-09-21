@@ -319,6 +319,15 @@ void BgSaveParentWebSocketHandler::reportFailure(const std::string &reason)
     reportFailedSave(reason);
 }
 
+std::string BgSaveParentWebSocketHandler::buildFailedSaveResult(const std::string& reason)
+{
+    // wsd reads the result text of a failed save and passes it on to the client in the save
+    // error, so the reason ends up in the client's log.
+    return "{ \"commandName\": \".uno:Save\", \"success\": false, \"background\": true, "
+           "\"result\": { \"type\": \"string\", \"value\": \"" +
+           JsonUtil::escapeJSONValue(reason) + "\" } }";
+}
+
 void BgSaveParentWebSocketHandler::reportFailedSave(const std::string &reason)
 {
     // next time we get a non-background save.
@@ -327,10 +336,8 @@ void BgSaveParentWebSocketHandler::reportFailedSave(const std::string &reason)
     // Synthesize a failed save result
     // FIXME: could this allow another new manual save to race against the ongoing bgsave ?
     // either way - that's better than hanging and blocking if we get interactive dialogs on save.
-    const std::string saveFailed =
-        "client-" + _session->getId() +
-        " unocommandresult: { \"commandName\": \".uno:Save\", \"success\": false, "
-        "\"background\": true }";
+    const std::string saveFailed = "client-" + _session->getId() +
+                                   " unocommandresult: " + buildFailedSaveResult(reason);
     _document->sendFrame(saveFailed, WSOpCode::Text);
 
     _document->updateModifiedOnFailedBgSave();

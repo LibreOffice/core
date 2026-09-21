@@ -111,6 +111,10 @@ public:
     // Decide if it is not an interactive prompt that the user must answer.
     static bool isBenignBgSaveJSDialog(const std::string& jsdialogPayload);
 
+    // The .uno:Save result JSON for a background save that ended without an answer from Core.
+    // It has the shape of Core's own answer, with the reason as the result text.
+    static std::string buildFailedSaveResult(const std::string& reason);
+
 protected:
     virtual void handleMessage(const std::vector<char>& data) override;
     virtual void onDisconnect() override;
