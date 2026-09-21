@@ -55,10 +55,6 @@ namespace sdbtools
         );
 
         // XObjectNames
-        virtual OUString suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) override;
-        virtual OUString convertToSQLName( const OUString& Name ) override;
-        virtual bool isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) override;
-        virtual bool isNameValid( ::sal_Int32 CommandType, const OUString& Name ) override;
         virtual void checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) override;
 
     protected:

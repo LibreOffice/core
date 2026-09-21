@@ -89,8 +89,6 @@
 #define RID_STR_MISSING_EXTENSION                   NC_("RID_STR_MISSING_EXTENSION", "The extension is not installed.")
 
 #define STR_QUERY_AND_TABLE_DISTINCT_NAMES          NC_("STR_QUERY_AND_TABLE_DISTINCT_NAMES", "You cannot give a table and a query the same name. Please use a name which is not yet used by a query or table.")
-#define STR_BASENAME_TABLE                          NC_("STR_BASENAME_TABLE", "Table")
-#define STR_BASENAME_QUERY                          NC_("STR_BASENAME_QUERY", "Query")
 #define STR_CONN_WITHOUT_QUERIES_OR_TABLES          NC_("STR_CONN_WITHOUT_QUERIES_OR_TABLES", "The given connection is no valid query and/or tables supplier.")
 #define STR_NO_TABLE_OBJECT                         NC_("STR_NO_TABLE_OBJECT", "The given object is no table object.")
 #define STR_INVALID_COMMAND_TYPE                    NC_("STR_INVALID_COMMAND_TYPE", "Invalid command type - only TABLE and QUERY from com.sun.star.sdb.CommandType are allowed.")

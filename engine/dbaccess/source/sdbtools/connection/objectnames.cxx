@@ -355,58 +355,6 @@ namespace sdbtools
     {
     }
 
-    OUString ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName )
-    {
-        EntryGuard aGuard( *this );
-
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( CommandType, getConnection() ) );
-
-        OUString sBaseName( BaseName );
-        if ( sBaseName.isEmpty() )
-        {
-            if ( CommandType == CommandType::TABLE )
-                sBaseName = DBA_RES(STR_BASENAME_TABLE);
-            else
-                sBaseName = DBA_RES(STR_BASENAME_QUERY);
-        }
-        else if( CommandType == CommandType::QUERY )
-        {
-            sBaseName=sBaseName.replace('/', '_');
-        }
-
-        OUString sName( sBaseName );
-        sal_Int32 i = 1;
-        while ( !pNameCheck->validateName( sName ) )
-        {
-            sName = sBaseName + " " + OUString::number(++i);
-        }
-
-        return sName;
-    }
-
-    OUString ObjectNames::convertToSQLName( const OUString& Name )
-    {
-        EntryGuard aGuard( *this );
-        Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), cpo::uno::UNO_SET_THROW );
-        return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
-    }
-
-    bool ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
-    {
-        EntryGuard aGuard( *this );
-
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( CommandType, getConnection()) );
-        return !pNameCheck->validateName( Name );
-    }
-
-    bool ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
-    {
-        EntryGuard aGuard( *this );
-
-        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( CommandType, getConnection()) );
-        return pNameCheck->validateName( Name );
-    }
-
     void ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
