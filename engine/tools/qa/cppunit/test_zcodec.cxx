@@ -31,11 +31,13 @@ private:
     void testGzCompressDecompress();
     void testMakeDummyFile();
     void testZlibCompressDecompress();
+    void testSmallOutputBuffer();
 
     CPPUNIT_TEST_SUITE(ZCodecTest);
     CPPUNIT_TEST(testMakeDummyFile);
     CPPUNIT_TEST(testGzCompressDecompress);
     CPPUNIT_TEST(testZlibCompressDecompress);
+    CPPUNIT_TEST(testSmallOutputBuffer);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -114,6 +116,37 @@ void ZCodecTest::testZlibCompressDecompress()
         = rtl_crc32(0, pDecompressedStream.GetData(), pDecompressedStream.GetSize());
     // Check that the initial and decompressed CRC32 checksums are the same -> zlib (de)compression works
     CPPUNIT_ASSERT_EQUAL(nInitialStreamCRC32, nCompressedDecompressedStreamCRC32);
+}
+
+// Test that nothing is dropped when deflate runs out of output part way through a chunk of
+// input. A small output buffer makes that happen on almost every call.
+void ZCodecTest::testSmallOutputBuffer()
+{
+    SvMemoryStream aInitialStream;
+    sal_uInt32 nSeed = 1;
+    for (sal_uInt32 i = 0; i < 100000; ++i)
+    {
+        nSeed = nSeed * 1103515245 + 12345;
+        const sal_uInt8 nByte(nSeed >> 24);
+        aInitialStream.WriteBytes(&nByte, 1);
+    }
+    const sal_uInt64 nInitialSize = aInitialStream.GetSize();
+    const auto nInitialCRC32 = rtl_crc32(0, aInitialStream.GetData(), nInitialSize);
+
+    SvMemoryStream aCompressedStream;
+    SvMemoryStream aDecompressedStream;
+    ZCodec aCodec(0x4000, 64);
+    aCodec.BeginCompression();
+    aCodec.Compress(aInitialStream, aCompressedStream);
+    // EndCompression answers with the bytes deflate took, which has to be all of them
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(nInitialSize), aCodec.EndCompression());
+
+    aCompressedStream.Seek(0);
+    aCodec.BeginCompression();
+    aCodec.Decompress(aCompressedStream, aDecompressedStream);
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(nInitialSize), aCodec.EndCompression());
+    CPPUNIT_ASSERT_EQUAL(
+        nInitialCRC32, rtl_crc32(0, aDecompressedStream.GetData(), aDecompressedStream.GetSize()));
 }
 
 } // namespace

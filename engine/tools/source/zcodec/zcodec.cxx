@@ -168,12 +168,17 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
         pStream->avail_in = rIStm.ReadBytes( mpInBuf.get(), mnInBufSize );
         if (pStream->avail_in == 0)
             break;
-        if ( pStream->avail_out == 0 )
-            ImplWriteBack();
-        if ( deflate( pStream, Z_NO_FLUSH ) < 0 )
+        // deflate stops as soon as the output buffer is full, so offer the rest of the chunk
+        // again once it has been written back, rather than reading over it
+        while (pStream->avail_in != 0)
         {
-            mbStatus = false;
-            break;
+            if (pStream->avail_out == 0)
+                ImplWriteBack();
+            if (deflate(pStream, Z_NO_FLUSH) < 0)
+            {
+                mbStatus = false;
+                return;
+            }
         }
     };
 }
