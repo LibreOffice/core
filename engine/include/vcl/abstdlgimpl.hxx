@@ -49,7 +49,14 @@ public:
     bool StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx) override
     {
         if constexpr (Async)
-            return Dialog::runAsync(m_pDlg, rCtx.maEndDialogFn);
+        {
+            const bool bStarted = Dialog::runAsync(m_pDlg, rCtx.maEndDialogFn);
+            // A refused dialog never reaches its end handler, so the owner that the context
+            // names is disposed here.
+            if (!bStarted)
+                rCtx.mxOwner.disposeAndClear();
+            return bStarted;
+        }
         else
             return Base::StartExecuteAsync(rCtx); // assert / fail
     }

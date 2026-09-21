@@ -965,7 +965,12 @@ public:
     }
     bool StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx) override
     {
-        return SfxTabDialogController::runAsync(m_pDlg, rCtx.maEndDialogFn);
+        const bool bStarted = SfxTabDialogController::runAsync(m_pDlg, rCtx.maEndDialogFn);
+        // A refused dialog never reaches its end handler, so the owner that the context names
+        // is disposed here.
+        if (!bStarted)
+            rCtx.mxOwner.disposeAndClear();
+        return bStarted;
     }
     const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
     void SetCurPageId(const OUString& rName) override { m_pDlg->SetCurPageId(rName); }

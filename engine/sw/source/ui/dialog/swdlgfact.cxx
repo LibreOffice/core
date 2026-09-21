@@ -709,13 +709,18 @@ public:
 
 bool AbstractSwFieldDlg_Impl::StartExecuteAsync(AsyncContext& rCtx)
 {
-    return SfxTabDialogController::runAsync(m_pDlg,
+    const bool bStarted = SfxTabDialogController::runAsync(m_pDlg,
                                             [rCtx, pDlg = m_pDlg](sal_Int32 nResult)
                                             {
                                                 pDlg->Close();
                                                 if (rCtx.isSet())
                                                     rCtx.maEndDialogFn(nResult);
                                             });
+    // A refused dialog never reaches its end handler, so the owner that the context names is
+    // disposed here.
+    if (!bStarted)
+        rCtx.mxOwner.disposeAndClear();
+    return bStarted;
 }
 }
 
