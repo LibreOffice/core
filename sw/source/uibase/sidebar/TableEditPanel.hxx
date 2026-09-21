@@ -89,8 +89,8 @@ private:
     ::sfx2::sidebar::ControllerItem m_aDistributeColumnsController;
     ::sfx2::sidebar::ControllerItem m_aMergeCellsController;
 
-    DECL_LINK(RowHeightMofiyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(ColumnWidthMofiyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(RowHeightModifyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ColumnWidthModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(AlignmentHdl, weld::ComboBox&, void);
     DECL_LINK(SpacingHdl, weld::MetricSpinButton&, void);
 };

@@ -1784,16 +1784,16 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
     {
         font.SetItalic(ITALIC_NORMAL);
         m_xWidget->set_entry_font(font);
-        OUString sSubsitute;
-        const bool bHasSubstitute = svtools::GetFontSubstitute(fontname, sSubsitute);
-        // no nested replacements: if 'Foo' is subsituted by 'Bar' and 'Bar' by some existing font
-        // this font wont be used
-        if (bHasSubstitute && CheckFontIsAvailable(sSubsitute))
+        OUString sSubstitute;
+        const bool bHasSubstitute = svtools::GetFontSubstitute(fontname, sSubstitute);
+        // no nested replacements: if 'Foo' is substituted by 'Bar' and 'Bar' by some existing font
+        // this font won't be used
+        if (bHasSubstitute && CheckFontIsAvailable(sSubstitute))
         {
             m_xWidget->set_entry_message_type(weld::EntryMessageType::Info);
             OUString sTip = SvxResId(RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE);
             sTip = sTip.replaceAll("%1", fontname);
-            sTip = sTip.replaceAll("%2", sSubsitute);
+            sTip = sTip.replaceAll("%2", sSubstitute);
             m_xWidget->set_tooltip_text(sTip);
         }
         else
@@ -1803,7 +1803,7 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
                                                     : RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_NOSUBST);
             sTip = sTip.replaceAll("%1", fontname);
             if (bHasSubstitute)
-                sTip = sTip.replaceAll("%2", sSubsitute);
+                sTip = sTip.replaceAll("%2", sSubstitute);
             m_xWidget->set_tooltip_text(sTip);
         }
     }

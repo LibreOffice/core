@@ -196,7 +196,7 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
 
 void TableEditPanel::InitRowHeightToolitem()
 {
-    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, RowHeightMofiyHdl);
+    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, RowHeightModifyHdl);
     m_aRowHeightEdit.connect_value_changed(aLink);
 
     FieldUnit eFieldUnit = ::GetDfltMetric(false);
@@ -210,7 +210,7 @@ void TableEditPanel::InitRowHeightToolitem()
 
 void TableEditPanel::InitColumnWidthToolitem()
 {
-    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, ColumnWidthMofiyHdl);
+    Link<weld::MetricSpinButton&, void> aLink = LINK(this, TableEditPanel, ColumnWidthModifyHdl);
     m_aColumnWidthEdit.connect_value_changed(aLink);
 
     FieldUnit eFieldUnit = ::GetDfltMetric(false);
@@ -314,7 +314,7 @@ void TableEditPanel::EnableLeftRight(sal_uInt16 nAlignment)
     m_aRightSpacingEdit.set_sensitive(enableRight);
 }
 
-IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(TableEditPanel, RowHeightModifyHdl, weld::MetricSpinButton&, void)
 {
     SwTwips nNewHeight = static_cast<SwTwips>(
         m_aRowHeightEdit.denormalize(m_aRowHeightEdit.get_value(FieldUnit::TWIP)));
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void
                                               { &aRowHeight });
 }
 
-IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(TableEditPanel, ColumnWidthModifyHdl, weld::MetricSpinButton&, void)
 {
     SwTwips nNewWidth = static_cast<SwTwips>(
         m_aColumnWidthEdit.denormalize(m_aColumnWidthEdit.get_value(FieldUnit::TWIP)));
