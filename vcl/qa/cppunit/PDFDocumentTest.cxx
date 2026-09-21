@@ -24,6 +24,44 @@ public:
 
 constexpr OUString DATA_DIRECTORY = u"/vcl/qa/cppunit/data/"_ustr;
 
+CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testXRefStreamWithoutPredictor)
+{
+    // /Predictor defaults to 1, so a cross-reference stream may carry no /DecodeParms at all.
+    // The content stream's /Length is indirect, which is what has to be resolved through it.
+    {
+        OUString aURL
+            = m_directories.getURLFromSrc(DATA_DIRECTORY) + "xref-stream-no-predictor.pdf";
+        vcl::filter::PDFDocument aDocument;
+        SvFileStream aStream(aURL, StreamMode::READ);
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+        std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+        vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+        CPPUNIT_ASSERT(pContents);
+        CPPUNIT_ASSERT(pContents->GetStream());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(28), pContents->GetStream()->GetMemory().GetSize());
+    }
+
+    // /Filter is optional too, and then the entries stand in the stream as they are
+    {
+        OUString aURL
+            = m_directories.getURLFromSrc(DATA_DIRECTORY) + "xref-stream-uncompressed.pdf";
+        vcl::filter::PDFDocument aDocument;
+        SvFileStream aStream(aURL, StreamMode::READ);
+        CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+        std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+        vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+        CPPUNIT_ASSERT(pContents);
+        CPPUNIT_ASSERT(pContents->GetStream());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(28), pContents->GetStream()->GetMemory().GetSize());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "basic.pdf";
