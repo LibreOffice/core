@@ -877,11 +877,24 @@ sub run {
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "UREPACKAGEPREFIX", $allvariableshashref->{'UREPACKAGEPREFIX'});
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
+                my $dbgpackage;
                 if ($dbg)
                 {
-                    $onepackage->{'packagename'} .= "-debuginfo";
-                    $onepackage->{'description'} .= " (debug info)";
-                    $dbgepmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $onepackage);
+                    # The debug info package matches exactly one build of its
+                    # base package, so it requires that package at the same
+                    # version and release. The base package's own provides,
+                    # replaces, incompat and findrequires relations describe
+                    # the runtime files and stay with the base package, whose
+                    # spec file is prepared from $onepackage further below.
+                    $dbgpackage = { %{$onepackage} };
+                    $dbgpackage->{'packagename'} .= "-debuginfo";
+                    $dbgpackage->{'description'} .= " (debug info)";
+                    $dbgpackage->{'requires'} = $onepackage->{'packagename'} . " %PACKAGEVERSION-%PACKAGEREVISION %PACKAGEVERSION-%PACKAGEREVISION";
+                    delete $dbgpackage->{'provides'};
+                    delete $dbgpackage->{'linuxreplaces'};
+                    delete $dbgpackage->{'linuxincompat'};
+                    delete $dbgpackage->{'findrequires'};
+                    $dbgepmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $dbgpackage);
                     installer::epmfile::adding_header_to_epm_file(\@dbgepmfile, $dbgepmheaderref);
                     installer::epmfile::put_directories_into_epmfile($dirsinpackage, \@dbgepmfile, $allvariableshashref, $packagerootpath);
                     installer::epmfile::put_files_into_dbgepmfile($debugfilelist, \@dbgepmfile );
@@ -934,7 +947,7 @@ sub run {
                             if ($dbg)
                             {
                                 installer::epmfile::call_epm($epmexecutable, $completedbgepmfilename, $packagename . "-debuginfo", $includepatharrayref);
-                                my $newdbgepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename . "-debuginfo", $staticpath, $relocatablepath, $onepackage, $allvariableshashref, $debugfilelist, $languagestringref);
+                                my $newdbgepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename . "-debuginfo", $staticpath, $relocatablepath, $dbgpackage, $allvariableshashref, $debugfilelist, $languagestringref);
                                 installer::epmfile::create_packages_without_epm($newdbgepmdir, $packagename . "-debuginfo", $includepatharrayref, $allvariableshashref, $languagestringref);
                                 installer::epmfile::remove_temporary_epm_files($newdbgepmdir, $loggingdir, $packagename . "-debuginfo");
                                 installer::epmfile::create_new_directory_structure($newdbgepmdir);
