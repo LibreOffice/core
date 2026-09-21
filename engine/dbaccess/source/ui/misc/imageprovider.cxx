@@ -21,7 +21,6 @@
 #include <bitmaps.hlst>
 
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
-#include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 
@@ -35,7 +34,6 @@ namespace dbaui
     using ::cpo::uno::Exception;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::graphic::XGraphic;
-    using ::com::sun::star::sdb::application::XTableUIProvider;
     using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::sdbcx::XViewsSupplier;
     using ::cpo::uno::UNO_SET_THROW;
@@ -82,8 +80,6 @@ namespace dbaui
             Reference< XViewsSupplier > xSuppViews( mxConnection, UNO_QUERY );
             if ( xSuppViews.is() )
                 mxViews.set( xSuppViews->getViews(), UNO_SET_THROW );
-
-            mxTableUI.set( _rxConnection, UNO_QUERY );
         }
         catch( const Exception& )
         {

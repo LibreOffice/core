@@ -2930,7 +2930,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb/application,\
 	XCopyTableListener \
 	XCopyTableWizard \
 	XDatabaseDocumentUI \
-	XTableUIProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb/tools,\
 	XConnectionSupplier \

@@ -40,7 +40,6 @@
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
-#include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 
 #include <connectivity/ConnectionWrapper.hxx>
@@ -66,7 +65,6 @@ typedef cppu::ImplInheritanceHelper<    connectivity::OConnectionWrapper
                                     ,   css::sdbcx::XUsersSupplier
                                     ,   css::sdbcx::XGroupsSupplier
                                     ,   css::sdb::tools::XConnectionTools
-                                    ,   css::sdb::application::XTableUIProvider
                                     >   OConnection_Base;
 
 class ODatabaseSource;
@@ -89,7 +87,6 @@ class OConnection final     :public OConnection_Base
     cpo::uno::Reference< cpo::uno::XComponentContext >                m_aContext;
     cpo::uno::Reference< css::sdbc::XConnection >                     m_xMasterConnection;
     cpo::uno::Reference< css::sdb::tools::XConnectionTools >          m_xConnectionTools;
-    cpo::uno::Reference< css::sdb::application::XTableUIProvider >    m_xTableUIProvider;
 
     // defines the helper services for example to query the command of a view
     // @ see com.sun.star.sdb.tools.XViewAccess
@@ -182,10 +179,6 @@ public:
     // XConnectionTools
     virtual cpo::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames(  ) override;
     virtual cpo::uno::Reference< css::container::XNameAccess > getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, cpo::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
-
-    // XTableUIProvider
-    virtual cpo::uno::Reference< css::graphic::XGraphic > getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
-    virtual cpo::uno::Reference< cpo::uno::XInterface > getTableEditor( const cpo::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
 
     // IRefreshListener
     virtual void refresh(const cpo::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) override;

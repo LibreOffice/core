@@ -22,8 +22,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-namespace com::sun::star::sdb::application { class XTableUIProvider; }
-
 namespace dbaui
 {
     /** provides images for database objects such as tables, queries, forms, reports ...
@@ -94,8 +92,6 @@ namespace dbaui
         cpo::uno::Reference< css::sdbc::XConnection > mxConnection;
         /// the views of the connection, if the DB supports views
         cpo::uno::Reference< css::container::XNameAccess > mxViews;
-        /// interface for providing table's UI
-        cpo::uno::Reference< css::sdb::application::XTableUIProvider > mxTableUI;
     };
 
 } // namespace dbaui

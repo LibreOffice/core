@@ -49,7 +49,6 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::sdb::application;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -278,8 +277,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-
-    m_xTableUIProvider.set(m_xMasterConnection, cpo::uno::UNO_QUERY);
 
     try
     {
@@ -723,38 +720,6 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-}
-
-Reference< XGraphic > OConnection::getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode )
-{
-    Reference< XGraphic > xReturn;
-
-    // ask our aggregate
-    if ( m_xTableUIProvider.is() )
-        xReturn = m_xTableUIProvider->getTableIcon( TableName, ColorMode );
-
-    // ask ourself
-    // well, we don't have own functionality here ...
-    // In the future, we might decide to delegate the complete handling to this interface.
-    // In this case, we would need to load the icon here.
-
-    return xReturn;
-}
-
-Reference< XInterface > OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& DocumentUI, const OUString& TableName )
-{
-    Reference< XInterface > xReturn;
-
-    // ask our aggregate
-    if ( m_xTableUIProvider.is() )
-        xReturn = m_xTableUIProvider->getTableEditor( DocumentUI, TableName );
-
-    // ask ourself
-    // well, we don't have own functionality here ...
-    // In the future, we might decide to delegate the complete handling to this interface.
-    // In this case, we would need to instantiate a css.sdb.TableDesign here.
-
-    return xReturn;
 }
 
 }   // namespace dbaccess
