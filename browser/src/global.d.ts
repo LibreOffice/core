@@ -418,6 +418,7 @@ interface Window {
 	starterScreen: boolean;
 	aiEthicalRatingMessage: boolean;
 	showAISidebar: boolean;
+	showAINotebookbar: boolean;
 	allowUpdateNotification: boolean;
 	autoShowWelcome: boolean;
 	bundlejsLoaded: boolean;

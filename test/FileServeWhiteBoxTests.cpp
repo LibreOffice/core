@@ -114,6 +114,12 @@ void FileServeTests::testUIDefaults()
         FileServerRequestHandler::uiDefaultsToJSON(
             "SpreadsheetAISidebar=true;PresentationAISidebar=false", uiMode, uiTheme,
             savedUIState));
+
+    // The tab and the sidebar are separate defaults; both may be set at once.
+    LOK_ASSERT_EQUAL_STR(
+        "{\"text\":{\"ShowAINotebookbar\":\"true\",\"ShowAISidebar\":\"false\"}}",
+        FileServerRequestHandler::uiDefaultsToJSON("TextAINotebookbar=true;TextAISidebar=false",
+                                                   uiMode, uiTheme, savedUIState));
 }
 
 void FileServeTests::testCSSVars()

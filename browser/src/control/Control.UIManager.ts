@@ -1189,6 +1189,31 @@ class UIManager extends window.L.Control {
 		return uiDefault !== undefined ? uiDefault === 'true' : window.showAISidebar;
 	}
 
+	/**
+	 * Whether the notebookbar opens on the AI Assistant tab:
+	 * ai.show_ai_notebookbar for the instance, the TextAINotebookbar
+	 * ui_default for one document. Read directly, as above.
+	 */
+	shouldSelectAIAssistantTab(): boolean {
+		const prefs = window.prefs as any;
+		const uiDefault = prefs._getUIDefault(
+			this.map.getDocType() + '.ShowAINotebookbar',
+		);
+
+		return uiDefault !== undefined
+			? uiDefault === 'true'
+			: window.showAINotebookbar;
+	}
+
+	/// A click on the already-selected tab of an expanded notebookbar
+	/// collapses it, so click only when it switches or re-expands.
+	selectAIAssistantTab(): void {
+		const tab = document.getElementById('AIAssistant-tab-label');
+		if (!tab || !this.isTabVisible('AIAssistant')) return;
+		if (!tab.classList.contains('selected') || this.isNotebookbarCollapsed())
+			tab.click();
+	}
+
 	/// Opens the AI Assistant on load where it was asked for. Called from
 	/// both the document load and the AI configuration reply, in either order.
 	initializeAIAssistant(): void {

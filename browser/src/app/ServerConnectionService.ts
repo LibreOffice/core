@@ -111,17 +111,7 @@ class ServerConnectionService {
 				if (sidebar.isVisible()) {
 					sidebar.refreshModelAndRating();
 				} else {
-					// A click on the already-selected tab of an expanded
-					// notebookbar collapses the bar, so click only when it
-					// switches tab or re-expands a collapsed bar.
-					const aiTab = document.getElementById('AIAssistant-tab-label');
-					if (
-						aiTab &&
-						(!aiTab.classList.contains('selected') ||
-							app.map.uiManager.isNotebookbarCollapsed())
-					) {
-						aiTab.click();
-					}
+					app.map.uiManager.selectAIAssistantTab();
 					sidebar.show();
 				}
 			}

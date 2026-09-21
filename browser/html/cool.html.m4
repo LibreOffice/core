@@ -307,6 +307,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-access-token-ttl = "%ACCESS_TOKEN_TTL%"
       data-ai-ethical-rating-message = "%AI_ETHICAL_RATING_MESSAGE%"
       data-show-ai-sidebar = "%SHOW_AI_SIDEBAR%"
+      data-show-ai-notebookbar = "%SHOW_AI_NOTEBOOKBAR%"
       data-allow-update-notification = "%ENABLE_UPDATE_NOTIFICATION%"
       data-auto-show-feedback = "%AUTO_SHOW_FEEDBACK%"
       data-auto-show-welcome = "%AUTO_SHOW_WELCOME%"

@@ -59,7 +59,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 
 		// initialize the model only once, remember updates from core
 		if (this.model.getSnapshot() === null)
-			this.model.fullUpdate(this.getFullJSON(this.HOME_TAB_ID));
+			this.model.fullUpdate(this.getFullJSON(this.getInitialTabId()));
 
 		this.map.on('notebookbar', this.onNotebookbar, this);
 	},
@@ -259,6 +259,20 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	selectedTab: function(tabName) {
 		// implement in child classes
 		this._lastSelectedTabName = tabName;
+	},
+
+	getInitialTabId: function() {
+		var aiTabId = 'AIAssistant-tab-label';
+		var uiManager = this.map.uiManager;
+		var hasAITab = this.getTabs().some(function(tab) {
+			return tab && tab.id === aiTabId;
+		});
+
+		if (hasAITab && uiManager.shouldSelectAIAssistantTab() &&
+			uiManager.isTabVisible('AIAssistant'))
+			return aiTabId;
+
+		return this.HOME_TAB_ID;
 	},
 
 	isTabSelected: function(tabName) {
@@ -819,7 +833,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	refresh: function() {
 		var selected = this._lastSelectedTabName
 			? this._lastSelectedTabName + '-tab-label'
-			: this.HOME_TAB_ID;
+			: this.getInitialTabId();
 		this.model.fullUpdateKeepingEntries(this.getFullJSON(selected));
 		if (this.container) this.loadTab();
 	},
