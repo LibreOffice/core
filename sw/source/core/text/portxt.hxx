@@ -36,6 +36,12 @@ class SwTextPortion : public SwLinePortion
             const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces );
     bool Format_( SwTextFormatInfo &rInf );
 
+protected:
+    /// Paints what surrounds the text; reads the index, so never under a SwTextSlot
+    void PaintDecorations(const SwTextPaintInfo& rInf) const;
+    /// Paints the text; pass false under a SwTextSlot, which does not remap the wrong list
+    void PaintText(const SwTextPaintInfo& rInf, bool bWrong) const;
+
 public:
     SwTextPortion(){ SetWhichPor( PortionType::Text ); }
     static SwTextPortion * CopyLinePortion(const SwLinePortion &rPortion);

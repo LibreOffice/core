@@ -43,6 +43,10 @@ class SwBlankPortion final : public SwTextPortion
 {
     sal_Unicode m_cChar;
     bool m_bMulti;        // For multiportion brackets
+
+    /// Whether the shown character differs from the model one: a hyphen shows a plain '-'
+    bool ShowsOtherChar(const SwTextSizeInfo& rInf) const;
+
 public:
     SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : m_cChar( cCh ), m_bMulti( bMult )
@@ -52,6 +56,7 @@ public:
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual SwPositiveSize GetTextSize(const SwTextSizeInfo& rInf) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     static sal_uInt16 MayUnderflow(const SwTextFormatInfo &rInf, TextFrameIndex nIdx,
         bool bUnderflow );

@@ -1871,6 +1871,41 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf136663_Korean_No_Extra_Spacing)
                 "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf171555NonBreakingHyphen)
+{
+    // Given paragraphs holding a non-breaking hyphen, on its own and inside a field, in a font
+    // that has no glyph for U+2011:
+    createSwDoc("tdf171555.fodt");
+
+    // When painting them:
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+    CPPUNIT_ASSERT(xMetaFile);
+
+    OUStringBuffer aPainted;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); ++nAction)
+    {
+        MetaAction* pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() != MetaActionType::TEXTARRAY)
+            continue;
+
+        auto pTextArray = static_cast<MetaTextArrayAction*>(pAction);
+        aPainted.append(
+            pTextArray->GetText().subView(pTextArray->GetIndex(), pTextArray->GetLen()));
+    }
+
+    // Then the plain hyphen the portion stands for reaches the font, not U+2011 itself, which
+    // Carlito has no glyph for; inside the field the hyphen was not painted at all. A no-break
+    // space stands for itself and still reaches the font as U+00A0. Joining the runs keeps this
+    // independent of where the portions and the narrow column's lines split, while still
+    // catching a character painted twice:
+    CPPUNIT_ASSERT_EQUAL(u"--a-bmm-nna\u00A0bX((1))Y"_ustr, aPainted.makeStringAndClear());
+
+    // ... and the hyphen is as wide as the one the second paragraph spells out directly
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(getXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout", "width"),
+                         getXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout", "width"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
