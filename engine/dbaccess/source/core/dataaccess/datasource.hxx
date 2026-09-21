@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdbc/XIsolatedConnection.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -36,7 +35,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <apitools.hxx>
-#include <bookmarkcontainer.hxx>
 #include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -60,7 +58,6 @@ class OConnection;
 // ODatabaseSource
 typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
                                        ,   css::sdbc::XDataSource
-                                       ,   css::sdb::XBookmarksSupplier
                                        ,   css::sdb::XQueryDefinitionsSupplier
                                        ,   css::sdb::XCompletedConnection
                                        ,   css::container::XContainerListener
@@ -83,8 +80,6 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
 
 private:
     using ODatabaseSource_Base::rBHelper;
-    // note: this thing uses the ref-count of "this", see OBookmarkContainer::acquire!
-    OBookmarkContainer m_Bookmarks;
     ::comphelper::OInterfaceContainerHelper3<css::util::XFlushListener> m_aFlushListeners;
 
 private:
@@ -163,9 +158,6 @@ public:
     virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password ) override;
     virtual void setLoginTimeout( sal_Int32 seconds ) override;
     virtual sal_Int32 getLoginTimeout(  ) override;
-
-//::css::sdb::XBookmarksSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess > getBookmarks(  ) override;
 
 //::css::sdb::XQueryDefinitionsSupplier
     virtual cpo::uno::Reference< css::container::XNameAccess > getQueryDefinitions(  ) override;

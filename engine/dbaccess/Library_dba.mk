@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/api/View \
     dbaccess/source/core/api/viewcontainer \
     dbaccess/source/core/api/WrappedResultSet \
-    dbaccess/source/core/dataaccess/bookmarkcontainer \
     dbaccess/source/core/dataaccess/commandcontainer \
     dbaccess/source/core/dataaccess/commanddefinition \
     dbaccess/source/core/dataaccess/ComponentDefinition \

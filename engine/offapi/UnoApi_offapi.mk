@@ -2883,7 +2883,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb,\
 	SQLErrorEvent \
 	SQLFilterOperator \
 	XAlterQuery \
-	XBookmarksSupplier \
 	XColumn \
 	XColumnUpdate \
 	XCommandPreparation \

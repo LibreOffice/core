@@ -9807,10 +9807,6 @@ module com {
      [property, optional] string HavingClause;
      [property, optional] string GroupBy;
     };
-    published interface XBookmarksSupplier {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::container::XNameAccess getBookmarks();
-    };
     published interface XCompletedConnection {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::sdbc::XConnection connectWithCompletion([in] ::com::sun::star::task::XInteractionHandler handler) raises (::com::sun::star::sdbc::SQLException);
@@ -9841,7 +9837,6 @@ module com {
      interface ::com::sun::star::util::XFlushable;
      interface ::com::sun::star::sdb::XQueryDefinitionsSupplier;
      interface ::com::sun::star::sdbc::XDataSource;
-     [optional] interface ::com::sun::star::sdb::XBookmarksSupplier;
      [property, readonly] string Name;
      [property] string URL;
      [property] sequence< ::com::sun::star::beans::PropertyValue > Info;

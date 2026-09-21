@@ -392,7 +392,6 @@ ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pI
             :ModelDependentComponent( _pImpl )
             ,ODatabaseSource_Base( getMutex() )
             ,OPropertySetHelper( ODatabaseSource_Base::rBHelper )
-            , m_Bookmarks(*this, getMutex())
             ,m_aFlushListeners( getMutex() )
 {
     // some kind of default
@@ -1066,13 +1065,6 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     }
 
     return xConn;
-}
-
-Reference< XNameAccess > ODatabaseSource::getBookmarks(  )
-{
-    ModelMethodGuard aGuard( *this );
-    // tdf#114596 this may look nutty but see OBookmarkContainer::acquire()
-    return static_cast<XNameContainer*>(&m_Bookmarks);
 }
 
 Reference< XNameAccess > ODatabaseSource::getQueryDefinitions( )

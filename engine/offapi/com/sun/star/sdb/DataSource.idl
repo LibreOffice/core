@@ -28,7 +28,6 @@
 
  published interface XCompletedConnection;
  published interface XQueryDefinitionsSupplier;
- published interface XBookmarksSupplier;
 
 
 /** is a factory to establish database connections. It should be registered at
@@ -72,17 +71,6 @@ published service DataSource
     /* useful for establishing connections and to get and set the login timeout.
     */
     interface com::sun::star::sdbc::XDataSource;
-
-    /** provides access to bookmarks to documents associated with the data source
-        <p>
-        The object returned by the
-        com::sun::star::sdb::XBookmarksSupplier::getBookmarks()
-        supports the
-        com::sun::star::sdb::DefinitionContainer
-        service.
-        </p>
-     */
-    [optional] interface XBookmarksSupplier;
 
     /** is the name of the data source.
 
