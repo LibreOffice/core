@@ -54,7 +54,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Image Operation Tests', fun
 			cy.cGet('#document-canvas').realSwipe("toRight", { x: startX, y: startY, length: moveX });
 		});
 
-		cy.wait(1000);
 		helper.assertImageSize(494, 115);
 	});
 });

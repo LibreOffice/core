@@ -52,7 +52,6 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 			cy.cGet('body').realMouseUp();
 		});
 
-		cy.wait(1000);
 		helper.assertImageSize(248 - moveX, 63);
 	});
 
@@ -66,16 +65,12 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		cy.cGet('#selectheight input').type('{selectAll}{backspace}2{enter}');
 
-		cy.wait(1000);
-
 		helper.assertImageSize(139, 93);
 
 		//Keep ratio checked
 		cy.cGet('#ratio input').check();
 
 		cy.cGet('#selectheight input').type('{selectAll}{backspace}5{enter}');
-
-		cy.wait(1000);
 
 		helper.assertImageSize(347, 232);
 	});

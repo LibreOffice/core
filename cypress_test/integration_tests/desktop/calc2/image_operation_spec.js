@@ -44,7 +44,6 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 			cy.cGet('body').realMouseUp();
 		});
 
-		cy.wait(1000);
 		helper.assertImageSize(248, 63 - moveY);
 	});
 

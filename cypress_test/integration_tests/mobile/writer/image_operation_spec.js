@@ -39,7 +39,6 @@ describe(['tagmobile'],'Image Operation Tests', function() {
 			cy.cGet('body').realSwipe("toRight", { x: startX, y: startY, length: moveX });
 		});
 
-		cy.wait(1000);
 		helper.assertImageSize(492, 115);
 	});
 });

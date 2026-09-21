@@ -42,7 +42,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Image Operation Tests', fun
 			cy.cGet('body').realSwipe("toRight", { x: startX, y: startY, length: moveX });
 		});
 
-		cy.wait(1000);
 		helper.assertImageSize(284, 63);
 	});
 });

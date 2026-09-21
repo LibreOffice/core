@@ -1296,8 +1296,8 @@ function getShapeSVGCenter() {
 function assertImageSize(expectedWidth, expectedHeight) {
 	cy.log('>> assertImageSize - start');
 
-	cy.cGet('#canvas-container > svg', {timeout: 1000})
-		.then(function (element) {
+	cy.cGet('#canvas-container > svg')
+		.should(function (element) {
 			expect(element).to.have.length(1);
 			const actualWidth = parseInt(element[0].style.width.replace('px', ''));
 			const actualHeight = parseInt(element[0].style.height.replace('px', ''));
@@ -1305,9 +1305,6 @@ function assertImageSize(expectedWidth, expectedHeight) {
 			expect(actualWidth).to.be.closeTo(expectedWidth, 10);
 			expect(actualHeight).to.be.closeTo(expectedHeight, 10);
 		});
-
-	// wait for above async result
-	cy.wait(3000);
 
 	cy.log('<< assertImageSize - end');
 }
