@@ -1684,7 +1684,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference< XInteractionHandler >& _rxHandler,
                       const std::vector<bool, std::allocator<bool> >& _aParametersSet)
 {
-    OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSQLQueryComposer is null!");
+    OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSingleSelectQueryComposer is null!");
     OSL_ENSURE(_xParameters.is(),"dbtools::askForParameters XParameters is null!");
     OSL_ENSURE(_xConnection.is(),"dbtools::askForParameters XConnection is null!");
     OSL_ENSURE(_rxHandler.is(),"dbtools::askForParameters XInteractionHandler is null!");

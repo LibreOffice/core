@@ -9635,7 +9635,6 @@ module com {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameAccess getQueries();
     };
-    published interface XSQLQueryComposer;
    };
    module sdbc {
     published interface XDatabaseMetaData;
@@ -10051,24 +10050,6 @@ module com {
     };
     published struct SQLErrorEvent: ::com::sun::star::lang::EventObject {
      any Reason;
-    };
-    published interface XSQLQueryComposer {
-     interface ::cpo::uno::XInterface;
-     string getQuery();
-     void setQuery([in] string command) raises (::com::sun::star::sdbc::SQLException);
-     string getComposedQuery();
-     string getFilter();
-     sequence< sequence< ::com::sun::star::beans::PropertyValue > > getStructuredFilter();
-     string getOrder();
-     void appendFilterByColumn([in] ::com::sun::star::beans::XPropertySet column) raises (::com::sun::star::sdbc::SQLException);
-     void appendOrderByColumn([in] ::com::sun::star::beans::XPropertySet column, [in] boolean ascending) raises (::com::sun::star::sdbc::SQLException);
-     void setFilter([in] string filter) raises (::com::sun::star::sdbc::SQLException);
-     void setOrder([in] string order) raises (::com::sun::star::sdbc::SQLException);
-    };
-    published service SQLQueryComposer {
-     interface ::com::sun::star::sdb::XSQLQueryComposer;
-     interface ::com::sun::star::sdbcx::XTablesSupplier;
-     interface ::com::sun::star::sdbcx::XColumnsSupplier;
     };
    };
    module sdbcx {

@@ -999,7 +999,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb,\
 	ResultColumn \
 	ResultSet \
 	RowSet \
-	SQLQueryComposer \
 	SingleSelectQueryAnalyzer \
 	SingleSelectQueryComposer \
 	Table \
@@ -2911,7 +2910,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb,\
 	XRowsChangeListener \
 	XSQLErrorBroadcaster \
 	XSQLErrorListener \
-	XSQLQueryComposer \
 	XSingleSelectQueryAnalyzer \
 	XSingleSelectQueryComposer \
 	XSubDocument \
