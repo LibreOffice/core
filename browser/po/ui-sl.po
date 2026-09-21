@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-09-20 07:56+0000\n"
+"PO-Revision-Date: 2026-09-22 02:51+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/sl/>\n"
@@ -2125,7 +2125,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "Napaka API ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
@@ -2771,7 +2771,7 @@ msgstr "Podpiši"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Izhod"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:130
 #: src/control/Control.Menubar.ts:485 src/control/Control.Menubar.ts:694
@@ -3701,7 +3701,7 @@ msgstr "Datoteka HTML (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Varnostna oznaka"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -4012,11 +4012,11 @@ msgstr "Porazdeli"
 
 #: src/control/Control.Menubar.ts:632
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Vstavi prosojnice iz datoteke ..."
 
 #: src/control/Control.Menubar.ts:634
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Posodobi povezane prosojnice ..."
 
 #: src/control/Control.Menubar.ts:641 src/control/Control.Menubar.ts:1302
 #: src/control/Control.PresentationBar.js:143
@@ -4286,7 +4286,7 @@ msgstr "Oblikovanje tabele"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Orodja"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4477,7 +4477,7 @@ msgstr "Zaščiti"
 #: src/control/Control.NotebookbarWriter.js:2841
 #: src/control/Control.NotebookbarWriter.js:3194
 msgid "Caption"
-msgstr ""
+msgstr "Napis"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -4489,7 +4489,7 @@ msgstr "Začetek:"
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
-msgstr ""
+msgstr "Konec:"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "Start arrowhead style"
@@ -4501,11 +4501,11 @@ msgstr ""
 
 #: src/control/Control.Notebookbar.js:670
 msgid "Line Width"
-msgstr ""
+msgstr "Širina črte"
 
 #: src/control/Control.Notebookbar.js:695
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Prosojnost črte:"
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:783
@@ -5173,11 +5173,11 @@ msgstr "Razmik in barva"
 
 #: src/control/Control.NotebookbarImpress.js:1579
 msgid "Import Slides"
-msgstr ""
+msgstr "Uvozi prosojnice"
 
 #: src/control/Control.NotebookbarImpress.js:1587
 msgid "Update Links"
-msgstr ""
+msgstr "Posodobi povezave"
 
 #: src/control/Control.NotebookbarImpress.js:1938
 msgid "Master Slide Templates"
@@ -5271,7 +5271,7 @@ msgstr "Pokaži spremembe"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Preklopi na urejanje"
 
 #: src/control/Control.PartsPreview.js:473
 #: src/control/Control.PartsPreview.js:548 src/map/Clipboard.js:1546
@@ -5357,39 +5357,39 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:611
 msgid "Missing"
-msgstr ""
+msgstr "Manjka"
 
 #: src/control/Control.SlideImportPane.tsx:613
 msgid "No access"
-msgstr ""
+msgstr "Ni dostopa"
 
 #: src/control/Control.SlideImportPane.tsx:615
 msgid "Failed"
-msgstr ""
+msgstr "Neuspešno"
 
 #: src/control/Control.SlideImportPane.tsx:617
 msgid "Linked"
-msgstr ""
+msgstr "Povezano"
 
 #: src/control/Control.SlideImportPane.tsx:618
 msgid "Not linked"
-msgstr ""
+msgstr "Ni povezano"
 
 #: src/control/Control.SlideImportPane.tsx:624
 msgid "This file is not available."
-msgstr ""
+msgstr "Ta datoteka ni na voljo."
 
 #: src/control/Control.SlideImportPane.tsx:625
 msgid "You cannot open this file."
-msgstr ""
+msgstr "Te datoteke ne morete odpreti."
 
 #: src/control/Control.SlideImportPane.tsx:626
 msgid "This file could not be opened."
-msgstr ""
+msgstr "Te datoteke ni možno odpreti."
 
 #: src/control/Control.SlideImportPane.tsx:627
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Branje prosojnic ..."
 
 #: src/control/Control.SlideImportPane.tsx:682
 msgid "1 slide inserted"
@@ -5401,7 +5401,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "Slide {0}"
-msgstr ""
+msgstr "Prosojnica {0}"
 
 #: src/control/Control.SlideImportPane.tsx:695
 msgid "Insert 1 slide"
@@ -5427,15 +5427,15 @@ msgstr "Izbrano: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:738
 msgid "Opening file..."
-msgstr ""
+msgstr "Odpiranje datoteke ..."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Vstavljanje prosojnic ..."
 
 #: src/control/Control.SlideImportPane.tsx:781
 msgid "Import slides"
-msgstr ""
+msgstr "Uvozi prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:785
 #: src/control/Control.SlideImportPane.tsx:786
@@ -5449,7 +5449,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:819
 msgid "Add presentation..."
-msgstr ""
+msgstr "Dodaj predstavitev ..."
 
 #: src/control/Control.SlideImportPane.tsx:837
 msgid "No presentations yet"
@@ -5478,19 +5478,19 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Hide slides"
-msgstr ""
+msgstr "Skrij prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:978
 msgid "Show slides"
-msgstr ""
+msgstr "Pokaži prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:987
 msgid "Reload slides"
-msgstr ""
+msgstr "Ponovno naloži prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:994
 msgid "Select all slides"
-msgstr ""
+msgstr "Izberi vse prosojnice"
 
 #: src/control/Control.SlideImportPane.tsx:1002
 msgid "Update the slides linked to this file"
@@ -5498,11 +5498,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1009
 msgid "Remove from list"
-msgstr ""
+msgstr "Odstrani s seznama"
 
 #: src/control/Control.SlideImportPane.tsx:1083
 msgid "Toggle {0}"
-msgstr ""
+msgstr "Preklopi {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1111
 msgid "Slides in {0}"
@@ -5926,7 +5926,7 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2805
 msgid "Confirm password"
-msgstr ""
+msgstr "Potrdi geslo"
 
 #: src/control/Control.UIManager.ts:2851
 msgid "The confirmation does not match the password"
@@ -6884,7 +6884,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hiperpovezava"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
@@ -7089,11 +7089,11 @@ msgstr "Obrobe celic"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Nov slog tabele ..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Počisti slog"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -7959,15 +7959,15 @@ msgstr "Nadaljuj"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animacija: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animacija: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Prehod: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
