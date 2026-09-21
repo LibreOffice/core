@@ -1087,13 +1087,13 @@ function onUpdatePermission(e) {
 		var enabledButtons = ['closemobile', 'undo', 'redo', 'fold'];
 
 		// copy the first array
-		var items = toolbar.getToolItems(app.map.getDocType()).slice();
+		var items = toolbar.getToolItems().slice();
 		for (var idx in items) {
 			var found = enabledButtons.filter(function(id) { return id === items[idx].id; });
 			var alwaysEnable = found.length !== 0;
 
 			if (e.detail.perm === 'edit') {
-				var unoCmd = map.getDocType() === 'spreadsheet' ? items[idx].unosheet : getUNOCommand(items[idx].uno);
+				var unoCmd = map.getDocType() === 'spreadsheet' ? undefined : getUNOCommand(items[idx].uno);
 				var keepDisabled = map['stateChangeHandler'].getItemValue(unoCmd) === 'disabled';
 				if (!keepDisabled || alwaysEnable)
 					toolbar.enableItem(items[idx].id, true);

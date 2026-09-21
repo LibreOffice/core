@@ -34,7 +34,6 @@ type ControlCommand =
 	| {
 			uno?: UnoCommand;
 			lockUno?: UnoCommand;
-			unosheet?: string;
 			command?: string;
 			id?: string;
 	  };

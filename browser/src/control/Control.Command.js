@@ -178,8 +178,6 @@ window.L.Map.include({
 			else { // some unos have multiple commands
 				commandArray.push(uno.textCommand);
 				commandArray.push(uno.objectCommand);
-				if (item.unosheet)
-					commandArray.push(item.unosheet);
 			}
 		}
 		else if (item.command) // in notebookbar uno commands are stored as command
