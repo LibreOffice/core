@@ -1606,14 +1606,16 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
     std::vector<char> aBuf(nLength);
     rStream.ReadBytes(aBuf.data(), aBuf.size());
 
-    auto pFilter = dynamic_cast<PDFNameElement*>(pObject->Lookup("Filter"_ostr));
-    if (!pFilter)
+    PDFElement* pFilterElement = pObject->Lookup("Filter"_ostr);
+    auto pFilter = dynamic_cast<PDFNameElement*>(pFilterElement);
+    if (pFilterElement && !pFilter)
     {
-        SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: no Filter found");
+        // ISO 32000-2 Table 5 allows an array of filters, which this reader does not apply
+        SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: filter is not a name");
         return;
     }
 
-    if (pFilter->GetValue() != "FlateDecode")
+    if (pFilter && pFilter->GetValue() != "FlateDecode")
     {
         SAL_WARN("vcl.filter",
                  "PDFDocument::ReadXRefStream: unexpected filter: " << pFilter->GetValue());
@@ -1636,16 +1638,21 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                 nPredictor = pPredictor->GetValue();
     }
 
-    SvMemoryStream aSource(aBuf.data(), aBuf.size(), StreamMode::READ);
     SvMemoryStream aStream;
-    ZCodec aZCodec;
-    aZCodec.BeginCompression();
-    aZCodec.Decompress(aSource, aStream);
-    if (!aZCodec.EndCompression())
+    if (pFilter)
     {
-        SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: decompression failed");
-        return;
+        SvMemoryStream aSource(aBuf.data(), aBuf.size(), StreamMode::READ);
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        aZCodec.Decompress(aSource, aStream);
+        if (!aZCodec.EndCompression())
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::ReadXRefStream: decompression failed");
+            return;
+        }
     }
+    else
+        aStream.WriteBytes(aBuf.data(), aBuf.size());
 
     // Look up the first and the last entry we need to read.
     auto pIndex = dynamic_cast<PDFArrayElement*>(pObject->Lookup("Index"_ostr));
@@ -1705,8 +1712,9 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         return;
     }
     int aW[nWSize];
-    // First character is the (kind of) repeated predictor.
-    int nLineLength = 1;
+    // only a PNG predictor tags each row with the one it used
+    const int nPredictorBytes = nPredictor > 1 ? 1 : 0;
+    int nLineLength = nPredictorBytes;
     for (size_t i = 0; i < nWSize; ++i)
     {
         auto pI = dynamic_cast<PDFNumberElement*>(pW->GetElements()[i]);
@@ -1719,7 +1727,7 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
         nLineLength += aW[i];
     }
 
-    if (nPredictor > 1 && nLineLength - 1 != nColumns)
+    if (nPredictor > 1 && nLineLength - nPredictorBytes != nColumns)
     {
         SAL_WARN("vcl.filter",
                  "PDFDocument::ReadXRefStream: /DecodeParms/Columns is inconsistent with /W");
@@ -1754,7 +1762,8 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                 switch (nPredictor)
                 {
                     case 1:
-                        // No prediction.
+                        // no prediction, so the line is what the stream holds
+                        aFilteredLine[i] = aOrigLine[i];
                         break;
                     case 12:
                         // PNG prediction: up (on all rows).
@@ -1767,8 +1776,8 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                 }
             }
 
-            // First character is already handled above.
-            int nPos = 1;
+            // the predictor byte, where there is one, is already handled above
+            int nPos = nPredictorBytes;
             size_t nType = 0;
             // Start of the current field in the stream data.
             int nOffset = nPos;
