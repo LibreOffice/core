@@ -664,24 +664,32 @@ class Dispatcher {
 	}
 
 	private addAICommands() {
-		this.actionsMap['aichat'] = function () {
-			if (!app.map.isAIConfigured) {
-				Dispatcher.openAISetup();
-				return;
-			}
-			const sidebar = JSDialog.getAIChatSidebar();
-			sidebar.toggle();
+		// None of these can answer without a provider, so an unconfigured user
+		// gets the setup path instead of a sidebar that cannot reply.
+		const requireAIProvider = (run: (sidebar: any) => void) => {
+			return function () {
+				if (!app.map.isAIConfigured) {
+					Dispatcher.openAISetup();
+					return;
+				}
+				run(JSDialog.getAIChatSidebar());
+			};
 		};
 
-		this.actionsMap['helpfixformulaerror'] = function () {
-			if (!app.map.isAIConfigured) {
-				Dispatcher.openAISetup();
-				return;
-			}
-			const sidebar = JSDialog.getAIChatSidebar();
+		this.actionsMap['aichat'] = requireAIProvider((sidebar) =>
+			sidebar.toggle(),
+		);
+
+		this.actionsMap['helpfixformulaerror'] = requireAIProvider((sidebar) => {
 			if (!sidebar.isVisible()) sidebar.show();
 			sidebar.diagnoseFormulaError();
-		};
+		});
+
+		for (const action of JSDialog.AIAssistantTab?.getQuickActions() ?? []) {
+			this.actionsMap['aichatquick-' + action.id] = requireAIProvider(
+				(sidebar) => sidebar.rewriteSelection(action.prompt),
+			);
+		}
 	}
 
 	private addExportCommands() {

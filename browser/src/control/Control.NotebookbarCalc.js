@@ -94,6 +94,8 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'context': 'Chart|Series|ErrorBar|Axis|Grid|ChartElements|Trendline|ChartTitle|ChartLegend|ChartLabel',
 				'accessibility': { focusBack: true,	combination: 'CH', de: null }
 			},
+			app.LOUtil.isAIAssistantAvailable(this.map)
+				? JSDialog.AIAssistantTab.getEntry() : null,
 			{
 				'id': 'View-tab-label',
 				'text': _('View'),
@@ -144,6 +146,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			this.getShapeTab(),
 			this.getPictureTab(),
 			this.getChartTab(),
+			this.getAIAssistantTab(),
 			this.getViewTab(),
 			this.getSparklineTab(),
 			this.getCalcTableTab(),
@@ -1725,16 +1728,6 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'command': '.uno:Navigator',
 				'accessibility': { focusBack: true,	combination: 'NV', de: null }
 			},
-			app.LOUtil.isAIAssistantAvailable(this.map) ? {
-				'id': 'view-ai-sidebar',
-				'type': 'bigcustomtoolitem',
-				'text': _('AI Assistant'),
-				'tooltip': _('AI Assistant'),
-				'icon': 'lc_ai_sidebar.svg',
-				'command': 'aichat',
-				'accessibility': { focusBack: true, combination: 'AI', de: null }
-			} : {},
-
 		];
 
 		return this.getTabPage('View', content);

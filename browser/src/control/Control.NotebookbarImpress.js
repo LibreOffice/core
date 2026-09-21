@@ -159,6 +159,8 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'context': 'MasterPage',
 				'accessibility': { focusBack: false, combination: 'M', de: null }
 			},
+			app.LOUtil.isAIAssistantAvailable(this.map)
+				? JSDialog.AIAssistantTab.getEntry() : null,
 			{
 				'id': 'View-tab-label',
 				'text': _('View'),
@@ -205,6 +207,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getPictureTab(),
 			this.getChartTab(),
 			this.getMasterTab(),
+			this.getAIAssistantTab(),
 			this.getViewTab(),
 			this.getExtensionsTab(),
 			this.getHelpTab()
@@ -820,15 +823,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': '.uno:SidebarDeck.ShapesDeck',
 				'accessibility': { focusBack: true, combination: 'SH', de: null }
 			},
-			app.LOUtil.isAIAssistantAvailable(this.map) ? {
-				'id': 'view-ai-sidebar',
-				'type': 'bigcustomtoolitem',
-				'text': _('AI Assistant'),
-				'tooltip': _('AI Assistant'),
-				'icon': 'lc_ai_sidebar.svg',
-				'command': 'aichat',
-				'accessibility': { focusBack: true, combination: 'AI', de: null }
-			} : {}
 		];
 
 		return this.getTabPage('View', content);

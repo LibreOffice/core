@@ -52,7 +52,7 @@ class ServerConnectionService {
 			return;
 		}
 
-		app.map.isAIConfigured = !!props.AIConfigured;
+		this.setAIConfigured(!!props.AIConfigured);
 		app.map.aiModelName = props.AIModelName || '';
 		app.map.aiEthicalRating = props.AIEthicalRating || 'U';
 
@@ -60,6 +60,15 @@ class ServerConnectionService {
 		// the document. This may land before or after the load, so both sides
 		// call in and the later one acts.
 		app.map.uiManager.initializeAIAssistant();
+	}
+
+	// The AI entry points are gated on a configured provider, so the
+	// notebookbar has to be rebuilt whenever that changes.
+	private setAIConfigured(configured: boolean) {
+		// Undefined until the first reply lands, so compare as a boolean.
+		if (!!app.map.isAIConfigured === configured) return;
+		app.map.isAIConfigured = configured;
+		app.map.uiManager?.notebookbar?.impl?.refresh();
 	}
 
 	public onViewSetting(viewSetting: ViewSetting) {
@@ -78,7 +87,7 @@ class ServerConnectionService {
 		app.impress.savedViewMode = viewSetting.presentationViewMode ?? null;
 		app.writer.savedViewMode = viewSetting.presentationViewMode ?? null;
 
-		app.map.isAIConfigured = !!viewSetting.aiConfigured;
+		this.setAIConfigured(!!viewSetting.aiConfigured);
 		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout
 			? Math.max(10, Number(viewSetting.aiRequestTimeout))
 			: 300;
@@ -96,7 +105,7 @@ class ServerConnectionService {
 				// On the desktop apps the Options dialog opens over the
 				// backstage, which covers the document. Close the backstage
 				// first so the user lands back on the document and sees the
-				// View tab and the AI sidebar.
+				// AI entry point and the AI sidebar.
 				if (app.map.backstageView) app.map.backstageView.hide();
 				const sidebar = JSDialog.getAIChatSidebar();
 				if (sidebar.isVisible()) {
@@ -104,14 +113,14 @@ class ServerConnectionService {
 				} else {
 					// A click on the already-selected tab of an expanded
 					// notebookbar collapses the bar, so click only when it
-					// switches to the View tab or re-expands a collapsed bar.
-					const viewTab = document.getElementById('View-tab-label');
+					// switches tab or re-expands a collapsed bar.
+					const aiTab = document.getElementById('AIAssistant-tab-label');
 					if (
-						viewTab &&
-						(!viewTab.classList.contains('selected') ||
+						aiTab &&
+						(!aiTab.classList.contains('selected') ||
 							app.map.uiManager.isNotebookbarCollapsed())
 					) {
-						viewTab.click();
+						aiTab.click();
 					}
 					sidebar.show();
 				}

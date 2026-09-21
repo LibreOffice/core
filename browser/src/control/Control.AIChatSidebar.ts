@@ -2408,8 +2408,9 @@ namespace cool {
 			);
 		}
 
-		async sendMessage(): Promise<void> {
-			const text = this.inputText.trim();
+		// A caller-supplied prompt leaves the user's own draft in the input.
+		async sendMessage(prompt?: string): Promise<void> {
+			const text = (prompt ?? this.inputText).trim();
 			if (!text || this.isProcessing) return;
 
 			if (text.length > this.MAX_MESSAGE_LENGTH) {
@@ -2425,13 +2426,15 @@ namespace cool {
 			}
 
 			this.hintText = '';
-			this.inputText = '';
-			// Clear the DOM value synchronously so that a pending keyup
-			// event does not restore inputText from the stale DOM value.
-			const textarea = document.querySelector(
-				'#aichat-input.ui-textarea',
-			) as HTMLTextAreaElement | null;
-			if (textarea) textarea.value = '';
+			if (prompt === undefined) {
+				this.inputText = '';
+				// Clear the DOM value synchronously so that a pending keyup
+				// event does not restore inputText from the stale DOM value.
+				const textarea = document.querySelector(
+					'#aichat-input.ui-textarea',
+				) as HTMLTextAreaElement | null;
+				if (textarea) textarea.value = '';
+			}
 
 			const userMsg = await this.buildUserMessage(text);
 			if (!userMsg) return;
@@ -2871,8 +2874,7 @@ namespace cool {
 			value: string;
 		}): void {
 			if (this.isProcessing) return;
-			this.inputText = _('Use section: ') + choice.label;
-			this.sendMessage().catch((e: any) => {
+			this.sendMessage(_('Use section: ') + choice.label).catch((e: any) => {
 				window.console.error('Sending the section choice failed:', e);
 			});
 		}
@@ -3622,6 +3624,23 @@ namespace cool {
 				app.map.on('commandvalues', handleResponse);
 				app.socket.sendMessage('commandvalues command=.uno:FormulaDepChain');
 			});
+		}
+
+		// The prompt says nothing about what to rewrite - buildUserMessage()
+		// attaches the selection - so without one there is nothing to send.
+		public rewriteSelection(prompt: string): void {
+			if (!this.isVisible()) this.show();
+
+			if (!TextSelections.isActive()) {
+				this.hintText = _('Select the text you want to rewrite first.');
+				this.updateHint();
+				return;
+			}
+
+			// Let the same selection through twice in a row, or the second
+			// rewrite arrives with nothing to work on.
+			this.lastSentSelectedText = '';
+			this.sendMessage(prompt);
 		}
 
 		public async diagnoseFormulaError(): Promise<void> {

@@ -99,6 +99,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'context': 'Chart|Series|ErrorBar|Axis|Grid|ChartElements|Trendline|ChartTitle|ChartLegend|ChartLabel',
 				'accessibility': { focusBack: true, combination: 'CH', de: 'CH' }
 			},
+			app.LOUtil.isAIAssistantAvailable(this.map)
+				? JSDialog.AIAssistantTab.getEntry() : null,
 			{
 				'text': _('View'),
 				'id': viewTabName + '-tab-label',
@@ -149,6 +151,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			this.getShapeTab(),
 			this.getPictureTab(),
 			this.getChartTab(),
+			this.getAIAssistantTab(),
 			this.getViewTab(),
 			this.getExtensionsTab(),
 			this.getHelpTab(),
@@ -1856,15 +1859,6 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'command': '.uno:SidebarDeck.PropertyDeck',
 				'accessibility': { focusBack: true, combination: 'SB', de: null }
 			},
-			app.LOUtil.isAIAssistantAvailable(this.map) ? {
-				'id': 'view-ai-sidebar',
-				'type': 'bigcustomtoolitem',
-				'text': _('AI Assistant'),
-				'tooltip': _('AI Assistant'),
-				'icon': 'lc_ai_sidebar.svg',
-				'command': 'aichat',
-				'accessibility': { focusBack: true, combination: 'AI', de: null }
-			} : {},
 			{ type: 'separator', id: 'view-sidebar-break', orientation: 'vertical' },
 			// On Android the app's own settings choose the theme, so the
 			// editor offers no theme toggle of its own.
@@ -2264,6 +2258,15 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
 	getReferencesTab: function() {
 		const tab = JSDialog.WriterReferencesTab;
+		return this.getTabPage(tab.getName(), tab.getContent());
+	},
+
+	// Null without a provider: _filterExtensionsTab() then drops this page
+	// and the label above with it.
+	getAIAssistantTab: function() {
+		if (!app.LOUtil.isAIAssistantAvailable(this.map))
+			return null;
+		const tab = JSDialog.AIAssistantTab;
 		return this.getTabPage(tab.getName(), tab.getContent());
 	},
 

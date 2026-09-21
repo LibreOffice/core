@@ -43,7 +43,7 @@ describe(['taglighthouse'], 'Accessibility Impress Notebookbar Tests', { testIso
 
     function selectAndValidateTab(tab) {
         var selector = '#' + tab.id;
-        cy.cGet(selector).should('be.visible').click();
+        cy.cGet(selector).scrollIntoView().should('be.visible').click();
         cy.cGet(selector).should('have.class', 'selected');
 
         helper.processToIdle(win);
