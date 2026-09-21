@@ -275,6 +275,7 @@ parts:
       ./configure \
         --prefix=/usr \
         --enable-qtapp \
+        --disable-server \
         --enable-ld \
         --with-lo-path=/usr/lib/collaboraoffice \
         --with-lokit-path=$(pwd)/engine/include \

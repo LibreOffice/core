@@ -89,9 +89,11 @@
 #include <vector>
 
 #include <dirent.h>
-#include <dlfcn.h>
 #include <openssl/evp.h>
+#if HAVE_SECURITY_PAM_APPL_H
+#include <dlfcn.h>
 #include <security/pam_appl.h>
+#endif
 #include <sys/stat.h>
 #include <unistd.h>
 #include <zlib.h>
@@ -114,6 +116,8 @@ constexpr std::string_view MetaViewPort =
 
 namespace
 {
+
+#if HAVE_SECURITY_PAM_APPL_H
 
 int functionConversation(int /*num_msg*/, const struct pam_message** /*msg*/,
                          struct pam_response **reply, void *appdata_ptr)
@@ -215,6 +219,18 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
 
     return true;
 }
+
+#else
+
+/// Check for user / password with PAM. A build without the PAM header has no
+/// PAM support, so this always fails.
+bool isPamAuthOk(const std::string& /*userProvidedUsr*/, const std::string& /*userProvidedPwd*/)
+{
+    LOG_ERR("PAM authentication requested, but this build has no PAM support.");
+    return false;
+}
+
+#endif
 
 /// Check for user / password set in coolwsd.xml.
 bool isConfigAuthOk(const std::string& userProvidedUsr, const std::string& userProvidedPwd)

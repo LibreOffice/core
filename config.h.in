@@ -126,6 +126,9 @@
 /* Define to 1 if this is a mobileapp (eg. Android) build. */
 #undef MOBILEAPP
 
+/* Define to 1 if the PAM header security/pam_appl.h is available. */
+#undef HAVE_SECURITY_PAM_APPL_H
+
 /* Define to 1 when we should use systemplate and jails (eg. normal coolwsd server), otherwise 0 (eg. CODA). */
 #undef ENABLE_CHILDROOTS
 
@@ -171,6 +174,11 @@
 #endif
 #ifndef ENABLE_CHILDROOTS
 #define ENABLE_CHILDROOTS 1
+#endif
+
+/* The configure check for the PAM header runs only for server builds. */
+#ifndef HAVE_SECURITY_PAM_APPL_H
+#define HAVE_SECURITY_PAM_APPL_H 0
 #endif
 
 /* Controls whether or not we allow loading documents from the local filesystem. */

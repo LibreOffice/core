@@ -76,6 +76,9 @@ if ENABLE_QTAPP
 SUBDIRS += qt
 endif
 
+# The unit tests and the cypress tests need coolwsd; a --disable-server tree
+# builds the browser bundle and the qt app only.
+if ENABLE_SERVER
 if ENABLE_TESTS
 SUBDIRS += test
 endif
@@ -83,11 +86,14 @@ endif
 if ENABLE_CYPRESS
 SUBDIRS += cypress_test
 endif
+endif ENABLE_SERVER
 
 bin_PROGRAMS =
+if ENABLE_SERVER
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
 endif
+endif ENABLE_SERVER
 
 endif !ENABLE_FUZZERS
 
@@ -97,17 +103,23 @@ QUIET_MKDIRP = $(QUIET_MKDIRP_$(V))
 QUIET_MKDIRP_ = $(QUIET_MKDIRP_$(AM_DEFAULT_VERBOSITY))
 QUIET_MKDIRP_0 = @echo "  MKDIRP  " $@;
 
+server_mans = man/coolwsd.1 \
+              man/coolforkit-caps.1 \
+              man/coolforkit-ns.1 \
+              man/coolconvert.1 \
+              man/coolconfig.1 \
+              man/coolstress.1 \
+              man/coolwsd-systemplate-setup.1 \
+              man/coolmount.1
+
+# Everything the server installs: binaries come via install-exec-local below,
+# the rest are these primaries. All of it is skipped with --disable-server, so
+# a qt app package gets only the browser bundle and the app.
+if ENABLE_SERVER
+
 dist_bin_SCRIPTS = coolwsd-systemplate-setup
 
-man_MANS = man/coolwsd.1 \
-           man/coolforkit-caps.1 \
-           man/coolforkit-ns.1 \
-           man/coolconvert.1 \
-           man/coolconfig.1 \
-           man/coolstress.1 \
-           man/coolwsd-systemplate-setup.1 \
-           man/coolmount.1
-
+man_MANS = $(server_mans)
 
 dist_doc_DATA = wsd/README.vars \
                 wsd/protocol.txt \
@@ -138,6 +150,8 @@ apache2config_DATA = etc/apache2/coolwsd.conf
 nginxconfigdir = ${sysconfdir}/nginx/snippets
 
 nginxconfig_DATA = etc/nginx/coolwsd.conf
+
+endif ENABLE_SERVER
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -275,7 +289,9 @@ coolwsd_sources = \
 
 noinst_PROGRAMS =
 
+if ENABLE_SERVER
 noinst_LIBRARIES = libsimd.a libkitwsdglobals.a
+endif
 
 libsimd_a_SOURCES = kit/DeltaSimd.c
 libsimd_a_CFLAGS = @SIMD_CFLAGS@
@@ -508,7 +524,7 @@ dist-hook:
 	$(abs_top_srcdir)/scripts/unoshortcuts.py --update $(distdir) $(abs_top_srcdir)/engine
 
 EXTRA_DIST = \
-             $(man_MANS) \
+             $(server_mans) \
              $(gbuild_sources) \
              README.md \
              SBOM.md \
@@ -579,13 +595,24 @@ endif
 
 CLEANUP_COVERAGE=rm -rf ${abs_top_srcdir}/gcov; find . -iname "*.gcda" -delete
 
+if ENABLE_SERVER
 GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress coolwsd
 
 GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
+else
+GBUILD_EXES =
+
+GBUILD_EXES_NOINST =
+endif
 
 build-gbuild: FORCE
 	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' Module_gbuild
 $(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
+
+# The qt app links libwsd.a and libshared.a from gbuild. With --disable-server
+# nothing else of the gbuild module is wanted, so build just those two.
+build-qtapp-gbuild-libs: FORCE
+	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' StaticLibrary_shared StaticLibrary_wsd
 
 # Similar to build-gbuild, but for the --enable-fuzzers case.
 build-fuzzer-gbuild-libs: FORCE
@@ -801,11 +828,20 @@ endif
 if ENABLE_FUZZERS
 ALL_LOCAL_DEPS=build-fuzzer-gbuild-libs
 else
+if ENABLE_SERVER
 ALL_LOCAL_DEPS=coolwsd
+else
+ALL_LOCAL_DEPS=build-qtapp-gbuild-libs
+endif
 endif
 
+if ENABLE_SERVER
 all-local: $(ALL_LOCAL_DEPS) @JAILS_PATH@ @CACHE_PATH@ $(SYSTEM_STAMP)
 	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
+else
+all-local: $(ALL_LOCAL_DEPS)
+	@abs_srcdir='$(abs_top_srcdir)' $(abs_top_srcdir)/scripts/refresh-git-hooks
+endif
 
 # just run the build without any tests
 build-nocheck: all-am
@@ -936,6 +972,7 @@ prettier: browser/node_modules
 prettier-write: browser/node_modules
 	@$(MAKE) -C browser prettier-write
 
+if ENABLE_SERVER
 install-exec-hook:
 	cd $(DESTDIR)$(bindir) && \
 	test -e coolconfig && $(LN_S) coolconfig loolconfig || true; \
@@ -945,6 +982,7 @@ install-exec-hook:
 install-exec-local: $(GBUILD_EXES)
 	test -z "$(GBUILD_EXES)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
 	for exe in $(GBUILD_EXES); do $(INSTALL_PROGRAM) "$$exe" "$(DESTDIR)$(bindir)/$$exe"; done
+endif ENABLE_SERVER
 
 stress_file=$(abs_top_srcdir)/test/data/hello-world.odt
 trace_dir=$(abs_top_srcdir)/test/traces

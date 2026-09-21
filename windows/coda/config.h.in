@@ -91,6 +91,9 @@
 /* Define to 1 if you have the `pipe2' function. */
 #define HAVE_PIPE2 0
 
+/* Define to 1 if you have the <security/pam_appl.h> header file. */
+#define HAVE_SECURITY_PAM_APPL_H 0
+
 /* Default value of help root URL */
 #define HELP_URL ""
 

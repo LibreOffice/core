@@ -164,7 +164,11 @@ configure looks by default, so no paths need to be passed:
 make -j $(nproc)
 ```
 
-This produces the `coda-qt` executable in `qt/`.
+This produces the `coda-qt` executable in `qt/`, and also builds `coolwsd`
+and the other server binaries from the same tree, which is handy for
+development. The packaging builds (Flatpak, Snap, FreeBSD port) add
+`--disable-server` so that only the browser bundle and the app are built and
+installed, and no server ends up in the app package.
 
 ## Running
 

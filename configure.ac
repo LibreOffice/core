@@ -258,9 +258,17 @@ AC_ARG_WITH([app-branding],
 
 AC_ARG_ENABLE([qtapp],
               AS_HELP_STRING([--enable-qtapp],
-                             [Use in a tree where the only purpose is to build the qt "app" that is supposed
-                              to work similarly to the iOS app, from the JavaScript and the pseudo WebSocket
-                              message plumbing point of view. See qt/README.]))
+                             [Also build the qt "app" that is supposed to work similarly to the iOS app,
+                              from the JavaScript and the pseudo WebSocket message plumbing point of view.
+                              The server is built from the same tree unless --disable-server is given
+                              as well. See qt/README.]))
+
+AC_ARG_ENABLE([server],
+              AS_HELP_STRING([--disable-server],
+                             [Do not build or install coolwsd, its tools, configuration and data files.
+                              Only meaningful together with --enable-qtapp: packaging builds of the qt
+                              app (Flatpak, Snap, FreeBSD port) use it so that no server ends up in the
+                              app package. The server is built by default.]))
 
 AC_ARG_ENABLE([qtapp-tests],
               AS_HELP_STRING([--enable-qtapp-tests],
@@ -2094,6 +2102,24 @@ fi
 AC_SUBST(ENABLE_MOBILEAPP)
 AM_CONDITIONAL([ENABLE_MOBILEAPP], [test "$ENABLE_MOBILEAPP" = "true"])
 
+ENABLE_SERVER=true
+server_msg="enabled"
+if test "$enable_server" = "no"; then
+    if test "$enable_qtapp" != "yes"; then
+        AC_MSG_ERROR([--disable-server is only meaningful together with --enable-qtapp; a server tree has nothing else to build])
+    fi
+    if test "$LIBFUZZER" = "1"; then
+        AC_MSG_ERROR([--disable-server cannot be combined with --enable-fuzzers, the fuzzers exercise the server])
+    fi
+    ENABLE_SERVER=false
+    server_msg="disabled (qt app only)"
+elif test "$mobile_app" = "true"; then
+    ENABLE_SERVER=false
+    server_msg="not applicable (app build)"
+fi
+AC_SUBST(ENABLE_SERVER)
+AM_CONDITIONAL([ENABLE_SERVER], [test "$ENABLE_SERVER" = "true"])
+
 if test "$host_os" = "emscripten" ; then
     ENABLE_EMSCRIPTENAPP=true
 fi
@@ -2170,8 +2196,9 @@ AC_SUBST(ENABLE_SSL)
 
 dnl coolwsd does not link libpam; it dlopen's it on demand for the optional
 dnl admin-console PAM auth. Only the header is needed at build time (for the
-dnl PAM types); the library is not required and not linked.
-AS_IF([test "$mobile_app" != "true" -a "$host_os" != "emscripten"],
+dnl PAM types); the library is not required and not linked. Only the server
+dnl needs it, so a --disable-server qt app tree skips the check.
+AS_IF([test "$ENABLE_SERVER" = "true" -a "$host_os" != "emscripten"],
       [AC_CHECK_HEADERS([security/pam_appl.h],
                         [],
                         [AC_MSG_ERROR([header security/pam_appl.h not found, install PAM development package])])])
@@ -2992,6 +3019,7 @@ Configuration:
     LOKit path                ${lokit_msg}
     LO path                   $LO_PATH
     LO integration tests      ${lo_msg}
+    Server (coolwsd)          $server_msg
     SSL support               $ssl_msg
     Landlock containment      $landlock_msg
     Debug & low security      $debug_msg
@@ -3005,7 +3033,7 @@ Configuration:
     Code-Coverage             $coverage_msg
 
     \$ make # to compile"
-if test -n "$with_lo_path"; then
+if test -n "$with_lo_path" -a "$ENABLE_SERVER" = "true"; then
 echo "    \$ make run # to start coolwsd
     \$ make sync-writer|calc|impress # to start browsersync with specified app
 "

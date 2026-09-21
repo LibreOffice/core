@@ -86,23 +86,6 @@
       "cleanup": [ "*" ]
     },
     {
-      "name": "linux-pam",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Ddocs=disabled",
-        "-Dexamples=false",
-        "-Dnis=disabled"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://gerrit.collaboraoffice.com/src/Linux-PAM-1.7.1.tar.xz",
-          "sha256": "21dbcec6e01dd578f14789eac9024a18941e6f2702a05cf91b28c232eeb26ab0"
-        }
-      ],
-      "cleanup": [ "*" ]
-    },
-    {
       "name": "rsync",
       "buildsystem": "autotools",
       "sources": [
@@ -362,7 +345,7 @@
       "build-commands": [
         "cd engine && ./autogen.sh --with-distro=CPLinuxQtFlatpak --prefix=$(pwd)/inst && make && make distro-pack-install && make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh com.collaboraoffice.Office'",
         "autoreconf -vfi",
-        "./configure --prefix=/app --enable-qtapp --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
+        "./configure --prefix=/app --enable-qtapp --disable-server --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
         "make",
         "rm -rf /app/bin/collaboraoffice",
         "make install"

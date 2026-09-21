@@ -166,7 +166,7 @@ ENGINE_CONFIGURE_ARGS=	--with-distro=CPFreeBSDQt --prefix=${PREFIX} \
 			--with-parallelism=${MAKE_JOBS_NUMBER} \
 			--with-os-version=${OSVERSION}
 
-APP_CONFIGURE_ARGS=	--prefix=${PREFIX} --enable-qtapp \
+APP_CONFIGURE_ARGS=	--prefix=${PREFIX} --enable-qtapp --disable-server \
 			--with-lo-path=${LO_PATH} \
 			--with-lokit-path=${ENGINE_WRKSRC}/include \
 			--with-lo-builddir=${ENGINE_WRKSRC} \
