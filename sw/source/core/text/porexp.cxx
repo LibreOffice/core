@@ -204,7 +204,16 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
         oTextSlot.emplace(&rInf, this, true, false);
     }
 
-    const bool bFull = rInf.IsUnderflow() || SwTextPortion::Format(rInf);
+    bool bFull = rInf.IsUnderflow();
+    if (!bFull)
+    {
+        // format the character that will be painted
+        std::optional<SwTextSlot> oShownChar;
+        if (!oTextSlot && ShowsOtherChar(rInf))
+            oShownChar.emplace(&rInf, this, true, false);
+        bFull = SwTextPortion::Format(rInf);
+    }
+
     if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
     {
         Truncate();
@@ -215,12 +224,38 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
     return bFull;
 }
 
+bool SwBlankPortion::ShowsOtherChar(const SwTextSizeInfo& rInf) const
+{
+    // a bracket of SwDoubleLinePortion and a field's hook char stand for no model character
+    return m_bMulti || !GetLen() || m_cChar != rInf.GetChar(rInf.GetIdx());
+}
+
+SwPositiveSize SwBlankPortion::GetTextSize(const SwTextSizeInfo& rInf) const
+{
+    std::optional<SwTextSlot> oShownChar;
+    if (ShowsOtherChar(rInf))
+        oShownChar.emplace(&rInf, this, true, false);
+    return SwTextPortion::GetTextSize(rInf);
+}
+
 void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // Draw field shade (can be disabled individually)
     if (!m_bMulti) // No gray background for multiportion brackets
         rInf.DrawViewOpt(*this, PortionType::Blank);
-    SwTextPortion::Paint(rInf);
+
+    // a field's hook char has no length, but a width and a character to draw
+    if (GetLen() || Width())
+    {
+        PaintDecorations(rInf);
+
+        std::optional<SwTextSlot> oShownChar;
+        if (ShowsOtherChar(rInf))
+            oShownChar.emplace(&rInf, this, true, true);
+
+        // the slot remaps the other two lists, but not the wrong one
+        PaintText(rInf, !oShownChar && rInf.GetpWrongList() != nullptr);
+    }
 
     if (rInf.GetOpt().IsViewMetaChars() && rInf.GetOpt().IsHardBlank())
     {
