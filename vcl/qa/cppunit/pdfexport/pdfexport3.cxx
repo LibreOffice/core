@@ -95,11 +95,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf157397)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pDocument(nullptr);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -425,11 +422,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf135192)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTable(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -624,11 +618,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf154955)
     CPPUNIT_ASSERT_GREATEREQUAL(1, nArtifacts);
 
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -693,11 +684,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155190)
 
     int nDiv(0);
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
 
         auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"_ostr));
@@ -829,11 +817,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testMediaShapeAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -952,11 +937,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFlyFrameHyperlinkAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -1090,11 +1072,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFormControlAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -1993,11 +1972,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155161)
 
     // Check that all fonts in the document are not Type 3 fonts.
     std::set<OString> aFontNames;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "Font")
         {
@@ -2029,11 +2005,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTrueTypeCompositeFont)
 
     vcl::filter::PDFObjectElement* pType0 = nullptr;
     vcl::filter::PDFObjectElement* pCIDFont = nullptr;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "Font")
             continue;
@@ -2096,11 +2069,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPDFA1CIDSet)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     vcl::filter::PDFObjectElement* pCIDFont = nullptr;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
         if (pSubtype && pSubtype->GetValue() == "CIDFontType0")
             pCIDFont = pObject;
@@ -2144,11 +2114,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testNoCIDSetWithoutPDFA1)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     bool bSawDescriptor = false;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "FontDescriptor")
             continue;
@@ -2173,11 +2140,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf171869)
     vcl::filter::PDFObjectElement* pType0 = nullptr;
     vcl::filter::PDFObjectElement* pCIDFont = nullptr;
     int nFonts = 0;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "Font")
             continue;

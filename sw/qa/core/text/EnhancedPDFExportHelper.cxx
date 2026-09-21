@@ -47,11 +47,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
     // the outline item, the footnote's two links, the shape's link and the citation's
     std::vector<OString> aOutlineTypes;
     std::vector<OString> aLinkTypes;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
         if (!pAction)
             continue;
@@ -119,11 +116,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
 
     // the type of the one element a footnote frame opens
     const auto aFootnoteType = [](vcl::filter::PDFDocument& rDocument) -> OString {
-        for (const auto& rDocElement : rDocument.GetElements())
+        for (auto* pObject : rDocument.GetObjects())
         {
-            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-            if (!pObject)
-                continue;
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
             if (pType && (pType->GetValue() == "Note" || pType->GetValue() == "FENote"))
                 return pType->GetValue();
@@ -175,12 +169,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCItemRef)
     // name the element its entry reaches
     OStringBuffer aTargets;
     std::unordered_set<sal_Int32> aSeen;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "TOCI")
             continue;
@@ -220,12 +210,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaAltFromSource)
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
     OUStringBuffer aAlts;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "Formula")
             continue;
@@ -255,12 +241,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaPlacement)
     OString aInALine;
     OString aInAParagraph;
     OString aOnThePage;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "Formula")
             continue;
@@ -309,12 +291,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutAttributeUnits)
     vcl::filter::PDFDictionaryElement* pIndented = nullptr;
     vcl::filter::PDFDictionaryElement* pHanging = nullptr;
     vcl::filter::PDFDictionaryElement* pCell = nullptr;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         auto pAttributes
             = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
@@ -371,12 +349,8 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
     // every structure element that names a language, sorted: they are emitted by object and
     // not by document order
     std::vector<OString> aLanguages;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         auto pLang
             = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("Lang"_ostr));

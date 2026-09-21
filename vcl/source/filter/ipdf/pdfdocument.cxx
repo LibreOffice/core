@@ -12,6 +12,7 @@
 
 #include <map>
 #include <memory>
+#include <ranges>
 #include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -2057,6 +2058,14 @@ PDFObjectElement* PDFDocument::GetCatalog()
     }
 
     return pRoot->LookupObject();
+}
+
+std::vector<PDFObjectElement*> PDFDocument::GetObjects()
+{
+    // the map holds what the file lists and what ParseStoredObjects unpacked from an object
+    // stream, so an object is here whether or not it stands in the file
+    auto aObjects = m_aIDObjects | std::views::values;
+    return { aObjects.begin(), aObjects.end() };
 }
 
 std::vector<PDFObjectElement*> PDFDocument::GetPages()
