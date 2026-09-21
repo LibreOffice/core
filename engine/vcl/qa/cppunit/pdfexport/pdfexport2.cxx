@@ -118,11 +118,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTable(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
 
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
@@ -187,11 +184,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObj : aDocument.GetObjects())
     {
-        auto pObj = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObj)
-            continue;
 
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "XObject")
@@ -334,11 +328,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf141171)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     int nImages(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
         if (pType && pType->GetValue() == "Image")
         {
@@ -984,11 +975,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTaggedNestedTableInRepeatedHeaderRow)
     int nTables(0);
     int nRows(0);
     int nParagraphs(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "StructElem")
             continue;
@@ -1425,11 +1413,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160117)
     bool bFound1 = false;
     bool bFound2 = false;
     bool bFound3 = false;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "FontDescriptor")
         {
@@ -1829,11 +1814,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152231)
     CPPUNIT_ASSERT_GREATEREQUAL(1, nArtifacts);
 
     int nPara(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -2010,11 +1992,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf149140)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTH(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -2079,11 +2058,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
 
     // the namespace each element points at, by object
     std::unordered_map<vcl::filter::PDFObjectElement*, OString> aNamespaceOf;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "Namespace")
             continue;
@@ -2140,11 +2116,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
 
     // the namespace each structure type landed in
     std::unordered_map<OString, OString> aNamespaceOfType;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType || pType->GetValue() != "StructElem")
             continue;
@@ -2228,11 +2201,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166963)
     // which element actually lists each structure element as its kid
     std::unordered_map<vcl::filter::PDFObjectElement*, vcl::filter::PDFObjectElement*> aLister;
     std::vector<vcl::filter::PDFObjectElement*> aElements;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (!pType)
             continue;
@@ -2289,11 +2259,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173194)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     vcl::filter::PDFObjectElement* pTableSE(nullptr);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Table")
@@ -2349,11 +2316,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNestedSection)
     CPPUNIT_ASSERT_EQUAL(size_t(3), aPages.size());
 
     int nDoc(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -2497,11 +2461,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
 
     vcl::filter::PDFObjectElement* pTOC(nullptr);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -2694,11 +2655,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135638)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -2791,11 +2749,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157703)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pDocument(nullptr);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -2872,11 +2827,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testSpans)
     CPPUNIT_ASSERT_EQUAL(size_t(2), aPages.size());
 
     int nDoc(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -3366,89 +3318,43 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf57423)
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
-    int nFigure(0);
-    int nFormula(0);
-    int nDiv(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    // each kind's descriptions in one string, so the assertion does not depend on the order the
+    // objects come back in
+    OUString aFigures;
+    OUString aFormulas;
+    OUString aDivs;
+    auto aAlt = [](vcl::filter::PDFObjectElement* pObject) -> OUString {
+        auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"_ostr));
+        return pAlt ? vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt) : OUString();
+    };
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
-        if (pType && pType->GetValue() == "StructElem")
-        {
-            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
-            if (pS && pS->GetValue() == "Figure")
-            {
-                switch (nFigure)
-                {
-                    case 2:
-                        CPPUNIT_ASSERT_EQUAL(u"QR Code - Tells how to get to Mosegaard"_ustr,
-                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                     pObject->Lookup("Alt"_ostr))));
-                        break;
-                    case 0:
-                        CPPUNIT_ASSERT_EQUAL(u"Title: Arrows - Description:  Explains the "
-                                             u"different arrow appearances"_ustr,
-                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                     pObject->Lookup("Alt"_ostr))));
-                        break;
-                    case 1:
-                        CPPUNIT_ASSERT_EQUAL(
-                            u"My blue triangle - Does not need further description"_ustr,
-                            ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                    pObject->Lookup("Alt"_ostr))));
-                        break;
-                }
-                ++nFigure;
-            }
-            if (pS && pS->GetValue() == "Formula")
-            {
-                CPPUNIT_ASSERT_EQUAL(
-                    u"Equation 1 - Now we give the full description of eq 1 here"_ustr,
-                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                        *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                            pObject->Lookup("Alt"_ostr))));
-                ++nFormula;
-            }
-            if (pS && pS->GetValue() == "Div")
-            {
-                switch (nDiv)
-                {
-                    case 0:
-                        CPPUNIT_ASSERT_EQUAL(u"This frame has a description"_ustr,
-                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                     pObject->Lookup("Alt"_ostr))));
-                        break;
-                    case 1:
-                        // no properties set on this
-                        CPPUNIT_ASSERT(!pObject->Lookup("Alt"_ostr));
-                        break;
-                    case 2:
-                        CPPUNIT_ASSERT_EQUAL(u"My textbox - Has a light background"_ustr,
-                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                     pObject->Lookup("Alt"_ostr))));
-                        break;
-                    case 3:
-                        CPPUNIT_ASSERT_EQUAL(u"Hey!  There is no alternate text for Frame "
-                                             u"// but maybe not needed?"_ustr,
-                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                     pObject->Lookup("Alt"_ostr))));
-                        break;
-                }
-                ++nDiv;
-            }
-        }
+        if (!pType || pType->GetValue() != "StructElem")
+            continue;
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS)
+            continue;
+        if (pS->GetValue() == "Figure")
+            aFigures += aAlt(pObject) + "|";
+        else if (pS->GetValue() == "Formula")
+            aFormulas += aAlt(pObject) + "|";
+        else if (pS->GetValue() == "Div")
+            aDivs += aAlt(pObject) + "|";
     }
-    CPPUNIT_ASSERT_EQUAL(3, nFigure);
-    CPPUNIT_ASSERT_EQUAL(1, nFormula);
-    CPPUNIT_ASSERT_EQUAL(4, nDiv);
+
+    CPPUNIT_ASSERT_EQUAL(
+        u"QR Code - Tells how to get to Mosegaard|"
+        "My blue triangle - Does not need further description|"
+        "Title: Arrows - Description:  Explains the different arrow appearances|"_ustr,
+        aFigures);
+    CPPUNIT_ASSERT_EQUAL(u"Equation 1 - Now we give the full description of eq 1 here|"_ustr,
+                         aFormulas);
+    // the first frame here has no properties set on it
+    CPPUNIT_ASSERT_EQUAL(u"|This frame has a description|"
+                         "Hey!  There is no alternate text for Frame // but maybe not needed?|"
+                         "My textbox - Has a light background|"_ustr,
+                         aDivs);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
@@ -3472,11 +3378,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154982)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -3555,11 +3458,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     vcl::filter::PDFObjectElement* pDocument(nullptr);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -3885,11 +3785,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135192)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     int nTable(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructElem")
         {
@@ -4084,11 +3981,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf154955)
     CPPUNIT_ASSERT_GREATEREQUAL(1, nArtifacts);
 
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "StructElem")
         {
@@ -4153,11 +4047,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155190)
 
     int nDiv(0);
     int nFigure(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
 
         auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"_ostr));
@@ -4289,11 +4180,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMediaShapeAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -4412,11 +4300,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -4550,11 +4435,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormControlAnnot)
 
     // check ParentTree to find StructElem
     int nRoots(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject1 : aDocument.GetObjects())
     {
-        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject1)
-            continue;
         auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"_ostr));
         if (pType1 && pType1->GetValue() == "StructTreeRoot")
         {
@@ -5497,11 +5379,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
 
     // Check that all fonts in the document are Type 3 fonts
     std::set<OString> aFontNames;
-    for (const auto& aElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "Font")
         {
@@ -7277,11 +7156,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
         maTempFile.CloseStream();
         CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
         OStringBuffer aTypes;
-        for (const auto& rDocElement : aDocument.GetElements())
+        for (auto* pObject : aDocument.GetObjects())
         {
-            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-            if (!pObject)
-                continue;
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
             if (!pType || pType->GetValue() != "StructElem")
                 continue;
@@ -7317,10 +7193,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
     // its own; the run in Source Text is the one element really of the Code type, and the
     // style really called Code1 keeps a name of its own, being a different style
     const auto[aTypes17, aRoles17] = aExport(17);
-    CPPUNIT_ASSERT_EQUAL(u8"Étude TD Étude TD TR Table"
+    CPPUNIT_ASSERT_EQUAL(u8"Document Table TR TD Étude TD Étude"
                          " Code-1 Title Index-1 Code1 H-1 THead-1 H7 Sub Artifact-1 Code-1-1 H7-1 "
-                         "Code-2 Code Étude-1"
-                         " Standard Document "_ostr,
+                         "Standard Code-2 Code Étude-1 "_ostr,
                          aTypes17);
     CPPUNIT_ASSERT_EQUAL(
         u8"Artifact-1=P Code-1=P Code-1-1=P Code-2=Span Code1=P H-1=P"
@@ -7330,10 +7205,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
     // PDF 2.0 has a Title type, and heading levels without limit, so Title names its own
     // elements while H7 and Sub have to give way
     const auto[aTypes20, aRoles20] = aExport(20);
-    CPPUNIT_ASSERT_EQUAL(u8"Étude TD Étude TD TR Table"
+    CPPUNIT_ASSERT_EQUAL(u8"Document Table TR TD Étude TD Étude"
                          " Code-1 Title Index-1 Code1 H-1 THead-1 H7-1 Sub-1 Artifact-1 Code-1-1 "
-                         "H7 Code-2 Code Étude-1"
-                         " Standard Document "_ostr,
+                         "H7 Standard Code-2 Code Étude-1 "_ostr,
                          aTypes20);
     CPPUNIT_ASSERT_EQUAL(
         u8"Artifact-1=P Code-1=P Code-1-1=P Code-2=Span Code1=P H-1=P"

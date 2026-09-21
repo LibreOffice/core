@@ -1015,11 +1015,10 @@ void ScPDFExportTest::testSheetDestinations()
     // ISO 14289-2 8.8: a sheet's outline item names the sheet, not only the page it starts on
     OStringBuffer aTypes;
     std::set<int> aTargets;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
         // an outline item, not the document information dictionary, which also has a title
-        if (!pObject || !pObject->Lookup("Title"_ostr) || !pObject->Lookup("Parent"_ostr))
+        if (!pObject->Lookup("Title"_ostr) || !pObject->Lookup("Parent"_ostr))
             continue;
         auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
         CPPUNIT_ASSERT(pAction);
@@ -1133,11 +1132,8 @@ void ScPDFExportTest::testPageRangeSkipsSheetStart()
 
     int nOutlineItems = 0;
     std::set<int> aWorksheetPages;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         if (pObject->Lookup("Title"_ostr) && pObject->Lookup("Parent"_ostr))
             ++nOutlineItems;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
@@ -1163,11 +1159,8 @@ void ScPDFExportTest::testDatabaseRangeHeader()
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
     std::vector<vcl::filter::PDFObjectElement*> aTables;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (pType && pType->GetValue() == "Table")
             aTables.push_back(pObject);

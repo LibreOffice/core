@@ -554,6 +554,8 @@ public:
     SAL_DLLPRIVATE size_t GetObjectOffset(size_t nIndex) const;
     const std::vector<std::unique_ptr<PDFElement>>& GetElements() const;
     std::vector<PDFObjectElement*> GetPages();
+    /// Every object of the document, those an object stream holds included.
+    std::vector<PDFObjectElement*> GetObjects();
     PDFObjectElement* GetCatalog();
     /// Remember the end location of an EOF token.
     SAL_DLLPRIVATE void PushBackEOF(size_t nOffset);
