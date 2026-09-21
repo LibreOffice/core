@@ -330,11 +330,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Shared
 
     private boolean copyFileToTemp(Uri documentUri) {
         // CSV files need a .csv suffix to be opened in Calc.
+        // Markdown files need an .md suffix to be imported as Markdown and not plain text
         String suffix = null;
         String intentType = getIntent().getType();
         // K-9 mail uses the first, GMail uses the second variant.
         if ("text/comma-separated-values".equals(intentType) || "text/csv".equals(intentType))
             suffix = ".csv";
+        else if ("text/markdown".equals(intentType))
+            suffix = ".md";
 
         try {
             mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());

@@ -111,6 +111,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements View.OnC
             "application/vnd.openxmlformats-officedocument.presentationml.template",
             "text/csv",
             "text/comma-separated-values",
+            "text/markdown",
             "application/vnd.ms-works",
             "application/vnd.apple.keynote",
             "application/x-abiword",

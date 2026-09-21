@@ -85,6 +85,7 @@ public class FileUtilities {
 
         // Other
         mExtnMap.put(".csv",  CALC);
+        mExtnMap.put(".md", DOC);
         mExtnMap.put(".wps",  DOC);
         mExtnMap.put(".key",  IMPRESS);
         mExtnMap.put(".abw",  DOC);
