@@ -325,9 +325,36 @@ bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &
 
     LanguageType aLang = rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), 1, true);
 
-    // Hungarian-only yet
-    if ( LANGUAGE_HUNGARIAN != aLang )
+    // is compound-based "smart" hyphenation enabled?
+    SvxAdjustItem aAdjustItem =
+        rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    if ( !aAdjustItem.GetCompoundBased() )
         return false;
+
+    // need Hunspell dictionaries with compound-based heuristics
+    // TODO update the list according to the dictionary update
+    if ( LANGUAGE_ICELANDIC != aLang &&
+         LANGUAGE_DANISH != aLang &&
+         LANGUAGE_DUTCH != aLang &&
+         LANGUAGE_DUTCH_BELGIAN != aLang &&
+         LANGUAGE_ESTONIAN != aLang &&
+         LANGUAGE_FINNISH != aLang &&
+         LANGUAGE_LATVIAN != aLang &&
+         LANGUAGE_GERMAN != aLang &&
+         LANGUAGE_GERMAN_AUSTRIAN != aLang &&
+         LANGUAGE_GERMAN_LIECHTENSTEIN != aLang &&
+         LANGUAGE_GERMAN_LUXEMBOURG != aLang &&
+         LANGUAGE_GERMAN_SWISS != aLang &&
+         LANGUAGE_HUNGARIAN != aLang &&
+         LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA != aLang &&
+         LANGUAGE_NORWEGIAN_BOKMAL != aLang &&
+         LANGUAGE_NORWEGIAN_NYNORSK != aLang &&
+         LANGUAGE_SWEDISH != aLang &&
+         LANGUAGE_SWEDISH_FINLAND != aLang &&
+         LANGUAGE_USER_ESPERANTO != aLang )
+    {
+          return false;
+    }
 
     LanguageTag aLanguageTag(aLang);
 
@@ -733,6 +760,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
                 // perhaps there is a compound splitting in the same word before the plain hyphenation
                 bool bPossibleCompoundSplit = bOrigHyphenated3 &&
+                        aAdjustItem.GetCompoundBased() &&
                         pGuess3->HyphWord()->getHyphenationPos() < pGuess2->HyphWord()->getHyphenationPos() &&
                         pGuess3->HyphWord()->getWord().equals(pGuess2->HyphWord()->getWord());
 

@@ -63,6 +63,9 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxPoolItem
     // paragraph composer
     bool    bParagraphComposer : 1;
 
+    // compound-based hyphenation
+    bool    bCompoundBased : 1;
+
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
@@ -159,6 +162,19 @@ public:
         ASSERT_CHANGE_REFCOUNTED_ITEM;
         bParagraphComposer = bValue;
     }
+
+
+    bool GetCompoundBased() const
+    {
+        return bCompoundBased;
+    }
+
+    void SetCompoundBased( const bool bValue )
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        bCompoundBased = bValue;
+    }
+
 
     sal_uInt16 GetPropWordSpacing() const
     {

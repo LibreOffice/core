@@ -517,6 +517,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                     sal_Int32 nPa = -1;
                                     while ( (nPa = morph.indexOf(u" pa:", nPa + 1)) > -1 )
                                     {
+                                        sal_Int32 nPaTemp(nPa);
                                         // use hy: field of the actual stem, if it exists
                                         // pa:stem1 hy:st|em1 pa:stem2 -> st|em1||stem2
                                         sal_Int32 nHy = morph.indexOf(u" hy:", nPa + 3);
@@ -529,7 +530,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                                 sStems += sStems2+ u"||";
                                             else if ( sal_Int32 nBreak = o3tl::toInt32(sStems2) )
                                             {
-                                                OUString sPa(morph.getToken(1, ' ', nPa).copy(3));
+                                                OUString sPa(morph.getToken(1, ' ', nPaTemp).copy(3));
                                                 if ( nBreak < sPa.getLength() )
                                                     sStems += OUString::Concat(sPa.subView(0, nBreak)) + u"|" +
                                                            sPa.subView(nBreak);
@@ -537,7 +538,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                         }
                                         else
                                         {
-                                            OUString sPa(morph.getToken(1, ' ', nPa).copy(3));
+                                            OUString sPa(morph.getToken(1, ' ', nPaTemp).copy(3));
 
                                             // handle special case: missing pa: in morphological analysis
                                             // before in-word suffixes (German, Sweden etc. dictionaries)
@@ -563,9 +564,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                                                     nSuffixLen = sPa.getLength() - nStemLen;
                                             }
                                         }
-
-                                        if ( nPa == -1 ) // getToken() can modify nPa
-                                            break;
                                     }
 
                                     // handle verb and leg-, legesleg- prefixes (Hungarian-only)

@@ -501,6 +501,7 @@ namespace xmloff::token {
         TOKEN( "command",                         XML_COMMAND ),
         TOKEN( "comment",                         XML_COMMENT ),
         TOKEN( "compose",                         XML_COMPOSE ),
+        TOKEN( "compound-based",                  XML_COMPOUND_BASED ),
         TOKEN( "cond-style-name",                 XML_COND_STYLE_NAME ),
         TOKEN( "condition",                       XML_CONDITION ),
         TOKEN( "condition-source",                XML_CONDITION_SOURCE ),

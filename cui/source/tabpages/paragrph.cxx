@@ -1299,6 +1299,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xLabelLetterSpacing(m_xBuilder->weld_label(u"labelLetterSpacing"_ustr))
     , m_xLetterSpacingMinimum(m_xBuilder->weld_metric_spin_button(u"spin_LETTER_SPACING_MIN"_ustr, FieldUnit::PERCENT))
     , m_xLetterSpacingMaximum(m_xBuilder->weld_metric_spin_button(u"spin_LETTER_SPACING_MAX"_ustr, FieldUnit::PERCENT))
+    , m_xCompoundBased(m_xBuilder->weld_check_button(u"checkCompoundBased"_ustr))
     , m_xLabelGlyphScaling(m_xBuilder->weld_label(u"labelGlyphScaling"_ustr))
     , m_xGlyphScalingMinimum(m_xBuilder->weld_metric_spin_button(u"spin_GLYPH_SCALING_MIN"_ustr, FieldUnit::PERCENT))
     , m_xGlyphScalingMaximum(m_xBuilder->weld_metric_spin_button(u"spin_GLYPH_SCALING_MAX"_ustr, FieldUnit::PERCENT))
@@ -1409,6 +1410,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
             m_xParagraphComposer->get_state_changed_from_saved() ||
             m_xLetterSpacingMinimum->get_value_changed_from_saved() ||
             m_xLetterSpacingMaximum->get_value_changed_from_saved() ||
+            m_xCompoundBased->get_state_changed_from_saved() ||
             m_xGlyphScalingMinimum->get_value_changed_from_saved() ||
             m_xGlyphScalingMaximum->get_value_changed_from_saved();
     }
@@ -1436,6 +1438,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         aAdj.SetParagraphComposer( m_xParagraphComposer->get_active() );
         aAdj.SetPropLetterSpacingMinimum( m_xLetterSpacingMinimum->get_value(FieldUnit::PERCENT) );
         aAdj.SetPropLetterSpacingMaximum( m_xLetterSpacingMaximum->get_value(FieldUnit::PERCENT) );
+        aAdj.SetCompoundBased( m_xCompoundBased->get_active() );
         aAdj.SetPropScaleWidthMinimum( m_xGlyphScalingMinimum->get_value(FieldUnit::PERCENT) );
         aAdj.SetPropScaleWidthMaximum( m_xGlyphScalingMaximum->get_value(FieldUnit::PERCENT) );
         rOutSet->Put( aAdj );
@@ -1543,6 +1546,8 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
             m_xLetterSpacingMinimum->set_sensitive(true);
             m_xLetterSpacingMinimum->set_value(rAdj.GetPropLetterSpacingMinimum(), FieldUnit::PERCENT);
             m_xLetterSpacingMaximum->set_value(rAdj.GetPropLetterSpacingMaximum(), FieldUnit::PERCENT);
+            m_xCompoundBased->set_sensitive(true);
+            m_xCompoundBased->set_active(rAdj.GetCompoundBased());
             // TODO add GlyphScaling (CharScaleWidth)
             m_xGlyphScalingMaximum->set_sensitive(true);
             m_xGlyphScalingMinimum->set_sensitive(true);
@@ -1559,10 +1564,10 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
             m_xWordSpacingMinimum->set_sensitive(false);
             m_xWordSpacingMaximum->set_sensitive(false);
             m_xParagraphComposer->set_sensitive(false);
-            m_xParagraphComposer->set_sensitive(false);
             m_xLabelLetterSpacing->set_sensitive(false);
             m_xLetterSpacingMinimum->set_sensitive(false);
             m_xLetterSpacingMaximum->set_sensitive(false);
+            m_xCompoundBased->set_sensitive(false);
             m_xLabelGlyphScaling->set_sensitive(false);
             m_xGlyphScalingMinimum->set_sensitive(false);
             m_xGlyphScalingMaximum->set_sensitive(false);
@@ -1664,6 +1669,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_xParagraphComposer->save_state();
     m_xLetterSpacingMinimum->save_value();
     m_xLetterSpacingMaximum->save_value();
+    m_xCompoundBased->save_state();
     m_xGlyphScalingMinimum->save_value();
     m_xGlyphScalingMaximum->save_value();
 
@@ -1690,6 +1696,7 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_xParagraphComposer->save_state();
     m_xLetterSpacingMinimum->save_value();
     m_xLetterSpacingMaximum->save_value();
+    m_xCompoundBased->save_state();
     m_xGlyphScalingMinimum->save_value();
     m_xGlyphScalingMaximum->save_value();
 }
@@ -1711,6 +1718,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     // TODO visualize CharKerning with percentage
     m_xLetterSpacingMinimum->set_sensitive(bJustify);
     m_xLetterSpacingMaximum->set_sensitive(bJustify);
+    m_xCompoundBased->set_sensitive(bJustify);
     m_xLabelGlyphScaling->set_sensitive(bJustify);
     // TODO visualize CharScaleWidth with percentage
     m_xGlyphScalingMinimum->set_sensitive(bJustify);

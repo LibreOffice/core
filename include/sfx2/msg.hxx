@@ -140,7 +140,7 @@ SFX_DECL_TYPE(7);
 SFX_DECL_TYPE(8);
 SFX_DECL_TYPE(10); // for SfxDocInfoItem
 SFX_DECL_TYPE(11);
-
+SFX_DECL_TYPE(12); // for SvxAdjustStruct
 SFX_DECL_TYPE(13); // for SwAddPrinterItem, Sd...
 SFX_DECL_TYPE(14);
 SFX_DECL_TYPE(16); // for SwDocDisplayItem

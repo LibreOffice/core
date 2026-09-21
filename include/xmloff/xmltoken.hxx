@@ -490,6 +490,7 @@ namespace xmloff::token {
         XML_COMMAND,
         XML_COMMENT,
         XML_COMPOSE,
+        XML_COMPOUND_BASED,
         XML_COND_STYLE_NAME,
         XML_CONDITION,
         XML_CONDITION_SOURCE,

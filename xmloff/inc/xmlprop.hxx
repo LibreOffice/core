@@ -498,6 +498,7 @@ inline constexpr OUString PROP_ParaBackTransparent = u"ParaBackTransparent"_ustr
 inline constexpr OUString PROP_ParaBottomMargin = u"ParaBottomMargin"_ustr;
 inline constexpr OUString PROP_ParaBottomMarginRelative = u"ParaBottomMarginRelative"_ustr;
 inline constexpr OUString PROP_ParaComposer = u"ParaComposer"_ustr;
+inline constexpr OUString PROP_ParaIsCompoundBased = u"ParaIsCompoundBased"_ustr;
 inline constexpr OUString PROP_ParaContextMargin = u"ParaContextMargin"_ustr;
 inline constexpr OUString PROP_ParaExpandSingleWord = u"ParaExpandSingleWord"_ustr;
 inline constexpr OUString PROP_ParaFirstLineIndent = u"ParaFirstLineIndent"_ustr;

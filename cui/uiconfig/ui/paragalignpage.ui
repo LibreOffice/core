@@ -741,6 +741,26 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="checkCompoundBased">
+                    <property name="label" translatable="yes" context="paralignpage|checkCompoundBased">Split compound words</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCompoundBased-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkCompoundBased">Select this check box, if you want to prefer compound word splitting during justification.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">4</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="labelGlyphScaling">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>

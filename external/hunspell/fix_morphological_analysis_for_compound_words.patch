@@ -1,0 +1,25 @@
+--- a/src/hunspell/affixmgr.cxx	2026-05-04 16:31:57.000000000 +0200
++++ b/src/hunspell/affixmgr.cxx	2026-09-16 00:10:58.854821764 +0200
+@@ -2338,10 +2338,10 @@
+               p = affix_check_morph(st, 0, i, compoundmiddle);
+             }
+           }
++          presult.push_back(MSEP_FLD);
++          presult.append(MORPH_PART);
++          presult.append(st, 0, i);
+           if (!p.empty()) {
+-            presult.push_back(MSEP_FLD);
+-            presult.append(MORPH_PART);
+-            presult.append(st, 0, i);
+             line_uniq_app(p, MSEP_REC);
+             presult.append(p);
+           }
+@@ -2540,7 +2540,7 @@
+         if (!rv && compoundend && !onlycpdrule) {
+           sfx = nullptr;
+           pfx = nullptr;
+-          rv = affix_check(word, i, word.size() - i, compoundend);
++          rv = affix_check(word, i, word.size() - i, compoundend, IN_CPD_END);
+         }
+ 
+         if (!rv && !defcpdtable.empty() && words) {

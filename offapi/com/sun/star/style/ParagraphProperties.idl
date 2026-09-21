@@ -644,6 +644,12 @@ published service ParagraphProperties
             @since LibreOffice 27.2
          */
         [optional, property] long ParaHyphenationLevel;
+
+        /** specifies if automatic compound-based "smart" hyphenation is applied.
+
+            @since LibreOffice 27.2
+         */
+        [optional, property] boolean ParaIsCompoundBased;
 };
 
 

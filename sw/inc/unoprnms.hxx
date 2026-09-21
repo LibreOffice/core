@@ -519,6 +519,7 @@ inline constexpr OUString UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES = u"TextUserDefi
 inline constexpr OUString UNO_NAME_FILE_PATH = u"FilePath"_ustr;
 inline constexpr OUString UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL = u"ParaChapterNumberingLevel"_ustr;
 inline constexpr OUString UNO_NAME_PARA_COMPOSER = u"ParaComposer"_ustr;
+inline constexpr OUString UNO_NAME_PARA_IS_COMPOUND_BASED = u"ParaIsCompoundBased"_ustr;
 inline constexpr OUString UNO_NAME_PARA_CONDITIONAL_STYLE_NAME = u"ParaConditionalStyleName"_ustr;
 inline constexpr OUString UNO_NAME_CHAPTER_NUMBERING_LEVEL = u"ChapterNumberingLevel"_ustr;
 inline constexpr OUString UNO_NAME_NUMBERING_SEPARATOR = u"NumberingSeparator"_ustr;

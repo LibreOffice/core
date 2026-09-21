@@ -322,7 +322,8 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     nPropLetterSpacingMaximum(0),
     nPropScaleWidthMinimum(100),
     nPropScaleWidthMaximum(100),
-    bParagraphComposer(false)
+    bParagraphComposer(false),
+    bCompoundBased(false)
 {
     SetAdjust( eAdjst );
 }
@@ -342,6 +343,7 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
            bParagraphComposer == rItem.bParagraphComposer &&
            nPropLetterSpacingMinimum == rItem.nPropLetterSpacingMinimum &&
            nPropLetterSpacingMaximum == rItem.nPropLetterSpacingMaximum &&
+           bCompoundBased == rItem.bCompoundBased &&
            nPropScaleWidthMinimum == rItem.nPropScaleWidthMinimum &&
            nPropScaleWidthMaximum == rItem.nPropScaleWidthMaximum;
 }
@@ -359,6 +361,7 @@ size_t SvxAdjustItem::hashCode() const
     o3tl::hash_combine(seed, bParagraphComposer);
     o3tl::hash_combine(seed, nPropLetterSpacingMinimum);
     o3tl::hash_combine(seed, nPropLetterSpacingMaximum);
+    o3tl::hash_combine(seed, bCompoundBased);
     o3tl::hash_combine(seed, nPropScaleWidthMinimum);
     o3tl::hash_combine(seed, nPropScaleWidthMaximum);
     return seed;
@@ -386,6 +389,11 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_PARAGRAPH_COMPOSER :
         {
             rVal <<= bParagraphComposer;
+            break;
+        }
+        case MID_COMPOUND_BASED :
+        {
+            rVal <<= bCompoundBased;
             break;
         }
         default: ;//prevent warning
@@ -469,6 +477,12 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             ASSERT_CHANGE_REFCOUNTED_ITEM;
             bParagraphComposer = Any2Bool(rVal);
+        }
+        break;
+        case MID_COMPOUND_BASED :
+        {
+            ASSERT_CHANGE_REFCOUNTED_ITEM;
+            bCompoundBased = Any2Bool(rVal);
         }
         break;
         case MID_EXPAND_SINGLE :

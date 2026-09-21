@@ -19,4 +19,9 @@ $(eval $(call gb_UnpackedTarball_set_post_action,hunspell,\
 ))
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
+       external/hunspell/fix_morphological_analysis_for_compound_words.patch \
+))
+
+
 # vim: set noet sw=4 ts=4:

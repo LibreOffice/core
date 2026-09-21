@@ -3384,6 +3384,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <!-- TODO no proposal -->
   <rng:define name="style-paragraph-properties-attlist" combine="interleave">
     <rng:optional>
+      <rng:attribute name="loext:compound-based">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
       <rng:attribute name="loext:letter-spacing-minimum">
         <rng:choice>
           <rng:ref name="length"/>

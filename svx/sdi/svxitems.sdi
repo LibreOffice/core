@@ -65,6 +65,7 @@ struct SvxAdjustStruct
     INT16       ScaleWidthMinimum  MID_SCALE_WIDTH_MIN;
     INT16       ScaleWidthMaximum  MID_SCALE_WIDTH_MAX;
     BOOL        ParagraphComposer  MID_PARAGRAPH_COMPOSER;
+    BOOL        CompoundBased      MID_COMPOUND_BASED;
 };
 item SvxAdjustStruct SvxAdjustItem;
 

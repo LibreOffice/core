@@ -405,6 +405,7 @@ comma-separated
 command
 comment
 compose
+compound-based
 cond-style-name
 condition
 condition-source

@@ -177,6 +177,9 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMinimum;
     std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMaximum;
 
+    /// compound-based hyphenation
+    std::unique_ptr<weld::CheckButton> m_xCompoundBased;
+
     /// glyph scaling
     std::unique_ptr<weld::Label> m_xLabelGlyphScaling;
     std::unique_ptr<weld::MetricSpinButton> m_xGlyphScalingMinimum;

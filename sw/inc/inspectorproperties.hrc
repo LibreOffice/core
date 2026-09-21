@@ -199,6 +199,7 @@
 #define RID_PARA_BOTTOM_MARGIN_RELATIVE                     NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Bottom Margin Relative")
 #define RID_PARA_CHAPTER_NUMBERING_LEVEL                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Chapter Numbering Level")
 #define RID_PARA_COMPOSER                                   NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Composer")
+#define RID_PARA_COMPOUND_BASED_HYPHENATION                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Compound-based Hyphenation")
 #define RID_PARA_CONDITIONAL_STYLE_NAME                     NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Conditional Style Name")
 #define RID_PARA_CONTEXT_MARGIN                             NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Context Margin")
 #define RID_PARA_EXPAND_SINGLE_WORD                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Expand Single Word")
