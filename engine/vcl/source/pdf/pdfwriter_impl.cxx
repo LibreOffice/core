@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include <algorithm>
+#include <ranges>
 #include <string_view>
 
 #include <lcms2.h>
@@ -121,6 +122,29 @@ namespace
 {
 
 void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
+
+// a reader inflates a whole object stream to reach any one object in it
+constexpr size_t nMaxObjectsPerStream = 200;
+
+// deflates a buffer for a /FlateDecode stream whose /Length has to be known before it is written
+std::vector<sal_uInt8> deflateBuffer(std::string_view aData)
+{
+    if (g_bDebugDisableCompression)
+        return { aData.begin(), aData.end() };
+
+    SvMemoryStream aInput(const_cast<char*>(aData.data()), aData.size(), StreamMode::READ);
+    SvMemoryStream aOutput(aData.size(), 0x4000);
+    ZCodec aCodec(0x4000, 0x4000);
+    aCodec.BeginCompression();
+    aCodec.Compress(aInput, aOutput);
+    // it answers with the bytes it took, and a short count would leave a stream that does not
+    // hold what its /Length claims
+    if (aCodec.EndCompression() != static_cast<tools::Long>(aData.size()))
+        return {};
+
+    const sal_uInt8* pBegin = static_cast<const sal_uInt8*>(aOutput.GetData());
+    return { pBegin, pBegin + aOutput.Tell() };
+}
 
 // the types ISO 32000-2 14.8.6 left out of the PDF 2.0 standard structure namespace
 bool isPDF17OnlyType(StructElement eType)
@@ -799,7 +823,7 @@ void PDFWriterImpl::endPage()
 
 sal_Int32 PDFWriterImpl::createObject()
 {
-    m_aObjects.push_back( ~0U );
+    m_aObjects.emplace_back();
     return m_aObjects.size();
 }
 
@@ -808,7 +832,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
     if( ! m_bOpen )
         return false;
 
-    sal_uInt64 nOffset = ~0U;
+    sal_uInt64 nOffset = SAL_MAX_UINT64;
     osl::File::RC aError = m_aFile.getPos(nOffset);
     SAL_WARN_IF( aError != osl::File::E_None, "vcl.pdfwriter", "could not register object" );
     if (aError != osl::File::E_None)
@@ -816,8 +840,85 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
         m_aFile.close();
         m_bOpen = false;
     }
-    m_aObjects[ n-1 ] = nOffset;
+    m_aObjects[n - 1].m_nOffset = nOffset;
     return aError == osl::File::E_None;
+}
+
+bool PDFWriterImpl::useObjectStreams() const
+{
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
+        return false;
+    // a string in an object stream shall not be separately encrypted, while this writer
+    // encrypts every string as it builds the object
+    if (m_aContext.Encryption.canEncrypt())
+        return false;
+    // sdext reads the embedded original document out of a trailer, and a cross-reference
+    // stream leaves none
+    return m_aDocumentAttachedFiles.empty();
+}
+
+bool PDFWriterImpl::writeObject(sal_Int32 nObject, std::string_view aBody)
+{
+    if (useObjectStreams())
+        return writeCompressedObject(nObject, aBody);
+
+    return updateObject(nObject) && writeBuffer(OString::number(nObject) + " 0 obj\n")
+           && writeBuffer(aBody) && writeBuffer("\nendobj\n\n");
+}
+
+bool PDFWriterImpl::writeCompressedObject(sal_Int32 nObject, std::string_view aBody)
+{
+    m_aCompressedObjects.emplace_back(nObject, OString(aBody));
+
+    return m_aCompressedObjects.size() < nMaxObjectsPerStream || emitObjectStream();
+}
+
+bool PDFWriterImpl::emitObjectStream()
+{
+    if (m_aCompressedObjects.empty())
+        return true;
+
+    // ISO 32000-2 7.5.7: /N pairs of object number and offset, then the bodies at /First
+    OStringBuffer aPairs(12 * m_aCompressedObjects.size());
+    OStringBuffer aBodies(4096);
+    const sal_Int32 nStreamObject = createObject();
+    for (const auto& rPending : m_aCompressedObjects)
+    {
+        aPairs.append(OString::number(rPending.m_nObject) + " "
+                      + OString::number(aBodies.getLength()) + " ");
+        aBodies.append(rPending.m_aBody + "\n");
+    }
+
+    const sal_Int32 nFirst = aPairs.getLength();
+    aPairs.append(aBodies.makeStringAndClear());
+    const std::vector<sal_uInt8> aStream(deflateBuffer(aPairs));
+    if (aStream.empty())
+        return false;
+
+    OStringBuffer aLine(256);
+    aLine.append(OString::number(nStreamObject) + " 0 obj\n<</Type/ObjStm/N "
+                 + OString::number(static_cast<sal_Int32>(m_aCompressedObjects.size())) + "/First "
+                 + OString::number(nFirst) + "/Length "
+                 + OString::number(static_cast<sal_Int32>(aStream.size())));
+    if (!g_bDebugDisableCompression)
+        aLine.append("/Filter/FlateDecode");
+    aLine.append(">>\nstream\n");
+
+    if (!updateObject(nStreamObject) || !writeBuffer(aLine)
+        || !writeBufferBytes(aStream.data(), aStream.size())
+        || !writeBuffer("\nendstream\nendobj\n\n"))
+        return false;
+
+    // only now can an entry name the stream, which is in the file
+    sal_Int32 nIndex = 0;
+    for (const auto& rPending : m_aCompressedObjects)
+    {
+        m_aObjects[rPending.m_nObject - 1]
+            = { .m_nObjectStream = nStreamObject, .m_nIndex = nIndex };
+        ++nIndex;
+    }
+    m_aCompressedObjects.clear();
+    return true;
 }
 
 sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
@@ -826,9 +927,7 @@ sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
     {
         OStringBuffer aLine( 1024 );
 
-        aLine.append( OString::number(nObject)
-            + " 0 obj\n"
-              "<</Nums[\n" );
+        aLine.append("<</Nums[\n");
         sal_Int32 nTreeItems = m_aStructParentTree.size();
         for( sal_Int32 n = 0; n < nTreeItems; n++ )
         {
@@ -836,10 +935,8 @@ sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
                 + m_aStructParentTree[n]
                 + "\n" );
         }
-        aLine.append( "]>>\nendobj\n\n" );
-        if (!updateObject(nObject))
-            return 0;
-        if (!writeBuffer(aLine))
+        aLine.append("]>>");
+        if (!writeObject(nObject, aLine))
             return 0;
     }
     return nObject;
@@ -866,7 +963,6 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
     }
     OStringBuffer buf;
     COSWriter aWriter(buf, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
-    appendObjectID(nObject, buf);
     buf.append("<</Names [\n");
     for (auto const& it : ids)
     {
@@ -875,10 +971,10 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
         appendObjectReference(it.second, buf);
         buf.append("\n");
     }
-    buf.append("] >>\nendobj\n\n");
+    buf.append("] >>");
 
-    if (!updateObject(nObject)) return 0;
-    if (!writeBuffer(buf)) return 0;
+    if (!writeObject(nObject, buf))
+        return 0;
 
     return nObject;
 }
@@ -1183,10 +1279,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 
     OStringBuffer aLine( 512 );
     COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
-    aLine.append(
-        OString::number(rEle.m_nObject)
-        + " 0 obj\n"
-          "<</Type" );
+    aLine.append("<</Type");
     sal_Int32 nParentTree = -1;
     sal_Int32 nIDTree = -1;
     if( rEle.m_nOwnElement == rEle.m_nParentElement )
@@ -1391,10 +1484,10 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         }
         aLine.append( "]\n" );
     }
-    aLine.append( ">>\nendobj\n\n" );
+    aLine.append(">>");
 
-    if (!updateObject(rEle.m_nObject)) return 0;
-    if (!writeBuffer(aLine)) return 0;
+    if (!writeObject(rEle.m_nObject, aLine))
+        return 0;
 
     if (!emitStructParentTree(nParentTree)) return 0;
     if (!emitStructIDTree(nIDTree)) return 0;
@@ -4547,6 +4640,8 @@ bool PDFWriterImpl::emitCatalog()
         addInternalStructureContainer(0);
         nStructureDict = m_aStructure[0].m_nObject = createObject();
         emitStructure( m_aStructure[ 0 ] );
+        if (!emitObjectStream())
+            return false;
     }
 
     // adjust tree node file offset
@@ -5430,34 +5525,41 @@ bool PDFWriterImpl::emitTrailer()
     {
         nSecObject = emitEncrypt();
     }
-    // emit xref table
-    // remember start
+    // a cross-reference table cannot address an object inside an object stream
+    const bool bXRefStream = std::ranges::any_of(m_aObjects, &ObjectLocation::isCompressed);
+
     sal_uInt64 nXRefOffset = 0;
-    if (osl::File::E_None != m_aFile.getPos(nXRefOffset))
-        return false;
-    if (!writeBuffer("xref\n"))
-        return false;
-
-    sal_Int32 nObjects = m_aObjects.size();
     OStringBuffer aLine;
-    aLine.append( "0 " );
-    aLine.append( static_cast<sal_Int32>(nObjects+1) );
-    aLine.append( "\n" );
-    aLine.append( "0000000000 65535 f \n" );
-    if (!writeBuffer(aLine))
-        return false;
-
-    for( sal_Int32 i = 0; i < nObjects; i++ )
+    if (!bXRefStream)
     {
-        aLine.setLength( 0 );
-        OString aOffset = OString::number( m_aObjects[i] );
-        for( sal_Int32 j = 0; j < (10-aOffset.getLength()); j++ )
-            aLine.append( '0' );
-        aLine.append( aOffset );
-        aLine.append( " 00000 n \n" );
-        SAL_WARN_IF( aLine.getLength() != 20, "vcl.pdfwriter", "invalid xref entry" );
+        // emit the xref table, remembering where it starts
+        if (osl::File::E_None != m_aFile.getPos(nXRefOffset))
+            return false;
+        if (!writeBuffer("xref\n"))
+            return false;
+
+        aLine.append("0 ");
+        aLine.append(static_cast<sal_Int32>(m_aObjects.size() + 1));
+        aLine.append("\n");
+        aLine.append("0000000000 65535 f \n");
         if (!writeBuffer(aLine))
             return false;
+
+        for (const auto& rLocation : m_aObjects)
+        {
+            if (rLocation.m_nOffset == SAL_MAX_UINT64)
+            {
+                SAL_WARN("vcl.pdfwriter", "object was created but never written");
+                if (!writeBuffer("0000000000 65535 f \n"))
+                    return false;
+                continue;
+            }
+            auto aOffset(OString::number(rLocation.m_nOffset));
+            aLine = RepeatedChar('0', 10 - aOffset.length) + aOffset + " 00000 n \n";
+            SAL_WARN_IF(aLine.getLength() != 20, "vcl.pdfwriter", "invalid xref entry");
+            if (!writeBuffer(aLine))
+                return false;
+        }
     }
 
     // prepare document checksum
@@ -5468,9 +5570,6 @@ bool PDFWriterImpl::emitTrailer()
     // document id set in setDocInfo method
     // emit trailer
     aLine.setLength( 0 );
-    aLine.append( "trailer\n"
-                  "<</Size " );
-    aLine.append( static_cast<sal_Int32>(nObjects+1) );
     aLine.append( "/Root " );
     aLine.append( m_nCatalogObject );
     aLine.append( " 0 R\n" );
@@ -5535,12 +5634,78 @@ bool PDFWriterImpl::emitTrailer()
     // Assertion failure: rv == SECSuccess, at sechash.c:140
     m_DocDigest.initialize();
 
-    aLine.append( ">>\n"
-                  "startxref\n" );
-    aLine.append( static_cast<sal_Int64>(nXRefOffset) );
-    aLine.append( "\n"
-                  "%%EOF\n" );
-    return writeBuffer( aLine );
+    if (bXRefStream)
+        return emitXRefStream(aLine);
+
+    return writeBuffer("trailer\n<</Size " + OString::number(m_aObjects.size() + 1))
+           && writeBuffer(aLine)
+           && writeBuffer(">>\nstartxref\n" + OString::number(static_cast<sal_Int64>(nXRefOffset))
+                          + "\n%%EOF\n");
+}
+
+bool PDFWriterImpl::emitXRefStream(std::string_view aTrailerEntries)
+{
+    // ISO 32000-2 7.5.8.3 requires an entry for the stream itself
+    const sal_Int32 nXRefObject = createObject();
+    sal_uInt64 nXRefOffset = 0;
+    if (osl::File::E_None != m_aFile.getPos(nXRefOffset))
+        return false;
+    m_aObjects[nXRefObject - 1].m_nOffset = nXRefOffset;
+
+    // the second field is a byte offset or an object stream number, so measure both
+    const auto aSecondField = [](const ObjectLocation& rLocation) -> sal_uInt64 {
+        if (rLocation.isCompressed())
+            return rLocation.m_nObjectStream;
+        // an unwritten object gets a free entry, which has no offset
+        return rLocation.m_nOffset == SAL_MAX_UINT64 ? 0 : rLocation.m_nOffset;
+    };
+    sal_Int32 nOffsetBytes = 1;
+    for (sal_uInt64 nWidest = std::ranges::max(m_aObjects | std::views::transform(aSecondField));
+         nWidest > 0xff; nWidest >>= 8)
+        ++nOffsetBytes;
+
+    OStringBuffer aEntries(static_cast<sal_Int32>((3 + nOffsetBytes) * (m_aObjects.size() + 1)));
+    auto appendEntry
+        = [&aEntries, nOffsetBytes](sal_uInt8 nType, sal_uInt64 nSecond, sal_uInt16 nThird) {
+              aEntries.append(char(nType));
+              for (sal_Int32 nByte = nOffsetBytes; nByte-- > 0;)
+                  aEntries.append(char(nSecond >> (8 * nByte)));
+              aEntries.append(char(nThird >> 8));
+              aEntries.append(char(nThird));
+          };
+
+    // object 0 heads the list of free objects, as it does in a table
+    appendEntry(0, 0, 0xffff);
+    for (const auto& rLocation : m_aObjects)
+    {
+        if (rLocation.isCompressed())
+            appendEntry(2, rLocation.m_nObjectStream, rLocation.m_nIndex);
+        else if (rLocation.m_nOffset == SAL_MAX_UINT64)
+            appendEntry(0, 0, 0xffff);
+        else
+            appendEntry(1, rLocation.m_nOffset, 0);
+    }
+
+    const std::vector<sal_uInt8> aStream(deflateBuffer(aEntries));
+    if (aStream.empty())
+        return false;
+
+    OStringBuffer aLine(512);
+    // 7.5.8.2: every entry of Table 17 shall be direct, and a reader cannot resolve an
+    // indirect /Length before it has read this stream
+    aLine.append(OString::number(nXRefObject) + " 0 obj\n<</Type/XRef/Size "
+                 + OString::number(static_cast<sal_Int32>(m_aObjects.size() + 1)) + "/W[1 "
+                 + OString::number(nOffsetBytes) + " 2]/Length "
+                 + OString::number(static_cast<sal_Int32>(aStream.size())));
+    if (!g_bDebugDisableCompression)
+        aLine.append("/Filter/FlateDecode");
+    aLine.append(aTrailerEntries);
+    aLine.append(">>\nstream\n");
+
+    // 7.5.8.2 forbids encrypting this stream, so it goes out as built
+    return writeBuffer(aLine) && writeBufferBytes(aStream.data(), aStream.size())
+           && writeBuffer("\nendstream\nendobj\n\nstartxref\n"
+                          + OString::number(static_cast<sal_Int64>(nXRefOffset)) + "\n%%EOF\n");
 }
 
 namespace {

@@ -678,6 +678,29 @@ struct StreamRedirect
     ResourceDict    m_aResourceDict;
 };
 
+/** Where the cross-reference has to point to reach an object.
+
+    ISO 32000-2 7.5.8.3 Table 18 calls these the type 1 and type 2 entries: an object written
+    into the file has a byte offset, one written into an object stream names that stream and its
+    index in it.
+ */
+struct ObjectLocation
+{
+    sal_uInt64 m_nOffset = SAL_MAX_UINT64;
+    /// the object stream holding it, 0 when the object stands in the file
+    sal_Int32 m_nObjectStream = 0;
+    sal_Int32 m_nIndex = 0;
+
+    bool isCompressed() const { return m_nObjectStream != 0; }
+};
+
+/// An object built but not yet written, held until its object stream is full.
+struct PendingObject
+{
+    sal_Int32 m_nObject;
+    OString m_aBody;
+};
+
 // graphics state
 struct GraphicsState
 {
@@ -749,8 +772,10 @@ private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     StyleSettings                       m_aWidgetStyleSettings;
     std::vector< pdf::PDFPage >         m_aPages;
-    /* maps object numbers to file offsets (needed for xref) */
-    std::vector< sal_uInt64 >           m_aObjects;
+    /* maps object numbers to where they were written (needed for xref) */
+    std::vector<pdf::ObjectLocation> m_aObjects;
+    /* objects waiting to be flushed into an object stream, with their numbers */
+    std::vector<pdf::PendingObject> m_aCompressedObjects;
     /* contains Bitmaps until they are written to the
      *  file stream as XObjects*/
     std::list< pdf::BitmapEmit >        m_aBitmaps;
@@ -1076,6 +1101,16 @@ private:
     sal_Int32 emitEncrypt();
     // writes xref and trailer
     bool emitTrailer();
+    /// whether this file may carry object streams and a cross-reference stream
+    bool useObjectStreams() const;
+    /// writes a whole object, into an object stream where the file may have one
+    bool writeObject(sal_Int32 nObject, std::string_view aBody);
+    /// writes an object's body into the pending object stream rather than into the file
+    bool writeCompressedObject(sal_Int32 nObject, std::string_view aBody);
+    /// flushes the objects waiting in m_aCompressedObjects as one /Type/ObjStm
+    bool emitObjectStream();
+    /// writes the cross-reference as a stream, the only form that can reach an object stream
+    bool emitXRefStream(std::string_view aTrailerEntries);
     // emits info dict (if applicable)
     sal_Int32 emitInfoDict( );
 

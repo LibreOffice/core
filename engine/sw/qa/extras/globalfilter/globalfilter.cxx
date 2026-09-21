@@ -1401,11 +1401,8 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nLbl)>(6), nLblTJ + nLblTj);
 
     auto nL(0);
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject0 : aDocument.GetObjects())
     {
-        auto pObject0 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject0)
-            continue;
         auto pType0 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject0->Lookup("Type"_ostr));
         if (!pType0 || pType0->GetValue() != "StructElem")
         {

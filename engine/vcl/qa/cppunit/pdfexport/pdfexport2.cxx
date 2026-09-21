@@ -2095,12 +2095,30 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
                                aNamespaceOf.contains(pRef->LookupObject()));
     }
 
-    // The references have to be separated in the file itself: "1 0 R2 0 R" is not two
-    // references, and this parser reads it as though it were, so check the bytes. veraPDF is
+    // The references have to be separated in the bytes themselves: "1 0 R2 0 R" is not two
+    // references, and this parser reads it as though it were, so check them. veraPDF is
     // stricter - it fails to parse such a file and reports nothing, which reads as a pass.
+    // The structure tree rides in an object stream, so the bytes to read are what it holds.
+    OStringBuffer aBytes;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "ObjStm")
+            continue;
+        vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
+        CPPUNIT_ASSERT(pObjStm);
+        SvMemoryStream aDecompressed;
+        ZCodec aCodec;
+        aCodec.BeginCompression();
+        pObjStm->GetMemory().Seek(0);
+        aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
+        CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
+        aBytes.append(static_cast<const char*>(aDecompressed.GetData()), aDecompressed.GetSize());
+    }
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     pStream->Seek(0);
-    const OString aFile(read_uInt8s_ToOString(*pStream, pStream->remainingSize()));
+    aBytes.append(read_uInt8s_ToOString(*pStream, pStream->remainingSize()));
+    const OString aFile(aBytes.makeStringAndClear());
     const sal_Int32 nStart(aFile.indexOf("/Namespaces ["));
     CPPUNIT_ASSERT_GREATER(sal_Int32(-1), nStart);
     const sal_Int32 nEnd(aFile.indexOf("]", nStart));
@@ -6741,6 +6759,54 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
     fnCompareIndices(4, 11);
     fnCompareIndices(5, 12);
     fnCompareIndices(6, 13);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testObjectStreams)
+{
+    // the bytes of the export, since what is asserted is the shape of the file itself
+    auto aExport = [this](const cpo::uno::Sequence<beans::PropertyValue>& rFilterData) {
+        comphelper::SequenceAsHashMap aMediaDescriptor;
+        aMediaDescriptor[u"FilterData"_ustr] <<= rFilterData;
+        loadFromFile(u"SimpleTestDocument.fodt");
+        maTempFile.CloseStream();
+        save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+        maTempFile.CloseStream();
+        SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+        pStream->Seek(0);
+        return read_uInt8s_ToOString(*pStream, pStream->remainingSize());
+    };
+
+    const OString aTagged(aExport({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) }));
+    CPPUNIT_ASSERT(aTagged.indexOf("/Type/ObjStm") != -1);
+    CPPUNIT_ASSERT(aTagged.indexOf("/Type/XRef") != -1);
+    // a cross-reference stream replaces the table, so neither the keyword nor a table is left
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aTagged.indexOf("\ntrailer\n"));
+
+    // the structure tree has to stay reachable through all of that
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    int nStructElements(0);
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "StructElem")
+            ++nStructElements;
+    }
+    CPPUNIT_ASSERT_GREATER(0, nStructElements);
+
+    // ISO 32000-2 7.5.7 put object streams at PDF 1.5, and PDF/A-1b is built on 1.4
+    const OString aArchive(
+        aExport({ comphelper::makePropertyValue(u"SelectPdfVersion"_ustr, sal_Int32(1)) }));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aArchive.indexOf("/Type/ObjStm"));
+    CPPUNIT_ASSERT(aArchive.indexOf("\ntrailer\n") != -1);
+
+    // sdext finds the embedded original document through the trailer, so a hybrid file keeps one
+    const OString aHybrid(aExport({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                                    comphelper::makePropertyValue(u"IsAddStream"_ustr, true) }));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHybrid.indexOf("/Type/ObjStm"));
+    CPPUNIT_ASSERT(aHybrid.indexOf("/AdditionalStreams ") != -1);
+    CPPUNIT_ASSERT(aHybrid.indexOf("\ntrailer\n") != -1);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)
