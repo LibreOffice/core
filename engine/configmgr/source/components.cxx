@@ -268,8 +268,13 @@ void Components::initGlobalBroadcaster(
     rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
 {
     //TODO: Iterate only over roots w/ listeners:
-    for (auto const& elemRoot : roots_)
+    std::vector<RootAccess*> roots(roots_.begin(), roots_.end());
+    // Iterate on a copy, because we may remove items from roots_ as part of the iteration.
+    for (auto const& elemRoot : roots)
     {
+        if (!roots_.contains(elemRoot)) {
+            continue;
+        }
         rtl::Reference< RootAccess > root;
         if (elemRoot->acquireCounting() > 1) {
             root.set(elemRoot); // must not throw
