@@ -37,7 +37,9 @@ SolarMutex *SolarMutex::get()
 
 SolarMutex::SolarMutex()
     : m_nCount( 0 )
+#ifdef _WIN32
     , m_aBeforeReleaseHandler( nullptr )
+#endif
 {
     assert(!g_pSolarMutex);
     g_pSolarMutex = this;
@@ -68,8 +70,10 @@ sal_uInt32 SolarMutex::doRelease( bool bUnlockAll )
 
     if ( 0 == m_nCount )
     {
+#ifdef _WIN32
         if ( m_aBeforeReleaseHandler )
             m_aBeforeReleaseHandler();
+#endif
         m_nThreadId = std::thread::id();
     }
 

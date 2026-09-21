@@ -45,13 +45,15 @@ namespace comphelper {
  */
 class COMPHELPER_DLLPUBLIC SolarMutex {
 public:
-    typedef void (*BeforeReleaseHandler) ();
 
     SolarMutex();
     virtual ~SolarMutex();
 
+#ifdef _WIN32
+    typedef void (*BeforeReleaseHandler) ();
     void SetBeforeReleaseHandler( const BeforeReleaseHandler& rLink )
          { m_aBeforeReleaseHandler = rLink; }
+#endif
 
     void acquire( sal_uInt32 nLockCount = 1 );
     sal_uInt32 release( bool bUnlockAll = false );
@@ -77,7 +79,9 @@ private:
     SolarMutex(const SolarMutex&) = delete;
     SolarMutex& operator=(const SolarMutex&) = delete;
 
+#ifdef _WIN32
     BeforeReleaseHandler  m_aBeforeReleaseHandler;
+#endif
 };
 
 inline void SolarMutex::acquire( sal_uInt32 nLockCount )
