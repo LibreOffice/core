@@ -116,6 +116,9 @@ struct DocumentTab
     std::string docType = "other";
     // The document holds changes that have not reached the file yet.
     bool isModified = false;
+    // The page has parsed its document and its stylesheets, so the WebView2 has something
+    // styled to put on the screen. It stays hidden until then.
+    bool hasContent = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -132,6 +135,7 @@ struct WindowState
     wil::com_ptr<ICoreWebView2Controller> stripController;
     wil::com_ptr<ICoreWebView2> stripWebView;
     bool stripIsVisible = false;
+    bool stripHasContent = false;
     // The transparent window raised over the web view for the duration of a drag from the desktop,
     // and the drop target registered for it. Both are created when the first such drag arrives.
     HWND hOverlayWnd = 0;
@@ -2755,7 +2759,7 @@ static void updateStripVisibility(WindowState& window)
 
     window.stripIsVisible = visible;
     if (window.stripController)
-        window.stripController->put_IsVisible(visible);
+        window.stripController->put_IsVisible(visible && window.stripHasContent);
     layoutTabs(window);
 }
 
@@ -2770,7 +2774,7 @@ static void pushTabsToStrip(WindowState& window)
 static void focusActiveDocument(const WindowState& window)
 {
     DocumentTab* tab = activeTabOf(window);
-    if (tab && tab->webViewController)
+    if (tab && tab->webViewController && tab->hasContent)
         tab->webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
 }
 
@@ -2787,7 +2791,7 @@ static void activateTab(WindowState& window, int tabId)
     {
         DocumentTab* other = findTab(otherId);
         if (other && other->webViewController)
-            other->webViewController->put_IsVisible(otherId == tabId);
+            other->webViewController->put_IsVisible(otherId == tabId && other->hasContent);
     }
 
     focusActiveDocument(window);
@@ -3071,8 +3075,30 @@ static void createTabStrip(WindowState& window)
 
                         installTabSwitchAccelerator(controller, hWnd);
 
-                        controller->put_IsVisible(window->stripIsVisible);
+                        controller->put_IsVisible(FALSE);
                         controller->put_Bounds(stripBounds(*window));
+
+                        // As for a document, the strip appears only once it has something styled
+                        // to show, so the window frame covers the gap instead of a white page.
+                        EventRegistrationToken readyToken;
+                        if (auto stripWebView2 = window->stripWebView.try_query<ICoreWebView2_2>())
+                            stripWebView2->add_DOMContentLoaded(
+                                Microsoft::WRL::Callback<ICoreWebView2DOMContentLoadedEventHandler>(
+                                    [hWnd](ICoreWebView2* sender,
+                                           ICoreWebView2DOMContentLoadedEventArgs* args) -> HRESULT
+                                    {
+                                        WindowState* stripWindow = findWindow(hWnd);
+                                        if (stripWindow && !stripWindow->stripHasContent)
+                                        {
+                                            stripWindow->stripHasContent = true;
+                                            if (stripWindow->stripController)
+                                                stripWindow->stripController->put_IsVisible(
+                                                    stripWindow->stripIsVisible);
+                                        }
+                                        return S_OK;
+                                    })
+                                    .Get(),
+                                &readyToken);
 
                         // The page reads the theme out of the query string, so
                         // it is in the right colours from its first paint.
@@ -3137,14 +3163,61 @@ static void createDocumentView(int tabId)
 
                         installTabSwitchAccelerator(controller, data->hWnd);
 
-                        // Fit the WebView to the part of the window below the tab strip, and show
-                        // it only if this is the document the window is on.
+                        // Fit the WebView to the part of the window below the tab strip. It stays
+                        // hidden until its page has something styled to show, so what fills the
+                        // window until then is the frame, in the colour of the theme.
                         WindowState* window = findWindow(data->hWnd);
                         if (window)
                         {
                             controller->put_Bounds(documentArea(*window));
-                            controller->put_IsVisible(window->activeTabId == tabId);
+                            controller->put_IsVisible(FALSE);
                         }
+
+                        // The page has parsed its document and the stylesheets that block its
+                        // first paint. A navigation that fails reaches the second of these and
+                        // not the first, and an empty document view is still better than one
+                        // that never appears.
+                        EventRegistrationToken readyToken;
+                        auto showWhenReady = [tabId]()
+                        {
+                            DocumentTab* tab = findTab(tabId);
+                            WindowState* tabWindow = tab ? findWindow(tab->hWnd) : nullptr;
+                            if (!tab || !tabWindow || tab->hasContent)
+                                return;
+
+                            tab->hasContent = true;
+                            if (tabWindow->activeTabId != tabId || !tab->webViewController)
+                                return;
+
+                            tab->webViewController->put_IsVisible(TRUE);
+                            tab->webViewController->MoveFocus(
+                                COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                        };
+
+                        if (auto webView2 = data->webView.try_query<ICoreWebView2_2>())
+                            webView2->add_DOMContentLoaded(
+                                Microsoft::WRL::Callback<ICoreWebView2DOMContentLoadedEventHandler>(
+                                    [showWhenReady](ICoreWebView2* sender,
+                                                    ICoreWebView2DOMContentLoadedEventArgs* args)
+                                        -> HRESULT
+                                    {
+                                        showWhenReady();
+                                        return S_OK;
+                                    })
+                                    .Get(),
+                                &readyToken);
+
+                        webView->add_NavigationCompleted(
+                            Microsoft::WRL::Callback<ICoreWebView2NavigationCompletedEventHandler>(
+                                [showWhenReady](ICoreWebView2* sender,
+                                                ICoreWebView2NavigationCompletedEventArgs* args)
+                                    -> HRESULT
+                                {
+                                    showWhenReady();
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &readyToken);
 
                         EventRegistrationToken token;
                         HRESULT hr;
@@ -3340,7 +3413,6 @@ static void createDocumentView(int tabId)
                                 std::string((data->mode == DocumentMode::WELCOME ? "&welcome=true" : ""));
 
                         webView->Navigate(Util::string_to_wide_string(coolURL).c_str());
-                        controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
 
                         return S_OK;
                     })
