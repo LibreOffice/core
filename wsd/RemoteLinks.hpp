@@ -20,10 +20,10 @@
 class ClientSession;
 class DocumentBroker;
 
-/// The related documents of one document, split into a shared part and a
+/// The remote links of one document, split into a shared part and a
 /// private part per browser view.
 ///
-/// The shared part, the same for every view, is the list of related documents
+/// The shared part, the same for every view, is the list of remote links
 /// this document may open.
 ///
 /// The private part belongs to one view, keyed by that view's tag.
@@ -31,10 +31,10 @@ class DocumentBroker;
 /// A view's tag is its ClientSession id. It is the tag reported in
 /// remotedocevent messages, so a remote document's reply reaches the one view
 /// that opened the subscription.
-class RelatedDocuments
+class RemoteLinks
 {
 public:
-    /// Records the public part of a related document: its source, the document as the user knows
+    /// Records the public part of a remote link: its source, the document as the user knows
     /// it and the time it was last modified. The same for every view. The latest report per
     /// WOPISrc wins, and a report that carries no name keeps the recorded one.
     void setSource(DocumentBroker& docBroker, const std::string& wopiSrc, const std::string& name,
@@ -42,15 +42,15 @@ public:
 
     /// Records the source documents the open document's own content names, which is the whole of
     /// what it names: a name reported here and nowhere else stands for a document the storage
-    /// listed no related document for, so nothing can reach it. The same for every view.
+    /// listed no remote link for, so nothing can reach it. The same for every view.
     void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names);
 
-    /// Drops one related document: the record of it, which is the same for every view, and in
+    /// Drops one remote link: the record of it, which is the same for every view, and in
     /// every view the token and the live link that reach it. Reports whether one was recorded
     /// at that address.
     bool removeSource(DocumentBroker& docBroker, const std::string& wopiSrc);
 
-    /// Records the access token one view holds for a related document. Private
+    /// Records the access token one view holds for a remote link. Private
     /// to that view.
     void setViewToken(DocumentBroker& docBroker, const std::string& tag,
                       const std::string& wopiSrc, const std::string& accessToken);
@@ -64,7 +64,7 @@ public:
                          const std::string& encodedWopiSrc, bool subscribe);
 
     /// Handles a remote document event addressed to one view: updates that
-    /// view's connection state and re-sends its related documents list.
+    /// view's connection state and re-sends its remote links list.
     /// Content events, which are the same for every view, are passed to the
     /// kit instead.
     void onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
@@ -91,16 +91,16 @@ public:
     /// back to one of them that would close a loop.
     void addToIncomingDocKeyChain(DocumentBroker& docBroker, const std::string& docKeyChain);
 
-    /// Sends the given view its own related documents list.
+    /// Sends the given view its own remote links list.
     void sendTo(const std::shared_ptr<ClientSession>& session);
 
-    /// True when no related document source is known.
+    /// True when no remote link source is known.
     bool empty() const { return _entries.empty() && _namedSources.empty(); }
 
     void dumpState(std::ostream& os) const;
 
 private:
-    /// The public part of one related document, the same for every view.
+    /// The public part of one remote link, the same for every view.
     struct Entry
     {
         /// The remote document's WOPISrc, decoded, without query parameters.
@@ -132,7 +132,7 @@ private:
         std::map<std::string, std::string> tokens;
         /// The view's subscriptions, keyed by the remote document's docKey.
         std::map<std::string, Subscription> subscriptions;
-        /// The last relateddocuments: message sent to the view.
+        /// The last remotelinks: message sent to the view.
         std::string lastClientMessage;
     };
 
@@ -147,7 +147,7 @@ private:
     static void sendError(DocumentBroker& docBroker, const std::string& tag,
                           const std::string& encodedWopiSrc, const std::string& kind);
 
-    /// Builds the relateddocuments: list for one view: every known source,
+    /// Builds the remotelinks: list for one view: every known source,
     /// stamped with that view's access and connection state.
     std::string buildJson(const std::string& tag) const;
 
@@ -157,11 +157,11 @@ private:
     /// Re-sends the list to every view when the shared part changed.
     void refreshAllViews(DocumentBroker& docBroker);
 
-    /// The related document sources the document knows, keyed by their docKey.
+    /// The remote link sources the document knows, keyed by their docKey.
     std::map<std::string, Entry> _entries;
 
     /// The source documents the open document's own content names, as the user knows them, in the
-    /// order the document names them. One the storage listed as a related document is reported as
+    /// order the document names them. One the storage listed as a remote link is reported as
     /// that document; any other is reported as a document nothing can reach.
     std::vector<std::string> _namedSources;
 

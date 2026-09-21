@@ -351,7 +351,7 @@ public:
 
 #if !MOBILEAPP
     /// Takes the source documents named by the slide links the document reports, so that a
-    /// source the storage listed no related document for is still known by its name.
+    /// source the storage listed no remote link for is still known by its name.
     void recordSlideLinkSources(const std::shared_ptr<Message>& payload,
                                 const std::shared_ptr<DocumentBroker>& docBroker);
 #endif // !MOBILEAPP
@@ -383,15 +383,15 @@ public:
     void rotateClipboardKey(bool notifyClient);
 
     /// Generate a fresh one-time token that authorizes a POST to
-    /// /cool/relateddocument for this view, sending it to the client when
+    /// /cool/links for this view, sending it to the client when
     /// notifyClient is set. Each accepted POST consumes and rotates it.
-    void rotateRelatedDocumentToken(bool notifyClient);
+    void rotateLinkToken(bool notifyClient);
 
-    /// True when the given token is this view's current related document POST
+    /// True when the given token is this view's current link POST
     /// token, and not empty.
-    bool matchesRelatedDocumentToken(const std::string& token) const
+    bool matchesLinkToken(const std::string& token) const
     {
-        return !token.empty() && token == _relatedDocumentToken;
+        return !token.empty() && token == _linkToken;
     }
 
     /// Generate an access token for this session via proxy protocol.
@@ -615,8 +615,8 @@ private:
     std::string _proxyAccess;
 
     /// The current one-time token that authorizes a POST to
-    /// /cool/relateddocument for this view. Empty until the first is generated.
-    std::string _relatedDocumentToken;
+    /// /cool/links for this view. Empty until the first is generated.
+    std::string _linkToken;
 
     /// Store last sent payload of form field button, so we can filter out redundant messages.
     std::string _lastSentFormFielButtonMessage;

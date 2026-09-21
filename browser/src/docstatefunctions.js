@@ -483,9 +483,9 @@ app.impress.isSlideSelected = function (index) {
 };
 
 // Slide import builds on the live links between documents. It is available
-// only when remote documents are enabled in the server configuration.
+// only when remote links are enabled in the server configuration.
 app.impress.isSlideImportSupported = function () {
-	return window.remoteDocumentsEnabled;
+	return window.remoteLinksEnabled;
 };
 
 app.enterRAF = function () {

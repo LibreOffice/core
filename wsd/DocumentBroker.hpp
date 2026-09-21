@@ -26,7 +26,7 @@
 #include <common/Util.hpp>
 #include <net/Socket.hpp>
 #include <wsd/QuarantineUtil.hpp>
-#include <wsd/RelatedDocuments.hpp>
+#include <wsd/RemoteLinks.hpp>
 #include <wsd/ServerAuditUtil.hpp>
 #include <wsd/SlideCache.hpp>
 #include <wsd/Storage.hpp>
@@ -509,40 +509,40 @@ public:
     bool isKnownAccessToken(const std::string& accessToken) const;
 
 #if !MOBILEAPP
-    /// Records the public part of a related document, the same for every view
+    /// Records the public part of a remote link, the same for every view
     void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
                                  const std::string& lastModifiedTime);
 
     /// Records the source documents this document's own content names, the whole of what it
-    /// names, so that a source the storage listed no related document for is still reported.
+    /// names, so that a source the storage listed no remote link for is still reported.
     void setRemoteDocumentNamedSources(std::vector<std::string> names);
 
-    /// Records the access token one view holds for a related document. Private.
+    /// Records the access token one view holds for a remote link. Private.
     void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
                                     const std::string& accessToken);
 
-    /// Records a related document and gives its access token to the view that
-    /// holds the given one-time token, coming from POST /cool/relateddocument.
+    /// Records a remote link and gives its access token to the view that
+    /// holds the given one-time token, coming from POST /cool/links.
     /// Consumes and rotates that view's token. Returns false when no view holds
     /// the token, so the request is refused and nothing is recorded.
     bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,
                                      const std::string& accessToken, const std::string& name,
                                      const std::string& lastModifiedTime);
 
-    /// What a request to drop a related document came to.
-    enum class RelatedDocumentRemoval
+    /// What a request to drop a remote link came to.
+    enum class LinkRemoval
     {
         BadToken, ///< No view of this document holds that one-time token, so nothing was done.
-        NotFound, ///< The token was accepted and no related document is recorded at that address.
-        Removed, ///< The related document is gone.
+        NotFound, ///< The token was accepted and no remote link is recorded at that address.
+        Removed, ///< The remote link is gone.
     };
 
-    /// Drops the related document at the given WOPISrc for the view that holds the given
-    /// one-time token, coming from DELETE /cool/relateddocument. The document is dropped for
-    /// every view, since the list of related documents is the same for all of them. A token
-    /// that is a view's own is consumed and rotated, whether a document was dropped or not.
-    RelatedDocumentRemoval removeRemoteDocumentSource(const std::string& oneTimeToken,
-                                                      const std::string& wopiSrc);
+    /// Drops the remote link at the given WOPISrc for the view that holds the given
+    /// one-time token, coming from DELETE /cool/links. The link is dropped for
+    /// every view, since the list of remote links is the same for all of them. A token
+    /// that is a view's own is consumed and rotated, whether a link was dropped or not.
+    LinkRemoval removeRemoteDocumentSource(const std::string& oneTimeToken,
+                                           const std::string& wopiSrc);
 
     /// Opens or drops one view's subscription to a remote document. The view
     /// is named by its tag.
@@ -556,7 +556,7 @@ public:
     /// not accepted. The view is named by its tag.
     void removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc);
 
-    /// Drops everything one view held for related documents when it leaves.
+    /// Drops everything one view held for remote links when it leaves.
     void removeRemoteDocumentView(const std::string& tag);
 
     /// Handles a remote document event addressed to one view, named by its
@@ -2041,9 +2041,9 @@ private:
     std::map<std::string, std::string> _registeredDownloadLinks;
 
 #if !MOBILEAPP
-    /// The related documents this document may subscribe to, with their
+    /// The remote links this document may subscribe to, with their
     /// subscriptions and the client-facing view of them.
-    RelatedDocuments _relatedDocuments;
+    RemoteLinks _remoteLinks;
 #endif
 
     /// Embedded media map [id, json].

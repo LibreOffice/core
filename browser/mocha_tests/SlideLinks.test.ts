@@ -27,7 +27,7 @@ describe('SlideLinks', function () {
 	let map: any;
 	let savedSocket: any;
 	let savedEvents: any;
-	let savedRelated: any;
+	let savedRemoteLinks: any;
 
 	// The linked pages, by the identifier each one holds.
 	const numbersPart = '{6A1C31B0-0001-4C5B-9E77-2F3D4A5B6C7D}';
@@ -67,9 +67,9 @@ describe('SlideLinks', function () {
 		posted = [];
 	}
 
-	// The related documents the storage named, one per source of the list above, each already
+	// The remote links the storage named, one per source of the list above, each already
 	// connected so that a refresh asks it straight away.
-	function relatedDocuments(state: string = 'connected'): any[] {
+	function remoteLinks(state: string = 'connected'): any[] {
 		return [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: state },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: state },
@@ -158,8 +158,8 @@ describe('SlideLinks', function () {
 
 		savedSocket = app.socket;
 		savedEvents = app.events;
-		savedRelated = (app as any).relatedDocuments;
-		(app as any).relatedDocuments = relatedDocuments();
+		savedRemoteLinks = (app as any).remoteLinks;
+		(app as any).remoteLinks = remoteLinks();
 		(app as any).socket = {
 			sendMessage: (message: string) => sent.push(message),
 		};
@@ -174,7 +174,7 @@ describe('SlideLinks', function () {
 	afterEach(function () {
 		(app as any).socket = savedSocket;
 		(app as any).events = savedEvents;
-		(app as any).relatedDocuments = savedRelated;
+		(app as any).remoteLinks = savedRemoteLinks;
 	});
 
 	it('reads the links of the document once it is open', function () {
@@ -215,7 +215,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('marks a page as broken when its source is missing from storage', function () {
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
 		];
@@ -231,7 +231,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('stops marking pages broken once the source is read again', function () {
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
 		];
@@ -239,13 +239,13 @@ describe('SlideLinks', function () {
 		nodeassert.equal(links.isPageBroken(numbersPart), true);
 
 		// The source is subscribed again and connects, so its links are whole.
-		(app as any).relatedDocuments = relatedDocuments();
-		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
+		(app as any).remoteLinks = remoteLinks();
+		deliver('remotelinks', { documents: (app as any).remoteLinks });
 		nodeassert.equal(links.isPageBroken(numbersPart), false);
 	});
 
 	it('marks a page as connected when its source is held open', function () {
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'connected' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'available' },
 		];
@@ -307,7 +307,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('subscribes to a source nothing holds a link to yet', function () {
-		(app as any).relatedDocuments = relatedDocuments('available');
+		(app as any).remoteLinks = remoteLinks('available');
 		documentHoldsLinks();
 		links.updateAll();
 
@@ -317,8 +317,8 @@ describe('SlideLinks', function () {
 				encodeURIComponent(wopiSrcOf('Sales deck.odp')),
 		]);
 
-		(app as any).relatedDocuments = relatedDocuments();
-		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
+		(app as any).remoteLinks = remoteLinks();
+		deliver('remotelinks', { documents: (app as any).remoteLinks });
 
 		// Every source that came up is asked for the slides it holds, and the one
 		// the refresh in hand names for its pages.
@@ -330,7 +330,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('carries on to the next source when one it waited on cannot be opened', function () {
-		(app as any).relatedDocuments = relatedDocuments('available');
+		(app as any).remoteLinks = remoteLinks('available');
 		documentHoldsLinks();
 		links.updateAll();
 
@@ -341,11 +341,11 @@ describe('SlideLinks', function () {
 
 		// The source the refresh waits on could not be opened, so it comes up
 		// in no state a refresh can read.
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'failed' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
 		];
-		deliver('relateddocuments', { documents: (app as any).relatedDocuments });
+		deliver('remotelinks', { documents: (app as any).remoteLinks });
 
 		// The user is told why that source was left, and the source behind it
 		// in the queue is refreshed.
@@ -391,7 +391,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('says so rather than waiting on a source that cannot be read', function () {
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
 		];
@@ -406,7 +406,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('says when the document is related to no source of that name', function () {
-		(app as any).relatedDocuments = [];
+		(app as any).remoteLinks = [];
 		documentHoldsLinks();
 		links.updateAll();
 
@@ -417,7 +417,7 @@ describe('SlideLinks', function () {
 	it('marks a page as broken when its source has no address to reach it at', function () {
 		// The server reports the source by name alone, which is what the slides of this
 		// document name it, and gives it no address because the storage listed none.
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: '', name: 'Sales deck.odp', state: 'missing' },
 			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
 		];
@@ -435,7 +435,7 @@ describe('SlideLinks', function () {
 	it('knows a source by the name the storage gave it rather than by its address', function () {
 		// The address ends in an opaque id, so the name the storage gave the document is the
 		// only thing that says which source the slides of this document came from.
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{
 				wopiSrc: 'https://host/wopi/files/1234',
 				name: 'Sales deck.odp',
@@ -644,7 +644,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('tells whether the source of a page can be read', function () {
-		(app as any).relatedDocuments = [
+		(app as any).remoteLinks = [
 			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'noaccess' },
 		];
 		deliver('slidelinks', { message: list });
@@ -655,7 +655,7 @@ describe('SlideLinks', function () {
 		nodeassert.equal(links.getPageSourceState(ticketsPart), '');
 		nodeassert.equal(links.isPageUpdatable(ticketsPart), false);
 
-		(app as any).relatedDocuments = relatedDocuments('available');
+		(app as any).remoteLinks = remoteLinks('available');
 		nodeassert.equal(links.getPageSourceState(numbersPart), 'available');
 		nodeassert.equal(links.isPageUpdatable(numbersPart), true);
 		// A page that is linked to nothing has no source to speak of.

@@ -326,7 +326,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-post-message-origin-ext = "%POSTMESSAGE_ORIGIN%"
       data-protocol-debug = "%PROTOCOL_DEBUG%"
       data-relay-origin = "%RELAY_ORIGIN%"
-      data-remote-documents-enabled = "%REMOTE_DOCUMENTS_ENABLED%"
+      data-remote-links-enabled = "%REMOTE_LINKS_ENABLED%"
       data-saved-ui-state = "%SAVED_UI_STATE%"
       data-service-root = "%SERVICE_ROOT%"
       data-smart-zoom = "%SMART_ZOOM%"

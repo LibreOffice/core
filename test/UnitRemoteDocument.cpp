@@ -37,42 +37,42 @@
 
 namespace
 {
-// Adds one related document to CheckFileInfo, split the way the production
+// Adds one remote link to CheckFileInfo, split the way the production
 // code now expects a WOPI host to send it: the public part (WOPISrc and the
-// last-modified time) in the top-level RelatedDocuments, and this view's
-// private access token in UserPrivateInfo.RelatedDocuments. Calling this
+// last-modified time) in the top-level RemoteLinks, and this view's
+// private access token in UserPrivateInfo.RemoteLinks. Calling this
 // again names a second document, so a test can list several.
-void setRelatedDocument(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
-                        const std::string& accessToken,
-                        const std::string& lastModifiedTime = std::string())
+void setRemoteLink(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
+                   const std::string& accessToken,
+                   const std::string& lastModifiedTime = std::string())
 {
-    Poco::JSON::Array::Ptr relatedDocuments = fileInfo->getArray("RelatedDocuments");
-    if (!relatedDocuments)
-        relatedDocuments = new Poco::JSON::Array();
+    Poco::JSON::Array::Ptr remoteLinks = fileInfo->getArray("RemoteLinks");
+    if (!remoteLinks)
+        remoteLinks = new Poco::JSON::Array();
     Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
     entry->set("WOPISrc", wopiSrc);
     if (!lastModifiedTime.empty())
         entry->set("LastModifiedTime", lastModifiedTime);
-    relatedDocuments->add(entry);
-    fileInfo->set("RelatedDocuments", relatedDocuments);
+    remoteLinks->add(entry);
+    fileInfo->set("RemoteLinks", remoteLinks);
 
     Poco::JSON::Object::Ptr userPrivateInfo = fileInfo->getObject("UserPrivateInfo");
     if (!userPrivateInfo)
         userPrivateInfo = new Poco::JSON::Object();
-    Poco::JSON::Array::Ptr tokens = userPrivateInfo->getArray("RelatedDocuments");
+    Poco::JSON::Array::Ptr tokens = userPrivateInfo->getArray("RemoteLinks");
     if (!tokens)
         tokens = new Poco::JSON::Array();
     Poco::JSON::Object::Ptr tokenEntry = new Poco::JSON::Object();
     tokenEntry->set("WOPISrc", wopiSrc);
     tokenEntry->set("AccessToken", accessToken);
     tokens->add(tokenEntry);
-    userPrivateInfo->set("RelatedDocuments", tokens);
+    userPrivateInfo->set("RemoteLinks", tokens);
     fileInfo->set("UserPrivateInfo", userPrivateInfo);
 }
 } // namespace
 
 /// A document (file 1) subscribes to a remote document (file 2) named in its
-/// CheckFileInfo RelatedDocuments. Verifies that the subscriber receives
+/// CheckFileInfo RemoteLinks. Verifies that the subscriber receives
 /// connected and modified events while another user edits the remote
 /// document, and that unsubscribing closes the headless session.
 class UnitRemoteDocument : public WopiTestServer
@@ -84,7 +84,7 @@ class UnitRemoteDocument : public WopiTestServer
     /// A second user editing the remote document (file 2).
     std::unique_ptr<UnitWebSocket> _editorWs;
 
-    /// The subscription states seen in the relateddocuments: messages.
+    /// The subscription states seen in the remotelinks: messages.
     bool _sawAvailableState = false;
     bool _sawConnectedState = false;
 
@@ -105,16 +105,16 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
                              Poco::JSON::Object::Ptr& fileInfo) override
     {
-        // Only the subscribing document lists a related document.
+        // Only the subscribing document lists a remote link.
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken",
+            setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken",
                                "2026-09-01T12:00:00.000000Z");
         }
     }
@@ -138,12 +138,12 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (message.starts_with("relateddocuments:"))
+        if (message.starts_with("remotelinks:"))
         {
             TST_LOG("Got: [" << message << ']');
-            LOK_ASSERT_MESSAGE("The related documents JSON must not carry access tokens",
+            LOK_ASSERT_MESSAGE("The remote links JSON must not carry access tokens",
                                message.find("remotetoken") == std::string_view::npos);
-            LOK_ASSERT_MESSAGE("The related documents JSON must carry the last modified time",
+            LOK_ASSERT_MESSAGE("The remote links JSON must carry the last modified time",
                                message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
                                    std::string_view::npos);
             if (message.find("\"state\":\"available\"") != std::string_view::npos)
@@ -204,9 +204,9 @@ public:
         // unsubscription, while the editor still holds it open.
         if (_phase == Phase::WaitHeadlessGone && docKey.ends_with("2") && session->isReadOnly())
         {
-            LOK_ASSERT_MESSAGE("The clients saw the related document as available",
+            LOK_ASSERT_MESSAGE("The clients saw the remote link as available",
                                _sawAvailableState);
-            LOK_ASSERT_MESSAGE("The clients saw the related document as connected",
+            LOK_ASSERT_MESSAGE("The clients saw the remote link as connected",
                                _sawConnectedState);
 
             TRANSITION_STATE(_phase, Phase::Done);
@@ -279,7 +279,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -287,8 +287,8 @@ public:
     {
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            // The document lists itself as a related document.
-            setRelatedDocument(fileInfo, ownWopiSrc(), "remotetoken");
+            // The document lists itself as a remote link.
+            setRemoteLink(fileInfo, ownWopiSrc(), "remotetoken");
         }
     }
 
@@ -356,12 +356,12 @@ public:
     }
 };
 
-/// Registers a related document over POST /cool/relateddocument: the request
+/// Registers a remote link over POST /cool/links: the request
 /// is authorized by the view's own one-time token, a wrong token is refused,
 /// a body over the size a registration takes is refused before it is read,
 /// the token is accepted only once, and the registered access token then
 /// serves that view's subscription.
-class UnitRelatedDocumentPost : public WopiTestServer
+class UnitLinkPost : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitToken, Posting, WaitConnected, Done) _phase;
 
@@ -383,13 +383,13 @@ class UnitRelatedDocumentPost : public WopiTestServer
 
     /// POSTs the registration authorized by the given one-time token, naming the given access
     /// token, and returns the response status.
-    unsigned postRelatedDocument(const std::string& oneTimeToken,
-                                 const std::string& accessToken = "remotetoken")
+    unsigned postLink(const std::string& oneTimeToken,
+                      const std::string& accessToken = "remotetoken")
     {
-        http::Request request("/cool/relateddocument?WOPISrc=" + Uri::encode(documentWopiSrc()),
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
                               http::Request::VERB_POST);
         request.setBody("{\"Nonce\":\"" + oneTimeToken +
-                            "\",\"RelatedDocument\":{\"WOPISrc\":\"" + remoteWopiSrc() +
+                            "\",\"Link\":{\"WOPISrc\":\"" + remoteWopiSrc() +
                             "\",\"AccessToken\":\"" + accessToken + "\""
                             ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
                         "application/json");
@@ -413,21 +413,21 @@ class UnitRelatedDocumentPost : public WopiTestServer
             {
                 // A token no view holds is refused.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
-                                 postRelatedDocument("wrongtoken"));
+                                 postLink("wrongtoken"));
 
                 // A body too large to name one document and one token is refused on its
                 // length alone, before the token in it is read.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::PayloadTooLarge),
-                                 postRelatedDocument(oneTimeToken, std::string(64 * 1024, 'x')));
+                                 postLink(oneTimeToken, std::string(64 * 1024, 'x')));
 
                 // The view's own one-time token authorizes the registration, so the refused
                 // request above did not spend it.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
-                                 postRelatedDocument(oneTimeToken));
+                                 postLink(oneTimeToken));
 
                 // The same token is not accepted a second time.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
-                                 postRelatedDocument(oneTimeToken));
+                                 postLink(oneTimeToken));
 
                 // The registered token serves this view's subscription.
                 TRANSITION_STATE(_phase, Phase::WaitConnected);
@@ -436,13 +436,13 @@ class UnitRelatedDocumentPost : public WopiTestServer
     }
 
 public:
-    UnitRelatedDocumentPost()
-        : WopiTestServer("UnitRelatedDocumentPost")
+    UnitLinkPost()
+        : WopiTestServer("UnitLinkPost")
         , _phase(Phase::Load)
     {
     }
 
-    ~UnitRelatedDocumentPost()
+    ~UnitLinkPost()
     {
         if (_postThread.joinable())
             _postThread.join();
@@ -451,7 +451,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     bool onDocumentLoaded(const std::string& message) override
@@ -466,7 +466,7 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (message.starts_with("relateddocumenttoken:"))
+        if (message.starts_with("linktoken:"))
         {
             TST_LOG("Got: [" << message << ']');
             // Keep the first token; a fresh one arrives after the accepted POST.
@@ -479,11 +479,11 @@ public:
             return false;
         }
 
-        if (message.starts_with("relateddocuments:"))
+        if (message.starts_with("remotelinks:"))
         {
             TST_LOG("Got: [" << message << ']');
             LOK_ASSERT_MESSAGE(
-                "The POST-registered last modified time must reach the related documents JSON",
+                "The POST-registered last modified time must reach the remote links JSON",
                 message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
                     std::string_view::npos);
             return false;
@@ -499,7 +499,7 @@ public:
             if (_phase == Phase::WaitConnected)
             {
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("The view's one-time token registered a related document");
+                passTest("The view's one-time token registered a remote link");
             }
         }
         else if (message.find("event=error") != std::string::npos)
@@ -522,11 +522,11 @@ public:
     }
 };
 
-/// Drops a related document over DELETE /cool/relateddocument: the request is
+/// Drops a remote link over DELETE /cool/links: the request is
 /// authorized by the view's own one-time token the way the registering POST
-/// is, a wrong token is refused, and the document leaves the list the views
+/// is, a wrong token is refused, and the link leaves the list the views
 /// are sent.
-class UnitRelatedDocumentDelete : public WopiTestServer
+class UnitLinkDelete : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitToken, Registering, WaitFreshToken, Dropping, WaitDropped, Done)
     _phase;
@@ -549,9 +549,9 @@ class UnitRelatedDocumentDelete : public WopiTestServer
     std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
 
     /// Sends the given request body to the endpoint and returns the response status.
-    unsigned sendRelatedDocument(const std::string& verb, const std::string& body)
+    unsigned sendLink(const std::string& verb, const std::string& body)
     {
-        http::Request request("/cool/relateddocument?WOPISrc=" + Uri::encode(documentWopiSrc()),
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
                               verb);
         request.setBody(body, "application/json");
 
@@ -561,22 +561,22 @@ class UnitRelatedDocumentDelete : public WopiTestServer
         return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
     }
 
-    unsigned postRelatedDocument(const std::string& oneTimeToken)
+    unsigned postLink(const std::string& oneTimeToken)
     {
-        return sendRelatedDocument(http::Request::VERB_POST,
-                                   "{\"Nonce\":\"" + oneTimeToken +
-                                       "\",\"RelatedDocument\":{\"WOPISrc\":\"" +
-                                       remoteWopiSrc() +
-                                       "\",\"AccessToken\":\"remotetoken\"}}");
+        return sendLink(http::Request::VERB_POST,
+                        "{\"Nonce\":\"" + oneTimeToken +
+                            "\",\"Link\":{\"WOPISrc\":\"" +
+                            remoteWopiSrc() +
+                            "\",\"AccessToken\":\"remotetoken\"}}");
     }
 
-    /// A drop names the document by its WOPISrc alone.
-    unsigned deleteRelatedDocument(const std::string& oneTimeToken, const std::string& wopiSrc)
+    /// A drop names the link by its WOPISrc alone.
+    unsigned deleteLink(const std::string& oneTimeToken, const std::string& wopiSrc)
     {
-        return sendRelatedDocument(http::Request::VERB_DELETE,
-                                   "{\"Nonce\":\"" + oneTimeToken +
-                                       "\",\"RelatedDocument\":{\"WOPISrc\":\"" + wopiSrc +
-                                       "\"}}");
+        return sendLink(http::Request::VERB_DELETE,
+                        "{\"Nonce\":\"" + oneTimeToken +
+                            "\",\"Link\":{\"WOPISrc\":\"" + wopiSrc +
+                            "\"}}");
     }
 
     /// Registers the document once the view has a token and the document is up.
@@ -594,7 +594,7 @@ class UnitRelatedDocumentDelete : public WopiTestServer
             [this, oneTimeToken = _oneTimeToken]
             {
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
-                                 postRelatedDocument(oneTimeToken));
+                                 postLink(oneTimeToken));
                 TRANSITION_STATE(_phase, Phase::WaitFreshToken);
                 // The fresh token and the list may already have arrived while the POST
                 // was in flight, so nothing else would start the drop.
@@ -617,22 +617,22 @@ class UnitRelatedDocumentDelete : public WopiTestServer
             {
                 // A token no view holds is refused, and the document stays.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
-                                 deleteRelatedDocument("wrongtoken", remoteWopiSrc()));
+                                 deleteLink("wrongtoken", remoteWopiSrc()));
 
                 TRANSITION_STATE(_phase, Phase::WaitDropped);
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
-                                 deleteRelatedDocument(oneTimeToken, remoteWopiSrc()));
+                                 deleteLink(oneTimeToken, remoteWopiSrc()));
             });
     }
 
 public:
-    UnitRelatedDocumentDelete()
-        : WopiTestServer("UnitRelatedDocumentDelete")
+    UnitLinkDelete()
+        : WopiTestServer("UnitLinkDelete")
         , _phase(Phase::Load)
     {
     }
 
-    ~UnitRelatedDocumentDelete()
+    ~UnitLinkDelete()
     {
         if (_postThread.joinable())
             _postThread.join();
@@ -643,7 +643,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     bool onDocumentLoaded(const std::string& message) override
@@ -658,7 +658,7 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (message.starts_with("relateddocumenttoken:"))
+        if (message.starts_with("linktoken:"))
         {
             TST_LOG("Got: [" << message << ']');
             _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
@@ -667,7 +667,7 @@ public:
             return false;
         }
 
-        if (message.starts_with("relateddocuments:"))
+        if (message.starts_with("remotelinks:"))
         {
             TST_LOG("Got: [" << message << ']');
             const bool names = message.find(remoteWopiSrc()) != std::string_view::npos;
@@ -683,7 +683,7 @@ public:
             if (_phase == Phase::WaitDropped && _listed)
             {
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("The dropped related document left the list");
+                passTest("The dropped remote link left the list");
             }
 
             return false;
@@ -732,18 +732,18 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
                              Poco::JSON::Object::Ptr& fileInfo) override
     {
-        // Each document lists the other as a related document.
+        // Each document lists the other as a remote link.
         const std::string path = Poco::URI(request.getURI()).getPath();
         const int other = path.ends_with("/1") ? 2 : path.ends_with("/2") ? 1 : 0;
         if (other)
         {
-            setRelatedDocument(fileInfo, fileWopiSrc(other), "remotetoken");
+            setRemoteLink(fileInfo, fileWopiSrc(other), "remotetoken");
         }
     }
 
@@ -860,7 +860,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -868,7 +868,7 @@ public:
     {
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
+            setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken");
         }
     }
 
@@ -952,7 +952,7 @@ public:
     }
 };
 
-/// A document subscribes to a related document whose file is gone from storage.
+/// A document subscribes to a remote link whose file is gone from storage.
 /// The storage answers the remote load with 404, so the subscriber is told the
 /// source is missing rather than merely disconnected. A source that cannot be
 /// loaded then holds no connection of the process: with room for one remote
@@ -980,28 +980,28 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
         // Room for one remote document at a time, so the second source connects
         // only if the first one stopped holding its slot.
-        config.setInt("remote_documents.max_remote_docs", 1);
+        config.setInt("remote_links.max_remote_docs", 1);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
                              Poco::JSON::Object::Ptr& fileInfo) override
     {
         // The subscribing document lists both the missing file and the readable
-        // one as related documents.
+        // one as remote links.
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
-            setRelatedDocument(fileInfo, readableWopiSrc(), "remotetoken");
+            setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken");
+            setRemoteLink(fileInfo, readableWopiSrc(), "remotetoken");
         }
     }
 
     std::unique_ptr<http::Response>
     assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& request) override
     {
-        // The related document's file is gone, so the storage cannot find it.
+        // The remote link's file is gone, so the storage cannot find it.
         // The subscribing document itself still loads normally.
         if (Poco::URI(request.getURI()).getPath().ends_with("/2"))
             return std::make_unique<http::Response>(http::StatusCode::NotFound);
@@ -1015,7 +1015,7 @@ public:
 
         if (_phase == Phase::WaitLoadStatus)
         {
-            // The subscriber document is up; ask for the missing related document.
+            // The subscriber document is up; ask for the missing remote link.
             TRANSITION_STATE(_phase, Phase::WaitMissing);
             WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
         }
@@ -1026,7 +1026,7 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (!message.starts_with("relateddocuments:"))
+        if (!message.starts_with("remotelinks:"))
             return false;
 
         TST_LOG("Got: [" << message << ']');
@@ -1118,10 +1118,10 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
         // Room for several remote documents at once, so the per-view link limit is the one
         // limit exercised here.
-        config.setInt("remote_documents.max_remote_docs", 16);
+        config.setInt("remote_links.max_remote_docs", 16);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -1132,7 +1132,7 @@ public:
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
             for (int id = 2; id <= 6; ++id)
-                setRelatedDocument(fileInfo, fileWopiSrc(id), "remotetoken");
+                setRemoteLink(fileInfo, fileWopiSrc(id), "remotetoken");
         }
     }
 
@@ -1171,7 +1171,7 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (!message.starts_with("relateddocuments:"))
+        if (!message.starts_with("remotelinks:"))
             return false;
 
         TST_LOG("Got: [" << message << ']');
@@ -1281,7 +1281,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -1294,15 +1294,15 @@ public:
         // for it, in its own UserPrivateInfo.
         if (request.getURI().find("access_token=firsttoken") != std::string::npos)
         {
-            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
+            setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken");
         }
         else
         {
-            Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+            Poco::JSON::Array::Ptr remoteLinks = new Poco::JSON::Array();
             Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
             entry->set("WOPISrc", remoteWopiSrc());
-            relatedDocuments->add(entry);
-            fileInfo->set("RelatedDocuments", relatedDocuments);
+            remoteLinks->add(entry);
+            fileInfo->set("RemoteLinks", remoteLinks);
         }
     }
 
@@ -1393,8 +1393,8 @@ public:
 };
 
 /// A document (file 1) subscribes to a remote document (file 2). When another
-/// user saves the remote document to storage, the subscriber's related
-/// documents list picks up the source's new last-modified time and the client
+/// user saves the remote document to storage, the subscriber's remote
+/// links list picks up the source's new last-modified time and the client
 /// is told the source is newer.
 class UnitRemoteDocumentSaved : public WopiTestServer
 {
@@ -1405,7 +1405,7 @@ class UnitRemoteDocumentSaved : public WopiTestServer
     /// A second user editing the remote document (file 2).
     std::unique_ptr<UnitWebSocket> _editorWs;
 
-    /// The last-modified time last seen in a related documents list.
+    /// The last-modified time last seen in a remote links list.
     std::string _lastSeenModifiedTime;
     /// The time seen just before the editor saved the remote document.
     std::string _modifiedTimeBeforeSave;
@@ -1434,7 +1434,7 @@ class UnitRemoteDocumentSaved : public WopiTestServer
         if (_phase == Phase::WaitSaved && _sawSavedEvent && _sawUpdatedTime)
         {
             TRANSITION_STATE(_phase, Phase::Done);
-            passTest("The remote save updated the related document's last modified time and "
+            passTest("The remote save updated the remote link's last modified time and "
                      "notified the client");
         }
     }
@@ -1449,7 +1449,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
@@ -1457,7 +1457,7 @@ public:
     {
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
-            setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken",
+            setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken",
                                "2026-09-01T12:00:00.000000Z");
         }
     }
@@ -1478,7 +1478,7 @@ public:
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (message.starts_with("relateddocuments:"))
+        if (message.starts_with("remotelinks:"))
         {
             TST_LOG("Got: [" << message << ']');
             const std::string modifiedTime = modifiedTimeOf(message);
@@ -1661,7 +1661,7 @@ public:
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
         WopiTestServer::configure(config);
-        config.setBool("remote_documents.enable", true);
+        config.setBool("remote_links.enable", true);
     }
 
     bool onDataLoss(const std::string& reason) override
@@ -1771,7 +1771,7 @@ public:
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
-                              new UnitRelatedDocumentPost(), new UnitRelatedDocumentDelete(),
+                              new UnitLinkPost(), new UnitLinkDelete(),
                               new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),

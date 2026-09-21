@@ -64,7 +64,7 @@ public:
         const std::string& getPresentationLeader() const { return _presentationLeader; }
 
         // Public part
-        struct RelatedDocument
+        struct RemoteLink
         {
             /// The remote document's WOPISrc.
             std::string wopiSrc;
@@ -78,7 +78,7 @@ public:
         };
 
         // Private part
-        struct RelatedDocumentToken
+        struct RemoteLinkToken
         {
             /// The remote document's WOPISrc.
             std::string wopiSrc;
@@ -86,16 +86,16 @@ public:
             std::string accessToken;
         };
 
-        /// Remote documents this document may subscribe to, without tokens.
-        const std::vector<RelatedDocument>& getRelatedDocuments() const
+        /// Remote links this document may subscribe to, without tokens.
+        const std::vector<RemoteLink>& getRemoteLinks() const
         {
-            return _relatedDocuments;
+            return _remoteLinks;
         }
 
-        /// This view's access tokens for the related documents.
-        const std::vector<RelatedDocumentToken>& getRelatedDocumentTokens() const
+        /// This view's access tokens for the remote links.
+        const std::vector<RemoteLinkToken>& getRemoteLinkTokens() const
         {
-            return _relatedDocumentTokens;
+            return _remoteLinkTokens;
         }
 
         bool getUserCanWrite() const { return _userCanWrite; }
@@ -238,11 +238,11 @@ public:
         /// Used for directly starting follow me presentation
         std::string _presentationLeader;
 
-        /// The RelatedDocuments entries this document may subscribe to
-        std::vector<RelatedDocument> _relatedDocuments;
+        /// The RemoteLinks entries this document may subscribe to
+        std::vector<RemoteLink> _remoteLinks;
 
-        /// This view's access tokens for the related documents
-        std::vector<RelatedDocumentToken> _relatedDocumentTokens;
+        /// This view's access tokens for the remote links
+        std::vector<RemoteLinkToken> _remoteLinkTokens;
     };
 
     WopiStorage(const Poco::URI& uri, const std::string& localStorePath,

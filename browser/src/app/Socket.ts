@@ -1493,20 +1493,16 @@ class Socket {
 			this._onHyperlinkClickedMsg(textMsg);
 		} else if (textMsg.startsWith('browsersetting:')) {
 			window.prefs._initializeBrowserSetting(textMsg);
-		} else if (textMsg.startsWith('relateddocuments:')) {
-			const related = JSON.parse(
-				textMsg.substring('relateddocuments:'.length + 1),
-			);
-			app.relatedDocuments = related.documents || [];
-			this._map.fire('relateddocuments', {
-				documents: app.relatedDocuments,
+		} else if (textMsg.startsWith('remotelinks:')) {
+			const links = JSON.parse(textMsg.substring('remotelinks:'.length + 1));
+			app.remoteLinks = links.documents || [];
+			this._map.fire('remotelinks', {
+				documents: app.remoteLinks,
 			});
-		} else if (textMsg.startsWith('relateddocumenttoken:')) {
-			app.relatedDocumentToken = textMsg
-				.substring('relateddocumenttoken:'.length)
-				.trim();
-			this._map.fire('relateddocumenttoken', {
-				token: app.relatedDocumentToken,
+		} else if (textMsg.startsWith('linktoken:')) {
+			app.linkToken = textMsg.substring('linktoken:'.length).trim();
+			this._map.fire('linktoken', {
+				token: app.linkToken,
 			});
 		} else if (textMsg.startsWith('presetconfigid:')) {
 			app.presetConfigId = textMsg.substring('presetconfigid:'.length).trim();

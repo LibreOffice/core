@@ -170,14 +170,14 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                 << _username << "] will be used until a valid name is specified.");
     }
 
-    // The public part of the remote documents this document may subscribe to.
-    // A server that reads no remote documents keeps none of them.
-    auto relatedDocuments = object->getArray("RelatedDocuments");
-    if (RemoteDocumentBroker::isEnabled() && relatedDocuments)
+    // The public part of the remote links this document may subscribe to.
+    // A server that reads no remote links keeps none of them.
+    auto remoteLinks = object->getArray("RemoteLinks");
+    if (RemoteDocumentBroker::isEnabled() && remoteLinks)
     {
-        for (std::size_t i = 0; i < relatedDocuments->size(); ++i)
+        for (std::size_t i = 0; i < remoteLinks->size(); ++i)
         {
-            auto entry = relatedDocuments->getObject(i);
+            auto entry = remoteLinks->getObject(i);
             if (!entry)
                 continue;
 
@@ -188,21 +188,21 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
             JsonUtil::findJSONValue(entry, "BaseFileName", name);
             JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
             if (!wopiSrc.empty())
-                _relatedDocuments.push_back(
+                _remoteLinks.push_back(
                     { std::move(wopiSrc), std::move(name), std::move(lastModifiedTime) });
         }
     }
 
-    // The access tokens for those related documents are private to this view.
+    // The access tokens for those remote links are private to this view.
     if (auto userPrivateInfo = object->getObject("UserPrivateInfo"))
     {
-        if (auto relatedTokens = userPrivateInfo->getArray("RelatedDocuments"))
+        if (auto linkTokens = userPrivateInfo->getArray("RemoteLinks"))
         {
             if (RemoteDocumentBroker::isEnabled())
             {
-                for (std::size_t i = 0; i < relatedTokens->size(); ++i)
+                for (std::size_t i = 0; i < linkTokens->size(); ++i)
                 {
-                    auto entry = relatedTokens->getObject(i);
+                    auto entry = linkTokens->getObject(i);
                     if (!entry)
                         continue;
 
@@ -211,14 +211,14 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                     JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
                     JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
                     if (!wopiSrc.empty() && !accessToken.empty())
-                        _relatedDocumentTokens.push_back(
+                        _remoteLinkTokens.push_back(
                             { std::move(wopiSrc), std::move(accessToken) });
                 }
             }
 
             // A token is private to its view whether or not a document reads it, so it leaves
             // the info that is stored and logged either way.
-            userPrivateInfo->remove("RelatedDocuments");
+            userPrivateInfo->remove("RemoteLinks");
         }
     }
 

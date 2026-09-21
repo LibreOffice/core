@@ -246,12 +246,12 @@ class RemoteDocumentBroker final : public SocketPoll
     static std::unique_ptr<RemoteDocumentBroker> Instance;
 
 public:
-    /// The remote_documents.enable configuration value.
+    /// The remote_links.enable configuration value.
     static bool isEnabled();
 
     /// The base URL to dial remote documents through, in the ws(s) scheme
     /// with the service root appended, no trailing slash. Built from the
-    /// remote_documents.server_url configuration, the server_name
+    /// remote_links.server_url configuration, the server_name
     /// configuration, or this server's own address, in that order; never
     /// from request data. Empty when none of the sources is available.
     static std::string getServerUrl();

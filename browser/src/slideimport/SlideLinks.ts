@@ -17,10 +17,10 @@
  * which slide of it each linked page came from - and runs the updates: it
  * names a source and the server refreshes the pages of it.
  *
- * A source is a document the storage named as a related document of this
+ * A source is a document the storage named as a remote link of this
  * one, and the server holds the access token to read it with, so an update
  * needs nothing of the user beyond asking for it. A source the server knows
- * no related document by is reported as one that cannot be updated.
+ * no remote link by is reported as one that cannot be updated.
  *
  * A document reads a few sources at once at the most, and a refresh that
  * arrives past that is refused as busy, so the refreshes of a view go one
@@ -109,7 +109,7 @@ class SlideLinks {
 		map.on('updateparts', this.onUpdateParts, this);
 		map.on('slidelink', this.onUpdated, this);
 		map.on('remotedoccommandresult', this.onRemoteResult, this);
-		map.on('relateddocuments', this.onRelatedDocuments, this);
+		map.on('remotelinks', this.onRemoteLinks, this);
 		map.on('slidelinkerror', this.onError, this);
 		map.on('slideimport', this.onImportMessage, this);
 	}
@@ -118,8 +118,8 @@ class SlideLinks {
 		return this.sources.length > 0;
 	}
 
-	// The source of this document's links that names the given related
-	// document, or an empty string when no page is linked to it.
+	// The source of this document's links that names the given remote
+	// link, or an empty string when no page is linked to it.
 	public linkedSourceOf(doc: { wopiSrc: string; name?: string }): string {
 		return (
 			this.sources.find((source) =>
@@ -164,9 +164,9 @@ class SlideLinks {
 	public isPageBroken(part: string): boolean {
 		const link = this.pages.get(part);
 		if (!link) return false;
-		const related = this.relatedDocument(link.source);
+		const remoteLink = this.remoteLink(link.source);
 		return (
-			(related !== null && related.state === 'missing') ||
+			(remoteLink !== null && remoteLink.state === 'missing') ||
 			this.isPageMissing(part)
 		);
 	}
@@ -184,18 +184,18 @@ class SlideLinks {
 	public isPageConnected(part: string): boolean {
 		const link = this.pages.get(part);
 		if (!link) return false;
-		const related = this.relatedDocument(link.source);
-		return related !== null && related.state === 'connected';
+		const remoteLink = this.remoteLink(link.source);
+		return remoteLink !== null && remoteLink.state === 'connected';
 	}
 
-	// The state of the related document a page's source names, as the
-	// storage announced it, or an empty string when this document is related
+	// The state of the remote link a page's source names, as the
+	// storage announced it, or an empty string when this document links
 	// to no document of that name or the page is linked to nothing.
 	public getPageSourceState(part: string): string {
 		const link = this.pages.get(part);
 		if (!link) return '';
-		const related = this.relatedDocument(link.source);
-		return related ? related.state : '';
+		const remoteLink = this.remoteLink(link.source);
+		return remoteLink ? remoteLink.state : '';
 	}
 
 	// Whether the source of a page can be read, so that its pages can be
@@ -222,14 +222,14 @@ class SlideLinks {
 	}
 
 	private currentSourceTime(source: string): string | null {
-		const related = this.relatedDocument(source);
-		return related && related.lastModifiedTime
-			? related.lastModifiedTime
+		const remoteLink = this.remoteLink(source);
+		return remoteLink && remoteLink.lastModifiedTime
+			? remoteLink.lastModifiedTime
 			: null;
 	}
 
 	// Refreshes the pages of every source of this document. The server reads
-	// each source as a related document of this one, so nothing is asked of
+	// each source as a remote link of this one, so nothing is asked of
 	// the user beyond the command itself.
 	public updateAll(): void {
 		if (!this.map.isEditMode()) return;
@@ -398,15 +398,15 @@ class SlideLinks {
 		this.sendNext();
 	}
 
-	// The related document a source names, as the storage announced it, or null when this
-	// document is related to no document of that name.
-	private relatedDocument(source: string): {
+	// The remote link a source names, as the storage announced it, or null when this
+	// document links to no document of that name.
+	private remoteLink(source: string): {
 		wopiSrc: string;
 		name?: string;
 		state: string;
 		lastModifiedTime?: string;
 	} | null {
-		for (const doc of app.relatedDocuments || []) {
+		for (const doc of app.remoteLinks || []) {
 			if (SlideImportSession.matchesDocument(doc, source)) return doc;
 		}
 		return null;
@@ -419,8 +419,8 @@ class SlideLinks {
 		const next = this.queue.shift();
 		if (next === undefined) return;
 
-		const related = this.relatedDocument(next.source);
-		if (!related) {
+		const remoteLink = this.remoteLink(next.source);
+		if (!remoteLink) {
 			this.say(
 				_(
 					'{0} is not one of the documents this one is related to, so the server cannot read it.',
@@ -430,7 +430,7 @@ class SlideLinks {
 			return;
 		}
 
-		if (!related.wopiSrc) {
+		if (!remoteLink.wopiSrc) {
 			// The slides of this document name the source, and that is all that is known of
 			// it: the storage gave no address to reach it at.
 			this.say(
@@ -444,14 +444,14 @@ class SlideLinks {
 
 		// A source this view holds no token for, or one the storage could not
 		// give, is never asked: a subscription to it would wait for ever.
-		if (!SlideLinks.isReadable(related.state)) {
-			this.abandonUnreadableSource(next.source, related.state);
+		if (!SlideLinks.isReadable(remoteLink.state)) {
+			this.abandonUnreadableSource(next.source, remoteLink.state);
 			return;
 		}
 
 		this.running = next;
-		if (related.state === 'connected') this.askForPages(related.wopiSrc);
-		else SlideImportSession.subscribeRelatedDocument(related.wopiSrc);
+		if (remoteLink.state === 'connected') this.askForPages(remoteLink.wopiSrc);
+		else SlideImportSession.subscribeRemoteLink(remoteLink.wopiSrc);
 	}
 
 	// A source that cannot be read leaves the run it was asked for. The user is told why the
@@ -497,38 +497,42 @@ class SlideLinks {
 	// that became unreadable, or whose subscription was refused, ends the run instead,
 	// so that the run leaves the queue and the sources behind it are still refreshed.
 	// A source that went down after it was asked is asked again once it comes back up.
-	private onRelatedDocuments(): void {
+	private onRemoteLinks(): void {
 		this.readSourceSlides();
 		app.events.fire('slidelink:changed', {});
 
 		if (this.running === null || this.running.updating) return;
-		const related = this.relatedDocument(this.running.source);
+		const remoteLink = this.remoteLink(this.running.source);
 
-		if (related && related.state === 'connected') {
-			if (!this.running.accepted) this.askForPages(related.wopiSrc);
+		if (remoteLink && remoteLink.state === 'connected') {
+			if (!this.running.accepted) this.askForPages(remoteLink.wopiSrc);
 			return;
 		}
 
-		if (this.running.accepted && related && related.state === 'disconnected') {
+		if (
+			this.running.accepted &&
+			remoteLink &&
+			remoteLink.state === 'disconnected'
+		) {
 			this.running.accepted = false;
 			return;
 		}
 
-		if (related && related.state === 'subscribed')
+		if (remoteLink && remoteLink.state === 'subscribed')
 			this.running.subscribed = true;
 
 		// A subscription this run opened was refused so went back to "available" state
 		const dead =
 			this.running.accepted ||
-			(related !== null &&
-				related.state === 'available' &&
+			(remoteLink !== null &&
+				remoteLink.state === 'available' &&
 				this.running.subscribed === true);
 
-		if (related && !dead && SlideLinks.isReadable(related.state)) return;
+		if (remoteLink && !dead && SlideLinks.isReadable(remoteLink.state)) return;
 
 		const source = this.running.source;
 		this.running = null;
-		this.abandonUnreadableSource(source, related ? related.state : '');
+		this.abandonUnreadableSource(source, remoteLink ? remoteLink.state : '');
 	}
 
 	// The pages the source wrote, staged in this document's jail by the server. The document
@@ -570,7 +574,7 @@ class SlideLinks {
 		}
 
 		// The pages read now match the source as it is, so they record the
-		// source time the related documents list reports for it. A refresh of
+		// source time the remote links list reports for it. A refresh of
 		// one page names it, and the document leaves the other pages of the
 		// source as they are.
 		const current = this.currentSourceTime(this.running.source);
@@ -606,8 +610,8 @@ class SlideLinks {
 	// Asks every source this document is connected to for the slides it holds
 	private readSourceSlides(): void {
 		for (const source of this.sources) {
-			const related = this.relatedDocument(source);
-			if (!related || related.state !== 'connected') {
+			const remoteLink = this.remoteLink(source);
+			if (!remoteLink || remoteLink.state !== 'connected') {
 				// A source that went down says nothing about its slides, so one that was
 				// asked and did not answer is asked again once it comes up.
 				const pending = this.sourceSlides.get(source);
@@ -615,13 +619,13 @@ class SlideLinks {
 				continue;
 			}
 
-			const time = related.lastModifiedTime || '';
+			const time = remoteLink.lastModifiedTime || '';
 			const known = this.sourceSlides.get(source);
 			if (known && known.time === time) continue;
 
 			this.sourceSlides.set(source, { time: time, guids: null });
 			SlideImportSession.sendRemoteCommand(
-				related.wopiSrc,
+				remoteLink.wopiSrc,
 				'getpresentationinfo',
 			);
 		}
@@ -630,8 +634,8 @@ class SlideLinks {
 	// The source of this document the given address belongs to, or empty when it belongs to none.
 	private sourceOf(wopiSrc: string): string {
 		for (const source of this.sources) {
-			const related = this.relatedDocument(source);
-			if (related && related.wopiSrc === wopiSrc) return source;
+			const remoteLink = this.remoteLink(source);
+			if (remoteLink && remoteLink.wopiSrc === wopiSrc) return source;
 		}
 		return '';
 	}

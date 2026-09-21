@@ -1411,11 +1411,11 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             servedSync = handleClipboardRequest(request, message, disposition, socket);
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
-                 requestDetails.equals(1, "relateddocument") &&
+                 requestDetails.equals(1, "links") &&
                  (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST ||
                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE))
         {
-            servedSync = handleRelatedDocumentRequest(request, message, disposition, socket);
+            servedSync = handleLinksRequest(request, message, disposition, socket);
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "signature"))
@@ -2245,35 +2245,35 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
     return false;
 }
 
-bool ClientRequestDispatcher::handleRelatedDocumentRequest(
+bool ClientRequestDispatcher::handleLinksRequest(
     const Poco::Net::HTTPRequest& request, std::istream& message, SocketDisposition& disposition,
     const std::shared_ptr<StreamSocket>& socket)
 {
     assert(socket && "Must have a valid socket");
 
-    // A POST registers a related document and a DELETE drops one. Both are the same request
+    // A POST registers a remote link and a DELETE drops one. Both are the same request
     // otherwise: the same address, the same authorization and the same way of naming the
     // document.
     const bool drop = request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE;
 
-    LOG_DBG_S("RelatedDocument " << request.getMethod()
-                                 << " request: " << Anonymizer::anonymizeUrl(request.getURI()));
+    LOG_DBG_S("Links " << request.getMethod()
+                       << " request: " << Anonymizer::anonymizeUrl(request.getURI()));
 
     if (!RemoteDocumentBroker::isEnabled())
     {
-        LOG_ERR_S("RelatedDocument request rejected: remote_documents is disabled in the "
+        LOG_ERR_S("Links request rejected: remote_links is disabled in the "
                   "configuration: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
-                                         "remote documents are disabled");
+                                         "remote links are disabled");
         return true;
     }
 
     if (request.getContentLength() > MaxInMemoryHttpRequestSize)
     {
-        LOG_ERR_S("RelatedDocument request rejected: the body is "
+        LOG_ERR_S("Links request rejected: the body is "
                   << request.getContentLength() << " bytes, over the " << MaxInMemoryHttpRequestSize
-                  << " a related document is named in: "
+                  << " a remote link is named in: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::PayloadTooLarge, socket,
                                          "body too large");
@@ -2290,7 +2290,7 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
 
     if (wopiSrc.empty())
     {
-        LOG_ERR_S("RelatedDocument request without a WOPISrc query parameter: "
+        LOG_ERR_S("Links request without a WOPISrc query parameter: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc");
         return true;
@@ -2299,19 +2299,19 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
     // Verify that the WOPISrc is properly encoded.
     if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc, socket))
     {
-        LOG_ERR_S("RelatedDocument request with an unencoded WOPISrc, rejected: "
+        LOG_ERR_S("Links request with an unencoded WOPISrc, rejected: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         return false;
     }
 
     // Tokens travel only in the body, never in the URL. The caller proves it
     // is one of the document's browser views by echoing that view's one-time
-    // related-document token, and names the related document the same way a
-    // CheckFileInfo RelatedDocuments entry does:
-    //   { "Nonce": "<the view's one-time related-document token>",
-    //     "RelatedDocument": { "WOPISrc": "...", "AccessToken": "...",
-    //                          "BaseFileName": "...", "LastModifiedTime": "..." } }
-    // A DELETE names the document to drop by its WOPISrc alone; the rest of the entry says
+    // link token, and names the remote link the same way a
+    // CheckFileInfo RemoteLinks entry does:
+    //   { "Nonce": "<the view's one-time link token>",
+    //     "Link": { "WOPISrc": "...", "AccessToken": "...",
+    //               "BaseFileName": "...", "LastModifiedTime": "..." } }
+    // A DELETE names the link to drop by its WOPISrc alone; the rest of the entry says
     // nothing about which document that is and is ignored.
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
@@ -2323,23 +2323,23 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
     if (JsonUtil::parseJSON(body, object))
     {
         JsonUtil::findJSONValue(object, "Nonce", oneTimeToken);
-        if (auto relatedDocument = object->getObject("RelatedDocument"))
+        if (auto link = object->getObject("Link"))
         {
-            JsonUtil::findJSONValue(relatedDocument, "WOPISrc", remoteWopiSrc);
-            JsonUtil::findJSONValue(relatedDocument, "AccessToken", remoteAccessToken);
-            JsonUtil::findJSONValue(relatedDocument, "BaseFileName", remoteName);
-            JsonUtil::findJSONValue(relatedDocument, "LastModifiedTime", remoteLastModifiedTime);
+            JsonUtil::findJSONValue(link, "WOPISrc", remoteWopiSrc);
+            JsonUtil::findJSONValue(link, "AccessToken", remoteAccessToken);
+            JsonUtil::findJSONValue(link, "BaseFileName", remoteName);
+            JsonUtil::findJSONValue(link, "LastModifiedTime", remoteLastModifiedTime);
         }
     }
 
     if (oneTimeToken.empty() || remoteWopiSrc.empty() || (!drop && remoteAccessToken.empty()))
     {
-        LOG_ERR_S("RelatedDocument request rejected: incomplete body (have Nonce: "
-                  << !oneTimeToken.empty() << ", RelatedDocument WOPISrc: " << !remoteWopiSrc.empty()
-                  << ", RelatedDocument AccessToken: " << !remoteAccessToken.empty()
+        LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
+                  << !oneTimeToken.empty() << ", Link WOPISrc: " << !remoteWopiSrc.empty()
+                  << ", Link AccessToken: " << !remoteAccessToken.empty()
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
-                                         "missing Nonce or RelatedDocument");
+                                         "missing Nonce or Link");
         return true;
     }
 
@@ -2354,8 +2354,8 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
 
     if (!docBroker || !docBroker->isAlive())
     {
-        LOG_ERR_S("RelatedDocument request rejected: no live document for docKey [" << docKey
-                                                                                    << ']');
+        LOG_ERR_S("Links request rejected: no live document for docKey [" << docKey
+                                                                          << ']');
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket, "no such document");
         return true;
     }
@@ -2372,26 +2372,26 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
 
             if (drop)
             {
-                // The document leaves the list of every view, which is where the one list of
-                // related documents lives. The token is consumed whether the list held that
-                // document or not.
-                const DocumentBroker::RelatedDocumentRemoval removal =
+                // The link leaves the list of every view, which is where the one list of
+                // remote links lives. The token is consumed whether the list held that
+                // link or not.
+                const DocumentBroker::LinkRemoval removal =
                     docBroker->removeRemoteDocumentSource(oneTimeToken, remoteWopiSrc);
-                if (removal == DocumentBroker::RelatedDocumentRemoval::BadToken)
+                if (removal == DocumentBroker::LinkRemoval::BadToken)
                 {
-                    LOG_ERR_S("RelatedDocument DELETE for [" << docBroker->getDocKey()
-                                                             << "] with an invalid one-time token");
+                    LOG_ERR_S("Links DELETE for [" << docBroker->getDocKey()
+                                                   << "] with an invalid one-time token");
                     HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
                                                      "invalid token");
                     return;
                 }
 
-                if (removal == DocumentBroker::RelatedDocumentRemoval::NotFound)
+                if (removal == DocumentBroker::LinkRemoval::NotFound)
                 {
-                    LOG_ERR_S("RelatedDocument DELETE for ["
-                              << docBroker->getDocKey() << "] names no related document of it");
+                    LOG_ERR_S("Links DELETE for ["
+                              << docBroker->getDocKey() << "] names no remote link of it");
                     HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, streamSocket,
-                                                     "no such related document");
+                                                     "no such link");
                     return;
                 }
             }
@@ -2404,7 +2404,7 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
                                                             remoteAccessToken, remoteName,
                                                             remoteLastModifiedTime))
                 {
-                    LOG_ERR_S("RelatedDocument request for ["
+                    LOG_ERR_S("Links request for ["
                               << docBroker->getDocKey() << "] with an invalid one-time token");
                     HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
                                                      "invalid token");
@@ -3308,7 +3308,7 @@ std::string getCapabilitiesJson(bool convertToAvailable)
 
     // Set if this instance supports importing slides from another presentation.
     // That builds on the live links between documents, so it follows the same
-    // remote_documents switch in the configuration.
+    // remote_links switch in the configuration.
     capabilities->set("hasSlideImportSupport", RemoteDocumentBroker::isEnabled());
 
     const std::string serverName = ConfigUtil::getString("indirection_endpoint.server_name", "");

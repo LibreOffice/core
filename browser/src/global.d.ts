@@ -244,7 +244,7 @@ interface AppInterface {
 	impressTableStyles: ImpressTableStylesService;
 	colorLastSelection: any;
 	serverAudit: any;
-	relatedDocuments: Array<{
+	remoteLinks: Array<{
 		wopiSrc: string;
 		// The document as the user knows it. A document the storage listed no
 		// address for holds a name and nothing else.
@@ -252,8 +252,8 @@ interface AppInterface {
 		state: string;
 		lastModifiedTime?: string;
 	}>;
-	// One-time token authorizing this view to call a POST to /cool/relateddocument
-	relatedDocumentToken: string;
+	// One-time token authorizing this view to call a POST to /cool/links
+	linkToken: string;
 	events: DocEvents;
 	showNavigator: boolean;
 
@@ -421,7 +421,7 @@ interface Window {
 	autoShowWelcome: boolean;
 	bundlejsLoaded: boolean;
 	canvasSlideshowEnabled: boolean;
-	remoteDocumentsEnabled: boolean;
+	remoteLinksEnabled: boolean;
 	deeplEnabled: boolean;
 	documentSigningEnabled: boolean;
 	deviceFormFactor?: string;

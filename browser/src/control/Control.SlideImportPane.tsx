@@ -126,7 +126,7 @@ class SlideImportPane {
     app.events.on('slidelink:changed', this.redraw.bind(this));
     app.events.on('updatepermission', this.onUpdatePermission.bind(this));
     map.on('docloaded', this.onDocLoaded, this);
-    map.on('relateddocuments', this.onRelatedDocuments, this);
+    map.on('remotelinks', this.onRemoteLinks, this);
     map.on('remotedoccommandresult', this.onRemoteResult, this);
     map.on('updateparts', this.updateInsertButton, this);
   }
@@ -210,7 +210,7 @@ class SlideImportPane {
     this.render();
   }
 
-  private onRelatedDocuments(): void {
+  private onRemoteLinks(): void {
     if (!this.visible) return;
     this.refreshSources();
     this.render();
@@ -230,11 +230,11 @@ class SlideImportPane {
     return this.sources.find((source) => source.wopiSrc === wopiSrc) || null;
   }
 
-  // Takes the related documents the server announced into the source list,
+  // Takes the remote links the server announced into the source list,
   // keeping what the sources already answered. A source that is no longer
   // connected has to be asked again, so what it answered before is dropped.
   private refreshSources(): void {
-    const documents = app.relatedDocuments || [];
+    const documents = app.remoteLinks || [];
     const kept: SlideImportPaneSource[] = [];
 
     for (const doc of documents) {
@@ -339,7 +339,7 @@ class SlideImportPane {
 
     if (source.opening) return;
     source.opening = true;
-    SlideImportSession.subscribeRelatedDocument(source.wopiSrc);
+    SlideImportSession.subscribeRemoteLink(source.wopiSrc);
   }
 
   // One source shows its slides at a time, and the one on show is the one an
@@ -401,20 +401,20 @@ class SlideImportPane {
 
   // The "Add presentation…" button asks the integration to open its own
   // file chooser, filtered to presentations, and to add the picked file as a
-  // related document. The integration registers it with a POST to
-  // /cool/relateddocument using the one-time token below. The added file then
-  // arrives in the related documents list, from where its slides are
+  // permanent link. The integration registers it with a POST to
+  // /cool/links using the one-time token below. The added file then
+  // arrives in the remote links list, from where its slides are
   // imported.
   private browseForImport(): void {
-    if (!app.relatedDocumentToken) return;
+    if (!app.linkToken) return;
 
     app.map.fire('postMessage', {
-      msgId: 'UI_AddRelatedDocument',
+      msgId: 'UI_GetPermanentLink',
       args: {
-        Nonce: app.relatedDocumentToken,
+        Nonce: app.linkToken,
         WOPISrc: window.wopiSrc,
         Endpoint:
-          window.makeHttpUrl('/cool/relateddocument') +
+          window.makeHttpUrl('/cool/links') +
           '?WOPISrc=' +
           encodeURIComponent(window.wopiSrc),
         mimeTypeFilter: app.LOUtil.presentationMimeFilter,
@@ -422,21 +422,21 @@ class SlideImportPane {
     });
   }
 
-  // "Remove from list" asks the integration to drop a file from the related
-  // documents of this one.
+  // "Remove from list" asks the integration to drop a file from the remote
+  // links of this one.
   private removeFromList(source: SlideImportPaneSource): void {
-    if (!app.relatedDocumentToken || !source.wopiSrc) return;
+    if (!app.linkToken || !source.wopiSrc) return;
 
     app.map.fire('postMessage', {
-      msgId: 'UI_RemoveRelatedDocument',
+      msgId: 'UI_RemovePermanentLink',
       args: {
-        Nonce: app.relatedDocumentToken,
+        Nonce: app.linkToken,
         WOPISrc: window.wopiSrc,
         Endpoint:
-          window.makeHttpUrl('/cool/relateddocument') +
+          window.makeHttpUrl('/cool/links') +
           '?WOPISrc=' +
           encodeURIComponent(window.wopiSrc),
-        RelatedDocument: {
+        Link: {
           WOPISrc: source.wopiSrc,
           BaseFileName: source.name,
         },
@@ -748,7 +748,7 @@ class SlideImportPane {
     if (source.state === 'missing')
       return {
         text: _('Locate file'),
-        enabled: !!app.relatedDocumentToken,
+        enabled: !!app.linkToken,
         run: () => this.browseForImport(),
       };
     if (source.state === 'failed')
@@ -990,7 +990,7 @@ class SlideImportPane {
     return (
       <button
         class={className}
-        disabled={!app.relatedDocumentToken}
+        disabled={!app.linkToken}
         onClick={() => this.browseForImport()}
       >
         {_('Add presentation…')}
@@ -1249,7 +1249,7 @@ class SlideImportPane {
         id: 'locate',
         type: 'comboboxentry',
         text: _('Locate file'),
-        enabled: !!app.relatedDocumentToken,
+        enabled: !!app.linkToken,
       });
       this.showSourceMenu(e, entries, source);
       return;
@@ -1290,7 +1290,7 @@ class SlideImportPane {
         id: 'remove',
         type: 'comboboxentry',
         text: _('Remove from list'),
-        enabled: !!app.relatedDocumentToken,
+        enabled: !!app.linkToken,
       });
 
     this.showSourceMenu(e, entries, source);

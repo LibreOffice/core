@@ -12,13 +12,13 @@
 /*
  * SlideImportSession - the state model behind the slide import pane.
  *
- * Owns the lifecycle of one import: the questions asked of the related
- * document the slides come from, the slide selection, the keep-design flag
+ * Owns the lifecycle of one import: the questions asked of the remote
+ * link the slides come from, the slide selection, the keep-design flag
  * and the link-to-source flag. What each source answered about its slides is
  * the pane's own.
  * Every state change is announced as a slideimport:* event on app.events.
  *
- * A question of a related document carries an id, and its answer comes back
+ * A question of a remote link carries an id, and its answer comes back
  * under that id, so the session knows which of its questions each answer
  * belongs to. The kit's replies to an insert carry no such id and are
  * matched by the state the session is in.
@@ -118,7 +118,7 @@ class SlideImportSession {
 	}
 
 	// The document the slides come from, as the user knows it. Pages inserted as links record
-	// it, and a later refresh finds the related document of that name.
+	// it, and a later refresh finds the remote link of that name.
 	public setSource(fileName: string): void {
 		this.fileName = fileName;
 		this.canLink = this.sourceName() !== '';
@@ -342,9 +342,9 @@ class SlideImportSession {
 		return this.pendingInsert;
 	}
 
-	// The name of a related document as the user knows it: the file name at
+	// The name of a remote link as the user knows it: the file name at
 	// the end of its address.
-	public static relatedDocumentName(wopiSrc: string): string {
+	public static remoteLinkName(wopiSrc: string): string {
 		const path = wopiSrc.split('?')[0];
 		const name = path.substring(path.lastIndexOf('/') + 1);
 		try {
@@ -354,41 +354,38 @@ class SlideImportSession {
 		}
 	}
 
-	// The related document as the user knows it: the name the server gave it, or
+	// The remote link as the user knows it: the name the server gave it, or
 	// the file name at the end of its address when the server gave none.
 	public static documentName(doc: { wopiSrc: string; name?: string }): string {
 		if (doc.name) return doc.name;
-		return doc.wopiSrc
-			? SlideImportSession.relatedDocumentName(doc.wopiSrc)
-			: '';
+		return doc.wopiSrc ? SlideImportSession.remoteLinkName(doc.wopiSrc) : '';
 	}
 
-	// Whether a related document is the one a source names.
+	// Whether a remote link is the one a source names.
 	public static matchesDocument(
 		doc: { wopiSrc: string; name?: string },
 		source: string,
 	): boolean {
 		if (SlideImportSession.documentName(doc) === source) return true;
 		return (
-			!!doc.wopiSrc &&
-			SlideImportSession.relatedDocumentName(doc.wopiSrc) === source
+			!!doc.wopiSrc && SlideImportSession.remoteLinkName(doc.wopiSrc) === source
 		);
 	}
 
 	// The document at the given address as the user knows it
 	public static documentNameOf(wopiSrc: string): string {
-		const doc = SlideImportSession.findRelatedDocument(wopiSrc);
+		const doc = SlideImportSession.findRemoteLink(wopiSrc);
 		return doc
 			? SlideImportSession.documentName(doc)
-			: SlideImportSession.relatedDocumentName(wopiSrc);
+			: SlideImportSession.remoteLinkName(wopiSrc);
 	}
 
-	// The time the related document of the given name was last modified now, as
+	// The time the remote link of the given name was last modified now, as
 	// the storage announced it, or empty when the storage named no such
 	// document or gave it no time.
 	public static sourceModifiedTime(source: string): string {
 		if (!source) return '';
-		for (const doc of app.relatedDocuments || []) {
+		for (const doc of app.remoteLinks || []) {
 			if (
 				SlideImportSession.matchesDocument(doc, source) &&
 				doc.lastModifiedTime
@@ -398,21 +395,21 @@ class SlideImportSession {
 		return '';
 	}
 
-	// The related document with the given address, or null when the storage
+	// The remote link with the given address, or null when the storage
 	// named none of that address.
-	public static findRelatedDocument(
+	public static findRemoteLink(
 		wopiSrc: string,
 	): { wopiSrc: string; state: string } | null {
 		return (
-			(app.relatedDocuments || []).find(
+			(app.remoteLinks || []).find(
 				(doc: { wopiSrc: string }) => doc.wopiSrc === wopiSrc,
 			) || null
 		);
 	}
 
-	// Asks the server to open a live link to the related document; the state
-	// in the next relateddocuments: message follows the subscription.
-	public static subscribeRelatedDocument(wopiSrc: string): void {
+	// Asks the server to open a live link to the remote link; the state
+	// in the next remotelinks: message follows the subscription.
+	public static subscribeRemoteLink(wopiSrc: string): void {
 		app.socket.sendMessage(
 			'remotedocsubscribe wopisrc=' + encodeURIComponent(wopiSrc),
 		);

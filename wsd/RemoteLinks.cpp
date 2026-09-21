@@ -11,7 +11,7 @@
 
 #include <config.h>
 
-#include "RelatedDocuments.hpp"
+#include "RemoteLinks.hpp"
 
 #include <common/Anonymizer.hpp>
 #include <common/ConfigUtil.hpp>
@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <sstream>
 
-void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
+void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
                                  const std::string& name, const std::string& lastModifiedTime)
 {
     docBroker.assertCorrectThread();
@@ -51,12 +51,12 @@ void RelatedDocuments::setSource(DocumentBroker& docBroker, const std::string& w
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Ignoring the invalid related document WOPISrc ["
+        LOG_ERR("Ignoring the invalid remote link WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
 }
 
-bool RelatedDocuments::removeSource(DocumentBroker& docBroker, const std::string& wopiSrc)
+bool RemoteLinks::removeSource(DocumentBroker& docBroker, const std::string& wopiSrc)
 {
     docBroker.assertCorrectThread();
 
@@ -67,15 +67,15 @@ bool RelatedDocuments::removeSource(DocumentBroker& docBroker, const std::string
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Cannot drop the invalid related document WOPISrc ["
+        LOG_ERR("Cannot drop the invalid remote link WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
         return false;
     }
 
     if (_entries.erase(docKey) == 0)
     {
-        LOG_INF("No related document of [" << docBroker.getDocKey() << "] at ["
-                                           << Anonymizer::anonymizeUrl(wopiSrc) << ']');
+        LOG_INF("No remote link of [" << docBroker.getDocKey() << "] at ["
+                                      << Anonymizer::anonymizeUrl(wopiSrc) << ']');
         return false;
     }
 
@@ -95,17 +95,17 @@ bool RelatedDocuments::removeSource(DocumentBroker& docBroker, const std::string
         itView.second.tokens.erase(docKey);
     }
 
-    LOG_INF("Dropped the related document [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
-                                             << docBroker.getDocKey() << ']');
+    LOG_INF("Dropped the remote link [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
+                                        << docBroker.getDocKey() << ']');
     refreshAllViews(docBroker);
     return true;
 }
 
-void RelatedDocuments::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names)
+void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names)
 {
     docBroker.assertCorrectThread();
 
-    // A source nothing can reach is reported where a document reads related documents at all, and
+    // A source nothing can reach is reported where a document reads remote links at all, and
     // left alone on a server that serves none.
     if (!RemoteDocumentBroker::isEnabled())
         return;
@@ -117,7 +117,7 @@ void RelatedDocuments::setNamedSources(DocumentBroker& docBroker, std::vector<st
     refreshAllViews(docBroker);
 }
 
-void RelatedDocuments::setViewToken(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::setViewToken(DocumentBroker& docBroker, const std::string& tag,
                                     const std::string& wopiSrc, const std::string& accessToken)
 {
     docBroker.assertCorrectThread();
@@ -130,12 +130,12 @@ void RelatedDocuments::setViewToken(DocumentBroker& docBroker, const std::string
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Ignoring the access token for the invalid related document WOPISrc ["
+        LOG_ERR("Ignoring the access token for the invalid remote link WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
 }
 
-void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
                                        const std::string& encodedWopiSrc, const bool subscribe)
 {
     docBroker.assertCorrectThread();
@@ -149,7 +149,7 @@ void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::str
     if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
     {
         LOG_ERR("Remote document subscribe by view [" << tag
-                                                      << "] rejected: remote_documents is disabled");
+                                                      << "] rejected: remote_links is disabled");
         sendError(docBroker, tag, encodedWopiSrc, "disabled");
         return;
     }
@@ -208,7 +208,7 @@ void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::str
     {
         LOG_ERR("Remote document subscribe by view ["
                 << tag
-                << "] rejected: no server URL to dial through; set remote_documents.server_url "
+                << "] rejected: no server URL to dial through; set remote_links.server_url "
                    "or server_name in the configuration");
         sendError(docBroker, tag, encodedWopiSrc, "noserver");
         return;
@@ -223,7 +223,7 @@ void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::str
         return;
 
     const size_t maxLinks =
-        ConfigUtil::getConfigValue<int>("remote_documents.max_links_per_document", 4);
+        ConfigUtil::getConfigValue<int>("remote_links.max_links_per_document", 4);
     const size_t liveLinks =
         std::count_if(view.subscriptions.begin(), view.subscriptions.end(),
                       [&isLive](const auto& it) { return isLive(it.second); });
@@ -251,7 +251,7 @@ void RelatedDocuments::handleSubscribe(DocumentBroker& docBroker, const std::str
     refreshView(docBroker, tag);
 }
 
-void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
                                      const std::string& encodedWopiSrc,
                                      const std::string& eventArguments)
 {
@@ -308,7 +308,7 @@ void RelatedDocuments::onRemoteEvent(DocumentBroker& docBroker, const std::strin
     }
 }
 
-void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
                                    const std::string& wopiSrc, const std::string& command)
 {
     docBroker.assertCorrectThread();
@@ -347,7 +347,7 @@ void RelatedDocuments::sendCommand(DocumentBroker& docBroker, const std::string&
                                                              << "]: no live subscription");
 }
 
-void RelatedDocuments::removeSubscription(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::removeSubscription(DocumentBroker& docBroker, const std::string& tag,
                                           const std::string& wopiSrc)
 {
     docBroker.assertCorrectThread();
@@ -368,7 +368,7 @@ void RelatedDocuments::removeSubscription(DocumentBroker& docBroker, const std::
     }
 }
 
-void RelatedDocuments::removeView(DocumentBroker& docBroker, const std::string& tag)
+void RemoteLinks::removeView(DocumentBroker& docBroker, const std::string& tag)
 {
     docBroker.assertCorrectThread();
 
@@ -386,7 +386,7 @@ void RelatedDocuments::removeView(DocumentBroker& docBroker, const std::string& 
     _views.erase(itView);
 }
 
-void RelatedDocuments::unsubscribeAll(DocumentBroker& docBroker)
+void RemoteLinks::unsubscribeAll(DocumentBroker& docBroker)
 {
     if (RemoteDocumentBroker::isInitialized())
     {
@@ -402,7 +402,7 @@ void RelatedDocuments::unsubscribeAll(DocumentBroker& docBroker)
         itView.second.subscriptions.clear();
 }
 
-void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
+void RemoteLinks::addToIncomingDocKeyChain(DocumentBroker& docBroker,
                                                 const std::string& docKeyChain)
 {
     docBroker.assertCorrectThread();
@@ -413,7 +413,7 @@ void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
     // A subscription reaches through at most this many documents, so a chain
     // holds that many docKeys and the record keeps that many.
     static const std::size_t maxChainDepth =
-        std::max(0, ConfigUtil::getConfigValue<int>("remote_documents.max_chain_depth", 3));
+        std::max(0, ConfigUtil::getConfigValue<int>("remote_links.max_chain_depth", 3));
 
     const StringVector docKeys = StringVector::tokenize(docKeyChain, ',');
     for (std::size_t i = 0; i < docKeys.size(); ++i)
@@ -467,14 +467,14 @@ void RelatedDocuments::addToIncomingDocKeyChain(DocumentBroker& docBroker,
     }
 }
 
-void RelatedDocuments::sendError(DocumentBroker& docBroker, const std::string& tag,
+void RemoteLinks::sendError(DocumentBroker& docBroker, const std::string& tag,
                                  const std::string& encodedWopiSrc, const std::string& kind)
 {
     docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
                                  " event=error kind=" + kind);
 }
 
-std::string RelatedDocuments::documentName(const std::string& wopiSrc)
+std::string RemoteLinks::documentName(const std::string& wopiSrc)
 {
     const std::string path = wopiSrc.substr(0, wopiSrc.find('?'));
     const std::size_t lastSlash = path.rfind('/');
@@ -482,12 +482,12 @@ std::string RelatedDocuments::documentName(const std::string& wopiSrc)
     return Uri::decode(name);
 }
 
-std::string RelatedDocuments::entryName(const Entry& entry)
+std::string RemoteLinks::entryName(const Entry& entry)
 {
     return entry.name.empty() ? documentName(entry.wopiSrc) : entry.name;
 }
 
-std::string RelatedDocuments::buildJson(const std::string& tag) const
+std::string RemoteLinks::buildJson(const std::string& tag) const
 {
     const auto itView = _views.find(tag);
     const View* view = itView != _views.end() ? &itView->second : nullptr;
@@ -516,7 +516,7 @@ std::string RelatedDocuments::buildJson(const std::string& tag) const
         documents->add(entry);
     }
 
-    // A source the document names that the storage listed no related document for is reported
+    // A source the document names that the storage listed no remote link for is reported
     // under its name alone: it says what this document was made from, and there is no address to
     // reach it at and no token to read it with.
     for (const std::string& name : _namedSources)
@@ -545,21 +545,21 @@ std::string RelatedDocuments::buildJson(const std::string& tag) const
     return oss.str();
 }
 
-void RelatedDocuments::sendTo(const std::shared_ptr<ClientSession>& session)
+void RemoteLinks::sendTo(const std::shared_ptr<ClientSession>& session)
 {
     const std::string tag = session->getId();
-    const std::string message = "relateddocuments: " + buildJson(tag);
+    const std::string message = "remotelinks: " + buildJson(tag);
     _views[tag].lastClientMessage = message;
     session->sendTextFrame(message);
 }
 
-void RelatedDocuments::refreshView(DocumentBroker& docBroker, const std::string& tag)
+void RemoteLinks::refreshView(DocumentBroker& docBroker, const std::string& tag)
 {
     const std::shared_ptr<ClientSession> session = docBroker.findSession(tag);
     if (!session)
         return;
 
-    const std::string message = "relateddocuments: " + buildJson(tag);
+    const std::string message = "remotelinks: " + buildJson(tag);
     View& view = _views[tag];
     if (message == view.lastClientMessage)
         return;
@@ -568,15 +568,15 @@ void RelatedDocuments::refreshView(DocumentBroker& docBroker, const std::string&
     session->sendTextFrame(message);
 }
 
-void RelatedDocuments::refreshAllViews(DocumentBroker& docBroker)
+void RemoteLinks::refreshAllViews(DocumentBroker& docBroker)
 {
     for (const std::string& tag : docBroker.getSessionIds())
         refreshView(docBroker, tag);
 }
 
-void RelatedDocuments::dumpState(std::ostream& os) const
+void RemoteLinks::dumpState(std::ostream& os) const
 {
-    os << "\n  related document sources: " << _entries.size();
+    os << "\n  remote link sources: " << _entries.size();
     for (const auto& it : _entries)
         os << "\n    " << it.first << " name: " << Anonymizer::anonymize(it.second.name)
            << " last modified: " << it.second.lastModifiedTime;

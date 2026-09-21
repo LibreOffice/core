@@ -1104,7 +1104,7 @@ DocumentBroker::~DocumentBroker()
                                 << " sessions left");
 
 #if !MOBILEAPP
-    _relatedDocuments.unsubscribeAll(*this);
+    _remoteLinks.unsubscribeAll(*this);
 #endif
 
     // Do this early - to avoid operating on _childProcess from two threads.
@@ -4798,10 +4798,10 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         {
             // The source list and last-modified times are public, the same for
             // every view. This view's access tokens are private to it.
-            for (const auto& related : wopiFileInfo->getRelatedDocuments())
-                setRemoteDocumentSource(related.wopiSrc, related.name, related.lastModifiedTime);
+            for (const auto& link : wopiFileInfo->getRemoteLinks())
+                setRemoteDocumentSource(link.wopiSrc, link.name, link.lastModifiedTime);
 
-            for (const auto& token : wopiFileInfo->getRelatedDocumentTokens())
+            for (const auto& token : wopiFileInfo->getRemoteLinkTokens())
                 setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
         }
 #endif
@@ -4838,15 +4838,15 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         setDetached(false);
 
 #if !MOBILEAPP
-        // The joining session gets the current related documents list; later
+        // The joining session gets the current remote links list; later
         // changes are broadcast.
-        if (!_relatedDocuments.empty())
-            _relatedDocuments.sendTo(session);
+        if (!_remoteLinks.empty())
+            _remoteLinks.sendTo(session);
 
-        // Give the view its first one-time token for registering a related
-        // document over POST /cool/relateddocument.
+        // Give the view its first one-time token for registering a remote
+        // link over POST /cool/links.
         if (RemoteDocumentBroker::isEnabled())
-            session->rotateRelatedDocumentToken(/*notifyClient=*/true);
+            session->rotateLinkToken(/*notifyClient=*/true);
 #endif
 
         const std::size_t count = _sessions.size();
@@ -5192,7 +5192,7 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
 #if !MOBILEAPP
         _admin.rmDoc(_docKey, id);
         COOLWSD::dumpEndSessionTrace(getJailId(), id, _uriOrig);
-        // Drop the tokens and subscriptions this view held for related documents.
+        // Drop the tokens and subscriptions this view held for remote links.
         removeRemoteDocumentView(id);
 #endif
         if (_docState.isUnloadRequested())
@@ -5430,19 +5430,19 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
 void DocumentBroker::setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
                                              const std::string& lastModifiedTime)
 {
-    _relatedDocuments.setSource(*this, wopiSrc, name, lastModifiedTime);
+    _remoteLinks.setSource(*this, wopiSrc, name, lastModifiedTime);
 }
 
 void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names)
 {
-    _relatedDocuments.setNamedSources(*this, std::move(names));
+    _remoteLinks.setNamedSources(*this, std::move(names));
 }
 
 void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
                                                 const std::string& wopiSrc,
                                                 const std::string& accessToken)
 {
-    _relatedDocuments.setViewToken(*this, tag, wopiSrc, accessToken);
+    _remoteLinks.setViewToken(*this, tag, wopiSrc, accessToken);
 }
 
 bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
@@ -5458,12 +5458,12 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
     // that carries no view's current token.
     for (const auto& it : _sessions)
     {
-        if (it.second->matchesRelatedDocumentToken(oneTimeToken))
+        if (it.second->matchesLinkToken(oneTimeToken))
         {
             setRemoteDocumentSource(wopiSrc, name, lastModifiedTime);
             setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
             // Consume the one-time token and hand the view its next one.
-            it.second->rotateRelatedDocumentToken(/*notifyClient=*/true);
+            it.second->rotateLinkToken(/*notifyClient=*/true);
             return true;
         }
     }
@@ -5471,7 +5471,7 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
     return false;
 }
 
-DocumentBroker::RelatedDocumentRemoval
+DocumentBroker::LinkRemoval
 DocumentBroker::removeRemoteDocumentSource(const std::string& oneTimeToken,
                                            const std::string& wopiSrc)
 {
@@ -5479,30 +5479,30 @@ DocumentBroker::removeRemoteDocumentSource(const std::string& oneTimeToken,
 
     for (const auto& it : _sessions)
     {
-        if (it.second->matchesRelatedDocumentToken(oneTimeToken))
+        if (it.second->matchesLinkToken(oneTimeToken))
         {
-            const bool removed = _relatedDocuments.removeSource(*this, wopiSrc);
+            const bool removed = _remoteLinks.removeSource(*this, wopiSrc);
             // Consume the one-time token and hand the view its next one.
-            it.second->rotateRelatedDocumentToken(/*notifyClient=*/true);
-            return removed ? RelatedDocumentRemoval::Removed : RelatedDocumentRemoval::NotFound;
+            it.second->rotateLinkToken(/*notifyClient=*/true);
+            return removed ? LinkRemoval::Removed : LinkRemoval::NotFound;
         }
     }
 
-    return RelatedDocumentRemoval::BadToken;
+    return LinkRemoval::BadToken;
 }
 
 void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,
                                                    const std::string& encodedWopiSrc,
                                                    const bool subscribe)
 {
-    _relatedDocuments.handleSubscribe(*this, tag, encodedWopiSrc, subscribe);
+    _remoteLinks.handleSubscribe(*this, tag, encodedWopiSrc, subscribe);
 }
 
 void DocumentBroker::sendRemoteDocumentEvent(const std::string& tag,
                                              const std::string& encodedWopiSrc,
                                              const std::string& eventArguments)
 {
-    _relatedDocuments.onRemoteEvent(*this, tag, encodedWopiSrc, eventArguments);
+    _remoteLinks.onRemoteEvent(*this, tag, encodedWopiSrc, eventArguments);
 }
 
 std::shared_ptr<ClientSession> DocumentBroker::findSession(const std::string& id) const
@@ -5529,7 +5529,7 @@ void DocumentBroker::sendRemoteDocumentCommand(const std::string& tag,
                                                const std::string& wopiSrc,
                                                const std::string& command)
 {
-    _relatedDocuments.sendCommand(*this, tag, wopiSrc, command);
+    _remoteLinks.sendCommand(*this, tag, wopiSrc, command);
 }
 
 void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
@@ -5587,17 +5587,17 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
 
 void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
 {
-    _relatedDocuments.addToIncomingDocKeyChain(*this, docKeyChain);
+    _remoteLinks.addToIncomingDocKeyChain(*this, docKeyChain);
 }
 
 void DocumentBroker::removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc)
 {
-    _relatedDocuments.removeSubscription(*this, tag, wopiSrc);
+    _remoteLinks.removeSubscription(*this, tag, wopiSrc);
 }
 
 void DocumentBroker::removeRemoteDocumentView(const std::string& tag)
 {
-    _relatedDocuments.removeView(*this, tag);
+    _remoteLinks.removeView(*this, tag);
 }
 
 #endif // !MOBILEAPP
@@ -7462,7 +7462,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  doc id: " << _docId;
     os << "\n  num sessions: " << _sessions.size();
 #if !MOBILEAPP
-    _relatedDocuments.dumpState(os);
+    _remoteLinks.dumpState(os);
 #endif
     os << "\n  createTime: " << Util::getTimeForLog(now, _createTime);
     os << "\n  stop: " << _stop;
