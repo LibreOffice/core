@@ -162,25 +162,22 @@ using namespace ::com::sun::star;
 using namespace oox;
 namespace writerfilter::dmapper{
 
-//line numbering for header/footer
-static void lcl_linenumberingHeaderFooter( const rtl::Reference<SwXStyleFamily>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
+static void lcl_disableStyleLineNumbering(const rtl::Reference<SwXStyleFamily>& xStyles,
+                                          const OUString& rProgName)
 {
-    const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
-    if (!pEntry)
+    if (!xStyles.is())
         return;
-    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->m_pProperties.get();
-    if ( !pStyleSheetProperties )
-        return;
-    sal_Int32 nListId = pStyleSheetProperties->props().GetListId();
-    if( xStyles.is() )
+
+    try
     {
-        if( xStyles->hasByName( rname ) )
-        {
-            rtl::Reference< SwXBaseStyle > xStyle = xStyles->getStyleByName( rname );
-            if( !xStyle.is() )
-                return;
-            xStyle->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::Any( nListId >= 0 ) );
-        }
+        rtl::Reference<SwXBaseStyle> xStyle = xStyles->getStyleByName(rProgName);
+        if (!xStyle.is())
+            return;
+
+        xStyle->setPropertyValue(getPropertyName(PROP_PARA_LINE_NUMBER_COUNT), uno::Any(false));
+    }
+    catch (const uno::Exception&)
+    {
     }
 }
 
@@ -9920,8 +9917,9 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
     m_bLineNumberingSet = true;
     rtl::Reference<SwXStyleFamilies> xStyleFamilies = m_xTextDocument->getSwStyleFamilies();
     rtl::Reference<SwXStyleFamily> xStyles = xStyleFamilies->GetParagraphStyles();
-    lcl_linenumberingHeaderFooter( xStyles, u"Header"_ustr, this );
-    lcl_linenumberingHeaderFooter( xStyles, u"Footer"_ustr, this );
+    // MS Word never shows line numbering in headers or footers
+    lcl_disableStyleLineNumbering(xStyles, u"Header"_ustr);
+    lcl_disableStyleLineNumbering(xStyles, u"Footer"_ustr);
 }
 
 
