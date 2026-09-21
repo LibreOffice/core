@@ -209,7 +209,7 @@ int acceptConnection(int descriptor, PeerAddress& peer)
     char address[INET6_ADDRSTRLEN] = {};
     ::inet_ntop(clientInfo.sin6_family, inAddr, address, sizeof(address));
     peer.address = address;
-    peer.port = clientInfo.sin6_port;
+    peer.port = ntohs(clientInfo.sin6_port);
     peer.family = clientInfo.sin6_family;
 
     return rc;

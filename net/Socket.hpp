@@ -552,7 +552,7 @@ namespace net
         Socket::Type type = Socket::Type::All;
         /// The address in its printable form, empty when the platform could not render it.
         std::string address;
-        /// The port, in the byte order the platform reported it in.
+        /// The port, in host byte order.
         unsigned int port = 0;
         /// The address family the platform reported.
         int family = 0;
