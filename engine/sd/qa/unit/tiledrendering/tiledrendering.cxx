@@ -1410,6 +1410,36 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextSelectionSurvivesEditingInAno
     CPPUNIT_ASSERT(pView2->GetTextEditOutlinerView()->GetEditView().HasSelection());
 }
 
+// Making the selected text bold lays it out wider, and the reported text
+// selection is the measurement of the new layout.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReportedTextSelectionFollowsBoldChange)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+
+    uno::Reference<container::XIndexAccess> xDrawPage(
+        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString(u"Aaa bbb."_ustr);
+
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection(0, 0, 0, 3));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+    const ::tools::Rectangle aSelectionOfTheRegularText = m_aSelection[0];
+
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // This failed: the text had become bold and wider, while the rectangle
+    // reported for it was still the one measured before the change.
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+    CPPUNIT_ASSERT_GREATER(aSelectionOfTheRegularText.GetWidth(), m_aSelection[0].GetWidth());
+}
+
 /**
  * tests a cut/paste bug around bullet items in a list and
  * graphic (bitmap) bullet items in a list (Tdf103083, Tdf166882)

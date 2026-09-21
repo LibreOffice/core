@@ -165,6 +165,12 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         // announcing a change of the cursor's visibility.
         pView->HideCursor(/*bDeactivate=*/true);
 
+        // A selection that outlives a change of the layout - a character attribute applied to it,
+        // a different font size, an undo - covers a different area than it did when it was made.
+        // Report the measurement of the new layout.
+        if (comphelper::COKit::isActive() && pView->getImpl().GetEditSelection().HasRange())
+            pView->getImpl().DrawSelectionXOR();
+
         tools::Rectangle aClipRect(maInvalidRect);
         tools::Rectangle aVisArea( pView->GetVisArea() );
         aClipRect.Intersection( aVisArea );
