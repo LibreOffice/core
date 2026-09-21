@@ -54,14 +54,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 			win.postMessage(JSON.stringify(message), '*');
 		});
 
-		// Then make sure we get markdown:
+		// Then make sure we get markdown. The host also receives other messages such as
+		// Doc_ModifiedStatus, so look for the copy response among all posted messages.
 		// Without the accompanying fix in place, this test would have failed with:
-		// expected postMessage to have been called at least once, but it was never called
-		cy.get('@postMessage').should('be.called');
+		// Action_Copy_Resp was not posted
 		cy.get('@postMessage').should(stub => {
-			const json = JSON.parse(stub.firstCall.args[0]);
-			expect(json.MessageId).to.equal('Action_Copy_Resp');
-			expect(json.Values.content).to.equal('foo *bar* baz\n');
+			const responses = stub.getCalls()
+				.map(call => JSON.parse(call.args[0]))
+				.filter(json => json.MessageId === 'Action_Copy_Resp');
+			expect(responses.length, 'Action_Copy_Resp was not posted').to.equal(1);
+			expect(responses[0].Values.content).to.equal('foo *bar* baz\n');
 		});
 	});
 
