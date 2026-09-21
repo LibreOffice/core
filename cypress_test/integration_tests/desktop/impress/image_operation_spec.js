@@ -11,10 +11,8 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		desktopHelper.switchUIToNotebookbar();
 		cy.viewport(1920,1080);
 
-		// give some time to open fully the app
-		cy.wait(1000);
-
 		cy.getFrameWindow().then((win) => {
+			helper.processToIdle(win);
 			this.win = win;
 		});
 	});
@@ -91,8 +89,6 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 			cy.cGet('body').realMouseMove(startX + moveX, startY);
 			cy.cGet('body').realMouseUp();
 		});
-
-		cy.wait(1000);
 
 		cy.cGet('#canvas-container > svg').should('exist');
 		cy.cGet('#test-div-shape-handle-3').should('exist');

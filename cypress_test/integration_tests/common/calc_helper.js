@@ -401,7 +401,9 @@ function assertNumberofSheets(n) {
 function selectOptionFromContextMenu(contextMenu) {
 	cy.log('>> selectOptionFromContextMenu - start');
 
-	cy.wait(1000);
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
 	cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').rightclick();
 	cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', contextMenu).click();
 

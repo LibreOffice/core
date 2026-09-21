@@ -303,12 +303,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 		cy.realPress('ArrowRight');
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-3')
 			.should('have.class', 'ui-treeview-cell-active');
-		// The navigation also sends a select to core, which replies with a
-		// grab_focus. The regression let that grab_focus focus the whole
-		// grid container shortly after the cell was focused. Wait for that
-		// round-trip to settle so we assert the final focus, not the
-		// transient synchronous cell focus that precedes it.
-		cy.wait(1000);
+		// Core answers the navigation with a grab_focus. The checks below read
+		// the focus after that answer, not the cell focus that precedes it.
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-3').should('be.focused');
 		cy.cGet('#ChartDataDialog #datagrid').should('not.be.focused');
 

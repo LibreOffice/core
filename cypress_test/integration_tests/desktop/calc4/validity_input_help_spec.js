@@ -16,10 +16,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Validity input help', func
 		cy.cGet('.input-help').should('be.visible');
 		cy.cGet('.input-help h4').should('have.text', 'Budget help');
 
-		// Let the load settle so the kit cellcursor resends arrive. The help
-		// must survive them rather than vanish.
 		helper.typeIntoDocument('{esc}');
-		cy.wait(1000);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('.input-help').should('be.visible');
 	});
 

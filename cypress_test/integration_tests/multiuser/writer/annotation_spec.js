@@ -105,7 +105,6 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 	it('Insert', function() {
 		cy.cSetActiveFrame('#iframe1');
 		helper.typeIntoDocument('Hello World');
-		cy.wait(500);
 		desktopHelper.insertComment();
 
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
@@ -119,7 +118,6 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 	it('Modify', function() {
 		cy.cSetActiveFrame('#iframe1');
 		helper.typeIntoDocument('Hello World');
-		cy.wait(500);
 		desktopHelper.insertComment();
 
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
@@ -140,7 +138,6 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 	it('Reply', function() {
 		cy.cSetActiveFrame('#iframe1');
 		helper.typeIntoDocument('Hello World');
-		cy.wait(500);
 		desktopHelper.insertComment();
 
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
@@ -161,7 +158,6 @@ describe(['tagmultiuser'], 'Multiuser Annotation Tests', function () {
 	it('Remove', function() {
 		cy.cSetActiveFrame('#iframe1');
 		helper.typeIntoDocument('Hello World');
-		cy.wait(500);
 		desktopHelper.insertComment();
 
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');

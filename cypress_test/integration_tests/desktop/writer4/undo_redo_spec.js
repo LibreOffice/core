@@ -1,4 +1,4 @@
-/* global cy describe it beforeEach require */
+/* global describe it beforeEach require */
 
 var helper = require('../../common/helper');
 var repairHelper = require('../../common/repair_document_helper');
@@ -32,7 +32,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Editing Operations', funct
 		helper.typeIntoDocument('{ctrl}y');
 
 		helper.selectAllText();
-		cy.wait(500);
 		helper.copy();
 		helper.expectTextForClipboard('Hello World');
 	});

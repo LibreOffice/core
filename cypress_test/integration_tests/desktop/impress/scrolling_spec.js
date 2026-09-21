@@ -29,7 +29,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 	it('Scrolling to bottom/top', function() {
 		//show vertical scrollbar
 		cy.cGet('#document-container').click('right');
-		cy.wait(1000);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		clickOnTheCenter();
 		desktopHelper.pressKey(15,'uparrow');
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
@@ -40,9 +42,13 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 	it('Scrolling to left/right', function() {
 		//show horizontal scrollbar
 		cy.cGet('#document-container').click('bottom');
-		cy.wait(500);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		clickOnTheCenter();
-		cy.wait(500);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		helper.typeIntoDocument('{home}');
 		desktopHelper.assertScrollbarPosition('horizontal', 0, 1);
 		helper.typeIntoDocument('{end}');

@@ -8,7 +8,9 @@ describe(['tagdesktop'], 'Signature operations.', function() {
 		// Given a document that can be signed:
 		helper.setupAndLoadDocument('draw/sign.pdf', /*isMultiUser=*/false, /*copyCertificates=*/true);
 
-		cy.wait(1000); // wait for resize after the first tile is received
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 
 		// When visually signing that document:
 		cy.cGet('#menu-insert').click();

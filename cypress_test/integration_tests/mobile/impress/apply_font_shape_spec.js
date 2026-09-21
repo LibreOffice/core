@@ -70,8 +70,11 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected shap
 
 		triggerNewSVG();
 
-		cy.wait(400);
-		// TODO: shadowed property is not in the SVG
+		// TODO: shadowed property is not in the SVG, so there is nothing to
+		// assert here beyond letting the toggle reach core before the test ends.
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 	});
 
 	it('Change font name of text shape.', function() {

@@ -36,8 +36,6 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		// No focus
 		helper.assertFocus('tagName', 'BODY');
 
-		cy.wait(1000);
-
 		// Shape selection.
 		cy.cGet('#document-container svg g').should('exist');
 
@@ -54,8 +52,6 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 
 		// Enter edit mode by double-clicking.
 		cy.cGet('#document-container').dblclick();
-
-		cy.wait(1000);
 
 		impressHelper.typeTextAndVerify('Hello Impress', undefined, true);
 

@@ -43,7 +43,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide panel accessibility'
 		cy.cGet('#preview-img-part-0').click();
 
 		cy.cGet('#preview-img-part-0').type('{downarrow}');
-		cy.wait(500);
 		helper.assertFocus('id', 'preview-img-part-1');
 
 		// The selected state and the roving tab stop follow the current slide.

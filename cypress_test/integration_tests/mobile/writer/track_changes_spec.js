@@ -44,7 +44,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Track Changes', function() 
 
 	it('Accept All', function() {
 		helper.typeIntoDocument('Hello World');
-		cy.wait(1000);
+		helper.processToIdle(this.win);
 		enableRecord(this.win);
 		helper.selectAllText();
 		helper.typeIntoDocument('{del}');
@@ -59,12 +59,11 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Track Changes', function() 
 	it('Reject All',function() {
 		helper.setDummyClipboardForCopy();
 		helper.typeIntoDocument('Hello World');
-		cy.wait(1000);
+		helper.processToIdle(this.win);
 		enableRecord(this.win);
 		helper.selectAllText();
 		helper.typeIntoDocument('{del}');
-		//if we don't wait , the test will fail in CLI
-		cy.wait(400);
+		helper.processToIdle(this.win);
 		confirmChange('Reject All');
 		cy.cGet('#document-container').click();
 		helper.selectAllText();

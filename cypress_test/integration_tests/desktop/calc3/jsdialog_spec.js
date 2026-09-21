@@ -253,7 +253,9 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		// FIXME: below button has class with "." inside, best to rework it
 		cy.cGet('#Format [id^="format-style-dialog"]:visible button').click();
 		cy.cGet('#filter-input').select('4');
-		cy.wait(500);
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('#flatview .ui-treeview-entry').eq(6).rightclick();
 		cy.get('@consoleError').should('not.be.called');
 	});

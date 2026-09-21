@@ -39,7 +39,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 
 		// Step1: Go to B1 and type something
 		helper.typeIntoDocument('{rightArrow}Text');
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step1', 0.1);
 
@@ -51,13 +51,13 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 		calcHelper.assertAddressInput('A2:{lastCol}{lastRow}');
 		calcHelper.hideSelectedRows();
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1');
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step2', 0.05);
 
 		// Step3: type and still see text
 		helper.typeIntoDocument('Calc is Cool{enter}');
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		helper.waitForCanvasAnimation(this.win);
 		cy.cGet('#map').compareSnapshot('b1_text_step3', 0.05);
 	});

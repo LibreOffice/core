@@ -19,7 +19,9 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Image Operation Tests', fun
 	it('Delete Image', function() {
 		mobileHelper.insertImage();
 		helper.typeIntoDocument('{esc}');
-		cy.wait(300);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 		mobileHelper.deleteImage();
 	});
 

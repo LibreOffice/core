@@ -195,6 +195,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 	it('Check non-range cell selection with CTRL', function() {
 		calcHelper.clickOnACell(1, 1, 2, 3);
 
+		// Real time between clicks lets the previous click's on-screen position
+		// settle before the next click reads it.
 		cy.wait(500);
 		calcHelper.clickOnACell(2, 3, 4, 3, { ctrlKey: true });
 
@@ -236,7 +238,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 			cy.cGet('#document-container').realMouseMove(left + 150, topY + 150);
 		});
 
-		cy.wait(1000);
+		helper.processToIdle(this.win);
 
 		helper.waitForCanvasAnimation(this.win);
 

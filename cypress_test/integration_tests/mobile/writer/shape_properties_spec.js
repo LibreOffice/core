@@ -154,13 +154,21 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Change shape properties via
 		// We can't test the result, so we just trigger
 		// the events to catch crashes, consoler errors.
 		cy.cGet('#mobile-wizard .unoBringToFront').click();
-		cy.wait(300);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 		cy.cGet('#mobile-wizard .unoObjectForwardOne').click();
-		cy.wait(300);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 		cy.cGet('#mobile-wizard .unoObjectBackOne').click();
-		cy.wait(300);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 		cy.cGet('#mobile-wizard .unoSendToBack').click();
-		cy.wait(300);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 	});
 
 	it.skip('Change line color', function() {

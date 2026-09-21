@@ -32,12 +32,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 		helper.typeIntoDocument('{shift}{downarrow}');
 		helper.copy();
 
-		cy.wait(1000);
-
-		cy.cGet('#copy-paste-container tbody').find('td b').each(($el) => {
-			cy.wrap($el)
-				.should('exist');
-		});
+		cy.cGet('#copy-paste-container tbody td b').should('have.length.greaterThan', 0);
 	});
 
 	it('Clone Formatting persistent mode via double-click.', function() {

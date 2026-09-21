@@ -24,11 +24,15 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart wizard data series d
 		// Navigate to the Data series/Data ranges dialog
         // Click "Next" to go from Chart type to Date range
 		cy.cGet('.lokdialog_container #next').click();
-		cy.wait(500);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 
         // Click "Next" again to go from Date range to Data series/ranges
 		cy.cGet('.lokdialog_container #next').click();
-		cy.wait(500);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 
 		// Capture screenshot of the Data series/Data ranges dialog
 		cy.cGet('.lokdialog_container').compareSnapshot('chart_wizard_data_series', 0.1);

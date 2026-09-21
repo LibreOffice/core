@@ -162,9 +162,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 		if (Cypress.browser.name === 'chromium' && Cypress.browser.majorVersion === '150')
 			this.skip();
 
-		// Wait for mobile wizard menu
-		cy.wait(500);
-
 		// Apply color fill first
 		cy.cGet('#fillstyle').click();
 		cy.cGet('#fillstyle').contains('Color').click();
@@ -190,9 +187,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 	});
 
 	it('Change master background.', function() {
-		// Wait for mobile wizard menu
-		cy.wait(500);
-
 		// The default master slide does not have background
 		// So switch to a different master slide first
 		cy.cGet('#masterslide').click();
@@ -212,9 +206,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 	});
 
 	it('Change master objects visibility.', function() {
-		// Wait for mobile wizard menu
-		cy.wait(500);
-
 		previewShouldBeFullWhite();
 
 		// Master objects are disabled, enable the settings first
@@ -231,8 +222,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 		mobileHelper.closeMobileWizard();
 		helper.processToIdle(this.win);
 		mobileHelper.openMobileWizard();
-		// Wait for mobile wizard menu
-		cy.wait(500);
 
 		// Randomly fails
 		//cy.get('input#displaymasterobjects')

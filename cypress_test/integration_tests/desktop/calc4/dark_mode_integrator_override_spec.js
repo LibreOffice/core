@@ -39,13 +39,17 @@ describe(['tagdesktop'], 'Integrator theme overrides a contradicting saved setti
 		// The integrator dark wins over the saved light on first open.
 		assertThemeIs('dark');
 
-		// The user switches to light; let the debounced server update flush so the
-		// saved setting becomes light.
+		// The user switches to light.
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.uiManager.applyDarkMode(false, /*persist*/ true);
 		});
 		assertThemeIs('light');
-		cy.wait(1200);
+
+		// Wait for the debounced setting update to reach the server before
+		// reloading, so the saved setting has actually become light.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.prefs._pendingSettingUpdate, 'debounced setting update flushed').to.be.undefined;
+		});
 
 		helper.reloadDocument(filePath, integratorOverride);
 

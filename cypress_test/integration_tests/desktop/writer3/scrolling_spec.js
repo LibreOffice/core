@@ -19,7 +19,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		helper.typeIntoDocument('{ctrl+enter}');
 		helper.typeIntoDocument('{ctrl+enter}');
 
-		cy.wait(500);
+		helper.processToIdle(this.win);
 		desktopHelper.assertVisiblePage(2, 3, 6);
 
 		desktopHelper.assertScrollbarPosition('vertical', 120, 250);

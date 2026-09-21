@@ -25,9 +25,9 @@ describe(['tagmobile', 'tagnextcloud'], 'Calc insertion wizard.', function() {
 		cy.cGet('#insertgraphic[type=file]')
 			.attachFile('/mobile/calc/image_to_insert.png');
 
-		// Could not find a good indicator here, because the inserted image
-		// is not selected after insertion.
-		cy.wait(1000);
+		// The image is not selected after insertion, so wait for it to
+		// reach the document instead.
+		cy.cGet('#document-container svg g.Graphic').should('exist');
 
 		// Select image
 		cy.cGet('#test-div-cell_selection_handle_end')

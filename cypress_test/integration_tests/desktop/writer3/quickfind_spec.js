@@ -45,11 +45,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in
         helper.typeIntoDocument('{ctrl}f');
 
         cy.cGet('body').type('Off');
-        cy.wait(1000);
         helper.assertFocus('id', 'navigator-search-input');
 
         cy.cGet('body').type('i');
-        cy.wait(1000);
         helper.assertFocus('id', 'navigator-search-input');
     });
 

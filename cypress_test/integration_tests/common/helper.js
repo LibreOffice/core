@@ -858,7 +858,9 @@ function isImageWhite(selector, expectWhite = true) {
 function isCanvasWhite(expectWhite = true) {
 	cy.log('>> isCanvasWhite - start');
 
-	cy.wait(300);
+	cy.getFrameWindow().then(function(win) {
+		processToIdle(win);
+	});
 	cy.cGet('#document-canvas').should('exist').then(function(canvas) {
 		var result = true;
 		var context = canvas[0].getContext('2d');
@@ -1161,7 +1163,11 @@ function typeIntoInputField(selector, text, clearBefore = true)
 {
 	cy.log('>> typeIntoInputField - start');
 
-	cy.wait(600);
+	// Core is idle and the JSDialog layout has settled, so the input is not
+	// rebuilt while the text goes in.
+	cy.getFrameWindow().then(function(win) {
+		processToIdle(win);
+	});
 	cy.cGet(selector).type((clearBefore ? '{selectall}{backspace}' : '') + text + '{enter}');
 	cy.cGet(selector).should('have.value', text);
 

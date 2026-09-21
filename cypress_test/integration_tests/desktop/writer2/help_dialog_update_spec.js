@@ -70,7 +70,6 @@ describe(['tagscreenshot'], 'Help dialog screenshot updation', function() {
 		cy.cGet('#insertannotation').click();
 		cy.cGet('#annotation-modify-textarea-new').type('comment added');
 		cy.cGet('#annotation-save-new').click(); // save button
-		cy.wait(1000);
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#comment .cool-annotation').screenshot('comment');
 
@@ -130,7 +129,9 @@ describe(['tagscreenshot'], 'Help dialog screenshot updation', function() {
 		cy.cGet('#menu-changesmenu').click();
 		cy.cGet('#menu-changesmenu').contains('Manage...').click();
 		cy.cGet('.lokdialog_canvas').should('exist');
-		cy.wait(1000); // For dialog's height to be calculated.
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('.lokdialog_container').should('exist').screenshot('manage-changes');
 		copyScreenshot('manage-changes.png');
 	});
@@ -148,7 +149,6 @@ describe(['tagscreenshot'], 'Help dialog screenshot updation', function() {
 
 		cy.cGet('#menu-insert').click();
 		cy.cGet('#menu-insert').contains('Chart...').click();
-		cy.wait(1000);
 		cy.cGet('#test-div-shapeHandlesSection')
 			.should('exist').screenshot('chart', {padding: 10});
 

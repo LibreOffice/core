@@ -24,7 +24,6 @@ describe(['tagdesktop'], 'Context toolbar tests.', function() {
 
 		// Dropdown should appear with font preview images
 		cy.cGet('[id$="-dropdown"].modalpopup').should('be.visible');
-		cy.wait(1000); // Wait for custom entry rendering
 		cy.cGet('[id$="-dropdown"].modalpopup img').should('have.length.greaterThan', 0);
 	});
 

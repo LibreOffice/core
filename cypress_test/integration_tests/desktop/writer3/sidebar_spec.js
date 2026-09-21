@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -119,10 +119,8 @@ describe(['tagdesktop'], 'Sidebar tests', function() {
 		cy.cGet('#sidebar-panel').should('be.visible');
 		cy.cGet('#sidebar-panel').should('not.be.empty');
 
-		cy.wait(1000);
-
-		cy.cGet('#sidebar-dock-wrapper.visible').then(function(sidebar) {
-			helper.containsFocusElement(sidebar[0], true)
+		cy.cGet('#sidebar-dock-wrapper.visible').should(function(sidebar) {
+			expect(sidebar[0].contains(sidebar[0].ownerDocument.activeElement)).to.equal(true);
 		});
 	});
 });

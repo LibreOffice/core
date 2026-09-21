@@ -13,7 +13,7 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 	});
 
 	it('Formula dialog visual regression test', function() {
-		cy.wait(1000);
+		helper.processToIdle(this.win);
 
 		cy.cGet('.unoFunctionDialog.formulabar').click();
 		cy.cGet('#FormulaDialog').should('be.visible');
@@ -23,7 +23,7 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 		cy.cGet('#FormulaDialog #function .ui-treeview-entry.selected span').contains('ACCRINTM').should('exist');
 		cy.cGet('#FormulaDialog label').contains('Settlement').should('be.visible');
 
-		cy.wait(1000); /* wait for position changes */
+		helper.processToIdle(this.win);
 
 		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm', 0.15);
 
@@ -33,7 +33,7 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 		cy.cGet('#FormulaDialog #RB_ARG1-button').click();
 
 		cy.cGet('#FormulaDialog #function').should('not.be.visible');
-		cy.wait(1000); /* wait for position changes */
+		helper.processToIdle(this.win);
 
 		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm_collapsed', 0.15);
 	});

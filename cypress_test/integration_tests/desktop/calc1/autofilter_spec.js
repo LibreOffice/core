@@ -18,11 +18,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Complex', funct
 
 		// make deterministic jump, so in retry we have similar scrollbar values
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
-		cy.wait(1000);
 
 		helper.typeIntoInputField(helper.addressInputSelector, 'U126');
 		cy.cGet('#map').focus();
-		cy.wait(1000);
 
 		desktopHelper.assertScrollbarPosition('vertical', 230, 270);
 		desktopHelper.assertScrollbarPosition('horizontal', 260, 290);
@@ -111,8 +109,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 	});
 
 	it('Close autofilter popup by click outside', function() {
-		// Test sometimes fails without this wait, no idea why.
-		cy.wait(1000);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 
 		calcHelper.openAutoFilterMenu();
 
@@ -122,7 +121,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 
 		// Wait for autofilter dialog to close
 		cy.cGet('div.autofilter').should('not.exist');
-		cy.wait(500);
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 
 		calcHelper.dblClickOnFirstCell();
 		// Position of the double click determines the cursor position. So press home button in order to go to start of the cell.

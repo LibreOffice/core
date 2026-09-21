@@ -19,16 +19,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc sidebar dialog image 
 
 		for (var i = 0; i < 30; i++) {
 			helper.typeIntoDocument('{enter}');
-			// The non-interactive Cypress test runs very fast, so to
-			// be sure that the sidebar actually has time to be rendered
-			// and sent to the client sleep a bit between switching cells.
-			cy.wait(500);
+			cy.getFrameWindow().then(function (win) {
+				helper.processToIdle(win);
+			});
 		}
 
 		// Then go up again. Now we should find stuff in the cache.
 		for (i = 0; i < 30; i++) {
 			helper.typeIntoDocument('{upArrow}');
-			cy.wait(500);
+			cy.getFrameWindow().then(function (win) {
+				helper.processToIdle(win);
+			});
 		}
 	});
 });

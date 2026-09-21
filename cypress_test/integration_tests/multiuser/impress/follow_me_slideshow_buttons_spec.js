@@ -1,12 +1,17 @@
 /* global describe it cy require beforeEach */
 
 var helper = require('../../common/helper');
+var impressHelper = require('../../common/impress_helper');
 var { getSlideShow, getSlideShowContent } = require('../../common/impress_helper');
 
 describe(['tagmultiuser'], 'Follow me slide show buttons', function () {
+	var win1, win2;
 
 	beforeEach(function () {
 		helper.setupAndLoadDocument('impress/follow.odp', true);
+
+		cy.getFrameWindow('#iframe1').then((win) => { win1 = win; });
+		cy.getFrameWindow('#iframe2').then((win) => { win2 = win; });
 
 		cy.cSetActiveFrame('#iframe1');
 		cy.cGet('.notebookbar #Slideshow-tab-label').click();
@@ -19,7 +24,6 @@ describe(['tagmultiuser'], 'Follow me slide show buttons', function () {
 		// User A starts "Present To All"
 		cy.cSetActiveFrame('#iframe1');
 		cy.cGet('.notebookbar #slide-presentation-follow-me').click();
-		cy.wait(500);
 		getSlideShow().should('be.visible');
 
 		// User B is attendee on slide 1
@@ -38,17 +42,17 @@ describe(['tagmultiuser'], 'Follow me slide show buttons', function () {
 	it('A advances to slide 2 -> B auto-follows and buttons update', function () {
 		cy.cSetActiveFrame('#iframe1');
 		cy.cGet('.notebookbar #slide-presentation-follow-me').click();
-		cy.wait(500);
+		impressHelper.waitForSlideShowIdle(win1);
 
 		// A advances to slide 2
 		cy.cSetActiveFrame('#iframe1');
 		for (let i = 0; i < 5; i++) {
-			cy.wait(500);
-			getSlideShowContent().find('.slideshow-nav-container #next').click();
+			impressHelper.clickSlideShowNav(win1, '#next');
+			impressHelper.waitForSlideShowIdle(win1);
 		}
-		cy.wait(500);
 		// B is on slide 2 following A
 		cy.cSetActiveFrame('#iframe2');
+		impressHelper.waitForSlideShowIdle(win2);
 
 		// B: Prev enabled, Next disabled on same slide as presenter
 		getSlideShowContent().find('.slideshow-nav-container #previous')

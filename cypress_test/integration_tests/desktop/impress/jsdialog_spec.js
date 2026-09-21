@@ -58,7 +58,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Master Page Preview', func
 
 	it('To - from master page switch should update previews.', function() {
 		cy.cGet('#masterslidebutton').click();
-		cy.wait(500);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('#preview-img-part-0').compareSnapshot('master_page_preview_0', 0.25);
 	});
 });

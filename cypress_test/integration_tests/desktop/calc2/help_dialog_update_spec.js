@@ -27,7 +27,9 @@ describe(['tagscreenshot'], 'Help dialog update', function() {
 
 		cy.cGet('#finish').click();
 
-		cy.wait(1000);
+		cy.getFrameWindow().then(function (win) {
+			return helper.processToIdle(win);
+		});
 
 		cy.cGet('#main-document-content').screenshot('chart-wizard');
 

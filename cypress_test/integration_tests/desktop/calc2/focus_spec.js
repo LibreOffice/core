@@ -14,7 +14,6 @@ describe(['tagdesktop'], 'Calc focus tests', function() {
 		helper.setDummyClipboardForCopy();
 		// Select first cell
 		calcHelper.clickOnFirstCell();
-		cy.wait(200);
 
 		// Type some text.
 		var text1 = 'Hello from Calc';
@@ -23,7 +22,6 @@ describe(['tagdesktop'], 'Calc focus tests', function() {
 
 		// Unselect formulabar and reselect cell
 		calcHelper.clickOnFirstCell();
-		cy.wait(200);
 
 		// Check text in formulabar
 		calcHelper.typeIntoFormulabar('{ctrl}a');
@@ -35,14 +33,12 @@ describe(['tagdesktop'], 'Calc focus tests', function() {
 
 		// Type some more text, at the end.
 		calcHelper.clickOnFirstCell();
-		cy.wait(200);
 		var text2 = ', this is a test.';
 		calcHelper.typeIntoFormulabar('{end}'+text2);
 		calcHelper.typeIntoFormulabar('{enter}');
 
 		// Check text in formulabar
 		calcHelper.clickOnFirstCell();
-		cy.wait(200);
 		calcHelper.typeIntoFormulabar('{ctrl}a');
 		helper.copy();
 		helper.expectTextForClipboard(text1+text2);

@@ -12,7 +12,6 @@ describe(['taga11yenabled'], 'Table accessibility', function() {
 	});
 
 	function checkCellDescription(expectedDescription) {
-		cy.wait(400);
 		cy.get('@clipboard').should('have.attr', 'aria-description', expectedDescription);
 	}
 

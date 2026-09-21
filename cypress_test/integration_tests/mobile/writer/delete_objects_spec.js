@@ -91,7 +91,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function()
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Fontwork...').click();
 		cy.cGet('#FontworkGalleryDialog').should('exist');
 		cy.cGet('#ok').click();
-		cy.wait(1000);
 
 		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 
@@ -102,7 +101,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function()
 			cy.cGet('#document-canvas').rightclick(x, y);
 		});
 
-		cy.wait(1000);
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Delete').should('be.visible').click();
 		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 	});

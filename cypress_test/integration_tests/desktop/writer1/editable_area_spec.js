@@ -222,6 +222,7 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		ceHelper.moveCaret('left', '', 4);
 		ceHelper.checkCaretPosition(5);
 		helper.getBlinkingCursorPosition('P2');
+		// Give the same browser-side settling as above before moving again.
 		cy.wait(800);
 		// move up to paragraph 3
 		ceHelper.moveCaret('up');
@@ -1196,7 +1197,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Editing - Basic typing', {
 		var backTo = upTo === 'home' ? 'end' : 'home';
 		ceHelper.moveCaret(upTo, 'shift');
 		helper.copy();
-		cy.wait(500);
 		helper.expectTextForClipboard(expectedText);
 		ceHelper.moveCaret(backTo);
 		helper.textSelectionShouldNotExist();

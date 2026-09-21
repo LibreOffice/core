@@ -26,9 +26,8 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 	});
 
 	it('Navigator visual test', function() {
-		cy.wait(500); // wait to make fully rendered
 		cy.cGet('#navigator-dock-wrapper').scrollTo(0,0,{ ensureScrollable: false });
-		cy.wait(500); // wait for animations
+		helper.processToIdle(this.win);
 		cy.cGet('#navigator-dock-wrapper').compareSnapshot('navigator_writer', 0.065);
 	});
 
@@ -39,11 +38,11 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		expandSection('Frames');
 		expandSection('Images');
 
-		cy.wait(500);
+		helper.processToIdle(this.win);
 
 		//Scroll back to Top
 		cy.cGet('#navigator-dock-wrapper').scrollTo(0,0, { ensureScrollable: false });
-		cy.wait(500);
+		helper.processToIdle(this.win);
 
 		// Doubleclick several items, and check if the document is scrolled to the right page
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Feedback').dblclick();
@@ -90,6 +89,8 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		// Type into whatever currently has focus (not directly into the input)
 		// so that focus being stolen mid-typing is detectable.
 		cy.cGet('body').type('Feedback');
+		// Give a delayed focus steal, if any, time to happen: the regression fired
+		// once the Outline tree processed the typed text, not on the first keystroke.
 		cy.wait(1000);
 
 		// Focus must remain in the search input and the whole word present.

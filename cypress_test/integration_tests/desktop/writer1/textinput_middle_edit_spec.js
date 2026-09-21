@@ -76,7 +76,6 @@ describe(['taga11yenabled'], 'TextInput - middle edit with caret at the end', fu
 		// "teh dhe" instead.
 		helper.selectAllText();
 		helper.copy();
-		cy.wait(500);
 		helper.expectTextForClipboard('The dog');
 	});
 });

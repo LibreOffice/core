@@ -44,6 +44,9 @@ describe(['tagmultiuser'], 'Dark mode is isolated per user', function() {
 			win.app.map.uiManager.applyDarkMode(true, /*persist*/ true);
 		});
 		assertThemeIs('dark');
+		// The setting reaches the server through a debounce timer that is not
+		// registered with the timer registry, and the server gives no
+		// acknowledgment once it saves the setting, so there is no state to poll.
 		cy.wait(1200);
 
 		// User 2 reloads: their own (light) setting comes back, not user 1's dark.

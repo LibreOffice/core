@@ -9,11 +9,6 @@ function openCommentDialog() {
 	cy.cGet('.cool-annotation-table').should('exist');
 }
 
-function skipDocModifiedMessage() {
-	// FIXME: {"MessageId":"Doc_ModifiedStatus" ... steals focus
-	cy.wait(3000);
-}
-
 describe(['tagmobile'], 'Annotation tests.', function() {
 	var newFilePath;
 
@@ -21,7 +16,10 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt');
 
 		mobileHelper.enableEditingMobile();
-		skipDocModifiedMessage();
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+			helper.processToIdle(win);
+		});
 	});
 
 	it('Saving comment.', function() {
@@ -30,7 +28,11 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		helper.waitUntilDocumentSaved();
 		helper.reloadDocument(newFilePath);
 		mobileHelper.enableEditingMobile();
-		skipDocModifiedMessage();
+		// The reload gives the frame a new window.
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+			helper.processToIdle(win);
+		});
 		mobileHelper.openCommentWizard();
 		cy.cGet('#mobile-wizard-content').should('exist');
 		cy.cGet('#annotation-content-area-1').should('have.text', 'some text');
@@ -47,7 +49,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		//cy.get('.blinking-cursor').should('be.visible');
 		cy.cGet('#input-modal-input').type('{home}modified ');
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 		cy.cGet('#toolbar-up #comment_wizard').click();
 		cy.cGet('#comment-container-1').should('exist');
 		cy.cGet('#annotation-content-area-1').should('have.text', 'modified some text');
@@ -61,7 +63,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		cy.cGet('#input-modal-input').should('have.text', '');
 		cy.cGet('#input-modal-input').type('reply');
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 		cy.cGet('#comment-container-1').click();
 		cy.cGet('#comment-container-2').should('exist');
 	});
@@ -79,7 +81,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		cy.cGet('#mobile-wizard-content').should('exist');
 		cy.cGet('#input-modal-input').should('exist').should('have.text', '');
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 		cy.cGet('#mobile-wizard .wizard-comment-box.cool-annotation-content-wrapper').should('not.exist');
 		cy.cGet('#mobile-wizard .wizard-comment-box .cool-annotation-content').should('not.exist');
 	});
@@ -101,7 +103,10 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/annotation.odt');
 		mobileHelper.enableEditingMobile();
-		skipDocModifiedMessage();
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+			helper.processToIdle(win);
+		});
 	});
 
 	it('Inserting comment with @mention', function() {
@@ -117,7 +122,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		cy.cGet('#input-modal-input').should('have.text','some text @Alexandra\u00A0');
 
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 		cy.cGet('#mobile-wizard-content').should('exist');
 
 		cy.cGet('#comment-container-1').should('exist');
@@ -147,7 +152,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		cy.cGet('#input-modal-input').should('have.text','some text @Alexandra\u00A0');
 
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 
 		cy.cGet('#toolbar-up #comment_wizard').click();
 		cy.cGet('#mobile-wizard-content').should('exist');
@@ -180,7 +185,7 @@ describe(['tagmobile'], 'Annotation tests.', function() {
 		cy.cGet('#input-modal-input').should('have.text','reply @Alexandra\u00A0');
 
 		cy.cGet('#response-ok').click();
-		skipDocModifiedMessage();
+		helper.processToIdle(this.win);
 		cy.cGet('#mobile-wizard-content').should('exist');
 
 		cy.cGet('#comment-container-1').should('exist').click();

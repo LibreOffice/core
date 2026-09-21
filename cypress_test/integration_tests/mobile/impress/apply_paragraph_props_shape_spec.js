@@ -17,11 +17,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties 
 	function triggerNewSVG() {
 		mobileHelper.closeMobileWizard();
 
-		cy.wait(1000);
-
 		impressHelper.triggerNewSVGForShapeInTheCenter();
-
-		cy.wait(1000);
 	}
 
 	function openParagraphPropertiesPanel() {

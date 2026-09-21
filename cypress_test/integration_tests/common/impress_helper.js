@@ -171,8 +171,8 @@ function triggerNewSVGForShapeInTheCenter() {
 
 	removeShapeSelection();
 
-	// If we click too fast on the shape again
-	// then it steps into edit mode, might be a bug
+	// A second click within the browser's own double-click window reads as a
+	// double click, and enters edit mode instead of selecting the shape.
 	cy.wait(200);
 
 	// Select text shape again which will retrigger a new SVG from core

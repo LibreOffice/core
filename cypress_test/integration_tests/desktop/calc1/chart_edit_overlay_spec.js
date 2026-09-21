@@ -101,7 +101,6 @@ describe(['tagdesktop'], 'Chart edit mode dark overlay', function() {
 
 			win.app.zoomControl.zoomTo(win.app.map.getZoom() + 1);
 		});
-		cy.wait(2000);
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 			expect(win.relayoutCount).to.be.greaterThan(0);
