@@ -92,6 +92,7 @@
 #include <fmtflcnt.hxx>
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <swtable.hxx>
 #include <fltini.hxx>
 #include "writerhelper.hxx"
@@ -805,6 +806,20 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
         aInfo.SetNumType( aNumType );
 
         m_rDoc.SetLineNumberInfo( aInfo );
+
+        // MS Word never shows line numbering in headers or footers - turn off in LO default styles
+        SwFormatLineNumber aNoLineNumbering;
+        aNoLineNumbering.SetCountLines(false);
+        UIName aUIName
+            = SwStyleNameMapper::GetUIName(ProgName("Header"), SwGetPoolIdFromName::TxtColl);
+        SwTextFormatColl* pStyle = m_rDoc.FindTextFormatCollByName(aUIName);
+        if (pStyle)
+            pStyle->SetFormatAttr(aNoLineNumbering);
+        aUIName = SwStyleNameMapper::GetUIName(ProgName("Footer"), SwGetPoolIdFromName::TxtColl);
+        pStyle = m_rDoc.FindTextFormatCollByName(aUIName);
+        if (pStyle)
+            pStyle->SetFormatAttr(aNoLineNumbering);
+
         m_bNoLnNumYet = false;
     }
 

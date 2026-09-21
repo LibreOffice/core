@@ -73,6 +73,18 @@ DECLARE_WW8EXPORT_TEST(testTdf72511_editengLRSpace, "tdf72511_editengLRSpace.doc
                                  getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf79738_footerLineNumbering, "tdf79738_footerLineNumbering.doc")
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameContainer> xStyles;
+    xStyleFamilies->getByName(u"ParagraphStyles"_ustr) >>= xStyles;
+    uno::Reference<beans::XPropertySet> xHeader(xStyles->getByName(u"Header"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, xHeader->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
+    uno::Reference<beans::XPropertySet> xFooter(xStyles->getByName(u"Footer"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, xFooter->getPropertyValue(u"ParaLineNumberCount"_ustr).get<bool>());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf160049_anchorMargin, "tdf160049_anchorMargin.doc")
 {
     // given a document with a LEFT "column/text" anchored image
