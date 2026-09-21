@@ -245,7 +245,11 @@ void pythonInit() {
 #endif
 
     // initialize python
+#if PY_VERSION_HEX >= 0x03080000
+    Py_InitializeFromConfig(&config);
+#else
     Py_Initialize();
+#endif
 #if PY_VERSION_HEX < 0x03090000
     PyEval_InitThreads();
 #endif
