@@ -6499,6 +6499,16 @@
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
+                              <object class="GtkToolButton" id="Data-ManageXMLSource">
+                                <property name="visible">True</property>
+                                <property name="action_name">.uno:ManageXMLSource</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkToolButton" id="Data-DataProvider">
                                 <property name="visible">True</property>
                                 <property name="action_name">.uno:DataProvider</property>
@@ -6509,9 +6519,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="Data-ManageXMLSource">
+                              <object class="GtkToolButton" id="Data-DataProviderRefresh">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:ManageXMLSource</property>
+                                <property name="action_name">.uno:DataProviderRefresh</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -6584,55 +6594,6 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="VclOptionalBox" id="Data-Section-Calculation1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom170">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="Data-DataProvider1">
-                                <property name="visible">True</property>
-                                <property name="action_name">.uno:DataProvider</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolButton" id="Data-ManageXMLSource1">
-                                <property name="visible">True</property>
-                                <property name="action_name">.uno:ManageXMLSource</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <style>
-                          <class name="priority-11"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -7201,6 +7162,16 @@
                               <object class="GtkToolButton" id="Data-DataConsolidate">
                                 <property name="visible">True</property>
                                 <property name="action_name">.uno:DataConsolidate</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Data-Duplicates">
+                                <property name="visible">True</property>
+                                <property name="action_name">.uno:HandleDuplicateRecords</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
