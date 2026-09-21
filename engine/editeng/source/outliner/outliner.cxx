@@ -27,11 +27,10 @@
 
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
-#include "paralist.hxx"
+#include <paralist.hxx>
 #include <editeng/outlobj.hxx>
-#include <outleeng.hxx>
 #include <ParagraphPortionList.hxx>
-#include "outlundo.hxx"
+#include <outlundo.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/overflowingtxt.hxx>
@@ -1167,7 +1166,7 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView )
 }
 
 Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
-    : pEditEngine(new OutlinerEditEng(this, pPool))
+    : pEditEngine(new EditEngine(this, pPool))
     , pParaList(new ParagraphList)
     , mnFirstSelPage(0)
     , nDepthChangedHdlPrevDepth(0)

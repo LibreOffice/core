@@ -45,7 +45,6 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/StripPortionsHelper.hxx>
-#include <outleeng.hxx>
 #include <TextPortion.hxx>
 #include <tools/gen.hxx>
 
@@ -3620,10 +3619,8 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                     ++rLine;
                     return true;
                 }
-                const OutlinerEditEng* pOutlEditEng = dynamic_cast<OutlinerEditEng*>(mpEditEngine);
                 const bool bIgnoreBreak
-                    = pOutlEditEng
-                      && pOutlEditEng
+                    = mpEditEngine
                              ->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
                              .value_or(false);
                 if (bIgnoreBreak || mpActiveView)

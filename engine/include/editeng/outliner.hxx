@@ -45,7 +45,7 @@
 
 #include <COKit/COKit.hxx>
 
-class OutlinerEditEng;
+class EditEngine;
 class Outliner;
 class EditView;
 class EditUndo;
@@ -132,7 +132,7 @@ private:
     friend class ParagraphList;
     friend class OutlinerView;
     friend class OutlinerParaObject;
-    friend class OutlinerEditEng;
+    friend class EditEngine;
     friend class OutlinerUndoCheckPara;
     friend class OutlinerUndoChangeParaFlags;
 
@@ -548,7 +548,7 @@ public:
     struct DepthChangeHdlParam { Outliner* pOutliner; Paragraph* pPara; ParaFlag nPrevFlags; };
 private:
     friend class OutlinerView;
-    friend class OutlinerEditEng;
+    friend class EditEngine;
     friend class OutlinerParaObject;
     friend class OLUndoExpand;
     friend class OutlinerUndoChangeDepth;
@@ -557,7 +557,7 @@ private:
 
     friend class TextChainingUtils;
 
-    std::unique_ptr<OutlinerEditEng> pEditEngine;
+    std::unique_ptr<EditEngine> pEditEngine;
 
     std::unique_ptr<ParagraphList>   pParaList;
     ViewList            aViewList;
@@ -622,8 +622,6 @@ private:
 
     SAL_DLLPRIVATE void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 
-    SAL_DLLPRIVATE OutlinerEditEng& getOutlinerEditEng() { return *pEditEngine; }
-
 protected:
     SAL_DLLPRIVATE void            ParagraphInserted( sal_Int32 nParagraph );
     SAL_DLLPRIVATE void            ParagraphDeleted( sal_Int32 nParagraph );
@@ -635,7 +633,7 @@ protected:
     SAL_DLLPRIVATE void            StripBullet(
         sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
-    // used by OutlinerEditEng. Allows Outliner objects to provide
+    // used by EditEngine. Allows Outliner objects to provide
     // bullet access to the EditEngine.
     SAL_DLLPRIVATE const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
 
@@ -899,8 +897,8 @@ public:
 
     bool            ShouldCreateBigTextObject() const;
 
-    const EditEngine& GetEditEngine() const;
-    EditEngine& GetEditEngine();
+    const EditEngine& GetEditEngine() const { return *pEditEngine; }
+    EditEngine& GetEditEngine() { return *pEditEngine; }
 
     // this is needed for StarOffice Api
     SAL_DLLPRIVATE void            SetLevelDependentStyleSheet( sal_Int32 nPara );

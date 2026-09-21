@@ -29,8 +29,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <editeng/outliner.hxx>
-#include "paralist.hxx"
-#include <outleeng.hxx>
+#include <paralist.hxx>
 #include <editeng/editstat.hxx>
 
 
@@ -495,16 +494,6 @@ void Outliner::EraseVirtualDevice()
 bool Outliner::ShouldCreateBigTextObject() const
 {
     return pEditEngine->ShouldCreateBigTextObject();
-}
-
-const EditEngine& Outliner::GetEditEngine() const
-{
-    return *pEditEngine;
-}
-
-EditEngine& Outliner::GetEditEngine()
-{
-    return *pEditEngine;
 }
 
 void Outliner::SetVertical(bool bVertical)

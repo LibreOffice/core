@@ -66,6 +66,9 @@
 #include <editeng/frmdiritem.hxx>
 #endif
 
+#include <paralist.hxx>
+#include <outlundo.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::cpo;
 using namespace ::cpo::uno;
@@ -79,6 +82,11 @@ ImpEditEngine& EditEngine::getImpl() const
 
 EditEngine::EditEngine(SfxItemPool* pItemPool)
     : mpImpEditEngine(new ImpEditEngine(this, pItemPool))
+{
+}
+
+EditEngine::EditEngine( Outliner* pEngOwner, SfxItemPool* pItemPool )
+    : mpImpEditEngine(new ImpEditEngine(this, pItemPool, pEngOwner))
 {
 }
 
@@ -985,9 +993,33 @@ void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 
 void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
+    Outliner* pOwner = getImpl().GetOwner();
+
+    if (pOwner)
+    {
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        if( !pPara )
+            return;
+
+        if ( !IsInUndo() && IsUndoEnabled() )
+            pOwner->UndoActionStart( OLUNDO_ATTR );
+    }
+
     getImpl().SetParaAttribs(nPara, rSet);
     if (getImpl().IsUpdateLayout())
         getImpl().FormatAndLayout();
+
+    if (pOwner)
+    {
+        pOwner->ImplCheckNumBulletItem( nPara );
+        // #i100014#
+        // It is not a good idea to subtract 1 from a count and cast the result
+        // to sal_uInt16 without check, if the count is 0.
+        pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
+
+        if ( !IsInUndo() && IsUndoEnabled() )
+            pOwner->UndoActionEnd();
+    }
 }
 
 const SfxItemSet& EditEngine::GetParaAttribs( sal_Int32 nPara ) const
@@ -1161,10 +1193,10 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
     return getImpl().GetDocPosTopLeft(nParagraph);
 }
 
-const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 ) const
+const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 nPara ) const
 {
-    // derived objects may override this function to give access to
-    // bullet information (see Outliner)
+    if (Outliner* pOwner = getImpl().GetOwner())
+       return pOwner->GetNumberFormat( nPara );
     return nullptr;
 }
 
@@ -1339,6 +1371,8 @@ LanguageType EditEngine::GetDefaultLanguage() const
 
 bool EditEngine::SpellNextDocument()
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        return pOwner->SpellNextDocument();
     return false;
 }
 
@@ -1377,6 +1411,8 @@ bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
 
 bool EditEngine::ConvertNextDocument()
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        return pOwner->ConvertNextDocument();
     return false;
 }
 
@@ -1560,12 +1596,26 @@ EditEngine::CreateTransferable(const ESelection& rSelection)
 
 // ======================    Virtual Methods    ========================
 
-void EditEngine::ProcessFirstLineOfParagraph(sal_Int32, const Point&, OutputDevice&, StripPortionsHelper&)
+void EditEngine::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev,
+                    StripPortionsHelper& rStripPortionsHelper)
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+    {
+        if( GetControlWord() & EEControlBits::OUTLINER )
+        {
+            PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev, rStripPortionsHelper);
+            pOwner->maPaintFirstLineHdl.Call( &aInfo );
+        }
+
+        pOwner->StripBullet(nPara, rStartPos, rOutDev, rStripPortionsHelper);
+    }
 }
 
 void EditEngine::ParagraphInserted( sal_Int32 nPara )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        pOwner->ParagraphInserted( nPara );
+
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
@@ -1576,6 +1626,9 @@ void EditEngine::ParagraphInserted( sal_Int32 nPara )
 
 void EditEngine::ParagraphDeleted( sal_Int32 nPara )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        pOwner->ParagraphDeleted( nPara );
+
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
@@ -1584,16 +1637,29 @@ void EditEngine::ParagraphDeleted( sal_Int32 nPara )
     }
 }
 
-void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 /*nRightParagraph*/ )
+void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 nRightParagraph )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        if(pOwner->IsUndoEnabled() && !pOwner->GetEditEngine().IsInUndo() )
+        {
+            Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
+            if( pPara && Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+            {
+                pOwner->InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nRightParagraph, ParaFlag::ISPAGE, ParaFlag::NONE ) );
+            }
+        }
 }
 
-void EditEngine::ParaAttribsChanged( sal_Int32 /* nParagraph */ )
+void EditEngine::ParaAttribsChanged( sal_Int32 nPara )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        pOwner->ParaAttribsChanged( nPara );
 }
 
-void EditEngine::StyleSheetChanged( SfxStyleSheet* /* pStyle */ )
+void EditEngine::StyleSheetChanged( SfxStyleSheet* pStyle )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        pOwner->StyleSheetChanged( pStyle );
 }
 
 void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
@@ -1611,6 +1677,25 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
 
 OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
 {
+    if (getImpl().GetOwner() != nullptr)
+        switch( nId )
+        {
+            case OLUNDO_DEPTH:
+                return EditResId(RID_OUTLUNDO_DEPTH);
+
+            case OLUNDO_EXPAND:
+                return EditResId(RID_OUTLUNDO_EXPAND);
+
+            case OLUNDO_COLLAPSE:
+                return EditResId(RID_OUTLUNDO_COLLAPSE);
+
+            case OLUNDO_ATTR:
+                return EditResId(RID_OUTLUNDO_ATTR);
+
+            case OLUNDO_INSERT:
+                return EditResId(RID_OUTLUNDO_INSERT);
+        }
+
     OUString aComment;
     switch ( nId )
     {
@@ -1658,13 +1743,35 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
     return aComment;
 }
 
-tools::Rectangle EditEngine::GetBulletArea( sal_Int32 )
+tools::Rectangle EditEngine::GetBulletArea( sal_Int32 nPara )
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+    {
+        tools::Rectangle aBulletArea { Point(), Point() };
+        if ( nPara < pOwner->pParaList->GetParagraphCount() )
+        {
+            if ( pOwner->ImplHasNumberFormat( nPara ) )
+                aBulletArea = pOwner->ImpCalcBulletArea( nPara, false, false );
+        }
+        return aBulletArea;
+    }
     return tools::Rectangle( Point(), Point() );
 }
 
-OUString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, std::optional<Color>&, std::optional<Color>&, std::optional<FontLineStyle>& )
+std::optional<bool> EditEngine::GetCompatFlag(SdrCompatibilityFlag eFlag) const
 {
+    if (Outliner* pOwner = getImpl().GetOwner())
+        return pOwner->GetCompatFlag(eFlag);
+    return {};
+}
+
+OUString EditEngine::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
+            std::optional<Color>& rpTxtColor,
+            std::optional<Color>& rpFldColor,
+            std::optional<FontLineStyle>& rpFldLineStyle)
+{
+    if (Outliner* pOwner = getImpl().GetOwner())
+        return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor, rpFldLineStyle );
     return OUString(' ');
 }
 
@@ -1964,6 +2071,16 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
     aPosition = rFldInfo.aPosition;
 
     return *this;
+}
+
+sal_Int16 EditEngine::GetDepth(sal_Int32 nPara) const
+{
+    return getImpl().GetOwner()->GetDepth(nPara);
+}
+
+Outliner* EditEngine::GetOwner()
+{
+    return getImpl().GetOwner();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
