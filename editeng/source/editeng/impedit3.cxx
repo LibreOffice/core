@@ -46,7 +46,6 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/StripPortionsHelper.hxx>
-#include <outleeng.hxx>
 #include <TextPortion.hxx>
 #include <tools/gen.hxx>
 
@@ -3810,11 +3809,9 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                             {
                                                 // tdf#148966 don't paint the line break following a
                                                 // multiline field based on a compat flag
-                                                OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
                                                 int nStartNextLine = rParaPortion.GetLines()[nLine + 1].GetStartPortion();
                                                 const TextPortion& rNextTextPortion = rParaPortion.GetTextPortions()[nStartNextLine];
-                                                if (pOutlEditEng
-                                                    && pOutlEditEng->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
+                                                if (mpEditEngine->GetCompatFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)
                                                            .value_or(false))
                                                 {
                                                     if (rNextTextPortion.GetKind() == PortionKind::LINEBREAK)

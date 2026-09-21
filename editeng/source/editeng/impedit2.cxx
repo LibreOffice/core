@@ -77,7 +77,6 @@
 #include <limits>
 #include <memory>
 #include <fstream>
-#include <outleeng.hxx>
 
 using namespace ::com::sun::star;
 
@@ -94,7 +93,7 @@ static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
 
 constexpr tools::Long constMaxPaperSize = 0x7FFFFFFF;
 
-ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
+ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool, Outliner* pEngOwner ) :
     pSharedVCL(EditDLL::Get().GetSharedVclResources()),
     maPaperSize(constMaxPaperSize, constMaxPaperSize),
     maMinAutoPaperSize(0, 0),
@@ -114,6 +113,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mnCurTextHeight(0),
     maOnlineSpellTimer("editeng::ImpEditEngine aOnlineSpellTimer"),
     maStatusTimer("editeng::ImpEditEngine aStatusTimer"),
+    mpOwner(pEngOwner),
     mbKernAsianPunctuation(false),
     mbAddExtLeading(false),
     mbIsFormatting(false),
@@ -4750,9 +4750,8 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(const ParaPortion& rPortion, bool b
     {
         if (nCurrent == nPortion)
         {
-            OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
-            if (!bIsScaling && pOutlEditEng)
-                return pOutlEditEng->GetDepth(nCurrent) < 0;
+            if (!bIsScaling && mpEditEngine->GetOwner() != nullptr)
+                return mpEditEngine->GetDepth(nCurrent) < 0;
             else
                 return true;
         }

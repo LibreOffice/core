@@ -20,7 +20,7 @@
 
 #include <editeng/outliner.hxx>
 #include <tools/debug.hxx>
-#include "outlundo.hxx"
+#include <outlundo.hxx>
 
 
 OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
