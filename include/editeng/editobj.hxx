@@ -40,7 +40,7 @@ class SvxFieldData;
 enum class OutlinerMode;
 struct EECharAttrib;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
-class ContentInfo;
+class EditEngineParagraph;
 class XParaPortionList;
 
 namespace editeng {
@@ -58,7 +58,7 @@ enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
 class EDITENG_DLLPUBLIC EditTextObject final
 {
 public:
-    typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
+    typedef std::vector<std::unique_ptr<EditEngineParagraph> > EditEngineParagraphs;
 
     EditTextObject(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
                    TextRotation eRotation, SvtScriptType eScriptType);
@@ -153,9 +153,9 @@ public:
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
-    ContentInfo*            CreateAndInsertContent();
-    ContentInfosType&       GetContents() { return maContents;}
-    const ContentInfosType& GetContents() const { return maContents;}
+    EditEngineParagraph*    CreateAndInsertParagraph();
+    EditEngineParagraphs&       GetParagraphs() { return maParagraphs;}
+    const EditEngineParagraphs& GetParagraphs() const { return maParagraphs;}
 
     bool                    HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
     MapUnit                 GetMetric() const { return meMetric; }
@@ -169,7 +169,7 @@ private:
     bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
 
-    ContentInfosType        maContents;
+    EditEngineParagraphs    maParagraphs;
     rtl::Reference<SfxItemPool>       mpPool;
     std::unique_ptr<XParaPortionList> mpPortionInfo;
     OutlinerMode            meUserType;

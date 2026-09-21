@@ -112,7 +112,7 @@ public:
     double  getSpacingScaleY() const { return mfSpacingScaleY; }
 };
 
-class ContentInfo
+class EditEngineParagraph
 {
     friend class EditTextObject;
 
@@ -129,13 +129,13 @@ private:
     sal_Int16           mnNumberingStartValue { -1 };
     bool                mbNumberingRestart { false };
 
-                        ContentInfo( SfxItemPool& rPool );
-                        ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
+    EditEngineParagraph( SfxItemPool& rPool );
+    EditEngineParagraph( const EditEngineParagraph& rCopyFrom, SfxItemPool& rPoolToUse  );
 
 public:
-                        ~ContentInfo();
-                        ContentInfo(const ContentInfo&) = delete;
-    ContentInfo&        operator=(const ContentInfo&) = delete;
+    ~EditEngineParagraph();
+    EditEngineParagraph(const EditEngineParagraph&) = delete;
+    EditEngineParagraph&  operator=(const EditEngineParagraph&) = delete;
 
     void NormalizeString( svl::SharedStringPool& rPool );
     const svl::SharedString& GetSharedString() const { return maText;}
@@ -159,10 +159,10 @@ public:
 
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
-    bool Equals( const ContentInfo& rCompare, bool bComparePool ) const;
+    bool Equals( const EditEngineParagraph& rCompare, bool bComparePool ) const;
 
     // #i102062#
-    bool isWrongListEqual(const ContentInfo& rCompare) const;
+    bool isWrongListEqual(const EditEngineParagraph& rCompare) const;
 
     sal_Int16 GetNumberingDepth() const { return mnNumberingDepth; }
     void SetNumberingDepth(sal_Int16 nDepth) { mnNumberingDepth = nDepth; }

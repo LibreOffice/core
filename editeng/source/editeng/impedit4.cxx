@@ -1227,7 +1227,7 @@ EditTextObject ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool*
             nEndPos = aSel.Max().GetIndex();
 
 
-        ContentInfo *pC = aTxtObj.CreateAndInsertContent();
+        EditEngineParagraph *pC = aTxtObj.CreateAndInsertParagraph();
 
         // The paragraph attributes ...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
@@ -1393,13 +1393,13 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     // Before, paragraph count was of type sal_uInt16 so if nContents exceeded
     // 0xFFFF this wouldn't have worked anyway, given that nPara is used to
     // number paragraphs and is fearlessly incremented.
-    sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.GetContents().size());
+    sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.GetParagraphs().size());
     SAL_WARN_IF( nContents < 0, "editeng", "ImpEditEngine::InsertTextObject - contents overflow " << nContents);
     sal_Int32 nPara = maEditDoc.GetPos( aPaM.GetNode() );
 
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
-        const ContentInfo* pC = rTextObject.GetContents()[n].get();
+        const EditEngineParagraph* pC = rTextObject.GetParagraphs()[n].get();
         bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 
