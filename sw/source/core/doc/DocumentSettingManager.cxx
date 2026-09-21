@@ -80,6 +80,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbTabRelativeToIndent(true),
     mbProtectForm(false), // i#78591#
     mbMsWordCompTrailingBlanks(false), // tdf#104349 tdf#104668
+    mbMsWordCompMinTextWrapGap(false),
     mbMsWordCompMinLineHeightByFly(false),
     mbInvertBorderSpacing (false),
     mbCollapseEmptyCellPara(true),
@@ -221,6 +222,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::PROTECT_FORM: return mbProtectForm;
         // tdf#104349 tdf#104668
         case DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS: return mbMsWordCompTrailingBlanks;
+        case DocumentSettingId::MS_WORD_COMP_MIN_TEXT_WRAP_GAP: return mbMsWordCompMinTextWrapGap;
         case DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY: return mbMsWordCompMinLineHeightByFly;
         // #i89181#
         case DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
@@ -414,6 +416,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         // tdf#140349
         case DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS:
             mbMsWordCompTrailingBlanks = value;
+            break;
+
+        case DocumentSettingId::MS_WORD_COMP_MIN_TEXT_WRAP_GAP:
+            mbMsWordCompMinTextWrapGap = value;
             break;
 
         case DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY:
@@ -806,6 +812,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
     mbProtectForm = rSource.mbProtectForm;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
+    mbMsWordCompMinTextWrapGap = rSource.mbMsWordCompMinTextWrapGap;
     mbMsWordCompMinLineHeightByFly = rSource.mbMsWordCompMinLineHeightByFly;
     mbInvertBorderSpacing = rSource.mbInvertBorderSpacing;
     mbCollapseEmptyCellPara = rSource.mbCollapseEmptyCellPara;
@@ -1066,6 +1073,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordCompTrailingBlanks"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbMsWordCompTrailingBlanks).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordCompMinTextWrapGap"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbMsWordCompMinTextWrapGap).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordCompMinLineHeightByFly"));

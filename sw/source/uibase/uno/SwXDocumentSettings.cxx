@@ -114,6 +114,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_OLD_PRINTER_METRICS,
     HANDLE_PROTECT_FORM,
     HANDLE_MS_WORD_COMP_TRAILING_BLANKS,
+    HANDLE_MS_WORD_COMP_MIN_TEXT_WRAP_GAP,
     HANDLE_MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY,
     HANDLE_TABS_RELATIVE_TO_INDENT,
     HANDLE_RSID,
@@ -237,6 +238,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"RsidRoot"_ustr, HANDLE_RSID_ROOT, cppu::UnoType<sal_Int32>::get(), 0},
         { u"ProtectForm"_ustr, HANDLE_PROTECT_FORM, cppu::UnoType<bool>::get(), 0},
         { u"MsWordCompTrailingBlanks"_ustr, HANDLE_MS_WORD_COMP_TRAILING_BLANKS, cppu::UnoType<bool>::get(), 0 },
+        { u"MsWordCompMinTextWrapGap"_ustr, HANDLE_MS_WORD_COMP_MIN_TEXT_WRAP_GAP, cppu::UnoType<bool>::get(), 0 },
         { u"MsWordCompMinLineHeightByFly"_ustr, HANDLE_MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY, cppu::UnoType<bool>::get(), 0 },
         { u"TabAtLeftIndentForParagraphsInList"_ustr, HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, cppu::UnoType<bool>::get(), 0},
         { u"ModifyPasswordInfo"_ustr, HANDLE_MODIFYPASSWORDINFO, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), 0},
@@ -823,6 +825,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, bTmp);
+        }
+        break;
+        case HANDLE_MS_WORD_COMP_MIN_TEXT_WRAP_GAP:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_COMP_MIN_TEXT_WRAP_GAP, bTmp);
         }
         break;
         case HANDLE_MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY:
@@ -1616,6 +1624,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_MS_WORD_COMP_TRAILING_BLANKS:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS);
+        }
+        break;
+        case HANDLE_MS_WORD_COMP_MIN_TEXT_WRAP_GAP:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_TEXT_WRAP_GAP);
         }
         break;
         case HANDLE_MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY:

@@ -1479,6 +1479,10 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // Wrap on both sides up to a frame width of 1.5cm
 #define FRAME_MAX 850
 
+// Word gives up a side narrower than 1/4 inch, measured from the column edge, when the
+// other side has that much room. With both sides narrow it wraps on both.
+#define WORD_TEXT_MIN 360
+
 css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
 {
     const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
@@ -1551,6 +1555,25 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
             else
                 eSurroundForTextWrap = nRight ? css::text::WrapTextMode_RIGHT: css::text::WrapTextMode_NONE;
         }
+    }
+
+    // Ask the format rather than eSurroundForTextWrap, because an optimal wrap
+    // which the branch above turned into a parallel one measures its sides
+    // against the paragraph and keeps that result.
+    if (css::text::WrapTextMode_PARALLEL == rFlyFormat.GetSurround()
+        && GetMaster()->GetDoc().getIDocumentSettingAccess().get(
+               DocumentSettingId::MS_WORD_COMP_MIN_TEXT_WRAP_GAP))
+    {
+        SwRectFnSet aRectFnSet(*m_pCurrFrame);
+        const SwRect& rObj(pAnchoredObj->GetObjRectWithSpaces());
+        const SwRect& rCol(m_pCurrFrame->getFrameArea());
+        const tools::Long nLeft = aRectFnSet.GetLeft(rObj) - aRectFnSet.GetLeft(rCol);
+        const tools::Long nRight = aRectFnSet.GetRight(rCol) - aRectFnSet.GetRight(rObj);
+        // If neither side has enough space, keep the wrap mode as PARALLEL
+        if (nLeft < WORD_TEXT_MIN && nRight >= WORD_TEXT_MIN)
+            eSurroundForTextWrap = css::text::WrapTextMode_RIGHT;
+        else if (nRight < WORD_TEXT_MIN && nLeft >= WORD_TEXT_MIN)
+            eSurroundForTextWrap = css::text::WrapTextMode_LEFT;
     }
 
     return eSurroundForTextWrap;
