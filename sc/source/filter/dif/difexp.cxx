@@ -48,37 +48,37 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument& rDoc,
 }
 
 void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
-    const ScRange&rRange, const rtl_TextEncoding eCharSet )
+    const ScRange&rRange, const rtl_TextEncoding eEncoding )
 {
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): only one table please!" );
 
-    const rtl_TextEncoding eStreamCharSet = rOut.GetStreamEncoding();
-    if ( eStreamCharSet != eCharSet )
-        rOut.SetStreamEncoding( eCharSet );
+    const rtl_TextEncoding eStreamEncoding = rOut.GetStreamEncoding();
+    if ( eStreamEncoding != eEncoding )
+        rOut.SetStreamEncoding( eEncoding );
 
     sal_Unicode cStrDelim('"');
     OString aStrDelimEncoded;    // only used if not Unicode
     OUString aStrDelimDecoded;     // only used if context encoding
     bool bContextOrNotAsciiEncoding;
-    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+    if ( eEncoding == RTL_TEXTENCODING_UNICODE )
     {
         rOut.StartWritingUnicodeText();
         bContextOrNotAsciiEncoding = false;
     }
     else
     {
-        aStrDelimEncoded = OString(&cStrDelim, 1, eCharSet);
+        aStrDelimEncoded = OString(&cStrDelim, 1, eEncoding);
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
-        if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
+        if ( rtl_getTextEncodingInfo( eEncoding, &aInfo ) )
         {
             bContextOrNotAsciiEncoding =
                 (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
-                aStrDelimDecoded = OStringToOUString(aStrDelimEncoded, eCharSet);
+                aStrDelimDecoded = OStringToOUString(aStrDelimEncoded, eEncoding);
         }
         else
             bContextOrNotAsciiEncoding = false;
@@ -202,35 +202,35 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
                 assert( aOS.isEmpty() && "aOS should be empty");
                 OUString aTmpStr = aString;
                 aOS.append(pStringData);
-                rOut.WriteUnicodeOrByteText(aOS, eCharSet);
+                rOut.WriteUnicodeOrByteText(aOS, eEncoding);
                 aOS.setLength(0);
-                if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+                if ( eEncoding == RTL_TEXTENCODING_UNICODE )
                 {
                     // the goal is to replace cStrDelim by cStrDelim+cStrDelim
                     OUString strFrom(cStrDelim);
                     OUString strTo = strFrom + strFrom;
                     aTmpStr = aTmpStr.replaceAll(strFrom, strTo);
                     rOut.WriteUniOrByteChar( cStrDelim );
-                    rOut.WriteUnicodeOrByteText(aTmpStr, eCharSet);
+                    rOut.WriteUnicodeOrByteText(aTmpStr, eEncoding);
                     rOut.WriteUniOrByteChar( cStrDelim );
                 }
                 else if ( bContextOrNotAsciiEncoding )
                 {
                     // to byte encoding
-                    OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
+                    OString aStrEnc = OUStringToOString(aTmpStr, eEncoding);
                     // back to Unicode
-                    OUString aStrDec = OStringToOUString(aStrEnc, eCharSet);
+                    OUString aStrDec = OStringToOUString(aStrEnc, eEncoding);
                     // search on re-decoded string
                     OUString aStrTo = aStrDelimDecoded + aStrDelimDecoded;
                     aStrDec = aStrDec.replaceAll(aStrDelimDecoded, aStrTo);
                     // write byte re-encoded
                     rOut.WriteUniOrByteChar( cStrDelim );
-                    rOut.WriteUnicodeOrByteText( aStrDec, eCharSet );
+                    rOut.WriteUnicodeOrByteText( aStrDec, eEncoding);
                     rOut.WriteUniOrByteChar( cStrDelim );
                 }
                 else
                 {
-                    OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
+                    OString aStrEnc = OUStringToOString(aTmpStr, eEncoding);
                     // search on encoded string
                     OString aStrTo = aStrDelimEncoded + aStrDelimEncoded;
                     aStrEnc = aStrEnc.replaceAll(aStrDelimEncoded, aStrTo);
@@ -253,7 +253,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
     aOS.setLength(0);
 
     // restore original value
-    rOut.SetStreamEncoding( eStreamCharSet );
+    rOut.SetStreamEncoding( eStreamEncoding );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -861,10 +861,10 @@ void ScDocument::InvalidateTableArea()
 }
 
 sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
-        SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
+        SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eEncoding ) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
-        return pTable->GetMaxStringLen(nCol, nRowStart, nRowEnd, eCharSet);
+        return pTable->GetMaxStringLen(nCol, nRowStart, nRowEnd, eEncoding);
     return 0;
 }
 

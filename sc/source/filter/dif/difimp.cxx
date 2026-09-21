@@ -213,7 +213,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
         return ERRCODE_NONE;
 }
 
-DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding eCharSet )
+DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding eEncoding )
     : fVal(0.0)
     , nVector(0)
     , nVal(0)
@@ -221,12 +221,12 @@ DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding
     , pNumFormatter(rDoc.GetFormatTable())
     , rIn(rNewIn)
 {
-    if ( rIn.GetStreamEncoding() != eCharSet )
+    if ( rIn.GetStreamEncoding() != eEncoding )
     {
-        OSL_FAIL( "CharSet passed overrides and modifies StreamCharSet" );
-        rIn.SetStreamEncoding( eCharSet );
+        OSL_FAIL( "Encoding passed overrides and modifies StreamEncoding" );
+        rIn.SetStreamEncoding( eEncoding );
     }
-    rIn.StartReadingUnicodeText( eCharSet );
+    rIn.StartReadingUnicodeText( eEncoding );
 }
 
 TOPIC DifParser::GetNextTopic()

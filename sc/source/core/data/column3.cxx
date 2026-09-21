@@ -3418,7 +3418,7 @@ class MaxStringLenHandler
 {
     sal_Int32 mnMaxLen;
     const ScColumn& mrColumn;
-    rtl_TextEncoding meCharSet;
+    rtl_TextEncoding meEncoding;
     bool mbOctetEncoding;
 
     void processCell(size_t nRow, const ScRefCellValue& rCell)
@@ -3430,7 +3430,7 @@ class MaxStringLenHandler
         if (mbOctetEncoding)
         {
             OString aOString;
-            if (!aString.convertToString(&aOString, meCharSet,
+            if (!aString.convertToString(&aOString, meEncoding,
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
             {
@@ -3449,11 +3449,11 @@ class MaxStringLenHandler
     }
 
 public:
-    MaxStringLenHandler(const ScColumn& rColumn, rtl_TextEncoding eCharSet) :
+    MaxStringLenHandler(const ScColumn& rColumn, rtl_TextEncoding eEncoding) :
         mnMaxLen(0),
         mrColumn(rColumn),
-        meCharSet(eCharSet),
-        mbOctetEncoding(rtl_isOctetTextEncoding(eCharSet))
+        meEncoding(eEncoding),
+        mbOctetEncoding(rtl_isOctetTextEncoding(eEncoding))
     {
     }
 
@@ -3486,9 +3486,9 @@ public:
 
 }
 
-sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
+sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eEncoding ) const
 {
-    MaxStringLenHandler aFunc(*this, eCharSet);
+    MaxStringLenHandler aFunc(*this, eEncoding);
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRowStart, nRowEnd, aFunc);
     return aFunc.getMaxLen();
 }
