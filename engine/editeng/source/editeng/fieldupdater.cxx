@@ -44,10 +44,10 @@ public:
     void updateTableFields(int nTab)
     {
         SfxItemPool* pPool = mrObj.GetPool();
-        EditTextObject::ContentInfosType& rContents = mrObj.GetContents();
-        for (std::unique_ptr<ContentInfo> & i : rContents)
+        EditTextObject::EditEngineParagraphs& rContents = mrObj.GetParagraphs();
+        for (std::unique_ptr<EditEngineParagraph> & i : rContents)
         {
-            ContentInfo& rContent = *i;
+            EditEngineParagraph& rContent = *i;
             for (XEditAttribute & rAttr : rContent.GetCharAttribs())
             {
                 const SfxPoolItem* pItem = rAttr.GetItem();
@@ -71,10 +71,10 @@ public:
 
     void UpdatePageRelativeURLs(const std::function<void(const SvxFieldItem & rFieldItem, SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback)
     {
-        EditTextObject::ContentInfosType& rContents = mrObj.GetContents();
-        for (std::unique_ptr<ContentInfo> & i : rContents)
+        EditTextObject::EditEngineParagraphs& rContents = mrObj.GetParagraphs();
+        for (std::unique_ptr<EditEngineParagraph> & i : rContents)
         {
-            ContentInfo& rContent = *i;
+            EditEngineParagraph& rContent = *i;
             for (XEditAttribute & rAttr : rContent.GetCharAttribs())
             {
                 const SfxPoolItem* pItem = rAttr.GetItem();
