@@ -1,6 +1,8 @@
 html, body { margin: 0; padding: 0; height: 100%; }
 body {
-	background: var(--color-main-background);
+	/* The surface the tabs sit on. The active tab takes the document
+	   background instead, so it reads as the front of the stack. */
+	background: var(--color-background-tabs-group);
 	color: var(--color-main-text);
 	font-family: var(--cool-font);
 	font-size: var(--default-font-size);
@@ -25,31 +27,33 @@ body {
 	min-width: 32px;
 	max-width: 220px;
 	height: 100%;
-	background: var(--color-background-tabs-group);
-	border-right: 1px solid var(--color-border);
-	border-bottom: 1px solid var(--color-border);
+	/* Rounded at the top only, so the active tab meets the document below it
+	   with a straight edge and the two read as one surface. */
+	border-radius: 8px 8px 0 0;
+	background: transparent;
 	cursor: pointer;
 	overflow: hidden;
 	position: relative;
+}
+.tab:hover:not(.active) {
+	background: var(--color-background-hover);
 }
 .tab[data-doctype] {
 	--tab-accent: rgb(var(--doc-type));
 }
 .tab.active {
 	background: var(--color-main-background);
-	/* padding-bottom reserves the 1px the inactive tab's border occupies, so
-	   becoming active does not shift the content up. */
-	border-bottom: 0;
-	padding-bottom: 1px;
 }
-/* Pseudo-element, not a border-bottom: a colored border-bottom miters
-   diagonally into the gray side border at the corner. */
+/* The document type in colour along the top edge. In the light palette the
+   strip and the document background are only a few shades apart, so this is
+   what makes the active tab stand out. A pseudo-element rather than a border,
+   so the tab's overflow clip curves its ends into the rounded corners. */
 .tab.active::after {
 	content: '';
 	position: absolute;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	top: 0;
 	height: 2px;
 	background: var(--tab-accent, var(--color-primary));
 }
@@ -93,8 +97,19 @@ body {
 	color: var(--color-main-text);
 }
 .tab.dragging { opacity: 0.5; }
-.tab.drop-before { border-left: 2px solid var(--color-primary); }
-.tab.drop-after { border-right: 2px solid var(--color-primary); }
+/* The insertion marker is positioned rather than a border, so it stays a
+   straight bar where the rounded corner would otherwise bend it. */
+.tab.drop-before::before,
+.tab.drop-after::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: var(--color-primary);
+}
+.tab.drop-before::before { left: 0; }
+.tab.drop-after::before { right: 0; }
 #new-tab {
 	box-sizing: border-box;
 	display: flex;
@@ -102,8 +117,12 @@ body {
 	justify-content: center;
 	flex: 0 0 28px;
 	width: 28px;
-	height: 100%;
-	border-bottom: 1px solid var(--color-border);
+	/* A rounded square centred in the strip, so its hover fill sits clear of
+	   the tabs beside it and of the document below. */
+	align-self: center;
+	height: 24px;
+	margin: 0 2px;
+	border-radius: 4px;
 	cursor: pointer;
 	color: var(--color-text-lighter);
 	font-size: 1.5em;
@@ -111,13 +130,6 @@ body {
 	line-height: 0;
 }
 #new-tab:hover {
-	background: var(--color-background-tabs-group);
+	background: var(--color-background-hover);
 	color: var(--color-main-text);
-}
-/* Continues the bottom separator across the strip's trailing empty space. */
-#strip::after {
-	content: '';
-	box-sizing: border-box;
-	flex: 1 1 auto;
-	border-bottom: 1px solid var(--color-border);
 }
