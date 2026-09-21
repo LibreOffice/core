@@ -42,12 +42,31 @@ struct IteratorAttr
     void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
     std::vector<sal_Int32> maAxis;
+
+    // One entry per step of the axis. A start is the place of the first Point the step keeps,
+    // counted from one. A count is how many it keeps from there, zero for all of them.
+    std::vector<sal_Int32> maStart;
+    std::vector<sal_Int32> maCount;
+
+    // The kind of Point each step of the axis keeps, XML_all for every kind.
+    std::vector<sal_Int32> maPtType;
+
     sal_Int32 mnCnt;
     bool  mbHideLastTrans;
     sal_Int32 mnPtType;
     sal_Int32 mnSt;
     sal_Int32 mnStep;
 };
+
+/// Puts every connector that names the shape it starts at and the one it ends at between those
+/// two across the flow. Runs once all shapes have their place.
+void settleNamedConnectors(const SmartArtDiagram& rDgm);
+
+/// The Points the axis of rIterator picks out, starting at the Point with rFromId, in the order
+/// the file puts them in. The start and the count each step of the axis carries are applied,
+/// except on the last step when bLastStepWhole says to leave that one whole.
+std::vector<OUString> pointsAlongAxis(const SmartArtDiagram& rDgm, const IteratorAttr& rIterator,
+                                      const OUString& rFromId, bool bLastStepWhole);
 
 struct ConditionAttr
 {
@@ -103,6 +122,8 @@ public:
 
     LayoutNode& getLayoutNode()
         { return mrLayoutNode; }
+    const LayoutNode& getLayoutNode() const
+        { return mrLayoutNode; }
 
     /** visitor acceptance
      */
@@ -148,6 +169,8 @@ public:
     virtual void accept( LayoutAtomVisitor& ) override;
     Constraint& getConstraint()
         { return maConstraint; }
+    const Constraint& getConstraint() const
+        { return maConstraint; }
     void parseConstraint(std::vector<Constraint>& rConstraints, bool bRequireForName) const;
 private:
     Constraint maConstraint;
@@ -179,10 +202,35 @@ public:
 
     void setType( sal_Int32 nToken )
         { mnType = nToken; }
+    sal_Int32 getType() const
+        { return mnType; }
     const ParamMap& getMap() const { return maMap; }
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
+
+    // A parameter whose value is the name of a layout node, srcNode and dstNode of a connector.
+    void addNamedParam(sal_Int32 nType, const OUString& rName) { maNamedParams[nType] = rName; }
+    OUString getNamedParam(sal_Int32 nType) const
+    {
+        const auto aFound = maNamedParams.find(nType);
+        return aFound == maNamedParams.end() ? OUString() : aFound->second;
+    }
     sal_Int32 getVerticalShapesCount(const ShapePtr& rShape);
+
+    /// A hierarchy root beside its branch, sized from its constraints and fitted as a whole.
+    /// True when it laid the root out.
+    bool layoutSidewaysRoot(const ShapePtr& rShape, const std::vector<Constraint>& rConstraints);
+
+    /// A branch of roots that stand beside their branches, the whole hierarchy below it sized
+    /// from its constraints and fitted into the branch at one scale. True when it laid it out.
+    bool layoutSidewaysBranch(const SmartArtDiagram& rDgm, const ShapePtr& rShape,
+                              const std::vector<Constraint>& rConstraints);
+
+    /// A row of roots that stand above their branches, the whole hierarchy below it sized from
+    /// its constraints, packed level by level and fitted into the row at one scale. True when it
+    /// laid it out.
+    bool layoutUprightBranch(const SmartArtDiagram& rDgm, const ShapePtr& rShape,
+                             const std::vector<Constraint>& rConstraints);
     void layoutShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
                       const std::vector<Constraint>& rConstraints,
                       const std::vector<Rule>& rRules );
@@ -194,6 +242,7 @@ public:
 private:
     sal_Int32 mnType;
     ParamMap  maMap;
+    std::map<sal_Int32, OUString> maNamedParams;
     /// Aspect ratio is not integer, so not part of maMap.
     double mfAspectRatio = 0;
 
@@ -209,6 +258,11 @@ class SnakeAlg
 public:
     static void layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
                                     const std::vector<Constraint>& rConstraints);
+
+    /// A snake whose transitions are drawn as connectors, a bending process. True when it
+    /// laid the children out, false when this is not such a snake.
+    static bool layoutBendingProcess(const AlgAtom& rAlg, const ShapePtr& rShape,
+                                     const std::vector<Constraint>& rConstraints);
 };
 
 /**
@@ -238,8 +292,11 @@ private:
      * each other, and in case A depends on B and A is applied before B, the effect of A won't be
      * updated when B is applied.
      */
-    static void applyConstraintToLayout(const Constraint& rConstraint,
-                                        LayoutPropertyMap& rProperties);
+    static void applyConstraintToLayout(const SmartArtDiagram& rDgm, const ShapePtr& rShape,
+                                        const std::vector<Constraint>& rAll,
+                                        const Constraint& rConstraint,
+                                        LayoutPropertyMap& rProperties,
+                                        std::map<sal_Int32, sal_Int32>& rUserVariables);
 
     /**
      * Decides if a certain reference type (e.g. "right") can be inferred from the available properties
@@ -277,13 +334,19 @@ class ConditionAtom
 public:
     explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
+    /// rPassNodeId is the modelId of the Point the pass of the loop around this condition
+    /// stands on, empty where there is no loop or it knows of none.
     bool getDecision(const SmartArtDiagram& rDgm,
-                     const rtl::Reference<svx::diagram::Point>& rPresPoint) const;
+                     const rtl::Reference<svx::diagram::Point>& rPresPoint,
+                     const OUString& rPassNodeId) const;
 
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    sal_Int32 getNodeCount(const SmartArtDiagram& rDgm,
-                           const rtl::Reference<svx::diagram::Point>& rPresPoint) const;
+    sal_Int32 getNodeCount(const SmartArtDiagram& rDgm, const OUString& rNodeId) const;
+    /// The place the data Point behind rPresPoint takes among its siblings, counted from one,
+    /// and how many siblings there are. Both stay zero for a Point with no parent.
+    static void getNodePlace(const SmartArtDiagram& rDgm, const OUString& rNodeId,
+                             sal_Int32& rPosition, sal_Int32& rSiblings);
 
     bool          mIsElse;
     IteratorAttr  maIter;

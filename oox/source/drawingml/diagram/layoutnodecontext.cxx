@@ -118,11 +118,20 @@ public:
                         case XML_ar:
                             mpNode->setAspectRatio(rAttribs.getDouble(XML_val, 0));
                             break;
-                        default:
-                            const sal_Int32 nValTok = rAttribs.getToken(XML_val, 0);
-                            mpNode->addParam(nType, nValTok > 0 ? nValTok
-                                                                : rAttribs.getInteger(XML_val, 0));
+                        case XML_srcNode:
+                        case XML_dstNode:
+                            mpNode->addNamedParam(nType, rAttribs.getStringDefaulted(XML_val));
                             break;
+                        default:
+                        {
+                            // The value is a token where it is one, 1D is the token numbered 0,
+                            // and a number otherwise.
+                            const sal_Int32 nValTok = rAttribs.getToken(XML_val, XML_TOKEN_INVALID);
+                            mpNode->addParam(nType, nValTok != XML_TOKEN_INVALID
+                                                        ? nValTok
+                                                        : rAttribs.getInteger(XML_val, 0));
+                            break;
+                        }
                     }
                     break;
                 }

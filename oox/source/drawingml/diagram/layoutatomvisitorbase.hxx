@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORBASE_HXX
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_LAYOUTATOMVISITORBASE_HXX
 
+#include <vector>
+#include <algorithm>
 #include "diagram.hxx"
 #include "diagramlayoutatoms.hxx"
 
@@ -55,6 +57,16 @@ public:
 
     void defaultVisit(LayoutAtom const& rAtom);
 
+    /// The data Points the presentation below the current one was built for, of nPointType, in
+    /// the order the file lists them. One pass of a loop belongs to each.
+    std::vector<OUString> passNodesBelow(sal_Int32 nPointType) const;
+
+    /// The presentation Point of rNamed that was built for the Point the pass of the loop stands
+    /// on. Where the pass stands on nothing, or nothing was built for it, the place of the pass
+    /// among rNamed decides, and an empty reference comes back where there is no such place.
+    rtl::Reference<svx::diagram::Point>
+    presentationForPass(const svx::diagram::Points& rNamed) const;
+
     using LayoutAtomVisitor::visit;
     virtual void visit(ForEachAtom& rAtom) override;
     virtual void visit(ConditionAtom& rAtom) override;
@@ -68,16 +80,23 @@ protected:
     sal_Int32 mnCurrStep;
     sal_Int32 mnCurrCnt;
     enum {LAYOUT_NODE, CONSTRAINT, ALGORITHM, RULE} meLookFor;
+
+    // The modelId of the Point the pass of the loop stands on, for the conditions to ask about.
+    // Empty outside a loop.
+    OUString msPassNodeId;
 };
 
 class ShallowPresNameVisitor : public LayoutAtomVisitorBase
 {
 public:
     explicit ShallowPresNameVisitor(const SmartArtDiagram& rDgm,
-                                    const rtl::Reference<svx::diagram::Point>& rRootPoint) :
+                                    const rtl::Reference<svx::diagram::Point>& rRootPoint,
+                                    const OUString& rPassNodeId) :
         LayoutAtomVisitorBase(rDgm, rRootPoint),
         mnCnt(0)
-    {}
+    {
+        msPassNodeId = rPassNodeId;
+    }
 
     using LayoutAtomVisitorBase::visit;
     virtual void visit(ConstraintAtom& rAtom) override;

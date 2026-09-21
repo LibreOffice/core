@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <set>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -142,7 +143,32 @@ public:
     void createShapeHierarchyFromModel( const ShapePtr & pShape, bool bCreate );
 
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
+
+    /// The values a layout has worked out under names of its own, userA to userZ, by the token
+    /// of the name. A layout states such a value at one node for the whole of what hangs below
+    /// it, and the layout is walked from the top down, so the value stands from where it is
+    /// stated until another node states it again.
+    std::map<sal_Int32, sal_Int32>& getUserVariables() { return maUserVariables; }
     void syncDiagramFontHeights();
+
+    /// A value under a name of its own, userA and the rest, that a layout states as a part of the
+    /// size of a shape levels below the node that states it. The node cannot see that shape when
+    /// it runs, so the statement is kept by the token of the name, and the value is read off the
+    /// shape when a node below takes the name.
+    struct DeferredUserVariable
+    {
+        OUString msShapeName;
+        sal_Int32 mnRefType = 0;
+        double mfFactor = 1.0;
+    };
+    std::map<sal_Int32, DeferredUserVariable>& getDeferredUserVariables()
+    {
+        return maDeferredUserVariables;
+    }
+
+    /// The shapes of a hierarchy that lies sideways which its branch has placed as a whole,
+    /// roots, branches and the shapes in them. Each holds its final place and size already.
+    std::set<const Shape*>& getLaidOutSideways() { return maLaidOutSideways; }
 
     void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
     css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
@@ -163,6 +189,9 @@ private:
 
     // This contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;
+    std::map<sal_Int32, sal_Int32> maUserVariables;
+    std::set<const Shape*> maLaidOutSideways;
+    std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
 
     OoxDiagramDataPtr              mpData;
     DiagramLayoutPtr               mpLayout;

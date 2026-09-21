@@ -1297,8 +1297,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
     CPPUNIT_ASSERT_EQUAL(u"A"_ustr, xTextA->getString());
 
     uno::Reference<drawing::XShapes> xGroupB(xGroup1->getByIndex(1), uno::UNO_QUERY);
-    // 5 connectors, B1 with children, B2 with children
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), xGroupB->getCount());
+    // a connector before each of them, B1 with children, B2 with children
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xGroupB->getCount());
 
     uno::Reference<drawing::XShapes> xGroupB1(xGroupB->getByIndex(1), uno::UNO_QUERY);
 
@@ -1308,13 +1308,13 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
 
     uno::Reference<drawing::XShape> xGroupC12(xGroupB1->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xTextC1(
-        getChildShape(getChildShape(getChildShape(xGroupC12, 0), 0), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroupC12, 1), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C1"_ustr, xTextC1->getString());
     uno::Reference<text::XText> xTextC2(
-        getChildShape(getChildShape(getChildShape(xGroupC12, 1), 0), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroupC12, 3), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C2"_ustr, xTextC2->getString());
 
-    uno::Reference<drawing::XShapes> xGroupB2(xGroupB->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupB2(xGroupB->getByIndex(3), uno::UNO_QUERY);
 
     uno::Reference<drawing::XShapes> xGroupB2a(xGroupB2->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xTextB2(xGroupB2a->getByIndex(0), uno::UNO_QUERY);
@@ -1322,7 +1322,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)
 
     uno::Reference<drawing::XShape> xGroupC3(xGroupB2->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xTextC3(
-        getChildShape(getChildShape(getChildShape(xGroupC3, 0), 0), 0), uno::UNO_QUERY);
+        getChildShape(getChildShape(getChildShape(xGroupC3, 1), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C3"_ustr, xTextC3->getString());
 }
 
@@ -1354,11 +1354,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testDataFollow)
     uno::Reference<drawing::XShapes> xGroupRight(xGroup->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xGroupC(xGroupRight->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeC1
-        = getChildShape(getChildShape(getChildShape(xGroupC, 3), 0), 0);
+        = getChildShape(getChildShape(getChildShape(xGroupC, 1), 0), 0);
     uno::Reference<text::XText> xTextC1(xShapeC1, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C1"_ustr, xTextC1->getString());
     uno::Reference<drawing::XShape> xShapeC2
-        = getChildShape(getChildShape(getChildShape(xGroupC, 5), 0), 0);
+        = getChildShape(getChildShape(getChildShape(xGroupC, 3), 0), 0);
     uno::Reference<text::XText> xTextC2(xShapeC2, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"C2"_ustr, xTextC2->getString());
 

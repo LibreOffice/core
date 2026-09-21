@@ -20,6 +20,8 @@
 #include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 #include "diagram.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <drawingml/fillproperties.hxx>
@@ -56,6 +58,34 @@
 using namespace ::com::sun::star;
 using namespace svx::diagram;
 
+namespace
+{
+// The box the shapes cover, against the origin of the Diagram, in EMU. A shape stands at a place
+// relative to the shape above it, and a turned shape covers the box round it as it is turned.
+// A group of its own draws nothing, what it covers is what the shapes in it cover.
+void gatherCover(oox::drawingml::Shape& rShape, const basegfx::B2DPoint& rOrigin,
+                 basegfx::B2DRange& rCover)
+{
+    const basegfx::B2DPoint aAt(rOrigin.getX() + rShape.getPosition().X,
+                                rOrigin.getY() + rShape.getPosition().Y);
+    const double fWidth(rShape.getSize().Width);
+    const double fHeight(rShape.getSize().Height);
+    if (rShape.getChildren().empty() && fWidth > 0.0 && fHeight > 0.0)
+    {
+        const double fAngle(basegfx::deg2rad(rShape.getRotation() / 60000.0));
+        const double fAcross(std::abs(cos(fAngle)));
+        const double fAlong(std::abs(sin(fAngle)));
+        const double fHalfWidth((fAcross * fWidth + fAlong * fHeight) / 2.0);
+        const double fHalfHeight((fAlong * fWidth + fAcross * fHeight) / 2.0);
+        const basegfx::B2DPoint aMiddle(aAt.getX() + fWidth / 2.0, aAt.getY() + fHeight / 2.0);
+        rCover.expand(basegfx::B2DRange(aMiddle.getX() - fHalfWidth, aMiddle.getY() - fHalfHeight,
+                                        aMiddle.getX() + fHalfWidth, aMiddle.getY() + fHalfHeight));
+    }
+    for (const auto& rChild : rShape.getChildren())
+        gatherCover(*rChild, aAt, rCover);
+}
+}
+
 namespace oox::drawingml
 {
 bool DiagramHelper_oox::hasDiagramData() const { return mpDiagramPtr && mpDiagramPtr->getData(); }
@@ -64,6 +94,7 @@ DiagramHelper_oox::DiagramHelper_oox(std::shared_ptr<SmartArtDiagram> xDiagramPt
                                      std::shared_ptr<::oox::drawingml::Theme> xTheme)
     : mpDiagramPtr(std::move(xDiagramPtr))
     , mpDiagramThemePtr(std::move(xTheme))
+    , maFrameInGroup(0.0, 0.0, 1.0, 1.0)
     , msNewNodeId()
     , msNewNodeText()
     , msNewNodeTemplateId()
@@ -74,6 +105,7 @@ DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
     : DiagramHelper_svx(rSource)
     , mpDiagramPtr(rSource.mpDiagramPtr ? new SmartArtDiagram(*rSource.mpDiagramPtr) : nullptr)
     , mpDiagramThemePtr(rSource.mpDiagramThemePtr)
+    , maFrameInGroup(rSource.maFrameInGroup)
     , msNewNodeId()
     , msNewNodeText()
     , msNewNodeTemplateId()
@@ -85,6 +117,7 @@ DiagramHelper_oox::DiagramHelper_oox(std::u16string_view rLayout, std::u16string
     : DiagramHelper_svx()
     , mpDiagramPtr(new SmartArtDiagram(rLayout, rData, rColors, rQuickstyle))
     , mpDiagramThemePtr()
+    , maFrameInGroup(0.0, 0.0, 1.0, 1.0)
     , msNewNodeId()
     , msNewNodeText()
     , msNewNodeTemplateId()
@@ -154,12 +187,18 @@ void DiagramHelper_oox::reLayout()
     pShapePtr->setDiagramType();
 
     // set the Size, this is important to let the layout mechanism work
-    // correctly. Since we use the XShape/SdrObject hierarchy as part of
-    // the model data, get size from there.
-    // Create bounding range using unit coordinates and the object
-    // transformation
-    const basegfx::B2DRange aRootRange(aTransformation * basegfx::B2DPoint(0, 0), // top-left
-                                       aTransformation * basegfx::B2DPoint(1, 1)); // bottom-right
+    // correctly. The room the layout fills is the frame of the Diagram, which is kept as a
+    // part of the group: the group covers what the shapes drew the last time, and a shape may
+    // stick out of the frame, an arc round a list of nodes for one. Laying out into the whole
+    // group would let such a shape grow the room with every layout.
+    const basegfx::B2DHomMatrix aFrameTransformation(
+        aTransformation
+        * basegfx::utils::createScaleTranslateB2DHomMatrix(
+              maFrameInGroup.getWidth(), maFrameInGroup.getHeight(), maFrameInGroup.getMinX(),
+              maFrameInGroup.getMinY()));
+    const basegfx::B2DRange aRootRange(aFrameTransformation * basegfx::B2DPoint(0, 0), // top-left
+                                       aFrameTransformation
+                                           * basegfx::B2DPoint(1, 1)); // bottom-right
 
     // also need to convert to Emu used by mso and thus in oox::Shape stuff
     pShapePtr->setSize(
@@ -289,8 +328,27 @@ void DiagramHelper_oox::reLayout()
                         pShapePtr->getFillProperties());
     }
 
-    // Re-apply remembered geometry
-    pTarget->TRSetBaseGeometry(aTransformation, aPolyPolygon);
+    // The shapes cover the room, or more where one sticks out of it, or less where the layout
+    // leaves a part of the room empty. The group takes what they cover, put where that lies
+    // against the frame, and the frame is remembered against the new group for the next time.
+    basegfx::B2DHomMatrix aCoverTransformation(aTransformation);
+    basegfx::B2DRange aCover;
+    gatherCover(*pShapePtr, basegfx::B2DPoint(0.0, 0.0), aCover);
+    const awt::Size& rRoom(pShapePtr->getSize());
+    if (!aCover.isEmpty() && aCover.getWidth() > 0.0 && aCover.getHeight() > 0.0 && rRoom.Width > 0
+        && rRoom.Height > 0)
+    {
+        aCoverTransformation
+            = aFrameTransformation
+              * basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aCover.getWidth() / rRoom.Width, aCover.getHeight() / rRoom.Height,
+                    aCover.getMinX() / rRoom.Width, aCover.getMinY() / rRoom.Height);
+        maFrameInGroup = basegfx::B2DRange(-aCover.getMinX() / aCover.getWidth(),
+                                           -aCover.getMinY() / aCover.getHeight(),
+                                           (rRoom.Width - aCover.getMinX()) / aCover.getWidth(),
+                                           (rRoom.Height - aCover.getMinY()) / aCover.getHeight());
+    }
+    pTarget->TRSetBaseGeometry(aCoverTransformation, aPolyPolygon);
 
     // new SdrObjects created, re-apply geometry change locks as needed
     // and reset SubSelection
@@ -704,7 +762,8 @@ void DiagramHelper_oox::applyTextFitToSizeToDiagramNodes(
     }
 }
 
-void DiagramHelper_oox::doAnchor(const uno::Reference<drawing::XShape>& rTarget)
+void DiagramHelper_oox::doAnchor(uno::Reference<drawing::XShape>& rTarget,
+                                 const awt::Point& rFramePosition, const awt::Size& rFrameSize)
 {
     if (!mpDiagramPtr || !rTarget)
     {
@@ -713,6 +772,34 @@ void DiagramHelper_oox::doAnchor(const uno::Reference<drawing::XShape>& rTarget)
 
     // sync FontHeights
     mpDiagramPtr->syncDiagramFontHeights();
+
+    // The group covers what the shapes drew, and the frame is the room the layout filled. The
+    // frame is kept in parts of the group, so it goes along when the group is moved or resized.
+    // Where the two do not go together at all the frame is taken to be the group.
+    maFrameInGroup = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+    SdrObject* pGroup(SdrObject::getSdrObjectFromXShape(rTarget));
+    if (pGroup && rFrameSize.Width > 0 && rFrameSize.Height > 0)
+    {
+        basegfx::B2DHomMatrix aGroupTransformation;
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        pGroup->TRGetBaseGeometry(aGroupTransformation, aPolyPolygon);
+        if (aGroupTransformation.isInvertible())
+        {
+            aGroupTransformation.invert();
+            const basegfx::B2DRange aFrame(
+                aGroupTransformation
+                    * basegfx::B2DPoint(convertEmuToHmm(rFramePosition.X),
+                                        convertEmuToHmm(rFramePosition.Y)),
+                aGroupTransformation
+                    * basegfx::B2DPoint(convertEmuToHmm(rFramePosition.X + rFrameSize.Width),
+                                        convertEmuToHmm(rFramePosition.Y + rFrameSize.Height)));
+            const bool bFits(aFrame.getWidth() > 0.2 && aFrame.getWidth() < 5.0
+                             && aFrame.getHeight() > 0.2 && aFrame.getHeight() < 5.0
+                             && aFrame.overlaps(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+            if (bFits)
+                maFrameInGroup = aFrame;
+        }
+    }
 
     // initialize connection to GroupObject
     connectToSdrObjGroup(rTarget, nullptr);

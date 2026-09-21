@@ -37,6 +37,8 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/token/namespaces.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <cmath>
+#include <basegfx/numeric/ftools.hxx>
 #include <svx/svdpage.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <comphelper/xmltools.hxx>
@@ -105,6 +107,53 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
         sortChildrenByZOrder(rChild);
 }
 
+// A layout turns a shape by the rot of its dgm:shape, 73 degrees for the arrow of a descending
+// process, and the box the layout gave it is the box the turned shape is to fill. The shape
+// itself is smaller than that box: turned by the angle, its own width and height reach the box
+// along both axes, W = w cos + h sin and H = w sin + h cos. The shape gets that own size, the
+// middle stays where it was, and the angle becomes a plain rotation of the shape. A right angle
+// changes nothing but which side is which, so the turn before the sizing does the same there and
+// stays; near 45 degrees the two equations say the same thing, and the shape is taken square.
+static void unturnRotatedShapes(const ShapePtr& pShape)
+{
+    for (const ShapePtr& pChild : pShape->getChildren())
+    {
+        unturnRotatedShapes(pChild);
+
+        // the angle is in 60000ths of a degree, as everywhere in the format
+        const sal_Int32 nTurn(pChild->getDiagramRotation());
+        if (nTurn == 0 || nTurn % (90 * 60000) == 0)
+            continue;
+
+        const double fAngle(basegfx::deg2rad<60000>(nTurn));
+        const double fCos(std::abs(cos(fAngle)));
+        const double fSin(std::abs(sin(fAngle)));
+        const awt::Size aBox(pChild->getSize());
+        double fWidth(0.0);
+        double fHeight(0.0);
+        const double fApart(fCos * fCos - fSin * fSin);
+        if (std::abs(fApart) < 0.05)
+            fWidth = fHeight = aBox.Width / (fCos + fSin);
+        else
+        {
+            fWidth = (aBox.Width * fCos - aBox.Height * fSin) / fApart;
+            fHeight = (aBox.Height * fCos - aBox.Width * fSin) / fApart;
+        }
+        if (fWidth <= 1.0 || fHeight <= 1.0)
+            continue;
+
+        const awt::Size aOwn(static_cast<sal_Int32>(fWidth), static_cast<sal_Int32>(fHeight));
+        awt::Point aAt(pChild->getPosition());
+        aAt.X += (aBox.Width - aOwn.Width) / 2;
+        aAt.Y += (aBox.Height - aOwn.Height) / 2;
+        pChild->setPosition(aAt);
+        pChild->setSize(aOwn);
+        pChild->setChildSize(aOwn);
+        pChild->setRotation(pChild->getRotation() + nTurn);
+        pChild->setDiagramRotation(0);
+    }
+}
+
 /// Removes empty group shapes, now that their spacing influenced the layout.
 static void removeUnneededGroupShapes(const ShapePtr& pShape)
 {
@@ -142,8 +191,10 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         // layout shapes - now all shapes are created
         ShapeLayoutingVisitor aLayoutingVisitor(*this, xRootPoint);
         mpLayout->getNode()->accept(aLayoutingVisitor);
+        settleNamedConnectors(*this);
 
         sortChildrenByZOrder(pParentShape);
+        unturnRotatedShapes(pParentShape);
         removeUnneededGroupShapes(pParentShape);
     }
 

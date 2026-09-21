@@ -56,22 +56,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     const DiagramData_oox::PointsNameMap::const_iterator aDataNode
         = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
-    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end()
-        || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end())
         return;
 
-    const rtl::Reference<svx::diagram::Point>& rNewNode(aDataNode->second.at(mnCurrIdx));
+    const rtl::Reference<svx::diagram::Point> rNewNode(presentationForPass(aDataNode->second));
     if (!mxCurrentNode.is() || !rNewNode.is())
-        return;
-
-    bool bIsChild = false;
-    for (const rtl::Reference<svx::diagram::Connection>& aConnection :
-         mrDgm.getData()->getConnections())
-        if (aConnection->msSourceId == mxCurrentNode->msModelId
-            && aConnection->msDestId == rNewNode->msModelId)
-            bIsChild = true;
-
-    if (!bIsChild)
         return;
 
     ShapePtr xCurrParent(mpParentShape);
@@ -92,6 +81,12 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         ShapeTemplateVisitor aTemplateVisitor(mrDgm, rNewNode);
         aTemplateVisitor.defaultVisit(rAtom);
         ShapePtr pShape = aTemplateVisitor.getShapeCopy();
+
+        // A layout node need not state a shape. It still takes a place and a size and it still
+        // holds what hangs below it, so it gets a group with nothing drawn in it. Without one
+        // its children would hang off its own parent and a hierarchy would come out flat.
+        if (!pShape)
+            pShape = std::make_shared<Shape>(u"com.sun.star.drawing.GroupShape"_ustr);
 
         if (pShape)
         {
@@ -119,6 +114,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     const rtl::Reference<svx::diagram::Point> xPreviousNode(mxCurrentNode);
     mxCurrentNode = rNewNode;
 
+    // From here the current Point is the one of this layout node, so a condition below asks
+    // about that and wants no stand-in from the loop above.
+    const OUString aHeldPassNodeId(msPassNodeId);
+    msPassNodeId.clear();
+
     // set new parent for children
     ShapePtr xPreviousParent(mpParentShape);
     mpParentShape = std::move(xCurrParent);
@@ -133,6 +133,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // restore parent
     mpParentShape = std::move(xPreviousParent);
+    msPassNodeId = aHeldPassNodeId;
     mxCurrentNode = xPreviousNode;
 }
 
@@ -220,28 +221,22 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 
     const DiagramData_oox::PointsNameMap::const_iterator aDataNode
         = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
-    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end()
-        || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end())
         return;
 
-    const rtl::Reference<svx::diagram::Point>& rNewNode(aDataNode->second.at(mnCurrIdx));
+    const rtl::Reference<svx::diagram::Point> rNewNode(presentationForPass(aDataNode->second));
     if (!mxCurrentNode.is() || !rNewNode.is())
-        return;
-
-    bool bIsChild = false;
-    for (const rtl::Reference<svx::diagram::Connection>& aConnection :
-         mrDgm.getData()->getConnections())
-        if (aConnection->msSourceId == mxCurrentNode->msModelId
-            && aConnection->msDestId == rNewNode->msModelId)
-            bIsChild = true;
-
-    if (!bIsChild)
         return;
 
     size_t nParentConstraintsNumber = maConstraints.size();
 
     const rtl::Reference<svx::diagram::Point> xPreviousNode(mxCurrentNode);
     mxCurrentNode = rNewNode;
+
+    // From here the current Point is the one of this layout node, so a condition below asks
+    // about that and wants no stand-in from the loop above.
+    const OUString aHeldPassNodeId(msPassNodeId);
+    msPassNodeId.clear();
 
     // process alg atoms first, nested layout nodes afterwards
     meLookFor = CONSTRAINT;
@@ -253,6 +248,7 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
 
+    msPassNodeId = aHeldPassNodeId;
     mxCurrentNode = xPreviousNode;
 
     // delete added constraints, keep parent constraints
