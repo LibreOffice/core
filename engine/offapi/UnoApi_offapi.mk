@@ -1006,9 +1006,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb,\
 	TableDescriptor \
 	TableDesign \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb/application,\
-	DefaultViewController \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdbc,\
 	CallableStatement \
 	Connection \
