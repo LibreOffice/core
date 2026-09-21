@@ -38,6 +38,7 @@
 #include "tblwordstylesdata.hxx"
 #include <docsh.hxx>
 #include <algorithm>
+#include <span>
 #include <o3tl/safeint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -1123,9 +1124,11 @@ bool SwTableAutoFormatTable::Save() const
 namespace {
 
 /// Writes one package part as a raw byte stream at the given path, creating any storage levels
-/// the path needs along the way.
+/// the path needs along the way. The part's text arrives in pieces, which are written one
+/// after the other.
 void lcl_WriteWordStylesPackagePart(const cpo::uno::Reference<css::embed::XStorage>& xRoot,
-                                     std::u16string_view sPath, std::string_view sContent)
+                                     std::u16string_view sPath,
+                                     std::span<const std::string_view> aPieces)
 {
     // Every storage level from the root down to this part's own parent needs its own commit
     // for the part to actually persist - committing only the innermost one leaves the change
@@ -1147,8 +1150,9 @@ void lcl_WriteWordStylesPackagePart(const cpo::uno::Reference<css::embed::XStora
     cpo::uno::Reference<css::io::XStream> xPartStream
         = aStorageChain.back()->openStreamElement(sName, css::embed::ElementModes::READWRITE);
     cpo::uno::Reference<css::io::XOutputStream> xOut = xPartStream->getOutputStream();
-    xOut->writeBytes(cpo::uno::Sequence<sal_Int8>(
-        reinterpret_cast<const sal_Int8*>(sContent.data()), sContent.size()));
+    for (const std::string_view& sPiece : aPieces)
+        xOut->writeBytes(cpo::uno::Sequence<sal_Int8>(
+            reinterpret_cast<const sal_Int8*>(sPiece.data()), sPiece.size()));
     xOut->closeOutput();
 
     for (auto it = aStorageChain.rbegin(); it != aStorageChain.rend(); ++it)
@@ -1157,6 +1161,13 @@ void lcl_WriteWordStylesPackagePart(const cpo::uno::Reference<css::embed::XStora
         if (xTransacted.is())
             xTransacted->commit();
     }
+}
+
+/// The same for a part whose text is in one piece.
+void lcl_WriteWordStylesPackagePart(const cpo::uno::Reference<css::embed::XStorage>& xRoot,
+                                     std::u16string_view sPath, std::string_view sContent)
+{
+    lcl_WriteWordStylesPackagePart(xRoot, sPath, std::span<const std::string_view>(&sContent, 1));
 }
 
 /// Builds a minimal in-memory DOCX package from the embedded Word table style catalog (see
@@ -1220,9 +1231,9 @@ cpo::uno::Reference<css::io::XInputStream> lcl_BuildWordTableStylesPackage()
                                     { aContentTypes.getStr(), o3tl::make_unsigned(aContentTypes.getLength()) });
     lcl_WriteWordStylesPackagePart(xRoot, u"_rels/.rels",
                                     { aRootRels.getStr(), o3tl::make_unsigned(aRootRels.getLength()) });
-    lcl_WriteWordStylesPackagePart(xRoot, u"word/document.xml", sw::tblwordstylesdata::g_sDocumentXml);
-    lcl_WriteWordStylesPackagePart(xRoot, u"word/styles.xml", sw::tblwordstylesdata::g_sStylesXml);
-    lcl_WriteWordStylesPackagePart(xRoot, u"word/theme/theme1.xml", sw::tblwordstylesdata::g_sTheme1Xml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/document.xml", sw::tblwordstylesdata::g_aDocumentXml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/styles.xml", sw::tblwordstylesdata::g_aStylesXml);
+    lcl_WriteWordStylesPackagePart(xRoot, u"word/theme/theme1.xml", sw::tblwordstylesdata::g_aTheme1Xml);
     lcl_WriteWordStylesPackagePart(xRoot, u"word/_rels/document.xml.rels",
                                     { aDocumentRels.getStr(), o3tl::make_unsigned(aDocumentRels.getLength()) });
 

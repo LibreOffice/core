@@ -51,12 +51,19 @@ THEME_CLR_SCHEME_TAGS = {
 }
 
 PARTS = [
-    ('styles.xml', 'g_sStylesXml'),
-    ('theme1.xml', 'g_sTheme1Xml'),
-    ('document.xml', 'g_sDocumentXml'),
+    ('styles.xml', 'g_aStylesXml'),
+    ('theme1.xml', 'g_aTheme1Xml'),
+    ('document.xml', 'g_aDocumentXml'),
 ]
 
 DELIMITER = 'TBLSTYLESRC'
+
+# The longest string literal every supported compiler accepts. MSVC stops at 16380 bytes for
+# one literal and at 65535 for adjacent literals joined into one, so each part is emitted as
+# an array of separate literals, none longer than this. Each piece is written with its length,
+# because a compiler that counts the characters itself does so in a constant expression, and
+# clang gives up on the whole array once that passes about a million steps.
+PIECE_SIZE = 16000
 
 HEADER_TEXT = '''/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
@@ -83,6 +90,11 @@ HEADER_TEXT = '''/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-
 // corpus (sw/qa/extras/ooxmlexport/data/tdf160077_layoutInCellB.docx) and their colors
 // recomputed from the stock Office theme, so they show the colors Word itself shows for them
 // rather than the theme of that one source document.
+//
+// Each part is an array of string pieces that together make up its text. The pieces are cut
+// at line ends, or inside a long line in front of a tag, and none is longer than 16000 bytes,
+// which is what a compiler is sure to accept as one string literal. Every piece comes with
+// its length, so building the array needs no character counting at compile time.
 //
 // tblafmt.cxx writes these parts into an in-memory package and runs it through the ordinary
 // DOCX import filter, the same path a document defining its own table style goes through.
@@ -196,6 +208,28 @@ def extract(docx_path):
     print('extracted %d table styles from %s' % (len(ids), docx_path))
 
 
+def split_pieces(content):
+    """Cuts the text into pieces of at most PIECE_SIZE bytes, each ending at a line end where
+    one falls inside the window, else right before a tag, else at the window's end."""
+    if any(ord(c) > 127 for c in content):
+        raise SystemExit('the parts are expected to be plain ASCII')
+    pieces = []
+    start = 0
+    while start < len(content):
+        end = min(start + PIECE_SIZE, len(content))
+        if end < len(content):
+            cut = content.rfind('\n', start, end)
+            if cut > start:
+                end = cut + 1
+            else:
+                cut = content.rfind('<', start + 1, end)
+                if cut > start:
+                    end = cut
+        pieces.append(content[start:end])
+        start = end
+    return pieces
+
+
 def write_header():
     with open(HEADER, 'w') as out:
         out.write(HEADER_TEXT)
@@ -204,14 +238,12 @@ def write_header():
                 content = f.read()
             if ')%s"' % DELIMITER in content:
                 raise SystemExit('%s contains the raw string delimiter' % name)
-            # A char array plus a two-argument string_view: constructing the view from the
-            # array alone would run char_traits::length as a constexpr loop over the whole
-            # text, and GCC caps such loops well below the size of styles.xml.
-            array = 'g_a' + variable[3:]
-            out.write('inline constexpr char %s[] = R"%s(%s)%s";\n'
-                      % (array, DELIMITER, content, DELIMITER))
-            out.write('inline constexpr std::string_view %s(%s, sizeof(%s) - 1);\n\n'
-                      % (variable, array, array))
+            pieces = split_pieces(content)
+            out.write('// %s in %d pieces\n' % (name, len(pieces)))
+            out.write('inline constexpr std::string_view %s[] = {\n' % variable)
+            for piece in pieces:
+                out.write('{ R"%s(%s)%s", %d },\n' % (DELIMITER, piece, DELIMITER, len(piece)))
+            out.write('};\n\n')
         out.write(FOOTER_TEXT)
     print('wrote', os.path.relpath(HEADER, ROOT))
 
