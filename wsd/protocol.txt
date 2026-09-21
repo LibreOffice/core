@@ -1047,6 +1047,10 @@ viewposition: [editmode=1] [zoompercent=<percent>] [x=<twips> y=<twips> width=<t
     present when that view was in editing mode. x and y are the top left corner
     of the area it had in view, in document twips, followed by its size.
 
+    Only a CODA client sees this. A document keeps the position of a view that
+    goes away while the app keeps the document open but detaches its view, which
+    is what CODA does when it drops excess tab contents, and on reattach sends this.
+
 textselectioncontent:
 <JSON>
 
