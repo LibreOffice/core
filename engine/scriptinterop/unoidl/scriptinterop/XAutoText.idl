@@ -15,11 +15,11 @@ interface XTextRange;
 
 interface XAutoText : XBase
 {
-    AutoTextType getAutoTextType();
+    com::sun::star::beans::Optional<AutoTextType> getAutoTextType();
 
-    long getIndex();
+    com::sun::star::beans::Optional<long> getIndex();
 
-    XTextRange getRange();
+    com::sun::star::beans::Optional<XTextRange> getRange();
 };
 
 };

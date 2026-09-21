@@ -17,7 +17,7 @@ interface XPictureFill : XBase
 
     sequence<byte> getBlob();
 
-    string getSourceUrl();
+    com::sun::star::beans::Optional<string> getSourceUrl();
 };
 
 };

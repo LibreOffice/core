@@ -33,9 +33,9 @@ interface XPageElementBase : XBase
 
     com::sun::star::beans::Optional<double> getHeight();
 
-    double getInherentHeight();
+    com::sun::star::beans::Optional<double> getInherentHeight();
 
-    double getInherentWidth();
+    com::sun::star::beans::Optional<double> getInherentWidth();
 
     double getLeft();
 
@@ -43,7 +43,7 @@ interface XPageElementBase : XBase
 
     PageElementType getPageElementType();
 
-    XGroup getParentGroup();
+    com::sun::star::beans::Optional<XGroup> getParentGroup();
 
     XPage getParentPage();
 

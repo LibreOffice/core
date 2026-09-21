@@ -15,7 +15,7 @@ interface XLineFill : XBase
 {
     LineFillType getFillType();
 
-    XSolidFill getSolidFill();
+    com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
     [overload setSolidFill] void setSolidFill([in] any color);
 

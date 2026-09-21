@@ -30,13 +30,14 @@ interface XPageBase : XBase
 
     string getObjectId();
 
-    XPageElement getPageElementById([in] string id);
+    com::sun::star::beans::Optional<XPageElement> getPageElementById([in] string id);
 
     sequence<XPageElement> getPageElements();
 
-    [overload getPlaceholder] XPageElement getPlaceholder([in] PlaceholderType placeholderType);
+    [overload getPlaceholder] com::sun::star::beans::Optional<XPageElement> getPlaceholder(
+        [in] PlaceholderType placeholderType);
 
-    [overload getPlaceholder] XPageElement getPlaceholderByIndex(
+    [overload getPlaceholder] com::sun::star::beans::Optional<XPageElement> getPlaceholderByIndex(
         [in] PlaceholderType placeholderType, [in] long placeholderIndex);
 
     sequence<XPageElement> getPlaceholders();

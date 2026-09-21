@@ -15,7 +15,7 @@ interface XTextRange;
 
 interface XTextParagraph : XBase
 {
-    long getIndex();
+    com::sun::star::beans::Optional<long> getIndex();
 
     com::sun::star::beans::Optional<XTextRange> getRange();
 };

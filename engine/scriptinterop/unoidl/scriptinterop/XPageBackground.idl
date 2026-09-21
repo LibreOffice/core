@@ -13,9 +13,9 @@ module scriptinterop {
 
 interface XPageBackground : XBase
 {
-    XPictureFill getPictureFill();
+    com::sun::star::beans::Optional<XPictureFill> getPictureFill();
 
-    XSolidFill getSolidFill();
+    com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
     PageBackgroundType getType();
 

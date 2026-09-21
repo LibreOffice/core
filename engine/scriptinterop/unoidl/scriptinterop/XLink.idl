@@ -17,15 +17,15 @@ interface XLink : XBase
 {
     LinkType getLinkType();
 
-    XSlide getLinkedSlide();
+    com::sun::star::beans::Optional<XSlide> getLinkedSlide();
 
-    string getSlideId();
+    com::sun::star::beans::Optional<string> getSlideId();
 
-    long getSlideIndex();
+    com::sun::star::beans::Optional<long> getSlideIndex();
 
-    SlidePosition getSlidePosition();
+    com::sun::star::beans::Optional<SlidePosition> getSlidePosition();
 
-    string getUrl();
+    com::sun::star::beans::Optional<string> getUrl();
 };
 
 };

@@ -18,7 +18,7 @@ interface XTextRange;
 
 interface XShape : XPageElementBase
 {
-    XAutofit getAutofit();
+    com::sun::star::beans::Optional<XAutofit> getAutofit();
 
     XBorder getBorder();
 
@@ -26,11 +26,11 @@ interface XShape : XPageElementBase
 
     XFill getFill();
 
-    XLink getLink();
+    com::sun::star::beans::Optional<XLink> getLink();
 
-    XPageElement getParentPlaceholder();
+    com::sun::star::beans::Optional<XPageElement> getParentPlaceholder();
 
-    long getPlaceholderIndex();
+    com::sun::star::beans::Optional<long> getPlaceholderIndex();
 
     PlaceholderType getPlaceholderType();
 

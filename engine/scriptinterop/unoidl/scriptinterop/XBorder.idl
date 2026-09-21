@@ -13,11 +13,11 @@ module scriptinterop {
 
 interface XBorder : XBase
 {
-    DashStyle getDashStyle();
+    com::sun::star::beans::Optional<DashStyle> getDashStyle();
 
     XLineFill getLineFill();
 
-    double getWeight();
+    com::sun::star::beans::Optional<double> getWeight();
 
     boolean isVisible();
 

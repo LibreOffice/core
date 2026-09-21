@@ -17,13 +17,13 @@ interface XListStyle : XBase
 {
     XListStyle applyListPreset([in] ListPreset listPreset);
 
-    string getGlyph();
+    com::sun::star::beans::Optional<string> getGlyph();
 
-    XList getList();
+    com::sun::star::beans::Optional<XList> getList();
 
-    long getNestingLevel();
+    com::sun::star::beans::Optional<long> getNestingLevel();
 
-    boolean isInList();
+    com::sun::star::beans::Optional<boolean> isInList();
 
     XListStyle removeFromList();
 };

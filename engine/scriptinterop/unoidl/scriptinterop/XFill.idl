@@ -13,7 +13,7 @@ module scriptinterop {
 
 interface XFill : XBase
 {
-    XSolidFill getSolidFill();
+    com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
     FillType getType();
 

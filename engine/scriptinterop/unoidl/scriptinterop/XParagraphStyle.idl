@@ -13,21 +13,21 @@ module scriptinterop {
 
 interface XParagraphStyle : XBase
 {
-    double getIndentEnd();
+    com::sun::star::beans::Optional<double> getIndentEnd();
 
-    double getIndentFirstLine();
+    com::sun::star::beans::Optional<double> getIndentFirstLine();
 
-    double getIndentStart();
+    com::sun::star::beans::Optional<double> getIndentStart();
 
-    double getLineSpacing();
+    com::sun::star::beans::Optional<double> getLineSpacing();
 
-    ParagraphAlignment getParagraphAlignment();
+    com::sun::star::beans::Optional<ParagraphAlignment> getParagraphAlignment();
 
-    double getSpaceAbove();
+    com::sun::star::beans::Optional<double> getSpaceAbove();
 
-    double getSpaceBelow();
+    com::sun::star::beans::Optional<double> getSpaceBelow();
 
-    TextDirection getTextDirection();
+    com::sun::star::beans::Optional<TextDirection> getTextDirection();
 
     XParagraphStyle setIndentEnd([in] double points);
 

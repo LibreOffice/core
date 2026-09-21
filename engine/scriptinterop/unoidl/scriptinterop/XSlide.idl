@@ -18,7 +18,7 @@ interface XSlide : XEditablePageBase
 {
     XSlide duplicate();
 
-    XLayout getLayout();
+    com::sun::star::beans::Optional<XLayout> getLayout();
 
     XNotesPage getNotesPage();
 

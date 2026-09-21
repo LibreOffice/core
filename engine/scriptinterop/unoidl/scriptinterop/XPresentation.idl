@@ -32,7 +32,7 @@ interface XPresentation : XBase
 
     double getNotesPageWidth();
 
-    XPageElement getPageElementById([in] string id);
+    com::sun::star::beans::Optional<XPageElement> getPageElementById([in] string id);
 
     double getPageHeight();
 
@@ -40,7 +40,7 @@ interface XPresentation : XBase
 
     com::sun::star::beans::Optional<XSlideSelection> getSelection();
 
-    XSlide getSlideById([in] string id);
+    com::sun::star::beans::Optional<XSlide> getSlideById([in] string id);
 
     sequence<XSlide> getSlides();
 

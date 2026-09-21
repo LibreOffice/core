@@ -22,7 +22,7 @@ interface XLine : XPageElementBase
 
     ArrowStyle getEndArrow();
 
-    XConnectionSite getEndConnection();
+    com::sun::star::beans::Optional<XConnectionSite> getEndConnection();
 
     LineCategory getLineCategory();
 
@@ -30,13 +30,13 @@ interface XLine : XPageElementBase
 
     LineType getLineType();
 
-    XLink getLink();
+    com::sun::star::beans::Optional<XLink> getLink();
 
     XPoint getStart();
 
     ArrowStyle getStartArrow();
 
-    XConnectionSite getStartConnection();
+    com::sun::star::beans::Optional<XConnectionSite> getStartConnection();
 
     double getWeight();
 

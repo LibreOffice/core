@@ -15,15 +15,15 @@ interface XSlideSelection : XBase
 {
     com::sun::star::beans::Optional<XPage> getCurrentPage();
 
-    XPageElementRange getPageElementRange();
+    com::sun::star::beans::Optional<XPageElementRange> getPageElementRange();
 
-    XPageRange getPageRange();
+    com::sun::star::beans::Optional<XPageRange> getPageRange();
 
     SelectionType getSelectionType();
 
-    XSlideTableCellRange getTableCellRange();
+    com::sun::star::beans::Optional<XSlideTableCellRange> getTableCellRange();
 
-    XTextRange getTextRange();
+    com::sun::star::beans::Optional<XTextRange> getTextRange();
 };
 
 };

@@ -15,7 +15,7 @@ interface XLink;
 
 interface XWordArt : XPageElementBase
 {
-    XLink getLink();
+    com::sun::star::beans::Optional<XLink> getLink();
 
     string getRenderedText();
 

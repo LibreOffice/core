@@ -202,12 +202,12 @@ public:
         throw cpo::uno::RuntimeException(u"getHeight: not implemented"_ustr);
     }
 
-    double SAL_CALL getInherentHeight() override
+    css::beans::Optional<double> SAL_CALL getInherentHeight() override
     {
         throw cpo::uno::RuntimeException(u"getInherentHeight: not implemented"_ustr);
     }
 
-    double SAL_CALL getInherentWidth() override
+    css::beans::Optional<double> SAL_CALL getInherentWidth() override
     {
         throw cpo::uno::RuntimeException(u"getInherentWidth: not implemented"_ustr);
     }
@@ -227,7 +227,8 @@ public:
         throw cpo::uno::RuntimeException(u"getPageElementType: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XGroup> SAL_CALL getParentGroup() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XGroup>>
+        SAL_CALL getParentGroup() override
     {
         throw cpo::uno::RuntimeException(u"getParentGroup: not implemented"_ustr);
     }
@@ -373,8 +374,8 @@ public:
         throw cpo::uno::RuntimeException(u"getObjectId: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
-    getPageElementById(OUString const&) override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPageElementById(OUString const&) override
     {
         throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
     }
@@ -385,14 +386,14 @@ public:
         throw cpo::uno::RuntimeException(u"getPageElements: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
-    getPlaceholder(scriptinterop::PlaceholderType) override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPlaceholder(scriptinterop::PlaceholderType) override
     {
         throw cpo::uno::RuntimeException(u"getPlaceholder: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
-    getPlaceholderByIndex(scriptinterop::PlaceholderType, sal_Int32) override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPlaceholderByIndex(scriptinterop::PlaceholderType, sal_Int32) override
     {
         throw cpo::uno::RuntimeException(u"getPlaceholderByIndex: not implemented"_ustr);
     }
@@ -576,67 +577,69 @@ public:
         return text_;
     }
 
-    cpo::uno::Reference<scriptinterop::XColor> SAL_CALL getBackgroundColor() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XColor>>
+        SAL_CALL getBackgroundColor() override
     {
         throw cpo::uno::RuntimeException(u"getBackgroundColor: not implemented"_ustr);
     }
 
-    scriptinterop::TextBaselineOffset SAL_CALL getBaselineOffset() override
+    css::beans::Optional<scriptinterop::TextBaselineOffset> SAL_CALL getBaselineOffset() override
     {
         throw cpo::uno::RuntimeException(u"getBaselineOffset: not implemented"_ustr);
     }
 
-    OUString SAL_CALL getFontFamily() override
+    css::beans::Optional<OUString> SAL_CALL getFontFamily() override
     {
         throw cpo::uno::RuntimeException(u"getFontFamily: not implemented"_ustr);
     }
 
-    double SAL_CALL getFontSize() override
+    css::beans::Optional<double> SAL_CALL getFontSize() override
     {
         throw cpo::uno::RuntimeException(u"getFontSize: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XColor> SAL_CALL getForegroundColor() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XColor>>
+        SAL_CALL getForegroundColor() override
     {
         throw cpo::uno::RuntimeException(u"getForegroundColor: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL getLink() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XLink>> SAL_CALL getLink() override
     {
         throw cpo::uno::RuntimeException(u"getLink: not implemented"_ustr);
     }
 
-    bool SAL_CALL hasLink() override
+    css::beans::Optional<bool> SAL_CALL hasLink() override
     {
         throw cpo::uno::RuntimeException(u"hasLink: not implemented"_ustr);
     }
 
-    bool SAL_CALL isBackgroundTransparent() override
+    css::beans::Optional<bool> SAL_CALL isBackgroundTransparent() override
     {
         throw cpo::uno::RuntimeException(u"isBackgroundTransparent: not implemented"_ustr);
     }
 
-    bool SAL_CALL isBold() override
+    css::beans::Optional<bool> SAL_CALL isBold() override
     {
         throw cpo::uno::RuntimeException(u"isBold: not implemented"_ustr);
     }
 
-    bool SAL_CALL isItalic() override
+    css::beans::Optional<bool> SAL_CALL isItalic() override
     {
         throw cpo::uno::RuntimeException(u"isItalic: not implemented"_ustr);
     }
 
-    bool SAL_CALL isSmallCaps() override
+    css::beans::Optional<bool> SAL_CALL isSmallCaps() override
     {
         throw cpo::uno::RuntimeException(u"isSmallCaps: not implemented"_ustr);
     }
 
-    bool SAL_CALL isStrikethrough() override
+    css::beans::Optional<bool> SAL_CALL isStrikethrough() override
     {
         throw cpo::uno::RuntimeException(u"isStrikethrough: not implemented"_ustr);
     }
 
-    bool SAL_CALL isUnderline() override
+    css::beans::Optional<bool> SAL_CALL isUnderline() override
     {
         throw cpo::uno::RuntimeException(u"isUnderline: not implemented"_ustr);
     }
@@ -775,7 +778,7 @@ public:
         return range_->getuno();
     }
 
-    sal_Int32 SAL_CALL getIndex() override
+    css::beans::Optional<sal_Int32> SAL_CALL getIndex() override
     {
         throw cpo::uno::RuntimeException(u"getIndex: not implemented"_ustr);
     }
@@ -1149,7 +1152,8 @@ public:
         throw cpo::uno::RuntimeException(u"getFill: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XAutofit> SAL_CALL getAutofit() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XAutofit>>
+        SAL_CALL getAutofit() override
     {
         throw cpo::uno::RuntimeException(u"getAutofit: not implemented"_ustr);
     }
@@ -1159,7 +1163,7 @@ public:
         throw cpo::uno::RuntimeException(u"getBorder: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XLink> SAL_CALL getLink() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XLink>> SAL_CALL getLink() override
     {
         throw cpo::uno::RuntimeException(u"getLink: not implemented"_ustr);
     }
@@ -1179,12 +1183,13 @@ public:
         throw cpo::uno::RuntimeException(u"setLinkSlide: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL getParentPlaceholder() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getParentPlaceholder() override
     {
         throw cpo::uno::RuntimeException(u"getParentPlaceholder: not implemented"_ustr);
     }
 
-    sal_Int32 SAL_CALL getPlaceholderIndex() override
+    css::beans::Optional<sal_Int32> SAL_CALL getPlaceholderIndex() override
     {
         throw cpo::uno::RuntimeException(u"getPlaceholderIndex: not implemented"_ustr);
     }
@@ -1346,7 +1351,7 @@ public:
         throw cpo::uno::RuntimeException(u"duplicate: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XLayout> SAL_CALL getLayout() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XLayout>> SAL_CALL getLayout() override
     {
         throw cpo::uno::RuntimeException(u"getLayout: not implemented"_ustr);
     }
@@ -1452,12 +1457,14 @@ public:
         return {true, new PageImpl(model_, page)};
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElementRange> SAL_CALL getPageElementRange() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElementRange>>
+        SAL_CALL getPageElementRange() override
     {
         throw cpo::uno::RuntimeException(u"getPageElementRange: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageRange> SAL_CALL getPageRange() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageRange>>
+        SAL_CALL getPageRange() override
     {
         throw cpo::uno::RuntimeException(u"getPageRange: not implemented"_ustr);
     }
@@ -1467,12 +1474,14 @@ public:
         throw cpo::uno::RuntimeException(u"getSelectionType: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XSlideTableCellRange> SAL_CALL getTableCellRange() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlideTableCellRange>>
+        SAL_CALL getTableCellRange() override
     {
         throw cpo::uno::RuntimeException(u"getTableCellRange: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XTextRange> SAL_CALL getTextRange() override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>>
+        SAL_CALL getTextRange() override
     {
         throw cpo::uno::RuntimeException(u"getTextRange: not implemented"_ustr);
     }
@@ -1549,8 +1558,8 @@ public:
         throw cpo::uno::RuntimeException(u"getNotesPageWidth: not implemented"_ustr);
     }
 
-    cpo::uno::Reference<scriptinterop::XPageElement> SAL_CALL
-    getPageElementById(OUString const&) override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XPageElement>>
+        SAL_CALL getPageElementById(OUString const&) override
     {
         throw cpo::uno::RuntimeException(u"getPageElementById: not implemented"_ustr);
     }
@@ -1565,7 +1574,8 @@ public:
         return {true, new SlideSelectionImpl(model_)};
     }
 
-    cpo::uno::Reference<scriptinterop::XSlide> SAL_CALL getSlideById(OUString const&) override
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XSlide>>
+        SAL_CALL getSlideById(OUString const&) override
     {
         throw cpo::uno::RuntimeException(u"getSlideById: not implemented"_ustr);
     }

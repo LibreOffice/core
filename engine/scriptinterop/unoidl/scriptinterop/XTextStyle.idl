@@ -15,31 +15,31 @@ interface XLink;
 
 interface XTextStyle : XBase
 {
-    XColor getBackgroundColor();
+    com::sun::star::beans::Optional<XColor> getBackgroundColor();
 
-    TextBaselineOffset getBaselineOffset();
+    com::sun::star::beans::Optional<TextBaselineOffset> getBaselineOffset();
 
-    string getFontFamily();
+    com::sun::star::beans::Optional<string> getFontFamily();
 
-    double getFontSize();
+    com::sun::star::beans::Optional<double> getFontSize();
 
-    XColor getForegroundColor();
+    com::sun::star::beans::Optional<XColor> getForegroundColor();
 
-    XLink getLink();
+    com::sun::star::beans::Optional<XLink> getLink();
 
-    boolean hasLink();
+    com::sun::star::beans::Optional<boolean> hasLink();
 
-    boolean isBackgroundTransparent();
+    com::sun::star::beans::Optional<boolean> isBackgroundTransparent();
 
-    boolean isBold();
+    com::sun::star::beans::Optional<boolean> isBold();
 
-    boolean isItalic();
+    com::sun::star::beans::Optional<boolean> isItalic();
 
-    boolean isSmallCaps();
+    com::sun::star::beans::Optional<boolean> isSmallCaps();
 
-    boolean isStrikethrough();
+    com::sun::star::beans::Optional<boolean> isStrikethrough();
 
-    boolean isUnderline();
+    com::sun::star::beans::Optional<boolean> isUnderline();
 
     XTextStyle removeLink();
 
