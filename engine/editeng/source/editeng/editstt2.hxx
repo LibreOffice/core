@@ -26,73 +26,73 @@ class InternalEditStatus : public EditStatus
 
 public:
     void    TurnOnFlags( EEControlBits nFlags )
-                { nControlBits |= nFlags; }
+                { m_nControlBits |= nFlags; }
 
     void    TurnOffFlags( EEControlBits nFlags )
-                { nControlBits &= ~nFlags; }
+                { m_nControlBits &= ~nFlags; }
 
     bool    UseCharAttribs() const
-                { return bool( nControlBits & EEControlBits::USECHARATTRIBS ); }
+                { return bool( m_nControlBits & EEControlBits::USECHARATTRIBS ); }
 
     bool    UseIdleFormatter() const
-                { return bool( nControlBits & EEControlBits::DOIDLEFORMAT); }
+                { return bool( m_nControlBits & EEControlBits::DOIDLEFORMAT); }
 
     bool    AllowPasteSpecial() const
-                { return bool( nControlBits & EEControlBits::PASTESPECIAL ); }
+                { return bool( m_nControlBits & EEControlBits::PASTESPECIAL ); }
 
     bool    DoAutoIndenting() const
-                { return bool( nControlBits & EEControlBits::AUTOINDENTING ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOINDENTING ); }
 
     bool    DoUndoAttribs() const
-                { return bool( nControlBits & EEControlBits::UNDOATTRIBS ); }
+                { return bool( m_nControlBits & EEControlBits::UNDOATTRIBS ); }
 
     bool    OneCharPerLine() const
     {
-        return bool(nControlBits & (EEControlBits::ONECHARPERLINE | EEControlBits::STACKED));
+        return bool(m_nControlBits & (EEControlBits::ONECHARPERLINE | EEControlBits::STACKED));
     }
 
     bool    IsOutliner() const
-                { return bool( nControlBits & EEControlBits::OUTLINER ); }
+                { return bool( m_nControlBits & EEControlBits::OUTLINER ); }
 
     bool    DoNotUseColors() const
-                { return bool( nControlBits & EEControlBits::NOCOLORS ); }
+                { return bool( m_nControlBits & EEControlBits::NOCOLORS ); }
 
     bool    AllowBigObjects() const
-                { return bool( nControlBits & EEControlBits::ALLOWBIGOBJS ); }
+                { return bool( m_nControlBits & EEControlBits::ALLOWBIGOBJS ); }
 
     bool    DoOnlineSpelling() const
-                { return bool( nControlBits & EEControlBits::ONLINESPELLING ); }
+                { return bool( m_nControlBits & EEControlBits::ONLINESPELLING ); }
 
     bool    DoStretch() const
-                { return bool( nControlBits & EEControlBits::STRETCHING ); }
+                { return bool( m_nControlBits & EEControlBits::STRETCHING ); }
 
     bool    AutoPageSize() const
-                { return bool( nControlBits & EEControlBits::AUTOPAGESIZE ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOPAGESIZE ); }
     bool    AutoPageWidth() const
-                { return bool( nControlBits & EEControlBits::AUTOPAGESIZEX ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOPAGESIZEX ); }
     bool    AutoPageHeight() const
-                { return bool( nControlBits & EEControlBits::AUTOPAGESIZEY ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOPAGESIZEY ); }
 
     bool    MarkNonUrlFields() const
-                { return bool( nControlBits & EEControlBits::MARKNONURLFIELDS ); }
+                { return bool( m_nControlBits & EEControlBits::MARKNONURLFIELDS ); }
 
     bool    MarkUrlFields() const
-                { return bool( nControlBits & EEControlBits::MARKURLFIELDS ); }
+                { return bool( m_nControlBits & EEControlBits::MARKURLFIELDS ); }
 
     bool    DoImportRTFStyleSheets() const
-                { return bool( nControlBits & EEControlBits::RTFSTYLESHEETS ); }
+                { return bool( m_nControlBits & EEControlBits::RTFSTYLESHEETS ); }
 
     bool    DoAutoCorrect() const
-                { return bool( nControlBits & EEControlBits::AUTOCORRECT ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOCORRECT ); }
 
     bool    DoAutoComplete() const
-                { return bool( nControlBits & EEControlBits::AUTOCOMPLETE ); }
+                { return bool( m_nControlBits & EEControlBits::AUTOCOMPLETE ); }
 
     bool    ULSpaceSummation() const
-                { return bool( nControlBits & EEControlBits::ULSPACESUMMATION ); }
+                { return bool( m_nControlBits & EEControlBits::ULSPACESUMMATION ); }
 
     bool    IsSingleLine() const
-                { return bool( nControlBits & EEControlBits::SINGLELINE ); }
+                { return bool( m_nControlBits & EEControlBits::SINGLELINE ); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

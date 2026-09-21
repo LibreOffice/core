@@ -99,18 +99,18 @@ inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
 class EditStatus
 {
 protected:
-    EditStatusFlags nStatusBits;
-    EEControlBits   nControlBits;
+    EditStatusFlags m_nStatusBits;
+    EEControlBits   m_nControlBits;
 
 public:
-            EditStatus()                { nStatusBits = EditStatusFlags::NONE; nControlBits = EEControlBits::NONE; }
+            EditStatus()                { m_nStatusBits = EditStatusFlags::NONE; m_nControlBits = EEControlBits::NONE; }
 
-    void    Clear()                     { nStatusBits = EditStatusFlags::NONE; }
+    void    Clear()                     { m_nStatusBits = EditStatusFlags::NONE; }
 
-    EditStatusFlags  GetStatusWord() const       { return nStatusBits; }
-    EditStatusFlags& GetStatusWord()             { return nStatusBits; }
+    EditStatusFlags  GetStatusWord() const       { return m_nStatusBits; }
+    EditStatusFlags& GetStatusWord()             { return m_nStatusBits; }
 
-    EEControlBits& GetControlWord()            { return nControlBits; }
+    EEControlBits& GetControlWord()            { return m_nControlBits; }
 };
 
 #endif // INCLUDED_EDITENG_EDITSTAT_HXX
