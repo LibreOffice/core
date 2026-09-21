@@ -833,22 +833,30 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         P2 = rTransformationFromUnitCircle*(aStart*P2);
         P3 = rTransformationFromUnitCircle*(aStart*P3);
 
-        pPoints[nPoint].X = static_cast< sal_Int32 >( P0.getX());
-        pPoints[nPoint].Y = static_cast< sal_Int32 >( P0.getY());
+        // The coordinates are truncated to whole 1/100 mm. A coordinate
+        // that is mathematically a whole number, like the topmost point
+        // of a circle, comes out of the transformations a tiny amount
+        // above or below it, and which side depends on how the platform
+        // rounds its floating-point operations. approxValue removes that
+        // noise, so the truncation gives the same point everywhere.
+        auto toInt = [](double f) { return static_cast<sal_Int32>(rtl::math::approxValue(f)); };
+
+        pPoints[nPoint].X = toInt(P0.getX());
+        pPoints[nPoint].Y = toInt(P0.getY());
         pFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
 
-        pPoints[nPoint].X = static_cast< sal_Int32 >( P1.getX());
-        pPoints[nPoint].Y = static_cast< sal_Int32 >( P1.getY());
+        pPoints[nPoint].X = toInt(P1.getX());
+        pPoints[nPoint].Y = toInt(P1.getY());
         pFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
 
-        pPoints[nPoint].X = static_cast< sal_Int32 >( P2.getX());
-        pPoints[nPoint].Y = static_cast< sal_Int32 >( P2.getY());
+        pPoints[nPoint].X = toInt(P2.getX());
+        pPoints[nPoint].Y = toInt(P2.getY());
         pFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
 
         if(nSegment==(nSegmentCount-1))
         {
-            pPoints[nPoint].X = static_cast< sal_Int32 >( P3.getX());
-            pPoints[nPoint].Y = static_cast< sal_Int32 >( P3.getY());
+            pPoints[nPoint].X = toInt(P3.getX());
+            pPoints[nPoint].Y = toInt(P3.getY());
             pFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
         }
     }
