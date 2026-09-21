@@ -2959,7 +2959,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			{ type: 'separator', id: 'picture-transparency-break', orientation: 'vertical' },
 			{
 				'id': 'picture-tab-fillcolor:ColorPickerMenu',
-				'type': 'menubutton',
+				'type': 'bigtoolitem',
 				'text': _UNO('.uno:FillColor'),
 				'command': '.uno:FillColor',
 				'accessibility': { focusBack: true, combination: 'FC', de: null }

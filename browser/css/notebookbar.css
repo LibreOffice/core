@@ -534,6 +534,19 @@ label.notebookbar.ui-checkbox-label {
 	color: var(--color-main-text);
 }
 
+/* big color split button */
+.unotoolbutton.notebookbar.has-label.has-colorpicker .unobutton img {
+	width: var(--btn-img-size) !important;
+	height: var(--btn-img-size) !important;
+	object-fit: contain;
+	margin: 0 auto !important;
+}
+
+.unotoolbutton.notebookbar.has-label.has-colorpicker .selected-color {
+	display: block;
+	margin: 0 auto 4px;
+}
+
 /* adding focus to tab in notebookbar */
 .ui-tab.selected.notebookbar.add-focus-to-tab {
 	border: 2px solid black !important
