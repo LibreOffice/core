@@ -762,7 +762,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPageCrossrefUpdate)
     CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aExpand);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHtmlKeepsBoldDropsColor)
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteCharProps)
 {
     // Given an empty Writer document with the merged-paste flag on:
     createSwDoc();
@@ -770,12 +770,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHtmlKeepsBoldDropsColor)
     pDoc->SetInMergedPaste(true);
     comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
 
-    // When importing an HTML file with a bold, red run into it:
+    // When importing an HTML file with a bold, red, superscript run into it:
     cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste.html")) };
     dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
 
-    // Then the pasted run's autoformat keeps bold but drops the red colour:
+    // Then the pasted run's autoformat keeps bold and superscript but drops the red colour:
     SwTextNode* pTextNode = nullptr;
     SwNodes& rNodes = pDoc->GetNodes();
     for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
@@ -808,6 +808,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHtmlKeepsBoldDropsColor)
     CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, pWeight->GetWeight());
     // Without the accompanying fix in place, this test would have failed, color was kept.
     CPPUNIT_ASSERT(!rSet.GetItemIfSet(RES_CHRATR_COLOR));
+    // Superscript is also kept:
+    const SvxEscapementItem* pEscapement = rSet.GetItemIfSet(RES_CHRATR_ESCAPEMENT);
+    CPPUNIT_ASSERT(pEscapement);
+    CPPUNIT_ASSERT(pEscapement->GetEsc() > 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

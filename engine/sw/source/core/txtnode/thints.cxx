@@ -1208,6 +1208,14 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
                 case sal_uInt16(RES_CHRATR_CTL_POSTURE):
                 // Underline
                 case sal_uInt16(RES_CHRATR_UNDERLINE):
+                // Superscript / subscript
+                case sal_uInt16(RES_CHRATR_ESCAPEMENT):
+                // Hidden text
+                case sal_uInt16(RES_CHRATR_HIDDEN):
+                // Proofing language
+                case sal_uInt16(RES_CHRATR_LANGUAGE):
+                case sal_uInt16(RES_CHRATR_CJK_LANGUAGE):
+                case sal_uInt16(RES_CHRATR_CTL_LANGUAGE):
                     continue;
                 default:
                     aFiltered.ClearItem(nWhich);
