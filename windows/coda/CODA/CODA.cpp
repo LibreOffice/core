@@ -111,18 +111,25 @@ struct DocumentTab
     FilenameAndUri filenameAndUri;
     DocumentMode mode = DocumentMode::EDIT;
     int appDocId = 0;
+    // The document kind the tab strip keys its icon and colour off: "writer",
+    // "calc", "impress", "draw", "starter", "welcome" or "other".
+    std::string docType = "other";
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
 };
 
-// One top-level window. It holds its documents in the order they were opened, and the
-// window-wide state that belongs to none of them in particular.
+// One top-level window. It holds its documents in the order the tab strip shows
+// them, and the window-wide state that belongs to none of them in particular.
 struct WindowState
 {
     HWND hWnd = 0;
     std::vector<int> tabIds;
     int activeTabId = 0;
+    // The tab strip. It is created with the window and shown at two documents.
+    wil::com_ptr<ICoreWebView2Controller> stripController;
+    wil::com_ptr<ICoreWebView2> stripWebView;
+    bool stripIsVisible = false;
     // The transparent window raised over the web view for the duration of a drag from the desktop,
     // and the drop target registered for it. Both are created when the first such drag arrives.
     HWND hOverlayWnd = 0;
@@ -138,6 +145,10 @@ struct WindowState
 // capture an entry by reference and run long after the container has grown.
 static std::map<int, DocumentTab> documentTabs;
 static std::map<HWND, WindowState> windows;
+
+// The window that shows documents as tabs. There is one, created with the first
+// document and gone once its last tab closes.
+static HWND tabbedWindow = 0;
 
 static DocumentTab* findTab(int tabId)
 {
@@ -278,6 +289,10 @@ static void closeTab(WindowState& window, int tabId);
 static void layoutTabs(WindowState& window);
 
 static RECT documentArea(const WindowState& window);
+
+static void updateStripVisibility(WindowState& window);
+
+static void pushTabsToStrip(WindowState& window);
 
 [[noreturn]] static void fatal(const std::string& message)
 {
@@ -642,6 +657,9 @@ static void enter_full_screen(WindowState& data, HMONITOR monitor, bool saveRest
                  monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
                  SWP_NOZORDER | SWP_FRAMECHANGED);
     data.isFullScreen = true;
+
+    // The presentation has the monitor to itself, tab strip included.
+    updateStripVisibility(data);
 }
 
 static void leave_full_screen(WindowState& data)
@@ -667,6 +685,8 @@ static void leave_full_screen(WindowState& data)
                  SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOMOVE);
 
     data.isFullScreen = false;
+
+    updateStripVisibility(data);
 }
 
 static void do_bye_handling_things(const DocumentTab& data)
@@ -1427,9 +1447,9 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
     DocumentTab* tab = window ? activeTabOf(*window) : nullptr;
     const bool canInsert = tab && tab->mode == DocumentMode::EDIT && !tab->isConsole;
 
-    // The page places the insert relative to the top left corner of the document view. A drop on
-    // the window frame arrives negative and stays that way, which puts the insert at the cursor
-    // instead.
+    // The document view starts below the tab strip, and the page places the insert relative to
+    // its own top left corner. A drop on the window frame arrives negative and stays that way,
+    // which puts the insert at the cursor instead.
     POINT documentPoint = dropPoint;
     if (window && documentPoint.x >= 0 && documentPoint.y >= 0)
     {
@@ -1569,7 +1589,8 @@ static void showDropOverlay(WindowState& data)
     // Where the document view of the window is on the screen. The overlay is a window of its own
     // rather than a child window, because only a top-level window can be made transparent with a
     // layer, and it is owned by the document window, which keeps it above that window and takes it
-    // away when the document window goes.
+    // away when the document window goes. It stops short of the tab strip, which takes its own
+    // drags.
     const RECT bounds = documentArea(data);
     const int width = bounds.right - bounds.left;
     const int height = bounds.bottom - bounds.top;
@@ -1927,8 +1948,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
         case WM_NCDESTROY:
         {
-            if (findWindow(hWnd))
+            WindowState* window = findWindow(hWnd);
+            if (window)
+            {
+                if (window->stripController)
+                {
+                    window->stripController->Close();
+                    window->stripController = nullptr;
+                }
+                window->stripWebView = nullptr;
+                if (tabbedWindow == hWnd)
+                    tabbedWindow = 0;
                 windows.erase(hWnd);
+            }
             break;
         }
 
@@ -2537,6 +2569,35 @@ static void withWebView2Environment(std::function<void(ICoreWebView2Environment*
             .Get());
 }
 
+// The document kind the tab strip keys its icon and colour off. The engine
+// decides what a file really is when it opens it; the strip needs a name for it
+// before that, and the extension is what there is to go on.
+static std::string docTypeFromFilename(const std::string& filename)
+{
+    const auto lastPeriod = filename.find_last_of('.');
+    if (lastPeriod == std::string::npos)
+        return "other";
+
+    std::string extension = filename.substr(lastPeriod + 1);
+    for (char& c : extension)
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+
+    static const std::set<std::string> writer = { "odt", "ott", "doc", "docx", "rtf", "txt", "fodt" };
+    static const std::set<std::string> calc = { "ods", "ots", "xls", "xlsx", "csv", "fods" };
+    static const std::set<std::string> impress = { "odp", "otp", "ppt", "pptx", "fodp" };
+    static const std::set<std::string> draw = { "odg", "otg", "fodg" };
+
+    if (writer.count(extension))
+        return "writer";
+    if (calc.count(extension))
+        return "calc";
+    if (impress.count(extension))
+        return "impress";
+    if (draw.count(extension))
+        return "draw";
+    return "other";
+}
+
 // The window takes its title from the document it shows.
 static std::wstring windowTitleForTab(const DocumentTab& tab)
 {
@@ -2560,22 +2621,53 @@ static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenam
     tab.hWnd = window.hWnd;
     tab.filenameAndUri = filenameAndUri;
     tab.mode = mode;
+    if (mode == DocumentMode::STARTER)
+        tab.docType = "starter";
+    else if (mode == DocumentMode::WELCOME)
+        tab.docType = "welcome";
+    else
+        tab.docType = docTypeFromFilename(filenameAndUri.filename);
 
     window.tabIds.push_back(tabId);
 
     return tab;
 }
 
-// The part of the window a document is shown in, which for now is all of it.
+// How tall the tab strip is at the standard resolution, in the same units the
+// strip page lays itself out in.
+static const int TAB_STRIP_HEIGHT = 36;
+
+static int stripHeight(const WindowState& window)
+{
+    if (!window.stripIsVisible)
+        return 0;
+    return MulDiv(TAB_STRIP_HEIGHT, GetDpiForWindow(window.hWnd), USER_DEFAULT_SCREEN_DPI);
+}
+
+// A minimized window has no client area at all, so both of these keep the
+// bottom edge at or below the top one: a web view rejects a rectangle that is
+// the wrong way round.
+static RECT stripBounds(const WindowState& window)
+{
+    RECT bounds;
+    GetClientRect(window.hWnd, &bounds);
+    bounds.bottom = std::min(bounds.bottom, bounds.top + stripHeight(window));
+    return bounds;
+}
+
 static RECT documentArea(const WindowState& window)
 {
     RECT bounds;
     GetClientRect(window.hWnd, &bounds);
+    bounds.top = std::min(bounds.bottom, bounds.top + stripHeight(window));
     return bounds;
 }
 
 static void layoutTabs(WindowState& window)
 {
+    if (window.stripController)
+        window.stripController->put_Bounds(stripBounds(window));
+
     // Every document keeps the right size, not just the one on show, so a
     // switch between tabs never lands on a stale layout.
     const RECT bounds = documentArea(window);
@@ -2587,7 +2679,79 @@ static void layoutTabs(WindowState& window)
     }
 }
 
-// The keyboard belongs to the document whenever the window brings one to the front.
+// Fresh strips start in the saved dark mode choice, or in the system theme.
+static std::string currentStripTheme()
+{
+    return darkModeEnabled() ? "dark" : "light";
+}
+
+// The state the tab strip draws, one entry per document in tab order.
+static std::string currentTabsJson(const WindowState& window)
+{
+    Poco::JSON::Array tabs;
+    for (int tabId : window.tabIds)
+    {
+        const DocumentTab* tab = findTab(tabId);
+        if (!tab)
+            continue;
+
+        Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+        entry->set("id", tab->tabId);
+        entry->set("title", tab->filenameAndUri.filename);
+        entry->set("docType", tab->docType);
+        entry->set("active", tab->tabId == window.activeTabId);
+        tabs.add(entry);
+    }
+
+    std::ostringstream oss;
+    tabs.stringify(oss);
+    return oss.str();
+}
+
+// The strip page reads a notification as {signal, args}, the mirror image of the
+// {call, args} it posts back.
+static void notifyStrip(WindowState& window, const std::string& signal,
+                        const std::string& argument)
+{
+    if (!window.stripWebView)
+        return;
+
+    Poco::JSON::Array::Ptr args = new Poco::JSON::Array();
+    args->add(argument);
+
+    Poco::JSON::Object::Ptr envelope = new Poco::JSON::Object();
+    envelope->set("signal", signal);
+    envelope->set("args", args);
+
+    std::ostringstream oss;
+    envelope->stringify(oss);
+
+    window.stripWebView->PostWebMessageAsJson(
+        Util::string_to_wide_string(oss.str()).c_str());
+}
+
+static void updateStripVisibility(WindowState& window)
+{
+    // A single document needs no strip to pick from, and a presentation wants
+    // the whole monitor.
+    const bool visible = window.tabIds.size() > 1 && !window.isFullScreen;
+    if (visible == window.stripIsVisible)
+        return;
+
+    window.stripIsVisible = visible;
+    if (window.stripController)
+        window.stripController->put_IsVisible(visible);
+    layoutTabs(window);
+}
+
+static void pushTabsToStrip(WindowState& window)
+{
+    updateStripVisibility(window);
+    notifyStrip(window, "tabsChanged", currentTabsJson(window));
+}
+
+// The strip page handles no keys, so the keyboard belongs to the document even
+// when the click that got us here landed on a tab.
 static void focusActiveDocument(const WindowState& window)
 {
     DocumentTab* tab = activeTabOf(window);
@@ -2614,6 +2778,8 @@ static void activateTab(WindowState& window, int tabId)
     focusActiveDocument(window);
 
     SetWindowTextW(window.hWnd, windowTitleForTab(*tab).c_str());
+
+    pushTabsToStrip(window);
 }
 
 static void closeTab(WindowState& window, int tabId)
@@ -2639,7 +2805,7 @@ static void closeTab(WindowState& window, int tabId)
     {
         // A presentation ends with the document driving it: the console window
         // goes, and the window this document was playing in comes back out of
-        // full screen.
+        // full screen with its tab strip.
         if (tab->hConsoleWnd)
         {
             PostMessageW(tab->hConsoleWnd, WM_CLOSE, 0, 0);
@@ -2694,6 +2860,7 @@ static void closeTab(WindowState& window, int tabId)
     }
     else
     {
+        pushTabsToStrip(window);
         focusActiveDocument(window);
     }
 }
@@ -2709,7 +2876,143 @@ static void reorderTab(WindowState& window, int fromIndex, int toIndex)
     window.tabIds.erase(window.tabIds.begin() + fromIndex);
     window.tabIds.insert(window.tabIds.begin() + toIndex, tabId);
 
+    pushTabsToStrip(window);
     focusActiveDocument(window);
+}
+
+static void openStarterWindow();
+
+// What the tab strip page asks of the app, as {call, args}.
+static void processStripMessage(WindowState& window, const std::string& message)
+{
+    Poco::JSON::Object::Ptr object;
+    if (!JsonUtil::parseJSON(message, object))
+    {
+        LOG_ERR("Unparseable message from the tab strip: '" << message << "'");
+        return;
+    }
+
+    const std::string call = object->optValue<std::string>("call", std::string());
+    Poco::JSON::Array::Ptr args = object->getArray("args");
+    const std::size_t argCount = args ? args->size() : 0;
+
+    if (call == "requestSync")
+    {
+        // The page has its handlers in place and wants the state it missed.
+        notifyStrip(window, "themeChanged", currentStripTheme());
+        pushTabsToStrip(window);
+    }
+    else if (call == "tabActivated" && argCount >= 1)
+    {
+        activateTab(window, args->getElement<int>(0));
+    }
+    else if (call == "tabCloseRequested" && argCount >= 1)
+    {
+        PostMessageW(window.hWnd, CODA_WM_CLOSETAB, (WPARAM)args->getElement<int>(0), 0);
+    }
+    else if (call == "tabReordered" && argCount >= 2)
+    {
+        reorderTab(window, args->getElement<int>(0), args->getElement<int>(1));
+    }
+    else if (call == "newTabRequested")
+    {
+        openStarterWindow();
+    }
+    else if (call == "debug" && argCount >= 1)
+    {
+        LOG_DBG("From the tab strip: " << args->getElement<std::string>(0));
+    }
+    else if (call == "tabDragStarted" || call == "tabDragEnded" || call == "targetDragOver" ||
+             call == "tabAdoptFromOtherWindow")
+    {
+        // Dragging a tab from one window to another. There is a single window
+        // here, and a drag that stays inside the strip arrives as tabReordered.
+    }
+    else
+    {
+        LOG_ERR("Unhandled message from the tab strip: '" << message << "'");
+    }
+}
+
+// The tab strip is the same page CODA-Q draws, in a web view of its own along the top of the
+// window.
+static void createTabStrip(WindowState& window)
+{
+    const HWND hWnd = window.hWnd;
+
+    withWebView2Environment(
+        [hWnd](ICoreWebView2Environment* env)
+        {
+            env->CreateCoreWebView2Controller(
+                hWnd,
+                Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    [hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+                    {
+                        WindowState* window = findWindow(hWnd);
+                        if (!controller || !window)
+                            return E_FAIL;
+
+                        ICoreWebView2* webView;
+                        controller->get_CoreWebView2(&webView);
+                        window->stripWebView = wil::com_ptr<ICoreWebView2>(webView);
+                        window->stripController = controller;
+
+                        wil::com_ptr<ICoreWebView2Settings> settings;
+                        webView->get_Settings(&settings);
+                        settings->put_IsScriptEnabled(TRUE);
+                        settings->put_IsWebMessageEnabled(TRUE);
+                        settings->put_AreDefaultContextMenusEnabled(FALSE);
+                        // The strip is part of the window frame rather than content, so it stays at
+                        // one scale. Ctrl with the wheel and the keyboard shortcuts go through
+                        // IsZoomControlEnabled, and a touch pinch has its own setting on
+                        // ICoreWebView2Settings5.
+                        settings->put_IsZoomControlEnabled(FALSE);
+                        wil::com_ptr<ICoreWebView2Settings5> settings5
+                            = settings.try_query<ICoreWebView2Settings5>();
+                        if (settings5)
+                            settings5->put_IsPinchZoomEnabled(FALSE);
+                        // The strip stays on the one page it loaded, so a horizontal swipe across
+                        // it does not navigate.
+                        wil::com_ptr<ICoreWebView2Settings6> settings6
+                            = settings.try_query<ICoreWebView2Settings6>();
+                        if (settings6)
+                            settings6->put_IsSwipeNavigationEnabled(FALSE);
+
+                        EventRegistrationToken token;
+                        webView->add_WebMessageReceived(
+                            Microsoft::WRL::Callback<ICoreWebView2WebMessageReceivedEventHandler>(
+                                [hWnd](ICoreWebView2* sender,
+                                       ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT
+                                {
+                                    WindowState* window = findWindow(hWnd);
+                                    if (!window)
+                                        return S_OK;
+
+                                    // The page posts an object, so the message
+                                    // arrives as JSON rather than as a string.
+                                    wil::unique_cotaskmem_string json;
+                                    if (SUCCEEDED(args->get_WebMessageAsJson(&json)))
+                                        processStripMessage(
+                                            *window, Util::wide_string_to_string(json.get()));
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
+
+                        controller->put_IsVisible(window->stripIsVisible);
+                        controller->put_Bounds(stripBounds(*window));
+
+                        // The page reads the theme out of the query string, so
+                        // it is in the right colours from its first paint.
+                        const std::string stripURL =
+                            app_installation_uri + "../cool/qtapp-tabstrip.html?darkTheme=" +
+                            (currentStripTheme() == "dark" ? "true" : "false");
+                        webView->Navigate(Util::string_to_wide_string(stripURL).c_str());
+
+                        return S_OK;
+                    })
+                    .Get());
+        });
 }
 
 // The web view of one document, in the window its tab belongs to. The document
@@ -2760,8 +3063,8 @@ static void createDocumentView(int tabId)
                         if (settings4)
                             settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
 
-                        // Fit the WebView to the part of the window a document is shown in, and
-                        // show it only if this is the document the window is on.
+                        // Fit the WebView to the part of the window below the tab strip, and show
+                        // it only if this is the document the window is on.
                         WindowState* window = findWindow(data->hWnd);
                         if (window)
                         {
@@ -3015,6 +3318,27 @@ static void defaultWindowSize(int& width, int& height)
     }
 }
 
+// The window that shows documents as tabs. There is one, made with the first
+// document and gone once its last tab closes.
+static WindowState& getOrCreateTabbedWindow()
+{
+    WindowState* existing = findWindow(tabbedWindow);
+    if (existing)
+        return *existing;
+
+    int width, height;
+    defaultWindowSize(width, height);
+
+    WindowState& window = createAppWindow(Util::string_to_wide_string(APP_NAME),
+                                          WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                                          width, height);
+    tabbedWindow = window.hWnd;
+
+    createTabStrip(window);
+
+    return window;
+}
+
 // The window the welcome slideshow plays in. It is displayed without
 // decorations, and at 16:9 because we know it is that aspect ratio.
 static WindowState& createWelcomeWindow()
@@ -3054,23 +3378,25 @@ static WindowState& createWelcomeWindow()
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
 {
-    // Every document opens in a window of its own, holding it as the single
-    // document of that window.
+    // The welcome slideshow and the starter backstage each get a window to
+    // themselves: neither is a document the user works in alongside others.
     WindowState* window = nullptr;
     if (mode == DocumentMode::WELCOME)
     {
         window = &createWelcomeWindow();
     }
-    else
+    else if (mode == DocumentMode::STARTER)
     {
         int width, height;
         defaultWindowSize(width, height);
-        const std::wstring title = mode == DocumentMode::STARTER
-                                       ? Util::string_to_wide_string(APP_NAME)
-                                       : Util::string_to_wide_string(filenameAndUri.filename
-                                                                     + " - " APP_NAME);
-        window = &createAppWindow(title, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-                                  width, height);
+        window = &createAppWindow(Util::string_to_wide_string(APP_NAME), WS_OVERLAPPEDWINDOW,
+                                  CW_USEDEFAULT, CW_USEDEFAULT, width, height);
+    }
+    else
+    {
+        window = &getOrCreateTabbedWindow();
+        // The document the user just asked for comes to the front.
+        SetForegroundWindow(window->hWnd);
     }
 
     DocumentTab& tab = createTab(*window, filenameAndUri, mode);
@@ -3082,6 +3408,21 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
 
     activateTab(*window, tab.tabId);
     createDocumentView(tab.tabId);
+}
+
+static void openStarterWindow()
+{
+    // One backstage is enough: a second ask brings the open one forward.
+    for (const auto& i : documentTabs)
+    {
+        if (i.second.mode == DocumentMode::STARTER)
+        {
+            SetForegroundWindow(i.second.hWnd);
+            return;
+        }
+    }
+
+    openCOOLWindow({}, DocumentMode::STARTER);
 }
 
 namespace
@@ -3702,6 +4043,10 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         {
             Desktop::setDarkMode(s.substr(strlen("SETDARKMODE ")) == L"true");
             applyTitleBarThemeToAllWindows();
+
+            // The tab strip is a page of its own and follows along.
+            for (auto& i : windows)
+                notifyStrip(i.second, "themeChanged", currentStripTheme());
         }
         else if (s.starts_with(L"downloadas "))
         {
@@ -3874,6 +4219,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             auto filename = path.substr(lastSlash + 1);
             data.filenameAndUri = { filename, Poco::URI(url).toString() } ;
             recentFiles.add(data.filenameAndUri.uri);
+            data.docType = docTypeFromFilename(filename);
 
             // Connect to COOLWSD
             int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);
@@ -3889,10 +4235,13 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             std::string message(data.filenameAndUri.uri + " " + std::to_string(data.appDocId));
             fakeSocketWriteQueue(data.fakeClientFd, message.c_str(), message.size());
 
-            // Update window title with new filename
+            // Update window title and tab with new filename
             if (WindowState* window = findWindow(data.hWnd))
+            {
                 if (window->activeTabId == data.tabId)
                     SetWindowTextW(data.hWnd, windowTitleForTab(data).c_str());
+                pushTabsToStrip(*window);
+            }
         }
         else if (s == L"uno .uno:Open")
         {
