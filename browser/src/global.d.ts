@@ -357,7 +357,7 @@ interface ErrorMessages {
 
 interface PluralParseRule {
 	nplurals: number;
-	select: (n: number) => 0 | 1;
+	select: (n: number) => number;
 }
 
 // Accessibility validator interface for Cypress tests
