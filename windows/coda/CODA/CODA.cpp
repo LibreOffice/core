@@ -114,6 +114,8 @@ struct DocumentTab
     // The document kind the tab strip keys its icon and colour off: "writer",
     // "calc", "impress", "draw", "starter", "welcome" or "other".
     std::string docType = "other";
+    // The document holds changes that have not reached the file yet.
+    bool isModified = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -2711,6 +2713,7 @@ static std::string currentTabsJson(const WindowState& window)
         entry->set("id", tab->tabId);
         entry->set("title", tab->filenameAndUri.filename);
         entry->set("docType", tab->docType);
+        entry->set("modified", tab->isModified);
         entry->set("active", tab->tabId == window.activeTabId);
         tabs.add(entry);
     }
@@ -4119,6 +4122,26 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             for (auto& i : windows)
                 notifyStrip(i.second, "themeChanged", currentStripTheme());
         }
+        else if (s.starts_with(L"COMMANDSTATECHANGED "))
+        {
+            Poco::JSON::Object::Ptr object;
+            if (!JsonUtil::parseJSON(Util::wide_string_to_string(s), object))
+                return;
+
+            if (object->optValue<std::string>("commandName", std::string()) !=
+                ".uno:ModifiedStatus")
+                return;
+
+            const bool modified =
+                object->optValue<std::string>("state", std::string()) == "true";
+            if (modified == data.isModified)
+                return;
+
+            // The tab shows a document with unwritten changes differently.
+            data.isModified = modified;
+            if (WindowState* window = findWindow(data.hWnd))
+                pushTabsToStrip(*window);
+        }
         else if (s.starts_with(L"downloadas "))
         {
             // "downloadas name=document.rtf id=export format=rtf options="
@@ -4291,6 +4314,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             data.filenameAndUri = { filename, Poco::URI(url).toString() } ;
             recentFiles.add(data.filenameAndUri.uri);
             data.docType = docTypeFromFilename(filename);
+            data.isModified = false;
 
             // Connect to COOLWSD
             int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);

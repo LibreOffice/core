@@ -2146,7 +2146,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// A command may only carry 'enabled' flag (.uno:DatabaseSettings).
 			if (json.commandName && (json.state !== undefined || json.enabled !== undefined)) {
 				this._map.fire('commandstatechanged', json);
-				if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp) {
+				if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 					window.postMobileMessage('COMMANDSTATECHANGED ' + JSON.stringify(json));
 				}
 			}
@@ -2168,7 +2168,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var state = index !== -1 ? textMsg.substr(index + 1) : '';
 			const json = {commandName : commandName, state : state};
 			this._map.fire('commandstatechanged', json);
-			if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp) {
+			if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 				window.postMobileMessage('COMMANDSTATECHANGED ' + JSON.stringify(json));
 			}
 		}
