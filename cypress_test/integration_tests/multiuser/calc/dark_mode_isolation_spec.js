@@ -47,18 +47,12 @@ describe(['tagmultiuser'], 'Dark mode is isolated per user', function() {
 		cy.wait(1200);
 
 		// User 2 reloads: their own (light) setting comes back, not user 1's dark.
-		cy.cSetActiveFrame('#iframe2');
-		cy.get('#form2').submit();
-		cy.wait(1000); // let the frame unload
-		helper.documentChecks(true);
+		helper.reloadFrameAndWaitForNewPage('#iframe2', '#form2');
 		assertThemeIs('light');
 
 		// User 1 reloads: dark is restored from their own setting. (Reloading
 		// iframe1 also reloads iframe2 through the harness; it stays light.)
-		cy.cSetActiveFrame('#iframe1');
-		cy.get('#form1').submit();
-		cy.wait(1000);
-		helper.documentChecks(true);
+		helper.reloadFrameAndWaitForNewPage('#iframe1', '#form1');
 		assertThemeIs('dark');
 
 		cy.cSetActiveFrame('#iframe2');

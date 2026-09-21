@@ -38,13 +38,7 @@ describe(['tagmultiuser'], 'Joining a document should not trigger an invalidatio
 
 			// joining triggered some theme related invalidations
 
-			// Reload page
-			cy.cSetActiveFrame('#iframe2');
-			cy.get('#form2').submit();
-			// Wait for page to unload
-			cy.wait(1000);
-			// Wait for page to finish loading
-			helper.documentChecks(true);
+			helper.reloadFrameAndWaitForNewPage('#iframe2', '#form2');
 
 			cy.cSetActiveFrame('#iframe1');
 			helper.typeIntoDocument('{rightarrow}');

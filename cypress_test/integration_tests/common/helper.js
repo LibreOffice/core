@@ -188,6 +188,32 @@ function reloadDocument(filePath, extraQuery) {
 	cy.log('<< reloadDocument - end');
 }
 
+// Reload one frame of a multi-user test by submitting its load form, and return
+// when the new page in that frame has finished loading.
+// Parameters:
+// frameSelector - '#iframe1' or '#iframe2'. It becomes the active frame.
+// formSelector - '#form1' or '#form2', the form that loads that frame.
+function reloadFrameAndWaitForNewPage(frameSelector, formSelector) {
+	cy.log('>> reloadFrameAndWaitForNewPage - start');
+
+	cy.cSetActiveFrame(frameSelector);
+	// The marker lives on the old window only, so its absence means the new
+	// page is in the frame.
+	cy.getFrameWindow().then(function(win) {
+		win.cypressOldPageMarker = true;
+	});
+	cy.get(formSelector).submit();
+	cy.getFrameWindow().should(function(win) {
+		expect(win.cypressOldPageMarker).to.be.undefined;
+	});
+	// The document canvas is visible once the new page has loaded the
+	// document, the same signal reloadDocument waits for.
+	cy.cGet('#document-canvas').should('be.visible');
+	documentChecks(true);
+
+	cy.log('<< reloadFrameAndWaitForNewPage - end');
+}
+
 function copyFile(filePath, newFilePath) {
 	// subFolder can be '', if filePath does not have a slash
 	var subFolder = getSubFolder(filePath);
@@ -1552,6 +1578,7 @@ module.exports.loadDocument = loadDocument;
 module.exports.setupAndLoadDocument = setupAndLoadDocument;
 module.exports.setupAndLoadTwoDocuments = setupAndLoadTwoDocuments;
 module.exports.reloadDocument = reloadDocument;
+module.exports.reloadFrameAndWaitForNewPage = reloadFrameAndWaitForNewPage;
 module.exports.documentChecks = documentChecks;
 module.exports.assertCursorAndFocus = assertCursorAndFocus;
 module.exports.assertNoKeyboardInput = assertNoKeyboardInput;
