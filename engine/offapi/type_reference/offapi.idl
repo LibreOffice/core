@@ -9636,10 +9636,6 @@ module com {
      ::com::sun::star::container::XNameAccess getQueries();
     };
     published interface XSQLQueryComposer;
-    published interface XSQLQueryComposerFactory {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::sdb::XSQLQueryComposer createQueryComposer();
-    };
    };
    module sdbc {
     published interface XDatabaseMetaData;
@@ -9701,7 +9697,6 @@ module com {
      service ::com::sun::star::sdbcx::DatabaseDefinition;
      interface ::com::sun::star::container::XChild;
      interface ::com::sun::star::sdb::XQueriesSupplier;
-     interface ::com::sun::star::sdb::XSQLQueryComposerFactory;
      [optional] interface ::com::sun::star::lang::XMultiServiceFactory;
     };
     published service ContentLoader {

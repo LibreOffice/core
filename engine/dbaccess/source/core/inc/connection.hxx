@@ -31,7 +31,6 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
@@ -58,7 +57,6 @@ typedef cppu::ImplInheritanceHelper<    connectivity::OConnectionWrapper
                                     ,   css::sdbc::XConnection
                                     ,   css::sdbc::XWarningsSupplier
                                     ,   css::sdb::XQueriesSupplier
-                                    ,   css::sdb::XSQLQueryComposerFactory
                                     ,   css::lang::XMultiServiceFactory
                                     ,   css::sdbcx::XUsersSupplier
                                     ,   css::sdbcx::XGroupsSupplier
@@ -125,9 +123,6 @@ public:
 
 // css::sdb::XQueriesSupplier
     virtual cpo::uno::Reference< css::container::XNameAccess > getQueries(  ) override;
-
-// css::sdb::XSQLQueryComposerFactory
-    virtual cpo::uno::Reference< css::sdb::XSQLQueryComposer > createQueryComposer(  ) override;
 
 // css::sdbc::XWarningsSupplier
     virtual cpo::uno::Any getWarnings(  ) override;

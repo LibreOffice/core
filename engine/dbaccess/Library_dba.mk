@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/api/preparedstatement \
     dbaccess/source/core/api/PrivateRow \
     dbaccess/source/core/api/query \
-    dbaccess/source/core/api/querycomposer \
     dbaccess/source/core/api/querycontainer \
     dbaccess/source/core/api/querydescriptor \
     dbaccess/source/core/api/resultcolumn \

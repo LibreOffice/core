@@ -2912,7 +2912,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb,\
 	XSQLErrorBroadcaster \
 	XSQLErrorListener \
 	XSQLQueryComposer \
-	XSQLQueryComposerFactory \
 	XSingleSelectQueryAnalyzer \
 	XSingleSelectQueryComposer \
 	XSubDocument \

@@ -23,7 +23,6 @@ module com {  module sun {  module star {  module lang {
 
  module com {  module sun {  module star {  module sdb {
 
- published interface XSQLQueryComposerFactory;
  published interface XQueriesSupplier;
 
 /** extends the
@@ -45,10 +44,6 @@ published service Connection
     /** returns a container of associated queries.
      */
     interface XQueriesSupplier;
-
-    /** returns a tool for composing queries.
-     */
-    interface XSQLQueryComposerFactory;
 
     /** allows the creation of different services which can only exists with a connection.
      */

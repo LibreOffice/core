@@ -30,7 +30,6 @@
 #include <preparedstatement.hxx>
 #include <callablestatement.hxx>
 #include <SingleSelectQueryComposer.hxx>
-#include <querycomposer.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -470,18 +469,6 @@ Reference< XInterface >  OConnection::getParent()
 void OConnection::setParent(const Reference< XInterface > & /*Parent*/)
 {
     throw NoSupportException();
-}
-
-// XSQLQueryComposerFactory
-Reference< XSQLQueryComposer >  OConnection::createQueryComposer()
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-
-    //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
-    Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
-    m_aComposers.emplace_back(xComposer);
-    return xComposer;
 }
 
 void OConnection::impl_fillTableFilter()
