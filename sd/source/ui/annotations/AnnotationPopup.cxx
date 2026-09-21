@@ -60,6 +60,21 @@ void AnnotationPopup::closePopup()
     {
         mpAnnotationWindow->SaveToDocument();
         mpAnnotationWindow.reset();
+
+        sd::DrawDocShell* pDocShell = dynamic_cast<sd::DrawDocShell*>(SfxObjectShell::Current());
+        if (pDocShell)
+        {
+            sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+            if (pViewShell)
+            {
+                const auto pAnnotation = mxAnnotation->findAnnotationObject();
+                if (pAnnotation)
+                {
+                    pViewShell->GetView()->MarkObj(pAnnotation,
+                                                   pViewShell->GetView()->GetSdrPageView(), true);
+                }
+            }
+        }
     }
 }
 
