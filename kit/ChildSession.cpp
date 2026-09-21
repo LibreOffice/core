@@ -1205,10 +1205,10 @@ bool ChildSession::loadDocument(const StringVector& tokens)
         // by their identifiers, so resolve an index to the identifier before selecting it.
         std::string partId;
         int index = 0;
-        if (part[0] == '{')
-            partId = part;
-        else if (COOLProtocol::stringToInteger(part, index))
+        if (COOLProtocol::stringToInteger(part, index))
             partId = getLOKitDocument()->getPartId(index, 0);
+        else if (COOLProtocol::isValidPartId(part))
+            partId = part;
 
         if (!partId.empty())
             getLOKitDocument()->setPart(partId.c_str());
