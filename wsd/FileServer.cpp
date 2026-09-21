@@ -2731,24 +2731,10 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    baseUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
-    baseUrl += "/v1/models";
-
     Poco::URI uri;
-    try
+    if (!AIUtil::buildAIEndpointUri(baseUrl, "/v1/models", uri))
     {
-        uri = Poco::URI(baseUrl);
-    }
-    catch (const std::exception&)
-    {
-    }
-
-    // A provider URL without a host, for example one missing its scheme, can
-    // never be reached; report it as a bad request instead of letting the
-    // empty host fail the allowlist check with a misleading 421.
-    if (uri.getHost().empty())
-    {
-        LOG_WRN("Rejected fetch-models request: provider URL has no host ["
+        LOG_WRN("Rejected fetch-models request: the provider URL is invalid ["
                 << Anonymizer::anonymizeUrl(baseUrl) << ']');
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
                   "The provider URL is invalid");

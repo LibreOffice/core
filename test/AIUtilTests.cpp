@@ -17,6 +17,7 @@
 #include <test/lokassert.hpp>
 
 #include <Poco/JSON/Object.h>
+#include <Poco/URI.h>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -31,6 +32,7 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testValidateTransformStructure);
     CPPUNIT_TEST(testParseLenientArgs);
     CPPUNIT_TEST(testNormalizeAIBaseUrl);
+    CPPUNIT_TEST(testBuildAIEndpointUri);
     CPPUNIT_TEST(testHostOfBaseUrl);
     CPPUNIT_TEST(testSlideCommandTable);
     CPPUNIT_TEST(testSlideCommandDocs);
@@ -39,6 +41,7 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     void testValidateTransformStructure();
     void testParseLenientArgs();
     void testNormalizeAIBaseUrl();
+    void testBuildAIEndpointUri();
     void testHostOfBaseUrl();
     void testSlideCommandTable();
     void testSlideCommandDocs();
@@ -148,6 +151,43 @@ void AIUtilTests::testNormalizeAIBaseUrl()
 
     // The empty string maps to the empty string.
     LOK_ASSERT_EQUAL(std::string(), AIUtil::normalizeAIBaseUrl(""));
+}
+
+void AIUtilTests::testBuildAIEndpointUri()
+{
+    constexpr std::string_view testname = __func__;
+
+    const auto build = [](const std::string& baseUrl)
+    {
+        Poco::URI uri;
+        return AIUtil::buildAIEndpointUri(baseUrl, "/v1/models", uri) ? uri.toString()
+                                                                     : std::string("rejected");
+    };
+
+    // The version path goes on the end, and a base path such as Groq's "/openai" stays.
+    LOK_ASSERT_EQUAL(std::string("https://api.openai.com/v1/models"),
+                     build("https://api.openai.com"));
+    LOK_ASSERT_EQUAL(std::string("https://api.groq.com/openai/v1/models"),
+                     build("https://api.groq.com/openai"));
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434/v1/models"),
+                     build("http://localhost:11434///"));
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434/v1/models"),
+                     build("http://localhost:11434/v1"));
+
+    // A query on the base URL stays a query, so the version path is still in the path.
+    LOK_ASSERT_EQUAL(std::string("http://127.0.0.1:8080/secret/v1/models?ignored="),
+                     build("http://127.0.0.1:8080/secret?ignored="));
+
+    // Another scheme or a missing host is refused.
+    LOK_ASSERT_EQUAL(std::string("rejected"), build("file:///etc/passwd"));
+    LOK_ASSERT_EQUAL(std::string("rejected"), build("ftp://example.com"));
+    LOK_ASSERT_EQUAL(std::string("rejected"), build("api.openai.com"));
+    LOK_ASSERT_EQUAL(std::string("rejected"), build(""));
+
+    // A refused base URL leaves the caller's URI alone.
+    Poco::URI untouched("https://example.com/kept");
+    LOK_ASSERT(!AIUtil::buildAIEndpointUri("ftp://example.com", "/v1/models", untouched));
+    LOK_ASSERT_EQUAL(std::string("https://example.com/kept"), untouched.toString());
 }
 
 void AIUtilTests::testHostOfBaseUrl()

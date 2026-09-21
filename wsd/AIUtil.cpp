@@ -114,6 +114,33 @@ std::string normalizeAIBaseUrl(std::string_view baseUrl)
     return url;
 }
 
+bool buildAIEndpointUri(std::string_view baseUrl, std::string_view versionPath, Poco::URI& uriOut)
+{
+    if (baseUrl.empty())
+        return false;
+
+    Poco::URI uri;
+    try
+    {
+        uri = Poco::URI(std::string(baseUrl));
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+
+    const std::string& scheme = uri.getScheme();
+    if (scheme != "http" && scheme != "https")
+        return false;
+
+    if (uri.getHost().empty())
+        return false;
+
+    uri.setPath(normalizeAIBaseUrl(uri.getPath()) + std::string(versionPath));
+    uriOut = std::move(uri);
+    return true;
+}
+
 std::string hostOfBaseUrl(std::string_view baseUrl)
 {
     if (baseUrl.empty())

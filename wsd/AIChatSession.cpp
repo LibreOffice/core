@@ -796,10 +796,19 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         return true;
     }
 
+    Poco::URI endpointUri;
+    if (!AIUtil::buildAIEndpointUri(baseUrl, "/v1/chat/completions", endpointUri))
+    {
+        LOG_WRN("Rejected AI chat request: the provider URL is invalid ["
+                << Anonymizer::anonymizeUrl(baseUrl) << ']');
+        sendChatError("providerUrlInvalid", "The AI provider URL is invalid, check the AI settings",
+                      req.requestId);
+        return true;
+    }
+
     req.model = model;
     req.apiKey = apiKey;
-    req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
-    req.requestUrl.append("/v1/chat/completions");
+    req.requestUrl = endpointUri.toString();
 
     // A presentation themed with a picked template needs that template's design
     // masters and layouts in the prompt. Fetch them from the kit, which knows the
@@ -1083,19 +1092,6 @@ void AIChatSession::callLLMAPI()
 
 #if !MOBILEAPP
     const std::string host = AIUtil::hostOfBaseUrl(_toolLoop->requestUrl);
-
-    // A provider URL without a host, for example one missing its scheme,
-    // can never be reached; report it as a configuration problem instead of
-    // letting the empty host fail the allowlist check with a misleading error.
-    if (host.empty())
-    {
-        LOG_WRN("Rejected AI chat request: provider URL has no host ["
-                << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
-        sendChatError("providerUrlInvalid", "The AI provider URL is invalid, check the AI settings",
-                      _toolLoop->requestId);
-        _toolLoop.reset();
-        return;
-    }
 
     // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
     // always allowed; any other host goes through the net.lok_allow allowlist.
@@ -2853,20 +2849,18 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
         return req;
     }
 
-    req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl) + "/v1/images/generations";
-
-#if !MOBILEAPP
-    const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
-
-    // A provider URL without a host, for example one missing its scheme,
-    // can never be reached; report it as a configuration problem instead of
-    // letting the empty host fail the allowlist check with a misleading error.
-    if (host.empty())
+    Poco::URI endpointUri;
+    if (!AIUtil::buildAIEndpointUri(baseUrl, "/v1/images/generations", endpointUri))
     {
         req.error = "The AI image provider URL is invalid, check the AI settings";
         req.errorCode = "imageProviderUrlInvalid";
         return req;
     }
+
+    req.requestUrl = endpointUri.toString();
+
+#if !MOBILEAPP
+    const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
 
     // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
     // always allowed; any other host goes through the net.lok_allow allowlist.

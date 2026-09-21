@@ -17,6 +17,7 @@
 #pragma once
 
 #include <Poco/JSON/Object.h>
+#include <Poco/URI.h>
 
 #include <optional>
 #include <span>
@@ -43,6 +44,10 @@ bool isPreCannedAIProviderHost(std::string_view host);
 /// path such as "/v1/chat/completions" is appended, so a stored value that
 /// already ends in "/v1" does not produce a doubled "/v1/v1/..." path.
 std::string normalizeAIBaseUrl(std::string_view baseUrl);
+
+/// The endpoint URI for an AI provider: the base URL, normalized as above, with a version
+/// path such as "/v1/models" as its path. False for a base URL that cannot serve as one.
+bool buildAIEndpointUri(std::string_view baseUrl, std::string_view versionPath, Poco::URI& uriOut);
 
 /// The host part of a base URL, lowercase and without an IPv6 literal's brackets. A base URL
 /// that is empty, unparseable, or has no host part gives an empty string.
