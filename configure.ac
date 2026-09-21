@@ -1308,6 +1308,11 @@ fi
 AC_SUBST(ENABLE_QTAPP)
 AM_CONDITIONAL([ENABLE_QTAPP], [test "$ENABLE_QTAPP" = "true"])
 
+dnl The desktop apps show their open documents as tabs, and both draw the tab
+dnl strip with the same HTML page out of the browser bundle.
+AM_CONDITIONAL([ENABLE_TABSTRIP],
+               [test "$ENABLE_QTAPP" = "true" -o "$ENABLE_WINDOWSAPP" = "true"])
+
 ENABLE_QTAPP_TESTS=false
 AT_SPI_DRIVER_PATH=
 if test "$enable_qtapp_tests" = "yes"; then

@@ -243,15 +243,72 @@
 		lastOverInsert = -2;
 	}
 
+	// The calls the strip makes into the app, and the notifications the app
+	// sends back. The bridge below offers a method per call and an object with
+	// a connect() per notification, whichever host the strip is running in.
+	const CALLS = [
+		'tabActivated',
+		'tabCloseRequested',
+		'newTabRequested',
+		'tabReordered',
+		'tabDragStarted',
+		'tabDragEnded',
+		'tabAdoptFromOtherWindow',
+		'targetDragOver',
+		'requestSync',
+		'debug',
+	];
+	const NOTIFICATIONS = ['tabsChanged', 'themeChanged', 'dragExited'];
+
+	// The WebView2 message channel carries structured data both ways: a call
+	// goes out as {call, args} and a notification arrives as {signal, args}.
+	function webView2Bridge() {
+		const bridgeObject = {};
+		const handlers = {};
+
+		NOTIFICATIONS.forEach((name) => {
+			handlers[name] = [];
+			bridgeObject[name] = {
+				connect: (handler) => handlers[name].push(handler),
+			};
+		});
+		CALLS.forEach((name) => {
+			bridgeObject[name] = (...args) =>
+				window.chrome.webview.postMessage({ call: name, args: args });
+		});
+
+		window.chrome.webview.addEventListener('message', (ev) => {
+			const message = ev.data;
+			if (!message || !handlers[message.signal]) return;
+			handlers[message.signal].forEach((handler) =>
+				handler(...(message.args || [])),
+			);
+		});
+
+		return bridgeObject;
+	}
+
+	// The Windows app hosts the strip in a WebView2, the Linux one in a
+	// QWebEngineView whose QWebChannel exposes the app object directly.
+	function connectTabBridge(onReady) {
+		if (window.chrome && window.chrome.webview) {
+			onReady(webView2Bridge());
+			return;
+		}
+		new QWebChannel(qt.webChannelTransport, (channel) =>
+			onReady(channel.objects.tabBridge),
+		);
+	}
+
 	installStripDropTarget(document.getElementById('strip'));
 
-	new QWebChannel(qt.webChannelTransport, function (channel) {
-		bridge = channel.objects.tabBridge;
+	connectTabBridge(function (tabBridge) {
+		bridge = tabBridge;
 		bridge.tabsChanged.connect(onTabsChanged);
 		bridge.themeChanged.connect(onThemeChanged);
 		bridge.dragExited.connect(onDragExited);
 		bridge.debug('tabstrip ready');
-		// Slots are connected now; ask C++ for the current state.
+		// Slots are connected now; ask the app for the current state.
 		bridge.requestSync();
 	});
 })();

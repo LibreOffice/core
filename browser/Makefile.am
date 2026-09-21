@@ -1054,9 +1054,9 @@ if ENABLE_WASM_FALLBACK
 WASM_FALLBACK_FILES += $(DIST_FOLDER)/wasm
 endif
 
-QTAPP_TABSTRIP_FILES =
-if ENABLE_QTAPP
-QTAPP_TABSTRIP_FILES += \
+TABSTRIP_FILES =
+if ENABLE_TABSTRIP
+TABSTRIP_FILES += \
 	$(DIST_FOLDER)/qtapp-tabstrip.html \
 	$(DIST_FOLDER)/qtapp-tabstrip.css \
 	$(DIST_FOLDER)/qtapp-tabstrip.js
@@ -1094,7 +1094,7 @@ build-cool: \
 	$(DIST_FOLDER)/color-palette-dark.css \
 	$(DIST_FOLDER)/bundle.js \
 	$(DIST_FOLDER)/cool.html \
-	$(QTAPP_TABSTRIP_FILES) \
+	$(TABSTRIP_FILES) \
 	$(COOL_QT_HTML) \
 	$(WASM_FILES) \
 	$(WASM_FALLBACK_FILES) \
@@ -1290,7 +1290,7 @@ $(DIST_FOLDER)/cool-qt.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=true \
 		$(srcdir)/html/cool.html.m4 > $@
 
-if ENABLE_QTAPP
+if ENABLE_TABSTRIP
 $(DIST_FOLDER)/qtapp-tabstrip.html: $(srcdir)/html/qtapp-tabstrip.html.m4
 	@mkdir -p $(DIST_FOLDER)
 	$(QUIET_M4) m4 -PE -I $(INTERMEDIATE_DIR) \

@@ -19,7 +19,8 @@ m4_changequote([,])m4_dnl
     <!-- Shared design tokens (--cool-font etc.); before qtapp-tabstrip.css so the strip's rules win. -->
     <link rel="stylesheet" href="cool.css" />
     <link rel="stylesheet" href="qtapp-tabstrip.css" />
-    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+m4_ifelse(QTAPP, [true], [    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+])m4_dnl
     <script src="qtapp-tabstrip.js" defer></script>
   </head>
   <body>
