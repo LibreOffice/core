@@ -491,8 +491,9 @@ public:
         if (!IsDirtyOrInTableOpDirty())
             return false;
 
-        return rDocument.GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE)
-            || (pCode->IsRecalcModeMustAfterImport() && !pCode->IsRecalcModeAlways());
+        // tdf#43003 - matrix formulas must respect AutoCalculate
+        return rDocument.GetAutoCalc()
+               || (pCode->IsRecalcModeMustAfterImport() && !pCode->IsRecalcModeAlways());
     }
 
     void MaybeInterpret()

@@ -7897,6 +7897,56 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAReferenceListTakesAFunctionResult)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf43003AutoCalcMatrix)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // AutoCalculate is on by default
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0); // A1
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0); // A2
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"=A1"_ustr); // C1
+
+    // Insert B1:B2 as a matrix formula
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 1, aMark, u"=A1:A2"_ustr);
+
+    // Check prerequisites on range B1:B2
+    ScFormulaCell* pOrigin = m_pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pOrigin);
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Formula, pOrigin->GetMatrixFlag());
+
+    ScFormulaCell* pReference = m_pDoc->GetFormulaCell(ScAddress(1, 1, 0));
+    CPPUNIT_ASSERT(pReference);
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::Reference, pReference->GetMatrixFlag());
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0))); // B2
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2, 0, 0))); // C1
+
+    // Turn off AutoCalculate and change cell A1 and A2
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0); // A1
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0); // A2
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 10
+    // i.e. B1:B2 would show the changed values while C1 correctly does not change
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0))); // B2
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2, 0, 0))); // C1
+
+    // Update the matrix and the plain formula
+    m_pDoc->CalcFormulaTree(false, false);
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(1, 1, 0))); // B2
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2, 0, 0))); // C1
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
