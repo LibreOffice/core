@@ -2466,123 +2466,28 @@ static void registerOdfShellExtensions()
     DeleteFileW(regFilePath.c_str());
 }
 
-// Give the window its document. The caller connects it to the server and gives it a document
-// id, which the backstage and the presenter console, showing no document of their own, do
-// without.
-static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenameAndUri,
-                              DocumentMode mode)
+// The one WebView2 environment every web view in the app is created from, and
+// the callbacks that asked for it while it was still being made.
+static wil::com_ptr<ICoreWebView2Environment> webViewEnvironment;
+static std::vector<std::function<void(ICoreWebView2Environment*)>> webViewEnvironmentWaiters;
+static bool webViewEnvironmentUnderway = false;
+
+// Hand the shared environment to the callback, creating it on the first call.
+// Creation is asynchronous, so callers that arrive in the meantime wait and are
+// served in order once it is there.
+static void withWebView2Environment(std::function<void(ICoreWebView2Environment*)> callback)
 {
-    static int nextTabId = 1;
-
-    const int tabId = nextTabId++;
-
-    DocumentTab& tab = documentTabs[tabId];
-    tab.tabId = tabId;
-    tab.hWnd = window.hWnd;
-    tab.filenameAndUri = filenameAndUri;
-    tab.mode = mode;
-
-    window.activeTabId = tabId;
-
-    return tab;
-}
-
-static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
-{
-    int width, height;
-    int welcomeX = CW_USEDEFAULT, welcomeY = CW_USEDEFAULT;
-    bool maximize = false;
-
-    // Set size of document window to be 90% of monitor width and height. For the welcome
-    // slideshow always set width:height to 16:9 because we know it is that aspect ratio.
-
-    // The welcome slideshow is displayed without decorations.
-
-    // FIXME: Should we actually, at least for text documents, ideally peek into the document and
-    // check what its page size is, and in the common case of a portrait orientation text document,
-    // make the document window also (if the monitor is large enough) higher than wider? On small
-    // monitors (1280x768 or less?) we should probably default to making the document window
-    // full-screen?
-
-    // FIXME: My initial assumption that the COOL window would open up on the monitor where the
-    // file section dialog was is incorrect.
-
-    MONITORINFO monitorInfo;
-
-    monitorInfo.cbSize = sizeof(monitorInfo);
-    if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
+    if (webViewEnvironment)
     {
-        if (mode == DocumentMode::WELCOME)
-        {
-            double aspectRatio =
-                (double)(monitorInfo.rcWork.right - monitorInfo.rcWork.left) / (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-            if (aspectRatio < 16.0/9.0)
-            {
-                width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-                welcomeX = monitorInfo.rcWork.left + 0.05 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-                height = width / (16.0/9.0);
-                welcomeY = monitorInfo.rcWork.top + ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - height) / 2;
-            }
-            else
-            {
-                height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-                welcomeY = monitorInfo.rcWork.top + 0.05 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-                width = (16.0/9.0) * height;
-                welcomeX = monitorInfo.rcWork.left + ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - width) / 2;
-            }
-        }
-        else
-        {
-            width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-            height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-        }
-    }
-    else
-    {
-        if (mode == DocumentMode::WELCOME)
-        {
-            width = 1280;
-            height = 720;
-        }
-        else
-        {
-            width = 1200;
-            height = 900;
-        }
+        callback(webViewEnvironment.get());
+        return;
     }
 
-    HWND hWnd;
-    if (mode == DocumentMode::WELCOME)
-        hWnd = CreateWindowW(
-            windowClass, Util::string_to_wide_string(APP_NAME).c_str(),
-            WS_POPUP, welcomeX, welcomeY, width, height, NULL, NULL, appInstance,
-            NULL);
-    else if (mode == DocumentMode::STARTER)
-        hWnd = CreateWindowW(
-            windowClass, Util::string_to_wide_string(APP_NAME).c_str(),
-            WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, NULL, NULL, appInstance,
-            NULL);
-    else
-        hWnd = CreateWindowW(
-            windowClass, Util::string_to_wide_string(filenameAndUri.filename + " - " APP_NAME).c_str(),
-            WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, NULL, NULL, appInstance,
-            NULL);
+    webViewEnvironmentWaiters.push_back(std::move(callback));
 
-    WindowState& window = windows[hWnd];
-    window.hWnd = hWnd;
-
-    DocumentTab& tab = createTab(window, filenameAndUri, mode);
-    if (mode != DocumentMode::STARTER)
-    {
-        tab.fakeClientFd = fakeSocketSocket();
-        tab.appDocId = generate_new_app_doc_id();
-    }
-    const int tabId = tab.tabId;
-
-    ShowWindow(hWnd, appShowMode);
-    UpdateWindow(hWnd);
-
-    AddClipboardFormatListener(hWnd);
+    if (webViewEnvironmentUnderway)
+        return;
+    webViewEnvironmentUnderway = true;
 
     // Configure the "cool" custom scheme registration
     auto schemeRegistration =
@@ -2621,255 +2526,408 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
         (Util::string_to_wide_string(localAppData) + L"\\UDF").c_str(),
         options.Get(),
         Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [tabId](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+            [](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
             {
-                DocumentTab* tab = findTab(tabId);
-                if (!tab)
-                    return S_OK;
+                if (!env)
+                    fatal("CreateCoreWebView2EnvironmentWithOptions() gave us no environment");
 
-                // Create a CoreWebView2Controller and get the associated CoreWebView2 whose parent
-                // is the window the document is shown in
-                env->CreateCoreWebView2Controller(
-                    tab->hWnd,
-                    Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                        [tabId, env](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
-                        {
-                            DocumentTab* data = findTab(tabId);
-                            if (!controller || !data)
-                                return E_FAIL;
+                webViewEnvironment = env;
 
-                            ICoreWebView2* webView;
-                            controller->get_CoreWebView2(&webView);
-                            data->webView = wil::com_ptr<ICoreWebView2>(webView);
-                            data->webViewController = controller;
+                const auto waiters = std::move(webViewEnvironmentWaiters);
+                webViewEnvironmentWaiters.clear();
+                for (const auto& waiter : waiters)
+                    waiter(env);
 
-                            wil::com_ptr<ICoreWebView2_22> webView22 = data->webView.try_query<ICoreWebView2_22>();
-                            if (!webView22)
-                                fatal("Could not get webView22");
-
-                            // Add a few settings for the webview
-                            // The demo step is redundant since the values are the default settings
-                            wil::com_ptr<ICoreWebView2Settings> settings;
-                            webView->get_Settings(&settings);
-                            settings->put_IsScriptEnabled(TRUE);
-                            settings->put_AreDefaultScriptDialogsEnabled(TRUE);
-                            settings->put_IsWebMessageEnabled(TRUE);
-                            // Stop browser shortcut keys (such as F12 for the
-                            // developer tools and F5 for reload) from being
-                            // handled by the WebView, so the keys reach the
-                            // document instead. F12 then toggles the numbered
-                            // list rather than opening the developer tools.
-                            wil::com_ptr<ICoreWebView2Settings4> settings4
-                                = settings.try_query<ICoreWebView2Settings4>();
-                            if (settings4)
-                                settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
-
-                            // Resize WebView to fit the bounds of the parent window
-                            RECT bounds;
-                            GetClientRect(data->hWnd, &bounds);
-                            controller->put_Bounds(bounds);
-
-                            EventRegistrationToken token;
-                            HRESULT hr;
-
-                            hr = (webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
-                                      L"cool://*",
-                                      COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
-                                      COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL));
-                            if (!SUCCEEDED(hr))
-                            {
-                                LOG_ERR_S("AddWebResourceRequestedFilterWithRequestSourceKinds() failed");
-                                return hr;
-                            }
-
-                            hr = webView->add_WebResourceRequested(
-                                Microsoft::WRL::Callback<ICoreWebView2WebResourceRequestedEventHandler>(
-                                    [env](ICoreWebView2* sender,
-                                          ICoreWebView2WebResourceRequestedEventArgs* args) -> HRESULT
-                                    {
-                                        return webResourceRequestedHandler(env, sender, args);
-                                    }).Get(), &token);
-
-                            if (!SUCCEEDED(hr))
-                            {
-                                LOG_ERR_S("add_WebResourceRequested() failed");
-                                return hr;
-                            }
-
-                            // Communication between host and web content
-                            // Set an event handler for the host to return received message back to the web content
-                            webView->add_WebMessageReceived(
-                                Microsoft::WRL::Callback<
-                                    ICoreWebView2WebMessageReceivedEventHandler>(
-                                    [tabId](
-                                        ICoreWebView2* webView,
-                                        ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT
-                                    {
-                                        DocumentTab* tab = findTab(tabId);
-                                        if (!tab)
-                                            return S_OK;
-
-                                        wil::unique_cotaskmem_string message;
-                                        args->TryGetWebMessageAsString(&message);
-                                        processMessage(*tab, message);
-                                        return S_OK;
-                                    })
-                                    .Get(),
-                                &token);
-
-                            webView->add_ContainsFullScreenElementChanged(
-                                Microsoft::WRL::Callback<ICoreWebView2ContainsFullScreenElementChangedEventHandler>(
-                                    [tabId](ICoreWebView2* sender, IUnknown* args) -> HRESULT
-                                    {
-                                        DocumentTab* tab = findTab(tabId);
-                                        WindowState* window = tab ? findWindow(tab->hWnd) : nullptr;
-                                        if (!window)
-                                            return S_OK;
-
-                                        BOOL containsFullscreenElement;
-                                        sender->get_ContainsFullScreenElement(&containsFullscreenElement);
-                                        if (containsFullscreenElement)
-                                        {
-                                            HMONITOR monitor = MonitorFromWindow(tab->hWnd, MONITOR_DEFAULTTONEAREST);
-                                            enter_full_screen(*window, monitor, true);
-                                        }
-                                        else
-                                            leave_full_screen(*window);
-                                        return S_OK;
-                                    })
-                                    .Get(),
-                                nullptr);
-
-                            // New windows appear to need to reuse the original env of the parent, a good explanation
-                            // of use at: https://github.com/MicrosoftEdge/WebView2Feedback/discussions/4501#discussioncomment-9215801
-                            webView->add_NewWindowRequested(
-                                Microsoft::WRL::Callback<ICoreWebView2NewWindowRequestedEventHandler>(
-                                    [env, tabId](ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args)
-                                    {
-                                        DocumentTab* data = findTab(tabId);
-                                        if (!data)
-                                            return S_OK;
-
-                                        wil::com_ptr<ICoreWebView2Deferral> deferral;
-                                        args->GetDeferral(&deferral);
-
-                                        HMONITOR hMonitor = MonitorFromWindow(data->hWnd, MONITOR_DEFAULTTONEAREST);
-                                        MONITORINFO monitorInfo = { sizeof(monitorInfo) };
-                                        GetMonitorInfo(hMonitor, &monitorInfo);
-                                        const RECT& area = monitorInfo.rcWork;
-                                        int areaWidth = area.right - area.left;
-                                        int areaHeight = area.bottom - area.top;
-                                        int width = areaWidth * 17 / 20;
-                                        int height = areaHeight * 17 / 20;
-                                        int x = area.left + (areaWidth - width) / 2;
-                                        int y = area.top + (areaHeight - height) / 2;
-
-                                        // The presenter console is a window of its own rather than a
-                                        // tab: it plays full screen on the monitor the presentation
-                                        // does not use.
-                                        data->hConsoleWnd = CreateWindowW(windowClass,
-                                                Util::string_to_wide_string(APP_NAME).c_str(),
-                                                WS_OVERLAPPEDWINDOW,
-                                                x, y, width, height,
-                                                NULL, NULL, appInstance, NULL);
-
-                                        WindowState& consoleWindow = windows[data->hConsoleWnd];
-                                        consoleWindow.hWnd = data->hConsoleWnd;
-
-                                        DocumentTab& consoleTab = createTab(consoleWindow, {},
-                                                                            DocumentMode::EDIT);
-                                        consoleTab.isConsole = true;
-                                        consoleTab.presentingTabId = tabId;
-                                        const int consoleTabId = consoleTab.tabId;
-
-                                        ShowWindow(data->hConsoleWnd, appShowMode);
-
-                                        env->CreateCoreWebView2Controller(
-                                            data->hConsoleWnd,
-                                            Microsoft::WRL::Callback<
-                                                ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                                                [consoleTabId, tabId, args, deferral](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
-                                                {
-                                                    DocumentTab* consoleData = findTab(consoleTabId);
-                                                    DocumentTab* presenting = findTab(tabId);
-                                                    if (!controller || !consoleData || !presenting)
-                                                        return E_FAIL;
-
-                                                    ICoreWebView2* webView;
-                                                    controller->get_CoreWebView2(&webView);
-                                                    consoleData->webView = wil::com_ptr<ICoreWebView2>(webView);
-
-                                                    webView->add_WindowCloseRequested(
-                                                        Microsoft::WRL::Callback<ICoreWebView2WindowCloseRequestedEventHandler>(
-                                                            [consoleTabId](ICoreWebView2* sender, IUnknown* args)
-                                                            {
-                                                                DocumentTab* consoleData = findTab(consoleTabId);
-                                                                if (consoleData)
-                                                                    PostMessageW(consoleData->hWnd, WM_CLOSE, 0, 0);
-                                                                return S_OK;
-                                                            })
-                                                            .Get(),
-                                                        nullptr);
-
-                                                    controller->put_IsVisible(TRUE);
-
-                                                    consoleData->webViewController = controller;
-
-                                                    // Resize WebView to fit the bounds of the parent window
-                                                    RECT bounds;
-                                                    GetClientRect(consoleData->hWnd, &bounds);
-                                                    controller->put_Bounds(bounds);
-
-                                                    args->put_NewWindow(consoleData->webView.get());
-                                                    args->put_Handled(TRUE);
-                                                    deferral->Complete();
-
-                                                    arrangePresentationWindows(*presenting);
-
-                                                    return S_OK;
-                                                })
-                                                .Get());
-
-                                        return S_OK;
-                                    })
-                                    .Get(),
-                                nullptr);
-
-                            std::string coolURL =
-                                app_installation_uri + "../cool/cool.html?";
-                            if (data->mode == DocumentMode::STARTER)
-                                coolURL += "starterMode=true";
-                            else
-                            {
-                                if (data->mode != DocumentMode::WELCOME)
-                                    recentFiles.add(data->filenameAndUri.uri);
-                                coolURL +=
-                                    "file_path=" + data->filenameAndUri.uri +
-                                    std::string("&permission=edit") +
-                                    std::string("&appdocid=") + std::to_string(data->appDocId) +
-                                    std::string("&userinterfacemode=notebookbar");
-                            }
-
-                            coolURL += "&lang=" + uiLanguage;
-                            coolURL += "&dir=" + std::string(LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
-
-                            // Saved choice wins, otherwise follow the system theme.
-                            coolURL += darkModeEnabled() ? "&darkTheme=true" : "&darkTheme=false";
-
-                            if (data->mode != DocumentMode::STARTER)
-                                coolURL +=
-                                    std::string((data->mode != DocumentMode::NEW ? "&startreadonly=true" : "")) +
-                                    std::string((data->mode == DocumentMode::WELCOME ? "&welcome=true" : ""));
-
-                            webView->Navigate(Util::string_to_wide_string(coolURL).c_str());
-                            controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
-
-                            return S_OK;
-                        })
-                        .Get());
                 return S_OK;
             })
             .Get());
+}
+
+// Give the window its document. The caller connects it to the server and gives it a document
+// id, which the backstage and the presenter console, showing no document of their own, do
+// without.
+static DocumentTab& createTab(WindowState& window, const FilenameAndUri& filenameAndUri,
+                              DocumentMode mode)
+{
+    static int nextTabId = 1;
+
+    const int tabId = nextTabId++;
+
+    DocumentTab& tab = documentTabs[tabId];
+    tab.tabId = tabId;
+    tab.hWnd = window.hWnd;
+    tab.filenameAndUri = filenameAndUri;
+    tab.mode = mode;
+
+    window.activeTabId = tabId;
+
+    return tab;
+}
+
+// The web view of one document, in the window its tab belongs to. The document
+// itself is loaded once the page reports back with HULLO.
+static void createDocumentView(int tabId)
+{
+    withWebView2Environment(
+        [tabId](ICoreWebView2Environment* env)
+        {
+            DocumentTab* tab = findTab(tabId);
+            if (!tab)
+                return;
+
+            // Create a CoreWebView2Controller and get the associated CoreWebView2 whose parent is
+            // the window the document is shown in
+            env->CreateCoreWebView2Controller(
+                tab->hWnd,
+                Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    [tabId, env](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+                    {
+                        DocumentTab* data = findTab(tabId);
+                        if (!controller || !data)
+                            return E_FAIL;
+
+                        ICoreWebView2* webView;
+                        controller->get_CoreWebView2(&webView);
+                        data->webView = wil::com_ptr<ICoreWebView2>(webView);
+                        data->webViewController = controller;
+
+                        wil::com_ptr<ICoreWebView2_22> webView22 = data->webView.try_query<ICoreWebView2_22>();
+                        if (!webView22)
+                            fatal("Could not get webView22");
+
+                        // Add a few settings for the webview
+                        // The demo step is redundant since the values are the default settings
+                        wil::com_ptr<ICoreWebView2Settings> settings;
+                        webView->get_Settings(&settings);
+                        settings->put_IsScriptEnabled(TRUE);
+                        settings->put_AreDefaultScriptDialogsEnabled(TRUE);
+                        settings->put_IsWebMessageEnabled(TRUE);
+                        // Stop browser shortcut keys (such as F12 for the
+                        // developer tools and F5 for reload) from being
+                        // handled by the WebView, so the keys reach the
+                        // document instead. F12 then toggles the numbered
+                        // list rather than opening the developer tools.
+                        wil::com_ptr<ICoreWebView2Settings4> settings4
+                            = settings.try_query<ICoreWebView2Settings4>();
+                        if (settings4)
+                            settings4->put_AreBrowserAcceleratorKeysEnabled(FALSE);
+
+                        // Resize WebView to fit the bounds of the parent window
+                        RECT bounds;
+                        GetClientRect(data->hWnd, &bounds);
+                        controller->put_Bounds(bounds);
+
+                        EventRegistrationToken token;
+                        HRESULT hr;
+
+                        hr = (webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
+                                  L"cool://*",
+                                  COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
+                                  COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL));
+                        if (!SUCCEEDED(hr))
+                        {
+                            LOG_ERR_S("AddWebResourceRequestedFilterWithRequestSourceKinds() failed");
+                            return hr;
+                        }
+
+                        hr = webView->add_WebResourceRequested(
+                            Microsoft::WRL::Callback<ICoreWebView2WebResourceRequestedEventHandler>(
+                                [env](ICoreWebView2* sender,
+                                      ICoreWebView2WebResourceRequestedEventArgs* args) -> HRESULT
+                                {
+                                    return webResourceRequestedHandler(env, sender, args);
+                                }).Get(), &token);
+
+                        if (!SUCCEEDED(hr))
+                        {
+                            LOG_ERR_S("add_WebResourceRequested() failed");
+                            return hr;
+                        }
+
+                        // Communication between host and web content
+                        // Set an event handler for the host to return received message back to the web content
+                        webView->add_WebMessageReceived(
+                            Microsoft::WRL::Callback<
+                                ICoreWebView2WebMessageReceivedEventHandler>(
+                                [tabId](
+                                    ICoreWebView2* webView,
+                                    ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT
+                                {
+                                    DocumentTab* tab = findTab(tabId);
+                                    if (!tab)
+                                        return S_OK;
+
+                                    wil::unique_cotaskmem_string message;
+                                    args->TryGetWebMessageAsString(&message);
+                                    processMessage(*tab, message);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
+
+                        webView->add_ContainsFullScreenElementChanged(
+                            Microsoft::WRL::Callback<ICoreWebView2ContainsFullScreenElementChangedEventHandler>(
+                                [tabId](ICoreWebView2* sender, IUnknown* args) -> HRESULT
+                                {
+                                    DocumentTab* tab = findTab(tabId);
+                                    WindowState* window = tab ? findWindow(tab->hWnd) : nullptr;
+                                    if (!window)
+                                        return S_OK;
+
+                                    BOOL containsFullscreenElement;
+                                    sender->get_ContainsFullScreenElement(&containsFullscreenElement);
+                                    if (containsFullscreenElement)
+                                    {
+                                        HMONITOR monitor = MonitorFromWindow(tab->hWnd, MONITOR_DEFAULTTONEAREST);
+                                        enter_full_screen(*window, monitor, true);
+                                    }
+                                    else
+                                        leave_full_screen(*window);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            nullptr);
+
+                        // New windows appear to need to reuse the original env of the parent, a good explanation
+                        // of use at: https://github.com/MicrosoftEdge/WebView2Feedback/discussions/4501#discussioncomment-9215801
+                        webView->add_NewWindowRequested(
+                            Microsoft::WRL::Callback<ICoreWebView2NewWindowRequestedEventHandler>(
+                                [env, tabId](ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args)
+                                {
+                                    DocumentTab* data = findTab(tabId);
+                                    if (!data)
+                                        return S_OK;
+
+                                    wil::com_ptr<ICoreWebView2Deferral> deferral;
+                                    args->GetDeferral(&deferral);
+
+                                    HMONITOR hMonitor = MonitorFromWindow(data->hWnd, MONITOR_DEFAULTTONEAREST);
+                                    MONITORINFO monitorInfo = { sizeof(monitorInfo) };
+                                    GetMonitorInfo(hMonitor, &monitorInfo);
+                                    const RECT& area = monitorInfo.rcWork;
+                                    int areaWidth = area.right - area.left;
+                                    int areaHeight = area.bottom - area.top;
+                                    int width = areaWidth * 17 / 20;
+                                    int height = areaHeight * 17 / 20;
+                                    int x = area.left + (areaWidth - width) / 2;
+                                    int y = area.top + (areaHeight - height) / 2;
+
+                                    // The presenter console is a window of its own rather than a
+                                    // tab: it plays full screen on the monitor the presentation
+                                    // does not use.
+                                    data->hConsoleWnd = CreateWindowW(windowClass,
+                                            Util::string_to_wide_string(APP_NAME).c_str(),
+                                            WS_OVERLAPPEDWINDOW,
+                                            x, y, width, height,
+                                            NULL, NULL, appInstance, NULL);
+
+                                    WindowState& consoleWindow = windows[data->hConsoleWnd];
+                                    consoleWindow.hWnd = data->hConsoleWnd;
+
+                                    DocumentTab& consoleTab = createTab(consoleWindow, {},
+                                                                        DocumentMode::EDIT);
+                                    consoleTab.isConsole = true;
+                                    consoleTab.presentingTabId = tabId;
+                                    const int consoleTabId = consoleTab.tabId;
+
+                                    ShowWindow(data->hConsoleWnd, appShowMode);
+
+                                    env->CreateCoreWebView2Controller(
+                                        data->hConsoleWnd,
+                                        Microsoft::WRL::Callback<
+                                            ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                                            [consoleTabId, tabId, args, deferral](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+                                            {
+                                                DocumentTab* consoleData = findTab(consoleTabId);
+                                                DocumentTab* presenting = findTab(tabId);
+                                                if (!controller || !consoleData || !presenting)
+                                                    return E_FAIL;
+
+                                                ICoreWebView2* webView;
+                                                controller->get_CoreWebView2(&webView);
+                                                consoleData->webView = wil::com_ptr<ICoreWebView2>(webView);
+
+                                                webView->add_WindowCloseRequested(
+                                                    Microsoft::WRL::Callback<ICoreWebView2WindowCloseRequestedEventHandler>(
+                                                        [consoleTabId](ICoreWebView2* sender, IUnknown* args)
+                                                        {
+                                                            DocumentTab* consoleData = findTab(consoleTabId);
+                                                            if (consoleData)
+                                                                PostMessageW(consoleData->hWnd, WM_CLOSE, 0, 0);
+                                                            return S_OK;
+                                                        })
+                                                        .Get(),
+                                                    nullptr);
+
+                                                controller->put_IsVisible(TRUE);
+
+                                                consoleData->webViewController = controller;
+
+                                                // Resize WebView to fit the bounds of the parent window
+                                                RECT bounds;
+                                                GetClientRect(consoleData->hWnd, &bounds);
+                                                controller->put_Bounds(bounds);
+
+                                                args->put_NewWindow(consoleData->webView.get());
+                                                args->put_Handled(TRUE);
+                                                deferral->Complete();
+
+                                                arrangePresentationWindows(*presenting);
+
+                                                return S_OK;
+                                            })
+                                            .Get());
+
+                                    return S_OK;
+                                })
+                                .Get(),
+                            nullptr);
+
+                        std::string coolURL =
+                            app_installation_uri + "../cool/cool.html?";
+                        if (data->mode == DocumentMode::STARTER)
+                            coolURL += "starterMode=true";
+                        else
+                        {
+                            if (data->mode != DocumentMode::WELCOME)
+                                recentFiles.add(data->filenameAndUri.uri);
+                            coolURL +=
+                                "file_path=" + data->filenameAndUri.uri +
+                                std::string("&permission=edit") +
+                                std::string("&appdocid=") + std::to_string(data->appDocId) +
+                                std::string("&userinterfacemode=notebookbar");
+                        }
+
+                        coolURL += "&lang=" + uiLanguage;
+                        coolURL += "&dir=" + std::string(LangUtil::isRtlLanguage(uiLanguage) ? "rtl" : "");
+
+                        // Saved choice wins, otherwise follow the system theme.
+                        coolURL += darkModeEnabled() ? "&darkTheme=true" : "&darkTheme=false";
+
+                        if (data->mode != DocumentMode::STARTER)
+                            coolURL +=
+                                std::string((data->mode != DocumentMode::NEW ? "&startreadonly=true" : "")) +
+                                std::string((data->mode == DocumentMode::WELCOME ? "&welcome=true" : ""));
+
+                        webView->Navigate(Util::string_to_wide_string(coolURL).c_str());
+                        controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+
+                        return S_OK;
+                    })
+                    .Get());
+        });
+}
+
+// Set up a top-level window of the app's own class, ready to take documents.
+static WindowState& createAppWindow(const std::wstring& title, DWORD style, int x, int y,
+                                    int width, int height)
+{
+    const HWND hWnd = CreateWindowW(windowClass, title.c_str(), style, x, y, width, height,
+                                    NULL, NULL, appInstance, NULL);
+
+    WindowState& window = windows[hWnd];
+    window.hWnd = hWnd;
+
+    ShowWindow(hWnd, appShowMode);
+    UpdateWindow(hWnd);
+
+    AddClipboardFormatListener(hWnd);
+
+    return window;
+}
+
+// Set size of document window to be 90% of monitor width and height.
+//
+// FIXME: Should we actually, at least for text documents, ideally peek into the document and
+// check what its page size is, and in the common case of a portrait orientation text document,
+// make the document window also (if the monitor is large enough) higher than wider? On small
+// monitors (1280x768 or less?) we should probably default to making the document window
+// full-screen?
+//
+// FIXME: My initial assumption that the COOL window would open up on the monitor where the
+// file section dialog was is incorrect.
+static void defaultWindowSize(int& width, int& height)
+{
+    MONITORINFO monitorInfo;
+    monitorInfo.cbSize = sizeof(monitorInfo);
+    if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
+    {
+        width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+        height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+    }
+    else
+    {
+        width = 1200;
+        height = 900;
+    }
+}
+
+// The window the welcome slideshow plays in. It is displayed without
+// decorations, and at 16:9 because we know it is that aspect ratio.
+static WindowState& createWelcomeWindow()
+{
+    int width, height;
+    int x = CW_USEDEFAULT, y = CW_USEDEFAULT;
+
+    MONITORINFO monitorInfo;
+    monitorInfo.cbSize = sizeof(monitorInfo);
+    if (GetMonitorInfoW(primaryMonitor, &monitorInfo))
+    {
+        double aspectRatio =
+            (double)(monitorInfo.rcWork.right - monitorInfo.rcWork.left) / (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+        if (aspectRatio < 16.0/9.0)
+        {
+            width = 0.9 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+            x = monitorInfo.rcWork.left + 0.05 * (monitorInfo.rcWork.right - monitorInfo.rcWork.left);
+            height = width / (16.0/9.0);
+            y = monitorInfo.rcWork.top + ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - height) / 2;
+        }
+        else
+        {
+            height = 0.9 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+            y = monitorInfo.rcWork.top + 0.05 * (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+            width = (16.0/9.0) * height;
+            x = monitorInfo.rcWork.left + ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - width) / 2;
+        }
+    }
+    else
+    {
+        width = 1280;
+        height = 720;
+    }
+
+    return createAppWindow(Util::string_to_wide_string(APP_NAME), WS_POPUP, x, y, width, height);
+}
+
+static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
+{
+    // Every document opens in a window of its own, holding it as the single
+    // document of that window.
+    WindowState* window = nullptr;
+    if (mode == DocumentMode::WELCOME)
+    {
+        window = &createWelcomeWindow();
+    }
+    else
+    {
+        int width, height;
+        defaultWindowSize(width, height);
+        const std::wstring title = mode == DocumentMode::STARTER
+                                       ? Util::string_to_wide_string(APP_NAME)
+                                       : Util::string_to_wide_string(filenameAndUri.filename
+                                                                     + " - " APP_NAME);
+        window = &createAppWindow(title, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                                  width, height);
+    }
+
+    DocumentTab& tab = createTab(*window, filenameAndUri, mode);
+    if (mode != DocumentMode::STARTER)
+    {
+        tab.fakeClientFd = fakeSocketSocket();
+        tab.appDocId = generate_new_app_doc_id();
+    }
+
+    createDocumentView(tab.tabId);
 }
 
 namespace
