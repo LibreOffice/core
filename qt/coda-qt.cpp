@@ -199,8 +199,10 @@ int main(int argc, char** argv)
     else if (translator.load("coda_" + locale, dataDir + "/translations"))
         app.installTranslator(&translator);
 
-    // default application name
+    // default application name and version, the latter is what --version prints
     QApplication::setApplicationName(APP_NAME);
+    QApplication::setApplicationVersion(
+        QString::fromStdString(Util::getCoolVersion() + " (git hash: " + Util::getCoolVersionHash() + ")"));
     // Lets window managers associate our windows with the installed desktop file.
     QGuiApplication::setDesktopFileName("com.collaboraoffice.Office");
     QApplication::setWindowIcon(QIcon::fromTheme("com.collaboraoffice.Office.startcenter"));
