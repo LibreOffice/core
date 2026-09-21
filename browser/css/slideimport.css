@@ -938,7 +938,7 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	padding: 6px 8px;
+	padding: 8px;
 	border-radius: var(--border-radius-large);
 	background: var(--color-background-dark);
 	color: var(--color-text-dark);
@@ -948,8 +948,8 @@
 /* The link mark, the same picture the slide's thumbnail carries. */
 .slide-link-toolbar-badge {
 	flex: none;
-	width: 24px;
-	height: 24px;
+	width: 32px;
+	height: 32px;
 	border-radius: var(--border-radius);
 	background: var(--color-background-lighter) url('images/lc_inserthyperlink.svg') no-repeat center / 16px;
 }
