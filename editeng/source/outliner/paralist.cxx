@@ -20,6 +20,7 @@
 
 #include <paralist.hxx>
 
+#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/numdef.hxx>
 #include <o3tl/safeint.hxx>
@@ -28,205 +29,89 @@
 #include <tools/debug.hxx>
 #include <libxml/xmlwriter.h>
 
-Paragraph::Paragraph( sal_Int16 nDDepth )
+
+// static
+bool ParagraphList::HasChildren( sal_Int32 nPara, const EditEngine& rEditEngine )
 {
-    DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
-    mnNumberingDepth = nDDepth;
-    mnNumberingStartValue = -1;
-    mbNumberingRestart = false;
+    sal_Int32 nParaNext = nPara+1;
+    if (nParaNext >= rEditEngine.GetParagraphCount())
+        return false;
+    return rEditEngine.GetNumberingDepth(nParaNext) > rEditEngine.GetNumberingDepth(nPara);
 }
 
-Paragraph::Paragraph( sal_Int16 nDepth, sal_Int16 nNumberingStartValue, bool bNumberingRestart )
+// static
+bool ParagraphList::HasHiddenChildren( sal_Int32 nPara, const EditEngine& rEditEngine )
 {
-    mnNumberingDepth = nDepth;
-    mnNumberingStartValue = nNumberingStartValue;
-    mbNumberingRestart = bNumberingRestart;
+    sal_Int32 nParaNext = nPara+1;
+    if (nParaNext >= rEditEngine.GetParagraphCount())
+        return false;
+    return ( rEditEngine.GetNumberingDepth(nParaNext) > rEditEngine.GetNumberingDepth(nPara) )
+        && !rEditEngine.IsBulletVisible(nParaNext);
 }
 
-void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
+// static
+bool ParagraphList::HasVisibleChildren( sal_Int32 nPara, const EditEngine& rEditEngine )
 {
-    mnNumberingStartValue = nNumberingStartValue;
-    if( mnNumberingStartValue != -1 )
-        mbNumberingRestart = true;
+    sal_Int32 nParaNext = nPara+1;
+    if (nParaNext >= rEditEngine.GetParagraphCount())
+        return false;
+    return ( rEditEngine.GetNumberingDepth(nParaNext) > rEditEngine.GetNumberingDepth(nPara) )
+        && rEditEngine.IsBulletVisible(nParaNext);
 }
 
-void Paragraph::SetNumberingRestart( bool bParaIsNumberingRestart )
-{
-    mbNumberingRestart = bParaIsNumberingRestart;
-    if( !mbNumberingRestart )
-        mnNumberingStartValue = -1;
-}
-
-void Paragraph::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nNumberingDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingDepth));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbNumberingRestart));
-    (void)xmlTextWriterEndElement(pWriter);
-}
-
-void ParagraphList::Clear()
-{
-    maEntries.clear();
-}
-
-void ParagraphList::Append( std::unique_ptr<Paragraph> pPara)
-{
-    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX, "editeng", "ParagraphList::Append - overflow");
-    maEntries.push_back(std::move(pPara));
-}
-
-void ParagraphList::Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos)
-{
-    SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < o3tl::make_unsigned(nAbsPos) && nAbsPos != EE_PARA_MAX),
-            "editeng", "ParagraphList::Insert - bad insert position " << nAbsPos);
-    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX, "editeng", "ParagraphList::Insert - overflow");
-
-    if (nAbsPos < 0 || maEntries.size() <= o3tl::make_unsigned(nAbsPos))
-        Append( std::move(pPara) );
-    else
-        maEntries.insert(maEntries.begin()+nAbsPos, std::move(pPara));
-}
-
-void ParagraphList::Remove( sal_Int32 nPara )
-{
-    if (nPara < 0 || maEntries.size() <= o3tl::make_unsigned(nPara))
-    {
-        SAL_WARN( "editeng", "ParagraphList::Remove - out of bounds " << nPara);
-        return;
-    }
-
-    maEntries.erase(maEntries.begin() + nPara );
-}
-
-void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 _nCount )
-{
-    OSL_ASSERT(o3tl::make_unsigned(nStart) < maEntries.size() && o3tl::make_unsigned(nDest) < maEntries.size());
-
-    if ( (( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) )) && nStart >= 0 && nDest >= 0 && _nCount >= 0 )
-    {
-        std::vector<std::unique_ptr<Paragraph>> aParas;
-        auto iterBeg = maEntries.begin() + nStart;
-        auto iterEnd = iterBeg + _nCount;
-
-        for (auto it = iterBeg; it != iterEnd; ++it)
-            aParas.push_back(std::move(*it));
-
-        maEntries.erase(iterBeg,iterEnd);
-
-        if ( nDest > nStart )
-            nDest -= _nCount;
-
-        for (auto & i : aParas)
-        {
-            maEntries.insert(maEntries.begin() + nDest, std::move(i));
-            ++nDest;
-        }
-    }
-    else
-    {
-        OSL_FAIL( "MoveParagraphs: Invalid Parameters" );
-    }
-}
-
-bool ParagraphList::HasChildren( Paragraph const * pParagraph ) const
-{
-    sal_Int32 n = GetAbsPos( pParagraph );
-    Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() );
-}
-
-bool ParagraphList::HasHiddenChildren( Paragraph const * pParagraph ) const
-{
-    sal_Int32 n = GetAbsPos( pParagraph );
-    Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() ) && !pNext->IsVisible();
-}
-
-bool ParagraphList::HasVisibleChildren( Paragraph const * pParagraph ) const
-{
-    sal_Int32 n = GetAbsPos( pParagraph );
-    Paragraph* pNext = GetParagraph( ++n );
-    return pNext && ( pNext->GetNumberingDepth() > pParagraph->GetNumberingDepth() ) && pNext->IsVisible();
-}
-
-sal_Int32 ParagraphList::GetChildCount( Paragraph const * pParent ) const
+// static
+sal_Int32 ParagraphList::GetChildCount( sal_Int32 nPara, const EditEngine& rEditEngine )
 {
     sal_Int32 nChildCount = 0;
-    sal_Int32 n = GetAbsPos( pParent );
-    Paragraph* pPara = GetParagraph( ++n );
-    while ( pPara && ( pPara->GetNumberingDepth() > pParent->GetNumberingDepth() ) )
+    sal_Int32 nParaNext = nPara+1;
+    while ( nParaNext < rEditEngine.GetParagraphCount()
+            && ( rEditEngine.GetNumberingDepth(nParaNext) > rEditEngine.GetNumberingDepth(nPara) ) )
     {
         nChildCount++;
-        pPara = GetParagraph( ++n );
+        ++nParaNext;
     }
     return nChildCount;
 }
 
-Paragraph* ParagraphList::GetParent( Paragraph const * pParagraph ) const
+// static
+sal_Int32 ParagraphList::GetParent( sal_Int32 nPara, const EditEngine& rEditEngine )
 {
-    sal_Int32 n = GetAbsPos( pParagraph );
-    Paragraph* pPrev = GetParagraph( --n );
-    while ( pPrev && ( pPrev->GetNumberingDepth() >= pParagraph->GetNumberingDepth() ) )
+    sal_Int32 nParaPrev = nPara-1;
+    while ( nParaPrev >= 0 && ( rEditEngine.GetNumberingDepth(nParaPrev) >= rEditEngine.GetNumberingDepth(nPara) ) )
     {
-        pPrev = GetParagraph( --n );
+        --nParaPrev;
     }
 
-    return pPrev;
+    return nParaPrev;
 }
 
-void ParagraphList::Expand( Paragraph const * pParent )
+void ParagraphList::Expand( sal_Int32 nParentPos, EditEngine& rEditEngine )
 {
-    sal_Int32 nChildCount = GetChildCount( pParent );
-    sal_Int32 nPos = GetAbsPos( pParent );
-
+    sal_Int32 nChildCount = GetChildCount( nParentPos, rEditEngine );
+    sal_Int32 nPos = nParentPos;
     for ( sal_Int32 n = 1; n <= nChildCount; n++  )
     {
-        Paragraph* pPara = GetParagraph( nPos+n );
-        if ( !( pPara->IsVisible() ) )
+        if ( !( rEditEngine.IsBulletVisible(nPos + n) ) )
         {
-            pPara->bVisible = true;
-            aVisibleStateChangedHdl.Call( *pPara );
+            rEditEngine.SetBulletVisible(nPos + n, true);
+            aVisibleStateChangedHdl.Call( nPos + n );
         }
     }
 }
 
-void ParagraphList::Collapse( Paragraph const * pParent )
+void ParagraphList::Collapse( sal_Int32 nParentPos, EditEngine& rEditEngine )
 {
-    sal_Int32 nChildCount = GetChildCount( pParent );
-    sal_Int32 nPos = GetAbsPos( pParent );
+    sal_Int32 nChildCount = GetChildCount( nParentPos, rEditEngine );
+    sal_Int32 nPos = nParentPos;
 
     for ( sal_Int32 n = 1; n <= nChildCount; n++  )
     {
-        Paragraph* pPara = GetParagraph( nPos+n );
-        if ( pPara->IsVisible() )
+        if ( rEditEngine.IsBulletVisible(nPos+n) )
         {
-            pPara->bVisible = false;
-            aVisibleStateChangedHdl.Call( *pPara );
+            rEditEngine.SetBulletVisible(nPos+n, false);
+            aVisibleStateChangedHdl.Call( nPos+n );
         }
     }
-}
-
-sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
-{
-    sal_Int32 pos = 0;
-    for (auto const& entry : maEntries)
-    {
-        if (entry.get() == pParent)
-            return pos;
-        ++pos;
-    }
-
-    return EE_PARA_MAX;
-}
-
-void ParagraphList::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ParagraphList"));
-    for (auto const & pParagraph : maEntries)
-        pParagraph->dumpAsXml(pWriter);
-    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

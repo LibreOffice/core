@@ -193,7 +193,7 @@ void EditUndoDelContent::Redo()
     assert(mpContentNode.get() == &rNode);
 
     if (pEE->IsCallParaInsertedOrDeleted())
-        pEE->ParagraphDeleted(nNode);
+        pEE->ParagraphDeleted(nNode, mpContentNode->GetNumberingDepth(), mpContentNode->HasParaFlag(ParaFlag::ISPAGE));
 
     DeletedNodeInfo* pDeletedNodeInfo = new DeletedNodeInfo(&rNode, nNode);
     pEE->AppendDeletedNodeInfo(pDeletedNodeInfo);

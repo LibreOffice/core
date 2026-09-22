@@ -1056,7 +1056,7 @@ void SdOutliner::DetectChange()
             pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
             SetPaperSize( Size(1, 1) );
-        SetText(OUString(), GetParagraph(0));
+        SetText(OUString(), 0);
 
         RememberStartPosition ();
 
@@ -1274,7 +1274,7 @@ void SdOutliner::ProvideNextTextObject()
         pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
         SetPaperSize( Size(1, 1) );
-    SetText(OUString(), GetParagraph(0));
+    SetText(OUString(), 0);
 
     mpSearchSpellTextObj = nullptr;
 
@@ -2140,7 +2140,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
             rOutliner.SetUpdateLayout(false);
             mpOutlineView->SetOutputArea (::tools::Rectangle (Point(), Size(1, 1)));
             rOutliner.SetPaperSize( Size(1, 1) );
-            rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));
+            rOutliner.SetText(OUString(), 0);
 
             meOriginalEditMode =
                 std::static_pointer_cast<sd::DrawViewShell>(rpViewShell)->GetEditMode();

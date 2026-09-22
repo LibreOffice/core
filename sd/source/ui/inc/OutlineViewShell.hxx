@@ -142,8 +142,8 @@ public:
     */
     void SetCurrentPage (SdPage* pPage);
 
-    void UpdateTitleObject( SdPage* pPage, Paragraph const * pPara );
-    void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
+    void UpdateTitleObject( SdPage* pPage, sal_Int32 nParaPos );
+    void UpdateOutlineObject( SdPage* pPage, sal_Int32 nParaPos );
 
 private:
     OUString m_StrOldPageName;

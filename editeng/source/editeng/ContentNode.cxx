@@ -637,6 +637,12 @@ void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentNode"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingDepth"),
+            "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingDepth));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"),
+            "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbNumberingRestart"),
+            "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbNumberingRestart));
     maContentAttribs.dumpAsXml(pWriter);
     maCharAttribList.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

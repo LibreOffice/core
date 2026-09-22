@@ -201,7 +201,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         pOutl->SetStyleSheet( nPara, pStyle );
         pOutl->RemoveCharAttribs(nPara);
         pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
-        pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
+        pOutl->SetDepth(nPara, 0);
     }
 
     pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );

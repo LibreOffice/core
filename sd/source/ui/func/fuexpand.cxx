@@ -124,11 +124,10 @@ void FuExpandPage::DoExecute( SfxRequest& )
         }
 
         sal_uInt16 nPos = 2;
-        Paragraph* pPara = aOutliner.GetParagraph( 0 );
+        sal_Int32 nParaPos = 0;
 
-        while (pPara)
+        while (nParaPos < aOutliner.GetParagraphCount())
         {
-            sal_Int32 nParaPos = aOutliner.GetAbsPos( pPara );
             sal_Int16 nDepth = aOutliner.GetDepth( nParaPos );
             if ( nDepth == 0 )
             {
@@ -194,7 +193,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     pOutlinerParaObject.reset();
 
-                    pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), -1 );
+                    pTempOutl->SetDepth( 0, -1 );
 
                     pOutlinerParaObject = pTempOutl->CreateParaObject();
                 }
@@ -207,7 +206,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pTextObj->NbcSetStyleSheet(pSheet, false);
 
                 SdrTextObj* pOutlineObj = nullptr;
-                sal_Int32 nChildCount = aOutliner.GetChildCount(pPara);
+                sal_Int32 nChildCount = aOutliner.GetChildCount(nParaPos);
                 if (nChildCount > 0)
                     pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PresObjKind::Outline) );
                 if (pOutlineObj)
@@ -223,7 +222,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     for( nPara = 0; nPara < nParaCount2; nPara++ )
                     {
                         pTempOutl->SetDepth (
-                            pTempOutl->GetParagraph( nPara ),
+                            nPara,
                             pTempOutl->GetDepth( nPara ) - 1);
                     }
 
@@ -241,7 +240,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 }
             }
 
-            pPara = aOutliner.GetParagraph( ++nParaPos );
+            ++nParaPos;
         }
 
         if( bUndo )

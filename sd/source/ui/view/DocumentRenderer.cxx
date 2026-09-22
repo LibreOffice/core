@@ -1004,7 +1004,7 @@ namespace {
                             aE.start.nPara = aPageBreaks[0].first;
                             aE.start.nIndex = aPageBreaks[0].second;
                             aE.end.nPara = pOut->GetParagraphCount() - 1;
-                            aE.end.nIndex = pOut->GetText(pOut->GetParagraph(aE.end.nPara)).getLength();
+                            aE.end.nIndex = pOut->GetText(aE.end.nPara).getLength();
                             pOut->QuickDelete(aE);
                         }
                         else
@@ -1018,8 +1018,7 @@ namespace {
                             aE.end.nIndex = aPageBreaks[0].second;
                             pOut->QuickDelete(aE);
 
-                            Paragraph* pFirstPara = pOut->GetParagraph(0);
-                            pOut->SetDepth(pFirstPara, nDepth);
+                            pOut->SetDepth(0, nDepth);
                             pOut->SetParaAttribs(0, aItemSet);
 
                             if (aPageBreaks.size() > 1)
@@ -1027,7 +1026,7 @@ namespace {
                                 aE.start.nPara = aPageBreaks[1].first;
                                 aE.start.nIndex = aPageBreaks[1].second;
                                 aE.end.nPara = pOut->GetParagraphCount() - 1;
-                                aE.end.nIndex = pOut->GetText(pOut->GetParagraph(aE.end.nPara)).getLength();
+                                aE.end.nIndex = pOut->GetText(aE.end.nPara).getLength();
                                 pOut->QuickDelete(aE);
                             }
                         }
@@ -1958,7 +1957,7 @@ private:
         {
             pOutliner->Clear();
 
-            Paragraph* pPara = nullptr;
+            sal_Int32 nPara = -1;
             ::tools::Long nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
@@ -1980,7 +1979,7 @@ private:
                     }
                 }
 
-                pPara = pOutliner->GetParagraph(pOutliner->GetParagraphCount() - 1);
+                nPara = pOutliner->GetParagraphCount() - 1;
 
                 if (pTextObj!=nullptr
                     && !pTextObj->IsEmptyPresObj()
@@ -2023,11 +2022,10 @@ private:
                 if (bSubTitle )
                 {
                     const sal_Int32 nParaCount2 (pOutliner->GetParagraphCount());
-                    for (sal_Int32 nPara=nParaCount1; nPara<nParaCount2; ++nPara)
+                    for (sal_Int32 i=nParaCount1; i<nParaCount2; ++i)
                     {
-                        Paragraph* pP = pOutliner->GetParagraph(nPara);
-                        if (pP!=nullptr && pOutliner->GetDepth(nPara) > 0)
-                            pOutliner->SetDepth(pP, 0);
+                        if (i >= 0 && pOutliner->GetDepth(i) > 0)
+                            pOutliner->SetDepth(i, 0);
                     }
                 }
 
@@ -2036,16 +2034,15 @@ private:
 
             // Remove the last paragraph when that does not fit completely on
             // the current page.
-            if (nH > nPageH && pPara!=nullptr)
+            if (nH > nPageH && nPara!=-1)
             {
-                sal_Int32 nCnt = pOutliner->GetAbsPos(
-                    pOutliner->GetParagraph( pOutliner->GetParagraphCount() - 1 ) );
-                sal_Int32 nParaPos = pOutliner->GetAbsPos( pPara );
+                sal_Int32 nCnt = pOutliner->GetParagraphCount() - 1;
+                sal_Int32 nParaPos = nPara;
                 nCnt -= nParaPos;
-                pPara = pOutliner->GetParagraph( ++nParaPos );
-                if ( nCnt && pPara )
+                nPara = ++nParaPos;
+                if ( nCnt && nPara < pOutliner->GetParagraphCount() )
                 {
-                    pOutliner->Remove(pPara, nCnt);
+                    pOutliner->Remove(nPara, nCnt);
                     --nIndex;
                 }
             }

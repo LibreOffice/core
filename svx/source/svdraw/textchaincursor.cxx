@@ -81,7 +81,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     ESelection aEndSelPrevBox(ESelection::AtEnd());
 
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
-    OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
+    OUString aLastParaText = pOutl->GetText(nLastPara);
     sal_Int32 nLastParaLen = aLastParaText.getLength();
 
     ESelection aEndSel(nLastPara, nLastParaLen);

@@ -250,7 +250,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     if ( IsCallParaInsertedOrDeleted() )
     {
-        GetEditEnginePtr()->ParagraphDeleted(EE_PARA_MAX);
+        GetEditEnginePtr()->ParagraphDeleted(EE_PARA_MAX, -1, false);
         GetEditEnginePtr()->ParagraphInserted( 0 );
     }
 
@@ -2389,7 +2389,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs(ContentNode* pLeft, ContentNode* pRi
     }
 
     if ( IsCallParaInsertedOrDeleted() )
-        GetEditEnginePtr()->ParagraphDeleted( nParagraphTobeDeleted );
+        GetEditEnginePtr()->ParagraphDeleted( nParagraphTobeDeleted, pRight->GetNumberingDepth(), pRight->HasParaFlag(ParaFlag::ISPAGE) );
 
     EditPaM aPaM = maEditDoc.ConnectParagraphs( pLeft, pRight );
     GetParaPortions().Remove( nParagraphTobeDeleted );
@@ -2614,7 +2614,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 
     if ( IsCallParaInsertedOrDeleted() )
     {
-        GetEditEnginePtr()->ParagraphDeleted( nPara );
+        GetEditEnginePtr()->ParagraphDeleted( nPara, pNode->GetNumberingDepth(), pNode->HasParaFlag( ParaFlag::ISPAGE ) );
     }
 
     // Extra-Space may be determined again in the following. For

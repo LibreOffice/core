@@ -436,8 +436,7 @@ bool SvxOutlinerForwarder::SupportsOutlineDepth() const
 
 sal_Int16 SvxOutlinerForwarder::GetDepth( sal_Int32 nPara ) const
 {
-    sal_Int16 nLevel = rOutliner.GetDepth( nPara );
-    return nLevel;
+    return rOutliner.GetDepth( nPara );
 }
 
 bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
@@ -446,8 +445,7 @@ bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 
     if( (nNewDepth >= -1) && (nNewDepth <= 9))
     {
-        Paragraph* pPara = rOutliner.GetParagraph( nPara );
-        rOutliner.SetDepth( pPara, nNewDepth );
+        rOutliner.SetDepth( nPara, nNewDepth );
 
 //          const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor::Default) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
         if( bOutlinerText )
@@ -493,16 +491,9 @@ void SvxOutlinerForwarder::AppendParagraph()
 
 sal_Int32 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )
 {
-    sal_Int32 nLen = 0;
-
     EditEngine& rEditEngine = rOutliner.GetEditEngine();
-    sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
-    DBG_ASSERT( 0 <= nPara && nPara < nParaCount, "paragraph index out of bounds" );
-    if (0 <= nPara && nPara < nParaCount)
-    {
-        nLen = rEditEngine.GetTextLen( nPara );
-        rEditEngine.QuickInsertText(rText, ESelection(nPara, nLen));
-    }
+    sal_Int32 nLen = rEditEngine.GetTextLen( nPara );
+    rEditEngine.QuickInsertText(rText, ESelection(nPara, nLen));
 
     return nLen;
 }

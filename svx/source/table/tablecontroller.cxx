@@ -328,8 +328,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         {
             if (pOutliner->GetParagraphCount() == 1)
             {
-                if (Paragraph* pParagraph = pOutliner->GetParagraph(0))
-                    bEmptyOutliner = pOutliner->GetText(pParagraph).isEmpty();
+                bEmptyOutliner = pOutliner->GetText(0).isEmpty();
             }
         }
         if (bEmptyOutliner)
@@ -2052,12 +2051,11 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
     {
         ::Outliner* pOutl = mrView.GetTextEditOutliner();
         sal_Int32 nParaCnt = pOutl->GetParagraphCount();
-        Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
-        if(nParaCnt==1 && p1stPara)
+        if(nParaCnt==1)
         {
             // with only one paragraph
-            if (pOutl->GetText(p1stPara).isEmpty())
+            if (pOutl->GetText(0).isEmpty())
             {
                 bEmptyOutliner = true;
             }

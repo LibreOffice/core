@@ -229,7 +229,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                 }
             }
 
-            mrOutliner.SetDepth( mrOutliner.GetParagraph( nPara ), -1 );
+            mrOutliner.SetDepth( nPara, -1 );
 
             bChange = true;
         }
