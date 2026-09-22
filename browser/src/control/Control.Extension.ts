@@ -1259,10 +1259,11 @@ async function tryLoadAppsScriptExtension(
 	}
 
 	// The add-on menu the runner brought back becomes one command per item, offered under
-	// the add-on's name where an editor add-on's menu belongs.
+	// the add-on's name where an editor add-on's menu belongs.  (Two items pointing at the same
+	// GAS function each keep their own caption by getting their own command id.)
 	const commands: ExtensionCommand[] = [];
 	const placement: ExtensionMenuEntry[] = [];
-	const functionNames: string[] = [];
+	const usedIds = new Set<string>();
 	for (const item of items) {
 		if (!item.functionName) {
 			// Two dividers in a row, or one before any item, would render as a stray line.
@@ -1274,15 +1275,19 @@ async function tryLoadAppsScriptExtension(
 			}
 			continue;
 		}
-		if (functionNames.indexOf(item.functionName) < 0) {
-			functionNames.push(item.functionName);
-			commands.push({
-				id: item.functionName,
-				title: item.caption || item.functionName,
-				gasFunctionName: item.functionName,
-			});
+		let commandId = item.functionName;
+		let n = 2;
+		while (usedIds.has(commandId)) {
+			commandId = item.functionName + ':' + n;
+			n++;
 		}
-		placement.push({ command: item.functionName });
+		usedIds.add(commandId);
+		commands.push({
+			id: commandId,
+			title: item.caption || item.functionName,
+			gasFunctionName: item.functionName,
+		});
+		placement.push({ command: commandId });
 	}
 	while (placement.length && 'separator' in placement[placement.length - 1]) {
 		placement.pop();
