@@ -155,6 +155,7 @@
 #include <editeng/outlobj.hxx>
 #include <PlaceholderDecoration.hxx>
 #include <editeng/eeitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
 #include <sax/tools/converter.hxx>
@@ -6577,7 +6578,8 @@ void SdXImpressDocument::render( sal_Int32 nRenderer, const cpo::uno::Any& rSele
 
     if (pPDFExtOutDevData)
     {
-        css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        css::lang::Locale const docLocale(
+            LanguageTag(mpDoc->GetLanguage(EE_CHAR_LANGUAGE)).getLocale());
         pPDFExtOutDevData->SetDocumentLocale(docLocale);
     }
 
