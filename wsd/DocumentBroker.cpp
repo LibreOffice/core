@@ -17,7 +17,6 @@
 #include <config.h>
 
 #include "DocumentBroker.hpp"
-#include "SettingsStorage.hpp"
 
 #include <common/Anonymizer.hpp>
 #include <common/Authorization.hpp>
@@ -34,6 +33,7 @@
 #include <common/NumUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/SaveResult.hpp>
+#include <common/SettingsStorage.hpp>
 #include <common/TilePrioritizer.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
