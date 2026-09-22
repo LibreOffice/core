@@ -195,15 +195,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 	it('Check non-range cell selection with CTRL', function() {
 		calcHelper.clickOnACell(1, 1, 2, 3);
 
-		// Real time between clicks lets the previous click's on-screen position
-		// settle before the next click reads it.
-		cy.wait(500);
+		helper.waitForTimers(this.win, 'clicktimer');
+		helper.processToIdle(this.win);
 		calcHelper.clickOnACell(2, 3, 4, 3, { ctrlKey: true });
 
-		cy.wait(500);
+		helper.waitForTimers(this.win, 'clicktimer');
+		helper.processToIdle(this.win);
 		calcHelper.clickOnACell(4, 3, 2, 6, { ctrlKey: true });
 
-		cy.wait(500);
+		helper.waitForTimers(this.win, 'clicktimer');
+		helper.processToIdle(this.win);
 		calcHelper.clickOnACell(2, 6, 2, 10, { shiftKey: true });
 
 		helper.processToIdle(this.win);

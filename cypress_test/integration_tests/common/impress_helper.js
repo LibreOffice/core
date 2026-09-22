@@ -171,9 +171,9 @@ function triggerNewSVGForShapeInTheCenter() {
 
 	removeShapeSelection();
 
-	// A second click within the browser's own double-click window reads as a
-	// double click, and enters edit mode instead of selecting the shape.
-	cy.wait(200);
+	cy.getFrameWindow().then(function(win) {
+		helper.waitForTimers(win, 'clicktimer');
+	});
 
 	// Select text shape again which will retrigger a new SVG from core
 	selectTextShapeInTheCenter();
