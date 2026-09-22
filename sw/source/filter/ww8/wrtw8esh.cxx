@@ -2574,7 +2574,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
 
     // #i30669# - convert the positioning attributes.
     // Most positions are converted, if layout information exists.
-    const bool bPosConverted = ConvertPosition( rHoriOri, rVertOri, rFormat );
+    ConvertPosition(rHoriOri, rVertOri, rFormat);
 
     const sal_Int16 eHOri = rHoriOri.GetHoriOrient();
     const sal_Int16 eVOri = rVertOri.GetVertOrient(); // #i22673#
@@ -2610,9 +2610,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
     // #i22673#
     // When adjustment is vertically relative to line or to char
     // bottom becomes top and vice versa
-    const bool bVertSwap = !bPosConverted &&
-                           ( (eVRel == text::RelOrientation::CHAR) ||
-                             (eVRel == text::RelOrientation::TEXT_LINE) );
+    const bool bVertSwap
+        = eVRel == text::RelOrientation::CHAR || eVRel == text::RelOrientation::TEXT_LINE;
     switch (eVOri)
     {
         default:

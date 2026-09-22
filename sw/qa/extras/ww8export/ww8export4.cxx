@@ -280,6 +280,15 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndDOC)
     CPPUNIT_ASSERT(pFormat->GetEndAtTextEnd().IsAtEnd());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf173671_textlineTop, "tdf173671_textlineTop.doc")
+{
+    const auto xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::TEXT_LINE,
+                         getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(css::text::VertOrientation::LINE_TOP,
+                         getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf90408, "tdf90408.doc")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
