@@ -201,6 +201,11 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     SCTAB nTabSelCount = rMark.GetSelectCount();
     SCTAB nCountVisible = 0;
     const SCTAB nTabCount = rDoc.GetTableCount();
+    for ( SCTAB i = 0; nCountVisible < 2 && i < nTabCount ; i++ )
+        if ( rDoc.IsVisible( i ) )
+            ++nCountVisible;
+    const bool bOnlyOneVisibleSheet = nCountVisible < 2;
+    bool bAllSelected = true;
 
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
@@ -279,10 +284,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().GetTabNumber()) + 1 ) );
 
                 // enabled only if several sheets are visible
-                for ( SCTAB i = 0; nCountVisible < 2 && i < nTabCount ; i++ )
-                    if ( rDoc.IsVisible( i ) )
-                        ++nCountVisible;
-                if ( nCountVisible < 2 )
+                if ( bOnlyOneVisibleSheet )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -555,6 +557,18 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case FID_TAB_DESELECTALL:
                 if ( nTabSelCount == 1 )
                     rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
+                break;
+
+            case FID_TAB_SELECTALL:
+                if ( bOnlyOneVisibleSheet )
+                    rSet.DisableItem( nWhich );     // enabled only if several sheets are visible
+                else
+                {
+                    for ( SCTAB i = 0; i < nTabCount && bAllSelected; i++ )
+                        bAllSelected = !( rDoc.IsVisible(i) && !rMark.GetTableSelect(i) );
+                    if ( bAllSelected )
+                        rSet.DisableItem( nWhich );  // disabled if all sheets are already selected
+                }
                 break;
 
             case FID_TOGGLEHIDDENCOLROW:
