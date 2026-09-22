@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVACFLAGS) \
+gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) "$(JAVACOMPILER)" $(JAVACFLAGS) \
     -encoding utf8 \
     $(if $(MODULAR_JAVA),--release $(1),-source $(1) -target $(1)) \
     -Xlint:-options \

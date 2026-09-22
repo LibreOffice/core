@@ -27,8 +27,8 @@ endef
 # $(call gb_CObject__compiler,flags,source,compiler)
 define gb_CObject__compiler
 	VSLANG=1033 \
-	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
-		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
+	$(if $(filter YES,$(LIBRARY_X64)), "$(CXX_X64_BINARY)", \
+		$(if $(filter YES,$(PE_X86)), "$(CXX_X86_BINARY)", \
 			$(if $(filter %.c,$(2)), \
 				$(if $(3), $(3), $(gb_CC)), \
 				$(if $(3), $(3), $(gb_CXX)))))
@@ -275,7 +275,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PCHOBJS) $(NATIVERES)) && \
 		$(if $(filter $(call gb_Library__get_workdir_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
-	$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_LINK),$(gb_LINK_DLLEXE)) \
+	"$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_LINK),$(gb_LINK_DLLEXE))" \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
 		-nologo \
