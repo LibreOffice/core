@@ -37,6 +37,11 @@ static bool internal_boost = false;
 /* WORKDIR. */
 static std::string work_dir;
 
+/* SRCDIR. The compiler runs there, so relative dep-file paths start from it.
+   Paths inside it are written as $(SRCDIR), so the dep-files stay valid after
+   the tree is moved and configured again. */
+static std::string src_dir;
+
 /* SRCDIR, BUILDDIR and WORKDIR with every backslash turned into a forward
    slash, each registered in every spelling it can turn up in. cl
    /sourceDependencies emits forward-slash-normalised include paths, and these
@@ -180,10 +185,10 @@ static int elide_dependency(const char* key, int key_len, const char** unpacked_
 {
     /* boost brings a plague of header files */
     int unpacked = 0;
-    /* walk down path elements */
-    for (int i = 0; i < key_len - 1; i++)
+    /* walk down path elements, including the first one of a relative path */
+    for (int i = -1; i < key_len - 1; i++)
     {
-        if (key[i] == '/')
+        if (i < 0 || key[i] == '/')
         {
             if (0 == unpacked)
             {
@@ -214,13 +219,34 @@ static int elide_dependency(const char* key, int key_len, const char** unpacked_
  */
 static void emit_single_boost_header(void)
 {
-    std::cout << work_dir << "/UnpackedTarball/boost.done ";
+    std::cout << "$(WORKDIR)/UnpackedTarball/boost.done ";
+}
+
+static void emit_path(const char* path, size_t len)
+{
+    if (len > src_dir.size() && path[src_dir.size()] == '/'
+        && PATHNCMP(path, src_dir.c_str(), src_dir.size()) == 0)
+    {
+        std::cout << "$(SRCDIR)";
+        path += src_dir.size();
+        len -= src_dir.size();
+    }
+    std::cout.write(path, static_cast<std::streamsize>(len));
 }
 
 static void emit_unpacked_target(const char* token, const char* end)
 {
-    std::cout.write(token, end - token);
+    emit_path(token, static_cast<size_t>(end - token));
     std::cout << ".done ";
+}
+
+/* A lone backslash token is a line continuation, not a path. */
+static bool is_relative_token(const char* token, size_t len)
+{
+    if (len == 0 || token[0] == '/' || token[0] == '$' || token[0] == '\\')
+        return false;
+    return !(len >= 3 && token[1] == ':' && (token[2] == '/' || token[2] == '\\')
+             && isalpha(static_cast<unsigned char>(token[0])));
 }
 
 /* prefix paths to absolute */
@@ -244,8 +270,18 @@ static void print_fullpaths(const char* line)
         }
         while (*end && (' ' != *end) && ('\t' != *end) && (':' != *end))
             ++end;
-        const int token_len = static_cast<int>(end - token);
-        if (target_seen && elide_dependency(token, token_len, &unpacked_end))
+        const char* path = token;
+        int path_len = static_cast<int>(end - token);
+        std::string absolute;
+        if (is_relative_token(token, static_cast<size_t>(path_len)))
+        {
+            absolute = src_dir + '/' + std::string(token, static_cast<size_t>(path_len));
+            if (absolute.find("/..") != std::string::npos)
+                absolute = std::filesystem::path(absolute).lexically_normal().generic_string();
+            path = absolute.c_str();
+            path_len = static_cast<int>(absolute.size());
+        }
+        if (target_seen && elide_dependency(path, path_len, &unpacked_end))
         {
             if (unpacked_end)
             {
@@ -265,14 +301,14 @@ static void print_fullpaths(const char* line)
                 }
                 else
                 {
-                    emit_unpacked_target(token, unpacked_end);
+                    emit_unpacked_target(path, unpacked_end);
                 }
                 unpacked_end = nullptr;
             }
         }
         else
         {
-            std::cout.write(token, token_len);
+            emit_path(path, static_cast<size_t>(path_len));
             if (!std::cout)
                 abort();
             std::cout.put(' ');
@@ -329,6 +365,7 @@ static std::string generate_phony_line(const char* phony_target, const char* ext
     else
         line += '.';
     line += extension;
+    line.replace(0, work_dir.size(), "$(WORKDIR)");
     line += ": $(gb_Helper_PHONY)\n";
     return line;
 }
@@ -760,13 +797,13 @@ static int process(std::unordered_set<std::string>& dep_hash, const char* fn)
             if (!elide_dependency(base, key_len + 1, nullptr)
                 && dep_hash.insert(std::string(base, static_cast<size_t>(key_len))).second)
             {
-                std::cout << base << '\n';
+                print_fullpaths(base);
                 std::cout.put('\n');
             }
         }
         else
         {
-            std::cout << base << '\n';
+            print_fullpaths(base);
             std::cout.put('\n');
         }
     }
@@ -802,6 +839,7 @@ int main(int argc, char** argv)
     if (!workdir)
         return 1;
     work_dir = workdir;
+    src_dir = dup_forward_slashes(srcdir);
 
     /* BUILDDIR is optional here. It only helps keep cl /sourceDependencies deps
        trimmed to the build tree. These prefixes feed the include allowlist. */
