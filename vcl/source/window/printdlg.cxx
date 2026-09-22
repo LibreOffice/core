@@ -1130,17 +1130,28 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
         if (!bUseCustomPreviewSize
             && mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
         {
-            aCurPageSize = !maSelectedPaperSize.IsEmpty()
-                ? maSelectedPaperSize
-                : aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
-            // Swap to landscape if document requires it.
-            if (!maSelectedPaperSize.IsEmpty())
+            // tdf#173544: with N-up, getFilteredPageFile() has just composed
+            // the sheet and returns its size. Same condition getRealPaperSize()
+            // uses to pick the sheet.
+            const PrinterController::MultiPageSetup& rMPS = maPController->getMultipage();
+            if (rMPS.nRows * rMPS.nColumns > 1 && !aPageSize.aSize.IsEmpty())
             {
-                Size aDocPageSize = getJobPageSize();
-                bool bDocLandscape = !aDocPageSize.IsEmpty()
-                                   && aDocPageSize.getWidth() > aDocPageSize.getHeight();
-                if (bDocLandscape && aCurPageSize.Width() < aCurPageSize.Height())
-                    aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+                aCurPageSize = aPageSize.aSize;
+            }
+            else
+            {
+                aCurPageSize = !maSelectedPaperSize.IsEmpty()
+                    ? maSelectedPaperSize
+                    : aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+                // Swap to landscape if document requires it.
+                if (!maSelectedPaperSize.IsEmpty())
+                {
+                    Size aDocPageSize = getJobPageSize();
+                    bool bDocLandscape = !aDocPageSize.IsEmpty()
+                                       && aDocPageSize.getWidth() > aDocPageSize.getHeight();
+                    if (bDocLandscape && aCurPageSize.Width() < aCurPageSize.Height())
+                        aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+                }
             }
         }
 
