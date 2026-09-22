@@ -1947,7 +1947,7 @@ class TreeViewControl {
 		);
 	}
 
-	filterEntries(filter: string) {
+	filterEntries(filter: string, immediately: boolean = false) {
 		if (this._filterTimer) clearTimeout(this._filterTimer);
 
 		var entriesToHide: Array<HTMLElement> = [];
@@ -1972,14 +1972,17 @@ class TreeViewControl {
 			entriesToHide.push(entry);
 		});
 
-		this._filterTimer = setTimeout(() => {
+		const hideEntries = () => {
 			allEntries.forEach((entry) => {
 				window.L.DomUtil.removeClass(entry, 'hidden');
 			});
 			entriesToHide.forEach((entry) => {
 				window.L.DomUtil.addClass(entry, 'hidden');
 			});
-		}, 100);
+		};
+
+		if (immediately) hideEntries();
+		else this._filterTimer = setTimeout(hideEntries, 100);
 	}
 
 	highlightEntries(searchTerm: string) {
@@ -2581,6 +2584,17 @@ class TreeViewControl {
 		searchBox.addEventListener('input', () =>
 			this.filterEntries(searchBox.value),
 		);
+
+		// A rebuilt treeview is built while the old one is still on the page. The
+		// new field takes over the text of the old field with the same id, and the
+		// entries are filtered at once, so the list keeps its filtered state.
+		const previousSearchBox = document.getElementById(
+			searchBox.id,
+		) as HTMLInputElement;
+		if (previousSearchBox && previousSearchBox.value) {
+			searchBox.value = previousSearchBox.value;
+			this.filterEntries(searchBox.value, true);
+		}
 
 		const searchContainer = document.createElement('div');
 		searchContainer.className = 'ui-treeview-search-container';

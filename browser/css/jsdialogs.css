@@ -2455,7 +2455,10 @@ img.ui-combobox-value-preview {
 }
 
 /* start: layouting has less cost when we have thousands of entries */
-.autofilter.ui-treeview-entry:not(.ui-treeview-tree) {
+/* A row the search box filters out carries the hidden class. Leaving such a row
+   out here lets its display: none win, as both declarations are important and
+   the more specific selector would otherwise take it. */
+.autofilter.ui-treeview-entry:not(.ui-treeview-tree):not(.hidden) {
 	display: table-row !important;
 }
 .autofilter.ui-treeview-entry:not(.ui-treeview-tree) > div,

@@ -283,3 +283,49 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Scroll Position
 		});
 	});
 });
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Search', function() {
+
+	function openAutoFilterAtCursor() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket.sendMessage('uno .uno:DataSelect');
+		});
+		cy.cGet('.autofilter .vertical').should('be.visible');
+	}
+
+	beforeEach(function() {
+		// The column holds the numbers 1 to 30, which is more values than the
+		// popup shows at once, so the search field is the way to reach one.
+		helper.setupAndLoadDocument('calc/autofilter-search.fods');
+		desktopHelper.switchUIToCompact();
+		toggleAutofilter();
+		helper.setDummyClipboardForCopy();
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+	});
+
+	it('Search narrows the list to the match, which then filters the sheet', function() {
+		openAutoFilterAtCursor();
+		cy.cGet('#check_list_box .ui-treeview-entry:not(.hidden)').should('have.length', 30);
+
+		cy.cGet('#toggle_all-input').uncheck();
+		cy.cGet('.autofilter .ui-treeview-search-input').type('25');
+
+		cy.cGet('#check_list_box .ui-treeview-entry:not(.hidden)').should('have.length', 1);
+		cy.cGet('#check_list_box .ui-treeview-entry:not(.hidden)').should('contain.text', '25');
+		cy.cGet('#check_list_box .ui-treeview-entry.hidden').first().should('have.css', 'display', 'none');
+
+		cy.cGet('#check_list_box .ui-treeview-entry:not(.hidden) .ui-treeview-checkbox').check();
+
+		// Ticking the entry rebuilds the list, and the search still holds.
+		cy.cGet('.autofilter .ui-treeview-search-input').should('have.value', '25');
+		cy.cGet('#check_list_box .ui-treeview-entry:not(.hidden)').should('have.length', 1);
+
+		cy.cGet('#ok').click();
+		cy.cGet('div.autofilter').should('not.exist');
+
+		calcHelper.assertSheetContents(['Value', '25'], true);
+	});
+});
