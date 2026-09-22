@@ -80,6 +80,7 @@
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <SlideSectionManager.hxx>
 #include <DesignTemplates.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
@@ -5909,6 +5910,35 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintUndoLeavesAnUnmarkedMa
     pUndoManager->Undo();
     CPPUNIT_ASSERT_EQUAL(nMasterCount, pDoc->GetMasterSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT(!xMaster->IsPrecious());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testEditingAfterSlideSectionRename)
+{
+    // Typing into a shape still starts a text edit after a slide section has
+    // been added and then renamed.
+    createSdImpressDoc();
+
+    dispatchCommand(mxComponent, u".uno:AddSlideSection"_ustr, {});
+
+    uno::Sequence<beans::PropertyValue> aRenameArgs(
+        comphelper::InitPropertySequence({ { u"SectionIndex"_ustr, uno::Any(sal_Int32(0)) },
+                                           { u"Name"_ustr, uno::Any(u"Opening"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:RenameSlideSection"_ustr, aRenameArgs);
+
+    auto* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    sd::SlideSectionManager& rManager = pImpressDocument->GetDoc()->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rManager.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rManager.GetSection(0).maName);
+
+    // The keystrokes reach the slide and open a text edit on the shape.
+    insertStringToObject(0, u"Test", /*bUseEscape*/ true);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Test"_ustr,
+                         xDrawPage->getByIndex(0).queryThrow<text::XTextRange>()->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -2636,6 +2636,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     GetDoc()->AddUndo(std::move(pUndo));
                 GetDocSh()->SetModified();
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -2659,6 +2662,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     GetDocSh()->SetModified();
                 }
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -2685,6 +2691,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     ResetActualPage();
                 }
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -2715,6 +2724,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                 }
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -2746,6 +2758,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     GetDocSh()->SetModified();
                 }
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -2775,6 +2790,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     GetDocSh()->SetModified();
                 }
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
