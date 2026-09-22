@@ -6854,13 +6854,14 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
 
+    // The largest page this document shows, in 1/100 mm while the slides below fill it in. A
+    // hidden page stays out of it, which keeps out the canvas page, a large square board
+    // carrying a preview of every other page.
+    Size aDocSize;
+
     try
     {
         rtl::Reference<SdDrawPagesAccess> xDrawPages = const_cast<SdXImpressDocument*>(this)->getSdDrawPages();
-        // size in twips
-        Size aDocSize = const_cast<SdXImpressDocument*>(this)->getDocumentSize();
-        aJsonWriter.put("docWidth", aDocSize.getWidth());
-        aJsonWriter.put("docHeight", aDocSize.getHeight());
 
         sd::PresentationSettings const& rSettings = mpDoc->getPresentationSettings();
 
@@ -6919,6 +6920,11 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 const Size aSlizeSize = const_cast<SdXImpressDocument*>(this)->getPartSize(i);
                 aJsonWriter.put("slideWidth", aSlizeSize.getWidth());
                 aJsonWriter.put("slideHeight", aSlizeSize.getHeight());
+
+                // Each side counts one unit more than the page bounds, the same way the size
+                // reported for this slide does.
+                aDocSize.setWidth(std::max(aDocSize.getWidth(), pPage->GetWidth() + 1));
+                aDocSize.setHeight(std::max(aDocSize.getHeight(), pPage->GetHeight() + 1));
 
                 if (bAllyState)
                 {
@@ -7187,6 +7193,17 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
     {
         TOOLS_WARN_EXCEPTION("sd", "SdXImpressDocument::getSlideShowInfo ... maybe some property can't be retrieved");
     }
+
+    // The slides array closes with the block above, so the size goes in here, in twips. A
+    // document whose pages are all hidden leaves the size empty, and then the page the view
+    // has on screen answers for the document.
+    if (aDocSize.IsEmpty())
+        aDocSize = const_cast<SdXImpressDocument*>(this)->getDocumentSize();
+    else
+        aDocSize = o3tl::convert(aDocSize, o3tl::Length::mm100, o3tl::Length::twip);
+    aJsonWriter.put("docWidth", aDocSize.getWidth());
+    aJsonWriter.put("docHeight", aDocSize.getHeight());
+
     return aJsonWriter.finishAndGetAsStdString();
 }
 

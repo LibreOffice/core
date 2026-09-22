@@ -3588,6 +3588,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     }
 }
 
+// The presentation info reports the size of the slides even while the canvas page, which is a
+// much larger square, is the page on screen.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoSizeOnCanvasPage)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT(pDocument->GetSdPage(0, PageKind::Standard)->IsCanvasPage());
+
+    pXImpressDocument->setPart(0);
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    CPPUNIT_ASSERT_EQUAL(15875, aTree.get_child("docWidth").get_value<int>());
+    CPPUNIT_ASSERT_EQUAL(8930, aTree.get_child("docHeight").get_value<int>());
+}
+
 // Notes with several paragraphs keep the paragraph breaks as newlines.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesParagraphs)
 {
