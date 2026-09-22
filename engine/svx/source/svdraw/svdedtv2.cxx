@@ -1260,7 +1260,7 @@ void SdrEditView::CombineMarkedTextObjects()
             // if the last paragraph does not end in paragraph-end punctuation (ignoring whitespace),
             // assume this text should be added to the end of the last paragraph, instead of starting a new paragraph.
             const sal_Int32 nPara = rDrawOutliner.GetParagraphCount();
-            const OUString sLastPara = nPara ? rDrawOutliner.GetText( rDrawOutliner.GetParagraph( nPara - 1 ) ) : u""_ustr;
+            const OUString sLastPara = nPara ? rDrawOutliner.GetText( nPara - 1 ) : u""_ustr;
             sal_Int32 n = sLastPara.getLength();
             while ( n && unicode::isWhiteSpace( sLastPara[--n] ) )
                 ;

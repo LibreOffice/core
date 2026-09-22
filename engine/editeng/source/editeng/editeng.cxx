@@ -994,10 +994,6 @@ void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 
     if (pOwner)
     {
-        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        if( !pPara )
-            return;
-
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionStart( OLUNDO_ATTR );
     }
@@ -1012,7 +1008,7 @@ void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         // #i100014#
         // It is not a good idea to subtract 1 from a count and cast the result
         // to sal_uInt16 without check, if the count is 0.
-        pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
+        pOwner->ImplCheckParagraphs( nPara, pOwner->pEditEngine->GetParagraphCount() );
 
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionEnd();
@@ -1633,10 +1629,10 @@ void EditEngine::ParagraphInserted( sal_Int32 nPara )
     }
 }
 
-void EditEngine::ParagraphDeleted( sal_Int32 nPara )
+void EditEngine::ParagraphDeleted( sal_Int32 nPara, sal_Int16 nNumberingDepth, bool bIsPage )
 {
     if (Outliner* pOwner = getImpl().GetOwner())
-        pOwner->ParagraphDeleted( nPara );
+        pOwner->ParagraphDeleted( nPara, nNumberingDepth, bIsPage );
 
     if ( GetNotifyHdl().IsSet() )
     {
@@ -1651,8 +1647,7 @@ void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 nRi
     if (Outliner* pOwner = getImpl().GetOwner())
         if(pOwner->IsUndoEnabled() && !pOwner->GetEditEngine().IsInUndo() )
         {
-            Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
-            if( pPara && Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+            if( HasParaFlag( nRightParagraph, ParaFlag::ISPAGE ) )
             {
                 pOwner->InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nRightParagraph, ParaFlag::ISPAGE, ParaFlag::NONE ) );
             }
@@ -1757,7 +1752,7 @@ tools::Rectangle EditEngine::GetBulletArea( sal_Int32 nPara )
     if (Outliner* pOwner = getImpl().GetOwner())
     {
         tools::Rectangle aBulletArea { Point(), Point() };
-        if ( nPara < pOwner->pParaList->GetParagraphCount() )
+        if ( nPara < pOwner->pEditEngine->GetParagraphCount() )
         {
             if ( pOwner->ImplHasNumberFormat( nPara ) )
                 aBulletArea = pOwner->ImpCalcBulletArea( nPara, false, false );
@@ -2084,7 +2079,97 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
 
 sal_Int16 EditEngine::GetNumberingDepth(sal_Int32 nPara) const
 {
-    return getImpl().GetOwner()->GetDepth(nPara);
+    return getImpl().GetEditDoc().GetObject(nPara).GetNumberingDepth();
+}
+
+void EditEngine::SetNumberingDepth(sal_Int32 nPara, sal_Int16 nDepth)
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetNumberingDepth(nDepth);
+}
+
+sal_Int16 EditEngine::GetNumberingStartValue(sal_Int32 nPara) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).GetNumberingStartValue();
+}
+
+void EditEngine::SetNumberingStartValue(sal_Int32 nPara, sal_Int16 nNumberingStartValue)
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetNumberingStartValue(nNumberingStartValue);
+}
+
+bool EditEngine::IsNumberingRestart(sal_Int32 nPara) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).IsNumberingRestart();
+}
+
+void EditEngine::SetNumberingRestart(sal_Int32 nPara, bool bRestart)
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetNumberingRestart(bRestart);
+}
+
+void EditEngine::SetBulletText(sal_Int32 nPara, const OUString& rText)
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetBulletText(rText);
+}
+
+Size const& EditEngine::GetBulletSize(sal_Int32 nPara) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).GetBulletSize();
+}
+
+void EditEngine::SetBulletSize(sal_Int32 nPara, Size const& rSize, ScalingParameters const& rScalingParameters)
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetBulletSize(rSize, rScalingParameters);
+}
+
+OUString const& EditEngine::GetBulletText(sal_Int32 nPara) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).GetBulletText();
+}
+
+bool EditEngine::IsBulletInvalid(sal_Int32 nPara, ScalingParameters const& rCurrentScalingParameters) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).IsBulletInvalid(rCurrentScalingParameters);
+}
+
+void EditEngine::InvalidateBulletSize(sal_Int32 nPara)
+{
+    getImpl().GetEditDoc().GetObject(nPara).InvalidateBulletSize();
+}
+
+void EditEngine::SetParaFlag( sal_Int32 nPara, ParaFlag nFlag )
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetParaFlag(nFlag);
+}
+
+void EditEngine::ClearAndSetParaFlag( sal_Int32 nPara, ParaFlag nFlag )
+{
+    getImpl().GetEditDoc().GetObject(nPara).ClearAndSetParaFlag(nFlag);
+}
+
+void EditEngine::RemoveParaFlag( sal_Int32 nPara, ParaFlag nFlag )
+{
+    getImpl().GetEditDoc().GetObject(nPara).RemoveParaFlag(nFlag);
+}
+
+bool EditEngine::HasParaFlag( sal_Int32 nPara, ParaFlag nFlag ) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).HasParaFlag(nFlag);
+}
+
+ParaFlag EditEngine::GetParaFlag( sal_Int32 nPara ) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).GetParaFlag();
+}
+
+bool EditEngine::IsBulletVisible( sal_Int32 nPara ) const
+{
+    return getImpl().GetEditDoc().GetObject(nPara).IsBulletVisible();
+}
+
+void EditEngine::SetBulletVisible( sal_Int32 nPara, bool b )
+{
+    getImpl().GetEditDoc().GetObject(nPara).SetBulletVisible(b);
 }
 
 Outliner* EditEngine::GetOwner()

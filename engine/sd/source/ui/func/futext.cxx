@@ -1015,12 +1015,11 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
         {
             ::Outliner* pOutl = mpView->GetTextEditOutliner();
             sal_Int32 nParagraphCnt = pOutl->GetParagraphCount();
-            Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
-            if (nParagraphCnt==1 && p1stPara)
+            if (nParagraphCnt==1)
             {
                 // with only one paragraph
-                if (pOutl->GetText(p1stPara).isEmpty())
+                if (pOutl->GetText(0).isEmpty())
                 {
                     bEmptyOutliner = true;
                 }
@@ -1144,7 +1143,7 @@ void FuText::DeleteDefaultText()
     if( bIsUndoEnabled )
         pOutliner->EnableUndo(false);
 
-    pOutliner->SetText( OUString(), pOutliner->GetParagraph( 0 ) );
+    pOutliner->SetText( OUString(), 0 );
 
     if( bIsUndoEnabled )
         pOutliner->EnableUndo(true);

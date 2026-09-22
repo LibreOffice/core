@@ -104,12 +104,12 @@ public:
     OutlinerView*   GetViewByWindow(vcl::Window const * pWin) const override;
     SdOutliner&     GetOutliner() { return mrOutliner; }
 
-    Paragraph*      GetPrevTitle(const Paragraph* pPara);
-    sal_Int32       CountTitlesBeforeParagraph(const Paragraph* pPara);
-    Paragraph*      GetNextTitle(const Paragraph* pPara);
+    sal_Int32       GetPrevTitle(sal_Int32 nParaPos);
+    sal_Int32       CountTitlesBeforeParagraph(sal_Int32 nParaPos);
+    sal_Int32       GetNextTitle(sal_Int32 nParaPos);
     SdPage*         GetActualPage();
-    SdPage*         GetPageForParagraph( Paragraph* pPara );
-    Paragraph*      GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage );
+    SdPage*         GetPageForParagraph( sal_Int32 nParaPos );
+    static sal_Int32 GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
     void            SetActualPage( SdPage const * pActual );
@@ -166,7 +166,7 @@ public:
     void IgnoreCurrentPageChanges (bool bIgnore);
 
     /** creates and inserts an empty slide for the given paragraph. */
-    SdPage* InsertSlideForParagraph( Paragraph* pPara );
+    SdPage* InsertSlideForParagraph( sal_Int32 nParaPos );
 
     void UpdateParagraph( sal_Int32 nPara );
 

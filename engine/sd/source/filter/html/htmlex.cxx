@@ -433,10 +433,6 @@ OUString ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara )
     EditEngine& rEditEngine = *const_cast<EditEngine*>(&pOutliner->GetEditEngine());
     bool bOldUpdateMode = rEditEngine.SetUpdateLayout(true);
 
-    Paragraph* pPara = pOutliner->GetParagraph(nPara);
-    if(nullptr == pPara)
-        return OUString();
-
     HtmlState aState( COL_BLACK );
     std::vector<sal_Int32> aPortionList;
     rEditEngine.GetPortions( nPara, aPortionList );
@@ -677,10 +673,6 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
 
     for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
     {
-        Paragraph* pParagraph = pOutliner->GetParagraph(nIndex);
-        if(pParagraph == nullptr)
-            continue;
-
         const sal_Int16 nDepth = pOutliner->GetDepth(nIndex);
         OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex);
 

@@ -2358,21 +2358,20 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
         if (SdrTextObj::HasTextImpl(mpTextEditOutliner.get()))
         {
             const sal_Int32 nParaCnt = mpTextEditOutliner->GetParagraphCount();
-            Paragraph* pLastPara
-                = mpTextEditOutliner->GetParagraph(nParaCnt > 1 ? nParaCnt - 1 : 0);
+            sal_Int32 nLastPara = nParaCnt > 1 ? nParaCnt - 1 : 0;
 
             ESelection aESel(mpTextEditOutlinerView->GetSelection());
             if (aESel.start.nPara == 0 && aESel.start.nIndex == 0
                 && aESel.end.nPara == (nParaCnt - 1))
             {
-                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.end.nIndex)
+                if (mpTextEditOutliner->GetText(nLastPara).getLength() == aESel.end.nIndex)
                     bRet = true;
             }
             // in case the selection was done backwards
             if (!bRet && aESel.end.nPara == 0 && aESel.end.nIndex == 0
                 && aESel.start.nPara == (nParaCnt - 1))
             {
-                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.start.nIndex)
+                if (mpTextEditOutliner->GetText(nLastPara).getLength() == aESel.start.nIndex)
                     bRet = true;
             }
         }
@@ -3093,9 +3092,8 @@ void SdrObjEditView::ApplyFormatPaintBrushToText(SfxItemSet const& rFormatSet, S
         aSet.Put(CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet,
                                 bNoCharacterFormats, bNoParagraphFormats));
         rOutliner.SetParaAttribs(nPara, aSet);
-        Paragraph* pParagraph = rOutliner.GetParagraph(nPara);
         if (nDepth > -2)
-            rOutliner.SetDepth(pParagraph, nDepth);
+            rOutliner.SetDepth(nPara, nDepth);
     }
 
     std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);

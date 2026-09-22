@@ -185,7 +185,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
-    rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
+    rOutliner.SetText(rStr, 0);
     std::optional<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     NbcSetOutlinerParaObject(std::move(pNewText));
     mbTextSizeDirty=true;
@@ -413,15 +413,15 @@ bool SdrTextObj::HasTextImpl( SdrOutliner const * pOutliner )
     bool bRet=false;
     if(pOutliner)
     {
-        Paragraph* p1stPara=pOutliner->GetParagraph( 0 );
+        sal_Int32 n1stPara=0;
         sal_Int32 nParaCount=pOutliner->GetParagraphCount();
-        if(p1stPara==nullptr)
+        if(n1stPara>=nParaCount)
             nParaCount=0;
 
         if(nParaCount==1)
         {
             // if it is only one paragraph, check if that paragraph is empty
-            if( pOutliner->GetText(p1stPara).isEmpty() )
+            if( pOutliner->GetText(n1stPara).isEmpty() )
                 nParaCount = 0;
         }
 

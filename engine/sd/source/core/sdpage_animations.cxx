@@ -107,7 +107,7 @@ FadeEffect SdPage::GetFadeEffect() const
 }
 
 /** callback from the sd::View when a new paragraph for one object on this page is created */
-void SdPage::onParagraphInserted( const ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
+void SdPage::onParagraphInserted( sal_Int32 nParaPos, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {
@@ -115,14 +115,14 @@ void SdPage::onParagraphInserted( const ::Outliner* pOutliner, Paragraph const *
         aTarget.Shape.set( pObj->getUnoShape(), UNO_QUERY );
         /* FIXME: Paragraph should be sal_Int32, though more than 64k
          * paragraphs at a shape are unlikely... */
-        aTarget.Paragraph = static_cast<sal_Int16>(pOutliner->GetAbsPos( pPara ));
+        aTarget.Paragraph = static_cast<sal_Int16>(nParaPos);
 
         getMainSequence()->insertTextRange( Any( aTarget ) );
     }
 }
 
 /** callback from the sd::View when a paragraph from one object on this page is removed */
-void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
+void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, sal_Int32 nParaPos, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {
@@ -130,16 +130,16 @@ void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, Paragraph const *
         aTarget.Shape.set( pObj->getUnoShape(), UNO_QUERY );
         /* FIXME: Paragraph should be sal_Int32, though more than 64k
          * paragraphs at a shape are unlikely... */
-        aTarget.Paragraph = static_cast<sal_Int16>(pOutliner->GetAbsPos( pPara ));
+        aTarget.Paragraph = static_cast<sal_Int16>( nParaPos );
 
         // Whether the paragraph before the removed one is empty, read from the
         // editing outliner that holds the live text.
         bool bPreviousParagraphEmpty = false;
         if( aTarget.Paragraph > 0 )
         {
-            Paragraph* pPrevPara = pOutliner->GetParagraph( aTarget.Paragraph - 1 );
-            if( pPrevPara )
-                bPreviousParagraphEmpty = pOutliner->GetText( pPrevPara ).isEmpty();
+            sal_Int32 nPrevPara = aTarget.Paragraph - 1;
+            if( nPrevPara >= 0 )
+                bPreviousParagraphEmpty = pOutliner->GetText( nPrevPara ).isEmpty();
         }
 
         getMainSequence()->disposeTextRange( Any( aTarget ), bPreviousParagraphEmpty );

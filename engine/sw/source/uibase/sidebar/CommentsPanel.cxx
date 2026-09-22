@@ -625,7 +625,7 @@ void CommentsPanel::EditComment(const Comment* pComment)
     sw::annotation::SwAnnotationWin* pWin = getAnnotationWin(pComment);
     Outliner* pOutliner = pWin->GetOutliner();
     pOutliner->Clear();
-    pOutliner->SetText(sText, pOutliner->GetParagraph(0));
+    pOutliner->SetText(sText, 0);
     pComment->mxTextView->set_editable(false);
 }
 

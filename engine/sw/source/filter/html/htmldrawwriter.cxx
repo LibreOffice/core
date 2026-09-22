@@ -269,7 +269,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsMarquee( SwHTMLWriter& rWrt,
     Outliner aOutliner(nullptr, OutlinerMode::TextObject);
     aOutliner.SetUpdateLayout( false );
     aOutliner.SetText( *pOutlinerParaObj );
-    OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),
+    OUString aText( aOutliner.GetText( 0,
                                      aOutliner.GetParagraphCount() ) );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText );
 

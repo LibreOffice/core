@@ -20,6 +20,7 @@
 #include <fuinsfil.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/progress.hxx>
+#include <editeng/bulletinfo.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
@@ -465,8 +466,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 // in title objects, only one paragraph is allowed
                 while ( aOutliner.GetParagraphCount() > 1 )
                 {
-                    Paragraph* pPara = aOutliner.GetParagraph( 0 );
-                    sal_uLong nLen = aOutliner.GetText( pPara ).getLength();
+                    sal_uLong nLen = aOutliner.GetText( 0 ).getLength();
                     aOutliner.QuickInsertLineBreak(ESelection(0, nLen, 1, 0));
                 }
             }
@@ -532,26 +532,26 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     ::Outliner&    rDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
 
-    std::vector<Paragraph*> aSelList;
+    std::vector<sal_Int32> aSelList;
     rDocliner.GetView(0)->CreateSelectionList(aSelList);
 
-    Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
+    sal_Int32 nPara = aSelList.empty() ? -1 : *(aSelList.begin());
 
     // what should we insert?
-    while (pPara && !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE))
-        pPara = rDocliner.GetParent(pPara);
+    while (nPara != -1 && !rDocliner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE))
+        nPara = rDocliner.GetParent(nPara);
 
-    sal_Int32 nTargetPos = rDocliner.GetAbsPos(pPara) + 1;
+    sal_Int32 nTargetPos = nPara + 1;
 
     // apply layout of predecessor page
     sal_uInt16 nPage = 0;
-    pPara = rDocliner.GetParagraph( rDocliner.GetAbsPos( pPara ) - 1 );
-    while (pPara)
+    nPara--;
+    while (nPara >= 0)
     {
-        sal_Int32 nPos = rDocliner.GetAbsPos( pPara );
-        if ( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+        sal_Int32 nPos = nPara;
+        if ( rDocliner.GetEditEngine().HasParaFlag( nPos, ParaFlag::ISPAGE ) )
             nPage++;
-        pPara = rDocliner.GetParagraph( nPos - 1 );
+        nPara = nPos - 1;
     }
     SdPage* pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
     aLayoutName = pPage->GetLayoutName();
@@ -590,13 +590,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         // for progress bar: number of level-0-paragraphs
         sal_uInt16 nNewPages = 0;
-        pPara = aOutliner.GetParagraph( 0 );
-        while (pPara)
+        nPara = 0;
+        while (nPara < aOutliner.GetEditEngine().GetParagraphCount())
         {
-            sal_Int32 nPos = aOutliner.GetAbsPos( pPara );
-            if( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+            sal_Int32 nPos = nPara;
+            if( aOutliner.GetEditEngine().HasParaFlag( nPos, ParaFlag::ISPAGE ) )
                 nNewPages++;
-            pPara = aOutliner.GetParagraph( ++nPos );
+            nPara = ++nPos;
         }
 
         mpDocSh->SetWaitCursor( false );
@@ -612,17 +612,17 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Outline );
-        Paragraph* pSourcePara = aOutliner.GetParagraph( 0 );
-        while (pSourcePara)
+        sal_Int32 nSourcePara = 0;
+        while (nSourcePara < aOutliner.GetEditEngine().GetParagraphCount())
         {
-            sal_Int32 nPos = aOutliner.GetAbsPos( pSourcePara );
+            sal_Int32 nPos = nSourcePara;
             sal_Int16 nDepth = aOutliner.GetDepth( nPos );
 
             // only take the last paragraph if it is filled
             if (nSourcePos < nParaCount - 1 ||
-                !aOutliner.GetText(pSourcePara).isEmpty())
+                !aOutliner.GetText(nSourcePara).isEmpty())
             {
-                rDocliner.Insert( aOutliner.GetText(pSourcePara), nTargetPos, nDepth );
+                rDocliner.Insert( aOutliner.GetText(nSourcePara), nTargetPos, nDepth );
                 OUString aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName = aStyleSheetName.subView( 0, aStyleSheetName.getLength()-1 ) +
                     OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
@@ -631,13 +631,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 rDocliner.SetStyleSheet( nTargetPos, pOutlStyle );
             }
 
-            if( Outliner::HasParaFlag( pSourcePara, ParaFlag::ISPAGE ) )
+            if( aOutliner.GetEditEngine().HasParaFlag( nPos, ParaFlag::ISPAGE ) )
             {
                 nNewPages++;
                 pProgress->SetState( nNewPages );
             }
 
-            pSourcePara = aOutliner.GetParagraph( ++nPos );
+            nSourcePara = ++nPos;
             nTargetPos++;
             nSourcePos++;
         }

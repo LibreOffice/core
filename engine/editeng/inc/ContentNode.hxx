@@ -21,6 +21,7 @@
 
 #include "editattr.hxx"
 #include "edtspell.hxx"
+#include <editeng/bulletinfo.hxx>
 #include <editeng/svxfont.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -112,6 +113,14 @@ private:
     ContentAttribs maContentAttribs;
     CharAttribList maCharAttribList;
     std::unique_ptr<WrongList> mpWrongList;
+    // following fields only useful when in outliner mode
+    sal_Int16 mnNumberingDepth { -1 };
+    sal_Int16 mnNumberingStartValue { -1 };
+    bool      mbNumberingRestart { false };
+    BulletInfo maBullet;
+    ParaFlag mnFlags = ParaFlag::NONE;
+    /// true if bullet is visible because the parent is expanded. false if the parent is collapsed.
+    bool mbBulletVisible = true;
 
     void UnExpandPosition(sal_Int32& rStartPos, bool bBiasStart);
 
@@ -170,6 +179,73 @@ public:
     sal_Unicode GetChar(sal_Int32 nPos) const;
 
     void checkAndDeleteEmptyAttribs() const;
+
+    sal_Int16 GetNumberingDepth() const { return mnNumberingDepth; }
+    void SetNumberingDepth(sal_Int16 nDepth) { mnNumberingDepth = nDepth; InvalidateBulletSize(); }
+
+    sal_Int16           GetNumberingStartValue() const { return mnNumberingStartValue; }
+    void                SetNumberingStartValue( sal_Int16 nNumberingStartValue )
+    {
+        mnNumberingStartValue = nNumberingStartValue;
+        if( mnNumberingStartValue != -1 )
+            mbNumberingRestart = true;
+    }
+
+    bool                IsNumberingRestart() const { return mbNumberingRestart; }
+    void                SetNumberingRestart( bool bRestart )
+    {
+        mbNumberingRestart = bRestart;
+        if( !mbNumberingRestart )
+            mnNumberingStartValue = -1;
+    }
+
+    void SetBulletText(const OUString& rText)
+    {
+        maBullet.maText = rText;
+        InvalidateBulletSize();
+    }
+
+    /// Sets the bullet size as well as the scaling parameters used to calculate the size
+    void SetBulletSize(Size const& rSize, ScalingParameters const& rScalingParameters)
+    {
+        maBullet.maSize = rSize;
+        maBullet.maScalingParameters = rScalingParameters;
+    }
+
+    /// Current size of the bullet
+    Size const& GetBulletSize() const
+    {
+        return maBullet.maSize;
+    }
+
+    const OUString& GetBulletText() const
+    {
+        return maBullet.maText;
+    }
+
+    /// Is the bullet size invalid for the current scaling parameters
+    bool IsBulletInvalid(ScalingParameters const& rCurrentScalingParameters) const
+    {
+        return rCurrentScalingParameters != maBullet.maScalingParameters
+            || maBullet.maSize.Width() == -1
+            || maBullet.maSize.Height() == -1;
+    }
+
+    /// Invalidate paragraph calculated information: bullet size
+    void InvalidateBulletSize()
+    {
+        maBullet.maSize.setWidth(-1);
+        maBullet.maSize.setHeight(-1);
+    }
+
+    void                SetParaFlag( ParaFlag nFlag ) { mnFlags |= nFlag; }
+    void                ClearAndSetParaFlag( ParaFlag nFlag ) { mnFlags = nFlag; }
+    void                RemoveParaFlag( ParaFlag nFlag ) { mnFlags &= ~nFlag; }
+    bool                HasParaFlag( ParaFlag nFlag ) const { return bool(mnFlags & nFlag); }
+    ParaFlag            GetParaFlag() const { return mnFlags; }
+
+    bool                IsBulletVisible() const { return mbBulletVisible; }
+    void                SetBulletVisible(bool b) { mbBulletVisible = b; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

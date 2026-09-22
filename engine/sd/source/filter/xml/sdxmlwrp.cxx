@@ -420,8 +420,7 @@ static void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
             const sal_Int16 nExpectedDepth = j;
             if (nExpectedDepth != pOutliner->GetDepth(j))
             {
-                Paragraph* p = pOutliner->GetParagraph(j);
-                pOutliner->SetDepth(p, nExpectedDepth);
+                pOutliner->SetDepth(j, nExpectedDepth);
                 bInconsistent = true;
             }
 

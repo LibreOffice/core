@@ -1873,10 +1873,9 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
     if(rOutl.IsModified())
     {
         std::optional<OutlinerParaObject> pNewText;
-        Paragraph* p1stPara = rOutl.GetParagraph( 0 );
         sal_Int32 nParaCnt = rOutl.GetParagraphCount();
 
-        if(p1stPara)
+        if(nParaCnt > 0)
         {
             // to remove the grey field background
             rOutl.UpdateFields();

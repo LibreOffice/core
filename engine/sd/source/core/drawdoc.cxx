@@ -1548,7 +1548,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
     // Advantages:
     // a) no unnecessary Clear calls
     // b) no wasted memory
-    DBG_ASSERT( !mpInternalOutliner || ( ( mpInternalOutliner->GetParagraphCount() == 1 ) && ( mpInternalOutliner->GetText( mpInternalOutliner->GetParagraph( 0 ) ).isEmpty() ) ), "InternalOutliner: not empty!" );
+    DBG_ASSERT( !mpInternalOutliner || ( ( mpInternalOutliner->GetParagraphCount() == 1 ) && ( mpInternalOutliner->GetText( 0 ).isEmpty() ) ), "InternalOutliner: not empty!" );
 
     return mpInternalOutliner.get();
 }
@@ -1780,8 +1780,6 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdDrawDocument"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    if (mpOutliner)
-        mpOutliner->dumpAsXml(pWriter);
     FmFormModel::dumpAsXml(pWriter);
     if (GetUndoManager())
         GetUndoManager()->dumpAsXml(pWriter);

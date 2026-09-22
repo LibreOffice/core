@@ -734,7 +734,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 
         ESelection aSel;
         aSel.end.nPara = aOutliner.GetParagraphCount() - 2;
-        aSel.end.nIndex = aOutliner.GetText( aOutliner.GetParagraph( aSel.end.nPara ) ).getLength();
+        aSel.end.nIndex = aOutliner.GetText( aSel.end.nPara ).getLength();
 
         aOutliner.QuickSetAttribs( aAnswerSet, aSel );
     }

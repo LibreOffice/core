@@ -64,49 +64,46 @@ void Outliner::ImplCheckDepth( sal_Int16& rnDepth ) const
         rnDepth = nMaxDepth;
 }
 
-Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 nDepth)
+sal_Int32 Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 nDepth)
 {
-    DBG_ASSERT(pParaList->GetParagraphCount(),"Insert:No Paras");
-
-    Paragraph* pPara;
+    sal_Int32 nPara;
 
     ImplCheckDepth( nDepth );
 
-    sal_Int32 nParagraphCount = pParaList->GetParagraphCount();
+    sal_Int32 nParagraphCount = pEditEngine->GetParagraphCount();
     if( nAbsPos > nParagraphCount )
         nAbsPos = nParagraphCount;
 
     if( bFirstParaIsEmpty )
     {
-        pPara = pParaList->GetParagraph( 0 );
-        if( pPara->GetNumberingDepth() != nDepth )
+        nPara = 0;
+        sal_Int32 nNumberingDepth = pEditEngine->GetNumberingDepth(0);
+        ParaFlag nPrevFlags = pEditEngine->GetParaFlag(0);
+        if( nNumberingDepth != nDepth )
         {
-            nDepthChangedHdlPrevDepth = pPara->GetNumberingDepth();
-            ParaFlag nPrevFlags = pPara->nFlags;
-            pPara->SetNumberingDepth( nDepth );
-            DepthChangedHdl(pPara, nPrevFlags);
+            nDepthChangedHdlPrevDepth = nNumberingDepth;
+            pEditEngine->SetNumberingDepth(0, nDepth);
+            DepthChangedHdl(nPrevFlags, 0);
         }
-        pPara->nFlags |= ParaFlag::HOLDDEPTH;
-        SetText( rText, pPara );
+        pEditEngine->ClearAndSetParaFlag(0, nPrevFlags | ParaFlag::HOLDDEPTH);
+        SetText( rText, nPara );
     }
     else
     {
         bool bUpdate = pEditEngine->SetUpdateLayout( false );
         ImplBlockInsertionCallbacks( true );
-        pPara = new Paragraph( nDepth );
-        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nAbsPos );
+        nPara = nAbsPos;
         pEditEngine->InsertParagraph( nAbsPos, OUString() );
-        DBG_ASSERT(pPara==pParaList->GetParagraph(nAbsPos),"Insert:Failed");
+        pEditEngine->SetNumberingDepth(nAbsPos, nDepth);
         ImplInitDepth( nAbsPos, nDepth, false );
-        ParagraphInsertedHdl(pPara);
-        pPara->nFlags |= ParaFlag::HOLDDEPTH;
-        SetText( rText, pPara );
+        ParagraphInsertedHdl(nAbsPos);
+        pEditEngine->SetParaFlag(nAbsPos, pEditEngine->GetParaFlag(nAbsPos) | ParaFlag::HOLDDEPTH);
+        SetText( rText, nPara );
         ImplBlockInsertionCallbacks( false );
         pEditEngine->SetUpdateLayout( bUpdate );
     }
     bFirstParaIsEmpty = false;
-    DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed");
-    return pPara;
+    return nPara;
 }
 
 
@@ -118,65 +115,57 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
 
     if( bPasting || pEditEngine->IsInUndo() )
     {
-        Paragraph* pPara = new Paragraph( -1 );
-        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nPara );
         if( pEditEngine->IsInUndo() )
         {
-            pPara->bVisible = true;
+            pEditEngine->SetBulletVisible(nPara, true);
             const SfxInt16Item& rLevel = pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-            pPara->SetNumberingDepth( rLevel.GetValue() );
+            pEditEngine->SetNumberingDepth( nPara, rLevel.GetValue() );
         }
     }
     else
     {
         sal_Int16 nDepth = -1;
-        Paragraph* pParaBefore = pParaList->GetParagraph( nPara-1 );
-        if ( pParaBefore )
-            nDepth = pParaBefore->GetNumberingDepth();
+        if (nPara - 1 >= 0)
+            nDepth = pEditEngine->GetNumberingDepth(nPara-1);
 
-        Paragraph* pPara = new Paragraph( nDepth );
-        pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nPara );
+        pEditEngine->SetNumberingDepth( nPara, nDepth );
 
         if( !pEditEngine->IsInUndo() )
         {
             ImplCalcBulletText( nPara, true, false );
-            ParagraphInsertedHdl(pPara);
+            ParagraphInsertedHdl(nPara);
         }
     }
 }
 
-void Outliner::ParagraphDeleted( sal_Int32 nPara )
+/**
+ * nPara is the index of the paragraph that __was__ deleted, so it actually
+ * now indexes to the __next__ paragraph.
+ */
+void Outliner::ParagraphDeleted( sal_Int32 nPara, sal_Int16 nDepth, bool bIsPage )
 {
 
     if (nBlockInsCallback || (nPara == EE_PARA_MAX))
         return;
 
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (!pPara)
-        return;
-
-    sal_Int16 nDepth = pPara->GetNumberingDepth();
-
     if( !pEditEngine->IsInUndo() )
     {
-        aParaRemovingHdl.Call( { this, pPara } );
+        aParaRemovingHdl.Call( { this, nPara, bIsPage } );
     }
-
-    pParaList->Remove( nPara );
 
     if( pEditEngine->IsInUndo() || bPasting )
         return;
 
-    pPara = pParaList->GetParagraph( nPara );
-    if ( pPara && ( pPara->GetNumberingDepth() > nDepth ) )
+    // is next paragraph of greater depth?
+    if ( nPara < pEditEngine->GetParagraphCount() && pEditEngine->GetNumberingDepth(nPara) > nDepth )
     {
         ImplCalcBulletText( nPara, true, false );
         // Search for next on the this level ...
-        while ( pPara && pPara->GetNumberingDepth() > nDepth )
-            pPara = pParaList->GetParagraph( ++nPara );
+        while ( nPara < pEditEngine->GetParagraphCount() && pEditEngine->GetNumberingDepth(nPara) > nDepth )
+            ++nPara;
     }
 
-    if ( pPara && ( pPara->GetNumberingDepth() == nDepth ) )
+    if ( nPara < pEditEngine->GetParagraphCount() && ( pEditEngine->GetNumberingDepth(nPara) == nDepth ) )
         ImplCalcBulletText( nPara, true, false );
 }
 
@@ -226,76 +215,66 @@ void Outliner::SetMaxDepth( sal_Int16 nDepth )
 
 sal_Int16 Outliner::GetDepth( sal_Int32 nPara ) const
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    assert(pPara);
-    return pPara->GetNumberingDepth();
+    return pEditEngine->GetNumberingDepth(nPara);
 }
 
-void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
+void Outliner::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 {
+    const sal_Int16 nOldDepth = pEditEngine->GetNumberingDepth(nPara);
 
     ImplCheckDepth( nNewDepth );
 
-    if ( nNewDepth == pPara->GetNumberingDepth() )
+    if ( nNewDepth == nOldDepth )
         return;
 
-    nDepthChangedHdlPrevDepth = pPara->GetNumberingDepth();
-    ParaFlag nPrevFlags = pPara->nFlags;
+    nDepthChangedHdlPrevDepth = nOldDepth;
+    ParaFlag nPrevFlags = pEditEngine->GetParaFlag(nPara);
 
-    sal_Int32 nPara = GetAbsPos( pPara );
     ImplInitDepth( nPara, nNewDepth, true );
     ImplCalcBulletText( nPara, false, false );
 
     if ( GetOutlinerMode() == OutlinerMode::OutlineObject )
         ImplSetLevelDependentStyleSheet( nPara );
 
-    DepthChangedHdl(pPara, nPrevFlags);
+    DepthChangedHdl(nPrevFlags, nPara);
 }
 
 sal_Int16 Outliner::GetNumberingStartValue( sal_Int32 nPara ) const
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    assert(pPara);
-    return pPara->GetNumberingStartValue();
+    return pEditEngine->GetNumberingStartValue(nPara);
 }
 
 void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue )
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    assert(pPara);
-    if( pPara->GetNumberingStartValue() != nNumberingStartValue )
+    if(  pEditEngine->GetNumberingStartValue(nPara) != nNumberingStartValue )
     {
         if( IsUndoEnabled() && !IsInUndo() )
             InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
-                pPara->GetNumberingStartValue(), nNumberingStartValue,
-                pPara->IsNumberingRestart(), pPara->IsNumberingRestart() ) );
+                pEditEngine->GetNumberingStartValue(nPara), nNumberingStartValue,
+                pEditEngine->IsNumberingRestart(nPara), pEditEngine->IsNumberingRestart(nPara) ) );
 
-        pPara->SetNumberingStartValue( nNumberingStartValue );
-        ImplCheckParagraphs( nPara, pParaList->GetParagraphCount() );
+        pEditEngine->SetNumberingStartValue( nPara, nNumberingStartValue );
+        ImplCheckParagraphs( nPara, pEditEngine->GetParagraphCount() );
         pEditEngine->SetModified();
     }
 }
 
 bool Outliner::IsParaIsNumberingRestart( sal_Int32 nPara ) const
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    assert(pPara);
-    return pPara->IsNumberingRestart();
+    return pEditEngine->IsNumberingRestart(nPara);
 }
 
 void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart )
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    assert(pPara);
-    if( pPara->IsNumberingRestart() != bParaIsNumberingRestart )
+    if( pEditEngine->IsNumberingRestart(nPara) != bParaIsNumberingRestart )
     {
         if( IsUndoEnabled() && !IsInUndo() )
             InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
-                pPara->GetNumberingStartValue(), pPara->GetNumberingStartValue(),
-                pPara->IsNumberingRestart(), bParaIsNumberingRestart ) );
+                pEditEngine->GetNumberingStartValue(nPara), pEditEngine->GetNumberingStartValue(nPara),
+                pEditEngine->IsNumberingRestart(nPara), bParaIsNumberingRestart ) );
 
-        pPara->SetNumberingRestart( bParaIsNumberingRestart );
-        ImplCheckParagraphs( nPara, pParaList->GetParagraphCount() );
+        pEditEngine->SetNumberingRestart( nPara, bParaIsNumberingRestart );
+        ImplCheckParagraphs( nPara, pEditEngine->GetParagraphCount() );
         pEditEngine->SetModified();
     }
 }
@@ -305,7 +284,7 @@ sal_Int32 Outliner::GetBulletsNumberingStatus(
     const sal_Int32 nParaEnd ) const
 {
     if ( nParaStart > nParaEnd
-         || nParaEnd >= pParaList->GetParagraphCount() )
+         || nParaEnd >= pEditEngine->GetParagraphCount() )
     {
         SAL_WARN("editeng", "<Outliner::GetBulletsNumberingStatus> - unexpected parameter values" );
         return 2;
@@ -315,10 +294,6 @@ sal_Int32 Outliner::GetBulletsNumberingStatus(
     sal_Int32 nNumberingCount = 0;
     for (sal_Int32 nPara = nParaStart; nPara <= nParaEnd; ++nPara)
     {
-        if ( !pParaList->GetParagraph(nPara) )
-        {
-            break;
-        }
         const SvxNumberFormat* pFmt = GetNumberFormat(nPara);
         if (!pFmt)
         {
@@ -351,16 +326,16 @@ sal_Int32 Outliner::GetBulletsNumberingStatus(
 
 sal_Int32 Outliner::GetBulletsNumberingStatus() const
 {
-    return pParaList->GetParagraphCount() > 0
-           ? GetBulletsNumberingStatus( 0, pParaList->GetParagraphCount()-1 )
+    return pEditEngine->GetParagraphCount() > 0
+           ? GetBulletsNumberingStatus( 0, pEditEngine->GetParagraphCount()-1 )
            : 2;
 }
 
 std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     if ( static_cast<sal_uInt64>(nStartPara) + nCount >
-            o3tl::make_unsigned(pParaList->GetParagraphCount()) )
-        nCount = pParaList->GetParagraphCount() - nStartPara;
+            o3tl::make_unsigned(pEditEngine->GetParagraphCount()) )
+        nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
     // When a new OutlinerParaObject is created because a paragraph is just being deleted,
     // it can happen that the ParaList is not updated yet...
@@ -375,9 +350,9 @@ std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPa
 
     for(sal_Int32 nPara(nStartPara); nPara <= nLastPara; nPara++)
     {
-        aText.SetNumberingDepth(nPara - nStartPara, GetParagraph(nPara)->GetNumberingDepth());
-        aText.SetNumberingStartValue(nPara - nStartPara, GetParagraph(nPara)->GetNumberingStartValue());
-        aText.SetNumberingRestart(nPara - nStartPara, GetParagraph(nPara)->IsNumberingRestart());
+        aText.SetNumberingDepth(nPara - nStartPara, pEditEngine->GetNumberingDepth(nPara));
+        aText.SetNumberingStartValue(nPara - nStartPara, pEditEngine->GetNumberingStartValue(nPara));
+        aText.SetNumberingRestart(nPara - nStartPara, pEditEngine->IsNumberingRestart(nPara));
     }
 
     aText.ClearPortionInfo(); // tdf#147166 the PortionInfo is unwanted here
@@ -392,12 +367,8 @@ void Outliner::SetToEmptyText()
     SetText(GetEmptyParaObject());
 }
 
-void Outliner::SetText( const OUString& rText, Paragraph* pPara )
+void Outliner::SetText( const OUString& rText, sal_Int32 nPara )
 {
-    assert(pPara && "SetText:No Para");
-
-    const sal_Int32 nPara = pParaList->GetAbsPos( pPara );
-
     if (pEditEngine->GetText( nPara ) == rText)
     {
         // short-circuit logic to improve performance
@@ -411,7 +382,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     if (rText.isEmpty())
     {
         pEditEngine->SetText( nPara, rText );
-        ImplInitDepth( nPara, pPara->GetNumberingDepth(), false );
+        const sal_Int16 nDepth = pEditEngine->GetNumberingDepth(nPara);
+        ImplInitDepth( nPara, nDepth, false );
     }
     else
     {
@@ -429,13 +401,17 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
             std::u16string_view aStr = o3tl::getToken(aText, 0, '\x0A', nIdx );
 
             sal_Int16 nCurDepth;
+            ParaFlag nFlag;
             if( nPos )
             {
-                pPara = new Paragraph( -1 );
                 nCurDepth = -1;
+                nFlag = ParaFlag::NONE;
             }
             else
-                nCurDepth = pPara->GetNumberingDepth();
+            {
+                nCurDepth = pEditEngine->GetNumberingDepth(nPara);
+                nFlag = pEditEngine->GetParaFlag(nPara);
+            }
 
             // In the outliner mode, filter the tabs and set the indentation
             // about a LRSpaceItem. In EditEngine mode intend over old tabs
@@ -450,18 +426,16 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                     aStr = aStr.substr(nTabs);
 
                 // Keep depth?  (see Outliner::Insert)
-                if( !(pPara->nFlags & ParaFlag::HOLDDEPTH) )
+                if( !(nFlag & ParaFlag::HOLDDEPTH) )
                 {
                     nCurDepth = nTabs-1; //TODO: sal_Int32 -> sal_Int16!
                     ImplCheckDepth( nCurDepth );
-                    pPara->SetNumberingDepth( nCurDepth );
                 }
             }
             if( nPos ) // not with the first paragraph
             {
-                pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nInsPos );
                 pEditEngine->InsertParagraph( nInsPos, OUString(aStr) );
-                ParagraphInsertedHdl(pPara);
+                ParagraphInsertedHdl(nInsPos);
             }
             else
             {
@@ -469,12 +443,12 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                 pEditEngine->SetText( nInsPos, OUString(aStr) );
             }
             ImplInitDepth( nInsPos, nCurDepth, false );
+            pEditEngine->SetNumberingDepth( nInsPos, nCurDepth );
             nInsPos++;
             nPos++;
         }
     }
 
-    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!");
     bFirstParaIsEmpty = false;
     ImplBlockInsertionCallbacks( false );
     // Restore the update mode.
@@ -568,23 +542,23 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     bFirstParaIsEmpty = false;
 
-    pParaList->Clear();
     for( sal_Int32 nCurPara = 0; nCurPara < rPObj.Count(); nCurPara++ )
     {
-        std::unique_ptr<Paragraph> pPara(new Paragraph( rPObj.GetNumberingDepth(nCurPara), rPObj.GetNumberingStartValue(nCurPara), rPObj.IsNumberingRestart(nCurPara) ));
-        ImplCheckDepth( pPara->mnNumberingDepth );
+        sal_Int16 nDepth = rPObj.GetNumberingDepth(nCurPara);
+        ImplCheckDepth( nDepth );
+        pEditEngine->SetNumberingDepth(nCurPara, nDepth);
+        pEditEngine->SetNumberingStartValue(nCurPara, rPObj.GetNumberingStartValue(nCurPara));
+        pEditEngine->SetNumberingRestart(nCurPara, rPObj.IsNumberingRestart(nCurPara));
 
-        pParaList->Append(std::move(pPara));
         ImplCheckNumBulletItem( nCurPara );
     }
 
-    ImplCheckParagraphs( 0, pParaList->GetParagraphCount() );
+    ImplCheckParagraphs( 0, pEditEngine->GetParagraphCount() );
 
     EnableUndo( bUndo );
     ImplBlockInsertionCallbacks( false );
     pEditEngine->SetUpdateLayout( bUpdate );
 
-    DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed");
     DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed");
 }
 
@@ -596,14 +570,13 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
     sal_Int32 nPara;
     if( bFirstParaIsEmpty )
     {
-        pParaList->Clear();
         pEditEngine->SetText(rPObj.GetTextObject());
         nPara = 0;
         bAppend = false;
     }
     else
     {
-        nPara = pParaList->GetParagraphCount();
+        nPara = pEditEngine->GetParagraphCount();
         pEditEngine->InsertParagraph(EE_PARA_MAX, rPObj.GetTextObject(), bAppend);
     }
     bFirstParaIsEmpty = false;
@@ -618,15 +591,15 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
             continue;
         }
 
-        Paragraph* pPara = new Paragraph( rPObj.GetNumberingDepth(n), rPObj.GetNumberingStartValue(n), rPObj.IsNumberingRestart(n) );
-        pParaList->Append(std::unique_ptr<Paragraph>(pPara));
+        const sal_Int16 nDepth = rPObj.GetNumberingDepth(n);
         sal_Int32 nP = nPara+n;
-        DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");
-        ImplInitDepth( nP, pPara->GetNumberingDepth(), false );
+        pEditEngine->SetNumberingDepth(nP, nDepth);
+        pEditEngine->SetNumberingStartValue(nP, rPObj.GetNumberingStartValue(n));
+        pEditEngine->SetNumberingRestart(nP, rPObj.IsNumberingRestart(n));
+        ImplInitDepth( nP, nDepth, false );
     }
-    DBG_ASSERT( pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(), "SetText: OutOfSync" );
 
-    ImplCheckParagraphs( nPara, pParaList->GetParagraphCount() );
+    ImplCheckParagraphs( nPara, pEditEngine->GetParagraphCount() );
 
     ImplBlockInsertionCallbacks( false );
     pEditEngine->SetUpdateLayout( bUpdate );
@@ -663,19 +636,13 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
 
 void Outliner::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (pPara)
-    {
-        pEditEngine->SetStyleSheet( nPara, pStyle );
-        ImplCheckNumBulletItem(  nPara );
-    }
+    pEditEngine->SetStyleSheet( nPara, pStyle );
+    ImplCheckNumBulletItem(  nPara );
 }
 
 void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (pPara)
-        pPara->Invalidate();
+    pEditEngine->InvalidateBulletSize( nPara );
 }
 
 void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
@@ -715,11 +682,8 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
 
     DBG_ASSERT( ( nDepth >= gnMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
 
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (!pPara)
-        return;
-    sal_Int16 nOldDepth = pPara->GetNumberingDepth();
-    pPara->SetNumberingDepth( nDepth );
+    sal_Int16 nOldDepth = pEditEngine->GetNumberingDepth(nPara);
+    pEditEngine->SetNumberingDepth( nPara, nDepth );
 
     // For IsInUndo attributes and style do not have to be set, there
     // the old values are restored by the EditEngine.
@@ -754,9 +718,9 @@ void Outliner::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
     pEditEngine->SetCharAttribs(nPara, rSet);
 }
 
-bool Outliner::Expand( Paragraph const * pPara )
+bool Outliner::Expand( sal_Int32 nPara )
 {
-    if ( !pParaList->HasHiddenChildren( pPara ) )
+    if ( !ParagraphList::HasHiddenChildren( nPara, *pEditEngine ) )
         return false;
 
     std::unique_ptr<OLUndoExpand> pUndo;
@@ -765,10 +729,10 @@ bool Outliner::Expand( Paragraph const * pPara )
     {
         UndoActionStart( OLUNDO_EXPAND );
         pUndo.reset( new OLUndoExpand( this, OLUNDO_EXPAND ) );
-        pUndo->nCount = pParaList->GetAbsPos( pPara );
+        pUndo->nCount = nPara;
     }
-    pParaList->Expand( pPara );
-    InvalidateBullet(pParaList->GetAbsPos(pPara));
+    pParaList->Expand( nPara, *pEditEngine );
+    InvalidateBullet(nPara);
     if( bUndo )
     {
         InsertUndo( std::move(pUndo) );
@@ -777,9 +741,9 @@ bool Outliner::Expand( Paragraph const * pPara )
     return true;
 }
 
-bool Outliner::Collapse( Paragraph const * pPara )
+bool Outliner::Collapse( sal_Int32 nPara )
 {
-    if ( !pParaList->HasVisibleChildren( pPara ) ) // collapsed
+    if ( !ParagraphList::HasVisibleChildren( nPara, *pEditEngine ) ) // collapsed
         return false;
 
     std::unique_ptr<OLUndoExpand> pUndo;
@@ -791,11 +755,11 @@ bool Outliner::Collapse( Paragraph const * pPara )
     {
         UndoActionStart( OLUNDO_COLLAPSE );
         pUndo.reset( new OLUndoExpand( this, OLUNDO_COLLAPSE ) );
-        pUndo->nCount = pParaList->GetAbsPos( pPara );
+        pUndo->nCount = nPara;
     }
 
-    pParaList->Collapse( pPara );
-    InvalidateBullet(pParaList->GetAbsPos(pPara));
+    pParaList->Collapse( nPara, *pEditEngine );
+    InvalidateBullet(nPara);
     if( bUndo )
     {
         InsertUndo( std::move(pUndo) );
@@ -894,7 +858,6 @@ void Outliner::StripBullet(
     aBulletArea = tools::Rectangle(Point(nStretchBulletX, aBulletArea.Top()),
                              Size(nStretchBulletWidth, aBulletArea.GetHeight()) );
 
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     if ( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) )
     {
@@ -942,7 +905,8 @@ void Outliner::StripBullet(
 
             const SvxFont aSvxFont(rOutDev.GetFont());
             KernArray aBuf;
-            rOutDev.GetTextArray( pPara->GetText(), &aBuf );
+            OUString sBulletText = pEditEngine->GetBulletText(nPara);
+            rOutDev.GetTextArray( sBulletText, &aBuf );
 
             if(bSymbol)
             {
@@ -952,7 +916,7 @@ void Outliner::StripBullet(
             }
 
             const DrawPortionInfo aInfo(
-                aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
+                aTextPos, sBulletText, 0, sBulletText.getLength(), aBuf, {},
                 aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             rStripPortionsHelper.processDrawPortionInfo(aInfo);
 
@@ -992,7 +956,7 @@ void Outliner::StripBullet(
                 DrawBulletInfo aDrawBulletInfo(
                     *pFmt->GetBrush()->GetGraphicObject(),
                     aBulletPos,
-                    pPara->GetBulletSize());
+                    pEditEngine->GetBulletSize(nPara));
                 rStripPortionsHelper.processDrawBulletInfo(aDrawBulletInfo);
             }
         }
@@ -1031,11 +995,9 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
     bFirstParaIsEmpty = false;
 
     sal_Int32 nParas = pEditEngine->GetParagraphCount();
-    pParaList->Clear();
     for ( sal_Int32 n = 0; n < nParas; n++ )
     {
-        std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
-        pParaList->Append(std::move(pPara));
+        pEditEngine->SetNumberingDepth(n, 0);
     }
 
     ImpFilterIndents( 0, nParas-1 );
@@ -1052,24 +1014,20 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
 {
     bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
-    Paragraph* pLastConverted = nullptr;
+    sal_Int32 nLastConverted = -1;
     for( sal_Int32 nPara = nFirstPara; nPara <= nLastPara; nPara++ )
     {
-        Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (pPara)
+        if( ImpConvertEdtToOut( nPara ) )
         {
-                    if( ImpConvertEdtToOut( nPara ) )
-                    {
-                            pLastConverted = pPara;
-                    }
-                    else if ( pLastConverted )
-                    {
-                            // Arrange normal paragraphs below the heading ...
-                            pPara->SetNumberingDepth( pLastConverted->GetNumberingDepth() );
-                    }
-
-                    ImplInitDepth( nPara, pPara->GetNumberingDepth(), false );
+            nLastConverted = nPara;
         }
+        else if ( nLastConverted != -1 )
+        {
+            // Arrange normal paragraphs below the heading ...
+            pEditEngine->SetNumberingDepth( nPara, pEditEngine->GetNumberingDepth(nLastConverted) );
+        }
+
+        ImplInitDepth( nPara, pEditEngine->GetNumberingDepth(nPara), false );
     }
 
     pEditEngine->SetUpdateLayout( bUpdate );
@@ -1091,22 +1049,21 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 
     const sal_Int32 nStart = nStartPara;
 
-    Paragraph* pPara = pParaList->GetParagraph( nStartPara );
-
-    while( nCount && pPara )
+    while( nCount )
     {
         if( GetOutlinerMode() != OutlinerMode::TextObject )
         {
-            nDepthChangedHdlPrevDepth = pPara->GetNumberingDepth();
-            ParaFlag nPrevFlags = pPara->nFlags;
+            nDepthChangedHdlPrevDepth = pEditEngine->GetNumberingDepth(nStartPara);
+            ParaFlag nPrevFlags = pEditEngine->GetParaFlag(nStartPara);
 
             ImpConvertEdtToOut( nStartPara );
 
             if( nStartPara == nStart )
             {
                 // the existing paragraph has changed depth or flags
-                if( (pPara->GetNumberingDepth() != nDepthChangedHdlPrevDepth) || (pPara->nFlags != nPrevFlags) )
-                    DepthChangedHdl(pPara, nPrevFlags);
+                if( (pEditEngine->GetNumberingDepth(nStartPara) != nDepthChangedHdlPrevDepth)
+                    || (pEditEngine->GetParaFlag(nStartPara) != nPrevFlags) )
+                    DepthChangedHdl(nPrevFlags, nStartPara);
             }
         }
         else // EditEngine mode
@@ -1124,12 +1081,9 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 
         nCount--;
         nStartPara++;
-        pPara = pParaList->GetParagraph( nStartPara );
     }
 
     pEditEngine->SetUpdateLayout( bUpdate );
-
-    DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"ImpTextPasted failed");
 }
 
 bool Outliner::IndentingPagesHdl( OutlinerView* pView )
@@ -1175,8 +1129,7 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     , bPasting(false)
 {
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
-    std::unique_ptr<Paragraph> pPara(new Paragraph( 0 ));
-    pParaList->Append(std::move(pPara));
+    pEditEngine->SetNumberingDepth(0, 0);
 
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
     pEditEngine->SetEndMovingParagraphsHdl( LINK( this, Outliner, EndMovingParagraphsHdl ) );
@@ -1188,7 +1141,6 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
 
 Outliner::~Outliner()
 {
-    pParaList->Clear();
     pParaList.reset();
     pEditEngine.reset();
 }
@@ -1228,39 +1180,28 @@ size_t Outliner::GetViewCount() const
     return aViewList.size();
 }
 
-void Outliner::ParagraphInsertedHdl(Paragraph* pPara)
+void Outliner::ParagraphInsertedHdl(sal_Int32 nParaPos)
 {
     if( !IsInUndo() )
-        aParaInsertedHdl.Call( { this, pPara } );
+        aParaInsertedHdl.Call( { this, nParaPos, pEditEngine->HasParaFlag( nParaPos, ParaFlag::ISPAGE ) } );
 }
 
 
-void Outliner::DepthChangedHdl(Paragraph* pPara, ParaFlag nPrevFlags)
+void Outliner::DepthChangedHdl(ParaFlag nPrevFlags, sal_Int32 nParaPos)
 {
     if( !IsInUndo() )
-        aDepthChangedHdl.Call( { this, pPara, nPrevFlags } );
+        aDepthChangedHdl.Call( { this, nPrevFlags, nParaPos } );
 }
 
-
-sal_Int32 Outliner::GetAbsPos( Paragraph const * pPara ) const
-{
-    assert(pPara);
-    return pParaList->GetAbsPos( pPara );
-}
 
 sal_Int32 Outliner::GetParagraphCount() const
 {
-    return pParaList->GetParagraphCount();
+    return pEditEngine->GetParagraphCount();
 }
 
-Paragraph* Outliner::GetParagraph( sal_Int32 nAbsPos ) const
+bool Outliner::HasChildren( sal_Int32 nParagraph ) const
 {
-    return pParaList->GetParagraph( nAbsPos );
-}
-
-bool Outliner::HasChildren( Paragraph const * pParagraph ) const
-{
-    return pParaList->HasChildren( pParagraph );
+    return ParagraphList::HasChildren( nParagraph, *pEditEngine );
 }
 
 bool Outliner::ImplHasNumberFormat( sal_Int32 nPara ) const
@@ -1272,11 +1213,7 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
 {
     const SvxNumberFormat* pFmt = nullptr;
 
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (!pPara)
-        return nullptr;
-
-    sal_Int16 nDepth = pPara->GetNumberingDepth();
+    sal_Int16 nDepth = pEditEngine->GetNumberingDepth(nPara);
 
     if( nDepth >= 0 )
     {
@@ -1290,14 +1227,10 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_Int32 nPara ) const
 
 Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
 {
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (!pPara)
-        return Size();
-
     auto aScalingParameters = getScalingParameters();
     Size aSize;
 
-    if (pPara->IsBulletInvalid(aScalingParameters))
+    if (pEditEngine->IsBulletInvalid(nPara, aScalingParameters))
     {
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
         assert(pFmt && "ImplGetBulletSize - no Bullet!");
@@ -1324,10 +1257,10 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
                     pEditEngine->GetRefDevice()->GetMapMode());
         }
 
-        pPara->SetBulletSize(aSize, aScalingParameters);
+        pEditEngine->SetBulletSize(nPara, aSize, aScalingParameters);
     }
 
-    return pPara->GetBulletSize();
+    return pEditEngine->GetBulletSize(nPara);
 }
 
 void Outliner::ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd )
@@ -1335,22 +1268,18 @@ void Outliner::ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd )
 
     for ( sal_Int32 n = nStart; n < nEnd; n++ )
     {
-        Paragraph* pPara = pParaList->GetParagraph( n );
-        if (pPara)
-        {
-            pPara->Invalidate();
-            ImplCalcBulletText( n, false, false );
-        }
+        pEditEngine->InvalidateBulletSize(n);
+        ImplCalcBulletText( n, false, false );
     }
 }
 
 void Outliner::SetRefDevice( OutputDevice* pRefDev )
 {
     pEditEngine->SetRefDevice( pRefDev );
-    for ( sal_Int32 n = pParaList->GetParagraphCount(); n; )
+    for ( sal_Int32 n = pEditEngine->GetParagraphCount(); n; )
     {
-        Paragraph* pPara = pParaList->GetParagraph( --n );
-        pPara->Invalidate();
+        --n;
+        pEditEngine->InvalidateBulletSize(n);
     }
 }
 
@@ -1362,17 +1291,12 @@ void Outliner::ParaAttribsChanged( sal_Int32 nPara )
     // is to be determined.
     if (!pEditEngine->IsInUndo())
         return;
-    if (pParaList->GetParagraphCount() != pEditEngine->GetParagraphCount())
-        return;
-    Paragraph* pPara = pParaList->GetParagraph(nPara);
-    if (!pPara)
-        return;
     // tdf#100734: force update of bullet
-    pPara->Invalidate();
+    pEditEngine->InvalidateBulletSize(nPara);
     const SfxInt16Item& rLevel = pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-    if (pPara->GetNumberingDepth() == rLevel.GetValue())
+    if (pEditEngine->GetNumberingDepth(nPara) == rLevel.GetValue())
         return;
-    pPara->SetNumberingDepth(rLevel.GetValue());
+    pEditEngine->SetNumberingDepth(nPara, rLevel.GetValue());
     ImplCalcBulletText(nPara, true, true);
 }
 
@@ -1383,7 +1307,7 @@ void Outliner::StyleSheetChanged( SfxStyleSheet const * pStyle )
     // Here all the paragraphs, which had the said template, used to be
     // hunted by an ImpRecalcParaAttribs, why?
     // => only the Bullet-representation can really change...
-    sal_Int32 nParas = pParaList->GetParagraphCount();
+    sal_Int32 nParas = pEditEngine->GetParagraphCount();
     for( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
     {
         if ( pEditEngine->GetStyleSheet( nPara ) == pStyle )
@@ -1588,11 +1512,10 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
     return aInfo;
 }
 
-OUString Outliner::GetText( Paragraph const * pParagraph, sal_Int32 nCount ) const
+OUString Outliner::GetText( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
 
     OUStringBuffer aText(128);
-    sal_Int32 nStartPara = pParaList->GetAbsPos( pParagraph );
     for ( sal_Int32 n = 0; n < nCount; n++ )
     {
         aText.append(pEditEngine->GetText( nStartPara + n ));
@@ -1602,11 +1525,9 @@ OUString Outliner::GetText( Paragraph const * pParagraph, sal_Int32 nCount ) con
     return aText.makeStringAndClear();
 }
 
-void Outliner::Remove( Paragraph const * pPara, sal_Int32 nParaCount )
+void Outliner::Remove( sal_Int32 nPos, sal_Int32 nParaCount )
 {
-
-    sal_Int32 nPos = pParaList->GetAbsPos( pPara );
-    if( !nPos && ( nParaCount >= pParaList->GetParagraphCount() ) )
+    if( !nPos && ( nParaCount >= pEditEngine->GetParagraphCount() ) )
     {
         Clear();
     }
@@ -1640,10 +1561,9 @@ SfxItemSet const & Outliner::GetParaAttribs( sal_Int32 nPara ) const
     return pEditEngine->GetParaAttribs( nPara );
 }
 
-IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph&, rPara, void )
+IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, sal_Int32, nPara, void )
 {
-    sal_Int32 nPara = pParaList->GetAbsPos( &rPara );
-    pEditEngine->ShowParagraph( nPara, rPara.IsVisible() );
+    pEditEngine->ShowParagraph( nPara, pEditEngine->IsBulletVisible(nPara) );
 }
 
 IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, void)
@@ -1668,9 +1588,8 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
 
 IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
 {
-    pParaList->MoveParagraphs( rInfos.nStartPara, rInfos.nDestPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
     sal_Int32 nChangesStart = std::min( rInfos.nStartPara, rInfos.nDestPara );
-    sal_Int32 nParas = pParaList->GetParagraphCount();
+    sal_Int32 nParas = pEditEngine->GetParagraphCount();
     for ( sal_Int32 n = nChangesStart; n < nParas; n++ )
         ImplCalcBulletText( n, false, false );
 
@@ -1696,13 +1615,11 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* p
 {
     sal_uInt16 nNumber = pParaFmt->GetStart() - 1;
 
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    const sal_Int16 nParaDepth = pPara->GetNumberingDepth();
+    const sal_Int16 nParaDepth = pEditEngine->GetNumberingDepth(nPara);
 
     do
     {
-        pPara = pParaList->GetParagraph( nPara );
-        const sal_Int16 nDepth = pPara->GetNumberingDepth();
+        const sal_Int16 nDepth = pEditEngine->GetNumberingDepth(nPara);
 
         // ignore paragraphs that are below our paragraph or have no numbering
         if( (nDepth > nParaDepth) || (nDepth == -1) )
@@ -1733,8 +1650,8 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* p
             nNumber += 1;
 
         // same depth, same number format, check for restart
-        const sal_Int16 nNumberingStartValue = pPara->GetNumberingStartValue();
-        if( (nNumberingStartValue != -1) || pPara->IsNumberingRestart() )
+        const sal_Int16 nNumberingStartValue = pEditEngine->GetNumberingStartValue(nPara);
+        if( (nNumberingStartValue != -1) || pEditEngine->IsNumberingRestart(nPara) )
         {
             if( nNumberingStartValue != -1 )
                 nNumber += nNumberingStartValue - 1;
@@ -1748,10 +1665,7 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* p
 
 void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRecalcChildren )
 {
-
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-
-    while ( pPara )
+    while ( nPara < pEditEngine->GetParagraphCount() )
     {
         OUString aBulletText;
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
@@ -1770,25 +1684,25 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
             aBulletText += pFmt->GetSuffix();
         }
 
-        if (pPara->GetText() != aBulletText)
-            pPara->SetText( aBulletText );
+        if (pEditEngine->GetBulletText(nPara) != aBulletText)
+            pEditEngine->SetBulletText( nPara, aBulletText );
 
         if ( bRecalcLevel )
         {
-            sal_Int16 nDepth = pPara->GetNumberingDepth();
-            pPara = pParaList->GetParagraph( ++nPara );
+            sal_Int16 nDepth = pEditEngine->GetNumberingDepth(nPara);
+            ++nPara;
             if ( !bRecalcChildren )
             {
-                while ( pPara && ( pPara->GetNumberingDepth() > nDepth ) )
-                    pPara = pParaList->GetParagraph( ++nPara );
+                while ( nPara < pEditEngine->GetParagraphCount() && ( pEditEngine->GetNumberingDepth(nPara) > nDepth ) )
+                    ++nPara;
             }
 
-            if ( pPara && ( pPara->GetNumberingDepth() < nDepth ) )
-                pPara = nullptr;
+            if ( nPara < pEditEngine->GetParagraphCount() && ( pEditEngine->GetNumberingDepth(nPara) < nDepth ) )
+                nPara = pEditEngine->GetParagraphCount();
         }
         else
         {
-            pPara = nullptr;
+            nPara = pEditEngine->GetParagraphCount();
         }
     }
 }
@@ -1800,16 +1714,13 @@ void Outliner::Clear()
     {
         ImplBlockInsertionCallbacks( true );
         pEditEngine->Clear();
-        pParaList->Clear();
-        pParaList->Append( std::unique_ptr<Paragraph>(new Paragraph( gnMinDepth )));
+        pEditEngine->SetNumberingDepth(0, gnMinDepth);
         bFirstParaIsEmpty = true;
         ImplBlockInsertionCallbacks( false );
     }
     else
     {
-            Paragraph* pPara = pParaList->GetParagraph( 0 );
-            if(pPara)
-                pPara->SetNumberingDepth( gnMinDepth );
+        pEditEngine->SetNumberingDepth( 0, gnMinDepth );
     }
 }
 
@@ -1818,8 +1729,8 @@ void Outliner::SetFlatMode( bool bFlat )
 
     if( bFlat != pEditEngine->IsFlatMode() )
     {
-        for ( sal_Int32 nPara = pParaList->GetParagraphCount(); nPara; )
-            pParaList->GetParagraph( --nPara )->Invalidate();
+        for ( sal_Int32 nPara = pEditEngine->GetParagraphCount(); nPara; )
+            pEditEngine->InvalidateBulletSize(--nPara);
 
         pEditEngine->SetFlatMode( bFlat );
     }
@@ -1828,12 +1739,8 @@ void Outliner::SetFlatMode( bool bFlat )
 OUString Outliner::ImplGetBulletText( sal_Int32 nPara )
 {
     OUString aRes;
-    Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (pPara)
-    {
-        ImplCalcBulletText( nPara, false, false );
-        aRes = pPara->GetText();
-    }
+    ImplCalcBulletText( nPara, false, false );
+    aRes = pEditEngine->GetBulletText(nPara);
     return aRes;
 }
 
@@ -1901,22 +1808,20 @@ void Outliner::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink )
     maEndPasteOrDropHdl = rLink;
 }
 
-void Outliner::SetParaFlag( Paragraph* pPara,  ParaFlag nFlag )
+void Outliner::SetParaFlag( sal_Int32 nPara,  ParaFlag nFlag )
 {
-    if( pPara && !pPara->HasFlag( nFlag ) )
+    if( !pEditEngine->HasParaFlag( nPara, nFlag ) )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( this, GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
+        {
+            ParaFlag nFlags = pEditEngine->GetParaFlag(nPara);
+            InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( this, nPara,
+                            nFlags, nFlags|nFlag ) );
+        }
 
-        pPara->SetFlag( nFlag );
+        pEditEngine->SetParaFlag( nPara, nFlag );
     }
 }
-
-bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag )
-{
-    return pPara && pPara->HasFlag( nFlag );
-}
-
 
 bool Outliner::IsPageOverflow()
 {
@@ -2010,7 +1915,7 @@ std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
         if (nLen == 0) {
             // XXX: What happens inside this case might be dependent on the joining paragraph or not-thingy
             // Overflowing paragraph is empty or first line overflowing: it's not "Non-Overflowing" text then
-            sal_Int32 nParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
+            sal_Int32 nParaLen = GetText(nOverflowingPara-1).getLength();
             aOverflowingTextSelection =
                 ESelection(nOverflowingPara-1, nParaLen, nEndPara, nEndPos);
         } else {
@@ -2064,7 +1969,7 @@ std::optional<OverflowingText> Outliner::GetOverflowingText() const
     sal_uInt32 nOverflowingPara = pEditEngine->GetOverflowingParaNum();
     ESelection aOverflowingTextSel;
     sal_Int32 nLastPara = nParaCount-1;
-    sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara)).getLength();
+    sal_Int32 nLastParaLen = GetText(nLastPara).getLength();
     aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
                                      nLastPara, nLastParaLen);
     return OverflowingText(pEditEngine->CreateTransferable(aOverflowingTextSel));
@@ -2074,29 +1979,6 @@ std::optional<OverflowingText> Outliner::GetOverflowingText() const
 void Outliner::ClearOverflowingParaNum()
 {
     pEditEngine->ClearOverflowingParaNum();
-}
-
-void Outliner::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    bool bOwns = false;
-    if (!pWriter)
-    {
-        pWriter = xmlNewTextWriterFilename("outliner.xml", 0);
-        xmlTextWriterSetIndent(pWriter,1);
-        (void)xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
-        bOwns = true;
-    }
-
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Outliner"));
-    pParaList->dumpAsXml(pWriter);
-    (void)xmlTextWriterEndElement(pWriter);
-
-    if (bOwns)
-    {
-       (void)xmlTextWriterEndDocument(pWriter);
-       xmlFreeTextWriter(pWriter);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

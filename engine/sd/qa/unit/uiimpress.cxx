@@ -2652,7 +2652,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf167029PasteKeepsOutlineLevel)
         pOlView->SetSelection(ESelection(0, 0, 0, 3));         // select "AAA"
         pOlView->Copy();
 
-        const sal_Int32 nLen = rOut.GetText(rOut.GetParagraph(1)).getLength();
+        const sal_Int32 nLen = rOut.GetText(1).getLength();
         ESelection aDest(1, 0, 1, 0);
         switch (ePos)
         {
@@ -2672,7 +2672,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf167029PasteKeepsOutlineLevel)
         // Make sure the copied text was actually pasted into the paragraph, so
         // the depth check below is meaningful (and not a no-op paste).
         CPPUNIT_ASSERT_MESSAGE("copied text was not pasted; " + aCase,
-                               rOut.GetText(rOut.GetParagraph(1)).indexOf(u"AAA") >= 0);
+                               rOut.GetText(1).indexOf(u"AAA") >= 0);
 
         // The destination paragraph keeps its own level 2 (depth 1). Without the
         // fix, pasting at the end of the line dropped it to depth 0 (the copied
@@ -2721,10 +2721,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf167029PasteIntoNonOutline)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), rBoxOut.GetDepth(0));
 
     // Paste the copied outline paragraph at the end of the text box paragraph.
-    const sal_Int32 nLen = rBoxOut.GetText(rBoxOut.GetParagraph(0)).getLength();
+    const sal_Int32 nLen = rBoxOut.GetText(0).getLength();
     pBoxView->SetSelection(ESelection(0, nLen, 0, nLen));
     pBoxView->PasteSpecial(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT);
-    CPPUNIT_ASSERT_EQUAL(u"BBBAAA"_ustr, rBoxOut.GetText(rBoxOut.GetParagraph(0)));
+    CPPUNIT_ASSERT_EQUAL(u"BBBAAA"_ustr, rBoxOut.GetText(0));
 
     // Without an outline level of its own, the destination takes the pasted
     // (source) level 0 rather than keeping its "no level" (-1).
@@ -6156,6 +6156,40 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDeleteAcrossSlides)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineBackspaceMergesTitle)
+{
+    OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B", u"C" });
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    SdPage* pPageA = pDoc->GetSdPage(0, PageKind::Standard);
+    SdPage* pPageC = pDoc->GetSdPage(2, PageKind::Standard);
+
+    // Backspace in front of "B" merges it into "A" and removes the slide of "B".
+    pOutlinerView->SetSelection(ESelection(1, 0, 1, 0));
+    typeOutlineKey(KEY_BACKSPACE);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pOutlinerView->GetOutliner().GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pPageA, pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(1, PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDeleteWholeTitle)
+{
+    OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B", u"C", u"D" });
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    SdPage* pPageA = pDoc->GetSdPage(0, PageKind::Standard);
+    SdPage* pPageD = pDoc->GetSdPage(3, PageKind::Standard);
+
+    // Deleting from the end of "A" to the end of "C" removes the slides of "B" and "C".
+    pOutlinerView->SetSelection(ESelection(0, 1, 2, 1));
+    typeOutlineKey(KEY_DELETE);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pOutlinerView->GetOutliner().GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pPageA, pDoc->GetSdPage(0, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pPageD, pDoc->GetSdPage(1, PageKind::Standard));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineMoveTitleUp)
 {
     OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B", u"C" });
@@ -6169,8 +6203,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineMoveTitleUp)
     // Order will be A C B
     pOutlinerView->SetSelection(ESelection(2, 0, 2, 1));
     dispatchCommand(mxComponent, u".uno:OutlineUp"_ustr, {});
-    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pOutlinerView->GetOutliner().GetText(
-                                        pOutlinerView->GetOutliner().GetParagraph(1)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pOutlinerView->GetOutliner().GetText(1));
     CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(1, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageB, pDoc->GetSdPage(2, PageKind::Standard));
 
@@ -6178,8 +6211,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineMoveTitleUp)
     // Order will be C A B
     pOutlinerView->SetSelection(ESelection(1, 0, 1, 1));
     dispatchCommand(mxComponent, u".uno:OutlineUp"_ustr, {});
-    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pOutlinerView->GetOutliner().GetText(
-                                        pOutlinerView->GetOutliner().GetParagraph(0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pOutlinerView->GetOutliner().GetText(0));
     CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(0, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageA, pDoc->GetSdPage(1, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageB, pDoc->GetSdPage(2, PageKind::Standard));
@@ -6188,8 +6220,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineMoveTitleUp)
     // Order will be C B A
     pOutlinerView->SetSelection(ESelection(1, 0, 1, 1));
     dispatchCommand(mxComponent, u".uno:OutlineDown"_ustr, {});
-    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pOutlinerView->GetOutliner().GetText(
-                                        pOutlinerView->GetOutliner().GetParagraph(2)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pOutlinerView->GetOutliner().GetText(2));
     CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(0, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageB, pDoc->GetSdPage(1, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageA, pDoc->GetSdPage(2, PageKind::Standard));
@@ -6229,14 +6260,14 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDropSlideDownIntoBody)
     CPPUNIT_ASSERT(pOutlinerView);
     Outliner& rOutliner = pOutlinerView->GetOutliner();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rOutliner.GetParagraphCount());
-    CPPUNIT_ASSERT_EQUAL(u"y2"_ustr, rOutliner.GetText(rOutliner.GetParagraph(3)));
+    CPPUNIT_ASSERT_EQUAL(u"y2"_ustr, rOutliner.GetText(3));
 
     // Dropping "A" between "y1" and "y2" moves its slide between the slides of "B" and "C".
     pOutlinerView->SetSelection(ESelection(0, 0, 0, 1));
     rOutliner.UndoActionStart(EDITUNDO_DRAGANDDROP);
     pOutlinerView->GetEditView().MoveParagraphs(Range(0, 0), 3);
     rOutliner.UndoActionEnd();
-    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, rOutliner.GetText(rOutliner.GetParagraph(2)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, rOutliner.GetText(2));
     CPPUNIT_ASSERT_EQUAL(pPageB, pDoc->GetSdPage(0, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageA, pDoc->GetSdPage(1, PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(2, PageKind::Standard));

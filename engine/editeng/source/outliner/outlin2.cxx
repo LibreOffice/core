@@ -222,19 +222,19 @@ void Outliner::SetMinColumnWrapHeight(tools::Long nVal)
     pEditEngine->SetMinColumnWrapHeight(nVal);
 }
 
-bool Outliner::IsExpanded( Paragraph const * pPara ) const
+bool Outliner::IsExpanded( sal_Int32 nPara ) const
 {
-    return pParaList->HasVisibleChildren( pPara );
+    return ParagraphList::HasVisibleChildren( nPara, *pEditEngine );
 }
 
-Paragraph* Outliner::GetParent( Paragraph const * pParagraph ) const
+sal_Int32 Outliner::GetParent( sal_Int32 nPara ) const
 {
-    return pParaList->GetParent( pParagraph );
+    return ParagraphList::GetParent( nPara, *pEditEngine );
 }
 
-sal_Int32 Outliner::GetChildCount( Paragraph const * pParent ) const
+sal_Int32 Outliner::GetChildCount( sal_Int32 nParent ) const
 {
-    return pParaList->GetChildCount( pParent );
+    return ParagraphList::GetChildCount( nParent, *pEditEngine );
 }
 
 Size Outliner::CalcTextSize()

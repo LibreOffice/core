@@ -90,7 +90,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         // Outliner has no text so we must set some
         // empty text so the outliner initialise itself
-        rOutl.SetText( u""_ustr, rOutl.GetParagraph( 0 ) );
+        rOutl.SetText( u""_ustr, 0 );
 
         if(GetStyleSheet())
             rOutl.SetStyleSheet( 0, GetStyleSheet());

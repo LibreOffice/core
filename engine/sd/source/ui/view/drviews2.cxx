@@ -4274,8 +4274,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     //there exists a previous numbering level
                     if (nDepth != sal_uInt16(-1) && nDepth > 0)
                     {
-                        Paragraph* pPara = pOL->GetParagraph(aSel.end.nPara);
-                        pOL->Remove(pPara, 1);
+                        pOL->Remove(aSel.end.nPara, 1);
                     }
                 }
             }

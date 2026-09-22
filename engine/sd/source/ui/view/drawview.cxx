@@ -183,15 +183,14 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     aComment = aComment.replaceFirst("$", SdResId(STR_PSEUDOSHEET_OUTLINE));
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString(), 0, mpDrawViewShell->GetViewShellBase().GetViewShellId() );
 
-                    std::vector<Paragraph*> aSelList;
+                    std::vector<sal_Int32> aSelList;
                     pOV->CreateSelectionList(aSelList);
 
-                    std::vector<Paragraph*>::reverse_iterator iter = aSelList.rbegin();
-                    Paragraph* pPara = iter != aSelList.rend() ? *iter : nullptr;
+                    std::vector<sal_Int32>::reverse_iterator iter = aSelList.rbegin();
+                    sal_Int32 nParaPos = iter != aSelList.rend() ? *iter : -1;
 
-                    while (pPara)
+                    while (nParaPos != -1)
                     {
-                        sal_Int32 nParaPos = rOutliner.GetAbsPos( pPara );
                         sal_Int16 nDepth = rOutliner.GetDepth( nParaPos );
                         OUString aName = rPage.GetLayoutName() + " " +
                             OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
@@ -233,10 +232,10 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         }
 
                         ++iter;
-                        pPara = iter != aSelList.rend() ? *iter : nullptr;
+                        nParaPos = iter != aSelList.rend() ? *iter : -1;
 
                         bool bJumpToLevel1 = false;
-                        if( !pPara && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SfxItemState::SET )
+                        if( nParaPos == -1 && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SfxItemState::SET )
                             bJumpToLevel1 = true;
 
                         if (bJumpToLevel1)
@@ -244,8 +243,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             iter = aSelList.rend();
                             --iter;
 
-                            if (rOutliner.GetDepth(rOutliner.GetAbsPos(*iter)) > 0)
-                                pPara = rOutliner.GetParagraph( 0 );  // Put NumBulletItem in outline level 1
+                            if (rOutliner.GetDepth(*iter) > 0)
+                                nParaPos = 0;  // Put NumBulletItem in outline level 1
                         }
                     }
 

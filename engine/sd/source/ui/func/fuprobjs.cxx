@@ -21,6 +21,8 @@
 
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
+#include <editeng/bulletinfo.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>
 #include <tools/debug.hxx>
@@ -82,17 +84,18 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( static_cast<Window*>(mpWindow) );
     ::Outliner& rOutl = pOutlinerView->GetOutliner();
 
-    std::vector<Paragraph*> aSelList;
+    std::vector<sal_Int32> aSelList;
     pOutlinerView->CreateSelectionList(aSelList);
+    if (aSelList.empty())
+        return;
 
-    Paragraph* pPara = aSelList.empty() ? nullptr : aSelList.front();
+    sal_Int32 nPara = aSelList.front();
+    nDepth = rOutl.GetDepth(nPara);
+    bool bPage = rOutl.GetEditEngine().HasParaFlag( nPara, ParaFlag::ISPAGE );
 
-    nDepth = rOutl.GetDepth(rOutl.GetAbsPos( pPara ) );
-    bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
-
-    for( const auto& rpPara : aSelList )
+    for( const auto nParaPos2 : aSelList )
     {
-        nTmp = rOutl.GetDepth( rOutl.GetAbsPos( rpPara ) );
+        nTmp = rOutl.GetDepth( nParaPos2 );
 
         if( nDepth != nTmp )
         {
@@ -100,7 +103,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             break;
         }
 
-        if( ::Outliner::HasParaFlag( rpPara, ParaFlag::ISPAGE ) != bPage )
+        if( rOutl.GetEditEngine().HasParaFlag( nParaPos2, ParaFlag::ISPAGE ) != bPage )
         {
             bUnique = false;
             break;

@@ -33,6 +33,7 @@
 #include <editeng/outliner.hxx>
 #include <paralist.hxx>
 #include <outlundo.hxx>
+#include <editeng/bulletinfo.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
@@ -131,8 +132,8 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                 {
                     if (aSel.end.nIndex == rOwner.pEditEngine->GetTextLen(aSel.end.nPara))
                     {
-                        Paragraph* pNext = rOwner.pParaList->GetParagraph(aSel.end.nPara + 1);
-                        if( pNext && pNext->HasFlag(ParaFlag::ISPAGE) )
+                        if (aSel.end.nPara + 1 < rOwner.pEditEngine->GetParagraphCount()
+                            && rOwner.pEditEngine->HasParaFlag(aSel.end.nPara + 1, ParaFlag::ISPAGE) )
                         {
                             if (!rOwner.ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                                 return false;
@@ -173,11 +174,9 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             {
                 if (!bReadOnly && !bSelection && aSel.end.nPara && !aSel.end.nIndex)
                 {
-                    Paragraph* pPara = rOwner.pParaList->GetParagraph(aSel.end.nPara);
-                    Paragraph* pPrev = rOwner.pParaList->GetParagraph(aSel.end.nPara - 1);
-                    if( !pPrev->IsVisible()  )
+                    if( !rOwner.GetEditEngine().IsBulletVisible(aSel.end.nPara - 1)  )
                         return true;
-                    if( !pPara->GetNumberingDepth() )
+                    if( !rOwner.GetEditEngine().GetNumberingDepth(aSel.end.nPara) )
                     {
                         if (!rOwner.ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                             return true;
@@ -191,12 +190,11 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                 {
                     // Special treatment: hard return at the end of a paragraph,
                     // which has collapsed subparagraphs.
-                    Paragraph* pPara = rOwner.pParaList->GetParagraph(aSel.end.nPara);
 
                     if( !aKeyCode.IsShift() )
                     {
                         // Don't let insert empty paragraph with numbering. Instead end numbering.
-                        if (pPara->GetNumberingDepth() > -1 &&
+                        if (rOwner.GetEditEngine().GetNumberingDepth(aSel.end.nPara) > -1 &&
                             rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
                         {
                             ToggleBullets();
@@ -207,8 +205,8 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                         if( !bSelection &&
                                 aSel.end.nIndex == rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) )
                         {
-                            sal_Int32 nChildren = rOwner.pParaList->GetChildCount(pPara);
-                            if( nChildren && !rOwner.pParaList->HasVisibleChildren(pPara))
+                            sal_Int32 nChildren = ParagraphList::GetChildCount(aSel.end.nPara, rOwner.GetEditEngine());
+                            if( nChildren && !ParagraphList::HasVisibleChildren(aSel.end.nPara, rOwner.GetEditEngine()))
                             {
                                 rOwner.UndoActionStart( OLUNDO_INSERT );
                                 sal_Int32 nTemp = aSel.end.nPara;
@@ -217,7 +215,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                                 SAL_WARN_IF( nTemp < 0, "editeng", "OutlinerView::PostKeyEvent - overflow");
                                 if (nTemp >= 0)
                                 {
-                                    rOwner.Insert( OUString(),nTemp,pPara->GetNumberingDepth());
+                                    rOwner.Insert( OUString(), nTemp, rOwner.GetEditEngine().GetNumberingDepth(aSel.end.nPara) );
                                     // Position the cursor
                                     ESelection aTmpSel(nTemp, 0);
                                     pEditView->SetSelection( aTmpSel );
@@ -235,7 +233,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                         rOwner.UndoActionStart( OLUNDO_INSERT );
                         sal_Int32 nTemp = aSel.end.nPara;
                         nTemp++;
-                        rOwner.Insert( OUString(), nTemp, pPara->GetNumberingDepth()+1 );
+                        rOwner.Insert( OUString(), nTemp, rOwner.GetEditEngine().GetNumberingDepth(aSel.end.nPara)+1 );
 
                         // Position the cursor
                         ESelection aTmpSel(nTemp, 0);
@@ -327,19 +325,18 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     sal_Int32 nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseTarget::Bullet )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        bool bHasChildren = (pPara && rOwner.pParaList->HasChildren(pPara));
+        bool bHasChildren = ParagraphList::HasChildren(nPara, rOwner.GetEditEngine());
         if( rMEvt.GetClicks() == 1 )
         {
             sal_Int32 nEndPara = nPara;
-            if ( bHasChildren && rOwner.pParaList->HasVisibleChildren(pPara) )
-                nEndPara += rOwner.pParaList->GetChildCount( pPara );
+            if ( bHasChildren && ParagraphList::HasVisibleChildren(nPara, rOwner.GetEditEngine()) )
+                nEndPara += ParagraphList::GetChildCount( nPara, rOwner.GetEditEngine() );
             // The selection is inverted, so that EditEngine does not scroll
             ESelection aSel(nEndPara, EE_TEXTPOS_MAX, nPara, 0);
             pEditView->SetSelection( aSel );
         }
         else if( rMEvt.GetClicks() == 2 && bHasChildren )
-            ImpToggleExpand( pPara );
+            ImpToggleExpand( nPara );
 
         return true;
     }
@@ -349,10 +346,10 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     {
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.start.nPara;
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        if( (pPara && rOwner.pParaList->HasChildren(pPara)) && pPara->HasFlag(ParaFlag::ISPAGE) )
+        if( ParagraphList::HasChildren(nPara, rOwner.GetEditEngine())
+            && rOwner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
         {
-            ImpToggleExpand( pPara );
+            ImpToggleExpand( nPara );
         }
     }
     return pEditView->MouseButtonDown( rMEvt );
@@ -379,17 +376,15 @@ void OutlinerView::ReleaseMouse()
     pEditView->ReleaseMouse();
 }
 
-void OutlinerView::ImpToggleExpand( Paragraph const * pPara )
+void OutlinerView::ImpToggleExpand( sal_Int32 nPara )
 {
-    sal_Int32 nPara = rOwner.pParaList->GetAbsPos( pPara );
     pEditView->SetSelection(ESelection(nPara, 0));
-    ImplExpandOrCollaps( nPara, nPara, !rOwner.pParaList->HasVisibleChildren( pPara ) );
+    ImplExpandOrCollaps( nPara, nPara, !ParagraphList::HasVisibleChildren( nPara, rOwner.GetEditEngine() ) );
     pEditView->ShowCursor();
 }
 
-void OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
+void OutlinerView::Select( sal_Int32 nPara, bool bSelect )
 {
-    sal_Int32 nPara = rOwner.pParaList->GetAbsPos( pParagraph );
     sal_Int32 nEnd = 0;
     if ( bSelect )
         nEnd = SAL_MAX_INT32;
@@ -400,8 +395,7 @@ void OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
 
 void OutlinerView::SetDepth(sal_Int32 nParagraph, sal_Int16 nDepth)
 {
-    Paragraph* pParagraph = rOwner.GetParagraph(nParagraph);
-    rOwner.SetDepth(pParagraph, nDepth);
+    rOwner.SetDepth(nParagraph, nDepth);
 }
 
 sal_Int16 OutlinerView::GetDepth() const
@@ -444,7 +438,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     pEditView->SetEditEngineUpdateLayout( bUpdate );
 }
 
-ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren )
+ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren ) const
 {
     ESelection aSel = pEditView->GetSelection();
     ParaRange aParas(aSel.start.nPara, aSel.end.nPara);
@@ -453,9 +447,8 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren )
     // Record the  invisible Children of the last Parents in the selection
     if ( bIncludeHiddenChildren )
     {
-        Paragraph* pLast = rOwner.pParaList->GetParagraph( aParas.nEndPara );
-        if ( rOwner.pParaList->HasHiddenChildren( pLast ) )
-            aParas.nEndPara = aParas.nEndPara + rOwner.pParaList->GetChildCount( pLast );
+        if ( ParagraphList::HasHiddenChildren( aParas.nEndPara, rOwner.GetEditEngine() ) )
+            aParas.nEndPara = aParas.nEndPara + ParagraphList::GetChildCount( aParas.nEndPara, rOwner.GetEditEngine() );
     }
     return aParas;
 }
@@ -484,30 +477,28 @@ void OutlinerView::Indent( short nDiff )
     ParaRange aSel = ImpGetSelectedParagraphs( true );
     for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-
-        sal_Int16 nOldDepth = pPara->GetNumberingDepth();
+        sal_Int16 nOldDepth = rOwner.GetEditEngine().GetNumberingDepth( nPara );
         sal_Int16 nNewDepth = nOldDepth + nDiff;
 
         if( bOutlinerView && nPara )
         {
-            const bool bPage = pPara->HasFlag(ParaFlag::ISPAGE);
+            const bool bPage = rOwner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE);
             if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
             {
                             // Notify App
                 rOwner.nDepthChangedHdlPrevDepth = nOldDepth;
-                ParaFlag nPrevFlags = pPara->nFlags;
+                ParaFlag nPrevFlags = rOwner.GetEditEngine().GetParaFlag(nPara);
 
                 if( bPage )
-                    pPara->RemoveFlag( ParaFlag::ISPAGE );
+                    rOwner.GetEditEngine().RemoveParaFlag( nPara, ParaFlag::ISPAGE );
                 else
-                    pPara->SetFlag( ParaFlag::ISPAGE );
+                    rOwner.GetEditEngine().SetParaFlag( nPara, ParaFlag::ISPAGE );
 
-                rOwner.DepthChangedHdl(pPara, nPrevFlags);
+                rOwner.DepthChangedHdl(nPrevFlags, nPara);
                 rOwner.pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
 
                 if( bUndo )
-                    rOwner.InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( &rOwner, nPara, nPrevFlags, pPara->nFlags ) );
+                    rOwner.InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( &rOwner, nPara, nPrevFlags, rOwner.GetEditEngine().GetParaFlag(nPara) ) );
 
                 continue;
             }
@@ -540,26 +531,25 @@ void OutlinerView::Indent( short nDiff )
                 // paragraph. In this case, the next visible paragraph is
                 // searched for and fluffed.
 #ifdef DBG_UTIL
-                Paragraph* _pPara = rOwner.pParaList->GetParagraph( aSel.nStartPara );
-                DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!");
+                DBG_ASSERT(rOwner.GetEditEngine().IsBulletVisible(aSel.nStartPara),"Selected Paragraph invisible ?!");
 #endif
-                Paragraph* pPrev= rOwner.pParaList->GetParagraph( aSel.nStartPara-1 );
+                sal_Int32 nPrevPara = aSel.nStartPara-1;
 
-                if( !pPrev->IsVisible() && ( pPrev->GetNumberingDepth() == nNewDepth ) )
+                if( !rOwner.GetEditEngine().IsBulletVisible(aSel.nStartPara-1) && ( rOwner.GetEditEngine().GetNumberingDepth(aSel.nStartPara-1) == nNewDepth ) )
                 {
                     // Predecessor is collapsed and is on the same level
                     // => find next visible paragraph and expand it
-                    pPrev = rOwner.pParaList->GetParent( pPrev );
-                    while( !pPrev->IsVisible() )
-                        pPrev = rOwner.pParaList->GetParent( pPrev );
+                    nPrevPara = ParagraphList::GetParent( nPrevPara, rOwner.GetEditEngine() );
+                    while( !rOwner.GetEditEngine().IsBulletVisible(nPrevPara) )
+                        nPrevPara = ParagraphList::GetParent( nPrevPara, rOwner.GetEditEngine() );
 
-                    rOwner.Expand( pPrev );
-                    rOwner.InvalidateBullet(rOwner.pParaList->GetAbsPos(pPrev));
+                    rOwner.Expand( nPrevPara );
+                    rOwner.InvalidateBullet(nPrevPara);
                 }
             }
 
             rOwner.nDepthChangedHdlPrevDepth = nOldDepth;
-            ParaFlag nPrevFlags = pPara->nFlags;
+            ParaFlag nPrevFlags = rOwner.GetEditEngine().GetParaFlag(nPara);
 
             rOwner.ImplInitDepth( nPara, nNewDepth, true );
             rOwner.ImplCalcBulletText( nPara, false, false );
@@ -568,7 +558,7 @@ void OutlinerView::Indent( short nDiff )
                 rOwner.ImplSetLevelDependentStyleSheet( nPara );
 
             // Notify App
-            rOwner.DepthChangedHdl(pPara, nPrevFlags);
+            rOwner.DepthChangedHdl(nPrevFlags, nPara);
         }
         else
         {
@@ -577,11 +567,10 @@ void OutlinerView::Indent( short nDiff )
         }
     }
 
-    sal_Int32 nParas = rOwner.pParaList->GetParagraphCount();
+    sal_Int32 nParas = rOwner.GetEditEngine().GetParagraphCount();
     for ( sal_Int32 n = aSel.nEndPara+1; n < nParas; n++ )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( n );
-        if ( pPara->GetNumberingDepth() < nMinDepth )
+        if ( rOwner.GetEditEngine().GetNumberingDepth(n) < nMinDepth )
             break;
         rOwner.ImplCalcBulletText( n, false, false );
     }
@@ -622,13 +611,13 @@ void OutlinerView::Collapse()
 
 void OutlinerView::ExpandAll()
 {
-    ImplExpandOrCollaps( 0, rOwner.pParaList->GetParagraphCount()-1, true );
+    ImplExpandOrCollaps( 0, rOwner.GetEditEngine().GetParagraphCount()-1, true );
 }
 
 
 void OutlinerView::CollapseAll()
 {
-    ImplExpandOrCollaps( 0, rOwner.pParaList->GetParagraphCount()-1, false );
+    ImplExpandOrCollaps( 0, rOwner.GetEditEngine().GetParagraphCount()-1, false );
 }
 
 void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand )
@@ -641,8 +630,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        bool bDone = bExpand ? rOwner.Expand( pPara ) : rOwner.Collapse( pPara );
+        bool bDone = bExpand ? rOwner.Expand( nPara ) : rOwner.Collapse( nPara );
         if( bDone )
         {
             // The line under the paragraph should disappear ...
@@ -736,15 +724,19 @@ void OutlinerView::Paste( bool bUseSpecial, SotClipboardFormatId format)
     aEndCutPasteLink.Call(nullptr);
 }
 
-void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
+void OutlinerView::CreateSelectionList (std::vector<sal_Int32> &aSelList)
 {
     ParaRange aParas = ImpGetSelectedParagraphs( true );
 
     for ( sal_Int32 nPara = aParas.nStartPara; nPara <= aParas.nEndPara; nPara++ )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        aSelList.push_back(pPara);
+        aSelList.push_back(nPara);
     }
+}
+
+ParaRange OutlinerView::GetSelectionRange() const
+{
+    return ImpGetSelectedParagraphs( true );
 }
 
 void OutlinerView::SetStyleSheet(const OUString& rStyleName)
@@ -838,9 +830,7 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
         nStartPara++;   // All paragraphs after StartPara will be deleted
     for (sal_Int32 nPara = nStartPara; nPara <= aSel.end.nPara; nPara++)
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        assert(pPara && "ImpCalcSelectedPages: invalid Selection?");
-        if( pPara->HasFlag(ParaFlag::ISPAGE) )
+        if( rOwner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
         {
             nPages++;
             if (nFirstPage == EE_PARA_MAX)
@@ -872,57 +862,51 @@ void OutlinerView::ToggleBullets()
 
     for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
-
-        if( pPara )
+        if( nNewDepth == -2 )
         {
-            if( nNewDepth == -2 )
+            nNewDepth = (rOwner.GetDepth(nPara) == -1) ? 0 : -1;
+            if ( nNewDepth == 0 )
             {
-                nNewDepth = (rOwner.GetDepth(nPara) == -1) ? 0 : -1;
-                if ( nNewDepth == 0 )
-                {
-                    // determine default numbering rule for bullets
-                    const ESelection aSelection(nPara, 0);
-                    const SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
-                    const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetUserOrPoolDefaultItem( EE_PARA_NUMBULLET );
-                    const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
-                    pDefaultBulletNumRule =  pNumBulletItem ? &pNumBulletItem->GetNumRule() : nullptr;
-                }
+                // determine default numbering rule for bullets
+                const ESelection aSelection(nPara, 0);
+                const SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
+                const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetUserOrPoolDefaultItem( EE_PARA_NUMBULLET );
+                const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
+                pDefaultBulletNumRule =  pNumBulletItem ? &pNumBulletItem->GetNumRule() : nullptr;
             }
+        }
 
-            rOwner.SetDepth( pPara, nNewDepth );
+        rOwner.SetDepth( nPara, nNewDepth );
 
-            if( nNewDepth == -1 )
+        if( nNewDepth == -1 )
+        {
+            const SfxItemSet& rAttrs = rOwner.GetParaAttribs( nPara );
+            if ( rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET )
             {
-                const SfxItemSet& rAttrs = rOwner.GetParaAttribs( nPara );
-                if ( rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET )
+                SfxItemSet aAttrs(rAttrs);
+                aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+                rOwner.SetParaAttribs( nPara, aAttrs );
+            }
+        }
+        else
+        {
+            if ( pDefaultBulletNumRule )
+            {
+                const SvxNumberFormat* pFmt = rOwner.GetNumberFormat( nPara );
+                if ( !pFmt
+                     || ( pFmt->GetNumberingType() != SVX_NUM_BITMAP
+                          && pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
                 {
-                    SfxItemSet aAttrs(rAttrs);
-                    aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+                    SfxItemSet aAttrs( rOwner.GetParaAttribs( nPara ) );
+                    SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
+                    aAttrs.Put( SvxNumBulletItem( std::move(aNewNumRule), EE_PARA_NUMBULLET ) );
                     rOwner.SetParaAttribs( nPara, aAttrs );
-                }
-            }
-            else
-            {
-                if ( pDefaultBulletNumRule )
-                {
-                    const SvxNumberFormat* pFmt = rOwner.GetNumberFormat( nPara );
-                    if ( !pFmt
-                         || ( pFmt->GetNumberingType() != SVX_NUM_BITMAP
-                              && pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
-                    {
-                        SfxItemSet aAttrs( rOwner.GetParaAttribs( nPara ) );
-                        SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
-                        aAttrs.Put( SvxNumBulletItem( std::move(aNewNumRule), EE_PARA_NUMBULLET ) );
-                        rOwner.SetParaAttribs( nPara, aAttrs );
-                    }
                 }
             }
         }
     }
 
-    const sal_Int32 nParaCount = rOwner.pParaList->GetParagraphCount();
+    const sal_Int32 nParaCount = rOwner.GetEditEngine().GetParagraphCount();
     rOwner.ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
@@ -944,22 +928,16 @@ bool OutlinerView::IsBulletOrNumbering(bool& bBullets, bool& bNumbering)
     aSel.Adjust();
     for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::IsBulletOrNumbering(), illegal selection?");
-
-        if( pPara )
+        if (rOwner.GetDepth(nPara) < 0)
+            return false;
+        const SvxNumberFormat* pFmt = rOwner.GetNumberFormat(nPara);
+        if (pFmt)
         {
-            if (rOwner.GetDepth(nPara) < 0)
-                return false;
-            const SvxNumberFormat* pFmt = rOwner.GetNumberFormat(nPara);
-            if (pFmt)
-            {
-                sal_Int16 nNumType = pFmt->GetNumberingType();
-                if (nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
-                    bNumberingFound = true;
-                else
-                    bBulletFound = true;
-            }
+            sal_Int16 nNumType = pFmt->GetNumberingType();
+            if (nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
+                bNumberingFound = true;
+            else
+                bBulletFound = true;
         }
     }
     if (bNumberingFound)
@@ -1021,14 +999,11 @@ void OutlinerView::EnsureNumberingIsOn()
 
     for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph(nPara);
-        DBG_ASSERT(pPara, "OutlinerView::EnableBullets(), illegal selection?");
-
-        if (pPara && rOwner.GetDepth(nPara) == -1)
-            rOwner.SetDepth(pPara, 0);
+        if (rOwner.GetDepth(nPara) == -1)
+            rOwner.SetDepth(nPara, 0);
     }
 
-    sal_Int32 nParaCount = rOwner.pParaList->GetParagraphCount();
+    sal_Int32 nParaCount = rOwner.GetEditEngine().GetParagraphCount();
     rOwner.ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     const sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
@@ -1063,100 +1038,94 @@ void OutlinerView::ApplyBulletsNumbering(
     else
     {
         nStartPara = 0;
-        nEndPara = rOwner.pParaList->GetParagraphCount() - 1;
+        nEndPara = rOwner.GetEditEngine().GetParagraphCount() - 1;
     }
 
     for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph(nPara);
-        DBG_ASSERT(pPara, "OutlinerView::ApplyBulletsNumbering(..), illegal selection?");
-
-        if (pPara)
+        const sal_Int16 nDepth = rOwner.GetDepth(nPara);
+        if ( nDepth == -1 )
         {
-            const sal_Int16 nDepth = rOwner.GetDepth(nPara);
-            if ( nDepth == -1 )
+            rOwner.SetDepth( nPara, 0 );
+        }
+
+        const SfxItemSet& rAttrs = rOwner.GetParaAttribs(nPara);
+        SfxItemSet aAttrs(rAttrs);
+        aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
+
+        // apply new numbering rule
+        if ( pNewNumRule )
+        {
+            bool bApplyNumRule = false;
+            if ( !bCheckCurrentNumRuleBeforeApplyingNewNumRule )
             {
-                rOwner.SetDepth( pPara, 0 );
+                bApplyNumRule = true;
             }
-
-            const SfxItemSet& rAttrs = rOwner.GetParaAttribs(nPara);
-            SfxItemSet aAttrs(rAttrs);
-            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
-
-            // apply new numbering rule
-            if ( pNewNumRule )
+            else
             {
-                bool bApplyNumRule = false;
-                if ( !bCheckCurrentNumRuleBeforeApplyingNewNumRule )
+                const SvxNumberFormat* pFmt = rOwner.GetNumberFormat(nPara);
+                if (!pFmt)
                 {
                     bApplyNumRule = true;
                 }
                 else
                 {
-                    const SvxNumberFormat* pFmt = rOwner.GetNumberFormat(nPara);
-                    if (!pFmt)
+                    sal_Int16 nNumType = pFmt->GetNumberingType();
+                    if ( bHandleBullets
+                         && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
                     {
+                        // Set to Normal bullet, old bullet type is Numbering bullet.
                         bApplyNumRule = true;
                     }
-                    else
+                    else if ( !bHandleBullets
+                              && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL))
                     {
-                        sal_Int16 nNumType = pFmt->GetNumberingType();
-                        if ( bHandleBullets
-                             && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
-                        {
-                            // Set to Normal bullet, old bullet type is Numbering bullet.
-                            bApplyNumRule = true;
-                        }
-                        else if ( !bHandleBullets
-                                  && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL))
-                        {
-                            // Set to Numbering bullet, old bullet type is Normal bullet.
-                            bApplyNumRule = true;
-                        }
+                        // Set to Numbering bullet, old bullet type is Normal bullet.
+                        bApplyNumRule = true;
                     }
                 }
+            }
 
-                if ( bApplyNumRule )
+            if ( bApplyNumRule )
+            {
+                SvxNumRule aNewRule(*pNewNumRule);
+
+                // Get old bullet space.
                 {
-                    SvxNumRule aNewRule(*pNewNumRule);
-
-                    // Get old bullet space.
+                    const SvxNumBulletItem* pNumBulletItem = rAttrs.GetItemIfSet(EE_PARA_NUMBULLET, false);
+                    if (pNumBulletItem)
                     {
-                        const SvxNumBulletItem* pNumBulletItem = rAttrs.GetItemIfSet(EE_PARA_NUMBULLET, false);
-                        if (pNumBulletItem)
-                        {
-                            // Use default value when has not contain bullet item.
-                            ESelection aSelection(nPara, 0);
-                            SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
-                            pNumBulletItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
-                        }
+                        // Use default value when has not contain bullet item.
+                        ESelection aSelection(nPara, 0);
+                        SfxItemSet aTmpSet(rOwner.pEditEngine->GetAttribs(aSelection));
+                        pNumBulletItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
+                    }
 
-                        if (pNumBulletItem)
+                    if (pNumBulletItem)
+                    {
+                        const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule().GetLevelCount(), aNewRule.GetLevelCount());
+                        for ( sal_uInt16 nLevel = 0; nLevel < nLevelCnt; ++nLevel )
                         {
-                            const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule().GetLevelCount(), aNewRule.GetLevelCount());
-                            for ( sal_uInt16 nLevel = 0; nLevel < nLevelCnt; ++nLevel )
+                            const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule().Get(nLevel);
+                            const SvxNumberFormat* pNewFmt = aNewRule.Get(nLevel);
+                            if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
                             {
-                                const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule().Get(nLevel);
-                                const SvxNumberFormat* pNewFmt = aNewRule.Get(nLevel);
-                                if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
-                                {
-                                    SvxNumberFormat aNewFmtClone(*pNewFmt);
-                                    aNewFmtClone.SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
-                                    aNewFmtClone.SetAbsLSpace(pOldFmt->GetAbsLSpace());
-                                    aNewRule.SetLevel(nLevel, &aNewFmtClone);
-                                }
+                                SvxNumberFormat aNewFmtClone(*pNewFmt);
+                                aNewFmtClone.SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
+                                aNewFmtClone.SetAbsLSpace(pOldFmt->GetAbsLSpace());
+                                aNewRule.SetLevel(nLevel, &aNewFmtClone);
                             }
                         }
                     }
-
-                    aAttrs.Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
                 }
+
+                aAttrs.Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
             }
-            rOwner.SetParaAttribs(nPara, aAttrs);
         }
+        rOwner.SetParaAttribs(nPara, aAttrs);
     }
 
-    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.pParaList->GetParagraphCount());
+    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.GetEditEngine().GetParagraphCount());
     rOwner.ImplCheckParagraphs( nStartPara, nParaCount );
     rOwner.pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
@@ -1181,7 +1150,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
     else
     {
         nStartPara = 0;
-        nEndPara = rOwner.pParaList->GetParagraphCount() - 1;
+        nEndPara = rOwner.GetEditEngine().GetParagraphCount() - 1;
     }
 
     rOwner.UndoActionStart( OLUNDO_DEPTH );
@@ -1189,32 +1158,26 @@ void OutlinerView::SwitchOffBulletsNumbering(
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
     {
-        Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::SwitchOffBulletsNumbering(...), illegal paragraph index?");
+        rOwner.SetDepth( nPara, -1 );
 
-        if( pPara )
+        const SfxItemSet& rAttrs = rOwner.GetParaAttribs( nPara );
+        if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET)
         {
-            rOwner.SetDepth( pPara, -1 );
+            SfxItemSet aAttrs(rAttrs);
+            aAttrs.ClearItem( EE_PARA_BULLETSTATE );
 
-            const SfxItemSet& rAttrs = rOwner.GetParaAttribs( nPara );
-            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET)
+            if (rOwner.GetOutlinerMode() == OutlinerMode::OutlineObject)
             {
-                SfxItemSet aAttrs(rAttrs);
-                aAttrs.ClearItem( EE_PARA_BULLETSTATE );
-
-                if (rOwner.GetOutlinerMode() == OutlinerMode::OutlineObject)
-                {
-                    // Outliner shape: also clear the SvxNumRule, so a next "switch on" will again
-                    // work with styles from the master page.
-                    aAttrs.ClearItem(EE_PARA_NUMBULLET);
-                }
-
-                rOwner.SetParaAttribs( nPara, aAttrs );
+                // Outliner shape: also clear the SvxNumRule, so a next "switch on" will again
+                // work with styles from the master page.
+                aAttrs.ClearItem(EE_PARA_NUMBULLET);
             }
+
+            rOwner.SetParaAttribs( nPara, aAttrs );
         }
     }
 
-    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.pParaList->GetParagraphCount());
+    const sal_uInt16 nParaCount = static_cast<sal_uInt16>(rOwner.GetEditEngine().GetParagraphCount());
     rOwner.ImplCheckParagraphs( nStartPara, nParaCount );
     rOwner.pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
@@ -1243,8 +1206,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
         aSel.Adjust();
         for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
         {
-            Paragraph* pPara = rOwner.pParaList->GetParagraph( nPara );
-            rOwner.ImplInitDepth( nPara, pPara->GetNumberingDepth(), false );
+            rOwner.ImplInitDepth( nPara, rOwner.GetEditEngine().GetNumberingDepth(nPara), false );
         }
     }
     rOwner.UndoActionEnd();

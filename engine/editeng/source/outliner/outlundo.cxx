@@ -18,6 +18,7 @@
  */
 
 
+#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <tools/debug.hxx>
 #include <outlundo.hxx>
@@ -48,15 +49,11 @@ void OutlinerUndoChangeParaFlags::Redo()
 void OutlinerUndoChangeParaFlags::ImplChangeFlags( ParaFlag nFlags )
 {
     Outliner* pOutliner = GetOutliner();
-    Paragraph* pPara = pOutliner->GetParagraph( mnPara );
-    if( pPara )
-    {
-        pOutliner->nDepthChangedHdlPrevDepth = pPara->GetNumberingDepth();
-        ParaFlag nPrevFlags = pPara->nFlags;
+    pOutliner->nDepthChangedHdlPrevDepth = pOutliner->GetEditEngine().GetNumberingDepth(mnPara);
+    ParaFlag nPrevFlags = pOutliner->GetEditEngine().GetParaFlag(mnPara);
 
-        pPara->nFlags = nFlags;
-        pOutliner->DepthChangedHdl(pPara, nPrevFlags);
-    }
+    pOutliner->GetEditEngine().ClearAndSetParaFlag(mnPara, nFlags);
+    pOutliner->DepthChangedHdl(nPrevFlags, mnPara);
 }
 
 OutlinerUndoChangeParaNumberingRestart::OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
@@ -109,15 +106,13 @@ OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPa
 
 void OutlinerUndoCheckPara::Undo()
 {
-    Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
-    pPara->Invalidate();
+    GetOutliner()->GetEditEngine().InvalidateBulletSize( mnPara );
     GetOutliner()->ImplCalcBulletText( mnPara, false, false );
 }
 
 void OutlinerUndoCheckPara::Redo()
 {
-    Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
-    pPara->Invalidate();
+    GetOutliner()->GetEditEngine().InvalidateBulletSize( mnPara );
     GetOutliner()->ImplCalcBulletText( mnPara, false, false );
 }
 
@@ -135,18 +130,16 @@ void OLUndoExpand::Restore( bool bUndo )
 {
     assert(pOutliner && "Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
-    Paragraph* pPara;
 
     bool bExpand = false;
     sal_uInt16 _nId = GetId();
     if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
         bExpand = true;
 
-    pPara = pOutliner->GetParagraph( nCount );
     if( bExpand )
-        pOutliner->Expand( pPara );
+        pOutliner->Expand( nCount );
     else
-        pOutliner->Collapse( pPara );
+        pOutliner->Collapse( nCount );
 }
 
 void OLUndoExpand::Undo()

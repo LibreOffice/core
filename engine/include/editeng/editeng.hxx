@@ -115,6 +115,7 @@ class DrawBulletInfo;
 class StripPortionsHelper;
 enum class SdrCompatibilityFlag;
 class Outliner;
+enum class ParaFlag;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -501,7 +502,7 @@ public:
     void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
     void    ParagraphInserted( sal_Int32 nNewParagraph );
-    void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
+    void    ParagraphDeleted( sal_Int32 nDeletedParagraph, sal_Int16 nNumberingDepth, bool bIsPage );
     void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
     void    ParaAttribsChanged( sal_Int32 nParagraph );
     void    StyleSheetChanged( SfxStyleSheet* pStyle );
@@ -642,6 +643,25 @@ public:
 
     // Only useful when this is Outliner capable.
     sal_Int16       GetNumberingDepth( sal_Int32 nPara ) const;
+    void            SetNumberingDepth( sal_Int32 nPara, sal_Int16 nDepth );
+    sal_Int16       GetNumberingStartValue(sal_Int32 nPara) const;
+    void            SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );
+    bool            IsNumberingRestart(sal_Int32 nPara) const;
+    void            SetNumberingRestart( sal_Int32 nPara, bool bRestart );
+    void SetBulletText(sal_Int32 nPara, const OUString& rText);
+    void SetBulletSize(sal_Int32 nPara, Size const& rSize, ScalingParameters const& rScalingParameters);
+    Size const& GetBulletSize(sal_Int32 nPara) const;
+    const OUString& GetBulletText(sal_Int32 nPara) const;
+    bool IsBulletInvalid(sal_Int32 nPara, ScalingParameters const& rCurrentScalingParameters) const;
+    void InvalidateBulletSize(sal_Int32 nPara);
+    void SetParaFlag( sal_Int32 nPara, ParaFlag nFlag );
+    // clears existing flags and sets new flag(s)
+    void ClearAndSetParaFlag( sal_Int32 nPara, ParaFlag nFlag );
+    void RemoveParaFlag( sal_Int32 nPara, ParaFlag nFlag );
+    bool HasParaFlag( sal_Int32 nPara, ParaFlag nFlag ) const;
+    ParaFlag GetParaFlag( sal_Int32 nPara ) const;
+    bool IsBulletVisible( sal_Int32 nPara ) const;
+    void SetBulletVisible( sal_Int32 nPara, bool bVisible );
 
     // Only useful when this is Outliner capable.
     /// @returns state of the SdrCompatibilityFlag

@@ -29,6 +29,8 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <editeng/bulletinfo.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -753,7 +755,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         bool bDisable = nParaCount == 0;
         if (!bDisable && nParaCount == 1)
         {
-            OUString aTest = rOutl.GetText(rOutl.GetParagraph(0));
+            OUString aTest = rOutl.GetText(0);
             if (aTest.isEmpty())
             {
                 bDisable = true;
@@ -789,24 +791,26 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     bool bUnique          = true;
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
 
-    std::vector<Paragraph*> aSelList;
+    std::vector<sal_Int32> aSelList;
     pOutlinerView->CreateSelectionList(aSelList);
 
     if (!aSelList.empty())
     {
-        sal_Int16 nTmpDepth = rOutl.GetDepth( rOutl.GetAbsPos( aSelList.front() ) );
-        bool bPage = ::Outliner::HasParaFlag( aSelList.front(), ParaFlag::ISPAGE );
+        sal_Int32 nParaPos = aSelList.front();
+        sal_Int16 nTmpDepth = rOutl.GetDepth( nParaPos );
+        bool bPage = rOutl.GetEditEngine().HasParaFlag( nParaPos, ParaFlag::ISPAGE );
 
-        for (const Paragraph* pPara : aSelList)
+        for (sal_Int32 nPara : aSelList)
         {
-            sal_Int16 nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
+            nParaPos = nPara;
+            sal_Int16 nDepth = rOutl.GetDepth( nParaPos );
 
-            if( nDepth != nTmpDepth || bPage != ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ))
+            if( nDepth != nTmpDepth || bPage != rOutl.GetEditEngine().HasParaFlag( nParaPos, ParaFlag::ISPAGE ))
                 bUnique = false;
 
-            if (rOutl.HasChildren(pPara))
+            if (rOutl.HasChildren(nPara))
             {
-                if (!rOutl.IsExpanded(pPara))
+                if (!rOutl.IsExpanded(nPara))
                     bDisableExpand = false;
                 else
                     bDisableCollapse = false;
@@ -846,16 +850,16 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll || bDisableExpandAll)
     {
         sal_Int32 nParaPos = 0;
-        Paragraph* pPara = rOutl.GetParagraph( nParaPos );
-        while (pPara && (bDisableCollapseAll || bDisableExpandAll))
+        sal_Int32 nPara = nParaPos;
+        while (nPara < rOutl.GetParagraphCount() && (bDisableCollapseAll || bDisableExpandAll))
         {
-            if (!rOutl.IsExpanded(pPara) && rOutl.HasChildren(pPara))
+            if (!rOutl.IsExpanded(nPara) && rOutl.HasChildren(nPara))
                 bDisableExpandAll = false;
 
-            if (rOutl.IsExpanded(pPara) && rOutl.HasChildren(pPara))
+            if (rOutl.IsExpanded(nPara) && rOutl.HasChildren(nPara))
                 bDisableCollapseAll = false;
 
-            pPara = rOutl.GetParagraph( ++nParaPos );
+            nPara = ++nParaPos;
         }
     }
 
@@ -1273,29 +1277,29 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     ::sd::Window*   pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
 
-    std::vector<Paragraph*> aSelList;
+    std::vector<sal_Int32> aSelList;
     pActiveView->CreateSelectionList(aSelList);
 
-    Paragraph *pFirstPara = nullptr;
-    Paragraph *pLastPara = nullptr;
+    sal_Int32 nFirstPara = -1;
+    sal_Int32 nLastPara = -1;
 
     if (!aSelList.empty())
     {
-        pFirstPara = *(aSelList.begin());
-        pLastPara = *(aSelList.rbegin());
+        nFirstPara = *(aSelList.begin());
+        nLastPara = *(aSelList.rbegin());
     }
 
-    if( !::Outliner::HasParaFlag(pFirstPara,ParaFlag::ISPAGE) )
-        pFirstPara = pOlView->GetPrevTitle( pFirstPara );
+    if( !pOlView->GetOutliner().GetEditEngine().HasParaFlag(nFirstPara,ParaFlag::ISPAGE) )
+        nFirstPara = pOlView->GetPrevTitle( nFirstPara );
 
-    if( !::Outliner::HasParaFlag(pLastPara, ParaFlag::ISPAGE) )
-        pLastPara = pOlView->GetPrevTitle( pLastPara );
+    if( !pOlView->GetOutliner().GetEditEngine().HasParaFlag(nLastPara, ParaFlag::ISPAGE) )
+        nLastPara = pOlView->GetPrevTitle( nLastPara );
 
     // only one page selected?
-    if( pFirstPara == pLastPara )
+    if( nFirstPara == nLastPara )
     {
         // how many pages are we before the selected page?
-        sal_Int32 nPos = pOlView->CountTitlesBeforeParagraph(pFirstPara);
+        sal_Int32 nPos = pOlView->CountTitlesBeforeParagraph(nFirstPara);
 
         if( nPos >= GetDoc()->GetSdPageCount( PageKind::Standard ) )
             nPos = 0;
@@ -1536,18 +1540,18 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage )
     }
 }
 
-void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara )
+void OutlineViewShell::UpdateTitleObject( SdPage* pPage, sal_Int32 nPara )
 {
     DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateTitleObject(), pPage == 0?" );
-    DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateTitleObject(), pPara == 0?" );
+    DBG_ASSERT( nPara != -1, "sd::OutlineViewShell::UpdateTitleObject(), pPara == 0?" );
 
-    if( !pPage || !pPara )
+    if( !pPage || nPara == -1)
         return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = OutlineView::GetTitleTextObject( pPage );
 
-    OUString aTest = rOutliner.GetText(pPara);
+    OUString aTest = rOutliner.GetText(nPara);
     bool    bText = !aTest.isEmpty();
 
     if( bText )
@@ -1564,7 +1568,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
         // if we have a title object and a text, set the text
         std::optional<OutlinerParaObject> pOPO;
         if (pTO)
-            pOPO = rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1);
+            pOPO = rOutliner.CreateParaObject(nPara, 1);
         if (pOPO)
         {
             pOPO->SetOutlinerMode( OutlinerMode::TitleObject );
@@ -1616,12 +1620,12 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
     }
 }
 
-void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
+void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, sal_Int32 nPara )
 {
     DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateOutlineObject(), pPage == 0?" );
-    DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateOutlineObject(), pPara == 0?" );
+    DBG_ASSERT( nPara != -1, "sd::OutlineViewShell::UpdateOutlineObject(), pPara == 0?" );
 
-    if( !pPage || !pPara )
+    if( !pPage || nPara == -1)
         return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
@@ -1637,14 +1641,13 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     }
 
     // how many paragraphs in the outline?
-    sal_Int32 nTitlePara     = rOutliner.GetAbsPos( pPara );
-    sal_Int32 nPara          = nTitlePara + 1;
+    sal_Int32 nTitlePara     = nPara;
+    nPara = nTitlePara + 1;
     sal_Int32 nParasInLayout = 0;
-    pPara = rOutliner.GetParagraph( nPara );
-    while( pPara && !::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
+    while( nPara < rOutliner.GetParagraphCount() && !rOutliner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
     {
         nParasInLayout++;
-        pPara = rOutliner.GetParagraph( ++nPara );
+        ++nPara;
     }
     if( nParasInLayout )
     {
@@ -1744,18 +1747,17 @@ ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
 
             if( (nDepth == 0) || !nPara )
             {
-                Paragraph* pPara = rOutl.GetParagraph( nPara );
-                rOutl.SetDepth(pPara, -1);
-                rOutl.SetParaFlag(pPara, ParaFlag::ISPAGE);
+                rOutl.SetDepth(nPara, -1);
+                rOutl.GetEditEngine().SetParaFlag(nPara, ParaFlag::ISPAGE);
 
                 rOutl.SetStyleSheet( nPara, pTitleSheet );
 
                 if( nPara ) // first slide already exists
-                    pOlView->InsertSlideForParagraph( pPara );
+                    pOlView->InsertSlideForParagraph( nPara );
             }
             else
             {
-                rOutl.SetDepth( rOutl.GetParagraph( nPara ), nDepth - 1 );
+                rOutl.SetDepth( nPara, nDepth - 1 );
                 OUString aStyleSheetName = pOutlSheet->GetName();
                 if (!aStyleSheetName.isEmpty())
                     aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);

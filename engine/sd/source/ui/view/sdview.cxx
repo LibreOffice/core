@@ -899,11 +899,11 @@ IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, aParam, 
 {
     SdrObject* pObj = GetTextEditObject();
 
-    if( aParam.pPara && pObj )
+    if( pObj )
     {
         SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
-            pPage->onParagraphInserted( aParam.pOutliner, aParam.pPara, pObj );
+            pPage->onParagraphInserted( aParam.nParaPos, pObj );
     }
 }
 
@@ -914,11 +914,11 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aParam, 
 {
     SdrObject* pObj = GetTextEditObject();
 
-    if( aParam.pPara && pObj )
+    if( pObj )
     {
         SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
-            pPage->onParagraphRemoving( aParam.pOutliner, aParam.pPara, pObj );
+            pPage->onParagraphRemoving( aParam.pOutliner, aParam.nParaPos, pObj );
     }
 }
 

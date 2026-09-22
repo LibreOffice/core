@@ -22,6 +22,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
+#include <editeng/bulletinfo.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
@@ -499,32 +500,30 @@ OutlinerView* OutlineView::GetViewByWindow (vcl::Window const * pWin) const
 /**
  * Return the title before a random paragraph
  */
-Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
+sal_Int32 OutlineView::GetPrevTitle(sal_Int32 nPos)
 {
-    sal_Int32 nPos = mrOutliner.GetAbsPos(pPara);
-
     if (nPos > 0)
     {
         while(nPos)
         {
-            pPara = mrOutliner.GetParagraph(--nPos);
-            if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
+            --nPos;
+            if( mrOutliner.GetEditEngine().HasParaFlag(nPos, ParaFlag::ISPAGE) )
             {
-                return const_cast< Paragraph* >( pPara );
+                return nPos;
             }
         }
 
     }
-    return nullptr;
+    return -1;
 }
 
-sal_Int32 OutlineView::CountTitlesBeforeParagraph(const Paragraph* pPara)
+sal_Int32 OutlineView::CountTitlesBeforeParagraph(sal_Int32 nParaPos)
 {
     sal_Int32 nCnt = 0;
-    while( pPara )
+    while( nParaPos >= 0 )
     {
-        pPara = GetPrevTitle( pPara );
-        if( pPara )
+        nParaPos = GetPrevTitle( nParaPos );
+        if( nParaPos >= 0 )
             nCnt++;
     }
     return nCnt;
@@ -533,21 +532,18 @@ sal_Int32 OutlineView::CountTitlesBeforeParagraph(const Paragraph* pPara)
 /**
  * Return the title after a random paragraph
  */
-Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
+sal_Int32 OutlineView::GetNextTitle(sal_Int32 nPos)
 {
-    Paragraph* pResult = const_cast< Paragraph* >( pPara );
-
-    sal_Int32 nPos = mrOutliner.GetAbsPos(pResult);
-
-    do
+    for(;;)
     {
-        pResult = mrOutliner.GetParagraph(++nPos);
-        if( pResult && ::Outliner::HasParaFlag(pResult, ParaFlag::ISPAGE) )
-            return pResult;
+        ++nPos;
+        if( nPos >= mrOutliner.GetEditEngine().GetParagraphCount() )
+            break;
+        if( mrOutliner.GetEditEngine().HasParaFlag(nPos, ParaFlag::ISPAGE) )
+            return nPos;
     }
-    while( pResult );
 
-    return nullptr;
+    return -1;
 }
 
 /**
@@ -562,36 +558,36 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, Outliner::ParagraphHdlParam, aPara
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    sal_Int32 nAbsPos = mrOutliner.GetAbsPos( aParam.pPara );
+    sal_Int32 nAbsPos = aParam.nParaPos;
 
     UpdateParagraph( nAbsPos );
 
     if( (nAbsPos == 0) ||
-        ::Outliner::HasParaFlag(aParam.pPara, ParaFlag::ISPAGE) ||
-        ::Outliner::HasParaFlag(mrOutliner.GetParagraph( nAbsPos-1 ), ParaFlag::ISPAGE) )
+        mrOutliner.GetEditEngine().HasParaFlag(nAbsPos, ParaFlag::ISPAGE) ||
+        mrOutliner.GetEditEngine().HasParaFlag( nAbsPos-1, ParaFlag::ISPAGE) )
     {
-        InsertSlideForParagraph( aParam.pPara );
+        InsertSlideForParagraph( aParam.nParaPos );
     }
 }
 
 /** creates and inserts an empty slide for the given paragraph */
-SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
+SdPage* OutlineView::InsertSlideForParagraph( sal_Int32 nPara )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::InsertSlideForParagraph(), model change without undo?!" );
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
+    mrOutliner.SetParaFlag( nPara, ParaFlag::ISPAGE );
     // how many titles are there before the new title paragraph?
     sal_uLong nExample = 0;            // position of the "example" page
-    sal_Int32 nTarget = CountTitlesBeforeParagraph(pPara); // position of insertion
+    sal_Int32 nTarget = CountTitlesBeforeParagraph(nPara); // position of insertion
 
     // if a new paragraph is created via RETURN before the first paragraph, the
     // Outliner reports the old paragraph (which was moved down) as a new
     // paragraph
     if (nTarget == 1)
     {
-        OUString aTest = mrOutliner.GetText(mrOutliner.GetParagraph(0));
+        OUString aTest = mrOutliner.GetText(0);
         if (aTest.isEmpty())
         {
             nTarget = 0;
@@ -689,14 +685,13 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
 
-    OutlineViewPageChangesGuard aGuard(this);
-
-    Paragraph* pPara = aParam.pPara;
-    if( !::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
+    if( !aParam.bIsPage )
         return;
 
-    // how many titles are in front of the title paragraph in question?
-    sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
+    OutlineViewPageChangesGuard aGuard(this);
+
+    // How many titles are in front of the title paragraph in question?
+    sal_Int32 nPos = CountTitlesBeforeParagraph(aParam.nParaPos);
 
     // delete page and notes page
     sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
@@ -739,13 +734,13 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    Paragraph* pPara = aParam.pPara;
     ::Outliner* pOutliner = aParam.pOutliner;
-    if( ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) == ParaFlag::NONE) )
+    sal_Int32 nPara = aParam.nParaPos;
+    if( pOutliner->GetEditEngine().HasParaFlag( nPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) == ParaFlag::NONE) )
     {
         // the current paragraph is transformed into a slide
 
-        mrOutliner.SetDepth( pPara, -1 );
+        mrOutliner.SetDepth( nPara, -1 );
 
         // are multiple level 1 paragraphs being brought to level 0 and we
         // should start a progress view or a timer and didn't already?
@@ -754,13 +749,13 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
             Window*       pActWin = mrOutlineViewShell.GetActiveWindow();
             OutlinerView* pOlView = GetViewByWindow(pActWin);
 
-            std::vector<Paragraph*> aSelList;
+            std::vector<sal_Int32> aSelList;
             pOlView->CreateSelectionList(aSelList);
 
             mnPagesToProcess = std::count_if(aSelList.begin(), aSelList.end(),
-                [&pOutliner](const Paragraph *pParagraph) {
-                    return !Outliner::HasParaFlag(pParagraph, ParaFlag::ISPAGE) &&
-                        (pOutliner->GetDepth(pOutliner->GetAbsPos(pParagraph)) <= 0);
+                [&pOutliner](sal_Int32 nPos) {
+                    return !pOutliner->GetEditEngine().HasParaFlag(nPos, ParaFlag::ISPAGE) &&
+                           (pOutliner->GetDepth(nPos) <= 0);
                 });
 
             mnPagesToProcess++; // the paragraph being in level 0 already
@@ -777,7 +772,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
             }
         }
 
-        ParagraphInsertedHdl( { aParam.pOutliner, aParam.pPara } );
+        ParagraphInsertedHdl( { aParam.pOutliner, aParam.nParaPos, /*bIsPage*/true } );
 
         mnPagesProcessed++;
 
@@ -803,12 +798,12 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         }
         pOutliner->UpdateFields();
     }
-    else if( !::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) != ParaFlag::NONE) )
+    else if( !pOutliner->GetEditEngine().HasParaFlag( nPara, ParaFlag::ISPAGE ) && ((aParam.nPrevFlags & ParaFlag::ISPAGE) != ParaFlag::NONE) )
     {
         // the paragraph was a page but now becomes a normal paragraph
 
         // how many titles are before the title paragraph in question?
-        sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
+        sal_Int32 nPos = CountTitlesBeforeParagraph(nPara);
 
         // delete page and notes page
 
@@ -824,9 +819,9 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
             AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
-        pPage = GetPageForParagraph( pPara );
+        pPage = GetPageForParagraph( nPara );
 
-        mrOutliner.SetDepth( pPara, (pPage && (static_cast<SdPage*>(pPage)->GetAutoLayout() == AUTOLAYOUT_TITLE)) ?  -1 : 0 );
+        mrOutliner.SetDepth( nPara, (pPage && (static_cast<SdPage*>(pPage)->GetAutoLayout() == AUTOLAYOUT_TITLE)) ?  -1 : 0 );
 
         // progress display if necessary
         if (mnPagesToProcess)
@@ -844,22 +839,22 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         }
         pOutliner->UpdateFields();
     }
-    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
+    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( nPara ) == 2 ) )
     {
         // how many titles are in front of the title paragraph in question?
-        sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
+        sal_Int32 nPos = CountTitlesBeforeParagraph(nPara);
 
         if(nPos > 0)
         {
             SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos - 1), PageKind::Standard);
 
             if(pPage && pPage->GetPresObj(PresObjKind::Text))
-                pOutliner->SetDepth( pPara, 0 );
+                pOutliner->SetDepth( nPara, 0 );
         }
 
     }
     // how many titles are in front of the title paragraph in question?
-    sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
+    sal_Int32 nPos = CountTitlesBeforeParagraph(nPara);
 
     if( nPos == 0 )
         return;
@@ -870,11 +865,10 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         return;
 
     SfxStyleSheet* pStyleSheet = nullptr;
-    sal_Int32 nPara = pOutliner->GetAbsPos( pPara );
     sal_Int16 nDepth = pOutliner->GetDepth( nPara );
     bool bSubTitle = pPage->GetPresObj(PresObjKind::Text) != nullptr;
 
-    if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
+    if( pOutliner->GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
     {
         pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Title );
     }
@@ -958,32 +952,22 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
-    // list of selected title paragraphs
-    std::vector<Paragraph*> aSelectedParas;
-    mpOutlinerViews[0]->CreateSelectionList(aSelectedParas);
-
-    std::erase_if(aSelectedParas,
-        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); });
+    // range of selected paragraphs
+    ParaRange aSelectedParas = mpOutlinerViews[0]->GetSelectionRange();
 
     // select the pages belonging to the paragraphs on level 0 to select
-    sal_uInt16 nPos = 0;
-    sal_Int32 nParaPos = 0;
-    Paragraph* pPara = pOutliner->GetParagraph( 0 );
-    std::vector<Paragraph*>::const_iterator fiter;
-
-    while(pPara)
+    sal_uInt16 nPage = 0;
+    for (sal_Int32 nPara = 0; nPara <= aSelectedParas.nEndPara; ++nPara)
     {
-        if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )                     // one page?
+        if( pOutliner->GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
         {
-            SdPage* pPage = mrDoc.GetSdPage(nPos, PageKind::Standard);
-
-            fiter = std::find(aSelectedParas.begin(),aSelectedParas.end(),pPara);
-
-            pPage->SetSelected(fiter != aSelectedParas.end());
-
-            ++nPos;
+            if (nPara >= aSelectedParas.nStartPara)
+            {
+                SdPage* pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
+                pPage->SetSelected(true);
+            }
+            ++nPage;
         }
-        pPara = pOutliner->GetParagraph( ++nParaPos );
     }
 }
 
@@ -1003,7 +987,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner::MoveParagraphsHdlParam, aParam
     {
         if (nPara == aParam.nDestPara)
             break;
-        if( ::Outliner::HasParaFlag(pOutliner->GetParagraph(nPara), ParaFlag::ISPAGE) )
+        if( pOutliner->GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
             ++nPagePos;
     }
 
@@ -1170,14 +1154,14 @@ void OutlineView::FillOutliner()
     ResetLinks();
     const bool bPrevUpdateLayout = mrOutliner.SetUpdateLayout(false);
 
-    Paragraph* pTitleToSelect = nullptr;
+    sal_Int32 nTitleToSelect = -1;
     sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
 
     // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (sal_uInt16 nPage = 0; nPage < nPageCount; nPage++)
     {
         SdPage*     pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
-        Paragraph * pPara = nullptr;
+        sal_Int32   nPara = -1;
 
         // take text from title shape
         SdrTextObj* pTO = GetTitleTextObject(pPage);
@@ -1190,31 +1174,29 @@ void OutlineView::FillOutliner()
                 pOPO->SetVertical( false );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );
-                pPara = mrOutliner.GetParagraph( mrOutliner.GetParagraphCount()-1 );
+                nPara = mrOutliner.GetParagraphCount()-1;
             }
         }
 
-        if( pPara == nullptr ) // no title, insert an empty paragraph
+        if( nPara == -1 ) // no title, insert an empty paragraph
         {
-            pPara = mrOutliner.Insert(OUString());
-            mrOutliner.SetDepth(pPara, -1);
+            nPara = mrOutliner.Insert(OUString());
+            mrOutliner.SetDepth(nPara, -1);
 
             // do not apply hard attributes from the previous paragraph
-            mrOutliner.SetParaAttribs( mrOutliner.GetAbsPos(pPara),
+            mrOutliner.SetParaAttribs( nPara,
                                        mrOutliner.GetEmptyItemSet() );
 
-            mrOutliner.SetStyleSheet( mrOutliner.GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PresObjKind::Title ) );
+            mrOutliner.SetStyleSheet( nPara, pPage->GetStyleSheetForPresObj( PresObjKind::Title ) );
         }
 
-        mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
-
-        sal_Int32 nPara = mrOutliner.GetAbsPos( pPara );
+        mrOutliner.SetParaFlag( nPara, ParaFlag::ISPAGE );
 
         UpdateParagraph( nPara );
 
         // remember paragraph of currently selected page
         if (pPage->IsSelected())
-            pTitleToSelect = pPara;
+            nTitleToSelect = nPara;
 
         // take text from subtitle or outline
         pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Text));
@@ -1239,9 +1221,8 @@ void OutlineView::FillOutliner()
                 {
                     if( bSubTitle )
                     {
-                        Paragraph* p = mrOutliner.GetParagraph(n);
-                        if(p && mrOutliner.GetDepth( n ) > 0 )
-                            mrOutliner.SetDepth(p, 0);
+                        if(n >= 0 && n < mrOutliner.GetParagraphCount() && mrOutliner.GetDepth( n ) > 0 )
+                            mrOutliner.SetDepth(n, 0);
                     }
 
                     UpdateParagraph( n );
@@ -1251,13 +1232,13 @@ void OutlineView::FillOutliner()
     }
 
     // place cursor at the start
-    Paragraph* pFirstPara = mrOutliner.GetParagraph( 0 );
-    mpOutlinerViews[0]->Select( pFirstPara );
-    mpOutlinerViews[0]->Select( pFirstPara, false );
+    sal_Int32 nFirstPara = 0;
+    mpOutlinerViews[0]->Select( nFirstPara );
+    mpOutlinerViews[0]->Select( nFirstPara, false );
 
     // select title of slide that was selected
-    if (pTitleToSelect)
-        mpOutlinerViews[0]->Select(pTitleToSelect);
+    if (nTitleToSelect != -1)
+        mpOutlinerViews[0]->Select(nTitleToSelect);
 
     SetLinks();
 
@@ -1303,11 +1284,11 @@ SdPage* OutlineView::GetActualPage()
     ::sd::Window* pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView* pActiveView = GetViewByWindow(pWin);
 
-    std::vector<Paragraph*> aSelList;
+    std::vector<sal_Int32> aSelList;
     pActiveView->CreateSelectionList(aSelList);
 
-    Paragraph *pPar = aSelList.empty() ? nullptr : *(aSelList.begin());
-    SdPage* pCurrent = GetPageForParagraph(pPar);
+    sal_Int32 nPar = aSelList.empty() ? -1 : *(aSelList.begin());
+    SdPage* pCurrent = GetPageForParagraph(nPar);
 
     DBG_ASSERT( pCurrent ||
                 (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->IsDoing()) ||
@@ -1320,12 +1301,12 @@ SdPage* OutlineView::GetActualPage()
     return mrDoc.GetSdPage( 0, PageKind::Standard );
 }
 
-SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
+SdPage* OutlineView::GetPageForParagraph( sal_Int32 nPara )
 {
-    if( !::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
-        pPara = GetPrevTitle(pPara);
+    if( !GetOutliner().GetEditEngine().HasParaFlag(nPara,ParaFlag::ISPAGE) )
+        nPara = GetPrevTitle(nPara);
 
-    sal_Int32 nPageToSelect = CountTitlesBeforeParagraph(pPara);
+    sal_Int32 nPageToSelect = CountTitlesBeforeParagraph(nPara);
 
     if( nPageToSelect < mrDoc.GetSdPageCount( PageKind::Standard ) )
         return mrDoc.GetSdPage( static_cast<sal_uInt16>(nPageToSelect), PageKind::Standard );
@@ -1333,7 +1314,8 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
     return nullptr;
 }
 
-Paragraph* OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage )
+// static
+sal_Int32 OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage )
 {
     // get the number of paragraphs with ident 0 we need to skip before
     // we find the actual page
@@ -1341,26 +1323,25 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage co
     assert(nPageNum > 0);
     sal_uInt32 nPagesToSkip = (nPageNum - 1) >> 1;
 
-    sal_Int32 nParaPos = 0;
-    Paragraph* pPara = rOutl.GetParagraph( 0 );
-    while( pPara )
+    sal_Int32 nParaFound = -1;
+    for (sal_Int32 nPara = 0; nPara < rOutl.GetParagraphCount(); ++nPara)
     {
         // if this paragraph is a page...
-        if( ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
+        if( rOutl.GetEditEngine().HasParaFlag(nPara,ParaFlag::ISPAGE) )
         {
             // see if we already skipped enough pages
             if( 0 == nPagesToSkip )
+            {
+                nParaFound = nPara;
                 break;  // and if so, end the loop
+            }
 
             // we skipped another page
             nPagesToSkip--;
         }
-
-        // get next paragraph
-        pPara = mrOutliner.GetParagraph( ++nParaPos );
     }
 
-    return pPara;
+    return nParaFound;
 }
 
 /** selects the paragraph for the given page at the outliner view*/
@@ -1369,9 +1350,9 @@ void OutlineView::SetActualPage( SdPage const * pActual )
     if( pActual && mrOutliner.GetIgnoreCurrentPageChangesLevel()==0 && !mbFirstPaint)
     {
         // if we found a paragraph, select its text at the outliner view
-        Paragraph* pPara = GetParagraphForPage( mrOutliner, pActual );
-        if( pPara )
-            mpOutlinerViews[0]->Select( pPara );
+        sal_Int32 nPara = GetParagraphForPage( mrOutliner, pActual );
+        if( nPara != -1 )
+            mpOutlinerViews[0]->Select( nPara );
     }
 }
 
@@ -1392,21 +1373,21 @@ SfxStyleSheet* OutlineView::GetStyleSheet() const
 void OutlineView::SetSelectedPages()
 {
     // list of selected title paragraphs
-    std::vector<Paragraph*> aSelParas;
+    std::vector<sal_Int32> aSelParas;
     mpOutlinerViews[0]->CreateSelectionList(aSelParas);
 
     std::erase_if(aSelParas,
-        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); });
+        [this](sal_Int32 nPara) { return !GetOutliner().GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE); });
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
     sal_Int32 nParaPos = 0;
-    Paragraph *pPara = mrOutliner.GetParagraph( 0 );
-    std::vector<Paragraph*>::const_iterator fiter;
+    sal_Int32 nPara = 0;
+    std::vector<sal_Int32>::const_iterator fiter;
 
-    while(pPara)
+    while(nPara >= 0 && nPara < GetOutliner().GetParagraphCount())
     {
-        if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )                     // one page
+        if( GetOutliner().GetEditEngine().HasParaFlag(nParaPos, ParaFlag::ISPAGE) )                     // one page
         {
             SdPage* pPage = mrDoc.GetSdPage(nPos, PageKind::Standard);
             DBG_ASSERT(pPage!=nullptr,
@@ -1414,14 +1395,14 @@ void OutlineView::SetSelectedPages()
 
             if (pPage)
             {
-                fiter = std::find(aSelParas.begin(),aSelParas.end(),pPara);
+                fiter = std::find(aSelParas.begin(),aSelParas.end(),nPara);
                 pPage->SetSelected(fiter != aSelParas.end());
             }
 
             nPos++;
         }
 
-        pPara = mrOutliner.GetParagraph( ++nParaPos );
+        nPara = ++nParaPos;
     }
 }
 
@@ -1590,30 +1571,30 @@ void OutlineView::UpdateDocument()
     OutlineViewPageChangesGuard aGuard(this);
 
     const sal_uInt32 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
-    Paragraph* pPara = mrOutliner.GetParagraph( 0 );
+    sal_Int32 nPara = 0;
     sal_uInt32 nPage;
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
         SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPage), PageKind::Standard);
         mrDoc.SetSelected(pPage, false);
 
-        mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
-        mrOutlineViewShell.UpdateOutlineObject( pPage, pPara );
+        mrOutlineViewShell.UpdateTitleObject( pPage, nPara );
+        mrOutlineViewShell.UpdateOutlineObject( pPage, nPara );
 
-        if( pPara )
-            pPara = GetNextTitle(pPara);
+        if( nPara != -1 )
+            nPara = GetNextTitle(nPara);
     }
 
-    DBG_ASSERT( pPara == nullptr, "sd::OutlineView::UpdateDocument(), slides are out of sync, creating missing ones" );
-    while( pPara )
+    DBG_ASSERT( nPara == -1, "sd::OutlineView::UpdateDocument(), slides are out of sync, creating missing ones" );
+    while( nPara >= 0 && nPara < GetOutliner().GetParagraphCount() )
     {
-        SdPage* pPage = InsertSlideForParagraph( pPara );
+        SdPage* pPage = InsertSlideForParagraph( nPara );
         mrDoc.SetSelected(pPage, false);
 
-        mrOutlineViewShell.UpdateTitleObject( pPage, pPara );
-        mrOutlineViewShell.UpdateOutlineObject( pPage, pPara );
+        mrOutlineViewShell.UpdateTitleObject( pPage, nPara );
+        mrOutlineViewShell.UpdateOutlineObject( pPage, nPara );
 
-        pPara = GetNextTitle(pPara);
+        nPara = GetNextTitle(nPara);
     }
 }
 
@@ -1691,21 +1672,20 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     if( !pInfo )
         return;
 
-    Paragraph* pPara = mrOutliner.GetParagraph( pInfo->mnPara );
+    sal_Int32 nPara = pInfo->mnPara;
     EditEngine& rEditEngine = mrOutliner.GetEditEngine();
 
     Size aImageSize( pInfo->mpOutDev->PixelToLogic( maSlideImage.GetSizePixel()  ) );
     Size aOffset( 100, 100 );
 
     // paint slide number
-    if( !(pPara && ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE)) )
+    if( !(nPara != -1 && rEditEngine.HasParaFlag(pInfo->mnPara,ParaFlag::ISPAGE)) )
         return;
 
     ::tools::Long nPage = 0; // todo, printing??
     for ( sal_Int32 n = 0; n <= pInfo->mnPara; n++ )
     {
-        Paragraph* p = mrOutliner.GetParagraph( n );
-        if ( ::Outliner::HasParaFlag(p,ParaFlag::ISPAGE) )
+        if ( mrOutliner.GetEditEngine().HasParaFlag(n, ParaFlag::ISPAGE) )
             nPage++;
     }
 
@@ -1825,9 +1805,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 
     for( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
     {
-        Paragraph* pPara = mrOutliner.GetParagraph( nPara );
-
-        bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE  );
+        bool bPage = mrOutliner.GetEditEngine().HasParaFlag( nPara, ParaFlag::ISPAGE  );
 
         if( !bPage )
         {
@@ -1839,19 +1817,16 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
             }
         }
 
-        if( !pPara )
-            continue; // fatality!?
-
         if( bPage && (nPara != pInfo->nStartPara) )
         {
             // insert new slide for this paragraph
-            pPage = InsertSlideForParagraph( pPara );
+            pPage = InsertSlideForParagraph( nPara );
         }
         else
         {
             // newly inserted non page paragraphs get the outline style
             if( !pPage )
-                pPage = GetPageForParagraph( pPara );
+                pPage = GetPageForParagraph( nPara );
 
             if( pPage )
             {

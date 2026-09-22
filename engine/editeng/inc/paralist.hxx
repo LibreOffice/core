@@ -34,48 +34,20 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class ParagraphList
 {
 public:
-    void            Clear();
+    static sal_Int32 GetParent( sal_Int32 nParagraphPos, const EditEngine& rEditEngine );
+    static bool     HasChildren( sal_Int32 nParagraphPos, const EditEngine& rEditEngine  );
+    static bool     HasHiddenChildren( sal_Int32 nParagraphPos, const EditEngine& rEditEngine );
+    static bool     HasVisibleChildren( sal_Int32 nParagraphPos, const EditEngine& rEditEngine );
+    static sal_Int32 GetChildCount( sal_Int32 nParagraphPos, const EditEngine& rEditEngine );
 
-    sal_Int32       GetParagraphCount() const
-    {
-        size_t nSize = maEntries.size();
-        if (nSize > SAL_MAX_INT32)
-        {
-            SAL_WARN( "editeng", "ParagraphList::GetParagraphCount - overflow " << nSize);
-            return SAL_MAX_INT32;
-        }
-        return nSize;
-    }
+    void            Expand( sal_Int32 nParentParaPos, EditEngine& rEditEngine );
+    void            Collapse( sal_Int32 nParentParaPos, EditEngine& rEditEngine );
 
-    Paragraph*      GetParagraph( sal_Int32 nPos ) const
-    {
-        return 0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size() ? maEntries[nPos].get() : nullptr;
-    }
-
-    sal_Int32       GetAbsPos( Paragraph const * pParent ) const;
-
-    void            Append( std::unique_ptr<Paragraph> pPara);
-    void            Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos);
-    void            Remove( sal_Int32 nPara );
-    void            MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 nCount );
-
-    Paragraph*      GetParent( Paragraph const * pParagraph ) const;
-    bool            HasChildren( Paragraph const * pParagraph ) const;
-    bool            HasHiddenChildren( Paragraph const * pParagraph ) const;
-    bool            HasVisibleChildren( Paragraph const * pParagraph ) const;
-    sal_Int32       GetChildCount( Paragraph const * pParagraph ) const;
-
-    void            Expand( Paragraph const * pParent );
-    void            Collapse( Paragraph const * pParent );
-
-    void            SetVisibleStateChangedHdl( const Link<Paragraph&,void>& rLink ) { aVisibleStateChangedHdl = rLink; }
-
-    void            dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void            SetVisibleStateChangedHdl( const Link<sal_Int32,void>& rLink ) { aVisibleStateChangedHdl = rLink; }
 
 private:
 
-    Link<Paragraph&,void> aVisibleStateChangedHdl;
-    std::vector<std::unique_ptr<Paragraph>> maEntries;
+    Link<sal_Int32,void> aVisibleStateChangedHdl;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

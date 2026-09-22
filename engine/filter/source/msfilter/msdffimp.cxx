@@ -4548,7 +4548,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                                 bool bCreateNewParaObject = false;
                                 for ( i = 0; i < nParagraphs; i++ )
                                 {
-                                    OUString aString(rOutliner.GetText(rOutliner.GetParagraph(i)));
+                                    OUString aString(rOutliner.GetText(i));
                                     bool bIsRTL = pVirDev->GetTextIsRTL(aString, 0, aString.getLength());
                                     if ( bIsRTL )
                                     {
