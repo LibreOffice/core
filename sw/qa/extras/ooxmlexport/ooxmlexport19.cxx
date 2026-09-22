@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -481,6 +482,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90153, "tdf90153.docx")
     // This was at-para, so the line-level VertOrientRelation was lost, resulting in an incorrect vertical position.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
                          getProperty<text::TextContentAnchorType>(getShape(1), u"AnchorType"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169024)
+{
+    createSwDoc("tdf90153.docx");
+    //saveAndReload(TestFilter::DOCX);
+
+    // To Character anchored Line of Text need to be LINE_BOTTOM in order for the GUI to pick it up
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::TEXT_LINE,
+                         getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::LINE_BOTTOM,
+                         getProperty<sal_Int16>(getShape(1), u"VertOrient"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf93919, "tdf93919.docx")

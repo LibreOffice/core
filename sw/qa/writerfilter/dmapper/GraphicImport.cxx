@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxTextlineTop)
 
     sal_Int16 nActualOrient{};
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"VertOrient"_ustr) >>= nActualOrient);
-    sal_Int16 nExpectedOrient = text::VertOrientation::BOTTOM;
+    sal_Int16 nExpectedOrient = text::VertOrientation::LINE_BOTTOM;
     CPPUNIT_ASSERT_EQUAL(nExpectedOrient, nActualOrient);
 }
 

@@ -196,9 +196,11 @@ sal_Int16 PositionHandler::orientation() const
     { // It appears that to 'line of text' alignment is backwards to other alignments,
       // 'top' meaning putting on top of the line instead of having top at the line.
         if( m_nOrient == text::VertOrientation::TOP )
-            return text::VertOrientation::BOTTOM;
+            return text::VertOrientation::LINE_BOTTOM;
         else if( m_nOrient == text::VertOrientation::BOTTOM )
-            return text::VertOrientation::TOP;
+            return text::VertOrientation::LINE_TOP;
+        else if (m_nOrient == text::VertOrientation::CENTER)
+            return text::VertOrientation::LINE_CENTER;
     }
     return m_nOrient;
 }
