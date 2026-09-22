@@ -1461,7 +1461,11 @@ if test "$enable_hardening" = no; then
 
     AC_MSG_CHECKING([whether $CC supports -D_FORTIFY_SOURCE=2])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
+    # Probe with optimization on. Ubuntu's gcc defines _FORTIFY_SOURCE=3 itself
+    # when optimizing unless a driver-visible -D/-U_FORTIFY_SOURCE is given, and
+    # the -Wp, spellings are not visible to it. There the macro gets redefined
+    # and the probe fails, which is right: the compiler already fortifies.
+    CFLAGS="$CFLAGS -O2 -Werror -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
     AC_LINK_IFELSE(
         [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
         [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"],
