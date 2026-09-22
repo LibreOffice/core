@@ -146,7 +146,7 @@ PathFormat()
                 pf_conv_to_dos="yes"
             ;;
         esac
-        if test "$pf_conv_to_dos" = "yes"; then
+        if test "$pf_conv_to_dos" = "yes" -a -z "$pf_no_shorten"; then
             if test "$build_os" = "wsl"; then
                 case "$formatted_path" in
                     /*)
@@ -202,7 +202,7 @@ PathFormat()
             fi
         fi
         fp_count_space=`echo "$formatted_path" | $GREP -c "[ ]"`
-        if test "$fp_count_space" != "0"; then
+        if test "$fp_count_space" != "0" -a -z "$pf_no_shorten"; then
             AC_MSG_ERROR([converted path "$formatted_path" still contains spaces. Short filenames (8.3 filenames) support was disabled on this system?])
         fi
     fi
@@ -238,6 +238,19 @@ PathFormat()
         formatted_path="$pf_path"
         formatted_path_unix=$(cygpath -u "$formatted_path")
     fi
+}
+
+encode_path()
+{
+    # Args: $1: a pathname.
+    #
+    # Return value: $encoded_path, the pathname with a percent written as %25
+    # and a space as %20, in that order. Decoding runs the other way round, so
+    # a pathname that holds a percent of its own comes back exactly as it went
+    # in. An encoded pathname stays one word through a make list, which a
+    # pathname holding a space does not.
+
+    encoded_path=`printf '%s\n' "$1" | $SED -e 's/%/%25/g' -e 's/ /%20/g'`
 }
 
 AbsolutePath()
@@ -4256,12 +4269,17 @@ if test "$_os" = "WINNT"; then
     find_ucrt
     # find_ucrt errors out if it doesn't find it
     AC_MSG_RESULT([$UCRTSDKDIR ($UCRTVERSION)])
+    pf_no_shorten=yes
+    PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
+    pf_no_shorten=
+    encode_path "$formatted_path"
+    ucrtincpath_encoded="$encoded_path"
     PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
     ucrtincpath_formatted=$formatted_path
     # SOLARINC is used for external modules and must be set too.
     # And no, it's not sufficient to set SOLARINC only, as configure
     # itself doesn't honour it.
-    SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
+    SOLARINC="$SOLARINC -I$ucrtincpath_encoded"
     CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
     CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
     CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
@@ -4339,6 +4357,11 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_NOTICE([found Visual C++ $vcyear])
 
+        pf_no_shorten=yes
+        PathFormat "$COMPATH"
+        pf_no_shorten=
+        encode_path "$formatted_path"
+        COMPATH_ENCODED="$encoded_path"
         PathFormat "$COMPATH"
         COMPATH="$formatted_path"
         COMPATH_unix="$formatted_path_unix"
@@ -7052,19 +7075,28 @@ the  Windows SDK are installed.])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
+    pf_no_shorten=yes
+    PathFormat "$WINDOWS_SDK_HOME"
+    pf_no_shorten=
+    encode_path "$formatted_path"
+    WINDOWS_SDK_HOME_ENCODED="$encoded_path"
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
     WINDOWS_SDK_HOME_unix="$formatted_path_unix"
     if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
-        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
+        dnl The include flags carry the encoded long pathname rather than the
+        dnl 8.3 one. Every reader of SOLARINC treats it as a list of words, so
+        dnl the directories have to stay one word each, and each reader decodes
+        dnl and quotes where it hands the flags to a tool.
+        SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/include -I$COMPATH_ENCODED/Include"
         if test -d "$WINDOWS_SDK_HOME_unix/include/um"; then
-            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/include/um -I$WINDOWS_SDK_HOME_ENCODED/include/shared"
         elif test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/um"; then
-            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME_ENCODED/Include/$winsdklibsubdir/shared"
         fi
         if test "$USE_HEADLESS_CODE" = "TRUE"; then
             if test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/winrt"; then
-                SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/winrt"
+                SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/Include/$winsdklibsubdir/winrt"
             fi
         fi
     fi

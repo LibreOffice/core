@@ -57,6 +57,13 @@ define gb_Helper_native_path
 $(call gb_Output_error,gb_Helper_native_path: Do not use. Should not be necessary.)
 endef
 
+# Configure writes a space in a detected pathname as %20 and a percent as %25,
+# because a pathname holding a space stops being one word the moment make reads
+# a list. gb_Helper_decode_path turns the pathname back, taking %20 first so
+# that a pathname which held a percent of its own comes back as it was. What it
+# returns belongs in quotes, because it may hold a space again.
+gb_Helper_decode_path = $(subst %25,%,$(subst %20, ,$(1)))
+
 # cygwin seems to eat one backslash when executing command, thus replace with '\\'
 define gb_Helper_windows_path
 $(subst /,\\,$(1))

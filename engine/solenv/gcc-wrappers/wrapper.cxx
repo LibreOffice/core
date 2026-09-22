@@ -76,6 +76,18 @@ void splitlauncher(const std::string& env_prefix, const std::string& variable, s
     }
 }
 
+// Turn a pathname that configure encoded back into its real spelling. %20 is a space and %25 a
+// percent, taken in that order so that a pathname which held a percent of its own comes back as it
+// was.
+static std::string decodepath(std::string path)
+{
+    for (size_t pos = path.find("%20"); pos != std::string::npos; pos = path.find("%20", pos + 1))
+        path.replace(pos, 3, " ");
+    for (size_t pos = path.find("%25"); pos != std::string::npos; pos = path.find("%25", pos + 1))
+        path.replace(pos, 3, "%");
+    return path;
+}
+
 void setupccenv() {
     // Set-up library path
     std::string libpath="LIB=";
@@ -120,7 +132,7 @@ void setupccenv() {
 
         if(len>2) {
             includepath.append(";");
-            includepath.append(inctmp,pos+2,len-2);
+            includepath.append(decodepath(inctmp.substr(pos+2,len-2)));
         }
         pos=endpos;
     }

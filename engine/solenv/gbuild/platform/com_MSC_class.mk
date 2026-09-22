@@ -192,7 +192,7 @@ define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) $(dir $(4)) && \
-    $(CC) -nologo -EP -D_M_ARM64 $(SOLARINC) $(3) > $(subst .o,.asm,$(1)) && \
+    $(CC) -nologo -EP -D_M_ARM64 $(foreach dir,$(SOLARINC),"$(call gb_Helper_decode_path,$(dir))") $(3) > $(subst .o,.asm,$(1)) && \
     "$(ML_EXE)" $(gb_AFLAGS) -g -errorReport:prompt -o $(1) $(subst .o,.asm,$(1)), \
     ) && \
     echo "$(1) : $(3)" > $(4)
@@ -219,7 +219,7 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
-	$(SOLARINC) \
+	$(foreach dir,$(SOLARINC),"$(call gb_Helper_decode_path,$(dir))") \
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
@@ -667,7 +667,7 @@ gb_AUTOCONF_WRAPPERS = \
     LD="$(shell cygpath -w '$(COMPATH)/bin/link.exe') -nologo"
 
 gb_ExternalProject_INCLUDE := \
-	$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))
+	$(call gb_Helper_decode_path,$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC))))
 
 # Workaround for openssl build - it puts the CC var into additional pair of quotes. This breaks if
 # CC consists of more than a single element such as when using "ccache compiler". In case the
