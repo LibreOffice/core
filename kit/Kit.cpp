@@ -405,7 +405,7 @@ namespace
                    path != std::string_view("sdk") &&
                    path != std::string_view("debugsource") &&
                    path != std::string_view("share/basic") &&
-                   !std::string_view(path).starts_with(std::string_view("share/extensions/dict")) &&
+                   !std::string_view(path).starts_with(std::string_view("share/dictionaries/dict")) &&
                    path != std::string_view("share/Scripts/java") &&
                    path != std::string_view("share/Scripts/javascript") &&
                    path != std::string_view("share/config/wizard") &&
