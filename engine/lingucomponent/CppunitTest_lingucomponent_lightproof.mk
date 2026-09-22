@@ -41,6 +41,6 @@ $(eval $(call gb_CppunitTest_use_rdb,lingucomponent_lightproof,services))
 
 # The test checks the Russian rule package the dictionaries module compiles.
 $(call gb_CppunitTest_get_target,lingucomponent_lightproof) : \
-    $(call gb_CustomTarget_get_target,dictionaries/lightproof)
+    $(call gb_CustomTarget_get_target,lingucomponent/lightproof)
 
 # vim: set noet sw=4 ts=4:
