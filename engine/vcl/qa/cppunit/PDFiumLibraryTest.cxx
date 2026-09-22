@@ -530,6 +530,12 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testStructureTree)
     auto pPage = pDocument->openPage(0);
     CPPUNIT_ASSERT(pPage);
 
+    // the page object side of the marked content ids the structure tree references
+    bool bFoundFirstMark = false;
+    for (int i = 0; !bFoundFirstMark && i < pPage->getObjectCount(); ++i)
+        bFoundFirstMark = pPage->getObject(i)->getMarkedContentID() == 0;
+    CPPUNIT_ASSERT(bFoundFirstMark);
+
     auto pTree = pPage->getStructureTree();
     CPPUNIT_ASSERT(pTree);
     CPPUNIT_ASSERT_EQUAL(1, pTree->getNumberOfChildren());

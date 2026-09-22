@@ -433,15 +433,24 @@ const SwTextNode* lcl_JumpedToNode(const SwEditShell& rSh, const SwPosition& rBe
     return rPoint == rBeforeJump ? nullptr : rPoint.GetNode().GetTextNode();
 }
 
-// the language a paragraph declares for itself, as against the one a run of text sets
+// the language of a paragraph, as against the one a run of text sets
 LanguageType lcl_GetParagraphLanguage(const SwTextFrame& rFrame,
                                       const TypedWhichId<SvxLanguageItem> nWhich)
 {
-    // what is anchored here is tagged inside the paragraph's element and would inherit a
-    // language put there; the node, not the frame, because a split paragraph is one element
-    if (!rFrame.GetTextNodeFirst()->GetAnchoredFlys().empty())
-        return LANGUAGE_DONTKNOW;
     return rFrame.GetTextNodeForParaProps()->GetSwAttrSet().Get(nWhich).GetLanguage();
+}
+
+// the language an element inherits from the element around it
+LanguageType lcl_GetInheritedLanguage(const SwFrame& rFrame, const SwEnhancedPDFState& rState)
+{
+    // a frame's element sits in its anchor's, and what the frame holds sits in the frame's
+    if (rFrame.IsFlyFrame())
+    {
+        const SwFrame* pAnchor = static_cast<const SwFlyFrame&>(rFrame).GetAnchorFrame();
+        if (auto pAnchorText = pAnchor ? pAnchor->DynCastTextFrame() : nullptr)
+            return lcl_GetParagraphLanguage(*pAnchorText, rState.m_nLanguageWhich);
+    }
+    return rState.m_eLanguageDefault;
 }
 
 // the language a run of text is measured against
@@ -1022,17 +1031,14 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
 
             case vcl::pdf::StructElement::Formula:
             case vcl::pdf::StructElement::Figure:
-                bAltText =
-                bPlacement =
-                bWidth =
-                bHeight =
-                bBox = true;
+                bAltText = bLanguage = bPlacement = bWidth = bHeight = bBox = true;
                 break;
 
             case vcl::pdf::StructElement::Division:
                 if (pFrame->IsFlyFrame()) // this can be something else too
                 {
                     bAltText = true;
+                    bLanguage = true;
                     bBox = true;
                 }
                 break;
@@ -1132,12 +1138,20 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::TextIndent, nVal );
         }
 
-        if (bLanguage && pFrame->IsTextFrame())
+        if (bLanguage)
         {
             const SwEnhancedPDFState& rState(*mpPDFExtOutDevData->GetSwPDFState());
-            const LanguageType nLanguage(lcl_GetParagraphLanguage(
-                static_cast<const SwTextFrame&>(*pFrame), rState.m_nLanguageWhich));
-            if (LANGUAGE_DONTKNOW != nLanguage && rState.m_eLanguageDefault != nLanguage)
+            LanguageType nLanguage(LANGUAGE_DONTKNOW);
+            if (auto pText = pFrame->DynCastTextFrame())
+                nLanguage = lcl_GetParagraphLanguage(*pText, rState.m_nLanguageWhich);
+            else if (pFrame->IsFlyFrame())
+            {
+                // a frame's contents measure against this
+                nLanguage = rState.m_eLanguageDefault;
+            }
+
+            if (nLanguage != LANGUAGE_DONTKNOW
+                && nLanguage != lcl_GetInheritedLanguage(*pFrame, rState))
             {
                 mpPDFExtOutDevData->SetStructureAttributeNumerical(
                     vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nLanguage));

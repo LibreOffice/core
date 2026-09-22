@@ -216,6 +216,8 @@ public:
 
     virtual PDFPageObjectType getType() = 0;
     virtual OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage) = 0;
+    // what ties the object to a structure element within the page, or -1
+    virtual int getMarkedContentID() = 0;
 
     virtual int getFormObjectCount() = 0;
     virtual std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex) = 0;

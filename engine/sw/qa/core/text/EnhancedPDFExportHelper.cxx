@@ -12,11 +12,13 @@
 #include <swmodeltestbase.hxx>
 
 #include <algorithm>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 
 namespace
@@ -30,6 +32,50 @@ public:
     {
     }
 };
+
+// the text an element's own marked content holds, excluding any nested element's
+OUString lcl_GetOwnText(vcl::pdf::PDFiumStructureElement& rElement,
+                        const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aText;
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const int nMarkedContentID = rElement.getChildMarkedContentID(i); nMarkedContentID >= 0)
+        {
+            const auto it = rTexts.find(nMarkedContentID);
+            if (it != rTexts.end())
+                aText += it->second;
+        }
+    }
+    return aText.trim();
+}
+
+// every element holding text or a description, in document order, with the language it
+// specifies - one specifying none is listed without a language, and inherits its parent's
+OUString lcl_CollectLanguages(vcl::pdf::PDFiumStructureElement& rElement,
+                              const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aLanguages;
+    OUString aLabel(lcl_GetOwnText(rElement, rTexts));
+    if (aLabel.isEmpty())
+    {
+        // a frame holds no text of its own, so its description identifies it
+        aLabel = rElement.getAltText();
+    }
+    if (!aLabel.isEmpty())
+    {
+        const OUString aLanguage(rElement.getLang());
+        aLanguages = rElement.getType() + (aLanguage.isEmpty() ? u""_ustr : " " + aLanguage) + ": "
+                     + aLabel + "\n";
+    }
+
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = rElement.getChild(i))
+            aLanguages += lcl_CollectLanguages(*pChild, rTexts);
+    }
+    return aLanguages;
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
 {
@@ -347,36 +393,64 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
     save(TestFilter::PDF_WRITER,
          { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
+    // the value the entries below state where they state one, and what the rest inherit
     vcl::filter::PDFDocument aDocument;
-    maTempFile.CloseStream();
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    auto pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    CPPUNIT_ASSERT(pCatalog->GetDictionary());
+    auto pDocumentLanguage = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+        pCatalog->GetDictionary()->LookupElement("Lang"_ostr));
+    CPPUNIT_ASSERT(pDocumentLanguage);
+    CPPUNIT_ASSERT_EQUAL("en-US"_ostr, pDocumentLanguage->GetValue());
 
-    // every structure element that names a language, sorted: they are emitted by object and
-    // not by document order
-    std::vector<OString> aLanguages;
-    for (auto* pObject : aDocument.GetObjects())
+    auto pPdfDocument = parsePDFExport();
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+
+    // the text behind each marked content id, to identify the element covering it
+    std::unordered_map<int, OUString> aTexts;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
     {
-
-        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
-        auto pLang
-            = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("Lang"_ostr));
-        if (!pType || !pLang)
-            continue;
-
-        aLanguages.push_back(pType->GetValue() + "=" + pLang->GetValue());
+        auto pObject = pPdfPage->getObject(i);
+        if (const int nMarkedContentID = pObject->getMarkedContentID(); nMarkedContentID >= 0)
+            aTexts[nMarkedContentID] += pObject->getText(pTextPage);
     }
-    std::sort(aLanguages.begin(), aLanguages.end());
 
-    CPPUNIT_ASSERT_EQUAL(size_t(5), aLanguages.size());
-    // the German words in an English paragraph, and the text of the paragraph holding a frame,
-    // which says nothing itself because what is anchored there hangs under it
-    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[0]);
-    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[1]);
-    // Without the fix this was de-DE: the run differs from its paragraph, not from the document
-    CPPUNIT_ASSERT_EQUAL("Span=en-US"_ostr, aLanguages[2]);
-    // and without it neither German paragraph named a language at all
-    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[3]);
-    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[4]);
+    auto pTree = pPdfPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    OUString aLanguages;
+    for (int i = 0; i < pTree->getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = pTree->getChild(i))
+            aLanguages += lcl_CollectLanguages(*pChild, aTexts);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(
+        // specifies no language, being in the document's, so it inherits
+        u"P: A paragraph in the language of the document.\n"
+        "P de-DE: Ein Absatz, der ganz und gar deutsch ist.\n"
+        // the gap is where the German span took its words out of the paragraph
+        "P: English with  in it.\n"
+        "Span de-DE: ein paar deutsche Worte\n"
+        "P de-DE: Ein deutscher Absatz mit  darin.\n"
+        // the run differs from its paragraph, not from the document
+        "Span en-US: a few English words\n"
+        // a paragraph holding an anchor specified no language before, a Span carrying it
+        "P de-DE: Ein deutscher Absatz mit einem Rahmen.\n"
+        // the shape's own element, so its description does not inherit the paragraph's
+        "Div en-US: A shape described in the language of the document\n"
+        // the shape's text, tagged by drawinglayer since fr1 has no parent style
+        "P en-US: Text inside the frame.\n"
+        "P de-DE: Ein deutscher Absatz mit einem Textrahmen.\n"
+        // a Writer text frame, identified by its description
+        "Div en-US: Described in the language of the document\n"
+        // specifies none: the frame's Div specifies en-US for what it contains
+        "P: Text in a Writer frame.\n"
+        "P de-DE: Ein deutscher Absatz mit einem Bild.\n"
+        "Figure en-US: A picture described in the language of the document\n"_ustr,
+        aLanguages);
 }
 }
 

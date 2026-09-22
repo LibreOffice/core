@@ -26,6 +26,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -218,6 +219,39 @@ tools::Rectangle getPDFGraphicRect(const basegfx::B2DVector& rTranslate,
     return tools::Rectangle(
         sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
         sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+}
+
+// the one language a paragraph's text is in, false once its portions disagree
+bool getTextLanguage(const drawinglayer::primitive2d::Primitive2DContainer& rChildren,
+                     LanguageType& rLanguage)
+{
+    for (const auto& rCandidate : rChildren)
+    {
+        if (const auto* pText
+            = dynamic_cast<const drawinglayer::primitive2d::TextSimplePortionPrimitive2D*>(
+                rCandidate.get()))
+        {
+            // a bullet, a tab and an empty line carry no locale, and would read as the UI's
+            if (pText->getLocale().Language.isEmpty())
+                continue;
+
+            const LanguageType eLanguage(LanguageTag(pText->getLocale()).getLanguageType());
+            if (eLanguage == LANGUAGE_DONTKNOW)
+                continue;
+            if (rLanguage != LANGUAGE_DONTKNOW && rLanguage != eLanguage)
+                return false;
+            rLanguage = eLanguage;
+        }
+        else if (const auto* pGroup
+                 = dynamic_cast<const drawinglayer::primitive2d::GroupPrimitive2D*>(
+                     rCandidate.get()))
+        {
+            if (!getTextLanguage(pGroup->getChildren(), rLanguage))
+                return false;
+        }
+    }
+
+    return true;
 }
 
 } // end of anonymous namespace
@@ -1597,6 +1631,15 @@ void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
         mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
     }
 
+    // a run in another language would need an element of its own, so name only one
+    LanguageType eLanguage(LANGUAGE_DONTKNOW);
+    if (getTextLanguage(rParagraphPrimitive.getChildren(), eLanguage)
+        && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_NONE)
+    {
+        mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::pdf::PDFWriter::Language,
+                                                           static_cast<sal_uInt16>(eLanguage));
+    }
+
     // Process recursively and add MetaFile comment
     process(rParagraphPrimitive);
     mpMetaFile->AddAction(new MetaCommentAction(aCommentString));
@@ -2769,6 +2812,18 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 mpPDFExtOutDevData->SetCurrentStructureElement(id);
             }
             mpPDFExtOutDevData->WrapBeginStructureElement(rTagElement);
+            // a title, a description and text that states no language are the document's
+            if (const css::lang::Locale& rLocale = mpPDFExtOutDevData->GetDocumentLocale();
+                rStructureTagCandidate.GetAnchorStructureElementKey() != nullptr
+                && !rLocale.Language.isEmpty())
+            {
+                const LanguageType eLanguage(LanguageTag(rLocale).getLanguageType());
+                if (eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_NONE)
+                {
+                    mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                        vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(eLanguage));
+                }
+            }
             switch (rTagElement)
             {
                 case vcl::pdf::StructElement::H1:
