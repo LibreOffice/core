@@ -1468,9 +1468,22 @@ if test "$enable_hardening" = no; then
     CFLAGS="$CFLAGS -O2 -Werror -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
     AC_LINK_IFELSE(
         [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
-        [AC_MSG_RESULT([yes]); HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"],
-        [AC_MSG_RESULT([no])])
+        [fortify_source_works=yes],
+        [fortify_source_works=no])
+    # Probe again with the passed-in CFLAGS the build will actually use, because if those do not
+    # enable optimization, setting _FORTIFY_SOURCE would later warn/error during the build:
+    CFLAGS="$save_CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
+        [],
+        [fortify_source_works=no])
     CFLAGS=$save_CFLAGS
+    if test "$fortify_source_works" = yes; then
+        AC_MSG_RESULT([yes])
+        HARDENING_CFLAGS="$HARDENING_CFLAGS -Wp,-U_FORTIFY_SOURCE -Wp,-D_FORTIFY_SOURCE=2"
+    else
+        AC_MSG_RESULT([no])
+    fi
 
     AC_MSG_CHECKING([whether $CC supports -D_GLIBCXX_ASSERTIONS])
     save_CFLAGS=$CFLAGS
