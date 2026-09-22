@@ -2203,9 +2203,18 @@ bool Signing::Verify(SvStream& rStream,
 #if USE_CRYPTO_ANY
     std::vector<unsigned char> buffer;
 
+    const sal_uInt64 nStreamSize = rStream.TellEnd();
+
     // Copy the byte ranges into a single buffer.
     for (const auto& rByteRange : aByteRanges)
     {
+        // A signature covers a part of the file, so both ends of every range are inside it.
+        if (rByteRange.first > nStreamSize || rByteRange.second > nStreamSize - rByteRange.first)
+        {
+            SAL_WARN("svl.crypto", "Verify: byte range is outside the stream");
+            return false;
+        }
+
         rStream.Seek(rByteRange.first);
         const size_t size = buffer.size();
         buffer.resize(size + rByteRange.second);
