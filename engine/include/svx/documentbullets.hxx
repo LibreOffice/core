@@ -16,7 +16,15 @@
 #include <svl/poolitem.hxx>
 #include <vcl/graph.hxx>
 
+#include <memory>
 #include <vector>
+
+namespace weld
+{
+class Builder;
+class Menu;
+class MenuButton;
+}
 
 /// One bullet that a document already uses, either a character taken from a font or an image.
 /// Exactly one of the two halves carries a value. A character bullet has a character and a font
@@ -74,5 +82,17 @@ public:
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SvxDocumentBulletsItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
+
+/// Builds the submenu that offers the image bullets a document already uses, and shows the entry
+/// of rMenuButton that holds it. Each entry is drawn as a small preview of the image and named
+/// after its position in rBullets, and the identifier of the entry for rBullets[n] is
+/// "document<n>". An empty rBullets gives an empty pointer back and leaves the entry hidden,
+/// because a submenu with nothing in it is worse than no entry at all.
+///
+/// rBuilder must have built a dialog description that carries a menu named "fromdocumentsubmenu"
+/// and an item named "fromdocument".
+SVXCORE_DLLPUBLIC std::unique_ptr<weld::Menu>
+CreateDocumentBulletMenu(weld::Builder& rBuilder, weld::MenuButton& rMenuButton,
+                         const std::vector<SvxDocumentBullet>& rBullets);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

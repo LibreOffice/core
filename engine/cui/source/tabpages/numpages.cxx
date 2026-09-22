@@ -30,6 +30,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
@@ -55,6 +56,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/kit.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1292,7 +1294,7 @@ void SvxBitmapPickTabPage::FillDocumentBullets()
                                                                   Size(150, 200));
         Bitmap aBitmap = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(nBullet);
-        OUString sText = CuiResId(RID_CUISTR_DOCUMENT_BULLET_ENTRY)
+        OUString sText = SvxResId(RID_SVXSTR_DOCUMENT_BULLET_ENTRY)
                              .replaceFirst("%1", OUString::number(nBullet + 1));
         m_xDocumentIV->insert(-1, &sText, &sId, &aBitmap, nullptr);
         m_xDocumentIV->set_item_accessible_name(m_xDocumentIV->n_children() - 1, sText);
@@ -2389,33 +2391,7 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
 
 void SvxNumOptionsTabPage::PopulateDocumentMenu()
 {
-    // A document with no image bullets of its own has nothing to offer here.
-    if (maDocumentBullets.empty())
-        return;
-
-    m_xDocumentMenu = m_xBuilder->weld_menu(u"fromdocumentsubmenu"_ustr);
-    m_xBitmapMB->set_item_visible(u"fromdocument"_ustr, true);
-
-    ScopedVclPtrInstance<VirtualDevice> pVD;
-    for (size_t i = 0; i < maDocumentBullets.size(); ++i)
-    {
-        Bitmap aBitmap(maDocumentBullets[i].aGraphic.GetBitmap());
-        Size aSize(aBitmap.GetSizePixel());
-        if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-        {
-            bool bWidth = aSize.Width() > aSize.Height();
-            double nScale = bWidth ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
-                                   : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-            aBitmap.Scale(nScale, nScale);
-        }
-        pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-        pVD->DrawBitmap(Point(), aBitmap);
-
-        m_xDocumentMenu->append(
-            "document" + OUString::number(i),
-            CuiResId(RID_CUISTR_DOCUMENT_BULLET_ENTRY).replaceFirst("%1", OUString::number(i + 1)),
-            *pVD);
-    }
+    m_xDocumentMenu = CreateDocumentBulletMenu(*m_xBuilder, *m_xBitmapMB, maDocumentBullets);
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, void)

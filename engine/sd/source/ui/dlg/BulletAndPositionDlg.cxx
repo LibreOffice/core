@@ -930,33 +930,7 @@ void SvxBulletAndPositionDlg::PopulateDocumentMenu(const ::sd::View& rView)
             aDocumentGraphicBullets.push_back(rBullet);
     }
 
-    // A presentation with no image bullets of its own has nothing to offer here, and the entry
-    // stays hidden the way the dialog description leaves it.
-    if (aDocumentGraphicBullets.empty())
-        return;
-
-    m_xDocumentMenu = m_xBuilder->weld_menu(u"fromdocumentsubmenu"_ustr);
-    m_xBitmapMB->set_item_visible(u"fromdocument"_ustr, true);
-
-    ScopedVclPtrInstance<VirtualDevice> pVD;
-    for (size_t i = 0; i < aDocumentGraphicBullets.size(); ++i)
-    {
-        Bitmap aBitmap(aDocumentGraphicBullets[i].aGraphic.GetBitmap());
-        Size aSize(aBitmap.GetSizePixel());
-        if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-        {
-            bool bWidth = aSize.Width() > aSize.Height();
-            double nScale = bWidth ? double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width())
-                                   : double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-            aBitmap.Scale(nScale, nScale);
-        }
-        pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-        pVD->DrawBitmap(Point(), aBitmap);
-
-        m_xDocumentMenu->append(
-            "document" + OUString::number(i),
-            SdResId(STR_DOCUMENT_BULLET_ENTRY).replaceFirst("%1", OUString::number(i + 1)), *pVD);
-    }
+    m_xDocumentMenu = CreateDocumentBulletMenu(*m_xBuilder, *m_xBitmapMB, aDocumentGraphicBullets);
 }
 
 void SvxBulletAndPositionDlg::PopulateGalleryMenu()

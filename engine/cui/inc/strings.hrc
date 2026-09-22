@@ -145,7 +145,6 @@
 #define RID_CUISTR_ADD_IMAGE                        NC_("RID_SVXSTR_ADD_IMAGE", "Add Image")
 // To translators: %1 is replaced by the position of the image among the document's own bullet
 // images, counted from 1.
-#define RID_CUISTR_DOCUMENT_BULLET_ENTRY            NC_("RID_CUISTR_DOCUMENT_BULLET_ENTRY", "Image %1")
 
 #define RID_CUISTR_ONE_PASSWORD_MISMATCH            NC_("RID_SVXSTR_ONE_PASSWORD_MISMATCH", "The confirmation password did not match the password. Set the password again by entering the same password in both boxes.")
 #define RID_CUISTR_TWO_PASSWORDS_MISMATCH           NC_("RID_SVXSTR_TWO_PASSWORDS_MISMATCH", "The confirmation passwords did not match the original passwords. Set the passwords again.")

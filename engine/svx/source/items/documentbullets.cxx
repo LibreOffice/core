@@ -11,13 +11,25 @@
 
 #include <svx/documentbullets.hxx>
 
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+
 #include <editeng/numitem.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <comphelper/sequence.hxx>
 
+#include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
+
 #include <cassert>
 #include <utility>
+
+namespace
+{
+/// The length of the longer side of a bullet image drawn in a menu, in pixels.
+constexpr tools::Long nMenuImageLength = 16;
+}
 
 OUString SvxDocumentBullet::GetIdentifier() const
 {
@@ -65,6 +77,42 @@ bool SvxDocumentBulletsItem::operator==(const SfxPoolItem& rAttr) const
 SvxDocumentBulletsItem* SvxDocumentBulletsItem::Clone(SfxItemPool*) const
 {
     return new SvxDocumentBulletsItem(*this);
+}
+
+std::unique_ptr<weld::Menu> CreateDocumentBulletMenu(weld::Builder& rBuilder,
+                                                     weld::MenuButton& rMenuButton,
+                                                     const std::vector<SvxDocumentBullet>& rBullets)
+{
+    if (rBullets.empty())
+        return nullptr;
+
+    std::unique_ptr<weld::Menu> xMenu = rBuilder.weld_menu(u"fromdocumentsubmenu"_ustr);
+    rMenuButton.set_item_visible(u"fromdocument"_ustr, true);
+
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDevice;
+    for (size_t nBullet = 0; nBullet < rBullets.size(); ++nBullet)
+    {
+        Bitmap aBitmap(rBullets[nBullet].aGraphic.GetBitmap());
+        Size aSize(aBitmap.GetSizePixel());
+        if (aSize.Width() > nMenuImageLength || aSize.Height() > nMenuImageLength)
+        {
+            // The longer side is scaled to fit, so the picture keeps its proportions.
+            const double fScale
+                = aSize.Width() > aSize.Height()
+                      ? double(nMenuImageLength) / static_cast<double>(aSize.Width())
+                      : double(nMenuImageLength) / static_cast<double>(aSize.Height());
+            aBitmap.Scale(fScale, fScale);
+        }
+        pVirtualDevice->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+        pVirtualDevice->DrawBitmap(Point(), aBitmap);
+
+        xMenu->append("document" + OUString::number(nBullet),
+                      SvxResId(RID_SVXSTR_DOCUMENT_BULLET_ENTRY)
+                          .replaceFirst("%1", OUString::number(nBullet + 1)),
+                      *pVirtualDevice);
+    }
+
+    return xMenu;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
