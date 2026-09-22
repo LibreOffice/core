@@ -23,4 +23,9 @@
     <string name="use_text">Koristi tekstualni format</string>
     <string name="ask_for_convert_odf">Potvrdi datotečni format</string>
     <string name="use_odf">Koristi ODF format</string>
+    <string name="all_files_access_title">Otvoreno u modusu samo-za-čitanje</string>
+    <string name="all_files_access_message">Aplikacija koja je dijelila ovu datoteku nije dopustila spremanje promjena u nju.\n\nAktiviraj „Pristup svim datotekama” kako bi aplikacija mogla zapisati datoteku tamo gdje je spremljena, tako da je ovdje možeš uređivati.</string>
+    <string name="all_files_access_grant">Dopusti pristup</string>
+    <string name="do_not_ask_again">Nemoj više pitati</string>
+    <string name="failed_to_save_file">Nije bilo moguće spremiti promjene u datoteku</string>
 </resources>
