@@ -5661,6 +5661,9 @@ SalInstanceIconView::~SalInstanceIconView()
     m_xIconView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
     m_xIconView->SetSelectHdl(Link<SvTreeListBox*, void>());
     m_xIconView->SetDeselectHdl(Link<SvTreeListBox*, void>());
+    m_xIconView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
+    m_xIconView->SetTooltipHdl(Link<SvTreeListEntry*, OUString>());
+    m_xIconView->SetDumpImageHdl(Link<const ::IconView::encoded_image_query&, bool>());
 
     for (SvTreeListEntry* pEntry = m_xIconView->First(); pEntry; pEntry = m_xIconView->Next(pEntry))
         pEntry->SetUserData(nullptr);
