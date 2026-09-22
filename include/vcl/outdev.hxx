@@ -274,6 +274,7 @@ public:
 
     SystemGraphicsData          GetSystemGfxData() const;
     OUString                    GetRenderBackendName() const;
+    OUString                    GetFontReplacement(const OUString& sMissingFontName);
 
     // Used by the canvas module. Despite the name it does not always return true if Cairo is supported.
     bool                        SupportsCairo() const;

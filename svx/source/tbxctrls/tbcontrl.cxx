@@ -1799,11 +1799,11 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
         else
         {
             m_xWidget->set_entry_message_type(weld::EntryMessageType::Warning);
-            OUString sTip = SvxResId(bHasSubstitute ? RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_HASSUBST
-                                                    : RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_NOSUBST);
+            OUString sTip = SvxResId(RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE_NOSUBST);
+            const OUString sReplaceBy
+                = Application::GetDefaultDevice()->GetFontReplacement(fontname);
             sTip = sTip.replaceAll("%1", fontname);
-            if (bHasSubstitute)
-                sTip = sTip.replaceAll("%2", sSubstitute);
+            sTip = sTip.replaceAll("%2", sReplaceBy);
             m_xWidget->set_tooltip_text(sTip);
         }
     }

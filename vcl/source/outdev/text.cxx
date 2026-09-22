@@ -55,6 +55,23 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
+OUString OutputDevice::GetFontReplacement(const OUString& sMissingFontName)
+{
+    if (getenv("SAL_NON_APPLICATION_FONT_USE") == nullptr)
+    {
+        vcl::Font aOldFont(GetFont());
+        vcl::Font aFont(sMissingFontName, Size(0, 12));
+        aFont.SetLanguageTag(Application::GetSettings().GetLanguageTag());
+        SetFont(aFont);
+        const LogicalFontInstance* pFontInstance = GetFontInstance();
+        const vcl::font::PhysicalFontFace* aFontFace = pFontInstance->GetFontFace();
+        SetFont(aOldFont);
+        return aFontFace->GetName(vcl::font::NAME_ID_FULL_NAME);
+    }
+    else
+        return sMissingFontName;
+}
+
 void OutputDevice::SetLayoutMode( vcl::text::ComplexTextLayoutFlags nTextLayoutMode )
 {
     if( mpMetaFile )
