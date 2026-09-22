@@ -4751,7 +4751,7 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(const ParaPortion& rPortion, bool b
         if (nCurrent == nPortion)
         {
             if (!bIsScaling && mpEditEngine->GetOwner() != nullptr)
-                return mpEditEngine->GetDepth(nCurrent) < 0;
+                return mpEditEngine->GetNumberingDepth(nCurrent) < 0;
             else
                 return true;
         }
