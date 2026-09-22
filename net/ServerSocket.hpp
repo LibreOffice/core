@@ -42,9 +42,6 @@ public:
         : Socket(type, creationTime)
         , _sockFactory(std::move(sockFactory))
         , _clientPoller(clientPoller)
-#if !MOBILEAPP
-        , _type(type)
-#endif
     {
     }
 
@@ -129,9 +126,6 @@ protected:
 private:
     std::shared_ptr<SocketFactory> _sockFactory;
     SocketPoll& _clientPoller;
-#if !MOBILEAPP
-    Socket::Type _type;
-#endif
 };
 
 #if !MOBILEAPP
