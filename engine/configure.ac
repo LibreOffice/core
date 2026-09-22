@@ -959,11 +959,6 @@ if test "$enable_kit_always_active" = yes; then
 fi
 AC_SUBST(ENABLE_KIT_ALWAYS_ACTIVE)
 
-disable_database_connectivity_dependencies()
-{
-    enable_evolution2=no
-}
-
 # ===================================================================
 #
 # Start initial platform setup
@@ -1130,7 +1125,6 @@ ios*) # iOS
     fi
     _os=iOS
     enable_mpl_subset=yes
-    disable_database_connectivity_dependencies
     enable_coinmp=no
     enable_xmlhelp=no
     with_ppds=no
@@ -1226,7 +1220,6 @@ linux-android*)
     build_crypto=no
     test_system_freetype=no
     test_webdav=no
-    disable_database_connectivity_dependencies
     enable_mpl_subset=yes
     enable_coinmp=yes
     enable_python=no
@@ -1678,8 +1671,10 @@ AC_ARG_ENABLE(mpl-subset,
 
 libo_FUZZ_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
-        [Allows the built-in evolution 2 addressbook connectivity build to be
-         enabled.])
+        [Enable the built-in evolution 2 addressbook connectivity build.
+         Disabled by default.]),
+,
+    [enable_evolution2=no]
 )
 
 AC_ARG_ENABLE(msvc-debug-runtime,
@@ -3015,8 +3010,6 @@ fi
 if test "$enable_database_connectivity" != no; then
     BUILD_TYPE="$BUILD_TYPE DBCONNECTIVITY"
     AC_DEFINE(HAVE_FEATURE_DBCONNECTIVITY)
-else
-    disable_database_connectivity_dependencies
 fi
 
 if test -z "$enable_extensions"; then

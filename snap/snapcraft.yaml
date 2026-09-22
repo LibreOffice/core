@@ -161,7 +161,6 @@ parts:
         --disable-dbus \
         --disable-dconf \
         --disable-epm \
-        --disable-evolution2 \
         --disable-gio \
         --disable-gtk3 \
         --disable-gui \
