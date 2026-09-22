@@ -1265,7 +1265,7 @@ EditTextObject ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool*
             nEndPos = aSel.Max().GetIndex();
 
 
-        EditEngineParagraph *pC = aTxtObj.CreateAndInsertParagraph();
+        EditTextObjectParagraph *pC = aTxtObj.CreateAndInsertParagraph();
 
         // The paragraph attributes ...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
@@ -1437,7 +1437,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
-        const EditEngineParagraph* pC = rTextObject.GetParagraphs()[n].get();
+        const EditTextObjectParagraph* pC = rTextObject.GetParagraphs()[n].get();
         bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 

@@ -38,7 +38,7 @@ class SvxFieldData;
 enum class OutlinerMode;
 struct EECharAttrib;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
-class EditEngineParagraph;
+class EditTextObjectParagraph;
 class XParaPortionList;
 
 namespace editeng {
@@ -53,10 +53,15 @@ class SharedStringPool;
 
 enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
 
+/**
+  This object is used to copy document/text info in and out of EditEngine.
+  It is not used internally to editeng as storage mechanism, just a means
+  of extracing and inserting data.
+*/
 class EDITENG_DLLPUBLIC EditTextObject final
 {
 public:
-    typedef std::vector<std::unique_ptr<EditEngineParagraph> > EditEngineParagraphs;
+    typedef std::vector<std::unique_ptr<EditTextObjectParagraph> > EditTextObjectParagraphs;
 
     EditTextObject(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
                    TextRotation eRotation, SvtScriptType eScriptType);
@@ -151,9 +156,9 @@ public:
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
-    EditEngineParagraph*    CreateAndInsertParagraph();
-    EditEngineParagraphs&       GetParagraphs() { return maParagraphs;}
-    const EditEngineParagraphs& GetParagraphs() const { return maParagraphs;}
+    EditTextObjectParagraph*    CreateAndInsertParagraph();
+    EditTextObjectParagraphs&       GetParagraphs() { return maParagraphs;}
+    const EditTextObjectParagraphs& GetParagraphs() const { return maParagraphs;}
 
     bool                    HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
     MapUnit                 GetMetric() const { return meMetric; }
@@ -167,7 +172,7 @@ private:
     bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
 
-    EditEngineParagraphs    maParagraphs;
+    EditTextObjectParagraphs    maParagraphs;
     rtl::Reference<SfxItemPool>       mpPool;
     std::unique_ptr<XParaPortionList> mpPortionInfo;
     OutlinerMode            meUserType;
