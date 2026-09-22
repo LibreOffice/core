@@ -291,6 +291,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
           ConfigUtil::getConfigValue<bool>("per_document.background_autosave", true))
     , _backgroundManualSave(
           ConfigUtil::getConfigValue<bool>("per_document.background_manualsave", true))
+    , _anySaveEverFailed(false)
 {
     assert(!_docKey.empty());
     assert(!COOLWSD::ChildRoot.empty());
@@ -3202,6 +3203,9 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     // Record that we got a response to avoid timing out on saving.
     _saveManager.setLastSaveResult(upToDate, /*newVersion=*/wroteNewVersion);
 
+    if (!upToDate)
+        _anySaveEverFailed = true;
+
     if (wroteNewVersion)
         LOG_DBG("Save result from Core: saved (during " << DocumentState::name(_docState.activity())
                                                         << ") in "
@@ -4300,9 +4304,9 @@ bool DocumentBroker::isBackgroundSaveWorking(bool canBackground) const
     if constexpr (Util::isMobileAppBuild())
         return false;
 
-    constexpr std::size_t MaxBackgroundSaveFailures = 2; // Give only 1 extra chance.
-    return canBackground && _saveManager.lastSaveSuccessful() &&
-           _saveManager.saveFailureCount() < MaxBackgroundSaveFailures;
+    // The Kit stops background saving for the life of the document after one failure, so a
+    // later success says nothing about whether the next save can be backgrounded.
+    return canBackground && !_anySaveEverFailed;
 }
 
 bool DocumentBroker::autoSave(const bool force, const bool dontSaveIfUnmodified,
@@ -7397,6 +7401,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  alwaysSaveOnExit: " << (_alwaysSaveOnExit?"true":"false");
     os << "\n  backgroundAutoSave: " << (_backgroundAutoSave?"true":"false");
     os << "\n  backgroundManualSave: " << (_backgroundManualSave?"true":"false");
+    os << "\n  anySaveEverFailed: " << (_anySaveEverFailed?"true":"false");
     os << "\n  isViewFileExtension: " << _isViewFileExtension;
     os << "\n  Total PSS: " << ProcUtil::getProcessTreePss(ProcUtil::getProcessId()) << " KB";
     if (childPid)

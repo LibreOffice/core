@@ -2220,6 +2220,9 @@ private:
 
     const bool _backgroundManualSave : 1;
 
+    /// True once any save of this document has failed, whether or not a later save succeeded.
+    bool _anySaveEverFailed : 1;
+
     /// Unique DocBroker ID for tracing and debugging.
     static std::atomic<unsigned> DocBrokerId;
 };
