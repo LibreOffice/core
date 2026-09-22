@@ -2073,7 +2073,7 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
     return *this;
 }
 
-sal_Int16 EditEngine::GetDepth(sal_Int32 nPara) const
+sal_Int16 EditEngine::GetNumberingDepth(sal_Int32 nPara) const
 {
     return getImpl().GetOwner()->GetDepth(nPara);
 }

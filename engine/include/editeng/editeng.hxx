@@ -639,7 +639,7 @@ public:
     const Size& GetKitSpecialPaperSize() const;
 
     // Only useful when this is Outliner capable.
-    sal_Int16       GetDepth( sal_Int32 nPara ) const;
+    sal_Int16       GetNumberingDepth( sal_Int32 nPara ) const;
 
     // Only useful when this is Outliner capable.
     /// @returns state of the SdrCompatibilityFlag
