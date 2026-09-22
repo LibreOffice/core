@@ -672,9 +672,18 @@ gb_ExternalProject_INCLUDE := \
 # Workaround for openssl build - it puts the CC var into additional pair of quotes. This breaks if
 # CC consists of more than a single element such as when using "ccache compiler". In case the
 # variables are exported for openssl, it closes and reopens the quotes after each element.
+#
+# Where configure knew the launcher and the compiler apart, the elements are joined one at a time
+# instead of by replacing every space in a finished string, so a path holding a space stays one
+# element for openssl. Where it did not, the words of CC are what there is to join. Every other
+# project takes the elements separated by a plain space, in one value and without quotes of their
+# own, so a path holding a space reaches those makefiles as several words.
+gb_NMAKE_CC_SEPARATOR = $(if $(filter openssl,$(1)),\" \", )
+gb_NMAKE_CC_FROM_PARTS = $(if $(CC_LAUNCHER),$(shell cygpath -w '$(CC_LAUNCHER)')$(gb_NMAKE_CC_SEPARATOR))$(shell cygpath -w '$(CC_PROGRAM)')$(foreach cc_flag,$(filter -%,$(CC)),$(gb_NMAKE_CC_SEPARATOR)$(cc_flag))
+gb_NMAKE_CC_FROM_WORDS = $(subst $(WHITESPACE),$(gb_NMAKE_CC_SEPARATOR),$(strip $(shell cygpath -ws $(filter-out -%,$(CC))) $(filter -%,$(CC))))
+
 gb_NMAKE_VARS = \
-	CC="$(subst $(WHITESPACE),$(if $(filter openssl,$(1)),\" \", ),$(strip \
-		$(shell cygpath -ws $(filter-out -%,$(CC))) $(filter -%,$(CC))))" \
+	CC="$(if $(CC_PROGRAM),$(gb_NMAKE_CC_FROM_PARTS),$(gb_NMAKE_CC_FROM_WORDS))" \
 	INCLUDE="$(gb_ExternalProject_INCLUDE)" \
 	LIB="$(ILIB)" \
 	MAKEFLAGS= \
