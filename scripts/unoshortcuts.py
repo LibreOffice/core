@@ -209,101 +209,6 @@ def extractAllOnlineCommands(onlinePath):
     return result
 
 
-def extractShortcutsFromXCU(xcuPath, onlineCommands):
-    """Parse Accelerators.xcu and extract en-US shortcut candidates.
-
-    Only extracts shortcuts for commands in onlineCommands.
-    Online uses en-US accelerator bindings regardless of UI language,
-    so only en-US values are extracted.
-    Returns a dict mapping command strings to lists of
-    (shortcutDisplay, modifierCount) tuples.
-    """
-    tree = etree.parse(xcuPath)
-    root = tree.getroot()
-    ns = {'oor': 'http://openoffice.org/2001/registry'}
-    installNs = 'http://openoffice.org/2004/installation'
-
-    shortcuts = {}
-
-    def processSection(section):
-        for entry in section.xpath('node', namespaces=ns):
-            keyName = entry.get('{http://openoffice.org/2001/registry}name')
-            if keyName is None:
-                continue
-
-            baseKey, modifiers, display, modCount = parseKeyName(keyName)
-
-            # Skip shortcuts the browser intercepts.
-            if isBrowserIntercepted(baseKey, modifiers):
-                continue
-
-            # Find the en-US command value.
-            command = None
-            for val in entry.xpath('prop[@oor:name="Command"]/value',
-                                   namespaces=ns):
-                lang = val.get(
-                    '{http://www.w3.org/XML/1998/namespace}lang', '')
-                if lang != 'en-US':
-                    continue
-
-                # Skip macOS-only entries.
-                installModule = val.get('{%s}module' % installNs, '')
-                if installModule == 'macosx':
-                    continue
-
-                text = ''.join(val.itertext()).strip()
-                if text:
-                    command = text
-                    break
-
-            if not command:
-                continue
-
-            # Strip parameters (e.g., ?InitialFocusReplace:bool=true).
-            paramIdx = command.find('?')
-            if paramIdx >= 0:
-                command = command[:paramIdx]
-
-            if command not in onlineCommands:
-                continue
-
-            if command not in shortcuts:
-                shortcuts[command] = []
-            shortcuts[command].append((display, modCount))
-
-    # Process PrimaryKeys/Global first, then each module.
-    for section in root.xpath(
-            'node[@oor:name="PrimaryKeys"]/node[@oor:name="Global"]',
-            namespaces=ns):
-        processSection(section)
-
-    for module in root.xpath(
-            'node[@oor:name="PrimaryKeys"]/node[@oor:name="Modules"]/node',
-            namespaces=ns):
-        processSection(module)
-
-    return shortcuts
-
-
-def pickCanonicalShortcut(candidates):
-    """Pick the best shortcut from a list of (display, modCount) tuples.
-
-    Prefers the most frequently occurring shortcut (the one that appears
-    across the most modules), then fewest modifiers, then alphabetical.
-    """
-    # Count occurrences of each display string.
-    counts = {}
-    for display, modCount in candidates:
-        if display not in counts:
-            counts[display] = (0, modCount)
-        counts[display] = (counts[display][0] + 1, modCount)
-
-    # Sort by: most occurrences (descending), fewest modifiers, alphabetical.
-    ranked = sorted(counts.items(),
-                    key=lambda item: (-item[1][0], item[1][1], item[0]))
-    return ranked[0][0]
-
-
 # X11 keysyms for modifier keys, used to parse keysymnames.cxx.
 MODIFIER_KEYSYMS = {
     'XK_Control_L': 'Ctrl',
@@ -387,128 +292,163 @@ def extractModifierL10N(corePath):
     return result
 
 
-def extractAllLanguageBindings(xcuPath):
-    """Parse Accelerators.xcu and extract per-language key->command mappings.
+def resolveShortcuts(xcuPath, onlineCommands):
+    """Work out the shortcut of every command, per language and document type.
 
-    Returns a dict: {lang: {keyNodeName: [(command, sectionName), ...]}}
-    for all languages.  Only includes .uno: commands.  Multiple entries
-    per key name are kept to support occurrence counting.
+    Mirrors what the kit answers a view: the accelerator configuration of
+    that view's own language and module, the module's own bindings ahead
+    of the ones every document type shares, and within a section the
+    first key the configuration lists, which is what core's
+    lcl_getPreferredKey picks.
+
+    Returns ({lang: {docType: {command: displayString}}},
+    {lang: {docType: {displayString}}}), the second being every key
+    combination bound to anything at all there, which is what says
+    whether a command may keep a shortcut it would otherwise inherit.
     """
     tree = etree.parse(xcuPath)
     root = tree.getroot()
     ns = {'oor': 'http://openoffice.org/2001/registry'}
     installNs = 'http://openoffice.org/2004/installation'
 
-    # {lang: {keyNodeName: [(command, section)]}}
-    bindings = {}
+    # section name -> [(display, {lang: command})], in configuration order.
+    sections = {}
+    languages = set()
 
-    def processSection(section):
-        sectionName = section.get(
-            '{http://openoffice.org/2001/registry}name', 'Global')
+    def readSection(section, name):
+        entries = sections.setdefault(name, [])
         for entry in section.xpath('node', namespaces=ns):
             keyName = entry.get('{http://openoffice.org/2001/registry}name')
             if keyName is None:
                 continue
+            baseKey, modifiers, display, modCount = parseKeyName(keyName)
+            if isBrowserIntercepted(baseKey, modifiers):
+                continue
 
+            commands = {}
             for val in entry.xpath('prop[@oor:name="Command"]/value',
                                    namespaces=ns):
                 lang = val.get(
                     '{http://www.w3.org/XML/1998/namespace}lang', '')
-                if lang == 'x-no-translate' or lang == '':
+                if lang == 'x-no-translate' or not lang:
                     continue
-
-                # Skip macOS-only entries.
-                installModule = val.get('{%s}module' % installNs, '')
-                if installModule == 'macosx':
+                if val.get('{%s}module' % installNs, '') == 'macosx':
                     continue
-
                 text = ''.join(val.itertext()).strip()
-                if not text:
-                    continue
-                if (not text.startswith('.uno:')
-                        and text not in EXTRA_NON_UNO_COMMANDS):
-                    continue
-
-                # Strip parameters.
                 paramIdx = text.find('?')
                 if paramIdx >= 0:
                     text = text[:paramIdx]
+                commands[lang] = text
+                languages.add(lang)
 
-                if lang not in bindings:
-                    bindings[lang] = {}
-                if keyName not in bindings[lang]:
-                    bindings[lang][keyName] = []
-                bindings[lang][keyName].append((text, sectionName))
+            if commands:
+                entries.append((display, commands))
 
     for section in root.xpath(
             'node[@oor:name="PrimaryKeys"]/node[@oor:name="Global"]',
             namespaces=ns):
-        processSection(section)
-
+        readSection(section, 'Global')
     for module in root.xpath(
             'node[@oor:name="PrimaryKeys"]/node[@oor:name="Modules"]/node',
             namespaces=ns):
-        processSection(module)
+        readSection(module, module.get(
+            '{http://openoffice.org/2001/registry}name'))
 
-    return bindings
+    moduleOf = {docType: name for name, docType in MODULE_DOCTYPE.items()}
+    resolved = {}
+    bound = {}
+    for lang in sorted(languages):
+        perDocType = {}
+        perDocTypeBound = {}
+        for docType in sorted(MODULE_DOCTYPE.values()):
+            labels = {}
+            taken = set()
+            # A key this language names itself comes first, so a French
+            # menu offers Ctrl+G for bold rather than the Ctrl+B it also
+            # inherits.  Then the module's own keys ahead of the shared
+            # ones, and within a section the order the configuration
+            # lists them.
+            for ownLanguage in (True, False):
+                for name in (moduleOf[docType], 'Global'):
+                    for display, commands in sections.get(name, []):
+                        if ownLanguage and lang not in commands:
+                            continue
+                        command = commands.get(lang, commands.get('en-US'))
+                        if not command:
+                            continue
+                        taken.add(display)
+                        if (not command.startswith('.uno:')
+                                and command not in EXTRA_NON_UNO_COMMANDS):
+                            continue
+                        if command not in onlineCommands:
+                            continue
+                        labels.setdefault(command, display)
+            applyEquivalentGroups(labels)
+            perDocType[docType] = labels
+            perDocTypeBound[docType] = taken
+        resolved[lang] = perDocType
+        bound[lang] = perDocTypeBound
+    return resolved, bound
 
 
-def buildL10NData(xcuPath, enUSShortcuts):
-    """Build per-language tooltip overrides.
+def splitBaseAndOverrides(resolved, bound):
+    """Layer the resolved labels so each difference is stored once.
 
-    Returns {lang: {command: displayString}} for tooltip display.  The
-    bindings themselves are core's business: the kit dispatches a key
-    through the accelerator configuration of the view's own language.
+    Returns (base, byDocType, l10n):
+    - base: what en-US says wherever the document types agree.
+    - byDocType: where en-US differs for one document type.
+    - l10n: {lang: {docType: ...}}, where a language differs from the
+      en-US answer for that same document type.
+
+    A command that this context does not bind, while the label it would
+    otherwise inherit belongs to another command here, is stored as an
+    empty string, so the menu says nothing rather than a key combination
+    that does something else.
     """
-    allBindings = extractAllLanguageBindings(xcuPath)
-    l10nShortcuts = {}
+    docTypes = sorted(MODULE_DOCTYPE.values())
+    enUS = resolved.get('en-US', {})
 
-    for lang, langBindings in allBindings.items():
+    base = {}
+    for command in {c for labels in enUS.values() for c in labels}:
+        seen = [enUS[d][command] for d in docTypes if command in enUS[d]]
+        base[command] = sorted(set(seen),
+                               key=lambda v: (-seen.count(v), len(v), v))[0]
+
+    def diff(labels, inherited, takenHere):
+        """What this context has to say beyond what it inherits."""
+        out = {}
+        for command, display in labels.items():
+            if inherited.get(command) != display:
+                out[command] = display
+        for command, display in inherited.items():
+            if command not in labels and display in takenHere:
+                out[command] = ''
+        return out
+
+    byDocType = {}
+    enUSFor = {}
+    for docType in docTypes:
+        labels = enUS.get(docType, {})
+        enUSFor[docType] = dict(base)
+        d = diff(labels, base, bound['en-US'][docType])
+        if d:
+            byDocType[docType] = d
+        enUSFor[docType].update(d)
+        enUSFor[docType] = {c: l for c, l in enUSFor[docType].items() if l}
+
+    l10n = {}
+    for lang, perDocType in resolved.items():
         if lang == 'en-US':
             continue
-
-        tooltipOverrides = {}
-        # display string -> the command this language gives that combo.
-        comboOwners = {}
-
-        for keyName, entries in langBindings.items():
-            # Use the most common command for this key in this language.
-            command = entries[0][0]
-
-            # Build tooltip: for this language, find the key combo for
-            # each command (reverse map).  Count each module occurrence
-            # so pickCanonicalShortcut prefers widely-used bindings.
-            baseKey, modifiers, display, modCount = parseKeyName(keyName)
-            if isBrowserIntercepted(baseKey, modifiers):
-                continue
-            comboOwners.setdefault(display, command)
-            enUSDisplay = enUSShortcuts.get(command)
-            if enUSDisplay and display != enUSDisplay:
-                if command not in tooltipOverrides:
-                    tooltipOverrides[command] = []
-                # Add one candidate per module occurrence so the
-                # occurrence count reflects how widely this binding
-                # is used across modules.
-                for _ in entries:
-                    tooltipOverrides[command].append((display, modCount))
-
-        resolved = {}
-        for cmd, cands in tooltipOverrides.items():
-            resolved[cmd] = pickCanonicalShortcut(cands)
-
-        # A command keeps its en-US shortcut in the tooltip only while this
-        # language leaves that key combination alone.  German gives
-        # Ctrl+Alt+F to Find and Replace, so the footnote entry must stop
-        # naming it.
-        for cmd, enUSDisplay in enUSShortcuts.items():
-            owner = comboOwners.get(enUSDisplay)
-            if owner is not None and owner != cmd and cmd not in resolved:
-                resolved[cmd] = ''
-
-        if resolved:
-            l10nShortcuts[lang] = resolved
-
-    return l10nShortcuts
+        byDoc = {}
+        for docType in docTypes:
+            d = diff(perDocType.get(docType, {}), enUSFor[docType],
+                     bound[lang][docType])
+            if d:
+                byDoc[docType] = d
+        if byDoc:
+            l10n[lang] = byDoc
+    return base, byDocType, l10n
 
 
 def applyEquivalentGroups(shortcuts):
@@ -529,7 +469,7 @@ def applyEquivalentGroups(shortcuts):
 def generateShortcuts(onlinePath, corePath):
     """Extract online commands and their shortcuts from core.
 
-    Returns (shortcuts, l10nShortcuts, modifierL10N).
+    Returns (shortcuts, byDocType, l10nShortcuts, modifierL10N).
     """
     xcuPath = os.path.join(
         corePath,
@@ -541,25 +481,16 @@ def generateShortcuts(onlinePath, corePath):
 
     onlineCommands = extractAllOnlineCommands(onlinePath)
 
-    # Extract en-US shortcuts for tooltip display.
-    candidates = extractShortcutsFromXCU(xcuPath, onlineCommands)
-
-    shortcuts = {}
-    for cmd, cands in candidates.items():
-        shortcuts[cmd] = pickCanonicalShortcut(cands)
+    resolved, bound = resolveShortcuts(xcuPath, onlineCommands)
+    shortcuts, byDocType, l10nShortcuts = splitBaseAndOverrides(resolved, bound)
 
     for cmd, shortcut in MANUAL_FALLBACKS.items():
         if cmd not in shortcuts:
             shortcuts[cmd] = shortcut
 
-    applyEquivalentGroups(shortcuts)
-
-    # Extract per-language overrides for both tooltips and key bindings.
-    l10nShortcuts = buildL10NData(xcuPath, shortcuts)
-
     modifierL10N = extractModifierL10N(corePath)
 
-    return shortcuts, l10nShortcuts, modifierL10N
+    return shortcuts, byDocType, l10nShortcuts, modifierL10N
 
 
 _IDENT_RE = re.compile(r'^[A-Za-z_$][A-Za-z0-9_$]*$')
@@ -600,7 +531,17 @@ def _renderObject(props, indent, trailing=','):
     return '{\n%s%s}' % (body, indent)
 
 
-def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
+def _writeDocTypeMap(f, byDocType, indent):
+    """Write a {docType: {command: display}} object."""
+    for docType in sorted(byDocType.keys()):
+        f.write("%s%s: {\n" % (indent, _jsKey(docType)))
+        for cmd in sorted(byDocType[docType].keys()):
+            f.write("%s\t%s: '%s',\n"
+                    % (indent, _jsKey(cmd), byDocType[docType][cmd]))
+        f.write("%s},\n" % indent)
+
+
+def writeUnoshortcutsJS(onlinePath, shortcuts, byDocType, l10nShortcuts,
                         modifierL10N):
     """Write the generated unoshortcuts.ts file."""
     outPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.ts')
@@ -608,20 +549,28 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
         f.write("// Don't modify, generated using scripts/unoshortcuts.py\n")
         f.write("/* eslint-disable no-unused-vars */\n\n")
 
-        # en-US command -> display string (for tooltips).
+        # en-US command -> display string, where every document type
+        # agrees.  An empty string means the command has no shortcut in
+        # that context, so the menu says nothing rather than a key
+        # combination that does something else there.
         f.write("var unoShortcutsMap: Record<string, string> = {\n")
         for cmd in sorted(shortcuts.keys()):
             f.write("\t%s: '%s',\n" % (_jsKey(cmd), shortcuts[cmd]))
         f.write("};\n\n")
 
-        # Per-language tooltip overrides: command -> display string
-        # where the shortcut differs from en-US.
-        f.write("var unoShortcutsL10N: Record<string, Record<string, string>> = {\n")
+        # Where en-US differs for one document type.
+        f.write("var unoShortcutsDocType: "
+                "Record<string, Record<string, string>> = {\n")
+        _writeDocTypeMap(f, byDocType, "\t")
+        f.write("};\n\n")
+
+        # Where a language differs from the en-US answer for the same
+        # document type.
+        f.write("var unoShortcutsL10N: "
+                "Record<string, Record<string, Record<string, string>>> = {\n")
         for lang in sorted(l10nShortcuts.keys()):
             f.write("\t%s: {\n" % _jsKey(lang))
-            for cmd in sorted(l10nShortcuts[lang].keys()):
-                f.write("\t\t%s: '%s',\n"
-                        % (_jsKey(cmd), l10nShortcuts[lang][cmd]))
+            _writeDocTypeMap(f, l10nShortcuts[lang], "\t\t")
             f.write("\t},\n")
         f.write("};\n\n")
 
@@ -681,9 +630,10 @@ if __name__ == "__main__":
                 % sys.argv[3])
             exit(1)
 
-        shortcuts, l10nSC, modL10N = generateShortcuts(onlineDir, coreDir)
+        shortcuts, byDocType, l10nSC, modL10N = generateShortcuts(
+            onlineDir, coreDir)
 
-        writeUnoshortcutsJS(onlineDir, shortcuts, l10nSC, modL10N)
+        writeUnoshortcutsJS(onlineDir, shortcuts, byDocType, l10nSC, modL10N)
 
     else:
         usageAndExit()

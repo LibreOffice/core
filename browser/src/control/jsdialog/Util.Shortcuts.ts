@@ -44,45 +44,71 @@ const EXPLICIT_ALIASES: Record<string, string> = {
 };
 
 class ShortcutsUtil {
-	private shortcutMap: Map<string, string> = new Map();
+	// One map per document type, built the first time that type asks.
+	private shortcutMaps: Map<string, Map<string, string>> = new Map();
 
-	constructor() {
-		// Load shortcuts generated from core's Accelerators.xcu.
+	/** The document type the shortcuts are being asked about. */
+	private docType(): string {
+		const map = (window as any).app ? (window as any).app.map : null;
+		return map && map._docLayer ? map._docLayer._docType : '';
+	}
+
+	private buildMap(docType: string): Map<string, string> {
+		const shortcutMap = new Map<string, string>();
+
+		// Shortcuts generated from core's Accelerators.xcu: what every
+		// document type shares, then what this one says instead, then
+		// what this UI language says instead of that.  An empty string
+		// means the command has no shortcut here.
+		const layers: Record<string, string>[] = [];
 		if (typeof unoShortcutsMap !== 'undefined') {
-			for (const [command, shortcut] of Object.entries(unoShortcutsMap)) {
-				this.shortcutMap.set(command, shortcut);
-			}
+			layers.push(unoShortcutsMap);
 		}
-
-		// Apply per-language shortcut overrides from Accelerators.xcu.
-		// Core defines different key combos per language
+		if (typeof unoShortcutsDocType !== 'undefined') {
+			layers.push(unoShortcutsDocType[docType] || {});
+		}
 		if (typeof unoShortcutsL10N !== 'undefined') {
 			for (const [lang, overrides] of Object.entries(unoShortcutsL10N)) {
 				if ((String as any).locale.startsWith(lang)) {
-					for (const [command, shortcut] of Object.entries(overrides)) {
-						this.shortcutMap.set(command, shortcut);
-					}
+					layers.push(overrides[docType] || {});
 					break;
 				}
+			}
+		}
+		for (const layer of layers) {
+			for (const [command, shortcut] of Object.entries(layer)) {
+				shortcutMap.set(command, shortcut);
 			}
 		}
 
 		// Aliases: non-UNO IDs that resolve to a UNO command's shortcut.
 		for (const [alias, unoCmd] of Object.entries(UNO_ALIASES)) {
-			const shortcut = this.shortcutMap.get(unoCmd);
+			const shortcut = shortcutMap.get(unoCmd);
 			if (shortcut) {
-				this.shortcutMap.set(alias, shortcut);
+				shortcutMap.set(alias, shortcut);
 			}
 		}
 
 		// Explicit aliases not derived from the XCU.
 		for (const [alias, shortcut] of Object.entries(EXPLICIT_ALIASES)) {
-			this.shortcutMap.set(alias, shortcut);
+			shortcutMap.set(alias, shortcut);
 		}
+
+		return shortcutMap;
+	}
+
+	private map(): Map<string, string> {
+		const docType = this.docType();
+		let shortcutMap = this.shortcutMaps.get(docType);
+		if (!shortcutMap) {
+			shortcutMap = this.buildMap(docType);
+			this.shortcutMaps.set(docType, shortcutMap);
+		}
+		return shortcutMap;
 	}
 
 	public hasShortcut(command: string): boolean {
-		return this.shortcutMap.has(command);
+		return !!this.map().get(command);
 	}
 
 	/**
@@ -132,7 +158,7 @@ class ShortcutsUtil {
 	 * with the corresponding Mac symbols.
 	 */
 	public getShortcutText(command: string): string | undefined {
-		const shortcut = this.shortcutMap.get(command);
+		const shortcut = this.map().get(command);
 		if (!shortcut) return undefined;
 		return app.util.replaceCtrlAltInMac(this.localizeModifiers(shortcut));
 	}

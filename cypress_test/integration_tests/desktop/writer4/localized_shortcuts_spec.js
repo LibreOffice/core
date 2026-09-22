@@ -30,6 +30,20 @@ describe(['tagdesktop'], 'Localized keyboard shortcuts', function() {
 		cy.cGet('#FindReplaceDialog').should('not.exist');
 	});
 
+	// The menu names the key that German uses, not the one English uses
+	// for the same command.
+	it('German labels Find and Replace with the key that opens it', function() {
+		helper.setupAndLoadDocument('writer/find_replace.odt', false, false, 'de');
+
+		cy.getFrameWindow().then((win) => {
+			expect(win.JSDialog.ShortcutsUtil.getShortcutText('.uno:SearchDialog'))
+				.to.equal('Strg+Alt+F');
+			// Ctrl+Alt+F is taken, so the footnote entry names no key.
+			expect(win.JSDialog.ShortcutsUtil.getShortcutText('.uno:InsertFootnote'))
+				.to.be.undefined;
+		});
+	});
+
 	// German LibreOffice gives Ctrl+1 to line spacing 1, Online applies the
 	// heading style there in every language.
 	it('German Ctrl+1 applies the first heading style', function() {
