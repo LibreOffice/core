@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport2, \
     cppu \
     cppuhelper \
     docmodel \
+    editeng \
     sal \
     sfx \
     subsequenttest \
