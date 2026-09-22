@@ -131,6 +131,14 @@ void GetByteRangesFromPDF(const std::unique_ptr<vcl::pdf::PDFiumSignature>& pSig
     size_t nByteRangeOffset = 0;
     for (size_t i = 0; i < aByteRange.size(); ++i)
     {
+        // Only offsets and lengths that are zero or more describe a part of the file.
+        if (aByteRange[i] < 0)
+        {
+            SAL_WARN("xmlsecurity.helper", "GetByteRangesFromPDF: negative byte range");
+            rByteRanges.clear();
+            return;
+        }
+
         if (i % 2 == 0)
         {
             nByteRangeOffset = aByteRange[i];
