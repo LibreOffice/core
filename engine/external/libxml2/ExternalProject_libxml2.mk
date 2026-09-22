@@ -28,9 +28,9 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 	+$(call gb_ExternalProject_run,build,\
 		export INCLUDE="$(gb_ExternalProject_INCLUDE)" \
 		&& export LIB="$(ILIB)" \
-		&& $(CMAKE) . \
+		&& "$(CMAKE)" . \
 			-G Ninja \
-			-DCMAKE_MAKE_PROGRAM=$(NINJA) \
+			-DCMAKE_MAKE_PROGRAM="$(NINJA)" \
 			-DCMAKE_BUILD_TYPE=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			-DCMAKE_C_COMPILER="$(if $(CC_PROGRAM),$(CC_PROGRAM),$(lastword $(filter-out -%,$(CC))))" \
 			$(if $(CCACHE),-DCMAKE_C_COMPILER_LAUNCHER="$(CCACHE)") \
@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(MSVC_USE_DEBUG_RUNTIME), \
 				-DICU_UC_LIBRARY_DEBUG=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuucd.lib, \
 				-DICU_UC_LIBRARY_RELEASE=$(gb_UnpackedTarball_workdir)/icu/source/lib/icuuc.lib) \
-		&& $(CMAKE) --build . \
+		&& "$(CMAKE)" --build . \
 		&& rm VERSION \
 	)
 	$(call gb_Trace_EndRange,libxml2,EXTERNAL)

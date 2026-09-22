@@ -79,7 +79,7 @@ else ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(CMAKE) . \
+		"$(CMAKE)" . \
 			$(if $(filter 17.%,$(VCVER)),-G "Visual Studio 17 2022") \
 			$(if $(filter 18.%,$(VCVER)),-G "Visual Studio 18 2026") \
 			-A $(gb_MSBUILD_PLATFORM) \
@@ -106,7 +106,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			-DCURL_DISABLE_SMTP=ON \
 			-DCURL_DISABLE_TELNET=ON \
 			-DCURL_DISABLE_TFTP=ON \
-		&& $(CMAKE) --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		&& "$(CMAKE)" --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 	)
 	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
