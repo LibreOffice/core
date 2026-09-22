@@ -50,6 +50,13 @@ bool GetByteRangesFromPDF(vcl::filter::PDFArrayElement& rArray,
             return false;
         }
 
+        // Only offsets and lengths that are zero or more describe a part of the file.
+        if (pNumber->GetValue() < 0)
+        {
+            SAL_WARN("xmlsecurity.pdfio", "GetByteRangesFromPDF: negative byte range");
+            return false;
+        }
+
         if (i % 2 == 0)
         {
             nByteRangeOffset = pNumber->GetValue();
