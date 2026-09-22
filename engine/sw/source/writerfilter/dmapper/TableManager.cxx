@@ -537,10 +537,12 @@ void TableManager::endLevel()
     uno::Reference<text::XTextCursor> xCursor;
     if (mpTableDataHandler != nullptr)
     {
-        if (mTableDataStack.size() > 1)
+        // The bottom of the stack is the level of the surrounding text, so a table is nested in
+        // another table's cell only from the third level on. For such an inner table, create a
+        // cursor from the outer cell's start position, in case that would become invalid during
+        // the current table resolution.
+        if (mTableDataStack.size() > 2)
         {
-            // This is an inner table: create a cursor from the outer cell's start position, in case
-            // that would become invalid during the current table resolution.
             TableData::Pointer_t pUpperTableData = mTableDataStack[mTableDataStack.size() - 2];
             RowData::Pointer_t pRow = pUpperTableData->getCurrentRow();
             unsigned int nCells = pRow->getCellCount();
