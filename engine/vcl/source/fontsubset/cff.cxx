@@ -2083,16 +2083,18 @@ bool CffContext::initialCffRead()
         // get the PrivateDict index
         // (we got mnPrivDictSize and mnPrivDictBase from TOPDICT or FDArray)
         if( mpCffLocal->mnPrivDictSize != 0) {
-            if ( mpCffLocal->mnPrivDictSize <= 0)
+            if (mpCffLocal->mnPrivDictBase < 0 || mpCffLocal->mnPrivDictSize < 0
+                || sal_Int64(mpCffLocal->mnPrivDictBase) + mpCffLocal->mnPrivDictSize
+                       > mpBaseEnd - mpBasePtr)
                 return false;
             // get the PrivDict data
             mpReadPtr = mpBasePtr + mpCffLocal->mnPrivDictBase;
             mpReadEnd = mpReadPtr + mpCffLocal->mnPrivDictSize;
-            if ( mpReadEnd > mpBaseEnd)
-                return false;
             // read PrivDict details
             while( mpReadPtr < mpReadEnd)
                 readDictOp();
+            if (mpReadPtr != mpReadEnd)
+                return false;
         }
 
         // prepare access to the LocalSubrs (we got mnLocalSubrOffs from PRIVDICT)
