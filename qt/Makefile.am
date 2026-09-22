@@ -88,7 +88,14 @@ nodist_coda_qt_SOURCES = $(BUILT_SOURCES)
 
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
 GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
-coda_qt_LDADD = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
+# The engine archives are C++20 builds, so they carry weak copies of the
+# std::string members that libstdc++ instantiates itself only for C++17 and
+# older. A C++17 static library on the link line (POCO in the snap) references
+# those members from libstdc++, and the linker would otherwise take them from
+# the first archive member that has them, extracting server-only objects that
+# collide with the mobile copies of the same sources built above. Naming
+# libstdc++ first resolves them from the shared runtime instead.
+coda_qt_LDADD = -lstdc++ $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB)
 EXTRA_coda_qt_DEPENDENCIES = $(GBUILD_WSD_LIB) $(GBUILD_SHARED_LIB) Makefile
 
 if ENABLE_SSL
