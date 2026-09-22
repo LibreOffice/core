@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <string_view>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <svl/typedwhich.hxx>
@@ -54,6 +55,13 @@ void f3()
 {
     for (rtl::OUStringChar c : { 'a', 'b' })
         (void)c;
+}
+
+// no warning expected
+void f4() {
+    for (std::string_view const v : {"a", "b"}) {
+        (void)v;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
