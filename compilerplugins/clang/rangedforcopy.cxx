@@ -60,6 +60,14 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
         if (dyn_cast<CXXBindTemporaryExpr>(exprWithCleanups->getSubExpr()->IgnoreImpCasts()))
             return true;
 
+    // Don't warn when there is a converting ctor involved, where binding the resulting temporary to
+    // a reference would be useless, and for which e.g. Clang would emit a -Wrange-loop-construct:
+    if (auto const ce = dyn_cast<CXXConstructExpr>(varDecl->getInit()->IgnoreImplicit())) {
+        if (!ce->getConstructor()->isCopyOrMoveConstructor()) {
+            return true;
+        }
+    }
+
     if (loplugin::TypeCheck(type).Class("__bit_const_reference").StdNamespace())
     {
         // With libc++ without _LIBCPP_ABI_BITSET_VECTOR_BOOL_CONST_SUBSCRIPT_RETURN_BOOL,
@@ -72,8 +80,6 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
 
     // trivial class, ignore it
     if (loplugin::TypeCheck(type).Class("TypedWhichId").GlobalNamespace())
-        return true;
-    if (loplugin::TypeCheck(type).Typedef("OUStringChar").Namespace("rtl"))
         return true;
 
     std::string name = type.getAsString();
