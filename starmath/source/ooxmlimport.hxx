@@ -10,6 +10,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <memory>
 
@@ -25,6 +26,9 @@ public:
     explicit SmOoxmlImport( oox::formulaimport::XmlStream& stream );
     ~SmOoxmlImport();
     OUString ConvertToStarMath();
+    /** The font size the markup gives for the formula, in half points, or 0 when the markup
+        carries no size of its own and the formula takes the size of the text around it. */
+    sal_Int32 GetFontSizeInHalfPoints() const;
 private:
     /// The parser that tells whether a run's text stands as an expression of its own.
     SmParser5& getParser();

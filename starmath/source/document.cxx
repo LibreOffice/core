@@ -835,7 +835,9 @@ void SmDocShell::writeFormulaOoxml(
         Parse();
     if( mpTree )
         ArrangeFormula();
-    SmOoxmlExport aEquation(mpTree.get(), version, documentType);
+    SmOoxmlExport aEquation(mpTree.get(), version, documentType,
+                            o3tl::convert(maFormat.GetBaseSize().Height() * 2, SmO3tlLengthUnit(),
+                                          o3tl::Length::pt));
     if(documentType == oox::drawingml::DOCUMENT_DOCX)
         aEquation.ConvertFromStarMath( pSerializer, nAlign);
     else
@@ -856,6 +858,19 @@ void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     SmOoxmlImport aEquation( stream );
     SetText( aEquation.ConvertToStarMath());
+    mnOoxmlFontSizeInHalfPoints = aEquation.GetFontSizeInHalfPoints();
+    SetFontSizeInHalfPoints(mnOoxmlFontSizeInHalfPoints);
+}
+
+void SmDocShell::SetFontSizeInHalfPoints(sal_Int32 nFontSize)
+{
+    if (nFontSize <= 0)
+        return;
+    SmFormat aFormat(GetFormat());
+    Size aSize(aFormat.GetBaseSize());
+    aSize.setHeight(o3tl::convert(nFontSize, o3tl::Length::pt, SmO3tlLengthUnit()) / 2);
+    aFormat.SetBaseSizeAndFonts(aSize);
+    SetFormat(aFormat);
 }
 
 void SmDocShell::Execute(SfxRequest& rReq)

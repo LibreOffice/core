@@ -434,7 +434,14 @@ CPPUNIT_TEST_FIXTURE(Test, testMathBoldItalic)
 
     assertXPath(pXmlDoc, "//w:p[1]//m:f/m:num/m:r/m:rPr/m:sty", "val", u"bi");
     assertXPath(pXmlDoc, "//w:p[1]//m:f/m:den/m:r/m:rPr", 0);
-    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr", 0);
+    // The fraction's control properties carry the size it is drawn at and nothing else: a
+    // bold or italic there belongs to the bar alone, and a command around the fraction would
+    // reach the terms as well. The size comes first, so the three counts below are taken on
+    // a path that is there.
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr/m:ctrlPr/w:rPr/w:sz", 1);
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr/m:ctrlPr/w:rPr/w:b", 0);
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr/m:ctrlPr/w:rPr/w:i", 0);
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr/m:ctrlPr/w:rPr/w:color", 0);
     assertXPath(pXmlDoc, "//w:p[2]//m:oMath/m:r[1]/w:rPr/w:b", 0);
     assertXPath(pXmlDoc, "(//w:p[3]//m:sSub)[1]/m:sub/m:r/m:rPr/m:sty", "val", u"b");
     assertXPath(pXmlDoc, "(//w:p[3]//m:f)[1]/m:num/m:r/m:rPr/m:sty", "val", u"bi");

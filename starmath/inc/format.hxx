@@ -107,6 +107,8 @@ public:
 
     const Size &    GetBaseSize() const             { return aBaseSize; }
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
+    /// Sets the base size and gives each of the fonts that same size.
+    void            SetBaseSizeAndFonts(const Size &rSize);
 
     const SmFace &  GetFont(sal_uInt16 nIdent) const { return vFont[nIdent]; }
     void            SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault = false);

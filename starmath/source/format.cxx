@@ -89,6 +89,13 @@ SmFormat::SmFormat()
 }
 
 
+void SmFormat::SetBaseSizeAndFonts(const Size &rSize)
+{
+    SetBaseSize(rSize);
+    for (sal_uInt16 nFont = FNT_BEGIN; nFont <= FNT_END; ++nFont)
+        SetFontSize(nFont, rSize);
+}
+
 void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
 {
     vFont[nIdent] = rFont;

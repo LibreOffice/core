@@ -480,12 +480,12 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
                 Size aSize = aFormat.GetBaseSize();
                 aSize.setHeight(o3tl::convert(nVal, o3tl::Length::pt, SmO3tlLengthUnit()));
-                aFormat.SetBaseSize(aSize);
+                aFormat.SetBaseSizeAndFonts(aSize);
 
-                // apply base size to fonts
-                const Size aTmp( aFormat.GetBaseSize() );
-                for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
-                    maFonts[i].SetSize(aTmp);
+                // A font that this same call names is merged in below, from a copy that
+                // needs the new size too.
+                for (sal_uInt16 nFont = FNT_BEGIN; nFont <= FNT_END; nFont++)
+                    maFonts[nFont].SetSize(aSize);
             }
             break;
             case HANDLE_RELATIVE_FONT_HEIGHT_TEXT          :
@@ -1110,6 +1110,16 @@ void SmModel::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding
 void SmModel::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     GetSmDocShell()->readFormulaOoxml(stream);
+}
+
+sal_Int32 SmModel::getFormulaFontSizeInHalfPoints() const
+{
+    return GetSmDocShell()->GetOoxmlFontSizeInHalfPoints();
+}
+
+void SmModel::setFormulaFontSizeInHalfPoints( sal_Int32 nFontSize )
+{
+    GetSmDocShell()->SetFontSizeInHalfPoints(nFontSize);
 }
 
 Size SmModel::getFormulaSize() const
