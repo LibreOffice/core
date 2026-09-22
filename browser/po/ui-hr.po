@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-11 12:52+0200\n"
-"PO-Revision-Date: 2026-08-10 18:53+0000\n"
+"PO-Revision-Date: 2026-09-22 19:44+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hr/>\n"
-"Language: \n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hr/>\n"
+"Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -419,13 +419,12 @@ msgstr "Tvoj WOPI server nije siguran: SSL provjera nije uspjela"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
-#, fuzzy
 msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
-"Dokumenti nisu učinkovito obuhvaćeni: nedostaju mogućnosti ili imenski "
-"prostori."
+"Dokumenti nisu učinkovito obuhvaćeni: nedostaju mogućnosti, imenski prostori "
+"i landlock."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -495,17 +494,17 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:558
 msgid "Invalid request"
-msgstr ""
+msgstr "Neispravan zahtjev"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Neispravan API ključ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API ključ nema dozvole"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid ""
@@ -516,17 +515,17 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:565
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Ograničena brzina – pričekaj trenutak i pokušaj ponovo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:566
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "Greška API servera – pokušaj kasnije ponovo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Usluga privremeno nije dostupna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:625
 msgid "Signature Certificate"
@@ -586,7 +585,7 @@ msgstr "Tamni modus"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:642
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatska provjera pravopisa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:643
 msgid "Use this server's zoom settings"
@@ -2187,9 +2186,8 @@ msgid "Error: "
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2504
-#, fuzzy
 msgid "Generated image"
-msgstr "Slika generirana umjetnom inteligencijom"
+msgstr "Generirana slika"
 
 #: src/control/Control.AIChatSidebar.ts:2516
 msgid "AI request failed"
@@ -2256,10 +2254,11 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: src/control/Control.AIChatSidebar.ts:2614
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Slika generirana umjetnom inteligencijom"
+msgstr[0] "generiraj %n sliku"
+msgstr[1] "generiraj %n slike"
+msgstr[2] "generiraj %n slika"
 
 #: src/control/Control.AIChatSidebar.ts:2622
 msgid "run %n document command"
@@ -3602,7 +3601,7 @@ msgstr "EPUB (.epub)"
 #: src/control/Control.NotebookbarBuilder.js:442
 #: src/control/Control.NotebookbarBuilder.js:632
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/control/Control.Menubar.ts:114 src/control/Control.UIManager.ts:650
 msgid "Rename Document"
@@ -3620,7 +3619,7 @@ msgstr "Dijeli …"
 #: src/control/Control.Menubar.ts:1186 src/control/Control.Menubar.ts:1252
 #: src/control/Control.Menubar.ts:1318 src/control/Control.Menubar.ts:1372
 msgid "See revision history"
-msgstr "Prikaži povijest izmjena"
+msgstr "Prikaži povijest revizija"
 
 #: src/control/Control.Menubar.ts:117 src/control/Control.Menubar.ts:469
 #: src/control/Control.Menubar.ts:687 src/control/Control.Menubar.ts:862
@@ -3646,7 +3645,7 @@ msgstr "HTML datoteka (.html)"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Oznaka sigurnosti"
 
 #: src/control/Control.Menubar.ts:133 src/control/Control.Menubar.ts:491
 #: src/control/Control.Menubar.ts:696 src/control/Control.Menubar.ts:879
@@ -3668,7 +3667,7 @@ msgstr "Popravi"
 #: src/control/Control.Menubar.ts:147 src/control/Control.Menubar.ts:505
 #: src/control/Control.Menubar.ts:710 src/control/Control.Menubar.ts:893
 msgid "Find"
-msgstr ""
+msgstr "Pronađi"
 
 #: src/control/Control.Menubar.ts:151
 msgid "Compare Changes"
@@ -4064,7 +4063,7 @@ msgstr "Još više isticanja …"
 
 #: src/control/Control.Menubar.ts:1033
 msgid "Top/Bottom Rules..."
-msgstr "Pravila gornjih/donjih …"
+msgstr "Pravila za gore/dolje …"
 
 #: src/control/Control.Menubar.ts:1034
 #: src/control/jsdialog/Definitions.Menu.ts:1951
@@ -4213,7 +4212,7 @@ msgstr ""
 
 #: src/control/Control.NavigatorPanel.ts:629
 msgid "Find and Replace"
-msgstr ""
+msgstr "Pronađi i zamijeni"
 
 #: src/control/Control.NavigatorPanel.ts:638
 #: src/control/jsdialog/Widget.Combobox.js:497
@@ -4430,34 +4429,33 @@ msgid "Animations"
 msgstr "Animacije"
 
 #: src/control/Control.Notebookbar.js:582
-#, fuzzy
 msgid "Start:"
-msgstr "Pokreni"
+msgstr "Početak:"
 
 #: src/control/Control.Notebookbar.js:582
 msgid "End:"
-msgstr ""
+msgstr "Kraj:"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Stil početka strelice"
 
 #: src/control/Control.Notebookbar.js:595
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Stil kraja strelice"
 
 #: src/control/Control.Notebookbar.js:670
 msgid "Line Width"
-msgstr ""
+msgstr "Debljina linije"
 
 #: src/control/Control.Notebookbar.js:695
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Prozirnost linije:"
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:783
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Nespremljene promjene. Spremi"
 
 #: src/control/Control.NotebookbarBuilder.js:266
 msgid "Click to expand"
@@ -5225,9 +5223,8 @@ msgid "Paste"
 msgstr "Umetni"
 
 #: src/control/Control.PartsPreview.js:612
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Prazni slajd"
+msgstr "Odspoji slajd"
 
 #: src/control/Control.PartsPreview.js:634
 msgid "Add Section"
@@ -5358,9 +5355,8 @@ msgid "Insert {0} slides"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:697
-#, fuzzy
 msgid "Insert slides"
-msgstr "Umetni oblike"
+msgstr "Umetni slajdove"
 
 #: src/control/Control.SlideImportPane.tsx:721
 #: src/control/Control.SlideImportPane.tsx:1236
@@ -5839,9 +5835,8 @@ msgid "Insert connectors"
 msgstr "Umetni poveznice"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min."
+msgstr "Glavno"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
@@ -6094,9 +6089,8 @@ msgstr ""
 "citate i bibliografiju u ovom dokumentu."
 
 #: src/control/HRuler.ts:326
-#, fuzzy
 msgid "First line"
-msgstr "Prvi slajd"
+msgstr "Prvi redak"
 
 #: src/control/HRuler.ts:332
 msgid "Before"
@@ -6149,9 +6143,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Navedena je netočna lozinka. Pokušaj ponovo."
 
 #: src/control/Permission.js:182
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Za prikaz dokumenta je potrebna lozinka."
+msgstr "Za uređivanje dokumenta je potrebna lozinka."
 
 #: src/control/Permission.js:227
 msgid "Enter a file name"
@@ -6176,7 +6169,7 @@ msgstr ""
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Zajedničko uređivanje"
 
 #: src/control/Permission.js:438 src/control/Permission.js:470
 msgid "Edit together in real-time"
@@ -6623,26 +6616,24 @@ msgid "All users"
 msgstr "Svi korisnici"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Istakni polja sa …"
+msgstr "Istakni polja sa"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Pravila gornjih/donjih …"
+msgstr "Pravila za gore/dolje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Skala boja"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Traka podataka"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Skup ikona"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -7506,9 +7497,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Dokument se ne može izvesti. Pokušaj ponovo."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Slajdovi"
+msgstr "Slajd"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -7697,10 +7687,8 @@ msgid "Please send us your feedback"
 msgstr "Pošalji nam povratne inormacije"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"Vrsta datoteke: {0} se ne može prenijeti na server jer datoteka nema ime"
+msgstr "Vrsta datoteke: {0} se ne može umetnuti jer datoteka nema ime"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -7711,10 +7699,8 @@ msgstr ""
 "Vrsta datoteke: {0} se ne može prenijeti na server jer datoteka nema ime"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"Vrsta datoteke: {0} se ne može prenijeti na server jer je datoteka prazna"
+msgstr "Vrsta datoteke: {0} se ne može umetnuti jer je datoteka prazna"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -7882,29 +7868,27 @@ msgstr "Zadnji slajd"
 #: src/slideshow/engine/SlideShowHandler.ts:122
 #: src/slideshow/SlideShowPresenter.ts:886
 msgid "End Show"
-msgstr "Završi projekciju"
+msgstr "Kraj prezentacije"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Pauza"
+msgstr "Pauzirano"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Nastavi"
+msgstr "Nastavljeno"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animacija: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animacija: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Prijelaz: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -7942,9 +7926,8 @@ msgid "Present to all"
 msgstr "Prezentiraj svima"
 
 #: src/slideshow/PresenterConsole.js:43
-#, fuzzy
 msgid "Exit"
-msgstr "Uredi"
+msgstr "Zatvori"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -7992,10 +7975,11 @@ msgid "No Notes"
 msgstr "Bez bilješki"
 
 #: src/slideshow/PresenterConsole.js:1708
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Ponovi za {0} s"
+msgstr[0] "Ponovi nakon %n sekunde"
+msgstr[1] "Ponovi nakon %n sekunde"
+msgstr[2] "Ponovi nakon %n sekundi"
 
 #: src/slideshow/PresenterConsole.js:1715
 #: src/slideshow/SlideShowPresenter.ts:678
