@@ -4318,13 +4318,21 @@ if test "$_os" = "WINNT"; then
         MSVC_CXX=`win_short_path_for_make "$MSVC_HOST_PATH/cl.exe"`
     fi
 
+    dnl CC_PROGRAM and CXX_PROGRAM hold the compiler on its own, with no
+    dnl launcher in front of it and no flags after it. A make rule that hands
+    dnl the compiler to an external build system needs the path as a single
+    dnl word, and a path holding a space stops being one the moment make splits
+    dnl $CC. They stay empty when the compiler came in from the environment,
+    dnl because then splitting $CC is all there is to go on.
     if test -z "$CC"; then
         CC=$MSVC_CXX
         CC_BASE=`first_arg_basename "$CC"`
+        CC_PROGRAM=$MSVC_CXX
     fi
     if test -z "$CXX"; then
         CXX=$MSVC_CXX
         CXX_BASE=`first_arg_basename "$CXX"`
+        CXX_PROGRAM=$MSVC_CXX
     fi
 
     if test -n "$CC"; then
@@ -4499,10 +4507,18 @@ if test "$CCACHE" != "" -a -n "$WSL_ONLY_AS_HELPER"; then
     cc_rest=`echo "$CC" | sed 's/^@<:@^ @:>@*//'`
     PathFormat "$cc_prog"
     CC="$formatted_path$cc_rest"
+    if test -n "$CC_PROGRAM"; then
+        PathFormat "$CC_PROGRAM"
+        CC_PROGRAM="$formatted_path"
+    fi
     cxx_prog=`echo "$CXX" | sed 's/ .*//'`
     cxx_rest=`echo "$CXX" | sed 's/^@<:@^ @:>@*//'`
     PathFormat "$cxx_prog"
     CXX="$formatted_path$cxx_rest"
+    if test -n "$CXX_PROGRAM"; then
+        PathFormat "$CXX_PROGRAM"
+        CXX_PROGRAM="$formatted_path"
+    fi
     AC_MSG_NOTICE([compiler named for ccache as $CC])
     AC_MSG_NOTICE([and CXX as $CXX])
 fi
@@ -4528,6 +4544,7 @@ if test "$CCACHE" != ""; then
     else
         CC="$CCACHE $CC"
         CC_BASE="ccache $CC_BASE"
+        CC_LAUNCHER="$CCACHE"
         AC_MSG_RESULT([no])
     fi
     AC_LANG_POP([C])
@@ -7184,12 +7201,18 @@ if test "$CCACHE" != ""; then
     else
         CXX="$CCACHE $CXX"
         CXX_BASE="ccache $CXX_BASE"
+        CXX_LAUNCHER="$CCACHE"
         AC_MSG_RESULT([no])
     fi
     CXXFLAGS=$save_CXXFLAGS
     ac_cxx_werror_flag=$save_ac_cxx_werror_flag
     AC_LANG_POP([C++])
 fi
+
+AC_SUBST(CC_PROGRAM)
+AC_SUBST(CC_LAUNCHER)
+AC_SUBST(CXX_PROGRAM)
+AC_SUBST(CXX_LAUNCHER)
 
 dnl ===================================================================
 dnl Find pre-processors.(should do that _after_ messing with CC/CXX)

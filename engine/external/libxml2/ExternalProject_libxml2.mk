@@ -32,8 +32,8 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			-G Ninja \
 			-DCMAKE_MAKE_PROGRAM=$(NINJA) \
 			-DCMAKE_BUILD_TYPE=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			-DCMAKE_C_COMPILER=$(lastword $(filter-out -%,$(CC))) \
-			$(if $(CCACHE),-DCMAKE_C_COMPILER_LAUNCHER=$(CCACHE)) \
+			-DCMAKE_C_COMPILER="$(if $(CC_PROGRAM),$(CC_PROGRAM),$(lastword $(filter-out -%,$(CC))))" \
+			$(if $(CCACHE),-DCMAKE_C_COMPILER_LAUNCHER="$(CCACHE)") \
 			-DLIBXML2_WITH_TESTS=OFF \
 			-DLIBXML2_WITH_ICONV=OFF \
 			-DLIBXML2_WITH_PYTHON=OFF \
