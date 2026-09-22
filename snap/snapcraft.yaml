@@ -271,6 +271,10 @@ parts:
       install -m 755 "$CRAFT_PART_BUILD/snap/qtpaths6-wrapper" \
           "$CRAFT_PART_BUILD/.qt6-wrapper/qtpaths6"
       export PATH="$CRAFT_PART_BUILD/.qt6-wrapper:/snap/node/current/bin:$PATH"
+      # craft-parts presets CXXFLAGS to an -isystem path only, which
+      # suppresses autoconf's default -g -O2, and configure adds no -O of
+      # its own, so opt in to an optimized coda-qt here.
+      export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-O2"
       autoreconf -vfi
       ./configure \
         --prefix=/usr \
