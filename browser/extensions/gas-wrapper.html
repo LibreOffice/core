@@ -17,7 +17,7 @@
 <style>
   /* Google's absolute .sidebar layout expects a fixed-height host frame; here the iframe grows to
    * fit content, so let it flow and hand cool.js's Resize a first-paint height: */
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; overflow: hidden; }
   body { min-height: 480px; }
   .sidebar { position: static !important; }
   .sidebar.branding-below { top: auto; bottom: auto; }
