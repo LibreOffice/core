@@ -24,6 +24,12 @@
  * The panel is a view of a run that lives in the kit. Every request travels as one
  * .uno:PresentationCleanup command carrying a JSON object, and every reply and every event of the
  * run comes back as the map event commandresult under that same command name.
+ *
+ * Every control the panel turns off for a run is turned back on by something the run sends, so the
+ * panel also watches the run for silence. A run that says nothing for the whole of that wait, and a
+ * run whose connection to the document goes down, are given up: the controls come back and the
+ * panel says the cleanup did not answer. So an answer that never arrives leaves a way out of the
+ * deck rather than a panel that can only be closed and opened again.
  */
 
 declare var JSDialog: any;
@@ -162,6 +168,9 @@ interface CleanupPanelState {
 	/// True while the row that holds the values a scan is run with stands open. It
 	/// opens with the deck, so the values are in view from the start.
 	optionsOpen: boolean;
+	/// A short line about the run the panel has just given up, and empty while there
+	/// is no such line to say.
+	notice: string;
 }
 
 /// What a check has to report: found while it holds findings, none once a scan has covered
@@ -275,6 +284,12 @@ const CLEANUP_GROUP_SLUG: { [key in CleanupCategory]: string } =
 /// The targets a scan can be asked for, in the order the list offers them. Zero leaves the
 /// images as they are.
 const CLEANUP_RESOLUTIONS = [0, 96, 150, 220, 300];
+
+/// How long a run may say nothing before the panel gives it up, in milliseconds. A run that
+/// is going reports far more often than this: the kit sends progress for every whole percent
+/// of the work and measures in slices a few milliseconds long. One very large image can hold
+/// the kit for several seconds at a time, so the wait is a generous one.
+const CLEANUP_SILENCE_TIMEOUT = 30000;
 
 /// The ids of the widgets the panel refreshes one at a time. A group is named by its
 /// category and a row by its id, see groupWidgetId and rowWidgetId.
@@ -429,6 +444,7 @@ function newCleanupPanelState(): CleanupPanelState {
 		documentBytes: 0,
 		scanned: new Set<CleanupCategory>(),
 		optionsOpen: true,
+		notice: '',
 	};
 }
 
@@ -610,6 +626,12 @@ function isCleanupRowPatch(value: unknown): value is CleanupRowPatch {
 /// and list are allowed while a run is going and their refusal says nothing about that run.
 function refusalEndsBusyState(action: string | undefined): boolean {
 	return action === 'scan' || action === 'fix' || action === 'fixAll';
+}
+
+/// True for the actions the panel cannot go on without an answer to: the three that put it
+/// into its busy state, and the stop that ends a run.
+function actionNeedsAnswer(action: string | undefined): boolean {
+	return refusalEndsBusyState(action) || action === 'stop';
 }
 
 /// True while the event belongs to a list the panel is not showing. An event carrying a run
@@ -973,7 +995,8 @@ function separatorJSON(state: CleanupPanelState): SeparatorWidgetJSON {
 }
 
 /// The panel says what the scan button is for until a list arrives, what the list came to
-/// once one has, and why there is nothing to do when the document may not be changed.
+/// once one has, why there is nothing to do when the document may not be changed, and what
+/// became of a run it gave up.
 function messageJSON(state: CleanupPanelState): TextWidget {
 	let text: string;
 	let visible = true;
@@ -982,6 +1005,10 @@ function messageJSON(state: CleanupPanelState): TextWidget {
 		text = _(
 			'This document cannot be changed here, so there is nothing to clean up.',
 		);
+	} else if (state.notice) {
+		// A line about a run that was given up stands over whatever list is on
+		// screen, so it is in sight even when the panel has findings to show.
+		text = state.notice;
 	} else {
 		text = _('Find what makes this presentation large, and clean it up here.');
 		visible = !state.hasList;
@@ -1364,6 +1391,16 @@ class CleanupSidebar extends SidebarBase {
 	/// True while the panel is listening for what its run reports.
 	private listening = false;
 	private onCommandResultBound = this.onCommandResult.bind(this);
+	private onDocLoadedBound = this.onDocLoaded.bind(this);
+
+	/// The wait for the run to say something, and null while nothing is being waited
+	/// for.
+	private silenceTimer: ReturnType<typeof setTimeout> | null = null;
+
+	/// The number of the last request the panel sent before it gave its run up, and null
+	/// while no run was given up. The kit answers requests in the order they were sent, so
+	/// what the run reports up to the reply to a later request belongs to the run given up.
+	private lastRequestOfGivenUpRun: number | null = null;
 
 	constructor(map: MapInterface) {
 		super(map, SidebarType.Cleanup);
@@ -1504,6 +1541,8 @@ class CleanupSidebar extends SidebarBase {
 		if (!this.state.readOnly) this.sendRequest('release');
 
 		this.stopListeningToMap();
+		this.clearSilenceTimer();
+		this.lastRequestOfGivenUpRun = null;
 		this.run = null;
 		this.requestActions.clear();
 		this.lastSent.clear();
@@ -1522,11 +1561,13 @@ class CleanupSidebar extends SidebarBase {
 		this.state = fresh;
 	}
 
-	/// What the run reports arrives on the map.
+	/// What the run reports arrives on the map, and so does the loss of the connection
+	/// to the document.
 	private listenToMap(): void {
 		if (this.listening) return;
 
 		this.map.on('commandresult', this.onCommandResultBound);
+		this.map.on('docloaded', this.onDocLoadedBound);
 		this.listening = true;
 	}
 
@@ -1534,7 +1575,18 @@ class CleanupSidebar extends SidebarBase {
 		if (!this.listening) return;
 
 		this.map.off('commandresult', this.onCommandResultBound);
+		this.map.off('docloaded', this.onDocLoadedBound);
 		this.listening = false;
+	}
+
+	/// The connection to the document is up or down. While it is down nothing more can
+	/// come of a run, so the panel gives the run up straight away rather than waiting the
+	/// silence out.
+	private onDocLoaded(event: { status?: boolean }): void {
+		if (event && event.status === false) {
+			this.giveUpQuietRun();
+			this.lastRequestOfGivenUpRun = null;
+		}
 	}
 
 	/// The view changed between editing and reading, so the panel takes the state it
@@ -1549,6 +1601,8 @@ class CleanupSidebar extends SidebarBase {
 
 		this.state.readOnly = readOnly;
 		if (readOnly) {
+			this.clearSilenceTimer();
+			this.lastRequestOfGivenUpRun = null;
 			this.run = null;
 			this.state.hasList = false;
 			this.requestActions.clear();
@@ -1788,6 +1842,13 @@ class CleanupSidebar extends SidebarBase {
 
 		this.requestActions.set(requestId, action);
 
+		if (actionNeedsAnswer(action)) {
+			// The panel is about to wait on the kit, so the line about the last run
+			// it waited on in vain goes.
+			this.clearNotice();
+			this.watchForSilence();
+		}
+
 		app.socket.sendMessage(
 			'uno .uno:PresentationCleanup ' +
 				JSON.stringify({
@@ -1819,6 +1880,12 @@ class CleanupSidebar extends SidebarBase {
 
 		if (!result || !result.event) return;
 
+		if (this.belongsToGivenUpRun(result)) {
+			// The run is still alive, so the wait starts over all the same.
+			if (this.state.busy) this.watchForSilence();
+			return;
+		}
+
 		// Every event is applied inside one guard, so a payload the panel cannot
 		// make sense of is reported and the panel stays as it was.
 		try {
@@ -1847,6 +1914,34 @@ class CleanupSidebar extends SidebarBase {
 				'cleanup: the panel could not apply an event: ' + String(exception),
 			);
 		}
+
+		// Whatever the event was, the run is alive, so the wait starts over for as long
+		// as the panel is still waiting on it.
+		if (this.state.busy) this.watchForSilence();
+		else this.clearSilenceTimer();
+	}
+
+	/// True for what the run the panel gave up reports: its progress and its end. Those arrive
+	/// before the reply to the first request sent after the panel gave the run up, and that
+	/// reply marks the point where what the kit sends is about the panel's requests again.
+	private belongsToGivenUpRun(result: CleanupResult): boolean {
+		if (this.lastRequestOfGivenUpRun === null) return false;
+
+		if (
+			result.event === 'reply' &&
+			typeof result.request === 'number' &&
+			result.request > this.lastRequestOfGivenUpRun
+		) {
+			this.lastRequestOfGivenUpRun = null;
+			return false;
+		}
+
+		return (
+			result.event === 'progress' ||
+			result.event === 'measured' ||
+			result.event === 'finished' ||
+			result.event === 'fixed'
+		);
 	}
 
 	/// True while a request for the whole list is out and its reply has not arrived.
@@ -1898,6 +1993,8 @@ class CleanupSidebar extends SidebarBase {
 	}
 
 	private onList(result: CleanupResult): void {
+		// A list is an answer from the kit, so a line saying it did not answer goes.
+		this.state.notice = '';
 		this.run = typeof result.run === 'number' ? result.run : null;
 		// The kit numbers its lists from one, so a list under run zero is the state
 		// of a session that has scanned nothing yet, and the panel keeps inviting
@@ -2263,6 +2360,7 @@ class CleanupSidebar extends SidebarBase {
 		// is placed once the rebuild is on screen.
 		const target = this.focusTargetAfterRun();
 		this.state.busy = false;
+		this.clearSilenceTimer();
 		this.refreshBusyRegions();
 		if (target) this.focusAfterRefresh(target);
 	}
@@ -2289,6 +2387,69 @@ class CleanupSidebar extends SidebarBase {
 		this.refresh(CleanupWidgetId.message);
 	}
 
+	// --- waiting on the kit
+	// -------------------------------------------------------------
+
+	/// Waits for the run to say something. Each request the panel cannot go on without an
+	/// answer to starts the wait, and everything the run sends starts it over, so the wait
+	/// only runs out on a run that has gone quiet.
+	private watchForSilence(): void {
+		this.clearSilenceTimer();
+		this.silenceTimer = app.timerRegistry.setTimeout(
+			'cleanupsilence',
+			() => {
+				this.silenceTimer = null;
+				this.giveUpSilentRun();
+			},
+			JSDialog.CleanupSilenceTimeout,
+		);
+	}
+
+	private clearSilenceTimer(): void {
+		if (this.silenceTimer === null) return;
+
+		app.timerRegistry.clearTimeout(this.silenceTimer);
+		this.silenceTimer = null;
+	}
+
+	/// The run said nothing for the whole of the wait, so the panel gives it up, and it
+	/// tells the kit to stop the run first. It then asks for the list, so a kit that is
+	/// alive but slow ends its run and brings the panel up to date with what it holds. A
+	/// kit that is gone hears nothing either way.
+	private giveUpSilentRun(): void {
+		if (!this.shown || !this.state.busy) return;
+
+		const stopRequest = this.sendRequest('stop');
+		this.giveUpQuietRun();
+		this.lastRequestOfGivenUpRun = stopRequest;
+		this.sendRequest('list');
+	}
+
+	/// The run is over as far as the panel is concerned, so the panel gives it up. The
+	/// controls come back, the requests that are still out are forgotten so that anything
+	/// arriving for them later is left alone, and the panel says what became of the run.
+	/// The list stays on screen as it stands.
+	private giveUpQuietRun(): void {
+		if (!this.shown || !this.state.busy) return;
+
+		this.clearSilenceTimer();
+		this.requestActions.clear();
+		this.setStatus('idle');
+		this.setBusy(false);
+		this.setNotice(_('The cleanup did not answer. Please try again.'));
+		this.updateSummary();
+	}
+
+	/// Puts a short line about the run the panel gave up over the panel.
+	private setNotice(notice: string): void {
+		this.state.notice = notice;
+		this.updateMessage();
+	}
+
+	private clearNotice(): void {
+		if (this.state.notice) this.setNotice('');
+	}
+
 	/// A read-only document offers no cleanup, so the options, the run and the band all
 	/// go and the panel says why the list is empty. The line that divides the list off
 	/// goes with it.
@@ -2302,3 +2463,6 @@ class CleanupSidebar extends SidebarBase {
 JSDialog.CleanupSidebar = function (map: MapInterface) {
 	return new CleanupSidebar(map);
 };
+
+/// How long a run may say nothing before the panel gives it up, in milliseconds.
+JSDialog.CleanupSilenceTimeout = CLEANUP_SILENCE_TIMEOUT;

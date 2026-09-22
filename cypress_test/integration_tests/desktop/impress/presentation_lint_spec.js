@@ -721,6 +721,94 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		assertTotalFigure();
 	});
 
+	it('a scan that is never answered leaves the panel ready to scan again', function() {
+		const win = this.win;
+
+		// Nothing the panel sends about the cleanup reaches the kit, so the scan
+		// below is never answered and the panel is left waiting.
+		const original = win.app.socket.sendMessage.bind(win.app.socket);
+		cy.stub(win.app.socket, 'sendMessage').callsFake(function(message) {
+			if (typeof message === 'string'
+				&& message.indexOf('.uno:PresentationCleanup') !== -1)
+				return;
+
+			return original(message);
+		});
+
+		// The panel waits tens of seconds for a run to say something, which is far
+		// longer than a test should stand still for, so the wait is shortened.
+		cy.then(function() {
+			win.JSDialog.CleanupSilenceTimeout = 2000;
+		});
+
+		const run = pressToStartRun(function() {
+			return cy.cGet(scanButton);
+		});
+
+		cy.then(function() {
+			expect(run.atStart.statusLine, 'the status line during the run').to.be.true;
+			expect(run.atStart.scanButton, 'the scan button during the run').to.be.false;
+		});
+
+		// Once the silence has gone on long enough the panel gives the scan up: the
+		// button that starts one is back in its place and can be pressed again.
+		waitForRunToEnd();
+
+		// The panel says why it has nothing to show, so the reader knows the scan
+		// came to nothing rather than that it is still going.
+		cy.cGet(deck + ' #cleanup-message').should('be.visible')
+			.and('contain.text', 'The cleanup did not answer');
+	});
+
+	it('the end of a scan given up does not end the scan that follows it', function() {
+		const win = this.win;
+
+		// Nothing the panel sends about the cleanup reaches the kit, so the kit
+		// answers nothing and the panel gives the scan up.
+		const original = win.app.socket.sendMessage.bind(win.app.socket);
+		cy.stub(win.app.socket, 'sendMessage').callsFake(function(message) {
+			if (typeof message === 'string'
+				&& message.indexOf('.uno:PresentationCleanup') !== -1)
+				return;
+
+			return original(message);
+		});
+
+		cy.then(function() {
+			win.JSDialog.CleanupSilenceTimeout = 2000;
+		});
+
+		pressToStartRun(function() {
+			return cy.cGet(scanButton);
+		});
+		waitForRunToEnd();
+
+		// The next scan waits far longer than the test lasts, so only the event
+		// below could end it.
+		cy.then(function() {
+			win.JSDialog.CleanupSilenceTimeout = 600000;
+		});
+
+		pressToStartRun(function() {
+			return cy.cGet(scanButton);
+		});
+
+		// The kit ends the scan the panel gave up only once it gets to it, which is
+		// after the next scan was asked for.
+		cy.then(function() {
+			win.app.map.fire('commandresult', {
+				commandName: '.uno:PresentationCleanup',
+				success: true,
+				result: { event: 'finished', stopped: true },
+			});
+		});
+		helper.processToIdle(win);
+
+		// The scan that follows is still going.
+		cy.cGet(deck + ' #cleanup-status').should('be.visible');
+		cy.cGet(scanButton).should('not.be.visible');
+	});
+
 	it('asking for images to be left alone reports none of them', function() {
 		const win = this.win;
 
