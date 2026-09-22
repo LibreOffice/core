@@ -12510,7 +12510,7 @@ if test "$need_meson" = "yes"; then
                 PathFormat "$MESON"
                 MESON="$formatted_path"
                 AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
-                if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
+                if ($PYTHON_FOR_BUILD "$MESON" --version >/dev/null) ; then
                     _meson_minver=0.61.5
                     if test "$test_cairo" = "yes" -a "$SYSTEM_CAIRO" != "TRUE"; then
                         _meson_minver=1.3.0
@@ -12524,7 +12524,7 @@ if test "$need_meson" = "yes"; then
                         fi
                     fi
                     _meson_minmajmin=`echo $_meson_minver | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                    _meson_version=`$PYTHON_FOR_BUILD $MESON --version 2>/dev/null`
+                    _meson_version=`$PYTHON_FOR_BUILD "$MESON" --version 2>/dev/null`
                     _meson_majmin=`echo $_meson_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
                     if test "$_meson_majmin" -lt "$_meson_minmajmin"; then
                         AC_MSG_WARN([meson "$_meson_version" is too old, using internal copy])
@@ -12541,7 +12541,11 @@ if test "$need_meson" = "yes"; then
                 fi
             fi
         fi
-        MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
+        dnl From here on MESON is a command line rather than a pathname, and
+        dnl nothing runs it from the shell again: what follows only ever
+        dnl reaches make. So the pathname takes quotes of its own, which is
+        dnl the only chance it gets to survive a space.
+        MESON='$(call gb_ExternalExecutable_get_command,python) "'"$MESON"'"'
     fi
     if test "$_os" = "WINNT" -a -n "$MESON"; then
         # meson reads ProgramFiles(x86) to find vswhere, but dash drops such
