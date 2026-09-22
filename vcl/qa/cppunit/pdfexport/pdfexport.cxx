@@ -1130,7 +1130,28 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
     auto pLang = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
         pCatalogDictionary->LookupElement("Lang"_ostr));
     CPPUNIT_ASSERT(pLang);
-    CPPUNIT_ASSERT_EQUAL("en-US"_ostr, pLang->GetValue());
+    // tdf#173661 the document default is es-ES, not the locale setting
+    CPPUNIT_ASSERT_EQUAL("es-ES"_ostr, pLang->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf173661CalcCatalogLang)
+{
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf135346.ods");
+    save(TestFilter::PDF);
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto pLang = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+        pCatalogDictionary->LookupElement("Lang"_ostr));
+    CPPUNIT_ASSERT(pLang);
+    // the document default is ru-RU; without the fix this was the locale setting
+    CPPUNIT_ASSERT_EQUAL("ru-RU"_ostr, pLang->GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)

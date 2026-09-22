@@ -115,6 +115,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/datetime.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/autolayout.hxx>
@@ -3551,7 +3552,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
     if (pPDFExtOutDevData)
     {
-        css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        css::lang::Locale const docLocale(
+            LanguageTag(mpDoc->GetLanguage(EE_CHAR_LANGUAGE)).getLocale());
         pPDFExtOutDevData->SetDocumentLocale(docLocale);
     }
 

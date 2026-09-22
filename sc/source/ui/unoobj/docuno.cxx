@@ -33,6 +33,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/fmview.hxx>
@@ -2314,13 +2315,15 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     return aSequence;
 }
 
-static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabName, SCTAB nTab,
-                                bool bIsFirstPage)
+static void lcl_PDFExportHelper(const OutputDevice* pDev, const ScDocument& rDoc,
+                                const OUString& rTabName, SCTAB nTab, bool bIsFirstPage)
 {
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     if (pPDF)
     {
-        css::lang::Locale const docLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        LanguageType eLatin, eCjk, eCtl;
+        rDoc.GetLanguage(eLatin, eCjk, eCtl);
+        css::lang::Locale const docLocale(LanguageTag(eLatin).getLocale());
         pPDF->SetDocumentLocale(docLocale);
 
         // first page of a sheet: add outline item for the sheet name
@@ -2802,7 +2805,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
         OUString aTabName;
         rDoc.GetName(nVisTab, aTabName);
-        lcl_PDFExportHelper(pDev, aTabName, nVisTab, bIsFirstPage);
+        lcl_PDFExportHelper(pDev, rDoc, aTabName, nVisTab, bIsFirstPage);
         mnPreviousRenderTab = nVisTab;
 
         pDocShell->DoDraw(pDev, Point(0, 0), aMMRect.GetSize(), JobSetup());
@@ -2934,7 +2937,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         OUString aTabName;
         rDoc.GetName(nTab, aTabName);
-        lcl_PDFExportHelper(pDev, aTabName, nTab, bIsFirstPage);
+        lcl_PDFExportHelper(pDev, rDoc, aTabName, nTab, bIsFirstPage);
     }
     mnPreviousRenderTab = nTab;
 
