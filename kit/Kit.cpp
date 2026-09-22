@@ -1741,6 +1741,14 @@ bool Document::forkToSave(const std::function<void()>& childSave, int viewId,
 
     const pid_t pid = fork();
 
+    if (pid < 0)
+    {
+        // Both socket ends and the thread guard go out of scope here, so the sockets
+        // close and the engine threads restart.
+        LOG_SYS("Failed to fork the background save process");
+        return false;
+    }
+
     if (!pid) // Child
     {
         Log::postFork();
