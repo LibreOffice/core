@@ -3935,6 +3935,48 @@ CPPUNIT_TEST_FIXTURE(Test, testAutofilterOptimizations)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162609_autofilterErrorValue)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // A1 is the header, A2:A11 contain 0-9 and A12 an error. With 10 query items,
+    // the optimized search would incorrectly match the error cell against the 0.
+    constexpr sal_Int32 nItems = 10;
+    m_pDoc->SetString(0, 0, 0, u"Number"_ustr);
+    for (sal_Int32 i = 0; i < nItems; ++i)
+        m_pDoc->SetValue(0, i + 1, 0, i);
+    m_pDoc->SetString(0, nItems + 1, 0, u"=NA()"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#N/A"_ustr, m_pDoc->GetString(0, nItems + 1, 0));
+
+    ScDBData* pDBData = new ScDBData(u"NONAME"_ustr, 0, 0, 0, 0, nItems + 1);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+    pDBData->SetAutoFilter(true);
+
+    // Select every value the autofilter offers except the error one
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 0;
+    rEntry.eOp = SC_EQUAL;
+    rEntry.GetQueryItems().resize(nItems);
+    for (sal_Int32 i = 0; i < nItems; ++i)
+    {
+        rEntry.GetQueryItems()[i].mfVal = i;
+        rEntry.GetQueryItems()[i].maString
+            = m_pDoc->GetSharedStringPool().intern(OUString::number(i));
+    }
+    pDBData->SetQueryParam(aParam);
+    m_pDoc->Query(0, aParam, true);
+
+    // Without the fix in place, this test would have failed
+    // because the row with the error value was not filtered out
+    CPPUNIT_ASSERT_MESSAGE("row with #N/A should be hidden", m_pDoc->RowHidden(nItems + 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("row with 0 should be visible", !m_pDoc->RowHidden(1, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf76441)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

@@ -692,10 +692,12 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol,
         // For ScQueryEntry::ByValue check that the cell either is a value or is a formula
         // that has a value and is not an error (those are compared as strings). This
         // is basically simplified isQueryByValue().
+        // tdf#162609 - keep error cells out of the numeric comparison since GetValue()
+        // returns 0.0 which could match a query item containing 0
         if (aCell.getType() == CELLTYPE_VALUE)
             value = aCell.getDouble();
         else if (aCell.getType() == CELLTYPE_FORMULA
-                 && aCell.getFormula()->GetErrCode() != FormulaError::NONE
+                 && aCell.getFormula()->GetErrCode() == FormulaError::NONE
                  && aCell.getFormula()->IsValue())
         {
             value = aCell.getFormula()->GetValue();
