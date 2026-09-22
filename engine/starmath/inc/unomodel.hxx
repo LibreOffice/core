@@ -91,6 +91,8 @@ public:
     virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding) override;
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;
     virtual Size getFormulaSize() const override;
+    virtual sal_Int32 getFormulaFontSizeInHalfPoints() const override;
+    virtual void setFormulaFontSizeInHalfPoints(sal_Int32 nFontSize) override;
 
 private:
     OUString msOldWindowState; // imported window state

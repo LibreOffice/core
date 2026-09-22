@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <string_view>
 
 #include "ooxmlimport.hxx"
@@ -199,6 +200,22 @@ SmParser5& SmOoxmlImport::getParser()
 OUString SmOoxmlImport::ConvertToStarMath()
 {
     return handleStream();
+}
+
+sal_Int32 SmOoxmlImport::GetFontSizeInHalfPoints() const
+{
+    // A formula is drawn at a single size, and the runs of a formula that names a size all
+    // carry it. Where they differ, the largest one is the size of the body: a smaller one
+    // belongs to a part the author shrank, such as a limit or a script. A value that is not
+    // a positive number of half points counts as no size at all, and so does a formula whose
+    // runs name none, which then takes the size of the text around it.
+    sal_Int32 nFontSize = 0;
+    for( const OUString& rValue : m_rStream.tagAttributesWithin(
+             M_TOKEN( r ), W_TOKEN( sz ), W_TOKEN( val )))
+    {
+        nFontSize = std::max( nFontSize, rValue.toInt32());
+    }
+    return nFontSize;
 }
 
 // "toplevel" of reading, there will be oMath (if there was oMathPara, that was

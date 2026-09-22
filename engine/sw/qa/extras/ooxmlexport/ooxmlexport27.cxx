@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -494,6 +495,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleJcStaysInStyle)
     assertXPath(pXmlDoc, "//w:tbl[2]/w:tblPr/w:jc", "val", u"start");
     // The third table's alignment comes from its style too, whichever way the style spells it.
     assertXPath(pXmlDoc, "//w:tbl[3]/w:tblPr/w:jc", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEquationFontSize)
+{
+    // Each equation is drawn at the size its run properties give it, and an equation whose runs
+    // give none takes the 11pt of the text around it. Without the fix all three came out at the
+    // 12pt default of the formula editor.
+    createSwDoc("math-font-size.docx");
+
+    const sal_Int16 aExpectedSizes[] = { 8, 11, 20 };
+    for (size_t i = 0; i < std::size(aExpectedSizes); ++i)
+    {
+        uno::Reference<document::XEmbeddedObjectSupplier2> xFormula(getShape(i + 1),
+                                                                    uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xFormula.is());
+        CPPUNIT_ASSERT_EQUAL(
+            aExpectedSizes[i],
+            getProperty<sal_Int16>(xFormula->getEmbeddedObject(), u"BaseFontHeight"_ustr));
+    }
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // The size goes back out on the equation's runs, in half points, so the sizes survive a
+    // round trip. Without the fix the export wrote no size at all.
+    assertXPath(pXmlDoc, "//w:p[1]/m:oMath/m:r/w:rPr/w:sz", "val", u"16");
+    assertXPath(pXmlDoc, "//w:p[2]/m:oMath/m:r/w:rPr/w:sz", "val", u"22");
+    assertXPath(pXmlDoc, "//w:p[3]/m:oMath/m:f/m:num/m:r/w:rPr/w:sz", "val", u"40");
+    // The fraction bar is drawn by the fraction itself, and takes its size from the control
+    // properties rather than from the runs above and below it.
+    assertXPath(pXmlDoc, "//w:p[3]/m:oMath/m:f/m:fPr/m:ctrlPr/w:rPr/w:sz", "val", u"40");
 }
 
 } // end of anonymous namespace
