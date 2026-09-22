@@ -121,6 +121,16 @@ class LayersCompositor extends SlideCompositor {
 			resolutionWidth = 1280;
 			resolutionHeight = 720;
 		}
+
+		// On a phone or tablet the system kills the browser content process
+		// when it passes its memory ceiling. A transition holds every layer
+		// of two slides as both a bitmap and a GPU texture, and a layer is
+		// 33 MB at 3840x2160 but 8 MB at 1920x1080.
+		if (window.L.Browser.mobile) {
+			resolutionWidth = Math.min(resolutionWidth, 1920);
+			resolutionHeight = Math.min(resolutionHeight, 1080);
+		}
+
 		return [resolutionWidth, resolutionHeight];
 	}
 
