@@ -486,6 +486,7 @@ class SlideShowPresenter {
 
 		this._stopWatchingFullscreenSize();
 
+		this.stopLoader();
 		if (this._slideCompositor) this._slideCompositor.deleteResources();
 		this._slideRenderer.deleteResources();
 
@@ -1553,6 +1554,17 @@ class SlideShowPresenter {
 			);
 			this._slideShowHandler.setMetaPresentation(this._metaPresentation);
 			this._slideShowNavigator.setMetaPresentation(this._metaPresentation);
+		} else if (this._canvasLoader) {
+			// The loader is on the canvas while the first slide of this show is
+			// being fetched. Take the newer info, and let the fetch that is
+			// already running bring the slide. This answers a refresh that was
+			// asked for in the meantime as well.
+			this._metaPresentation.update(data);
+			this._presentationInfoChanged = false;
+			this._updateAnimatedElementsCanvasSize(
+				this._slideCompositor.getCanvasSize(),
+			);
+			return;
 		} else {
 			// don't allow user interaction
 			this._slideShowNavigator.disable();
@@ -1595,15 +1607,7 @@ class SlideShowPresenter {
 		this._slideShowCanvas.height = canvasSize[1];
 		this.centerCanvas();
 
-		// animated elements needs to update canvas size
-		this._metaPresentation.getMetaSlides().forEach((metaSlide) => {
-			if (metaSlide.animationsHandler) {
-				const animElemMap = metaSlide.animationsHandler.getAnimatedElementMap();
-				animElemMap.forEach((animatedElement) => {
-					animatedElement.updateCanvasSize(canvasSize);
-				});
-			}
-		});
+		this._updateAnimatedElementsCanvasSize(canvasSize);
 
 		this.startLoader();
 
@@ -1615,6 +1619,19 @@ class SlideShowPresenter {
 			skipTransition,
 			this._startEffect,
 		);
+	}
+
+	/// The animated elements draw at the canvas size, so every new set of meta
+	/// slides is given it.
+	private _updateAnimatedElementsCanvasSize(canvasSize: [number, number]) {
+		this._metaPresentation.getMetaSlides().forEach((metaSlide) => {
+			if (metaSlide.animationsHandler) {
+				const animElemMap = metaSlide.animationsHandler.getAnimatedElementMap();
+				animElemMap.forEach((animatedElement) => {
+					animatedElement.updateCanvasSize(canvasSize);
+				});
+			}
+		});
 	}
 
 	onSlideShowInfoChanged() {
