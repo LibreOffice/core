@@ -24,12 +24,12 @@ $(eval $(call gb_Library_use_api,oleautobridge,\
 ))
 
 $(eval $(call gb_Library_set_include,oleautobridge,\
-	$(foreach inc,$(ATL_INCLUDE),-I$(inc)) \
+	-I"$(ATL_INCLUDE)" \
 	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,oleautobridge,\
-	-LIBPATH:$(ATL_LIB) \
+	-LIBPATH:"$(ATL_LIB)" \
 ))
 
 $(eval $(call gb_Library_use_external,oleautobridge,boost_headers))
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_use_system_win32_libs,oleautobridge,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_libs,oleautobridge,\
-	$(ATL_LIB)/atls.lib \
+	"$(ATL_LIB)/atls.lib" \
 ))
 endif
 

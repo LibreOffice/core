@@ -14,7 +14,7 @@ $(eval $(call gb_Library_set_componentfile,emser,embedserv/util/emser,services))
 
 $(eval $(call gb_Library_set_include,emser,\
 	-I$(SRCDIR)/embedserv/source/inc \
-	-I$(ATL_INCLUDE) \
+	-I"$(ATL_INCLUDE)" \
 	$$(INCLUDE) \
 ))
 
@@ -41,11 +41,11 @@ $(eval $(call gb_Library_use_system_win32_libs,emser,\
 ))
 
 $(eval $(call gb_Library_add_libs,emser,\
-	$(ATL_LIB)/atls.lib \
+	"$(ATL_LIB)/atls.lib" \
 ))
 
 $(eval $(call gb_Library_add_ldflags,emser,\
-	-LIBPATH:$(ATL_LIB) \
+	-LIBPATH:"$(ATL_LIB)" \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,emser,\
