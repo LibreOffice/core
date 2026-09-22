@@ -93,6 +93,9 @@ describe('OtherViewCursorSection', function () {
 		}
 
 		function setupDocument() {
+			// The spreadsheet is the first document to open, so the new layout has no
+			// earlier one to take a reading position from.
+			app.activeDocument = null;
 			layout = new ViewLayoutBase();
 
 			app.activeDocument = {

@@ -71,6 +71,9 @@ class ViewLayoutBase {
 	// app.events is a bridge over DOM events, so the resize handler is kept bound
 	// here: off has to be given the same function reference that on registered.
 	private readonly boundOnResize = () => this.onResize();
+	// Where the replaced layout was reading, measured while its scale is still in
+	// effect. A subclass changes the zoom as soon as this constructor returns.
+	private previousPageTop = -1;
 
 	constructor() {
 		this._viewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
@@ -93,6 +96,10 @@ class ViewLayoutBase {
 		app.layoutingService.appendLayoutingTask(() =>
 			this.rebuildSingleWindowView(),
 		);
+
+		const previous = app.activeDocument?.activeLayout;
+		if (previous && previous.isWriterLayout())
+			this.previousPageTop = previous.firstVisiblePageTop();
 	}
 
 	// Drops the subscriptions this layout made, so that only the layout which is
@@ -1013,6 +1020,67 @@ class ViewLayoutBase {
 		pY -= this.viewedRectangle.pY1;
 
 		this.scroll(pX, pY, userIsScrolling);
+	}
+
+	// The document position (twips) of the top of the first page that the view
+	// shows enough of. A page showing less than the fraction is passed over, so a
+	// few pixels peeking in at the top edge do not count as being on screen. When
+	// no page reaches the fraction the most visible one wins.
+	private firstVisiblePageTop(): number {
+		const minimumVisibleFraction = 0.4;
+		const viewTop = this._documentAnchorPosition[1];
+		const viewBottom = viewTop + this.frameSize.pY;
+
+		let mostVisibleTop = 0;
+		let mostVisibleFraction = 0;
+
+		for (const page of app.file.writer.pageRectangleList) {
+			const top = this.documentToViewY(new cool.SimplePoint(page[0], page[1]));
+			const bottom = this.documentToViewY(
+				new cool.SimplePoint(page[0], page[1] + page[3]),
+			);
+
+			const height = bottom - top;
+			if (height <= 0) continue;
+
+			const fraction =
+				(Math.min(bottom, viewBottom) - Math.max(top, viewTop)) / height;
+
+			if (fraction >= minimumVisibleFraction) return page[1];
+
+			if (fraction > mostVisibleFraction) {
+				mostVisibleFraction = fraction;
+				mostVisibleTop = page[1];
+			}
+		}
+
+		return mostVisibleTop;
+	}
+
+	// Only the Writer layouts lay the document out in pages.
+	private isWriterLayout(): boolean {
+		return [
+			'ViewLayoutWriter',
+			'ViewLayoutMultiPage',
+			'ViewLayoutCompareChanges',
+		].includes(this.type);
+	}
+
+	// Open this layout on the part of the document the replaced one was showing.
+	public setStartYPosition(): void {
+		if (!this.isWriterLayout()) return;
+		if (this.previousPageTop < 0) return;
+
+		const pageTop = this.previousPageTop;
+
+		app.layoutingService.appendLayoutingTask(() => {
+			const target = new cool.SimplePoint(this.viewedRectangle.x1, pageTop);
+
+			this.scroll(
+				0,
+				this.documentToViewY(target) - this._documentAnchorPosition[1],
+			);
+		});
 	}
 
 	public setOverviewPageVisArea(point: cool.SimplePoint): void {
