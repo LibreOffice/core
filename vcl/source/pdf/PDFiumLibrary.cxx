@@ -443,6 +443,7 @@ public:
 
     PDFPageObjectType getType() override;
     OUString getText(std::unique_ptr<PDFiumTextPage> const& pTextPage) override;
+    int getMarkedContentID() override;
 
     int getFormObjectCount() override;
     std::unique_ptr<PDFiumPageObject> getFormObject(int nIndex) override;
@@ -1213,6 +1214,11 @@ OUString PDFiumPageObjectImpl::getText(std::unique_ptr<PDFiumTextPage> const& rT
     auto pTextPage = static_cast<PDFiumTextPageImpl*>(rTextPage.get());
     // FPDFTextObj_GetText may report some hyphens as 0x2
     return pTextPage->getText(mpPageObject);
+}
+
+int PDFiumPageObjectImpl::getMarkedContentID()
+{
+    return FPDFPageObj_GetMarkedContentID(mpPageObject);
 }
 
 PDFPageObjectType PDFiumPageObjectImpl::getType()
