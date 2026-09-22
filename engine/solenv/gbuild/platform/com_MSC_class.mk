@@ -648,17 +648,23 @@ define gb_ExternalProject_use_nmake
 $(call gb_ExternalProject_get_state_target,$(1),$(2)): NMAKE := $(gb_NMAKE_VARS)
 endef
 
-# if ccache is enabled, then split it and use lastword as REAL_FOO
-# /opt/lo/bin/ccache /cygdrive/c/PROGRA~2/MICROS~2.0/VC/bin/cl.exe
+# The compiler and the launcher in front of it travel as two values, each
+# converted on its own, so that a path holding a space stays a single word.
+# REAL_CC_LAUNCHER is exported only where configure knew the two apart, and it
+# is empty when the build uses no launcher. Where the compiler came in from the
+# environment configure knows no better than the old split does, the variable
+# stays absent, and the wrapper takes the launcher off REAL_CC itself.
 
 gb_AUTOCONF_WRAPPERS = \
-	REAL_CC="$(shell cygpath -w $(filter-out -%,$(CC)))" \
+	REAL_CC="$(if $(CC_PROGRAM),$(shell cygpath -w '$(CC_PROGRAM)'),$(shell cygpath -w $(filter-out -%,$(CC))))" \
+	$(if $(CC_PROGRAM),REAL_CC_LAUNCHER="$(if $(CC_LAUNCHER),$(shell cygpath -w '$(CC_LAUNCHER)'))") \
 	REAL_CC_FLAGS="$(filter -%,$(CC))" \
 	CC="$(call gb_Executable_get_target_for_build,gcc-wrapper)" \
-	REAL_CXX="$(shell cygpath -w $(filter-out -%,$(CXX)))" \
+	REAL_CXX="$(if $(CXX_PROGRAM),$(shell cygpath -w '$(CXX_PROGRAM)'),$(shell cygpath -w $(filter-out -%,$(CXX))))" \
+	$(if $(CXX_PROGRAM),REAL_CXX_LAUNCHER="$(if $(CXX_LAUNCHER),$(shell cygpath -w '$(CXX_LAUNCHER)'))") \
 	REAL_CXX_FLAGS="$(filter -%,$(CXX))" \
 	CXX="$(call gb_Executable_get_target_for_build,g++-wrapper)" \
-    LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
+    LD="$(shell cygpath -w '$(COMPATH)/bin/link.exe') -nologo"
 
 gb_ExternalProject_INCLUDE := \
 	$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))

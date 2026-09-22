@@ -21,6 +21,8 @@ int main(int argc, char* argv[])
     std::string flags = getexe(env_prefix + "CC_FLAGS", true);
     args.insert(0, flags.empty() ? std::string() : flags + " ");
 
+    splitlauncher(env_prefix, "CC", command, args);
+
     setupccenv();
 
     return startprocess(command, args, verbose);

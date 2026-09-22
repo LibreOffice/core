@@ -16,6 +16,11 @@
 
 std::string getexe(std::string exename, bool maybeempty = false);
 
+bool lookupenv(const std::string& name, std::string& value);
+
+void splitlauncher(const std::string& env_prefix, const std::string& variable, std::string& command,
+                   std::string& args);
+
 void setupccenv();
 
 std::string processccargs(const std::vector<std::string>& rawargs, std::string& env_prefix,
