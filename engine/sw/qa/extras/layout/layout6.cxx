@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <limits>
+#include <string_view>
 
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -2790,6 +2791,44 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTableStyleContextualSpacingRowsBefore)
     // Without the fix in place, this test would have failed, because the paragraph that starts a
     // cell kept its space above, so every row was at least the 18pt of that spacing taller.
     CPPUNIT_ASSERT_LESS(nParaSpacing, nRowHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16232_tabTrailingBlanks)
+{
+    // A tab lines its text up by the last character that shows, so the blanks behind the text
+    // do not move it, however the line happens to end.
+    createSwDoc("tabTrailingBlanks.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    auto aGetTabWidth = [&](int nParagraph, std::string_view aType) {
+        const OString aXPath = OString::Concat("/root/page/body/txt[")
+                               + OString::number(nParagraph)
+                               + "]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::"
+                               + aType + "']";
+        return getXPath(pXmlDoc, aXPath, "width").toInt32();
+    };
+
+    // These four pair the same spaces around "10,00 m" behind the same tab stop, and only the
+    // first of each pair ends in a tab. The trailing spaces counted towards the width the tab
+    // aligned whenever a tab closed the line, which put the centered tab at 3003 and the
+    // right tab at 2910.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3423), aGetTabWidth(1, "TabCenter"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3423), aGetTabWidth(2, "TabCenter"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3750), aGetTabWidth(4, "TabRight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3750), aGetTabWidth(5, "TabRight"));
+
+    // A line break closes a line too, and the blanks in front of it do not count there either.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4143), aGetTabWidth(6, "TabCenter"));
+
+    // The blanks count in their own font, not in that of the tab closing them: 24pt blanks
+    // before a 12pt tab, then 12pt blanks before a 24pt tab. Measured in the font of the tab
+    // they put the tab at 2910 and at 4536, the latter aligning nothing at all.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3750), aGetTabWidth(7, "TabRight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3750), aGetTabWidth(8, "TabRight"));
+
+    // A blank a line gives up where it wraps is not one of the blanks that end the text, so
+    // a tab whose text carries on to the next line keeps the width it had.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(72), aGetTabWidth(3, "TabCenter"));
 }
 
 } // end of anonymous namespace

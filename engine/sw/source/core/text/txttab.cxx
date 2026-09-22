@@ -31,6 +31,7 @@
 #include "itrform2.hxx"
 #include <txtfrm.hxx>
 #include "porfld.hxx"
+#include <algorithm>
 #include <memory>
 
 /**
@@ -512,18 +513,34 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     const SwLinePortion *pPor = GetNextPortion();
 
     SwTwips nPorWidth = 0;
+    // The blanks ending the text as it stands at each portion: a portion that is all blanks
+    // carries on the run before it, any other portion begins the count again with its own.
+    SwTwips nTrailingBlankWidth = 0;
     while( pPor )
     {
         nPorWidth = nPorWidth + pPor->Width();
+        if( pPor->Width() || pPor->GetLen() )
+            nTrailingBlankWidth
+                = pPor->TrailingBlankWidth() && pPor->TrailingBlankWidth() == pPor->Width()
+                      ? nTrailingBlankWidth + pPor->TrailingBlankWidth()
+                      : pPor->TrailingBlankWidth();
         pPor = pPor->GetNextPortion();
     }
 
+    // A tab lines its text up by the last character that shows, so the blanks that end the
+    // text are left out of the width it aligns from. Each portion brought its own in, measured
+    // in its own font, so there is nothing to measure here.
     const PortionType nWhich = GetWhichPor();
+    SwTwips nAlignWidth = nPorWidth;
+    if( PortionType::TabCenter == nWhich || PortionType::TabRight == nWhich )
+        nAlignWidth = std::max( SwTwips(0), nPorWidth - nTrailingBlankWidth );
+
     const bool bTabCompat = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
 
     if ((bTabOverMargin || bTabOverSpacing) && PortionType::TabLeft == nWhich)
     {
         nPorWidth = 0;
+        nAlignWidth = 0;
     }
 
     // #127428# Abandon dec. tab position if line is full
@@ -540,6 +557,8 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
             }
 
             nPorWidth = nPrePorWidth - 1;
+            // The decimal separator carries the alignment from here on.
+            nAlignWidth = nPorWidth;
         }
     }
 
@@ -547,18 +566,19 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     {
         // centered tabs are problematic:
         // We have to detect how much fits into the line.
-        SwTwips nNewWidth = nPorWidth / 2;
-        if (!bTabOverMargin && !bTabOverSpacing && nNewWidth > rInf.Width() - nRight)
+        SwTwips nNewWidth = nAlignWidth / 2;
+        if (!bTabOverMargin && !bTabOverSpacing && nPorWidth / 2 > rInf.Width() - nRight)
             nNewWidth = nPorWidth - (rInf.Width() - nRight);
         nPorWidth = nNewWidth;
+        nAlignWidth = nNewWidth;
     }
 
     const SwTwips nDiffWidth = nRight - GetFix();
 
-    if( nDiffWidth > nPorWidth )
+    if( nDiffWidth > nAlignWidth )
     {
         const SwTwips nOldWidth = GetFixWidth().as_twip<SwTwips>();
-        const SwTwips nAdjDiff = nDiffWidth - nPorWidth;
+        const SwTwips nAdjDiff = nDiffWidth - nAlignWidth;
         if (nAdjDiff > GetFixWidth().as_twip<SwTwips>())
             PrtWidth( nAdjDiff );
         // Don't be afraid: we have to move rInf further.

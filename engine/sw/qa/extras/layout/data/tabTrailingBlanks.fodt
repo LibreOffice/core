@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="MsWordCompTrailingBlanks" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="3.15in" style:type="center"/>
+     <style:tab-stop style:position="6.3in" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-family="Liberation Serif" fo:font-size="12pt"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="3.15in" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties fo:font-family="Liberation Serif" fo:font-size="12pt"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="24pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.2681in" fo:page-height="11.6929in" fo:margin-top="0.9839in" fo:margin-bottom="0.3937in" fo:margin-left="0.9839in" fo:margin-right="0.9839in"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="P1"><text:tab/> <text:s text:c="23"/>10,00 m <text:s text:c="13"/><text:tab/></text:p>
+   <text:p text:style-name="P1"><text:tab/> <text:s text:c="23"/>10,00 m <text:s text:c="13"/></text:p>
+   <text:p text:style-name="P1"><text:tab/>aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt uuu vvv www xxx yyy zzz</text:p>
+   <text:p text:style-name="P2"><text:tab/>10,00 m <text:s text:c="13"/><text:tab/></text:p>
+   <text:p text:style-name="P2"><text:tab/>10,00 m <text:s text:c="13"/></text:p>
+   <text:p text:style-name="P1"><text:tab/>10,00 m <text:s text:c="13"/><text:line-break/>next</text:p>
+   <text:p text:style-name="P2"><text:tab/>10,00 m<text:span text:style-name="T1"> <text:s text:c="13"/></text:span><text:tab/></text:p>
+   <text:p text:style-name="P2"><text:tab/>10,00 m <text:s text:c="13"/><text:span text:style-name="T1"><text:tab/></text:span></text:p>
+  </office:text>
+ </office:body>
+</office:document>

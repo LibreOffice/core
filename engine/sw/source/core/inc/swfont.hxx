@@ -48,6 +48,12 @@ const sal_Unicode CH_BULLET = 0xB7;     // centered dot
 const sal_Unicode CH_FULL_BLANK = 0x3000;
 const sal_Unicode CH_NB_SPACE = 0xA0;
 const sal_Unicode CH_SIX_PER_EM = 0x2006; // six-per-em space
+
+// UAX #14: spaces from SP and BA classes (elided in the end of a line)
+inline bool IsBlank(sal_Unicode ch)
+{
+    return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_SIX_PER_EM;
+}
 const sal_Unicode CH_EN_SPACE = 0x2002;
 const sal_Unicode CH_DEGREE =  0xb0;
 

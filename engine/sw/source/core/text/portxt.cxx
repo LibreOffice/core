@@ -827,6 +827,27 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         if( !InExpGrp() || InFieldGrp() )
             SetLen( rInf.GetLen() );
 
+        // The blanks that end this portion sit inside its width, and a tab waiting to align
+        // its text leaves them out. They are measured here, where the portion's own font is
+        // the current one, rather than at the tab, which may hold another font by then. A
+        // line that hands its blanks over in ExtraBlankWidth has them outside the width
+        // already, and the line breaker keeps those of a right to left line.
+        if( GetLen() && !ExtraBlankWidth() && rInf.GetLastTab()
+            && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                   DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS)
+            && !rInf.GetTextFrame()->IsRightToLeft() )
+        {
+            const TextFrameIndex nEnd = rInf.GetIdx() + GetLen();
+            TextFrameIndex nStart = nEnd;
+            while( nStart > rInf.GetIdx()
+                   && IsBlank( rInf.GetChar( nStart - TextFrameIndex(1) )))
+                nStart = nStart - TextFrameIndex(1);
+            if( nStart < nEnd )
+                TrailingBlankWidth(
+                    rInf.GetTextSize( &rInf.GetParaPortion()->GetScriptInfo(), nStart,
+                                      nEnd - nStart ).Width() );
+        }
+
         short nKern = rInf.GetFont()->CheckKerning();
         if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
         {
@@ -980,6 +1001,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             {
                 Width( Width() * pLay->GetScaleWidth() / 100.0 +
                                         pLay->GetLetterSpacing() * sal_Int32(GetLen()) );
+                if( TrailingBlankWidth() )
+                    TrailingBlankWidth( TrailingBlankWidth() * pLay->GetScaleWidth() / 100.0 );
 
                 SetModifiedWidth(true);
             }
