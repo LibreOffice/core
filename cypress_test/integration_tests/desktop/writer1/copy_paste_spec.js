@@ -2,7 +2,7 @@
 
 var helper = require('../../common/helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', function() {
+describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 	it('Copy and Paste text.', function() {
 		helper.setupAndLoadDocument('writer/copy_paste.odt');

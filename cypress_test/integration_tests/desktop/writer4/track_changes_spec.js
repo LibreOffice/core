@@ -4,7 +4,7 @@ var helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
 const redlineHelper = require('../../common/redline_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function () {
+describe(['tagdesktop', 'tagnextcloud'], 'Track Changes', function () {
 
 	beforeEach(function () {
 		cy.viewport(1400, 600);

@@ -44,10 +44,14 @@
                 let filePath = params.get('file_path').substr(1);
                 params.delete('file_path');
                 const wopiPort = params.get('wopiPort');
-                wopiSrc = localServer;
                 params.delete('wopiPort');
+                // wopiPort names the port of coolwsd when this page came
+                // through proxy.php on another port, so it replaces the port
+                // of the page rather than being appended to it.
                 if (wopiPort)
-                  wopiSrc += ':' + wopiPort;
+                  wopiSrc = window.location.protocol + "//" + window.location.hostname + ':' + wopiPort;
+                else
+                  wopiSrc = localServer;
                 wopiSrc += "/wopi/files/" + encodeURIComponent(filePath);
             }
             var filename = "Document"; // default

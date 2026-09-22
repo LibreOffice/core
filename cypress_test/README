@@ -260,11 +260,27 @@ Limitations:
 Running tests with php-proxy
 ----------------------------
 
-You can tests with proxy.php which uses ProxyProtocol in coolwsd. It is primarily used in richdocumentscode - https://github.com/CollaboraOnline/richdocumentscode
+You can run the desktop tests through proxy.php, which drives coolwsd over its
+ProxyProtocol. proxy.php belongs to richdocumentscode -
+https://github.com/CollaboraOnline/richdocumentscode - the built-in CODE
+server of the Nextcloud and ownCloud apps.
 
 make check-php-proxy
 
-It downloads https://github.com/CollaboraOnline/richdocumentscode/blob/master/proxy.php and start php server in docker.
+It downloads proxy.php from the master branch of richdocumentscode into
+workdir/php-proxy/, serves it with the PHP command line web server (php -S,
+no Docker and no root needed) on port 9984, and runs the desktop specs whose
+describe blocks are tagged 'tagproxy' against it, with coolwsd on port 9983.
+-jN runs the specs in parallel and spec=... runs one spec, as for
+check-desktop. The requests the PHP server saw are in workdir/php-proxy.log.
+
+Variables:
+* PHP: the php binary, default php. For example PHP=php82 with the Remi
+  packages on Oracle Linux 7. richdocumentscode supports PHP >= 8.1.
+* PHP_PROXY_HTTP_PORT: the port of the PHP web server, default 9984.
+* PROXY_PHP: a local proxy.php to serve instead of downloading one, for
+  example PROXY_PHP=/path/to/richdocumentscode/proxy.php
+* PHP_CLI_SERVER_WORKERS: PHP worker processes, default 16.
 
 Other useful flags
 ------------------

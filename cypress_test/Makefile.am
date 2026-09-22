@@ -123,6 +123,27 @@ NEXTCLOUD_PORT = 9980
 ALLOWED_PORTS = $(if $(findstring php-proxy, $(CYPRESS_INTEGRATION)),$(PHP_PROXY_PORT),\
 			$(if $(findstring nextcloud, $(CYPRESS_INTEGRATION)),$(NEXTCLOUD_PORT),$(shell seq 9900 1 9980)))
 
+# proxy.php of richdocumentscode in front of coolwsd, served by the PHP
+# command line web server. See check-php-proxy.
+PHP = php
+PHP_PROXY_HTTP_PORT = 9984
+# php -S serves one request per process. Each ProxySocket client polls every
+# 25-500 ms with up to four requests in flight, and the browser loads the page
+# assets on six connections, so give the parallel cypress processes a few
+# workers each. Requests beyond that only queue up. PHP >= 7.4.
+PHP_CLI_SERVER_WORKERS = 16
+PROXY_PHP_URL = https://raw.githubusercontent.com/CollaboraOnline/richdocumentscode/master/proxy.php
+# A local proxy.php to serve instead of downloading PROXY_PHP_URL.
+PROXY_PHP =
+PHP_PROXY_ROOT = $(abs_builddir)/workdir/php-proxy
+PHP_PROXY_PID_FILE = $(abs_builddir)/workdir/php-proxy.pid
+PHP_PROXY_LOG = $(abs_builddir)/workdir/php-proxy.log
+# The describe blocks that run under php-proxy carry this tag.
+PHP_PROXY_TAG = tagproxy
+# php -S forks its workers off the process in the pidfile, so take those down too.
+KILL_PHP_PROXY = test ! -f $(PHP_PROXY_PID_FILE) || \
+	{ pkill -TERM -P "$$(cat $(PHP_PROXY_PID_FILE))"; pkill -TERM -F $(PHP_PROXY_PID_FILE); rm -f $(PHP_PROXY_PID_FILE); } 2>/dev/null; true
+
 KILL_COMMAND=$(if $(coolwsd),true,pkill -F $(PID_FILE) || pkill --signal SIGKILL -F $(PID_FILE))
 LOAD_PID_FILE=$(abs_builddir)/workdir/load.pids
 PARALLEL_BUILD = $(findstring -j,$(MAKEFLAGS))
@@ -181,7 +202,15 @@ MOBILE_TEST_FILES=$(subst $(MOBILE_TEST_FOLDER)/,,$(wildcard $(MOBILE_TEST_FOLDE
 
 LIGHTHOUSE_TEST_FILES=$(subst $(LIGHTHOUSE_TEST_FOLDER)/,,$(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*_spec.js) $(wildcard $(LIGHTHOUSE_TEST_FOLDER)/*/*_spec.js))
 
-DESKTOP_TEST_FILES=$(subst $(DESKTOP_TEST_FOLDER)/,,$(wildcard $(DESKTOP_TEST_FOLDER)/*_spec.js) $(wildcard $(DESKTOP_TEST_FOLDER)/*/*_spec.js))
+DESKTOP_TEST_FILES_ALL=$(wildcard $(DESKTOP_TEST_FOLDER)/*_spec.js) $(wildcard $(DESKTOP_TEST_FOLDER)/*/*_spec.js)
+
+# Under php-proxy only the describe blocks tagged tagproxy run, so leave the
+# other specs out of the list too: a cypress process that only skips still
+# costs its start-up. A describe.skip does not count. The dot in the pattern
+# stands for the opening parenthesis, which make would take for its own.
+DESKTOP_TEST_FILES=$(subst $(DESKTOP_TEST_FOLDER)/,,$(if $(findstring php-proxy,$(CYPRESS_INTEGRATION)),\
+	$(shell grep -l "^describe.\[[^]]*'$(PHP_PROXY_TAG)'" $(DESKTOP_TEST_FILES_ALL)),\
+	$(DESKTOP_TEST_FILES_ALL)))
 
 IDLE_TEST_FILES=$(subst $(IDLE_TEST_FOLDER)/,,$(wildcard $(IDLE_TEST_FOLDER)/*_spec.js) $(wildcard $(IDLE_TEST_FOLDER)/*/*_spec.js))
 
@@ -573,10 +602,13 @@ DESKTOP_CONFIG = \
 	specPattern=$(DESKTOP_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(DESKTOP_USER_AGENT)
 
 DESKTOP_ENV = \
-	DATA_FOLDER=$(DESKTOP_DATA_FOLDER),DATA_WORKDIR=$(DESKTOP_DATA_WORKDIR),SERVER=$(COOLWSD_SERVER),SERVER_PORT=$(FREE_PORT),LO_CORE_VERSION="$(CORE_VERSION)",INTEGRATION=$(CYPRESS_INTEGRATION),IMAGES_FOLDER=$(abs_top_srcdir)/browser/images/help/en/
+	DATA_FOLDER=$(DESKTOP_DATA_FOLDER),DATA_WORKDIR=$(DESKTOP_DATA_WORKDIR),SERVER=$(COOLWSD_SERVER),SERVER_PORT=$(FREE_PORT),LO_CORE_VERSION="$(CORE_VERSION)",INTEGRATION=$(CYPRESS_INTEGRATION),IMAGES_FOLDER=$(abs_top_srcdir)/browser/images/help/en/$(if $(findstring php-proxy,$(CYPRESS_INTEGRATION)),$(COMMA)PHP_PROXY_HTTP_PORT=$(PHP_PROXY_HTTP_PORT))
 
+# Under php-proxy only the describe blocks tagged tagproxy run. The a11y tag is
+# left out there: cypress-tags ORs the include tags, so it would pull in every
+# a11y-tagged block as well.
 DESKTOP_INCLUDE_TAGS = \
-	tagdesktop,$(A11Y_TAG)
+	$(if $(findstring php-proxy,$(CYPRESS_INTEGRATION)),$(PHP_PROXY_TAG),tagdesktop$(COMMA)$(A11Y_TAG))
 
 # Run one desktop test / all desktop tests in headless mode.
 # Parameters:
@@ -795,23 +827,41 @@ endef
 # proxy.php desktop tests
 #########################
 
-check-php-proxy:
-	@mkdir -p workdir
-	@rm -rf workdir/proxy.php
-	curl -L -o workdir/proxy.php https://raw.githubusercontent.com/CollaboraOnline/richdocumentscode/master/proxy.php
-	@# necessary for comunication of proxy.php in docker with locally running coolwsd
-	sed -i 's/localhost/172.17.0.1/g' workdir/proxy.php
-	-docker stop php-proxy 2>/dev/null || true
-	-docker rm php-proxy 2>/dev/null || true
-	docker run -d --name php-proxy -p 80:80 -v $(PWD)/workdir/proxy.php:/var/www/html/proxy.php php:8.2-apache
-	@echo "PHP proxy server starting on http://localhost"
-	sleep 3
-	-$(MAKE) CYPRESS_INTEGRATION="php-proxy" check-desktop
-	$(MAKE) cleanup-php-proxy
+# Run the desktop specs tagged tagproxy through proxy.php of richdocumentscode,
+# served by the PHP command line web server on PHP_PROXY_HTTP_PORT, with
+# coolwsd on PHP_PROXY_PORT and its ProxyPrefix support on. -jN and spec= work
+# as for check-desktop. PHP=php82 picks another php binary, PROXY_PHP=<file>
+# serves a local proxy.php instead of downloading PROXY_PHP_URL.
+check-php-proxy: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
+	$(V)$(KILL_PHP_PROXY)
+	$(V)rm -rf $(PHP_PROXY_ROOT) $(PHP_PROXY_LOG) && mkdir -p $(PHP_PROXY_ROOT)
+	$(if $(PROXY_PHP),\
+		cp $(PROXY_PHP) $(PHP_PROXY_ROOT)/proxy.php,\
+		curl -sSfL -o $(PHP_PROXY_ROOT)/proxy.php $(PROXY_PHP_URL))
+	$(V)$(PHP) --version | head -n 1
+	$(V)$(PHP) -l $(PHP_PROXY_ROOT)/proxy.php
+# get-port-cli hands back another port when the asked one is taken, see FREE_PORT.
+	$(V)test "$$(FORCE_COLOR=0 $(GET_PORT_BINARY) --host=127.0.0.1 $(PHP_PROXY_HTTP_PORT))" = "$(PHP_PROXY_HTTP_PORT)" || \
+		{ echo "CypressError: port $(PHP_PROXY_HTTP_PORT) for the php proxy is unavailable!"; exit 1; }
+	$(V)echo "Starting the php proxy on http://127.0.0.1:$(PHP_PROXY_HTTP_PORT)/proxy.php with $(PHP_CLI_SERVER_WORKERS) workers..."
+# One shell for the whole run, so the trap stops the php server however the
+# tests end, and the status of check-desktop is the status of this target.
+	PHP_CLI_SERVER_WORKERS=$(PHP_CLI_SERVER_WORKERS) $(PHP) -S 127.0.0.1:$(PHP_PROXY_HTTP_PORT) \
+		-t $(PHP_PROXY_ROOT) -d upload_max_filesize=64M -d post_max_size=64M \
+		> $(PHP_PROXY_LOG) 2>&1 & \
+	echo $$! > $(PHP_PROXY_PID_FILE); \
+	trap '$(KILL_PHP_PROXY)' EXIT INT TERM; \
+	$(WAIT_ON_BINARY) tcp:127.0.0.1:$(PHP_PROXY_HTTP_PORT) --timeout 30000 || \
+		{ echo ==dump php proxy output==; cat $(PHP_PROXY_LOG); exit 1; }; \
+	echo "proxy.php status: $$(curl -sf 'http://127.0.0.1:$(PHP_PROXY_HTTP_PORT)/proxy.php?status')"; \
+	status=0; \
+	$(MAKE) CYPRESS_INTEGRATION=php-proxy PHP_PROXY_HTTP_PORT=$(PHP_PROXY_HTTP_PORT) check-desktop || status=$$?; \
+	$(KILL_PHP_PROXY); trap - EXIT INT TERM; \
+	exit $$status
 
+# Stop a php proxy left behind by an interrupted check-php-proxy.
 cleanup-php-proxy:
-	-docker stop php-proxy
-	-docker rm php-proxy
+	$(V)$(KILL_PHP_PROXY)
 
 #############################
 # Desktop interference tests.

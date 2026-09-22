@@ -209,6 +209,16 @@ function logError(event) {
 }
 
 /*
+ * The origin of the web server that serves proxy.php under php-proxy. The
+ * Makefile passes the port of the PHP built-in server it starts; without
+ * one the proxy is expected on port 80.
+ */
+function phpProxyOrigin() {
+	const port = Cypress.env('PHP_PROXY_HTTP_PORT');
+	return 'http://' + Cypress.env('SERVER') + (port ? ':' + port : '');
+}
+
+/*
  * Loads the test document directly in Collabora Online.
  */
 function loadDocumentNoIntegration(filePath, isMultiUser, lang, extraQuery) {
@@ -217,7 +227,7 @@ function loadDocumentNoIntegration(filePath, isMultiUser, lang, extraQuery) {
 	var URI = '';
 
 	if (Cypress.env('INTEGRATION') === 'php-proxy') {
-		URI += 'http://' + Cypress.env('SERVER') + '/proxy.php?req=';
+		URI += phpProxyOrigin() + '/proxy.php?req=';
 	}
 
 	URI += '/browser/' + Cypress.env('WSD_VERSION_HASH') + '/debug.html'
@@ -652,10 +662,11 @@ function closeDocument(filePath) {
 			cy.cGet('tr[data-file=\'' + fileName + '\']').should('not.exist');
 
 		}
-	// For php-proxy admin console does not work, so we just open
-	// localhost and wait some time for the test document to be closed.
+	// For php-proxy the admin console is out of reach, so just leave the
+	// document by opening the root of the proxy's web server (a 404 from
+	// php -S is fine) and give coolwsd some time to close it.
 	} else if (Cypress.env('INTEGRATION') === 'php-proxy') {
-		cy.visit('http://' + Cypress.env('SERVER') + '/', {failOnStatusCode: false});
+		cy.visit(phpProxyOrigin() + '/', {failOnStatusCode: false});
 
 		cy.wait(5000);
 	} else {
