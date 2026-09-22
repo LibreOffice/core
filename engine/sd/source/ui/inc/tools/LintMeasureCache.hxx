@@ -80,9 +80,13 @@ struct LintMeasureKeyHash
     several links of different sizes, so that answer is worked out afresh for every count the cache
     is asked about.
 
+    One cache stands for one whole document and is shared by everything that measures it, so a
+    deck scanned a second time at the same settings reads what an earlier scan worked out rather
+    than encoding the same images again.
+
     What it holds is bounded. Once the kept bytes are over the limit the encodings that went in
-    first are dropped, so a session that scans one deck after another keeps a ceiling on what the
-    cache costs. */
+    first are dropped, so scanning one deck after another keeps a ceiling on what the cache
+    costs. */
 class SD_DLLPUBLIC LintMeasureCache
 {
 public:
@@ -102,6 +106,10 @@ public:
     /** How many encodings the cache holds. */
     std::size_t getCount() const { return maEntries.size(); }
 
+    /** How many encodings the cache was handed since it was made, those it kept and those it
+        turned away alike. */
+    std::size_t getHandedInCount() const { return mnHandedIn; }
+
 private:
     std::unordered_map<LintMeasureKey, BinaryDataContainer, LintMeasureKeyHash> maEntries;
 
@@ -110,6 +118,9 @@ private:
 
     /** How many bytes the kept encodings take altogether. */
     sal_uInt64 mnStoredBytes = 0;
+
+    /** How many encodings the cache was handed since it was made. */
+    std::size_t mnHandedIn = 0;
 };
 
 } // end of namespace sd::lint

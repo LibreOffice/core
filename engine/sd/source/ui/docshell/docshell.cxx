@@ -65,6 +65,7 @@
 #include <docmodel/theme/Theme.hxx>
 #include <Outliner.hxx>
 #include <svx/fillbitmaplink.hxx>
+#include <tools/LintMeasureCache.hxx>
 
 using namespace sd;
 #define ShellClass_DrawDocShell
@@ -482,6 +483,18 @@ std::shared_ptr<model::ColorSet> DrawDocShell::GetThemeColors()
         return {};
 
     return pTheme->getColorSet();
+}
+
+std::shared_ptr<lint::LintMeasureCache> DrawDocShell::getLintMeasureCache()
+{
+    std::shared_ptr<lint::LintMeasureCache> pCache = mpLintMeasureCache.lock();
+    if (!pCache)
+    {
+        pCache = std::make_shared<lint::LintMeasureCache>();
+        mpLintMeasureCache = pCache;
+    }
+
+    return pCache;
 }
 
 } // end of namespace sd

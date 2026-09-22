@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <span>
 
 #include <rtl/ref.hxx>
@@ -45,6 +46,10 @@ namespace sd {
 class FrameView;
 class ViewShell;
 class DrawViewShell;
+
+namespace lint {
+class LintMeasureCache;
+}
 
 // DrawDocShell
 class SAL_DLLPUBLIC_RTTI DrawDocShell : public SfxObjectShell
@@ -202,11 +207,24 @@ public:
 
     std::shared_ptr<model::ColorSet> GetThemeColors() override;
 
+    /** The encodings the presentation cleanup measurements of this document worked out. One cache
+        stands for the whole document, so a bitmap drawn at the same size and measured at the same
+        settings is encoded once however many measurements of the document are under way.
+
+        The shell keeps only a weak reference to the cache. It lives for as long as at least one
+        holder of the returned pointer is left, and goes with the last of them. */
+    SD_DLLPUBLIC std::shared_ptr<lint::LintMeasureCache> getLintMeasureCache();
+
 private:
     static void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
     void                    Construct(bool bClipboard);
 
     SdDrawDocument*         mpDoc;
+
+    /** Weak reference to the encodings the measurements of this document worked out. It is empty
+        while nothing holds the cache. */
+    std::weak_ptr<lint::LintMeasureCache> mpLintMeasureCache;
+
     std::unique_ptr<SfxUndoManager> mpUndoManager;
     VclPtr<SfxPrinter>      mpPrinter;
     ::sd::ViewShell*        mpViewShell;

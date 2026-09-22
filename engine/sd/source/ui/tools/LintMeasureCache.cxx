@@ -61,6 +61,8 @@ std::optional<LintCompressedImage> LintMeasureCache::find(const LintMeasureKey& 
 
 void LintMeasureCache::store(const LintMeasureKey& rKey, const LintCompressedImage& rCompressed)
 {
+    ++mnHandedIn;
+
     if (rCompressed.maData.isEmpty())
         return;
 

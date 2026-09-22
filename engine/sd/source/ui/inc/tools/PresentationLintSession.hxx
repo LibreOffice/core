@@ -84,7 +84,7 @@ public:
         /** The session keeps the run, the list and the encodings it holds. */
         Keep,
 
-        /** The client has asked for the session to go, with the list and the kept encodings. */
+        /** The client has asked for the session to go, with the list it holds. */
         Release
     };
 
@@ -144,9 +144,10 @@ private:
 
     std::optional<PresentationLint> moLint;
 
-    /** The encodings the measurements of earlier scans worked out, kept for as long as the session
-        lives. A scan of a deck that was scanned before at the same settings reads its figures out
-        of this. */
+    /** The encodings the measurements of earlier scans worked out, which belong to the document
+        and are shared with every other session of it. A scan of a deck that was scanned before at
+        the same settings reads its figures out of this. The encodings stay for as long as at least
+        one session of the document holds them. */
     std::shared_ptr<LintMeasureCache> mpMeasureCache;
 
     /** What a cleanup hands its undo entry, so that taking the cleanup back or making it again

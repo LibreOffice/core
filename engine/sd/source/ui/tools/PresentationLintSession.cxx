@@ -89,11 +89,21 @@ void sendResult(const ViewShellBase& rBase,
     rBase.viewCallback(COKitCallbackType::UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 }
 
+/** The measurement cache of the document the given view shows. A view with no document shell
+    behind it gets a cache of its own, which nothing else reads. */
+std::shared_ptr<LintMeasureCache> getMeasureCacheOfDocument(const ViewShellBase& rBase)
+{
+    if (DrawDocShell* pDocShell = rBase.GetDocShell())
+        return pDocShell->getLintMeasureCache();
+
+    return std::make_shared<LintMeasureCache>();
+}
+
 } // end of anonymous namespace
 
 LintSession::LintSession(ViewShellBase& rBase)
     : mrBase(rBase)
-    , mpMeasureCache(std::make_shared<LintMeasureCache>())
+    , mpMeasureCache(getMeasureCacheOfDocument(rBase))
     , mpUndoNotifier(
           std::make_shared<LintUndoNotifier>([this] { requestRebuild(ListReason::Undo); }))
     , maRescanIdle("sd::lint::LintSession maRescanIdle")
@@ -127,12 +137,9 @@ LintSession::~LintSession()
     maRowIdByFinding.clear();
     moLint.reset();
 
-    // The encodings the measurements kept are of use only to a scan of this session.
-    if (mpMeasureCache)
-    {
-        mpMeasureCache->clear();
-        mpMeasureCache.reset();
-    }
+    // The encodings the measurements kept belong to the document, and another session of it may
+    // still be reading them, so this session only lets go of its share.
+    mpMeasureCache.reset();
 
     // The undo entries of the cleanups this session started outlive it, and letting go of the
     // notifier here is what leaves them with nobody to ask for a list.

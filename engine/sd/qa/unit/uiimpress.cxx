@@ -4406,6 +4406,50 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintRescanKeepsWhatItMeasu
     CPPUNIT_ASSERT_EQUAL(aFirst[0]->getSavingBytes(), aSecond[0]->getSavingBytes());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintMeasurementsBelongToTheDocument)
+{
+    // The measurement cache belongs to the document rather than to one view of it, so a second
+    // holder is handed the encodings the first one worked out. It goes once no holder is left.
+    createSdImpressDoc("presentation-lint.fodp");
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sd::DrawDocShell* pDocShell = pImpressDocument->GetDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    const sd::lint::LintOptions aOptions;
+    {
+        auto pFirstCache = pDocShell->getLintMeasureCache();
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pFirstCache->getCount());
+
+        sd::lint::PresentationLint aFirstLint(*pDoc, aOptions, pFirstCache);
+        aFirstLint.scan();
+
+        const size_t nCachedAfterFirstScan = pFirstCache->getCount();
+        CPPUNIT_ASSERT(nCachedAfterFirstScan > 0);
+        const size_t nHandedInAfterFirstScan = pFirstCache->getHandedInCount();
+
+        // Whoever asks the document next is handed the very same cache.
+        auto pSecondCache = pDocShell->getLintMeasureCache();
+        CPPUNIT_ASSERT_EQUAL(pFirstCache.get(), pSecondCache.get());
+
+        // So a scan run from it reads every figure out and encodes none of the images again. Every
+        // encoding a scan makes is handed to the cache, so the cache has been handed no more.
+        sd::lint::PresentationLint aSecondLint(*pDoc, aOptions, pSecondCache);
+        aSecondLint.scan();
+
+        CPPUNIT_ASSERT_EQUAL(nCachedAfterFirstScan, pSecondCache->getCount());
+        CPPUNIT_ASSERT_EQUAL(nHandedInAfterFirstScan, pSecondCache->getHandedInCount());
+    }
+
+    // Nothing holds the encodings any more, so the document has an empty cache to hand out again.
+    auto pLaterCache = pDocShell->getLintMeasureCache();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pLaterCache->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPresentationLintFix)
 {
     // Every cleanup the scan offers changes the document and can be taken back again with a single
