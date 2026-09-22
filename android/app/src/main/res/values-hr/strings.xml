@@ -110,4 +110,5 @@
     <string name="pref_user_name_guest">Gost korisnik</string>
     <string name="pref_user_name_info">Koristi se prilikom dodavanja komentara</string>
     <string name="pref_user_name">Korisničko ime</string>
+    <string name="app_version_and_hash">Verzija: %1$s\ngit-hash: %2$s</string>
 </resources>
