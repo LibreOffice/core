@@ -2,23 +2,23 @@
 // Manually edited
 window.CODA_TEMPLATES = [
 	{
-		"id": "writer-modern-business-letter-sans-serif",
-		"name": _("Modern Business Letter (sans-serif)"),
+		"id": "writer-business-letter-sans-serif",
+		"name": _("Business Letter (sans-serif)"),
 		"type": "writer",
 		"category": "writer",
-		"path": "templates/files/text/Modern_business_letter_sans_serif.odt",
-		"basename": _("Modern Business Letter"),
-		"preview": "templates/previews/text/writer-modern-business-letter-sans-serif.png",
+		"path": "templates/files/text/Business_letter_sans_serif.odt",
+		"basename": _("Business Letter"),
+		"preview": "templates/previews/text/writer-business-letter-sans-serif.png",
 		"featured": true
 	},
 	{
-		"id": "writer-modern-business-letter-serif",
-		"name": _("Modern Business Letter (serif)"),
+		"id": "writer-classic-business-letter-serif",
+		"name": _("Classic Business Letter (serif)"),
 		"type": "writer",
 		"category": "writer",
-		"path": "templates/files/text/Modern_business_letter_serif.odt",
-		"basename": _("Modern Business Letter"),
-		"preview": "templates/previews/text/writer-modern-business-letter-serif.png",
+		"path": "templates/files/text/Classic_business_letter_serif.odt",
+		"basename": _("Classic Business Letter"),
+		"preview": "templates/previews/text/writer-classic-business-letter-serif.png",
 		"featured": true
 	},
 	{
