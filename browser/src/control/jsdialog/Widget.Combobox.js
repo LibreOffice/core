@@ -547,6 +547,15 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			clickFunction();
 	});
 
+	// The field shows its own text while no picture is there, so the name and
+	// the preview never appear at once.
+	const showValuePreview = function (preview, text, image) {
+		preview.src = image;
+		preview.alt = text;
+		preview.title = text;
+		window.L.DomUtil.addClass(container, 'ui-combobox-rendered-value');
+	};
+
 	container.updateRenders = function (pos) {
 		if (container._selectedValuePos === parseInt(pos)) {
 			var valuePreview = container.querySelector(
@@ -555,7 +564,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 				builder.rendersCache[data.id] &&
 				builder.rendersCache[data.id].images[pos];
 			if (valuePreview && cachedValue)
-				valuePreview.src = cachedValue;
+				showValuePreview(valuePreview, entries[pos].text, cachedValue);
 		}
 
 		var dropdownRoot = JSDialog.GetDropdown(data.id);
@@ -589,20 +598,16 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 				return;
 			}
 
-			window.L.DomUtil.addClass(container, 'ui-combobox-rendered-value');
-
 			if (!preview)
 				preview = window.L.DomUtil.create(
 					'img', 'ui-combobox-value-preview', container);
 
-			preview.alt = entry.text;
-			preview.title = entry.text;
-
 			var cache = builder.rendersCache[data.id];
 			if (cache && cache.images[container._selectedValuePos]) {
-				preview.src = cache.images[container._selectedValuePos];
+				showValuePreview(preview, entry.text,
+					cache.images[container._selectedValuePos]);
 			} else {
-				// the element keeps the previous preview until the new render arrives
+				window.L.DomUtil.removeClass(container, 'ui-combobox-rendered-value');
 				var pendingKey = data.id + ':' + container._selectedValuePos;
 				if (!app.pendingOnDemandRenderRequests.has(pendingKey)) {
 					app.pendingOnDemandRenderRequests.add(pendingKey);
