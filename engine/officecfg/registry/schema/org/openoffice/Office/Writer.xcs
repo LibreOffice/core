@@ -777,12 +777,12 @@
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
           <info>
             <desc>Specifies whether links in the document are updated during loading.</desc>
-            <label>Update links: Always/On request/Never</label>
+            <label>Update links: Never/On request/Always</label>
           </info>
           <constraints>
             <enumeration oor:value="0">
               <info>
-                <desc>Always</desc>
+                <desc>Never</desc>
               </info>
             </enumeration>
             <enumeration oor:value="1">
@@ -792,7 +792,7 @@
             </enumeration>
             <enumeration oor:value="2">
               <info>
-                <desc>Never</desc>
+                <desc>Always</desc>
               </info>
             </enumeration>
           </constraints>
