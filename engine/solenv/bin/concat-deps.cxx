@@ -277,7 +277,8 @@ static void print_fullpaths(const char* line)
         {
             absolute = src_dir + '/' + std::string(token, static_cast<size_t>(path_len));
             if (absolute.find("/..") != std::string::npos)
-                absolute = std::filesystem::path(absolute).lexically_normal().generic_string();
+                absolute = std::filesystem::path(absolute).lexically_normal()
+                    .generic_string<char>();
             path = absolute.c_str();
             path_len = static_cast<int>(absolute.size());
         }
