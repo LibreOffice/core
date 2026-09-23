@@ -1930,7 +1930,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
         }
     }
 
-    createSwDoc("tdf119908_smart_hyphenation_ml.odt");
+    createSwDoc("tdf119908_smart_hyphenation_nl.odt");
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
@@ -1957,16 +1957,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
                     u"Een ieder heeft recht op arbeid, op vrije keuze van beroep, op rechtmatige "
                     u"en gunstige ar");
     }
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 
-    // delete page 2 to update hyphenation on the next page
+    // delete page 3 and page 4 to update hyphenation on the last page
 
-    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6179, /*bBasicCall=*/false);
-    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 6179, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6177, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 6177, /*bBasicCall=*/false);
     pWrtShell->Delete();
-
-    // 10 hyphenations on page 3
 
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -1976,11 +1974,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
 
     if (bHunspell && aTests[1])
     {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
                     u"Deze rechten en vrijheden mogen in geen geval worden uitgeoefend in strijd "
                     u"met de doelein");
     }
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 }
 
@@ -2035,7 +2033,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_nl)
         }
     }
 
-    createSwDoc("tdf173389_smart_hyphenation_ml.odt");
+    createSwDoc("tdf173389_smart_hyphenation_nl.odt");
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
 
@@ -2062,16 +2060,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_nl)
                     u"Een ieder heeft recht op arbeid, op vrije keuze van beroep, op rechtmatige "
                     u"en gunstige arbeids");
     }
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 
-    // delete page 2 to update hyphenation on the next page
+    // delete page 3 and page 4 to update hyphenation on the last page
 
-    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6179, /*bBasicCall=*/false);
-    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 6179, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6177, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 6177, /*bBasicCall=*/false);
     pWrtShell->Delete();
-
-    // 10 hyphenations on page 3
 
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -2081,11 +2077,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_nl)
 
     if (bHunspell && aTests[1])
     {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
                     u"Deze rechten en vrijheden mogen in geen geval worden uitgeoefend in strijd "
                     u"met de doel");
     }
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 }
 
