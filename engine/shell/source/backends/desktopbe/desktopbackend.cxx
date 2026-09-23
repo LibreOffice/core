@@ -45,6 +45,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/kit.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 
@@ -225,6 +226,10 @@ cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 {
     if (PropertyName == "TemplatePathVariable")
     {
+        // In kit-mode the templates stay in the template directory of the user profile.
+        if (comphelper::COKit::isActive())
+            return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>());
+
         // Never pick up the HOME directory as the default location of user's templates
         return xdgDirectoryIfExists("Templates", false);
     }
