@@ -1418,6 +1418,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         auto aColumnsIt = rMap.find(u"columns"_ustr);
         if (aColumnsIt != rMap.end())
             xBox->SetFixedColumnCount(aColumnsIt->second.toInt32());
+
+        auto aItemPaddingIt = rMap.find(u"item-padding"_ustr);
+        if (aItemPaddingIt != rMap.end())
+            xBox->SetSpacing(aItemPaddingIt->second.toInt32());
     }
     else if (name == "GtkTreeView")
     {
