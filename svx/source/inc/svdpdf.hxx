@@ -130,10 +130,8 @@ class ImpSdrPdfImport final
 
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
-    Color getStrokeColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                         std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
-    Color getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                       std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage);
+    Color getStrokeColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject);
+    Color getFillColor(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject);
 
     void ImportPdfObject(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                          std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
@@ -141,16 +139,11 @@ class ImpSdrPdfImport final
                          int nPageObjectIndex);
     void ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                     std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
-                    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
-                    int nPageObjectIndex);
-    void ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                     int nPageObjectIndex);
-    void ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage, int nPageObjectIndex);
+                    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage);
+    void ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject);
+    void ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject);
     void ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
-                    std::unique_ptr<vcl::pdf::PDFiumPage> const& pPage,
-                    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
-                    int nPageObjectIndex);
+                    std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage);
     void InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr,
                           bool bInvisible);
 
