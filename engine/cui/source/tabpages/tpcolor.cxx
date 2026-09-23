@@ -31,7 +31,6 @@
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
-#include <sfx2/AdditionsDialogHelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
@@ -77,7 +76,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xBtnDelete(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xBtnWorkOn(m_xBuilder->weld_button(u"edit"_ustr))
-    , m_xMoreColors(m_xBuilder->weld_button(u"btnMoreColors"_ustr))
     , m_xCtlPreviewOld(new weld::CustomWeld(*m_xBuilder, u"oldpreview"_ustr, m_aCtlPreviewOld))
     , m_xCtlPreviewNew(new weld::CustomWeld(*m_xBuilder, u"newpreview"_ustr, m_aCtlPreviewNew))
 {
@@ -131,7 +129,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     m_xBtnDelete->set_sensitive(false);
     m_xBtnDelete->set_tooltip_text( CuiResId(RID_CUISTR_DELETEUSERCOLOR1) );
 
-    m_xMoreColors->connect_clicked(LINK(this, SvxColorTabPage, OnMoreColorsClick));
 
     // disable preset color values
     m_xRGBpreset->set_sensitive(false);
@@ -140,12 +137,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     // IconView
     maPaletteManager.ReloadRecentColorSet(*m_xIconViewRecentList);
     vRecentColors = maPaletteManager.GetRecentColors();
-
-    // it is not possible to install color palette extensions in Online or mobile apps
-    if(comphelper::COKit::isActive())
-    {
-        m_xMoreColors->hide();
-    }
 }
 
 SvxColorTabPage::~SvxColorTabPage()
@@ -641,12 +632,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, voi
         m_eCM = ColorModel::CMYK;
     ChangeColorModel();
     UpdateColorValues();
-}
-
-IMPL_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
-{
-    AdditionsDialogHelper::RunAdditionsDialog(GetDialogController()->getDialog(),
-                                              u"Color Palette"_ustr);
 }
 
 void SvxColorTabPage::ChangeColor(const NamedColor &rNewColor, bool bUpdatePreset )

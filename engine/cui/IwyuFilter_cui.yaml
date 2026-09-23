@@ -33,6 +33,3 @@ excludelist:
     cui/source/customize/cfg.cxx:
     # Actually used
     - com/sun/star/ui/dialogs/XFilePicker.hpp
-    cui/source/dialogs/AdditionsDialog.cxx:
-    # Actually needed for orcus::json::parse_error
-    - orcus/json_parser.hpp

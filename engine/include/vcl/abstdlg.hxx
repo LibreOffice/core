@@ -152,12 +152,6 @@ protected:
     virtual ~AbstractQrCodeGenDialog() override = default;
 };
 
-class VCL_DLLPUBLIC AbstractAdditionsDialog : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractAdditionsDialog() override = default;
-};
-
 /** Edit Diagram dialog */
 class VCL_DLLPUBLIC AbstractDiagramDialog : public VclAbstractDialog
 {
@@ -208,8 +202,6 @@ public:
         weld::Dialog& rParentDialog) = 0;
 
     // create additions dialog
-    virtual VclPtr<AbstractAdditionsDialog>
-        CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) = 0;
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,

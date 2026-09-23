@@ -118,7 +118,6 @@ bool UnnecessaryLocking::VisitCompoundStmt(const CompoundStmt* compoundStmt)
 
             // needs to lock around access to methods in vcl
             && !loplugin::isSamePathname(fn, SRCDIR "/basctl/source/basicide/unomodel.cxx")
-            && !loplugin::isSamePathname(fn, SRCDIR "/cui/source/dialogs/AdditionsDialog.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/cui/source/dialogs/cuigaldlg.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/browser/unodatbr.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/uno/dbinteraction.cxx")

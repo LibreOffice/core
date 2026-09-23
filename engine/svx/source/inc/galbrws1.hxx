@@ -97,7 +97,6 @@ class GalleryBrowser final : public SfxListener
 private:
     std::unique_ptr<weld::Button> mxNewTheme;
     std::unique_ptr<weld::TreeView> mxThemes;
-    std::unique_ptr<weld::Button> mxMoreGalleries;
     Gallery* mpGallery;
     std::unique_ptr<ExchangeData> mpExchangeData;
     std::unique_ptr<SfxItemSet> mpThemePropsDlgItemSet;
@@ -156,7 +155,6 @@ private:
     DECL_LINK(SelectThemeHdl, weld::TreeView&, void);
     DECL_LINK(PopupMenuHdl1, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl1, const KeyEvent&, bool);
-    DECL_STATIC_LINK(GalleryBrowser, OnMoreGalleriesClick, weld::Button&, void);
 
     DECL_LINK(SelectObjectHdl, weld::TreeView&, void);
     DECL_LINK(SelectObjectValueSetHdl, ValueSet*, void);

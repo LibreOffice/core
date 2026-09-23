@@ -5259,22 +5259,6 @@ SfxVoidItem InsertAVMedia SID_INSERT_AVMEDIA
     GroupId = SfxGroupId::Application;
 ]
 
-SfxVoidItem MoreDictionaries SID_MORE_DICTIONARIES
-()
-[
-        AutoUpdate = FALSE,
-        FastCall = TRUE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Container = TRUE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-
-        AccelConfig = FALSE,
-        MenuConfig = TRUE,
-        ToolBoxConfig = TRUE,
-        GroupId = SfxGroupId::Options;
-]
 
 SfxVoidItem OptionsSecurityDialog SID_OPTIONS_SECURITY
 ()
@@ -5609,22 +5593,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     GroupId = SfxGroupId::Options;
 ]
 
-SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
-(SfxStringItem AdditionsTag FN_PARAM_ADDITIONS_TAG)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
-]
 
 SfxBoolItem ToolbarLock SID_TOOLBAR_LOCK
 [

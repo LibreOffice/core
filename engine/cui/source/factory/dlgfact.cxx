@@ -27,7 +27,6 @@
 
 #include <dlgname.hxx>
 #include <securityoptions.hxx>
-#include <AdditionsDialog.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/newstyle.hxx>
 #include <sfx2/pageids.hxx>
@@ -1444,20 +1443,6 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
     using AbstractQrCodeGenDialog_Impl
         = vcl::AbstractDialogImpl_Async<AbstractQrCodeGenDialog, QrCodeGenDialog>;
     return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(pParent, xModel, bEditExisting);
-}
-
-VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
-    weld::Window* pParent, const OUString& sAdditionsTag)
-{
-#if HAVE_FEATURE_EXTENSIONS
-    using AbstractAdditionsDialog_Impl
-        = vcl::AbstractDialogImpl_Async<AbstractAdditionsDialog, AdditionsDialog>;
-    return VclPtr<AbstractAdditionsDialog_Impl>::Create(pParent, sAdditionsTag);
-#else
-    (void) pParent;
-    (void) sAdditionsTag;
-    return nullptr;
-#endif
 }
 
 VclPtr<VclAbstractDialog>

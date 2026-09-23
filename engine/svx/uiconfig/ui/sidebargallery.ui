@@ -368,20 +368,6 @@
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="btnMoreGalleries">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="sidebargallery|btnMoreGalleries">Add more galleries via extension</property>
-                        <property name="image">image3</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">5</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>

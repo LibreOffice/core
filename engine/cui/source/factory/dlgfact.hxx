@@ -197,8 +197,6 @@ public:
     CreateQrCodeGenDialog(weld::Window* pParent,
                               const cpo::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
 
-    virtual VclPtr<AbstractAdditionsDialog>
-    CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 

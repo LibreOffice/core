@@ -93,7 +93,6 @@ constexpr SfxFormalArgument aFormalArgs[] = {
     { static_cast<const SfxType*>(&aSfxBoolItem_Impl), u"NoEmbDataSet"_ustr, SID_NO_EMBEDDED_DS },
     { static_cast<const SfxType*>(&aSfxBoolItem_Impl), u"IsRedactMode"_ustr, SID_IS_REDACT_MODE },
     { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"RedactionStyle"_ustr, SID_REDACTION_STYLE },
-    { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"AdditionsTag"_ustr, FN_PARAM_ADDITIONS_TAG },
     { static_cast<const SfxType*>(&aSfxBoolItem_Impl), u"RedactImages"_ustr, SID_REDACT_IMAGE},
 };
 

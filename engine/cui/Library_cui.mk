@@ -96,8 +96,6 @@ endif
 $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/cfgutil \
     cui/source/customize/macropg \
-    $(call gb_Helper_optional,EXTENSIONS, \
-        cui/source/dialogs/AdditionsDialog) \
     cui/source/dialogs/cuifmsearch \
     cui/source/dialogs/cuigaldlg \
     cui/source/dialogs/cuigrfflt \

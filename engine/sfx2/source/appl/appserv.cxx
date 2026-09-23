@@ -78,7 +78,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <sfx2/AdditionsDialogHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1439,23 +1438,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_ADDITIONS_DIALOG:
-        {
-            OUString sAdditionsTag = u""_ustr;
-
-            const SfxStringItem* pStringArg = rReq.GetArg(FN_PARAM_ADDITIONS_TAG);
-            if (pStringArg)
-                sAdditionsTag = pStringArg->GetValue();
-
-            AdditionsDialogHelper::RunAdditionsDialog(rReq.GetFrameWeld(), sAdditionsTag);
-            break;
-        }
-
-        case SID_MORE_DICTIONARIES:
-        {
-            AdditionsDialogHelper::RunAdditionsDialog(rReq.GetFrameWeld(), u"Dictionary"_ustr);
-            break;
-        }
 #if HAVE_FEATURE_SCRIPTING
         case SID_BASICIDE_APPEAR:
         {

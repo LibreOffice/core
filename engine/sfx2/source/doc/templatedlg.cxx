@@ -16,7 +16,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <sfx2/AdditionsDialogHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
@@ -67,7 +66,6 @@ constexpr OUString MNI_ACTION_DEFAULT_CALC   = u"default_calc"_ustr;
 constexpr OUString MNI_ACTION_DEFAULT_IMPRESS   = u"default_impress"_ustr;
 constexpr OUString MNI_ACTION_DEFAULT_DRAW   = u"default_draw"_ustr;
 constexpr OUString MNI_ACTION_IMPORT   = u"import_template"_ustr;
-constexpr OUString MNI_ACTION_EXTENSIONS = u"extensions"_ustr;
 #define MNI_ALL_APPLICATIONS 0
 #define MNI_WRITER           1
 #define MNI_CALC             2
@@ -182,7 +180,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxActionBar->append_item(MNI_ACTION_DEFAULT_DRAW, SfxResId(STR_ACTION_RESET_DRAW_TEMPLATE), BMP_ACTION_DEFAULT_DRAW);
     mxActionBar->append_separator(u"separator2"_ustr);
     mxActionBar->append_item(MNI_ACTION_IMPORT, SfxResId(STR_ACTION_IMPORT), BMP_ACTION_IMPORT);
-    mxActionBar->append_item(MNI_ACTION_EXTENSIONS, SfxResId(STR_ACTION_EXTENSIONS), BMP_ACTION_EXTENSIONS);
 
     mxActionBar->connect_selected(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
@@ -209,7 +206,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxLocalViewWeld->set_size_request(TEMPLATE_ITEM_MAX_WIDTH * 5, TEMPLATE_ITEM_MAX_HEIGHT_SUB * 3);
 
     mxOKButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
-    mxActionBar->set_item_sensitive(MNI_ACTION_EXTENSIONS, true);
     mxListViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ListViewHdl));
     mxThumbnailViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ThumbnailViewHdl));
 
@@ -226,7 +222,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxCBApp->set_active(0);
     fillFolderComboBox();
 
-    mxActionBar->set_item_visible(MNI_ACTION_EXTENSIONS, true);
     mxActionBar->set_item_visible(MNI_ACTION_IMPORT, true);
     mxActionBar->set_item_visible(MNI_ACTION_NEW_FOLDER, true);
 
@@ -526,8 +521,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OUString&, rIdent, void)
         DefaultTemplateMenuSelectHdl(rIdent);
     else if(rIdent == MNI_ACTION_IMPORT)
         ImportActionHdl();
-    else if(rIdent == MNI_ACTION_EXTENSIONS)
-        ExtensionsActionHdl();
 }
 
 void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::u16string_view rIdent)
@@ -641,11 +634,6 @@ void SfxTemplateManagerDlg::ImportActionHdl()
     }
     mxLocalView->reload();
     SearchUpdate();
-}
-
-void SfxTemplateManagerDlg::ExtensionsActionHdl()
-{
-    AdditionsDialogHelper::RunAdditionsDialog(getDialog(), u"Templates"_ustr);
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)

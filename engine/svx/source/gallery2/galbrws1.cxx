@@ -124,7 +124,6 @@ GalleryBrowser::GalleryBrowser(
     :
     mxNewTheme(rBuilder.weld_button(u"insert"_ustr)),
     mxThemes(rBuilder.weld_tree_view(u"themelist"_ustr)),
-    mxMoreGalleries(rBuilder.weld_button(u"btnMoreGalleries"_ustr)),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
@@ -155,7 +154,6 @@ GalleryBrowser::GalleryBrowser(
     mxThemes->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl1));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
-    mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser, OnMoreGalleriesClick));
 
     // disable creation of new themes if a writable directory is not available
     if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NotValid )
@@ -502,14 +500,6 @@ void GalleryBrowser::Notify( SfxBroadcaster&, const SfxHint& rHint )
         break;
     }
 
-}
-
-IMPL_STATIC_LINK_NOARG( GalleryBrowser, OnMoreGalleriesClick, weld::Button&, void)
-{
-    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue(u"AdditionsTag"_ustr, u"Gallery"_ustr)
-    };
-    comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
 IMPL_LINK(GalleryBrowser, KeyInputHdl1, const KeyEvent&, rKEvt, bool)

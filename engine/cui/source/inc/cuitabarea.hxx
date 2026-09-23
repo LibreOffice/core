@@ -699,7 +699,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnDelete;
     std::unique_ptr<weld::Button> m_xBtnWorkOn;
-    std::unique_ptr<weld::Button> m_xMoreColors;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewOld;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewNew;
 
@@ -719,7 +718,6 @@ private:
     void AddColorFromNameDialog(const OUString& aName);
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
-    DECL_LINK(OnMoreColorsClick, weld::Button&, void);
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectionChangedHdl, weld::IconView&, void );
