@@ -2738,7 +2738,12 @@ void setLanguageAndLocale(OUString const & aLangISO)
     aLocalOptions.SetLocaleConfigString(aLangISO);
     aLocalOptions.SetUILocaleConfigString(aLangISO);
     aLocalOptions.Commit();
+    // A bare language tag such as "hu" has no language ID of its own and
+    // would be registered as a nameless on-the-fly ID, which the language
+    // table cannot name and the dictionaries do not match. Resolve it to its
+    // fallback locale ("hu-HU") so new documents get LANGUAGE_HUNGARIAN.
     LanguageTag aTag(aLangISO);
+    aTag.makeFallback();
     MsLangId::setConfiguredSystemUILanguage(aTag.getLanguageType(false));
     LanguageTag::setConfiguredSystemLanguage(aTag.getLanguageType(false));
 }
@@ -2808,7 +2813,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             KitHelper::setDefaultLanguage(aLanguage);
             // Set the COKit language tag, used for dialog tunneling.
             comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
-            comphelper::COKit::setLocale(LanguageTag(aLanguage));
+            comphelper::COKit::setLocale(LanguageTag(aLanguage).makeFallback());
             comphelper::COKit::setLoadLanguageTag(LanguageTag(aLanguage));
 
             SAL_INFO("kit", "Set document language to " << aLanguage);

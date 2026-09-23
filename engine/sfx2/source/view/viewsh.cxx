@@ -2770,6 +2770,7 @@ SfxViewShell::SfxViewShell
     {
         maKitLanguageTag = KitHelper::getDefaultLanguage();
         maKitLocale = KitHelper::getDefaultLanguage();
+        maKitLocale.makeFallback();
 
         const auto [isTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
         maKitIsTimezoneSet = isTimezoneSet;
