@@ -1042,8 +1042,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		var contextTab = null;
 		var defaultTab = null;
 		let alreadySelected = null;
-		// Currently selected tab name, part of the element's ID.
-		let currentlySelectedTabName = null;
+		let currentlySelectedTab = null;
 
 		if (requestedContext)
 			if (requestedContext.includes('MasterPage'))
@@ -1055,7 +1054,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		for (var tab in tabs) {
 			var tabElement = $('#' + tabs[tab].name + '-tab-label');
 			if (tabElement.hasClass('selected')) {
-				currentlySelectedTabName = tabs[tab].name;
+				currentlySelectedTab = tabs[tab];
 			}
 			if (tabs[tab].context) {
 				var contexts = tabs[tab].context.split('|');
@@ -1110,6 +1109,12 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			return;
 		}
 
+		if (currentlySelectedTab && currentlySelectedTab.keepSelected) {
+			this.updateButtonVisibilityForContext(
+				requestedContext, currentlySelectedTab.id);
+			return;
+		}
+
 		const docType = this._map.getDocType();
 
 		if (docType === 'spreadsheet' && this.isTabSelected('Formulas')) {
@@ -1128,7 +1133,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			// Switch to the tab of the context, unless we currently show the review tab
 			// for text documents, where jumping to the next change would possibly
 			// switch to the Home or Table tabs, which is not wanted.
-			if ((docType !== 'text' || currentlySelectedTabName !== 'Review') &&
+			if ((docType !== 'text' ||
+				(currentlySelectedTab && currentlySelectedTab.name) !== 'Review') &&
 				!inPlaceEditTransition) {
 				contextTab.click();
 			}

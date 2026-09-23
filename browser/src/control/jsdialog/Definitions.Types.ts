@@ -269,6 +269,7 @@ type NotebookbarTabEntry = {
 	text: string; // visible in the UI
 	name: string; // identifier for tab widget
 	context: string; // list of contexts (separated by '|') in which the element/tab is visible
+	keepSelected?: boolean; // a context change does not switch away from it
 	accessibility: NotebookbarAccessibilityDescriptor;
 };
 

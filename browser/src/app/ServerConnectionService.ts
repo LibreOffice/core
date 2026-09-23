@@ -68,7 +68,10 @@ class ServerConnectionService {
 		// Undefined until the first reply lands, so compare as a boolean.
 		if (!!app.map.isAIConfigured === configured) return;
 		app.map.isAIConfigured = configured;
-		app.map.uiManager?.notebookbar?.impl?.refresh();
+		// Until the document layer exists the notebookbar cannot tell its
+		// document type, and would rebuild the tab empty; initializeAIAssistant()
+		// does the rebuild once it can.
+		if (app.map.getDocType()) app.map.uiManager?.notebookbar?.impl?.refresh();
 	}
 
 	public onViewSetting(viewSetting: ViewSetting) {

@@ -3628,17 +3628,19 @@ namespace cool {
 
 		// The prompt says nothing about what to rewrite - buildUserMessage()
 		// attaches the selection - so without one there is nothing to send.
-		public rewriteSelection(prompt: string): void {
+		public runOnSelection(prompt: string): void {
 			if (!this.isVisible()) this.show();
 
 			if (!TextSelections.isActive()) {
-				this.hintText = _('Select the text you want to rewrite first.');
+				this.hintText = _(
+					'Select the content you want the assistant to work on first.',
+				);
 				this.updateHint();
 				return;
 			}
 
 			// Let the same selection through twice in a row, or the second
-			// rewrite arrives with nothing to work on.
+			// action arrives with nothing to work on.
 			this.lastSentSelectedText = '';
 			this.sendMessage(prompt);
 		}
@@ -3836,7 +3838,7 @@ namespace cool {
 			app.socket.sendMessage('dialogevent -4 ' + msg);
 		}
 
-		private async sanityCheckData(): Promise<void> {
+		public async sanityCheckData(): Promise<void> {
 			if (this.isProcessing) return;
 
 			if (!TextSelections.isActive()) {
@@ -3893,17 +3895,37 @@ namespace cool {
 			this.dispatchRequest();
 		}
 
-		private createSlides(): void {
+		public createSlides(): void {
+			this.promptFor(
+				_(
+					'Describe the slides you want to create. For example: "A 5-slide overview of renewable energy" or "An introduction to our team".',
+				),
+			);
+		}
+
+		public generateImage(): void {
+			this.promptFor(
+				_(
+					'Describe the image you want to generate. For example: "A watercolour of a mountain lake at sunrise".',
+				),
+			);
+		}
+
+		public generateSpeakerNotes(): void {
+			if (!this.isVisible()) this.show();
+			this.sendMessage(_('Write speaker notes for the current slide.'));
+		}
+
+		private promptFor(hint: string): void {
+			if (!this.isVisible()) this.show();
 			if (this.isProcessing) return;
 
-			this.hintText = _(
-				'Describe the slides you want to create. For example: "A 5-slide overview of renewable energy" or "An introduction to our team".',
-			);
+			this.hintText = hint;
 			this.updateHint();
 			this.focusInput();
 		}
 
-		private async createFormula(): Promise<void> {
+		public async createFormula(): Promise<void> {
 			if (this.isProcessing) return;
 
 			let context = '';

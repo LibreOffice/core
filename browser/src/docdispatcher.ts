@@ -686,10 +686,31 @@ class Dispatcher {
 		});
 
 		for (const action of JSDialog.AIAssistantTab?.getQuickActions() ?? []) {
+			if (!action.prompt) continue;
 			this.actionsMap['aichatquick-' + action.id] = requireAIProvider(
-				(sidebar) => sidebar.rewriteSelection(action.prompt),
+				(sidebar) => sidebar.runOnSelection(action.prompt),
 			);
 		}
+
+		this.actionsMap['aichatcreateslides'] = requireAIProvider((sidebar) =>
+			sidebar.createSlides(),
+		);
+
+		this.actionsMap['aichatgenerateimage'] = requireAIProvider((sidebar) =>
+			sidebar.generateImage(),
+		);
+
+		this.actionsMap['aichatspeakernotes'] = requireAIProvider((sidebar) =>
+			sidebar.generateSpeakerNotes(),
+		);
+
+		this.actionsMap['aichatcreateformula'] = requireAIProvider((sidebar) =>
+			sidebar.createFormula(),
+		);
+
+		this.actionsMap['aichatcleanupdata'] = requireAIProvider((sidebar) =>
+			sidebar.sanityCheckData(),
+		);
 	}
 
 	private addExportCommands() {
