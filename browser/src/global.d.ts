@@ -246,11 +246,10 @@ interface AppInterface {
 	serverAudit: any;
 	remoteLinks: Array<{
 		wopiSrc: string;
-		// The document as the user knows it. A document the storage listed no
-		// address for holds a name and nothing else.
 		name?: string;
 		state: string;
 		lastModifiedTime?: string;
+		persistentLink?: string;
 	}>;
 	// One-time token authorizing this view to call a POST to /cool/links
 	linkToken: string;

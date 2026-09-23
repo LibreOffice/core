@@ -38,6 +38,9 @@ interface SlideImportPaneSource {
   id: number;
   // The source as the user knows it.
   name: string;
+  // The persistent link the pages of this document store for the source,
+  // or the name alone for a source the storage listed no address for.
+  persistentLink: string;
   // The state the server reports for this view: available, subscribed,
   // connected, disconnected, failed, missing or noaccess.
   state: string;
@@ -247,6 +250,7 @@ class SlideImportPane {
           key: key,
           id: this.nextSourceId++,
           name: name,
+          persistentLink: doc.persistentLink || '',
           state: doc.state,
           expanded: false,
           asked: false,
@@ -261,6 +265,7 @@ class SlideImportPane {
         };
       }
       source.name = name;
+      source.persistentLink = doc.persistentLink || '';
       source.state = doc.state;
       // The source answered, so it is not opening any more.
       if (source.state !== 'available' && source.state !== 'disconnected')
@@ -404,21 +409,25 @@ class SlideImportPane {
   // permanent link. The integration registers it with a POST to
   // /cool/links using the one-time token below. The added file then
   // arrives in the remote links list, from where its slides are
-  // imported.
-  private browseForImport(): void {
+  // imported. Locating a missing source names that source too, so the
+  // integration binds the picked file to the pages that store it.
+  private browseForImport(source?: SlideImportPaneSource): void {
     if (!app.linkToken) return;
+
+    const args: any = {
+      Nonce: app.linkToken,
+      WOPISrc: window.wopiSrc,
+      Endpoint:
+        window.makeHttpUrl('/cool/links') +
+        '?WOPISrc=' +
+        encodeURIComponent(window.wopiSrc),
+      mimeTypeFilter: app.LOUtil.presentationMimeFilter,
+    };
+    if (source) args.PersistentLink = source.persistentLink || source.name;
 
     app.map.fire('postMessage', {
       msgId: 'UI_GetPermanentLink',
-      args: {
-        Nonce: app.linkToken,
-        WOPISrc: window.wopiSrc,
-        Endpoint:
-          window.makeHttpUrl('/cool/links') +
-          '?WOPISrc=' +
-          encodeURIComponent(window.wopiSrc),
-        mimeTypeFilter: app.LOUtil.presentationMimeFilter,
-      },
+      args: args,
     });
   }
 
@@ -657,6 +666,7 @@ class SlideImportPane {
     return links.linkedSourceOf({
       wopiSrc: source.wopiSrc,
       name: source.name,
+      persistentLink: source.persistentLink,
     });
   }
 
@@ -749,7 +759,7 @@ class SlideImportPane {
       return {
         text: _('Locate file'),
         enabled: !!app.linkToken,
-        run: () => this.browseForImport(),
+        run: () => this.browseForImport(source),
       };
     if (source.state === 'failed')
       return {
@@ -1312,7 +1322,7 @@ class SlideImportPane {
       if (eventType !== 'selected') return false;
       switch (entry.id) {
         case 'locate':
-          this.browseForImport();
+          this.browseForImport(source);
           break;
         case 'toggle':
           this.toggleSource(source);

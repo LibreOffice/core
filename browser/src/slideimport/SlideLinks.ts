@@ -120,7 +120,11 @@ class SlideLinks {
 
 	// The source of this document's links that names the given remote
 	// link, or an empty string when no page is linked to it.
-	public linkedSourceOf(doc: { wopiSrc: string; name?: string }): string {
+	public linkedSourceOf(doc: {
+		wopiSrc: string;
+		name?: string;
+		persistentLink?: string;
+	}): string {
 		return (
 			this.sources.find((source) =>
 				SlideImportSession.matchesDocument(doc, source),

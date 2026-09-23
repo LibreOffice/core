@@ -363,9 +363,10 @@ class SlideImportSession {
 
 	// Whether a remote link is the one a source names.
 	public static matchesDocument(
-		doc: { wopiSrc: string; name?: string },
+		doc: { wopiSrc: string; name?: string; persistentLink?: string },
 		source: string,
 	): boolean {
+		if (!!doc.persistentLink && doc.persistentLink === source) return true;
 		if (SlideImportSession.documentName(doc) === source) return true;
 		return (
 			!!doc.wopiSrc && SlideImportSession.remoteLinkName(doc.wopiSrc) === source
