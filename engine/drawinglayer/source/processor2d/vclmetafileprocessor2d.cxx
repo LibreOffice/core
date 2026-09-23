@@ -1684,8 +1684,38 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
         mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::LIBody);
     }
 
+    // tagged PDF: emit the natural language of this run when it differs from
+    // the document default, so that /Lang lands on a Span structure element;
+    // not inside a Figure, which is read through its alternative text, and whose
+    // embedded objects do not share the document's default language
+    bool bPopLanguageSpan(false);
+    const bool bInFigure(mpCurrentStructureTag
+                         && mpCurrentStructureTag->getStructureElement()
+                                == vcl::pdf::StructElement::Figure);
+
+    if (mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() && !bInFigure
+        && !rTextCandidate.getLocale().Language.isEmpty()
+        && !mpPDFExtOutDevData->GetDocumentLocale().Language.isEmpty())
+    {
+        const LanguageType nCurrentLanguage(
+            LanguageTag(rTextCandidate.getLocale()).getLanguageType());
+        const LanguageType nDefaultLanguage(
+            LanguageTag(mpPDFExtOutDevData->GetDocumentLocale()).getLanguageType());
+
+        if (nCurrentLanguage != nDefaultLanguage)
+        {
+            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Span);
+            mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage));
+            bPopLanguageSpan = true;
+        }
+    }
+
     // directdraw of text simple portion; use default processing
     RenderTextSimpleOrDecoratedPortionPrimitive2D(rTextCandidate);
+
+    if (bPopLanguageSpan)
+        mpPDFExtOutDevData->EndStructureElement();
 
     if (mbInListItem && mbBulletPresent)
         mbBulletPresent = false;

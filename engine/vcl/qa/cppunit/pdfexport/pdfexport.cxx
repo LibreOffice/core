@@ -1193,6 +1193,50 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf173661CalcCatalogLang)
     CPPUNIT_ASSERT_EQUAL("ru-RU"_ostr, pLang->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf173662ImpressSpanLang)
+{
+    loadFromFile(u"tdf173662.fodp");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // the document default is es-ES
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto pCatalogLang = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+        pCatalogDictionary->LookupElement("Lang"_ostr));
+    CPPUNIT_ASSERT(pCatalogLang);
+    CPPUNIT_ASSERT_EQUAL("es-ES"_ostr, pCatalogLang->GetValue());
+
+    // every run in another language has to state it on a Span - including
+    // en-US, which is the locale setting of the test run; without the fix
+    // Impress emitted no structure element for either
+    std::vector<OString> aSpanLangs;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "StructElem" && pS && pS->GetValue() == "Span")
+        {
+            auto pLang
+                = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("Lang"_ostr));
+            CPPUNIT_ASSERT(pLang);
+            aSpanLangs.push_back(pLang->GetValue());
+        }
+    }
+    std::sort(aSpanLangs.begin(), aSpanLangs.end());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aSpanLangs.size());
+    CPPUNIT_ASSERT_EQUAL("en-US"_ostr, aSpanLangs[0]);
+    CPPUNIT_ASSERT_EQUAL("uk-UA"_ostr, aSpanLangs[1]);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
