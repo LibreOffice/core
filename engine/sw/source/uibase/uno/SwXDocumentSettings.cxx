@@ -23,7 +23,9 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <optional>
 #include <utility>
+#include <vector>
 
 #include <o3tl/any.hxx>
 #include "SwXDocumentSettings.hxx"
@@ -35,6 +37,9 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
+#include <svx/compatflags.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
@@ -176,6 +181,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
     HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
     HANDLE_ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES,
+    // Every SdrCompatibilityFlag, told apart by the property name
+    HANDLE_COMPATIBILITY_FLAG,
 };
 
 }
@@ -324,7 +331,19 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
 */
         { OUString(), 0, cpo::uno::Type(), 0}
     };
-    return new MasterPropertySetInfo ( aWriterSettingsInfoMap );
+    static const std::vector<PropertyInfo> aSettingsInfoMap = []
+    {
+        std::vector<PropertyInfo> aEntries(std::begin(aWriterSettingsInfoMap),
+                                           std::prev(std::end(aWriterSettingsInfoMap)));
+        for (const SdrCompatibilityFlagName& rName : SdrModel::GetCompatibilityFlagNames())
+        {
+            aEntries.emplace_back(rName.maName, HANDLE_COMPATIBILITY_FLAG,
+                                  cppu::UnoType<bool>::get(), 0);
+        }
+        aEntries.push_back(aWriterSettingsInfoMap[std::size(aWriterSettingsInfoMap) - 1]);
+        return aEntries;
+    }();
+    return new MasterPropertySetInfo ( aSettingsInfoMap.data() );
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
@@ -1288,6 +1307,23 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES, bTmp);
             }
             break;
+        case HANDLE_COMPATIBILITY_FLAG:
+        {
+            std::optional<SdrCompatibilityFlag> oFlag
+                = SdrModel::GetCompatibilityFlagByName(rInfo.maName);
+            if (bool bTmp; oFlag && (rValue >>= bTmp))
+            {
+                // The draw model is made on demand and starts with every flag off, so only a
+                // flag that is on needs one to hold it.
+                IDocumentDrawModelAccess& rDrawModelAccess = mpDoc->getIDocumentDrawModelAccess();
+                SwDrawModel* pDrawModel = rDrawModelAccess.GetDrawModel();
+                if (!pDrawModel && bTmp)
+                    pDrawModel = &rDrawModelAccess.GetOrCreateDrawModel();
+                if (pDrawModel)
+                    pDrawModel->SetCompatibilityFlag(*oFlag, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1944,6 +1980,15 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES);
+        }
+        break;
+
+        case HANDLE_COMPATIBILITY_FLAG:
+        {
+            std::optional<SdrCompatibilityFlag> oFlag
+                = SdrModel::GetCompatibilityFlagByName(rInfo.maName);
+            const SwDrawModel* pDrawModel = mpDoc->getIDocumentDrawModelAccess().GetDrawModel();
+            rValue <<= oFlag && pDrawModel && pDrawModel->GetCompatibilityFlag(*oFlag);
         }
         break;
 

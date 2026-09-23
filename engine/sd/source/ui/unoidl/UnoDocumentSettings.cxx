@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -35,6 +36,7 @@
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
 
@@ -148,7 +150,9 @@ enum SdDocumentSettingsPropertyHandles
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL,
     HANDLE_EMBED_FONTS, HANDLE_EMBED_USED_FONTS,
     HANDLE_EMBED_LATIN_SCRIPT_FONTS, HANDLE_EMBED_ASIAN_SCRIPT_FONTS, HANDLE_EMBED_COMPLEX_SCRIPT_FONTS,
-    HANDLE_IMAGE_PREFERRED_DPI
+    HANDLE_IMAGE_PREFERRED_DPI,
+    // Every SdrCompatibilityFlag, told apart by the property name
+    HANDLE_COMPATIBILITY_FLAG
 };
 
 }
@@ -220,7 +224,19 @@ enum SdDocumentSettingsPropertyHandles
             { u"ImagePreferredDPI"_ustr, HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0,  0 },
         };
 
+        static const std::vector<PropertyMapEntry> aCompatibilityFlagsInfoMap = []
+        {
+            std::vector<PropertyMapEntry> aEntries;
+            for (const SdrCompatibilityFlagName& rName : SdrModel::GetCompatibilityFlagNames())
+            {
+                aEntries.emplace_back(rName.maName, HANDLE_COMPATIBILITY_FLAG,
+                                      cppu::UnoType<bool>::get(), 0, 0);
+            }
+            return aEntries;
+        }();
+
         rtl::Reference<PropertySetInfo> xInfo = new PropertySetInfo( aCommonSettingsInfoMap );
+        xInfo->add( aCompatibilityFlagsInfoMap );
         if (bIsDraw)
             xInfo->add( aDrawSettingsInfoMap );
         else
@@ -1046,6 +1062,22 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
             }
             break;
 
+            case HANDLE_COMPATIBILITY_FLAG:
+            {
+                std::optional<SdrCompatibilityFlag> oFlag
+                    = SdrModel::GetCompatibilityFlagByName((*ppEntries)->maName);
+                if (oFlag && (*pValues >>= bValue))
+                {
+                    if (pDoc->GetCompatibilityFlag(*oFlag) != bValue)
+                    {
+                        pDoc->SetCompatibilityFlag(*oFlag, bValue);
+                        bChanged = true;
+                    }
+                    bOk = true;
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException( OUString::number((*ppEntries)->mnHandle), static_cast<cppu::OWeakObject*>(this));
         }
@@ -1323,6 +1355,14 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_IMAGE_PREFERRED_DPI:
             {
                 *pValue <<= pDoc->getImagePreferredDPI();
+            }
+            break;
+
+            case HANDLE_COMPATIBILITY_FLAG:
+            {
+                std::optional<SdrCompatibilityFlag> oFlag
+                    = SdrModel::GetCompatibilityFlagByName((*ppEntries)->maName);
+                *pValue <<= oFlag && pDoc->GetCompatibilityFlag(*oFlag);
             }
             break;
 

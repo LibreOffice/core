@@ -19,7 +19,9 @@
 
 #include <sal/config.h>
 
+#include <optional>
 #include <utility>
+#include <vector>
 
 #include <config_features.h>
 
@@ -31,6 +33,7 @@
 #include <appoptio.hxx>
 #include <viewopti.hxx>
 #include <docpool.hxx>
+#include <drwlayer.hxx>
 #include <sc.hrc>
 #include <scmod.hxx>
 
@@ -40,6 +43,7 @@
 #include <formula/grammar.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/itemset.hxx>
+#include <svx/compatflags.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 
@@ -95,8 +99,17 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
         { SC_UNO_IMAGE_PREFERRED_DPI,       0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         { SC_UNO_SYNTAXSTRINGREF, 0,  cppu::UnoType<sal_Int16>::get(),     0, 0},
     };
-    return aConfigPropertyMap_Impl;
+    static const std::vector<SfxItemPropertyMapEntry> aConfigPropertyMap = []
+    {
+        std::vector<SfxItemPropertyMapEntry> aEntries(std::begin(aConfigPropertyMap_Impl),
+                                                      std::end(aConfigPropertyMap_Impl));
+        for (const SdrCompatibilityFlagName& rName : SdrModel::GetCompatibilityFlagNames())
+            aEntries.emplace_back(rName.maName, 0, cppu::UnoType<bool>::get(), 0, 0);
+        return aEntries;
+    }();
+    return aConfigPropertyMap;
 }
+
 
 ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
     : pDocShell(pDocSh) ,
@@ -410,6 +423,18 @@ void ScDocumentConfiguration::setPropertyValue(
             rDoc.SetImagePreferredDPI(aValue.get<sal_Int32>());
         }
     }
+    else if (std::optional<SdrCompatibilityFlag> oFlag
+             = SdrModel::GetCompatibilityFlagByName(aPropertyName))
+    {
+        // The draw layer is made on demand and starts with every flag off, so only a flag that
+        // is on needs one to hold it.
+        const bool bEnabled = ScUnoHelpFunctions::GetBoolFromAny(aValue);
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+        if (!pDrawLayer && bEnabled)
+            pDrawLayer = pDocShell->MakeDrawLayer();
+        if (pDrawLayer)
+            pDrawLayer->SetCompatibilityFlag(*oFlag, bEnabled);
+    }
     else
     {
         ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -619,6 +644,12 @@ cpo::uno::Any ScDocumentConfiguration::getPropertyValue( const OUString& aProper
     else if (aPropertyName == SC_UNO_IMAGE_PREFERRED_DPI)
     {
         aRet <<= rDoc.GetImagePreferredDPI();
+    }
+    else if (std::optional<SdrCompatibilityFlag> oFlag
+             = SdrModel::GetCompatibilityFlagByName(aPropertyName))
+    {
+        const ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+        aRet <<= pDrawLayer && pDrawLayer->GetCompatibilityFlag(*oFlag);
     }
     else
     {

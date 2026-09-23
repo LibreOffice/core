@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -1814,6 +1816,28 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDateUTC)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aReloaded.Hours);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), aReloaded.Minutes);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), aReloaded.Seconds);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCompatibilityFlagIsDocumentSetting)
+{
+    // A compatibility flag of the drawing layer is a document setting, so it is saved in the
+    // document part of the settings, which a document without a view writes too.
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xSettings->getPropertyValue(u"AnchoredTextOverflowLegacy"_ustr).get<bool>());
+
+    xSettings->setPropertyValue(u"AnchoredTextOverflowLegacy"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(xSettings->getPropertyValue(u"AnchoredTextOverflowLegacy"_ustr).get<bool>());
+
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pXmlDoc,
+                       "/office:document-settings/office:settings/"
+                       "config:config-item-set[@config:name='ooo:configuration-settings']/"
+                       "config:config-item[@config:name='AnchoredTextOverflowLegacy']",
+                       u"true");
 }
 
 } // end of anonymous namespace

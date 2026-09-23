@@ -21,6 +21,9 @@
 
 #include <functional>
 #include <memory>
+#include <optional>
+#include <span>
+#include <string_view>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -60,6 +63,7 @@ class SdrUndoFactory;
 class TextChain;
 enum class CharCompressType;
 enum class SdrCompatibilityFlag;
+struct SdrCompatibilityFlagName;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -589,6 +593,10 @@ public:
     void SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled);
     /// @returns state of the SdrCompatibilityFlag
     bool GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const;
+    /// @returns every SdrCompatibilityFlag with the name it is stored under
+    static std::span<const SdrCompatibilityFlagName> GetCompatibilityFlagNames();
+    /// @returns the SdrCompatibilityFlag stored under aName, if there is one
+    static std::optional<SdrCompatibilityFlag> GetCompatibilityFlagByName(std::u16string_view aName);
 
     void ReformatAllTextObjects();
 

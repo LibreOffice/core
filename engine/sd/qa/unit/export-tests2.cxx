@@ -1253,6 +1253,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testHiddenTableShape)
     CPPUNIT_ASSERT_EQUAL(false, bVisible);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testCompatibilityFlagIsDocumentSetting)
+{
+    // A compatibility flag of the drawing layer is a document setting, so it is saved in the
+    // document part of the settings, which a document without a view writes too.
+    createSdImpressDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xSettings->getPropertyValue(u"AnchoredTextOverflowLegacy"_ustr).get<bool>());
+
+    xSettings->setPropertyValue(u"AnchoredTextOverflowLegacy"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT(xSettings->getPropertyValue(u"AnchoredTextOverflowLegacy"_ustr).get<bool>());
+
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pXmlDoc,
+                       "/office:document-settings/office:settings/"
+                       "config:config-item-set[@config:name='ooo:configuration-settings']/"
+                       "config:config-item[@config:name='AnchoredTextOverflowLegacy']",
+                       u"true");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
