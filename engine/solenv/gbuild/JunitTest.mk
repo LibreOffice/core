@@ -20,7 +20,7 @@
 
 # JunitTest class
 
-gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER) $(JAVAIFLAGS)
+gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER_LAUNCHER) "$(JAVAINTERPRETER)" $(JAVAIFLAGS)
 
 
 .PHONY : $(call gb_JunitTest_get_clean_target,%)

@@ -25,12 +25,17 @@ gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 # Only trust dash when it copies a here-document larger than that buffer back
 # intact: feed it a 5000-space body and check the 5001 bytes come back.
 gb_DASH := $(shell command -v dash 2>/dev/null)
-gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
+# autoconf's configure starts itself again with exec $CONFIG_SHELL, without quotes, so the value
+# must hold no space. $(1) is the Unix pathname of the shell and $(2) its Windows pathname, which is
+# the value unless it holds a space, as that of the shell of Git for Windows under Program Files
+# does. The Unix pathname is the value then, which the shell that runs configure resolves too.
+gb_CONFIG_SHELL_PATHNAME = $(if $(word 2,$(2)),$(1),$(2))
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(call gb_CONFIG_SHELL_PATHNAME,/bin/sh,$(shell cygpath -m /bin/sh))
 ifneq ($(gb_DASH),)
 ifeq ($(shell printf 'cat <<EOF\n%5000s\nEOF\n' | $(gb_DASH) 2>/dev/null | wc -c | tr -dc 0-9),5001)
-gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms $(gb_DASH))
+gb_RUN_CONFIGURE := CONFIG_SHELL=$(call gb_CONFIG_SHELL_PATHNAME,$(gb_DASH),$(shell cygpath -m $(gb_DASH)))
 ifeq ($(shell $(gb_DASH) -c 'set -o pipefail' >/dev/null 2>&1 && echo yes),yes)
-SHELL := $(shell cygpath -ms $(gb_DASH))
+SHELL := $(shell cygpath -m $(gb_DASH))
 endif
 endif
 endif

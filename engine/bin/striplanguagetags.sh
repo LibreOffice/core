@@ -30,7 +30,7 @@ fi
 
 # On Windows, xsltproc is a non-Cygwin program, so we can't pass
 # a Cygwin /tmp path to it
-[ "$COM" == MSC ] && XSL=`cygpath -m -s $XSL`
+[ "$COM" == MSC ] && XSL=`cygpath -m $XSL`
 
 WRKDIR=`mktemp -d /tmp/${tempfoo}.XXXXXX`
 if [ $? -ne 0 ]; then

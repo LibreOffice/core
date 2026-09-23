@@ -138,31 +138,6 @@ PathFormat()
             formatted_path=$(echo "$formatted_path" | tr -d '\r')
         fi
 
-        pf_conv_to_dos=
-        # spaces,parentheses,brackets,braces are problematic in pathname
-        # so are backslashes
-        case "$formatted_path" in
-            *\ * | *\)* | *\(* | *\{* | *\}* | *\[* | *\]* | *\\* )
-                pf_conv_to_dos="yes"
-            ;;
-        esac
-        if test "$pf_conv_to_dos" = "yes" -a -z "$pf_no_shorten"; then
-            if test "$build_os" = "wsl"; then
-                case "$formatted_path" in
-                    /*)
-                        formatted_path=$(wslpath -w "$formatted_path")
-                        ;;
-                esac
-                formatted_path=$($WSL_LO_HELPER --8.3 "$formatted_path")
-            elif test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-                formatted_path=`cygpath -sm "$formatted_path"`
-            else
-                formatted_path=`cygpath -d "$formatted_path"`
-            fi
-            if test $? -ne 0;  then
-                AC_MSG_ERROR([path conversion failed for "$1".])
-            fi
-        fi
         fp_count_colon=`echo "$formatted_path" | $GREP -c "[:]"`
         fp_count_slash=`echo "$formatted_path" | $GREP -c "[/]"`
         if test "$fp_count_slash$fp_count_colon" != "00"; then
@@ -201,10 +176,6 @@ PathFormat()
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
         fi
-        fp_count_space=`echo "$formatted_path" | $GREP -c "[ ]"`
-        if test "$fp_count_space" != "0" -a -z "$pf_no_shorten"; then
-            AC_MSG_ERROR([converted path "$formatted_path" still contains spaces. Short filenames (8.3 filenames) support was disabled on this system?])
-        fi
     fi
     if test "$build_os" = "wsl"; then
         # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
@@ -214,30 +185,75 @@ PathFormat()
         formatted_path_unix="$formatted_path"
     fi
     if test -n "$WSL_ONLY_AS_HELPER"; then
-        # if already in unix format, switch to windows format to create shortened path
+        # the build runs in the Windows realm, so hand back the Windows
+        # spelling, and a Unix one the helper shell can reach it by
         case "$formatted_path" in
             /*)
                 formatted_path=$(wslpath -m "$formatted_path")
                 ;;
         esac
-
-        # cd to /mnt/c to avoid wsl/cmd complaining about not supporting UNC paths/the current working directory
-        formatted_path_unix=$(wslpath -u "$(cd /mnt/c; cmd.exe /c $shortpath_cmd "$formatted_path" | tr -d '\r')")
-        # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
-        formatted_path=$(wslpath -m "$formatted_path_unix")
+        formatted_path_unix=$(wslpath -u "$formatted_path")
     elif test -n "$MSYS_ONLY_AS_HELPER"; then
         # tool output (vswhere, reg.exe, ...) can carry a trailing CR
         formatted_path=$(echo "$formatted_path" | tr -d '\r')
-        # cygpath handles both unix and windows input, and -s shortens the
-        # components that have 8.3 names; for a path that does not exist (yet)
-        # -s errors out, so fall back to the plain long-form conversion then
-        pf_path=$(cygpath -sm "$formatted_path" 2>/dev/null)
-        if test -z "$pf_path"; then
-            pf_path=$(cygpath -m "$formatted_path")
-        fi
-        formatted_path="$pf_path"
+        formatted_path=$(cygpath -m "$formatted_path")
         formatted_path_unix=$(cygpath -u "$formatted_path")
     fi
+}
+
+reject_awkward_characters()
+{
+    # Args: $1: a pathname. $2: what the pathname is, for the message.
+    #
+    # The build's own pathnames become make targets and prerequisites, and
+    # gbuild writes them into recipes as plain text. Make holds a target name
+    # as one word and has no way to carry a space in it, and a parenthesis,
+    # brace or bracket is taken apart by make or by the shell before the recipe
+    # runs. A pathname outside the build, a compiler's for instance, goes
+    # through none of that and may hold whatever it likes.
+
+    case "$1" in
+    *\ * | *\(* | *\)* | *\{* | *\}* | *\@<:@* | *\@:>@* )
+        AC_MSG_ERROR([the $2 pathname "$1" holds a space or one of ( ) { } @<:@ @:>@. Make cannot carry those in a target name, so put the $2 somewhere without them.])
+        ;;
+    esac
+}
+
+add_to_path_env()
+{
+    # Args: $1: a directory holding programs.
+    #
+    # PATH is separated by colons and a drive letter brings one of its own, so
+    # the entry has to be a Unix pathname. PathFormat hands back the Windows
+    # spelling under cygwin, because a Windows binary runs from it happily;
+    # PATH is the one place that does not hold.
+
+    PathFormat "$1"
+    atpe_dir="$formatted_path_unix"
+    case "$atpe_dir" in
+    ?:*)
+        atpe_dir=`cygpath -u "$atpe_dir"`
+        ;;
+    esac
+    PATH="$atpe_dir:$PATH"
+}
+
+add_to_include_env()
+{
+    # Args: $1: a directory holding headers.
+    #
+    # cl.exe reads the INCLUDE environment variable, whose entries are
+    # separated by semicolons, so a directory holding a space goes in it
+    # unharmed. An -I flag in CFLAGS or CPPFLAGS cannot carry one: autoconf
+    # builds its compile command by expanding those without quotes, and quotes
+    # written into the value are not looked at a second time.
+
+    if test -z "$INCLUDE"; then
+        INCLUDE="$1"
+    else
+        INCLUDE="$INCLUDE;$1"
+    fi
+    export INCLUDE
 }
 
 encode_path()
@@ -376,7 +392,6 @@ WSL_ONLY_AS_HELPER=
 MSYS_ONLY_AS_HELPER=
 if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q -e mingw64 -e clangarm64); then
     WSL_ONLY_AS_HELPER=TRUE
-    shortpath_cmd=$(wslpath -m $srcdir/solenv/bin/shortpath.cmd)
 elif test -n "$MSYSTEM"; then
     MSYS_ONLY_AS_HELPER=TRUE
 fi
@@ -480,9 +495,6 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
                     AC_MSG_ERROR([Invalid cygpath invocation: Path '$input' is not absolute])
                     ;;
             esac
-            if test -n "$opt_d" -o -n "$opt_s"; then
-                input=$($WSL_LO_HELPER --8.3 "$input")
-            fi
             if test -n "$opt_m"; then
                 input="${input//\\//}"
             fi
@@ -508,17 +520,10 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
         BUILDDIR=.
 
         # Nothing special with these file names, just arbitrary ones picked to test with
-        cygpath -d /usr/lib64/ld-linux-x86-64.so.2
         cygpath -w /usr/lib64/ld-linux-x86-64.so.2
         cygpath -m /usr/lib64/ld-linux-x86-64.so.2
-        cygpath -m -s /usr/lib64/ld-linux-x86-64.so.2
-        # At least on my machine for instance this file does have an 8.3 name
-        cygpath -d /mnt/c/windows/WindowsUpdate.log
-        # But for instance this one doesn't
         cygpath -w /mnt/c/windows/system32/AboutSettingsHandlers.dll
-        cygpath -ws /mnt/c/windows/WindowsUpdate.log
         cygpath -m /mnt/c/windows/system32/AboutSettingsHandlers.dll
-        cygpath -ms /mnt/c/windows/WindowsUpdate.log
 
         cygpath -u 'c:\windows\system32\AboutSettingsHandlers.dll'
         cygpath -u 'c:/windows/system32/AboutSettingsHandlers.dll'
@@ -689,7 +694,7 @@ win_short_path_for_make()
 {
     local short_path="$1"
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$MSYS_ONLY_AS_HELPER"; then
-        cygpath -sm "$short_path"
+        cygpath -m "$short_path"
     elif test -n "$WSL_ONLY_AS_HELPER"; then
         # when already unix-style path, wslpath doesn't return anything
         case "$short_path" in
@@ -700,7 +705,7 @@ win_short_path_for_make()
         esac
         wslpath -m "$(wslpath -u "$short_path")"
     else
-        cygpath -u "$(cygpath -d "$short_path")"
+        cygpath -u "$short_path"
     fi
 }
 
@@ -717,6 +722,11 @@ if test "$build_os" = "cygwin"; then
     else
         AC_MSG_RESULT([found: $COMSPEC])
     fi
+fi
+
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
+    reject_awkward_characters "$SRC_ROOT" "source"
+    reject_awkward_characters "$BUILDDIR" "build"
 fi
 
 AC_SUBST(SRC_ROOT)
@@ -2877,7 +2887,7 @@ pathmunge ()
         if test "$build_os" = "cygwin"; then
             if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 PathFormat "$1"
-                new_path=`cygpath -sm "$formatted_path"`
+                new_path=`cygpath -m "$formatted_path"`
             else
                 PathFormat "$1"
                 new_path=`cygpath -u "$formatted_path"`
@@ -3160,6 +3170,10 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
             CCACHE_COMPILERTYPE=msvc CCACHE_LOGFILE=conftest.txt $CCACHE echo >/dev/null 2>/dev/null
             if grep -q 'Config: (environment) compiler_type = msvc' conftest.txt; then
                 AC_MSG_RESULT(yes)
+                CCACHE_PROGRAM="$CCACHE"
+                ccache_exe_dir=`dirname "$CCACHE"`
+                add_to_path_env "$ccache_exe_dir"
+                CCACHE=`basename "$CCACHE"`
             else
                 AC_MSG_RESULT(no)
                 CCACHE="not found"
@@ -3256,12 +3270,12 @@ MSBUILD_CCACHE=
 MSBUILD_CCACHE_DIR=
 if test -n "$CCACHE" -a -z "$SCCACHE" -a "$_os" = "WINNT"; then
     msbuild_ccache_dir="$BUILDDIR/msbuild-ccache"
-    msbuild_ccache_origin=`dirname "$CCACHE"`
+    msbuild_ccache_origin=`dirname "$CCACHE_PROGRAM"`
     AS_MKDIR_P([$msbuild_ccache_dir])
     for msbuild_ccache_name in cl.exe clang-cl.exe ccache.exe; do
         rm -f "$msbuild_ccache_dir/$msbuild_ccache_name"
-        ln "$CCACHE" "$msbuild_ccache_dir/$msbuild_ccache_name" 2>/dev/null \
-            || cp -f "$CCACHE" "$msbuild_ccache_dir/$msbuild_ccache_name"
+        ln "$CCACHE_PROGRAM" "$msbuild_ccache_dir/$msbuild_ccache_name" 2>/dev/null \
+            || cp -f "$CCACHE_PROGRAM" "$msbuild_ccache_dir/$msbuild_ccache_name"
     done
     dnl A copy of ccache in another directory no longer finds the DLLs that sat
     dnl beside the original, so check that it still runs.
@@ -4142,14 +4156,14 @@ find_msvc()
     PathFormat "$vswhere"
     vswhere=$formatted_path_unix
     for ver in $vsversions; do
-        vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        vswhereoutput=`"$vswhere" -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         if test -z "$vswhereoutput"; then
-            vswhereoutput=`$vswhere -prerelease -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+            vswhereoutput=`"$vswhere" -prerelease -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         fi
         # Fall back to all MS products (this includes VC++ Build Tools)
         if ! test -n "$vswhereoutput"; then
             AC_MSG_CHECKING([VC++ Build Tools and similar])
-            vswhereoutput=`$vswhere -products \* -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+            vswhereoutput=`"$vswhere" -products \* -version "@<:@ $ver , $(expr ${ver%%.*} + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         fi
         if test -n "$vswhereoutput"; then
             PathFormat "$vswhereoutput"
@@ -4172,7 +4186,7 @@ find_msvc()
             vcyear=2026
             vctoolset=v145
         esac
-        vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
+        vcbuildnumber=`ls "$vctest/VC/Tools/MSVC" -A1r | head -1`
 
     fi
 }
@@ -4258,7 +4272,7 @@ if test "$_os" = "WINNT"; then
         MSVC_HOST_PATH="$MSVC_BUILD_PATH"
     fi
 
-    AC_MSG_CHECKING([for short pathname of VC product directory])
+    AC_MSG_CHECKING([for VC product directory])
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
     AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
@@ -4269,20 +4283,15 @@ if test "$_os" = "WINNT"; then
     find_ucrt
     # find_ucrt errors out if it doesn't find it
     AC_MSG_RESULT([$UCRTSDKDIR ($UCRTVERSION)])
-    pf_no_shorten=yes
-    PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
-    pf_no_shorten=
-    encode_path "$formatted_path"
-    ucrtincpath_encoded="$encoded_path"
     PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
     ucrtincpath_formatted=$formatted_path
+    encode_path "$ucrtincpath_formatted"
+    ucrtincpath_encoded="$encoded_path"
     # SOLARINC is used for external modules and must be set too.
     # And no, it's not sufficient to set SOLARINC only, as configure
     # itself doesn't honour it.
     SOLARINC="$SOLARINC -I$ucrtincpath_encoded"
-    CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
-    CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
-    CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
+    add_to_include_env "$ucrtincpath_formatted"
 
     AC_SUBST(UCRTSDKDIR)
     AC_SUBST(UCRTVERSION)
@@ -4329,6 +4338,13 @@ if test "$_os" = "WINNT"; then
         AC_MSG_WARN([No devenv.exe found - this is expected for VC++ Build Tools])
     fi
 
+    dnl cl.exe is named without a directory below, so the compiler's own
+    dnl directory has to be on PATH from here on: for the shell to resolve the
+    dnl name, and for the compiler to find mspdb140.dll and the rest of the
+    dnl DLLs that sit beside it. test_cl_exe does the same for the length of
+    dnl one probe; this is the same thing for the length of configure.
+    add_to_path_env "$MSVC_HOST_PATH"
+
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
@@ -4336,20 +4352,24 @@ if test "$_os" = "WINNT"; then
         MSVC_CXX=`win_short_path_for_make "$MSVC_HOST_PATH/cl.exe"`
     fi
 
+    dnl CC and CXX name the compiler without a directory, because autoconf
+    dnl splits $CC on whitespace to build a compile command and a pathname
+    dnl holding a space does not survive that. The directory went on PATH
+    dnl above, which is also how gbuild names the compiler by default.
+    dnl
     dnl CC_PROGRAM and CXX_PROGRAM hold the compiler on its own, with no
-    dnl launcher in front of it and no flags after it. A make rule that hands
-    dnl the compiler to an external build system needs the path as a single
-    dnl word, and a path holding a space stops being one the moment make splits
-    dnl $CC. They stay empty when the compiler came in from the environment,
-    dnl because then splitting $CC is all there is to go on.
+    dnl launcher in front of it and no flags after it, for a make rule that
+    dnl has to hand an external build system the whole pathname. They stay
+    dnl empty when the compiler came in from the environment, because then
+    dnl splitting $CC is all there is to go on.
     if test -z "$CC"; then
-        CC=$MSVC_CXX
-        CC_BASE=`first_arg_basename "$CC"`
+        CC=cl.exe
+        CC_BASE=cl.exe
         CC_PROGRAM=$MSVC_CXX
     fi
     if test -z "$CXX"; then
-        CXX=$MSVC_CXX
-        CXX_BASE=`first_arg_basename "$CXX"`
+        CXX=cl.exe
+        CXX_BASE=cl.exe
         CXX_PROGRAM=$MSVC_CXX
     fi
 
@@ -4357,15 +4377,12 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_NOTICE([found Visual C++ $vcyear])
 
-        pf_no_shorten=yes
-        PathFormat "$COMPATH"
-        pf_no_shorten=
-        encode_path "$formatted_path"
-        COMPATH_ENCODED="$encoded_path"
         PathFormat "$COMPATH"
         COMPATH="$formatted_path"
         COMPATH_unix="$formatted_path_unix"
-        CPPFLAGS="$CPPFLAGS -I$COMPATH/Include"
+        encode_path "$COMPATH"
+        COMPATH_ENCODED="$encoded_path"
+        add_to_include_env "$COMPATH/Include"
 
         VCVER=$vcnumwithdot
         VCTOOLSET=$vctoolset
@@ -4512,7 +4529,7 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 #
 dnl Under wsl, CC becomes two programs with two different launchers:
 dnl
-dnl     /mnt/c/.../ccache.exe  C:/PROGRA~1/.../cl.exe  -c conftest.c
+dnl     /mnt/c/.../ccache.exe  C:/Program Files/.../cl.exe  -c conftest.c
 dnl     \__ the shell runs this __/\__ ccache runs this __/
 dnl
 dnl and each launcher can only open one spelling. The shell reaches a Windows
@@ -4523,21 +4540,31 @@ dnl Only CC and CXX are respelled. MSVC_CXX and the other compiler variables
 dnl stay as the shell writes them and are converted later, when the /mnt/<drive>/
 dnl postprocessing rewrites config_host.mk for make.
 if test "$CCACHE" != "" -a -n "$WSL_ONLY_AS_HELPER"; then
-    dnl PathFormat takes one pathname. MSVC detection shortened CC to an 8.3
-    dnl path, so the first space in it is the one before the flags.
+    dnl A compiler named without a directory is found on PATH by whoever runs
+    dnl it and needs no respelling. One that came in from the environment
+    dnl carries a pathname, and its first space is the one before the flags.
+    dnl PathFormat takes one pathname at a time.
     cc_prog=`echo "$CC" | sed 's/ .*//'`
-    dnl @<:@ and @:>@ are how autoconf spells [ and ].
-    cc_rest=`echo "$CC" | sed 's/^@<:@^ @:>@*//'`
-    PathFormat "$cc_prog"
-    CC="$formatted_path$cc_rest"
+    case "$cc_prog" in
+    */*)
+        dnl @<:@ and @:>@ are how autoconf spells [ and ].
+        cc_rest=`echo "$CC" | sed 's/^@<:@^ @:>@*//'`
+        PathFormat "$cc_prog"
+        CC="$formatted_path$cc_rest"
+        ;;
+    esac
     if test -n "$CC_PROGRAM"; then
         PathFormat "$CC_PROGRAM"
         CC_PROGRAM="$formatted_path"
     fi
     cxx_prog=`echo "$CXX" | sed 's/ .*//'`
-    cxx_rest=`echo "$CXX" | sed 's/^@<:@^ @:>@*//'`
-    PathFormat "$cxx_prog"
-    CXX="$formatted_path$cxx_rest"
+    case "$cxx_prog" in
+    */*)
+        cxx_rest=`echo "$CXX" | sed 's/^@<:@^ @:>@*//'`
+        PathFormat "$cxx_prog"
+        CXX="$formatted_path$cxx_rest"
+        ;;
+    esac
     if test -n "$CXX_PROGRAM"; then
         PathFormat "$CXX_PROGRAM"
         CXX_PROGRAM="$formatted_path"
@@ -6456,6 +6483,9 @@ else
     AbsolutePath "$TARFILE_LOCATION"
     PathFormat "${absolute_path}"
     TARFILE_LOCATION="${formatted_path_unix}"
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
+        reject_awkward_characters "$TARFILE_LOCATION" "tarball"
+    fi
 fi
 AC_SUBST(TARFILE_LOCATION)
 
@@ -7075,14 +7105,11 @@ the  Windows SDK are installed.])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
-    pf_no_shorten=yes
-    PathFormat "$WINDOWS_SDK_HOME"
-    pf_no_shorten=
-    encode_path "$formatted_path"
-    WINDOWS_SDK_HOME_ENCODED="$encoded_path"
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
     WINDOWS_SDK_HOME_unix="$formatted_path_unix"
+    encode_path "$WINDOWS_SDK_HOME"
+    WINDOWS_SDK_HOME_ENCODED="$encoded_path"
     if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
         dnl The include flags carry the encoded long pathname rather than the
         dnl 8.3 one. Every reader of SOLARINC treats it as a list of words, so
@@ -8817,11 +8844,10 @@ if test "$ENABLE_JAVA" != ""; then
     dnl check: officebean needs to link -ljawt, and libjpipe.so needs to be
     dnl loaded by java to run JunitTests:
     if test "$build_os" = "cygwin" -a "$cross_compiling" != "yes"; then
-        shortjdkhome=`cygpath -d "$with_jdk_home"`
-        if test $WIN_HOST_BITS -eq 64 -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
+        if test $WIN_HOST_BITS -eq 64 -a -f "$with_jdk_home/bin/java.exe" -a "`"$with_jdk_home/bin/java.exe" -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
             AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
-        elif test $WIN_HOST_BITS -eq 32 -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
+        elif test $WIN_HOST_BITS -eq 32 -a -f "$with_jdk_home/bin/java.exe" -a "`"$with_jdk_home/bin/java.exe" -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
             AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
             AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
         fi
@@ -8861,19 +8887,19 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     AC_MSG_CHECKING([the installed JDK])
     if test -n "$JAVAINTERPRETER"; then
         dnl java -version sends output to stderr!
-        if test `$JAVAINTERPRETER -version 2>&1 | $GREP -c "Kaffe"` -gt 0; then
+        if test `$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version 2>&1 | $GREP -c "Kaffe"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
-        elif test `$JAVAINTERPRETER --version 2>&1 | $GREP -c "GNU libgcj"` -gt 0; then
+        elif test `$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" --version 2>&1 | $GREP -c "GNU libgcj"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
-        elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "BEA"` -gt 0; then
+        elif test `$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version 2>&1 | $AWK '{ print }' | $GREP -c "BEA"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
-        elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "IBM"` -gt 0; then
+        elif test `$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version 2>&1 | $AWK '{ print }' | $GREP -c "IBM"` -gt 0; then
             AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         else
             JDK=sun
 
             dnl Sun JDK specific tests
-            _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
+            _jdk=`$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
             if test "$_jdk_ver" -lt 10800; then
@@ -8887,7 +8913,7 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
                 JDK_SECURITYMANAGER_DISALLOWED=TRUE
             fi
 
-            JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
+            JAVA_HOME=`echo "$JAVAINTERPRETER" | $SED -n "s,//*bin//*java,,p"`
             if test "$_os" = "WINNT"; then
                 JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
             fi
@@ -9048,7 +9074,7 @@ _ACEOF
                 AC_MSG_ERROR([javac does not work - java projects will not build!])
             fi
             AC_MSG_CHECKING([if gij knows its java.home])
-            JAVA_HOME=`$JAVAINTERPRETER findhome`
+            JAVA_HOME=`$JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" findhome`
             if test $? = 0 -a "$JAVA_HOME" != ""; then
                 AC_MSG_RESULT([$JAVA_HOME])
             else
@@ -9059,7 +9085,7 @@ _ACEOF
             # clean-up after ourselves
             rm -f ./findhome.java ./findhome.class
         else
-            JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$with_java,,p"`
+            JAVA_HOME=`echo "$JAVAINTERPRETER" | $SED -n "s,//*bin//*$with_java,,p"`
         fi
     fi
 
@@ -9133,8 +9159,9 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
     case "$host_os" in
 
     cygwin*|wsl*)
-        JAVAINC="-I$JAVA_HOME/include/win32"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include"
+        encode_path "$JAVA_HOME"
+        JAVAINC="-I$encoded_path/include/win32"
+        JAVAINC="$JAVAINC -I$encoded_path/include"
         ;;
 
     darwin*)
@@ -9202,7 +9229,7 @@ if test -n "$JAVAINTERPRETER"; then
     for i in $CXX $CXXFLAGS; do
         case $i in
         -shared-libsan)
-            JAVAINTERPRETER="env LD_PRELOAD=libclang_rt.asan.so $JAVAINTERPRETER"
+            JAVAINTERPRETER_LAUNCHER="env LD_PRELOAD=libclang_rt.asan.so"
             break
             ;;
         esac
@@ -9210,6 +9237,7 @@ if test -n "$JAVAINTERPRETER"; then
 fi
 
 AC_SUBST(JAVACFLAGS)
+AC_SUBST(JAVAINTERPRETER_LAUNCHER)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
@@ -9255,7 +9283,7 @@ if test "$with_export_validation" != "no"; then
         dnl macOS ships a /usr/bin/java stub that exits non-zero with
         dnl "Unable to locate a Java Runtime" when no JDK is installed,
         dnl so verify the interpreter actually runs.
-        if test -n "$JAVAINTERPRETER" && ! $JAVAINTERPRETER -version >/dev/null 2>&1; then
+        if test -n "$JAVAINTERPRETER" && ! $JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version >/dev/null 2>&1; then
             JAVAINTERPRETER=
         fi
         if test -z "$JAVAINTERPRETER"; then
@@ -10598,14 +10626,19 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
     SYSTEM_ODBC_HEADERS=TRUE
 
     if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
-        save_CPPFLAGS=$CPPFLAGS
+        save_INCLUDE=$INCLUDE
         find_winsdk
         PathFormat "$winsdktest"
-        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/Include/$winsdklibsubdir/um -I$formatted_path/include -I$formatted_path/include/shared -I$formatted_path/include/$winsdklibsubdir/shared"
+        add_to_include_env "$formatted_path/include/um"
+        add_to_include_env "$formatted_path/Include/$winsdklibsubdir/um"
+        add_to_include_env "$formatted_path/include"
+        add_to_include_env "$formatted_path/include/shared"
+        add_to_include_env "$formatted_path/include/$winsdklibsubdir/shared"
         AC_CHECK_HEADER(sqlext.h, [],
             [AC_MSG_ERROR(odbc not found. install odbc)],
             [#include <windows.h>])
-        CPPFLAGS=$save_CPPFLAGS
+        INCLUDE=$save_INCLUDE
+        export INCLUDE
     else
         AC_CHECK_HEADER(sqlext.h, [],
             [AC_MSG_ERROR(odbc not found. install odbc)],[])
@@ -11899,18 +11932,26 @@ if test \( "$ENABLE_SKIA" = TRUE -o "$ENABLE_PDFIUM" = TRUE \) -a "$COM_IS_CLANG
     else
         if test "$_os" = "WINNT"; then
             AC_MSG_CHECKING([for clang-cl])
+            dnl Remember the directory rather than the program. clang-cl is
+            dnl named without one below, for the same reason cl.exe is: the
+            dnl value carries flags after the name, so whoever runs it splits
+            dnl it on whitespace and a pathname holding a space would not
+            dnl survive that.
+            LO_CLANG_DIR=
             if test "$WIN_BUILD_ARCH" = "x64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/clang-cl.exe"; then
-                LO_CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/clang-cl.exe"`
+                LO_CLANG_DIR="$VC_PRODUCT_DIR/Tools/Llvm/x64/bin"
             elif test "$WIN_BUILD_ARCH" = "arm64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/clang-cl.exe"; then
-                LO_CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/clang-cl.exe"`
+                LO_CLANG_DIR="$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin"
             elif test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
-                LO_CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
+                LO_CLANG_DIR="$VC_PRODUCT_DIR/Tools/Llvm/bin"
             elif test -n "$PROGRAMFILES" -a -x "$(cygpath -u "$PROGRAMFILES/LLVM/bin/clang-cl.exe")"; then
-                LO_CLANG_CC=`win_short_path_for_make "$PROGRAMFILES/LLVM/bin/clang-cl.exe"`
+                LO_CLANG_DIR="$PROGRAMFILES/LLVM/bin"
             elif test -x "$(cygpath -u "c:/Program Files/LLVM/bin/clang-cl.exe")"; then
-                LO_CLANG_CC=`win_short_path_for_make "c:/Program Files/LLVM/bin/clang-cl.exe"`
+                LO_CLANG_DIR="c:/Program Files/LLVM/bin"
             fi
-            if test -n "$LO_CLANG_CC"; then
+            if test -n "$LO_CLANG_DIR"; then
+                add_to_path_env "$LO_CLANG_DIR"
+                LO_CLANG_CC=clang-cl.exe
                 dnl explicitly set -m32/-m64
                 LO_CLANG_CC="$LO_CLANG_CC --target=$WIN_CLANG_TARGET -m$WIN_HOST_BITS"
                 LO_CLANG_CXX="$LO_CLANG_CC"
@@ -12805,10 +12846,10 @@ EOF
     dnl Checking for ant.jar
     if test "$ANT_HOME" != "NO_ANT_HOME"; then
         AC_MSG_CHECKING([Ant lib directory])
-        if test -f $ANT_HOME/lib/ant.jar; then
+        if test -f "$ANT_HOME/lib/ant.jar"; then
             ANT_LIB="$ANT_HOME/lib"
         else
-            if test -f $ANT_HOME/ant.jar; then
+            if test -f "$ANT_HOME/ant.jar"; then
                 ANT_LIB="$ANT_HOME"
             else
                 if test -f /usr/share/java/ant.jar; then
@@ -12817,7 +12858,7 @@ EOF
                     if test -f /usr/share/ant-core/lib/ant.jar; then
                         ANT_LIB=/usr/share/ant-core/lib
                     else
-                        if test -f $ANT_HOME/lib/ant/ant.jar; then
+                        if test -f "$ANT_HOME/lib/ant/ant.jar"; then
                             ANT_LIB="$ANT_HOME/lib/ant"
                         else
                             if test -f /usr/share/lib/ant/ant.jar; then
@@ -13150,7 +13191,7 @@ else
         CUSTOM_BRAND_DIR="$formatted_path"
         for lfile in $brand_files
         do
-            if ! test -f $with_branding/$lfile ; then
+            if ! test -f "$with_branding/$lfile" ; then
                 AC_MSG_WARN([Branded file $lfile does not exist, using the default one])
                 DEFAULT_BRAND_IMAGES="$DEFAULT_BRAND_IMAGES $lfile"
             else
@@ -13465,8 +13506,10 @@ dnl "Bogus error C2440 with consteval constructor (/std:c++20)":
 have_cpp_consteval=
 AC_LANG_PUSH([C++])
 save_CXX=$CXX
+save_LIB="$LIB"
 if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
-    CXX="env LIB=$ILIB $CXX"
+    LIB="$ILIB"
+    export LIB
 fi
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -13526,6 +13569,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
         AC_MSG_RESULT([yes])
     ], [AC_MSG_RESULT([no])], [AC_MSG_RESULT([assumed no (cross compiling)])])
 CXX=$save_CXX
+LIB=$save_LIB
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 if test -n "$have_cpp_consteval" && test "$COM_IS_CLANG" = TRUE && test -n "$BUILDING_PCH_WITH_OBJ"
@@ -13568,8 +13612,10 @@ dnl <https://github.com/llvm/llvm-project/commit/d8380ad977e94498e170b06449c81f1
 dnl [P1614] Implement [cmp.alg]'s std::{strong,weak,partial}_order" in LLVM 14:
 AC_LANG_PUSH([C++])
 save_CXX=$CXX
+save_LIB="$LIB"
 if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
-    CXX="env LIB=$ILIB $CXX"
+    LIB="$ILIB"
+    export LIB
 fi
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -13582,6 +13628,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([
         AC_MSG_RESULT([yes])
     ], [AC_MSG_RESULT([no])])
 CXX=$save_CXX
+LIB=$save_LIB
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
@@ -13894,6 +13941,9 @@ if test -n "$LO_PATH_FOR_BUILD"; then
     case "$host_os" in
     cygwin*|wsl*)
         pathmunge "$MSVC_HOST_PATH" "before"
+        if test -n "$LO_CLANG_DIR"; then
+            pathmunge "$LO_CLANG_DIR" "before"
+        fi
         ;;
     esac
 else
@@ -13938,6 +13988,9 @@ else
             pathmunge "$JAVA_HOME/bin" "before"
         fi
         pathmunge "$MSVC_HOST_PATH" "before"
+        if test -n "$LO_CLANG_DIR"; then
+            pathmunge "$LO_CLANG_DIR" "before"
+        fi
         ;;
 
     solaris*)

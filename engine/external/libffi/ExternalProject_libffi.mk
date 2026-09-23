@@ -26,7 +26,7 @@ libffi_WIN_PLATFORM := $(strip \
 $(call gb_ExternalProject_get_state_target,libffi,build):
 	$(call gb_Trace_StartRange,libffi,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export LIB="$(ILIB)" && \
+		export LIB="$(ILIB)" INCLUDE="$(gb_ExternalProject_INCLUDE)" && \
 		$(if $(MSBUILD_CCACHE),\
 			export PATH="$(shell cygpath -u '$(MSBUILD_CCACHE)'):$$PATH" && ) \
 		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 				LD='link' \
 				CPP='cl -nologo -EP' \
 				CXXCPP='cl -nologo -EP' \
-				CPPFLAGS="-DFFI_BUILDING_DLL $(SOLARINC)") \
+				CPPFLAGS="-DFFI_BUILDING_DLL") \
 			--prefix=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM) \
 			--disable-docs \
 		&& $(MAKE) \

@@ -19,7 +19,7 @@ static void print_result(const wchar_t* argv0, const wchar_t* result)
                             NULL)
         == 0)
     {
-        fprintf(stderr, "%S --8.3: Could not convert result to UTF-8.\n", argv0);
+        fprintf(stderr, "%S: Could not convert result to UTF-8.\n", argv0);
         exit(1);
     }
 
@@ -81,8 +81,6 @@ int wmain(int argc, wchar_t** argv)
     if (argc <= 1)
     {
         fprintf(stderr, "%S: Usage:\n", argv[0]);
-        fprintf(stderr, "%S --8.3 <windows-pathname>\n", argv[0]);
-        fprintf(stderr, "    Print the 8.3 form of a Windows pathnam. Fail it not present.\n");
         fprintf(stderr, "%S --read-registry [32|64] <path>\n", argv[0]);
         fprintf(stderr, "    Read a string value from the Registry and print it.\n");
         fprintf(stderr, "%S --list-registry [32|64] <path>\n", argv[0]);
@@ -90,28 +88,7 @@ int wmain(int argc, wchar_t** argv)
         exit(1);
     }
 
-    if (wcscmp(argv[1], L"--8.3") == 0)
-    {
-        if (argc != 3)
-        {
-            fprintf(stderr, "%S --8.3: One pathname argument expected\n", argv[0]);
-            exit(1);
-        }
-
-        // The argument should be a pathname in Windows format. The
-        // output will be the 8.3 pathname if present. If not present,
-        // return failure.
-
-        wchar_t woutput[1000];
-        if (GetShortPathNameW(argv[2], woutput, sizeof(woutput) / sizeof(woutput[0])) == 0)
-        {
-            fprintf(stderr, "%S --8.3: Could not get short pathname of %S.\n", argv[0], argv[2]);
-            exit(1);
-        }
-
-        print_result(argv[0], woutput);
-    }
-    else if (wcscmp(argv[1], L"--read-registry") == 0)
+    if (wcscmp(argv[1], L"--read-registry") == 0)
     {
         if (argc != 4)
         {

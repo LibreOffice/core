@@ -669,18 +669,18 @@ gb_AUTOCONF_WRAPPERS = \
 gb_ExternalProject_INCLUDE := \
 	$(call gb_Helper_decode_path,$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC))))
 
-# Workaround for openssl build - it puts the CC var into additional pair of quotes. This breaks if
-# CC consists of more than a single element such as when using "ccache compiler". In case the
-# variables are exported for openssl, it closes and reopens the quotes after each element.
+# CC reaches an nmake project as a command line, so every element of it carries quotes of its own
+# and a pathname holding a space stays one argument. openssl is the exception: it puts the whole
+# value inside a second pair of quotes, so there the elements close and reopen that pair instead of
+# bringing their own, and the outer quotes come from openssl.
 #
 # Where configure knew the launcher and the compiler apart, the elements are joined one at a time
-# instead of by replacing every space in a finished string, so a path holding a space stays one
-# element for openssl. Where it did not, the words of CC are what there is to join. Every other
-# project takes the elements separated by a plain space, in one value and without quotes of their
-# own, so a path holding a space reaches those makefiles as several words.
-gb_NMAKE_CC_SEPARATOR = $(if $(filter openssl,$(1)),\" \", )
-gb_NMAKE_CC_FROM_PARTS = $(if $(CC_LAUNCHER),$(shell cygpath -w '$(CC_LAUNCHER)')$(gb_NMAKE_CC_SEPARATOR))$(shell cygpath -w '$(CC_PROGRAM)')$(foreach cc_flag,$(filter -%,$(CC)),$(gb_NMAKE_CC_SEPARATOR)$(cc_flag))
-gb_NMAKE_CC_FROM_WORDS = $(subst $(WHITESPACE),$(gb_NMAKE_CC_SEPARATOR),$(strip $(shell cygpath -ws $(filter-out -%,$(CC))) $(filter -%,$(CC))))
+# rather than by replacing every space in a finished string. Where it did not, the words of CC are
+# what there is to join.
+gb_NMAKE_CC_SEPARATOR = \" \"
+gb_NMAKE_CC_EDGE = $(if $(filter openssl,$(1)),,\")
+gb_NMAKE_CC_FROM_PARTS = $(gb_NMAKE_CC_EDGE)$(if $(CC_LAUNCHER),$(shell cygpath -w '$(CC_LAUNCHER)')$(gb_NMAKE_CC_SEPARATOR))$(shell cygpath -w '$(CC_PROGRAM)')$(foreach cc_flag,$(filter -%,$(CC)),$(gb_NMAKE_CC_SEPARATOR)$(cc_flag))$(gb_NMAKE_CC_EDGE)
+gb_NMAKE_CC_FROM_WORDS = $(gb_NMAKE_CC_EDGE)$(subst $(WHITESPACE),$(gb_NMAKE_CC_SEPARATOR),$(strip $(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))))$(gb_NMAKE_CC_EDGE)
 
 gb_NMAKE_VARS = \
 	CC="$(if $(CC_PROGRAM),$(gb_NMAKE_CC_FROM_PARTS),$(gb_NMAKE_CC_FROM_WORDS))" \
@@ -740,7 +740,12 @@ gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
 gb_Python_HOME := $(INSTDIR_FOR_BUILD)/program/python-core-$(PYTHON_VERSION)
-gb_Python_PRECOMMAND := PATH="$(shell cygpath -u $(INSTDIR_FOR_BUILD)/program):$(shell cygpath.exe -uS)" PYTHONHOME="$(gb_Python_HOME)" PYTHONPATH="$${PYPATH:+$$PYPATH;}$(gb_Python_HOME)/lib;$(gb_Python_HOME)/lib/lib-dynload:$(INSTDIR_FOR_BUILD)/program"
+# This python has a PATH of its own, the program directory for its DLLs and the Windows system
+# directory. It also gets the directory of ccache, which CC names by its basename, and meson finds
+# ccache there. The compiler's directory stays out, because meson sets up the Visual Studio
+# environment itself only when it finds no cl.exe in PATH.
+gb_Python__CCACHE_DIR := $(if $(CCACHE),$(shell dirname "$$(command -v "$(firstword $(CCACHE))")"))
+gb_Python_PRECOMMAND := PATH="$(shell cygpath -u $(INSTDIR_FOR_BUILD)/program):$(shell cygpath.exe -uS)$(if $(gb_Python__CCACHE_DIR),:$(gb_Python__CCACHE_DIR))" PYTHONHOME="$(gb_Python_HOME)" PYTHONPATH="$${PYPATH:+$$PYPATH;}$(gb_Python_HOME)/lib;$(gb_Python_HOME)/lib/lib-dynload:$(INSTDIR_FOR_BUILD)/program"
 gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/python.exe
 
 gb_ICU_PRECOMMAND := PATH="$(shell cygpath -w $(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)"

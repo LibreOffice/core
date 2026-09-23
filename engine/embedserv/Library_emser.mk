@@ -41,7 +41,7 @@ $(eval $(call gb_Library_use_system_win32_libs,emser,\
 ))
 
 $(eval $(call gb_Library_add_libs,emser,\
-	"$(ATL_LIB)/atls.lib" \
+	atls.lib \
 ))
 
 $(eval $(call gb_Library_add_ldflags,emser,\

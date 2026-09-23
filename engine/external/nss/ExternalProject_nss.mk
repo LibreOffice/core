@@ -44,13 +44,14 @@ nss_WNT_MAKE = \
 	$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 	$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 	LIB="$(ILIB)" \
-	XCFLAGS="$(SOLARINC) $(ZLIB_CFLAGS)" \
+	INCLUDE="$(gb_ExternalProject_INCLUDE)" \
+	XCFLAGS="$(ZLIB_CFLAGS)" \
 	NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
 	COMMA=$(COMMA) \
 	$(if $(CROSS_COMPILING),\
 		CROSS_COMPILE=1 \
 		$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64)) \
-	$(MAKE) $(1) RC="rc.exe $(SOLARINC)" \
+	$(MAKE) $(1) RC="rc.exe" \
 		NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 		NSS_DISABLE_GTESTS=1 \
 		NSS_DISABLE_CMD_TOOLS=1 \
@@ -93,12 +94,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		&& export PYEXE='$(gb_UnpackedTarball_workdir)/python3/PCbuild/$(python_arch_subdir)/python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe' \
 		&& root=$$(cygpath -u "$$("$$PYEXE" -c 'import os,sys;sys.stdout.write(os.path.realpath(sys.argv[1]))' "$$(cygpath -m ..)")") \
 		&& cd "$$root/nss" \
-		&& PATH="$(shell cygpath -u '$(SRCDIR)/external/gyp/bin'):$(shell cygpath -u '$(dir $(NINJA))'):$$PATH" \
+		&& PATH="$(shell cygpath -u '$(SRCDIR)/external/gyp/bin'):$$(cygpath -u "$$(dirname '$(NINJA)')"):$$PATH" \
 			GYPDIR='$(gb_UnpackedTarball_workdir)/gyp' \
 			VSPATH='$(VS_INSTALL_DIR)' \
 			GYP_MSVS_OVERRIDE_PATH='$(VS_INSTALL_DIR)' \
 			GYP_MSVS_VERSION='$(VS_YEAR)' \
-			$(if $(CCACHE),CC_wrapper='$(CCACHE)') \
+			$(if $(CCACHE),CC_wrapper="$$(cygpath -m "$$(command -v '$(CCACHE)')")") \
 			bash ./build.sh --msvc $(if $(MSVC_USE_DEBUG_RUNTIME),,-o) -t x64 -Ddisable_dbm=0 -Ddisable_libpkix=0 -Dsign_libs=0 -Ddisable_werror=1 -Ddisable_cmds=1 \
 				--disable-tests \
 				--with-nspr="$$(cygpath -m "$$root/dist/out")/include:$$(cygpath -m "$$root/dist/out")/lib" \

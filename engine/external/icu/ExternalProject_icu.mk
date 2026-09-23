@@ -24,9 +24,9 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(UNIX_HELPER) autoconf -f \
 		&& export CC="$(filter-out -fsanitize%,$(CC))" CXX="$(filter-out -fsanitize%,$(CXX))" \
-			LIB="$(ILIB)" PYTHONWARNINGS="default" \
-			gb_ICU_XFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD -Gy)" \
-		&& CFLAGS="$${gb_ICU_XFLAGS}" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$${gb_ICU_XFLAGS} $(CXXFLAGS_CXX11)" \
+			LIB="$(ILIB)" INCLUDE="$(gb_ExternalProject_INCLUDE)" PYTHONWARNINGS="default" \
+			gb_ICU_XFLAGS="-FS $(gb_DEBUGINFO_FLAGS) $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD -Gy)" \
+		&& CFLAGS="$${gb_ICU_XFLAGS}" CXXFLAGS="$${gb_ICU_XFLAGS} $(CXXFLAGS_CXX11)" \
 			INSTALL=`cygpath -m /usr/bin/install` $(if $(MSVC_USE_DEBUG_RUNTIME),LDFLAGS="-DEBUG") \
 			$(gb_RUN_CONFIGURE) ./configure \
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \

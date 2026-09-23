@@ -50,7 +50,7 @@ $(eval $(call gb_Library_use_system_win32_libs,oleautobridge,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_libs,oleautobridge,\
-	"$(ATL_LIB)/atls.lib" \
+	atls.lib \
 ))
 endif
 
