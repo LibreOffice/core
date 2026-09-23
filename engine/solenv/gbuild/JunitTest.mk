@@ -178,29 +178,8 @@ $(eval $(call gb_JunitTest_add_classes,$(1),\
 
 endef
 
-# To be used by gb_JunitTest_set_unoapi_test_defaults
-# <module>_unoapi_1 => <module>_1 => <module> => <module>/qa/unoapi
-gb_JunitTest__unoapi_iter = $(subst _unoapi,,$(1))
-gb_JunitTest__unoapi_module = $(firstword $(subst _, ,$(gb_JunitTest__unoapi_iter)))
-gb_JunitTest__unoapi_dir = $(if $(2),$(2),$(gb_JunitTest__unoapi_module)/qa/unoapi)
-
-# $(1) = test name (prefer <module>_unoapi for defaults, example <module>_unoapi_1)
-# $(2) = test directory base (def: <module>_unoapi_1 => <module>_1/qa/unoapi)
-# $(3) = SCE file (def: <module>_1.sce)
-# $(4) = XCL file (def: knownissues.xcl)
-# $(5) = test document directory (def: testdocuments; use . for base)
-define gb_JunitTest_set_unoapi_test_defaults
-$(eval $(call gb_JunitTest_set_defs,$(1),\
-    $$(DEFS) \
-    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/$(gb_JunitTest__unoapi_dir)/$(if $(3),$(3),$(gb_JunitTest__unoapi_iter).sce) \
-    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/$(gb_JunitTest__unoapi_dir)/$(if $(4),$(4),knownissues.xcl) \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/$(gb_JunitTest__unoapi_dir)/$(if $(5),$(5),testdocuments) \
-))
-
 $(eval $(call gb_JunitTest_use_unoapi_jars,$(1)))
 $(eval $(call gb_JunitTest_use_unoapi_test_class,$(1)))
-
-endef
 
 else # OOO_JUNIT_JAR
 

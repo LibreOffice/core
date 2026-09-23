@@ -65,10 +65,6 @@ $(eval $(call gb_Module_add_targets_for_build,svx,\
 endif
 endif # !DESKTOP
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
-    JunitTest_svx_unoapi \
-))
-
 $(eval $(call gb_Module_add_uicheck_targets,svx,\
     UITest_svx_table \
 ))

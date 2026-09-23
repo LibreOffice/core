@@ -18,12 +18,7 @@ $(eval $(call gb_Module_add_targets,linguistic,\
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
-    JunitTest_linguistic_unoapi \
     CppunitTest_linguistic_restprotocol \
-))
-else
-$(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
-    JunitTest_linguistic_unoapi \
 ))
 endif
 

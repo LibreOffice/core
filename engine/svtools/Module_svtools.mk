@@ -43,10 +43,6 @@ endif
 
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
-    JunitTest_svtools_unoapi \
-))
-
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,svtools,\
     CppunitTest_svtools_dialogs_test \

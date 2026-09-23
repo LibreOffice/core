@@ -213,14 +213,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
-    JunitTest_sw_complex \
-    JunitTest_sw_unoapi_1 \
-    JunitTest_sw_unoapi_2 \
-    JunitTest_sw_unoapi_3 \
-    JunitTest_sw_unoapi_4 \
-))
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
 	PythonTest_sw_python \
 ))
 

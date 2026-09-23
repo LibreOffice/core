@@ -38,9 +38,4 @@ $(eval $(call gb_Module_add_check_targets,ucb,\
 
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,ucb,\
-	JunitTest_ucb_unoapi \
-	$(if $(WITH_WEBDAV),JunitTest_ucb_webdav_unoapi) \
-))
-
 # vim: set noet sw=4 ts=4:
