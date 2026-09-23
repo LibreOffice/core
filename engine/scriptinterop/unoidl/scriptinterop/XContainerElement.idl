@@ -16,6 +16,8 @@ interface XContainerElement: XElement {
 
     XElement getChild([in] long index);
 
+    long getChildIndex([in] XElement child);
+
     long getNumChildren();
 };
 

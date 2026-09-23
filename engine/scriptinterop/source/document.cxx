@@ -105,6 +105,26 @@ template<typename T>
 css::beans::Optional<cpo::uno::Reference<T>> maybe(cpo::uno::Reference<T> const & ref)
 { return {ref.is(), ref}; }
 
+sal_Int32 childIndexOf(
+    scriptinterop::XContainerElement & container,
+    cpo::uno::Reference<scriptinterop::XElement> const & child)
+{
+    if (!child.is()) {
+        throw cpo::uno::RuntimeException(u"getChildIndex: the child must not be null"_ustr);
+    }
+    auto const target = child->getuno();
+    assert(target.is());
+    auto const n = container.getNumChildren();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        auto const candidate = container.getChild(i);
+        if (candidate->getType() == child->getType() && candidate->getuno() == target) {
+            return i;
+        }
+    }
+    throw cpo::uno::RuntimeException(
+        u"getChildIndex: the element does not contain the given child"_ustr);
+}
+
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
     cpo::uno::Reference<css::text::XText> const & text,
     cpo::uno::Reference<scriptinterop::XElement> const & parent);
@@ -919,6 +939,9 @@ public:
         return new InlineImageImpl(this, images[imgIndex]);
     }
 
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
+
     css::beans::Optional<scriptinterop::GlyphType> getGlyphType() override {
         auto const rulesAny = getParaProp(u"NumberingRules"_ustr);
         if (!rulesAny) {
@@ -1191,6 +1214,9 @@ public:
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
+
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
         return enumerateElements(text_, this);
     }
@@ -1299,6 +1325,9 @@ public:
         auto const cell = getCell(index);
         return cell.IsPresent ? cell.Value : nullptr;
     }
+
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
 
     // TODO: real sibling walk that steps through the containing table's rows:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
@@ -1422,6 +1451,9 @@ public:
         auto const row = getRow(index);
         return row.IsPresent ? row.Value : nullptr;
     }
+
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
         return maybe(siblingContent(table_, parent_, true));
@@ -1816,6 +1848,9 @@ public:
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
+
     // TODO: a footnote section is not part of a sibling list in our model:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
         return {false, {}};
@@ -1948,6 +1983,9 @@ public:
         auto const list = getChildren();
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
+
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
         return enumerateElements(text_, this);

@@ -95,6 +95,23 @@ function documentTest() {
     console.assert(table.getRow(1).getCell(0).getText() === 'A2');
     console.assert(table.getRow(1).getCell(1).getText() === 'B2');
 
+    console.assert(body.getChildIndex(p0) === 0);
+    console.assert(body.getChildIndex(body.getChild(1)) === 1);
+    console.assert(body.getChildIndex(table) === 3);
+    console.assert(p0.getChildIndex(p0.getChild(0)) === 0);
+    console.assert(table.getChildIndex(table.getRow(1)) === 1);
+    console.assert(row0.getChildIndex(row0.getCell(1)) === 1);
+    console.assert(cell00.getChildIndex(cell00.getChild(0)) === 0);
+    // The Text child of p0 is not a child of the body, even though it stands for the same document
+    // paragraph as p0:
+    let threw = false;
+    try {
+        body.getChildIndex(p0.getChild(0));
+    } catch (e) {
+        threw = true;
+    }
+    console.assert(threw);
+
     // Paragraph 4 anchors a footnote whose only paragraph is "Note":
     console.assert(body.getChild(4).getText().substring(0, 8) === 'Trailing');
     const fns = DocumentApp.getActiveDocument().getFootnotes();
@@ -104,6 +121,7 @@ function documentTest() {
     console.assert(noteContents.getType() === DocumentApp.ElementType.FOOTNOTE_SECTION);
     console.assert(noteContents.getNumChildren() >= 1);
     console.assert(noteContents.getChild(0).getText() === 'Note');
+    console.assert(noteContents.getChildIndex(noteContents.getChild(0)) === 0);
 
     // No user selection on a freshly opened document, so getSelection returns null:
     console.assert(DocumentApp.getActiveDocument().getSelection() === null);
