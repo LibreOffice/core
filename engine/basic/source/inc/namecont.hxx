@@ -34,7 +34,6 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAScriptListener.hpp>
@@ -324,7 +323,6 @@ private:
     void init_Impl( const OUString& rInitialDocumentURL,
                     const cpo::uno::Reference< css::embed::XStorage >& _rxInitialStorage,
                     std::unique_lock<std::mutex>& guard );
-    void implScanExtensions(std::unique_lock<std::mutex>& guard);
     static constexpr OUString sVBATextEncodingPropName = u"VBATextEncoding"_ustr;
 
 public:
@@ -567,70 +565,6 @@ protected:
 
     virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const = 0;
 };
-
-
-class ScriptSubPackageIterator
-{
-    cpo::uno::Reference< css::deployment::XPackage > m_xMainPackage;
-
-    bool m_bIsValid;
-    bool m_bIsBundle;
-
-    cpo::uno::Sequence< cpo::uno::Reference< css::deployment::XPackage > > m_aSubPkgSeq;
-    sal_Int32 m_nSubPkgCount;
-    sal_Int32 m_iNextSubPkg;
-
-    static cpo::uno::Reference< css::deployment::XPackage >
-        implDetectScriptPackage( const cpo::uno::Reference
-            < css::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
-
-public:
-    ScriptSubPackageIterator( cpo::uno::Reference< css::deployment::XPackage > const & xMainPackage );
-
-    cpo::uno::Reference< css::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
-};
-
-
-class ScriptExtensionIterator final
-{
-public:
-    ScriptExtensionIterator();
-    OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
-
-private:
-    cpo::uno::Reference< css::deployment::XPackage >
-        implGetNextUserScriptPackage( bool& rbPureDialogLib );
-    cpo::uno::Reference< css::deployment::XPackage >
-        implGetNextSharedScriptPackage( bool& rbPureDialogLib );
-    cpo::uno::Reference< css::deployment::XPackage >
-        implGetNextBundledScriptPackage( bool& rbPureDialogLib );
-
-    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-
-    enum IteratorState
-    {
-        USER_EXTENSIONS,
-        SHARED_EXTENSIONS,
-        BUNDLED_EXTENSIONS,
-        END_REACHED
-    } m_eState;
-
-    cpo::uno::Sequence< cpo::uno::Reference< css::deployment::XPackage > > m_aUserPackagesSeq;
-    bool m_bUserPackagesLoaded;
-
-    cpo::uno::Sequence< cpo::uno::Reference< css::deployment::XPackage > > m_aSharedPackagesSeq;
-    bool m_bSharedPackagesLoaded;
-
-    cpo::uno::Sequence< cpo::uno::Reference< css::deployment::XPackage > > m_aBundledPackagesSeq;
-    bool m_bBundledPackagesLoaded;
-
-    int m_iUserPackage;
-    int m_iSharedPackage;
-    int m_iBundledPackage;
-
-    ScriptSubPackageIterator* m_pScriptSubPackageIterator;
-
-}; // end class ScriptExtensionIterator
 
 
 }   // namespace basic

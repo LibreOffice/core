@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_extensions.h>
 #include <config_folders.h>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -87,7 +85,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::task;
 using namespace com::sun::star::embed;
 using namespace com::sun::star::frame;
-using namespace com::sun::star::deployment;
 using namespace com::sun::star;
 using namespace cppu;
 
@@ -938,19 +935,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     // #110009: END Scope to force the StorageRefs to be destructed
     }
 
-    if( !bStorage && meInitMode == DEFAULT )
-    {
-        try
-        {
-            implScanExtensions(guard);
-        }
-        catch(const cpo::uno::Exception& )
-        {
-            // TODO: error handling?
-            SAL_WARN("basic", "Cannot access extensions!");
-        }
-    }
-
     // Preload?
     {
         for (auto& aName : maNameContainer.getElementNames())
@@ -1188,55 +1172,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     }
     catch(const Exception& )
     {}
-}
-
-void SfxLibraryContainer::implScanExtensions(std::unique_lock<std::mutex>& guard)
-{
-#if HAVE_FEATURE_EXTENSIONS
-    ScriptExtensionIterator aScriptIt;
-
-    bool bPureDialogLib = false;
-    for (;;)
-    {
-        OUString aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib );
-        if (aLibURL.isEmpty())
-            break;
-        if( bPureDialogLib && maInfoFileName == "script" )
-        {
-            continue;
-        }
-        // Extract lib name
-        sal_Int32 nLen = aLibURL.getLength();
-        sal_Int32 indexLastSlash = aLibURL.lastIndexOf( '/' );
-        sal_Int32 nReduceCopy = 0;
-        if( indexLastSlash == nLen - 1 )
-        {
-            nReduceCopy = 1;
-            indexLastSlash = aLibURL.lastIndexOf( '/', nLen - 1 );
-        }
-
-        OUString aLibName = aLibURL.copy( indexLastSlash + 1, nLen - indexLastSlash - nReduceCopy - 1 );
-
-        // If a library of the same exists the existing library wins
-        if( hasByName( aLibName ) )
-        {
-            continue;
-        }
-        // Add index file to URL
-        OUString aIndexFileURL = aLibURL;
-        if( nReduceCopy == 0 )
-        {
-            aIndexFileURL += "/";
-        }
-        aIndexFileURL += maInfoFileName + ".xlb";
-
-        // Create link
-        const bool bReadOnly = false;
-        createLibraryLink_Impl(aLibName, aIndexFileURL, bReadOnly, guard);
-    }
-#else
-    (void)guard;
-#endif
 }
 
 // Handle maLibInfoFileURL and maStorageURL correctly
@@ -2174,6 +2109,9 @@ SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString
     maNameContainer.insertByName(Name, aElement, guard);
     maModifiable.setModified(true, guard);
 
+    // A profile written before extensions were removed can still hold links
+    // into an extension's script container. Mark those, so that they are left
+    // out of the index this rewrites rather than written back.
     if( StorageURL.indexOf( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" ) != -1 )
     {
         pNewLib->mbExtension = true;
@@ -3129,316 +3067,6 @@ void SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xLi
     maNameContainer.removeChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-
-// Implementation class ScriptExtensionIterator
-
-ScriptExtensionIterator::ScriptExtensionIterator()
-    : m_xContext( comphelper::getProcessComponentContext() )
-    , m_eState( USER_EXTENSIONS )
-    , m_bUserPackagesLoaded( false )
-    , m_bSharedPackagesLoaded( false )
-    , m_bBundledPackagesLoaded( false )
-    , m_iUserPackage( 0 )
-    , m_iSharedPackage( 0 )
-       , m_iBundledPackage( 0 )
-    , m_pScriptSubPackageIterator( nullptr )
-{}
-
-OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDialogLib )
-{
-    OUString aRetLib;
-
-    while( aRetLib.isEmpty() && m_eState != END_REACHED )
-    {
-        switch( m_eState )
-        {
-            case USER_EXTENSIONS:
-            {
-                Reference< deployment::XPackage > xScriptPackage =
-                    implGetNextUserScriptPackage( rbPureDialogLib );
-                if( !xScriptPackage.is() )
-                {
-                    break;
-                }
-                aRetLib = xScriptPackage->getURL();
-                break;
-            }
-
-            case SHARED_EXTENSIONS:
-            {
-                Reference< deployment::XPackage > xScriptPackage =
-                    implGetNextSharedScriptPackage( rbPureDialogLib );
-                if( !xScriptPackage.is() )
-                {
-                    break;
-                }
-                aRetLib = xScriptPackage->getURL();
-                break;
-            }
-            case BUNDLED_EXTENSIONS:
-            {
-                Reference< deployment::XPackage > xScriptPackage =
-                    implGetNextBundledScriptPackage( rbPureDialogLib );
-                if( !xScriptPackage.is() )
-                {
-                    break;
-                }
-                aRetLib = xScriptPackage->getURL();
-                break;
-            }
-            case END_REACHED:
-                SAL_WARN(
-                    "basic",
-                    ("ScriptExtensionIterator::nextBasicOrDialogLibrary():"
-                     " Invalid case END_REACHED"));
-                break;
-        }
-    }
-
-    return aRetLib;
-}
-
-ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPackage > const & xMainPackage )
-    : m_xMainPackage( xMainPackage )
-    , m_bIsValid( false )
-    , m_bIsBundle( false )
-    , m_nSubPkgCount( 0 )
-    , m_iNextSubPkg( 0 )
-{
-    if( !m_xMainPackage.is() )
-    {
-        return;
-    }
-    // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<bool> > option( m_xMainPackage->isRegistered
-        ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
-    bool bRegistered = false;
-    if( option.IsPresent )
-    {
-        beans::Ambiguous<bool> const & reg = option.Value;
-        if( !reg.IsAmbiguous && reg.Value )
-        {
-            bRegistered = true;
-        }
-    }
-    if( bRegistered )
-    {
-        m_bIsValid = true;
-        if( m_xMainPackage->isBundle() )
-        {
-            m_bIsBundle = true;
-            m_aSubPkgSeq = m_xMainPackage->getBundle( Reference<task::XAbortChannel>(),
-                                                      Reference<ucb::XCommandEnvironment>() );
-            m_nSubPkgCount = m_aSubPkgSeq.getLength();
-        }
-    }
-}
-
-Reference< deployment::XPackage > ScriptSubPackageIterator::getNextScriptSubPackage( bool& rbPureDialogLib )
-{
-    rbPureDialogLib = false;
-
-    Reference< deployment::XPackage > xScriptPackage;
-    if( !m_bIsValid )
-    {
-        return xScriptPackage;
-    }
-    if( m_bIsBundle )
-    {
-        sal_Int32 iPkg;
-        for( iPkg = m_iNextSubPkg ; iPkg < m_nSubPkgCount ; ++iPkg )
-        {
-            const Reference<deployment::XPackage> xSubPkg = m_aSubPkgSeq[iPkg];
-            xScriptPackage = implDetectScriptPackage( xSubPkg, rbPureDialogLib );
-            if( xScriptPackage.is() )
-            {
-                break;
-            }
-        }
-        m_iNextSubPkg = iPkg + 1;
-    }
-    else
-    {
-        xScriptPackage = implDetectScriptPackage( m_xMainPackage, rbPureDialogLib );
-        m_bIsValid = false;     // No more script packages
-    }
-
-    return xScriptPackage;
-}
-
-Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPackage ( const Reference< deployment::XPackage >& rPackage,
-                                                                                      bool& rbPureDialogLib )
-{
-    Reference< deployment::XPackage > xScriptPackage;
-
-    if( rPackage.is() )
-    {
-        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = rPackage->getPackageType();
-        OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if ( aMediaType == u"application/vnd.sun.star.basic-library"_ustr )
-        {
-            xScriptPackage = rPackage;
-        }
-        else if ( aMediaType == u"application/vnd.sun.star.dialog-library"_ustr )
-        {
-            rbPureDialogLib = true;
-            xScriptPackage = rPackage;
-        }
-    }
-
-    return xScriptPackage;
-}
-
-Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScriptPackage( bool& rbPureDialogLib )
-{
-    Reference< deployment::XPackage > xScriptPackage;
-
-    if( !m_bUserPackagesLoaded )
-    {
-        try
-        {
-            Reference< XExtensionManager > xManager = ExtensionManager::get( m_xContext );
-            m_aUserPackagesSeq = xManager->getDeployedExtensions(u"user"_ustr,
-                                                                 Reference< task::XAbortChannel >(),
-                                                                 Reference< ucb::XCommandEnvironment >() );
-        }
-        catch(const cpo::uno::DeploymentException& )
-        {
-            // Special Office installations may not contain deployment code
-            m_eState = END_REACHED;
-            return xScriptPackage;
-        }
-
-        m_bUserPackagesLoaded = true;
-    }
-
-    if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
-    {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
-    }
-    else
-    {
-        if( m_pScriptSubPackageIterator == nullptr )
-        {
-            Reference<deployment::XPackage> xPackage = m_aUserPackagesSeq[m_iUserPackage];
-            SAL_WARN_IF(
-                !xPackage.is(), "basic",
-                ("ScriptExtensionIterator::implGetNextUserScriptPackage():"
-                 " Invalid package"));
-            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
-        }
-
-        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-        if( !xScriptPackage.is() )
-        {
-            delete m_pScriptSubPackageIterator;
-            m_pScriptSubPackageIterator = nullptr;
-            m_iUserPackage++;
-        }
-    }
-
-    return xScriptPackage;
-}
-
-Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScriptPackage( bool& rbPureDialogLib )
-{
-    Reference< deployment::XPackage > xScriptPackage;
-
-    if( !m_bSharedPackagesLoaded )
-    {
-        try
-        {
-            Reference< XExtensionManager > xSharedManager = ExtensionManager::get( m_xContext );
-            m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions(u"shared"_ustr,
-                                                                         Reference< task::XAbortChannel >(),
-                                                                         Reference< ucb::XCommandEnvironment >() );
-        }
-        catch(const cpo::uno::DeploymentException& )
-        {
-            // Special Office installations may not contain deployment code
-            return xScriptPackage;
-        }
-
-        m_bSharedPackagesLoaded = true;
-    }
-
-    if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
-    {
-        m_eState = BUNDLED_EXTENSIONS;
-    }
-    else
-    {
-        if( m_pScriptSubPackageIterator == nullptr )
-        {
-            Reference<deployment::XPackage> xPackage = m_aSharedPackagesSeq[m_iSharedPackage];
-            SAL_WARN_IF(
-                !xPackage.is(), "basic",
-                ("ScriptExtensionIterator::implGetNextSharedScriptPackage():"
-                 " Invalid package"));
-            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
-        }
-
-        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-        if( !xScriptPackage.is() )
-        {
-            delete m_pScriptSubPackageIterator;
-            m_pScriptSubPackageIterator = nullptr;
-            m_iSharedPackage++;
-        }
-    }
-
-    return xScriptPackage;
-}
-
-Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScriptPackage( bool& rbPureDialogLib )
-{
-    Reference< deployment::XPackage > xScriptPackage;
-
-    if( !m_bBundledPackagesLoaded )
-    {
-        try
-        {
-            Reference< XExtensionManager > xManager = ExtensionManager::get( m_xContext );
-            m_aBundledPackagesSeq = xManager->getDeployedExtensions(u"bundled"_ustr,
-                                                                    Reference< task::XAbortChannel >(),
-                                                                    Reference< ucb::XCommandEnvironment >() );
-        }
-        catch(const cpo::uno::DeploymentException& )
-        {
-            // Special Office installations may not contain deployment code
-            return xScriptPackage;
-        }
-
-        m_bBundledPackagesLoaded = true;
-    }
-
-    if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
-    {
-        m_eState = END_REACHED;
-    }
-    else
-    {
-        if( m_pScriptSubPackageIterator == nullptr )
-        {
-            Reference<deployment::XPackage> xPackage = m_aBundledPackagesSeq[m_iBundledPackage];
-            SAL_WARN_IF(
-                !xPackage.is(), "basic",
-                ("ScriptExtensionIterator::implGetNextBundledScriptPackage():"
-                 " Invalid package"));
-            m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
-        }
-
-        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-        if( !xScriptPackage.is() )
-        {
-            delete m_pScriptSubPackageIterator;
-            m_pScriptSubPackageIterator = nullptr;
-            m_iBundledPackage++;
-        }
-    }
-
-    return xScriptPackage;
-}
 
 }   // namespace basic
 
