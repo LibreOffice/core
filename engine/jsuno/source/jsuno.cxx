@@ -1854,6 +1854,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
 
 ValueRef getUnoidlRepresentation(JSContext* ctx, std::u16string_view id)
 {
+    auto const suppression = comphelper::suppressLegacyApiWarning();
     ValueRef const global(ctx, JS_GetGlobalObject(ctx));
     ValueRef const uno(ctx, JS_GetPropertyStr(ctx, global, "uno"));
     assert(JS_IsObject(uno));

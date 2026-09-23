@@ -27,21 +27,21 @@ class Execute : public CppUnit::TestFixture
 public:
     void testReturnValue()
     {
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, testexec(u"42"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, testexec(u"true"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, testexec(u"42"_ustr).result);
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, testexec(u"true"_ustr).result);
         CPPUNIT_ASSERT_EQUAL(
-            u"\"hello\""_ustr, testexec(u"'hello'"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, testexec(u"null"_ustr));
+            u"\"hello\""_ustr, testexec(u"'hello'"_ustr).result);
+        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, testexec(u"null"_ustr).result);
         CPPUNIT_ASSERT_EQUAL(
-            u"[1,2,3]"_ustr, testexec(u"[1, 2, 3]"_ustr));
+            u"[1,2,3]"_ustr, testexec(u"[1, 2, 3]"_ustr).result);
         CPPUNIT_ASSERT_EQUAL(u"{\"a\":1,\"b\":\"two\"}"_ustr,
-                             testexec(u"({a: 1, b: 'two'})"_ustr));
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, testexec(u"undefined"_ustr));
+                             testexec(u"({a: 1, b: 'two'})"_ustr).result);
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, testexec(u"undefined"_ustr).result);
         CPPUNIT_ASSERT_EQUAL(
-            u""_ustr, testexec(u"(function () {})"_ustr));
+            u""_ustr, testexec(u"(function () {})"_ustr).result);
         CPPUNIT_ASSERT_EQUAL(u"42"_ustr,
                              testexec(
-                                 u"(function () { return 42; }).apply(null, [])"_ustr));
+                                 u"(function () { return 42; }).apply(null, [])"_ustr).result);
         try
         {
             testexec(u"1n"_ustr);
@@ -101,9 +101,26 @@ public:
         }
     }
 
+    void testLegacyUnoApiUse() {
+        CPPUNIT_ASSERT(testexec(u"uno.idl.com.sun.star.uno.XInterface"_ustr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(testexec(u"uno.idl.cpo.uno.XInterface"_ustr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(!testexec(u"uno.idl.scriptinterop.XFactory"_ustr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(
+            !testexec(
+                u"$internal.suppressLegacyUnoApiStart();"
+                " uno.idl.com.sun.star.uno.XInterface;"
+                " $internal.suppressLegacyUnoApiEnd();"_ustr).usedLegacyUnoApi);
+        // A UNO exception thrown into the script is not the script's own use of the legacy API,
+        // even though its JS representation is a cpo.uno.RuntimeException:
+        CPPUNIT_ASSERT(
+            !testexec(
+                u"try { cool.newAffineTransformBuilder(); } catch (e) {}"_ustr).usedLegacyUnoApi);
+    }
+
     CPPUNIT_TEST_SUITE(Execute);
     CPPUNIT_TEST(testReturnValue);
     CPPUNIT_TEST(testThrows);
+    CPPUNIT_TEST(testLegacyUnoApiUse);
     CPPUNIT_TEST_SUITE_END();
 };
 
