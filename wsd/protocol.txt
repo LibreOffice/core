@@ -267,9 +267,12 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
     refreshes the pages of one source, and takes the source off one page. Only
     Impress and Draw documents hold such pages. A source name is the source
     document as the user knows it, and it is the name a page records rather than
-    a location: nothing resolves it, and a refresh reads the remote link it
-    names. A source name holds no path and no control character. The source name,
-    the WOPISrc and the staged name are all percent-encoded.
+    a location. The server matches it against the remote links of the document,
+    and for a name no remote link stands for it asks the storage, when
+    CheckFileInfo says SupportsLinkAccess; a refresh then reads the remote link
+    the name stands for. A source name holds no path
+    and no control character. The source name, the WOPISrc and the staged name
+    are all percent-encoded.
 
     A client sends all three. An update names a file the server staged in the
     jail, which is what an exportslides of a remote link comes to, so the

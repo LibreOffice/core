@@ -292,6 +292,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     JsonUtil::findJSONValue(object, "HideUserList", _hideUserList);
     JsonUtil::findJSONValue(object, "SupportsLocks", _supportsLocks);
     JsonUtil::findJSONValue(object, "SupportsRename", _supportsRename);
+    JsonUtil::findJSONValue(object, "SupportsLinkAccess", _supportsLinkAccess);
     JsonUtil::findJSONValue(object, "UserCanRename", _userCanRename);
     JsonUtil::findJSONValue(object, "BreadcrumbDocName", _breadcrumbDocName);
     JsonUtil::findJSONValue(object, "FileUrl", _fileUrl);

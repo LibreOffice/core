@@ -522,6 +522,14 @@ public:
     void setRemoteDocumentViewToken(const std::string& tag, const std::string& wopiSrc,
                                     const std::string& accessToken);
 
+    /// Records that one view's storage answers link access requests and asks it for the
+    /// sources this document names that no remote link stands for. Private to that view.
+    void enableRemoteDocumentLinkAccess(const std::string& tag);
+
+    /// Takes the storage's answer to one view's link access request for one source.
+    void completeRemoteDocumentLinkAccess(const std::string& tag, const std::string& persistentLink,
+                                          unsigned statusCode, const std::string& body);
+
     /// Records a remote link and gives its access token to the view that
     /// holds the given one-time token, coming from POST /cool/links.
     bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,

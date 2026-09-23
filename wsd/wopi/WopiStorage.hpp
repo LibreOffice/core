@@ -123,6 +123,7 @@ public:
         bool getEnableShare() const { return _enableShare; }
         bool getSupportsRename() const { return _supportsRename; }
         bool getSupportsLocks() const { return _supportsLocks; }
+        bool getSupportsLinkAccess() const { return _supportsLinkAccess; }
         bool getUserCanRename() const { return _userCanRename; }
         bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
         bool getUserCanOnlyManageRedlines() const { return _userCanOnlyManageRedlines; }
@@ -224,6 +225,8 @@ public:
         bool _supportsLocks = false;
         /// If WOPI host supports rename
         bool _supportsRename = false;
+        /// Whether the storage answers a POST to <WOPISrc>/linkaccess
+        bool _supportsLinkAccess = false;
         /// If user is allowed to rename the document
         bool _userCanRename = false;
         /// If user is limited to only writing/modifying comments

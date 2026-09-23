@@ -57,6 +57,15 @@ public:
     void setViewToken(DocumentBroker& docBroker, const std::string& tag,
                       const std::string& wopiSrc, const std::string& accessToken);
 
+    /// Records that storage answers link access requests, then asks it for every
+    /// source the document names that the view holds no remote link for. Private to that view.
+    void enableViewLinkAccess(DocumentBroker& docBroker, const std::string& tag);
+
+    /// Takes the storage's answer to one view's link access request for one source.
+    void completeLinkAccess(DocumentBroker& docBroker, const std::string& tag,
+                            const std::string& persistentLink, unsigned statusCode,
+                            const std::string& body);
+
     /// Opens or drops one view's subscription to a remote document. On
     /// subscribe the view's own token is used; a view without a token for the
     /// source is refused. A subscription in the failed or missing state holds
@@ -131,6 +140,16 @@ private:
         std::string state;
     };
 
+    /// What asking the storage for the document behind one persistent link came to.
+    enum class LinkAccess
+    {
+        Pending, ///< The request is in flight.
+        Resolved, ///< The storage named a document and gave this view a token for it.
+        NotFound, ///< The storage knows no document for the reference.
+        Denied, ///< This view's user may not reach the document.
+        Failed, ///< Any other answer, or none.
+    };
+
     /// The private state of one view.
     struct View
     {
@@ -140,6 +159,12 @@ private:
         std::map<std::string, Subscription> subscriptions;
         /// The last remotelinks: message sent to the view.
         std::string lastClientMessage;
+        /// Whether this view's storage answers a POST to <WOPISrc>/linkaccess, from the
+        /// SupportsLinkAccess of its CheckFileInfo.
+        bool supportsLinkAccess = false;
+        /// What asking the storage for each source came to, keyed by the persistent link. A
+        /// persistent link with no record has not been asked for by this view.
+        std::map<std::string, LinkAccess> linkAccess;
     };
 
     /// The document a WOPISrc names, as the user knows it: the last part of its path, decoded.
@@ -156,6 +181,20 @@ private:
 
     /// True when a remote link stands for the source of the given name.
     bool isListed(const std::string& name) const { return findListed(name) != _entries.end(); }
+
+    /// Asks the storage of every view, or of the given view alone, for the document behind
+    /// each source the document names that the view holds no token for and has not asked
+    /// for yet.
+    void resolveUnlistedSources(DocumentBroker& docBroker);
+    void resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag);
+
+    /// Sends one view's storage the question for one source, authorized the way every WOPI
+    /// request of that view is, and records the question as pending.
+    void requestLinkAccess(DocumentBroker& docBroker, const std::string& tag,
+                           const std::string& persistentLink);
+
+    /// The name of one link access outcome, for logs and the state dump.
+    static const char* linkAccessName(LinkAccess access);
 
     /// Answers one view's remote document subscription with an error event.
     static void sendError(DocumentBroker& docBroker, const std::string& tag,

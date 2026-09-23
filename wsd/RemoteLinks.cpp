@@ -15,15 +15,19 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/ConfigUtil.hpp>
+#include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
+#include <common/SigUtil.hpp>
 #include <common/StringVector.hpp>
 #include <common/Uri.hpp>
+#include <net/HttpRequest.hpp>
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/RequestDetails.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 
 #include <Poco/JSON/Object.h>
 #include <Poco/URI.h>
@@ -120,8 +124,6 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
 {
     docBroker.assertCorrectThread();
 
-    // A source nothing can reach is reported where a document reads remote links at all, and
-    // left alone on a server that serves none.
     if (!RemoteDocumentBroker::isEnabled())
         return;
 
@@ -129,6 +131,23 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
         return;
 
     _namedSources = std::move(names);
+
+    for (auto& itView : _views)
+    {
+        std::map<std::string, LinkAccess>& linkAccess = itView.second.linkAccess;
+        for (auto it = linkAccess.begin(); it != linkAccess.end();)
+        {
+            const bool named = std::find(_namedSources.begin(), _namedSources.end(), it->first) !=
+                               _namedSources.end();
+            if (!named ||
+                (it->second != LinkAccess::Pending && it->second != LinkAccess::Resolved))
+                it = linkAccess.erase(it);
+            else
+                ++it;
+        }
+    }
+
+    resolveUnlistedSources(docBroker);
     refreshAllViews(docBroker);
 }
 
@@ -148,6 +167,223 @@ void RemoteLinks::setViewToken(DocumentBroker& docBroker, const std::string& tag
         LOG_ERR("Ignoring the access token for the invalid remote link WOPISrc ["
                 << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
     }
+}
+
+void RemoteLinks::enableViewLinkAccess(DocumentBroker& docBroker, const std::string& tag)
+{
+    docBroker.assertCorrectThread();
+
+    if (!RemoteDocumentBroker::isEnabled())
+        return;
+
+    _views[tag].supportsLinkAccess = true;
+    resolveUnlistedSources(docBroker, tag);
+}
+
+void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker)
+{
+    std::vector<std::string> tags;
+    tags.reserve(_views.size());
+    for (const auto& itView : _views)
+        tags.push_back(itView.first);
+
+    for (const std::string& tag : tags)
+        resolveUnlistedSources(docBroker, tag);
+}
+
+void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag)
+{
+    const auto itView = _views.find(tag);
+    if (itView == _views.end() || !itView->second.supportsLinkAccess)
+        return;
+
+    for (const std::string& name : _namedSources)
+    {
+        // A source this view can already read needs no question
+        const auto itEntry = findListed(name);
+        if (itEntry != _entries.end() &&
+            itView->second.tokens.find(itEntry->first) != itView->second.tokens.end())
+            continue;
+        if (itView->second.linkAccess.find(name) != itView->second.linkAccess.end())
+            continue;
+
+        requestLinkAccess(docBroker, tag, name);
+    }
+}
+
+void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string& tag,
+                                    const std::string& persistentLink)
+{
+    View& view = _views[tag];
+    const std::shared_ptr<ClientSession> session = docBroker.findSession(tag);
+    if (!session)
+        return;
+
+    // The question goes to the storage of this document.
+    // Is authorized the way every other WOPI request of this view is.
+    const Authorization& auth = session->getAuthorization();
+    Poco::URI uri(session->getPublicUri());
+    uri.setPath(uri.getPath() + "/linkaccess");
+    auth.authorizeURI(uri);
+
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
+
+    // A relative URI has no host to send the request to.
+    if (uri.isRelative())
+    {
+        LOG_WRN("Not asking for the source [" << linkAnonym << "] of [" << docBroker.getDocKey()
+                                              << "]: the WOPI URL [" << uriAnonym
+                                              << "] is relative");
+        view.linkAccess[persistentLink] = LinkAccess::Failed;
+        return;
+    }
+
+    Poco::JSON::Object::Ptr body = new Poco::JSON::Object();
+    body->set("PersistentLink", persistentLink);
+    std::ostringstream bodyStream;
+    body->stringify(bodyStream);
+
+    http::Request request = StorageConnectionManager::createHttpRequest(uri, auth);
+    request.setVerb(http::Request::VERB_POST);
+    request.setBody(bodyStream.str(), "application/json; charset=utf-8");
+
+    std::shared_ptr<http::Session> httpSession = StorageConnectionManager::getHttpSession(uri);
+    if (!httpSession)
+    {
+        LOG_WRN("Not asking for the source [" << linkAnonym << "] of [" << docBroker.getDocKey()
+                                              << "]: no HTTP session to [" << uriAnonym << ']');
+        view.linkAccess[persistentLink] = LinkAccess::Failed;
+        return;
+    }
+
+    std::weak_ptr<DocumentBroker> weakBroker = docBroker.weak_from_this();
+    const auto complete = [weakBroker, tag, persistentLink](unsigned statusCode,
+                                                             const std::string& answer)
+    {
+        if (SigUtil::getShutdownRequestFlag())
+            return;
+
+        const std::shared_ptr<DocumentBroker> broker = weakBroker.lock();
+        if (!broker || broker->isMarkedToDestroy())
+            return;
+
+        broker->completeRemoteDocumentLinkAccess(tag, persistentLink, statusCode, answer);
+    };
+    httpSession->setFinishedHandler(
+        [complete](const std::shared_ptr<http::Session>& finishedSession)
+        {
+            const std::shared_ptr<const http::Response> response = finishedSession->response();
+            complete(response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0,
+                     response ? response->getBody() : std::string());
+        });
+    httpSession->setConnectFailHandler([complete](const std::shared_ptr<http::Session>&)
+                                       { complete(0, std::string()); });
+
+    view.linkAccess[persistentLink] = LinkAccess::Pending;
+    LOG_INF("Asking [" << uriAnonym << "] for the source [" << linkAnonym << "] of ["
+                       << docBroker.getDocKey() << "] for view [" << tag << ']');
+    httpSession->asyncRequest(request, docBroker.getPoll());
+}
+
+void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::string& tag,
+                                     const std::string& persistentLink, const unsigned statusCode,
+                                     const std::string& body)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    const auto itAccess = itView->second.linkAccess.find(persistentLink);
+    if (itAccess == itView->second.linkAccess.end() || itAccess->second != LinkAccess::Pending)
+        return;
+
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
+
+    if (statusCode == static_cast<unsigned>(http::StatusCode::NotFound))
+    {
+        LOG_INF("The storage knows no document for the source ["
+                                << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
+        itAccess->second = LinkAccess::NotFound;
+        return;
+    }
+
+    if (statusCode == static_cast<unsigned>(http::StatusCode::Unauthorized) ||
+        statusCode == static_cast<unsigned>(http::StatusCode::Forbidden))
+    {
+        LOG_INF("The storage denies view [" << tag << "] the source ["
+                                << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
+        itAccess->second = LinkAccess::Denied;
+        return;
+    }
+
+    if (statusCode != static_cast<unsigned>(http::StatusCode::OK))
+    {
+        LOG_WRN("The storage answered the question for the source ["
+                                << linkAnonym << "] of [" << docBroker.getDocKey()
+                                << "] with status " << statusCode);
+        itAccess->second = LinkAccess::Failed;
+        return;
+    }
+
+    constexpr std::size_t MaxAnswerSize = 64 * 1024;
+    Poco::JSON::Object::Ptr object;
+    if (body.size() > MaxAnswerSize || !JsonUtil::parseJSON(body, object))
+    {
+        LOG_ERR("The storage answered the question for the source ["
+                                << linkAnonym << "] of [" << docBroker.getDocKey()
+                                << "] with a body that is not a link");
+        itAccess->second = LinkAccess::Failed;
+        return;
+    }
+
+    std::string wopiSrc;
+    std::string accessToken;
+    std::string name;
+    std::string lastModifiedTime;
+    std::string answeredPersistentLink;
+    JsonUtil::findJSONValue(object, "WOPISrc", wopiSrc);
+    JsonUtil::findJSONValue(object, "AccessToken", accessToken);
+    JsonUtil::findJSONValue(object, "BaseFileName", name);
+    JsonUtil::findJSONValue(object, "LastModifiedTime", lastModifiedTime);
+    JsonUtil::findJSONValue(object, "PersistentLink", answeredPersistentLink);
+
+    std::string reason;
+    try
+    {
+        if (wopiSrc.empty() || accessToken.empty())
+            reason = "names no document or no token";
+        else if (!answeredPersistentLink.empty() && answeredPersistentLink != persistentLink)
+            reason = "answers for another persistent link";
+        else if (RequestDetails::getDocKey(wopiSrc) == docBroker.getDocKey())
+            reason = "names this document itself";
+        else if (!HostUtil::allowedWopiHost(Poco::URI(wopiSrc).getHost()))
+            reason = "names a document on a host that is not allowed";
+    }
+    catch (const std::exception& exc)
+    {
+        reason = std::string("names an invalid document: ") + exc.what();
+    }
+
+    if (!reason.empty())
+    {
+        LOG_ERR("The storage answered the question for the source ["
+                                << linkAnonym << "] of [" << docBroker.getDocKey()
+                                << "] with a link that " << reason);
+        itAccess->second = LinkAccess::Failed;
+        return;
+    }
+
+    itAccess->second = LinkAccess::Resolved;
+    LOG_INF("The storage named [" << Anonymizer::anonymizeUrl(wopiSrc)
+                            << "] for the source [" << linkAnonym << "] of ["
+                            << docBroker.getDocKey() << "] for view [" << tag << ']');
+
+    // The document stands for the source for every view, and the token is this view's own.
+    setSource(docBroker, wopiSrc, name, lastModifiedTime, persistentLink);
+    setViewToken(docBroker, tag, wopiSrc, accessToken);
 }
 
 void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
@@ -517,6 +753,24 @@ RemoteLinks::findListed(const std::string& name) const
                         });
 }
 
+const char* RemoteLinks::linkAccessName(const LinkAccess access)
+{
+    switch (access)
+    {
+        case LinkAccess::Pending:
+            return "pending";
+        case LinkAccess::Resolved:
+            return "resolved";
+        case LinkAccess::NotFound:
+            return "notfound";
+        case LinkAccess::Denied:
+            return "denied";
+        case LinkAccess::Failed:
+            return "failed";
+    }
+    return "unknown";
+}
+
 std::string RemoteLinks::buildJson(const std::string& tag) const
 {
     const auto itView = _views.find(tag);
@@ -618,10 +872,15 @@ void RemoteLinks::dumpState(std::ostream& os) const
     for (const auto& itView : _views)
     {
         os << "\n    view " << itView.first << " tokens: " << itView.second.tokens.size()
-           << " subscriptions: " << itView.second.subscriptions.size();
+           << " subscriptions: " << itView.second.subscriptions.size()
+           << " link access: " << (itView.second.supportsLinkAccess ? "yes" : "no")
+           << " link access asked: " << itView.second.linkAccess.size();
         for (const auto& it : itView.second.subscriptions)
             os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc) << " state: "
                << it.second.state;
+        for (const auto& it : itView.second.linkAccess)
+            os << "\n      persistent link " << Anonymizer::anonymize(it.first) << " access: "
+               << linkAccessName(it.second);
     }
 }
 

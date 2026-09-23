@@ -4794,6 +4794,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
     try
     {
 #if !MOBILEAPP
+        bool supportsLinkAccess = false;
         if (wopiFileInfo)
         {
             // The source list and last-modified times are public, the same for
@@ -4804,6 +4805,8 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 
             for (const auto& token : wopiFileInfo->getRemoteLinkTokens())
                 setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
+
+            supportsLinkAccess = wopiFileInfo->getSupportsLinkAccess();
         }
 #endif
 
@@ -4848,6 +4851,9 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // link over POST /cool/links.
         if (RemoteDocumentBroker::isEnabled())
             session->rotateLinkToken(/*notifyClient=*/true);
+
+        if (supportsLinkAccess)
+            _remoteLinks.enableViewLinkAccess(*this, id);
 #endif
 
         const std::size_t count = _sessions.size();
@@ -5445,6 +5451,19 @@ void DocumentBroker::setRemoteDocumentViewToken(const std::string& tag,
                                                 const std::string& accessToken)
 {
     _remoteLinks.setViewToken(*this, tag, wopiSrc, accessToken);
+}
+
+void DocumentBroker::enableRemoteDocumentLinkAccess(const std::string& tag)
+{
+    _remoteLinks.enableViewLinkAccess(*this, tag);
+}
+
+void DocumentBroker::completeRemoteDocumentLinkAccess(const std::string& tag,
+                                                      const std::string& persistentLink,
+                                                      unsigned statusCode,
+                                                      const std::string& body)
+{
+    _remoteLinks.completeLinkAccess(*this, tag, persistentLink, statusCode, body);
 }
 
 bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
