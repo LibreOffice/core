@@ -14,7 +14,7 @@ if (!globalThis.cool) {
     console.assert = console.assert || (cond => { if (!cond) throw new Error('failed: ' + cond); });
 }
 
-function utilitiesTest() {
+function test() {
     const b1 = Utilities.newBlob([1, 2, 3]);
     console.assert(b1.getContentType() === null);
     console.assert(b1.getName() === null);

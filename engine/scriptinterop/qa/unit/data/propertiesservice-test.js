@@ -14,7 +14,7 @@ if (!globalThis.cool) {
     console.assert = console.assert || (cond => { if (!cond) throw new Error('failed: ' + cond); });
 }
 
-function propertiesServiceTest() {
+function test() {
     const props = PropertiesService.getUserProperties();
     // A property that the user has not set reports as null:
     console.assert(props.getProperty('scriptinterop-test-key') === null);

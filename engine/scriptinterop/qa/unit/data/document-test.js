@@ -14,7 +14,7 @@ if (!globalThis.cool) {
     console.assert = console.assert || (cond => { if (!cond) throw new Error('failed: ' + cond); });
 }
 
-function documentTest() {
+function test() {
     const body = DocumentApp.getActiveDocument().getBody();
     console.assert(body.getType() === DocumentApp.ElementType.BODY_SECTION);
     console.assert(body.getText().length > 0);

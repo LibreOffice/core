@@ -82,10 +82,7 @@ protected:
             getCurrentController()->getFrame());
     }
 
-    void runScript(
-        OUString const & url, std::u16string_view entry,
-        std::function<void(OUString const &)> proxyCallHook)
-    {
+    void runScript(OUString const & url, std::function<void(OUString const &)> proxyCallHook) {
         OUString gasUrl;
         auto const rc = osl::FileBase::getFileURLFromSystemPath(
             u"" SRC_ROOT "/../browser/extensions/gas-kit-runner.js"_ustr, gasUrl);
@@ -93,7 +90,7 @@ protected:
         OUString const script(
             "var window = globalThis;\n" + read(gasUrl)
             + "\n__gasKitRunner('scriptinterop_document_test', [" + jsLiteral(read(url)) + "], ["
-            + jsLiteral(url) + "], " + jsLiteral(entry) + ", []);");
+            + jsLiteral(url) + "], 'test', []);");
         try {
             jsuno::execute(
                 script, u"<input>"_ustr, 1,
@@ -145,11 +142,11 @@ std::u16string_view extractCallId(std::u16string_view payload) {
 
 CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     loadActiveDocument(u"document-test.rtf");
-    runScript(createFileURL(u"document-test.js"), u"documentTest", {});
+    runScript(createFileURL(u"document-test.js"), {});
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
-    runScript(createFileURL(u"utilities-test.js"), u"utilitiesTest", {});
+    runScript(createFileURL(u"utilities-test.js"), {});
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
@@ -157,7 +154,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
     // every property read; the proxy hook plays the client side of that call and returns an absent
     // Optional<string> so `getProperty` should hand back null:
     runScript(
-        createFileURL(u"propertiesservice-test.js"), u"propertiesServiceTest",
+        createFileURL(u"propertiesservice-test.js"),
         [](OUString const & payload) {
             auto const callId = extractCallId(payload);
             if (!callId.empty()) {
