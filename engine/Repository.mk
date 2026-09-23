@@ -449,7 +449,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,writer, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	smoketest \
 	subsequenttest \
 	test \
 	test-setupvcl \
@@ -605,7 +604,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	ScriptFramework \
 	ScriptProviderForJava \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
-	smoketest \
 	unoil \
 ))
 

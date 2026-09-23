@@ -115,9 +115,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment,\
 	PackageRegistryBackend \
 	thePackageManagerFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/deployment/test,\
-	SmoketestCommandEnvironment \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/document,\
 	DocumentProperties \
 	DocumentRevisionListPersistence \

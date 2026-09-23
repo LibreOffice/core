@@ -147,7 +147,6 @@ excludeDirs = {
     "ridljar",
     "ridljar",
     "scp2",
-    "smoketest",
     "sysui",
     "udkapi",
     "uitest",

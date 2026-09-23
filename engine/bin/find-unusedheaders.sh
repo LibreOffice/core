@@ -42,7 +42,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e ridljar/ \
                                 -e schema/ \
                                 -e scp2/ \
-                                -e smoketest/ \
                                 -e sysui/ \
                                 -e udkapi/ \
                                 -e uitest/ \
