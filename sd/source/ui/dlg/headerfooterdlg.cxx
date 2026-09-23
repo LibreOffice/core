@@ -570,7 +570,7 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     pOutl->Init( OutlinerMode::TextObject );
     OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
 
-    EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
+    EditEngine& rEdit = pOutl->GetEditEngine();
 
     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
     if( pOPO )
@@ -579,10 +579,10 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     EPaM aDateFieldPosition;
     bool bHasDateFieldItem = false;
 
-    sal_Int32 nParaCount = pEdit->GetParagraphCount();
+    sal_Int32 nParaCount = rEdit.GetParagraphCount();
     for (sal_Int32 nPara = 0; (nPara < nParaCount) && !bHasDateFieldItem; ++nPara)
     {
-        for (const EFieldInfo& rFieldInfo : pEdit->GetFieldInfo(nPara))
+        for (const EFieldInfo& rFieldInfo : rEdit.GetFieldInfo(nPara))
         {
             if (rFieldInfo.pFieldItem)
             {
@@ -602,7 +602,7 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     {
         if( bSet )
         {
-            SfxItemSet aSet(pEdit->GetAttribs(aDateFieldPosition.nPara,
+            SfxItemSet aSet(rEdit.GetAttribs(aDateFieldPosition.nPara,
                                               aDateFieldPosition.nIndex,
                                               aDateFieldPosition.nIndex+1,
                                               GetAttribsFlags::CHARATTRIBS));
@@ -618,7 +618,7 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
 
             ESelection aSel(aDateFieldPosition.nPara, aDateFieldPosition.nIndex,
                             aDateFieldPosition.nPara, aDateFieldPosition.nIndex+1 );
-            pEdit->QuickSetAttribs( aSet, aSel );
+            rEdit.QuickSetAttribs( aSet, aSel );
 
             pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
             pOutl->UpdateFields();

@@ -448,7 +448,7 @@ void Test::testHyperlinkCopyPaste()
     aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
 
     // Create EditEngine's instance
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& aEditEngine = aOutliner.GetEditEngine();
 
     // Get EditDoc for current EditEngine's instance
     EditDoc& rDoc = aEditEngine.GetEditDoc();
@@ -2214,7 +2214,7 @@ void Test::testTdf154248MultilineFieldWrapping()
     aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
 
     // Create EditEngine's instance
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& aEditEngine = aOutliner.GetEditEngine();
     aEditEngine.SetPaperSize(Size(2000, 2000));
     aEditEngine.SetText(u"ABC  DEF ABC DEFGH"_ustr);
     // Positions Ref     ....*4............

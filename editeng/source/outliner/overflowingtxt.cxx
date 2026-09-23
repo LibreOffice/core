@@ -46,7 +46,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(
                              (pOutl->GetParagraphCount() == 1 &&
                               !pNextPObj->GetTextObject().HasText(0));
 
-    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+    EditEngine &rEditEngine = pOutl->GetEditEngine();
 
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
@@ -76,7 +76,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
         pOutl->SetText(*pNextPObj);
     }
 
-    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+    EditEngine &rEditEngine = pOutl->GetEditEngine();
 
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
@@ -91,9 +91,9 @@ std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
     return pOutl->CreateParaObject();
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner const *pOutl)
+css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
 {
-    EditEngine& rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+    EditEngine& rEditEngine = pOutl->GetEditEngine();
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
     ESelection aWholeTextSel(0, 0, nLastPara, rEditEngine.GetTextLen(nLastPara));
 
@@ -201,7 +201,7 @@ bool OFlowChainedText::IsLastParaInterrupted() const
 
 
 
-UFlowChainedText::UFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
+UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 {
     mxUnderflowingTxt = TextChainingUtils::CreateTransferableFromText(pOutl);
     mbIsDeepMerge = bIsDeepMerge;
