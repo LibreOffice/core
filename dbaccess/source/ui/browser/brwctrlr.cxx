@@ -1361,8 +1361,14 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = false;
                     return aReturn;
                 }
-                // any filter or sort order set ?
-                aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength();
+                {
+                    Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
+                    OUString sFilter, sHaving;
+                    xFormSet->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
+                    xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE) >>= sHaving;
+                    // any filter or sort order set ?
+                    aReturn.bEnabled = !sFilter.isEmpty() || !sHaving.isEmpty() || m_xParser->getOrder().getLength();
+                }
                 return aReturn;
         }
         // no chance without valid models
@@ -1705,8 +1711,16 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
 
-    const OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
-    const OUString sOldHaving = m_xParser->getHavingClause();
+    OUString sOldVal, sOldHaving;
+    if (bFilter)
+    {
+        xFormSet->getPropertyValue(PROPERTY_FILTER) >>= sOldVal;
+        xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE) >>= sOldHaving;
+    }
+    else
+    {
+        sOldVal = m_xParser->getOrder();
+    }
     Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
     try
     {
