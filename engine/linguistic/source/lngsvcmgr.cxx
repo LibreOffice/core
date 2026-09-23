@@ -20,8 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -421,41 +419,6 @@ LngSvcMgr::LngSvcMgr()
 
     aUpdateIdle.SetPriority(TaskPriority::LOWEST);
     aUpdateIdle.SetInvokeHandler(LINK(this, LngSvcMgr, updateAndBroadcast));
-
-    // request to be notified if an extension has been added/removed
-    const uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
-
-    uno::Reference<deployment::XExtensionManager> xExtensionManager;
-    try {
-        xExtensionManager = deployment::ExtensionManager::get(xContext);
-    } catch ( const cpo::uno::DeploymentException & ) {
-        SAL_WARN( "linguistic", "no extension manager - should fire on mobile only" );
-    } catch ( const deployment::DeploymentException & ) {
-        SAL_WARN( "linguistic", "no extension manager - should fire on mobile only" );
-    }
-    if (xExtensionManager.is())
-    {
-        xMB.set(xExtensionManager, uno::UNO_QUERY_THROW);
-
-        uno::Reference<util::XModifyListener> xListener(this);
-        xMB->addModifyListener( xListener );
-    }
-}
-
-// css::util::XModifyListener
-void LngSvcMgr::modified(const lang::EventObject&)
-{
-    osl::MutexGuard aGuard(GetLinguMutex());
-    //assume that if an extension has been added/removed that
-    //it might be a dictionary extension, so drop our cache
-
-    pAvailSpellSvcs.reset();
-    pAvailGrammarSvcs.reset();
-    pAvailHyphSvcs.reset();
-    pAvailThesSvcs.reset();
-
-    //schedule in an update to execute in the main thread
-    aUpdateIdle.Start();
 }
 
 bool LngSvcMgr::joinThreads()
@@ -486,38 +449,12 @@ IMPL_LINK_NOARG(LngSvcMgr, updateAndBroadcast, Timer *, void)
     }
 }
 
-void LngSvcMgr::stopListening()
-{
-    osl::MutexGuard aGuard(GetLinguMutex());
-
-    if (!xMB.is())
-        return;
-
-    try
-    {
-            uno::Reference<util::XModifyListener>  xListener(this);
-            xMB->removeModifyListener(xListener);
-    }
-    catch (const cpo::uno::Exception&)
-    {
-    }
-
-    xMB.clear();
-}
-
-void LngSvcMgr::disposing(const lang::EventObject&)
-{
-    stopListening();
-}
-
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14 && __GNUC__ <= 17
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 LngSvcMgr::~LngSvcMgr()
 {
-    stopListening();
-
     // memory for pSpellDsp, pHyphDsp, pThesDsp, pListenerHelper
     // will be freed in the destructor of the respective Reference's
     // xSpellDsp, xGrammarDsp, xHyphDsp, xThesDsp

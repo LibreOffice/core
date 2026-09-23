@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <unotools/configitem.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
@@ -52,8 +51,7 @@ class LngSvcMgr :
     public cppu::WeakImplHelper
     <
         css::linguistic2::XLinguServiceManager2,
-        css::lang::XServiceInfo,
-        css::util::XModifyListener
+        css::lang::XServiceInfo
     >,
     private utl::ConfigItem,
     public comphelper::COKit::ThreadJoinable
@@ -61,9 +59,6 @@ class LngSvcMgr :
     friend class LngSvcMgrListenerHelper;
 
     ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>  aEvtListeners;
-
-    cpo::uno::Reference<
-        css::util::XModifyBroadcaster>                  xMB;
 
     Idle                                                aUpdateIdle;
 
@@ -118,7 +113,6 @@ class LngSvcMgr :
     virtual void    ImplCommit() override;
 
     void UpdateAll();
-    void stopListening();
     DECL_LINK( updateAndBroadcast, Timer*, void );
 
 public:
@@ -149,10 +143,7 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XEventListener
-    virtual void disposing( const css::lang::EventObject& rSource ) override;
 
-    // XModifyListener
-    virtual void modified( const css::lang::EventObject& rEvent ) override;
 
     // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;
