@@ -3913,6 +3913,11 @@ void SalInstanceTreeView::set_column_header_name(int nColumn, const OUString& rN
     m_xTreeView->SetColumnHeaderName(nColumn, rName);
 }
 
+void SalInstanceTreeView::clear_column_header_names()
+{
+    m_xTreeView->ClearColumnHeaderNames();
+}
+
 void SalInstanceTreeView::set_headers_sortable(bool bSortable)
 {
     m_xTreeView->SetHeadersSortable(bSortable);

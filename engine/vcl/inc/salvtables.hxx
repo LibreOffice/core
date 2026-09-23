@@ -1583,6 +1583,8 @@ public:
 
     virtual void set_column_header_name(int nColumn, const OUString& rName) override;
 
+    virtual void clear_column_header_names() override;
+
     virtual void set_headers_sortable(bool bSortable) override;
 
     virtual void set_header_name_aria_label(const OUString& rLabel) override;

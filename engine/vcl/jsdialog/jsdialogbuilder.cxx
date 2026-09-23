@@ -2003,6 +2003,12 @@ void JSTreeView::set_column_header_name(int nColumn, const OUString& rName)
     sendUpdate();
 }
 
+void JSTreeView::clear_column_header_names()
+{
+    SalInstanceTreeView::clear_column_header_names();
+    sendUpdate();
+}
+
 void JSTreeView::render_entry(int pos, int dpiscale)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);

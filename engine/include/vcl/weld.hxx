@@ -1629,6 +1629,9 @@ public:
     virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
     virtual void set_column_header_color(int /*nColumn*/, const Color& /*rColor*/) {}
     virtual void set_column_header_name(int /*nColumn*/, const OUString& /*rName*/) {}
+    // Forget every column header name, so only the columns named again
+    // afterwards get a name box.
+    virtual void clear_column_header_names() {}
     // Mark the column-title headers as non-clickable pure labels (no sort /
     // column-click). Default no-op; backends that render clickable headers
     // override it.

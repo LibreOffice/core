@@ -384,7 +384,23 @@ class TreeViewControl {
 			nameInput.setAttribute('aria-label', headerNameLabel);
 
 			if (data && columnIndex !== undefined) {
-				const commitEdit = () => {
+				// Stable id so _updateWidgetImpl's id-based focus restore finds
+				// the same box across a widget rebuild; the marker lets it keep
+				// the text typed so far as well.
+				nameInput.id = data.id + '-header-' + columnIndex + '-name';
+				nameInput.dataset.keepValueOnRebuild = '';
+				// Keep the input's intrinsic width out of the column's
+				// min-content, the grid track decides the width.
+				nameInput.size = 1;
+
+				const engineValue = header.headerName;
+				// Commit on blur rather than on 'change': a value restored by
+				// _updateWidgetImpl after a rebuild never sets the dirty flag,
+				// so 'change' would not fire for it.
+				nameInput.addEventListener('blur', () => {
+					// Window lost focus (Alt+Tab): keep the text, commit later.
+					if (!document.hasFocus()) return;
+					if (nameInput.value === engineValue) return;
 					builder.callback(
 						'treeview',
 						'headernamechanged',
@@ -392,11 +408,23 @@ class TreeViewControl {
 						{ column: columnIndex, value: nameInput.value },
 						builder,
 					);
-				};
-				nameInput.addEventListener('change', commitEdit);
+				});
 				nameInput.addEventListener('keydown', (e: KeyboardEvent) => {
 					if (e.key === 'Enter') {
+						e.preventDefault();
 						nameInput.blur();
+					} else if (e.key === 'Escape') {
+						// Revert an uncommitted edit and stay in the box; an
+						// unchanged box lets Escape bubble up to close the dialog.
+						if (nameInput.value !== engineValue) {
+							nameInput.value = engineValue;
+							e.preventDefault();
+							e.stopPropagation();
+						}
+					} else if (TreeViewControl.headerNameOwnedKeys.includes(e.key)) {
+						// Caret movement and '*' belong to the text box; keep
+						// them away from the grid's row navigation handler.
+						e.stopPropagation();
 					}
 				});
 			}
@@ -2712,6 +2740,18 @@ class TreeViewControl {
 		if (data.type === 'menu') return true;
 		return false;
 	}
+
+	// Keys the grid's container handler would otherwise turn into row
+	// navigation while the user is editing a column header name.
+	static headerNameOwnedKeys = [
+		'ArrowUp',
+		'ArrowDown',
+		'ArrowLeft',
+		'ArrowRight',
+		'Home',
+		'End',
+		'*',
+	];
 
 	// True when the key was typed into a text field, such as the tree's own
 	// search box, where it should edit that field rather than jump in the list.

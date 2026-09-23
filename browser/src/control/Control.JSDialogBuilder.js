@@ -2306,6 +2306,19 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		var focusedElementInDialog = focusedElement ? container.querySelector('[id=\'' + focusedElement.id + '\']') : null;
 		var focusedId = focusedElementInDialog ? focusedElementInDialog.id : null;
 
+		// A text box inside the rebuilt widget that opted in (e.g. the series
+		// name box in the chart Data Table headers) keeps the text typed so
+		// far and its caret when the update races the user's typing.
+		var keepValueInput = focusedElementInDialog
+			&& focusedElementInDialog !== control
+			&& control.contains(focusedElementInDialog)
+			&& focusedElementInDialog.dataset
+			&& focusedElementInDialog.dataset.keepValueOnRebuild !== undefined
+			? focusedElementInDialog : null;
+		var keptValue = keepValueInput ? keepValueInput.value : null;
+		var keptSelectionStart = keepValueInput ? keepValueInput.selectionStart : null;
+		var keptSelectionEnd = keepValueInput ? keepValueInput.selectionEnd : null;
+
 		var temporaryParent = new DocumentFragment();
 
 		// Preserve spinfield unit across rebuilds: if the old element stored
@@ -2350,6 +2363,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			var found = container.querySelector('[id=\'' + focusedId + '\']');
 			if (found) {
 				found.focus();
+				if (keepValueInput && found.tagName === 'INPUT' && found.value !== keptValue) {
+					found.value = keptValue;
+					found.setSelectionRange(keptSelectionStart, keptSelectionEnd);
+				}
 			} else {
 				// Iconview builds its entries in a deferred layouting task, so
 				// the element is not present yet here. Retry after those tasks

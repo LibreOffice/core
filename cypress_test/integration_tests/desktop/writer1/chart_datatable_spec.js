@@ -314,4 +314,75 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 
 		closeDataTableDialog();
 	});
+
+	// Column 0 is the row number column, column 1 the categories, so the
+	// first series name box sits in header 2.
+	function getSeriesNameInput() {
+		return cy.cGet('#ChartDataDialog #datagrid-header-2-name');
+	}
+
+	it('Rename series via header input', function() {
+		getSeriesNameInput().should('be.visible').clear().type('Renamed{enter}');
+		// Core echoes the name back and the rebuilt header keeps it.
+		getSeriesNameInput().should('have.value', 'Renamed');
+
+		// The name survives a full grid rebuild.
+		getEntries().first().click();
+		cy.cGet('#ChartDataDialog #InsertRow').click();
+		getEntries().should('have.length', 5);
+		getSeriesNameInput().should('have.value', 'Renamed');
+
+		// And it is stored in the chart.
+		closeDataTableDialog();
+		openDataTableDialog();
+		getSeriesNameInput().should('have.value', 'Renamed');
+
+		closeDataTableDialog();
+	});
+
+	it('Clearing a series name keeps the header input', function() {
+		getHeaders().its('length').then(function(headerCount) {
+			getSeriesNameInput().clear().type('{enter}');
+
+			// An empty name is still a series name: the box stays so the
+			// user can type a new one, and the header row keeps its shape.
+			getSeriesNameInput().should('exist').and('have.value', '');
+			getHeaders().should('have.length', headerCount);
+
+			getSeriesNameInput().type('Again{enter}');
+			getSeriesNameInput().should('have.value', 'Again');
+		});
+
+		closeDataTableDialog();
+	});
+
+	it('Navigation keys in the header input do not move the grid focus', function() {
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').click();
+		cy.cGet('#ChartDataDialog #datagrid-cell-1-2')
+			.should('have.class', 'ui-treeview-cell-active');
+
+		getSeriesNameInput().invoke('val').then(function(original) {
+			getSeriesNameInput().click().clear().type('ab');
+			// Caret keys and '*' belong to the text box, not to the grid.
+			cy.realPress('ArrowDown');
+			cy.realPress('ArrowUp');
+			cy.realPress('End');
+			getSeriesNameInput().type('*');
+			cy.realPress('Home');
+			getSeriesNameInput().type('x');
+			getSeriesNameInput().should('be.focused').and('have.value', 'xab*');
+
+			// The row selection and the active cell are untouched.
+			getEntries().eq(1).should('have.class', 'selected');
+			cy.cGet('#ChartDataDialog #datagrid-cell-1-2')
+				.should('have.class', 'ui-treeview-cell-active');
+
+			// Escape on an edited box reverts it and keeps the dialog open.
+			cy.realPress('Escape');
+			getSeriesNameInput().should('have.value', original);
+			cy.cGet('#ChartDataDialog').should('be.visible');
+		});
+
+		closeDataTableDialog();
+	});
 });

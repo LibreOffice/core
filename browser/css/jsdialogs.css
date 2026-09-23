@@ -4647,7 +4647,11 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 
 #ChartDataDialog #datagrid.ui-treeview {
 	overflow-x: auto;
-	grid-auto-columns: minmax(80px, auto);
+	/* An intrinsic minimum lets a column grow to fit its title (bold
+	   "Categories" at 125% zoom is wider than 80px); a fixed minimum would
+	   let the title overflow under the next header. The 80px floor moves to
+	   the header cell below. */
+	grid-auto-columns: minmax(min-content, auto);
 }
 
 /* Align header text (e.g. "Categories") to bottom, matching columns with series names */
@@ -4655,6 +4659,8 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	display: flex;
 	flex-direction: column;
 	background-color: var(--color-background-dark);
+	min-width: 80px;
+	box-sizing: border-box;
 }
 
 #ChartDataDialog .ui-treeview-header .ui-treeview-header-text,
@@ -4676,6 +4682,10 @@ div [id^='themeview'].ui-iconview-entry, div [id^='themeview1col'].ui-iconview-e
 	font-size: var(--default-font-size);
 	background: var(--color-background-lighter);
 	box-sizing: border-box;
+	min-width: 0;
+	/* Fixed height so the header row does not jump while editing */
+	height: 1.6em;
+	flex: 0 0 auto;
 }
 /* Inline cell editing input */
 #ChartDataDialog .ui-treeview-inline-edit {

@@ -30,6 +30,8 @@
 #include <vcl/accessibletableprovider.hxx>
 
 #include <tools/color.hxx>
+
+#include <optional>
 #include <tools/debug.hxx>
 
 #include <memory>
@@ -52,7 +54,10 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 private:
     std::vector<SvLBoxTab>      mvTabList;
     std::vector<OUString>       m_aColumnTitles;
-    std::vector<OUString>       m_aColumnHeaderNames;
+    // Editable series name shown in a column header. No value means the
+    // column has no name box at all (e.g. the category column); an empty
+    // string is a series whose name the user cleared.
+    std::vector<std::optional<OUString>> m_aColumnHeaderNames;
     std::vector<Color>          m_aColumnColors;
     OUString                    aCurEntry;
     SvTabListBoxRole            m_eRole;
@@ -107,6 +112,7 @@ public:
     void             SetHeaderNameAriaLabel( const OUString& rLabel ) { m_sHeaderNameAriaLabel = rLabel; }
 
     void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
+    void             ClearColumnHeaderNames() { m_aColumnHeaderNames.clear(); }
 
     void             SetColumnColor( sal_uInt16 nCol, const Color& rColor );
 

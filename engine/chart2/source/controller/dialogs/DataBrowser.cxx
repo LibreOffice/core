@@ -652,17 +652,13 @@ void DataBrowser::RenewTable()
     }
 
     // Reset stale per-column header names/colors before re-assigning them.
-    // The TreeView's header-name/color vectors are only grown or shrunk
-    // (set_column_fixed_widths -> SetColumnCount), never cleared in place,
-    // so after inserting a text column the data series shift right and a
-    // removed series' name/color would linger on the now-category column
-    // (showing a spurious series-name input). Clearing first keeps category
-    // columns clean; the loop below restores names/colors for real series.
+    // Drop the names and colors of the previous layout first: after
+    // inserting a text column or removing a series, a stale name or color
+    // would otherwise linger on what is now a category column. The loop
+    // below sets them again for the real series.
+    m_rTreeView.clear_column_header_names();
     for (sal_Int32 nCol = 0; nCol <= nColumnCount; ++nCol)
-    {
-        m_rTreeView.set_column_header_name(nCol, OUString());
         m_rTreeView.set_column_header_color(nCol, COL_AUTO);
-    }
 
     // Set header colors and names on the TreeView inside the freeze block
     // so they are included in the single thaw update sent to JSDialog/COOL.

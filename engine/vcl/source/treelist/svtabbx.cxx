@@ -233,9 +233,11 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             // than a focusable, do-nothing button.
             if (!m_bHeadersSortable)
                 rJsonWriter.put("sortable", false);
-            if (i < m_aColumnHeaderNames.size() && !m_aColumnHeaderNames[i].isEmpty())
+            // An empty name is still a name: the client keeps the input box
+            // so the user can type a new one.
+            if (i < m_aColumnHeaderNames.size() && m_aColumnHeaderNames[i].has_value())
             {
-                rJsonWriter.put("headerName", m_aColumnHeaderNames[i]);
+                rJsonWriter.put("headerName", *m_aColumnHeaderNames[i]);
                 // Accessible name for the editable header-name input.
                 if (!m_sHeaderNameAriaLabel.isEmpty())
                     rJsonWriter.put("headerNameAriaLabel", m_sHeaderNameAriaLabel);
