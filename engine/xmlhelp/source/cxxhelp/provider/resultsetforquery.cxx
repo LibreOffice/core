@@ -120,13 +120,11 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< cpo::uno::XComponent
 
     IndexFolderIterator aIndexFolderIt( *pDatabases, aURLParameter.get_module(), aURLParameter.get_language() );
     OUString idxDir;
-    bool bExtension = false;
     std::vector< std::vector<HitItem> > aIndexFolderResultVectorVector;
 
-    bool bTemporary;
     for (;;)
     {
-        idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary );
+        idxDir = aIndexFolderIt.nextIndexFolder();
         if( idxDir.isEmpty() )
             break;
         std::vector<HitItem> aIndexFolderResultVector;
@@ -244,10 +242,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< cpo::uno::XComponent
         {
             TOOLS_WARN_EXCEPTION("xmlhelp", "");
         }
-
-        if( bTemporary )
-            aIndexFolderIt.deleteTempIndexFolder( idxDir );
-
     }   // Iterator
 
 

@@ -36,7 +36,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 // Forward declaration
@@ -152,17 +151,14 @@ namespace chelp {
         StaticModuleInformation* getStaticInformationForModule( std::u16string_view Module,
                                                                 const OUString& Language );
 
-        bool checkModuleMatchForExtension( std::u16string_view Database, const OUString& doclist );
         KeywordInfo* getKeyword( const OUString& Module,
                                  const OUString& Language );
 
         helpdatafileproxy::Hdf* getHelpDataFile( std::u16string_view Module,
-                         const OUString& Language, bool helpText = false,
-                         const OUString* pExtensionPath = nullptr );
+                         const OUString& Language, bool helpText = false );
         helpdatafileproxy::Hdf* getHelpDataFile(std::unique_lock<std::mutex>& rGuard,
                          std::u16string_view Module,
-                         const OUString& Language, bool helpText = false,
-                         const OUString* pExtensionPath = nullptr );
+                         const OUString& Language, bool helpText = false );
 
 
         /**
@@ -204,8 +200,7 @@ namespace chelp {
 
         cpo::uno::Reference< css::container::XHierarchicalNameAccess >
         findJarFileForPath( const OUString& jar, const OUString& Language,
-            const OUString& path, OUString* o_pExtensionPath = nullptr,
-            OUString* o_pExtensionRegistryPath = nullptr );
+            const OUString& path );
 
         /**
          *  Maps a given language-locale combination to language or locale.
@@ -285,25 +280,13 @@ namespace chelp {
     enum class IteratorState
     {
         InitialModule,
-        //SHARED_MODULE,        // Later, avoids redundancies in help compiling
-        UserExtensions,
-        SharedExtensions,
-        BundledExtensions,
         EndReached
     };
 
-    // Hashtable to cache extension help status
-    typedef std::unordered_map
-    <
-        OUString,
-        bool
-    >
-    ExtensionHelpExistenceMap;
-
+    /// Walks the help of one module. It used to walk the installed extensions after it,
+    /// which is where the state machine comes from.
     class ExtensionIteratorBase
     {
-        static ExtensionHelpExistenceMap    aHelpExistenceMap;
-
     public:
         ExtensionIteratorBase( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, OUString aInitialModule, OUString aLanguage );
@@ -311,26 +294,7 @@ namespace chelp {
             OUString  aLanguage );
         void init();
 
-    private:
-        static cpo::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
-              cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-
     protected:
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
-            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
-            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
-        ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        OUString implGetFileFromPackage( std::u16string_view rFileExtension,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
-        OUString implGetFileFromPackage(std::unique_lock<std::mutex>& rGuard,
-            std::u16string_view rFileExtension,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
-        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
-
         cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         cpo::uno::Reference< css::ucb::XSimpleFileAccess >    m_xSFA;
         Databases&                                            m_rDatabases;
@@ -339,22 +303,6 @@ namespace chelp {
 
         OUString                                              m_aInitialModule;
         OUString                                              m_aLanguage;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                   m_aUserPackagesSeq;
-        bool                                                  m_bUserPackagesLoaded;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                   m_aSharedPackagesSeq;
-        bool                                                  m_bSharedPackagesLoaded;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                   m_aBundledPackagesSeq;
-        bool                                                  m_bBundledPackagesLoaded;
-
-        int                                                   m_iUserPackage;
-        int                                                   m_iSharedPackage;
-        int                                                   m_iBundledPackage;
 
     }; // end class ExtensionIteratorBase
 
@@ -372,13 +320,9 @@ namespace chelp {
                 , m_bHelpText( bHelpText )
         {}
 
-        helpdatafileproxy::Hdf* nextHdf( OUString* o_pExtensionPath = nullptr, OUString* o_pExtensionRegistryPath = nullptr );
+        helpdatafileproxy::Hdf* nextHdf();
 
     private:
-        helpdatafileproxy::Hdf* implGetHdfFromPackage(
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
-            OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
-
         bool                                                                        m_bHelpText;
 
     }; // end class DataBaseIterator
@@ -391,11 +335,7 @@ namespace chelp {
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
         //Returns a file URL
-        OUString nextDbFile(std::unique_lock<std::mutex>& rGuard, bool& o_rbExtension);
-
-    private:
-        OUString implGetDbFileFromPackage(std::unique_lock<std::mutex>& rGuard,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
+        OUString nextDbFile(std::unique_lock<std::mutex>& rGuard);
 
     }; // end class KeyDataBaseFileIterator
 
@@ -408,15 +348,7 @@ namespace chelp {
         {}
 
         cpo::uno::Reference< css::container::XHierarchicalNameAccess >
-            nextJarFile(std::unique_lock<std::mutex>& rGuard,
-                cpo::uno::Reference<css::deployment::XPackage>& o_xParentPackageBundle,
-                            OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
-
-    private:
-        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
-            implGetJarFromPackage(std::unique_lock<std::mutex>& rGuard,
-                const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
-                OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
+            nextJarFile(std::unique_lock<std::mutex>& rGuard);
 
     }; // end class JarFileIterator
 
@@ -427,12 +359,7 @@ namespace chelp {
             : ExtensionIteratorBase( rDatabases, aInitialModule, aLanguage )
         {}
 
-        OUString nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary );
-        void deleteTempIndexFolder( std::u16string_view aIndexFolder );
-
-    private:
-        OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
+        OUString nextIndexFolder();
 
     }; // end class KeyDataBaseFileIterator
 

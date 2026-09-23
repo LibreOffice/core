@@ -130,7 +130,6 @@ namespace chelp {
 
         OUString get_jar();
 
-        const OUString& get_ExtensionRegistryPath() const { return m_aExtensionRegistryPath; }
 
         const OUString& get_module() const { return m_aModule; }
 
@@ -175,7 +174,6 @@ namespace chelp {
         OUString  m_aModule;
         OUString  m_aTitle;
         OUString  m_aJar;
-        OUString  m_aExtensionRegistryPath;
         OUString  m_aEid;
         OUString  m_aDbPar;
 

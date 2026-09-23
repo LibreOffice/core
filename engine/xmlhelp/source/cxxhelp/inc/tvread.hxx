@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
@@ -211,64 +210,6 @@ namespace treeview {
         void Check(TVDom* tvDom);
 
     };  // end class TVChildTarget
-
-    enum class IteratorState
-    {
-        UserExtensions,
-        SharedExtensions,
-        BundledExtensions,
-        EndReached
-    };
-
-    class TreeFileIterator
-    {
-    public:
-        TreeFileIterator( OUString  aLanguage );
-        OUString nextTreeFile( sal_Int32& rnFileSize );
-
-    private:
-        static cpo::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
-              cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
-            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
-            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        cpo::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
-            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-
-        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
-
-        std::mutex                                                                  m_aMutex;
-        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        cpo::uno::Reference< css::ucb::XSimpleFileAccess >    m_xSFA;
-
-        IteratorState                                                               m_eState;
-        OUString                                                               m_aLanguage;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                              m_aUserPackagesSeq;
-        bool                                                                        m_bUserPackagesLoaded;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                              m_aSharedPackagesSeq;
-        bool                                                                        m_bSharedPackagesLoaded;
-
-        cpo::uno::Sequence< cpo::uno::Reference
-            < css::deployment::XPackage > >                              m_aBundledPackagesSeq;
-        bool                                                                        m_bBundledPackagesLoaded;
-
-        int                                                                         m_iUserPackage;
-        int                                                                         m_iSharedPackage;
-        int                                                                         m_iBundledPackage;
-
-        OUString expandURL( const OUString& aURL );
-        OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
-            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
-
-    }; // end class TreeFileIterator
 
 }
 

@@ -21,7 +21,6 @@
 #include "db.hxx"
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
@@ -37,8 +36,6 @@
 #include <helpcompiler/HelpIndexer.hxx>
 
 // Extensible help
-#include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -77,7 +74,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::container;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::deployment;
 using namespace com::sun::star::beans;
 
 OUString Databases::expandURL( const OUString& aURL )
@@ -411,18 +407,16 @@ OUString Databases::processLang( std::unique_lock<std::mutex>& /*rGuard*/, const
 }
 
 helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::u16string_view Database,
-                            const OUString& Language, bool helpText,
-                            const OUString* pExtensionPath )
+                            const OUString& Language, bool helpText )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    return getHelpDataFile(aGuard, Database, Language, helpText, pExtensionPath);
+    return getHelpDataFile(aGuard, Database, Language, helpText);
 }
 
 helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::unique_lock<std::mutex>& rGuard,
         std::u16string_view Database,
-                            const OUString& Language, bool helpText,
-                            const OUString* pExtensionPath )
+                            const OUString& Language, bool helpText )
 
 {
     if( Database.empty() || Language.isEmpty() )
@@ -430,11 +424,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::unique_lock<std::mutex>&
 
     OUString aFileExt( helpText ? u".ht"_ustr : u".db"_ustr );
     OUString dbFileName = OUString::Concat("/") + Database + aFileExt;
-    OUString key;
-    if( pExtensionPath == nullptr )
-        key = processLang( rGuard, Language ) + dbFileName;
-    else
-        key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
+    OUString key = processLang( rGuard, Language ) + dbFileName;
 
     std::pair< DatabasesTable::iterator,bool > aPair =
         m_aDatabases.emplace( key, nullptr);
@@ -445,16 +435,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile(std::unique_lock<std::mutex>&
     {
         std::unique_ptr<helpdatafileproxy::Hdf> pHdf;
 
-        OUString fileURL;
-        if( pExtensionPath )
-            fileURL = expandURL(rGuard, *pExtensionPath) + Language + dbFileName;
-        else
-            fileURL = m_aInstallDirectory + key;
-
-        OUString fileNameHDFHelp( fileURL );
-        //Extensions always use the new format
-        if( pExtensionPath != nullptr )
-            fileNameHDFHelp += "_";
+        OUString fileNameHDFHelp( m_aInstallDirectory + key );
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
         if( m_xSFA->exists( fileNameHDFHelp ) )
@@ -645,55 +626,6 @@ KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
         listTitleRange[i] = aVec[i].listTitle;
     }
 }
-
-bool Databases::checkModuleMatchForExtension
-    ( std::u16string_view Database, const OUString& doclist )
-{
-    bool bBelongsToDatabase = true;
-
-    // Analyse doclist string to find module assignments
-    bool bFoundAtLeastOneModule = false;
-    bool bModuleMatch = false;
-    sal_Int32 nLen = doclist.getLength();
-    sal_Int32 nLastFound = doclist.lastIndexOf( ';' );
-    if( nLastFound == -1 )
-        nLastFound = nLen;
-    const sal_Unicode* pStr = doclist.getStr();
-    sal_Int32 nFound = doclist.lastIndexOf( '_' );
-    while( nFound != -1 )
-    {
-        // Simple optimization, stop if '_' is followed by "id"
-        if( nLen - nFound > 2 )
-        {
-            if( pStr[ nFound + 1 ] == 'i' &&
-                pStr[ nFound + 2 ] == 'd' )
-                    break;
-        }
-
-        OUString aModule = doclist.copy( nFound + 1, nLastFound - nFound - 1 );
-        std::vector< OUString >::iterator result = std::find( m_avModules.begin(), m_avModules.end(), aModule );
-        if( result != m_avModules.end() )
-        {
-            bFoundAtLeastOneModule = true;
-            if( Database == aModule )
-            {
-                bModuleMatch = true;
-                break;
-            }
-        }
-
-        nLastFound = nFound;
-        if( nLastFound == 0 )
-            break;
-        nFound = doclist.lastIndexOf( '_', nLastFound - 1 );
-    }
-
-    if( bFoundAtLeastOneModule && !bModuleMatch )
-        bBelongsToDatabase = false;
-
-    return bBelongsToDatabase;
-}
-
 KeywordInfo* Databases::getKeyword( const OUString& Database,
                                     const OUString& Language )
 {
@@ -712,15 +644,12 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
 
         KeyDataBaseFileIterator aDbFileIt( m_xContext, *this, Database, Language );
         OUString fileURL;
-        bool bExtension = false;
         for (;;)
         {
-            fileURL = aDbFileIt.nextDbFile(aGuard, bExtension);
+            fileURL = aDbFileIt.nextDbFile(aGuard);
             if( fileURL.isEmpty() )
                 break;
             OUString fileNameHDFHelp( fileURL );
-            if( bExtension )
-                fileNameHDFHelp += "_";
             if( m_xSFA->exists( fileNameHDFHelp ) )
             {
                 helpdatafileproxy::Hdf aHdf( fileNameHDFHelp, m_xSFA );
@@ -741,13 +670,6 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                                                RTL_TEXTENCODING_UTF8 );
                         OUString doclist( aValue.getData(), aValue.getSize(),
                                                RTL_TEXTENCODING_UTF8 );
-
-                        bool bBelongsToDatabase = true;
-                        if( bExtension )
-                            bBelongsToDatabase = checkModuleMatchForExtension( Database, doclist );
-
-                        if( !bBelongsToDatabase )
-                            continue;
 
                         aVector.emplace_back( this,
                                                                         pHdf,
@@ -786,21 +708,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile(
     cpo::uno::Reference< css::container::XHierarchicalNameAccess > xHNameAccess;
     try
     {
-        OUString zipFile;
-        // Extension jar file? Search for ?
-        size_t nQuestionMark1 = jar.find( '?' );
-        size_t nQuestionMark2 = jar.rfind( '?' );
-        if( nQuestionMark1 != std::u16string_view::npos && nQuestionMark2 != std::u16string_view::npos && nQuestionMark1 != nQuestionMark2 )
-        {
-            std::u16string_view aExtensionPath = jar.substr( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
-            std::u16string_view aPureJar = jar.substr( nQuestionMark2 + 1 );
-
-            zipFile = expandURL(rGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar);
-        }
-        else
-        {
-            zipFile = m_aInstallDirectory + key;
-        }
+        OUString zipFile = m_aInstallDirectory + key;
 
         // create the package zip file
         Sequence< Any > aArguments{
@@ -826,8 +734,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile(
 
 Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     ( const OUString& jar, const OUString& Language,
-      const OUString& path, OUString* o_pExtensionPath,
-      OUString* o_pExtensionRegistryPath )
+      const OUString& path )
 {
     Reference< XHierarchicalNameAccess > xNA;
     if( jar.isEmpty() || Language.isEmpty() )
@@ -839,47 +746,15 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
 
     JarFileIterator aJarFileIt( m_xContext, *this, jar, Language );
     Reference< XHierarchicalNameAccess > xTestNA;
-    Reference< deployment::XPackage > xParentPackageBundle;
     for (;;)
     {
-        xTestNA = aJarFileIt.nextJarFile(aGuard, xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath);
+        xTestNA = aJarFileIt.nextJarFile(aGuard);
         if( !xTestNA.is() )
             break;
-        if( xTestNA.is() && xTestNA->hasByHierarchicalName( path ) )
+        if( xTestNA->hasByHierarchicalName( path ) )
         {
-            bool bSuccess = true;
-            if( xParentPackageBundle.is() )
-            {
-                OUString aIdentifierInPath;
-                sal_Int32 nFindSlash = path.indexOf( '/' );
-                if( nFindSlash != -1 )
-                    aIdentifierInPath = path.copy( 0, nFindSlash );
-
-                beans::Optional<OUString> aIdentifierOptional = xParentPackageBundle->getIdentifier();
-                if( !aIdentifierInPath.isEmpty() && aIdentifierOptional.IsPresent )
-                {
-                    OUString aUnencodedIdentifier = aIdentifierOptional.Value;
-                    OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier,
-                        rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
-
-                    if( aIdentifierInPath != aIdentifier )
-                    {
-                        // path does not start with extension identifier -> ignore
-                        bSuccess = false;
-                    }
-                }
-                else
-                {
-                    // No identifier -> ignore
-                    bSuccess = false;
-                }
-            }
-
-            if( bSuccess )
-            {
-                xNA = xTestNA;
-                break;
-            }
+            xNA = xTestNA;
+            break;
         }
     }
 
@@ -1066,9 +941,6 @@ void Databases::setInstallPath( const OUString& aInstDir )
         m_aInstallDirectory += "/";
 }
 
-
-ExtensionHelpExistenceMap ExtensionIteratorBase::aHelpExistenceMap;
-
 ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > const & xContext,
     Databases& rDatabases, OUString aInitialModule, OUString aLanguage )
         : m_xContext( xContext )
@@ -1095,263 +967,9 @@ ExtensionIteratorBase::ExtensionIteratorBase( Databases& rDatabases,
 void ExtensionIteratorBase::init()
 {
     m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
-
-    m_bUserPackagesLoaded = false;
-    m_bSharedPackagesLoaded = false;
-    m_bBundledPackagesLoaded = false;
-    m_iUserPackage = 0;
-    m_iSharedPackage = 0;
-    m_iBundledPackage = 0;
 }
 
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
-    ( const Reference< deployment::XPackage >& xPackage, Reference< deployment::XPackage >& o_xParentPackageBundle )
-{
-    o_xParentPackageBundle.clear();
-
-    Reference< deployment::XPackage > xHelpPackage;
-    if( !xPackage.is() )
-        return xHelpPackage;
-
-    // #i84550 Cache information about help content in extension
-    OUString aExtensionPath = xPackage->getURL();
-    ExtensionHelpExistenceMap::iterator it = aHelpExistenceMap.find( aExtensionPath );
-    bool bFound = ( it != aHelpExistenceMap.end() );
-    bool bHasHelp = bFound && it->second;
-    if( bFound && !bHasHelp )
-        return xHelpPackage;
-
-    // Check if parent package is registered
-    beans::Optional< beans::Ambiguous<bool> > option( xPackage->isRegistered
-        ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
-    bool bRegistered = false;
-    if( option.IsPresent )
-    {
-        beans::Ambiguous<bool> const & reg = option.Value;
-        if( !reg.IsAmbiguous && reg.Value )
-            bRegistered = true;
-    }
-    if( bRegistered )
-    {
-        OUString aHelpMediaType( u"application/vnd.sun.star.help"_ustr );
-        if( xPackage->isBundle() )
-        {
-            const Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
-                ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
-            auto pSubPkg = std::find_if(aPkgSeq.begin(), aPkgSeq.end(),
-                [&aHelpMediaType](const Reference< deployment::XPackage >& xSubPkg) {
-                    const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
-                    OUString aMediaType = xPackageTypeInfo->getMediaType();
-                    return aMediaType == aHelpMediaType;
-                });
-            if (pSubPkg != aPkgSeq.end())
-            {
-                xHelpPackage = *pSubPkg;
-                o_xParentPackageBundle = xPackage;
-            }
-        }
-        else
-        {
-            const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
-            OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType == aHelpMediaType )
-                xHelpPackage = xPackage;
-        }
-    }
-
-    if( !bFound )
-        aHelpExistenceMap[ aExtensionPath ] = xHelpPackage.is();
-
-    return xHelpPackage;
-}
-
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPackage
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
-{
-    Reference< deployment::XPackage > xHelpPackage;
-
-    if( !m_bUserPackagesLoaded )
-    {
-        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
-        m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( u"user"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-        m_bUserPackagesLoaded = true;
-    }
-
-    if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
-    {
-        m_eState = IteratorState::SharedExtensions;       // Later: SHARED_MODULE
-    }
-    else
-    {
-        const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
-        Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
-        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
-    }
-
-    return xHelpPackage;
-}
-
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPackage
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
-{
-    Reference< deployment::XPackage > xHelpPackage;
-
-    if( !m_bSharedPackagesLoaded )
-    {
-        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
-        m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( u"shared"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-        m_bSharedPackagesLoaded = true;
-    }
-
-    if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
-    {
-        m_eState = IteratorState::BundledExtensions;
-    }
-    else
-    {
-        const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
-        Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
-        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
-    }
-
-    return xHelpPackage;
-}
-
-Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpPackage
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
-{
-    Reference< deployment::XPackage > xHelpPackage;
-
-    if( !m_bBundledPackagesLoaded )
-    {
-        Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
-        m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( u"bundled"_ustr, Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
-        m_bBundledPackagesLoaded = true;
-    }
-
-    if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
-    {
-        m_eState = IteratorState::EndReached;
-    }
-    else
-    {
-        const Reference< deployment::XPackage >* pBundledPackages =
-            m_aBundledPackagesSeq.getConstArray();
-        Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
-        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
-        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
-    }
-
-    return xHelpPackage;
-}
-
-OUString ExtensionIteratorBase::implGetFileFromPackage(
-    std::unique_lock<std::mutex> & rGuard,
-    std::u16string_view rFileExtension, const Reference< deployment::XPackage >& xPackage )
-{
-    // No extension -> search for pure language folder
-    bool bLangFolderOnly = rFileExtension.empty();
-
-    OUString aFile;
-    OUString aLanguage = m_aLanguage;
-    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
-    {
-        OUString aStr = xPackage->getRegistrationDataURL().Value + "/" + aLanguage;
-        if( !bLangFolderOnly )
-        {
-            aStr += OUString::Concat("/help") + rFileExtension;
-        }
-
-        aFile = m_rDatabases.expandURL(rGuard, aStr);
-        if( iPass == 0 )
-        {
-            if( m_xSFA->exists( aFile ) )
-                break;
-
-            ::std::vector< OUString > av;
-            implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
-            if( pFound != av.end() )
-                aLanguage = *pFound;
-        }
-    }
-    return aFile;
-}
-
-
-OUString ExtensionIteratorBase::implGetFileFromPackage(
-    std::u16string_view rFileExtension, const Reference< deployment::XPackage >& xPackage )
-{
-    // No extension -> search for pure language folder
-    bool bLangFolderOnly = rFileExtension.empty();
-
-    OUString aFile;
-    OUString aLanguage = m_aLanguage;
-    for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
-    {
-        OUString aStr = xPackage->getRegistrationDataURL().Value + "/" + aLanguage;
-        if( !bLangFolderOnly )
-        {
-            aStr += OUString::Concat("/help") + rFileExtension;
-        }
-
-        aFile = m_rDatabases.expandURL( aStr );
-        if( iPass == 0 )
-        {
-            if( m_xSFA->exists( aFile ) )
-                break;
-
-            ::std::vector< OUString > av;
-            implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
-            if( pFound != av.end() )
-                aLanguage = *pFound;
-        }
-    }
-    return aFile;
-}
-
-static bool isLetter( sal_Unicode c )
-{
-    return rtl::isAsciiAlpha(c);
-}
-
-void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    const cpo::uno::Reference< css::deployment::XPackage >& xPackage )
-{
-    rv.clear();
-    OUString aExtensionPath = xPackage->getURL();
-    const Sequence< OUString > aEntrySeq = m_xSFA->getFolderContents( aExtensionPath, true );
-
-    for( const OUString& aEntry : aEntrySeq )
-    {
-        if( m_xSFA->isFolder( aEntry ) )
-        {
-            sal_Int32 nLastSlash = aEntry.lastIndexOf( '/' );
-            if( nLastSlash != -1 )
-            {
-                OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
-
-                // Check language scheme
-                int nLen = aPureEntry.getLength();
-                const sal_Unicode* pc = aPureEntry.getStr();
-                bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );
-                bool bIsLanguage = bStartCanBeLanguage &&
-                    ( nLen == 2 || (nLen == 5 && pc[2] == '-' && isLetter( pc[3] ) && isLetter( pc[4] )) );
-                if( bIsLanguage )
-                    rv.push_back( aPureEntry );
-            }
-        }
-    }
-}
-
-
-helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
+helpdatafileproxy::Hdf* DataBaseIterator::nextHdf()
 {
     helpdatafileproxy::Hdf* pRetHdf = nullptr;
 
@@ -1361,44 +979,8 @@ helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, O
         {
             case IteratorState::InitialModule:
                 pRetHdf = m_rDatabases.getHelpDataFile( m_aInitialModule, m_aLanguage, m_bHelpText );
-                m_eState = IteratorState::UserExtensions;     // Later: SHARED_MODULE
+                m_eState = IteratorState::EndReached;
                 break;
-
-            // Later:
-            //case SHARED_MODULE
-
-
-            case IteratorState::UserExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
-                break;
-            }
-
-            case IteratorState::SharedExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
-                break;
-            }
-
-               case IteratorState::BundledExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
-                break;
-            }
 
             case IteratorState::EndReached:
                 OSL_FAIL( "DataBaseIterator::nextDb(): Invalid case IteratorState::EndReached" );
@@ -1408,59 +990,8 @@ helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, O
 
     return pRetHdf;
 }
-
-helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference< deployment::XPackage >& xPackage,
-            OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
-{
-
-    beans::Optional< OUString> optRegData;
-    try
-    {
-        optRegData = xPackage->getRegistrationDataURL();
-    }
-    catch ( deployment::ExtensionRemovedException&)
-    {
-        return nullptr;
-    }
-
-    helpdatafileproxy::Hdf* pRetHdf = nullptr;
-    if (optRegData.IsPresent && !optRegData.Value.isEmpty())
-    {
-        OUString aRegDataUrl = optRegData.Value + "/";
-
-        OUString aHelpFilesBaseName(u"help"_ustr);
-
-        OUString aUsedLanguage = m_aLanguage;
-        pRetHdf = m_rDatabases.getHelpDataFile(
-            aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
-
-        // Language fallback
-        if( !pRetHdf )
-        {
-            ::std::vector< OUString > av;
-            implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
-            if( pFound != av.end() )
-            {
-                aUsedLanguage = *pFound;
-                pRetHdf = m_rDatabases.getHelpDataFile(
-                    aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
-            }
-        }
-
-        if( o_pExtensionPath )
-            *o_pExtensionPath = aRegDataUrl + aUsedLanguage;
-
-        if( o_pExtensionRegistryPath )
-            *o_pExtensionRegistryPath = xPackage->getURL() + "/" + aUsedLanguage;
-    }
-
-    return pRetHdf;
-}
-
-
 //returns a file URL
-OUString KeyDataBaseFileIterator::nextDbFile(std::unique_lock<std::mutex>& rGuard, bool& o_rbExtension)
+OUString KeyDataBaseFileIterator::nextDbFile(std::unique_lock<std::mutex>& rGuard)
 {
     OUString aRetFile;
 
@@ -1474,50 +1005,8 @@ OUString KeyDataBaseFileIterator::nextDbFile(std::unique_lock<std::mutex>& rGuar
                         "/" +
                         m_aInitialModule + ".key";
 
-                o_rbExtension = false;
-
-                m_eState = IteratorState::UserExtensions;     // Later: SHARED_MODULE
+                m_eState = IteratorState::EndReached;
                 break;
-
-            // Later:
-            //case SHARED_MODULE
-
-
-            case IteratorState::UserExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
-                o_rbExtension = true;
-                break;
-            }
-
-            case IteratorState::SharedExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
-                o_rbExtension = true;
-                break;
-            }
-
-            case IteratorState::BundledExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aRetFile = implGetDbFileFromPackage(rGuard, xHelpPackage);
-                o_rbExtension = true;
-                break;
-            }
 
             case IteratorState::EndReached:
                 OSL_FAIL( "DataBaseIterator::nextDbFile(): Invalid case IteratorState::EndReached" );
@@ -1527,23 +1016,8 @@ OUString KeyDataBaseFileIterator::nextDbFile(std::unique_lock<std::mutex>& rGuar
 
     return aRetFile;
 }
-
-//Returns a file URL, that does not contain macros
-OUString KeyDataBaseFileIterator::implGetDbFileFromPackage(
-    std::unique_lock<std::mutex>& rGuard,
-    const Reference<deployment::XPackage>& xPackage)
-{
-    OUString aExpandedURL =
-        implGetFileFromPackage(rGuard, u".key", xPackage);
-
-    return aExpandedURL;
-}
-
-
 Reference<XHierarchicalNameAccess> JarFileIterator::nextJarFile(
-        std::unique_lock<std::mutex>& rGuard,
-        Reference< deployment::XPackage >& o_xParentPackageBundle,
-        OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
+        std::unique_lock<std::mutex>& rGuard )
 {
     Reference< XHierarchicalNameAccess > xNA;
 
@@ -1553,42 +1027,8 @@ Reference<XHierarchicalNameAccess> JarFileIterator::nextJarFile(
         {
             case IteratorState::InitialModule:
                 xNA = m_rDatabases.jarFile(rGuard, m_aInitialModule, m_aLanguage);
-                m_eState = IteratorState::UserExtensions;     // Later: SHARED_MODULE
+                m_eState = IteratorState::EndReached;
                 break;
-
-            // Later:
-            //case SHARED_MODULE
-
-
-            case IteratorState::UserExtensions:
-            {
-                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( o_xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
-                break;
-            }
-
-            case IteratorState::SharedExtensions:
-            {
-                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( o_xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
-                break;
-            }
-
-            case IteratorState::BundledExtensions:
-            {
-                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( o_xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                xNA = implGetJarFromPackage(rGuard, xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath);
-                break;
-            }
 
             case IteratorState::EndReached:
                 OSL_FAIL( "JarFileIterator::nextJarFile(): Invalid case IteratorState::EndReached" );
@@ -1598,67 +1038,7 @@ Reference<XHierarchicalNameAccess> JarFileIterator::nextJarFile(
 
     return xNA;
 }
-
-Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage(
-    std::unique_lock<std::mutex>& rGuard,
-    const Reference<deployment::XPackage>& xPackage, OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath)
-{
-    Reference< XHierarchicalNameAccess > xNA;
-
-    OUString zipFile =
-        implGetFileFromPackage(rGuard, u".jar", xPackage);
-
-    try
-    {
-        Sequence< Any > aArguments{
-            Any(zipFile),
-            // let ZipPackage be used ( no manifest.xml is required )
-            Any(comphelper::makePropertyValue(u"StorageFormat"_ustr,
-                                              ZIP_STORAGE_FORMAT_STRING))
-        };
-
-        Reference< XMultiComponentFactory >xSMgr = m_xContext->getServiceManager();
-        Reference< XInterface > xIfc
-            = xSMgr->createInstanceWithArgumentsAndContext(
-                u"com.sun.star.packages.comp.ZipPackage"_ustr,
-                aArguments, m_xContext );
-
-        if ( xIfc.is() )
-        {
-            xNA.set( xIfc, UNO_QUERY );
-
-            OSL_ENSURE( xNA.is(),
-                "JarFileIterator::implGetJarFromPackage() - "
-                "Got no hierarchical name access!" );
-        }
-    }
-    catch ( RuntimeException & )
-    {}
-    catch ( Exception & )
-    {}
-
-    if( xNA.is() && o_pExtensionPath != nullptr )
-    {
-        // Extract path including language from file name
-        sal_Int32 nLastSlash = zipFile.lastIndexOf( '/' );
-        if( nLastSlash != -1 )
-            *o_pExtensionPath = zipFile.copy( 0, nLastSlash );
-
-        if( o_pExtensionRegistryPath != nullptr )
-        {
-            OUString& rPath = *o_pExtensionPath;
-            sal_Int32 nLastSlashInPath = rPath.lastIndexOf( '/', rPath.getLength() - 1 );
-
-            *o_pExtensionRegistryPath = xPackage->getURL();
-            *o_pExtensionRegistryPath += rPath.subView( nLastSlashInPath);
-        }
-    }
-
-    return xNA;
-}
-
-
-OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary )
+OUString IndexFolderIterator::nextIndexFolder()
 {
     OUString aIndexFolder;
 
@@ -1671,51 +1051,8 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
                     + m_rDatabases.processLang(m_aLanguage) + "/"
                     + m_aInitialModule + ".idxl";
 
-                o_rbTemporary = false;
-                o_rbExtension = false;
-
-                m_eState = IteratorState::UserExtensions;     // Later: SHARED_MODULE
+                m_eState = IteratorState::EndReached;
                 break;
-
-            // Later:
-            //case SHARED_MODULE
-
-
-            case IteratorState::UserExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aIndexFolder = implGetIndexFolderFromPackage( o_rbTemporary, xHelpPackage );
-                o_rbExtension = true;
-                break;
-            }
-
-            case IteratorState::SharedExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aIndexFolder = implGetIndexFolderFromPackage( o_rbTemporary, xHelpPackage );
-                o_rbExtension = true;
-                break;
-            }
-
-            case IteratorState::BundledExtensions:
-            {
-                Reference< deployment::XPackage > xParentPackageBundle;
-                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
-                if( !xHelpPackage.is() )
-                    break;
-
-                aIndexFolder = implGetIndexFolderFromPackage( o_rbTemporary, xHelpPackage );
-                o_rbExtension = true;
-                break;
-            }
 
             case IteratorState::EndReached:
                 OSL_FAIL( "IndexFolderIterator::nextIndexFolder(): Invalid case IteratorState::EndReached" );
@@ -1725,98 +1062,4 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
 
     return aIndexFolder;
 }
-
-OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, const Reference< deployment::XPackage >& xPackage )
-{
-    OUString aIndexFolder =
-        implGetFileFromPackage( u".idxl", xPackage );
-
-    o_rbTemporary = false;
-    if( !m_xSFA->isFolder( aIndexFolder ) )
-    {
-        // i98680: Missing index? Try to generate now
-        OUString aLangURL = implGetFileFromPackage( std::u16string_view(), xPackage );
-        if( m_xSFA->isFolder( aLangURL ) )
-        {
-            // Test write access (shared extension may be read only)
-            bool bIsWriteAccess = false;
-            try
-            {
-                OUString aCreateTestFolder = aLangURL + "CreateTestFolder";
-                m_xSFA->createFolder( aCreateTestFolder );
-                if( m_xSFA->isFolder( aCreateTestFolder  ) )
-                    bIsWriteAccess = true;
-
-                m_xSFA->kill( aCreateTestFolder );
-            }
-            catch (const cpo::uno::Exception &)
-            {
-            }
-
-            // TEST
-            //bIsWriteAccess = false;
-
-            try
-            {
-                OUString aLang;
-                sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
-                if( nLastSlash != -1 )
-                    aLang = aLangURL.copy( nLastSlash + 1 );
-                else
-                    aLang = u"en"_ustr;
-
-                OUString aZipDir = aLangURL;
-                if( !bIsWriteAccess )
-                {
-                    OUString aTempFileURL;
-                    ::osl::FileBase::RC eErr = ::osl::File::createTempFile( nullptr, nullptr, &aTempFileURL );
-                    if( eErr == ::osl::FileBase::E_None )
-                    {
-                        try
-                        {
-                            m_xSFA->kill( aTempFileURL );
-                        }
-                        catch (const cpo::uno::Exception &)
-                        {
-                        }
-                        m_xSFA->createFolder( aTempFileURL );
-
-                        aZipDir = aTempFileURL;
-                        o_rbTemporary = true;
-                    }
-                }
-
-                HelpIndexer aIndexer(aLang, u"help"_ustr, aLangURL, aZipDir);
-                aIndexer.indexDocuments();
-
-                if( bIsWriteAccess )
-                    aIndexFolder = implGetFileFromPackage( u".idxl", xPackage );
-                else
-                    aIndexFolder = aZipDir + "/help.idxl";
-            }
-            catch (const cpo::uno::Exception &)
-            {
-            }
-        }
-    }
-
-    return aIndexFolder;
-}
-
-void IndexFolderIterator::deleteTempIndexFolder( std::u16string_view aIndexFolder )
-{
-    size_t nLastSlash = aIndexFolder.rfind( '/' );
-    if( nLastSlash != std::u16string_view::npos )
-    {
-        OUString aTmpFolder( aIndexFolder.substr( 0, nLastSlash ) );
-        try
-        {
-            m_xSFA->kill( aTmpFolder );
-        }
-        catch (const cpo::uno::Exception &)
-        {
-        }
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

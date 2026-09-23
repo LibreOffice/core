@@ -52,7 +52,6 @@ using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace chelp;
 
@@ -248,11 +247,9 @@ void URLParameter::readHelpDataFile()
     const char* pData = nullptr;
 
     helpdatafileproxy::HDFData aHDFData;
-    OUString aExtensionPath;
-    OUString aExtensionRegistryPath;
     while( true )
     {
-        helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf( &aExtensionPath, &aExtensionRegistryPath );
+        helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf();
         if( !pHdf )
             break;
 
@@ -273,11 +270,6 @@ void URLParameter::readHelpDataFile()
     m_pDatabases->replaceName( m_aTitle );
     m_aPath  = converter.getFile();
     m_aJar   = converter.getDatabase();
-    if( !aExtensionPath.isEmpty() )
-    {
-        m_aJar = "?" + aExtensionPath + "?" + m_aJar;
-        m_aExtensionRegistryPath = aExtensionRegistryPath;
-    }
     m_aTag   = converter.getHash();
 }
 
@@ -776,50 +768,6 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "''"_ostr;
             parString[last++] = "vendorshort"_ostr;
             parString[last++] = "''"_ostr;
-        }
-
-        // Do we need to add extension path?
-        OUString aExtensionPath;
-        OUString aJar = urlParam->get_jar();
-
-        bool bAddExtensionPath = false;
-        OUString aExtensionRegistryPath;
-        sal_Int32 nQuestionMark1 = aJar.indexOf( '?' );
-        sal_Int32 nQuestionMark2 = aJar.lastIndexOf( '?' );
-        if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
-        {
-            aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
-            aExtensionRegistryPath = urlParam->get_ExtensionRegistryPath();
-            bAddExtensionPath = true;
-        }
-        else
-        {
-            // Path not yet specified, search directly
-            Reference< XHierarchicalNameAccess > xNA = pDatabases->findJarFileForPath
-                ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath, &aExtensionRegistryPath );
-            if( xNA.is() && !aExtensionPath.isEmpty() )
-                bAddExtensionPath = true;
-        }
-
-        if( bAddExtensionPath )
-        {
-            const Reference< XComponentContext >& xContext(
-                comphelper::getProcessComponentContext() );
-
-            OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );
-            OString aExpandedExtensionPath = OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
-
-            parString[last++] = "ExtensionPath"_ostr;
-            parString[last++] = "'" + aExpandedExtensionPath + "'";
-
-            // ExtensionId
-            OString aPureExtensionId;
-            sal_Int32 iSlash = aPath.indexOf( '/' );
-            if( iSlash != -1 )
-                aPureExtensionId = aPath.copy( 0, iSlash );
-
-            parString[last++] = "ExtensionId"_ostr;
-            parString[last++] = "'" + aPureExtensionId + "'";
         }
 
         for( int i = 0; i < last; ++i )
