@@ -82,6 +82,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		desktopHelper.scrollWriterDocumentToTop();
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 
+		// Core reports the initial marks state a few seconds after the load. The click below
+		// is the first change after that report, so the client keeps it.
+		helper.waitForMapState('.uno:ControlCodes', 'false');
+
 		cy.cGet('.notebookbar #View-tab-label').click();
 		cy.cGet('.notebookbar #View-container .unoControlCodes').click();
 
