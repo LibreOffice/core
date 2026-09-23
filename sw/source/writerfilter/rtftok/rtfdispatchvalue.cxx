@@ -1022,7 +1022,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam == 2)
                 nParam = 1;
             else if (nParam > 1)
-                nParam = nParam * 2 / 5;
+                nParam = sal_Int64(nParam) * 2 / 5;
             auto pValue = new RTFValue(nParam);
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_sz, pValue);
         }
