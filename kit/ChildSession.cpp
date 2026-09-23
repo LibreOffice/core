@@ -3252,16 +3252,24 @@ std::string pickedFileName(const std::string& uploadName)
     return fileName;
 }
 
-/// The local path a file: URL names, or empty for any other URL.
+/// The local path a file: URL names, or empty for any other URL. A host in
+/// the URL names a network share on Windows and a remote file elsewhere.
 std::string localPathOfFileUrl(const std::string& url)
 {
     try
     {
         const Poco::URI uri(url);
-        if (uri.getScheme() != "file" || !uri.getHost().empty())
+        if (uri.getScheme() != "file")
             return std::string();
 
-        return FileUtil::fixPocoURIgetPathReturnValue(uri.getPath());
+        const std::string path = FileUtil::fixPocoURIgetPathReturnValue(uri.getPath());
+        if (uri.getHost().empty())
+            return path;
+#ifdef _WIN32
+        return "//" + uri.getHost() + path;
+#else
+        return std::string();
+#endif
     }
     catch (const std::exception&)
     {

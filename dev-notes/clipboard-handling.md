@@ -636,7 +636,10 @@ CODA-W adopted the identical provider and then the process-shared
 clipboard. The Win32 specifics stay behind the same small provider
 surface in `windows/coda/CODA/CODA.cpp`: the advertised formats are
 served on demand through delayed rendering, and the pending promises
-are materialized at exit so the clipboard outlives the process.
+are materialized at exit so the clipboard outlives the process. An
+Explorer file copy (`CF_HDROP`, or the first file's `FileNameW`) is
+served as `text/uri-list`, one percent-encoded `file:///` URL per path,
+CRLF separated; the drop path keeps its own handling.
 
 ### Qt: same model, with GUI-thread marshaling
 
