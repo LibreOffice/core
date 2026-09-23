@@ -19,10 +19,6 @@
 #include <unordered_set>
 #include <vector>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 /* On Windows cl lower-cases some paths, so include prefixes are compared
    case-insensitively there. */
 #ifdef _WIN32
@@ -71,31 +67,6 @@ static std::string dup_forward_slashes(const char* s)
     return result;
 }
 
-#ifdef _WIN32
-/* The path s as convert - GetLongPathNameA or GetShortPathNameA - spells it,
-   forward-slash-normalised, or an empty string when the conversion fails (say
-   for a directory that does not exist, or on a volume that keeps no 8.3
-   names). */
-static std::string win_path_variant(const std::string& s,
-                                    DWORD(WINAPI* convert)(LPCSTR, LPSTR, DWORD))
-{
-    std::string in(s);
-    for (char& c : in)
-    {
-        if (c == '/')
-            c = '\\';
-    }
-    const DWORD size = convert(in.c_str(), nullptr, 0);
-    if (size == 0)
-        return std::string();
-    std::vector<char> out(size);
-    const DWORD len = convert(in.c_str(), out.data(), size);
-    if (len == 0 || len >= size)
-        return std::string();
-    return dup_forward_slashes(out.data());
-}
-#endif
-
 /* Add path to build_tree_prefixes unless it is empty or already there. */
 static void add_prefix(const std::string& path)
 {
@@ -109,23 +80,12 @@ static void add_prefix(const std::string& path)
     build_tree_prefixes.push_back(path);
 }
 
-/* Register dir as a directory whose includes belong to the build tree. On
-   Windows configure hands out SRCDIR and BUILDDIR in 8.3 short form as soon as
-   a path component is longer than eight characters, while cl reports the long
-   path of an include it opened - and the short one for an include reached
-   through a short -I - so both spellings are registered and either one
-   matches. */
+/* Register dir as a directory whose includes belong to the build tree. One
+   spelling is enough: configure hands out SRCDIR and BUILDDIR as the
+   filesystem spells them, and the comparison ignores case. */
 static void add_build_tree_prefix(const char* dir)
 {
-    const std::string path = dup_forward_slashes(dir);
-    add_prefix(path);
-#ifdef _WIN32
-    if (!path.empty())
-    {
-        add_prefix(win_path_variant(path, GetLongPathNameA));
-        add_prefix(win_path_variant(path, GetShortPathNameA));
-    }
-#endif
+    add_prefix(dup_forward_slashes(dir));
 }
 
 /* Load the whole regular file name into out. Returns false when the file is
