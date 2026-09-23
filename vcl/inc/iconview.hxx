@@ -28,12 +28,17 @@ private:
     short m_nFixedColumnCount = -1;
     short m_nColumnCount;
 
+    // number of pixels from top, from bottom, between icon and label
+    int m_nSpacing = 5;
+
 public:
     IconView(vcl::Window* pParent, WinBits nBits);
 
     Size GetEntrySize(const SvTreeListEntry&) const;
     short GetColumnCount() const { return m_nColumnCount; }
     void SetFixedColumnCount(short nColumnCount);
+
+    void SetSpacing(int nSpacing) { m_nSpacing = nSpacing; }
 
     virtual Size GetOptimalSize() const override;
     virtual void Resize() override;

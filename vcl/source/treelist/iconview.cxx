@@ -30,7 +30,6 @@
 namespace
 {
 const int separatorHeight = 10;
-const int nSpacing = 5; // 5 pixels from top, from bottom, between icon and label
 }
 
 IconView::IconView(vcl::Window* pParent, WinBits nBits)
@@ -64,7 +63,7 @@ void IconView::UpdateEntrySize(const SvTreeListEntry& rEntry)
     // provide some minimum width if text exists (will be ellipsized if it doesn't fit completely)
     const tools::Long nMinTextWidth = rEntry.GetFirstItem(SvLBoxItemType::String) ? 100 : 0;
 
-    int spacing = nSpacing * 2;
+    int spacing = m_nSpacing * 2;
     const short nMinHeight = aImageSize.getHeight() + spacing;
     const short nMinWidth = std::max(aImageSize.getWidth() + spacing, nMinTextWidth);
 
@@ -98,7 +97,7 @@ bool IconView::HasSeparatorEntry() const
 
 void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
 {
-    int nHeight = nSpacing * 2;
+    int nHeight = m_nSpacing * 2;
     SvViewDataEntry& rViewData = GetViewDataEntry(rEntry);
     const size_t nCount = rEntry.ItemCount();
     bool bHasIcon = false;
@@ -111,7 +110,7 @@ void IconView::CalcEntryHeight(const SvTreeListEntry& rEntry)
     }
 
     if (bHasIcon && nCount > 1)
-        nHeight += nSpacing; // between icon and label
+        nHeight += m_nSpacing; // between icon and label
 
     if (nHeight > m_nEntryHeight)
     {
@@ -245,7 +244,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         nLabelHeight += nItemHeight;
     }
 
-    int nLabelYPos = nY + nTempEntryHeight - nLabelHeight - nSpacing; // padding from bottom
+    int nLabelYPos = nY + nTempEntryHeight - nLabelHeight - m_nSpacing; // padding from bottom
     for (auto nCurItem : aTextItems)
     {
         aEntryPos.setY(nLabelYPos);
@@ -271,12 +270,12 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         // center horizontally
         aEntryPos.AdjustX((nTempEntryWidth - nItemWidth) / 2);
         // center vertically
-        int nImageAreaHeight = nTempEntryHeight - nSpacing * 2; // spacings from top, from bottom
+        int nImageAreaHeight = nTempEntryHeight - m_nSpacing * 2; // spacings from top, from bottom
         if (nLabelHeight > 0)
         {
-            nImageAreaHeight -= nLabelHeight + nSpacing; // spacing between icon and label
+            nImageAreaHeight -= nLabelHeight + m_nSpacing; // spacing between icon and label
         }
-        aEntryPos.AdjustY((nImageAreaHeight - nItemHeight) / 2 + nSpacing);
+        aEntryPos.AdjustY((nImageAreaHeight - nItemHeight) / 2 + m_nSpacing);
 
         rItem.Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
     }
