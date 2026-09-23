@@ -133,6 +133,14 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     CreateTableColumns(xColumnRowRange->getColumns(), mvTableGrid);
     CreateTableRows(xColumnRowRange->getRows(), mvTableRows);
 
+    // a:tblPr flags all default to false, the svx table settings mostly to true
+    xPropSet->setPropertyValue(u"UseFirstRowStyle"_ustr, Any(isFirstRow()));
+    xPropSet->setPropertyValue(u"UseLastRowStyle"_ustr, Any(isLastRow()));
+    xPropSet->setPropertyValue(u"UseFirstColumnStyle"_ustr, Any(isFirstCol()));
+    xPropSet->setPropertyValue(u"UseLastColumnStyle"_ustr, Any(isLastCol()));
+    xPropSet->setPropertyValue(u"UseBandingRowStyle"_ustr, Any(isBandRow()));
+    xPropSet->setPropertyValue(u"UseBandingColumnStyle"_ustr, Any(isBandCol()));
+
     std::unique_ptr<TableStyle> xTableStyleToDelete;
     const TableStyle& rTableStyle(getUsedTableStyle(rFilterBase, xTableStyleToDelete));
     sal_Int32 nRow = 0;

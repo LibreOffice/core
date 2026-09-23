@@ -1520,6 +1520,54 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testGroupConnectorDescription)
     assertXPath(pSlide, "//p:cxnSp/p:nvCxnSpPr/p:cNvPr", "title", u"Title on the line");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf173682_tableStyleFlags)
+{
+    // Two tables. The first one has the opposite of the svx defaults: no firstRow and no bandRow,
+    // the other four set. The second one has the other half. The first row was still taken as a
+    // header, so tagged PDF made its cells TH.
+    createSdImpressDoc("pptx/tdf173682.pptx");
+    struct Flag
+    {
+        OUString aProperty;
+        const char* pAttribute;
+        bool bFirstTable;
+    };
+    const Flag aFlags[] = {
+        { u"UseFirstRowStyle"_ustr, "firstRow", false },
+        { u"UseLastRowStyle"_ustr, "lastRow", true },
+        { u"UseFirstColumnStyle"_ustr, "firstCol", true },
+        { u"UseLastColumnStyle"_ustr, "lastCol", true },
+        { u"UseBandingRowStyle"_ustr, "bandRow", false },
+        { u"UseBandingColumnStyle"_ustr, "bandCol", true },
+    };
+    auto checkFlags = [this, &aFlags]() {
+        for (int nTable = 0; nTable < 2; ++nTable)
+        {
+            uno::Reference<beans::XPropertySet> xTable(getShapeFromPage(nTable, 0));
+            for (const Flag& rFlag : aFlags)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(rFlag.pAttribute, rFlag.bFirstTable == (nTable == 0),
+                                             xTable->getPropertyValue(rFlag.aProperty).get<bool>());
+        }
+    };
+    checkFlags();
+
+    // The flags were not written, so they were gone on reload.
+    saveAndReload(TestFilter::PPTX);
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    for (int nTable = 0; nTable < 2; ++nTable)
+    {
+        OString aTblPr = "(//a:tbl)[" + OString::number(nTable + 1) + "]/a:tblPr";
+        for (const Flag& rFlag : aFlags)
+        {
+            if (rFlag.bFirstTable == (nTable == 0))
+                assertXPath(pSlide, aTblPr, rFlag.pAttribute, u"1");
+            else
+                assertXPathNoAttribute(pSlide, aTblPr, rFlag.pAttribute);
+        }
+    }
+    checkFlags();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
