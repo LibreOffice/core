@@ -79,33 +79,6 @@ $(eval $(call gb_Module_add_targets,desktop, \
 ))
 endif
 
-ifneq (,$(filter Extension_test-active,$(MAKECMDGOALS)))
-$(eval $(call gb_Module_add_targets,desktop, \
-    Extension_test-active \
-    Jar_active_java \
-    Library_active_native \
-))
-endif
-
-ifneq (,$(filter Extension_test-passive,$(MAKECMDGOALS)))
-$(eval $(call gb_Module_add_targets,desktop, \
-    Extension_test-passive \
-    Jar_passive_java \
-    Library_passive_native \
-    Pyuno_passive_python \
-    Rdb_passive_generic \
-    Rdb_passive_platform \
-))
-endif
-
-ifneq (,$(filter Extension_test-crashextension,$(MAKECMDGOALS)))
-$(eval $(call gb_Module_add_targets,desktop, \
-    Extension_test-crashextension \
-    Library_crashextension \
-    Rdb_crashextension \
-))
-endif
-
 $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_app \
     CppunitTest_desktop_version \

@@ -588,9 +588,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
-	active_native \
-	passive_native \
-	crashextension \
 	rust_uno-example \
 ))
 
@@ -610,11 +607,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
 	smoketest \
 	unoil \
-))
-
-$(eval $(call gb_Helper_register_jars,OXT, \
-	active_java \
-	passive_java \
 ))
 
 $(eval $(call gb_Helper_register_jars,NONE,\
