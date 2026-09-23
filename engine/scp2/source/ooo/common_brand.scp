@@ -318,14 +318,6 @@ ProfileItem gid_Brand_Profileitem_Soffice_SecureUserConfigMode
     Value = "1";
 End
 
-ProfileItem gid_Brand_Profileitem_Soffice_SecureUserConfigExtensions
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Key = "SecureUserConfigExtensions";
-    Value = "true";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Buildid
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

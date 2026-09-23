@@ -1412,7 +1412,6 @@ int Desktop::doShutdown()
         comphelper::BackupFileHelper aBackupFileHelper;
 
         aBackupFileHelper.tryPush();
-        aBackupFileHelper.tryPushExtensionInfo();
     }
 
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)

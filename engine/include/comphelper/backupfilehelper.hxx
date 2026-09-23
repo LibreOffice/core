@@ -67,7 +67,6 @@ namespace comphelper
         sal_uInt16              mnMode;
 
         bool                    mbActive;
-        bool                    mbExtensions;
         bool                    mbCompress;
 
         // internal flag if _exit() was called already - a hint to evtl.
@@ -115,10 +114,8 @@ namespace comphelper
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.
          *
-         * tryPushExtensionInfo is the specialized version for ExtensionInfo
          */
         void tryPush();
-        void tryPushExtensionInfo();
 
     private:
         // internal helper methods
@@ -127,9 +124,6 @@ namespace comphelper
         // file push helpers
         bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, const OUString& rTargetURL);
         bool tryPush_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
-
-        // ExtensionInfo helpers
-        bool tryPush_extensionInfo(std::u16string_view rTargetURL);
 
         // FileDirInfo helpers
         void fillDirFileInfo();

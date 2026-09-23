@@ -30,8 +30,6 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Reference.hxx>
-#include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
@@ -125,20 +123,6 @@ namespace
         return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten;
     }
 
-    bool write_OString(oslFileHandle& rHandle, const OString& rSource)
-    {
-        const sal_uInt32 nLength(rSource.getLength());
-
-        if (!write_sal_uInt32(rHandle, nLength))
-        {
-            return false;
-        }
-
-        sal_uInt64 nBaseWritten(0);
-
-        return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten;
-    }
-
     OUString createFileURL(
         std::u16string_view rURL, std::u16string_view rName, std::u16string_view rExt)
     {
@@ -168,291 +152,6 @@ namespace
 
         return aRetval;
     }
-}
-
-namespace
-{
-    enum PackageRepository { USER, SHARED, BUNDLED };
-
-    class ExtensionInfoEntry
-    {
-    private:
-        OString             maName;         // extension name
-        PackageRepository   maRepository;   // user|shared|bundled
-        bool                mbEnabled;      // state
-
-    public:
-        ExtensionInfoEntry(const uno::Reference< deployment::XPackage >& rxPackage)
-        :   maName(OUStringToOString(rxPackage->getName(), RTL_TEXTENCODING_ASCII_US)),
-            maRepository(USER),
-            mbEnabled(false)
-        {
-            // check maRepository
-            const OString aRepName(OUStringToOString(rxPackage->getRepositoryName(), RTL_TEXTENCODING_ASCII_US));
-
-            if (aRepName == "shared")
-            {
-                maRepository = SHARED;
-            }
-            else if (aRepName == "bundled")
-            {
-                maRepository = BUNDLED;
-            }
-
-            // check mbEnabled
-            const beans::Optional< beans::Ambiguous< bool > > option(
-                rxPackage->isRegistered(uno::Reference< task::XAbortChannel >(),
-                uno::Reference< ucb::XCommandEnvironment >()));
-
-            if (option.IsPresent)
-            {
-                ::beans::Ambiguous< bool > const& reg = option.Value;
-
-                if (!reg.IsAmbiguous)
-                {
-                    mbEnabled = reg.Value;
-                }
-            }
-        }
-
-        bool operator<(const ExtensionInfoEntry& rComp) const
-        {
-            if (maRepository == rComp.maRepository)
-            {
-                if (maName == rComp.maName)
-                {
-                    return mbEnabled < rComp.mbEnabled;
-                }
-                else
-                {
-                    return 0 > maName.compareTo(rComp.maName);
-                }
-            }
-            else
-            {
-                return maRepository < rComp.maRepository;
-            }
-        }
-
-        bool write_entry(oslFileHandle& rHandle) const
-        {
-            // write maName;
-            if (!write_OString(rHandle, maName))
-            {
-                return false;
-            }
-
-            // write maRepository
-            sal_uInt32 nState(maRepository);
-
-            if (!write_sal_uInt32(rHandle, nState))
-            {
-                return false;
-            }
-
-            // write mbEnabled
-            nState = static_cast< sal_uInt32 >(mbEnabled);
-
-            return write_sal_uInt32(rHandle, nState);
-        }
-
-        const OString& getName() const
-        {
-            return maName;
-        }
-    };
-
-    typedef std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
-
-    class ExtensionInfo
-    {
-    private:
-        ExtensionInfoEntryVector    maEntries;
-
-    public:
-        ExtensionInfo()
-        {
-        }
-
-        void reset()
-        {
-            // clear all data
-            maEntries.clear();
-        }
-
-        void createUsingXExtensionManager()
-        {
-            // clear all data
-            reset();
-
-            // create content from current extension configuration
-            cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
-            const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
-
-            try
-            {
-                xAllPackages = m_xExtensionManager->getAllExtensions(uno::Reference< task::XAbortChannel >(),
-                    uno::Reference< ucb::XCommandEnvironment >());
-            }
-            catch (const deployment::DeploymentException &)
-            {
-                return;
-            }
-            catch (const ucb::CommandFailedException &)
-            {
-                return;
-            }
-            catch (const ucb::CommandAbortedException &)
-            {
-                return;
-            }
-            catch (const lang::IllegalArgumentException & e)
-            {
-                cpo::uno::Any anyEx = cppu::getCaughtException();
-                throw css::lang::WrappedTargetRuntimeException( e.Message,
-                                e.Context, anyEx );
-            }
-
-            for (const cpo::uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : xAllPackages)
-            {
-                for (const uno::Reference< deployment::XPackage > & xPackage : xPackageList)
-                {
-                    if (xPackage.is())
-                    {
-                        maEntries.emplace_back(xPackage);
-                    }
-                }
-            }
-
-            if (!maEntries.empty())
-            {
-                // sort the list
-                std::sort(maEntries.begin(), maEntries.end());
-            }
-        }
-
-    private:
-        static bool visitNodesXMLChange(
-            const OUString& rTagToSearch,
-            const uno::Reference< xml::dom::XElement >& rElement,
-            const ExtensionInfoEntryVector& rToBeEnabled,
-            const ExtensionInfoEntryVector& rToBeDisabled)
-        {
-            bool bChanged(false);
-
-            if (rElement.is())
-            {
-                const OUString aTagName(rElement->getTagName());
-
-                if (aTagName == rTagToSearch)
-                {
-                    const OString aAttrUrl(OUStringToOString(rElement->getAttribute(u"url"_ustr), RTL_TEXTENCODING_ASCII_US));
-                    const OUString aAttrRevoked(rElement->getAttribute(u"revoked"_ustr));
-                    const bool bEnabled(aAttrRevoked.isEmpty() || !aAttrRevoked.toBoolean());
-
-                    if (!aAttrUrl.isEmpty())
-                    {
-                        for (const auto& enable : rToBeEnabled)
-                        {
-                            if (-1 != aAttrUrl.indexOf(enable.getName()))
-                            {
-                                if (!bEnabled)
-                                {
-                                    // needs to be enabled
-                                    rElement->removeAttribute(u"revoked"_ustr);
-                                    bChanged = true;
-                                }
-                            }
-                        }
-
-                        for (const auto& disable : rToBeDisabled)
-                        {
-                            if (-1 != aAttrUrl.indexOf(disable.getName()))
-                            {
-                                if (bEnabled)
-                                {
-                                    // needs to be disabled
-                                    rElement->setAttribute(u"revoked"_ustr, u"true"_ustr);
-                                    bChanged = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    uno::Reference< xml::dom::XNodeList > aList = rElement->getChildNodes();
-
-                    if (aList.is())
-                    {
-                        const sal_Int32 nLength(aList->getLength());
-
-                        for (sal_Int32 a(0); a < nLength; a++)
-                        {
-                            const uno::Reference< xml::dom::XElement > aChild(aList->item(a), uno::UNO_QUERY);
-
-                            if (aChild.is())
-                            {
-                                bChanged |= visitNodesXMLChange(
-                                    rTagToSearch,
-                                    aChild,
-                                    rToBeEnabled,
-                                    rToBeDisabled);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return bChanged;
-        }
-
-    public:
-        bool write_entries(oslFileHandle& rHandle) const
-        {
-            const sal_uInt32 nExtEntries(maEntries.size());
-
-            if (!write_sal_uInt32(rHandle, nExtEntries))
-            {
-                return false;
-            }
-
-            for (const auto& a : maEntries)
-            {
-                if (!a.write_entry(rHandle))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        bool createTempFile(OUString& rTempFileName)
-        {
-            oslFileHandle aHandle;
-            bool bRetval(false);
-
-            // create current configuration
-            if (maEntries.empty())
-            {
-                createUsingXExtensionManager();
-            }
-
-            // open target temp file and write current configuration to it - it exists until deleted
-            if (osl::File::E_None == osl::FileBase::createTempFile(nullptr, &aHandle, &rTempFileName))
-            {
-                bRetval = write_entries(aHandle);
-
-                // close temp file - it exists until deleted
-                osl_closeFile(aHandle);
-            }
-
-            return bRetval;
-        }
-
-    };
 }
 
 namespace
@@ -1159,7 +858,6 @@ namespace comphelper
     :   mnNumBackups(2),
         mnMode(1),
         mbActive(false),
-        mbExtensions(true),
         mbCompress(true)
     {
         OUString sTokenOut;
@@ -1195,11 +893,6 @@ namespace comphelper
             mnMode = std::min(nMode, sal_uInt16(2));
         }
 
-        if (mbActive && rtl::Bootstrap::get(u"SecureUserConfigExtensions"_ustr, sTokenOut))
-        {
-            mbExtensions = sTokenOut.toBoolean();
-        }
-
         if (mbActive && rtl::Bootstrap::get(u"SecureUserConfigCompress"_ustr, sTokenOut))
         {
             mbCompress = sTokenOut.toBoolean();
@@ -1232,19 +925,6 @@ namespace comphelper
                 maFiles,
                 maUserConfigWorkURL,
                 aPackURL);
-        }
-    }
-
-    void BackupFileHelper::tryPushExtensionInfo()
-    {
-        // no push when SafeModeDir exists, it may be Office's exit after SafeMode
-        // where SafeMode flag is already deleted, but SafeModeDir cleanup is not
-        // done yet (is done at next startup)
-        if (mbActive && mbExtensions && !mbSafeModeDirExists)
-        {
-            const OUString aPackURL(getPackURL());
-
-            tryPush_extensionInfo(aPackURL);
         }
     }
 
@@ -1335,37 +1015,6 @@ namespace comphelper
         }
 
         return false;
-    }
-
-    /////////////////// ExtensionInfo helpers ///////////////////////
-
-    bool BackupFileHelper::tryPush_extensionInfo(
-        std::u16string_view rTargetURL // target dir without trailing '/'
-        )
-    {
-        ExtensionInfo aExtensionInfo;
-        OUString aTempURL;
-        bool bRetval(false);
-
-        // create current configuration and write to temp file - it exists until deleted
-        if (aExtensionInfo.createTempFile(aTempURL))
-        {
-            const OUString aPackURL(createPackURL(rTargetURL, u"ExtensionInfo"));
-            PackedFile aPackedFile(aPackURL);
-            FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
-
-            if (aPackedFile.tryPush(aBaseFile, mbCompress))
-            {
-                // reduce to allowed number and flush
-                aPackedFile.tryReduceToNumBackups(mnNumBackups);
-                aPackedFile.flush();
-                bRetval = true;
-            }
-        }
-
-        // delete temp file (in all cases)
-        osl::File::remove(aTempURL);
-        return bRetval;
     }
 
     /////////////////// FileDirInfo helpers ///////////////////////

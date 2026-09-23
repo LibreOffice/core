@@ -22,8 +22,6 @@
 #include <com/sun/star/configuration/backend/MalformedDataException.hpp>
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
-#include <com/sun/star/deployment/DependencyException.hpp>
-#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -125,22 +123,6 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const cpo::uno::Any &
         {
             sMessage.append("\n    wrapped: ");
             exceptionToStringImpl(sMessage, specialized.BackendException);
-        }
-    }
-    {
-        css::deployment::DependencyException specialized;
-        if ( caught >>= specialized )
-        {
-            sMessage.append(" UnsatisfiedDependencies: ");
-            sMessage.append(toOString(comphelper::anyToString(cpo::uno::Any(specialized.UnsatisfiedDependencies))));
-        }
-    }
-    {
-        css::deployment::DeploymentException specialized;
-        if ( caught >>= specialized )
-        {
-            sMessage.append("\n    wrapped: ");
-            exceptionToStringImpl(sMessage, specialized.Cause);
         }
     }
     {

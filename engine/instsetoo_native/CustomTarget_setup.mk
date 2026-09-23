@@ -125,8 +125,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,se
 #                                           0 : only registrymodifications.xcu
 #                                           1 : a selected amount of user-defined configs
 #                                           2 : everything in the user config directory
-#  SecureUserConfigExtensions:  boolean - defines to also safe the extension configuration (which extensions
-#                                         are installed, which are activated) - default is true
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,soffice) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
@@ -145,7 +143,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,so
 		&& echo 'ProgressTextColor=255,255,255' \
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
-		&& echo 'SecureUserConfigExtensions=true' \
 		&& echo 'SecureUserConfigMode=1' \
 		&& echo 'SecureUserConfigNumCopies=2' \
 		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
