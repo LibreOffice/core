@@ -344,7 +344,7 @@ FileServerRequestHandler::relayOriginFromForm(const std::string& value,
 
     // The sources are separated by spaces, and the configuration file may wrap a long list over
     // several lines, so every kind of blank ends a source.
-    constexpr std::string_view blanks = " \t\r\n";
+    static constexpr std::string_view blanks = " \t\r\n";
     std::size_t start = configuredFrameAncestors.find_first_not_of(blanks);
     while (start != std::string::npos)
     {
