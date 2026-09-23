@@ -154,6 +154,14 @@ public:
         CPPUNIT_ASSERT_EQUAL(false,
                              comphelper::parseJsonToAny(u"false"_ustr, cppu::UnoType<bool>::get()).get<bool>());
         CPPUNIT_ASSERT_EQUAL(
+            sal_Int8(-128),
+            comphelper::parseJsonToAny(
+                u"-128"_ustr, cppu::UnoType<sal_Int8>::get()).get<sal_Int8>());
+        CPPUNIT_ASSERT_EQUAL(
+            sal_Int8(-1),
+            comphelper::parseJsonToAny(
+                u"255"_ustr, cppu::UnoType<sal_Int8>::get()).get<sal_Int8>());
+        CPPUNIT_ASSERT_EQUAL(
             sal_Int32(42),
             comphelper::parseJsonToAny(u"42"_ustr, cppu::UnoType<sal_Int32>::get()).get<sal_Int32>());
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_UINT64, comphelper::parseJsonToAny(u"18446744073709551615"_ustr,
@@ -165,7 +173,7 @@ public:
 
     void testParseScalarsOutOfRange()
     {
-        CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"128"_ustr, cppu::UnoType<sal_Int8>::get()),
+        CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"256"_ustr, cppu::UnoType<sal_Int8>::get()),
                              cpo::uno::RuntimeException);
         CPPUNIT_ASSERT_THROW(comphelper::parseJsonToAny(u"-129"_ustr, cppu::UnoType<sal_Int8>::get()),
                              cpo::uno::RuntimeException);

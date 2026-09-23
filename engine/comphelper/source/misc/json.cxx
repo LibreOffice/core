@@ -633,14 +633,14 @@ cpo::uno::Any comphelper::parseJsonToAny(OUString const& json, cpo::uno::Type co
         }
         case cpo::uno::TypeClass_BYTE:
         {
-            auto const v = parseJsonNumberAs<sal_Int8>(json);
-            if (!v)
+            auto const v = parseJsonNumberAs<sal_Int16>(json);
+            if (!v || *v < SAL_MIN_INT8 || *v > SAL_MAX_UINT8)
             {
                 throw cpo::uno::RuntimeException(u"JSON value "_ustr + json
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return cpo::uno::Any(*v);
+            return cpo::uno::Any(static_cast<sal_Int8>(*v <= SAL_MAX_INT8 ? *v : *v - 256));
         }
         case cpo::uno::TypeClass_SHORT:
         {
