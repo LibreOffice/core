@@ -2,6 +2,7 @@
 
 /* global describe it cy require beforeEach */
 var helper = require('../../common/helper');
+var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop'], 'Formulabar in readonly mode', function() {
 
@@ -52,6 +53,43 @@ describe(['tagdesktop'], 'Formulabar tests', function() {
 	it('Do not hide on notebookbar collapse', function() {
 		cy.cGet('#Home-tab-label').click();
 		cy.cGet('#sc_input_window.formulabar').should('be.visible');
+	});
+
+	it('Deleting a selection dragged out of the formula bar updates the cell', function() {
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+		helper.typeIntoDocument('ONE TWO THREE{enter}');
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+
+		var textLayer = '#sc_input_window .ui-custom-textarea-text-layer';
+		cy.cGet(textLayer).should('have.text', 'ONE TWO THREE');
+
+		// Press before the "T" of "TWO", drag left to select "ONE " and release the mouse
+		// past the left edge of the text, outside the formula bar.
+		cy.cGet(textLayer).trigger('mousedown');
+		cy.cGet(textLayer).then(function(layer) {
+			var edit = layer[0];
+			edit.focus();
+			edit.ownerDocument.getSelection().setBaseAndExtent(
+				edit.childNodes[3].firstChild, 1, edit.childNodes[0].firstChild, 0);
+		});
+		cy.cGet('body').trigger('mouseup');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		cy.cGet('body').type('{backspace}{enter}');
+
+		// Visit another cell and come back, so the formula bar shows the cell content as the
+		// document holds it.
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A2');
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+		cy.cGet(textLayer).should('have.text', 'TWO THREE');
 	});
 
 	// FIXME: need to stabilize

@@ -608,7 +608,8 @@ function _formulabarEditControl(parentContainer, data, builder) {
 			return;
 
 		pointerFocus = true;
-		textLayer.addEventListener('mouseup', textSelectionHandler, {once: true});
+		// A drag can end outside the text layer.
+		window.addEventListener('mouseup', textSelectionHandler, {once: true});
 		builder.callback('edit', 'grab_focus', container, null, builder);
 
 		cursorLayer.querySelectorAll('.selection').forEach(function (element) {
