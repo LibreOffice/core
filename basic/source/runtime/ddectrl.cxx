@@ -22,8 +22,8 @@
 #include "ddectrl.hxx"
 #include <basic/sberrors.hxx>
 
-#define DDE_FIRSTERR    0x4000
-#define DDE_LASTERR     0x4011
+constexpr tools::Long DDE_FIRSTERR = 0x4000;
+constexpr tools::Long DDE_LASTERR = 0x4011;
 
 const ErrCode nDdeErrMap[] =
 {

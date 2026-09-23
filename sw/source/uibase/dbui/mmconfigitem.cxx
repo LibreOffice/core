@@ -62,12 +62,12 @@ const char cDataSourceName[]         = "DataSource/DataSourceName";
 const char cDataTableName[]          = "DataSource/DataTableName" ;
 const char cDataCommandType[]        = "DataSource/DataCommandType";
 
-#define SECURE_PORT     587
-#define DEFAULT_PORT    25
-#define POP_PORT        110
-#define POP_SECURE_PORT     995
-#define IMAP_PORT           143
-#define IMAP_SECURE_PORT    993
+constexpr sal_Int16 SECURE_PORT = 587;
+constexpr sal_Int16 DEFAULT_PORT = 25;
+constexpr sal_Int16 POP_PORT = 110;
+constexpr sal_Int16 POP_SECURE_PORT = 995;
+constexpr sal_Int16 IMAP_PORT = 143;
+constexpr sal_Int16 IMAP_SECURE_PORT = 993;
 
 namespace {
 
