@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
+#include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -46,6 +47,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
+
+#include <algorithm>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
 #include <cppunit/TestAssert.h>
@@ -70,6 +74,7 @@ public:
     void testListener();
     void testRecursive();
     void testCrossThreads();
+    void testSharedOrganizationLayer();
 
     cpo::uno::Any getKey(
         OUString const & path, OUString const & relative) const;
@@ -101,6 +106,7 @@ public:
     CPPUNIT_TEST(testListener);
     CPPUNIT_TEST(testRecursive);
     CPPUNIT_TEST(testCrossThreads);
+    CPPUNIT_TEST(testSharedOrganizationLayer);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -518,6 +524,49 @@ cpo::uno::Reference< cpo::uno::XInterface > Test::createUpdateAccess(
     return provider_->createInstanceWithArguments(
         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
         cpo::uno::Sequence< cpo::uno::Any >(&arg, 1));
+}
+
+/// Collabora Online puts the shared AutoText, Dictionary and Template directories into the
+/// configuration at run time, by handing an .xcu to XUpdate. That needs the "sharedext" layer
+/// to be declared in CONFIGURATION_LAYERS, and nothing says so out loud if it is not: the
+/// caller only logs, so the paths quietly go missing. This test is what says so.
+void Test::testSharedOrganizationLayer()
+{
+    OUString aUrl;
+    oslFileHandle aHandle = nullptr;
+    CPPUNIT_ASSERT_EQUAL(
+        osl::FileBase::E_None, osl::FileBase::createTempFile(nullptr, &aHandle, &aUrl));
+
+    static constexpr OString aXcu
+        = R"(<?xml version="1.0" encoding="UTF-8"?>)"
+          R"(<oor:component-data xmlns:oor="http://openoffice.org/2001/registry")"
+          R"( oor:name="Paths" oor:package="org.openoffice.Office">)"
+          R"(<node oor:name="Paths"><node oor:name="AutoText" oor:op="fuse">)"
+          R"(<prop oor:name="OrganizationPaths" oor:type="oor:string-list">)"
+          R"(<value>file:///tmp/configmgr-test-autotext</value></prop></node></node>)"
+          R"(</oor:component-data>)"_ostr;
+
+    sal_uInt64 nWritten = 0;
+    CPPUNIT_ASSERT_EQUAL(osl_File_E_None,
+                         osl_writeFile(aHandle, aXcu.getStr(), aXcu.getLength(), &nWritten));
+    osl_closeFile(aHandle);
+
+    // Throws "insert extension xcs/xcu file into undefined layer" when the layer is gone.
+    css::configuration::Update::get(comphelper::getProcessComponentContext())
+        ->insertExtensionXcuFile(true, aUrl);
+
+    cpo::uno::Sequence<OUString> aPaths;
+    CPPUNIT_ASSERT(
+        getKey(u"/org.openoffice.Office.Paths/Paths/AutoText"_ustr, u"OrganizationPaths"_ustr)
+        >>= aPaths);
+
+    // The layer has to outrank the shipped defaults, or the entry is read and then ignored.
+    CPPUNIT_ASSERT_MESSAGE(
+        "the shared layer did not reach the AutoText path",
+        std::find(aPaths.begin(), aPaths.end(), u"file:///tmp/configmgr-test-autotext"_ustr)
+            != aPaths.end());
+
+    osl::File::remove(aUrl);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

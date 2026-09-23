@@ -115,6 +115,7 @@
 
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -135,6 +136,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
@@ -5483,6 +5485,32 @@ static void reInitDictionaryList()
     }
 };
 
+/// Whether the OrganizationPaths of a named path already hold a directory.
+static bool organizationPathHolds(const OUString& rPathName, std::u16string_view rDirectoryUrl)
+{
+    try
+    {
+        const cpo::uno::Reference<css::container::XHierarchicalNameAccess> xPaths(
+            css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext())
+                ->createInstanceWithArguments(
+                    u"com.sun.star.configuration.ConfigurationAccess"_ustr,
+                    { cpo::uno::Any(css::beans::NamedValue(
+                        u"nodepath"_ustr, cpo::uno::Any(u"/org.openoffice.Office.Paths/Paths"_ustr))) }),
+            cpo::uno::UNO_QUERY_THROW);
+
+        const cpo::uno::Reference<css::beans::XPropertySet> xPath(xPaths->getByHierarchicalName(rPathName),
+                                                                 cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Sequence<OUString> aPaths;
+        xPath->getPropertyValue(u"OrganizationPaths"_ustr) >>= aPaths;
+        return std::find(aPaths.begin(), aPaths.end(), rDirectoryUrl) != aPaths.end();
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("kit", "Failed to read back the " << rPathName << " path");
+        return false;
+    }
+}
+
 /// Adds one directory to the OrganizationPaths of a named path of org.openoffice.Office.Paths.
 /// The shared extension layer holds the entry, so it ranks above the shipped defaults and below
 /// the settings of the individual user.
@@ -5528,13 +5556,27 @@ static void addOrganizationPath(const OUString& rPathName, const OUString& rDire
     {
         css::configuration::Update::get(comphelper::getProcessComponentContext())
             ->insertExtensionXcuFile(true, aXcuUrl);
-        SAL_INFO("kit", "Added " << rDirectoryUrl << " to the " << rPathName << " path");
     }
     catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("kit", "Failed to add " << rDirectoryUrl << " to the " << rPathName
                                                     << " path");
+        return;
     }
+
+    // Read it back rather than trust the write. The layer this goes into is named in the
+    // environment, so a change there takes the entry away without any error: the insert
+    // above reports a layer that was never declared, but a layer that is declared in the
+    // wrong place simply loses to the shipped defaults.
+    if (!organizationPathHolds(rPathName, rDirectoryUrl))
+    {
+        SAL_WARN("kit", "The " << rPathName << " path did not take " << rDirectoryUrl
+                               << ": the shared configuration layer is missing from "
+                                  "CONFIGURATION_LAYERS or ranks below the defaults");
+        return;
+    }
+
+    SAL_INFO("kit", "Added " << rDirectoryUrl << " to the " << rPathName << " path");
 }
 
 /// Registers the preset groups of one configuration as organization paths. The directory is the

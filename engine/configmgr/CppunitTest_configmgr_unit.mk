@@ -42,6 +42,11 @@ $(eval $(call gb_CppunitTest_use_ure,configmgr_unit))
 
 $(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))
 
+# Collabora Online inserts the shared AutoText, Dictionary and Template paths into this
+# layer at run time. Declare it here, with an ini file that does not exist, the way the
+# product does, so testSharedOrganizationLayer can check the mechanism still works.
+$(eval $(call gb_CppunitTest__use_configuration,configmgr_unit,sharedext,$(WORKDIR)/configmgr-no-such-layer.ini))
+
 $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
