@@ -8,7 +8,7 @@ to propose changes to this document via Gerrit.
 
 If you have questions about how to install or use Collabora Online,
 please direct these to our [forum][forum]. If you have questions
-about Collabora Online development, you may join us on [IRC][irc]
+about Collabora Online development, you may join us on [Matrix][matrix]
 or [Telegram][telegram].
 
 ### Guidelines
@@ -31,7 +31,7 @@ new features by not reporting duplicate issues.
 
 [report]: https://github.com/CollaboraOnline/online/issues/new/choose
 [forum]: https://forum.collaboraonline.com/
-[irc]: https://web.libera.chat/?channels=cool-dev
+[matrix]: https://matrix.to/#/#cool-dev:matrix.org
 [telegram]: https://t.me/CollaboraOnline
 [gh-search]: https://help.github.com/articles/searching-issues
 [secpolicy]: https://github.com/CollaboraOnline/online/security/policy
@@ -109,6 +109,12 @@ pushing like this:
 ```bash
 git push origin HEAD~1:refs/for/main%wip
 git push origin HEAD:refs/for/main
+```
+
+Or equivalently, using our convenience script:
+
+```sh
+./g review
 ```
 
 This way only the last patch triggers CI. Once CI passes on the top

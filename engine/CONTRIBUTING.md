@@ -7,7 +7,7 @@ The following is a set of rules and guidelines for contributing to Collabora Off
 ## Submitting issues
 
 If you have questions about how to install or use Collabora Office, please direct these to our [forum][forum].
-If you have issues or questions about Collabora Office development, you may join us on [IRC][irc] or [Telegram][telegram].
+If you have issues or questions about Collabora Office development, you may join us on [Matrix][matrix] or [Telegram][telegram].
 
 ### Guidelines
 * Please search the existing issues first, it's likely that your issue was already reported or even fixed.
@@ -22,7 +22,7 @@ Help us to maximize the effort we can spend fixing issues and adding new feature
 
 [report]: https://github.com/CollaboraOnline/online/issues/new/choose
 [forum]: https://forum.collaboraonline.com/
-[irc]: https://web.libera.chat/?channels=cool-dev
+[matrix]: https://matrix.to/#/#cool-dev:matrix.org
 [telegram]: https://t.me/CollaboraOnline
 
 ## Contributing to Source Code
