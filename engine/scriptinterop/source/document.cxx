@@ -281,6 +281,16 @@ public:
         if (!element.is()) {
             throw cpo::uno::RuntimeException(u"addElement: the element must not be null"_ustr);
         }
+        // A Writer selection is either text or a single object, so an inline image can only be the
+        // only element of a range:
+        if (image_.is() || element->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
+            if (image_.is() || cursor_.is()) {
+                throw cpo::uno::RuntimeException(
+                    u"addElement: an inline image can only be the only element of a range"_ustr);
+            }
+            image_.set(element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            return this;
+        }
         cpo::uno::Reference<css::text::XTextRange> const range(
             element->getuno(), cpo::uno::UNO_QUERY);
         if (!range.is()) {
@@ -298,6 +308,10 @@ public:
         if (!text.is()) {
             throw cpo::uno::RuntimeException(
                 u"addElementRange: the text must not be null"_ustr);
+        }
+        if (image_.is()) {
+            throw cpo::uno::RuntimeException(
+                u"addElementRange: an inline image can only be the only element of a range"_ustr);
         }
         if (startOffset < 0 || endOffsetInclusive < startOffset) {
             throw cpo::uno::RuntimeException(
@@ -323,13 +337,7 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XSelection> build() override {
-        if (!cursor_.is()) {
-            throw cpo::uno::RuntimeException(
-                u"build: add at least one element or element range first"_ustr);
-        }
-        return new SelectionImpl(new SingleRangeIndex(cursor_));
-    }
+    cpo::uno::Reference<scriptinterop::XSelection> build() override;
 
 private:
     void extend(
@@ -353,6 +361,7 @@ private:
     }
 
     cpo::uno::Reference<css::text::XTextCursor> cursor_;
+    cpo::uno::Reference<css::text::XTextContent> image_;
 };
 
 class TextImpl: public cppu::WeakImplHelper<scriptinterop::XText> {
@@ -1627,7 +1636,7 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
 
-    cpo::uno::Reference<scriptinterop::XParagraph> getElement() override {
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override {
         if (!paragraph_.is()) {
             throw cpo::uno::RuntimeException(
                 u"getElement: this range element is not inside a paragraph"_ustr);
@@ -1735,6 +1744,70 @@ SelectionImpl::getRangeElements() {
         splitAtParagraphBoundaries(range, v);
     }
     return cpo::uno::Sequence(v.data(), v.size());
+}
+
+class ImageRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
+public:
+    explicit ImageRangeElementImpl(cpo::uno::Reference<css::text::XTextContent> const & image):
+        image_(image) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
+
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override {
+        auto const anchor = image_->getAnchor();
+        if (!anchor.is()) {
+            throw cpo::uno::RuntimeException(u"getElement: the image has no anchor"_ustr);
+        }
+        auto const para = findContainingParagraph(anchor);
+        if (!para.is()) {
+            throw cpo::uno::RuntimeException(
+                u"getElement: the image is not anchored in a paragraph"_ustr);
+        }
+        return new InlineImageImpl(new ParagraphImpl(nullptr, para), image_);
+    }
+
+    sal_Int32 getEndOffsetInclusive() override { return -1; }
+
+    sal_Int32 getStartOffset() override { return -1; }
+
+    bool isPartial() override { return false; }
+
+private:
+    cpo::uno::Reference<css::text::XTextContent> image_;
+};
+
+// An inline image that is selected on its own, as one whole range element:
+class ImageSelectionImpl: public cppu::WeakImplHelper<scriptinterop::XSelection> {
+public:
+    explicit ImageSelectionImpl(cpo::uno::Reference<css::text::XTextContent> const & image):
+        image_(image) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
+        override
+    { return {new ImageRangeElementImpl(image_)}; }
+
+    OUString getText() override { return {}; }
+
+    void replace(OUString const &) override {
+        throw cpo::uno::RuntimeException(
+            u"replace: the selection is an image, which has no text to replace"_ustr);
+    }
+
+private:
+    cpo::uno::Reference<css::text::XTextContent> image_;
+};
+
+cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
+    if (image_.is()) {
+        return new ImageSelectionImpl(image_);
+    }
+    if (!cursor_.is()) {
+        throw cpo::uno::RuntimeException(
+            u"build: add at least one element or element range first"_ustr);
+    }
+    return new SelectionImpl(new SingleRangeIndex(cursor_));
 }
 
 cpo::uno::Reference<css::text::XTextViewCursor> viewCursorOf(
@@ -2130,8 +2203,18 @@ public:
         cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
             doc->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+        auto const selected = sup->getSelection();
+        // A selected graphic object is the object itself rather than a collection of ranges:
+        if (cpo::uno::Reference<css::lang::XServiceInfo> const info{selected, cpo::uno::UNO_QUERY};
+            info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
+        {
+            return {
+                true,
+                cpo::uno::Reference<scriptinterop::XSelection>(new ImageSelectionImpl(
+                    cpo::uno::Reference<css::text::XTextContent>(info, cpo::uno::UNO_QUERY_THROW)))};
+        }
         cpo::uno::Reference<css::container::XIndexAccess> ranges;
-        sup->getSelection() >>= ranges;
+        selected >>= ranges;
         if (!ranges.is()) {
             return {false, {}};
         }
@@ -2159,10 +2242,14 @@ public:
         return new BodyImpl(model_, doc->getText());
     }
 
-    // The position given to setCursor stays the cursor, with its own element and offset, for as
-    // long as the view cursor is still at that position:
+    // There is no cursor while there is a selection.  The position given to setCursor stays the
+    // cursor, with its own element and offset, for as long as the view cursor is still at that
+    // position:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XCursor>> getCursor() override
     {
+        if (getSelection().IsPresent) {
+            return {false, {}};
+        }
         if (cursorPosition_.is()) {
             auto const view = viewCursorOf(model_);
             cpo::uno::Reference<css::text::XTextRange> const position(

@@ -1,15 +1,23 @@
+// Insert text the way typing does, replacing the selection when there is one:
+function insertText(text) {
+	var doc = cool.getActiveDocument();
+	var selection = doc.getSelection();
+	if (selection) selection.replace(text);
+	else doc.getCursor().insertText(text);
+}
+
 var commands = {
 	insertDate: function () {
-		cool.getActiveDocument().getCursor().insertText(new Date().toLocaleDateString());
+		insertText(new Date().toLocaleDateString());
 	},
 	insertTime: function () {
-		cool.getActiveDocument().getCursor().insertText(new Date().toLocaleTimeString());
+		insertText(new Date().toLocaleTimeString());
 	},
 	insertIsoDate: function () {
-		cool.getActiveDocument().getCursor().insertText(new Date().toISOString().slice(0, 10));
+		insertText(new Date().toISOString().slice(0, 10));
 	},
 	insertLocaleDate: function () {
-		cool.getActiveDocument().getCursor().insertText(new Date().toLocaleDateString(undefined, {
+		insertText(new Date().toLocaleDateString(undefined, {
 			weekday: 'long',
 			year: 'numeric',
 			month: 'long',

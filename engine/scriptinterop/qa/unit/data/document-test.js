@@ -286,4 +286,24 @@ function test() {
     console.assert(cursor.getOffset() === 1);
     console.assert(cursor.getSurroundingText().getText() === 'Before');
     console.assert(cursor.getSurroundingTextOffset() === 6);
+
+    // An inline image can be selected on its own, as one whole range element:
+    doc.setSelection(doc.newRange().addElement(image).build());
+    const imageRanges = doc.getSelection().getRangeElements();
+    console.assert(imageRanges.length === 1);
+    console.assert(imageRanges[0].isPartial() === false);
+    console.assert(imageRanges[0].getStartOffset() === -1);
+    console.assert(imageRanges[0].getEndOffsetInclusive() === -1);
+    const selected = imageRanges[0].getElement();
+    console.assert(selected.getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(selected.asInlineImage().getWidth() === 100);
+    console.assert(selected.getParent().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(selected.getParent().asText().getText() === 'Before');
+    console.assert(selected.getParent().getChildIndex(selected) === 1);
+    // While there is a selection, there is no cursor:
+    console.assert(doc.getCursor() === null);
+    // Setting the cursor ends the selection of the image (the cursor itself is not read again here,
+    // see above):
+    doc.setCursor(doc.newPosition(para5, 1));
+    console.assert(doc.getSelection() === null);
 }
