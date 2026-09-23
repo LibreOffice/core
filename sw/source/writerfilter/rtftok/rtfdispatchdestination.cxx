@@ -80,6 +80,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 while (!bFoundCode && ch != '}')
                 {
                     Strm().ReadChar(ch);
+                    if (Strm().eof())
+                        break;
                     if ('\\' == ch)
                         bInKeyword = true;
                     if (!bInKeyword && rtl::isAsciiAlphanumeric(static_cast<unsigned char>(ch)))
@@ -99,7 +101,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     while (true)
                     {
                         Strm().ReadChar(ch);
-                        if (ch == '}')
+                        if (Strm().eof() || ch == '}')
                             break;
                         aBuf.append(ch);
                     }
