@@ -44,8 +44,8 @@ BZIP2_TARBALL := bzip2-1.0.8.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CAIRO_SHA256SUM := 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
-CAIRO_VERSION_MICRO := 4
+CAIRO_SHA256SUM := 1c767308174337a74694da0f3ec069c271452163a1ef4540964c50c301f157d4
+CAIRO_VERSION_MICRO := 6
 CAIRO_TARBALL := cairo-1.18.$(CAIRO_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
