@@ -1,0 +1,179 @@
+From 3e9b2c24c3c35c17ad887f6b415e04163d97ae3c Mon Sep 17 00:00:00 2001
+Date: Thu, 17 Sep 2026 15:52:06 -0700
+Subject: [PATCH] Add FPDFPageObj_GetRenderedFillPattern() API
+
+This is similar to http://pdfium-review.googlesource.com/c/154910, but
+that one was for stroke patterns and this is for fill patterns.
+
+Change-Id: I9929e232472fdd974009c64bcb1109d69a813d0a
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/157490
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+---
+ fpdfsdk/fpdf_edit_embeddertest.cpp            |  64 ++++++++++++++
+ fpdfsdk/fpdf_editpage.cpp                     |  79 +++++++++++-------
+ fpdfsdk/fpdf_view_c_api_test.c                |   1 +
+ public/fpdf_edit.h                            |  16 ++++
+ .../resources/embedder_tests/pattern_fill.png | Bin 0 -> 107 bytes
+ .../embedder_tests/pattern_fill_uncolored.png | Bin 0 -> 107 bytes
+ testing/resources/pattern_fill.in             |  56 +++++++++++++
+ testing/resources/pattern_fill.pdf            |  68 +++++++++++++++
+ testing/resources/pattern_fill_uncolored.in   |  58 +++++++++++++
+ testing/resources/pattern_fill_uncolored.pdf  |  70 ++++++++++++++++
+ 10 files changed, 384 insertions(+), 28 deletions(-)
+ create mode 100644 testing/resources/embedder_tests/pattern_fill.png
+ create mode 100644 testing/resources/embedder_tests/pattern_fill_uncolored.png
+ create mode 100644 testing/resources/pattern_fill.in
+ create mode 100644 testing/resources/pattern_fill.pdf
+ create mode 100644 testing/resources/pattern_fill_uncolored.in
+ create mode 100644 testing/resources/pattern_fill_uncolored.pdf
+
+diff --git a/fpdfsdk/fpdf_editpage.cpp b/fpdfsdk/fpdf_editpage.cpp
+index 9b9474ed7..033572048 100644
+--- a/fpdfsdk/fpdf_editpage.cpp
++++ b/fpdfsdk/fpdf_editpage.cpp
+@@ -199,7 +199,8 @@ ByteString FormatPDFDate(time_t current_time, const tm& local_time) {
+ 
+ FPDF_BITMAP RenderTilingPatternToBitmap(CPDF_Pattern* pattern,
+                                         CPDF_Document* doc,
+-                                        CPDF_PageObject* page_obj) {
++                                        CPDF_PageObject* page_obj,
++                                        bool use_stroke_color) {
+   CPDF_TilingPattern* tiling_pattern = pattern->AsTilingPattern();
+   if (!tiling_pattern) {
+     return nullptr;
+@@ -228,10 +229,13 @@ FPDF_BITMAP RenderTilingPatternToBitmap(CPDF_Pattern* pattern,
+     return FPDFBitmapFromCFXDIBitmap(cell_bitmap.Leak());
+   }
+ 
+-  // An uncolored pattern gets its color from the stroke color operands.
+-  const FX_COLORREF stroke_colorref =
+-      page_obj->color_state().GetStrokeColorRef();
+-  if (stroke_colorref == 0xFFFFFFFF) {
++  // An uncolored pattern gets its color from the stroke/fill color operands.
++  const CPDF_ColorState& color_state = page_obj->color_state();
++  const FX_COLORREF colorref =
++      use_stroke_color ? color_state.GetStrokeColorRef()
++                       : color_state.GetFillColorRef();
++  // 0xFFFFFFFF is the unusable color, see FX_COLORREF.
++  if (colorref == 0xFFFFFFFF) {
+     return nullptr;
+   }
+ 
+@@ -240,11 +244,14 @@ FPDF_BITMAP RenderTilingPatternToBitmap(CPDF_Pattern* pattern,
+                              FXDIB_Format::kBgra)) {
+     return nullptr;
+   }
+-  const int stroke_alpha =
+-      static_cast<int>(page_obj->general_state().GetStrokeAlpha() * 255);
++  const CPDF_GeneralState& general_state = page_obj->general_state();
++  const float float_alpha = use_stroke_color
++                                ? general_state.GetStrokeAlpha()
++                                : general_state.GetFillAlpha();
++  const int alpha = static_cast<int>(float_alpha * 255);
+   if (!result_bitmap->CompositeMask(
+           /*dest_left=*/0, /*dest_top=*/0, rect.Width(), rect.Height(),
+-          cell_bitmap, AlphaAndColorRefToArgb(stroke_alpha, stroke_colorref),
++          cell_bitmap, AlphaAndColorRefToArgb(alpha, colorref),
+           /*src_left=*/0, /*src_top=*/0, BlendMode::kNormal)) {
+     return nullptr;
+   }
+@@ -255,6 +262,36 @@ FPDF_BITMAP RenderTilingPatternToBitmap(CPDF_Pattern* pattern,
+   return FPDFBitmapFromCFXDIBitmap(result_bitmap.Leak());
+ }
+ 
++FPDF_BITMAP GetRenderedPattern(FPDF_DOCUMENT document,
++                               FPDF_PAGEOBJECT page_object,
++                               bool use_stroke_color) {
++  CPDF_Document* doc = CPDFDocumentFromFPDFDocument(document);
++  if (!doc) {
++    return nullptr;
++  }
++
++  CPDF_PageObject* object = CPDFPageObjectFromFPDFPageObject(page_object);
++  if (!object) {
++    return nullptr;
++  }
++
++  const CPDF_ColorState& color_state = object->color_state();
++  const CPDF_Color* color = use_stroke_color
++                                ? color_state.GetStrokeColor()
++                                : color_state.GetFillColor();
++  if (!color || !color->IsPattern()) {
++    return nullptr;
++  }
++
++  RetainPtr<CPDF_Pattern> pattern = color->GetPattern();
++  if (!pattern) {
++    return nullptr;
++  }
++
++  return RenderTilingPatternToBitmap(pattern.Get(), doc, object,
++                                     use_stroke_color);
++}
++
+ }  // namespace
+ 
+ FPDF_EXPORT FPDF_DOCUMENT FPDF_CALLCONV FPDF_CreateNewDocument() {
+@@ -1261,27 +1298,13 @@ FPDFPageObj_SetDashArray(FPDF_PAGEOBJECT page_object,
+ FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
+ FPDFPageObj_GetRenderedStrokePattern(FPDF_DOCUMENT document,
+                                      FPDF_PAGEOBJECT page_object) {
+-  CPDF_Document* doc = CPDFDocumentFromFPDFDocument(document);
+-  if (!doc) {
+-    return nullptr;
+-  }
+-
+-  CPDF_PageObject* object = CPDFPageObjectFromFPDFPageObject(page_object);
+-  if (!object) {
+-    return nullptr;
+-  }
+-
+-  const CPDF_Color* stroke = object->color_state().GetStrokeColor();
+-  if (!stroke || !stroke->IsPattern()) {
+-    return nullptr;
+-  }
+-
+-  RetainPtr<CPDF_Pattern> pattern = stroke->GetPattern();
+-  if (!pattern) {
+-    return nullptr;
+-  }
++  return GetRenderedPattern(document, page_object, /*use_stroke_color=*/true);
++}
+ 
+-  return RenderTilingPatternToBitmap(pattern.Get(), doc, object);
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedFillPattern(FPDF_DOCUMENT document,
++                                   FPDF_PAGEOBJECT page_object) {
++  return GetRenderedPattern(document, page_object, /*use_stroke_color=*/false);
+ }
+ 
+ FPDF_EXPORT int FPDF_CALLCONV
+diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
+index c7fca05a1..77fa19c81 100644
+--- a/public/fpdf_edit.h
++++ b/public/fpdf_edit.h
+@@ -1206,6 +1206,22 @@ FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
+ FPDFPageObj_GetRenderedStrokePattern(FPDF_DOCUMENT document,
+                                      FPDF_PAGEOBJECT page_object);
+ 
++// Experimental API.
++// Get a bitmap rasterization of the fill pattern of |page_object|.
++// To render correctly, the caller must provide the |document| associated with
++// |page_object|. The returned bitmap will be owned by the caller, and
++// FPDFBitmap_Destroy() must be called on the returned bitmap when it is no
++// longer needed.
++//
++//   document    - handle to the document containing |page_object|.
++//   page_object - handle to a page object.
++//
++// Returns the bitmap, or NULL if the fill is not a tiling pattern or on
++// failure.
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFPageObj_GetRenderedFillPattern(FPDF_DOCUMENT document,
++                                   FPDF_PAGEOBJECT page_object);
++
+ // Get number of segments inside |path|.
+ //
+ //   path - handle to a path.
