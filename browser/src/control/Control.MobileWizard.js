@@ -187,6 +187,9 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 			var existingWindow = this._getContentForWindowId(data.id);
 			if (existingWindow) {
 				existingWindow._onMobileWizard(data, callback);
+			} else if (data.action === 'close' || data.action === 'fadeout') {
+				// No window has this id, so the open windows stay as they are.
+				return;
 			} else {
 				var newWindow = window.L.control.mobileWizardWindow(this, 'mobile-wizard-content-' + data.id);
 				for (var i in this.contents)

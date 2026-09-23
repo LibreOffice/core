@@ -146,8 +146,9 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font changes.', funct
 		cy.cGet('#copy-paste-container p font').should('have.attr', 'face', 'Liberation Sans, sans-serif');
 		cy.cGet('#copy-paste-container p font font').should('have.attr', 'style', 'font-size: 28pt');
 
-		// Clear formatting
-		mobileHelper.openMobileWizard();
+		// Clear formatting. The wizard is still open after the style pick.
+		cy.cGet('#toolbar-up #mobile_wizard').should('have.class', 'selected');
+		cy.cGet('#mobile-wizard-content').should('not.be.empty');
 		cy.cGet('#applystyle').click();
 		cy.cGet('body').contains('#fontstyletoolbox .ui-combobox-text', 'Clear formatting').click();
 
