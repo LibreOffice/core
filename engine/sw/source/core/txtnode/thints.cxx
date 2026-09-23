@@ -1196,30 +1196,9 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
         SfxWhichIter aIter(aFiltered);
         for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
         {
-            switch (nWhich)
+            if (!SwTextNode::IsCharItemKeptInMergedPaste(nWhich))
             {
-                // Bold
-                case sal_uInt16(RES_CHRATR_WEIGHT):
-                case sal_uInt16(RES_CHRATR_CJK_WEIGHT):
-                case sal_uInt16(RES_CHRATR_CTL_WEIGHT):
-                // Italic
-                case sal_uInt16(RES_CHRATR_POSTURE):
-                case sal_uInt16(RES_CHRATR_CJK_POSTURE):
-                case sal_uInt16(RES_CHRATR_CTL_POSTURE):
-                // Underline
-                case sal_uInt16(RES_CHRATR_UNDERLINE):
-                // Superscript / subscript
-                case sal_uInt16(RES_CHRATR_ESCAPEMENT):
-                // Hidden text
-                case sal_uInt16(RES_CHRATR_HIDDEN):
-                // Proofing language
-                case sal_uInt16(RES_CHRATR_LANGUAGE):
-                case sal_uInt16(RES_CHRATR_CJK_LANGUAGE):
-                case sal_uInt16(RES_CHRATR_CTL_LANGUAGE):
-                    continue;
-                default:
-                    aFiltered.ClearItem(nWhich);
-                    break;
+                aFiltered.ClearItem(nWhich);
             }
         }
         pAutoStyle = rStyleAccess.getAutomaticStyle(aFiltered, IStyleAccess::AUTO_STYLE_CHAR);

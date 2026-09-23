@@ -275,6 +275,8 @@ public:
     /// overriding to handle change of certain paragraph attributes
     virtual bool SetAttr( const SfxPoolItem& ) override;
     virtual bool SetAttr( const SfxItemSet& rSet ) override;
+    /// Same as SetAttr(), but can opt out from an active per-doc merged paste.
+    bool SetAttr( const SfxItemSet& rSet, std::optional<bool> oInMergedPaste );
     virtual bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) override;
     virtual bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr ) override;
     virtual sal_uInt16 ResetAllAttr() override;
@@ -396,6 +398,9 @@ public:
     static void EstablishParentChildRelationsOfComments(const SwTextNode* pDest,
                 std::map<sal_Int32, sal_Int32>& idMapForComments,
                 std::map<sal_Int32, SwMarkName>& nameMapForComments);
+
+    /// Whether nWhich is a character property that is kept during a merged paste.
+    static bool IsCharItemKeptInMergedPaste(sal_uInt16 nWhich);
 
     void        CutText(SwTextNode * const pDest,
                     const SwContentIndex & rStart, const sal_Int32 nLen);

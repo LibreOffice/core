@@ -5543,7 +5543,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             if( aBrkSet.Count() && nullptr != ( pDestTextNd = rDoc.GetNodes()[
                     pCopyPam->GetPoint()->GetNodeIndex()+1 ]->GetTextNode()))
             {
-                pDestTextNd->SetAttr( aBrkSet );
+                // Don't lose the breaks during a merged paste.
+                pDestTextNd->SetAttr( aBrkSet, /*oInMergedPaste=*/false );
                 bCopyPageSource = true;
             }
         }

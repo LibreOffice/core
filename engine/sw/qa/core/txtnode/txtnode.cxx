@@ -20,9 +20,11 @@
 #include <test/kitcallback.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <paratr.hxx>
 #include <fmtautofmt.hxx>
 #include <ndhints.hxx>
 
@@ -812,6 +814,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteCharProps)
     const SvxEscapementItem* pEscapement = rSet.GetItemIfSet(RES_CHRATR_ESCAPEMENT);
     CPPUNIT_ASSERT(pEscapement);
     CPPUNIT_ASSERT(pEscapement->GetEsc() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteParaProps)
+{
+    // Given an empty Writer document with the merged-paste flag on:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    pDoc->SetInMergedPaste(true);
+    comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
+
+    // When importing an HTML file with a right-aligned paragraph into it:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste-para.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the pasted paragraph drops the alignment:
+    SwTextNode* pTextNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"item")
+        {
+            pTextNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    const SfxItemSet& rSet = pTextNode->GetSwAttrSet();
+    // Without the accompanying fix in place, this failed, alignment was set by the HTML import.
+    CPPUNIT_ASSERT(!rSet.GetItemIfSet(RES_PARATR_ADJUST));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

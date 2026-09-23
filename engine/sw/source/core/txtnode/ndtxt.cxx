@@ -89,6 +89,7 @@
 #include <fmtpdsc.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <undobj.hxx>
 #include <formatflysplit.hxx>
 #include <fmtcntnt.hxx>
@@ -5318,14 +5319,74 @@ bool SwTextNode::SetAttr( const SfxPoolItem& pItem )
     return bRet;
 }
 
+bool SwTextNode::IsCharItemKeptInMergedPaste(sal_uInt16 nWhich)
+{
+    switch (nWhich)
+    {
+        // Bold
+        case sal_uInt16(RES_CHRATR_WEIGHT):
+        case sal_uInt16(RES_CHRATR_CJK_WEIGHT):
+        case sal_uInt16(RES_CHRATR_CTL_WEIGHT):
+        // Italic
+        case sal_uInt16(RES_CHRATR_POSTURE):
+        case sal_uInt16(RES_CHRATR_CJK_POSTURE):
+        case sal_uInt16(RES_CHRATR_CTL_POSTURE):
+        // Underline
+        case sal_uInt16(RES_CHRATR_UNDERLINE):
+        // Superscript / subscript
+        case sal_uInt16(RES_CHRATR_ESCAPEMENT):
+        // Hidden text
+        case sal_uInt16(RES_CHRATR_HIDDEN):
+        // Proofing language
+        case sal_uInt16(RES_CHRATR_LANGUAGE):
+        case sal_uInt16(RES_CHRATR_CJK_LANGUAGE):
+        case sal_uInt16(RES_CHRATR_CTL_LANGUAGE):
+            return true;
+    }
+    return false;
+}
+
 bool SwTextNode::SetAttr( const SfxItemSet& rSet )
+{
+    return SetAttr(rSet, std::nullopt);
+}
+
+bool SwTextNode::SetAttr( const SfxItemSet& rSet, std::optional<bool> oInMergedPaste )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
-    HandleSetAttrAtTextNode aHandleSetAttr( *this, rSet );
+    SfxItemSet aFiltered(rSet);
+    if (oInMergedPaste.value_or(GetDoc().IsInMergedPaste()))
+    {
+        // Merged paste: only use selected paragraph properties from the source.
+        SfxWhichIter aIter(aFiltered);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            switch (nWhich)
+            {
+                // List membership, level, number format, start value
+                case sal_uInt16(RES_PARATR_LIST_ISCOUNTED):
+                case sal_uInt16(RES_PARATR_LIST_LEVEL):
+                case sal_uInt16(RES_PARATR_NUMRULE):
+                case sal_uInt16(RES_PARATR_LIST_ISRESTART):
+                case sal_uInt16(RES_PARATR_LIST_RESTARTVALUE):
+                    continue;
+                default:
+                    if (SwTextNode::IsCharItemKeptInMergedPaste(nWhich))
+                    {
+                        // A character property on the full paragraph.
+                        continue;
+                    }
+                    aFiltered.ClearItem(nWhich);
+                    break;
+            }
+        }
+    }
 
-    bool bRet = SwContentNode::SetAttr( rSet );
+    HandleSetAttrAtTextNode aHandleSetAttr( *this, aFiltered );
+
+    bool bRet = SwContentNode::SetAttr( aFiltered );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
