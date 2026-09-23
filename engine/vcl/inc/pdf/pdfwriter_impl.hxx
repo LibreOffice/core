@@ -1103,7 +1103,14 @@ private:
     bool emitTrailer();
     /// whether this file may carry object streams and a cross-reference stream
     bool useObjectStreams() const;
-    /// writes a whole object, into an object stream where the file may have one
+    /// what encrypts a string as an object is built, and nothing for an object bound for a stream
+    std::shared_ptr<pdf::IPDFEncryptor> getStringEncryptor(sal_Int32 nObject);
+#ifndef NDEBUG
+    /// objects whose strings went in plain, checked once the last object stream is flushed
+    std::unordered_set<sal_Int32> m_aPlainStringObjects;
+#endif
+    /// writes a whole object, into an object stream where the file may have one; a body
+    /// holding strings takes its encryptor from getStringEncryptor
     bool writeObject(sal_Int32 nObject, std::string_view aBody);
     /// writes an object's body into the pending object stream rather than into the file
     bool writeCompressedObject(sal_Int32 nObject, std::string_view aBody);

@@ -848,13 +848,24 @@ bool PDFWriterImpl::useObjectStreams() const
 {
     if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
         return false;
-    // a string in an object stream shall not be separately encrypted, while this writer
-    // encrypts every string as it builds the object
-    if (m_aContext.Encryption.canEncrypt())
-        return false;
     // sdext reads the embedded original document out of a trailer, and a cross-reference
     // stream leaves none
     return m_aDocumentAttachedFiles.empty();
+}
+
+std::shared_ptr<pdf::IPDFEncryptor> PDFWriterImpl::getStringEncryptor(sal_Int32 nObject)
+{
+    if (!useObjectStreams())
+        return m_pPDFEncryptor;
+
+#ifndef NDEBUG
+    m_aPlainStringObjects.insert(nObject);
+#else
+    (void)nObject;
+#endif
+    // ISO 32000-2 7.5.7: a string in an object stream is not encrypted on its own, the
+    // stream carrying it is
+    return nullptr;
 }
 
 bool PDFWriterImpl::writeObject(sal_Int32 nObject, std::string_view aBody)
@@ -899,14 +910,24 @@ bool PDFWriterImpl::emitObjectStream()
     aLine.append(OString::number(nStreamObject) + " 0 obj\n<</Type/ObjStm/N "
                  + OString::number(static_cast<sal_Int32>(m_aCompressedObjects.size())) + "/First "
                  + OString::number(nFirst) + "/Length "
-                 + OString::number(static_cast<sal_Int32>(aStream.size())));
+                 + OString::number(calculateStreamSize(aStream.size())));
     if (!g_bDebugDisableCompression)
         aLine.append("/Filter/FlateDecode");
     aLine.append(">>\nstream\n");
 
-    if (!updateObject(nStreamObject) || !writeBuffer(aLine)
-        || !writeBufferBytes(aStream.data(), aStream.size())
-        || !writeBuffer("\nendstream\nendobj\n\n"))
+    if (!updateObject(nStreamObject) || !writeBuffer(aLine))
+        return false;
+
+    // ISO 32000-2 7.5.7: a string in here is not encrypted on its own, the stream holding
+    // it is, with the cipher set up for the stream's own object number
+    checkAndEnableStreamEncryption(nStreamObject);
+    // the strings inside are covered by nothing else, so stream encryption must really be on
+    assert((!m_aContext.Encryption.canEncrypt()
+            || (m_pPDFEncryptor && m_pPDFEncryptor->isStreamEncryptionEnabled()))
+           && "an object stream is going out unencrypted");
+    const bool bBodies = writeBufferBytes(aStream.data(), aStream.size());
+    finishStreamEncryption();
+    if (!bBodies || !writeBuffer("\nendstream\nendobj\n\n"))
         return false;
 
     // only now can an entry name the stream, which is in the file
@@ -962,7 +983,7 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
         ids.emplace(GenerateID(n), n);
     }
     OStringBuffer buf;
-    COSWriter aWriter(buf, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+    COSWriter aWriter(buf, m_aContext.Encryption.getParams(), getStringEncryptor(nObject));
     buf.append("<</Names [\n");
     for (auto const& it : ids)
     {
@@ -1278,7 +1299,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     }
 
     OStringBuffer aLine( 512 );
-    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), getStringEncryptor(rEle.m_nObject));
     aLine.append("<</Type");
     sal_Int32 nParentTree = -1;
     sal_Int32 nIDTree = -1;
@@ -4642,6 +4663,11 @@ bool PDFWriterImpl::emitCatalog()
         emitStructure( m_aStructure[ 0 ] );
         if (!emitObjectStream())
             return false;
+        // whatever put its strings in plain has to have landed in an object stream; that the
+        // stream is encrypted is asserted where it is written
+        assert(std::ranges::all_of(m_aPlainStringObjects, [this](sal_Int32 nPlain) {
+            return m_aObjects[nPlain - 1].isCompressed();
+        }));
     }
 
     // adjust tree node file offset

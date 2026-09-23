@@ -12,10 +12,12 @@
 
 #include <test/unoapi_test.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <vcl/filter/pdfdocument.hxx>
@@ -25,6 +27,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -175,6 +180,78 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
+}
+
+// encryption used to cost a tagged file its object streams, and so most of its size
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedTaggedUsesObjectStreams)
+{
+    loadFromURL(u"private:factory/swriter"_ustr);
+    auto xText = mxComponent.queryThrow<text::XTextDocument>()->getText();
+    xText->setString(u"Some tagged text"_ustr);
+    // a footnote, because its element is the one this writer gives an /ID to
+    auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xFootnote = xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr)
+                         .queryThrow<text::XTextContent>();
+    xText->insertTextContent(xText->getEnd(), xFootnote, false);
+    xFootnote.queryThrow<text::XText>()->setString(u"The note this refers to"_ustr);
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                                    comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
+                                    comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr,
+                                                                  u"secret"_ustr) };
+    mxComponent.queryThrow<frame::XStorable>()->storeToURL(
+        maTempFile.GetURL(),
+        { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+
+    // the structure tree went into object streams, which is what the encryption used to cost.
+    // Only strings and stream data are encrypted, so the stream's own dictionary reads plainly
+    const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
+    // an unencrypted export has object streams anyway, so the rest tests nothing without this
+    CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
+    const size_t nObjStm = aFile.find("/ObjStm");
+    CPPUNIT_ASSERT(nObjStm != std::string_view::npos);
+
+    // /Length has to count what the cipher adds, or a reader that trusts it stops mid-block.
+    // pdfium does not: it scans for endstream, so only the byte count catches this
+    // the writer puts exactly one newline here, and the cipher's own first byte may be another
+    const size_t nData = aFile.find(">>\nstream\n", nObjStm);
+    CPPUNIT_ASSERT(nData != std::string_view::npos);
+    const size_t nLength = aFile.find("/Length ", nObjStm);
+    CPPUNIT_ASSERT(nLength != std::string_view::npos);
+    // inside this dictionary, so it is this stream's length and not a later object's
+    CPPUNIT_ASSERT_LESS(nData, nLength);
+    const sal_Int32 nDeclared = o3tl::toInt32(aFile.substr(nLength + 8, 12));
+    CPPUNIT_ASSERT(nData + 10 + nDeclared + 10 <= aFile.size());
+    CPPUNIT_ASSERT_EQUAL("\nendstream"_ostr, OString(aFile.substr(nData + 10 + nDeclared, 10)));
+
+    // reading the footnote element's /ID back through the password distinguishes a plain
+    // string from one encrypted a second time
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    auto pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+    auto pTree = pPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    CPPUNIT_ASSERT_GREATER(0, pTree->getNumberOfChildren());
+
+    OUString aID;
+    const auto aFindID = [&aID](auto& rSelf, vcl::pdf::PDFiumStructureElement& rElement) -> void {
+        if (aID.isEmpty())
+            aID = rElement.getID();
+        for (int i = 0; i < rElement.getNumberOfChildren() && aID.isEmpty(); ++i)
+        {
+            if (const auto pKid = rElement.getChild(i))
+                rSelf(rSelf, *pKid);
+        }
+    };
+    for (int i = 0; i < pTree->getNumberOfChildren() && aID.isEmpty(); ++i)
+    {
+        if (const auto pChild = pTree->getChild(i))
+            aFindID(aFindID, *pChild);
+    }
+    CPPUNIT_ASSERT(aID.startsWith("id"));
 }
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
