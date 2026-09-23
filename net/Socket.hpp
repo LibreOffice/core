@@ -1794,6 +1794,7 @@ public:
         setLastSeenTime(now);
 
         bool closed = (events & (POLLHUP | POLLERR | POLLNVAL));
+        bool unreadAfterHangup = false;
 
         if (events & POLLIN)
         {
@@ -1828,6 +1829,7 @@ public:
                 LOG_DBG("Ignoring POLLHUP to drain incoming data as we had POLLIN but got "
                         << Util::symbolicErrno(last_errno) << " on read");
                 closed = false;
+                unreadAfterHangup = true;
             }
             else if (read == 0 || (read < 0 && (last_errno == EPIPE || last_errno == ECONNRESET)))
             {
@@ -1898,7 +1900,8 @@ public:
                         LOG_DBG("Disconnected while writing (" << Util::symbolicErrno(last_errno)
                                                                << "): " << std::strerror(last_errno)
                                                                << ')');
-                        closed = true;
+                        // Input still unread is handled on the next poll, which then closes.
+                        closed = !unreadAfterHangup;
                         break;
                     }
                 }

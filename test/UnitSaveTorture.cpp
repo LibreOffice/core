@@ -557,6 +557,87 @@ public:
     }
 };
 
+// The answer of a background save child reaches the client even when the child hangs up while
+// the parent Kit still has a ping waiting to go out to it. The Kit hook delays each ping from the
+// parent Kit, so the child answers and exits before that ping is written.
+class UnitBgSaveHangupWithPing : public UnitSaveTortureBase
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitSave, Done) _phase;
+
+    static constexpr int SaveCount = 40;
+    int _savesDone;
+
+    void sendSave()
+    {
+        TST_LOG("Sending unmodified save #" << (_savesDone + 1));
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=1");
+    }
+
+public:
+    UnitBgSaveHangupWithPing()
+        : UnitSaveTortureBase("UnitBgSaveHangupWithPing")
+        , _phase(Phase::Load)
+        , _savesDone(0)
+    {
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        createStamp("delaybgsaveping");
+
+        forceAutosave();
+        TRANSITION_STATE(_phase, Phase::WaitSave);
+        sendSave();
+        return true;
+    }
+
+    bool onDocumentSaved(const std::string& message, bool success,
+                         const std::string& result) override
+    {
+        TST_LOG("Save result: [" << result << "] for " << message);
+        LOK_ASSERT_STATE(_phase, Phase::WaitSave);
+
+        LOK_ASSERT_MESSAGE("An unmodified document is not written", !success);
+        LOK_ASSERT_EQUAL_MESSAGE("Save #" + std::to_string(_savesDone + 1) + " lost its answer",
+                                 std::string("unmodified"), result);
+
+        ++_savesDone;
+        if (_savesDone < SaveCount)
+        {
+            sendSave();
+            return true;
+        }
+
+        removeStamp("delaybgsaveping");
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("Every background save answer arrived");
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                const std::string docName = "empty.odt";
+                TST_LOG("Loading document: " << docName);
+                connectAndLoadLocalDocument(docName);
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitSave:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 // An interactive dialog appearing in the background save child aborts that
 // save without writing a new version. The server must fall back to an
 // ordinary foreground save, and upload that, rather than uploading whatever
@@ -921,6 +1002,10 @@ public:
 
         std::cerr << "\npost background save process fork\n\n";
 
+        // The save outlasts the first ping from the parent Kit, as it does on a busy machine.
+        if (stampExists("delaybgsaveping", false))
+            std::this_thread::sleep_for(50ms);
+
         waitWhileStamp("holdsave");
     }
 
@@ -939,6 +1024,18 @@ public:
                "\"action\": \"close\" }";
     }
 
+    // Only the parent Kit sends pings, to its background save child.
+    bool onFilterSendWebSocketMessage(std::string_view /* data */, const WSOpCode code,
+                                      const bool /* flush */, int& /* unitReturn */) override
+    {
+        if (code == WSOpCode::Ping && stampExists("delaybgsaveping", false))
+        {
+            TST_LOG("Delaying the ping to the background save child");
+            std::this_thread::sleep_for(200ms);
+        }
+        return false;
+    }
+
     virtual void preBackgroundSaveExit() override
     {
         std::cerr << "\n\npre exit of background save process\n\n\n";
@@ -950,7 +1047,7 @@ UnitBase** unit_create_wsd_multi(void)
     return new UnitBase* []
     {
         new UnitBgSaveCrash(), new UnitBgSaveDialogClose(), new UnitBgSaveDialogAbort(),
-            new UnitBgSaveUnmodified(),
+            new UnitBgSaveUnmodified(), new UnitBgSaveHangupWithPing(),
             new UnitTileCombineRace(), new UnitModified(),
             new UnitSaveTortureOne("empty.ods", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.odt", true, false, "simple_load-modify-bgsave"),
