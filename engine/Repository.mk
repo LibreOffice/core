@@ -586,10 +586,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ure, \
 	salhelper \
 ))
 
-$(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
-	rust_uno-example \
-))
-
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 	java_uno \

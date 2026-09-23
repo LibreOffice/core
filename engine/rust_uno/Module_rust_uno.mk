@@ -13,9 +13,7 @@ ifeq ($(ENABLE_RUST_UNO),TRUE)
 $(eval $(call gb_Module_add_targets,rust_uno, \
     CustomTarget_cargo \
     CustomTarget_rustmaker \
-    Extension_rust_uno-example \
     Library_rust_uno-cpp \
-    Library_rust_uno-example \
 ))
 endif
 
