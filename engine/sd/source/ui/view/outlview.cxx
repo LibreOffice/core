@@ -1749,7 +1749,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         return;
 
     Paragraph* pPara = mrOutliner.GetParagraph( pInfo->mnPara );
-    EditEngine& rEditEngine = const_cast< EditEngine& >( mrOutliner.GetEditEngine() );
+    EditEngine& rEditEngine = mrOutliner.GetEditEngine();
 
     Size aImageSize( pInfo->mpOutDev->PixelToLogic( maSlideImage.GetSizePixel()  ) );
     Size aOffset( 100, 100 );

@@ -179,7 +179,7 @@ SdrTableHTMLParser::SdrTableHTMLParser(SdrTableObj& rTableObj)
 
 void SdrTableHTMLParser::Read(SvStream& rStream)
 {
-    EditEngine& rEdit = const_cast<EditEngine&>(mpOutliner->GetEditEngine());
+    EditEngine& rEdit = mpOutliner->GetEditEngine();
 
     Link<HtmlImportInfo&, void> aOldLink(rEdit.GetHtmlImportHdl());
     rEdit.SetHtmlImportHdl(LINK(this, SdrTableHTMLParser, HTMLImportHdl));

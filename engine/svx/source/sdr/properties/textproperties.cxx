@@ -466,7 +466,7 @@ namespace sdr::properties
 
                             if(aSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
                             {
-                                EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
+                                EditEngine* pEditEngine = &(pOutliner->GetEditEngine());
                                 std::vector<EECharAttrib> aAttribs;
                                 pEditEngine->GetCharAttribs(nPara, aAttribs);
 

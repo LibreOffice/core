@@ -46,7 +46,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(
                              (pOutl->GetParagraphCount() == 1 &&
                               !pNextPObj->GetTextObject().HasText(0));
 
-    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+    EditEngine &rEditEngine = pOutl->GetEditEngine();
 
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)
@@ -76,7 +76,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
         pOutl->SetText(*pNextPObj);
     }
 
-    EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
+    EditEngine &rEditEngine = pOutl->GetEditEngine();
 
     // XXX: this code should be moved in Outliner directly
     //          creating Outliner::InsertText(...transferable...)

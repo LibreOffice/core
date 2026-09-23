@@ -579,7 +579,7 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     pOutl->Init( OutlinerMode::TextObject );
     OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
 
-    EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
+    EditEngine* pEdit = &pOutl->GetEditEngine();
 
     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
     if( pOPO )

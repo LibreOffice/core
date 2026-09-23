@@ -4333,7 +4333,7 @@ cpo::uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguage
         SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
         if(pOutliner)
         {
-            EditEngine& rEditEng = const_cast<EditEngine&>(pOutliner->GetEditEngine());
+            EditEngine& rEditEng = pOutliner->GetEditEngine();
             sal_Int32 nParCount = pOutliner->GetParagraphCount();
             for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
             {

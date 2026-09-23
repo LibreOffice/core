@@ -666,7 +666,7 @@ uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferable(
     if (nParaCount == 0)
         return uno::Reference<datatransfer::XTransferable>();
 
-    EditEngine& rEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& rEditEngine = aOutliner.GetEditEngine();
     sal_Int32 nLen = rEditEngine.GetTextLen(nParaCount - 1);
     ESelection aSel(0, 0, nParaCount - 1, nLen);
 

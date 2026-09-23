@@ -490,7 +490,7 @@ void Test::testHyperlinkCopyPaste()
     aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
 
     // Create EditEngine's instance
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& aEditEngine = aOutliner.GetEditEngine();
 
     // Get EditDoc for current EditEngine's instance
     EditDoc& rDoc = aEditEngine.GetEditDoc();
@@ -2256,7 +2256,7 @@ void Test::testTdf154248MultilineFieldWrapping()
     aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
 
     // Create EditEngine's instance
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& aEditEngine = aOutliner.GetEditEngine();
     aEditEngine.SetPaperSize(Size(2000, 2000));
     aEditEngine.SetText(u"ABC  DEF ABC DEFGH"_ustr);
     // Positions Ref     ....*4............
@@ -2351,7 +2351,7 @@ EditEngine& Test::prepareWrappedFieldDocument(Outliner& rOutliner, const OUStrin
 {
     rOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
 
-    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
     rEditEngine.SetPaperSize(Size(2000, 5000));
     rEditEngine.SetText(rTailText);
 
@@ -2756,7 +2756,7 @@ void Test::testPasteURLOverSelection()
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
     aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditEngine& aEditEngine = aOutliner.GetEditEngine();
     EditDoc& rDoc = aEditEngine.GetEditDoc();
 
     OUString aParaText = u"Click here for details"_ustr;
@@ -2978,7 +2978,7 @@ void Test::prepareBulletedParagraphs(Outliner& rOutliner)
 
 tools::Long Test::firstLineMiddle(Outliner& rOutliner, sal_Int32 nPara)
 {
-    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
     const ParaPortion& rParaPortion = rEditEngine.GetParaPortions().getRef(nPara);
     return rEditEngine.GetDocPosTopLeft(nPara).Y() + rParaPortion.GetFirstLineOffset()
            + rEditEngine.GetParagraphInfos(nPara).nFirstLineHeight / 2;

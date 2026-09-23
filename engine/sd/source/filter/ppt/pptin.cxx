@@ -234,7 +234,7 @@ bool ImplSdPPTImport::Import()
     SdrOutliner& rOutl = mrDoc.GetDrawOutliner();
     EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
     nControlWord |=  EEControlBits::ULSPACESUMMATION;
-    const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
+    rOutl.GetEditEngine().SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mrDoc.GetLayerAdmin();
     mnBackgroundObjectsLayerID = rAdmin.GetLayerID( sUNO_LayerName_background_objects );

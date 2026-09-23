@@ -61,7 +61,7 @@ OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
     //! GetText (ESelection) should probably also be in the Outliner
     // in the time being use as the hack for the EditEngine:
-    EditEngine* pEditEngine = const_cast<EditEngine*>(&rOutliner.GetEditEngine());
+    EditEngine* pEditEngine = &rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel );
 }
 
@@ -109,7 +109,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
     //! Does it not exist on the Outliner?
     //! and why is the GetAttribs on the EditEngine not a const?
-    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, nOnlyHardAttrib, rEditEngine ) );
 
@@ -146,7 +146,7 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
     moParaAttribsCache.emplace( rOutliner.GetParaAttribs( nPara ) );
     mnParaAttribsCache = nPara;
 
-    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
 
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
     if( pStyle )
@@ -181,7 +181,7 @@ SfxItemPool* SvxOutlinerForwarder::GetPool() const
 
 void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const
 {
-    const_cast<EditEngine&>(rOutliner.GetEditEngine()).GetPortions( nPara, rList );
+    rOutliner.GetEditEngine().GetPortions( nPara, rList );
 }
 
 OUString SvxOutlinerForwarder::GetStyleSheet(sal_Int32 nPara) const
@@ -522,13 +522,13 @@ void SvxOutlinerForwarder::SetParaIsNumberingRestart(  sal_Int32 nPara, bool bPa
 
 const SfxItemSet * SvxOutlinerForwarder::GetEmptyItemSetPtr()
 {
-    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
     return &rEditEngine.GetEmptyItemSet();
 }
 
 void SvxOutlinerForwarder::AppendParagraph()
 {
-    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), OUString() );
 }
 
@@ -536,7 +536,7 @@ sal_Int32 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUStri
 {
     sal_Int32 nLen = 0;
 
-    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    EditEngine& rEditEngine = rOutliner.GetEditEngine();
     sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
     DBG_ASSERT( 0 <= nPara && nPara < nParaCount, "paragraph index out of bounds" );
     if (0 <= nPara && nPara < nParaCount)

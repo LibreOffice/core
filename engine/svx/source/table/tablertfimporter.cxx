@@ -162,7 +162,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 
 void SdrTableRTFParser::Read( SvStream& rStream )
 {
-    EditEngine& rEdit = const_cast< EditEngine& >( mpOutliner->GetEditEngine() );
+    EditEngine& rEdit = mpOutliner->GetEditEngine();
 
     Link<RtfImportInfo&,void> aOldLink( rEdit.GetRtfImportHdl() );
     rEdit.SetRtfImportHdl( LINK( this, SdrTableRTFParser, RTFImportHdl ) );

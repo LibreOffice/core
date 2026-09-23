@@ -677,7 +677,7 @@ sal_Int32 Cell::calcPreferredWidth( const Size aSize )
     if( GetOutlinerParaObject() )
         rOutliner.SetText(*GetOutlinerParaObject());
 
-    sal_Int32 nPreferredWidth = const_cast<EditEngine&>(rOutliner.GetEditEngine()).CalcTextWidth();
+    sal_Int32 nPreferredWidth = rOutliner.GetEditEngine().CalcTextWidth();
     rOutliner.Clear();
 
     return GetTextLeftDistance() + GetTextRightDistance() + nPreferredWidth;
