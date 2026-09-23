@@ -1410,7 +1410,7 @@ void SwXTextTableRow::Notify(const SfxHint& rHint)
     else if(rHint.GetId() == SfxHintId::SwFindUnoTextTableRowInstance)
     {
         auto pFindHint = static_cast<const FindUnoTextTableRowInstanceHint*>(&rHint);
-        if(!pFindHint->m_pCore && pFindHint->m_pCore == m_pLine)
+        if(!pFindHint->m_pResult && pFindHint->m_pCore == m_pLine)
             pFindHint->m_pResult = this;
     }
 }
