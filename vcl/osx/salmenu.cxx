@@ -300,9 +300,6 @@ AquaSalMenu::~AquaSalMenu()
 
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
-    // set offsets for positioning
-    const float offset = 9.0;
-
     // get the pointers
     AquaSalFrame * pParentAquaSalFrame = static_cast<AquaSalFrame *>(pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame());
     NSWindow* pParentNSWindow = pParentAquaSalFrame->mpNSWindow;
@@ -311,28 +308,35 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectan
     NSRect popupFrame = [pPopupNSView frame];
 
     // create frame rect
-    NSRect displayPopupFrame = NSMakeRect( rRect.Left()+(offset-1), rRect.Top()+(offset+1), popupFrame.size.width, 0 );
+    NSRect displayPopupFrame = NSMakeRect( rRect.Left(), rRect.Top(), popupFrame.size.width, 0 );
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
     // do the same strange semantics as vcl popup windows to arrive at a frame geometry
     // in mirrored UI case; best done by actually executing the same code
     sal_uInt16 nArrangeIndex;
     pWin->SetPosPixel( FloatingWindow::ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
-    displayPopupFrame.origin.x = pWin->ImplGetFrame()->GetUnmirroredGeometry().x() - pParentAquaSalFrame->GetUnmirroredGeometry().x() + offset;
-    displayPopupFrame.origin.y = pWin->ImplGetFrame()->GetUnmirroredGeometry().y() - pParentAquaSalFrame->GetUnmirroredGeometry().y() + offset;
+    displayPopupFrame.origin.x = pWin->ImplGetFrame()->GetUnmirroredGeometry().x() - pParentAquaSalFrame->GetUnmirroredGeometry().x();
+    displayPopupFrame.origin.y = pWin->ImplGetFrame()->GetUnmirroredGeometry().y() - pParentAquaSalFrame->GetUnmirroredGeometry().y();
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
     // #i111992# if this menu was opened due to a key event, prevent dispatching that yet again
     if( [pParentNSView respondsToSelector: @selector(clearLastEvent)] )
         [pParentNSView performSelector:@selector(clearLastEvent)];
 
-    // open popup menu
-    NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
-    [pPopUpButtonCell setMenu: mpMenu];
-    [pPopUpButtonCell selectItem:nil];
+    NSEvent *fakeMouseEvent = [NSEvent
+            mouseEventWithType:NSEventTypeRightMouseDown
+            location:displayPopupFrame.origin
+            modifierFlags:0
+            timestamp:0
+            windowNumber:[pParentNSWindow windowNumber]
+            context:nil
+            eventNumber:0
+            clickCount:1
+            pressure:1.0
+        ];
+
     [AquaA11yWrapper setPopupMenuOpen: YES];
-    [pPopUpButtonCell performClickWithFrame:displayPopupFrame inView:pParentNSView];
-    [pPopUpButtonCell release];
+    [NSMenu popUpContextMenu:mpMenu withEvent:fakeMouseEvent forView:pParentNSView];
     [AquaA11yWrapper setPopupMenuOpen: NO];
 
     return true;
