@@ -1737,14 +1737,37 @@ SelectionImpl::getRangeElements() {
     return cpo::uno::Sequence(v.data(), v.size());
 }
 
+cpo::uno::Reference<css::text::XTextViewCursor> viewCursorOf(
+    cpo::uno::Reference<css::frame::XModel> const & model)
+{
+    cpo::uno::Reference<css::text::XTextViewCursorSupplier> const sup(
+        model->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+    auto const c = sup->getViewCursor();
+    if (!c.is()) {
+        throw cpo::uno::RuntimeException(u"the document view has no cursor"_ustr);
+    }
+    return c;
+}
+
 class CursorImpl: public cppu::WeakImplHelper<scriptinterop::XCursor> {
 public:
     explicit CursorImpl(cpo::uno::Reference<css::frame::XModel> const & model): model_(model) {}
 
-    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return viewCursor(); }
+    // A position at one place in the document, rather than wherever the view cursor is, which is
+    // at offset into element:
+    CursorImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XTextRange> const & position,
+        cpo::uno::Reference<scriptinterop::XElement> const & element, sal_Int32 offset):
+        model_(model), position_(position), element_(element), offset_(offset) {}
 
-    cpo::uno::Reference<scriptinterop::XParagraph> getElement() override {
-        auto const para = findContainingParagraph(viewCursor());
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return where(); }
+
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override {
+        if (element_.is()) {
+            return element_;
+        }
+        auto const para = findContainingParagraph(where());
         if (!para.is()) {
             throw cpo::uno::RuntimeException(
                 u"getElement: the cursor is not inside a paragraph"_ustr);
@@ -1752,8 +1775,50 @@ public:
         return new ParagraphImpl(nullptr, para);
     }
 
-    sal_Int32 getOffset() override {
-        auto const c = viewCursor();
+    sal_Int32 getOffset() override { return element_.is() ? offset_ : paragraphOffset(); }
+
+    cpo::uno::Reference<scriptinterop::XText> getSurroundingText() override {
+        auto const para = findContainingParagraph(where());
+        if (!para.is()) {
+            throw cpo::uno::RuntimeException(
+                u"getSurroundingText: the cursor is not inside a paragraph"_ustr);
+        }
+        return new TextImpl(nullptr, para, scriptinterop::ElementType_TEXT);
+    }
+
+    sal_Int32 getSurroundingTextOffset() override { return paragraphOffset(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XInlineImage>> insertInlineImage(
+        cpo::uno::Reference<scriptinterop::XBlob> const & blob) override
+    {
+        auto const c = where();
+        auto const host = c->getText();
+        if (!host.is()) {
+            throw cpo::uno::RuntimeException(
+                u"insertInlineImage: the cursor is not somewhere that accepts inline images"_ustr);
+        }
+        auto const graphic = createGraphicFromBlob(model_, blob);
+        host->insertTextContent(c->getStart(), graphic, false);
+        return {true, new InlineImageImpl(nullptr, graphic)};
+    }
+
+    void insertText(OUString const & text) override {
+        auto const c = where();
+        auto const host = c->getText();
+        if (!host.is()) {
+            throw cpo::uno::RuntimeException(
+                u"insertText: the cursor is not somewhere that accepts text"_ustr);
+        }
+        host->insertString(c->getStart(), text, false);
+    }
+
+private:
+    cpo::uno::Reference<css::text::XTextRange> where() {
+        return position_.is() ? position_ : viewCursorOf(model_);
+    }
+
+    sal_Int32 paragraphOffset() {
+        auto const c = where();
         auto const para = findContainingParagraph(c);
         if (!para.is()) {
             throw cpo::uno::RuntimeException(
@@ -1774,53 +1839,10 @@ public:
         return probe->getString().getLength();
     }
 
-    cpo::uno::Reference<scriptinterop::XText> getSurroundingText() override {
-        auto const para = findContainingParagraph(viewCursor());
-        if (!para.is()) {
-            throw cpo::uno::RuntimeException(
-                u"getSurroundingText: the cursor is not inside a paragraph"_ustr);
-        }
-        return new TextImpl(nullptr, para, scriptinterop::ElementType_TEXT);
-    }
-
-    sal_Int32 getSurroundingTextOffset() override { return getOffset(); }
-
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XInlineImage>> insertInlineImage(
-        cpo::uno::Reference<scriptinterop::XBlob> const & blob) override
-    {
-        auto const c = viewCursor();
-        auto const host = c->getText();
-        if (!host.is()) {
-            throw cpo::uno::RuntimeException(
-                u"insertInlineImage: the cursor is not somewhere that accepts inline images"_ustr);
-        }
-        auto const graphic = createGraphicFromBlob(model_, blob);
-        host->insertTextContent(c->getStart(), graphic, false);
-        return {true, new InlineImageImpl(nullptr, graphic)};
-    }
-
-    void insertText(OUString const & text) override {
-        auto const c = viewCursor();
-        auto const host = c->getText();
-        if (!host.is()) {
-            throw cpo::uno::RuntimeException(
-                u"insertText: the cursor is not somewhere that accepts text"_ustr);
-        }
-        host->insertString(c->getStart(), text, false);
-    }
-
-private:
-    cpo::uno::Reference<css::text::XTextViewCursor> viewCursor() {
-        cpo::uno::Reference<css::text::XTextViewCursorSupplier> const sup(
-            model_->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
-        auto const c = sup->getViewCursor();
-        if (!c.is()) {
-            throw cpo::uno::RuntimeException(u"the document view has no cursor"_ustr);
-        }
-        return c;
-    }
-
     cpo::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::text::XTextRange> position_;
+    cpo::uno::Reference<scriptinterop::XElement> element_;
+    sal_Int32 offset_ = 0;
 };
 
 class FootnoteSectionImpl: public cppu::WeakImplHelper<scriptinterop::XContainerElement> {
@@ -2137,13 +2159,96 @@ public:
         return new BodyImpl(model_, doc->getText());
     }
 
+    // The position given to setCursor stays the cursor, with its own element and offset, for as
+    // long as the view cursor is still at that position:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XCursor>> getCursor() override
     {
+        if (cursorPosition_.is()) {
+            auto const view = viewCursorOf(model_);
+            cpo::uno::Reference<css::text::XTextRange> const position(
+                cursorPosition_->getuno(), cpo::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(
+                view->getText(), cpo::uno::UNO_QUERY_THROW);
+            try {
+                if (cmp->compareRegionStarts(view->getStart(), position->getStart()) == 0) {
+                    return {true, cursorPosition_};
+                }
+            } catch (css::lang::IllegalArgumentException const &) {
+                // The position is in another text than the view cursor.
+            }
+            cursorPosition_.clear();
+        }
         return {true, cpo::uno::Reference<scriptinterop::XCursor>(new CursorImpl(model_))};
+    }
+
+    cpo::uno::Reference<scriptinterop::XCursor> newPosition(
+        cpo::uno::Reference<scriptinterop::XElement> const & element, sal_Int32 offset) override
+    {
+        if (!element.is()) {
+            throw cpo::uno::RuntimeException(u"newPosition: the element must not be null"_ustr);
+        }
+        if (offset < 0) {
+            throw cpo::uno::RuntimeException(
+                "newPosition: expected a non-negative offset, got " + OUString::number(offset));
+        }
+        if (element->getType() == scriptinterop::ElementType_TEXT) {
+            cpo::uno::Reference<css::text::XTextRange> const text(
+                element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            if (offset > text->getString().getLength()) {
+                throw cpo::uno::RuntimeException(
+                    "newPosition: offset " + OUString::number(offset)
+                    + " is past the end of the text");
+            }
+            auto const cursor = text->getText()->createTextCursorByRange(text->getStart());
+            cursor->goRight(offset, false);
+            return new CursorImpl(model_, cursor->getStart(), element, offset);
+        }
+        cpo::uno::Reference<scriptinterop::XContainerElement> const container(
+            element, cpo::uno::UNO_QUERY);
+        if (!container.is()) {
+            throw cpo::uno::RuntimeException(
+                u"newPosition: the element is neither text nor has children"_ustr);
+        }
+        auto const n = container->getNumChildren();
+        if (offset > n) {
+            throw cpo::uno::RuntimeException(
+                "newPosition: child index " + OUString::number(offset) + " is past the "
+                + OUString::number(n) + " children");
+        }
+        if (offset == n) {
+            cpo::uno::Reference<css::text::XTextRange> const whole(
+                element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            return new CursorImpl(model_, whole->getEnd(), element, offset);
+        }
+        auto const child = container->getChild(offset)->getuno();
+        // An inline image or a paragraph starts where its anchor does:
+        if (cpo::uno::Reference<css::text::XTextContent> const content{child, cpo::uno::UNO_QUERY})
+        {
+            return new CursorImpl(model_, content->getAnchor()->getStart(), element, offset);
+        }
+        cpo::uno::Reference<css::text::XTextRange> const range(child, cpo::uno::UNO_QUERY_THROW);
+        return new CursorImpl(model_, range->getStart(), element, offset);
     }
 
     cpo::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {
         return new RangeBuilderImpl;
+    }
+
+    void setCursor(cpo::uno::Reference<scriptinterop::XCursor> const & position) override {
+        if (!position.is()) {
+            throw cpo::uno::RuntimeException(u"setCursor: the position must not be null"_ustr);
+        }
+        cpo::uno::Reference<css::text::XTextRange> const range(
+            position->getuno(), cpo::uno::UNO_QUERY_THROW);
+        // Selecting the collapsed range also ends a selection of a graphic or other object, which
+        // the view cursor cannot move out of on its own:
+        cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+        if (!sup->select(cpo::uno::Any(range->getStart()))) {
+            throw cpo::uno::RuntimeException(
+                u"setCursor: the position is not somewhere the cursor can be"_ustr);
+        }
+        cursorPosition_ = position;
     }
 
     void setSelection(cpo::uno::Reference<scriptinterop::XSelection> const & selection) override {
@@ -2240,6 +2345,7 @@ public:
 
 private:
     cpo::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<scriptinterop::XCursor> cursorPosition_;
 };
 }
 

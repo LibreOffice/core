@@ -12,7 +12,7 @@
 module scriptinterop {
 
 interface XCursor: XBase {
-    XParagraph getElement();
+    XElement getElement();
 
     long getOffset();
 

@@ -16,7 +16,14 @@ globalThis.__gasKitRunner = function(
     // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
-        function activeDoc() { return cool.getActiveDocument(); }
+        // One document object for the whole call, as it holds the position that setCursor set:
+        let activeDocument = null;
+        function activeDoc() {
+            if (activeDocument === null) {
+                activeDocument = cool.getActiveDocument();
+            }
+            return activeDocument;
+        }
 
         // What getUi() collects over one call: the messages an add-on passed to alert(), the
         // items it put in its menu, and (if any) the sidebar file and the dialog it asked us to
@@ -118,7 +125,11 @@ globalThis.__gasKitRunner = function(
                     getCursor: function() { return activeDoc().getCursor(); },
                     getBody: function() { return activeDoc().getBody(); },
                     getFootnotes: function() { return activeDoc().getFootnotes(); },
+                    newPosition: function(element, offset) {
+                        return activeDoc().newPosition(element, offset);
+                    },
                     newRange: function() { return activeDoc().newRange(); },
+                    setCursor: function(position) { activeDoc().setCursor(position); },
                     setSelection: function(sel) { activeDoc().setSelection(sel); },
                     getName: function() { return 'Untitled'; },
                     getUrl: function() { return ''; },

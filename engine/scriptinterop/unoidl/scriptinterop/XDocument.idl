@@ -23,7 +23,11 @@ interface XDocument : XBase
 
     void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
 
+    XCursor newPosition([in] XElement element, [in] long offset);
+
     XRangeBuilder newRange();
+
+    void setCursor([in] XCursor position);
 
     void setSelection([in] XSelection selection);
 };

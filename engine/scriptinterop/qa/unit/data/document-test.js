@@ -240,4 +240,50 @@ function test() {
     console.assert(inserted.getAltDescription() === 'desc');
     console.assert(inserted.getWidth() === 80);
     console.assert(inserted.getHeight() === 40);
+
+    // newPosition takes a character offset into a Text element:
+    const text1 = body.getChild(1).getChild(0);
+    console.assert(text1.getType() === DocumentApp.ElementType.TEXT);
+    const inText = doc.newPosition(text1, 5);
+    console.assert(inText.getOffset() === 5);
+    console.assert(inText.getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(inText.getElement().getText() === 'UnderStrikeSuperPlain');
+    let pastText = false;
+    try {
+        doc.newPosition(text1, text1.getText().length + 1);
+    } catch (e) {
+        pastText = true;
+    }
+    console.assert(pastText);
+
+    // For any other element, newPosition takes a child index, where the index equal to the number
+    // of children is the element's end, and the position keeps that element and index (paragraph 5
+    // is "Before" followed by its inline image):
+    const para5 = body.getChild(5);
+    console.assert(para5.getNumChildren() === 2);
+    for (let i = 0; i <= 2; ++i) {
+        const pos = doc.newPosition(para5, i);
+        console.assert(pos.getOffset() === i);
+        console.assert(pos.getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+        console.assert(pos.getElement().getText() === 'Before');
+    }
+    let pastChildren = false;
+    try {
+        doc.newPosition(para5, 3);
+    } catch (e) {
+        pastChildren = true;
+    }
+    console.assert(pastChildren);
+
+    // After setCursor, the cursor is the given position, with the element and child index it was
+    // made from (GAS reports every getCursor after the first one that is not null in a script
+    // execution against that first cursor's element, with an offset that is not relative to that
+    // element, so this is the only getCursor here that is not null):
+    doc.setCursor(doc.newPosition(para5, 1));
+    const cursor = doc.getCursor();
+    console.assert(cursor.getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(cursor.getElement().getText() === 'Before');
+    console.assert(cursor.getOffset() === 1);
+    console.assert(cursor.getSurroundingText().getText() === 'Before');
+    console.assert(cursor.getSurroundingTextOffset() === 6);
 }
