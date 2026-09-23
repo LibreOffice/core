@@ -743,12 +743,33 @@ void SwTaggedPDFHelper::OpenTagImpl(void const*const pKey)
 #endif
 }
 
-sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
-    vcl::pdf::StructElement const eType, const OUString& rString)
+std::pair<sal_Int32, sal_Int32> SwTaggedPDFHelper::CreateRubyKids(const OutputDevice& rOut,
+                                                                  const SwFrame& rFrame)
+{
+    auto* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData*>(rOut.GetExtOutDevData());
+    // the check BeginInlineStructureElements makes, so no kid is created that nothing enters
+    if (!pPDFExtOutDevData || !pPDFExtOutDevData->GetIsExportTaggedPDF()
+        || lcl_IsInNonStructEnv(rFrame))
+        return { -1, -1 };
+
+    // ISO 32000-2 Table 369 requires RB before RT, and an element is ordered among its
+    // siblings where its type is set, which is here rather than where the sub-line paints
+    const sal_Int32 nRB(pPDFExtOutDevData->EnsureStructureElement(nullptr));
+    pPDFExtOutDevData->InitStructureElement(nRB, vcl::pdf::StructElement::RB, u"RB"_ustr);
+    const sal_Int32 nRT(pPDFExtOutDevData->EnsureStructureElement(nullptr));
+    pPDFExtOutDevData->InitStructureElement(nRT, vcl::pdf::StructElement::RT, u"RT"_ustr);
+    return { nRB, nRT };
+}
+
+sal_Int32 SwTaggedPDFHelper::BeginTagImpl(const void* const pKey,
+                                          const vcl::pdf::StructElement eType,
+                                          const OUString& rString, const sal_Int32 nExistingId)
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
-    mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
+    const sal_Int32 nId
+        = nExistingId != -1 ? nExistingId : mpPDFExtOutDevData->EnsureStructureElement(pKey);
+    if (nExistingId == -1)
+        mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
     mpPDFExtOutDevData->BeginStructureElement(nId);
     m_aOpenedTags.push_back(nId);
 
@@ -787,7 +808,8 @@ void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& 
         }
     }
 
-    sal_Int32 const nId = BeginTagImpl(pKey, eType, rString);
+    const sal_Int32 nId
+        = BeginTagImpl(pKey, eType, rString, mpPorInfo ? mpPorInfo->m_nExistingId : -1);
 
     // which tag a destination pointing at this node names
     if (mpFrameInfo && mpFrameInfo->mrFrame.IsTextFrame())

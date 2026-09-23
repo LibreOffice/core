@@ -2999,8 +2999,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithRuby)
     // the ruby reads between the text before it and the text after it
     CPPUNIT_ASSERT_EQUAL(size_t(1), nMCIDBeforeRuby);
 
-    // the base and the ruby text, each with its own content; RB before RT would
-    // be the reading order, but the paint order puts RT first
+    // the base and the ruby text, each with its own content, in the order
+    // ISO 32000-2 Table 369 requires rather than the paint order
     auto pRubyKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pRubySE->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pRubyKids);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pRubyKids->GetElements().size());
@@ -3019,8 +3019,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithRuby)
         CPPUNIT_ASSERT_EQUAL(size_t(1), pKidKids->GetElements().size());
         CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(pKidKids->GetElement(0)));
     }
-    CPPUNIT_ASSERT(std::find(aRubyKids.begin(), aRubyKids.end(), "RB"_ostr) != aRubyKids.end());
-    CPPUNIT_ASSERT(std::find(aRubyKids.begin(), aRubyKids.end(), "RT"_ostr) != aRubyKids.end());
+    CPPUNIT_ASSERT_EQUAL("RB"_ostr, aRubyKids[0]);
+    CPPUNIT_ASSERT_EQUAL("RT"_ostr, aRubyKids[1]);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWithSpan)

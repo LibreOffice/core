@@ -77,6 +77,27 @@ OUString lcl_CollectLanguages(vcl::pdf::PDFiumStructureElement& rElement,
     return aLanguages;
 }
 
+// the kids of every Ruby, in the order they are emitted, each with the text it covers
+OUString lcl_CollectRubies(vcl::pdf::PDFiumStructureElement& rElement,
+                           const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aRubies;
+    if (rElement.getType() == "Ruby")
+    {
+        for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+        {
+            if (const auto pKid = rElement.getChild(i))
+                aRubies += pKid->getType() + ": " + lcl_GetOwnText(*pKid, rTexts) + "\n";
+        }
+    }
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = rElement.getChild(i))
+            aRubies += lcl_CollectRubies(*pChild, rTexts);
+    }
+    return aRubies;
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
 {
     createSwDoc("structure-destinations.fodt");
@@ -451,6 +472,46 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
         "P de-DE: Ein deutscher Absatz mit einem Bild.\n"
         "Figure en-US: A picture described in the language of the document\n"_ustr,
         aLanguages);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRubyStructureOrder)
+{
+    createSwDoc("ruby-positions.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    auto pPdfDocument = parsePDFExport();
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+
+    // the text behind each marked content id, to identify the element covering it
+    std::unordered_map<int, OUString> aTexts;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
+    {
+        auto pObject = pPdfPage->getObject(i);
+        if (const int nMarkedContentID = pObject->getMarkedContentID(); nMarkedContentID >= 0)
+            aTexts[nMarkedContentID] += pObject->getText(pTextPage);
+    }
+
+    auto pTree = pPdfPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    OUString aRubies;
+    for (int i = 0; i < pTree->getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = pTree->getChild(i))
+            aRubies += lcl_CollectRubies(*pChild, aTexts);
+    }
+
+    // ISO 32000-2 Table 369 requires RB first. An annotation above its base paints first and
+    // is still the RT; one below paints second and is still the RT
+    CPPUNIT_ASSERT_EQUAL(u"RB: base above\n"
+                         "RT: anno above\n"
+                         "RB: base below\n"
+                         "RT: anno below\n"_ustr,
+                         aRubies);
 }
 }
 

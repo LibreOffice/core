@@ -26,6 +26,7 @@
 #include "swtypes.hxx"
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace vcl
@@ -121,9 +122,15 @@ struct Por_Info
       Ruby: 0-> Ruby 1-> RT 2-> RB
     */
     int const m_Mode;
+    /// the element to enter, created before the portion paints, or -1 to create one
+    const sal_Int32 m_nExistingId;
 
-    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, int const nMode)
-        : mrPor(rPor), mrTextPainter(rTextPainer), m_Mode(nMode) {};
+    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, const int nMode,
+             const sal_Int32 nExistingId = -1)
+        : mrPor(rPor)
+        , mrTextPainter(rTextPainer)
+        , m_Mode(nMode)
+        , m_nExistingId(nExistingId){};
 };
 
 struct lt_TableColumn
@@ -154,7 +161,8 @@ class SwTaggedPDFHelper
     const Por_Info* mpPorInfo;
 
     void OpenTagImpl(void const* pKey);
-    sal_Int32 BeginTagImpl(void const* pKey,vcl::pdf::StructElement aTagRole, const OUString& rTagName);
+    sal_Int32 BeginTagImpl(void const* pKey, vcl::pdf::StructElement aTagRole,
+                           const OUString& rTagName, sal_Int32 nExistingId = -1);
     void BeginTag(vcl::pdf::StructElement aTagRole, const OUString& rTagName);
     void EndTag();
     void DeferTag();
@@ -188,6 +196,10 @@ class SwTaggedPDFHelper
     void CheckRestoreTag() const;
 
     public:
+
+    /// a Ruby's RB and RT, created before either sub-line paints so that they end up in that order
+    static std::pair<sal_Int32, sal_Int32> CreateRubyKids(const OutputDevice& rOut,
+                                                          const SwFrame& rFrame);
 
     // pFrameInfo != 0 => BeginBlockStructureElement
     // pPorInfo != 0 => BeginInlineStructureElement
