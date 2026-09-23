@@ -32,7 +32,10 @@ endif
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
-pdfium_patches += extractpatterns.patch
+# https://pdfium-review.googlesource.com/c/pdfium/+/154910
+pdfium_patches += extractpatterns-stroke.patch.1
+# https://pdfium-review.googlesource.com/c/pdfium/+/157490
+pdfium_patches += extractpatterns-fill.patch.1
 pdfium_patches += charbboxinflation.patch.1
 # Hide bundled FreeType symbols
 pdfium_patches += freetype-hidden-visibility.patch

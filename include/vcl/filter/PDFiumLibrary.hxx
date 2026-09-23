@@ -239,14 +239,10 @@ public:
     virtual std::unique_ptr<PDFiumFont> getFont() = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
     virtual Color getFillColor() = 0;
-    virtual std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc,
-                                                                 PDFiumPage& rPage)
-        = 0;
+    virtual std::unique_ptr<PDFiumBitmap> getRenderedFillPattern(PDFiumDocument& rDoc) = 0;
     virtual Color getStrokeColor() = 0;
     virtual double getStrokeWidth() = 0;
-    virtual std::unique_ptr<PDFiumBitmap> getRenderedStrokePattern(PDFiumDocument& rDoc,
-                                                                   PDFiumPage& rPage)
-        = 0;
+    virtual std::unique_ptr<PDFiumBitmap> getRenderedStrokePattern(PDFiumDocument& rDoc) = 0;
     // Path
     virtual int getPathSegmentCount() = 0;
     virtual std::unique_ptr<PDFiumPathSegment> getPathSegment(int index) = 0;
