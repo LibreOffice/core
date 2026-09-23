@@ -97,28 +97,23 @@ PathFormat()
     # Return value: $formatted_path and $formatted_path_unix.
     #
     # $formatted_path is the argument in Windows format, but using forward slashes instead of
-    # backslashes, using 8.3 pathname components if necessary (if it otherwise would contains spaces
-    # or shell metacharacters).
+    # backslashes. A pathname holding a space keeps it, so whoever hands the value to a tool puts
+    # quotes around it.
     #
-    # $formatted_path_unix is the argument in a form usable in Cygwin or WSL, using 8.3 components if
-    # necessary. On Cygwin, it is the same as $formatted_path, but on WSL it is $formatted_path as a
-    # Unix pathname.
-    #
-    # Errors out if 8.3 names are needed but aren't present for some of the path components.
+    # $formatted_path_unix is the argument in a form usable in Cygwin or WSL. On Cygwin, it is the
+    # same as $formatted_path, because a Windows binary runs from that spelling; on WSL it is
+    # $formatted_path as a Unix pathname.
 
     # Examples:
     #
     # /home/tml/lo/master-optimised => C:/cygwin64/home/tml/lo/master-optimised
     #
-    # C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe => C:/PROGRA~2/MICROS~3/INSTAL~1/vswhere.exe
+    # C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe
+    #     => C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe
     #
-    # C:\Program Files (x86)\Microsoft Visual Studio\2019\Community => C:/PROGRA~2/MICROS~3/2019/COMMUN~1
+    # /cygdrive/c/Program Files (x86)/Windows Kits/10 => C:/Program Files (x86)/Windows Kits/10
     #
-    # C:/PROGRA~2/WI3CF2~1/10/Include/10.0.18362.0/ucrt => C:/PROGRA~2/WI3CF2~1/10/Include/10.0.18362.0/ucrt
-    #
-    # /cygdrive/c/PROGRA~2/WI3CF2~1/10 => C:/PROGRA~2/WI3CF2~1/10
-    #
-    # C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\ => C:/PROGRA~2/WI3CF2~1/NETFXSDK/4.8/
+    # C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\ => C:/Program Files (x86)/Windows Kits/NETFXSDK/4.8/
     #
     # /usr/bin/find.exe => C:/cygwin64/bin/find.exe
 
@@ -487,7 +482,7 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
         local result
 
         if test -n "$opt_d" -o -n "$opt_m" -o -n "$opt_w"; then
-            # Print Windows path, possibly in 8.3 form (-d) or with forward slashes (-m)
+            # Print Windows path, with forward slashes for -m
 
             if test -n "$opt_u"; then
                 AC_MSG_ERROR([Invalid cygpath invocation: Both Windows and Unix path output requested])
@@ -703,7 +698,7 @@ else
     fi
 fi
 
-win_short_path_for_make()
+win_path_for_make()
 {
     local short_path="$1"
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$MSYS_ONLY_AS_HELPER"; then
@@ -3167,7 +3162,7 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
         dnl empty off Windows, and Cygwin resolves the bare name to the .exe anyway.
         AC_PATH_PROG([CCACHE],[ccache$ccache_ext],[not found])
         if test "$CCACHE" != "not found" -a "$_os" = "WINNT"; then
-            CCACHE=`win_short_path_for_make "$CCACHE"`
+            CCACHE=`win_path_for_make "$CCACHE"`
             # check that it has MSVC support (it should recognize it in CCACHE_COMPILERTYPE)
             rm -f conftest.txt
             AC_MSG_CHECKING([whether $CCACHE has MSVC support])
@@ -3209,7 +3204,7 @@ elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" 
                 unset ac_cv_path_CCACHE
                 AC_PATH_PROG([CCACHE],[sccache],[not found])
                 if test "$CCACHE" != "not found"; then
-                    CCACHE=`win_short_path_for_make "$CCACHE"`
+                    CCACHE=`win_path_for_make "$CCACHE"`
                     SCCACHE=1
                     CCACHE_DEPEND_MODE=1
                 fi
@@ -4283,7 +4278,7 @@ if test "$_os" = "WINNT"; then
     fi
 
     AC_MSG_CHECKING([for VC product directory])
-    VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
+    VC_PRODUCT_DIR=`win_path_for_make "$VC_PRODUCT_DIR"`
     AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
     UCRTSDKDIR=
@@ -4319,7 +4314,7 @@ if test "$_os" = "WINNT"; then
         fi
     fi
     if test -d "$regvalue" ; then
-        MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+        MSBUILD_PATH=`win_path_for_make "$regvalue"`
         AC_MSG_RESULT([$regvalue])
     else
         AC_MSG_ERROR([MSBuild.exe location not found])
@@ -4358,8 +4353,8 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
-        # This gives us a posix path with 8.3 filename restrictions
-        MSVC_CXX=`win_short_path_for_make "$MSVC_HOST_PATH/cl.exe"`
+        # This gives us the pathname in the form make wants
+        MSVC_CXX=`win_path_for_make "$MSVC_HOST_PATH/cl.exe"`
     fi
 
     dnl CC and CXX name the compiler without a directory, because autoconf
@@ -4447,7 +4442,7 @@ if test "$_os" = "WINNT"; then
         if test -n "$CXX_X86_BINARY"; then
             AC_MSG_RESULT([provided via environment variable])
         elif test -n "$WIN_MULTI_ARCH"; then
-            CXX_X86_BINARY=`win_short_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
+            CXX_X86_BINARY=`win_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
@@ -4894,15 +4889,15 @@ if test "$enable_ld" != "no"; then
         yes|lld)
             AC_MSG_CHECKING([for lld-link])
             if test "$WIN_BUILD_ARCH" = "x64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/lld-link.exe"; then
-                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/lld-link.exe"`
+                LLD_LINK=`win_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/lld-link.exe"`
             elif test "$WIN_BUILD_ARCH" = "arm64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/lld-link.exe"; then
-                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/lld-link.exe"`
+                LLD_LINK=`win_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/lld-link.exe"`
             elif test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/lld-link.exe"; then
-                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/lld-link.exe"`
+                LLD_LINK=`win_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/lld-link.exe"`
             elif test -n "$PROGRAMFILES" -a -x "$(cygpath -u "$PROGRAMFILES/LLVM/bin/lld-link.exe")"; then
-                LLD_LINK=`win_short_path_for_make "$PROGRAMFILES/LLVM/bin/lld-link.exe"`
+                LLD_LINK=`win_path_for_make "$PROGRAMFILES/LLVM/bin/lld-link.exe"`
             elif test -x "$(cygpath -u "c:/Program Files/LLVM/bin/lld-link.exe")"; then
-                LLD_LINK=`win_short_path_for_make "c:/Program Files/LLVM/bin/lld-link.exe"`
+                LLD_LINK=`win_path_for_make "c:/Program Files/LLVM/bin/lld-link.exe"`
             fi
             if test -n "$LLD_LINK"; then
                 AC_MSG_RESULT([$LLD_LINK])
@@ -4911,7 +4906,7 @@ if test "$enable_ld" != "no"; then
             fi
             ;;
         lld:*)
-            LLD_LINK=`win_short_path_for_make "${enable_ld#lld:}"`
+            LLD_LINK=`win_path_for_make "${enable_ld#lld:}"`
             AC_MSG_CHECKING([for lld-link])
             AC_MSG_RESULT([$LLD_LINK])
             ;;
@@ -4941,7 +4936,7 @@ if test "$_os" = "WINNT"; then
         fastlink_linker=$LLD_LINK
     else
         dnl PATH doesn't cover the MSVC tools yet; link.exe sits next to cl.exe
-        fastlink_linker=`win_short_path_for_make "$MSVC_HOST_PATH/link.exe"`
+        fastlink_linker=`win_path_for_make "$MSVC_HOST_PATH/link.exe"`
     fi
     dnl the link fails on the missing input file, and any mention of the flag in
     dnl the output is a complaint about the flag itself: not being able to use it
@@ -7120,10 +7115,9 @@ the  Windows SDK are installed.])
     encode_path "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME_ENCODED="$encoded_path"
     if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPER"; then
-        dnl The include flags carry the encoded long pathname rather than the
-        dnl 8.3 one. Every reader of SOLARINC treats it as a list of words, so
-        dnl the directories have to stay one word each, and each reader decodes
-        dnl and quotes where it hands the flags to a tool.
+        dnl Every reader of SOLARINC treats it as a list of words, so the
+        dnl directories have to stay one word each and go in encoded. Each
+        dnl reader decodes and quotes where it hands the flags to a tool.
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/include -I$COMPATH_ENCODED/Include"
         if test -d "$WINDOWS_SDK_HOME_unix/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME_ENCODED/include/um -I$WINDOWS_SDK_HOME_ENCODED/include/shared"
@@ -7171,8 +7165,8 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$UNIX_ONLY_AS_HELPE
         AC_MSG_RESULT([$MIDL_PATH/midl.exe])
     fi
 
-    # Convert to posix path with 8.3 filename restrictions ( No spaces )
-    MIDL_PATH=`win_short_path_for_make "$MIDL_PATH"`
+    # Convert to the pathname form make wants
+    MIDL_PATH=`win_path_for_make "$MIDL_PATH"`
 
     if test -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msiinfo.exe" \
          -a -f "$WINDOWS_SDK_BINDIR_NO_ARCH/msidb.exe" \
@@ -8788,7 +8782,7 @@ if test $_os = "WINNT"; then
             with_redist=${VCTOOLSET:1}
             find_msms "$with_redist"
             if test -n "$msmdir"; then
-                MSM_PATH=`win_short_path_for_make "${msmdir%/}/"`
+                MSM_PATH=`win_path_for_make "${msmdir%/}/"`
                 SCPDEFS="$SCPDEFS -DWITH_VC_REDIST=$with_redist"
             fi
             break
@@ -8864,7 +8858,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVAINTERPRETER" | $GREP -i '\.exe$'` = x; then
             JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
         fi
-        JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
+        JAVAINTERPRETER=`win_path_for_make "$JAVAINTERPRETER"`
     elif test "$cross_compiling" != "yes"; then
         case $CPUNAME in
             AARCH64|AXP|X86_64|IA64|POWERPC64|S390X|SPARC64|MIPS64|RISCV64|LOONGARCH64)
@@ -8978,7 +8972,7 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
         if test x`echo "$JAVACOMPILER" | $GREP -i '\.exe$'` = x; then
             JAVACOMPILER="${JAVACOMPILER}.exe"
         fi
-        JAVACOMPILER=`win_short_path_for_make "$JAVACOMPILER"`
+        JAVACOMPILER=`win_path_for_make "$JAVACOMPILER"`
     fi
 fi
 
@@ -9004,7 +8998,7 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
         if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
-        JAVADOC=`win_short_path_for_make "$JAVADOC"`
+        JAVADOC=`win_path_for_make "$JAVADOC"`
     fi
 
     if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
@@ -9408,7 +9402,7 @@ if test "$with_bffvalidator" != "no"; then
     fi
 
     if test "$with_bffvalidator" = "yes"; then
-        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
+        BFFVALIDATOR=`win_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
     else
         BFFVALIDATOR="$with_bffvalidator"
     fi
@@ -11526,7 +11520,7 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for the MSVC assembler ($assembler)])
     if test -f "$MSVC_HOST_PATH/$assembler"; then
-        ML_EXE=`win_short_path_for_make "$MSVC_HOST_PATH/$assembler"`
+        ML_EXE=`win_path_for_make "$MSVC_HOST_PATH/$assembler"`
         AC_MSG_RESULT([$ML_EXE])
     else
         AC_MSG_ERROR([not found in $MSVC_HOST_PATH])
@@ -13891,8 +13885,8 @@ if test "$build_os" = "cygwin" -o "$build_os" = wsl -o -n "$UNIX_ONLY_AS_HELPER"
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     fi
     ATL_LIB="$ATL_LIB/$WIN_HOST_ARCH"
-    ATL_LIB=`win_short_path_for_make "$ATL_LIB"`
-    ATL_INCLUDE=`win_short_path_for_make "$ATL_INCLUDE"`
+    ATL_LIB=`win_path_for_make "$ATL_LIB"`
+    ATL_INCLUDE=`win_path_for_make "$ATL_INCLUDE"`
 fi
 
 if test "$build_os" = "cygwin"; then
