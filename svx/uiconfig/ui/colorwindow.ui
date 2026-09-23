@@ -140,7 +140,10 @@
                 <property name="model">coloriconview_model</property>
                 <property name="columns">12</property>
                 <property name="pixbuf-column">0</property>
+                <property name="row-spacing">0</property>
+                <property name="column-spacing">0</property>
                 <property name="tooltip-column">2</property>
+                <property name="item-padding">2</property>
                 <property name="activate-on-single-click">True</property>
               </object>
             </child>
@@ -185,7 +188,10 @@
             <property name="model">recent_coloriconview_model</property>
             <property name="columns">12</property>
             <property name="pixbuf-column">0</property>
+            <property name="row-spacing">0</property>
+            <property name="column-spacing">0</property>
             <property name="tooltip-column">2</property>
+            <property name="item-padding">2</property>
             <property name="activate-on-single-click">True</property>
           </object>
           <packing>
