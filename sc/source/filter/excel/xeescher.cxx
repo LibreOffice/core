@@ -1670,8 +1670,8 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
         {
             const sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
             sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
-                    XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProps", nDrawing ),
-                    XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProps", nDrawing ),
+                    XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProp", nDrawing ),
+                    XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProp", nDrawing ),
                     rStrm.GetCurrentStream()->getOutputStream(),
                     "application/vnd.ms-excel.controlproperties+xml",
                     oox::getRelationship(Relationship::CTRLPROP),
@@ -1715,8 +1715,8 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
         {
             sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
             sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
-                XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProps", nDrawing),
-                XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProps", nDrawing),
+                XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProp", nDrawing),
+                XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProp", nDrawing),
                 rStrm.GetCurrentStream()->getOutputStream(),
                 "application/vnd.ms-excel.controlproperties+xml",
                 oox::getRelationship(Relationship::CTRLPROP), &sIdFormControlPr);
