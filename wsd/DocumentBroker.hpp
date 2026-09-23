@@ -511,7 +511,8 @@ public:
 #if !MOBILEAPP
     /// Records the public part of a remote link, the same for every view
     void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
-                                 const std::string& lastModifiedTime);
+                                 const std::string& lastModifiedTime,
+                                 const std::string& persistentLink);
 
     /// Records the source documents this document's own content names, the whole of what it
     /// names, so that a source the storage listed no remote link for is still reported.
@@ -523,11 +524,10 @@ public:
 
     /// Records a remote link and gives its access token to the view that
     /// holds the given one-time token, coming from POST /cool/links.
-    /// Consumes and rotates that view's token. Returns false when no view holds
-    /// the token, so the request is refused and nothing is recorded.
     bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,
                                      const std::string& accessToken, const std::string& name,
-                                     const std::string& lastModifiedTime);
+                                     const std::string& lastModifiedTime,
+                                     const std::string& persistentLink);
 
     /// What a request to drop a remote link came to.
     enum class LinkRemoval

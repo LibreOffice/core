@@ -4799,7 +4799,8 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
             // The source list and last-modified times are public, the same for
             // every view. This view's access tokens are private to it.
             for (const auto& link : wopiFileInfo->getRemoteLinks())
-                setRemoteDocumentSource(link.wopiSrc, link.name, link.lastModifiedTime);
+                setRemoteDocumentSource(link.wopiSrc, link.name, link.lastModifiedTime,
+                                        std::string());
 
             for (const auto& token : wopiFileInfo->getRemoteLinkTokens())
                 setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
@@ -5428,9 +5429,10 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
 
 #if !MOBILEAPP
 void DocumentBroker::setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
-                                             const std::string& lastModifiedTime)
+                                             const std::string& lastModifiedTime,
+                                             const std::string& persistentLink)
 {
-    _remoteLinks.setSource(*this, wopiSrc, name, lastModifiedTime);
+    _remoteLinks.setSource(*this, wopiSrc, name, lastModifiedTime, persistentLink);
 }
 
 void DocumentBroker::setRemoteDocumentNamedSources(std::vector<std::string> names)
@@ -5449,7 +5451,8 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
                                                  const std::string& wopiSrc,
                                                  const std::string& accessToken,
                                                  const std::string& name,
-                                                 const std::string& lastModifiedTime)
+                                                 const std::string& lastModifiedTime,
+                                                 const std::string& persistentLink)
 {
     ASSERT_CORRECT_THREAD();
 
@@ -5460,7 +5463,7 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
     {
         if (it.second->matchesLinkToken(oneTimeToken))
         {
-            setRemoteDocumentSource(wopiSrc, name, lastModifiedTime);
+            setRemoteDocumentSource(wopiSrc, name, lastModifiedTime, persistentLink);
             setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
             // Consume the one-time token and hand the view its next one.
             it.second->rotateLinkToken(/*notifyClient=*/true);

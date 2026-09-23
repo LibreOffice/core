@@ -34,11 +34,13 @@ class DocumentBroker;
 class RemoteLinks
 {
 public:
-    /// Records the public part of a remote link: its source, the document as the user knows
-    /// it and the time it was last modified. The same for every view. The latest report per
-    /// WOPISrc wins, and a report that carries no name keeps the recorded one.
+    /// Records the public part of a remote link: its address, the document as the user knows
+    /// it, the time it was last modified and the persistent link the open document's pages
+    /// store for it. The same for every view. The latest report per WOPISrc wins, and a report
+    /// that carries no name or no persistent link keeps the recorded one. A persistent link
+    /// belongs to one remote link, so recording it here takes it off any other.
     void setSource(DocumentBroker& docBroker, const std::string& wopiSrc, const std::string& name,
-                   const std::string& lastModifiedTime);
+                   const std::string& lastModifiedTime, const std::string& persistentLink);
 
     /// Records the source documents the open document's own content names, which is the whole of
     /// what it names: a name reported here and nowhere else stands for a document the storage
@@ -111,6 +113,10 @@ private:
         /// The time the remote document was last modified, as the integrator
         /// reported it. Empty when the integrator did not provide one.
         std::string lastModifiedTime;
+        /// The persistent link to the remote document, which is
+        /// the name after vnd.collabora.slide-source:. It is not WOPISrc,
+        /// it is the address which could be resolved to it.
+        std::string persistentLink;
     };
 
     /// One view's subscription to a remote document.
@@ -142,6 +148,14 @@ private:
     /// The document one entry stands for, as the user knows it: the name the integrator gave it,
     /// or the one its WOPISrc names when the integrator gave none.
     static std::string entryName(const Entry& entry);
+
+    /// The remote link that stands for the source of the given name: by the persistent link
+    /// bound to it, the name the integrator gave it, or the file name its WOPISrc ends in.
+    /// The end of the entries when none does.
+    std::map<std::string, Entry>::const_iterator findListed(const std::string& name) const;
+
+    /// True when a remote link stands for the source of the given name.
+    bool isListed(const std::string& name) const { return findListed(name) != _entries.end(); }
 
     /// Answers one view's remote document subscription with an error event.
     static void sendError(DocumentBroker& docBroker, const std::string& tag,

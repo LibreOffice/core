@@ -25,6 +25,7 @@
 
 #include <net/HttpRequest.hpp>
 #include <wsd/ClientSession.hpp>
+#include <wsd/DocumentBroker.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
@@ -1768,6 +1769,188 @@ public:
     }
 };
 
+/// A POST /cool/links whose Link object carries a PersistentLink binds the registered document to a
+/// source the open document's pages name: the name stops being reported as missing, and the
+/// views are sent the registered link, under the name the integrator gave it, standing for
+/// that source.
+class UnitLinkPostPersistentLink : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitToken, WaitMissing, Posting, WaitBound, Done) _phase;
+
+    /// The source document the pages name, as the user knows it.
+    static constexpr auto SourceName = "Q3 #1 100%.odp";
+
+    /// The one-time token the view was handed for the POST.
+    std::string _oneTimeToken;
+    bool _documentLoaded = false;
+
+    std::mutex _brokerMutex;
+    std::weak_ptr<DocumentBroker> _docBroker;
+
+    std::thread _postThread;
+
+    std::string documentWopiSrc() const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/1";
+    }
+
+    std::string remoteWopiSrc() const
+    {
+        return helpers::getTestServerURI() + "/wopi/files/2";
+    }
+
+    /// POSTs the registration, naming the source the pages store, and returns the status.
+    unsigned postLink(const std::string& oneTimeToken)
+    {
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
+                              http::Request::VERB_POST);
+        request.setBody("{\"Nonce\":\"" + oneTimeToken + "\",\"Link\":{\"WOPISrc\":\"" +
+                            remoteWopiSrc() +
+                            "\",\"AccessToken\":\"remotetoken\","
+                            "\"BaseFileName\":\"Quarter.odp\",\"PersistentLink\":\"" +
+                            std::string(SourceName) + "\"}}",
+                        "application/json");
+
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
+        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+    }
+
+    /// Names the source on the document's own thread, the way the kit's slide link list does,
+    /// once the view has its token and the document is up.
+    void maybeNameSource()
+    {
+        if (_phase != Phase::WaitToken || _oneTimeToken.empty() || !_documentLoaded)
+            return;
+
+        std::shared_ptr<DocumentBroker> docBroker;
+        {
+            std::lock_guard<std::mutex> lock(_brokerMutex);
+            docBroker = _docBroker.lock();
+        }
+        LOK_ASSERT_MESSAGE("The document has no broker to name a source on", docBroker);
+
+        TRANSITION_STATE(_phase, Phase::WaitMissing);
+        docBroker->addCallback(
+            [docBroker]
+            { docBroker->setRemoteDocumentNamedSources({ std::string(SourceName) }); });
+    }
+
+public:
+    UnitLinkPostPersistentLink()
+        : WopiTestServer("UnitLinkPostPersistentLink")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkPostPersistentLink()
+    {
+        if (_postThread.joinable())
+            _postThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    void onDocBrokerAddSession(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        std::lock_guard<std::mutex> lock(_brokerMutex);
+        _docBroker = session->getDocumentBroker();
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        _documentLoaded = true;
+        maybeNameSource();
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("linktoken:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            // Keep the first token; a fresh one arrives after the accepted POST.
+            if (_oneTimeToken.empty())
+            {
+                _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
+                maybeNameSource();
+            }
+
+            return false;
+        }
+
+        if (!message.starts_with("remotelinks:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        const std::string linkField = "\"persistentLink\":\"" + std::string(SourceName) + '"';
+        const bool missing = message.find("\"state\":\"missing\"") != std::string_view::npos;
+
+        if (_phase == Phase::WaitMissing)
+        {
+            if (!missing)
+                return false;
+
+            // A source no remote link stands for is reported under its name, with no address.
+            LOK_ASSERT_MESSAGE("A missing source must carry its name as the persistent link",
+                               message.find(linkField) != std::string_view::npos);
+            LOK_ASSERT_MESSAGE("A missing source has no address",
+                               message.find("\"wopiSrc\":\"\"") != std::string_view::npos);
+
+            TRANSITION_STATE(_phase, Phase::Posting);
+            _postThread = std::thread(
+                [this, oneTimeToken = _oneTimeToken]
+                {
+                    TRANSITION_STATE(_phase, Phase::WaitBound);
+                    LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                     postLink(oneTimeToken));
+                });
+            return false;
+        }
+
+        if (_phase == Phase::WaitBound)
+        {
+            // The registered link is recorded before this view's token is, so the list may
+            // arrive once more before the view holds access to it.
+            if (message.find("\"state\":\"available\"") == std::string_view::npos)
+                return false;
+
+            LOK_ASSERT_MESSAGE("The registered link must stand for the named source",
+                               message.find(linkField) != std::string_view::npos);
+            LOK_ASSERT_MESSAGE("The registered link keeps the name the integrator gave it",
+                               message.find("\"name\":\"Quarter.odp\"") != std::string_view::npos);
+            LOK_ASSERT_MESSAGE("A source a remote link stands for is no longer missing",
+                               !missing);
+
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("A POST naming a PersistentLink bound the registered link to it");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitToken);
+
+            initWebsocket("/wopi/files/1?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentCycle(),
@@ -1776,7 +1959,8 @@ UnitBase** unit_create_wsd_multi(void)
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
                               new UnitRemoteDocumentSaved(),
-                              new UnitRemoteDocumentNoChain(), nullptr };
+                              new UnitRemoteDocumentNoChain(), new UnitLinkPostPersistentLink(),
+                              nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

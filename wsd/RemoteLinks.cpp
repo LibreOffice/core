@@ -32,7 +32,8 @@
 #include <sstream>
 
 void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
-                                 const std::string& name, const std::string& lastModifiedTime)
+                            const std::string& name, const std::string& lastModifiedTime,
+                            const std::string& persistentLink)
 {
     docBroker.assertCorrectThread();
 
@@ -41,12 +42,26 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSr
     try
     {
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
-        _entries[docKey].wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
-        _entries[docKey].lastModifiedTime = lastModifiedTime;
+        Entry& entry = _entries[docKey];
+        entry.wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
+        entry.lastModifiedTime = lastModifiedTime;
         // A report that names no document leaves the name it is known by as it is, so a later
         // report of the time alone keeps the name the integrator gave it.
         if (!name.empty())
-            _entries[docKey].name = name;
+            entry.name = name;
+
+        // The pages that store a persistent link come from one document, so the link moves to
+        // the remote link reported for it and leaves any other.
+        if (!persistentLink.empty())
+        {
+            for (auto& it : _entries)
+            {
+                if (it.second.persistentLink == persistentLink)
+                    it.second.persistentLink.clear();
+            }
+            entry.persistentLink = persistentLink;
+        }
+
         refreshAllViews(docBroker);
     }
     catch (const std::exception& exc)
@@ -274,7 +289,8 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
         std::string time;
         if (arguments.size() > 1)
             COOLProtocol::getTokenString(arguments[1], "time", time);
-        setSource(docBroker, Uri::decode(encodedWopiSrc), std::string(), Uri::decode(time));
+        setSource(docBroker, Uri::decode(encodedWopiSrc), std::string(), Uri::decode(time),
+                  std::string());
         return;
     }
 
@@ -487,6 +503,20 @@ std::string RemoteLinks::entryName(const Entry& entry)
     return entry.name.empty() ? documentName(entry.wopiSrc) : entry.name;
 }
 
+std::map<std::string, RemoteLinks::Entry>::const_iterator
+RemoteLinks::findListed(const std::string& name) const
+{
+    // Either spelling of a document's name counts, so slides imported before the integrator
+    // named a document stay with it.
+    return std::find_if(_entries.begin(), _entries.end(),
+                        [&name](const auto& it)
+                        {
+                            return it.second.persistentLink == name ||
+                                   entryName(it.second) == name ||
+                                   documentName(it.second.wopiSrc) == name;
+                        });
+}
+
 std::string RemoteLinks::buildJson(const std::string& tag) const
 {
     const auto itView = _views.find(tag);
@@ -513,20 +543,16 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         entry->set("name", entryName(it.second));
         entry->set("state", state);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
+        entry->set("persistentLink", it.second.persistentLink);
         documents->add(entry);
     }
 
-    // A source the document names that the storage listed no remote link for is reported
-    // under its name alone: it says what this document was made from, and there is no address to
-    // reach it at and no token to read it with.
+    // A source the document names that no remote link stands for is reported under its name
+    // alone: it says what this document was made from, and there is no address to reach it at
+    // and no token to read it with.
     for (const std::string& name : _namedSources)
     {
-        // A source is one the storage listed when either spelling of that document's name is the
-        // one recorded, so slides imported before the integrator named a document stay with it.
-        const bool listed = std::any_of(
-            _entries.begin(), _entries.end(), [&name](const auto& it)
-            { return entryName(it.second) == name || documentName(it.second.wopiSrc) == name; });
-        if (listed)
+        if (isListed(name))
             continue;
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
@@ -534,6 +560,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         entry->set("name", name);
         entry->set("state", "missing");
         entry->set("lastModifiedTime", std::string());
+        entry->set("persistentLink", name);
         documents->add(entry);
     }
 
@@ -579,7 +606,8 @@ void RemoteLinks::dumpState(std::ostream& os) const
     os << "\n  remote link sources: " << _entries.size();
     for (const auto& it : _entries)
         os << "\n    " << it.first << " name: " << Anonymizer::anonymize(it.second.name)
-           << " last modified: " << it.second.lastModifiedTime;
+           << " last modified: " << it.second.lastModifiedTime
+           << " persistent link: " << Anonymizer::anonymize(it.second.persistentLink);
     os << "\n  sources the document names: " << _namedSources.size();
     for (const std::string& name : _namedSources)
         os << "\n    " << Anonymizer::anonymize(name);

@@ -2310,7 +2310,9 @@ bool ClientRequestDispatcher::handleLinksRequest(
     // CheckFileInfo RemoteLinks entry does:
     //   { "Nonce": "<the view's one-time link token>",
     //     "Link": { "WOPISrc": "...", "AccessToken": "...",
-    //               "BaseFileName": "...", "LastModifiedTime": "..." } }
+    //               "BaseFileName": "...", "LastModifiedTime": "...",
+    //               "PersistentLink": "<the reference the document's pages store for this
+    //                                  file>" } }
     // A DELETE names the link to drop by its WOPISrc alone; the rest of the entry says
     // nothing about which document that is and is ignored.
     const std::string body(std::istreambuf_iterator<char>(message), {});
@@ -2319,6 +2321,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
     std::string remoteAccessToken;
     std::string remoteName;
     std::string remoteLastModifiedTime;
+    std::string remotePersistentLink;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
     {
@@ -2329,7 +2332,20 @@ bool ClientRequestDispatcher::handleLinksRequest(
             JsonUtil::findJSONValue(link, "AccessToken", remoteAccessToken);
             JsonUtil::findJSONValue(link, "BaseFileName", remoteName);
             JsonUtil::findJSONValue(link, "LastModifiedTime", remoteLastModifiedTime);
+            JsonUtil::findJSONValue(link, "PersistentLink", remotePersistentLink);
         }
+    }
+
+    // sanitize: no control chars and not unusually long
+    constexpr std::size_t MaxPersistentLinkLength = 1024;
+    if (remotePersistentLink.size() > MaxPersistentLinkLength ||
+        std::any_of(remotePersistentLink.begin(), remotePersistentLink.end(),
+                    [](unsigned char c) { return c < 0x20 || c == 0x7f; }))
+    {
+        LOG_WRN_S("Links request for [" << Anonymizer::anonymizeUrl(request.getURI())
+                                        << "] names a persistent link of an unexpected syntax, "
+                                           "ignored");
+        remotePersistentLink.clear();
     }
 
     if (oneTimeToken.empty() || remoteWopiSrc.empty() || (!drop && remoteAccessToken.empty()))
@@ -2365,8 +2381,9 @@ bool ClientRequestDispatcher::handleLinksRequest(
         [docBroker, drop, oneTimeToken = std::move(oneTimeToken),
          remoteWopiSrc = std::move(remoteWopiSrc), remoteAccessToken = std::move(remoteAccessToken),
          remoteName = std::move(remoteName),
-         remoteLastModifiedTime =
-             std::move(remoteLastModifiedTime)](const std::shared_ptr<Socket>& moveSocket)
+         remoteLastModifiedTime = std::move(remoteLastModifiedTime),
+         remotePersistentLink =
+             std::move(remotePersistentLink)](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
@@ -2402,7 +2419,8 @@ bool ClientRequestDispatcher::handleLinksRequest(
                 // current token is refused, and the token is consumed on success.
                 if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
                                                             remoteAccessToken, remoteName,
-                                                            remoteLastModifiedTime))
+                                                            remoteLastModifiedTime,
+                                                            remotePersistentLink))
                 {
                     LOG_ERR_S("Links request for ["
                               << docBroker->getDocKey() << "] with an invalid one-time token");

@@ -823,7 +823,9 @@ linktoken: <token>
     over POST /cool/links, or to drop one over DELETE to the same
     address. Sent when the view joins a document with remote_links
     enabled, and again with a fresh token after each accepted request, so a
-    token is never accepted twice. Keep only the latest.
+    token is never accepted twice. Keep only the latest. The Link object of
+    the POST may carry a PersistentLink, the reference the document's pages
+    store for the file, so that the registered link stands for that source.
 
 contextmenu: <json description of the context menu>
 
@@ -863,16 +865,18 @@ remotelinks: <json>
           "name": "<the BaseFileName the integrator gave the document, or the
                     file name at the end of its WOPISrc>",
           "lastModifiedTime": "<time or empty>",
-          "state": "noaccess|available|subscribed|connected|disconnected|failed|missing" }
+          "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
+          "persistentLink": "<saved in file, can be resolved to WOPISrc, or empty>" }
 
     'noaccess' means the view holds no token for the source. 'available'
     means the view holds a token but has no live subscription. The other
     values follow the remotedocevent states of the view's subscription.
     'missing' means the source cannot be read: either it could not be read
     from storage, or it is a document the open one names as the source of
-    its slides that the storage listed no remote link for. Such an
+    its slides that no remote link stands for. Such an
     entry carries an empty wopiSrc and its name alone, so it says what the
-    slides were made from while nothing can reach it.
+    slides were made from while nothing can reach it; its persistentLink is
+    that name.
 
 remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 
