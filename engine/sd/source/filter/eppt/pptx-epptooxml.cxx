@@ -3686,12 +3686,12 @@ void PowerPointExport::WriteNotesMaster()
         auto pTheme = std::make_shared<model::Theme>(u"Office Theme"_ustr);
         pTheme->setColorSet(std::make_shared<model::ColorSet>(*pDefaultColorSet));
 
-        WriteTheme(mnMasterPages - static_cast<int>(mbHasCanvasPage), pTheme.get());
+        WriteTheme(mnThemeIdMax, pTheme.get());
 
         // add implicit relation to the presentation theme
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::THEME),
-                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1 - static_cast<int>(mbHasCanvasPage)) + ".xml"));
+                    Concat2View("../theme/theme" + OUString::number(++mnThemeIdMax) + ".xml"));
     }
 
     pFS->startElementNS(XML_p, XML_notesMaster, presentationNamespaces(*this));
