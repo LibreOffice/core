@@ -30,6 +30,12 @@ endif
 
 include $(BUILDDIR)/config_$(gb_Side).mk
 
+# Apply the configured parallelism, as the top-level Makefile does. Leave a sub-make and an
+# explicit -j alone: forcing -j in a sub-make resets the parent's jobserver.
+ifeq ($(MAKELEVEL)$(filter -j%,$(MAKEFLAGS)),0)
+MAKEFLAGS += $(if $(filter-out 0,$(PARALLELISM)),-j$(PARALLELISM))$(if $(LOADLIMIT), -l$(LOADLIMIT))
+endif
+
 gb_PARTIAL_BUILD := T
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
