@@ -19,6 +19,7 @@
 
 #include <deque>
 #include <memory>
+#include <tuple>
 
 #include <hintids.hxx>
 
@@ -1657,6 +1658,15 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     OSL_ENSURE( nullptr == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
             " Only BiDi portions are allowed to use the common underlining font" );
 
+    // the two sub-lines paint in visual order, so both kids are created before either of them
+    sal_Int32 nRB(-1);
+    sal_Int32 nRT(-1);
+    if (rMulti.IsRuby())
+    {
+        std::tie(nRB, nRT)
+            = SwTaggedPDFHelper::CreateRubyKids(*GetInfo().GetOut(), *GetInfo().GetTextFrame());
+    }
+
     ::std::optional<SwTaggedPDFHelper> oTag;
     if (rMulti.IsDouble())
     {
@@ -1665,7 +1675,8 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     }
     else if (rMulti.IsRuby())
     {
-        Por_Info const por(rMulti, *this, bRubyTop ? 1 : 2);
+        // OnTop selects the sub-line with the annotation; bRubyTop applies to a squared grid only
+        const Por_Info por(rMulti, *this, rMulti.OnTop() ? 1 : 2, rMulti.OnTop() ? nRT : nRB);
         oTag.emplace(nullptr, nullptr, &por, *GetInfo().GetOut());
         GetInfo().SetRuby( rMulti.OnTop() );
     }
@@ -1843,7 +1854,8 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             if (rMulti.IsRuby())
             {
                 oTag.reset();
-                Por_Info const por(rMulti, *this, bRubyTop ? 2 : 1);
+                const Por_Info por(rMulti, *this, rMulti.OnTop() ? 2 : 1,
+                                   rMulti.OnTop() ? nRB : nRT);
                 oTag.emplace(nullptr, nullptr, &por, *GetInfo().GetOut());
             }
         }
