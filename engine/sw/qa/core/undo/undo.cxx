@@ -33,6 +33,17 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 
+#include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
+#include <comphelper/propertysequence.hxx>
+
+#include <svx/svdhdl.hxx>
+#include <svx/svdview.hxx>
+
+#include <view.hxx>
+#include <fmtfsize.hxx>
+
 using namespace css;
 using namespace ::cpo;
 using namespace ::cpo::uno;
@@ -161,6 +172,68 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
 
     CPPUNIT_ASSERT(!pTextDoc->isModified());
     CPPUNIT_ASSERT(!pWrtShell->GetLastUndoInfo(nullptr, nullptr, nullptr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testCropImageSingleUndo)
+{
+    // Cropping an image by dragging a handle is a single undo step.
+    createSwDoc("image-as-character.odt");
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    cpo::uno::Any aImage = pTextDoc->getGraphicObjects()->getByName(u"Image1"_ustr);
+    cpo::uno::Reference<css::beans::XPropertySet> xImage(aImage, cpo::uno::UNO_QUERY_THROW);
+
+    auto getCrop = [&xImage] {
+        css::text::GraphicCrop aCrop;
+        xImage->getPropertyValue(u"GraphicCrop"_ustr) >>= aCrop;
+        return aCrop;
+    };
+
+    const auto& rFormats = *getSwDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFormats.size());
+    const Size aOldSize = rFormats[0]->GetFrameSize().GetSize();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getCrop().Left);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getCrop().Top);
+
+    // Select the image and enter crop mode.
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
+        pTextDoc->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+    xSelectionSupplier->select(aImage);
+    getSwDocShell()->GetView()->StopShellTimer();
+    dispatchCommand(mxComponent, u".uno:Crop"_ustr, {});
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const SdrHdlList& rHdlList = pWrtShell->GetDrawView()->GetHdlList();
+    const SdrHdl* pTopLeft = rHdlList.GetHdl(0);
+    const SdrHdl* pBottomRight = rHdlList.GetHdl(7);
+    CPPUNIT_ASSERT(pTopLeft);
+    CPPUNIT_ASSERT(pBottomRight);
+    CPPUNIT_ASSERT_EQUAL(SdrHdlKind::UpperLeft, pTopLeft->GetKind());
+    CPPUNIT_ASSERT_EQUAL(SdrHdlKind::LowerRight, pBottomRight->GetKind());
+
+    // Drag the upper left handle a quarter of the way towards the lower right one.
+    const Point aNewPos(
+        pTopLeft->GetPos().X() + (pBottomRight->GetPos().X() - pTopLeft->GetPos().X()) / 4,
+        pTopLeft->GetPos().Y() + (pBottomRight->GetPos().Y() - pTopLeft->GetPos().Y()) / 4);
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"HandleNum"_ustr, cpo::uno::Any(sal_Int32(0)) },
+        { u"NewPosX"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aNewPos.X())) },
+        { u"NewPosY"_ustr, cpo::uno::Any(static_cast<sal_Int32>(aNewPos.Y())) },
+    }));
+    dispatchCommand(mxComponent, u".uno:MoveShapeHandle"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), getCrop().Left);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), getCrop().Top);
+    CPPUNIT_ASSERT_LESS(aOldSize.Width(), rFormats[0]->GetFrameSize().GetWidth());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Without the fix, the crop was left for a second undo, so this failed with:
+    // - Expected: 0
+    // - Actual  : 1270
+    // i.e. the frame had its original size back while the graphic stayed cropped.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getCrop().Left);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getCrop().Top);
+    CPPUNIT_ASSERT_EQUAL(aOldSize, rFormats[0]->GetFrameSize().GetSize());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testAnchorTypeChangePosition)

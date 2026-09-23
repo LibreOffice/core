@@ -930,7 +930,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
 
     // Apply values
     pSh->StartAllAction();
-    // pSh->StartUndo(SwUndoId::START);
+    // Group: crop changes the crop item, the frame size and possibly the position.
+    pSh->StartUndo(SwUndoId::START);
 
     // Set new crop values in twips
     aCrop.SetLeft  (o3tl::toTwips(nLeftCrop, o3tl::Length::mm100));
@@ -995,7 +996,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         NbcMove(aDeltaMove);
     }
 
-    // pSh->EndUndo(SwUndoId::END);
+    pSh->EndUndo(SwUndoId::END);
     pSh->EndAllAction();
 }
 
