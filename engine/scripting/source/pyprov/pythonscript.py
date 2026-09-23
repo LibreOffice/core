@@ -176,11 +176,9 @@ class MyUriHelper:
         self.ctx = ctx
         self.s_UriMap = {
             "share": "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python",
-            "share:uno_packages": "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages",
             "user": "vnd.sun.star.expand:${$BRAND_INI_DIR/"
             + toIniName("bootstrap")
             + "::UserInstallation}/user/Scripts/python",
-            "user:uno_packages": "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages",
         }
         self.m_uriRefFac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory", ctx)
         if location.startswith("vnd.sun.star.tdoc"):
@@ -374,69 +372,6 @@ class ProviderContext:
         self.uriHelper = uriHelper
         self.scriptContext = scriptContext
         self.modules = {}
-        self.rootUrl = None
-        self.mapPackageName2Path = None
-
-    def getTransientPartFromUrl(self, url):
-        rest = url.replace(self.rootUrl, "", 1).replace("/", "", 1)
-        return rest[0 : rest.find("/")]
-
-    def getPackageNameFromUrl(self, url):
-        rest = url.replace(self.rootUrl, "", 1).replace("/", "", 1)
-        start = rest.find("/") + 1
-        return rest[start : rest.find("/", start)]
-
-    def removePackageByUrl(self, url):
-        items = self.mapPackageName2Path.items()
-        for i in items:
-            if url in i[1].paths:
-                self.mapPackageName2Path.pop(i[0])
-                break
-
-    def addPackageByUrl(self, url):
-        packageName = self.getPackageNameFromUrl(url)
-        transientPart = self.getTransientPartFromUrl(url)
-        log.debug(
-            "addPackageByUrl : " + packageName + ", " + transientPart + "(" + url + ")" + ", rootUrl=" + self.rootUrl
-        )
-        if packageName in self.mapPackageName2Path:
-            package = self.mapPackageName2Path[packageName]
-            package.paths = package.paths + (url,)
-        else:
-            package = Package((url,), transientPart)
-            self.mapPackageName2Path[packageName] = package
-
-    def isUrlInPackage(self, url):
-        values = self.mapPackageName2Path.values()
-        for i in values:
-            #           print ("checking " + url + " in " + str(i.paths))
-            if url in i.paths:
-                return True
-        #        print ("false")
-        return False
-
-    def setPackageAttributes(self, mapPackageName2Path, rootUrl):
-        self.mapPackageName2Path = mapPackageName2Path
-        self.rootUrl = rootUrl
-
-    def getPersistentUrlFromStorageUrl(self, url):
-        # package name is the second directory
-        ret = url
-        if self.rootUrl:
-            pos = len(self.rootUrl) + 1
-            ret = url[0:pos] + url[url.find("/", pos) + 1 : len(url)]
-        log.debug("getPersistentUrlFromStorageUrl " + url + " -> " + ret)
-        return ret
-
-    def getStorageUrlFromPersistentUrl(self, url):
-        ret = url
-        if self.rootUrl:
-            pos = len(self.rootUrl) + 1
-            packageName = url[pos : url.find("/", pos + 1)]
-            package = self.mapPackageName2Path[packageName]
-            ret = url[0:pos] + package.transientPathElement + "/" + url[pos : len(url)]
-        log.debug("getStorageUrlFromPersistentUrl " + url + " -> " + ret)
-        return ret
 
     def getFuncsByUrl(self, url):
         src = readTextFromStream(self.sfa.openFileRead(url))
@@ -539,9 +474,7 @@ class ScriptBrowseNode(unohelper.Base, XBrowseNode, XPropertySet, XInvocation, X
         ret = None
         try:
             if name == "URI":
-                ret = self.provCtx.uriHelper.getScriptURI(
-                    self.provCtx.getPersistentUrlFromStorageUrl(self.uri + "$" + self.funcName)
-                )
+                ret = self.provCtx.uriHelper.getScriptURI(self.uri + "$" + self.funcName)
             elif name == "Editable" and ENABLE_EDIT_DIALOG:
                 ret = not self.provCtx.sfa.isReadOnly(self.uri)
 
@@ -751,25 +684,6 @@ def isPyFileInPath(sfa, path):
 
 
 # extracts META-INF directory from
-def getPathsFromPackage(rootUrl, sfa):
-    ret = ()
-    try:
-        fileUrl = rootUrl + "/META-INF/manifest.xml"
-        inputStream = sfa.openFileRead(fileUrl)
-        parser = uno.getComponentContext().ServiceManager.createInstance("com.sun.star.xml.sax.Parser")
-        handler = ManifestHandler(rootUrl)
-        parser.setDocumentHandler(handler)
-        parser.parseStream(InputSource(inputStream, "", fileUrl, fileUrl))
-        for i in tuple(handler.urlList):
-            if not isPyFileInPath(sfa, i):
-                handler.urlList.remove(i)
-        ret = tuple(handler.urlList)
-    except UnoException:
-        text = lastException2String()
-        log.debug("getPathsFromPackage " + fileUrl + " Exception: " + text)
-        pass
-    return ret
-
 
 class Package:
     def __init__(self, paths, transientPathElement):
@@ -848,80 +762,12 @@ def getModelFromDocUrl(ctx, url):
     return doc
 
 
-def mapStorageType2PackageContext(storageType):
-    ret = storageType
-    if storageType == "share:uno_packages":
-        ret = "shared"
-    if storageType == "user:uno_packages":
-        ret = "user"
-    return ret
 
-
-def getPackageName2PathMap(sfa, storageType):
-    ret = {}
-
-    ext_mgr = uno.getComponentContext().getValueByName("/singletons/com.sun.star.deployment.ExtensionManager")
-
-    log.debug("pythonscript: getPackageName2PathMap start getDeployedPackages")
-    packages = ext_mgr.getDeployedExtensions(
-        mapStorageType2PackageContext(storageType),
-        ext_mgr.createAbortChannel(),
-        CommandEnvironment(),
-    )
-
-    log.debug("pythonscript: getPackageName2PathMap end getDeployedPackages (" + str(len(packages)) + ")")
-
-    for pkg in packages:
-        log.debug("inspecting package " + pkg.Name + "(" + pkg.Identifier.Value + ")")  # type: ignore
-        transientPathElement = penultimateElement(pkg.URL)  # type: ignore
-        exp_uri = expandUri(pkg.URL)  # type: ignore
-        paths = getPathsFromPackage(exp_uri, sfa)
-        if len(paths) > 0:
-            # map package name to url, we need this later
-            log.debug("adding Package " + transientPathElement + " " + str(paths))
-            ret[lastElement(exp_uri)] = Package(paths, transientPathElement)
-    return ret
-
-
-def penultimateElement(aStr):
-    lastSlash = aStr.rindex("/")
-    penultimateSlash = aStr.rindex("/", 0, lastSlash - 1)
-    return aStr[penultimateSlash + 1 : lastSlash]
 
 
 def lastElement(aStr):
     return aStr[aStr.rfind("/") + 1 : len(aStr)]
 
-
-class PackageBrowseNode(unohelper.Base, XBrowseNode):
-    def __init__(self, provCtx, name, rootUrl):
-        self.provCtx = provCtx
-        self.name = name
-        self.rootUrl = rootUrl
-
-    def getName(self):
-        return self.name
-
-    def getChildNodes(self):
-        items = self.provCtx.mapPackageName2Path.items()
-        browseNodeList = []
-        for i in items:
-            if len(i[1].paths) == 1:
-                browseNodeList.append(DirBrowseNode(self.provCtx, i[0], i[1].paths[0]))
-            else:
-                for j in i[1].paths:
-                    browseNodeList.append(DirBrowseNode(self.provCtx, i[0] + "." + lastElement(j), j))
-        return tuple(browseNodeList)
-
-    def hasChildNodes(self):
-        return len(self.provCtx.mapPackageName2Path) > 0
-
-    def getType(self):
-        return CONTAINER
-
-    def getScript(self, uri):
-        log.debug("PackageBrowseNode getScript " + uri + " invoked")
-        raise IllegalArgumentException("PackageBrowseNode couldn't instantiate script " + uri, self, 0)
 
 
 class PythonScript(unohelper.Base, XScript):
@@ -1017,8 +863,6 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
                 text = lastException2String()
                 log.error(text)
 
-        isPackage = storageType.endswith(":uno_packages")
-
         try:
             #            urlHelper = ctx.ServiceManager.createInstanceWithArgumentsAndContext(
             #                "com.sun.star.script.provider.ScriptURIHelper", (LANGUAGENAME, storageType), ctx)
@@ -1036,12 +880,7 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
             self.provCtx = ProviderContext(
                 storageType, sfa, urlHelper, ScriptContext(uno.getComponentContext(), doc, inv)
             )
-            if isPackage:
-                mapPackageName2Path = getPackageName2PathMap(sfa, storageType)
-                self.provCtx.setPackageAttributes(mapPackageName2Path, rootUrl)
-                self.dirBrowseNode = PackageBrowseNode(self.provCtx, LANGUAGENAME, rootUrl)
-            else:
-                self.dirBrowseNode = DirBrowseNode(self.provCtx, LANGUAGENAME, rootUrl)
+            self.dirBrowseNode = DirBrowseNode(self.provCtx, LANGUAGENAME, rootUrl)
 
         except Exception as e:
             text = lastException2String()
@@ -1083,7 +922,7 @@ class PythonScriptProvider(unohelper.Base, XBrowseNode, XScriptProvider, XNameCo
         try:
             log.debug("getScript " + scriptUri + " invoked")
 
-            storageUri = self.provCtx.getStorageUrlFromPersistentUrl(self.provCtx.uriHelper.getStorageURI(scriptUri))
+            storageUri = self.provCtx.uriHelper.getStorageURI(scriptUri)
             log.debug("getScript: storageUri = " + storageUri)
             fileUri = storageUri[0 : storageUri.find("$")]
             funcName = storageUri[storageUri.find("$") + 1 : len(storageUri)]

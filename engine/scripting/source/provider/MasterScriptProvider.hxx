@@ -25,7 +25,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -43,8 +42,7 @@ namespace func_provider
  typedef ::cppu::WeakImplHelper<
      css::script::provider::XScriptProvider,
      css::script::browse::XBrowseNode, css::lang::XServiceInfo,
-     css::lang::XInitialization,
-     css::container::XNameContainer > t_helper;
+     css::lang::XInitialization > t_helper;
 
 class MasterScriptProvider :
             public t_helper
@@ -64,20 +62,6 @@ public:
     virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > getChildNodes() override;
     virtual bool hasChildNodes() override;
     virtual sal_Int16 getType() override;
-    // XNameContainer
-    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void removeByName( const OUString& Name ) override;
-
-    // XNameReplace
-    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    // XNameAccess
-    virtual cpo::uno::Any getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
-    virtual bool hasByName( const OUString& aName ) override;
-
-    // XElementAccess
-    virtual cpo::uno::Type getElementType(  ) override;
-    virtual bool hasElements(  ) override;
     virtual bool supportsService( const OUString& ServiceName ) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override;
 
@@ -98,7 +82,6 @@ public:
 
 private:
     static OUString parseLocationName( const OUString& location );
-    void  createPkgProvider();
 
     ProviderCache* providerCache();
     /* to obtain other services if needed */
@@ -119,8 +102,6 @@ private:
     bool m_bIsValid;
     // m_bInitialised ensure initialisation only takes place once.
     bool m_bInitialised;
-    bool m_bIsPkgMSP;
-    cpo::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
     std::unique_ptr<ProviderCache> m_pPCache;
     std::mutex m_mutex;
     OUString m_sCtxString;

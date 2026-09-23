@@ -84,7 +84,6 @@ private:
     osl::Mutex m_mutex;
     OUString userDirString;
     OUString shareDirString;
-    OUString bundledDirString;
     cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 } // func_provider

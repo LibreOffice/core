@@ -39,7 +39,6 @@ ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext )
 {
     userDirString = u"user"_ustr;
     shareDirString = u"share"_ustr;
-    bundledDirString = u"bundled"_ustr;
 }
 
 ActiveMSPList::~ActiveMSPList()
@@ -282,10 +281,6 @@ ActiveMSPList::createNonDocMSPs()
     args = { Any(shareDirString) };
     // should check if provider reference is valid
     m_hMsps[ shareDirString ].set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-
-    args = { Any(bundledDirString) };
-    // should check if provider reference is valid
-    m_hMsps[ bundledDirString ].set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
 }
 
 } // namespace func_provider

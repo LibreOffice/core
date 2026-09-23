@@ -217,15 +217,7 @@ private:
 
         for ( const auto& rLangNode : langNodes )
         {
-            Reference< browse::XBrowseNode > xbn;
-            if ( rLangNode->getName() == "uno_packages" )
-            {
-                xbn.set( new LocationBrowseNode( rLangNode ) );
-            }
-            else
-            {
-                xbn.set( rLangNode );
-            }
+            Reference< browse::XBrowseNode > xbn( rLangNode );
 
             const Sequence< Reference< browse::XBrowseNode > > grandchildren =
                 xbn->getChildNodes();
