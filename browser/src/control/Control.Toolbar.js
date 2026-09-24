@@ -289,6 +289,7 @@ var sendInsertTableFunction = function(event) {
 	var row = $(event.target).parent().index() + 1;
 	$('.col').removeClass('bright');
 	const status = Util.getElementOrWarn('inserttable-status');
+	// eslint-disable-next-line no-restricted-syntax -- fixed markup
 	if (status) status.innerHTML = '<br/>';
 	var msg = 'uno .uno:InsertTable {' +
 		' "Columns": { "type": "long","value": '

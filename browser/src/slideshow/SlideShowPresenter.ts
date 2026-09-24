@@ -1201,6 +1201,7 @@ class SlideShowPresenter {
 		}
 
 		this._getProxyDocumentNode().open();
+		// eslint-disable-next-line no-restricted-syntax -- fixed markup
 		this._getProxyDocumentNode().write(htmlContent);
 		this._getProxyDocumentNode().close();
 		this._getProxyDocumentNode().title = popupTitle;

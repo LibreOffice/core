@@ -37,6 +37,7 @@ JSDialog.fixedtextControl = function (
 	fixedtext.id = data.id;
 
 	if (data.text) fixedtext.textContent = builder._cleanText(data.text);
+	// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 	else if (data.html) fixedtext.innerHTML = app.LOUtil.sanitize(data.html);
 
 	if (data.xalign) {

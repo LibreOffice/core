@@ -503,6 +503,7 @@ class Xcu {
 		resetButton.id = 'document-settings-reset-button';
 		resetButton.classList.add('button', 'button--vue-secondary');
 		resetButton.title = _('Reset to default Document settings');
+		// eslint-disable-next-line no-restricted-syntax -- fixed icon markup
 		resetButton.innerHTML = `
 			<span class="button__wrapper">
 				<span class="button__icon xcu-reset-icon">

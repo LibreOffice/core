@@ -23,6 +23,24 @@
     "no-unreachable": 1,
     "no-unused-vars": 1,
     "no-await-in-loop": 1,
+    "no-restricted-syntax": [2,
+      {
+        "selector": "AssignmentExpression[left.type='MemberExpression'][left.property.name=/^(innerHTML|outerHTML)$/]",
+        "message": "Set text with textContent, empty with replaceChildren() and remove with remove(). If this really is markup, say why in the disable comment."
+      },
+      {
+        "selector": "CallExpression[callee.property.name='insertAdjacentHTML']",
+        "message": "Build the nodes with JSX or DOM calls. If this really is markup, say why in the disable comment."
+      },
+      {
+        "selector": "CallExpression[callee.property.name='html'][arguments.length>0]",
+        "message": "Use .text() for text. If this really is markup, say why in the disable comment."
+      },
+      {
+        "selector": "CallExpression[callee.property.name=/^(write|writeln)$/][callee.object.name='document'], CallExpression[callee.property.name=/^(write|writeln)$/][callee.object.property.name='document'], CallExpression[callee.property.name=/^(write|writeln)$/][callee.object.callee.property.name=/Document/]",
+        "message": "Build the document with DOM calls. If this really is markup, say why in the disable comment."
+      }
+    ]
   },
   "globals": {
     "L": true,

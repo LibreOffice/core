@@ -608,6 +608,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.svg.style.pointerEvents = 'none';
 		document.getElementById('canvas-container').appendChild(this.sectionProperties.svg);
 
+		// eslint-disable-next-line no-restricted-syntax -- sanitized SVG markup
 		this.sectionProperties.svg.innerHTML = app.LOUtil.sanitize(data, 'svg');
 		this.sectionProperties.svg.style.position = 'absolute';
 		this.sectionProperties.svg.children[0].style.width = this.sectionProperties.svg.children[0].style.height = 'auto';

@@ -27,6 +27,7 @@ function staticTextControl(
 	);
 
 	if (data.text) statictext.textContent = builder._cleanText(data.text);
+	// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 	else if (data.html) statictext.innerHTML = app.LOUtil.sanitize(data.html);
 
 	statictext.id = data.id;

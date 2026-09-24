@@ -3071,10 +3071,12 @@ class Menubar extends window.L.Control {
 				aItem.replaceChildren();
 			}
 			if (menu[i].uno && (JSDialog.ShortcutsUtil.hasShortcut(menu[i].uno) || JSDialog.ShortcutsUtil.hasShortcut(menu[i].id))) {
+				// eslint-disable-next-line no-restricted-syntax -- the label is markup with a shortcut span
 				aItem.innerHTML = JSDialog.ShortcutsUtil.getMenuLabel(aItem.innerHTML, menu[i].uno ? menu[i].uno : menu[i].id);
 			} else if (menu[i].shortcut && JSDialog.ShortcutsUtil.hasShortcut(menu[i].shortcut)) {
 				// Action-only entries have no UNO command to derive a shortcut
 				// from, so they name the command that owns it explicitly.
+				// eslint-disable-next-line no-restricted-syntax -- the label is markup with a shortcut span
 				aItem.innerHTML = JSDialog.ShortcutsUtil.getMenuLabel(aItem.innerHTML, menu[i].shortcut);
 			}
 

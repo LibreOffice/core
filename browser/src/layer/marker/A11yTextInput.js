@@ -148,14 +148,17 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	setHTML: function(content) {
+		// eslint-disable-next-line no-restricted-syntax -- spacer markup around escaped text
 		this._textArea.innerHTML = this._wrapContent(content);
 	},
 
 	_prependSpace: function() {
+		// eslint-disable-next-line no-restricted-syntax -- spacer markup around escaped text
 		this._textArea.innerHTML = this._preSpaceChar + this._textArea.innerHTML;
 	},
 
 	_appendSpace: function() {
+		// eslint-disable-next-line no-restricted-syntax -- spacer markup around escaped text
 		this._textArea.innerHTML = this._textArea.innerHTML + this._postSpaceChar;
 	},
 

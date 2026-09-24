@@ -62,6 +62,7 @@ function _multiLineEditControl(parentContainer, data, builder, callback) {
 		edit.textContent = builder._cleanText(data.text);
 	} else if (controlType === 'div') {
 		if (data.html)
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			edit.innerHTML = window.app.LOUtil.sanitize(data.html);
 		else
 			edit.textContent = builder._cleanText(data.text);

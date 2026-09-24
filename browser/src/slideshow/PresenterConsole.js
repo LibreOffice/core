@@ -292,6 +292,7 @@ class PresenterConsole {
 		}
 
 		this._proxyPresenter.document.open();
+		// eslint-disable-next-line no-restricted-syntax -- fixed markup, with translated labels and icon URLs
 		this._proxyPresenter.document.write(this._generateHtml());
 		this._proxyPresenter.document.close();
 		this._proxyPresenter.document.title = _('Presenter Console');
@@ -1612,6 +1613,7 @@ class PresenterConsole {
 				const notesHtml = this._sanitizeNotes(
 					this._presenter.getNotesHtml(e.slide),
 				);
+				// eslint-disable-next-line no-restricted-syntax -- sanitized notes markup
 				if (notesHtml) notesContentElem.innerHTML = notesHtml;
 				else notesContentElem.innerText = notes;
 			}

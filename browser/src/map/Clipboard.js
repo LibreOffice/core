@@ -558,6 +558,7 @@ window.L.Clipboard = window.L.Class.extend({
 				// send the image URL then.
 				const template = document.createElement('template');
 				// Parse via <template> to decode e.g. &amp; -> &.
+				// eslint-disable-next-line no-restricted-syntax -- parsed in an inert template to decode entities
 				template.innerHTML = htmlText;
 				const img = template.content.querySelector('img');
 				const url = img ? img.getAttribute('src') : null;
@@ -1422,6 +1423,7 @@ window.L.Clipboard = window.L.Class.extend({
 		this._selectionContent = html;
 		this._selectionPlainTextContent = plainText;
 		if (window.L.Browser.cypressTest) {
+			// eslint-disable-next-line no-restricted-syntax -- test-only copy of the selection markup
 			this._dummyDiv.innerHTML = html;
 			this._dummyPlainDiv.innerText = plainText;
 		}

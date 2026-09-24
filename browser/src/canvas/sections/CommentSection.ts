@@ -735,17 +735,20 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.lastContentRaw = contentRaw;
 
 		if (this.sectionProperties.data.html)
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			this.sectionProperties.contentText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.data.html);
 		else
 			this.sectionProperties.contentText.innerText = this.sectionProperties.data.text ? this.sectionProperties.data.text: '';
 		// Get the escaped HTML out and find for possible, useful links
 		var linkedText = Autolinker.link(this.sectionProperties.contentText.outerHTML);
+		// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 		this.sectionProperties.contentText.innerHTML = app.LOUtil.sanitize(linkedText);
 		// Original unlinked text
 		this.sectionProperties.contentText.origText = this.sectionProperties.data.text ? this.sectionProperties.data.text: '';
 		this.sectionProperties.contentText.origHTML = this.sectionProperties.data.html ? this.sectionProperties.data.html: '';
 		this.sectionProperties.nodeModifyText.innerText = this.sectionProperties.data.text ? this.sectionProperties.data.text: '';
 		if (this.sectionProperties.data.html) {
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			this.sectionProperties.nodeModifyText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.data.html);
 		}
 	}
@@ -1548,6 +1551,7 @@ export class Comment extends CanvasSectionObject {
 		// It is mandatory to change these values before handleSaveCommentButton is called
 		// calling handleSaveCommentButton in onCancelClick causes problem because that is also called from many other events/function (i.e: onPartChange)
 		if (this.sectionProperties.contentText.origHTML) {
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			this.sectionProperties.nodeModifyText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.contentText.origHTML);
 		}
 		else {
@@ -1570,6 +1574,7 @@ export class Comment extends CanvasSectionObject {
 		if (e)
 			window.L.DomEvent.stopPropagation(e);
 		if (this.sectionProperties.contentText.origHTML) {
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			this.sectionProperties.nodeModifyText.innerHTML = app.LOUtil.sanitize(this.sectionProperties.contentText.origHTML);
 		}
 		else {

@@ -718,6 +718,7 @@ window.L.Control.Zotero = window.L.Control.extend({
 				continue;
 
 			var dummyNode = window.L.DomUtil.create('div');
+			// eslint-disable-next-line no-restricted-syntax -- sanitized markup
 			dummyNode.innerHTML = app.LOUtil.sanitize(items[iterator].data.note);
 			var note = dummyNode.innerText.replaceAll('\n', ' ');
 

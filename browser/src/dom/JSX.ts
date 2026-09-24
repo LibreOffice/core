@@ -91,6 +91,7 @@ function jsxApplyProps(el: HTMLElement, props: JSXProps): void {
 		} else if (key === 'ref' && typeof value === 'function') {
 			value(el);
 		} else if (key === 'dangerouslySetInnerHTML') {
+			// eslint-disable-next-line no-restricted-syntax -- the explicit raw markup property
 			el.innerHTML = value.__html;
 		} else if (
 			key.length > 2 &&

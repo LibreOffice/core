@@ -400,6 +400,7 @@ window.L.TextInput = window.L.Layer.extend({
 	},
 
 	resetContent: function() {
+		// eslint-disable-next-line no-restricted-syntax -- fixed spacer markup
 		this._textArea.innerHTML = this._initialContent;
 	},
 

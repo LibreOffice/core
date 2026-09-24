@@ -520,6 +520,7 @@ window.L.Map.include({
 				// Assign only on an actual change: re-setting innerHTML recreates
 				// the children, detaching elements that are yet to be translated.
 				if (trans !== orig) {
+					// eslint-disable-next-line no-restricted-syntax -- translated help page markup that we ship
 					element.innerHTML = trans;
 				}
 			});
@@ -544,8 +545,10 @@ window.L.Map.include({
 		if (id === 'online-help-content') {
 			var productNameContent = contentElement.querySelectorAll('span.productname');
 			for (i = 0, max = productNameContent.length; i < max; i++) {
+				// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 				productNameContent[i].innerHTML = productNameContent[i].innerHTML.replace('{productname}', productName);
 			}
+			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
 		}
 		if (id === 'keyboard-shortcuts-content') {
@@ -584,6 +587,7 @@ window.L.Map.include({
 					}
 				}
 			}
+			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			document.getElementById('keyboard-shortcuts-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
 		}
 		var searchInput = document.getElementById('online-help-search-input');
@@ -807,6 +811,7 @@ window.L.Map.include({
 			const box = document.getElementById(id + '-box');
 			const innerDiv = window.L.DomUtil.create('div', '', null);
 			box.insertBefore(innerDiv, box.firstChild);
+			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			innerDiv.innerHTML = data;
 
 			this.onHelpOpen(id, map, productName);

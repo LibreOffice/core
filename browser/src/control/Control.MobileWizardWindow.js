@@ -391,6 +391,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	/// setups custom HTML titlebar
 	_setCustomTitle: function(title) {
 		this.cusomTitle = title;
+		// eslint-disable-next-line no-restricted-syntax -- the title is a DOM element, not a string
 		this.titleNode.html(this.cusomTitle);
 	},
 

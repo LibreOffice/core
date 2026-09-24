@@ -16,6 +16,7 @@ var AdminClusterOverviewAbout = AdminSocketBase.extend({
             textMsg = '';
         }
         if (textMsg.startsWith('license')) {
+            // eslint-disable-next-line no-restricted-syntax -- license page markup built into the controller
             $('#license-content').html(textMsg.substring('license: '.length));
         }
     },

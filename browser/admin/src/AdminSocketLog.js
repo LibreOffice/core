@@ -96,6 +96,7 @@ var AdminSocketLog = AdminSocketBase.extend({
 				var newSelectElement = document.createElement('select');
 				newSelectElement.name = 'channel-' + channelName;
 				newSelectElement.id = 'channel-' + channelName;
+				// eslint-disable-next-line no-restricted-syntax -- option elements built from the fixed level names
 				newSelectElement.innerHTML = innerHTML;
 				newSelectElement.value = channelLogLevel;
 				newSelectElement.style.width = '160px';
