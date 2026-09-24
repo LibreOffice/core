@@ -404,8 +404,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 
 		const eSignature = this._map.eSignature;
 		if (eSignature && eSignature.url === e.origin) {
-			// The sender is our esign popup: accept it.
-			return true;
+			// The sender is our esign popup, which sends only its signing result.
+			return (
+				typeof e.data === 'object' &&
+				e.data !== null &&
+				e.data.sender === 'EIDEASY_SINGLE_METHOD_SIGNATURE'
+			);
 		}
 
 		return false;
