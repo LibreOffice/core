@@ -140,9 +140,16 @@ PHP_PROXY_PID_FILE = $(abs_builddir)/workdir/php-proxy.pid
 PHP_PROXY_LOG = $(abs_builddir)/workdir/php-proxy.log
 # The describe blocks that run under php-proxy carry this tag.
 PHP_PROXY_TAG = tagproxy
-# php -S forks its workers off the process in the pidfile, so take those down too.
-KILL_PHP_PROXY = test ! -f $(PHP_PROXY_PID_FILE) || \
-	{ pkill -TERM -P "$$(cat $(PHP_PROXY_PID_FILE))"; pkill -TERM -F $(PHP_PROXY_PID_FILE); rm -f $(PHP_PROXY_PID_FILE); } 2>/dev/null; true
+# php -S forks its workers, so the server runs in a session of its own and
+# the pidfile holds the leader, which is also the process group. Signalling
+# that group takes the workers down with it, and leaves the server out of
+# the process group a CI wrapper waits on. pkill would be shorter, but
+# --pidfile is not in every procps version and failed silently on procps-ng
+# 3.3.10, and matching the command line instead also matches the shell
+# running this recipe, which carries the same text.
+KILL_PHP_PROXY = php_pgid=$$(cat $(PHP_PROXY_PID_FILE) 2>/dev/null); \
+	test -z "$$php_pgid" || kill -TERM -$$php_pgid 2>/dev/null || true; \
+	rm -f $(PHP_PROXY_PID_FILE)
 
 KILL_COMMAND=$(if $(coolwsd),true,pkill -F $(PID_FILE) || pkill --signal SIGKILL -F $(PID_FILE))
 LOAD_PID_FILE=$(abs_builddir)/workdir/load.pids
@@ -847,10 +854,11 @@ check-php-proxy: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(V)echo "Starting the php proxy on http://127.0.0.1:$(PHP_PROXY_HTTP_PORT)/proxy.php with $(PHP_CLI_SERVER_WORKERS) workers..."
 # One shell for the whole run, so the trap stops the php server however the
 # tests end, and the status of check-desktop is the status of this target.
-	PHP_CLI_SERVER_WORKERS=$(PHP_CLI_SERVER_WORKERS) $(PHP) -S 127.0.0.1:$(PHP_PROXY_HTTP_PORT) \
-		-t $(PHP_PROXY_ROOT) -d upload_max_filesize=64M -d post_max_size=64M \
+	setsid sh -c 'echo $$$$ > $(PHP_PROXY_PID_FILE); \
+		exec env PHP_CLI_SERVER_WORKERS=$(PHP_CLI_SERVER_WORKERS) \
+		$(PHP) -S 127.0.0.1:$(PHP_PROXY_HTTP_PORT) -t $(PHP_PROXY_ROOT) \
+		-d upload_max_filesize=64M -d post_max_size=64M' \
 		> $(PHP_PROXY_LOG) 2>&1 & \
-	echo $$! > $(PHP_PROXY_PID_FILE); \
 	trap '$(KILL_PHP_PROXY)' EXIT INT TERM; \
 	$(WAIT_ON_BINARY) tcp:127.0.0.1:$(PHP_PROXY_HTTP_PORT) --timeout 30000 || \
 		{ echo ==dump php proxy output==; cat $(PHP_PROXY_LOG); exit 1; }; \
