@@ -111,8 +111,13 @@ class BrokenRule(Exception):
 
 # ---------------------------------------------------------------- reading
 
+def read_text(path, **kwargs):
+    with open(path, **kwargs) as f:
+        return f.read()
+
+
 def read_rule_table(path):
-    src = open(path, encoding="utf-8").read()
+    src = read_text(path, encoding="utf-8")
     marker = src.index("dic = ")
     return ast.literal_eval(src[marker + len("dic = "):])
 
@@ -124,7 +129,7 @@ def read_module_assignments(path, names):
     files use.  Only literals are evaluated, so the rule implementation is
     never imported or executed.
     """
-    tree = ast.parse(open(path, encoding="utf-8-sig").read())
+    tree = ast.parse(read_text(path, encoding="utf-8-sig"))
     found = {}
     for node in tree.body:
         if not isinstance(node, ast.Assign):
@@ -151,7 +156,7 @@ def read_data_tables(path):
     a dict literal for lookup tables, and re.compile(...) for the auxiliary
     patterns. Nothing is imported or executed.
     """
-    tree = ast.parse(open(path, encoding="utf-8").read())
+    tree = ast.parse(read_text(path, encoding="utf-8"))
     tables = {}
     for node in tree.body:
         if not isinstance(node, ast.Assign) or not isinstance(node.targets[0], ast.Name):
@@ -187,7 +192,7 @@ def read_licence(dictdir, pkg):
     for name in ("README_Lightproof_%s.txt" % pkg, "README_lightproof_%s.txt" % pkg):
         path = os.path.join(dictdir, name)
         if os.path.exists(path):
-            text = open(path, encoding="utf-8", errors="replace").read().strip()
+            text = read_text(path, encoding="utf-8", errors="replace").strip()
             return " ".join(text.split())
     return ""
 
@@ -954,7 +959,7 @@ def read_option_titles(dictdir, pkg):
     if not os.path.exists(path):
         return blocks
     current = None
-    for line in open(path, encoding="utf-8"):
+    for line in read_text(path, encoding="utf-8").splitlines():
         line = line.strip()
         if line.startswith("["):
             current = {}
