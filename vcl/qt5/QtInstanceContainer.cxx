@@ -16,7 +16,6 @@
 QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
     : QtInstanceWidget(pWidget)
 {
-    assert(pWidget->layout() && "no layout to use for container");
 }
 
 void QtInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
@@ -92,7 +91,7 @@ void QtInstanceContainer::connect_container_focus_changed(const Link<Container&,
 QLayout& QtInstanceContainer::getLayout() const
 {
     QLayout* pLayout = getQWidget()->layout();
-    assert(pLayout);
+    assert(pLayout && "Widget doesn't have a layout");
     return *pLayout;
 }
 
