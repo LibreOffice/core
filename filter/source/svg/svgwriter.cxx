@@ -34,6 +34,7 @@
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -1280,7 +1281,15 @@ bool SVGTextWriter::nextTextPortion()
 #if OSL_DEBUG_LEVEL > 0
                                 sInfo += "url: " + mrExport.GetRelativeReference( sURL );
 #endif
-                                msUrl = mrExport.GetRelativeReference( sURL );
+                                // A link to a place in the presentation starts with '#'.
+                                INetURLObject aINetURLObject(sURL);
+                                if (sURL.startsWith("#")
+                                    || (!aINetURLObject.HasError()
+                                        && !aINetURLObject.IsExoticProtocol()
+                                        && aINetURLObject.GetProtocol() != INetProtocol::Javascript))
+                                    msUrl = mrExport.GetRelativeReference( sURL );
+                                else
+                                    msUrl.clear();
                                 if( !msUrl.isEmpty() )
                                 {
                                     implRegisterInterface( xPortionTextRange );
