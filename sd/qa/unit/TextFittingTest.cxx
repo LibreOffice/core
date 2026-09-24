@@ -13,6 +13,8 @@
 #include <svx/svdview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/svddef.hxx>
 #include <Outliner.hxx>
 #include <DrawDocShell.hxx>
 #include <unomodel.hxx>
@@ -201,6 +203,37 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTestBulletDifferenceViewAndEdit)
     }
     pView->SdrEndTextEdit();
     CPPUNIT_ASSERT_EQUAL(false, pView->IsTextEdit());
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
+{
+    // The first slide stores a fit of 55 percent font with 20 percent less line spacing, though
+    // its text fits at full size. The stored fit is shown until the text is edited, and then the
+    // text is fitted afresh.
+    createSdImpressDoc("pptx/TextFittingStored.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pBody = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(1));
+    CPPUNIT_ASSERT(pBody);
+
+    const SdrTextFitToSizeTypeItem& rStored = pBody->GetMergedItem(SDRATTR_TEXT_FITTOSIZE);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.55, rStored.getFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rStored.getSpacingScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.55, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, pBody->GetSpacingScale(), 1E-4);
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pBody);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(0, 0));
+    rEditView.InsertText(u"x"_ustr);
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetSpacingScale(), 1E-4);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
