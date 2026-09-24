@@ -105,7 +105,7 @@ class NotebookbarBase extends JSDialogComponent {
 	protected setupContainer(parentContainer?: HTMLElement) {
 		// remove old toolbar
 		let toolbar = window.L.DomUtil.get('toolbar-up');
-		if (toolbar) toolbar.outerHTML = '';
+		if (toolbar) toolbar.remove();
 		// create toolbar from template
 		const toolbarLogo = document.getElementById('toolbar-logo');
 		if (toolbarLogo)

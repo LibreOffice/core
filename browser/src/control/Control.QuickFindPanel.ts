@@ -137,7 +137,7 @@ class QuickFindPanel extends SidebarBase {
 			return;
 		}
 
-		this.container.innerHTML = '';
+		this.container.replaceChildren();
 
 		let modifiedData = this.removeSearchFields(quickFindData);
 		modifiedData = this.addPlaceholderIfEmpty(modifiedData);

@@ -45,9 +45,9 @@ window.L.Control.ScrollAnnotation = window.L.Control.extend({
 		this._map.fire('AnnotationScrollDown');
 	},
 
-	_createButton: function (html, title, className, container, fn, context) {
+	_createButton: function (text, title, className, container, fn, context) {
 		var link = window.L.DomUtil.create('a', className, container);
-		link.innerHTML = String.fromCharCode(html);
+		link.textContent = String.fromCharCode(text);
 		link.href = '#';
 		link.title = title;
 

@@ -145,7 +145,7 @@ class WordBook {
 		word: string,
 		index: number,
 	): void => {
-		container.innerHTML = '';
+		container.replaceChildren();
 		container.style.removeProperty('display');
 		container.classList.add('list-item__wrapper');
 
@@ -281,7 +281,7 @@ class WordBook {
 		dictDropdownList.style.display = 'none';
 
 		const populateDropdownList = () => {
-			dictDropdownList.innerHTML = '';
+			dictDropdownList.replaceChildren();
 			const selected = dictDropdownContainer.getAttribute('data-selected');
 			this.options.forEach((option) => {
 				if (option.value !== selected) {
@@ -583,7 +583,7 @@ class VirtualWordList {
 			if (wordIndex < this.words.length) {
 				this.renderItem(this.pool[i], this.words[wordIndex], wordIndex);
 			} else {
-				this.pool[i].innerHTML = '';
+				this.pool[i].replaceChildren();
 			}
 		}
 	}

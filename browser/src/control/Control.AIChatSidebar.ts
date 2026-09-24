@@ -391,7 +391,7 @@ namespace cool {
 
 		private render(): void {
 			if (!this._isActive) return;
-			this.container.innerHTML = '';
+			this.container.replaceChildren();
 			const data = this.getWidgetJSON();
 			this.builder.build(this.container, [data], false);
 			this.applyMessageStyles();

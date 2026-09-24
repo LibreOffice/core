@@ -595,13 +595,13 @@ class ColorPicker {
 				noColorElem.checked = checked;
 				if (this._selectedColorElement) {
 					if (checked) {
-						noColorElem.innerHTML = '&#10004;';
+						noColorElem.textContent = '\u2714';
 						// update value for the related menu entry
 						window.L.DomUtil.addClass(
 							this._selectedColorElement,
 							'no-color-selected',
 						);
-						this._selectedColorElement.innerHTML = '\\';
+						this._selectedColorElement.textContent = '\\';
 					} else {
 						noColorElem.replaceChildren();
 						// update value for the related menu entry
@@ -625,13 +625,13 @@ class ColorPicker {
 				autoColorElem.checked = checked;
 				if (this._selectedColorElement) {
 					if (checked) {
-						autoColorElem.innerHTML = '&#10004;';
+						autoColorElem.textContent = '\u2714';
 						// update value for the related menu entry
 						window.L.DomUtil.addClass(
 							this._selectedColorElement,
 							'auto-color-selected',
 						);
-						this._selectedColorElement.innerHTML = '\\';
+						this._selectedColorElement.textContent = '\\';
 					} else {
 						autoColorElem.replaceChildren();
 						// update value for the related menu entry

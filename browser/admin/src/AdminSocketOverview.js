@@ -256,12 +256,12 @@ var AdminSocketOverview = AdminSocketBase.extend({
 			$('td.elapsed_time').each(function() {
 				var newSecs = parseInt($(this).data('secs')) + 1;
 				$(this).data('secs', newSecs);
-				$(this).html(Util.humanizeSecs(newSecs));
+				$(this).text(Util.humanizeSecs(newSecs));
 			});
 			$('td.idle_time').each(function() {
 				var newSecs = parseInt($(this).data('secs')) + 1;
 				$(this).data('secs', newSecs);
-				$(this).html(Util.humanizeSecs(newSecs));
+				$(this).text(Util.humanizeSecs(newSecs));
 			});
 		}, 1000);
 	},

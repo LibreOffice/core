@@ -144,7 +144,7 @@
 	// keeps no stale drag state.
 	function render() {
 		const strip = document.getElementById('strip');
-		strip.innerHTML = '';
+		strip.replaceChildren();
 		tabEls = [];
 		clearDropMarkers();
 		tabs.forEach((t, idx) => {

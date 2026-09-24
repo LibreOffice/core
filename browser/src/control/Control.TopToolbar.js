@@ -32,7 +32,7 @@ class TopToolbar extends JSDialog.Toolbar {
 
 	onRemove() {
 		if (this.parentContainer) {
-			this.parentContainer.outerHTML = '';
+			this.parentContainer.remove();
 			this.parentContainer = null;
 		}
 
@@ -51,7 +51,7 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		// In case it contains garbage
 		if (this.parentContainer) {
-			this.parentContainer.outerHTML = '';
+			this.parentContainer.remove();
 			this.parentContainer = null;
 		}
 

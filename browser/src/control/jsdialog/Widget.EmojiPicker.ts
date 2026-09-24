@@ -359,7 +359,7 @@ class EmojiPickerWidget {
 	}
 
 	private renderGrid(): void {
-		this.grid.innerHTML = '';
+		this.grid.replaceChildren();
 		if (!this.query && this.recents.length > 0) {
 			this.appendSection(_('Recently used'), this.recents);
 		}

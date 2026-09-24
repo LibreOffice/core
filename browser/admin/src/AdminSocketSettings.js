@@ -100,11 +100,11 @@ var AdminSocketSettings = AdminSocketBase.extend({
 			if (coolwsdVersionObj.PocoVersion !== undefined) {
 				buildConfig += ' (poco version: ' + coolwsdVersionObj.PocoVersion + ')';
 			}
-			$('#coolwsd-buildconfig').html(buildConfig);
+			$('#coolwsd-buildconfig').text(buildConfig);
 		}
 		else if (textMsg.startsWith('lokitversion ')) {
 			var lokitVersionObj = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
-			$('#lokit-buildconfig').html(lokitVersionObj.BuildConfig);
+			$('#lokit-buildconfig').text(lokitVersionObj.BuildConfig);
 		}
 	},
 

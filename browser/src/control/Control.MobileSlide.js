@@ -43,9 +43,9 @@ window.L.Control.MobileSlide = window.L.Control.extend({
 		return this._container;
 	},
 
-	_createButton: function (html, title, className, container, fnOnClick, context) {
+	_createButton: function (text, title, className, container, fnOnClick, context) {
 		var button = window.L.DomUtil.create('a', className, container);
-		button.innerHTML = html;
+		button.textContent = text;
 		button.href = '#';
 		button.title = title;
 

@@ -1944,7 +1944,7 @@ class SettingIframe {
 				const contentsContainer = editorContainer.querySelector(
 					'#tab-contents-browserSetting',
 				) as HTMLElement;
-				contentsContainer.innerHTML = '';
+				contentsContainer.replaceChildren();
 				if (this.browserSettingOptions && this.browserSettingOptions[tab.id]) {
 					const renderedTree = this.renderSettingsOption(
 						this.browserSettingOptions[tab.id],
@@ -2641,7 +2641,7 @@ class SettingIframe {
 		const listEl = document.getElementById(listId);
 		if (!listEl) return;
 
-		listEl.innerHTML = '';
+		listEl.replaceChildren();
 
 		items.forEach((item) => {
 			const fileName = this.getFilename(item.uri, false);
@@ -3683,7 +3683,7 @@ class SettingIframe {
 		if (!modelSelect) {
 			return;
 		}
-		modelSelect.innerHTML = '';
+		modelSelect.replaceChildren();
 		modelIds.forEach((modelId) => {
 			const option = document.createElement('option');
 			option.value = modelId;
@@ -3702,7 +3702,7 @@ class SettingIframe {
 			'aiImageModel',
 		) as HTMLSelectElement | null;
 		if (!select) return;
-		select.innerHTML = '';
+		select.replaceChildren();
 		const noneOpt = document.createElement('option');
 		noneOpt.value = '';
 		noneOpt.textContent = _('None (disable image generation)');
@@ -3733,7 +3733,7 @@ class SettingIframe {
 		select: HTMLSelectElement,
 		storedModel: string,
 	): void {
-		select.innerHTML = '';
+		select.replaceChildren();
 		this.initialModelOptions(storedModel).forEach((opt) => {
 			const option = document.createElement('option');
 			option.value = opt.value;

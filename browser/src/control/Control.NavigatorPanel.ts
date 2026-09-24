@@ -388,7 +388,7 @@ class NavigatorPanel extends SidebarBase {
 		}
 
 		this.builder.setWindowId(windowId);
-		this.container.innerHTML = '';
+		this.container.replaceChildren();
 
 		if (navigatorData.action === 'close') {
 			this.closeSidebar();
