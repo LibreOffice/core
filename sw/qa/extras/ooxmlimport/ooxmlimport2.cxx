@@ -772,9 +772,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169843_set_letter_formula)
     createSwDoc("tdf169843.docx");
 
     // Without the fix in place, this test would have failed with
-    // - Expected: " " setR  " "
-    // - Actual  : " "R " "
-    CPPUNIT_ASSERT_EQUAL(u"\" \" setR  \" \""_ustr, getFormula(getRun(getParagraph(1), 1)));
+    // - Expected: bold {" " setR } " "
+    // - Actual  : bold { R} " "
+    CPPUNIT_ASSERT_EQUAL(u"bold {\" \" setR } \" \""_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119200)

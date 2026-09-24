@@ -37,8 +37,11 @@ private:
     void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
     void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
     void HandleBlank() override;
-    /// Writes the m:ctrlPr carrying the color of the parts a construct draws itself.
-    void WriteCtrlPrColor(const SmNode* pNode);
+    /// Writes the m:ctrlPr carrying the color, bold and italic of the parts a construct
+    /// draws itself.
+    void WriteCtrlPr(const SmNode* pNode);
+    /// True when the node has a color, bold or italic of its own to write in an m:ctrlPr.
+    bool HasCtrlPr(const SmNode* pNode) const;
     /// True when the color of the node is written out, which needs a color other than
     /// the default and a DOCX.
     bool HasOwnColor(const SmNode* pNode) const;

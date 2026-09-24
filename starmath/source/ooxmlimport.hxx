@@ -49,6 +49,7 @@ private:
     OUString handleSsubsup();
     OUString handleSsup();
     OUString readCtrlPrColorCommand();
+    OUString readCtrlPrStyle();
     OUString readOMathArg( int stoptoken );
     OUString readOMathArgInElement( int token );
     static OUString handleSetString(const OUString& setOUstring);
@@ -57,6 +58,9 @@ private:
     // The color command that applies to the part of the formula being read now, or
     // an empty string for the default color.
     OUString m_sColorCommandInEffect;
+    // Set while the name of a function is read
+    bool m_bInFunctionName = false;
+    OUString m_sFunctionNameStyle;
     // Built on first use, because constructing one creates a character classification
     // service, and most formulas never need it.
     std::unique_ptr<SmParser5> m_pParser;
