@@ -367,11 +367,10 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
                                              // calling with held
                                              // solarmutex
 
+        // tdf#104892 - other context changes are batched into a single rebuild
+        // by the request above; only an application switch needs an immediate one
         bool bSwitchedApp = maRequestedContext.msApplication != maCurrentContext.msApplication;
-        // Happens on reattach of sidebar to frame or context change
-        // LOK performance impact: prevents to switch sidebar on every keypress in multi user case
-        // Allow when enters embedded OLE (eg. Math formula editor second time)
-        if (!comphelper::LibreOfficeKit::isActive() || bSwitchedApp)
+        if (bSwitchedApp)
             UpdateConfigurations();
     }
 }
