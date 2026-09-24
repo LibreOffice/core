@@ -652,7 +652,6 @@ Platform QtInstance::GetPlatform() const
     if (sPlatformName == u"cocoa")
         return Platform::Mac;
 
-    assert(false && "Unsupported qt VCL platform");
     return Platform::Other;
 }
 
