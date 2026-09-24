@@ -1411,6 +1411,25 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testColorChangeToTransparent)
                          rBitmapAfter.GetPixelColor(410, 140));
 }
 
+CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappedOutGraphicKeepsSizeAfterThreadedLoad)
+{
+    // Given a PNG graphic that was loaded once and then swapped out:
+    Graphic aGraphic = makeUnloadedGraphic(u"png");
+    CPPUNIT_ASSERT(aGraphic.makeAvailable());
+    CPPUNIT_ASSERT(aGraphic.ImplGetImpGraphic()->swapOut());
+
+    // When it is loaded again by the threaded loader and swapped out once more:
+    std::vector<Graphic*> aGraphics{ &aGraphic };
+    GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(aGraphics);
+    CPPUNIT_ASSERT(aGraphic.isAvailable());
+    CPPUNIT_ASSERT(aGraphic.ImplGetImpGraphic()->swapOut());
+
+    // Then it still reports its size, so it does not look like an empty graphic.
+    // Without the fix in place, this test would have failed, the graphic reported a size of 0
+    // bytes.
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

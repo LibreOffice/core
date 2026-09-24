@@ -1535,6 +1535,10 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
 
         mbSwapOut = false;
     }
+
+    // The loaded content is measured while it is in memory, so the graphic still knows its size
+    // after it is swapped out again.
+    ensureCurrentSizeInBytes();
 }
 
 void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
