@@ -64,6 +64,7 @@
 static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OString>& rSet);
 #endif
 
+#include <test/pdftesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 using namespace ::com::sun::star;
@@ -2099,26 +2100,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173162)
     // references, and this parser reads it as though it were, so check them. veraPDF is
     // stricter - it fails to parse such a file and reports nothing, which reads as a pass.
     // The structure tree rides in an object stream, so the bytes to read are what it holds.
-    OStringBuffer aBytes;
-    for (auto* pObject : aDocument.GetObjects())
-    {
-        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
-        if (!pType || pType->GetValue() != "ObjStm")
-            continue;
-        vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
-        CPPUNIT_ASSERT(pObjStm);
-        SvMemoryStream aDecompressed;
-        ZCodec aCodec;
-        aCodec.BeginCompression();
-        pObjStm->GetMemory().Seek(0);
-        aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
-        CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
-        aBytes.append(static_cast<const char*>(aDecompressed.GetData()), aDecompressed.GetSize());
-    }
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     pStream->Seek(0);
-    aBytes.append(read_uInt8s_ToOString(*pStream, pStream->remainingSize()));
-    const OString aFile(aBytes.makeStringAndClear());
+    const OString aFile(PdfTestTools::getObjectStreamsData(aDocument)
+                        + read_uInt8s_ToOString(*pStream, pStream->remainingSize()));
     const sal_Int32 nStart(aFile.indexOf("/Namespaces ["));
     CPPUNIT_ASSERT_GREATER(sal_Int32(-1), nStart);
     const sal_Int32 nEnd(aFile.indexOf("]", nStart));

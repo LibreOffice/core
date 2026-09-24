@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/xmltesttools \
     test/source/JsonTestTools \
     test/source/htmltesttools \
+    test/source/pdftesttools \
     test/source/screenshot_test \
     test/source/unoapi_property_testers \
     test/source/kitcallback \

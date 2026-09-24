@@ -11,6 +11,7 @@
 #include <config_oox.h>
 #include <config_pdfimport.h>
 
+#include <test/pdftesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
@@ -156,23 +157,8 @@ bool ScPDFExportTest::hasTextInPdf(const char* sText, bool& bFound)
         SvMemoryStream aFile(pBuffer, nFileSize, StreamMode::READ);
         if (aDocument.Read(aFile))
         {
-            for (auto* pObject : aDocument.GetObjects())
-            {
-                auto pType
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
-                if (!pType || pType->GetValue() != "ObjStm")
-                    continue;
-                vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
-                CPPUNIT_ASSERT(pObjStm);
-                SvMemoryStream aDecompressed;
-                ZCodec aCodec;
-                aCodec.BeginCompression();
-                pObjStm->GetMemory().Seek(0);
-                aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
-                CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
-                haystack.append(static_cast<const char*>(aDecompressed.GetData()),
-                                aDecompressed.GetSize());
-            }
+            const OString aStreams = PdfTestTools::getObjectStreamsData(aDocument);
+            haystack.append(aStreams.getStr(), aStreams.getLength());
         }
         bFound = haystack.find(std::string(sText)) != std::string::npos;
     }
