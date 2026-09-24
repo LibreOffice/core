@@ -163,19 +163,7 @@ void DrawViewShell::SelectionHasChanged()
 {
     Invalidate();
 
-    // Auto-switch to individual handles when a multi-selection is first
-    // formed (like F8 / Toggle Point Edit Mode). Only do this the moment
-    // the selection changes between one shape and many. This method runs
-    // on every selection change. If it switched every time, it would
-    // undo the Point Edit Mode setting the user chose while the same
-    // shapes stay selected.
-    const bool bMultiSelection
-        = mpDrawView->GetMarkedObjectList().GetMarkCount() > 1;
-    if (bMultiSelection != mbWasMultiSelection)
-    {
-        mpDrawView->SetFrameDragSingles(!bMultiSelection);
-        mbWasMultiSelection = bMultiSelection;
-    }
+    mpDrawView->AdjustFrameHandlesToMarkCount();
 
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, true );

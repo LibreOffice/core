@@ -11,6 +11,13 @@
 
 #include <optional>
 
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -28,7 +35,9 @@
 #include <editeng/svxenum.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <numrule.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <doc.hxx>
@@ -44,10 +53,13 @@
 #include <formatflysplit.hxx>
 #include <frmatr.hxx>
 
+#include <vcl/scheduler.hxx>
+
 #include <svx/fontworkbar.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <swdtflvr.hxx>
@@ -813,6 +825,245 @@ CPPUNIT_TEST_FIXTURE(Test, testOutlineToggleOff)
     // Second click removes it, so the paragraph is no longer in a list.
     dispatchCommand(mxComponent, u".uno:SetOutline"_ustr, {});
     CPPUNIT_ASSERT(!pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetNumRule());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSeveralShapesGetIndividualHandles)
+{
+    // Selecting several drawing objects shows the handles of each one, the way Toggle Point Edit
+    // Mode does, and the command still toggles that back and forth.
+    createSwDoc();
+
+    auto xFactory(mxComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xDrawPage(mxComponent.queryThrow<drawing::XDrawPageSupplier>()->getDrawPage());
+    std::vector<SdrObject*> aShapes;
+    for (sal_Int32 nShape = 0; nShape < 3; ++nShape)
+    {
+        auto xShape(xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr)
+                        .queryThrow<drawing::XShape>());
+        xDrawPage->add(xShape);
+        xShape->setPosition(awt::Point(1000 + nShape * 3000, 1000));
+        xShape->setSize(awt::Size(2000, 2000));
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        CPPUNIT_ASSERT(pObject);
+        aShapes.push_back(pObject);
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+    SdrView* pDrawView = pWrtShell->GetDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+
+    // Toggle Point Edit Mode is handled by the drawing object shell. StopShellTimer brings that
+    // shell up at once instead of waiting for the timer the selection started.
+    auto togglePointEditMode = [&rView] {
+        rView.StopShellTimer();
+        rView.GetViewFrame().GetDispatcher()->Execute(SID_BEZIER_EDIT, SfxCallMode::SYNCHRON);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // One selected object keeps the single surrounding frame.
+    pWrtShell->SelectObj(Point(), 0, aShapes[0]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT(rView.IsDrawSelMode());
+
+    // A second selected object brings up the handles of both.
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, aShapes[1]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+    // The view keeps its own copy of the mode, so the command shows the right state.
+    CPPUNIT_ASSERT(!rView.IsDrawSelMode());
+
+    // The command turns the individual handles off and on again.
+    togglePointEditMode();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    togglePointEditMode();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // Turning them off and then selecting one more object keeps them off, so the choice the user
+    // made holds while the same objects stay selected.
+    togglePointEditMode();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, aShapes[2]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+
+    // Falling back to one selected object restores the single frame and arms the default again.
+    pWrtShell->SelectObj(Point(), 0, aShapes[0]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT(rView.IsDrawSelMode());
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, aShapes[1]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT(!rView.IsDrawSelMode());
+}
+
+namespace
+{
+/// Puts two differently sized rectangles into the document, anchored to the paragraph.
+std::vector<SdrObject*> lcl_addTwoShapes(const uno::Reference<lang::XComponent>& xComponent)
+{
+    auto xFactory(xComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xDrawPage(xComponent.queryThrow<drawing::XDrawPageSupplier>()->getDrawPage());
+    const awt::Size aSizes[] = { awt::Size(4000, 2000), awt::Size(2000, 4000) };
+    std::vector<SdrObject*> aShapes;
+    for (size_t nShape = 0; nShape < std::size(aSizes); ++nShape)
+    {
+        auto xShape(xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr)
+                        .queryThrow<drawing::XShape>());
+        xDrawPage->add(xShape);
+        // A shape anchored as character makes Writer protect the whole selection against
+        // resizing, so anchor these the way the drawing toolbar does.
+        xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(
+            u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+        xShape->setPosition(awt::Point(1000 + nShape * 6000, 1000));
+        xShape->setSize(aSizes[nShape]);
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        CPPUNIT_ASSERT(pObject);
+        aShapes.push_back(pObject);
+    }
+    return aShapes;
+}
+
+/// Drags the given handle of the first shape by the given distance, with both shapes selected.
+void lcl_dragHandleOfFirstShape(SwWrtShell* pWrtShell, const std::vector<SdrObject*>& rShapes,
+                                SdrHdlKind eKind, const Point& rDistance)
+{
+    pWrtShell->SelectObj(Point(), 0, rShapes[0]);
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, rShapes[1]);
+    Scheduler::ProcessEventsToIdle();
+
+    SdrView* pDrawView = pWrtShell->GetDrawView();
+    SdrHdl* pDragHandle = nullptr;
+    const SdrHdlList& rHandles = pDrawView->GetHdlList();
+    for (size_t i = 0; i < rHandles.GetHdlCount(); ++i)
+    {
+        if (rHandles.GetHdl(i)->GetKind() == eKind && rHandles.GetHdl(i)->GetObj() == rShapes[0])
+            pDragHandle = rHandles.GetHdl(i);
+    }
+    CPPUNIT_ASSERT_MESSAGE("the first shape has no handle of that kind", pDragHandle);
+
+    const Point aStart = pDragHandle->GetPos();
+    CPPUNIT_ASSERT(pDrawView->BegDragObj(aStart, nullptr, pDragHandle, 0));
+    pDrawView->MovDragObj(aStart + rDistance);
+    pDrawView->EndDragObj();
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOneResizeHandleResizesEverySelectedShape)
+{
+    // Dragging the resize handle of one selected shape grows every selected shape by the same
+    // factor, each around its own opposite corner, and a single undo puts them all back.
+    createSwDoc();
+    std::vector<SdrObject*> aShapes = lcl_addTwoShapes(mxComponent);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // Snapping would round the drag, and these assertions are about the exact geometry.
+    pWrtShell->GetDrawView()->SetSnapEnabled(false);
+
+    const tools::Rectangle aWide(aShapes[0]->GetSnapRect());
+    const tools::Rectangle aTall(aShapes[1]->GetSnapRect());
+    lcl_dragHandleOfFirstShape(pWrtShell, aShapes, SdrHdlKind::LowerRight, Point(1000, 500));
+
+    // The dragged corner ends up where the pointer left it, and the opposite corner stays.
+    const tools::Rectangle aNewWide(aShapes[0]->GetSnapRect());
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.TopLeft(), aNewWide.TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.BottomRight() + Point(1000, 500),
+                                              aNewWide.BottomRight(), 1);
+
+    // The other shape grows by that same factor around its own top left corner, which is what
+    // makes this different from moving both corners by the same distance.
+    const double fHorizontal = double(aNewWide.GetWidth()) / aWide.GetWidth();
+    const double fVertical = double(aNewWide.GetHeight()) / aWide.GetHeight();
+    const tools::Rectangle aNewTall(aShapes[1]->GetSnapRect());
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTall.TopLeft(), aNewTall.TopLeft(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aTall.GetWidth() * fHorizontal, aNewTall.GetWidth(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aTall.GetHeight() * fVertical, aNewTall.GetHeight(), 2.0);
+
+    // One undo brings both shapes back.
+    pWrtShell->Do(SwWrtShell::UNDO, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aWide, aShapes[0]->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aTall, aShapes[1]->GetSnapRect(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOneRotateHandleTurnsEverySelectedShape)
+{
+    // Dragging the rotate handle of one selected shape turns every selected shape by the same
+    // angle, each around its own centre, and a single undo puts them all back.
+    createSwDoc();
+    std::vector<SdrObject*> aShapes = lcl_addTwoShapes(mxComponent);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetDrawView()->SetSnapEnabled(false);
+
+    const tools::Rectangle aWide(aShapes[0]->GetSnapRect());
+    const tools::Rectangle aTall(aShapes[1]->GetSnapRect());
+    lcl_dragHandleOfFirstShape(pWrtShell, aShapes, SdrHdlKind::Rotate, Point(1000, 1000));
+
+    // Both shapes end up turned by the same angle, and neither is left unturned.
+    const Degree100 nWideAngle = aShapes[0]->GetRotateAngle();
+    CPPUNIT_ASSERT(nWideAngle.get() != 0);
+    CPPUNIT_ASSERT_EQUAL(nWideAngle.get(), aShapes[1]->GetRotateAngle().get());
+
+    // Each shape turned around its own centre, so no shape travelled across the page.
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.Center(), aShapes[0]->GetSnapRect().Center(),
+                                              2);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTall.Center(), aShapes[1]->GetSnapRect().Center(),
+                                              2);
+
+    // One undo brings both shapes back.
+    pWrtShell->Do(SwWrtShell::UNDO, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aShapes[0]->GetRotateAngle().get());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aShapes[1]->GetRotateAngle().get());
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aWide, aShapes[0]->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aTall, aShapes[1]->GetSnapRect(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTogglePointEditModeReportsTheDrawingViewState)
+{
+    // Toggle Point Edit Mode shows the mode the drawing view is in, also for a line, which
+    // draws its point handles whatever the mode says. One press then changes the mode.
+    createSwDoc();
+    std::vector<SdrObject*> aShapes = lcl_addTwoShapes(mxComponent);
+
+    auto xFactory(mxComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xDrawPage(mxComponent.queryThrow<drawing::XDrawPageSupplier>()->getDrawPage());
+    auto xLine(xFactory->createInstance(u"com.sun.star.drawing.LineShape"_ustr)
+                   .queryThrow<drawing::XShape>());
+    xDrawPage->add(xLine);
+    xLine.queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xLine->setPosition(awt::Point(1000, 6000));
+    xLine->setSize(awt::Size(3000, 0));
+    SdrObject* pLine = SdrObject::getSdrObjectFromXShape(xLine);
+    CPPUNIT_ASSERT(pLine);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+    SdrView* pDrawView = pWrtShell->GetDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+
+    // Two selected shapes turn Point Edit Mode on.
+    pWrtShell->SelectObj(Point(), 0, aShapes[0]);
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, aShapes[1]);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT(!rView.IsDrawSelMode());
+
+    // Selecting the line alone turns Point Edit Mode off, and the view says the same.
+    pWrtShell->SelectObj(Point(), 0, pLine);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT_EQUAL(pDrawView->IsFrameDragSingles(), rView.IsDrawSelMode());
+
+    // The first press of the command turns Point Edit Mode back on.
+    rView.StopShellTimer();
+    rView.GetViewFrame().GetDispatcher()->Execute(SID_BEZIER_EDIT, SfxCallMode::SYNCHRON);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+    CPPUNIT_ASSERT_EQUAL(pDrawView->IsFrameDragSingles(), rView.IsDrawSelMode());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

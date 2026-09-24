@@ -564,6 +564,7 @@ public:
     bool     IsDrawSelMode() const     { return m_bDrawSelMode; }
     void            SetSelDrawSlot();
     void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
+    void     SetDrawSelMode(bool bSet) { m_bDrawSelMode = bSet; }
     void            NoRotate();     // turn off rotate mode
     void            ToggleRotate();     // switch between move and rotate mode
 

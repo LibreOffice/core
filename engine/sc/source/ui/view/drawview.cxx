@@ -344,6 +344,8 @@ void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
 
 void ScDrawView::MarkListHasChanged()
 {
+    AdjustFrameHandlesToMarkCount();
+
     FmFormView::MarkListHasChanged();
 
     ScTabViewShell* pViewSh = rViewData.GetViewShell();

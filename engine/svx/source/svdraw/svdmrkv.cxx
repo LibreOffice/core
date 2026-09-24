@@ -220,6 +220,7 @@ SdrMarkView::SdrMarkView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbMarkedPointsRectsDirty(false)
     , mbMarkHandlesHidden(false)
     , mbNegativeX(false)
+    , meHandleModeChosenFor(HandleModeChosenFor::Nothing)
 {
 
     BrkMarkObj();
@@ -2194,6 +2195,42 @@ void SdrMarkView::SetFrameHandles(bool bOn)
             MarkListHasChanged();
         }
     }
+
+    // Remember which selection this choice was made for, so the next mark change keeps it. A
+    // choice made while nothing is selected counts as one object, because the object that is
+    // about to be created arrives on its own. This runs after the notification above, which
+    // would overwrite the record.
+    meHandleModeChosenFor = GetMarkedObjectList().GetMarkCount() > 1
+                                ? HandleModeChosenFor::SeveralObjects
+                                : HandleModeChosenFor::OneObject;
+}
+
+void SdrMarkView::AdjustFrameHandlesToMarkCount()
+{
+    // An empty selection has no handles to choose between, so leave them alone. Forget the size
+    // the mode was chosen for, so the next selection is treated as a fresh one.
+    const size_t nMarkCount = GetMarkedObjectList().GetMarkCount();
+    if (nMarkCount == 0)
+    {
+        meHandleModeChosenFor = HandleModeChosenFor::Nothing;
+        return;
+    }
+
+    const HandleModeChosenFor eChosenFor = nMarkCount > 1 ? HandleModeChosenFor::SeveralObjects
+                                                          : HandleModeChosenFor::OneObject;
+    if (eChosenFor == meHandleModeChosenFor)
+        return;
+    meHandleModeChosenFor = eChosenFor;
+
+    const bool bWasFrameHandles = ImpIsFrameHandles();
+    mbForceFrameHandles = (eChosenFor == HandleModeChosenFor::OneObject);
+    if (ImpIsFrameHandles() == bWasFrameHandles)
+        return;
+
+    // Build the handles here rather than through SetFrameDragSingles, which reports the change
+    // through MarkListHasChanged. The caller is inside that notification already, and running it
+    // a second time repeats everything the caller does for one selection change.
+    AdjustMarkHdl();
 }
 
 void SdrMarkView::SetEditMode(SdrViewEditMode eMode)

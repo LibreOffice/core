@@ -135,6 +135,16 @@ protected:
     // flag indicating whether all x coordinates are negated or not
     bool mbNegativeX : 1;
 
+    // How many objects the handle mode was last chosen for. It is Nothing while the selection
+    // is empty and nothing has been chosen since.
+    enum class HandleModeChosenFor
+    {
+        Nothing,
+        OneObject,
+        SeveralObjects
+    };
+    HandleModeChosenFor meHandleModeChosenFor;
+
     // Helper to get a possible GridOffset from SdrObject
     SAL_DLLPRIVATE bool getPossibleGridOffsetForSdrObject(
         basegfx::B2DVector& rOffset,
@@ -243,6 +253,13 @@ public:
 
     void SetFrameDragSingles(bool bOn=true) { SetFrameHandles(bOn); }
     bool IsFrameDragSingles() const { return IsFrameHandles(); }
+
+    // Give each selected object its own handles while several are selected, and go back to the
+    // single surrounding frame once one is left. A choice made with Toggle Point Edit Mode holds
+    // while the selection keeps its size. An empty selection keeps the handles and starts the
+    // rule again. Call it from a mark change notification, because it builds the handles without
+    // reporting a change of its own.
+    void AdjustFrameHandlesToMarkCount();
 
     bool HasMarkableObj() const { return MarkableObjectsExceed(0); };
 

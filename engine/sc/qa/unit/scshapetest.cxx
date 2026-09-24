@@ -20,8 +20,10 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/keycodes.hxx>
 
+#include <drawview.hxx>
 #include <drwlayer.hxx>
 #include <fuconcustomshape.hxx>
 #include <fuconuno.hxx>
@@ -1417,6 +1419,236 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866)
     // - Expression : pNote
     CPPUNIT_ASSERT(pNote);
     CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testSeveralShapesGetIndividualHandles)
+{
+    // Selecting several drawing objects shows the handles of each one, the way Toggle Point Edit
+    // Mode does, and the command still toggles that back and forth.
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = lcl_getSdrPageWithAssert(*pDoc);
+
+    std::vector<SdrObject*> aShapes;
+    for (sal_Int32 nShape = 0; nShape < 3; ++nShape)
+    {
+        const tools::Rectangle aRect(Point(1000 + nShape * 3000, 1000), Size(2000, 2000));
+        rtl::Reference<SdrRectObj> pObject = new SdrRectObj(*pDrawLayer, aRect);
+        pPage->InsertObject(pObject.get());
+        aShapes.push_back(pObject.get());
+    }
+
+    ScTabViewShell* pViewShell = getViewShell();
+    ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    SdrPageView* pPageView = pDrawView->GetSdrPageView();
+    CPPUNIT_ASSERT(pPageView);
+
+    auto togglePointEditMode = [pViewShell] {
+        pViewShell->GetViewData().GetDispatcher().Execute(SID_BEZIER_EDIT, SfxCallMode::SYNCHRON);
+    };
+
+    // One selected object keeps the single surrounding frame.
+    pDrawView->MarkObj(aShapes[0], pPageView);
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+
+    // A second selected object brings up the handles of both.
+    pDrawView->MarkObj(aShapes[1], pPageView);
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // The command turns the individual handles off and on again.
+    togglePointEditMode();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    togglePointEditMode();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // Turning them off and then selecting one more object keeps them off, so the choice the user
+    // made holds while the same objects stay selected.
+    togglePointEditMode();
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    pDrawView->MarkObj(aShapes[2], pPageView);
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+
+    // Falling back to one selected object restores the single frame and arms the default again.
+    pDrawView->UnmarkAllObj();
+    pDrawView->MarkObj(aShapes[0], pPageView);
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+    pDrawView->MarkObj(aShapes[1], pPageView);
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+}
+
+// Selects the two shapes and drags the given handle of the first one by the given distance.
+static void lcl_dragHandleOfFirstShape(ScDrawView* pDrawView, SdrObject* pFirst, SdrObject* pSecond,
+                                       SdrHdlKind eKind, const Point& rDistance)
+{
+    pDrawView->UnmarkAllObj();
+    pDrawView->MarkObj(pFirst, pDrawView->GetSdrPageView());
+    pDrawView->MarkObj(pSecond, pDrawView->GetSdrPageView());
+
+    SdrHdl* pDragHandle = nullptr;
+    const SdrHdlList& rHandles = pDrawView->GetHdlList();
+    for (size_t i = 0; i < rHandles.GetHdlCount(); ++i)
+    {
+        if (rHandles.GetHdl(i)->GetKind() == eKind && rHandles.GetHdl(i)->GetObj() == pFirst)
+            pDragHandle = rHandles.GetHdl(i);
+    }
+    CPPUNIT_ASSERT_MESSAGE("the first shape has no handle of that kind", pDragHandle);
+
+    const Point aStart = pDragHandle->GetPos();
+    CPPUNIT_ASSERT(pDrawView->BegDragObj(aStart, nullptr, pDragHandle, 0));
+    pDrawView->MovDragObj(aStart + rDistance);
+    pDrawView->EndDragObj();
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testOneResizeHandleResizesEverySelectedShape)
+{
+    // Dragging the resize handle of one selected shape grows every selected shape by the same
+    // factor, each around its own opposite corner, and a single undo puts them all back.
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = lcl_getSdrPageWithAssert(*pDoc);
+
+    // The two shapes have different sizes, so a shared factor and a shared distance tell apart.
+    const tools::Rectangle aWide(Point(1000, 1000), Size(2000, 1000));
+    const tools::Rectangle aTall(Point(5000, 5000), Size(1000, 2000));
+    rtl::Reference<SdrRectObj> pWide = new SdrRectObj(*pDrawLayer, aWide);
+    rtl::Reference<SdrRectObj> pTall = new SdrRectObj(*pDrawLayer, aTall);
+    pPage->InsertObject(pWide.get());
+    pPage->InsertObject(pTall.get());
+
+    ScTabViewShell* pViewShell = getViewShell();
+    ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    // Snapping would round the drag, and these assertions are about the exact geometry.
+    pDrawView->SetSnapEnabled(false);
+
+    lcl_dragHandleOfFirstShape(pDrawView, pWide.get(), pTall.get(), SdrHdlKind::LowerRight,
+                               Point(1000, 500));
+
+    // The dragged corner ends up where the pointer left it, and the opposite corner stays.
+    const tools::Rectangle aNewWide(pWide->GetSnapRect());
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.TopLeft(), aNewWide.TopLeft(), 1);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.BottomRight() + Point(1000, 500),
+                                              aNewWide.BottomRight(), 1);
+
+    // The other shape grows by that same factor around its own top left corner, which is what
+    // makes this different from moving both corners by the same distance.
+    const double fHorizontal = double(aNewWide.GetWidth()) / aWide.GetWidth();
+    const double fVertical = double(aNewWide.GetHeight()) / aWide.GetHeight();
+    const tools::Rectangle aNewTall(pTall->GetSnapRect());
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTall.TopLeft(), aNewTall.TopLeft(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aTall.GetWidth() * fHorizontal, aNewTall.GetWidth(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aTall.GetHeight() * fVertical, aNewTall.GetHeight(), 2.0);
+
+    // One undo brings both shapes back.
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aWide, pWide->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aTall, pTall->GetSnapRect(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testOneRotateHandleTurnsEverySelectedShape)
+{
+    // Dragging the rotate handle of one selected shape turns every selected shape by the same
+    // angle, each around its own centre, and a single undo puts them all back.
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = lcl_getSdrPageWithAssert(*pDoc);
+
+    const tools::Rectangle aWide(Point(1000, 1000), Size(2000, 1000));
+    const tools::Rectangle aTall(Point(5000, 5000), Size(1000, 2000));
+    rtl::Reference<SdrRectObj> pWide = new SdrRectObj(*pDrawLayer, aWide);
+    rtl::Reference<SdrRectObj> pTall = new SdrRectObj(*pDrawLayer, aTall);
+    pPage->InsertObject(pWide.get());
+    pPage->InsertObject(pTall.get());
+
+    ScTabViewShell* pViewShell = getViewShell();
+    ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    pDrawView->SetSnapEnabled(false);
+
+    lcl_dragHandleOfFirstShape(pDrawView, pWide.get(), pTall.get(), SdrHdlKind::Rotate,
+                               Point(1000, 1000));
+
+    // Both shapes end up turned by the same angle, and neither is left unturned.
+    const Degree100 nWideAngle = pWide->GetRotateAngle();
+    CPPUNIT_ASSERT(nWideAngle.get() != 0);
+    CPPUNIT_ASSERT_EQUAL(nWideAngle.get(), pTall->GetRotateAngle().get());
+
+    // Each shape turned around its own centre, so no shape travelled across the sheet.
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aWide.Center(), pWide->GetSnapRect().Center(), 2);
+    CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(aTall.Center(), pTall->GetSnapRect().Center(), 2);
+
+    // One undo brings both shapes back.
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWide->GetRotateAngle().get());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pTall->GetRotateAngle().get());
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aWide, pWide->GetSnapRect(), 1);
+    CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aTall, pTall->GetSnapRect(), 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testPointEditModeBeforeAndAfterAnEmptySelection)
+{
+    // Clearing the selection leaves Point Edit Mode as it is, and the selection that follows
+    // decides the mode again. A tool that asks for its own handles while nothing is selected
+    // keeps them for the object it creates.
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = lcl_getSdrPageWithAssert(*pDoc);
+
+    rtl::Reference<SdrRectObj> pFirst
+        = new SdrRectObj(*pDrawLayer, tools::Rectangle(Point(1000, 1000), Size(2000, 1000)));
+    rtl::Reference<SdrRectObj> pSecond
+        = new SdrRectObj(*pDrawLayer, tools::Rectangle(Point(5000, 5000), Size(1000, 2000)));
+    pPage->InsertObject(pFirst.get());
+    pPage->InsertObject(pSecond.get());
+
+    ScTabViewShell* pViewShell = getViewShell();
+    ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
+    CPPUNIT_ASSERT(pDrawView);
+    SdrPageView* pPageView = pDrawView->GetSdrPageView();
+
+    pDrawView->MarkObj(pFirst.get(), pPageView);
+    pDrawView->MarkObj(pSecond.get(), pPageView);
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // Selecting nothing is not the same as selecting one object, so the individual handles stay.
+    pDrawView->UnmarkAllObj();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // Selecting one object does bring the single surrounding frame back.
+    pDrawView->MarkObj(pFirst.get(), pPageView);
+    CPPUNIT_ASSERT(pDrawView->IsFrameDragSingles());
+
+    // Picking several objects in one step, the way Select All marks them, brings the individual
+    // handles up.
+    pDrawView->UnmarkAllObj();
+    pDrawView->MarkAllObj();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // Turning Point Edit Mode off and then picking several objects again turns it back on.
+    pDrawView->SetFrameDragSingles(true);
+    pDrawView->UnmarkAllObj();
+    pDrawView->MarkAllObj();
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
+
+    // A tool asks for its own handles while nothing is selected. The object it creates arrives
+    // on its own and keeps those handles.
+    pDrawView->UnmarkAllObj();
+    pDrawView->SetFrameDragSingles(false);
+    pDrawView->MarkObj(pFirst.get(), pPageView);
+    CPPUNIT_ASSERT(!pDrawView->IsFrameDragSingles());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

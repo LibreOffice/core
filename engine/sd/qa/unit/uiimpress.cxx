@@ -3993,6 +3993,15 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionPointEditToggle)
     CPPUNIT_ASSERT(pView->IsFrameDragSingles());
     pView->MarkObj(pRect2.get(), pView->GetSdrPageView());
     CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    // Turning it off and then picking several objects again brings it back. Select All marks
+    // every object in one step, without passing through a selection of one.
+    dispatchCommand(mxComponent, u".uno:ToggleObjectBezierMode"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsFrameDragSingles());
+    pView->UnmarkAllObj(pView->GetSdrPageView());
+    pView->MarkAllObj(pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testUndoRestoresDeletedPlaceholderText)
