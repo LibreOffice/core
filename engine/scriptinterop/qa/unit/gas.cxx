@@ -100,7 +100,7 @@ protected:
         OUString const script(
             "var window = globalThis;\n" + read(gasUrl)
             + "\n__gasKitRunner('scriptinterop_document_test', [" + jsLiteral(read(url)) + "], ["
-            + jsLiteral(url) + "], 'test', []);");
+            + jsLiteral(url) + "], 'test', [], 'scriptinterop_test');");
         try {
             bool usedLegacyUnoApi;
             jsuno::execute(
@@ -298,6 +298,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocument) {
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
     runScript(createFileURL(u"utilities-test.js"), {});
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testScriptApp) {
+    runScript(createFileURL(u"scriptapp-test.js"), {});
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUrlFetchApp) {

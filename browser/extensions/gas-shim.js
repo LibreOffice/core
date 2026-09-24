@@ -54,7 +54,8 @@
                         window.__gasScriptSources || [],
                         window.__gasScriptNames || [],
                         prop,
-                        callArgs).then(function(result) {
+                        callArgs,
+                        extensionIdMatch ? extensionIdMatch[1] : '').then(function(result) {
                         done();
                         const value = unwrapEnvelope(result);
                         if (typeof state.success === 'function') {

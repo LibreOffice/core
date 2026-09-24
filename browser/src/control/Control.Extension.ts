@@ -695,7 +695,9 @@ window.L.Control.Extension = window.L.Control.extend({
 			JSON.stringify(gc.names) +
 			', ' +
 			JSON.stringify(command.gasFunctionName) +
-			', []]';
+			', [], ' +
+			JSON.stringify(this.options.id) +
+			']';
 		app.socket.sendMessage(
 			'executescript ' +
 				callId +
@@ -1623,7 +1625,9 @@ async function collectGasAddonMenu(
 			JSON.stringify(sources) +
 			', ' +
 			JSON.stringify(scriptNames) +
-			', "__coolGasMenu", []]';
+			', "__coolGasMenu", [], ' +
+			JSON.stringify(id) +
+			']';
 		app.socket.sendMessage(
 			'executescript ' +
 				callId +

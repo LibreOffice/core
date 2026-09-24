@@ -10,7 +10,7 @@
  */
 
 // The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-kit-runner.js:
-globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) {
+globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs, extensionId) {
     // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
@@ -447,6 +447,43 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
                 return { getEmail: function() { return ''; } };
             }
         };
+
+        // A GAS enum value is an object of its own that prints as its name and has the name(),
+        // ordinal() and compareTo() of a Java enum:
+        function gasEnum(names) {
+            const values = {};
+            names.forEach(function(name, ordinal) {
+                values[name] = Object.freeze({
+                    toString: function() { return name; },
+                    toJSON: function() { return name; },
+                    name: function() { return name; },
+                    ordinal: function() { return ordinal; },
+                    compareTo: function(other) { return ordinal - other.ordinal(); }
+                });
+            });
+            return Object.freeze(values);
+        }
+        function scriptAppNotSupported(name) {
+            return function() {
+                throw new Error(
+                    'ScriptApp.' + name + ' is not supported in the COOL Apps Script wrapper.');
+            };
+        }
+        globalThis.ScriptApp = {
+            AuthMode: gasEnum(['NONE', 'CUSTOM_FUNCTION', 'LIMITED', 'FULL']),
+            getScriptId: function() { return extensionId; },
+            getOAuthToken: scriptAppNotSupported('getOAuthToken'),
+            getIdentityToken: scriptAppNotSupported('getIdentityToken'),
+            getService: scriptAppNotSupported('getService'),
+            getInstallationSource: scriptAppNotSupported('getInstallationSource'),
+            newTrigger: scriptAppNotSupported('newTrigger'),
+            getProjectTriggers: scriptAppNotSupported('getProjectTriggers'),
+            getUserTriggers: scriptAppNotSupported('getUserTriggers'),
+            deleteTrigger: scriptAppNotSupported('deleteTrigger'),
+            requireAllScopes: scriptAppNotSupported('requireAllScopes'),
+            getAuthorizationInfo: scriptAppNotSupported('getAuthorizationInfo'),
+            invalidateAuth: scriptAppNotSupported('invalidateAuth')
+        };
         // Real UrlFetchApp, routed to the iframe (kit has no outbound network).  The response
         // object matches Apps Script's HTTPResponse shape: getContentText returns UTF-8 text,
         // getContent returns a byte array, and getHeaders and getAllHeaders return the headers
@@ -644,8 +681,10 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         // menu-driven add-on, which ships no HTML at all, still describes a user interface:
         let value;
         if (fnName === '__coolGasMenu') {
+            // The runner runs everything the add-on asks for, so onOpen gets the FULL authorization
+            // mode:
             if (typeof globalThis.onOpen === 'function') {
-                globalThis.onOpen({});
+                globalThis.onOpen({ authMode: globalThis.ScriptApp.AuthMode.FULL });
             }
             value = menuItems;
         } else {
