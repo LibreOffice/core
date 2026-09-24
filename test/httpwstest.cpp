@@ -221,11 +221,25 @@ void HTTPWSTest::testReloadWhileDisconnecting()
                            socket->waitForDisconnection(5s));
 
         // Do not wait here. Reconnect before disconnect finishes
-        // TODO: Test fails because it is unable to reconnect
 
         // Load the same document and check that the last changes (pasted text) is saved.
         TST_LOG("Loading again.");
-        socket = loadDocAndGetSession(_socketPoll, _uri, documentURL, testname);
+        socket.reset();
+        constexpr int maxReconnectAttempts = 10;
+        for (int attempt = 1; attempt <= maxReconnectAttempts; ++attempt)
+        {
+            // Retry in case we connected early enough to be still in the same docbroker but late
+            // enough that the kit process is no longer around, similar to how the 'docunloading'
+            // handler in Socket.ts does it.
+            socket = loadDocAndGetSession(_socketPoll, _uri, documentURL, testname,
+                                          /*isView=*/true, /*isAssert=*/false);
+            if (socket)
+                break;
+            TST_LOG("Reload attempt #" << attempt
+                                       << " failed (broker likely still unloading), retrying");
+            std::this_thread::sleep_for(std::chrono::milliseconds(500 * attempt));
+        }
+        LOK_ASSERT_MESSAGE("Expected to reload the document after retries", socket);
 
         TST_LOG("Checking if the document contains the pasted text.");
         const std::string expected = "aaa bbb ccc";
