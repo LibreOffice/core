@@ -301,9 +301,14 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 
 	// A pointer gesture is the one caret move the engine cannot know about, so it is reported.
 	// Keyboard caret moves are not: those went to the engine as key events, and the model that
-	// comes back says where the caret ended up.
-	container.addEventListener('mouseup', () =>
-		editEngineSendSelection(container),
+	// comes back says where the caret ended up. The gesture ends at the mouseup wherever it is
+	// released, because a drag that selects text can finish outside the widget.
+	container.addEventListener('mousedown', () =>
+		window.addEventListener(
+			'mouseup',
+			() => editEngineSendSelection(container),
+			{ once: true },
+		),
 	);
 }
 

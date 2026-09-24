@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require expect */
+/* global describe it cy beforeEach require expect NodeFilter */
 
 var helper = require('../../common/helper');
 
@@ -97,6 +97,40 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			'contain.text',
 			'again'
 		);
+	});
+
+	it('Deleting a selection dragged out of the notes pane removes all of it', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('ONE TWO');
+		cy.cGet(paragraph).should('contain.text', 'ONE TWO');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// Press in the notes, select "ONE " and release the mouse outside the notes pane.
+		var textBefore;
+		cy.cGet(editEngine).trigger('mousedown');
+		cy.cGet(paragraph).then(function (element) {
+			textBefore = element[0].textContent;
+			// The paragraph can hold other text before the typed words, and the words can sit
+			// directly in the paragraph or inside a formatting run.
+			var walker = element[0].ownerDocument.createTreeWalker(element[0], NodeFilter.SHOW_TEXT);
+			var text = walker.nextNode();
+			while (text && text.data.indexOf('ONE ') === -1)
+				text = walker.nextNode();
+			var start = text.data.indexOf('ONE ');
+			element[0].ownerDocument.getSelection().setBaseAndExtent(text, start + 4, text, start);
+		});
+		cy.cGet('body').trigger('mouseup');
+
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+		cy.cGet(editEngine).type('{backspace}');
+
+		cy.cGet(paragraph).should(function (element) {
+			expect(element[0].textContent).to.equal(textBefore.replace('ONE ', ''));
+		});
 	});
 
 	it('Enter starts a new paragraph', function () {
