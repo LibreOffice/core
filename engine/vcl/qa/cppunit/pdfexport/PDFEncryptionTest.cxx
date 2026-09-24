@@ -211,7 +211,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedTaggedUsesObjectStreams)
     const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
     // an unencrypted export has object streams anyway, so the rest tests nothing without this
     CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
-    const size_t nObjStm = aFile.find("/ObjStm");
+    // the dictionary entry, not a chance match in binary data
+    const size_t nObjStm = aFile.find("/Type/ObjStm");
     CPPUNIT_ASSERT(nObjStm != std::string_view::npos);
 
     // /Length has to count what the cipher adds, or a reader that trusts it stops mid-block.
