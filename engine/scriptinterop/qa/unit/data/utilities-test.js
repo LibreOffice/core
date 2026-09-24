@@ -47,4 +47,62 @@ function test() {
     const b6n = Utilities.newBlob('hello', null, 'greet.txt');
     console.assert(b6n.getContentType() === null);
     console.assert(b6n.getName() === 'greet.txt');
+
+    // A string is encoded as US-ASCII, with "?" for each code point outside it, unless UTF-8 is
+    // asked for:
+    console.assert(Utilities.base64Encode('hi') === 'aGk=');
+    console.assert(Utilities.base64Encode('') === '');
+    console.assert(Utilities.base64Encode('aéb') === 'YT9i');
+    console.assert(Utilities.base64Encode('€') === 'Pw==');
+    console.assert(Utilities.base64Encode('😀') === 'Pw==');
+    console.assert(Utilities.base64Encode('é', Utilities.Charset.US_ASCII) === 'Pw==');
+    console.assert(Utilities.base64Encode('é', Utilities.Charset.UTF_8) === 'w6k=');
+    console.assert(Utilities.base64Encode('€', Utilities.Charset.UTF_8) === '4oKs');
+    console.assert(Utilities.base64Encode('😀', Utilities.Charset.UTF_8) === '8J+YgA==');
+    // Bytes are encoded as they are, whether given signed or unsigned:
+    console.assert(Utilities.base64Encode([0x68, 0x69]) === 'aGk=');
+    console.assert(Utilities.base64Encode([-1, 0, 127, -128]) === '/wB/gA==');
+    console.assert(Utilities.base64Encode([0xff, 0, 0x7f, 0x80]) === '/wB/gA==');
+
+    // Decoding gives signed bytes, ignoring white space and any missing or extra padding:
+    const decoded = (...args) => JSON.stringify(Utilities.base64Decode(...args));
+    console.assert(decoded('aGk=') === '[104,105]');
+    console.assert(decoded('/wB/gA==') === '[-1,0,127,-128]');
+    console.assert(decoded('w6k=') === '[-61,-87]');
+    console.assert(decoded('w6k=', Utilities.Charset.UTF_8) === '[-61,-87]');
+    console.assert(decoded('') === '[]');
+    console.assert(decoded('aGk') === '[104,105]');
+    console.assert(decoded('aGk==') === '[104,105]');
+    console.assert(decoded('aG k=') === '[104,105]');
+    console.assert(decoded('aG\nk=') === '[104,105]');
+    // Anything else is not base64, including the web-safe alphabet:
+    for (const text of ['_wB_gA==', '!!!!', 'a']) {
+        let message = null;
+        try {
+            Utilities.base64Decode(text);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Could not decode string.');
+    }
+
+    // A charset argument that is given has to be a charset:
+    for (const f of [
+        () => Utilities.base64Encode('hi', null), () => Utilities.base64Encode('hi', undefined),
+        () => Utilities.base64Decode('aGk=', null), () => Utilities.base64Decode('aGk=', undefined)])
+    {
+        let message = null;
+        try {
+            f();
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Argument cannot be null: charset');
+    }
+
+    // A UUID is a random (version 4) one, new on each call:
+    const uuid = Utilities.getUuid();
+    console.assert(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid));
+    console.assert(Utilities.getUuid() !== uuid);
 }

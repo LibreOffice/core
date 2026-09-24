@@ -375,12 +375,50 @@ globalThis.__gasKitRunner = function(
             SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
         };
 
+        const charsetValues = { UTF_8: 'UTF-8', US_ASCII: 'US-ASCII' };
+        // As in GAS, a string is encoded as US-ASCII unless UTF_8 is asked for, with "?" for each
+        // code point that US-ASCII does not have:
+        function stringBytes(text, charset) {
+            const bytes = [];
+            for (const character of String(text)) {
+                const c = character.codePointAt(0);
+                if (c < 0x80) {
+                    bytes.push(c);
+                } else if (charset !== charsetValues.UTF_8) {
+                    bytes.push(0x3f);
+                } else if (c < 0x800) {
+                    bytes.push(0xc0 | c >> 6, 0x80 | c & 0x3f);
+                } else if (c < 0x10000) {
+                    bytes.push(0xe0 | c >> 12, 0x80 | c >> 6 & 0x3f, 0x80 | c & 0x3f);
+                } else {
+                    bytes.push(
+                        0xf0 | c >> 18, 0x80 | c >> 12 & 0x3f, 0x80 | c >> 6 & 0x3f,
+                        0x80 | c & 0x3f);
+                }
+            }
+            return bytes;
+        }
+        // GAS rejects a charset argument that is passed but null or undefined:
+        function checkCharset(args) {
+            if (args.length > 1 && args[1] == null) {
+                throw new Error('Argument cannot be null: charset');
+            }
+        }
         globalThis.Utilities = globalThis.Utilities || {
-            base64Encode: function(v) {
-                return btoa(String(v));
+            base64Encode: function(data, charset) {
+                checkCharset(arguments);
+                const bytes = typeof data === 'string' ? stringBytes(data, charset) : data;
+                return Uint8Array.from(bytes).toBase64();
             },
-            base64Decode: function(v) {
-                return atob(String(v));
+            // Like GAS, this returns signed bytes and ignores white space and any missing or extra
+            // padding:
+            base64Decode: function(encoded) {
+                checkCharset(arguments);
+                const text = String(encoded).replace(/[\s=]/g, '');
+                if (!/^[A-Za-z0-9+/]*$/.test(text) || text.length % 4 === 1) {
+                    throw new Error('Could not decode string.');
+                }
+                return Array.from(Uint8Array.fromBase64(text), b => b > 127 ? b - 256 : b);
             },
             getUuid: function() {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -388,7 +426,8 @@ globalThis.__gasKitRunner = function(
                     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
                 });
             },
-            newBlob: cool.newBlob.bind(cool)
+            newBlob: cool.newBlob.bind(cool),
+            Charset: charsetValues
         };
 
         // Round-tripped over the XClientRuntime proxy so the store lives in the iframe's
