@@ -1671,7 +1671,7 @@ sal_Int8 SwContentTree::AcceptDrop(const AcceptDropEvent& rEvt)
             nRet = rEvt.mnAction;
     }
     else if (!IsInDrag())
-        nRet = GetParentWindow()->AcceptDrop();
+        nRet = GetParentWindow().AcceptDrop();
     return nRet;
 }
 
@@ -1761,7 +1761,7 @@ sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
         MoveOutline(nTargetPos);
 
     }
-    return IsInDrag() ? DND_ACTION_NONE : GetParentWindow()->ExecuteDrop(rEvt);
+    return IsInDrag() ? DND_ACTION_NONE : GetParentWindow().ExecuteDrop(rEvt);
 }
 
 namespace
@@ -4213,7 +4213,7 @@ void SwContentTree::ToggleToRoot()
         Display(State::HIDDEN != m_eState);
     }
     m_pConfig->SetRootType( m_nRootType );
-    weld::Toolbar* pBox = GetParentWindow()->m_xContent5ToolBox.get();
+    weld::Toolbar* pBox = GetParentWindow().m_xContent5ToolBox.get();
     pBox->set_item_active(u"root"_ustr, m_bIsRoot);
 }
 
@@ -4506,7 +4506,7 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
     }
     Display(false);
 
-    GetParentWindow()->UpdateListBox();
+    GetParentWindow().UpdateListBox();
 }
 
 void SwContentTree::SetActiveShell(SwWrtShell* pSh)
@@ -4649,7 +4649,7 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
         return;
     if (GetWrtShell()->GetView().GetDocShell()->IsReadOnly() ||
         (State::ACTIVE != m_eState &&
-         (State::CONSTANT != m_eState || m_pActiveShell != GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
+         (State::CONSTANT != m_eState || m_pActiveShell != GetParentWindow().GetCreateView()->GetWrtShellPtr())))
     {
         return;
     }
@@ -5200,7 +5200,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     // No update while focus is not in document.
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
-    SwView* pView = GetParentWindow()->GetCreateView();
+    SwView* pView = GetParentWindow().GetCreateView();
 
     SwWrtShell* pActShell = pView ? pView->GetWrtShellPtr() : nullptr;
     if(pActShell && pActShell->GetWin() &&
@@ -5212,7 +5212,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
             if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
             {
                 SetActiveShell(pActShell);
-                GetParentWindow()->UpdateListBox();
+                GetParentWindow().UpdateListBox();
             }
             if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
             {
@@ -5989,7 +5989,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
                 nTargetPos = nPrevTargetPosOrOffset;
             }
         }
-        GetParentWindow()->MoveOutline(nSourcePos, nTargetPos);
+        GetParentWindow().MoveOutline(nSourcePos, nTargetPos);
     }
 
     pShell->EndUndo();
@@ -6002,7 +6002,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 // Update immediately
 IMPL_LINK_NOARG(SwContentTree, FocusInHdl, weld::Widget&, void)
 {
-    SwView* pActView = GetParentWindow()->GetCreateView();
+    SwView* pActView = GetParentWindow().GetCreateView();
     if(pActView)
     {
         SwWrtShell* pActShell = pActView->GetWrtShellPtr();
@@ -6049,7 +6049,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
             {
                 case KEY_MOD2:
                     // Switch boxes
-                    GetParentWindow()->ToggleTree();
+                    GetParentWindow().ToggleTree();
                 break;
                 case KEY_MOD1:
                     // Switch RootMode
@@ -6774,7 +6774,7 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
                 m_eState = (nSelectedPopupEntry == 1) ? State::ACTIVE : State::HIDDEN;
                 Display(nSelectedPopupEntry == 1);
             }
-            GetParentWindow()->UpdateListBox();
+            GetParentWindow().UpdateListBox();
         }
     }
 }
@@ -6910,9 +6910,7 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::ItemView&, void)
 
 void SwContentTree::UpdateContentFunctionsToolbar()
 {
-    SwNavigationPI* pNavi = GetParentWindow();
-    if (pNavi)
-        pNavi->UpdateContentFunctionsToolbar();
+    GetParentWindow().UpdateContentFunctionsToolbar();
 }
 
 void SwContentTree::SetRootType(ContentTypeId nType)
@@ -7756,7 +7754,7 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData, const OUSt
     return bRet;
 }
 
-SwNavigationPI* SwContentTree::GetParentWindow() { return &m_rDialog; }
+SwNavigationPI& SwContentTree::GetParentWindow() { return m_rDialog; }
 
 void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
 {

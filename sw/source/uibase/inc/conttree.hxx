@@ -176,7 +176,7 @@ class SwContentTree final : public SfxListener
 
     void remove(const weld::TreeIter& rIter);
 
-    SwNavigationPI* GetParentWindow();
+    SwNavigationPI& GetParentWindow();
 
     bool FillTransferData(TransferDataContainer& rTransfer);
 
