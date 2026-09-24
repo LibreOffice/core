@@ -3020,6 +3020,60 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetUILocaleDataWrapper() );
         OUString strDecimalSeparator = rLocaleWrapper.getNumDecimalSep();
 
+        // convert one structured condition into its UI text, e.g. "LIKE A*"
+        auto getCriteriaText = [&](const PropertyValue& rRefValue, const Reference< XPropertySet >& xField) -> OUString
+        {
+            OUString sPredicate,sErrorMsg;
+            rRefValue.Value >>= sPredicate;
+            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField, xConnection);
+            if ( pParseNode == nullptr )
+                return OUString();
+
+            OUString sCriteria;
+            switch (rRefValue.Handle)
+            {
+                case css::sdb::SQLFilterOperator::EQUAL:
+                    sCriteria += "=";
+                    break;
+                case css::sdb::SQLFilterOperator::NOT_EQUAL:
+                    sCriteria += "!=";
+                    break;
+                case css::sdb::SQLFilterOperator::LESS:
+                    sCriteria += "<";
+                    break;
+                case css::sdb::SQLFilterOperator::GREATER:
+                    sCriteria += ">";
+                    break;
+                case css::sdb::SQLFilterOperator::LESS_EQUAL:
+                    sCriteria += "<=";
+                    break;
+                case css::sdb::SQLFilterOperator::GREATER_EQUAL:
+                    sCriteria += ">=";
+                    break;
+                case css::sdb::SQLFilterOperator::LIKE:
+                    sCriteria += "LIKE ";
+                    break;
+                case css::sdb::SQLFilterOperator::NOT_LIKE:
+                    sCriteria += "NOT LIKE ";
+                    break;
+                case css::sdb::SQLFilterOperator::SQLNULL:
+                    sCriteria += "IS NULL";
+                    break;
+                case css::sdb::SQLFilterOperator::NOT_SQLNULL:
+                    sCriteria += "IS NOT NULL";
+                    break;
+            }
+            pParseNode->parseNodeToPredicateStr( sCriteria
+                                                ,xConnection
+                                                ,xFormatter
+                                                ,xField
+                                                ,OUString()
+                                                ,aAppLocale
+                                                ,strDecimalSeparator
+                                                ,getParseContext());
+            return sCriteria;
+        };
+
         // retrieving the filter
         for (const Sequence < PropertyValue >& rRow : aFilterRows)
         {
@@ -3080,62 +3134,20 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         // do we already have the control ?
                         if (aRow.find(rFieldInfo.xText) != aRow.end())
                         {
+                            // further conditions on the same field need their operator too
+                            OUString sCriteria = getCriteriaText(rRefValue, xField);
+                            if (sCriteria.isEmpty())
+                                sCriteria = ::comphelper::getString(rRefValue.Value);
                             OString aVal = m_pParser->getContext().getIntlKeywordAscii(IParseContext::InternationalKeyCode::And);
                             aRow[rFieldInfo.xText] = aRow[rFieldInfo.xText] + " "  +
                                                         OStringToOUString(aVal, RTL_TEXTENCODING_ASCII_US) + " " +
-                                                        ::comphelper::getString(rRefValue.Value);
+                                                        sCriteria;
                         }
                         else
                         {
-                            OUString sPredicate,sErrorMsg;
-                            rRefValue.Value >>= sPredicate;
-                            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField, xConnection);
-                            if ( pParseNode != nullptr )
-                            {
-                                OUString sCriteria;
-                                switch (rRefValue.Handle)
-                                {
-                                    case css::sdb::SQLFilterOperator::EQUAL:
-                                        sCriteria += "=";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::NOT_EQUAL:
-                                        sCriteria += "!=";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::LESS:
-                                        sCriteria += "<";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::GREATER:
-                                        sCriteria += ">";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::LESS_EQUAL:
-                                        sCriteria += "<=";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::GREATER_EQUAL:
-                                        sCriteria += ">=";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::LIKE:
-                                        sCriteria += "LIKE ";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::NOT_LIKE:
-                                        sCriteria += "NOT LIKE ";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::SQLNULL:
-                                        sCriteria += "IS NULL";
-                                        break;
-                                    case css::sdb::SQLFilterOperator::NOT_SQLNULL:
-                                        sCriteria += "IS NOT NULL";
-                                        break;
-                                }
-                                pParseNode->parseNodeToPredicateStr( sCriteria
-                                                                    ,xConnection
-                                                                    ,xFormatter
-                                                                    ,xField
-                                                                    ,OUString()
-                                                                    ,aAppLocale
-                                                                    ,strDecimalSeparator
-                                                                    ,getParseContext());
+                            OUString sCriteria = getCriteriaText(rRefValue, xField);
+                            if (!sCriteria.isEmpty())
                                 aRow[rFieldInfo.xText] = sCriteria;
-                            }
                         }
                     }
                 }
