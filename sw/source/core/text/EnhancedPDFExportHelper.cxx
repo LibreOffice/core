@@ -482,10 +482,11 @@ LanguageType lcl_GetEnclosingLanguage(const SwTextPaintInfo& rInf, const SwEnhan
 // the StarMath source of the formula a frame holds, empty for anything else
 OUString lcl_GetFormulaSource(const SwFlyFrame& rFly)
 {
-    if (!rFly.Lower() || !rFly.Lower()->IsNoTextFrame())
+    const SwFrame* pLower = rFly.Lower();
+    if (!pLower || !pLower->IsNoTextFrame())
         return OUString();
 
-    const SwContentNode* pNode = static_cast<const SwNoTextFrame*>(rFly.Lower())->GetNode();
+    const SwContentNode* pNode = static_cast<const SwNoTextFrame*>(pLower)->GetNode();
     SwOLENode* pOLENd = pNode ? const_cast<SwOLENode*>(pNode->GetOLENode()) : nullptr;
     if (!pOLENd)
         return OUString();
