@@ -1557,11 +1557,73 @@ namespace
         return sColumnName.isEmpty() ? rComposedName : sColumnName;
     }
 
+    Reference<XPropertySet> lcl_findSelectColumn(const Reference< XNameAccess >& i_xSelectColumns,
+        const Reference< XDatabaseMetaData >& i_xMetaData, std::u16string_view rComposedName, const OUString& rColumnName)
+    {
+        Reference<XPropertySet> xColumn;
+        if ( !i_xSelectColumns.is() )
+            return xColumn;
+        if ( i_xSelectColumns->hasByName(rColumnName) )
+        {
+            i_xSelectColumns->getByName(rColumnName) >>= xColumn;
+            return xColumn;
+        }
+
+        // Now do a lookup for the real name of the columns. Functions
+        // are left out, they are handled by the caller like any other unknown column.
+        // If several columns have the same real name, the one from the table given in the
+        // filter's column name is used; otherwise only a unique match is used.
+        const ::comphelper::UStringMixEqual aCompare(i_xMetaData->supportsMixedCaseQuotedIdentifiers());
+        const OUString sQuote = i_xMetaData->getIdentifierQuoteString();
+        Reference<XPropertySet> xUnique;
+        sal_Int32 nMatches = 0;
+        const std::u16string_view sComposedName = o3tl::trim(rComposedName);
+        for (const OUString& rName : i_xSelectColumns->getElementNames())
+        {
+            Reference<XPropertySet> xCandidate(i_xSelectColumns->getByName(rName), UNO_QUERY);
+            if ( !xCandidate.is() )
+                continue;
+            Reference<XPropertySetInfo> xInfo = xCandidate->getPropertySetInfo();
+            if ( !xInfo->hasPropertyByName(PROPERTY_REALNAME) )
+                continue;
+            if ( xInfo->hasPropertyByName(u"Function"_ustr)
+                 && ::comphelper::getBOOL(xCandidate->getPropertyValue(u"Function"_ustr)) )
+                continue;
+
+            OUString sRealName;
+            xCandidate->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
+            if ( !aCompare(sRealName, rColumnName) )
+                continue;
+
+            OUString sTableName;
+            if ( xInfo->hasPropertyByName(PROPERTY_TABLENAME) )
+                xCandidate->getPropertyValue(PROPERTY_TABLENAME) >>= sTableName;
+            if ( !sTableName.isEmpty() )
+            {
+                // compose the name the same way as the filter dialog does
+                OUString aCatalog, aSchema, aTable;
+                ::dbtools::qualifiedNameComponents(i_xMetaData, sTableName, aCatalog, aSchema,
+                    aTable, ::dbtools::EComposeRule::InDataManipulation);
+                const OUString sComposed = ::dbtools::composeTableName(i_xMetaData, aCatalog,
+                    aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation)
+                    + "." + ::dbtools::quoteName(sQuote, sRealName);
+                if ( aCompare(sComposed, sComposedName) )
+                    return xCandidate;
+            }
+            xUnique = xCandidate;
+            ++nMatches;
+        }
+        if ( nMatches == 1 )
+            xColumn = xUnique;
+        return xColumn;
+    }
+
     OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter,
         const OPredicateInputController& i_aPredicateInputController,
         const Reference< XNameAccess >& i_xSelectColumns,
-        std::u16string_view rQuoteString)
+        const Reference< XDatabaseMetaData >& i_xMetaData)
     {
+        const OUString sQuoteString = i_xMetaData->getIdentifierQuoteString();
         OUStringBuffer sRet;
         for (auto& rOr : filter)
         {
@@ -1578,10 +1640,10 @@ namespace
                     sAnd.append(rAnd.Name);
                     OUString sValue;
                     rAnd.Value >>= sValue;
-                    const OUString sColumnName = lcl_getDecomposedColumnName( rAnd.Name, rQuoteString );
-                    if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(sColumnName) )
+                    const OUString sColumnName = lcl_getDecomposedColumnName( rAnd.Name, sQuoteString );
+                    Reference<XPropertySet> xColumn = lcl_findSelectColumn(i_xSelectColumns, i_xMetaData, rAnd.Name, sColumnName);
+                    if ( xColumn.is() )
                     {
-                        Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(sColumnName),UNO_QUERY);
                         sValue = i_aPredicateInputController.getPredicateValueStr(sValue,xColumn);
                     }
                     else
@@ -1600,13 +1662,13 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter )
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
-    setFilter(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
+    setFilter(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData));
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter )
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
-    setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
+    setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData));
 }
 
 void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria, std::function<bool(OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor, sal_Int32 filterOperator)

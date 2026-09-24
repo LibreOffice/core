@@ -44,6 +44,9 @@ public:
     void testTdf153057_RangeFilter();
     void testTdf153057_FractionalFilter();
     void testTdf173589_TableStandardFilter();
+    void testTdf164328_AliasColumn();
+    void testTdf164328_SameRealName();
+    void testTdf164328_Aggregate();
 
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
@@ -53,6 +56,9 @@ public:
     CPPUNIT_TEST(testTdf153057_RangeFilter);
     CPPUNIT_TEST(testTdf153057_FractionalFilter);
     CPPUNIT_TEST(testTdf173589_TableStandardFilter);
+    CPPUNIT_TEST(testTdf164328_AliasColumn);
+    CPPUNIT_TEST(testTdf164328_SameRealName);
+    CPPUNIT_TEST(testTdf164328_Aggregate);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -379,6 +385,126 @@ void FirebirdTest::testTdf173589_TableStandardFilter()
     CPPUNIT_ASSERT_MESSAGE("tdf173589: expected a row", xRS->next());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf173589: wrong row returned", sal_Int32(1), xRow->getInt(1));
     CPPUNIT_ASSERT_MESSAGE("tdf173589: expected exactly one row", !xRS->next());
+}
+
+namespace
+{
+void lcl_createAliasTestTables(const uno::Reference<XConnection>& xConnection)
+{
+    uno::Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(u"CREATE TABLE \"T1\" (\"ID\" INTEGER NOT NULL PRIMARY KEY,"
+                   " \"NAME\" VARCHAR(20))"_ustr);
+    xStmt->execute(u"INSERT INTO \"T1\" VALUES(1, 'Annemone')"_ustr);
+    xStmt->execute(u"INSERT INTO \"T1\" VALUES(2, 'Bert')"_ustr);
+    xStmt->execute(u"INSERT INTO \"T1\" VALUES(3, 'Clara')"_ustr);
+    // same column name as in "T1", but a different type
+    xStmt->execute(u"CREATE TABLE \"T2\" (\"ID\" INTEGER NOT NULL PRIMARY KEY,"
+                   " \"NAME\" INTEGER)"_ustr);
+    xStmt->execute(u"INSERT INTO \"T2\" VALUES(1, 10)"_ustr);
+    xStmt->execute(u"INSERT INTO \"T2\" VALUES(2, 20)"_ustr);
+    xStmt->execute(u"INSERT INTO \"T2\" VALUES(3, 30)"_ustr);
+    xConnection->commit();
+
+    uno::Reference<sdbcx::XTablesSupplier> xTablesSupplier(xConnection, UNO_QUERY_THROW);
+    uno::Reference<util::XRefreshable> xTablesRefresh(xTablesSupplier->getTables(),
+                                                      UNO_QUERY_THROW);
+    xTablesRefresh->refresh();
+}
+
+uno::Reference<XSingleSelectQueryComposer>
+lcl_createComposer(const uno::Reference<XConnection>& xConnection, const OUString& rQuery)
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xConnection, UNO_QUERY_THROW);
+    uno::Reference<XSingleSelectQueryComposer> xComposer(
+        xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
+        UNO_QUERY_THROW);
+    xComposer->setElementaryQuery(rQuery);
+    return xComposer;
+}
+
+sal_Int32 lcl_countRows(const uno::Reference<XConnection>& xConnection, const OUString& rQuery)
+{
+    uno::Reference<XResultSet> xRS = xConnection->createStatement()->executeQuery(rQuery);
+    sal_Int32 nRows = 0;
+    while (xRS->next())
+        ++nRows;
+    return nRows;
+}
+
+Sequence<Sequence<beans::PropertyValue>> lcl_makeFilter(const OUString& rName, sal_Int32 nOperator,
+                                                        const OUString& rValue)
+{
+    beans::PropertyValue aCondition;
+    aCondition.Name = rName;
+    aCondition.Handle = nOperator;
+    aCondition.Value <<= rValue;
+    return { { aCondition } };
+}
+}
+
+/**
+ * tdf#164328: the Standard Filter on a query column with an alias passes the
+ * real column name, while the composer's select columns are named by alias.
+ */
+void FirebirdTest::testTdf164328_AliasColumn()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createAliasTestTables(xConnection);
+
+    uno::Reference<XSingleSelectQueryComposer> xComposer
+        = lcl_createComposer(xConnection, u"SELECT \"ID\", \"NAME\" AS \"ALIAS\" FROM \"T1\""_ustr);
+    xComposer->setStructuredFilter(
+        lcl_makeFilter(u"\"T1\".\"NAME\""_ustr, SQLFilterOperator::EQUAL, u"Annemone"_ustr));
+
+    // Without the fix in place, the value was quoted as an identifier ("Annemone")
+    CPPUNIT_ASSERT_EQUAL(u"( \"T1\".\"NAME\" = 'Annemone' )"_ustr, xComposer->getFilter());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), lcl_countRows(xConnection, xComposer->getQuery()));
+}
+
+/**
+ * tdf#164328: two select columns with the same real name from different
+ * tables; the value must be converted using the column of the filtered table.
+ */
+void FirebirdTest::testTdf164328_SameRealName()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createAliasTestTables(xConnection);
+
+    // the INTEGER column comes first
+    uno::Reference<XSingleSelectQueryComposer> xComposer = lcl_createComposer(
+        xConnection, u"SELECT \"T2\".\"NAME\" AS \"B\", \"T1\".\"NAME\" AS \"A\" FROM \"T1\", "
+                     "\"T2\" WHERE \"T1\".\"ID\" = \"T2\".\"ID\""_ustr);
+    xComposer->setStructuredFilter(
+        lcl_makeFilter(u"\"T1\".\"NAME\""_ustr, SQLFilterOperator::EQUAL, u"Annemone"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"( \"T1\".\"NAME\" = 'Annemone' )"_ustr, xComposer->getFilter());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), lcl_countRows(xConnection, xComposer->getQuery()));
+}
+
+/**
+ * tdf#164328: filtering on an aggregate function with an alias (COUNT AS "CNT"),
+ * which the Standard Filter adds as a HAVING condition; the function must still be
+ * handled as a function and not be matched by its real name.
+ */
+void FirebirdTest::testTdf164328_Aggregate()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createAliasTestTables(xConnection);
+
+    uno::Reference<XSingleSelectQueryComposer> xComposer = lcl_createComposer(
+        xConnection,
+        u"SELECT \"NAME\", COUNT( \"ID\" ) AS \"CNT\" FROM \"T1\" GROUP BY \"NAME\""_ustr);
+    xComposer->setStructuredHavingClause(
+        lcl_makeFilter(u"COUNT( \"ID\" )"_ustr, SQLFilterOperator::GREATER, u"0"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"( COUNT( \"ID\" ) > 0 )"_ustr, xComposer->getHavingClause());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), lcl_countRows(xConnection, xComposer->getQuery()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);
