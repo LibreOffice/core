@@ -213,9 +213,12 @@ function pressToStartRun(getButton) {
 
 	getButton().should('be.visible').and('not.be.disabled').click();
 
+	// The drawing that puts the status line up comes some frames after the press.
+	cy.wrap(run).should(function() {
+		expect(run.started, 'the run the press set going').to.be.true;
+	});
 	cy.then(function() {
 		run.stopWatching();
-		expect(run.started, 'the run the press set going').to.be.true;
 	});
 
 	return run;
