@@ -4293,18 +4293,19 @@ std::shared_ptr<ClientSession> DocumentBroker::getWriteableSession() const
         // Save the document using a session that is loaded, editable, and
         // with a valid authorization token, or the first.
         // Note that isViewLoaded() precludes inWaitDisconnected().
-        if (!savingSession || (session->isViewLoaded() && session->isEditable() &&
-                               session->getAuthorization().isValid()))
+        // An owner that has not entered the document's edit password is not
+        // editable, as it has no changes of its own.
+        const bool canSave = session->isViewLoaded() && session->isEditable() &&
+                             session->getAuthorization().isValid();
+        if (!savingSession || canSave)
         {
             savingSession = session;
         }
 
-        // or if any of the sessions is document owner, use that. An owner that has not entered
-        // the document's edit password has no changes of its own, so it is skipped here.
-        //FIXME: can the owner be read-only?
-        if (session->isDocumentOwner() && !session->isLockedByPassword())
+        // Among the sessions that can save, the document owner comes first. An owner whose view
+        // is read-only, or whose token the host has rejected, is passed over like any other.
+        if (canSave && session->isDocumentOwner())
         {
-            savingSession = session;
             break;
         }
     }

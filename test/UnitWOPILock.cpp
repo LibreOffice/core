@@ -1223,14 +1223,145 @@ public:
     }
 };
 
+/// The owner and another editor have the document open. The host rejects the owner's token on a
+/// lock refresh, which makes the owner's view read-only. The lock is then refreshed with the
+/// other editor's token, which is still good.
+class UnitWopiLockRefreshOwnerExpired : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitViews, RefuseOwnerRefresh, WaitOtherRefresh, Done) _phase;
+
+    static constexpr std::chrono::seconds RefreshPeriod = std::chrono::seconds(1);
+
+    /// How long to wait for a refresh with the other editor's token.
+    static constexpr std::chrono::seconds WaitDuration = RefreshPeriod * 3;
+
+    std::size_t _viewCount;
+    std::string _ownerWopiSrc;
+    std::string _otherWopiSrc;
+    std::chrono::steady_clock::time_point _refusedTime;
+
+    static bool isOwner(const Poco::Net::HTTPRequest& request)
+    {
+        return request.getURI().find("access_token=owner") != std::string::npos;
+    }
+
+public:
+    UnitWopiLockRefreshOwnerExpired()
+        : WopiTestServer("UnitWopiLockRefreshOwnerExpired")
+        , _phase(Phase::Load)
+        , _viewCount(0)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setInt("storage.wopi.locking.refresh", RefreshPeriod.count());
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        TST_LOG("CheckFileInfo: " << (isOwner(request) ? "owner" : "other editor"));
+
+        fileInfo->set("SupportsLocks", "true");
+        fileInfo->set("BaseFileName", "doc.odt");
+
+        // The default UserId is the same as the OwnerId.
+        if (!isOwner(request))
+            fileInfo->set("UserId", "other");
+    }
+
+    std::unique_ptr<http::Response>
+    assertLockRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        const std::string op = request.get("X-WOPI-Override", std::string());
+        const bool owner = isOwner(request);
+        TST_LOG(op << " request with the " << (owner ? "owner's" : "other editor's") << " token in "
+                   << name(_phase));
+
+        if (op != "LOCK")
+            return nullptr;
+
+        if (_phase == Phase::RefuseOwnerRefresh)
+        {
+            LOK_ASSERT_MESSAGE("Expected the owner's session to refresh the lock", owner);
+            TST_LOG("Rejecting the owner's token");
+            _refusedTime = std::chrono::steady_clock::now();
+            TRANSITION_STATE(_phase, Phase::WaitOtherRefresh);
+            return std::make_unique<http::Response>(http::StatusCode::Unauthorized);
+        }
+
+        if (_phase == Phase::WaitOtherRefresh)
+        {
+            LOK_ASSERT_MESSAGE("Expected no more lock refreshes with the rejected owner's token",
+                               !owner);
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("Refreshed the lock with the other editor's token");
+        }
+
+        return nullptr;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        ++_viewCount;
+        TST_LOG("View #" << _viewCount << " [" << session->getName() << "] loaded");
+
+        if (_viewCount == 2)
+            TRANSITION_STATE(_phase, Phase::RefuseOwnerRefresh);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitViews);
+
+                // Each connection goes in at the front, so the owner ends up at index 1.
+                TST_LOG("Creating the owner and other editor connections");
+                _ownerWopiSrc = initWebsocket("/wopi/files/0?access_token=owner");
+                _otherWopiSrc = initWebsocket("/wopi/files/0?access_token=other");
+
+                WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + _ownerWopiSrc);
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + _otherWopiSrc);
+                break;
+            }
+            case Phase::WaitOtherRefresh:
+            {
+                if (std::chrono::steady_clock::now() - _refusedTime >= WaitDuration)
+                {
+                    failTest("No lock refresh with the other editor's token in " +
+                             std::to_string(WaitDuration.count()) +
+                             " seconds after the host rejected the owner's token");
+                    break;
+                }
+
+                // Keep the document from being unloaded as idle while we wait.
+                WSD_CMD_BY_CONNECTION_INDEX(0, "ping");
+                break;
+            }
+            case Phase::WaitViews:
+            case Phase::RefuseOwnerRefresh:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[10]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
+    return new UnitBase*[11]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
                               new UnitWopiLockFail(), new UnitWopiUnlock(),
                               new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
                               new UnitWopiUnlockRetry(),
                               new UnitWopiUnlockUnauthorized(),
-                              new UnitWopiLockRefreshReadOnly(), nullptr };
+                              new UnitWopiLockRefreshReadOnly(),
+                              new UnitWopiLockRefreshOwnerExpired(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
