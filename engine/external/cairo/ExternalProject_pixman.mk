@@ -41,6 +41,11 @@ cpu = '$(if $(filter x86,$(RTL_ARCH)),i686,$(if $(filter X86_64,$(RTL_ARCH)),x86
 endian = '$(ENDIANNESS)'
 endef
 
+# A shared library is not linked against the sanitizer runtime, which belongs
+# to the executable, so its __ubsan_handle_* and __asan_* references stay
+# undefined and --no-undefined turns that into an error. Meson drops that flag
+# itself when it is the one enabling the sanitizers, but here they reach it
+# through CC, so it has to be told.
 $(call gb_ExternalProject_get_state_target,pixman,build) :
 	$(call gb_Trace_StartRange,pixman,EXTERNAL)
 	$(file >$(gb_UnpackedTarball_workdir)/pixman/cross-file.txt,$(gb_pixman_cross_compile))
@@ -55,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 			$(if $(call gb_Module__symbols_enabled,pixman),-Dc_args="$$PIXMAP_CFLAGS") \
 			-Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release)) \
 			-Dauto_features=disabled \
+			$(if $(filter -fsanitize=%,$(CC)),-Db_lundef=false) \
 			$(if $(filter X86_64,$(RTL_ARCH)),-Dsse2=enabled -Dssse3=enabled) \
 			$(if $(filter x86,$(RTL_ARCH)),$(if $(filter EMSCRIPTEN,$(OS)),,-Dsse2=enabled -Dmmx=enabled)) \
 			$(if $(filter AARCH64,$(RTL_ARCH)),-Da64-neon=enabled) \
