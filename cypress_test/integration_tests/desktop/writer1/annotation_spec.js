@@ -1516,6 +1516,10 @@ describe(['tagdesktop'], 'Large Annotation Tests', function() {
 		helper.setupAndLoadDocument('writer/annotation-large.odt');
 		desktopHelper.switchUIToNotebookbar();
 		desktopHelper.sidebarToggle();
+		// A cursor update from core closes any comment the cursor is not in.
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
 	});
 
 	it('Full view fits in viewport', function() {
