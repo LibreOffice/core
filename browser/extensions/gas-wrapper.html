@@ -36,7 +36,9 @@
 <div id="gas-loading" style="padding: 12px; font: 13px sans-serif; color: #666;">Loading...</div>
 <script>
 // Query params: base (extension directory), sidebar (an HTML file under base, absent for an
-// add-on that has none), scripts (comma-separated .gs or .js file names under base):
+// add-on that has none), scripts (comma-separated .gs or .js file names under base), template (for
+// a page made through HtmlService.createTemplateFromFile, the JSON object of the properties the
+// add-on set on the template):
 (function() {
     function fail(msg) {
         const el = document.createElement('div');
@@ -53,6 +55,8 @@
     const sidebarName = params.get('sidebar') || '';
     if (!sidebarName) { fail('missing "sidebar" query parameter'); return; }
     const scriptNames = (params.get('scripts') || '').split(',').filter(Boolean);
+    const templateParam = params.get('template');
+    const templateValues = templateParam === null ? null : JSON.parse(templateParam);
     const baseUrl = new URL(base, location.href);
     const sidebarUrl = new URL(sidebarName, baseUrl);
     async function fetchText(url) {
@@ -62,8 +66,12 @@
     }
     // Serialise script insertion so a later inline script that depends on an external one above it
     // (typical jQuery pattern) sees the library rather than racing against its async load:
-    async function injectBody(bodyDoc) {
-        for (const el of Array.from(bodyDoc.childNodes)) {
+    async function injectNodes(sourceParent, target) {
+        for (const el of Array.from(sourceParent.childNodes)) {
+            if (el.nodeType === 1 && el.tagName === 'TITLE') {
+                document.title = el.textContent;
+                continue;
+            }
             if (el.nodeType === 1 && el.tagName === 'SCRIPT') {
                 const s = document.createElement('script');
                 for (const a of Array.from(el.attributes)) {
@@ -74,14 +82,14 @@
                     await new Promise(function(resolve) {
                         s.onload = resolve;
                         s.onerror = function() { resolve(); };
-                        document.body.appendChild(s);
+                        target.appendChild(s);
                     });
                 } else {
                     s.text = el.textContent;
-                    document.body.appendChild(s);
+                    target.appendChild(s);
                 }
             } else {
-                document.body.appendChild(el);
+                target.appendChild(el);
             }
         }
     }
@@ -105,11 +113,532 @@
             last = match.index + match[0].length;
         }
         out += html.substring(last);
-        if (/<\?/.test(out)) {
+        if (templateValues === null && /<\?/.test(out)) {
             console.warn('gas-wrapper: unhandled template scriptlets remain in',
                          sidebarUrl.href);
         }
         return out;
+    }
+    // As in HtmlService, a printing scriptlet prints nothing for null and undefined and otherwise
+    // the value as a string, which it escapes by the context the scriptlet stands in:
+    const scriptEscapes = {
+        '\0': '\\0', '\t': '\\t', '\n': '\\n', '\v': '\\x0b', '\f': '\\f', '\r': '\\r',
+        // Unlike in HtmlService, "$" is escaped too, so that a printed value stays text inside a
+        // template literal:
+        '"': '\\x22', '$': '\\x24', '&': '\\x26', "'": '\\x27', '(': '\\(', ')': '\\)',
+        '+': '\\x2b', '/': '\\/', '<': '\\x3c', '>': '\\x3e', '\\': '\\\\', '`': '\\x60',
+        '\u2028': '\\u2028', '\u2029': '\\u2029',
+    };
+    const htmlEscapes = {
+        '\0': '\ufffd', '"': '&#34;', '&': '&amp;', "'": '&#39;', '+': '&#43;', '<': '&lt;',
+        '>': '&gt;', '`': '&#96;',
+    };
+    function escapeHtml(text, quote) {
+        return text.replace(/[\0"&'+<>`]/g, (c) =>
+            (c === '"' && quote === "'") || (c === "'" && quote === '"') ? c : htmlEscapes[c]);
+    }
+    function escapeJs(text, regex) {
+        return text.replace(/[\0\t\n\v\f\r"&'()+\/<>\\`\u2028\u2029.*?[\]{}|^$]/g, (c) =>
+            scriptEscapes[c] !== undefined ? scriptEscapes[c] : regex ? '\\' + c : c);
+    }
+    function percentEncode(text, keep) {
+        return Array.from(text, (c) => keep.test(c) ? c : Array.from(
+            new TextEncoder().encode(c),
+            (b) => '%' + b.toString(16).padStart(2, '0')).join('')).join('');
+    }
+    // A URL at the start of a URL attribute keeps only http, https and mailto as its scheme:
+    function filterUrl(text) {
+        const scheme = /^([^:/?#]*):/.exec(text);
+        if (scheme && !/^(?:https?|mailto)$/i.test(scheme[1])) {
+            return '#ZautoescZ';
+        }
+        return percentEncode(text, /[A-Za-z0-9\-._~:/?#[\]@!$&*+,;=%]/);
+    }
+    function printValue(value, context) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        const text = String(value);
+        let escaped;
+        switch (context.kind) {
+        case 'drop':
+            return '';
+        case 'attrName':
+            return 'ZautoescZ';
+        case 'jsBare':
+            return "'" + escapeJs(text, false) + "'";
+        case 'jsString':
+            return escapeJs(text, false);
+        case 'jsRegex':
+            return escapeJs(text, true);
+        case 'url':
+            escaped = filterUrl(text);
+            break;
+        case 'urlPath':
+            escaped = percentEncode(text, /[A-Za-z0-9\-._~:/?#[\]@!$&*+,;=%]/);
+            break;
+        case 'urlQuery':
+            escaped = percentEncode(text, /[A-Za-z0-9\-._~]/);
+            break;
+        case 'cssName':
+            escaped = /^[A-Za-z_-][A-Za-z0-9_-]*$/.test(text) ? text : 'ZautoescZ';
+            break;
+        case 'cssValue':
+            escaped = /^[A-Za-z0-9 #.%!_-]*$/.test(text) ? text : 'ZautoescZ';
+            break;
+        default:
+            escaped = text;
+        }
+        return context.quote === undefined ? escaped : escapeHtml(escaped, context.quote);
+    }
+
+    // The JavaScript of a <script> element or an on* attribute, fed one character at a time, as
+    // far as it tells whether a scriptlet stands in code, a string, a regular expression or a
+    // comment:
+    function createJsState() {
+        return { state: 'code', previous: '' };
+    }
+    function feedJs(js, c) {
+        switch (js.state) {
+        case 'slash':
+            if (c === '/') {
+                js.state = 'line';
+                return;
+            }
+            if (c === '*') {
+                js.state = 'block';
+                return;
+            }
+            js.state = js.slashStartsRegex ? 'regex' : 'code';
+            if (!js.slashStartsRegex) {
+                js.previous = '/';
+            }
+            feedJs(js, c);
+            return;
+        case 'code':
+            if (c === "'" || c === '"') {
+                js.state = c;
+            } else if (c === '`') {
+                js.state = 'template';
+            } else if (c === '/') {
+                js.state = 'slash';
+                js.slashStartsRegex = js.previous === ''
+                    || '(,=:[!&|?{};+-*%<>~^'.includes(js.previous);
+            } else if (!/\s/.test(c)) {
+                js.previous = c;
+            }
+            return;
+        case "'":
+        case '"':
+        case 'template':
+            if (js.escaped) {
+                js.escaped = false;
+            } else if (c === '\\') {
+                js.escaped = true;
+            } else if (c === (js.state === 'template' ? '`' : js.state)) {
+                js.state = 'code';
+                js.previous = ')';
+            }
+            return;
+        case 'regex':
+        case 'class':
+            if (js.escaped) {
+                js.escaped = false;
+            } else if (c === '\\') {
+                js.escaped = true;
+            } else if (js.state === 'regex' && c === '[') {
+                js.state = 'class';
+            } else if (js.state === 'class' && c === ']') {
+                js.state = 'regex';
+            } else if (js.state === 'regex' && c === '/') {
+                js.state = 'code';
+                js.previous = ')';
+            }
+            return;
+        case 'line':
+            if (c === '\n') {
+                js.state = 'code';
+            }
+            return;
+        case 'block':
+            if (js.star && c === '/') {
+                js.state = 'code';
+            }
+            js.star = c === '*';
+            return;
+        }
+    }
+    function jsContext(js) {
+        switch (js.state) {
+        case "'":
+        case '"':
+            return 'jsString';
+        case 'regex':
+        case 'class':
+            return 'jsRegex';
+        case 'slash':
+            return js.slashStartsRegex ? 'jsRegex' : 'jsBare';
+        case 'line':
+        case 'block':
+            return 'drop';
+        default:
+            // HtmlService treats a template literal like code:
+            return 'jsBare';
+        }
+    }
+
+    // The CSS of a <style> element or a style attribute, fed one character at a time, as far as
+    // it tells whether a scriptlet stands in a selector or property name, a value, a url() or a
+    // comment:
+    function createCssState(inAttribute) {
+        return { state: inAttribute ? 'property' : 'selector', recent: '' };
+    }
+    function feedCss(css, c) {
+        const recent = css.recent;
+        css.recent = (recent + c).slice(-4);
+        switch (css.state) {
+        case 'comment':
+            if (css.star && c === '/') {
+                css.state = css.resume;
+            }
+            css.star = c === '*';
+            return;
+        case 'string':
+            if (css.escaped) {
+                css.escaped = false;
+            } else if (c === '\\') {
+                css.escaped = true;
+            } else if (c === css.quote) {
+                css.state = 'value';
+            }
+            return;
+        case 'url':
+            if (css.quote === '' && css.urlStart && (c === '"' || c === "'")) {
+                css.quote = c;
+            } else if (css.quote !== '' && css.quote !== ')' && c === css.quote) {
+                css.quote = ')';
+            } else if (c === ')' && (css.quote === '' || css.quote === ')')) {
+                css.state = 'value';
+            } else if (!/\s/.test(c)) {
+                css.urlStart = false;
+            }
+            return;
+        }
+        if (c === '*' && recent.endsWith('/')) {
+            css.resume = css.state;
+            css.state = 'comment';
+            css.star = false;
+        } else if (c === '{') {
+            css.state = 'property';
+        } else if (c === '}') {
+            css.state = 'selector';
+        } else if (c === ':' && css.state === 'property') {
+            css.state = 'value';
+        } else if (c === ';') {
+            css.state = 'property';
+        } else if (css.state === 'value' && (c === '"' || c === "'")) {
+            css.state = 'string';
+            css.quote = c;
+        } else if (css.state === 'value' && c === '(' && /url$/i.test(recent)) {
+            css.state = 'url';
+            css.quote = '';
+            css.urlStart = true;
+        }
+    }
+    function cssContext(css) {
+        switch (css.state) {
+        case 'selector':
+        case 'property':
+            return 'cssName';
+        case 'url':
+            return css.urlStart ? 'url' : 'urlQuery';
+        case 'comment':
+            return 'drop';
+        default:
+            return 'cssValue';
+        }
+    }
+
+    const urlAttributes = new Set(['action', 'background', 'cite', 'codebase', 'formaction', 'href',
+        'longdesc', 'manifest', 'poster', 'src', 'srcset', 'usemap', 'xlink:href']);
+
+    // Follow the template's HTML from one scriptlet to the next, where parts is the output so far
+    // as text parts and scriptlet parts, which the tracker changes where HtmlService would change
+    // the HTML, dropping comments, adding quotes around an unquoted attribute value with a
+    // scriptlet in it, and making a "<" before a scriptlet text:
+    function createTracker(parts) {
+        let state = 'text';
+        let rawEnd = '';
+        let tagName = '';
+        let tagOpen = null;
+        let attribute = '';
+        let quote = '';
+        let valueStart = null;
+        let valueQuoted = false;
+        let valueText = '';
+        let valuePrinted = false;
+        let js = null;
+        let css = null;
+
+        function startValue(q, at) {
+            state = 'value';
+            quote = q;
+            valueStart = at;
+            valueQuoted = false;
+            valueText = '';
+            valuePrinted = false;
+            const name = attribute.toLowerCase();
+            js = name.startsWith('on') ? createJsState() : null;
+            css = name === 'style' ? createCssState(true) : null;
+        }
+        function endTag() {
+            const name = tagName.toLowerCase();
+            state = 'text';
+            if (name === 'script' || name === 'style' || name === 'textarea' || name === 'title') {
+                state = name === 'script' ? 'script' : name === 'style' ? 'style' : 'rcdata';
+                rawEnd = '</' + name;
+                js = name === 'script' ? createJsState() : null;
+                css = name === 'style' ? createCssState(false) : null;
+            }
+        }
+
+        return {
+            text: function (text) {
+                let out = '';
+                let i = 0;
+                const here = () => ({ part: parts.length, offset: out.length });
+                while (i < text.length) {
+                    const c = text[i];
+                    switch (state) {
+                    case 'text':
+                        if (text.startsWith('<!--', i)) {
+                            state = 'comment';
+                            i += 4;
+                            continue;
+                        }
+                        if (c === '<') {
+                            tagOpen = here();
+                            const closing = text[i + 1] === '/';
+                            const start = i + (closing ? 2 : 1);
+                            const name = /^[A-Za-z][A-Za-z0-9:-]*/.exec(text.substring(start));
+                            if (name) {
+                                out += text.substring(i, i + (closing ? 2 : 1) + name[0].length);
+                                i += (closing ? 2 : 1) + name[0].length;
+                                tagName = closing ? '' : name[0];
+                                state = 'tag';
+                                continue;
+                            }
+                            if (i + (closing ? 2 : 1) === text.length) {
+                                out += text.substring(i);
+                                state = 'tagOpen';
+                                return parts.push({ text: out });
+                            }
+                        }
+                        break;
+                    case 'comment':
+                        if (text.startsWith('-->', i)) {
+                            state = 'text';
+                            i += 3;
+                        } else {
+                            ++i;
+                        }
+                        continue;
+                    case 'rcdata':
+                    case 'script':
+                    case 'style':
+                        if (text.substring(i, i + rawEnd.length).toLowerCase() === rawEnd) {
+                            tagName = '';
+                            out += text.substring(i, i + rawEnd.length);
+                            i += rawEnd.length;
+                            state = 'tag';
+                            continue;
+                        }
+                        if (state === 'script') {
+                            feedJs(js, c);
+                        } else if (state === 'style') {
+                            feedCss(css, c);
+                        }
+                        break;
+                    case 'tagOpen':
+                        state = 'text';
+                        continue;
+                    case 'tag':
+                        if (c === '>') {
+                            out += c;
+                            ++i;
+                            endTag();
+                            continue;
+                        }
+                        if (!/[\s/]/.test(c)) {
+                            state = 'attrName';
+                            attribute = '';
+                            continue;
+                        }
+                        break;
+                    case 'attrName':
+                        if (c === '=') {
+                            state = 'beforeValue';
+                        } else if (/[\s/>]/.test(c)) {
+                            state = 'tag';
+                            continue;
+                        } else {
+                            attribute += c;
+                        }
+                        break;
+                    case 'beforeValue':
+                        if (c === '"' || c === "'") {
+                            out += c;
+                            ++i;
+                            startValue(c, here());
+                            continue;
+                        }
+                        if (c === '>') {
+                            state = 'tag';
+                            continue;
+                        }
+                        if (!/\s/.test(c)) {
+                            startValue('', here());
+                            continue;
+                        }
+                        break;
+                    case 'value':
+                        if (quote !== '' ? c === quote : /[\s>]/.test(c)) {
+                            if (valueQuoted) {
+                                out += '"';
+                            }
+                            state = 'tag';
+                            if (quote !== '') {
+                                out += c;
+                                ++i;
+                            }
+                            continue;
+                        }
+                        valueText += c;
+                        if (js) {
+                            feedJs(js, c);
+                        } else if (css) {
+                            feedCss(css, c);
+                        }
+                        break;
+                    }
+                    out += c;
+                    ++i;
+                }
+                parts.push({ text: out });
+            },
+            // Where the next scriptlet prints, making room for it where HtmlService changes the
+            // HTML around it:
+            context: function (escaping) {
+                if (state === 'tagOpen') {
+                    const part = parts[tagOpen.part];
+                    part.text = part.text.substring(0, tagOpen.offset) + '&lt;'
+                        + part.text.substring(tagOpen.offset + 1);
+                    state = 'text';
+                }
+                if (state === 'beforeValue') {
+                    startValue('', { part: parts.length, offset: 0 });
+                }
+                if (state === 'value' && quote === '' && escaping && !valueQuoted) {
+                    const part = parts[valueStart.part] || { text: '' };
+                    if (valueStart.part === parts.length) {
+                        parts.push({ text: '"' });
+                    } else {
+                        part.text = part.text.substring(0, valueStart.offset) + '"'
+                            + part.text.substring(valueStart.offset);
+                    }
+                    valueQuoted = true;
+                }
+                const attributeQuote = quote !== '' ? quote : valueQuoted ? '"' : undefined;
+                switch (state) {
+                case 'comment':
+                    return { kind: 'drop' };
+                case 'tag':
+                case 'attrName':
+                    state = 'attrName';
+                    attribute = '';
+                    return { kind: 'attrName' };
+                case 'script':
+                    return { kind: jsContext(js) };
+                case 'style':
+                    return { kind: cssContext(css) };
+                case 'value': {
+                    const name = attribute.toLowerCase();
+                    let kind = 'attr';
+                    if (js) {
+                        kind = jsContext(js);
+                    } else if (css) {
+                        kind = cssContext(css);
+                    } else if (urlAttributes.has(name)) {
+                        kind = valueText.trim() === '' && !valuePrinted ? 'url'
+                            : /[?#]/.test(valueText) ? 'urlQuery' : 'urlPath';
+                    }
+                    return {
+                        kind: kind, quote: kind.startsWith('js') ? undefined : attributeQuote,
+                    };
+                }
+                default:
+                    return { kind: 'text', quote: '' };
+                }
+            },
+            // Take note of a scriptlet having printed something:
+            printed: function () {
+                if (js) {
+                    js.previous = ')';
+                }
+                if (css && css.state === 'url') {
+                    css.urlStart = false;
+                }
+                valuePrinted = true;
+            },
+            finish: function () {
+                if (state === 'value' && valueQuoted) {
+                    parts.push({ text: '"' });
+                }
+            },
+        };
+    }
+
+    // Compile <? code ?>, <?= expr ?> and <?!= expr ?> into one function that runs with the
+    // template's properties as its variables, with an unclosed scriptlet running to the end of the
+    // template as in HtmlService:
+    function evaluateTemplate(html, values) {
+        const tagRe = /<\?(!?=)?([\s\S]*?)(?:\?>|$)/g;
+        const parts = [];
+        const tracker = createTracker(parts);
+        let last = 0;
+        let match;
+        while ((match = tagRe.exec(html)) !== null) {
+            tracker.text(html.substring(last, match.index));
+            if (match[1] === '=') {
+                parts.push({ print: match[2], context: tracker.context(true) });
+                tracker.printed();
+            } else if (match[1] === '!=') {
+                tracker.context(false);
+                parts.push({ raw: match[2] });
+                tracker.printed();
+            } else {
+                parts.push({ code: match[2] });
+            }
+            last = match.index + match[0].length;
+        }
+        tracker.text(html.substring(last));
+        tracker.finish();
+        let code = 'let __out = "";\n';
+        for (const part of parts) {
+            if (part.text !== undefined) {
+                code += '__out += ' + JSON.stringify(part.text) + ';\n';
+            } else if (part.print !== undefined) {
+                code += '__out += __print((' + part.print + '), ' + JSON.stringify(part.context)
+                    + ');\n';
+            } else if (part.raw !== undefined) {
+                code += '__out += String((' + part.raw + '));\n';
+            } else {
+                code += part.code + '\n;\n';
+            }
+        }
+        code += 'return __out;';
+        const fn = new Function('__values', '__print', 'with (__values) {\n' + code + '\n}');
+        return fn(values, printValue);
     }
     (async function() {
         const sources = await Promise.all(scriptNames.map(function(s) {
@@ -127,18 +656,18 @@
         }
         window.__gasFunctionNames = Array.from(names);
         const rawHtml = await fetchText(sidebarUrl);
-        const html = await expandScriptlets(rawHtml);
+        const expanded = await expandScriptlets(rawHtml);
+        const html = templateValues === null
+            ? expanded : evaluateTemplate(expanded, templateValues);
         const doc = new DOMParser().parseFromString(html, 'text/html');
-        // Merge <head> children in so <link rel="stylesheet"> and <style> apply:
-        for (const el of Array.from(doc.head.children)) {
-            if (el.tagName === 'TITLE') { document.title = el.textContent; continue; }
-            document.head.appendChild(el);
-        }
+        // Merge <head> children in so <link rel="stylesheet"> and <style> apply and the page's
+        // own head scripts run:
+        await injectNodes(doc.head, document.head);
         // Move body attributes over so class/id-based CSS keeps applying:
         for (const a of Array.from(doc.body.attributes)) {
             document.body.setAttribute(a.name, a.value);
         }
-        await injectBody(doc.body);
+        await injectNodes(doc.body, document.body);
         const loading = document.getElementById('gas-loading');
         if (loading) loading.remove();
     })().catch(function(err) {

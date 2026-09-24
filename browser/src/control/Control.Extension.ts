@@ -311,6 +311,22 @@ interface ExtensionOpenSidebarMessage {
 	sidebarFile: string;
 }
 
+// The dialog an Apps Script add-on asked for through one of the ui.show*Dialog calls: its HTML
+// file under the add-on directory, and for a page made from a template, the properties the add-on
+// set on that template:
+interface GasDialogSpec {
+	file: string;
+	title?: string;
+	width?: number;
+	height?: number;
+	templateValues?: object;
+}
+
+interface ExtensionShowGasDialogMessage {
+	msgId: 'Extension_ShowGasDialog';
+	dialog: GasDialogSpec;
+}
+
 interface ExtensionDialogCloseMessage {
 	msgId: 'Extension_DialogClose';
 	value: unknown;
@@ -328,9 +344,12 @@ type ExtensionSidebarMessage =
 	| ExtensionResizeMessage
 	| ExtensionShowDialogMessage
 	| ExtensionSaveFileMessage
-	| ExtensionOpenSidebarMessage;
+	| ExtensionOpenSidebarMessage
+	| ExtensionShowGasDialogMessage;
 
 type ExtensionDialogMessage =
+	| ExtensionCallMessage
+	| ExtensionProxyReturnMessage
 	| ExtensionDialogCloseMessage
 	| ExtensionDialogCancelMessage
 	| ExtensionResizeMessage;
@@ -389,10 +408,12 @@ window.L.Control.Extension = window.L.Control.extend({
 	// One modal dialog per extension at a time.  origRemove holds the un-hooked
 	// L.IFrameDialog.remove so _closeDialog can dismiss without re-entering the
 	// user-close override installed in _openDialog.
+	// dialogId is null for an Apps Script dialog, which has no cool.dialog.open() call
+	// waiting for its result.
 	_dialog: null as null | {
 		iframeDialog: any;
 		origRemove: () => void;
-		dialogId: string;
+		dialogId: string | null;
 	},
 
 	onAdd: function (map: any) {
@@ -424,12 +445,28 @@ window.L.Control.Extension = window.L.Control.extend({
 		return window.origin.startsWith('http') ? window.origin : '*';
 	},
 
-	_postToIframe: function (payload: object) {
-		if (!this._iframe || !this._iframe.contentWindow) return;
+	_postToIframe: function (payload: object): boolean {
+		if (!this._iframe || !this._iframe.contentWindow) return false;
 		this._iframe.contentWindow.postMessage(
 			JSON.stringify(payload),
 			this._targetOrigin(),
 		);
+		return true;
+	},
+
+	// A call or proxy id that cool.js made in the dialog iframe starts with "dlg-", and every
+	// other one comes from the sidebar iframe:
+	_postToCaller: function (id: string, payload: object): boolean {
+		if (!id.startsWith('dlg-')) {
+			return this._postToIframe(payload);
+		}
+		const frame = this._dialog && this._dialog.iframeDialog._iframe;
+		if (!frame || !frame.contentWindow) return false;
+		frame.contentWindow.postMessage(
+			JSON.stringify(payload),
+			this._targetOrigin(),
+		);
+		return true;
 	},
 
 	// Forward LOK comment events (Add/Modify/Remove) to the iframe as Extension_DocumentEvent
@@ -492,13 +529,31 @@ window.L.Control.Extension = window.L.Control.extend({
 			}
 			return;
 		}
-		this._postToIframe({
+		const delivered = this._postToCaller(e.proxyId, {
 			msgId: 'Extension_ProxyCall',
 			proxyId: e.proxyId,
 			callId: e.callId,
 			method: e.method,
 			args: e.args,
 		});
+		if (!e.callId) return;
+		// Every Extension control sees every proxy call, and a call that none of them can pass
+		// to a frame, as after the dialog making it has closed, returns null to its caller in
+		// the kit once all of them have seen it:
+		const callId = e.callId;
+		let delivery = proxyCallDeliveries.get(callId);
+		if (!delivery) {
+			delivery = { delivered: false };
+			proxyCallDeliveries.set(callId, delivery);
+			const pending = delivery;
+			queueMicrotask(() => {
+				proxyCallDeliveries.delete(callId);
+				if (!pending.delivered) {
+					app.socket.sendMessage('proxyreturn ' + callId + ' null');
+				}
+			});
+		}
+		if (delivered) delivery.delivered = true;
 	},
 
 	_makeGasProxyHandlers: function (): {
@@ -659,6 +714,7 @@ window.L.Control.Extension = window.L.Control.extend({
 					__coolGas?: boolean;
 					alerts?: { title?: string; message?: string }[];
 					sidebarFile?: string;
+					dialog?: GasDialogSpec | null;
 				} | null;
 				if (!envelope || envelope.__coolGas !== true) return;
 				for (const alert of envelope.alerts || []) {
@@ -669,6 +725,9 @@ window.L.Control.Extension = window.L.Control.extend({
 				}
 				if (typeof envelope.sidebarFile === 'string' && envelope.sidebarFile) {
 					this._openPanel(envelope.sidebarFile);
+				}
+				if (envelope.dialog) {
+					this._openGasDialog(envelope.dialog);
 				}
 			},
 			onError: (err: Error) => {
@@ -782,6 +841,46 @@ window.L.Control.Extension = window.L.Control.extend({
 		app.socket.sendMessage('uno .uno:SidebarHide');
 	},
 
+	// The URL of gas-wrapper.html showing the add-on page named file, with params carrying any
+	// further query parameters:
+	_gasWrapperUrl: function (file: string, params: URLSearchParams): string {
+		const manifest: ExtensionManifest = this.options.manifest;
+		params.set('base', new URL(this.options.baseUrl, document.baseURI).href);
+		if (manifest.gasContext && manifest.gasContext.names.length) {
+			params.set('scripts', manifest.gasContext.names.join(','));
+		}
+		params.set('sidebar', file + (/\.html?$/i.test(file) ? '' : '.html'));
+		return new URL(
+			this.options.baseUrl + '../gas-wrapper.html?' + params.toString(),
+			document.baseURI,
+		).href;
+	},
+
+	_openGasDialog: function (spec: GasDialogSpec) {
+		// One modal at a time per extension, and the add-on's second request is dropped:
+		if (this._dialog) {
+			console.warn(
+				'extension ' +
+					this.options.id +
+					': dialog ' +
+					spec.file +
+					' requested while another one is open',
+			);
+			return;
+		}
+		const params = new URLSearchParams();
+		params.set('coolRole', 'dialog');
+		if (spec.templateValues !== undefined) {
+			params.set('template', JSON.stringify(spec.templateValues));
+		}
+		this._showDialogFrame(this._gasWrapperUrl(spec.file, params), {
+			dialogId: null,
+			title: spec.title,
+			width: spec.width,
+			height: spec.height,
+		});
+	},
+
 	_showPanel: function (sidebarFile?: string) {
 		const manifest: ExtensionManifest = this.options.manifest;
 
@@ -805,19 +904,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		let entryUrl: string;
 		if (manifest.isGasExtension) {
 			if (!manifest.gasContext || !sidebarFile) return;
-			const params = new URLSearchParams();
-			params.set('base', new URL(this.options.baseUrl, document.baseURI).href);
-			if (manifest.gasContext.names.length) {
-				params.set('scripts', manifest.gasContext.names.join(','));
-			}
-			params.set(
-				'sidebar',
-				sidebarFile + (/\.html?$/i.test(sidebarFile) ? '' : '.html'),
-			);
-			entryUrl = new URL(
-				this.options.baseUrl + '../gas-wrapper.html?' + params.toString(),
-				document.baseURI,
-			).href;
+			entryUrl = this._gasWrapperUrl(sidebarFile, new URLSearchParams());
 		} else {
 			entryUrl = this.options.baseUrl + manifest.entry;
 		}
@@ -917,7 +1004,10 @@ window.L.Control.Extension = window.L.Control.extend({
 		}
 	},
 
-	_handleSidebarMessage: function (msg: ExtensionSidebarMessage) {
+	// The sidebar and the dialog iframe both send these on to the kit:
+	_forwardToKit: function (
+		msg: ExtensionCallMessage | ExtensionProxyReturnMessage,
+	) {
 		switch (msg.msgId) {
 			case 'Extension_Call': {
 				// Wire format `executescript <id> <line> <source>\n<script>`:
@@ -944,6 +1034,15 @@ window.L.Control.Extension = window.L.Control.extend({
 						JSON.stringify(msg.value === undefined ? null : msg.value),
 				);
 				break;
+		}
+	},
+
+	_handleSidebarMessage: function (msg: ExtensionSidebarMessage) {
+		switch (msg.msgId) {
+			case 'Extension_Call':
+			case 'Extension_ProxyReturn':
+				this._forwardToKit(msg);
+				break;
 			case 'Extension_Close':
 				this._closeExtension();
 				break;
@@ -963,6 +1062,9 @@ window.L.Control.Extension = window.L.Control.extend({
 				break;
 			case 'Extension_OpenSidebar':
 				this._openPanel(msg.sidebarFile);
+				break;
+			case 'Extension_ShowGasDialog':
+				this._openGasDialog(msg.dialog);
 				break;
 			default:
 				console.warn('unexpected msgId: ' + (msg as any).msgId);
@@ -1029,6 +1131,10 @@ window.L.Control.Extension = window.L.Control.extend({
 
 	_handleDialogMessage: function (msg: ExtensionDialogMessage) {
 		switch (msg.msgId) {
+			case 'Extension_Call':
+			case 'Extension_ProxyReturn':
+				this._forwardToKit(msg);
+				break;
 			case 'Extension_DialogClose':
 				this._closeDialog({ cancelled: false, value: msg.value });
 				break;
@@ -1070,6 +1176,19 @@ window.L.Control.Extension = window.L.Control.extend({
 			this._postDialogResult(msg.dialogId, { cancelled: true });
 			return;
 		}
+		resolved.searchParams.set('coolRole', 'dialog');
+		this._showDialogFrame(resolved.href, msg);
+	},
+
+	_showDialogFrame: function (
+		url: string,
+		msg: {
+			dialogId: string | null;
+			title?: string;
+			width?: number;
+			height?: number;
+		},
+	) {
 		const iframeOptions: any = {
 			// Own prefix rather than iframe-dialog so extension-specific CSS
 			// can stand on its own without disturbing the Feedback dialog.
@@ -1079,7 +1198,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		};
 		if (msg.title !== undefined) iframeOptions.title = msg.title;
 		const iframeDialog = window.L.iframeDialog(
-			withUiLanguage(resolved.href),
+			withUiLanguage(url),
 			{},
 			null,
 			iframeOptions,
@@ -1124,9 +1243,10 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	_postDialogResult: function (
-		dialogId: string,
+		dialogId: string | null,
 		result: { cancelled: boolean; value?: unknown },
 	) {
+		if (dialogId === null) return;
 		this._postToIframe({
 			msgId: 'Extension_DialogResult',
 			dialogId: dialogId,
@@ -1167,7 +1287,7 @@ window.L.Control.Extension = window.L.Control.extend({
 			if (e.err !== undefined) pending.onError(this._toScriptError(e.err));
 			else pending.onSuccess(e.ok);
 		} else {
-			this._postToIframe({
+			this._postToCaller(e.id, {
 				msgId: 'Extension_CallResult',
 				callId: e.id,
 				ok: e.ok,
@@ -1351,6 +1471,10 @@ function loadGasRunnerExpr(baseRel: string): Promise<string> {
 // (a null proxyId keeps the call working so long as onOpen doesn't touch PropertiesService
 // or LanguageApp, since nothing top-side serves those here):
 let nextGasCollectId = 0;
+// The proxy calls that the Extension controls are passing on, by call id, each with whether one of
+// the controls found a frame for it:
+const proxyCallDeliveries = new Map<string, { delivered: boolean }>();
+
 async function collectGasAddonMenu(
 	id: string,
 	baseRel: string,

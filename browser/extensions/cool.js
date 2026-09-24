@@ -121,6 +121,12 @@
 		})(),
 	};
 
+	// The host opens a dialog page with coolRole=dialog in its query, and the call and proxy
+	// ids made in a dialog carry this prefix so that the host can send each reply to the frame
+	// that is waiting for it:
+	window.cool.idPrefix =
+		new URLSearchParams(location.search).get('coolRole') === 'dialog' ? 'dlg-' : '';
+
 	let nextCallId = 0;
 	const pending = Object.create(null);
 
@@ -192,7 +198,7 @@
 	// `args` must be JSON-serializable.
 	window.cool.callRemote = function (fnOrOpts) {
 		const args = Array.prototype.slice.call(arguments, 1);
-		const callId = String(nextCallId++);
+		const callId = window.cool.idPrefix + String(nextCallId++);
 		const promise = new Promise(function (resolve, reject) {
 			pending[callId] = { resolve: resolve, reject: reject };
 		});
@@ -257,7 +263,7 @@
 	// Returns `{ready, detach}`: `ready` resolves after the kit-side attach script has run;
 	// `detach()` runs `spec.detach` on the kit as the matching callRemote.
 	function attachListenerImpl(typeName, spec, facade) {
-		const proxyId = 'p' + (nextProxyId++);
+		const proxyId = window.cool.idPrefix + 'p' + (nextProxyId++);
 		listeners[proxyId] = {
 			on: spec.on,
 			detach: spec.detach,

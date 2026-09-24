@@ -21,11 +21,12 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         function activeDoc() { return cool.getActiveDocument(); }
 
         // What getUi() collects over one call: the messages an add-on passed to alert(), the
-        // items it put in its menu, and (if any) the sidebar file it asked us to show.  All
-        // travel back with the call's result:
+        // items it put in its menu, and (if any) the sidebar file and the dialog it asked us to
+        // show.  All travel back with the call's result:
         const pendingAlerts = [];
         const menuItems = [];
         let showSidebarFile = null;
+        let showDialogSpec = null;
 
         // ButtonSet and Button members are objects rather than strings so alert()'s overloads
         // stay distinguishable: alert(title, prompt) and alert(prompt, buttons) both take two
@@ -58,25 +59,34 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             return m;
         }
 
+        function recordDialog(callName, html, title) {
+            if (!html || !html.__gasSourceFile) {
+                throw new Error(
+                    'getUi().' + callName + ' supports only HtmlOutput made from an add-on file'
+                        + ' in the COOL Apps Script wrapper');
+            }
+            showDialogSpec = {
+                file: html.__gasSourceFile,
+                title: title === undefined ? html.__gasTitle : String(title),
+                width: html.__gasWidth,
+                height: html.__gasHeight,
+                templateValues: html.__gasTemplateValues
+            };
+        }
+
         const uiStub = {
             createAddonMenu: menuBuilder,
             createMenu: menuBuilder,
             showSidebar: function(html) {
                 showSidebarFile = html && html.__gasSourceFile ? html.__gasSourceFile : null;
             },
-            showDialog: function() {
-                throw new Error(
-                    'getUi().showDialog is not yet supported in the COOL Apps Script wrapper');
+            showDialog: function(html) { recordDialog('showDialog', html, undefined); },
+            showModalDialog: function(html, title) {
+                recordDialog('showModalDialog', html, title);
             },
-            showModalDialog: function() {
-                throw new Error(
-                    'getUi().showModalDialog is not yet supported in the COOL Apps Script'
-                        + ' wrapper');
-            },
-            showModelessDialog: function() {
-                throw new Error(
-                    'getUi().showModelessDialog is not yet supported in the COOL Apps Script'
-                        + ' wrapper');
+            // The host has modal dialogs only, so a modeless one blocks the document too:
+            showModelessDialog: function(html, title) {
+                recordDialog('showModelessDialog', html, title);
             },
             // GAS blocks the script on a modal here.  This one only records the message, which
             // travels back with the call's result, so an add-on that alerts and then keeps
@@ -315,12 +325,19 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             getUi: function() { return uiStub; }
         };
 
-        function makeHtmlOutput(fileName) {
+        function makeHtmlOutput(fileName, templateValues) {
             const o = {
                 __gasSourceFile: fileName,
-                setTitle: function() { return o; },
-                setWidth: function() { return o; },
-                setHeight: function() { return o; },
+                __gasTemplateValues: templateValues,
+                __gasTitle: undefined,
+                __gasWidth: undefined,
+                __gasHeight: undefined,
+                setTitle: function(t) { o.__gasTitle = String(t); return o; },
+                getTitle: function() { return o.__gasTitle === undefined ? '' : o.__gasTitle; },
+                setWidth: function(w) { o.__gasWidth = Number(w); return o; },
+                getWidth: function() { return o.__gasWidth; },
+                setHeight: function(h) { o.__gasHeight = Number(h); return o; },
+                getHeight: function() { return o.__gasHeight; },
                 setContent: function() { return o; },
                 setSandboxMode: function() { return o; },
                 getContent: function() { return ''; },
@@ -331,8 +348,20 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         globalThis.HtmlService = {
             createHtmlOutputFromFile: makeHtmlOutput,
             createHtmlOutput: function() { return makeHtmlOutput(); },
+            // The page's scriptlets run in the iframe that shows it, with the properties the
+            // add-on set on the template as their variables, so evaluate() takes a JSON copy of
+            // those properties:
             createTemplateFromFile: function(name) {
-                return { evaluate: function() { return makeHtmlOutput(name); } };
+                const t = {
+                    evaluate: function() {
+                        const values = {};
+                        for (const k of Object.keys(t)) {
+                            if (typeof t[k] !== 'function') values[k] = t[k];
+                        }
+                        return makeHtmlOutput(name, JSON.parse(JSON.stringify(values)));
+                    }
+                };
+                return t;
             },
             SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
         };
@@ -447,9 +476,11 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         }
         // A result marked __coolGas holds the add-on function's own return value in value,
         // every message it passed to getUi().alert() in alerts, and (if any) the sidebar file
-        // it asked us to show through ui.showSidebar in sidebarFile:
+        // it asked us to show through ui.showSidebar in sidebarFile and the dialog it asked us
+        // to show through one of the ui.show*Dialog calls in dialog:
         return {
-            __coolGas: true, value: value, alerts: pendingAlerts, sidebarFile: showSidebarFile
+            __coolGas: true, value: value, alerts: pendingAlerts, sidebarFile: showSidebarFile,
+            dialog: showDialogSpec
         };
     } finally {
         if (proxyId != null) $internal.takeProxy(proxyId);

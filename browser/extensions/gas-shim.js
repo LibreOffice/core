@@ -43,7 +43,7 @@
                 if (Object.prototype.hasOwnProperty.call(chainReserved, prop)) return undefined;
                 return function() {
                     const callArgs = Array.prototype.slice.call(arguments);
-                    const proxyId = 'gasrt' + (nextClientRuntimeId++);
+                    const proxyId = window.cool.idPrefix + 'gasrt' + (nextClientRuntimeId++);
                     window.cool.registerProxy(proxyId, clientRuntimeHandlers);
                     const done = function() { window.cool.unregisterProxy(proxyId); };
                     // Explicit source/line so kit-side stack frames map to gas-kit-runner.js on
@@ -83,9 +83,10 @@
         });
     }
     // A result marked __coolGas holds the add-on function's own return value in value, every
-    // message it passed to getUi().alert() in alerts, and (if any) the HtmlOutput file its
-    // ui.showSidebar was called with in sidebarFile.  Show the messages, ask the host to
-    // open the sidebar with that file, return the value:
+    // message it passed to getUi().alert() in alerts, (if any) the HtmlOutput file its
+    // ui.showSidebar was called with in sidebarFile, and (if any) the dialog one of its
+    // ui.show*Dialog calls asked for in dialog.  Show the messages, ask the host to open the
+    // sidebar and the dialog, return the value:
     function unwrapEnvelope(result) {
         if (!result || result.__coolGas !== true) return result;
         const alerts = Array.isArray(result.alerts) ? result.alerts : [];
@@ -96,6 +97,12 @@
             window.parent.postMessage(JSON.stringify({
                 msgId: 'Extension_OpenSidebar',
                 sidebarFile: result.sidebarFile
+            }), '*');
+        }
+        if (result.dialog) {
+            window.parent.postMessage(JSON.stringify({
+                msgId: 'Extension_ShowGasDialog',
+                dialog: result.dialog
             }), '*');
         }
         return result.value;
@@ -143,7 +150,11 @@
     });
     window.google.script.host = window.google.script.host || {
         close: function() {
-            window.parent.postMessage(JSON.stringify({ msgId: 'Extension_Close' }), '*');
+            if (window.cool.idPrefix) {
+                window.cool.dialog.close();
+            } else {
+                window.parent.postMessage(JSON.stringify({ msgId: 'Extension_Close' }), '*');
+            }
         },
         setHeight: function() {},
         setWidth: function() {},
