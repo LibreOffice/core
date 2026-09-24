@@ -5466,6 +5466,12 @@ void DocumentBroker::completeRemoteDocumentLinkAccess(const std::string& tag,
     _remoteLinks.completeLinkAccess(*this, tag, persistentLink, statusCode, body);
 }
 
+void DocumentBroker::resolveRemoteDocumentSource(const std::string& tag,
+                                                 const std::string& persistentLink)
+{
+    _remoteLinks.resolveSource(*this, tag, persistentLink);
+}
+
 bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
                                                  const std::string& wopiSrc,
                                                  const std::string& accessToken,

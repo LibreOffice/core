@@ -410,6 +410,13 @@ class SlideImportSession {
 		);
 	}
 
+	// Asks the server to look for the document behind a persistent link.
+	public static resolveRemoteLink(persistentLink: string): void {
+		app.socket.sendMessage(
+			'remotelinkresolve source=' + encodeURIComponent(persistentLink),
+		);
+	}
+
 	// Sends a read-only client command to a subscribed remote document. Its
 	// reply arrives as a remotedoccommandresult map event carrying the same
 	// wopiSrc.

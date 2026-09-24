@@ -250,6 +250,7 @@ interface AppInterface {
 		state: string;
 		lastModifiedTime?: string;
 		persistentLink?: string;
+		access?: string;
 	}>;
 	// One-time token authorizing this view to call a POST to /cool/links
 	linkToken: string;

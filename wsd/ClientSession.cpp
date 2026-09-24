@@ -1537,6 +1537,19 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                                                  tokens.equals(0, "remotedocsubscribe"));
         return true;
     }
+    else if (tokens.equals(0, "remotelinkresolve"))
+    {
+        std::string encodedSource;
+        if (tokens.size() < 2 || !COOLProtocol::getTokenString(tokens[1], "source", encodedSource) ||
+            encodedSource.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkresolve kind=syntax");
+            return false;
+        }
+
+        docBroker->resolveRemoteDocumentSource(getId(), Uri::decode(encodedSource));
+        return true;
+    }
 #endif // !MOBILEAPP && !WASMAPP
     else if (tokens.equals(0, "slidelink"))
     {

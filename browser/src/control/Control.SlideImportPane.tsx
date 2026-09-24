@@ -41,6 +41,9 @@ interface SlideImportPaneSource {
   // The persistent link the pages of this document store for the source,
   // or the name alone for a source the storage listed no address for.
   persistentLink: string;
+  // State of asking the storage for the persistent link: pending,
+  // resolved, notfound, denied or failed. Empty when it was never asked.
+  access: string;
   // The state the server reports for this view: available, subscribed,
   // connected, disconnected, failed, missing or noaccess.
   state: string;
@@ -251,6 +254,7 @@ class SlideImportPane {
           id: this.nextSourceId++,
           name: name,
           persistentLink: doc.persistentLink || '',
+          access: doc.access || '',
           state: doc.state,
           expanded: false,
           asked: false,
@@ -266,6 +270,7 @@ class SlideImportPane {
       }
       source.name = name;
       source.persistentLink = doc.persistentLink || '';
+      source.access = doc.access || '';
       source.state = doc.state;
       // The source answered, so it is not opening any more.
       if (source.state !== 'available' && source.state !== 'disconnected')
@@ -741,10 +746,20 @@ class SlideImportPane {
   private sourceMessage(source: SlideImportPaneSource): string {
     if (source.slides.length) return '';
     if (source.opening) return _('Reading the slides...');
-    if (source.state === 'missing')
+    if (source.state === 'missing') {
+      if (source.access === 'pending') return _('Looking for the file...');
+      if (source.access === 'denied')
+        return _(
+          'The slides are in this presentation. You do not have permission to open the file they came from.',
+        );
+      if (source.access === 'failed')
+        return _(
+          'The slides are in this presentation. Looking for the file they came from did not work this time.',
+        );
       return _(
         'The slides are in this presentation. The file they came from is no longer here.',
       );
+    }
     if (source.state === 'noaccess')
       return _('This file is here. You do not have permission to open it.');
     if (source.state === 'failed')
@@ -754,20 +769,46 @@ class SlideImportPane {
 
   private sourceRecovery(
     source: SlideImportPaneSource,
-  ): { text: string; enabled: boolean; run: () => void } | null {
-    if (source.state === 'missing')
-      return {
+  ): { text: string; enabled: boolean; run: () => void }[] {
+    if (source.state === 'missing') {
+      const actions: { text: string; enabled: boolean; run: () => void }[] = [];
+      if (this.canLookAgain(source))
+        actions.push({
+          text: _('Look again'),
+          enabled: true,
+          run: () => this.lookAgain(source),
+        });
+      actions.push({
         text: _('Locate file'),
         enabled: !!app.linkToken,
         run: () => this.browseForImport(source),
-      };
+      });
+      return actions;
+    }
     if (source.state === 'failed')
-      return {
-        text: _('Reload slides'),
-        enabled: true,
-        run: () => this.reloadSource(source),
-      };
-    return null;
+      return [
+        {
+          text: _('Reload slides'),
+          enabled: true,
+          run: () => this.reloadSource(source),
+        },
+      ];
+    return [];
+  }
+
+  private canLookAgain(source: SlideImportPaneSource): boolean {
+    return (
+      source.state === 'missing' &&
+      source.persistentLink !== '' &&
+      source.access !== '' &&
+      source.access !== 'pending' &&
+      source.access !== 'resolved'
+    );
+  }
+
+  private lookAgain(source: SlideImportPaneSource): void {
+    if (!this.canLookAgain(source)) return;
+    SlideImportSession.resolveRemoteLink(source.persistentLink);
   }
 
   private onSelectionChanged(): void {
@@ -1252,9 +1293,15 @@ class SlideImportPane {
     const entries: any[] = [];
 
     // A file the storage lists no address for cannot be reached, so there is
-    // nothing to do with it but name it to the integration, which is what
-    // adding a presentation does.
+    // nothing to do with it but have the storage looked in again, or name it
+    // to the integration, which is what adding a presentation does.
     if (source.state === 'missing') {
+      if (this.canLookAgain(source))
+        entries.push({
+          id: 'lookagain',
+          type: 'comboboxentry',
+          text: _('Look again'),
+        });
       entries.push({
         id: 'locate',
         type: 'comboboxentry',
@@ -1321,6 +1368,9 @@ class SlideImportPane {
     ) => {
       if (eventType !== 'selected') return false;
       switch (entry.id) {
+        case 'lookagain':
+          this.lookAgain(source);
+          break;
         case 'locate':
           this.browseForImport(source);
           break;
@@ -1362,18 +1412,20 @@ class SlideImportPane {
   private renderPanelBody(source: SlideImportPaneSource): HTMLElement {
     const message = this.sourceMessage(source);
     if (message) {
-      const recovery = this.sourceRecovery(source);
+      const recovery = this.sourceRecovery(source).filter(
+        (action) => action.enabled,
+      );
       return (
         <div class="slide-import-panel-message">
           <p>{message}</p>
-          {recovery && recovery.enabled && (
+          {recovery.map((action) => (
             <button
               class="button slide-import-panel-action"
-              onClick={() => recovery.run()}
+              onClick={() => action.run()}
             >
-              {recovery.text}
+              {action.text}
             </button>
-          )}
+          ))}
         </div>
       );
     }

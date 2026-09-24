@@ -2254,14 +2254,18 @@ public:
 };
 
 /// The storage knows no document for the source the document names: the source stays
-/// missing, the question is asked once, and it is asked again only when the sources the
-/// document names change.
+/// missing, the question is asked once when the view finds the source, and editing asks
+/// nothing more. Only the user asks again.
 class UnitLinkAccessNotFound : public LinkAccessTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoad, Checking, Done) _phase;
 
     /// A second source the document comes to name.
     static constexpr auto OtherSourceName = "Q4 outlook.odp";
+
+    /// The two sources as a client spells them in a command.
+    static constexpr auto EncodedSourceName = "Q3%20%231%20100%25.odp";
+    static constexpr auto EncodedOtherSourceName = "Q4%20outlook.odp";
 
     std::thread _checkThread;
 
@@ -2321,21 +2325,35 @@ public:
                                    waitForBrokerState("sources the document names: 1") &&
                                        requestCount() == 1);
 
-                // A changed list asks again for the source the storage knew nothing of, and
-                // for the new one, once each.
+                // Editing names a source of its own. Neither it nor the source the storage
+                // knew nothing of is asked for: the view asked when it found its sources.
                 nameSources({ std::string(SourceName), std::string(OtherSourceName) });
-                LOK_ASSERT_MESSAGE("A changed list must ask once more for each source",
+                LOK_ASSERT_MESSAGE("A changed list must ask nothing",
+                                   waitForBrokerState("sources the document names: 2") &&
+                                       requestCount() == 1);
+
+                // The user has the source the storage knew nothing of looked for again, and
+                // that one alone is asked for.
+                WSD_CMD(std::string("remotelinkresolve source=") + EncodedSourceName);
+                LOK_ASSERT_MESSAGE("The user's request must ask the endpoint once more",
+                                   waitForRequests(2));
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), countRequestsFor(SourceName));
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), countRequestsFor(OtherSourceName));
+
+                // A source the document does not name is asked for by nobody, which the
+                // request for one it does name, sent behind it, shows.
+                WSD_CMD(std::string("remotelinkresolve source=Nothing.odp"));
+                WSD_CMD(std::string("remotelinkresolve source=") + EncodedOtherSourceName);
+                LOK_ASSERT_MESSAGE("The source the document names must be asked for",
                                    waitForRequests(3));
                 LOK_ASSERT_MESSAGE("The answers must be recorded as not found",
                                    waitForBrokerState(std::string("persistent link ") +
                                                       OtherSourceName + " access: notfound"));
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), countRequestsFor(SourceName));
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1),
-                                 countRequestsFor(OtherSourceName));
                 LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), requestCount());
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), countRequestsFor("Nothing.odp"));
 
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("A source the storage knows nothing of is asked for once per list");
+                passTest("A source the storage knows nothing of is asked for when the user asks");
             });
 
         return true;

@@ -66,6 +66,11 @@ public:
                             const std::string& persistentLink, unsigned statusCode,
                             const std::string& body);
 
+    /// Asks one view's storage again for the document behind one source the document names,
+    /// at the request of the user of that view. Private to that view.
+    void resolveSource(DocumentBroker& docBroker, const std::string& tag,
+                       const std::string& persistentLink);
+
     /// Opens or drops one view's subscription to a remote document. On
     /// subscribe the view's own token is used; a view without a token for the
     /// source is refused. A subscription in the failed or missing state holds
@@ -162,6 +167,8 @@ private:
         /// Whether this view's storage answers a POST to <WOPISrc>/linkaccess, from the
         /// SupportsLinkAccess of its CheckFileInfo.
         bool supportsLinkAccess = false;
+        /// Whether the view has asked for the sources the document named when it found them.
+        bool askedOnLoad = false;
         /// What asking the storage for each source came to, keyed by the persistent link. A
         /// persistent link with no record has not been asked for by this view.
         std::map<std::string, LinkAccess> linkAccess;
@@ -187,7 +194,8 @@ private:
 
     /// Asks the storage of every view, or of the given view alone, for the document behind
     /// each source the document names that the view holds no token for and has not asked
-    /// for yet.
+    /// for yet. A view asks for the sources it finds on the document once, so the sources
+    /// editing names are left to the user to ask for.
     void resolveUnlistedSources(DocumentBroker& docBroker);
     void resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag);
 

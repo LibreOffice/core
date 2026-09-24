@@ -137,10 +137,8 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
         std::map<std::string, LinkAccess>& linkAccess = itView.second.linkAccess;
         for (auto it = linkAccess.begin(); it != linkAccess.end();)
         {
-            const bool named = std::find(_namedSources.begin(), _namedSources.end(), it->first) !=
-                               _namedSources.end();
-            if (!named ||
-                (it->second != LinkAccess::Pending && it->second != LinkAccess::Resolved))
+            if (std::find(_namedSources.begin(), _namedSources.end(), it->first) ==
+                _namedSources.end())
                 it = linkAccess.erase(it);
             else
                 ++it;
@@ -197,6 +195,12 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
     if (itView == _views.end() || !itView->second.supportsLinkAccess)
         return;
 
+    // The sources the view finds on the document are asked for once.
+    if (itView->second.askedOnLoad || _namedSources.empty())
+        return;
+
+    itView->second.askedOnLoad = true;
+
     for (const std::string& name : _namedSources)
     {
         // A source this view can already read needs no question
@@ -209,6 +213,35 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
 
         requestLinkAccess(docBroker, tag, name);
     }
+
+    refreshView(docBroker, tag);
+}
+
+void RemoteLinks::resolveSource(DocumentBroker& docBroker, const std::string& tag,
+                                const std::string& persistentLink)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end() || !itView->second.supportsLinkAccess)
+        return;
+
+    // Only a source the document names is asked for, and only once at a time: the answer to
+    // the question in flight is the answer to this one.
+    if (std::find(_namedSources.begin(), _namedSources.end(), persistentLink) ==
+        _namedSources.end())
+    {
+        LOG_WRN("Not asking view [" << tag << "] for a source of [" << docBroker.getDocKey()
+                                    << "] that the document does not name");
+        return;
+    }
+
+    const auto itAccess = itView->second.linkAccess.find(persistentLink);
+    if (itAccess != itView->second.linkAccess.end() && itAccess->second == LinkAccess::Pending)
+        return;
+
+    requestLinkAccess(docBroker, tag, persistentLink);
+    refreshView(docBroker, tag);
 }
 
 void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string& tag,
@@ -307,6 +340,7 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
         LOG_INF("The storage knows no document for the source ["
                                 << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
         itAccess->second = LinkAccess::NotFound;
+        refreshView(docBroker, tag);
         return;
     }
 
@@ -316,6 +350,7 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
         LOG_INF("The storage denies view [" << tag << "] the source ["
                                 << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
         itAccess->second = LinkAccess::Denied;
+        refreshView(docBroker, tag);
         return;
     }
 
@@ -325,6 +360,7 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with status " << statusCode);
         itAccess->second = LinkAccess::Failed;
+        refreshView(docBroker, tag);
         return;
     }
 
@@ -336,6 +372,7 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with a body that is not a link");
         itAccess->second = LinkAccess::Failed;
+        refreshView(docBroker, tag);
         return;
     }
 
@@ -373,6 +410,7 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with a link that " << reason);
         itAccess->second = LinkAccess::Failed;
+        refreshView(docBroker, tag);
         return;
     }
 
@@ -770,6 +808,16 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
     const auto itView = _views.find(tag);
     const View* view = itView != _views.end() ? &itView->second : nullptr;
 
+    // What asking this view's storage for a source came to, empty for one it never asked for.
+    const auto access = [&view](const std::string& persistentLink) -> std::string
+    {
+        if (!view || persistentLink.empty())
+            return std::string();
+
+        const auto it = view->linkAccess.find(persistentLink);
+        return it == view->linkAccess.end() ? std::string() : linkAccessName(it->second);
+    };
+
     Poco::JSON::Array::Ptr documents = new Poco::JSON::Array();
     for (const auto& it : _entries)
     {
@@ -792,6 +840,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         entry->set("state", state);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
         entry->set("persistentLink", it.second.persistentLink);
+        entry->set("access", access(it.second.persistentLink));
         documents->add(entry);
     }
 
@@ -809,6 +858,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         entry->set("state", "missing");
         entry->set("lastModifiedTime", std::string());
         entry->set("persistentLink", name);
+        entry->set("access", access(name));
         documents->add(entry);
     }
 
@@ -868,6 +918,7 @@ void RemoteLinks::dumpState(std::ostream& os) const
         os << "\n    view " << itView.first << " tokens: " << itView.second.tokens.size()
            << " subscriptions: " << itView.second.subscriptions.size()
            << " link access: " << (itView.second.supportsLinkAccess ? "yes" : "no")
+           << " asked on load: " << (itView.second.askedOnLoad ? "yes" : "no")
            << " link access asked: " << itView.second.linkAccess.size();
         for (const auto& it : itView.second.subscriptions)
             os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc) << " state: "

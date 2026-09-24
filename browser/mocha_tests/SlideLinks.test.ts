@@ -666,4 +666,15 @@ describe('SlideLinks', function () {
 		// A page that is linked to nothing has no source to speak of.
 		nodeassert.equal(links.getPageSourceState(unknownPart), '');
 	});
+
+	it('asks the server to look for the file of one source again', function () {
+		sent = [];
+		SlideImportSession.resolveRemoteLink('Q3 #1 100%.odp');
+
+		// The link is a whole word of the command, so it carries no space of
+		// its own and no character a command line reads.
+		nodeassert.deepEqual(sent, [
+			'remotelinkresolve source=Q3%20%231%20100%25.odp',
+		]);
+	});
 });

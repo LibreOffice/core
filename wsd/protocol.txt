@@ -104,6 +104,16 @@ remotedocunsubscribe wopisrc=<encoded-WOPISrc>
     per source. The command is handled inside wsd and never given to this
     document's kit. Requires the remote_links feature to be enabled.
 
+remotelinkresolve source=<encoded persistent link>
+
+    Asks this view's storage for the document behind one of the persistent
+    links the open document's pages record, over a POST to
+    <WOPISrc>/linkaccess. A view asks for the sources it finds on the
+    document once, when it joins; afterwards, and for the sources later
+    editing names, this command is the only thing that asks, so a user who
+    sees a source reported as missing can have it looked for again.
+    Requires the remote_links feature and SupportsLinkAccess.
+
 remotedoccommand wopisrc=<encoded-WOPISrc> <inner client command>
 
     Routes a read-only client command to the remote document the current
@@ -871,7 +881,8 @@ remotelinks: <json>
                     file name at the end of its WOPISrc>",
           "lastModifiedTime": "<time or empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
-          "persistentLink": "<saved in file, can be resolved to WOPISrc, or empty>" }
+          "persistentLink": "<saved in file, can be resolved to WOPISrc, or empty>",
+          "access": "pending|resolved|notfound|denied|failed, or empty" }
 
     'noaccess' means the view holds no token for the source. 'available'
     means the view holds a token but has no live subscription. The other
@@ -882,6 +893,15 @@ remotelinks: <json>
     entry carries an empty wopiSrc and its name alone, so it says what the
     slides were made from while nothing can reach it; its persistentLink is
     that name.
+
+    'access' is what asking this view's storage for the persistent link came
+    to, and it is empty for a source this view never asked for, which is
+    every source on a storage that does not answer link access requests.
+    'pending' means a question is in flight, 'notfound' that the storage
+    knows no document for the link, 'denied' that this view's user may not
+    reach it, and 'failed' any other answer or none. A source that is
+    'resolved' carries the address the storage named. See
+    remotelinkresolve for asking again.
 
 remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 
