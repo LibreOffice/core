@@ -150,45 +150,18 @@ $(eval $(call gb_Helper_register_external_libraries_for_install,skia,OOOLIBS,ooo
 ))
 endif
 
-ifneq ($(filter SQLITE3,$(BUILD_TYPE)),)
 ifneq ($(SYSTEM_SQLITE3),)
-
-define gb_LinkTarget__use_sqlite3_impl
-$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_SQLITE3 \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),-lsqlite3)
-
-endef
 
 gb_ExternalProject__use_sqlite3 :=
 
 else # !SYSTEM_SQLITE3
 
-define gb_LinkTarget__use_sqlite3_impl
-$(if $(2),,$(error gb_LinkTarget__use_sqlite3_impl needs additional parameter))
-
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/sqlite3 \
-    $$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	$(2) \
-)
-
-endef
-
 define gb_ExternalProject__use_sqlite3
-$(call gb_ExternalProject_use_static_libraries,$(1),sqlite3)
+$(call gb_ExternalProject_use_static_libraries,$(1),sqlite3,sqlite)
 
 endef
 
 endif # SYSTEM_SQLITE3
-endif # SQLITE3
 
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
@@ -318,10 +291,11 @@ else
   define gb_LinkTarget__use_zstd
     $(call gb_LinkTarget_set_include,$(1),$(ZSTD_CFLAGS) $$(INCLUDE))
     $(call gb_LinkTarget_use_static_libraries,$(1),zstd)
+    $(call gb_Helper_LinkTarget_use_external,$(1),zstandard)
   endef
 
   define gb_ExternalProject__use_zstd
-    $(call gb_ExternalProject_use_static_libraries,$(1),zstd)
+    $(call gb_ExternalProject_use_static_libraries,$(1),zstd,zstandard)
   endef
 endif
 
@@ -335,10 +309,11 @@ else
   define gb_LinkTarget__use_md4c
     $(call gb_LinkTarget_set_include,$(1),$(MD4C_CFLAGS) $$(INCLUDE))
     $(call gb_LinkTarget_use_static_libraries,$(1),md4c)
+    $(call gb_Helper_LinkTarget_use_external,$(1),md4c)
   endef
 
   define gb_ExternalProject__use_md4c
-    $(call gb_ExternalProject_use_static_libraries,$(1),md4c)
+    $(call gb_ExternalProject_use_static_libraries,$(1),md4c,md4c)
   endef
 endif
 
@@ -1269,7 +1244,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endef
 
 define gb_ExternalProject__use_fontconfig
-$(call gb_ExternalProject_use_external_project,$(1),fontconfig)
+$(call gb_ExternalProject_use_external_project,$(1),fontconfig,fontconfig)
 
 endef
 
@@ -1668,7 +1643,7 @@ $(call gb_LinkTarget_use_external_project,$(1),libetonyek)
 endef
 
 define gb_ExternalProject__use_etonyek
-$(call gb_ExternalProject_use_external_project,$(1),libetonyek)
+$(call gb_ExternalProject_use_external_project,$(1),libetonyek,libetonyek)
 
 endef
 
@@ -3484,10 +3459,12 @@ $(call gb_LinkTarget_set_include,$(1),\
        $$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),afdko)
+$(call gb_Helper_LinkTarget_use_external,$(1),afdko)
+$(call gb_Helper_LinkTarget_use_external,$(1),antlr)
 endef
 
 define gb_ExternalProject__use_afdko
-$(call gb_ExternalProject_use_static_libraries,$(1),afdko)
+$(call gb_ExternalProject_use_static_libraries,$(1),afdko,afdko antlr)
 endef
 
 endif
@@ -3533,6 +3510,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/fast_float/include/\
 	$$(INCLUDE) \
 )
+$(call gb_Helper_LinkTarget_use_external,$(1),fast_float)
 endef
 
 endif
@@ -3656,7 +3634,7 @@ endif
 
 ifeq ($(ENABLE_QUICKJS),TRUE)
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+$(eval $(call gb_Helper_register_external_libraries_for_install,quickjs,PLAINLIBS_OOO,ooo, \
     qjs \
 ))
 

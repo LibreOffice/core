@@ -55,13 +55,13 @@
     Notices and License Terms</a></h1>
     <h1><a id="a__Libraries" name="a__Libraries">Libraries</a></h1>
     <div class="AFDKO">
+        <!-- Name: afdko, Vendor:, Source: AFDKO_TARBALL, URL: https://github.com/adobe-type-tools/afdko, Declared: Apache-2.0, Concluded: MPL-2.0 -->
         <h2>Adobe Font Development Kit for OpenType (AFDKO)</h2>
         <p>The following software may be included in this product: Adobe Font Development Kit for OpenType (AFDKO).
         Use of any of this software is governed by the terms of the license below:</p>
         <p><a href="#a__Apache_License_version_2_0">Jump to Apache License Version 2.0</a></p>
-    </div>
-    <div class="ANTLR">
         <h2>ANTLR (ANother Tool for Language Recognition)</h2>
+        <!-- Name: antlr, Vendor:, Source: ANTLR4CPPRUNTIME_TARBALL, URL: https://www.antlr.org/download.html, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         <p>Copyright (c) 2012-2022 The ANTLR Project. All rights reserved.</p>
         <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that
         the following conditions are met:</p>
@@ -231,6 +231,7 @@
     </div>
     <div class="FAST_FLOAT">
         <h2>fast_float</h2>
+        <!-- Name: fast_float, Vendor:, Source: FAST_FLOAT_TARBALL, URL: https://github.com/fastfloat/fast_float, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: fast_float.</p>
         <p>fast_float code is covered by the MIT license:</p>
         <blockquote>
@@ -1187,7 +1188,7 @@
     </div>
     <div class="WPD">
         <h2>libwpd</h2>
-        <!-- Name: libwpd, Vendor: libwpd, Source: WPD_TARBALL, URL: http://libwpd.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
+        <!-- Name: libwpd, Vendor: libwpd_project, Source: WPD_TARBALL, URL: http://libwpd.sourceforge.net/, Declared: LGPL-2.1-or-later OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: libwpd. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>LGPL v2.1+ / MPL 2</p>
@@ -1313,6 +1314,7 @@
     </div>
     <div class="MD4C">
         <h2>md4c</h2>
+        <!-- Name: md4c, Vendor: md4c_project, Source: MD4C_TARBALL, URL: https://github.com/mity/md4c.git, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: md4c. Use of any of this software is governed by
         the terms of the license below:</p>
         <p>The MIT License (MIT)</p>
@@ -1665,6 +1667,7 @@
     </div>
     <div class="QUICKJS">
         <h2>QuickJS</h2>
+        <!-- Name: quickjs, Vendor: quickjs-ng, Source: QUICKJS_TARBALL, URL: https://quickjs-ng.github.io/quickjs/, Declared: MIT, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: QuickJS.
         Use of any of this software is governed by the terms of the license below:</p>
         <h3>The MIT License (MIT)</h3>
@@ -1806,8 +1809,9 @@
     GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
     LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-    <div class="SQLITE">
+    <div class="SQLITE3">
         <h2>SQLITE</h2>
+        <!-- Name: sqlite, Vendor: sqlite, Source: SQLITE3_TARBALL, URL: https://sqlite.org/, Declared: SQLite Blessing, Concluded: MPL-2.0 -->
         <p>All of the code and documentation in SQLite has been dedicated to the public domain by the authors.
         All code authors, and representatives of the companies they work for, have signed affidavits dedicating their
         contributions to the public domain and originals of those signed affidavits are stored in a firesafe at the main offices of Hwaci.
@@ -2086,6 +2090,7 @@
     </div>
     <div class="ZSTD">
         <h2>Zstandard</h2>
+        <!-- Name: zstandard, Vendor: facebook, Source: ZSTD_TARBALL, URL: https://github.com/facebook/zstd, Declared: BSD-3-Clause OR GPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Zstandard or zstd as short version.
         Zstandard is dual-licensed under BSD or GPLv2.</p>
         <p>BSD License</p>
@@ -3599,6 +3604,7 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h2>Korean</h2>
         <h3>Spelling dictionary</h3>
+        <!-- Name: dict-ko-spell, Vendor:, Source: ko_KR, URL:, Declared: GPL-3.0-or-later, Concluded: GPL-3.0-or-later -->
         <p>The following software may be included in this product: Korean spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Copyright (C) 2008-2019 hunspell-dict-ko contributors</p>
@@ -3805,6 +3811,7 @@
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Thesaurus</h3>
         <p>The following software may be included in this product: Portuguese (Brazilian) thesaurus. Use of
+        <!-- Name: dict-pt-BR-thes, Vendor:, Source: pt_BR, URL:, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
         any of this software is governed by the terms of the license below:</p>
         <p>Copyright 2003 Kevin B. Hendricks, Stratford, Ontario, Canada
         And Contributors.  All rights reserved.</p>
@@ -4034,6 +4041,7 @@
         <p>This dictionary is made available subject to the terms of GNU Lesser General Public License Version 3.</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <h3>Hyphenation patterns</h3>
+        <!-- Name: dict-sv-hyph, Vendor:, Source: sv_SE, URL:, Declared: MPL-2.0 or LGPL-3.0-or-later, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Swedish hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2.0</a></p>

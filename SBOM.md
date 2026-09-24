@@ -47,6 +47,12 @@ declared and concluded license — comes from the HTML comments in
     <!-- Name: curl, Vendor: haxx, Source: CURL_TARBALL, URL: https://curl.se/,
          Declared: curl, Concluded: MPL-2.0 -->
 
+`Name` and `Vendor` come from the NIST NVD CPE2.3 identifier database at
+https://nvd.nist.gov/products/cpe/search/ - apparently you only get
+an entry there if you have a CVE, so a lot of our externals don't have an
+entry; in that case we leave `Vendor` blank and make something up for `Name`
+which may need correcting in the event that NIST assigns an identifier later.
+
 `Source` is either a `*_TARBALL` variable from `engine/download.lst` (version
 and SHA256 are then taken from there, and the download URL from the matching
 bucket in `engine/Makefile.fetch`) or a path in the source tree. Everything
