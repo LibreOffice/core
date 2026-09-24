@@ -184,12 +184,14 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
             std::string wopiSrc;
             std::string name;
             std::string lastModifiedTime;
+            std::string persistentLink;
             JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
             JsonUtil::findJSONValue(entry, "BaseFileName", name);
             JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
+            JsonUtil::findJSONValue(entry, "PersistentLink", persistentLink);
             if (!wopiSrc.empty())
-                _remoteLinks.push_back(
-                    { std::move(wopiSrc), std::move(name), std::move(lastModifiedTime) });
+                _remoteLinks.push_back({ std::move(wopiSrc), std::move(name),
+                                         std::move(lastModifiedTime), std::move(persistentLink) });
         }
     }
 

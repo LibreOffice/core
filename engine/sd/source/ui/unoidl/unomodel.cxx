@@ -7453,11 +7453,9 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         return false;
     }
 
-    // A page keeps its link by the name of the source document, so an insert that asks for
-    // links needs one to record: a document name, holding no path.
-    if (bLink
-        && (aSourceName.isEmpty() || aSourceName.indexOf('/') >= 0
-            || aSourceName.indexOf('\\') >= 0))
+    // A page keeps its link by the persistent link of the source document, any text the storage
+    // resolves to that document, so an insert that asks for links needs one to record.
+    if (bLink && aSourceName.isEmpty())
         return false;
 
     SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl);

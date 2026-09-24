@@ -50,7 +50,8 @@ namespace
 // again names a second document, so a test can list several.
 void setRemoteLink(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
                    const std::string& accessToken,
-                   const std::string& lastModifiedTime = std::string())
+                   const std::string& lastModifiedTime = std::string(),
+                   const std::string& persistentLink = std::string())
 {
     Poco::JSON::Array::Ptr remoteLinks = fileInfo->getArray("RemoteLinks");
     if (!remoteLinks)
@@ -59,6 +60,8 @@ void setRemoteLink(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc
     entry->set("WOPISrc", wopiSrc);
     if (!lastModifiedTime.empty())
         entry->set("LastModifiedTime", lastModifiedTime);
+    if (!persistentLink.empty())
+        entry->set("PersistentLink", persistentLink);
     remoteLinks->add(entry);
     fileInfo->set("RemoteLinks", remoteLinks);
 
@@ -121,7 +124,7 @@ public:
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
             setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken",
-                               "2026-09-01T12:00:00.000000Z");
+                          "2026-09-01T12:00:00.000000Z", "storage:quarter-3");
         }
     }
 
@@ -151,6 +154,9 @@ public:
                                message.find("remotetoken") == std::string_view::npos);
             LOK_ASSERT_MESSAGE("The remote links JSON must carry the last modified time",
                                message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
+                                   std::string_view::npos);
+            LOK_ASSERT_MESSAGE("The remote links JSON must carry the persistent link",
+                               message.find("\"persistentLink\":\"storage:quarter-3\"") !=
                                    std::string_view::npos);
             if (message.find("\"state\":\"available\"") != std::string_view::npos)
                 _sawAvailableState = true;

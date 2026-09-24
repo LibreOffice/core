@@ -17,6 +17,8 @@
 #include <sal/types.h>
 #include <string_view>
 
+#include "sddllapi.h"
+
 namespace tools
 {
 class JsonWriter;
@@ -96,7 +98,7 @@ public:
         Empty when rReference names no source document, which is the case for a page linked to a
         file by its path.
     */
-    static OUString GetSourceName(std::u16string_view rReference);
+    SD_DLLPUBLIC static OUString GetSourceName(std::u16string_view rReference);
 
     /** The file the pages linked to rReference are read from, or empty when nothing reads them.
 

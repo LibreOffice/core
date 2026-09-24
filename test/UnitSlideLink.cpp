@@ -239,6 +239,25 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         LOK_ASSERT_EQUAL(std::string("inserted"), wholeObject->getValue<std::string>("status"));
         LOK_ASSERT_EQUAL(10, wholeObject->getValue<int>("count"));
 
+        // A source is a persistent link the storage resolves.
+        stageSource(socket, documentURL, "source.odp");
+        helpers::sendTextFrame(socket,
+                               insertCommand("slides=0 at=0 keepdesign=0 link=1", /*named=*/false) +
+                                   " source=https%3A%2F%2Fstorage.example%2Ffiles%2F42",
+                               testname);
+        helpers::getResponseString(socket, "slideimport:", testname);
+        Poco::JSON::Array::Ptr linked = getLinks(socket);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), linked->size());
+        bool foundAddress = false;
+        for (std::size_t i = 0; i < linked->size(); ++i)
+        {
+            if (linked->getObject(i)->getValue<std::string>("source") ==
+                "https://storage.example/files/42")
+                foundAddress = true;
+        }
+        LOK_ASSERT_MESSAGE("the link list must report the persistent link as recorded",
+                           foundAddress);
+
         socketPoll->joinThread();
     }
     catch (const Poco::Exception& exc)
@@ -409,15 +428,13 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
         stageSource(socket, documentURL, "source.odp");
 
-        // A source is the name of a document, so a name holding a path and a
-        // name holding a control character are both refused.
-        helpers::assertErrorReply(socket,
-                                  insertCommand("slides=0", /*named=*/false) +
-                                      " source=deck%2Fsales.odp",
-                                  "slideimport", "syntax", testname);
         helpers::assertErrorReply(socket,
                                   insertCommand("slides=0", /*named=*/false) +
                                       " source=deck%01.odp",
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0", /*named=*/false) + " source=" +
+                                      std::string(2000, 'x'),
                                   "slideimport", "syntax", testname);
 
         // The time is recorded on the pages the insert links and is written out with them, so a
@@ -473,11 +490,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
                          "failed", std::string(" source=") + EncodedSourceName);
         assertErrorAsWsd(socket, "slidelink update source=deck.odp", "syntax");
 
-        // A source is the name of a document, so one holding a path is refused, and the file
-        // staged for that refresh goes with it: the refresh that follows reaches nothing.
+        // A source holding a control character is refused, and the file staged for that
+        // refresh goes with it: the refresh that follows reaches nothing.
         stageSource(socket, documentURL, "staged.odp");
-        assertErrorAsWsd(socket, "slidelink update source=deck%2Fsales.odp file=staged.odp",
-                         "syntax", " source=deck%2Fsales.odp");
+        assertErrorAsWsd(socket, "slidelink update source=deck%01.odp file=staged.odp",
+                         "syntax", " source=deck%01.odp");
 
         // A refresh records the time it names on the pages it reads, so a time of that shape is
         // refused the same way, and the file staged for it goes with the refresh it was staged

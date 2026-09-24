@@ -2522,6 +2522,13 @@ bool isRecordableSourceTime(const std::string& time)
     return time.size() <= MaxTimeLength && !Util::holdsControlCharacter(time);
 }
 
+bool isRecordablePersistentLink(const std::string& link)
+{
+    constexpr std::size_t MaxPersistentLinkLength = 1024;
+    return !link.empty() && link.size() <= MaxPersistentLinkLength &&
+           !Util::holdsControlCharacter(link);
+}
+
 }
 
 bool ChildSession::exportSlides(const StringVector& tokens)
@@ -2754,9 +2761,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
-    // The source is the document the inserted pages record as the one they came from, as the
-    // user knows it. A name holding a path or a control character is refused.
-    if (haveSource && (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source)))
+    if (haveSource && !isRecordablePersistentLink(source))
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -2968,9 +2973,8 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
         return false;
     }
 
-    // A refresh covers the pages of one source document, named by the document
-    // name the pages record.
-    if (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source))
+    // A refresh covers the pages of one source document.
+    if (!isRecordablePersistentLink(source))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;

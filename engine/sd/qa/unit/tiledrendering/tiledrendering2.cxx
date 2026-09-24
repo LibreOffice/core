@@ -41,6 +41,7 @@
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <SlideLink.hxx>
 #include <unomodel.hxx>
 
 using namespace css;
@@ -495,11 +496,16 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
         !pXImpressDocument->insertPagesFromFile(aSourceUrl, "{\"slides\":[0],\"link\":true}"_ostr));
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
 
-    // A name holding a path names a location rather than a document, so an insert that asks
-    // for links to it is in the same position as one that names no source at all.
-    CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
-        aSourceUrl, "{\"slides\":[0],\"link\":true,\"source\":\"/tmp/staged/Q3.odp\"}"_ostr));
-    CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
+    // The source is a persistent link the storage resolves, so one of the shape of an address
+    // is recorded on the linked page as it is.
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl,
+        "{\"slides\":[0],\"link\":true,\"source\":\"https://storage.example/files/42\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(nPartsBefore + 1, pXImpressDocument->getParts());
+    SdPage* pAddressed = pDoc->GetSdPage(static_cast<sal_uInt16>(nPartsBefore), PageKind::Standard);
+    CPPUNIT_ASSERT(pAddressed);
+    CPPUNIT_ASSERT_EQUAL(u"https://storage.example/files/42"_ustr,
+                         sd::SlideLink::GetSourceName(pAddressed->GetFileName()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportScalesLetterSizes)

@@ -740,17 +740,11 @@ std::string RemoteLinks::entryName(const Entry& entry)
 }
 
 std::map<std::string, RemoteLinks::Entry>::const_iterator
-RemoteLinks::findListed(const std::string& name) const
+RemoteLinks::findListed(const std::string& persistentLink) const
 {
-    // Either spelling of a document's name counts, so slides imported before the integrator
-    // named a document stay with it.
     return std::find_if(_entries.begin(), _entries.end(),
-                        [&name](const auto& it)
-                        {
-                            return it.second.persistentLink == name ||
-                                   entryName(it.second) == name ||
-                                   documentName(it.second.wopiSrc) == name;
-                        });
+                        [&persistentLink](const auto& it)
+                        { return it.second.persistentLink == persistentLink; });
 }
 
 const char* RemoteLinks::linkAccessName(const LinkAccess access)

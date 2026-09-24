@@ -70,10 +70,11 @@ describe('SlideLinks', function () {
 	// The remote links the storage named, one per source of the list above, each already
 	// connected so that a refresh asks it straight away.
 	function remoteLinks(state: string = 'connected'): any[] {
-		return [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: state },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: state },
-		];
+		return [linkOf('Sales deck.odp', state), linkOf('Support deck.odp', state)];
+	}
+
+	function linkOf(source: string, state: string): any {
+		return { wopiSrc: wopiSrcOf(source), persistentLink: source, state: state };
 	}
 
 	function wopiSrcOf(source: string): string {
@@ -216,8 +217,8 @@ describe('SlideLinks', function () {
 
 	it('marks a page as broken when its source is missing from storage', function () {
 		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+			linkOf('Sales deck.odp', 'missing'),
+			linkOf('Support deck.odp', 'connected'),
 		];
 		deliver('slidelinks', { message: list });
 
@@ -232,8 +233,8 @@ describe('SlideLinks', function () {
 
 	it('stops marking pages broken once the source is read again', function () {
 		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+			linkOf('Sales deck.odp', 'missing'),
+			linkOf('Support deck.odp', 'connected'),
 		];
 		deliver('slidelinks', { message: list });
 		nodeassert.equal(links.isPageBroken(numbersPart), true);
@@ -246,8 +247,8 @@ describe('SlideLinks', function () {
 
 	it('marks a page as connected when its source is held open', function () {
 		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'connected' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'available' },
+			linkOf('Sales deck.odp', 'connected'),
+			linkOf('Support deck.odp', 'available'),
 		];
 		deliver('slidelinks', { message: list });
 
@@ -342,8 +343,8 @@ describe('SlideLinks', function () {
 		// The source the refresh waits on could not be opened, so it comes up
 		// in no state a refresh can read.
 		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'failed' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+			linkOf('Sales deck.odp', 'failed'),
+			linkOf('Support deck.odp', 'connected'),
 		];
 		deliver('remotelinks', { documents: (app as any).remoteLinks });
 
@@ -392,8 +393,8 @@ describe('SlideLinks', function () {
 
 	it('says so rather than waiting on a source that cannot be read', function () {
 		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'missing' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+			linkOf('Sales deck.odp', 'missing'),
+			linkOf('Support deck.odp', 'connected'),
 		];
 		documentHoldsLinks();
 		links.updateAll();
@@ -415,11 +416,16 @@ describe('SlideLinks', function () {
 	});
 
 	it('marks a page as broken when its source has no address to reach it at', function () {
-		// The server reports the source by name alone, which is what the slides of this
-		// document name it, and gives it no address because the storage listed none.
+		// The server reports the source by the persistent link the slides of this document
+		// record, and gives it no address because the storage listed none.
 		(app as any).remoteLinks = [
-			{ wopiSrc: '', name: 'Sales deck.odp', state: 'missing' },
-			{ wopiSrc: wopiSrcOf('Support deck.odp'), state: 'connected' },
+			{
+				wopiSrc: '',
+				name: 'Sales deck.odp',
+				persistentLink: 'Sales deck.odp',
+				state: 'missing',
+			},
+			linkOf('Support deck.odp', 'connected'),
 		];
 		documentHoldsLinks();
 
@@ -433,12 +439,13 @@ describe('SlideLinks', function () {
 	});
 
 	it('knows a source by the name the storage gave it rather than by its address', function () {
-		// The address ends in an opaque id, so the name the storage gave the document is the
-		// only thing that says which source the slides of this document came from.
+		// The address ends in an opaque id, so the persistent link is the only thing that
+		// says which source the slides of this document came from.
 		(app as any).remoteLinks = [
 			{
 				wopiSrc: 'https://host/wopi/files/1234',
 				name: 'Sales deck.odp',
+				persistentLink: 'Sales deck.odp',
 				state: 'connected',
 			},
 		];
@@ -644,9 +651,7 @@ describe('SlideLinks', function () {
 	});
 
 	it('tells whether the source of a page can be read', function () {
-		(app as any).remoteLinks = [
-			{ wopiSrc: wopiSrcOf('Sales deck.odp'), state: 'noaccess' },
-		];
+		(app as any).remoteLinks = [linkOf('Sales deck.odp', 'noaccess')];
 		deliver('slidelinks', { message: list });
 
 		nodeassert.equal(links.getPageSourceState(numbersPart), 'noaccess');

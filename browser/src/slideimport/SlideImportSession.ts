@@ -117,8 +117,7 @@ class SlideImportSession {
 		);
 	}
 
-	// The document the slides come from, as the user knows it. Pages inserted as links record
-	// it, and a later refresh finds the remote link of that name.
+	// The persistent link of the document the slides come from.
 	public setSource(fileName: string): void {
 		this.fileName = fileName;
 		this.canLink = this.sourceName() !== '';
@@ -133,8 +132,7 @@ class SlideImportSession {
 
 	private sourceName(): string {
 		const name = this.fileName;
-		if (name === '' || name === '.' || name === '..') return '';
-		if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) return '';
+		if (name === '') return '';
 		for (let i = 0; i < name.length; i++)
 			if (name.charCodeAt(i) < 0x20) return '';
 		return name;
@@ -366,11 +364,7 @@ class SlideImportSession {
 		doc: { wopiSrc: string; name?: string; persistentLink?: string },
 		source: string,
 	): boolean {
-		if (!!doc.persistentLink && doc.persistentLink === source) return true;
-		if (SlideImportSession.documentName(doc) === source) return true;
-		return (
-			!!doc.wopiSrc && SlideImportSession.remoteLinkName(doc.wopiSrc) === source
-		);
+		return !!doc.persistentLink && doc.persistentLink === source;
 	}
 
 	// The document at the given address as the user knows it

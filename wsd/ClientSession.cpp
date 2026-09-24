@@ -3244,10 +3244,10 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
         if (links.isNull())
             return;
 
-        // The names come out of the document's own content, so a document holding many links, or
-        // a long name, names no more than this.
+        // The persistent links come out of the document's own content, so a document holding
+        // many links, or a long one, names no more than this.
         constexpr std::size_t MaxSources = 64;
-        constexpr std::size_t MaxNameLength = 256;
+        constexpr std::size_t MaxNameLength = 1024;
         for (std::size_t i = 0; i < links->size() && names.size() < MaxSources; ++i)
         {
             Poco::JSON::Object::Ptr link = links->getObject(i);

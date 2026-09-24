@@ -174,13 +174,16 @@ private:
     /// or the one its WOPISrc names when the integrator gave none.
     static std::string entryName(const Entry& entry);
 
-    /// The remote link that stands for the source of the given name: by the persistent link
-    /// bound to it, the name the integrator gave it, or the file name its WOPISrc ends in.
-    /// The end of the entries when none does.
-    std::map<std::string, Entry>::const_iterator findListed(const std::string& name) const;
+    /// The remote link the given persistent link is bound to. The end of the entries when
+    /// none is.
+    std::map<std::string, Entry>::const_iterator
+    findListed(const std::string& persistentLink) const;
 
-    /// True when a remote link stands for the source of the given name.
-    bool isListed(const std::string& name) const { return findListed(name) != _entries.end(); }
+    /// True when a remote link stands for the source of the given persistent link.
+    bool isListed(const std::string& persistentLink) const
+    {
+        return findListed(persistentLink) != _entries.end();
+    }
 
     /// Asks the storage of every view, or of the given view alone, for the document behind
     /// each source the document names that the view holds no token for and has not asked
@@ -213,9 +216,9 @@ private:
     /// The remote link sources the document knows, keyed by their docKey.
     std::map<std::string, Entry> _entries;
 
-    /// The source documents the open document's own content names, as the user knows them, in the
-    /// order the document names them. One the storage listed as a remote link is reported as
-    /// that document; any other is reported as a document nothing can reach.
+    /// The source documents the open document's own content names, by the persistent link its
+    /// pages record, in the order the document names them. One a remote link is bound to is
+    /// reported as that document; any other is reported as a document nothing can reach.
     std::vector<std::string> _namedSources;
 
     /// docKeys of the documents connected into this document through headless

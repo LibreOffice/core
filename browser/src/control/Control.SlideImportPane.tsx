@@ -398,9 +398,9 @@ class SlideImportPane {
     const kept = this.picks.get(source.key);
     this.session.setSelection(kept ? Array.from(kept) : []);
     this.session.slideCount = source.slides.length;
-    // The pages of a link insert record the document they came from, as the
-    // user knows it.
-    this.session.setSource(source.name);
+    // The pages of a link insert record the persistent link of the document
+    // they came from. A source without one cannot be linked to.
+    this.session.setSource(source.persistentLink);
     if (source.slides.length) this.session.slidesShown();
   }
 
@@ -423,7 +423,7 @@ class SlideImportPane {
         encodeURIComponent(window.wopiSrc),
       mimeTypeFilter: app.LOUtil.presentationMimeFilter,
     };
-    if (source) args.PersistentLink = source.persistentLink || source.name;
+    if (source) args.PersistentLink = source.persistentLink;
 
     app.map.fire('postMessage', {
       msgId: 'UI_GetPermanentLink',

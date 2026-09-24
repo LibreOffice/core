@@ -4801,7 +4801,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
             // every view. This view's access tokens are private to it.
             for (const auto& link : wopiFileInfo->getRemoteLinks())
                 setRemoteDocumentSource(link.wopiSrc, link.name, link.lastModifiedTime,
-                                        std::string());
+                                        link.persistentLink);
 
             for (const auto& token : wopiFileInfo->getRemoteLinkTokens())
                 setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);

@@ -265,14 +265,15 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
 
     Reads the pages of the document that are linked to a source document,
     refreshes the pages of one source, and takes the source off one page. Only
-    Impress and Draw documents hold such pages. A source name is the source
-    document as the user knows it, and it is the name a page records rather than
-    a location. The server matches it against the remote links of the document,
-    and for a name no remote link stands for it asks the storage, when
+    Impress and Draw documents hold such pages. A source is the persistent
+    link of the source document, the value a page records: the reference the
+    storage resolves to that document, which is no address the server reads
+    itself. The server matches it against the remote links of the document,
+    and for one no remote link stands for it asks the storage, when
     CheckFileInfo says SupportsLinkAccess; a refresh then reads the remote link
-    the name stands for. A source name holds no path
-    and no control character. The source name, the WOPISrc and the staged name
-    are all percent-encoded.
+    it stands for. A source name is any text without a control character, at
+    most 1024 bytes long. The source name, the WOPISrc and the staged name are
+    all percent-encoded.
 
     A client sends all three. An update names a file the server staged in the
     jail, which is what an exportslides of a remote link comes to, so the
@@ -855,7 +856,8 @@ downloadas: jail=<jail directory> dir=<a tmp dir> name=<name> port=<port> filena
 remotelinks: <json>
 
     The remote links the server tracks for this document, from the
-    RemoteLinks field of CheckFileInfo, from POST
+    RemoteLinks field of CheckFileInfo (WOPISrc, BaseFileName,
+    LastModifiedTime and PersistentLink per entry), from POST
     /cool/links, and from the sources the document's own slide
     links name. A DELETE to /cool/links takes one off the list,
     for every view, and the fresh list goes out to all of them. Built for the receiving view: the source list and
