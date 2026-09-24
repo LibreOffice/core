@@ -600,6 +600,11 @@ public:
     virtual void onDocBrokerRemoveSession(const std::string&, const std::shared_ptr<ClientSession>&)
     {
     }
+
+    /// Called each time a DocumentBroker sets out to refresh the lock it holds in storage, whether
+    /// or not a request goes out to the host.
+    virtual void onDocBrokerRefreshLock(const std::string& /*docKey*/) {}
+
     /// Called when document presets install is launched
     virtual void onDocBrokerPresetsInstallStart() {}
     /// Called when document presets install is finished

@@ -4309,6 +4309,8 @@ void DocumentBroker::refreshLock()
 {
     ASSERT_CORRECT_THREAD();
 
+    UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerRefreshLock(_docKey));
+
     const std::shared_ptr<ClientSession> session = getWriteableSession();
     if (!session)
     {
@@ -4330,8 +4332,12 @@ void DocumentBroker::refreshLock()
         std::string error;
         if (!updateStorageLockStateAsync(session, StorageBase::LockState::LOCK, error))
         {
+            // No request went out, so no answer will reset the timer. Wait for the next refresh
+            // period, as the branches above do.
             LOG_ERR("Failed to refresh lock of docKey [" << _docKey << "] with session ["
                                                          << savingSessionId << "]: " << error);
+            _lockCtx->clearRetry();
+            _lockCtx->bumpTimer();
         }
     }
 }

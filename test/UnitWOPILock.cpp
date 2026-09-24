@@ -24,6 +24,7 @@
 
 #include <Poco/Net/HTTPRequest.h>
 
+#include <atomic>
 #include <chrono>
 
 /// This is to test that we unlock before unloading the last editor.
@@ -1072,13 +1073,164 @@ public:
     }
 };
 
+/// When the editor leaves and a view that can only comment stays, the lock stays held, but that
+/// view is read-only and cannot refresh it. The refresh that cannot be sent is tried again once
+/// per refresh period, like any other refresh, however busy the document is.
+class UnitWopiLockRefreshReadOnly : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitViews, WaitEditorGone, CountRefreshes, Done) _phase;
+
+    /// Long enough that a document which retries on every pass of its poll makes many more
+    /// attempts than the few this period allows while we count.
+    static constexpr std::chrono::seconds RefreshPeriod = std::chrono::seconds(4);
+
+    /// How long to count refresh attempts for, once only the commenter is left.
+    static constexpr std::chrono::seconds CountDuration = RefreshPeriod * 2;
+
+    /// The most attempts CountDuration can hold at one per RefreshPeriod: one at each end of
+    /// the two periods.
+    static constexpr std::size_t MaxRefreshes = 3;
+
+    std::size_t _checkFileInfoCount;
+    std::size_t _viewCount;
+    std::atomic<std::size_t> _refreshCount;
+    std::chrono::steady_clock::time_point _countStart;
+
+public:
+    UnitWopiLockRefreshReadOnly()
+        : WopiTestServer("UnitWopiLockRefreshReadOnly")
+        , _phase(Phase::Load)
+        , _checkFileInfoCount(0)
+        , _viewCount(0)
+        , _refreshCount(0)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setInt("storage.wopi.locking.refresh", RefreshPeriod.count());
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // The first session is the editor, the second can only comment.
+        const bool editor = _checkFileInfoCount == 0;
+        ++_checkFileInfoCount;
+        TST_LOG("CheckFileInfo: " << (editor ? "editor" : "commenter"));
+
+        fileInfo->set("SupportsLocks", "true");
+        fileInfo->set("BaseFileName", "doc.odt");
+        if (!editor)
+        {
+            fileInfo->set("UserId", "commenter");
+            fileInfo->set("UserCanWrite", "false");
+            fileInfo->set("UserCanOnlyComment", "true");
+        }
+    }
+
+    std::unique_ptr<http::Response>
+    assertLockRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        const std::string op = request.get("X-WOPI-Override", std::string());
+        TST_LOG("LOCK request: " << op << " in " << name(_phase));
+
+        // The commenter keeps the document editable, so the editor leaving must not unlock.
+        if (_phase == Phase::WaitEditorGone || _phase == Phase::CountRefreshes)
+            LOK_ASSERT_EQUAL_MESSAGE("Unexpected lock-state change", std::string("LOCK"), op);
+
+        return nullptr;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        ++_viewCount;
+        TST_LOG("View #" << _viewCount << " [" << session->getName() << "] loaded");
+
+        if (_viewCount == 2)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitEditorGone);
+            TST_LOG("Disconnecting the editor");
+            deleteSocketAt(0);
+        }
+    }
+
+    void onDocBrokerRemoveSession(const std::string&,
+                                  const std::shared_ptr<ClientSession>& session) override
+    {
+        TST_LOG("Session [" << session->getName() << "] removed in " << name(_phase));
+        if (_phase == Phase::WaitEditorGone)
+        {
+            _countStart = std::chrono::steady_clock::now();
+            _refreshCount = 0;
+            TRANSITION_STATE(_phase, Phase::CountRefreshes);
+        }
+    }
+
+    void onDocBrokerRefreshLock(const std::string&) override
+    {
+        if (_phase != Phase::CountRefreshes)
+            return;
+
+        const std::size_t count = ++_refreshCount;
+        TST_LOG("Lock refresh attempt #" << count);
+        if (count > MaxRefreshes)
+        {
+            failTest("Tried to refresh the lock " + std::to_string(count) + " times in less than " +
+                     std::to_string(CountDuration.count()) + " seconds, with a refresh period of " +
+                     std::to_string(RefreshPeriod.count()) + " seconds");
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitViews);
+
+                TST_LOG("Creating the editor and commenter connections");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                addWebSocket();
+
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::CountRefreshes:
+            {
+                if (std::chrono::steady_clock::now() - _countStart >= CountDuration)
+                {
+                    TRANSITION_STATE(_phase, Phase::Done);
+                    passTest("Tried to refresh the lock " + std::to_string(_refreshCount) +
+                             " times while only the commenter was left");
+                    break;
+                }
+
+                // Keep the document busy, so that every pass of its poll could retry.
+                WSD_CMD_BY_CONNECTION_INDEX(1, "ping");
+                break;
+            }
+            case Phase::WaitViews:
+            case Phase::WaitEditorGone:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[9]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
-                             new UnitWopiLockFail(), new UnitWopiUnlock(),
-                             new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
-                             new UnitWopiUnlockRetry(),
-                             new UnitWopiUnlockUnauthorized(), nullptr };
+    return new UnitBase*[10]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
+                              new UnitWopiLockFail(), new UnitWopiUnlock(),
+                              new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
+                              new UnitWopiUnlockRetry(),
+                              new UnitWopiUnlockUnauthorized(),
+                              new UnitWopiLockRefreshReadOnly(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
