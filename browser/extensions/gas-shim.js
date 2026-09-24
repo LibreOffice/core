@@ -198,6 +198,51 @@
             for (const k of propKeys()) {
                 localStorage.removeItem(propStoragePrefix + k);
             }
+        },
+        urlFetch: async function(url, method, contentType, payload, payloadIsBase64,
+                                 headerNames, headerValues, followRedirects) {
+            const headers = {};
+            for (let i = 0; i < headerNames.length; ++i) {
+                headers[headerNames[i]] = headerValues[i];
+            }
+            if (contentType) headers['Content-Type'] = contentType;
+            try {
+                const body = method === 'GET' || method === 'HEAD'
+                    ? undefined
+                    : payloadIsBase64
+                        ? Uint8Array.from(atob(payload), c => c.charCodeAt(0))
+                        : payload;
+                const resp = await fetch(url, {
+                    method: method,
+                    headers: headers,
+                    body: body,
+                    redirect: followRedirects ? 'follow' : 'manual'
+                });
+                const buf = await resp.arrayBuffer();
+                const bytes = new Uint8Array(buf);
+                let binary = '';
+                for (let i = 0; i < bytes.length; i += 0x8000) {
+                    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+                }
+                const outNames = [];
+                const outValues = [];
+                resp.headers.forEach(function(v, k) {
+                    outNames.push(k);
+                    outValues.push(v);
+                });
+                return {
+                    code: resp.status,
+                    headerNames: outNames,
+                    headerValues: outValues,
+                    body: btoa(binary),
+                    error: ''
+                };
+            } catch (err) {
+                return {
+                    code: 0, headerNames: [], headerValues: [], body: '',
+                    error: err && err.message ? err.message : String(err)
+                };
+            }
         }
     };
 

@@ -447,6 +447,191 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
                 return { getEmail: function() { return ''; } };
             }
         };
+        // Real UrlFetchApp, routed to the iframe (kit has no outbound network).  The response
+        // object matches Apps Script's HTTPResponse shape: getContentText returns UTF-8 text,
+        // getContent returns a byte array, and getHeaders and getAllHeaders return the headers
+        // under the lower-case names the iframe's fetch reports.  When the underlying fetch or the
+        // callback itself fails, urlFetch fills `error` and this shim throws with that message so
+        // an add-on's try/catch runs.  A non-2xx status without muteHttpExceptions:true also
+        // throws, matching GAS.
+        // A byte payload (an array of GAS's signed bytes, a Uint8Array, or a Blob) travels to the
+        // iframe as base64.  As in GAS, a payload without a contentType (and, for a Blob, without
+        // a content type of its own) is sent as application/x-www-form-urlencoded:
+        function urlFetchNormalize(payload, givenContentType) {
+            const contentType = givenContentType || 'application/x-www-form-urlencoded';
+            if (payload == null) {
+                return { body: '', isBase64: false, contentType: givenContentType };
+            }
+            if (typeof payload === 'string') {
+                return { body: payload, isBase64: false, contentType: contentType };
+            }
+            if (payload instanceof Uint8Array || Array.isArray(payload)) {
+                return {
+                    body: Uint8Array.from(payload).toBase64(), isBase64: true,
+                    contentType: contentType
+                };
+            }
+            if (typeof payload.getBytes === 'function') {
+                const blobType = payload.getContentType();
+                return {
+                    body: Uint8Array.from(payload.getBytes()).toBase64(), isBase64: true,
+                    contentType: givenContentType || blobType || contentType
+                };
+            }
+            if (typeof payload === 'object') {
+                // GAS form-encodes an object payload, with a space as "+":
+                const encode = (v) => encodeURIComponent(v).replace(/%20/g, '+');
+                const parts = [];
+                for (const k of Object.keys(payload)) {
+                    parts.push(encode(k) + '=' + encode(String(payload[k])));
+                }
+                return { body: parts.join('&'), isBase64: false, contentType: contentType };
+            }
+            return { body: String(payload), isBase64: false, contentType: contentType };
+        }
+        // Decode UTF-8 the way the Encoding Standard's TextDecoder does, without a leading byte
+        // order mark and with one U+FFFD for each maximal subpart of an ill-formed sequence:
+        function decodeUtf8(bytes) {
+            const codePoints = [];
+            let i = bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf ? 3 : 0;
+            while (i < bytes.length) {
+                const lead = bytes[i];
+                let codePoint = 0xfffd;
+                let length = 1;
+                let need = 0;
+                let lower = 0x80;
+                let upper = 0xbf;
+                if (lead < 0x80) {
+                    codePoint = lead;
+                } else if (lead >= 0xc2 && lead <= 0xdf) {
+                    need = 1;
+                    codePoint = lead & 0x1f;
+                } else if (lead >= 0xe0 && lead <= 0xef) {
+                    need = 2;
+                    codePoint = lead & 0x0f;
+                    lower = lead === 0xe0 ? 0xa0 : 0x80;
+                    upper = lead === 0xed ? 0x9f : 0xbf;
+                } else if (lead >= 0xf0 && lead <= 0xf4) {
+                    need = 3;
+                    codePoint = lead & 0x07;
+                    lower = lead === 0xf0 ? 0x90 : 0x80;
+                    upper = lead === 0xf4 ? 0x8f : 0xbf;
+                }
+                for (let j = 1; j <= need; ++j) {
+                    const next = bytes[i + j];
+                    if (next === undefined || next < lower || next > upper) {
+                        codePoint = 0xfffd;
+                        length = j;
+                        break;
+                    }
+                    codePoint = (codePoint << 6) | (next & 0x3f);
+                    lower = 0x80;
+                    upper = 0xbf;
+                    length = j + 1;
+                }
+                codePoints.push(codePoint);
+                i += length;
+            }
+            let text = '';
+            for (let k = 0; k < codePoints.length; k += 0x8000) {
+                text += String.fromCodePoint.apply(null, codePoints.slice(k, k + 0x8000));
+            }
+            return text;
+        }
+        // The body arrives as base64, and is decoded only when the add-on asks for it:
+        function urlFetchResponse(r) {
+            let bytes = null;
+            let text = null;
+            const content = function() {
+                if (bytes === null) {
+                    bytes = Uint8Array.fromBase64(r.body);
+                }
+                return bytes;
+            };
+            const headerMap = {};
+            for (let i = 0; i < r.headerNames.length; ++i) {
+                headerMap[r.headerNames[i]] = r.headerValues[i];
+            }
+            return {
+                getResponseCode: function() { return r.code; },
+                getContentText: function(charset) {
+                    if (charset && charset.toLowerCase() !== 'utf-8'
+                        && charset.toLowerCase() !== 'utf8') {
+                        throw new Error(
+                            'HTTPResponse.getContentText: charset override to ' + charset
+                                + ' is not supported; only the response\'s own charset is'
+                                + ' available.');
+                    }
+                    if (text === null) {
+                        text = decodeUtf8(content());
+                    }
+                    return text;
+                },
+                // As in GAS, the bytes are signed:
+                getContent: function() {
+                    return Array.from(content(), (b) => b > 127 ? b - 256 : b);
+                },
+                getHeaders: function() { return headerMap; },
+                // GAS gives the values of a repeated header as an array, but the iframe's fetch
+                // has already joined them into one string, separated by ", ":
+                getAllHeaders: function() { return headerMap; },
+                // GAS gives the blob the response's media type without its parameters:
+                getBlob: function() {
+                    const contentType = headerMap['content-type'];
+                    return cool.newBlob(
+                        this.getContent(),
+                        contentType === undefined ? null : contentType.split(';')[0].trim());
+                }
+            };
+        }
+        function urlFetchOne(url, params) {
+            params = params || {};
+            const method = String(params.method || 'get').toUpperCase();
+            const norm = urlFetchNormalize(params.payload, params.contentType || '');
+            const headerNames = [];
+            const headerValues = [];
+            const headers = params.headers || {};
+            for (const k of Object.keys(headers)) {
+                headerNames.push(String(k));
+                headerValues.push(String(headers[k]));
+            }
+            const followRedirects = params.followRedirects !== false;
+            const resp = clientRuntime.urlFetch(
+                String(url), method, norm.contentType, norm.body, norm.isBase64,
+                headerNames, headerValues, followRedirects);
+            if (resp.error) {
+                throw new Error(
+                    'UrlFetchApp.fetch ' + url + ': ' + resp.error);
+            }
+            // GAS names only the scheme and host of the URL here:
+            if (!params.muteHttpExceptions && resp.code >= 400) {
+                const origin = String(url).match(/^[^:/?#]+:\/\/[^/?#]*/);
+                throw new Error(
+                    'Request failed for ' + (origin === null ? url : origin[0])
+                        + ' returned code ' + resp.code);
+            }
+            return urlFetchResponse(resp);
+        }
+        globalThis.UrlFetchApp = {
+            fetch: urlFetchOne,
+            fetchAll: function(requests) {
+                return requests.map(function(r) {
+                    if (typeof r === 'string') return urlFetchOne(r, {});
+                    return urlFetchOne(r.url, r);
+                });
+            },
+            getRequest: function(url, params) {
+                params = params || {};
+                const norm = urlFetchNormalize(params.payload, params.contentType || '');
+                return {
+                    url: String(url),
+                    method: String(params.method || 'get').toLowerCase(),
+                    contentType: norm.contentType,
+                    payload: norm.isBase64 ? params.payload : norm.body,
+                    headers: params.headers || {}
+                };
+            }
+        };
 
         // Eval each .gs under its own filename so exception messages name the .gs, not the runner
         // blob:

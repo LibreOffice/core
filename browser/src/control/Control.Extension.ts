@@ -1439,11 +1439,16 @@ function answerGasProxyCall(e: {
 	const proxy = gasProxies[e.proxyId];
 	if (!proxy) return;
 	const handler = proxy.handlers;
-	const fn = handler[e.method];
-	let value: unknown;
-	try {
-		value = fn ? fn(...e.args) : null;
-	} catch (err) {
+	const send = (value: unknown) => {
+		if (!e.callId) return;
+		app.socket.sendMessage(
+			'proxyreturn ' +
+				e.callId +
+				' ' +
+				JSON.stringify(value === undefined ? null : value),
+		);
+	};
+	const onThrow = (err: unknown) => {
 		console.warn(
 			'extension ' +
 				proxy.extensionId +
@@ -1452,15 +1457,21 @@ function answerGasProxyCall(e: {
 				' threw:',
 			err,
 		);
-		value = null;
-	}
-	if (e.callId) {
-		app.socket.sendMessage(
-			'proxyreturn ' +
-				e.callId +
-				' ' +
-				JSON.stringify(value === undefined ? null : value),
-		);
+		send(null);
+	};
+	const fn = handler[e.method];
+	try {
+		// A handler may return a Promise (urlFetch does): wait for it before
+		// sending proxyreturn, so a non-void async method blocks the kit-side
+		// caller for the real answer instead of getting null immediately.
+		const result = fn ? fn(...e.args) : null;
+		if (result && typeof (result as { then?: unknown }).then === 'function') {
+			(result as Promise<unknown>).then(send, onThrow);
+		} else {
+			send(result);
+		}
+	} catch (err) {
+		onThrow(err);
 	}
 }
 
@@ -1496,6 +1507,68 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 		userPropGetKeys: () => propKeys(),
 		userPropDeleteAll: () => {
 			for (const k of propKeys()) localStorage.removeItem(prefix + k);
+		},
+		urlFetch: async (...args: unknown[]) => {
+			const url = String(args[0]);
+			const method = String(args[1]);
+			const contentType = String(args[2]);
+			const payload = String(args[3]);
+			const payloadIsBase64 = Boolean(args[4]);
+			const headerNames = args[5] as string[];
+			const headerValues = args[6] as string[];
+			const followRedirects = Boolean(args[7]);
+			const headers: { [k: string]: string } = {};
+			for (let i = 0; i < headerNames.length; ++i) {
+				headers[headerNames[i]] = headerValues[i];
+			}
+			if (contentType) headers['Content-Type'] = contentType;
+			try {
+				const body =
+					method === 'GET' || method === 'HEAD'
+						? undefined
+						: payloadIsBase64
+							? Uint8Array.from(atob(payload), (c) => c.charCodeAt(0))
+							: payload;
+				const resp = await fetch(url, {
+					method: method,
+					headers: headers,
+					body: body,
+					redirect: followRedirects ? 'follow' : 'manual',
+				});
+				const buf = await resp.arrayBuffer();
+				const bytes = new Uint8Array(buf);
+				let binary = '';
+				for (let i = 0; i < bytes.length; i += 0x8000) {
+					binary += String.fromCharCode.apply(
+						null,
+						Array.from(bytes.subarray(i, i + 0x8000)),
+					);
+				}
+				const outNames: string[] = [];
+				const outValues: string[] = [];
+				resp.headers.forEach((v, k) => {
+					outNames.push(k);
+					outValues.push(v);
+				});
+				return {
+					code: resp.status,
+					headerNames: outNames,
+					headerValues: outValues,
+					body: btoa(binary),
+					error: '',
+				};
+			} catch (err) {
+				return {
+					code: 0,
+					headerNames: [],
+					headerValues: [],
+					body: '',
+					error:
+						err && (err as Error).message
+							? (err as Error).message
+							: String(err),
+				};
+			}
 		},
 	};
 }

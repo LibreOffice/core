@@ -15,19 +15,29 @@
 #include <functional>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <string_view>
+#include <vector>
+
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <cpo/uno/Reference.hxx>
+#include <comphelper/base64.hxx>
+#include <comphelper/json.hxx>
 #include <comphelper/processfactory.hxx>
 #include <config_srcdir.h>
 #include <cool.hpp>
+#include <cppu/unotype.hxx>
 #include <jsuno/jsuno.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -142,6 +152,145 @@ std::u16string_view extractCallId(std::u16string_view payload) {
     return payload.substr(from, end - from);
 }
 
+void appendJsonString(OStringBuffer & buf, OUString const & text) {
+    comphelper::appendUnoAsJson(buf, cppu::UnoType<OUString>::get(), &text);
+}
+
+bool isUtf8(std::string const & bytes) {
+    OUString text;
+    return rtl_convertStringToUString(
+        &text.pData, bytes.data(), bytes.size(), RTL_TEXTENCODING_UTF8,
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+            | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+}
+
+std::string formDecode(std::string const & text) {
+    return std::string(OUStringToOString(
+        rtl::Uri::decode(
+            OUString::fromUtf8(text).replace('+', ' '), rtl_UriDecodeWithCharset,
+            RTL_TEXTENCODING_UTF8),
+        RTL_TEXTENCODING_UTF8));
+}
+
+// httpbin reports request header names with each dash-separated part capitalized:
+std::string titleCase(std::string name) {
+    bool start = true;
+    for (auto & c: name) {
+        auto const u = static_cast<unsigned char>(c);
+        c = static_cast<char>(start ? rtl::toAsciiUpperCase(u) : rtl::toAsciiLowerCase(u));
+        start = c == '-';
+    }
+    return name;
+}
+
+// The client side of XClientRuntime.urlFetch, answering the way https://httpbin.org does for the
+// URLs that urlfetchapp-test.js uses:
+void httpbin(OUString const & payload) {
+    std::istringstream in(std::string(payload.toUtf8()));
+    boost::property_tree::ptree call;
+    boost::property_tree::read_json(in, call);
+    CPPUNIT_ASSERT_EQUAL(std::string("urlFetch"), call.get<std::string>("method"));
+    std::vector<boost::property_tree::ptree> args;
+    for (auto const & arg: call.get_child("args")) {
+        args.push_back(arg.second);
+    }
+    CPPUNIT_ASSERT_EQUAL(std::size_t(8), args.size());
+    auto const url = args[0].data();
+    auto const method = args[1].data();
+    auto const contentType = args[2].data();
+    std::string body = args[3].data();
+    if (args[4].data() == "true") {
+        cpo::uno::Sequence<sal_Int8> bytes;
+        comphelper::Base64::decode(bytes, body);
+        body.assign(reinterpret_cast<char const *>(bytes.getConstArray()), bytes.getLength());
+    }
+    sal_Int32 code;
+    std::string responseType;
+    std::string text;
+    OUString error;
+    if (url == "https://httpbin.org/anything") {
+        boost::property_tree::ptree headers;
+        std::vector<std::string> names;
+        for (auto const & name: args[5]) {
+            names.push_back(name.second.data());
+        }
+        std::size_t i = 0;
+        for (auto const & value: args[6]) {
+            headers.push_back({titleCase(names.at(i++)), boost::property_tree::ptree(
+                value.second.data())});
+        }
+        if (!contentType.empty()) {
+            headers.push_back({"Content-Type", boost::property_tree::ptree(contentType)});
+        }
+        boost::property_tree::ptree form;
+        std::string data;
+        // httpbin decodes a form body that is not UTF-8 into replacement characters, which the
+        // test does not look at:
+        if (contentType.starts_with("application/x-www-form-urlencoded")) {
+            if (!isUtf8(body)) {
+                body.clear();
+            }
+            std::istringstream fields(body);
+            std::string field;
+            while (std::getline(fields, field, '&')) {
+                auto const eq = field.find('=');
+                form.push_back({formDecode(field.substr(0, eq)), boost::property_tree::ptree(
+                    eq == std::string::npos ? std::string() : formDecode(field.substr(eq + 1)))});
+            }
+        } else if (isUtf8(body)) {
+            data = body;
+        } else {
+            OStringBuffer b64;
+            comphelper::Base64::encode(
+                b64, cpo::uno::Sequence<sal_Int8>(
+                    reinterpret_cast<sal_Int8 const *>(body.data()), body.size()));
+            data = "data:application/octet-stream;base64," + std::string(b64);
+        }
+        boost::property_tree::ptree echo;
+        echo.put("data", data);
+        echo.add_child("form", form);
+        echo.add_child("headers", headers);
+        echo.put("method", method);
+        echo.put("url", url);
+        std::ostringstream out;
+        boost::property_tree::write_json(out, echo, false);
+        code = 200;
+        responseType = "application/json";
+        text = out.str();
+        // write_json writes an empty object as "", where httpbin writes {}:
+        if (auto const pos = text.find("\"form\":\"\""); pos != std::string::npos) {
+            text.replace(pos, 9, "\"form\":{}");
+        }
+    } else if (url == "https://httpbin.org/image/png") {
+        code = 200;
+        responseType = "image/png";
+        text = "\x89PNG\r\n\x1a\n";
+    } else if (url == "https://httpbin.org/status/404") {
+        code = 404;
+        responseType = "text/html; charset=utf-8";
+    } else {
+        code = 0;
+        error = u"Failed to fetch"_ustr;
+    }
+    OStringBuffer buf("{\"code\":" + OString::number(code) + ",\"headerNames\":[");
+    if (!responseType.empty()) {
+        buf.append("\"content-type\"");
+    }
+    buf.append("],\"headerValues\":[");
+    if (!responseType.empty()) {
+        appendJsonString(buf, OUString::fromUtf8(responseType));
+    }
+    buf.append("],\"body\":\"");
+    comphelper::Base64::encode(
+        buf, cpo::uno::Sequence<sal_Int8>(
+            reinterpret_cast<sal_Int8 const *>(text.data()), text.size()));
+    buf.append("\",\"error\":");
+    appendJsonString(buf, error);
+    buf.append('}');
+    jsuno::deliverProxyResult(
+        OUString::fromUtf8(call.get<std::string>("callId")), OUString::fromUtf8(buf));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     loadActiveDocument(u"document-test.rtf");
     runScript(createFileURL(u"document-test.js"), {});
@@ -149,6 +298,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocument) {
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
     runScript(createFileURL(u"utilities-test.js"), {});
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testUrlFetchApp) {
+    runScript(createFileURL(u"urlfetchapp-test.js"), httpbin);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {

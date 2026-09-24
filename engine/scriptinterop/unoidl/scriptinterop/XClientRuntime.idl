@@ -31,6 +31,18 @@ interface XClientRuntime {
 
     // Translate text from ISO 639-1 `origin` to `dest`; empty `origin` means auto-detect:
     string translate([in] string text, [in] string origin, [in] string dest);
+
+    // Do an HTTP request from the iframe (the kit has no outbound network) and return the response
+    // for a UrlFetchApp.fetch call.  `method` is upper-case ("GET"/"POST"/...).  When
+    // `payloadIsBase64` is true the `payload` string decodes to the raw request body; when false,
+    // the string is sent as-is.  `headerNames` and `headerValues` are parallel arrays.  If
+    // `contentType` is non-empty it is added as a Content-Type header before the request body is
+    // sent.  A network or CORS failure is reported through the response's `error` field rather than
+    // as a UNO exception.
+    HttpResponse urlFetch(
+        [in] string url, [in] string method, [in] string contentType, [in] string payload,
+        [in] boolean payloadIsBase64, [in] sequence<string> headerNames,
+        [in] sequence<string> headerValues, [in] boolean followRedirects);
 };
 
 };

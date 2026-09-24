@@ -38,6 +38,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     FillType \
     GlyphType \
     HorizontalAlignment \
+    HttpResponse \
     ImageOptions \
     LineCategory \
     LineFillType \
