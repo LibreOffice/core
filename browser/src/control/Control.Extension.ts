@@ -1477,6 +1477,61 @@ function answerGasProxyCall(e: {
 	}
 }
 
+// The cache entries of all add-ons share a budget of a million characters, well below the
+// localStorage quota that COOL's own settings need too, and storing one drops the expired entries
+// and, as far as needed, those that expire soonest:
+function storeGasCacheEntry(storageKey: string, envelope: string): void {
+	const now = Date.now();
+	const entries: { key: string; exp: number; size: number }[] = [];
+	const expired: string[] = [];
+	let used = 0;
+	for (let i = 0; i < localStorage.length; ++i) {
+		const k = localStorage.key(i);
+		if (k === null || !k.startsWith('gas-cache:') || k === storageKey) continue;
+		const raw = localStorage.getItem(k) || '';
+		let exp: unknown = 0;
+		try {
+			exp = JSON.parse(raw).exp;
+		} catch (_) {
+			/* dropped as expired */
+		}
+		if (typeof exp !== 'number' || exp <= now) {
+			expired.push(k);
+		} else {
+			entries.push({ key: k, exp: exp, size: k.length + raw.length });
+			used += k.length + raw.length;
+		}
+	}
+	for (const k of expired) localStorage.removeItem(k);
+	entries.sort((a, b) => a.exp - b.exp);
+	const size = storageKey.length + envelope.length;
+	let next = 0;
+	while (used + size > 1000000 && next < entries.length) {
+		const entry = entries[next++];
+		localStorage.removeItem(entry.key);
+		used -= entry.size;
+	}
+	// A value that does not fit is not cached, which GAS allows as well:
+	for (;;) {
+		if (used + size > 1000000) {
+			localStorage.removeItem(storageKey);
+			return;
+		}
+		try {
+			localStorage.setItem(storageKey, envelope);
+			return;
+		} catch (_) {
+			if (next === entries.length) {
+				localStorage.removeItem(storageKey);
+				return;
+			}
+			const entry = entries[next++];
+			localStorage.removeItem(entry.key);
+			used -= entry.size;
+		}
+	}
+}
+
 function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 	const prefix = 'gas-user-props:' + extensionId + ':';
 	const propKeys = () => {
@@ -1489,6 +1544,8 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 		}
 		return out;
 	};
+	const cacheKey = (scope: string, key: string) =>
+		'gas-cache:' + extensionId + ':' + scope + ':' + key;
 	return {
 		translate: () => {
 			throw new Error(
@@ -1509,6 +1566,40 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 		userPropGetKeys: () => propKeys(),
 		userPropDeleteAll: () => {
 			for (const k of propKeys()) localStorage.removeItem(prefix + k);
+		},
+		cacheGet: (...args: unknown[]) => {
+			const scope = String(args[0]);
+			const key = String(args[1]);
+			const raw = localStorage.getItem(cacheKey(scope, key));
+			if (raw === null) return { IsPresent: false, Value: '' };
+			try {
+				const parsed = JSON.parse(raw);
+				if (
+					parsed &&
+					typeof parsed.exp === 'number' &&
+					Date.now() < parsed.exp
+				) {
+					return { IsPresent: true, Value: String(parsed.v) };
+				}
+			} catch (_) {
+				/* fall through and drop */
+			}
+			localStorage.removeItem(cacheKey(scope, key));
+			return { IsPresent: false, Value: '' };
+		},
+		cachePut: (...args: unknown[]) => {
+			const scope = String(args[0]);
+			const key = String(args[1]);
+			const value = String(args[2]);
+			const ttl = Math.max(0, Number(args[3]));
+			const envelope = JSON.stringify({
+				v: value,
+				exp: Date.now() + ttl * 1000,
+			});
+			storeGasCacheEntry(cacheKey(scope, key), envelope);
+		},
+		cacheRemove: (...args: unknown[]) => {
+			localStorage.removeItem(cacheKey(String(args[0]), String(args[1])));
 		},
 		urlFetch: async (...args: unknown[]) => {
 			const url = String(args[0]);

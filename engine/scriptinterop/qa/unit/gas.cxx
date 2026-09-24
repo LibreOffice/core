@@ -13,6 +13,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <map>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -291,6 +292,46 @@ void httpbin(OUString const & payload) {
         OUString::fromUtf8(call.get<std::string>("callId")), OUString::fromUtf8(buf));
 }
 
+// The client side of XClientRuntime.cacheGet, cachePut and cacheRemove, which keeps the entries in
+// memory and checks the expiration that cacheservice-test.js expects for some of its keys:
+void cache(OUString const & payload) {
+    static std::map<std::string, std::pair<std::string, std::string>> entries;
+    std::istringstream in(std::string(payload.toUtf8()));
+    boost::property_tree::ptree call;
+    boost::property_tree::read_json(in, call);
+    std::vector<std::string> args;
+    for (auto const & arg: call.get_child("args")) {
+        args.push_back(arg.second.data());
+    }
+    auto const method = call.get<std::string>("method");
+    auto const key = args.at(0) + '\n' + args.at(1);
+    if (method == "cacheGet") {
+        OStringBuffer buf;
+        auto const i = entries.find(key);
+        if (i == entries.end()) {
+            buf.append("{\"IsPresent\":false,\"Value\":\"\"}");
+        } else {
+            buf.append("{\"IsPresent\":true,\"Value\":");
+            appendJsonString(buf, OUString::fromUtf8(i->second.first));
+            buf.append('}');
+        }
+        jsuno::deliverProxyResult(
+            OUString::fromUtf8(call.get<std::string>("callId")), OUString::fromUtf8(buf));
+    } else if (method == "cachePut") {
+        for (auto const & [suffix, ttl]:
+             {std::pair{"-ttl-default", "600"}, {"-ttl-zero", "600"}, {"-ttl-big", "21600"}})
+        {
+            if (args.at(1).ends_with(suffix)) {
+                CPPUNIT_ASSERT_EQUAL(std::string(ttl), args.at(3));
+            }
+        }
+        entries[key] = {args.at(2), args.at(3)};
+    } else {
+        CPPUNIT_ASSERT_EQUAL(std::string("cacheRemove"), method);
+        entries.erase(key);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     loadActiveDocument(u"document-test.rtf");
     runScript(createFileURL(u"document-test.js"), {});
@@ -298,6 +339,10 @@ CPPUNIT_TEST_FIXTURE(Test, testDocument) {
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
     runScript(createFileURL(u"utilities-test.js"), {});
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCacheService) {
+    runScript(createFileURL(u"cacheservice-test.js"), cache);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testScriptApp) {

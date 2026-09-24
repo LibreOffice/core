@@ -484,6 +484,75 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             getAuthorizationInfo: scriptAppNotSupported('getAuthorizationInfo'),
             invalidateAuth: scriptAppNotSupported('invalidateAuth')
         };
+        // A cache for one scope, whose entries live in the iframe's localStorage and which checks
+        // its arguments the way GAS does:
+        function cacheFacade(scope) {
+            function normalizedTtl(ttl) {
+                const n = Math.trunc(Number(ttl));
+                if (!Number.isFinite(n)) {
+                    throw new Error("Cannot convert '" + ttl + "' to int.");
+                }
+                return n <= 0 ? 600 : Math.min(n, 21600);
+            }
+            function checkedKey(k) {
+                const key = String(k);
+                if (key.length > 250) {
+                    throw new Error('Argument too large: key');
+                }
+                return key;
+            }
+            const c = {
+                get: function(k) {
+                    return clientRuntime.cacheGet(scope, String(k));
+                },
+                // As in GAS, a null value leaves no entry:
+                put: function(k, v, ttl) {
+                    const key = checkedKey(k);
+                    const expiration = ttl === undefined ? 600 : normalizedTtl(ttl);
+                    if (v == null) {
+                        c.remove(key);
+                        return;
+                    }
+                    const value = String(v);
+                    if (value.length > 100 * 1024) {
+                        throw new Error('Argument too large: value');
+                    }
+                    clientRuntime.cachePut(scope, key, value, expiration);
+                },
+                remove: function(k) {
+                    clientRuntime.cacheRemove(scope, String(k));
+                },
+                getAll: function(keys) {
+                    const out = {};
+                    for (const k of keys) {
+                        const v = c.get(k);
+                        if (v !== null) out[k] = v;
+                    }
+                    return out;
+                },
+                putAll: function(values, ttl) {
+                    for (const k of Object.keys(values)) {
+                        c.put(k, values[k], ttl);
+                    }
+                },
+                removeAll: function(keys) {
+                    for (const k of keys) {
+                        c.remove(k);
+                    }
+                }
+            };
+            return c;
+        }
+        globalThis.CacheService = {
+            getUserCache: function() { return cacheFacade('user'); },
+            getScriptCache: function() { return cacheFacade('script'); },
+            getDocumentCache: function() {
+                throw new Error(
+                    'CacheService.getDocumentCache is not supported in the COOL Apps Script'
+                        + ' wrapper; a per-document cache would need a document-side key that is'
+                        + ' not plumbed through the iframe yet.');
+            }
+        };
         // Real UrlFetchApp, routed to the iframe (kit has no outbound network).  The response
         // object matches Apps Script's HTTPResponse shape: getContentText returns UTF-8 text,
         // getContent returns a byte array, and getHeaders and getAllHeaders return the headers

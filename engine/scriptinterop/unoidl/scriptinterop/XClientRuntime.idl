@@ -32,6 +32,16 @@ interface XClientRuntime {
     // Translate text from ISO 639-1 `origin` to `dest`; empty `origin` means auto-detect:
     string translate([in] string text, [in] string origin, [in] string dest);
 
+    // The entry for key in the cache of scope ("user" or "script"), absent when there is none or
+    // it has expired:
+    com::sun::star::beans::Optional<string> cacheGet([in] string scope, [in] string key);
+
+    // Store value under key in the cache of scope, for ttlSeconds seconds:
+    void cachePut([in] string scope, [in] string key, [in] string value, [in] long ttlSeconds);
+
+    // Remove the entry for key from the cache of scope:
+    void cacheRemove([in] string scope, [in] string key);
+
     // Do an HTTP request from the iframe (the kit has no outbound network) and return the response
     // for a UrlFetchApp.fetch call.  `method` is upper-case ("GET"/"POST"/...).  When
     // `payloadIsBase64` is true the `payload` string decodes to the raw request body; when false,

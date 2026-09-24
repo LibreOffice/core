@@ -179,6 +179,63 @@
         return out;
     }
 
+    // A cache entry lives in localStorage under the add-on and the scope, as JSON with the value
+    // and the time at which it expires:
+    function cacheKey(scope, key) {
+        return 'gas-cache:' + (extensionIdMatch ? extensionIdMatch[1] : 'unknown')
+            + ':' + scope + ':' + key;
+    }
+    // The cache entries of all add-ons share a budget of a million characters, well below the
+    // localStorage quota that COOL's own settings need too, and storing one drops the expired
+    // entries and, as far as needed, those that expire soonest:
+    function cacheStore(storageKey, envelope) {
+        const now = Date.now();
+        const entries = [];
+        const expired = [];
+        let used = 0;
+        for (let i = 0; i < localStorage.length; ++i) {
+            const k = localStorage.key(i);
+            if (k === null || !k.startsWith('gas-cache:') || k === storageKey) continue;
+            const raw = localStorage.getItem(k) || '';
+            let exp = 0;
+            try { exp = JSON.parse(raw).exp; } catch (_) { /* dropped as expired */ }
+            if (typeof exp !== 'number' || exp <= now) {
+                expired.push(k);
+            } else {
+                entries.push({ key: k, exp: exp, size: k.length + raw.length });
+                used += k.length + raw.length;
+            }
+        }
+        for (const k of expired) localStorage.removeItem(k);
+        entries.sort(function(a, b) { return a.exp - b.exp; });
+        const size = storageKey.length + envelope.length;
+        let next = 0;
+        while (used + size > 1000000 && next < entries.length) {
+            const entry = entries[next++];
+            localStorage.removeItem(entry.key);
+            used -= entry.size;
+        }
+        // A value that does not fit is not cached, which GAS allows as well:
+        for (;;) {
+            if (used + size > 1000000) {
+                localStorage.removeItem(storageKey);
+                return;
+            }
+            try {
+                localStorage.setItem(storageKey, envelope);
+                return;
+            } catch (_) {
+                if (next === entries.length) {
+                    localStorage.removeItem(storageKey);
+                    return;
+                }
+                const entry = entries[next++];
+                localStorage.removeItem(entry.key);
+                used -= entry.size;
+            }
+        }
+    }
+
     const clientRuntimeHandlers = {
         translate: function() {
             throw new Error(
@@ -199,6 +256,28 @@
             for (const k of propKeys()) {
                 localStorage.removeItem(propStoragePrefix + k);
             }
+        },
+        cacheGet: function(scope, key) {
+            const raw = localStorage.getItem(cacheKey(String(scope), String(key)));
+            if (raw === null) return { IsPresent: false, Value: '' };
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed && typeof parsed.exp === 'number' && Date.now() < parsed.exp) {
+                    return { IsPresent: true, Value: String(parsed.v) };
+                }
+            } catch (_) { /* fall through and drop */ }
+            localStorage.removeItem(cacheKey(String(scope), String(key)));
+            return { IsPresent: false, Value: '' };
+        },
+        cachePut: function(scope, key, value, ttlSeconds) {
+            const envelope = JSON.stringify({
+                v: String(value),
+                exp: Date.now() + Math.max(0, ttlSeconds) * 1000
+            });
+            cacheStore(cacheKey(String(scope), String(key)), envelope);
+        },
+        cacheRemove: function(scope, key) {
+            localStorage.removeItem(cacheKey(String(scope), String(key)));
         },
         urlFetch: async function(url, method, contentType, payload, payloadIsBase64,
                                  headerNames, headerValues, followRedirects) {
