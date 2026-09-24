@@ -86,6 +86,23 @@ public:
     Test(): UnoApiTest(u"/scriptinterop/qa/unit/data/"_ustr) {}
 
 protected:
+    // A library for the runner's libraries argument, made of files in qa/unit/data, and with the
+    // libraries that it declares in turn, as for runScript:
+    OUString library(
+        std::u16string_view userSymbol, std::vector<std::u16string_view> const & files,
+        std::u16string_view libraries)
+    {
+        OUStringBuffer sources;
+        for (auto const & file: files) {
+            if (!sources.isEmpty()) {
+                sources.append(", ");
+            }
+            sources.append(jsLiteral(read(createFileURL(file))));
+        }
+        return "{userSymbol: " + jsLiteral(userSymbol) + ", dir: '', scripts: [], sources: ["
+            + sources + "], libraries: [" + libraries + "]}";
+    }
+
     void loadActiveDocument(std::u16string_view filename) {
         loadFromURL(createFileURL(filename));
         css::frame::Desktop::create(comphelper::getProcessComponentContext())->setActiveFrame(
@@ -93,7 +110,12 @@ protected:
             getCurrentController()->getFrame());
     }
 
-    void runScript(OUString const & url, std::function<void(OUString const &)> proxyCallHook) {
+    // The libraries are the elements of the runner's libraries argument, as made by library and
+    // separated by commas:
+    void runScript(
+        OUString const & url, std::function<void(OUString const &)> proxyCallHook,
+        std::u16string_view libraries)
+    {
         OUString gasUrl;
         auto const rc = osl::FileBase::getFileURLFromSystemPath(
             u"" SRC_ROOT "/../browser/extensions/gas-kit-runner.js"_ustr, gasUrl);
@@ -101,7 +123,7 @@ protected:
         OUString const script(
             "var window = globalThis;\n" + read(gasUrl)
             + "\n__gasKitRunner('scriptinterop_document_test', [" + jsLiteral(read(url)) + "], ["
-            + jsLiteral(url) + "], 'test', [], 'scriptinterop_test');");
+            + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
         try {
             bool usedLegacyUnoApi;
             jsuno::execute(
@@ -334,23 +356,30 @@ void cache(OUString const & payload) {
 
 CPPUNIT_TEST_FIXTURE(Test, testDocument) {
     loadActiveDocument(u"document-test.rtf");
-    runScript(createFileURL(u"document-test.js"), {});
+    runScript(createFileURL(u"document-test.js"), {}, u"");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
-    runScript(createFileURL(u"utilities-test.js"), {});
+    runScript(createFileURL(u"utilities-test.js"), {}, u"");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCacheService) {
-    runScript(createFileURL(u"cacheservice-test.js"), cache);
+    runScript(createFileURL(u"cacheservice-test.js"), cache, u"");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLibrary) {
+    OUString const inner(library(u"Inner", {u"library-test/Inner.gs"}, u""));
+    OUString const libraries(
+        library(u"TestLibrary", {u"library-test/Main.gs", u"library-test/Helpers.gs"}, inner));
+    runScript(createFileURL(u"library-test.js"), {}, libraries);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testScriptApp) {
-    runScript(createFileURL(u"scriptapp-test.js"), {});
+    runScript(createFileURL(u"scriptapp-test.js"), {}, u"");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUrlFetchApp) {
-    runScript(createFileURL(u"urlfetchapp-test.js"), httpbin);
+    runScript(createFileURL(u"urlfetchapp-test.js"), httpbin, u"");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
@@ -365,7 +394,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
                 jsuno::deliverProxyResult(
                     OUString(callId), u"{\"IsPresent\":false,\"Value\":\"\"}"_ustr);
             }
-        });
+        },
+        u"");
 }
 
 }

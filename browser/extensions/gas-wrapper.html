@@ -36,9 +36,10 @@
 <div id="gas-loading" style="padding: 12px; font: 13px sans-serif; color: #666;">Loading...</div>
 <script>
 // Query params: base (extension directory), sidebar (an HTML file under base, absent for an
-// add-on that has none), scripts (comma-separated .gs or .js file names under base), template (for
-// a page made through HtmlService.createTemplateFromFile, the JSON object of the properties the
-// add-on set on the template):
+// add-on that has none), scripts (comma-separated .gs or .js file names under base), libraries (the
+// JSON of the Apps Script libraries that the add-on declares, each with its code files under base),
+// template (for a page made through HtmlService.createTemplateFromFile, the JSON object of the
+// properties the add-on set on the template):
 (function() {
     function fail(msg) {
         const el = document.createElement('div');
@@ -55,6 +56,7 @@
     const sidebarName = params.get('sidebar') || '';
     if (!sidebarName) { fail('missing "sidebar" query parameter'); return; }
     const scriptNames = (params.get('scripts') || '').split(',').filter(Boolean);
+    const libraries = JSON.parse(params.get('libraries') || '[]');
     const templateParam = params.get('template');
     const templateValues = templateParam === null ? null : JSON.parse(templateParam);
     const baseUrl = new URL(base, location.href);
@@ -646,6 +648,14 @@
         }));
         window.__gasScriptSources = sources;
         window.__gasScriptNames = scriptNames;
+        async function loadSources(library) {
+            library.sources = await Promise.all(library.scripts.map(function(s) {
+                return fetchText(new URL(library.dir + s, baseUrl));
+            }));
+            await Promise.all(library.libraries.map(loadSources));
+        }
+        await Promise.all(libraries.map(loadSources));
+        window.__gasLibraries = libraries;
         // Extract top-level function names so gas-shim.js can expose them under Object.keys on
         // google.script.run (client libraries such as gas-client enumerate that to discover the
         // callable server functions, and the enumeration would otherwise come back empty):

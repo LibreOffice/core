@@ -10,7 +10,9 @@
  */
 
 // The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-shim.js:
-globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs, extensionId) {
+globalThis.__gasKitRunner = function(
+    proxyId, gsSources, gsNames, fnName, callArgs, extensionId, libraries)
+{
     // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
@@ -739,6 +741,29 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             }
         };
 
+        // As in GAS, a library runs in a scope of its own, together with the libraries that it
+        // declares in turn, and exposes its top-level functions and variables whose names do not
+        // end in "_":
+        function loadLibrary(library) {
+            const names = [];
+            const declaration
+                = /^(?:function\s*\*?\s*|class\s+|(?:var|let|const)\s+)([A-Za-z_$][\w$]*)/gm;
+            for (const source of library.sources) {
+                for (const m of source.matchAll(declaration)) {
+                    if (!m[1].endsWith('_') && !names.includes(m[1])) {
+                        names.push(m[1]);
+                    }
+                }
+            }
+            const code = '(function(' + library.libraries.map(l => l.userSymbol).join(', ')
+                + ') {\n' + library.sources.join('\n') + '\nreturn Object.freeze({'
+                + names.map(n => n + ': ' + n).join(', ') + '});\n})';
+            return $internal.evalWithSource(code, library.userSymbol + ' library', 0).apply(
+                null, library.libraries.map(loadLibrary));
+        }
+        for (const library of libraries) {
+            globalThis[library.userSymbol] = loadLibrary(library);
+        }
         // Eval each .gs under its own filename so exception messages name the .gs, not the runner
         // blob:
         for (let i = 0; i < gsSources.length; ++i) {

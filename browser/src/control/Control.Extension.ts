@@ -239,6 +239,17 @@ interface ExtensionContributes {
 	keybindings?: ExtensionKeybinding[];
 }
 
+// An Apps Script library that an add-on declares, as scripts/gas/fetch-gas-addon.py has put it
+// into the add-on's _cool-gas-libraries directory under dir, with the code files in the order in
+// which GAS runs them, and with the sources of those files where they are loaded:
+interface GasLibrary {
+	userSymbol: string;
+	dir: string;
+	scripts: string[];
+	sources?: string[];
+	libraries: GasLibrary[];
+}
+
 interface ExtensionManifest {
 	manifestVersion: string;
 	name: string;
@@ -250,6 +261,7 @@ interface ExtensionManifest {
 	gasContext?: {
 		sources: string[];
 		names: string[];
+		libraries: GasLibrary[];
 		runnerExpr: string;
 	};
 	// On disk this is a string naming a separate JSON file (resolved the same way
@@ -697,6 +709,8 @@ window.L.Control.Extension = window.L.Control.extend({
 			JSON.stringify(command.gasFunctionName) +
 			', [], ' +
 			JSON.stringify(this.options.id) +
+			', ' +
+			JSON.stringify(gc.libraries) +
 			']';
 		app.socket.sendMessage(
 			'executescript ' +
@@ -782,6 +796,14 @@ window.L.Control.Extension = window.L.Control.extend({
 		params.set('base', new URL(this.options.baseUrl, document.baseURI).href);
 		if (manifest.gasContext && manifest.gasContext.names.length) {
 			params.set('scripts', manifest.gasContext.names.join(','));
+		}
+		if (manifest.gasContext && manifest.gasContext.libraries.length) {
+			params.set(
+				'libraries',
+				JSON.stringify(manifest.gasContext.libraries, (key, value) =>
+					key === 'sources' ? undefined : value,
+				),
+			);
 		}
 		params.set('sidebar', file + (/\.html?$/i.test(file) ? '' : '.html'));
 		return new URL(
@@ -1273,6 +1295,7 @@ async function tryLoadAppsScriptExtension(
 ): Promise<ExtensionManifest | null> {
 	const gasResp = await fetch(app.LOUtil.getURL(baseRel + 'appsscript.json'));
 	if (!gasResp.ok) return null;
+	const libraries = await loadGasLibraries(id, baseRel, await gasResp.json());
 	let listing: {
 		scripts?: string[];
 		supports?: string[];
@@ -1303,7 +1326,13 @@ async function tryLoadAppsScriptExtension(
 	}[] = [];
 	if (scriptNames.length) {
 		try {
-			items = await collectGasAddonMenu(id, baseRel, scriptNames, map);
+			items = await collectGasAddonMenu(
+				id,
+				baseRel,
+				scriptNames,
+				libraries,
+				map,
+			);
 		} catch (err) {
 			console.warn(
 				'extension ' + id + ': __coolGasMenu invocation failed:',
@@ -1365,6 +1394,7 @@ async function tryLoadAppsScriptExtension(
 			manifest.gasContext = {
 				sources: sources,
 				names: scriptNames,
+				libraries: libraries,
 				runnerExpr: runnerExpr,
 			};
 			manifest.contributes = { commands: commands, extensionsMenu: placement };
@@ -1403,6 +1433,64 @@ function loadGasRunnerExpr(baseRel: string): Promise<string> {
 }
 // Ask the runner for the menu items the add-on's onOpen() puts together, at extension load:
 let nextGasCollectId = 0;
+// The libraries that an appsscript.json declares, loaded from the add-on's _cool-gas-libraries
+// directory together with the libraries that each of them declares in turn:
+async function loadGasLibraries(
+	id: string,
+	baseRel: string,
+	appsscript: any,
+): Promise<GasLibrary[]> {
+	const declared =
+		(appsscript.dependencies && appsscript.dependencies.libraries) || [];
+	const libraries = await Promise.all(
+		declared.map(async (library: any): Promise<GasLibrary | null> => {
+			const dir =
+				'_cool-gas-libraries/' +
+				library.libraryId +
+				'/' +
+				(library.developmentMode ? 'HEAD' : String(library.version)) +
+				'/';
+			const fetchFile = async (name: string) => {
+				const resp = await fetch(app.LOUtil.getURL(baseRel + dir + name));
+				if (!resp.ok) {
+					throw new Error(baseRel + dir + name + ' HTTP ' + resp.status);
+				}
+				return resp;
+			};
+			const listResp = await fetch(
+				app.LOUtil.getURL(baseRel + dir + '_cool-gas.json'),
+			);
+			if (!listResp.ok) {
+				console.warn(
+					'extension ' +
+						id +
+						': Apps Script library ' +
+						library.userSymbol +
+						' is missing from ' +
+						dir +
+						' (see scripts/gas/fetch-gas-addon.py)',
+				);
+				return null;
+			}
+			const scripts: string[] = (await listResp.json()).scripts;
+			const [sources, manifest] = await Promise.all([
+				Promise.all(
+					scripts.map(async (name) => (await fetchFile(name)).text()),
+				),
+				fetchFile('appsscript.json').then((resp) => resp.json()),
+			]);
+			return {
+				userSymbol: library.userSymbol,
+				dir: dir,
+				scripts: scripts,
+				sources: sources,
+				libraries: await loadGasLibraries(id, baseRel, manifest),
+			};
+		}),
+	);
+	return libraries.filter((library): library is GasLibrary => library !== null);
+}
+
 // The proxy calls that the Extension controls are passing on, by call id, each with whether one of
 // the controls found a frame for it:
 const proxyCallDeliveries = new Map<string, { delivered: boolean }>();
@@ -1670,6 +1758,7 @@ async function collectGasAddonMenu(
 	id: string,
 	baseRel: string,
 	scriptNames: string[],
+	libraries: GasLibrary[],
 	map: any,
 ): Promise<{ caption?: string; functionName?: string; separator?: boolean }[]> {
 	const [runnerExpr, sources] = await Promise.all([
@@ -1718,6 +1807,8 @@ async function collectGasAddonMenu(
 			JSON.stringify(scriptNames) +
 			', "__coolGasMenu", [], ' +
 			JSON.stringify(id) +
+			', ' +
+			JSON.stringify(libraries) +
 			']';
 		app.socket.sendMessage(
 			'executescript ' +

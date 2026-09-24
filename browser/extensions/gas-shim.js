@@ -55,7 +55,8 @@
                         window.__gasScriptNames || [],
                         prop,
                         callArgs,
-                        extensionIdMatch ? extensionIdMatch[1] : '').then(function(result) {
+                        extensionIdMatch ? extensionIdMatch[1] : '',
+                        window.__gasLibraries).then(function(result) {
                         done();
                         const value = unwrapEnvelope(result);
                         if (typeof state.success === 'function') {
