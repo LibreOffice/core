@@ -23,6 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <parse5.hxx>
 #include <starmathdatabase.hxx>
+#include <unicode/uchar.h>
 #include <unordered_set>
 #include <utility>
 
@@ -71,18 +72,58 @@ static OUString lcl_ApplyColorCommand( const OUString& rText, std::u16string_vie
 
 // A run holds whatever text the document put in it, which need not be an expression. A
 // run of operators is written as a literal, because that is an expression and it keeps
-// the color. Anything else that does not parse keeps the color off, so that the formula
-// reads as it did before the color was carried over at all.
-static OUString lcl_ApplyRunColorCommand( SmParser5& rParser, const OUString& rText,
-    std::u16string_view sColorCommand, std::u16string_view sInEffect )
+// the command. Anything else that does not parse keeps the command off, so that the
+// formula reads as it did before the command was carried over at all.
+static OUString lcl_ApplyRunCommand( SmParser5& rParser, const OUString& rText,
+    std::u16string_view sCommand, std::u16string_view sInEffect )
 {
-    if( sColorCommand.empty() || sColorCommand == sInEffect || rText.isEmpty())
+    if( sCommand.empty() || sCommand == sInEffect || rText.isEmpty())
         return rText;
     if( lcl_IsAllMathOperators( rText ))
-        return OUString::Concat( sColorCommand ) + " {\"" + rText + "\"}";
+        return OUString::Concat( sCommand ) + " {\"" + rText + "\"}";
     if( !lcl_ParsesAsExpression( rParser, rText ))
         return rText;
-    return OUString::Concat( sColorCommand ) + " {" + rText + "}";
+    return OUString::Concat( sCommand ) + " {" + rText + "}";
+}
+
+static bool lcl_HasLetter( const OUString& rText )
+{
+    for( sal_Int32 nIndex = 0; nIndex < rText.getLength(); )
+        if( u_isalpha( rText.iterateCodePoints( &nIndex )))
+            return true;
+    return false;
+}
+
+static bool lcl_IsFunctionName( std::u16string_view sText )
+{
+    const SmTokenTableEntry* pEntry = GetTokenTableEntry( OUString( o3tl::trim( sText )));
+    return pEntry != nullptr && ( pEntry->nGroup & TG::Function );
+}
+
+// An m:sty value is p, b, i or bi, and italic when there is none. Word and StarMath both
+// draw letters italic and a function name upright by default, so only a difference from
+// that needs a command. A digit stays upright whatever the style says, because the
+// Unicode math alphanumerics have no italic digits.
+static OUString lcl_FontCommandFromOoxmlStyle( std::u16string_view sStyle, bool bHasLetter,
+    bool bFunctionName )
+{
+    if( bFunctionName )
+    {
+        if( sStyle == u"bi" )
+            return u"bold ital"_ustr;
+        if( sStyle == u"b" )
+            return u"bold"_ustr;
+        if( sStyle == u"i" )
+            return u"ital"_ustr;
+        return OUString();
+    }
+    if( sStyle == u"bi" )
+        return u"bold"_ustr;
+    if( sStyle == u"b" )
+        return bHasLetter ? u"bold nitalic"_ustr : u"bold"_ustr;
+    if( sStyle == u"p" && bHasLetter )
+        return u"nitalic"_ustr;
+    return OUString();
 }
 
 namespace
@@ -556,7 +597,19 @@ OUString SmOoxmlImport::handleFunc()
 {
 //lim from{x rightarrow 1} x
     m_rStream.ensureOpeningTag( M_TOKEN( func ));
+    OUString sNameStyle;
+    if( m_rStream.checkOpeningTag( M_TOKEN( funcPr )))
+    {
+        sNameStyle = readCtrlPrStyle();
+        m_rStream.ensureClosingTag( M_TOKEN( funcPr ));
+    }
+    const bool bWasInFunctionName = m_bInFunctionName;
+    const OUString sPreviousNameStyle = m_sFunctionNameStyle;
+    m_bInFunctionName = true;
+    m_sFunctionNameStyle = sNameStyle;
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
+    m_bInFunctionName = bWasInFunctionName;
+    m_sFunctionNameStyle = sPreviousNameStyle;
     // fix the various functions
     if( fname.startsWith( "lim csub {" ))
         fname = OUString::Concat("lim from {") + fname.subView( 10 );
@@ -737,6 +790,33 @@ OUString SmOoxmlImport::readCtrlPrColorCommand()
     return sRet;
 }
 
+OUString SmOoxmlImport::readCtrlPrStyle()
+{
+    bool bBold = false;
+    bool bItalic = false;
+    if( m_rStream.checkOpeningTag( M_TOKEN( ctrlPr )))
+    {
+        if( m_rStream.checkOpeningTag( W_TOKEN( rPr )))
+        {
+            if( XmlStream::Tag aBoldTag = m_rStream.checkOpeningTag( W_TOKEN( b )))
+            {
+                bBold = aBoldTag.attribute( W_TOKEN( val ), true );
+                m_rStream.ensureClosingTag( W_TOKEN( b ));
+            }
+            if( XmlStream::Tag aItalicTag = m_rStream.checkOpeningTag( W_TOKEN( i )))
+            {
+                bItalic = aItalicTag.attribute( W_TOKEN( val ), true );
+                m_rStream.ensureClosingTag( W_TOKEN( i ));
+            }
+            m_rStream.ensureClosingTag( W_TOKEN( rPr ));
+        }
+        m_rStream.ensureClosingTag( M_TOKEN( ctrlPr ));
+    }
+    if( bBold )
+        return bItalic ? u"bi"_ustr : u"b"_ustr;
+    return bItalic ? u"i"_ustr : OUString();
+}
+
 // NOT complete
 OUString SmOoxmlImport::handleR()
 {
@@ -744,7 +824,10 @@ OUString SmOoxmlImport::handleR()
     bool normal = false;
     bool literal = false;
     OUString scrString;
+    OUString styString;
     OUString sColorCommand;
+    bool bTextBold = false;
+    bool bTextItalic = false;
     if( XmlStream::Tag rPr = m_rStream.checkOpeningTag( M_TOKEN( rPr )))
     {
         if( XmlStream::Tag litTag = m_rStream.checkOpeningTag( M_TOKEN( lit )))
@@ -762,8 +845,17 @@ OUString SmOoxmlImport::handleR()
             scrString = srcTag.attribute( M_TOKEN( val ), scrString );
             m_rStream.ensureClosingTag( M_TOKEN( scr ));
         }
+        if( XmlStream::Tag styTag = m_rStream.checkOpeningTag( M_TOKEN( sty )))
+        {
+            styString = styTag.attribute( M_TOKEN( val ), styString );
+            m_rStream.ensureClosingTag( M_TOKEN( sty ));
+        }
         m_rStream.ensureClosingTag( M_TOKEN( rPr ));
     }
+    // Word keeps the style of a whole function name in the m:ctrlPr of the function,
+    // and a run of the name with a style of its own overrides it
+    if( m_bInFunctionName && styString.isEmpty())
+        styString = m_sFunctionNameStyle;
     OUStringBuffer text;
     bool isTagT = false;
     while( !m_rStream.atEnd() && m_rStream.currentToken() != CLOSING( m_rStream.currentToken()))
@@ -771,10 +863,21 @@ OUString SmOoxmlImport::handleR()
         switch( m_rStream.currentToken())
         {
             // A run has two property elements. The math one m:rPr is read above.
-            // This is the text one w:rPr and it holds the font color.
+            // This is the text one w:rPr and it holds the font color, and the bold
+            // and italic of a normal text run.
             case OPENING( W_TOKEN( rPr )):
             {
                 m_rStream.ensureOpeningTag( W_TOKEN( rPr ));
+                if( XmlStream::Tag aBoldTag = m_rStream.checkOpeningTag( W_TOKEN( b )))
+                {
+                    bTextBold = aBoldTag.attribute( W_TOKEN( val ), true );
+                    m_rStream.ensureClosingTag( W_TOKEN( b ));
+                }
+                if( XmlStream::Tag aItalicTag = m_rStream.checkOpeningTag( W_TOKEN( i )))
+                {
+                    bTextItalic = aItalicTag.attribute( W_TOKEN( val ), true );
+                    m_rStream.ensureClosingTag( W_TOKEN( i ));
+                }
                 if( XmlStream::Tag aColorTag = m_rStream.checkOpeningTag( W_TOKEN( color )))
                 {
                     sColorCommand
@@ -805,12 +908,28 @@ OUString SmOoxmlImport::handleR()
         }
     }
     m_rStream.ensureClosingTag( M_TOKEN( r ));
+    const OUString sText = text.makeStringAndClear();
+    OUString sFontCommand;
+    if( normal )
+    {
+        if( bTextBold )
+            sFontCommand = u"bold"_ustr;
+        if( bTextItalic )
+            sFontCommand += sFontCommand.isEmpty() ? u"ital"_ustr : u" ital"_ustr;
+    }
+    else
+        sFontCommand = lcl_FontCommandFromOoxmlStyle( styString, lcl_HasLetter( sText ),
+            m_bInFunctionName || lcl_IsFunctionName( sText ));
+    // Bold or italic shows nothing on a run of spaces
+    if( o3tl::trim( sText ).empty())
+        sFontCommand.clear();
     OUString sRet;
     if (scrString.isEmpty() && (normal || literal || isTagT))
-        sRet = encloseOrEscapeLiteral(text.makeStringAndClear(), normal || literal);
+        sRet = encloseOrEscapeLiteral(sText, normal || literal);
     else
-        sRet = text.makeStringAndClear();
-    return lcl_ApplyRunColorCommand( getParser(), sRet, sColorCommand, m_sColorCommandInEffect );
+        sRet = sText;
+    sRet = lcl_ApplyRunCommand( getParser(), sRet, sFontCommand, std::u16string_view());
+    return lcl_ApplyRunCommand( getParser(), sRet, sColorCommand, m_sColorCommandInEffect );
 }
 
 OUString SmOoxmlImport::handleSetString(const OUString& setOUstring)

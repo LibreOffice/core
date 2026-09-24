@@ -183,6 +183,7 @@ public:
      * @return font attributes
      */
     FontAttribute &Attributes() { return mnAttributes; }
+    const FontAttribute &Attributes() const { return mnAttributes; }
 
     /**
      * Checks if it is a visible node rendered invisible.

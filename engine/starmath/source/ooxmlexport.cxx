@@ -15,6 +15,8 @@
 #include <oox/mathml/imexport.hxx>
 #include <filter/msfilter/util.hxx>
 #include <tools/color.hxx>
+#include <unicode/uchar.h>
+#include <utility.hxx>
 
 using namespace oox;
 using namespace oox::core;
@@ -90,18 +92,54 @@ bool SmOoxmlExport::HasOwnColor( const SmNode* pNode ) const
         && pNode->GetFont().GetColor() != COL_AUTO;
 }
 
-// A construct such as a fraction or a pair of brackets draws part of itself, and the
-// color of that part travels in the m:ctrlPr of the construct's property element.
-void SmOoxmlExport::WriteCtrlPrColor( const SmNode* pNode )
+// Only a bold or italic command around a construct sets these attributes on it.
+bool SmOoxmlExport::HasCtrlPr( const SmNode* pNode ) const
 {
-    if( !HasOwnColor( pNode ))
+    return HasOwnColor( pNode )
+        || ( drawingml::DOCUMENT_DOCX == m_DocumentType
+             && ( pNode->Attributes() & ( FontAttribute::Bold | FontAttribute::Italic )));
+}
+
+// A construct such as a fraction or a pair of brackets draws part of itself, and the
+// format of that part travels in the m:ctrlPr of the construct's property element.
+void SmOoxmlExport::WriteCtrlPr( const SmNode* pNode )
+{
+    if( !HasCtrlPr( pNode ))
         return;
     m_pSerializer->startElementNS( XML_m, XML_ctrlPr );
     m_pSerializer->startElementNS( XML_w, XML_rPr );
-    m_pSerializer->singleElementNS( XML_w, XML_color, FSNS( XML_w, XML_val ),
-        msfilter::util::ConvertColorOU( pNode->GetFont().GetColor()));
+    if( pNode->Attributes() & FontAttribute::Bold )
+        m_pSerializer->singleElementNS( XML_w, XML_b );
+    if( pNode->Attributes() & FontAttribute::Italic )
+        m_pSerializer->singleElementNS( XML_w, XML_i );
+    if( HasOwnColor( pNode ))
+        m_pSerializer->singleElementNS( XML_w, XML_color, FSNS( XML_w, XML_val ),
+            msfilter::util::ConvertColorOU( pNode->GetFont().GetColor()));
     m_pSerializer->endElementNS( XML_w, XML_rPr );
     m_pSerializer->endElementNS( XML_m, XML_ctrlPr );
+}
+
+static bool lcl_HasLetter( const OUString& rText )
+{
+    for( sal_Int32 nIndex = 0; nIndex < rText.getLength(); )
+        if( u_isalpha( rText.iterateCodePoints( &nIndex )))
+            return true;
+    return false;
+}
+
+// The m:sty that makes Word draw the run the way StarMath does. Without one Word draws
+// letters italic and digits upright, as StarMath does. A function name is read back as
+// upright unless it says otherwise.
+static const char* lcl_GetOoxmlStyle( bool bBold, bool bItalic, const OUString& rText,
+    bool bFunctionName )
+{
+    if( bBold )
+        return bItalic ? "bi" : "b";
+    if( bItalic )
+        return bFunctionName ? "i" : nullptr;
+    if( lcl_HasLetter( rText ))
+        return "p";
+    return nullptr;
 }
 
 void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel )
@@ -123,20 +161,37 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 {
     m_pSerializer->startElementNS(XML_m, XML_r);
 
-    if( pNode->GetToken().eType == TTEXT ) // literal text (in quotes)
+    const SmTextNode* pTemp = static_cast<const SmTextNode* >(pNode);
+    const bool bBold = IsBold( pNode->GetFont());
+    const bool bItalic = IsItalic( pNode->GetFont());
+    const bool bLiteral = pNode->GetToken().eType == TTEXT;
+    if( bLiteral ) // literal text (in quotes)
     {
         m_pSerializer->startElementNS(XML_m, XML_rPr);
         m_pSerializer->singleElementNS(XML_m, XML_lit);
         m_pSerializer->singleElementNS(XML_m, XML_nor);
         m_pSerializer->endElementNS( XML_m, XML_rPr );
     }
+    // m:nor and m:sty exclude each other, so normal text keeps its bold and italic in
+    // the w:rPr
+    else if( const char* pStyle = lcl_GetOoxmlStyle( bBold, bItalic, pTemp->GetText(),
+                 pTemp->GetFontDesc() == FNT_FUNCTION ))
+    {
+        m_pSerializer->startElementNS(XML_m, XML_rPr);
+        m_pSerializer->singleElementNS(XML_m, XML_sty, FSNS(XML_m, XML_val), pStyle);
+        m_pSerializer->endElementNS( XML_m, XML_rPr );
+    }
     const bool bWriteFont
         = drawingml::DOCUMENT_DOCX == m_DocumentType && ECMA_376_1ST_EDITION == version;
-    // A surrounding color command has already reached this node.
+    const bool bWriteBold
+        = drawingml::DOCUMENT_DOCX == m_DocumentType && bLiteral && bBold;
+    const bool bWriteItalic
+        = drawingml::DOCUMENT_DOCX == m_DocumentType && bLiteral && bItalic;
+    // A surrounding color, bold or italic command has already reached this node.
     const Color aColor = pNode->GetFont().GetColor();
     const bool bWriteColor
         = drawingml::DOCUMENT_DOCX == m_DocumentType && aColor != COL_AUTO;
-    if( bWriteFont || bWriteColor )
+    if( bWriteFont || bWriteBold || bWriteItalic || bWriteColor )
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
         if( bWriteFont )
@@ -145,13 +200,16 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
             m_pSerializer->singleElementNS( XML_w, XML_rFonts,
                 FSNS( XML_w, XML_ascii ), "Cambria Math",
                 FSNS( XML_w, XML_hAnsi ), "Cambria Math" );
+        if( bWriteBold )
+            m_pSerializer->singleElementNS( XML_w, XML_b );
+        if( bWriteItalic )
+            m_pSerializer->singleElementNS( XML_w, XML_i );
         if( bWriteColor )
             m_pSerializer->singleElementNS( XML_w, XML_color, FSNS( XML_w, XML_val ),
                 msfilter::util::ConvertColorOU( aColor ));
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
     m_pSerializer->startElementNS(XML_m, XML_t, FSNS(XML_xml, XML_space), "preserve");
-    const SmTextNode* pTemp = static_cast<const SmTextNode* >(pNode);
     SAL_INFO( "starmath.ooxml", "Text:" << pTemp->GetText());
     OUStringBuffer buf(pTemp->GetText());
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
@@ -212,12 +270,12 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
 void SmOoxmlExport::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
     m_pSerializer->startElementNS(XML_m, XML_f);
-    if( type != nullptr || HasOwnColor( pNode ))
+    if( type != nullptr || HasCtrlPr( pNode ))
     {
         m_pSerializer->startElementNS(XML_m, XML_fPr);
         if( type != nullptr )
             m_pSerializer->singleElementNS(XML_m, XML_type, FSNS(XML_m, XML_val), type);
-        WriteCtrlPrColor( pNode );
+        WriteCtrlPr( pNode );
         m_pSerializer->endElementNS( XML_m, XML_fPr );
     }
     assert( pNode->GetNumSubNodes() == 3 );
@@ -255,7 +313,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->startElementNS(XML_m, XML_accPr);
             OString value = OUStringToOString(pNode->Attribute()->GetToken().cMathChar, RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS(XML_m, XML_chr, FSNS(XML_m, XML_val), value);
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_accPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -269,7 +327,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->startElementNS(XML_m, XML_barPr);
             m_pSerializer->singleElementNS( XML_m, XML_pos, FSNS( XML_m, XML_val ),
                 ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top" );
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_barPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -284,7 +342,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributeNode* pNode, int nLevel )
             m_pSerializer->singleElementNS(XML_m, XML_hideLeft, FSNS(XML_m, XML_val), "1");
             m_pSerializer->singleElementNS(XML_m, XML_hideRight, FSNS(XML_m, XML_val), "1");
             m_pSerializer->singleElementNS(XML_m, XML_strikeH, FSNS(XML_m, XML_val), "1");
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_borderBoxPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );
@@ -302,10 +360,10 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
     m_pSerializer->startElementNS(XML_m, XML_rad);
     if( const SmNode* argument = pNode->Argument())
     {
-        if( HasOwnColor( pNode ))
+        if( HasCtrlPr( pNode ))
         {
             m_pSerializer->startElementNS(XML_m, XML_radPr);
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_radPr );
         }
         m_pSerializer->startElementNS(XML_m, XML_deg);
@@ -316,7 +374,7 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
     {
         m_pSerializer->startElementNS(XML_m, XML_radPr);
         m_pSerializer->singleElementNS(XML_m, XML_degHide, FSNS(XML_m, XML_val), "1");
-        WriteCtrlPrColor( pNode );
+        WriteCtrlPr( pNode );
         m_pSerializer->endElementNS( XML_m, XML_radPr );
         m_pSerializer->singleElementNS(XML_m, XML_deg); // empty but present
     }
@@ -362,7 +420,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
                 m_pSerializer->singleElementNS(XML_m, XML_subHide, FSNS(XML_m, XML_val), "1");
             if( subsup == nullptr || subsup->GetSubSup( CSUP ) == nullptr )
                 m_pSerializer->singleElementNS(XML_m, XML_supHide, FSNS(XML_m, XML_val), "1");
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_naryPr );
             if( subsup == nullptr || subsup->GetSubSup( CSUB ) == nullptr )
                 m_pSerializer->singleElementNS(XML_m, XML_sub);
@@ -586,7 +644,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
         m_pSerializer->singleElementNS( XML_m, XML_endChr,
             FSNS( XML_m, XML_val ), mathSymbolToString(pNode->ClosingBrace()) );
 
-    WriteCtrlPrColor( pNode );
+    WriteCtrlPr( pNode );
     m_pSerializer->endElementNS( XML_m, XML_dPr );
     if (subnodes.empty())
     {
@@ -625,7 +683,7 @@ void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int n
                 FSNS( XML_m, XML_val ), top ? "top" : "bot" );
             m_pSerializer->singleElementNS(XML_m, XML_vertJc, FSNS(XML_m, XML_val),
                                            top ? "bot" : "top");
-            WriteCtrlPrColor( pNode );
+            WriteCtrlPr( pNode );
             m_pSerializer->endElementNS( XML_m, XML_groupChrPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
             HandleNode( pNode->Body(), nLevel + 1 );

@@ -398,6 +398,84 @@ CPPUNIT_TEST_FIXTURE(Test, testMathFractionBarColor)
     assertXPath(pXmlDoc, "//w:p[4]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"FF0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMathBoldItalic)
+{
+    createSwDoc("math-bold-italic.docx");
+
+    // The bold and italic in the m:ctrlPr of the fraction belong to its bar, not to the
+    // terms.
+    CHECK_FORMULA(u"{bold {x}} over {2I}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+
+    // The second formula follows a line of text in its paragraph
+    uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(2), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRuns = xParagraph->createEnumeration();
+    uno::Reference<text::XTextRange> xFormulaRun;
+    while (!xFormulaRun && xRuns->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xRun(xRuns->nextElement(), uno::UNO_QUERY);
+        if (getProperty<OUString>(xRun, u"TextPortionType"_ustr) == "Frame")
+            xFormulaRun = xRun;
+    }
+    CPPUNIT_ASSERT(xFormulaRun.is());
+    CHECK_FORMULA(u"color red {\" \"} {xBI} over {2B}"_ustr, getFormula(xFormulaRun));
+
+    CHECK_FORMULA(u"f left (bold {x} right ) = {a} rsub {bold {0}} + sum from {n=1} to "
+                  u"{\u221E} {left ({bold {a}} rsub {bold {n}} cos {{bold {n\u03C0x}} over "
+                  u"{L}} + {b} rsub {n} bold {sin} {{n\u03C0x} over {L}} right )}"_ustr,
+                  getFormula(getRun(getParagraph(3), 1)));
+    CHECK_FORMULA(u"{bold nitalic {e}} ^ {x} =1+ {nitalic {x}} over {1!} + {{color hex EE0000 "
+                  u"{bold {x}}} ^ {2}} over {2!} + {{x} ^ {3}} over {3!} +\u2026, \" \"\" \" "
+                  u"-\u221E<x<\u221E"_ustr,
+                  getFormula(getRun(getParagraph(5), 1)));
+    CHECK_FORMULA(u"cos {\u03B1} + bold {cos} {\u03B2} =2 bold ital {cos} {{1} over {2} left "
+                  u"(\u03B1+\u03B2 right )} cos {{1} over {2} left (\u03B1-\u03B2 right )}"_ustr,
+                  getFormula(getRun(getParagraph(6), 1)));
+    CHECK_FORMULA(u"ital {sin} {x} = bold {\"if\"} \" \"x>0"_ustr,
+                  getFormula(getRun(getParagraph(8), 1)));
+
+    saveAndReload(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:num/m:r/m:rPr/m:sty", "val", u"bi");
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:den/m:r/m:rPr", 0);
+    assertXPath(pXmlDoc, "//w:p[1]//m:f/m:fPr", 0);
+    assertXPath(pXmlDoc, "//w:p[2]//m:oMath/m:r[1]/w:rPr/w:b", 0);
+    assertXPath(pXmlDoc, "(//w:p[3]//m:sSub)[1]/m:sub/m:r/m:rPr/m:sty", "val", u"b");
+    assertXPath(pXmlDoc, "(//w:p[3]//m:f)[1]/m:num/m:r/m:rPr/m:sty", "val", u"bi");
+    assertXPath(pXmlDoc, "(//w:p[3]//m:f)[2]/m:num/m:r/m:rPr", 0);
+    assertXPath(pXmlDoc, "//w:p[3]//m:r[m:t='cos']/m:rPr/m:sty", "val", u"p");
+    assertXPath(pXmlDoc, "//w:p[3]//m:r[m:t='sin']/m:rPr/m:sty", "val", u"b");
+    assertXPath(pXmlDoc, "//w:p[5]//m:r[m:t='e']/m:rPr/m:sty", "val", u"b");
+    assertXPath(pXmlDoc, "//w:p[5]//m:r[m:rPr/m:sty/@m:val='p']", 1);
+    assertXPathContent(pXmlDoc, "//w:p[5]//m:r[m:rPr/m:sty/@m:val='p']/m:t", u"x");
+    assertXPath(pXmlDoc, "//w:p[5]//m:r[w:rPr/w:color]/m:rPr/m:sty", "val", u"bi");
+    assertXPath(pXmlDoc, "//w:p[5]//m:r[w:rPr/w:color]/w:rPr/w:color", "val", u"EE0000");
+    assertXPath(pXmlDoc, "(//w:p[6]//m:r[m:t='cos'])[2]/m:rPr/m:sty", "val", u"b");
+    assertXPath(pXmlDoc, "(//w:p[6]//m:r[m:t='cos'])[3]/m:rPr/m:sty", "val", u"bi");
+    assertXPath(pXmlDoc, "//w:p[8]//m:r[m:t='sin']/m:rPr/m:sty", "val", u"i");
+    assertXPath(pXmlDoc, "//w:p[8]//m:r[m:t='if']/m:rPr/m:nor", 1);
+    assertXPath(pXmlDoc, "//w:p[8]//m:r[m:t='if']/m:rPr/m:sty", 0);
+    assertXPath(pXmlDoc, "//w:p[8]//m:r[m:t='if']/w:rPr/w:b", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMathBoldItalicCtrlPr)
+{
+    createSwDoc("math-bold-italic-export.fodt");
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // A bold or ital command around a construct reaches the part that it draws itself
+    assertXPath(pXmlDoc, "(//m:oMath)[1]/m:f/m:fPr/m:ctrlPr/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[1]/m:f/m:fPr/m:ctrlPr/w:rPr/w:i", 0);
+    assertXPath(pXmlDoc, "(//m:oMath)[2]/m:rad/m:radPr/m:ctrlPr/w:rPr/w:i", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[3]/m:nary/m:naryPr/m:ctrlPr/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[4]/m:f/m:fPr/m:ctrlPr/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[4]/m:f/m:fPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "(//m:oMath)[5]/m:r/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[6]/m:r/w:rPr/w:i", 1);
+    assertXPath(pXmlDoc, "(//m:oMath)[7]/m:r/m:rPr/m:sty", "val", u"p");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 {
     CHECK_FORMULA( u"left (x mline y mline z right )"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
