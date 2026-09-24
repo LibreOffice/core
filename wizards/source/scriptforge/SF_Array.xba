@@ -133,7 +133,7 @@ Public Function AppendColumn(Optional ByRef Array_2D As Variant _
 &apos;&apos;&apos;		ARRAYINSERTERROR
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		SF_Array.AppendColumn(Array(1, 2, 3), Array(4, 5, 6)) returns ((1, 4), (2, 5), (3, 6))
-&apos;&apos;&apos;		x = SF_Array.AppendColumn(Array(), Array(1, 2, 3)) =&gt; ∀ i ∈ {0 ≤ i ≤ 2} : x(0, i) ≡ i
+&apos;&apos;&apos;		x = SF_Array.AppendColumn(Array(), Array(0, 1, 2)) =&gt; ∀ i ∈ {0 ≤ i ≤ 2} : x(i, 0) ≡ i
 
 Dim vAppendColumn As Variant	&apos;	Return value
 Dim iDims As Integer			&apos;	Dimensions of Array_2D
@@ -214,7 +214,7 @@ Public Function AppendRow(Optional ByRef Array_2D As Variant _
 &apos;&apos;&apos;		ARRAYINSERTERROR
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		SF_Array.AppendRow(Array(1, 2, 3), Array(4, 5, 6)) returns ((1, 2, 3), (4, 5, 6))
-&apos;&apos;&apos;		x = SF_Array.AppendRow(Array(), Array(1, 2, 3)) =&gt; ∀ i ∈ {0 ≤ i ≤ 2} : x(i, 0) ≡ i
+&apos;&apos;&apos;		x = SF_Array.AppendRow(Array(), Array(0, 1, 2)) =&gt; ∀ i ∈ {0 ≤ i ≤ 2} : x(0, i) ≡ i
 
 Dim vAppendRow As Variant	&apos;	Return value
 Dim iDims As Integer		&apos;	Dimensions of Array_2D
