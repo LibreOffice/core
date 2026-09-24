@@ -16217,7 +16217,17 @@ HyperlinkElement.prototype.handleClick = function( )
         var aWindowObject = document.defaultView;
         if( aWindowObject )
         {
-            aWindowObject.open( this.sURL, this.sId );
+            var sProtocol = '';
+            try
+            {
+                sProtocol = new URL( this.sURL, document.baseURI ).protocol;
+            }
+            catch( e )
+            {
+                log( 'error: HyperlinkElement.handleClick: invalid url.' );
+            }
+            if( sProtocol === 'http:' || sProtocol === 'https:' || sProtocol === 'mailto:' )
+                aWindowObject.open( this.sURL, this.sId );
         }
         else
         {
