@@ -1470,7 +1470,11 @@ $(eval $(call gb_Helper_register_external_packages_for_install,openssl,ooo, \
 ))
 
 define gb_ExternalProject__use_openssl
-$(call gb_ExternalProject_use_package,$(1),openssl,openssl)
+ifeq ($(OS),WNT)
+$(call gb_ExternalProject_use_package,$(1),openssl)
+else
+$(call gb_ExternalProject_use_external_project,$(1),openssl,openssl)
+endif
 
 endef
 

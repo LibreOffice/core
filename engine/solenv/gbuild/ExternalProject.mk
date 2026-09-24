@@ -153,11 +153,9 @@ endef
 # This is most useful for depending on output files created by another
 # ExternalProject.
 #
-# gb_ExternalProject_use_package external package
-# gb_ExternalProject_use_package project package external-name
+# gb_ExternalProject_use_package project package
 define gb_ExternalProject_use_package
 $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Package_get_target,$(2))
-gb_ExternalProject_STATICLINK_$(1) += $(3)
 
 endef
 
