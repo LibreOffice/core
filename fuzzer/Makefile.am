@@ -10,19 +10,12 @@
 
 MAINTAINERCLEANFILES = Makefile.in
 
-coolforkit_sources = \
-                     ../kit/ChildSession.cpp \
-                     ../kit/ForKit.cpp \
-                     ../kit/Kit.cpp \
-                     ../kit/KitWebSocket.cpp
-
 common_fuzzer_sources = \
                        Common.cpp \
                        ../common/DummyTraceEventEmitter.cpp \
                        ../wsd/COOLWSD.cpp \
                        ../wsd/coolwsd-inproc.cpp \
-                       ../wsd/KitWSDGlobals.cpp \
-                       $(coolforkit_sources)
+                       ../wsd/KitWSDGlobals.cpp
 
 include_paths = -I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit ${ZLIB_CFLAGS} ${ZSTD_CFLAGS} ${PNG_CFLAGS}
 if ENABLE_SSL
@@ -78,12 +71,13 @@ LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
 # Pull in code produced by gbuild already: the static libraries.
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
 GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
-GBUILD_WHOLE = -Wl,--whole-archive,$(GBUILD_WSD_LIB),$(GBUILD_SHARED_LIB),--no-whole-archive
+GBUILD_FORKIT_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libforkit.a
+GBUILD_WHOLE = -Wl,--whole-archive,$(GBUILD_WSD_LIB),$(GBUILD_FORKIT_LIB),$(GBUILD_SHARED_LIB),--no-whole-archive
 
 LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS) $(GBUILD_WHOLE)
 
 # Dependency for code produced by gbuild.
-GBUILD_LIBS = $(GBUILD_SHARED_LIB) $(GBUILD_WSD_LIB)
+GBUILD_LIBS = $(GBUILD_SHARED_LIB) $(GBUILD_WSD_LIB) $(GBUILD_FORKIT_LIB)
 EXTRA_admin_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
 EXTRA_clientrequest_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
 EXTRA_clientsession_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)

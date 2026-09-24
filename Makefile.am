@@ -616,7 +616,7 @@ build-qtapp-gbuild-libs: FORCE
 
 # Similar to build-gbuild, but for the --enable-fuzzers case.
 build-fuzzer-gbuild-libs: FORCE
-	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' ONLINE.FUZZER_CFLAGS='-fsanitize=fuzzer-no-link' StaticLibrary_shared StaticLibrary_wsd
+	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.SRCDIR=$(abs_top_srcdir) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' ONLINE.SIMD_CFLAGS='$(SIMD_CFLAGS)' ONLINE.FUZZER_CFLAGS='-fsanitize=fuzzer-no-link' StaticLibrary_shared StaticLibrary_wsd StaticLibrary_forkit
 
 FORCE:
 

@@ -39,12 +39,18 @@ $(eval $(call gb_StaticLibrary_use_externals,forkit, \
     zstd \
 ))
 
+# Set in Makefile.am's build-fuzzer-gbuild-libs target.
+$(eval $(call gb_StaticLibrary_add_cxxflags,forkit, \
+    $(ONLINE.FUZZER_CFLAGS) \
+))
+
+# kit/forkit-main defines main(), so avoid it in fuzzers, which get ther own main().
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,forkit, \
     kit/ChildSession \
     kit/ForKit \
     kit/Kit \
     kit/KitWebSocket \
-    kit/forkit-main \
+    $(if $(ONLINE.FUZZER_CFLAGS),,kit/forkit-main) \
 ))
 
 # vim: set noet sw=4 ts=4:
