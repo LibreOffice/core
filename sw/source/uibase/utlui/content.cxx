@@ -1446,10 +1446,10 @@ const TranslateId STR_CONTEXT_ARY[] =
     STR_OUTLINE_TRACKING_OFF
 };
 
-SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog)
+SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI& rDialog)
     : m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
-    , m_pDialog(pDialog)
+    , m_rDialog(rDialog)
     , m_sSpace(u"                    "_ustr)
     , m_aUpdTimer("SwContentTree m_aUpdTimer")
     , m_aOverlayObjectDelayTimer("SwContentTree m_aOverlayObjectDelayTimer")
@@ -6497,14 +6497,14 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
         {
             if (pSection->GetPassword().hasElements() && aSectionData.IsProtectFlag())
             {
-                SfxPasswordDialog aPasswordDlg(m_pDialog->GetFrameWeld());
+                SfxPasswordDialog aPasswordDlg(m_rDialog.GetFrameWeld());
                 if (aPasswordDlg.run() != RET_OK)
                     return;
                 if (!SvPasswordHelper::CompareHashPassword(aSectionData.GetPassword(),
                                                            aPasswordDlg.GetPassword()))
                 {
                     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
-                        m_pDialog->GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                        m_rDialog.GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
                         SwResId(STR_WRONG_PASSWORD)));
                     xInfoBox->run();
                     return;
@@ -6882,10 +6882,10 @@ void SwContentTree::ShowHiddenShell()
 // only called from IMPL_LINK(SwNavigationPI, DocListBoxSelectHdl, weld::ComboBox&, rBox, void)
 void SwContentTree::ShowActualView()
 {
-    if (SwView* pView = m_pDialog->GetCreateView())
+    if (SwView* pView = m_rDialog.GetCreateView())
     {
         SetConstantShell(pView->GetWrtShellPtr());
-        m_pDialog->UpdateListBox();
+        m_rDialog.UpdateListBox();
     }
 }
 
@@ -6905,7 +6905,7 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::ItemView&, void)
         return;
     while (m_xTreeView->get_iter_depth(*xEntry))
         m_xTreeView->iter_parent(*xEntry);
-    m_pDialog->SelectNavigateByContentType(m_xTreeView->get_text(*xEntry));
+    m_rDialog.SelectNavigateByContentType(m_xTreeView->get_text(*xEntry));
 }
 
 void SwContentTree::UpdateContentFunctionsToolbar()
@@ -7756,10 +7756,7 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData, const OUSt
     return bRet;
 }
 
-SwNavigationPI* SwContentTree::GetParentWindow()
-{
-    return m_pDialog;
-}
+SwNavigationPI* SwContentTree::GetParentWindow() { return &m_rDialog; }
 
 void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
 {

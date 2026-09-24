@@ -441,7 +441,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_xGlobalToolBox(m_xBuilder->weld_toolbar(u"global"_ustr))
     , m_xGotoPageSpinButton(m_xBuilder->weld_spin_button(u"gotopage"_ustr))
     , m_xContentBox(m_xBuilder->weld_widget(u"contentbox"_ustr))
-    , m_xContentTree(new SwContentTree(m_xBuilder->weld_tree_view(u"contenttree"_ustr), this))
+    , m_xContentTree(new SwContentTree(m_xBuilder->weld_tree_view(u"contenttree"_ustr), *this))
     , m_xGlobalBox(m_xBuilder->weld_widget(u"globalbox"_ustr))
     , m_xGlobalTree(new SwGlobalTree(m_xBuilder->weld_tree_view(u"globaltree"_ustr), this))
     , m_xDocListBox(m_xBuilder->weld_combo_box(u"documents"_ustr))

@@ -92,7 +92,7 @@ class SwContentTree final : public SfxListener
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
     SwContentTreeDropTarget m_aDropTargetHelper;
-    SwNavigationPI*     m_pDialog;
+    SwNavigationPI& m_rDialog;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
     AutoTimer m_aOverlayObjectDelayTimer;
@@ -234,7 +234,7 @@ class SwContentTree final : public SfxListener
     DECL_LINK(EditedEntryHdl, const weld::TreeView::IterColText&, bool);
 
 public:
-    SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);
+    SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI& rDialog);
     ~SwContentTree();
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
