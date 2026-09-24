@@ -60,8 +60,7 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
                                  const QStringList files = dialog->selectedFiles();
                                  if (result == QDialog::Accepted && !files.isEmpty())
                                      pfnPicked(pContext, QUrl::fromLocalFile(files.first())
-                                                             .toString()
-                                                             .toUtf8()
+                                                             .toEncoded()
                                                              .constData());
                                  else
                                      pfnPicked(pContext, nullptr);
