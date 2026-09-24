@@ -697,13 +697,13 @@ OString DocxAttributeOutput::convertToOOXMLVertOrient(sal_Int16 nOrient)
         case text::VertOrientation::LINE_CENTER:
             return "center"_ostr;
         case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM: // approximation - nothing compares exactly
+        case text::VertOrientation::LINE_TOP: // TEXT_LINE inverts the DOCX meaning of 'bottom'
             return "bottom"_ostr;
-        case text::VertOrientation::LINE_BOTTOM:
-            return "outside"_ostr;
         case text::VertOrientation::TOP:
+        case text::VertOrientation::CHAR_TOP:
+        case text::VertOrientation::LINE_BOTTOM: // TEXT_LINE inverts the DOCX meaning of 'top'
             return "top"_ostr;
-        case text::VertOrientation::LINE_TOP:
-            return "inside"_ostr;
         default:
             return OString();
     }
