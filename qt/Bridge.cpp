@@ -688,7 +688,7 @@ void Bridge::saveDocumentAs()
         {
             const QFileInfo destInfo(QString::fromStdString(destPath));
 
-            Poco::URI destUri("file", destInfo.absoluteFilePath().toStdString());
+            const Poco::URI destUri(Poco::Path(destInfo.absoluteFilePath().toStdString()));
 
             if (destUri.getPath() == currentUri.getPath())
             {
