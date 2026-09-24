@@ -377,10 +377,10 @@ globalThis.__gasKitRunner = function(
 
         globalThis.Utilities = globalThis.Utilities || {
             base64Encode: function(v) {
-                return typeof btoa === 'function' ? btoa(String(v)) : String(v);
+                return btoa(String(v));
             },
             base64Decode: function(v) {
-                return typeof atob === 'function' ? atob(String(v)) : String(v);
+                return atob(String(v));
             },
             getUuid: function() {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
