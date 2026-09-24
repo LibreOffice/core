@@ -15,9 +15,6 @@
 
 /* global app JSDialog */
 
-/// css::drawing::FillStyle_SOLID
-const FILL_STYLE_SOLID = 1;
-
 var colorPreviews = [];
 
 function registerColorPreview(command, node, update) {
@@ -153,16 +150,6 @@ JSDialog.sendColorCommand = function (builder, data, color, themeData) {
 		params[colorParameterID].value,
 	);
 	builder.map.sendUnoCommand(data.command, params);
-
-	if (
-		data.command === '.uno:FillColor' &&
-		builder.map.getDocType() === 'text' &&
-		params[colorParameterID].value >= 0
-	) {
-		builder.map.sendUnoCommand('.uno:FillStyle', {
-			FillStyle: { type: 'long', value: FILL_STYLE_SOLID },
-		});
-	}
 
 	app.colorLastSelection[data.command] = color;
 	refreshColorPreviews(data.command);

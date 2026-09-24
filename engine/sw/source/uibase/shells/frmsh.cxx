@@ -70,6 +70,7 @@
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/drawstyleutils.hxx>
 #include <memory>
 
 #define ShellClass_SwFrameShell
@@ -1392,7 +1393,9 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest const & rReq)
     {
         if(rSh.IsFrameSelected())
         {
-            rSh.SetFlyFrameAttr(const_cast< SfxItemSet& >(*pArgs));
+            std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
+            svx::convertDrawStyleArguments(*pNewArgs);
+            rSh.SetFlyFrameAttr(*pNewArgs);
         }
         else
         {
