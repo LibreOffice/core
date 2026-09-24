@@ -9,7 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-kit-runner.js:
+// The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-shim.js:
 globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs, extensionId) {
     // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
