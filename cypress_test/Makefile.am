@@ -147,9 +147,26 @@ PHP_PROXY_TAG = tagproxy
 # --pidfile is not in every procps version and failed silently on procps-ng
 # 3.3.10, and matching the command line instead also matches the shell
 # running this recipe, which carries the same text.
+#
+# Wait for the group to go and say so either way. A server that survives
+# holds a port the next run needs, and silence here has already cost two
+# rounds of guessing at a build that would not stop.
 KILL_PHP_PROXY = php_pgid=$$(cat $(PHP_PROXY_PID_FILE) 2>/dev/null); \
-	test -z "$$php_pgid" || kill -TERM -$$php_pgid 2>/dev/null || true; \
-	rm -f $(PHP_PROXY_PID_FILE)
+	rm -f $(PHP_PROXY_PID_FILE); \
+	if test -z "$$php_pgid"; then \
+		echo "check-php-proxy: no php proxy pidfile, nothing to stop"; \
+	else \
+		kill -TERM -$$php_pgid 2>/dev/null || true; \
+		n=0; while kill -0 -$$php_pgid 2>/dev/null; do \
+			n=$$(expr $$n + 1); test $$n -ge 10 && break; sleep 1; \
+		done; \
+		if kill -0 -$$php_pgid 2>/dev/null; then \
+			echo "check-php-proxy: php proxy group $$php_pgid outlived SIGTERM, sending SIGKILL"; \
+			kill -KILL -$$php_pgid 2>/dev/null || true; \
+		else \
+			echo "check-php-proxy: php proxy group $$php_pgid stopped"; \
+		fi; \
+	fi
 
 KILL_COMMAND=$(if $(coolwsd),true,pkill -F $(PID_FILE) || pkill --signal SIGKILL -F $(PID_FILE))
 LOAD_PID_FILE=$(abs_builddir)/workdir/load.pids
