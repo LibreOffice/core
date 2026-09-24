@@ -872,11 +872,21 @@ describe(['tagdesktop'], 'Presentation cleanup suggestions', function() {
 		cy.cGet(deck + ' #cleanup-options-heading-button').focus();
 		helper.assertFocus('id', 'cleanup-options-heading-button');
 
+		// The focus goes to Stop first and moves on when the run ends, which on a short run
+		// can happen before the focus is checked. So the first element to take the focus is
+		// noted, and that must be Stop.
+		const focus = {};
+		cy.cGet(deck).then(function($panel) {
+			$panel[0].addEventListener('focusin', function(event) {
+				focus.first = event.target.id;
+			}, { once: true });
+		});
+
 		cy.cGet(deck + ' #cleanup-scan-button').then(function($scan) {
 			$scan[0].dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
 		});
 
-		helper.assertFocus('id', 'cleanup-stop-button');
+		cy.wrap(focus).its('first').should('equal', 'cleanup-stop-button');
 
 		helper.processToIdle(win);
 		waitForRunToEnd();
