@@ -15,6 +15,7 @@
 #include <editeng/eeitem.hxx>
 #include <sfx2/app.hxx>
 #include <tools/gen.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include <editdoc.hxx>
@@ -71,6 +72,35 @@ CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testSelectionBelowParagraphStart)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.start.nIndex);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.end.nPara);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSelection.end.nIndex);
+
+    aEditEngine.RemoveView(&aEditView);
+}
+
+CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testCtrlASelectsAllText)
+{
+    // Given a widget on two paragraphs of text, with the caret inside the first one.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(5000, 5000));
+    aEditEngine.SetText(u"hello\nworld"_ustr);
+
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWin.get());
+    aEditEngine.InsertView(&aEditView);
+    aEditView.SetSelection(ESelection(0, 2));
+
+    EditEngineWidgetController aController(aEditView);
+
+    // When the client sends Ctrl+A.
+    const OUString aKey = "{\"keyCode\":" + OUString::number(KEY_MOD1 | KEY_A)
+                          + ",\"charCode\":0,\"repeat\":0}";
+    aController.HandleCustomEvent(u"key"_ustr, aKey);
+
+    // Then the whole text is selected.
+    const ESelection aSelection = aEditView.GetSelection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.start.nPara);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.start.nIndex);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aSelection.end.nPara);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aSelection.end.nIndex);
 
     aEditEngine.RemoveView(&aEditView);
 }

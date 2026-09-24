@@ -396,6 +396,16 @@ bool EditEngineWidgetController::HandleKey(std::u16string_view rData)
 
     const KeyEvent aKeyEvent(nCharCode, vcl::KeyCode(nKeyCode), nRepeat);
 
+    // Select all is an accelerator of the frame and not a key of the edit engine, so the widget
+    // selects the whole text itself.
+    const vcl::KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
+    if (rKeyCode.GetCode() == KEY_A && rKeyCode.GetModifier() == KEY_MOD1)
+    {
+        m_rEditView.SetSelection(ESelection::All());
+        QueueUpdate();
+        return true;
+    }
+
     // An outliner handles Return, Tab and numbering at the outline level and keeps its paragraph
     // list in step with the edit engine, so the key goes through its view when there is one. Posting
     // straight to the edit view would split a paragraph behind the outliner's back.
