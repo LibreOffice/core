@@ -2431,7 +2431,16 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
     }
     rBox.SetSaveNumFormatColor( pCol ? *pCol : std::optional<Color>() );
 
-    if( pTNd->GetText() != rText )
+    // What the cell shows is its text without what a tracked deletion took out of it, which is
+    // also the text HasNumContent() and IsNumberChanged() work the value out from. Ask whether
+    // that already says what the format wants: if it does there is nothing to do, and the
+    // changes recorded in the cell are left alone.
+    //
+    // If it does not, the text is rewritten as a whole below, which loses the changes recorded
+    // over it. That is coarse, but a number format is free to rewrite the text into anything -
+    // a number can come out as words, or grow a thousands separator that shifts every position
+    // after it - so there is no general way to carry a set of changes across a reformat.
+    if( pTNd->GetRedlineText() != rText )
     {
         // Exchange text. Bugfix to keep Tabs (front and back!) and annotations (inword comment anchors)
         const OUString& rOrig = pTNd->GetText();
@@ -2475,12 +2484,18 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
             while( nCommentPos > aIdx.GetIndex() && nCommentPos == nEndPos );
         }
 
+        const sal_Int32 nInsStt = aIdx.GetIndex();
         pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
         pTNd->InsertText( rText, aIdx, SwInsertFlags::EMPTYEXPAND );
 
-        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+        // The text of a box with a formula is worked out from the formula and is rewritten
+        // whenever the table is recalculated, by a change to some other box as much as by one
+        // here. Nobody wrote it, so do not record it as an insertion.
+        const bool bFormulaBox = SfxItemState::SET
+            == rBox.GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA, false );
+        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() && !bFormulaBox )
         {
-            SwPaM aTemp(*pTNd, 0, *pTNd, rText.getLength());
+            SwPaM aTemp(*pTNd, nInsStt, *pTNd, nInsStt + rText.getLength());
             rDoc.getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(RedlineType::Insert, aTemp), true);
         }
     }
