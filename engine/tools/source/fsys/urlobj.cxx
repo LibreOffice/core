@@ -4921,7 +4921,6 @@ bool INetURLObject::IsExoticProtocol() const
         || m_eScheme == INetProtocol::PrivSoffice
         || m_eScheme == INetProtocol::VndSunStarHelp
         || m_eScheme == INetProtocol::Https
-        || m_eScheme == INetProtocol::Javascript
         || m_eScheme == INetProtocol::Data
         || m_eScheme == INetProtocol::Cid
         || m_eScheme == INetProtocol::VndSunStarHier
