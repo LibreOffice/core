@@ -404,7 +404,7 @@ globalThis.__gasKitRunner = function(
                 throw new Error('Argument cannot be null: charset');
             }
         }
-        globalThis.Utilities = globalThis.Utilities || {
+        globalThis.Utilities = {
             base64Encode: function(data, charset) {
                 checkCharset(arguments);
                 const bytes = typeof data === 'string' ? stringBytes(data, charset) : data;
@@ -490,11 +490,11 @@ globalThis.__gasKitRunner = function(
             }
         };
 
-        globalThis.Logger = globalThis.Logger || {
+        globalThis.Logger = {
             log: function() { console.log.apply(console, arguments); }
         };
 
-        globalThis.Session = globalThis.Session || {
+        globalThis.Session = {
             getActiveUser: function() {
                 return { getEmail: function() { return ''; } };
             },
