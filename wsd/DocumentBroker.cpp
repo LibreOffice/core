@@ -450,6 +450,33 @@ void DocumentBroker::pollThread()
     const auto limStoreFailures =
         ConfigUtil::getConfigValue<int>("per_document.limit_store_failures", 5);
 
+    // Stops the document when saving or uploading has failed limStoreFailures times in a row, and
+    // returns true if it did.
+    const auto stopOnStoreFailures = [this, limStoreFailures]()
+    {
+        if (limStoreFailures <= 0 ||
+            (_saveManager.saveFailureCount() < NumUtil::makeUnsigned(limStoreFailures) &&
+             _storageManager.uploadFailureCount() < NumUtil::makeUnsigned(limStoreFailures)))
+        {
+            return false;
+        }
+
+#if !MOBILEAPP
+        LOG_ERR("Failed to store the document and reached maximum retry count of "
+                << limStoreFailures << " Save failures: " << _saveManager.saveFailureCount()
+                << ", Upload failures: " << _storageManager.uploadFailureCount() << ". Giving up"
+                << (_storage && _quarantine && Quarantine::isEnabled()
+                        ? ". The document should be recoverable from the quarantine. "
+                        : ", but Quarantine is disabled. "));
+#else
+        LOG_ERR("Failed to store the document and reached maximum retry count of "
+                << limStoreFailures << " Save failures: " << _saveManager.saveFailureCount()
+                << ", Upload failures: " << _storageManager.uploadFailureCount());
+#endif // !MOBILEAPP
+        stop("storefailed");
+        return true;
+    };
+
     bool waitingForMigrationMsg = false;
     std::chrono::time_point<std::chrono::steady_clock> migrationMsgStartTime;
     CONFIG_STATIC const std::chrono::microseconds migrationMsgTimeout =
@@ -659,7 +686,10 @@ void DocumentBroker::pollThread()
                 // Remove idle documents after the configured time.
                 if (!Util::isMobileApp() && isLoaded() && getIdleTime() >= IdleDocTimeoutSecs)
                 {
-                    autoSaveAndStop("idle");
+                    // Unloading an idle document is closing it, so the same limit on failed saves
+                    // and uploads applies, even while views are still connected.
+                    if (!stopOnStoreFailures())
+                        autoSaveAndStop("idle");
                 }
                 // A detached document has dropped its views on purpose, so an empty
                 // session list is the expected state and the document stays loaded. Its
@@ -712,31 +742,8 @@ void DocumentBroker::pollThread()
                 else if (_docState.isUnloadRequested() || SigUtil::getShutdownRequestFlag() ||
                          _docState.isCloseRequested())
                 {
-                    if (limStoreFailures > 0 && (_saveManager.saveFailureCount() >=
-                                                     NumUtil::makeUnsigned(limStoreFailures) ||
-                                                 _storageManager.uploadFailureCount() >=
-                                                     NumUtil::makeUnsigned(limStoreFailures)))
-                    {
-#if !MOBILEAPP
-                        LOG_ERR(
-                            "Failed to store the document and reached maximum retry count of "
-                            << limStoreFailures
-                            << " Save failures: " << _saveManager.saveFailureCount()
-                            << ", Upload failures: " << _storageManager.uploadFailureCount()
-                            << ". Giving up"
-                            << (_storage && _quarantine && Quarantine::isEnabled()
-                                    ? ". The document should be recoverable from the quarantine. "
-                                    : ", but Quarantine is disabled. "));
-#else
-                        LOG_ERR(
-                            "Failed to store the document and reached maximum retry count of "
-                            << limStoreFailures
-                            << " Save failures: " << _saveManager.saveFailureCount()
-                            << ", Upload failures: " << _storageManager.uploadFailureCount());
-#endif // !MOBILEAPP
-                        stop("storefailed");
+                    if (stopOnStoreFailures())
                         continue;
-                    }
 
                     const std::string reason =
                         SigUtil::getShutdownRequestFlag()
