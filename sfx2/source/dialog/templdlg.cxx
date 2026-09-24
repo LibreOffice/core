@@ -739,19 +739,22 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, bool bFillTre
 
     m_aStyleList.FamilySelect(nEntry, bFillTreeView);
 
-    // update Spotlight checkbox
-    SfxStyleFamily eFam = m_aStyleList.GetFamilyItem()->GetFamily();
-    bool bShowSpotlightCheckbox = m_aStyleList.HasStylesSpotlightFeature()
-                                  && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char);
-    mxSpotlightCheckbox->set_visible(bShowSpotlightCheckbox);
-    if (bShowSpotlightCheckbox)
+    if (const SfxStyleFamilyItem* pFamilyItem = m_aStyleList.GetFamilyItem())
     {
-        bool bActive = false;
-        if (eFam == SfxStyleFamily::Para)
-            bActive = m_aStyleList.IsSpotlightParaStyles();
-        else if (eFam == SfxStyleFamily::Char)
-            bActive = m_aStyleList.IsSpotlightCharStyles();
-        mxSpotlightCheckbox->set_active(bActive);
+        // update Spotlight checkbox
+        SfxStyleFamily eFam = pFamilyItem->GetFamily();
+        bool bShowSpotlightCheckbox = m_aStyleList.HasStylesSpotlightFeature()
+                                      && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char);
+        mxSpotlightCheckbox->set_visible(bShowSpotlightCheckbox);
+        if (bShowSpotlightCheckbox)
+        {
+            bool bActive = false;
+            if (eFam == SfxStyleFamily::Para)
+                bActive = m_aStyleList.IsSpotlightParaStyles();
+            else if (eFam == SfxStyleFamily::Char)
+                bActive = m_aStyleList.IsSpotlightCharStyles();
+            mxSpotlightCheckbox->set_active(bActive);
+        }
     }
 }
 
