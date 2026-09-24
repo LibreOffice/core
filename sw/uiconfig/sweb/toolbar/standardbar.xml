@@ -55,9 +55,9 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawText"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertPagebreak"/>
@@ -66,9 +66,9 @@
  <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertEndnote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>

@@ -53,27 +53,27 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawText"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
  <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertEndnote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
- <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChanges" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChangesBar"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Line"/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
+ <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
