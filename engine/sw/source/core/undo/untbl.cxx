@@ -19,6 +19,8 @@
 
 #include <libxml/xmlwriter.h>
 
+#include <algorithm>
+
 #include <UndoTable.hxx>
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
@@ -94,6 +96,10 @@ struct UndoTableCpyTable_Entry
 
     // Was the last paragraph of the new and the first paragraph of the old content joined?
     bool bJoin; // For redlining only
+
+    // Was this box copied as a change? A box that holds a formula is not, see lcl_CpyBox(),
+    // and then undo and redo have to take the same route the copy took.
+    bool bTrackChanges;
 
     explicit UndoTableCpyTable_Entry( const SwTableBox& rBox );
 
@@ -2207,7 +2213,7 @@ void SwUndoTableNumFormat::SetBox( const SwTableBox& rBox )
 
 UndoTableCpyTable_Entry::UndoTableCpyTable_Entry( const SwTableBox& rBox )
     : nBoxIdx( rBox.GetSttIdx() ), nOffset( 0 ),
-    bJoin( false )
+    bJoin( false ), bTrackChanges( true )
 {
 }
 
@@ -2244,6 +2250,11 @@ void UndoTableCpyTable_Entry::dumpAsXml(xmlTextWriterPtr pWriter) const
                                 BAD_CAST(OString::boolean(bJoin).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bTrackChanges"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(bTrackChanges).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -2256,6 +2267,39 @@ SwUndoTableCpyTable::~SwUndoTableCpyTable()
 {
     m_vArr.clear();
     m_pInsRowUndo.reset();
+}
+
+namespace
+{
+// Move cursors off the temporary node at the start of the box, onto the content that stays.
+//
+// UndoImpl() and RedoImpl() park cursors on that node while they hand the content of the box to
+// an undo object, the same way AddBoxBefore() does, and the node is deleted right after, so the
+// cursors have to come off it first. This is what AddBoxAfter() does at the end of a copy.
+void lcl_MoveCursorsOffTempNode(const SwTableBox & rBox)
+{
+    SwPaM aPam(SwNodeIndex(*rBox.GetSttNd(), 1));
+    if (!aPam.GetPoint()->GetNode().IsTextNode())
+        return;
+    aPam.SetMark();
+    aPam.Move(fnMoveForward, GoInContent);
+    ::PaMCorrAbs(aPam, *aPam.GetPoint());
+}
+
+// Put the cursor at the start of the content of the box that starts at nBoxStart.
+void lcl_SetCursorToBoxContent(::sw::UndoRedoContext & rContext,
+                               const SwTableNode *const pTableNd, SwNodeOffset const nBoxStart)
+{
+    if (!pTableNd)
+        return;
+    const SwTableBox *const pBox = pTableNd->GetTable().GetTableBox(nBoxStart);
+    if (!pBox || !pBox->GetSttNd())
+        return;
+    SwPaM & rPaM(rContext.GetCursorSupplier().CreateNewShellCursor());
+    rPaM.DeleteMark();
+    rPaM.GetPoint()->Assign(*pBox->GetSttNd());
+    rPaM.Move(fnMoveForward, GoInContent);
+}
 }
 
 void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -2283,14 +2327,22 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBox& rBox = *pBox;
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() );
+        SwTextNode *const pNewNode(
+            rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() ));
 
         // b62341295: Redline for copying tables
         const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
         SwPaM aPam( aInsIdx.GetNode(), *pEndNode );
         std::unique_ptr<SwUndoDelete> pUndo;
 
-        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
+        {   // move cursors to the new node which precedes aPam, the way AddBoxBefore() does:
+            // the content below is about to be handed to an undo object, and a cursor left in it
+            // still points there once that object lets the nodes go.
+            SwPosition const pos(*pNewNode, 0);
+            ::PaMCorrAbs(aPam, pos);
+        }
+
+        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) && pEntry->bTrackChanges )
         {
             bool bDeleteCompleteParagraph = false;
             bool bShiftPam = false;
@@ -2312,8 +2364,14 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                     SwTextNode *pText = aTmpIdx.GetNode().GetTextNode();
                     if( pText )
                     {
+                        // The content start was recorded when the copy was done. The text of a
+                        // box can be rebuilt after that, by the number format of the box
+                        // regenerating it from the value, and that leaves the recorded offset
+                        // describing text that is no longer there. Keep it inside the text, the
+                        // same way the redline table clamps its own stale positions.
                         aPam.GetPoint()->Assign(*pText,
-                                pUndoRedlineDelete->ContentStart() );
+                                std::min(pUndoRedlineDelete->ContentStart(),
+                                         pText->GetText().getLength()) );
                     }
                     else
                         aPam.GetPoint()->Assign( aTmpIdx );
@@ -2357,6 +2415,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         pEntry->pUndo = std::move(pUndo);
 
         aInsIdx = rBox.GetSttIdx() + 1;
+        lcl_MoveCursorsOffTempNode( rBox );
         rDoc.GetNodes().Delete( aInsIdx );
 
         SfxItemSet aTmpSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
@@ -2390,6 +2449,10 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         m_pInsRowUndo->UndoImpl(rContext);
     }
+
+    if (!m_vArr.empty())
+        lcl_SetCursorToBoxContent(rContext, pTableNd, m_vArr[0]->nBoxIdx + m_vArr[0]->nOffset);
+
     DEBUG_REDLINE( rDoc )
 }
 
@@ -2417,15 +2480,24 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
 
         // b62341295: Redline for copying tables - Start.
-        rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() );
+        SwTextNode *const pNewNode(
+            rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() ));
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        std::unique_ptr<SwUndo> pUndo(IDocumentRedlineAccess::IsRedlineOn(GetRedlineFlags())
+        const bool bRedlineBox = IDocumentRedlineAccess::IsRedlineOn(GetRedlineFlags())
+            && pEntry->bTrackChanges;
+        if( !bRedlineBox )
+        {   // as in UndoImpl() above: take cursors out of the content that the undo object below
+            // is about to take over
+            SwPosition const pos(*pNewNode, 0);
+            ::PaMCorrAbs(aPam, pos);
+        }
+        std::unique_ptr<SwUndo> pUndo(bRedlineBox
             ? nullptr
             : std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, true));
         if( pEntry->pUndo )
         {
             pEntry->pUndo->UndoImpl(rContext);
-            if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
+            if( bRedlineBox )
             {
                 // PrepareRedline has to be called with the beginning of the old content
                 // When new and old content has been joined, the rIter.pAktPam has been set
@@ -2450,6 +2522,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         // b62341295: Redline for copying tables - End.
 
         aInsIdx = rBox.GetSttIdx() + 1;
+        lcl_MoveCursorsOffTempNode( rBox );
         rDoc.GetNodes().Delete( aInsIdx );
 
         SfxItemSet aTmpSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
@@ -2477,15 +2550,21 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         pEntry->nOffset = rBox.GetSttIdx() - pEntry->nBoxIdx;
     }
+
+    if (!m_vArr.empty())
+        lcl_SetCursorToBoxContent(rContext, pTableNd, m_vArr[0]->nBoxIdx + m_vArr[0]->nOffset);
+
     DEBUG_REDLINE( rDoc )
 }
 
-void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent )
+void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent,
+                                       bool bTrackChanges )
 {
     if (!m_vArr.empty() && !bDelContent)
         return;
 
     UndoTableCpyTable_Entry* pEntry = new UndoTableCpyTable_Entry( rBox );
+    pEntry->bTrackChanges = bTrackChanges;
     m_vArr.push_back(std::unique_ptr<UndoTableCpyTable_Entry>(pEntry));
 
     SwDoc& rDoc = rBox.GetFrameFormat()->GetDoc();
@@ -2496,7 +2575,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         SwTextNode *const pNewNode(rDoc.GetNodes().MakeTextNode(aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl()));
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
-        if( !rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+        if( !bTrackChanges || !rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
             {   // move cursors to new node which precedes aPam
                 SwPosition const pos(*pNewNode, 0);
@@ -2517,7 +2596,8 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
     DEBUG_REDLINE( rDoc )
 }
 
-void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, bool bDelContent )
+void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx,
+                                      bool bDelContent, bool bTrackChanges )
 {
     UndoTableCpyTable_Entry *const pEntry = m_vArr.back().get();
 
@@ -2534,7 +2614,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
             pam.Move(fnMoveForward, GoInContent);
             ::PaMCorrAbs(pam, *pam.GetPoint());
         }
-        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+        if( bTrackChanges && rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
             SwPosition aTmpPos( rIdx );
             pEntry->pUndo = PrepareRedline( rDoc, rBox, aTmpPos, pEntry->bJoin, false );

@@ -507,10 +507,19 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                         pDstBox->GetSttNd()->EndOfSectionIndex() -
                         pDstBox->GetSttIdx() );
 
-    if( pUndo )
-        pUndo->AddBoxBefore( *pDstBox, bDelContent );
+    // Do not record (track) changes if the cell holds a formula.
+    // The text that arrives with the copy will be recalculated based on the formula,
+    // and that would eliminate the tracked change from the cell anyway.
+    // TODO: if we want tracked changes to work on it, we should create a new type of
+    // tracked change that track the formula changes, not the cell values changes.
+    const bool bTrackChanges = !pCpyBox
+        || SfxItemState::SET
+               != pCpyBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA, false );
 
-    bool bUndoRedline = pUndo && rDoc.getIDocumentRedlineAccess().IsRedlineOn();
+    if( pUndo )
+        pUndo->AddBoxBefore( *pDstBox, bDelContent, bTrackChanges );
+
+    bool bUndoRedline = pUndo && bTrackChanges && rDoc.getIDocumentRedlineAccess().IsRedlineOn();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
@@ -576,7 +585,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 
     //b6341295: Table copy redlining will be managed by AddBoxAfter()
     if( pUndo )
-        pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelContent );
+        pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelContent, bTrackChanges );
 
     // heading
     SwTextNode *const pTextNd = aSavePos.GetNode().GetTextNode();

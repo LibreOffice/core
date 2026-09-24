@@ -30,7 +30,18 @@
 #include <fmtcol.hxx>
 #include <poolfmt.hxx>
 #include <swundo.hxx>
+#include <docstat.hxx>
+#include <ndtxt.hxx>
+#include <pam.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
+#include <docary.hxx>
+
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <IDocumentStylePoolAccess.hxx>
 
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -125,6 +136,177 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
 
     // Without the accompanying fix in place, this test would have crashed.
     pWrtShell->Undo();
+}
+
+namespace
+{
+/// Put the view cursor into the given cell of the given table.
+void lcl_GotoCell(const uno::Reference<lang::XComponent>& xComponent, SwXTextDocument* pTextDoc,
+                  const OUString& rTable, const OUString& rCell)
+{
+    uno::Reference<text::XTextTablesSupplier> xSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName(rTable),
+                                            uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(rCell), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursorSupplier> xCursorSupplier(
+        pTextDoc->getCurrentController(), uno::UNO_QUERY_THROW);
+    xCursorSupplier->getViewCursor()->gotoRange(xCell->getStart(), /*bExpand=*/false);
+}
+
+/// The text of the given cell of the given table.
+OUString lcl_GetCellText(const uno::Reference<lang::XComponent>& xComponent,
+                         const OUString& rTable, const OUString& rCell)
+{
+    uno::Reference<text::XTextTablesSupplier> xSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName(rTable),
+                                            uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(rCell), uno::UNO_QUERY_THROW);
+    return xCell->getString();
+}
+
+/// The formula of the given cell of the given table, empty when it holds none.
+OUString lcl_GetCellFormula(const uno::Reference<lang::XComponent>& xComponent,
+                            const OUString& rTable, const OUString& rCell)
+{
+    uno::Reference<text::XTextTablesSupplier> xSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName(rTable),
+                                            uno::UNO_QUERY_THROW);
+    uno::Reference<table::XCell> xCell(xTable->getCellByName(rCell));
+    CPPUNIT_ASSERT(xCell.is());
+    return xCell->getFormula();
+}
+
+/// The tracked changes of the document, as a "<type>:<text>" list.
+OUString lcl_GetRedlines(SwDoc* pDoc)
+{
+    OUString aRet;
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    for (SwRedlineTable::size_type i = 0; i < rTable.size(); ++i)
+    {
+        if (!aRet.isEmpty())
+            aRet += " ";
+        aRet += SwRedlineTypeToOUString(rTable[i]->GetType()) + ":" + rTable[i]->GetText();
+    }
+    return aRet;
+}
+
+/// Every cursor position has to stay inside the text of the node it points at.
+void lcl_AssertCursorInText(SwWrtShell* pWrtShell)
+{
+    for (const SwPaM& rPaM : pWrtShell->GetCursor()->GetRingContainer())
+    {
+        for (const SwPosition* pPos : { rPaM.GetPoint(), rPaM.GetMark() })
+        {
+            const SwContentNode* pContentNode = pPos->GetNode().GetContentNode();
+            if (!pContentNode)
+                continue;
+            CPPUNIT_ASSERT_LESSEQUAL(pContentNode->Len(), pPos->GetContentIndex());
+        }
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf169795CopyCellWithFormula)
+{
+    // Given a document with two tables and change recording enabled, where the cell to copy
+    // holds a formula and the cell to copy it over does not:
+    createSwDoc("tdf169795.odt");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         lcl_GetCellFormula(mxComponent, u"Table1"_ustr, u"D2"_ustr));
+
+    // When copying that whole cell, "$100.00", over "$10.00":
+    lcl_GotoCell(mxComponent, pTextDoc, u"Table2"_ustr, u"D3"_ustr);
+    pWrtShell->SelTableBox();
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+    TransferableDataHelper aHelper(pTransfer);
+    lcl_GotoCell(mxComponent, pTextDoc, u"Table1"_ustr, u"D2"_ustr);
+    pWrtShell->SelTableBox();
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Then no change is recorded over the cell: what it shows is worked out from the formula in
+    // its new place, not text that somebody wrote, so there is nothing to accept or reject.
+    // Without the accompanying fix in place, the copy was recorded as a change over text that
+    // the recalculation then rewrote, and the records left over that text described text that
+    // was no longer there.
+    CPPUNIT_ASSERT_EQUAL(OUString(), lcl_GetRedlines(pDoc));
+    CPPUNIT_ASSERT(!lcl_GetCellFormula(mxComponent, u"Table1"_ustr, u"D2"_ustr).isEmpty());
+    CPPUNIT_ASSERT_EQUAL(u"$10.00"_ustr, lcl_GetCellText(mxComponent, u"Table1"_ustr, u"D2"_ustr));
+
+    // And undo takes the formula away again, leaving the old value behind.
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString(), lcl_GetRedlines(pDoc));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         lcl_GetCellFormula(mxComponent, u"Table1"_ustr, u"D2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"$10.00"_ustr, lcl_GetCellText(mxComponent, u"Table1"_ustr, u"D2"_ustr));
+
+    // The cursor has to stay inside the text it points at. Without the fix, undo left it on the
+    // range of the pasted text, which the undo removed again, so it pointed past the end of the
+    // cell text: content index 11 of a 6 character long node.
+    lcl_AssertCursorInText(pWrtShell);
+
+    // ... and counting words over that selection must not run out of the text either; this is
+    // what the status bar does, and what crashed in SwScanner.
+    SwDocStat aDocStat;
+    pWrtShell->CountWords(aDocStat);
+
+    // Redo puts the formula back, again without recording a change, and again with a cursor that
+    // describes something. Without the fix, redo went down the route the copy had not taken.
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(OUString(), lcl_GetRedlines(pDoc));
+    CPPUNIT_ASSERT(!lcl_GetCellFormula(mxComponent, u"Table1"_ustr, u"D2"_ustr).isEmpty());
+    lcl_AssertCursorInText(pWrtShell);
+    pWrtShell->CountWords(aDocStat);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf169795NumFormatCellPasteKeepsTrackedChanges)
+{
+    // Given a document with number cells and change recording enabled:
+    createSwDoc("tdf169795.odt");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+
+    // When copying one currency cell over another one:
+    lcl_GotoCell(mxComponent, pTextDoc, u"Table1"_ustr, u"C3"_ustr);
+    pWrtShell->SelTableBox();
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+    TransferableDataHelper aHelper(pTransfer);
+    lcl_GotoCell(mxComponent, pTextDoc, u"Table1"_ustr, u"C2"_ustr);
+    pWrtShell->SelTableBox();
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Then the old value has to be kept as a deletion.
+    // Without the accompanying fix in place, the number format of the box regenerated the text
+    // of the cell right after the copy, which dropped the deletion: only the insertion was left,
+    // and the old value was gone for good.
+    OUString aExpected(u"Insert:$2.00 Delete:$1.00"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aExpected, lcl_GetRedlines(pDoc));
+
+    // Leaving the cell must not drop it either, that is where the cell is checked against its
+    // number format.
+    pWrtShell->EndAllTableBoxEdit();
+    CPPUNIT_ASSERT_EQUAL(aExpected, lcl_GetRedlines(pDoc));
+
+    // And undo and redo have to be symmetric: undo leaves the old value alone,
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString(), lcl_GetRedlines(pDoc));
+    CPPUNIT_ASSERT_EQUAL(u"$1.00"_ustr, lcl_GetCellText(mxComponent, u"Table1"_ustr, u"C2"_ustr));
+
+    // ... and redo puts the very same pair of changes back. Without the fix, redo produced two
+    // empty redlines instead, which piled up over further undo and redo rounds.
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT_EQUAL(aExpected, lcl_GetRedlines(pDoc));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
