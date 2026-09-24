@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
-# This file is part of the LibreOffice project.
+# Copyright the Collabora Office contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -375,9 +377,8 @@ fetch_url_cache = None
 def get_fetch_url(variable):
     """The URL a tarball variable is downloaded from, per Makefile.fetch.
 
-    Most tarballs are on the LibreOffice mirror, but some are not: the CJK
-    Noto fonts come from the code-assets release, OpenDyslexic and POCO from
-    their upstream releases, and the /extern bucket has its own path."""
+    All tarballs are on our Gerrit server, but OpenSymbol is in a different
+    directory."""
     global fetch_url_cache
     if fetch_url_cache is None:
         with open(os.environ.get('SRC_ROOT') + '/Makefile.fetch') as f:
