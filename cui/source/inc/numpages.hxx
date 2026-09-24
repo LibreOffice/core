@@ -289,7 +289,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(LevelHdl_Impl, weld::ItemView&, void);
     DECL_LINK(LevelHdl, void *, void);
-    DECL_LINK(PopupActivateHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(GraphicHdl_Impl, const OUString&, void);
     DECL_LINK(BulletHdl_Impl, weld::Button&, void);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
@@ -305,6 +304,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(BulRelSizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PreviewInvalidateHdl_Impl, Timer*, void);
     void EditModifyHdl_Impl(const weld::TextWidget*);
+
+    void CreateGalleryMenu();
 
 public:
     SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

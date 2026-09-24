@@ -1197,7 +1197,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     m_xBulletPB->connect_clicked(LINK(this, SvxNumOptionsTabPage, BulletHdl_Impl));
     m_xFmtLB->connect_changed(LINK(this, SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl));
     m_xBitmapMB->connect_selected(LINK(this, SvxNumOptionsTabPage, GraphicHdl_Impl));
-    m_xBitmapMB->connect_toggled(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
     m_xLevelLB->connect_selection_changed(LINK(this, SvxNumOptionsTabPage, LevelHdl_Impl));
     m_xCharFmtLB->connect_changed(LINK(this, SvxNumOptionsTabPage, CharFmtHdl_Impl));
@@ -1690,6 +1689,8 @@ void SvxNumOptionsTabPage::SwitchNumberType( NumberType nType )
 
     m_xBitmapFT->set_visible(bBitmap);
     m_xBitmapMB->set_visible(bBitmap);
+    if (bBitmap)
+        CreateGalleryMenu();
 
     m_xWidthFT->set_visible(bBitmap);
     m_xWidthMF->set_visible(bBitmap);
@@ -2050,7 +2051,7 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     m_aInvalidateTimer.Start();
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, void)
+void SvxNumOptionsTabPage::CreateGalleryMenu()
 {
     if (m_xGalleryMenu)
         return;
