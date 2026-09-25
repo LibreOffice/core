@@ -391,7 +391,7 @@ void ColorFieldControl::SetValues(sal_uInt16 nBaseValue, ColorMode eMode, double
 
     mnBaseValue = nBaseValue;
     meMode = eMode;
-    mdX = x;
+    mdX = IsRTLEnabled() ? 1 - x : x;
     mdY = y;
 
     if (bUpdateBitmap)
@@ -399,6 +399,14 @@ void ColorFieldControl::SetValues(sal_uInt16 nBaseValue, ColorMode eMode, double
     UpdatePosition();
     if (bUpdateBitmap)
         Invalidate();
+}
+
+double ColorFieldControl::GetX() const
+{
+    if (IsRTLEnabled())
+        return 1 - mdX;
+
+    return mdX;
 }
 
 void ColorFieldControl::UpdatePosition()

@@ -95,7 +95,7 @@ public:
     void Modify();
 
     void SetValues(sal_uInt16 nBaseValue, ColorMode eMode, double x, double y);
-    double GetX() const { return mdX; }
+    double GetX() const;
     double GetY() const { return mdY; }
 
     void SetModifyHdl(const Link<ColorFieldControl&, void>& rLink) { maModifyHdl = rLink; }
