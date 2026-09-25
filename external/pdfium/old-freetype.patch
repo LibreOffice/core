@@ -1,28 +1,28 @@
 --- core/fxge/cfx_face.cpp
 +++ core/fxge/cfx_face.cpp
-@@ -987,7 +987,10 @@
- 
- int CFX_Face::GetGlyphTTWidth(uint32_t glyph_index) const {
+@@ -1019,7 +1019,10 @@
+   }
+ #endif  // defined(PDF_ENABLE_FONTATIONS)
    const auto* fontglyph = GetRec()->glyph;
 +// FreeType 2.9 has no glyph_index member
 +#if FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 10)
    DCHECK_EQ(glyph_index, fontglyph->glyph_index);
 +#endif
- 
-   const int ft_result =
-       NormalizeFontMetric(fontglyph->metrics.horiAdvance, GetUnitsPerEm());
-@@ -1127,7 +1130,7 @@
+   return NormalizeFontMetric(fontglyph->metrics.horiAdvance, GetUnitsPerEm());
  }
  
- int CFX_Face::GetNameIndex(const char* name) {
--  int ft_result = FT_Get_Name_Index(GetRec(), name);
-+  int ft_result = FT_Get_Name_Index(GetRec(), const_cast<char*>(name));
+@@ -1090,7 +1093,7 @@
+     return static_cast<int>(skrifa_font_->font->name_index(name));
+   }
+ #endif  // defined(PDF_ENABLE_FONTATIONS)
+-  return FT_Get_Name_Index(GetRec(), name);
++  return FT_Get_Name_Index(GetRec(), const_cast<char*>(name));
+ }
  
- #if defined(PDF_ENABLE_SKIA_TYPEFACE_CHECKS)
- #if defined(PDF_ENABLE_FONTATIONS)
-@@ -1320,7 +1323,10 @@
- 
- FX_RECT CFX_Face::GetGlyphBBox(uint32_t glyph_index) const {
+ int CFX_Face::LoadGlyph(uint32_t glyph_index, bool scale) {
+@@ -1231,7 +1234,10 @@
+   }
+ #endif  // defined(PDF_ENABLE_FONTATIONS)
    const auto* glyph = GetRec()->glyph;
 +// FreeType 2.9 has no glyph_index member
 +#if FREETYPE_MAJOR > 2 || (FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 10)

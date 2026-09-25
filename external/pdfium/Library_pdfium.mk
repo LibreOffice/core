@@ -63,6 +63,10 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_FAST_FLOAT \
 ))
 endif
+# Always define: our pdfium tarball doesn't ship third_party/dragonbox/src/ itself.
+$(eval $(call gb_Library_add_defs,pdfium,\
+    -DUSE_SYSTEM_DRAGONBOX \
+))
 
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
@@ -296,7 +300,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_occontext \
-    UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_contentstream_write_utils \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_font_util \
     UnpackedTarball/pdfium/core/fpdfapi/edit/cpdf_fontsubsetter \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_annotcontext \
@@ -386,6 +389,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_segment \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_symbol_dict \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_trd_proc \
+    UnpackedTarball/pdfium/core/fxcodec/image_predictors \
+    UnpackedTarball/pdfium/core/fxcodec/jpeg/libjpeg_scanline_decoder \
 ))
 
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
@@ -450,6 +455,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_read_only_container_stream \
     UnpackedTarball/pdfium/core/fxcrt/bytestring_pool \
     UnpackedTarball/pdfium/core/fxcrt/cfx_bidi_resolver \
+    UnpackedTarball/pdfium/core/fxcrt/stream_write_utils \
 ))
 
 ifneq ($(OS),WNT)
@@ -583,6 +589,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 ))
 endif
 
+ifneq ($(SYSTEM_ABSEIL),TRUE)
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/base/throw_delegate \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,pdfium,\
     libjpeg \
     lcms2 \
@@ -590,6 +602,7 @@ $(eval $(call gb_Library_use_externals,pdfium,\
     icu_headers \
     icuuc \
     harfbuzz \
+    dragonbox \
 ))
 
 ifneq (,$(filter LINUX ANDROID,$(OS)))
