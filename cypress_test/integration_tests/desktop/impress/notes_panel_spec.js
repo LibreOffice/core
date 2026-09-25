@@ -33,6 +33,29 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 	});
 
+	it('clicking into empty notes replaces the placeholder with the typed text', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		cy.cGet(paragraph).should('contain.text', 'Click to add Notes');
+
+		cy.cGet(editEngine).click();
+		cy.cGet(paragraph).should('not.contain.text', 'Click to add Notes');
+
+		// Leaving the notes empty brings the placeholder back. The blur is called on the element
+		// itself, because cy.blur() looks for the focus in the top window, where the frame holds it.
+		cy.cGet(editEngine).then(function (element) {
+			element[0].blur();
+		});
+		cy.cGet(paragraph).should('contain.text', 'Click to add Notes');
+
+		cy.cGet(editEngine).click();
+		cy.cGet(paragraph).should('not.contain.text', 'Click to add Notes');
+		cy.cGet(editEngine).type('Remember the demo');
+		cy.cGet(paragraph).should('have.text', 'Remember the demo');
+	});
+
 	it('typed text reaches the notes of the current slide', function () {
 		openNotesPane();
 

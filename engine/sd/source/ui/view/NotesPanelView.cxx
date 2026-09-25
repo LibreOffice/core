@@ -212,20 +212,28 @@ void NotesPanelView::onLoseFocus()
         return;
     mbInFocus = false;
 
+    // Typing is saved when the modify timer fires, so only an edit still waiting for it is saved
+    // here. Leaving the panel without an edit keeps the notes in the document as they are.
+    const bool bUnsavedEdit = aModifyIdle.IsActive();
     aModifyIdle.Stop();
     SdrTextObj* pNotesTextObj = getNotesTextObj();
-    if (pNotesTextObj)
+    if (!pNotesTextObj)
+        return;
+
+    if (bUnsavedEdit)
+        setNotesToDoc();
+
+    if (maOutliner.GetEditEngine().HasText())
+        return;
+
+    // Notes left empty show the placeholder text again. The document gets the placeholder back
+    // only when its notes are empty too, so notes written meanwhile in another view stay.
+    if (!pNotesTextObj->IsEmptyPresObj() && !pNotesTextObj->HasText())
     {
-        if (!maOutliner.GetEditEngine().HasText())
-        {
-            // if the notes are empty restore the placeholder text and state.
-            SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject());
-            if (pPage)
-                pPage->RestoreDefaultText(pNotesTextObj, pNotesTextObj->GetCustomPromptText());
-        }
-        else
-            setNotesToDoc();
+        if (SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject()))
+            pPage->RestoreDefaultText(pNotesTextObj, pNotesTextObj->GetCustomPromptText());
     }
+    FillOutliner();
 }
 
 /**

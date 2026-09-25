@@ -17,6 +17,38 @@
 
 namespace sd
 {
+namespace
+{
+/// The notes editor as seen from the client. Focus moves the panel in and out of editing, which
+/// swaps the "Click to add Notes" placeholder for empty text and back.
+class NotesPanelWidgetController final : public EditEngineWidgetController
+{
+    NotesPanelView& mrNotesPanelView;
+
+public:
+    NotesPanelWidgetController(NotesPanelView& rNotesPanelView, OutlinerView& rOutlinerView)
+        : EditEngineWidgetController(rOutlinerView.GetEditView(), &rNotesPanelView.GetOutliner())
+        , mrNotesPanelView(rNotesPanelView)
+    {
+    }
+
+protected:
+    bool HandleExtraEvent(const OUString& rCmd, const OUString& /*rData*/) override
+    {
+        if (rCmd == u"focus")
+            mrNotesPanelView.onGrabFocus();
+        else if (rCmd == u"blur")
+            mrNotesPanelView.onLoseFocus();
+        else
+            return false;
+
+        // A focus change can clear or restore the placeholder, so the client gets the new text.
+        QueueUpdate();
+        return true;
+    }
+};
+}
+
 NotesPanelWidget::NotesPanelWidget(vcl::Window* pParent, NotesPanelView& rNotesPanelView,
                                    sal_uInt64 nKitWindowId)
     : InterimItemWindow(pParent, u"modules/simpress/ui/notespanel.ui"_ustr, u"NotesPanel"_ustr,
@@ -27,8 +59,7 @@ NotesPanelWidget::NotesPanelWidget(vcl::Window* pParent, NotesPanelView& rNotesP
     if (!pOutlinerView)
         return;
 
-    mxController = std::make_unique<EditEngineWidgetController>(pOutlinerView->GetEditView(),
-                                                                &rNotesPanelView.GetOutliner());
+    mxController = std::make_unique<NotesPanelWidgetController>(rNotesPanelView, *pOutlinerView);
     mxWidgetWeld
         = std::make_unique<weld::CustomClientWeld>(*m_xBuilder, u"notesedit"_ustr, *mxController);
 

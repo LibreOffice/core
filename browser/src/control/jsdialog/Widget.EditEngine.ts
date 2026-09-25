@@ -26,8 +26,8 @@
  *
  * Expected JSON payload (in data.data): see EditEngineWidgetJSON.
  *
- * Sent back as 'key' { keyCode, charCode, repeat }, 'text' { text } and
- * 'selection' { startPara, startIndex, endPara, endIndex }.
+ * Sent back as 'key' { keyCode, charCode, repeat }, 'text' { text },
+ * 'selection' { startPara, startIndex, endPara, endIndex }, and 'focus' and 'blur' with no data.
  */
 
 declare var JSDialog: any;
@@ -275,6 +275,16 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 
 	container.addEventListener('beforeinput', (e: Event) =>
 		editEngineOnBeforeInput(container, e as InputEvent),
+	);
+
+	// The engine switches the text in and out of editing on focus changes, for example to clear a
+	// placeholder text on entry and to restore it when the text is left empty.
+	container.addEventListener('focus', () =>
+		editEngineSendAction(container, 'focus', {}),
+	);
+
+	container.addEventListener('blur', () =>
+		editEngineSendAction(container, 'blur', {}),
 	);
 
 	container.addEventListener('compositionend', (e: CompositionEvent) => {
