@@ -23,6 +23,8 @@ interface XFactory
 
     XDrawing getActiveDrawing();
 
+    string getActiveUserLocale();
+
     XAffineTransformBuilder newAffineTransformBuilder();
 
     [overload newBlob] XBlob newBlobBytes([in] sequence<byte> data);

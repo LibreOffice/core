@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,scriptinterop_gas, \
     comphelper \
     cppu \
     cppuhelper \
+    i18nlangtag \
     jsuno \
     sal \
     subsequenttest \

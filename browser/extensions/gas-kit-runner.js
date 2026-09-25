@@ -447,7 +447,8 @@ globalThis.__gasKitRunner = function(
         globalThis.Session = globalThis.Session || {
             getActiveUser: function() {
                 return { getEmail: function() { return ''; } };
-            }
+            },
+            getActiveUserLocale: cool.getActiveUserLocale.bind(cool)
         };
 
         // A GAS enum value is an object of its own that prints as its name and has the name(),

@@ -19,10 +19,12 @@
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
@@ -95,6 +97,14 @@ public:
         return scriptinterop::detail::createDrawing(
             modelRequiring(u"com.sun.star.drawing.DrawingDocument"_ustr,
                            u"com.sun.star.presentation.PresentationDocument"_ustr));
+    }
+
+    OUString getActiveUserLocale() override {
+        // Conservatively only the language and region subtags, joined with an underscore, assuming
+        // that GAS never returns more than those either:
+        auto const & tag = comphelper::COKit::getLanguageTag();
+        auto const region = tag.getCountry();
+        return region.isEmpty() ? tag.getLanguage() : tag.getLanguage() + "_" + region;
     }
 
     cpo::uno::Reference<scriptinterop::XAffineTransformBuilder> SAL_CALL

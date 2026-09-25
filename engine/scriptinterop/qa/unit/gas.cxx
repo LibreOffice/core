@@ -28,10 +28,13 @@
 #include <cpo/uno/Reference.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/json.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <config_srcdir.h>
 #include <cool.hpp>
 #include <cppu/unotype.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <jsuno/jsuno.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
@@ -396,6 +399,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
             }
         },
         u"");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSession) {
+    // The kit's language is one with a script and a region while the script runs:
+    LanguageTag const language(comphelper::COKit::getLanguageTag());
+    comphelper::COKit::setLanguageTag(LanguageTag(u"sr-Latn-RS"_ustr));
+    comphelper::ScopeGuard const restore(
+        [&language] { comphelper::COKit::setLanguageTag(language); });
+    runScript(createFileURL(u"session-test.js"), {}, u"");
 }
 
 }
