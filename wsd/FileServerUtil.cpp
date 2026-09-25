@@ -16,6 +16,7 @@
 
 #include <config.h>
 
+#include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/StringVector.hpp>
 #include <common/base64.hpp>
@@ -478,6 +479,8 @@ bool FileServerRequestHandler::buildSettingsUploadFileId(const std::string& file
             bad = true;
         }
     }
+    if (!FileUtil::isPlainFileName(fileName))
+        bad = true;
     if (bad)
         return false;
 

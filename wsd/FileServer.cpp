@@ -2993,12 +2993,11 @@ void FileServerRequestHandler::uploadFileToIntegrator(const Poco::Net::HTTPReque
 
     std::string fileId;
     if (!buildSettingsUploadFileId(filePath, fileName, fileId)) {
-        LOG_WRN(
-            "Rejected upload to per-user extensions filePath ["
-            << Anonymizer::anonymizeUrl(filePath) << ']');
-        sendError(
-            http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
-            "Per-user extension installation is disabled");
+        LOG_WRN("Rejected settings upload to filePath ["
+                << Anonymizer::anonymizeUrl(filePath) << "] with file name ["
+                << Anonymizer::anonymizeUrl(fileName) << ']');
+        sendError(http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
+                  "Invalid filePath or file name");
         return;
     }
 

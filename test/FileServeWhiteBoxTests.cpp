@@ -645,6 +645,22 @@ void FileServeTests::testSettingsUploadFileId()
         "/settings/spif/..", "x.xml", fileId));
     LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
         "/settings/spif/.", "x.xml", fileId));
+
+    // The file name is a single path segment.
+    fileId = "sentinel";
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/", "extensions/evil.zip", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", "../extensions/evil.zip", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", "..\\evil.zip", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", "..", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", ".", fileId));
+    LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
+        "/settings/userconfig/spif/", "", fileId));
+    LOK_ASSERT_EQUAL_STR("sentinel", fileId);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileServeTests);
