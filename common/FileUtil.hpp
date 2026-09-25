@@ -224,6 +224,10 @@ namespace FileUtil
     /// Returns file extension from the path
     std::string extractFileExtension(const std::string& path);
 
+    /// Returns true iff name is one plain path component: not empty, not "." or "..", and with
+    /// no path separator or control character in it.
+    bool isPlainFileName(std::string_view name);
+
     /// Returns true iff the two files both exist, can be read,
     /// have equal size and every byte of their contents match.
     bool compareFileContents(const std::string& rhsPath, const std::string& lhsPath);

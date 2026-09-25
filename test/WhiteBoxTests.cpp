@@ -68,6 +68,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testAnonymization);
     CPPUNIT_TEST(testStat);
     CPPUNIT_TEST(testReadFile);
+    CPPUNIT_TEST(testIsPlainFileName);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -96,6 +97,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testAnonymization();
     void testStat();
     void testReadFile();
+    void testIsPlainFileName();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -967,6 +969,25 @@ void WhiteBoxTests::testReadFile()
 
     // A file that cannot be read yields a null pointer.
     LOK_ASSERT(!FileUtil::readFile("/missing/file/path"));
+}
+
+void WhiteBoxTests::testIsPlainFileName()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT(FileUtil::isPlainFileName("hello.odt"));
+    LOK_ASSERT(FileUtil::isPlainFileName("..hidden"));
+    LOK_ASSERT(FileUtil::isPlainFileName("a..b"));
+
+    LOK_ASSERT(!FileUtil::isPlainFileName(""));
+    LOK_ASSERT(!FileUtil::isPlainFileName("."));
+    LOK_ASSERT(!FileUtil::isPlainFileName(".."));
+    LOK_ASSERT(!FileUtil::isPlainFileName("dir/file.odt"));
+    LOK_ASSERT(!FileUtil::isPlainFileName("dir\\file.odt"));
+    LOK_ASSERT(!FileUtil::isPlainFileName("/file.odt"));
+    LOK_ASSERT(!FileUtil::isPlainFileName("file.odt/"));
+    LOK_ASSERT(!FileUtil::isPlainFileName("file\nname.odt"));
+    LOK_ASSERT(!FileUtil::isPlainFileName("file\x7fname.odt"));
 }
 
 void WhiteBoxTests::testStringCompare()

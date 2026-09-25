@@ -2047,12 +2047,7 @@ void PresetsInstallTask::addGroup(const Poco::JSON::Object::Ptr& settings, const
             if (fileName.empty())
                 fileName = Uri::getFilenameWithExtFromURL(uri);
 
-            // A settings file name is one plain path component.
-            const bool hasControlChar =
-                std::any_of(fileName.begin(), fileName.end(),
-                            [](unsigned char c) { return c < 0x20 || c == 0x7f; });
-            if (fileName.empty() || fileName == "." || fileName == ".." ||
-                fileName.find_first_of("/\\") != std::string::npos || hasControlChar)
+            if (!FileUtil::isPlainFileName(fileName))
             {
                 LOG_ERR("Invalid settings filename of: " << fileName);
                 continue;
@@ -2879,11 +2874,7 @@ std::string DocumentBroker::handleRenameFileCommand(std::string sessionId,
     // The new name goes to the storage as the requested name, and a host is free to take it
     // literally. A name with a path separator in it then creates the folders it names and puts
     // the document in the last of them. A document name is one plain path component.
-    const bool hasControlChar =
-        std::any_of(newFilename.begin(), newFilename.end(),
-                    [](unsigned char c) { return c < 0x20 || c == 0x7f; });
-    if (newFilename.empty() || newFilename == "." || newFilename == ".." ||
-        newFilename.find_first_of("/\\") != std::string::npos || hasControlChar)
+    if (!FileUtil::isPlainFileName(newFilename))
     {
         LOG_ERR("Invalid filename for rename: [" << newFilename << ']');
         return "error: cmd=renamefile kind=invalid";
