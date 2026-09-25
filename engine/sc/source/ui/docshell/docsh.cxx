@@ -675,6 +675,8 @@ bool ScDocShell::Load( SfxMedium& rMedium )
                                           true); // for tdf#99729
         m_pDocument->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork,
                                           true); // for tdf#148000
+        m_pDocument->SetCompatibilityFlag(SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy,
+                                          true); // for tdf#163590
         m_pDocument->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
                                           true); // for tdf#163590
     }

@@ -525,6 +525,25 @@ static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontH
     return basegfx::fround(nFontHeight * f120Percent);  // + 20%
 }
 
+// Three quarters of a line's height sits above the baseline, and so does three quarters of any
+// height the line gains from its line spacing.
+static tools::Long ImplShareAboveBaseline( const tools::Long nHeight )
+{
+    constexpr const double f75Percent = 75.0 / 100.0;
+    return basegfx::fround(nHeight * f75Percent);
+}
+
+// At or below single spacing the baseline is also no higher than leaves the single spaced line's
+// descent below it.
+static tools::Long ImplAboveBaseline(tools::Long nLineHeight, tools::Long nSingleHeight,
+                                     tools::Long nSingleDescent)
+{
+    const tools::Long nShare = ImplShareAboveBaseline(nLineHeight);
+    if (nLineHeight > nSingleHeight)
+        return nShare;
+    return std::max(nShare, nLineHeight - nSingleDescent);
+}
+
 tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
 {
     assert(mnColumns >= 1);
@@ -1572,7 +1591,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 sal_uInt16 nFixHeight = basegfx::fround(fFixHeight);
 
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
-                pLine->SetMaxAscent( static_cast<sal_uInt16>(pLine->GetMaxAscent() + ( nFixHeight - nTxtHeight ) ) );
+                if (IsFixedCellHeight() && !mbLineSpacingBelowBaseline)
+                    pLine->SetMaxAscent(static_cast<sal_uInt16>(ImplAboveBaseline(
+                        nFixHeight, nTxtHeight, nTxtHeight - pLine->GetMaxAscent())));
+                else
+                    pLine->SetMaxAscent( static_cast<sal_uInt16>(pLine->GetMaxAscent() + nFixHeight - nTxtHeight) );
                 if (nFixHeight < nTxtHeight)
                     pLine->SetAscentCompressed(true);
                 pLine->SetHeight( nFixHeight, nTxtHeight );
@@ -1585,7 +1608,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 double fProportionalScale = double(nPropLineSpace) / 100.0;
                 constexpr const double f80Percent = 8.0 / 10.0;
                 double fLineSpacing = scaleProportionalLineSpacing(fProportionalScale);
-                if (nPropLineSpace && nPropLineSpace < 100)
+                const bool bShareAboveBaseline = IsFixedCellHeight() && !mbLineSpacingBelowBaseline;
+                if (nPropLineSpace && nPropLineSpace < 100 && !bShareAboveBaseline)
                 {
                     // Adapted code from sw/source/core/text/itrform2.cxx
                     sal_uInt16 nAscent = pLine->GetMaxAscent();
@@ -1603,9 +1627,17 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 {
                     sal_uInt16 nTxtHeight = pLine->GetHeight();
                     sal_Int32 nPropTextHeight = nTxtHeight * fLineSpacing;
-                    // The Ascent has to be adjusted for the difference:
-                    tools::Long nDiff = pLine->GetHeight() - nPropTextHeight;
-                    pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) );
+                    if (bShareAboveBaseline)
+                        pLine->SetMaxAscent(static_cast<sal_uInt16>(ImplAboveBaseline(
+                            nPropTextHeight, nTxtHeight, nTxtHeight - pLine->GetMaxAscent())));
+                    else
+                    {
+                        // The Ascent has to be adjusted for the difference:
+                        tools::Long nDiff = nPropTextHeight - pLine->GetHeight();
+                        pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() + nDiff ) );
+                    }
+                    if (nPropTextHeight < nTxtHeight)
+                        pLine->SetAscentCompressed(true);
                     pLine->SetHeight( static_cast<sal_uInt16>( nPropTextHeight ), nTxtHeight );
                 }
             }
@@ -1615,7 +1647,17 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 {
                     double fSpacingFactor = maScalingParameters.fSpacingY;
                     sal_uInt16 nPropLineSpace = basegfx::fround(100.0 * fSpacingFactor);
-                    if (nPropLineSpace && nPropLineSpace < 100)
+                    if (nPropLineSpace && nPropLineSpace < 100 && IsFixedCellHeight()
+                        && !mbLineSpacingBelowBaseline)
+                    {
+                        sal_uInt16 nTxtHeight = pLine->GetHeight();
+                        sal_uInt16 nHeight = basegfx::fround(nTxtHeight * fSpacingFactor);
+                        pLine->SetMaxAscent(static_cast<sal_uInt16>(ImplAboveBaseline(
+                            nHeight, nTxtHeight, nTxtHeight - pLine->GetMaxAscent())));
+                        pLine->SetAscentCompressed(true);
+                        pLine->SetHeight(nHeight, pLine->GetTxtHeight());
+                    }
+                    else if (nPropLineSpace && nPropLineSpace < 100)
                     {
                         // Adapted code from sw/source/core/text/itrform2.cxx
                         sal_uInt16 nAscent = pLine->GetMaxAscent();
@@ -3209,8 +3251,17 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
 
     if ( IsFixedCellHeight() )
     {
-        nAscent = sal::static_int_cast< sal_uInt16 >( rFont.GetFontHeight() );
-        nDescent= sal::static_int_cast< sal_uInt16 >( ImplCalculateFontIndependentLineSpacing( rFont.GetFontHeight() ) - nAscent );
+        const sal_Int32 nLineHeight = ImplCalculateFontIndependentLineSpacing( rFont.GetFontHeight() );
+        const tools::Long nFontHeight = aMetric.GetAscent() + aMetric.GetDescent();
+        const tools::Long nShareDescent = std::min(
+            nFontHeight > 0 ? basegfx::fround(double(nLineHeight) * aMetric.GetDescent() / nFontHeight)
+                            : tools::Long(0),
+            nLineHeight - ImplShareAboveBaseline(nLineHeight));
+        const tools::Long nAboveBaseline
+            = mbLineSpacingBelowBaseline ? rFont.GetFontHeight()
+                                         : ImplAboveBaseline(nLineHeight, nLineHeight, nShareDescent);
+        nAscent = sal::static_int_cast< sal_uInt16 >( nAboveBaseline );
+        nDescent= sal::static_int_cast< sal_uInt16 >( nLineHeight - nAscent );
     }
     else
     {

@@ -486,6 +486,11 @@ void Outliner::setRoundFontSizeToPt(bool bRound) const
     pEditEngine->setRoundFontSizeToPt(bRound);
 }
 
+void Outliner::setLineSpacingBelowBaseline(bool bBelow) const
+{
+    pEditEngine->setLineSpacingBelowBaseline(bBelow);
+}
+
 void Outliner::setTextFitting(EETextFitting eFitting) const
 {
     pEditEngine->setTextFitting(eFitting);

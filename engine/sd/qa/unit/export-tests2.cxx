@@ -585,9 +585,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1985, x, 0);
 #endif
     sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
-    // was 3092 originally, then 3057; now 3073 with font-independent
-    // line spacing set during PDF decomposition
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3073, y, 0);
+    // font-independent line spacing set during PDF decomposition
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3041, y, 0);
 
     // Before fix, on reimport this was split over two lines when it
     // should have remained as one line.

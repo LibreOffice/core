@@ -493,6 +493,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                                                  true); // legacy processing for tdf#99729
                 pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork,
                                                  true); // legacy processing for tdf#148000
+                pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy,
+                                                 true); // legacy processing for tdf#163590
                 pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
                                                  true); // legacy processing for tdf#163590
                 pDrawModel->incImportExport();

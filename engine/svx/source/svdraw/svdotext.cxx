@@ -1142,6 +1142,8 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
     rOutl.Init( nOutlinerMode );
 
     rOutl.resetScalingParameters();
+    rOutl.setLineSpacingBelowBaseline(getSdrModelFromSdrObject().GetCompatibilityFlag(
+        SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy));
 
     EEControlBits nStat=rOutl.GetControlWord();
     nStat &= ~EEControlBits(EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);

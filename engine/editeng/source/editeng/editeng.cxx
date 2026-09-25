@@ -1436,6 +1436,11 @@ void EditEngine::setRoundFontSizeToPt(bool bRound)
     getImpl().setRoundToNearestPt(bRound);
 }
 
+void EditEngine::setLineSpacingBelowBaseline(bool bBelow)
+{
+    getImpl().setLineSpacingBelowBaseline(bBelow);
+}
+
 void EditEngine::setTextFitting(EETextFitting eFitting)
 {
     getImpl().setTextFitting(eFitting);

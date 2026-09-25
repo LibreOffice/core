@@ -594,6 +594,7 @@ private:
     ScalingParameters maCustomScalingParameters;
     ScalingParameters maScalingParameters;
     bool mbRoundToNearestPt;
+    bool mbLineSpacingBelowBaseline;
     EETextFitting meTextFitting;
 
     CharCompressType mnAsianCompressionMode;
@@ -864,6 +865,7 @@ private:
     }
 
     void setRoundToNearestPt(bool bRound) { mbRoundToNearestPt = bRound; }
+    void setLineSpacingBelowBaseline(bool bBelow) { mbLineSpacingBelowBaseline = bBelow; }
     void setTextFitting(EETextFitting eFitting) { meTextFitting = eFitting; }
     double roundToNearestPt(double fInput) const;
 

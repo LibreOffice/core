@@ -19,6 +19,8 @@ enum class SdrCompatibilityFlag
     ConnectorUseSnapRect, ///< for tdf#149756
     IgnoreBreakAfterMultilineField, ///< for tdf#148966
     UseTrailingEmptyLinesInLayout, ///< for tdf#168010
+    LineSpacingBelowBaselineLegacy, ///< for tdf#163590 true == all the extra height a line gains
+                                    ///< from its line spacing sits below the baseline
     TextFittingLegacy, ///< for tdf#163590 true == the older shrink-on-overflow fitting
     LAST = TextFittingLegacy /// add new items above
 };

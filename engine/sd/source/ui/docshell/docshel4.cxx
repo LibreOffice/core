@@ -275,6 +275,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     {
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy, true); // for tdf#99729
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork, true); // for tdf#148000
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy, true); // for tdf#163590
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy, true); // for tdf#163590
     }
 

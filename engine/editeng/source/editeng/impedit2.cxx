@@ -108,6 +108,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool, Outliner*
     maWordDelimiters(u" .,;:-`'?!_=\"{}()[]"_ustr),
     maBackgroundColor(COL_AUTO),
     mbRoundToNearestPt(false),
+    mbLineSpacingBelowBaseline(false),
     meTextFitting(EETextFitting::Body),
     mnAsianCompressionMode(CharCompressType::NONE),
     meDefaultHorizontalTextDirection(EEHorizontalTextDirection::Default),

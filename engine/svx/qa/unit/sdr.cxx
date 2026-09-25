@@ -316,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
     assertXPath(pDocument, "//textsimpleportion", "text", u"Vertical");
     // x/y are the unrotated text position (in page coordinates, before the transform)
     assertXPath(pDocument, "//textsimpleportion", "x", u"7799");
-    assertXPath(pDocument, "//textsimpleportion", "y", u"6303");
+    assertXPath(pDocument, "//textsimpleportion", "y", u"6285");
 
     assertXPath(pDocument, "//transform", 1);
     double fXY11 = getXPath(pDocument, "//transform", "xy11").toDouble();
@@ -339,8 +339,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
     CPPUNIT_ASSERT_EQUAL(-M_PI_2, fRotate);
     // The translation values reflect current state; they may change a bit (the position of the
     // rotated text is not pixel-perfect; it is about one pixel off compared to Powerpoint).
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2744.0, aTranslate.getX(), 10.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(14896.0, aTranslate.getY(), 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2762.0, aTranslate.getX(), 10.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(14888.0, aTranslate.getY(), 10.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonIsPainted)

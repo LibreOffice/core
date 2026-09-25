@@ -863,26 +863,26 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     assertXPathContent(pDocument, "count((//sdrblocktext)[4]//textsimpleportion)", u"6");
 
     // make sure text is aligned correctly after the overflowing text is clipped
-    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]", "y", u"3749");
-    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]", "y", u"7559");
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]", "y", u"3710");
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]", "y", u"7520");
 
     // make sure the text that isn't overflowing is still aligned properly
     assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)", u"3");
-    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]", "y", 5073.5,
+    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]", "y", 5034.5,
                            0.001);
-    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]", "y", 6597.5,
+    assertXPathDoubleValue(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]", "y", 6558.5,
                            0.001);
 
     // Test vertically overflowing text, with vertical text direction
     assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)", u"12");
     // make sure text is aligned correctly after the overflowing text is clipped
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"12964");
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4582");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"13003");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4621");
 
     // make sure the text that isn't overflowing is still aligned properly
     assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)", u"3");
-    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]", "x", u"25417");
-    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", u"23893");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]", "x", u"25456");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", u"23932");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)

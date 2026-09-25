@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf104722)
     // - Actual  : -10276
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", u"2093");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"9273");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", u"9056");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
@@ -127,14 +127,14 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 331.0, 3.0);
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 9420.0, 10.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 372.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 9370.0, 10.0);
     // no scaling
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
 
     // text position
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", 4760.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", 4717.0, 3.0);
     assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", -2250.0, 3.0);
 }
 
@@ -403,14 +403,15 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         xmlDocUniquePtr pXmlDoc = parseLayout();
         // The line break after the multiline field is ignored, so the text
         // that follows starts on the field's last subline row.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6218");
     }
     {
         createSdImpressDoc("odp/tdf148966-withflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
         // When the IgnoreBreakAfterMultilineField flag is set, the line
-        // break after the multiline field is ignored, giving the same layout
-        // as the OOXML document above.
+        // break after the multiline field is ignored. The text sits lower
+        // than in the OOXML document above because a document in our own
+        // format keeps the whole of the extra line height below the baseline.
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
     {
@@ -465,22 +466,22 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
 
     // index, length, x, y
     const std::tuple<int, int, int, int> strings[] = {
-        { 0, 6, 9600, 8643 }, //                        Lorem
-        { 6, 22, 7570, 9352 }, //               ipsum dolor sit amet,
-        { 28, 29, 6776, 10061 }, //         consectetur adipiscing elit.
-        { 57, 29, 6299, 10770 }, //         Vestibulum consequat mi quis
-        { 86, 37, 5453, 11479 }, //     pretium semper. Proin luctus orci ac
-        { 123, 36, 5134, 12188 }, //     neque venenatis, quis commodo dolor
-        { 159, 41, 4764, 12897 }, //  posuere. Curabitur dignissim sapien quis
-        { 200, 43, 4481, 13606 }, // cursus egestas. Donec blandit auctor arcu,
-        { 243, 40, 4975, 14315 }, //   nec pellentesque eros molestie eget. In
-        { 283, 42, 4552, 15024 }, //  consectetur aliquam hendrerit. Sed cursus
-        { 325, 38, 5363, 15733 }, //    mauris vitae ligula pellentesque, non
-        { 363, 42, 4693, 16442 }, //  pellentesque urna aliquet. Fusce placerat
-        { 405, 37, 5047, 17151 }, //    mauris enim, nec rutrum purus semper
-        { 442, 33, 5963, 17860 }, //      vel. Praesent tincidunt neque eu
-        { 475, 29, 6387, 18569 }, //        pellentesque pharetra. Fusce
-        { 504, 22, 7499, 19278 }, //           pellentesque est orci.
+        { 0, 6, 9600, 8639 }, //                        Lorem
+        { 6, 22, 7570, 9347 }, //               ipsum dolor sit amet,
+        { 28, 29, 6776, 10055 }, //         consectetur adipiscing elit.
+        { 57, 29, 6299, 10763 }, //         Vestibulum consequat mi quis
+        { 86, 37, 5453, 11471 }, //     pretium semper. Proin luctus orci ac
+        { 123, 36, 5134, 12179 }, //     neque venenatis, quis commodo dolor
+        { 159, 41, 4764, 12887 }, //  posuere. Curabitur dignissim sapien quis
+        { 200, 43, 4481, 13595 }, // cursus egestas. Donec blandit auctor arcu,
+        { 243, 40, 4975, 14303 }, //   nec pellentesque eros molestie eget. In
+        { 283, 42, 4552, 15011 }, //  consectetur aliquam hendrerit. Sed cursus
+        { 325, 38, 5363, 15719 }, //    mauris vitae ligula pellentesque, non
+        { 363, 42, 4693, 16427 }, //  pellentesque urna aliquet. Fusce placerat
+        { 405, 37, 5047, 17135 }, //    mauris enim, nec rutrum purus semper
+        { 442, 33, 5963, 17843 }, //      vel. Praesent tincidunt neque eu
+        { 475, 29, 6387, 18551 }, //        pellentesque pharetra. Fusce
+        { 504, 22, 7499, 19259 }, //           pellentesque est orci.
     };
 
     createSdDrawDoc("odg/adjust-to-contour.fodg");
@@ -605,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['5']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6500, y, 100);
         assertXPathContent(pXml, "/metafile['5']/push/push/textarray/text", u"textbox");
     }
 
@@ -617,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['6']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6500, y, 100);
         assertXPathContent(pXml, "/metafile['6']/push/push/textarray/text", u"textbox");
     }
 
@@ -633,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['7']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6500, y, 100);
         assertXPathContent(pXml, "/metafile['7']/push/push/textarray/text", u"textbox");
     }
 }
@@ -656,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 14416.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 14391.0, 3.0);
     // Without the fix, this failed with
     // - Expected: 1658
     // - Actual  : 1415872
@@ -667,13 +668,13 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
 
     // text position
     // Without the fix, this failed with
-    // - Expected: -11031
+    // - Expected: -11019
     // - Actual  : -718138
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", -11031.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", -11019.0, 3.0);
     // Without the fix, this failed with
-    // - Expected: 3617
+    // - Expected: 3605
     // - Actual  : -703490
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", 3617.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", 3605.0, 3.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
