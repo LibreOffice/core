@@ -11,12 +11,8 @@
 
 // The next line's number is recorded as a hardcoded 13 in browser/extensions/gas-kit-runner.js:
 globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callArgs) {
-    // Body must be self-contained; gas-shim.js ships it as source text via fn.toString()
-    // (a null proxyId is for callers with nothing on the client side to serve proxy calls,
-    // like the load-time __coolGasMenu collection, where touching clientRuntime would throw
-    // in the caller's own path rather than route to nowhere):
-    const clientRuntime = proxyId != null
-        ? $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId) : null;
+    // Body must be self-contained; gas-shim.js ships it as source text via fn.toString():
+    const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
         function activeDoc() { return cool.getActiveDocument(); }
 
@@ -483,6 +479,6 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
             dialog: showDialogSpec
         };
     } finally {
-        if (proxyId != null) $internal.takeProxy(proxyId);
+        $internal.takeProxy(proxyId);
     }
 };

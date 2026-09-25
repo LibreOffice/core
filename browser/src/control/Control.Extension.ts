@@ -401,9 +401,6 @@ window.L.Control.Extension = window.L.Control.extend({
 			onError: (err: Error) => void;
 		};
 	} | null,
-	_gasCommandProxies: null as {
-		[proxyId: string]: { [method: string]: (...args: unknown[]) => unknown };
-	} | null,
 	_nextCommandCallId: 0,
 	// One modal dialog per extension at a time.  origRemove holds the un-hooked
 	// L.IFrameDialog.remove so _closeDialog can dismiss without re-entering the
@@ -420,7 +417,6 @@ window.L.Control.Extension = window.L.Control.extend({
 		this.map = map;
 		this._setToolitemHighlight(false);
 		this._pendingCommandCalls = {};
-		this._gasCommandProxies = {};
 		window.addEventListener('message', this._onPostMessage.bind(this));
 		map.on('executescriptresult', this._onScriptResult, this);
 		map.on('proxycall', this._onProxyCall, this);
@@ -502,33 +498,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		method: string;
 		args: unknown[];
 	}) {
-		const handler = this._gasCommandProxies[e.proxyId];
-		if (handler) {
-			const fn = handler[e.method];
-			let value: unknown;
-			try {
-				value = fn ? fn(...e.args) : null;
-			} catch (err) {
-				console.warn(
-					'extension ' +
-						this.options.id +
-						': proxy method ' +
-						e.method +
-						' threw:',
-					err,
-				);
-				value = null;
-			}
-			if (e.callId) {
-				app.socket.sendMessage(
-					'proxyreturn ' +
-						e.callId +
-						' ' +
-						JSON.stringify(value === undefined ? null : value),
-				);
-			}
-			return;
-		}
+		if (gasProxies[e.proxyId]) return;
 		const delivered = this._postToCaller(e.proxyId, {
 			msgId: 'Extension_ProxyCall',
 			proxyId: e.proxyId,
@@ -554,44 +524,6 @@ window.L.Control.Extension = window.L.Control.extend({
 			});
 		}
 		if (delivered) delivery.delivered = true;
-	},
-
-	_makeGasProxyHandlers: function (): {
-		[method: string]: (...args: unknown[]) => unknown;
-	} {
-		const prefix = 'gas-user-props:' + this.options.id + ':';
-		const propKeys = () => {
-			const out: string[] = [];
-			for (let i = 0; i < localStorage.length; ++i) {
-				const k = localStorage.key(i);
-				if (k !== null && k.indexOf(prefix) === 0) {
-					out.push(k.substring(prefix.length));
-				}
-			}
-			return out;
-		};
-		return {
-			translate: () => {
-				throw new Error(
-					'LanguageApp.translate is not supported in the COOL Apps Script wrapper',
-				);
-			},
-			userPropGetProperty: (...args: unknown[]) => {
-				const key = String(args[0]);
-				const raw = localStorage.getItem(prefix + key);
-				return { IsPresent: raw !== null, Value: raw === null ? '' : raw };
-			},
-			userPropSetProperty: (...args: unknown[]) => {
-				localStorage.setItem(prefix + String(args[0]), String(args[1]));
-			},
-			userPropDeleteProperty: (...args: unknown[]) => {
-				localStorage.removeItem(prefix + String(args[0]));
-			},
-			userPropGetKeys: () => propKeys(),
-			userPropDeleteAll: () => {
-				for (const k of propKeys()) localStorage.removeItem(prefix + k);
-			},
-		};
 	},
 
 	// Dispatcher entry point for a contributed menu command (docdispatcher's
@@ -701,9 +633,9 @@ window.L.Control.Extension = window.L.Control.extend({
 		const seq = this._nextCommandCallId++;
 		const callId = 'cmd-' + this.options.id + '-' + seq;
 		const proxyId = 'gas-cmd-proxy-' + this.options.id + '-' + seq;
-		this._gasCommandProxies[proxyId] = this._makeGasProxyHandlers();
+		registerGasProxy(this.map, proxyId, this.options.id);
 		const releaseProxy = () => {
-			delete this._gasCommandProxies[proxyId];
+			delete gasProxies[proxyId];
 		};
 		this._pendingCommandCalls[callId] = {
 			onSuccess: (value: unknown) => {
@@ -1467,13 +1399,106 @@ function loadGasRunnerExpr(baseRel: string): Promise<string> {
 	})();
 	return gasRunnerExpr;
 }
-// Ask the runner for the menu items the add-on's onOpen() puts together, at extension load
-// (a null proxyId keeps the call working so long as onOpen doesn't touch PropertiesService
-// or LanguageApp, since nothing top-side serves those here):
+// Ask the runner for the menu items the add-on's onOpen() puts together, at extension load:
 let nextGasCollectId = 0;
 // The proxy calls that the Extension controls are passing on, by call id, each with whether one of
 // the controls found a frame for it:
 const proxyCallDeliveries = new Map<string, { delivered: boolean }>();
+
+type GasProxyHandlers = { [method: string]: (...args: unknown[]) => unknown };
+
+// The XClientRuntime proxies that the main window serves itself, by proxy id, each with the id of
+// the extension whose runner calls it:
+const gasProxies: {
+	[proxyId: string]: { extensionId: string; handlers: GasProxyHandlers };
+} = {};
+let gasProxyMap: any = null;
+
+function registerGasProxy(
+	map: any,
+	proxyId: string,
+	extensionId: string,
+): void {
+	if (gasProxyMap !== map) {
+		if (gasProxyMap) gasProxyMap.off('proxycall', answerGasProxyCall);
+		map.on('proxycall', answerGasProxyCall);
+		gasProxyMap = map;
+	}
+	gasProxies[proxyId] = {
+		extensionId: extensionId,
+		handlers: makeGasProxyHandlers(extensionId),
+	};
+}
+
+function answerGasProxyCall(e: {
+	proxyId: string;
+	callId?: string;
+	method: string;
+	args: unknown[];
+}): void {
+	const proxy = gasProxies[e.proxyId];
+	if (!proxy) return;
+	const handler = proxy.handlers;
+	const fn = handler[e.method];
+	let value: unknown;
+	try {
+		value = fn ? fn(...e.args) : null;
+	} catch (err) {
+		console.warn(
+			'extension ' +
+				proxy.extensionId +
+				': proxy method ' +
+				e.method +
+				' threw:',
+			err,
+		);
+		value = null;
+	}
+	if (e.callId) {
+		app.socket.sendMessage(
+			'proxyreturn ' +
+				e.callId +
+				' ' +
+				JSON.stringify(value === undefined ? null : value),
+		);
+	}
+}
+
+function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
+	const prefix = 'gas-user-props:' + extensionId + ':';
+	const propKeys = () => {
+		const out: string[] = [];
+		for (let i = 0; i < localStorage.length; ++i) {
+			const k = localStorage.key(i);
+			if (k !== null && k.indexOf(prefix) === 0) {
+				out.push(k.substring(prefix.length));
+			}
+		}
+		return out;
+	};
+	return {
+		translate: () => {
+			throw new Error(
+				'LanguageApp.translate is not supported in the COOL Apps Script wrapper',
+			);
+		},
+		userPropGetProperty: (...args: unknown[]) => {
+			const key = String(args[0]);
+			const raw = localStorage.getItem(prefix + key);
+			return { IsPresent: raw !== null, Value: raw === null ? '' : raw };
+		},
+		userPropSetProperty: (...args: unknown[]) => {
+			localStorage.setItem(prefix + String(args[0]), String(args[1]));
+		},
+		userPropDeleteProperty: (...args: unknown[]) => {
+			localStorage.removeItem(prefix + String(args[0]));
+		},
+		userPropGetKeys: () => propKeys(),
+		userPropDeleteAll: () => {
+			for (const k of propKeys()) localStorage.removeItem(prefix + k);
+		},
+	};
+}
 
 async function collectGasAddonMenu(
 	id: string,
@@ -1491,11 +1516,15 @@ async function collectGasAddonMenu(
 			}),
 		),
 	]);
-	const callId = 'gas-collect-' + id + '-' + nextGasCollectId++;
+	const seq = nextGasCollectId++;
+	const callId = 'gas-collect-' + id + '-' + seq;
+	const proxyId = 'gas-collect-proxy-' + id + '-' + seq;
+	registerGasProxy(map, proxyId, id);
 	return new Promise((resolve, reject) => {
 		const handler = (result: any) => {
 			if (result.id !== callId) return;
 			map.off('executescriptresult', handler);
+			delete gasProxies[proxyId];
 			if (result.err) {
 				const msg =
 					(result.err && result.err.message) ||
@@ -1515,7 +1544,9 @@ async function collectGasAddonMenu(
 		};
 		map.on('executescriptresult', handler);
 		const args =
-			'[null, ' +
+			'[' +
+			JSON.stringify(proxyId) +
+			', ' +
 			JSON.stringify(sources) +
 			', ' +
 			JSON.stringify(scriptNames) +
