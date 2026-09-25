@@ -11,6 +11,7 @@
 
 #include "OutlineView.hxx"
 #include <Outliner.hxx>
+#include <unotools/weakref.hxx>
 
 class SdrTextObj;
 
@@ -42,9 +43,15 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
 
     bool mbInFocus = false;
 
+    /// The notes object the outliner was filled from.
+    ::unotools::WeakReference<SdrTextObj> mxEditedNotesObj;
+
     void getNotesFromDoc();
     void setNotesToDoc();
     SdrTextObj* getNotesTextObj();
+    SdrTextObj* getEditedNotesObj();
+    void clearPlaceholder();
+    void commitNotes();
 
 public:
     NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,

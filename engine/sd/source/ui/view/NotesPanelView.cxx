@@ -74,10 +74,14 @@ NotesPanelView::~NotesPanelView()
 
 void NotesPanelView::FillOutliner()
 {
+    if (mbInFocus)
+        commitNotes();
+
     maOutliner.GetUndoManager().Clear();
     maOutliner.EnableUndo(false);
     ResetLinks();
     maOutliner.Clear();
+    mxEditedNotesObj.clear();
 
     SdrTextObj* pNotesTextObj = getNotesTextObj();
     if (!pNotesTextObj)
@@ -86,6 +90,9 @@ void NotesPanelView::FillOutliner()
     getNotesFromDoc();
     SetLinks();
     maOutliner.EnableUndo(true);
+
+    if (mbInFocus)
+        clearPlaceholder();
 
     maContentChangedHdl.Call(nullptr);
 }
@@ -103,6 +110,8 @@ SdrTextObj* NotesPanelView::getNotesTextObj()
     return dynamic_cast<SdrTextObj*>(pNotesObj);
 }
 
+SdrTextObj* NotesPanelView::getEditedNotesObj() { return mxEditedNotesObj.get().get(); }
+
 void NotesPanelView::SetLinks()
 {
     maOutliner.SetStatusEventHdl(LINK(this, NotesPanelView, StatusEventHdl));
@@ -116,6 +125,8 @@ void NotesPanelView::getNotesFromDoc()
     if (!pNotesTextObj)
         return;
 
+    mxEditedNotesObj = pNotesTextObj;
+
     // Ignore notifications that will rebound from updating the text
     maOutliner.SetModifyHdl(Link<LinkParamNone*, void>());
 
@@ -127,7 +138,7 @@ void NotesPanelView::getNotesFromDoc()
 
 void NotesPanelView::setNotesToDoc()
 {
-    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
     if (!pNotesTextObj)
         return;
 
@@ -198,12 +209,7 @@ void NotesPanelView::onGrabFocus()
         return;
     mbInFocus = true;
 
-    SdrTextObj* pNotesTextObj = getNotesTextObj();
-    if (pNotesTextObj && pNotesTextObj->IsEmptyPresObj())
-    {
-        // clear the "Click to add Notes" text on entering the window.
-        maOutliner.SetToEmptyText();
-    }
+    clearPlaceholder();
 }
 
 void NotesPanelView::onLoseFocus()
@@ -212,11 +218,29 @@ void NotesPanelView::onLoseFocus()
         return;
     mbInFocus = false;
 
+    commitNotes();
+
+    // Notes left empty show the placeholder text again.
+    if (!maOutliner.GetEditEngine().HasText())
+        FillOutliner();
+}
+
+void NotesPanelView::clearPlaceholder()
+{
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    if (pNotesTextObj && pNotesTextObj->IsEmptyPresObj())
+        maOutliner.SetToEmptyText();
+}
+
+/// Writes an edit still waiting for the modify timer back to the object the notes came from, or,
+/// when the notes were left empty, restores that object's placeholder text and state.
+void NotesPanelView::commitNotes()
+{
     // Typing is saved when the modify timer fires, so only an edit still waiting for it is saved
-    // here. Leaving the panel without an edit keeps the notes in the document as they are.
+    // here. Leaving the notes without an edit keeps them in the document as they are.
     const bool bUnsavedEdit = aModifyIdle.IsActive();
     aModifyIdle.Stop();
-    SdrTextObj* pNotesTextObj = getNotesTextObj();
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
     if (!pNotesTextObj)
         return;
 
@@ -226,14 +250,13 @@ void NotesPanelView::onLoseFocus()
     if (maOutliner.GetEditEngine().HasText())
         return;
 
-    // Notes left empty show the placeholder text again. The document gets the placeholder back
-    // only when its notes are empty too, so notes written meanwhile in another view stay.
+    // The document gets the placeholder back only when its notes are empty too, so notes
+    // written meanwhile in another view stay.
     if (!pNotesTextObj->IsEmptyPresObj() && !pNotesTextObj->HasText())
     {
         if (SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject()))
             pPage->RestoreDefaultText(pNotesTextObj, pNotesTextObj->GetCustomPromptText());
     }
-    FillOutliner();
 }
 
 /**

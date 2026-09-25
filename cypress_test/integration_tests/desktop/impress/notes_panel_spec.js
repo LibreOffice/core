@@ -56,6 +56,43 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'Remember the demo');
 	});
 
+	// Adding a slide moves the pane to the notes of the new slide while the
+	// editor keeps the focus. Those notes are entered right away, so their
+	// placeholder goes too, and the notes typed before stay with their slide.
+	it('a slide added while typing starts with empty notes as well', function () {
+		openNotesPane();
+
+		cy.cGet('#notespanel-container .ui-editengine').click();
+		cy.cGet('#notespanel-container .ui-editengine').type('First slide');
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'First slide'
+		);
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:InsertPage');
+		});
+		cy.cGet('#slide-sorter .preview-img').should('have.length', 3);
+
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			''
+		);
+		cy.cGet('#notespanel-container .ui-editengine').type('Second slide');
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'Second slide'
+		);
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.setPart(0);
+		});
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'First slide'
+		);
+	});
+
 	it('typed text reaches the notes of the current slide', function () {
 		openNotesPane();
 
