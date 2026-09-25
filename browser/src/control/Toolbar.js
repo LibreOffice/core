@@ -283,16 +283,6 @@ window.L.Map.include({
 		app.socket.sendMessage(msg);
 	},
 
-	messageNeedsToBeRedirected: function(command) {
-		if (command === '.uno:EditHyperlink') {
-			this.sendUnoCommand('.uno:HyperlinkDialog');
-			return true;
-		}
-		else {
-			return false;
-		}
-	},
-
 	sendUnoCommand: function (command, json, force) {
 		if (command.indexOf('.uno:') < 0 && command.indexOf('vnd.sun.star.script') < 0)
 			console.error('Trying to send uno command without prefix: "' + command + '"');
@@ -377,7 +367,7 @@ window.L.Map.include({
 			&& !command.startsWith('.uno:ToolbarMode') && !force) {
 			console.debug('Cannot execute: ' + command + ' when dialog is opened.');
 			this.dialog.blinkOpenDialog();
-		} else if ((this.isEditMode() || isAllowedInReadOnly) && !this.messageNeedsToBeRedirected(command)) {
+		} else if (this.isEditMode() || isAllowedInReadOnly) {
 			app.socket.sendMessage('uno ' + command + (json ? ' ' + JSON.stringify(json) : ''));
 			// user interaction turns off the following of other users
 			if (map.userList && map._docLayer && map._docLayer._viewId)
