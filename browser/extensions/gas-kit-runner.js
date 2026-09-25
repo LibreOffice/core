@@ -358,10 +358,7 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
         function userPropsFacade() {
             const f = {
                 getProperty: function(k) {
-                    $internal.suppressLegacyUnoApiStart();
-                    try {
-                        return clientRuntime.userPropGetProperty(String(k));
-                    } finally { $internal.suppressLegacyUnoApiEnd(); }
+                    return clientRuntime.userPropGetProperty(String(k));
                 },
                 setProperty: function(k, v) {
                     clientRuntime.userPropSetProperty(String(k), String(v));
@@ -374,13 +371,10 @@ globalThis.__gasKitRunner = function(proxyId, gsSources, gsNames, fnName, callAr
                 getProperties: function() {
                     const out = {};
                     const keys = clientRuntime.userPropGetKeys();
-                    $internal.suppressLegacyUnoApiStart();
-                    try {
-                        for (let i = 0; i < keys.length; ++i) {
-                            const value = clientRuntime.userPropGetProperty(keys[i]);
-                            if (value !== null) out[keys[i]] = value;
-                        }
-                    } finally { $internal.suppressLegacyUnoApiEnd(); }
+                    for (let i = 0; i < keys.length; ++i) {
+                        const value = clientRuntime.userPropGetProperty(keys[i]);
+                        if (value !== null) out[keys[i]] = value;
+                    }
                     return out;
                 },
                 setProperties: function(o) {

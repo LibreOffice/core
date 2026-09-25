@@ -92,6 +92,7 @@ protected:
             + "\n__gasKitRunner('scriptinterop_document_test', [" + jsLiteral(read(url)) + "], ["
             + jsLiteral(url) + "], 'test', []);");
         try {
+            bool usedLegacyUnoApi;
             jsuno::execute(
                 script, u"<input>"_ustr, 1,
                 [](OUString const & level, OUString const & message) {
@@ -102,7 +103,8 @@ protected:
                         std::cout << msg << std::endl;
                     }
                 },
-                proxyCallHook, nullptr);
+                proxyCallHook, &usedLegacyUnoApi);
+            CPPUNIT_ASSERT(!usedLegacyUnoApi);
         } catch (jsuno::Exception const & e) {
             std::ostringstream buf;
             buf << e.name << ": " << e.message;
