@@ -484,7 +484,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         // Define some settings for legacy ODF files that have different default values now
         // (if required, they will be overridden later when settings will be read)
         SwDrawModel* pDrawModel(nullptr);
-        if (IsOwnStorageFormat(rMedium))
+        if (IsOwnStorageFormatWithSettings(rMedium))
         {
             pDrawModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
             if (pDrawModel)

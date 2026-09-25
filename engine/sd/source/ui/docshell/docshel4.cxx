@@ -271,7 +271,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     // If this is an ODF file being loaded, then by default, use legacy processing
     // (if required, it will be overridden in *::ReadUserDataSequence())
-    if (IsOwnStorageFormat(rMedium))
+    if (IsOwnStorageFormatWithSettings(rMedium))
     {
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy, true); // for tdf#99729
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork, true); // for tdf#148000

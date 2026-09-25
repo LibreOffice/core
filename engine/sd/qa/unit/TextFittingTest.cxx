@@ -232,6 +232,18 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testOwnFormatKeepsLegacyTextFitting)
         pXImpressDocument->GetDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testOwnFormatWithoutSettingsFitsTextTheNewWay)
+{
+    // A minimal document in our own format with no settings.xml, like the empty templates that
+    // storage hosts copy for a new presentation, fits text the new way.
+    createSdImpressDoc("TextFittingNoSettings.odp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(!pDoc->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
+    CPPUNIT_ASSERT(!pDoc->GetCompatibilityFlag(SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy));
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testTitleKeepsLineSpacing)
 {
     createSdImpressDoc("TextFittingTitle.fodp");

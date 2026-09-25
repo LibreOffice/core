@@ -1218,6 +1218,22 @@ bool SfxObjectShell::IsOwnStorageFormat(const SfxMedium &rMedium)
 }
 
 
+bool SfxObjectShell::IsOwnStorageFormatWithSettings(SfxMedium& rMedium)
+{
+    if (!IsOwnStorageFormat(rMedium))
+        return false;
+    try
+    {
+        uno::Reference<embed::XStorage> xStorage = rMedium.GetStorage();
+        return xStorage.is() && xStorage->hasByName(u"settings.xml"_ustr);
+    }
+    catch (const uno::Exception&)
+    {
+        return false;
+    }
+}
+
+
 bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium)
 {
     return !rMedium.GetFilter() || // Embedded

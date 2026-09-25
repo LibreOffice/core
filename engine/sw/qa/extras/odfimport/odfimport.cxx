@@ -1884,6 +1884,26 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldmarkBelowNestedTable)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rMarkAccess.getFieldmarksCount());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testNoSettingsFitsTextTheNewWay)
+{
+    // A minimal document with no settings.xml, like the empty templates that storage hosts copy
+    // for a new document, fits text the new way.
+    createSwDoc("no-settings.odt");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSettings, u"TextFittingLegacy"_ustr));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSettings, u"LineSpacingBelowBaselineLegacy"_ustr));
+
+    // A document saved before these settings existed keeps the older fitting.
+    createSwDoc("fdo75872_aoo40.odt");
+    xFactory.set(mxComponent, uno::UNO_QUERY);
+    xSettings.set(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr),
+                  uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<bool>(xSettings, u"TextFittingLegacy"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xSettings, u"LineSpacingBelowBaselineLegacy"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

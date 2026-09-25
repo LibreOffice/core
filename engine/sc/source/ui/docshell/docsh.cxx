@@ -669,7 +669,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
 
     // If this is an ODF file being loaded, then by default, use legacy processing
     // (if required, it will be overridden in *::ReadUserDataSequence())
-    if (IsOwnStorageFormat(rMedium))
+    if (IsOwnStorageFormatWithSettings(rMedium))
     {
         m_pDocument->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
                                           true); // for tdf#99729

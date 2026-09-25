@@ -724,6 +724,8 @@ public:
     virtual bool    GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     static bool IsOwnStorageFormat(const SfxMedium &);
+    /// An own format package that holds a settings.xml, which every version of this program writes.
+    static bool IsOwnStorageFormatWithSettings(SfxMedium &);
 
     /** Append Infobar once the frame is ready.
         Useful when you want to register an Infobar before the doc/frame is fully loaded. */
