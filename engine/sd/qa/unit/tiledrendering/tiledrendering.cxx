@@ -2752,6 +2752,41 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTableCellAutoColorTranslucentFill
     CPPUNIT_ASSERT(bDarkText);
 }
 
+// The notes text of a slide sits on the notes page, which has no fill of its own and whose master
+// carries none either, so its automatic font color follows the document background of the view
+// and not the fill of the master of the slide
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPageAutoColorWithDarkSlideMaster)
+{
+    addScheme(u"Light"_ustr, COL_WHITE);
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    dispatchThemeCommand(mxComponent, u".uno:ChangeTheme"_ustr, u"Light"_ustr);
+
+    // Show the notes pages
+    dispatchCommand(mxComponent, u".uno:NotesMode"_ustr,
+                    cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pNotesPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pNotesPage);
+    CPPUNIT_ASSERT_EQUAL(PageKind::Notes, pNotesPage->GetPageKind());
+
+    // Give the master of the slides a dark fill, as a dark template has
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pSlideMaster = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pSlideMaster);
+    pSlideMaster->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pSlideMaster->getSdrPageProperties().PutItem(
+        XFillColorItem(OUString(), Color(0x1c, 0x1c, 0x1c)));
+
+    // The notes text is edited on the white notes page, so its automatic color is black; without
+    // the accompanying fix the notes page answered with the dark fill of the slide master and
+    // the notes text was white on white
+    SdrObject* pNotesObject = pNotesPage->GetPresObj(PresObjKind::Notes);
+    CPPUNIT_ASSERT(pNotesObject);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getShapeTextEditAutoColor(pXImpressDocument, pNotesObject,
+                                                              pViewShell->GetView()));
+}
+
 // Test that changing the theme in one view doesn't change it in the other view
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
 {

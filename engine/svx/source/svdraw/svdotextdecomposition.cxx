@@ -58,7 +58,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
 
@@ -403,29 +402,12 @@ const SfxItemSet* SdrObject::getBackgroundFillSet() const
 
     if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
-        SdrPage* pOwnerPage(getSdrPageFromSdrObject());
-        if (pOwnerPage)
+        // The fill of the page or of its master page.
+        // none from a master page without a style sheet, e.g. a notes master page
+        if (const SdrPage* pOwnerPage = getSdrPageFromSdrObject())
         {
-            pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
-
-            if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
-            {
-                if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
-                {
-                    // See unomodel.cxx: "It is guaranteed, that after a standard page the corresponding notes page follows."
-                    bool notesPage = pOwnerPage->GetPageNum() % 2 == 0;
-
-                    if (!comphelper::COKit::isActive() || !notesPage || !pOwnerPage->getSdrModelFromSdrPage().IsImpress())
-                        pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-                    else {
-                        // See sdrmasterpagedescriptor.cxx: e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
-                        if (pOwnerPage->getSdrModelFromSdrPage().GetPage(pOwnerPage->GetPageNum() - 1))
-                            pBackgroundFillSet = &pOwnerPage->getSdrModelFromSdrPage().GetPage(pOwnerPage->GetPageNum() - 1)->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-                        else
-                            pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-                    }
-                }
-            }
+            if (const SdrPageProperties* pPageProperties = pOwnerPage->getCorrectSdrPageProperties())
+                pBackgroundFillSet = &pPageProperties->GetItemSet();
         }
     }
     return pBackgroundFillSet;

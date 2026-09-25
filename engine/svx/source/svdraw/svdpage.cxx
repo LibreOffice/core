@@ -60,7 +60,6 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 #include <docmodel/theme/Theme.hxx>
-#include <comphelper/kit.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -1848,35 +1847,13 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
 
 Color SdrPage::GetPageBackgroundColor(const Color& rBehind) const
 {
-    const SfxItemSet* pBackgroundFill = &getSdrPageProperties().GetItemSet();
-
-    if(!IsMasterPage() && TRG_HasMasterPage())
-    {
-        if(drawing::FillStyle_NONE == pBackgroundFill->Get(XATTR_FILLSTYLE).GetValue())
-        {
-            // See unomodel.cxx: "It is guaranteed, that after a standard page the corresponding notes page follows."
-            bool notesPage = GetPageNum() % 2 == 0;
-
-            if (!comphelper::COKit::isActive() || !notesPage || !getSdrModelFromSdrPage().IsImpress())
-                pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-            else
-            {
-                /*
-                    See sdrmasterpagedescriptor.cxx: e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
-                */
-
-                // This is a notes page. Try to get itemset from standard page's master.
-                if (getSdrModelFromSdrPage().GetPage(GetPageNum() - 1))
-                    pBackgroundFill = &getSdrModelFromSdrPage().GetPage(GetPageNum() - 1)->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-                else
-                    pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
-            }
-        }
-    }
+    const SdrPageProperties* pPageProperties = getCorrectSdrPageProperties();
+    if (!pPageProperties)
+        return rBehind;
 
     // A page fill that is not fully opaque is mixed with the color behind the page, which is the
     // document background this page is painted on.
-    if (auto oColor = GetDraftFillColor(*pBackgroundFill, rBehind))
+    if (auto oColor = GetDraftFillColor(pPageProperties->GetItemSet(), rBehind))
         return *oColor;
 
     return rBehind;
