@@ -3317,11 +3317,13 @@ void ScMatrix::SetImmutable() const
 
 void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
 {
+    maNumberFormats.clear();
     pImpl->Resize(nC, nR);
 }
 
 void ScMatrix::Resize(SCSIZE nC, SCSIZE nR, double fVal)
 {
+    maNumberFormats.clear();
     pImpl->Resize(nC, nR, fVal);
 }
 
@@ -3356,6 +3358,21 @@ bool ScMatrix::ValidColRow( SCSIZE nC, SCSIZE nR) const
 bool ScMatrix::ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
 {
     return pImpl->ValidColRowReplicated(rC, rR);
+}
+
+void ScMatrix::SetNumberFormats( std::vector<sal_uInt32>&& rFormats )
+{
+    assert(rFormats.empty() || rFormats.size() == GetElementCount());
+    maNumberFormats = std::move(rFormats);
+}
+
+sal_uInt32 ScMatrix::GetNumberFormat( SCSIZE nC, SCSIZE nR ) const
+{
+    if (maNumberFormats.empty() || !ValidColRowOrReplicated(nC, nR))
+        return NUMBERFORMAT_ENTRY_NOT_FOUND;
+    SCSIZE nCols, nRows;
+    GetDimensions(nCols, nRows);
+    return maNumberFormats[nR * nCols + nC];
 }
 
 bool ScMatrix::ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const

@@ -46,9 +46,11 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
+#include <com/sun/star/sheet/FormattedResult.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 
 #include <addincol.hxx>
 #include <addinhelpid.hxx>
@@ -60,10 +62,14 @@
 #include <scmod.hxx>
 #include <rangeseq.hxx>
 #include <funcdesc.hxx>
+#include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
+#include <svl/zforlist.hxx>
 #include <formulaopt.hxx>
 #include <compiler.hxx>
 #include <document.hxx>
+#include <global.hxx>
+#include <cassert>
 #include <memory>
 
 using namespace com::sun::star;
@@ -718,6 +724,9 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
                     IsTypeName( sName, cppu::UnoType<uno::XInterface>::get()) );
             }
 
+        case uno::TypeClass_STRUCT:
+            return IsTypeName( xClass->getName(), cppu::UnoType<sheet::FormattedResult>::get() );
+
         default:
             {
                 //  nested sequences for arrays
@@ -1364,10 +1373,12 @@ ScUnoAddInCall::ScUnoAddInCall( ScDocument& rDoc, ScUnoAddInCollection& rColl, c
                                 sal_Int32 nParamCount ) :
     mrDoc( rDoc ),
     bValidCount( false ),
+    meLanguage( ScGlobal::eLnge ),
     nErrCode( FormulaError::NoCode ),      // before function was called
     bHasString( true ),
     fValue( 0.0 ),
-    xMatrix( nullptr )
+    xMatrix( nullptr ),
+    mnNumberFormat( NUMBERFORMAT_ENTRY_NOT_FOUND )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
     OSL_ENSURE( pFuncData, "Function Data missing" );
@@ -1565,10 +1576,167 @@ static sal_Int32 lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRo
     return pRow->getLength();
 }
 
+namespace {
+
+enum class FormatsSize { Empty, Single, Full, Invalid };
+
+// Which of the sizes FormattedResult allows rFormats has for a result of
+// nCols x nRows values.
+template <typename T>
+FormatsSize lcl_GetFormatsSize( const uno::Sequence< uno::Sequence<T> >& rFormats,
+                                SCSIZE nCols, SCSIZE nRows )
+{
+    if (!rFormats.hasElements())
+        return FormatsSize::Empty;
+    if (rFormats.getLength() == 1 && rFormats[0].getLength() == 1)
+        return FormatsSize::Single;
+    if (static_cast<SCSIZE>(rFormats.getLength()) != nRows)
+        return FormatsSize::Invalid;
+    for (const uno::Sequence<T>& rRow : rFormats)
+        if (static_cast<SCSIZE>(rRow.getLength()) != nCols)
+            return FormatsSize::Invalid;
+    return FormatsSize::Full;
+}
+
+template <typename T>
+const T& lcl_GetFormat( const uno::Sequence< uno::Sequence<T> >& rFormats, FormatsSize eSize,
+                        SCSIZE nCol, SCSIZE nRow )
+{
+    if (eSize == FormatsSize::Single)
+        return rFormats[0][0];
+    return rFormats[nRow][nCol];
+}
+
+bool lcl_IsResultFormatType( sal_Int16 nType )
+{
+    switch (nType)
+    {
+        case util::NumberFormat::DATE:
+        case util::NumberFormat::TIME:
+        case util::NumberFormat::DATETIME:
+        case util::NumberFormat::DURATION:
+        case util::NumberFormat::CURRENCY:
+        case util::NumberFormat::NUMBER:
+        case util::NumberFormat::SCIENTIFIC:
+        case util::NumberFormat::FRACTION:
+        case util::NumberFormat::PERCENT:
+        case util::NumberFormat::LOGICAL:
+            return true;
+        default:
+            return false;
+    }
+}
+
+// The number format keys of the nCols x nRows values of rRes, row by row,
+// NUMBERFORMAT_ENTRY_NOT_FOUND for a value without a format. rFormats stays
+// empty if rRes gives no formats. Returns false for a size FormattedResult
+// does not allow, an unknown type or a code that cannot be read.
+bool lcl_GetResultFormats( SvNumberFormatter& rFormatter, LanguageType eLanguage,
+                           const sheet::FormattedResult& rRes, SCSIZE nCols, SCSIZE nRows,
+                           std::vector<sal_uInt32>& rFormats )
+{
+    FormatsSize eTypes = lcl_GetFormatsSize(rRes.NumberFormatTypes, nCols, nRows);
+    FormatsSize eCodes = lcl_GetFormatsSize(rRes.NumberFormatCodes, nCols, nRows);
+    if (eTypes == FormatsSize::Invalid || eCodes == FormatsSize::Invalid)
+        return false;
+    if (eTypes == FormatsSize::Empty && eCodes == FormatsSize::Empty)
+        return true;
+
+    std::unordered_map<OUString, sal_uInt32> aCodeKeys;
+    rFormats.assign(nCols * nRows, NUMBERFORMAT_ENTRY_NOT_FOUND);
+    for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol < nCols; ++nCol)
+        {
+            sal_Int16 nType = util::NumberFormat::ALL;
+            if (eTypes != FormatsSize::Empty)
+            {
+                nType = lcl_GetFormat(rRes.NumberFormatTypes, eTypes, nCol, nRow);
+                if (nType != util::NumberFormat::ALL && !lcl_IsResultFormatType(nType))
+                    return false;
+            }
+            OUString aCode;
+            if (eCodes != FormatsSize::Empty)
+                aCode = lcl_GetFormat(rRes.NumberFormatCodes, eCodes, nCol, nRow);
+
+            sal_uInt32 nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            if (!aCode.isEmpty())
+            {
+                auto it = aCodeKeys.find(aCode);
+                if (it != aCodeKeys.end())
+                    nKey = it->second;
+                else
+                {
+                    OUString aConverted = aCode;
+                    sal_Int32 nCheckPos = 0;
+                    SvNumFormatType eType = SvNumFormatType::ALL;
+                    // Also gives the key of a code already in the table; only
+                    // nCheckPos tells a code that cannot be read.
+                    rFormatter.PutandConvertEntry(aConverted, nCheckPos, eType, nKey,
+                                                  LANGUAGE_ENGLISH_US, eLanguage, false);
+                    if (nCheckPos != 0)
+                        return false;
+                    aCodeKeys.emplace(aCode, nKey);
+                }
+            }
+            else if (nType != util::NumberFormat::ALL)
+                nKey = rFormatter.GetStandardFormat(static_cast<SvNumFormatType>(nType), eLanguage);
+            rFormats[nRow * nCols + nCol] = nKey;
+        }
+    }
+    return true;
+}
+
+}
+
+void ScUnoAddInCall::SetFormattedResult( const uno::Any& rNewRes )
+{
+    sheet::FormattedResult aRes;
+    if ( !(rNewRes >>= aRes) )
+    {
+        nErrCode = FormulaError::NoValue;          // unknown struct
+        return;
+    }
+    uno::TypeClass eValueClass = aRes.Value.getValueTypeClass();
+    if ( eValueClass == uno::TypeClass_STRUCT || eValueClass == uno::TypeClass_INTERFACE )
+    {
+        nErrCode = FormulaError::NoValue;          // nested or volatile result
+        return;
+    }
+
+    SetResult( aRes.Value );
+    if ( nErrCode != FormulaError::NONE )
+        return;
+
+    // Add-In calls never run in threaded calculation (ocExternal is on its deny
+    // list), so the format table can take new entries here.
+    assert(!mrDoc.IsThreadedGroupCalcInProgress());
+    if ( mrDoc.IsThreadedGroupCalcInProgress() )
+        return;
+
+    SCSIZE nCols = 1, nRows = 1;
+    if ( xMatrix )
+        xMatrix->GetDimensions( nCols, nRows );
+    std::vector<sal_uInt32> aFormats;
+    if ( !lcl_GetResultFormats( *mrDoc.GetFormatTable(), meLanguage, aRes, nCols, nRows, aFormats ) )
+    {
+        nErrCode = FormulaError::NoValue;
+        return;
+    }
+    if ( aFormats.empty() )
+        return;
+
+    if ( xMatrix )
+        xMatrix->SetNumberFormats( std::move( aFormats ) );
+    else if ( !bHasString )
+        mnNumberFormat = aFormats[0];
+}
+
 void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 {
     nErrCode = FormulaError::NONE;
     xVarRes = nullptr;
+    mnNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     // Reflection* pRefl = rNewRes.getReflection();
 
@@ -1615,6 +1783,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 if (!xVarRes.is())
                     nErrCode = FormulaError::NoValue;          // unknown interface
             }
+            break;
+
+        case uno::TypeClass_STRUCT:
+            SetFormattedResult( rNewRes );
             break;
 
         default:

@@ -3887,8 +3887,26 @@ void ScInterpreter::ScMatRef()
             }
             else
             {
-                // Determine nFuncFmtType type before PushDouble().
-                mrDoc.GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
+                // Determine nFuncFmtType type before PushDouble(), from the
+                // elements' own formats that an Add-In result may carry, else
+                // from the top left cell.
+                if (pMat->HasNumberFormats())
+                {
+                    sal_uInt32 nFormat = pMat->GetNumberFormat( nC, nR);
+                    if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+                    {
+                        nCurFmtType = mrContext.NFGetType( nFormat);
+                        nCurFmtIndex = nFormat;
+                        mbFuncFmtIndexKept = true;
+                    }
+                    else
+                    {
+                        nCurFmtType = SvNumFormatType::NUMBER;
+                        nCurFmtIndex = 0;
+                    }
+                }
+                else
+                    mrDoc.GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
                 nFuncFmtType = nCurFmtType;
                 nFuncFmtIndex = nCurFmtIndex;
                 PushDouble(nMatVal.fVal);  // handles DoubleError

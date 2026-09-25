@@ -278,6 +278,7 @@ private:
     sal_uInt8   cPar;                   // current count of parameters
     bool        bCalcAsShown;           // precision as shown
     bool        bMatrixFormula;         // formula cell is a matrix formula
+    bool        mbFuncFmtIndexKept;     // nFuncFmtIndex applies whatever the type, an Add-In's own format
 
     VolatileType meVolatileType;
 

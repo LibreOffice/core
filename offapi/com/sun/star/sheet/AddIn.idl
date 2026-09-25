@@ -94,6 +94,7 @@ module com {  module sun {  module star {  module sheet {
     <li>`string[][]`</li>
     <li>`any[][]`</li>
     <li>XVolatileResult</li>
+    <li>FormattedResult</li>
     <li>`any`</li>
     </ul>
 
@@ -103,6 +104,7 @@ module com {  module sun {  module star {  module sheet {
     implementing the VolatileResult service, that contains
     a volatile result. Subsequent calls with the same parameters must
     return the same object.
+    A FormattedResult return value gives the result's values number formats.
     An `any` return value can contain any of the other types.</p>
  */
 published service AddIn

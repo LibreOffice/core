@@ -1,0 +1,65 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+/** contains the result of an AddIn function together with the number formats
+    of its values.
+
+    <p>An AddIn function may declare this struct as its return type, or return
+    it in an `any`, and the ResultEvent of a volatile result may carry it.
+    Calc applies the formats to the cells that show the result as it does for
+    the results of its own functions, such as a date format for the result of
+    DATE(): a format the user applied to a cell is kept, and inside a larger
+    formula the result is treated as the result of any function would be.</p>
+
+    <p>Each of NumberFormatTypes and NumberFormatCodes is either empty, for no
+    formats, or holds one element, which applies to every value of the
+    result, or has as many rows as the result and as many elements in each
+    row as the result's longest row, one for each value.  A single value
+    counts as one row of one element.  Formats apply to numeric values only;
+    text values keep none.  Any other size, an unknown type or a code that
+    cannot be read makes the result an error.</p>
+
+    @see AddIn
+    @since LibreOffice 27.2
+ */
+struct FormattedResult
+{
+    /** contains the result.
+
+        <p>This can be any of the return types described for the AddIn
+        service, except XVolatileResult and FormattedResult.</p>
+     */
+    any Value;
+
+    /** contains the number format types of the values.
+
+        <p>Each element is one of the constants DATE, TIME, DATETIME,
+        DURATION, CURRENCY, NUMBER, SCIENTIFIC, FRACTION, PERCENT or LOGICAL,
+        which selects the standard format of that type for the cell's
+        language, or ALL, for no type.</p>
+
+        @see com::sun::star::util::NumberFormat
+     */
+    sequence< sequence< short > > NumberFormatTypes;
+
+    /** contains the number format codes of the values.
+
+        <p>Each element is a format code written with the keywords of the
+        en-US locale, which Calc converts to the cell's language, or an empty
+        string, for no code.  A code takes precedence over the type given for
+        the same value.</p>
+     */
+    sequence< sequence< string > > NumberFormatCodes;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

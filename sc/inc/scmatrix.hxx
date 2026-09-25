@@ -105,6 +105,7 @@ class ScMatrix final
     mutable size_t  nRefCnt;    // reference count
     mutable bool    mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
     std::unique_ptr<ScMatrixImpl> pImpl;
+    std::vector<sal_uInt32> maNumberFormats; // Number format keys of an Add-In result, row by row.
 
     ScMatrix( const ScMatrix& ) = delete;
     ScMatrix& operator=( const ScMatrix&) = delete;
@@ -251,6 +252,21 @@ public:
         position not within matrix, returns false.
      */
     bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
+
+    /** Set the number format keys of the elements, row by row, one for each
+        element, as an Add-In result given as css::sheet::FormattedResult
+        carries them. An empty vector removes them. Clone() does not copy
+        them and Resize() removes them, so they stay with the values they
+        were given for.
+     */
+    void SetNumberFormats( std::vector<sal_uInt32>&& rFormats );
+
+    /** The number format key of an element, or NUMBERFORMAT_ENTRY_NOT_FOUND
+        if the matrix carries none. Vectors are replicated as by Get().
+     */
+    sal_uInt32 GetNumberFormat( SCSIZE nC, SCSIZE nR ) const;
+
+    bool HasNumberFormats() const { return !maNumberFormats.empty(); }
 
     SC_DLLPUBLIC void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);

@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include <addincol.hxx>
 #include <clipparam.hxx>
 #include <compiler.hxx>
 #include <interpre.hxx>
@@ -27,7 +28,12 @@
 #include <stringutil.hxx>
 
 #include <svl/broadcast.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/docfile.hxx>
+#include <com/sun/star/sheet/FormattedResult.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <unotools/saveopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -8234,6 +8240,86 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf43003AutoCalcMatrix)
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1, 0, 0))); // B1
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(1, 1, 0))); // B2
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2, 0, 0))); // C1
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAddInFormattedResult)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    const sal_uInt32 nDateKey
+        = pFormatter->GetStandardFormat(SvNumFormatType::DATE, ScGlobal::eLnge);
+
+    // SetResult() only converts a result, so no Add-In of this name is needed.
+    ScUnoAddInCall aCall(*m_pDoc, *ScGlobal::GetAddInCollection(), u"FormattedResultTest"_ustr, 0);
+
+    // A single value with a type
+    css::sheet::FormattedResult aRes;
+    aRes.Value <<= 46290.0;
+    aRes.NumberFormatTypes = { { css::util::NumberFormat::DATE } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, aCall.GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(46290.0, aCall.GetValue());
+    CPPUNIT_ASSERT_EQUAL(nDateKey, aCall.GetNumberFormat());
+
+    // A code takes precedence over the type
+    aRes.NumberFormatCodes = { { u"0.0000"_ustr } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, aCall.GetErrCode());
+    const SvNumberformat* pEntry = pFormatter->GetEntry(aCall.GetNumberFormat());
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(u"0.0000"_ustr, pEntry->GetFormatstring());
+
+    // A plain result after a formatted one has no format
+    aCall.SetResult(css::uno::Any(46290.0));
+    CPPUNIT_ASSERT_EQUAL(NUMBERFORMAT_ENTRY_NOT_FOUND, aCall.GetNumberFormat());
+
+    // Text keeps no format
+    aRes.Value <<= u"text"_ustr;
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, aCall.GetErrCode());
+    CPPUNIT_ASSERT(aCall.HasString());
+    CPPUNIT_ASSERT_EQUAL(NUMBERFORMAT_ENTRY_NOT_FOUND, aCall.GetNumberFormat());
+
+    // An array with a format for each value, none for the second
+    aRes.Value <<= css::uno::Sequence<css::uno::Sequence<double>>{ { 46290.0, 0.5 } };
+    aRes.NumberFormatTypes = { { css::util::NumberFormat::DATE, css::util::NumberFormat::ALL } };
+    aRes.NumberFormatCodes = {};
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, aCall.GetErrCode());
+    CPPUNIT_ASSERT(aCall.HasMatrix());
+    CPPUNIT_ASSERT_EQUAL(nDateKey, aCall.GetMatrix()->GetNumberFormat(0, 0));
+    CPPUNIT_ASSERT_EQUAL(NUMBERFORMAT_ENTRY_NOT_FOUND, aCall.GetMatrix()->GetNumberFormat(1, 0));
+
+    // A single format applies to every value
+    aRes.NumberFormatTypes = { { css::util::NumberFormat::DATE } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, aCall.GetErrCode());
+    CPPUNIT_ASSERT_EQUAL(nDateKey, aCall.GetMatrix()->GetNumberFormat(1, 0));
+
+    // A size that is neither one element nor the result's
+    aRes.NumberFormatTypes = { { css::util::NumberFormat::DATE, css::util::NumberFormat::DATE,
+                                 css::util::NumberFormat::DATE } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, aCall.GetErrCode());
+
+    // An unknown type
+    aRes.NumberFormatTypes = { { css::util::NumberFormat::UNDEFINED } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, aCall.GetErrCode());
+
+    // A code that cannot be read
+    aRes.NumberFormatTypes = {};
+    aRes.NumberFormatCodes = { { u"[ZZZ]0"_ustr } };
+    aCall.SetResult(css::uno::Any(aRes));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, aCall.GetErrCode());
+
+    // A formatted result inside another
+    css::sheet::FormattedResult aOuter;
+    aOuter.Value <<= aRes;
+    aCall.SetResult(css::uno::Any(aOuter));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, aCall.GetErrCode());
 
     m_pDoc->DeleteTab(0);
 }

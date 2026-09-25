@@ -33,6 +33,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
 #include <osl/thread.h>
+#include <editeng/langitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -44,6 +45,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 
+#include <scitems.hxx>
 #include <global.hxx>
 #include <dbdata.hxx>
 #include <formulacell.hxx>
@@ -53,6 +55,7 @@
 #include <dociter.hxx>
 #include <docsh.hxx>
 #include <docoptio.hxx>
+#include <patattr.hxx>
 #include <scmatrix.hxx>
 #include <adiasync.hxx>
 #include <cellsuno.hxx>
@@ -1921,6 +1924,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rR
         xMat->GetDimensions(nCols, nRows);
         ScMatrixValue nMatVal = xMat->Get(0, 0);
         ScMatValType nMatValType = nMatVal.nType;
+        sal_uInt32 nMatFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
         if (ScMatrix::IsNonValueType( nMatValType))
         {
             if ( xMat->IsEmptyPath( 0, 0))
@@ -1955,10 +1959,14 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, SvNumFormatType& rR
             else
                 xRes = CreateFormulaDoubleToken( nMatVal.fVal);
             PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-            if ( rRetTypeExpr != SvNumFormatType::LOGICAL )
+            // An Add-In result may carry its own number formats.
+            nMatFormat = xMat->GetNumberFormat( 0, 0);
+            if (nMatFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+                rRetTypeExpr = mrContext.NFGetType( nMatFormat);
+            else if ( rRetTypeExpr != SvNumFormatType::LOGICAL )
                 rRetTypeExpr = SvNumFormatType::NUMBER;
         }
-        rRetIndexExpr = 0;
+        rRetIndexExpr = (nMatFormat != NUMBERFORMAT_ENTRY_NOT_FOUND ? nMatFormat : 0);
         xMat->SetErrorInterpreter( nullptr);
     }
     else
@@ -3119,6 +3127,10 @@ void ScInterpreter::ScExternal()
         if ( !aCall.ValidParamCount() )
             SetError( FormulaError::IllegalParameter );
 
+        // Number formats the result gives are in the cell's language, as for TEXT().
+        if (const ScPatternAttr* pPattern = mrDoc.GetPattern( aPos.Col(), aPos.Row(), aPos.Tab()))
+            aCall.SetLanguage( pPattern->GetItem( ATTR_LANGUAGE_FORMAT ).GetValue());
+
         if ( aCall.NeedsCaller() && GetError() == FormulaError::NONE )
         {
             ScDocShell* pShell = mrDoc.GetDocumentShell();
@@ -3470,6 +3482,15 @@ void ScInterpreter::ScExternal()
             }
             else
             {
+                // The number format the result gives, set before PushDouble()
+                // types the value by it.
+                sal_uInt32 nFormat = aCall.GetNumberFormat();
+                if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+                {
+                    nFuncFmtType = mrContext.NFGetType( nFormat);
+                    nFuncFmtIndex = nFormat;
+                    mbFuncFmtIndexKept = true;
+                }
                 PushDouble( aCall.GetValue() );
             }
         }
@@ -3736,6 +3757,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpre
     , mnSubTotalFlags(SubtotalFlags::NONE)
     , cPar(0)
     , bCalcAsShown(rDoc.GetDocOptions().IsCalcAsShown())
+    , mbFuncFmtIndexKept(false)
     , meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     MergeCalcConfig();
@@ -4417,6 +4439,7 @@ StackVar ScInterpreter::Interpret()
                 // default function's format, others are set if needed
                 nFuncFmtType = SvNumFormatType::NUMBER;
                 nFuncFmtIndex = 0;
+                mbFuncFmtIndexKept = false;
 
                 if (bIsOpCodeJumpCommand)
                     nStackBase = sp;        // don't mess around with the jumps
@@ -4475,7 +4498,7 @@ StackVar ScInterpreter::Interpret()
                             nRetIndexExpr = nFuncFmtIndex;
                         break;
                         default:
-                            nRetIndexExpr = 0;
+                            nRetIndexExpr = (mbFuncFmtIndexKept ? nFuncFmtIndex : 0);
                     }
                 }
             }
