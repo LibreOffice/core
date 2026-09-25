@@ -1554,7 +1554,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
-                double fMinHeight = scaleYSpacingValue(rLSItem.GetLineHeight());
+                double fMinHeight = scaleYLineSpacingValue(rLSItem.GetLineHeight());
                 sal_uInt16 nMinHeight = basegfx::fround(fMinHeight);
 
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
@@ -1568,7 +1568,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Fix )
             {
-                double fFixHeight = scaleYSpacingValue(rLSItem.GetLineHeight());
+                double fFixHeight = scaleYLineSpacingValue(rLSItem.GetLineHeight());
                 sal_uInt16 nFixHeight = basegfx::fround(fFixHeight);
 
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
@@ -3603,7 +3603,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
 
             const SvxLineSpacingItem& rLSItem = rParaPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
-                                ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
+                                ? scaleYLineSpacingValue(rLSItem.GetInterLineSpace()) : 0;
             bool bPaintBullet (false);
 
             // Fold the line that follows a multiline field into the field's
@@ -4204,7 +4204,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
             if (!maStatus.IsOutliner())
             {
                 const SvxULSpaceItem& rULItem = rParaPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-                tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
+                tools::Long nUL = scaleYParagraphSpacingValue(rULItem.GetLower());
                 adjustYDirectionAware(aStartPos, nUL);
             }
 
@@ -4603,10 +4603,10 @@ tools::Long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
 
         const SvxLineSpacingItem& rLSItem = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
         sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
-                            ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
+                            ? scaleYLineSpacingValue(rLSItem.GetInterLineSpace()) : 0;
 
         const SvxULSpaceItem& rULItem = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
-        tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
+        tools::Long nUL = scaleYParagraphSpacingValue(rULItem.GetLower());
 
         const EditLineList& rLines = rPortion.GetLines();
         sal_Int32 nLineCount = rLines.Count();

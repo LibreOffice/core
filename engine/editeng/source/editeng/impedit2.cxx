@@ -3377,7 +3377,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 const SvxLineSpacingItem& rLSItem
                     = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
                 nSBL = (rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix)
-                           ? scaleYSpacingValue(rLSItem.GetInterLineSpace())
+                           ? scaleYLineSpacingValue(rLSItem.GetInterLineSpace())
                            : 0;
             }
 
@@ -3455,7 +3455,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
             if (!maStatus.IsOutliner())
             {
                 const SvxULSpaceItem& rULItem = rPortion.GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
-                tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
+                tools::Long nUL = scaleYParagraphSpacingValue(rULItem.GetLower());
                 adjustYDirectionAware(aLineStart, nUL);
             }
         }
@@ -5017,7 +5017,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
 
     const SvxULSpaceItem& rULItem = rPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
     const SvxLineSpacingItem& rLSItem = rPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    sal_Int32 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) ? scaleYSpacingValue(rLSItem.GetInterLineSpace()) : 0;
+    sal_Int32 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) ? scaleYLineSpacingValue(rLSItem.GetInterLineSpace()) : 0;
 
     if ( nSBL )
     {
@@ -5030,14 +5030,14 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     sal_Int32 nPortion = GetParaPortions().GetPos(&rPortion);
     if ( nPortion )
     {
-        sal_uInt16 nUpper = scaleYSpacingValue(rULItem.GetUpper());
+        sal_uInt16 nUpper = scaleYParagraphSpacingValue(rULItem.GetUpper());
         rPortion.mnHeight += nUpper;
         rPortion.mnFirstLineOffset = nUpper;
     }
 
     if (nPortion != GetParaPortions().lastIndex())
     {
-        rPortion.mnHeight += scaleYSpacingValue(rULItem.GetLower());   // not in the last
+        rPortion.mnHeight += scaleYParagraphSpacingValue(rULItem.GetLower());   // not in the last
     }
 
     if ( !nPortion || maStatus.ULSpaceSummation() )
@@ -5056,7 +5056,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     // Only Writer3: Do not add up, but minimum distance.
 
     // check if distance by LineSpacing > Upper:
-    sal_uInt16 nExtraSpace = scaleYSpacingValue(lcl_CalcExtraSpace(rLSItem));
+    sal_uInt16 nExtraSpace = scaleYLineSpacingValue(lcl_CalcExtraSpace(rLSItem));
     if (nExtraSpace > rPortion.mnFirstLineOffset)
     {
         // Paragraph becomes 'bigger':
@@ -5065,7 +5065,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     }
 
     // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
-    sal_uInt16 nPrevLower = scaleYSpacingValue(rPrevULItem.GetLower());
+    sal_uInt16 nPrevLower = scaleYParagraphSpacingValue(rPrevULItem.GetLower());
 
     // This PrevLower is still in the height of PrevPortion ...
     if (nPrevLower > rPortion.mnFirstLineOffset)
@@ -5086,7 +5086,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
     if ( pPrev->IsInvalid() )
         return;
 
-    nExtraSpace = scaleYSpacingValue(lcl_CalcExtraSpace(rPrevLSItem));
+    nExtraSpace = scaleYLineSpacingValue(lcl_CalcExtraSpace(rPrevLSItem));
     if ( nExtraSpace > nPrevLower )
     {
         sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;

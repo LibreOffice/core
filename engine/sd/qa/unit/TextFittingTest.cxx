@@ -298,6 +298,56 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTitleFitsLikeReference)
     }
 }
 
+namespace
+{
+// Fits two equal lines, the second with 2cm of space above it, into a box too small for them.
+// Returns the space above the second line after fitting, in 1/100 mm, and the line spacing scale.
+std::pair<tools::Long, double> fitParagraphSpacing(SdXImpressDocument* pXImpressDocument,
+                                                   bool bLegacyFitting)
+{
+    pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
+                                                      bLegacyFitting);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTextObject = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+    const double fSpacingY = rEditEngine.getScalingParameters().fSpacingY;
+    const tools::Long nSpace = tools::Long(rEditEngine.GetTextHeight(1))
+                               - tools::Long(rEditEngine.GetTextHeight(0));
+    pView->SdrEndTextEdit();
+    return { nSpace, fSpacingY };
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testParagraphSpacingKeepsSize)
+{
+    // Fitting the text leaves the space above a paragraph at the size it was given.
+    createSdImpressDoc("TextFittingParagraphSpacing.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    auto [nSpace, fSpacingY] = fitParagraphSpacing(pXImpressDocument, false);
+    CPPUNIT_ASSERT_LESS(1.0, fSpacingY);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2000), nSpace);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesParagraphSpacing)
+{
+    // With the legacy fitting the space above a paragraph is reduced along with the line spacing.
+    createSdImpressDoc("TextFittingParagraphSpacing.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    auto [nSpace, fSpacingY] = fitParagraphSpacing(pXImpressDocument, true);
+    CPPUNIT_ASSERT_LESS(1.0, fSpacingY);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0 * fSpacingY, double(nSpace), 2.0);
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
 {
     // The first slide stores a fit of 55 percent font with 20 percent less line spacing, though

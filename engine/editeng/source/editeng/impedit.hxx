@@ -812,12 +812,20 @@ private:
         return double(nXValue) * maScalingParameters.fSpacingX;
     }
 
-    double scaleYSpacingValue(sal_uInt16 nYValue) const
+    double scaleYLineSpacingValue(sal_uInt16 nYValue) const
     {
         if (!maStatus.DoStretch() || maScalingParameters.fSpacingY == 1.0)
             return nYValue;
 
         return double(nYValue) * maScalingParameters.fSpacingY;
+    }
+
+    double scaleYParagraphSpacingValue(sal_uInt16 nYValue) const
+    {
+        if (meTextFitting != EETextFitting::Legacy)
+            return nYValue;
+
+        return scaleYLineSpacingValue(nYValue);
     }
 
     double scaleXFontValue(tools::Long nXValue) const
