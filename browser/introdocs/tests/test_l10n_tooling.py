@@ -387,6 +387,17 @@ class ScriptEndToEndTest(unittest.TestCase):
             result = self.run_script("extract_odf_text.py", "--check", ods, pot)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
+            # another polib version orders the header fields differently
+            with open(pot, encoding="utf-8") as pot_file:
+                reordered = pot_file.read().replace(
+                    '"Language: \\n"\n', "").replace(
+                    '"Content-Transfer-Encoding: 8bit\\n"\n',
+                    '"Content-Transfer-Encoding: 8bit\\n"\n"Language: \\n"\n')
+            with open(pot, "w", encoding="utf-8") as pot_file:
+                pot_file.write(reordered)
+            result = self.run_script("extract_odf_text.py", "--check", ods, pot)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
             # --check flags a stale pot with exit code 2 and a diff
             with open(pot, encoding="utf-8") as pot_file:
                 stale = pot_file.read().replace("Enter", "Escape")

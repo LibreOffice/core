@@ -5,7 +5,8 @@
 Key derivation and the <N> span-tag msgid format are defined in
 l10n_odf.py.  Marker spec violations reject the document with exit code 1.
 --check compares the fresh .pot against the committed one instead of
-writing it; a stale file prints a diff and exits 2.
+writing it; a stale file prints a diff and exits 2.  Only the entries are
+compared: polib versions order the header fields differently.
 """
 
 import argparse
@@ -47,6 +48,10 @@ def build_pot(units, source_name):
     return pot
 
 
+def entry_keys(pot):
+    return [(entry.msgctxt, entry.msgid, entry.comment) for entry in pot]
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Extract '_'-marked strings from an ODF file into a .pot")
@@ -79,7 +84,8 @@ def main():
                   f"extract_odf_text.py {args.odf_file} {args.pot_file}",
                   file=sys.stderr)
             return 2
-        if existing != generated:
+        if (entry_keys(polib.pofile(existing))
+                != entry_keys(polib.pofile(generated))):
             sys.stdout.writelines(difflib.unified_diff(
                 existing.splitlines(keepends=True),
                 generated.splitlines(keepends=True),
