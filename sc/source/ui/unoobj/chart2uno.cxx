@@ -1381,7 +1381,10 @@ public:
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
-        if(abs((e.Col()-s.Col())*(e.Row()-s.Row())) < SHRINK_RANGE_THRESHOLD)
+        // tdf#133808 - use cell counts in order to shrink entire columns/rows
+        const sal_Int64 nCells = (static_cast<sal_Int64>(std::abs(e.Col() - s.Col())) + 1)
+                                 * (static_cast<sal_Int64>(std::abs(e.Row() - s.Row())) + 1);
+        if (nCells < SHRINK_RANGE_THRESHOLD)
             return;
 
         SCCOL nMinCol = mpDoc->MaxCol(), nMaxCol = 0;
