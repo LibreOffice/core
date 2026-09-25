@@ -52,6 +52,8 @@
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpagv.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svddrgmt.hxx>
@@ -3861,6 +3863,50 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionResize)
     CPPUNIT_ASSERT_EQUAL(aOrig2.TopLeft(), aNew2.TopLeft());
     CPPUNIT_ASSERT_EQUAL(aOrig2.Left() + 2 * (aOrig2.Right() - aOrig2.Left()), aNew2.Right());
     CPPUNIT_ASSERT_EQUAL(aOrig2.Top() + 2 * (aOrig2.Bottom() - aOrig2.Top()), aNew2.Bottom());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRotateHandleOfAPolygonIsNotOneOfItsPoints)
+{
+    // A polygon has points that the user can select, and its rotate handle is not one of them.
+    // Counting it as a point selects the first point of the polygon and shows the wrong mouse
+    // pointer.
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    rtl::Reference<SdrRectObj> pRectangle
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(0, 3000, 2000, 4000));
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(5000, 3000));
+    aTriangle.append(basegfx::B2DPoint(7000, 3000));
+    aTriangle.append(basegfx::B2DPoint(6000, 5000));
+    aTriangle.setClosed(true);
+    rtl::Reference<SdrPathObj> pPolygon
+        = new SdrPathObj(pView->getSdrModelFromSdrView(), SdrObjKind::Polygon,
+                         basegfx::B2DPolyPolygon(aTriangle));
+    pPage->NbcInsertObject(pRectangle.get());
+    pPage->NbcInsertObject(pPolygon.get());
+
+    // Two selected objects give each of them its own rotate handle.
+    pView->MarkObj(pRectangle.get(), pView->GetSdrPageView());
+    pView->MarkObj(pPolygon.get(), pView->GetSdrPageView());
+    CPPUNIT_ASSERT(!pView->IsFrameDragSingles());
+
+    SdrHdl* pRotateHandle = nullptr;
+    const SdrHdlList& rHdlList = pView->GetHdlList();
+    for (size_t i = 0; i < rHdlList.GetHdlCount(); ++i)
+    {
+        SdrHdl* pHdl = rHdlList.GetHdl(i);
+        if (pHdl->GetKind() == SdrHdlKind::Rotate && pHdl->GetObj() == pPolygon.get())
+            pRotateHandle = pHdl;
+    }
+    CPPUNIT_ASSERT_MESSAGE("the polygon has no rotate handle", pRotateHandle);
+
+    CPPUNIT_ASSERT(!pView->IsPointMarkable(*pRotateHandle));
+    CPPUNIT_ASSERT(!pView->MarkPoint(*pRotateHandle));
+    CPPUNIT_ASSERT(!pView->HasMarkedPoints());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMultiSelectionRotate)

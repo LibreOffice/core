@@ -84,7 +84,9 @@ bool SdrMarkView::HasMarkedPoints() const
 
 bool SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
 {
-    return !ImpIsFrameHandles() && !rHdl.IsPlusHdl() && rHdl.GetKind()!=SdrHdlKind::Glue && rHdl.GetKind()!=SdrHdlKind::SmartTag && rHdl.GetObj()!=nullptr && rHdl.GetObj()->IsPolyObj();
+    // The rotate handle belongs to the whole object and stands outside it, so it is none of the
+    // object's points.
+    return !ImpIsFrameHandles() && !rHdl.IsPlusHdl() && rHdl.GetKind()!=SdrHdlKind::Glue && rHdl.GetKind()!=SdrHdlKind::SmartTag && rHdl.GetKind()!=SdrHdlKind::Rotate && rHdl.GetObj()!=nullptr && rHdl.GetObj()->IsPolyObj();
 }
 
 bool SdrMarkView::MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
