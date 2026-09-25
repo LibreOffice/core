@@ -348,6 +348,52 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesParagraphSpacing)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0 * fSpacingY, double(nSpace), 2.0);
 }
 
+namespace
+{
+// Fits four lines of exact 1.5cm line spacing into a box too small for them and returns the
+// height of the fitted text in 1/100 mm.
+tools::Long fitExactLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLegacyFitting)
+{
+    pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
+                                                      bLegacyFitting);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTextObject = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+
+    // The text does not fit, so the line spacing scale has been taken down.
+    CPPUNIT_ASSERT_LESS(1.0, rEditEngine.getScalingParameters().fSpacingY);
+    tools::Long nHeight = rEditEngine.GetTextHeight();
+    pView->SdrEndTextEdit();
+    return nHeight;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testExactLineSpacingKeepsHeight)
+{
+    // Fitting the text leaves an exact line spacing at the height it was given.
+    createSdImpressDoc("TextFittingExactLineSpacing.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), fitExactLineSpacing(pXImpressDocument, false));
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesExactLineSpacing)
+{
+    // With the legacy fitting an exact line spacing is reduced along with a proportional one.
+    createSdImpressDoc("TextFittingExactLineSpacing.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4800), fitExactLineSpacing(pXImpressDocument, true));
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
 {
     // The first slide stores a fit of 55 percent font with 20 percent less line spacing, though

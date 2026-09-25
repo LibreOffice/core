@@ -828,6 +828,14 @@ private:
         return scaleYLineSpacingValue(nYValue);
     }
 
+    double scaleYExactLineSpacingValue(sal_uInt16 nYValue) const
+    {
+        if (meTextFitting != EETextFitting::Legacy)
+            return nYValue;
+
+        return scaleYLineSpacingValue(nYValue);
+    }
+
     double scaleXFontValue(tools::Long nXValue) const
     {
         if (!maStatus.DoStretch() || (maScalingParameters.fFontX == 1.0))

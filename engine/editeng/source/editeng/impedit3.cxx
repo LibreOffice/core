@@ -1568,7 +1568,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Fix )
             {
-                double fFixHeight = scaleYLineSpacingValue(rLSItem.GetLineHeight());
+                double fFixHeight = scaleYExactLineSpacingValue(rLSItem.GetLineHeight());
                 sal_uInt16 nFixHeight = basegfx::fround(fFixHeight);
 
                 sal_uInt16 nTxtHeight = pLine->GetHeight();
