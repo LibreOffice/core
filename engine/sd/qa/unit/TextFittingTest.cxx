@@ -546,6 +546,37 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetSpacingScale(), 1E-4);
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitBackAfterUndo)
+{
+    // Undoing an edit brings the text back with the fit stored in the file, and redoing it brings
+    // back the fit made afresh after the edit.
+    createSdImpressDoc("pptx/TextFittingStored.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pBody = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(1));
+    CPPUNIT_ASSERT(pBody);
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pBody);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(0, 0));
+    rEditView.InsertText(u"x"_ustr);
+    pView->SdrEndTextEdit();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetSpacingScale(), 1E-4);
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.55, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, pBody->GetSpacingScale(), 1E-4);
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetSpacingScale(), 1E-4);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

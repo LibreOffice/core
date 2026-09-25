@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <editeng/outlobj.hxx>
@@ -440,6 +441,9 @@ class SVXCORE_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
     bool                        m_bNewTextAvailable;
     bool                        m_bEmptyPresObj;
     sal_Int32                   mnText;
+    // The font and spacing scales of a fit to size stored with the object, 0 when none is stored.
+    std::pair<double, double>   m_aOldFitScales;
+    std::pair<double, double>   m_aNewFitScales;
 
 public:
     SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );

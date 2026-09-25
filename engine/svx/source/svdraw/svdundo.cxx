@@ -21,6 +21,8 @@
 
 #include <svx/svdundo.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
@@ -49,6 +51,22 @@
 #include <svx/svditer.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/dispatchcommand.hxx>
+
+static std::pair<double, double> ImplGetFitScales(const SdrObject& rObj)
+{
+    const SdrTextFitToSizeTypeItem& rItem = rObj.GetMergedItem(SDRATTR_TEXT_FITTOSIZE);
+    return { rItem.getFontScale(), rItem.getSpacingScale() };
+}
+
+static void ImplSetFitScales(SdrObject& rObj, const std::pair<double, double>& rScales)
+{
+    if (ImplGetFitScales(rObj) == rScales)
+        return;
+    SdrTextFitToSizeTypeItem aItem(rObj.GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
+    aItem.setFontScale(rScales.first);
+    aItem.setSpacingScale(rScales.second);
+    rObj.SetMergedItem(aItem);
+}
 
 // iterates over all views and unmarks this SdrObject if it is marked
 static void ImplUnmarkObject( SdrObject* pObj )
@@ -1098,6 +1116,7 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
         m_pOldText = *pText->GetOutlinerParaObject();
 
     m_bEmptyPresObj = rNewObj.IsEmptyPresObj();
+    m_aOldFitScales = ImplGetFitScales(rNewObj);
 }
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
@@ -1120,6 +1139,7 @@ void SdrUndoObjSetText::AfterSetText()
         SdrText* pText = static_cast< SdrTextObj*>( mxObj.get() )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
             m_pNewText = *pText->GetOutlinerParaObject();
+        m_aNewFitScales = ImplGetFitScales(*mxObj);
         m_bNewTextAvailable=true;
     }
 }
@@ -1150,6 +1170,7 @@ void SdrUndoObjSetText::Undo()
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
         pTarget->NbcSetOutlinerParaObjectForText(m_pOldText, pText);
     }
+    ImplSetFitScales(*pTarget, m_aOldFitScales);
 
     pTarget->SetEmptyPresObj(m_bEmptyPresObj);
     pTarget->ActionChanged();
@@ -1183,6 +1204,7 @@ void SdrUndoObjSetText::Redo()
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
         pTarget->NbcSetOutlinerParaObjectForText( m_pNewText, pText );
     }
+    ImplSetFitScales(*pTarget, m_aNewFitScales);
 
     pTarget->ActionChanged();
 
