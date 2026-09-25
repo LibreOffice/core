@@ -144,6 +144,7 @@ protected:
     std::unique_ptr<weld::MetricSpinButton> mxMTRAngle;
     std::unique_ptr<weld::ComboBox> mxGradientStyle;
     std::unique_ptr<weld::Button> mxBmpImport;
+    std::unique_ptr<weld::Container> mxTransparencyBox;
     std::unique_ptr<AreaTransparencyGradientPopup> mxTrGrPopup;
 
     std::unique_ptr< XFillStyleItem >               mpStyleItem;

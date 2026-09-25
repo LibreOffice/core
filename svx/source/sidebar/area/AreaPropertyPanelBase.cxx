@@ -90,6 +90,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mxMTRAngle(m_xBuilder->weld_metric_spin_button(u"gradangle"_ustr, FieldUnit::DEGREE)),
       mxGradientStyle(m_xBuilder->weld_combo_box(u"gradientstyle"_ustr)),
       mxBmpImport(m_xBuilder->weld_button(u"bmpimport"_ustr)),
+      mxTransparencyBox(m_xBuilder->weld_container(u"box1"_ustr)),
       maImgAxial(BMP_AXIAL),
       maImgElli(BMP_ELLI),
       maImgQuad(BMP_QUAD),
@@ -410,8 +411,7 @@ void AreaPropertyPanelBase::ShowTransparency(const bool bDoShow)
 {
     mxLBTransType->set_visible(bDoShow);
     mxTrspTextFT->set_visible(bDoShow);
-    mxMTRTransparent->set_visible(bDoShow);
-    mxSldTransparent->set_visible(bDoShow);
+    mxTransparencyBox->set_visible(bDoShow);
 }
 
 void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
