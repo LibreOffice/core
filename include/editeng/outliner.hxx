@@ -48,7 +48,6 @@ class Outliner;
 class EditView;
 class EditUndo;
 class EditUndoManager;
-class ParagraphList;
 class OutlinerParaObject;
 class SvStream;
 class SvxSearchItem;
@@ -456,7 +455,6 @@ private:
 
     std::unique_ptr<EditEngine> pEditEngine;
 
-    std::unique_ptr<ParagraphList>   pParaList;
     ViewList            aViewList;
 
     sal_Int32           mnFirstSelPage;
@@ -486,7 +484,6 @@ private:
     Link<EENotify&,void> aOutlinerNotifyHdl;
     NotifyList          aNotifyCache;
 
-    DECL_DLLPRIVATE_LINK(    ParaVisibleStateChangedHdl, sal_Int32, void );
     DECL_DLLPRIVATE_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
     DECL_DLLPRIVATE_LINK(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
     DECL_DLLPRIVATE_LINK(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
@@ -598,6 +595,8 @@ public:
     bool            HasChildren( sal_Int32 nParagraphPos ) const;
     sal_Int32       GetChildCount( sal_Int32 nParentParaPos ) const;
     bool            IsExpanded( sal_Int32 nParagraphPos ) const;
+    bool            HasHiddenChildren( sal_Int32 nPara ) const;
+    bool            HasVisibleChildren( sal_Int32 nPara ) const;
     sal_Int32       GetParent( sal_Int32 nParagraphPos ) const;
 
     sal_Int16       GetDepth( sal_Int32 nPara ) const;

@@ -29,7 +29,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <editeng/outliner.hxx>
-#include <paralist.hxx>
 #include <editeng/editstat.hxx>
 
 
@@ -224,17 +223,49 @@ void Outliner::SetMinColumnWrapHeight(tools::Long nVal)
 
 bool Outliner::IsExpanded( sal_Int32 nPara ) const
 {
-    return ParagraphList::HasVisibleChildren( nPara, *pEditEngine );
+    return HasVisibleChildren( nPara );
 }
 
 sal_Int32 Outliner::GetParent( sal_Int32 nPara ) const
 {
-    return ParagraphList::GetParent( nPara, *pEditEngine );
+    sal_Int32 nParaPrev = nPara-1;
+    while ( nParaPrev >= 0 && ( pEditEngine->GetNumberingDepth(nParaPrev) >= pEditEngine->GetNumberingDepth(nPara) ) )
+    {
+        --nParaPrev;
+    }
+
+    return nParaPrev;
 }
 
-sal_Int32 Outliner::GetChildCount( sal_Int32 nParent ) const
+bool Outliner::HasHiddenChildren( sal_Int32 nPara ) const
 {
-    return ParagraphList::GetChildCount( nParent, *pEditEngine );
+    sal_Int32 nParaNext = nPara+1;
+    if (nParaNext >= pEditEngine->GetParagraphCount())
+        return false;
+    return ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) )
+        && !pEditEngine->IsBulletVisible(nParaNext);
+}
+
+bool Outliner::HasVisibleChildren( sal_Int32 nPara ) const
+{
+    sal_Int32 nParaNext = nPara+1;
+    if (nParaNext >= pEditEngine->GetParagraphCount())
+        return false;
+    return ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) )
+        && pEditEngine->IsBulletVisible(nParaNext);
+}
+
+sal_Int32 Outliner::GetChildCount( sal_Int32 nPara ) const
+{
+    sal_Int32 nChildCount = 0;
+    sal_Int32 nParaNext = nPara+1;
+    while ( nParaNext < pEditEngine->GetParagraphCount()
+            && ( pEditEngine->GetNumberingDepth(nParaNext) > pEditEngine->GetNumberingDepth(nPara) ) )
+    {
+        nChildCount++;
+        ++nParaNext;
+    }
+    return nChildCount;
 }
 
 Size Outliner::CalcTextSize()

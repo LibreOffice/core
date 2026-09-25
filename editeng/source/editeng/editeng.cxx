@@ -66,7 +66,6 @@
 #include <editeng/frmdiritem.hxx>
 #endif
 
-#include <paralist.hxx>
 #include <outlundo.hxx>
 
 using namespace ::com::sun::star;

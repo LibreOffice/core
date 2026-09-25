@@ -31,7 +31,6 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/outliner.hxx>
-#include <paralist.hxx>
 #include <outlundo.hxx>
 #include <editeng/bulletinfo.hxx>
 #include <editeng/outlobj.hxx>
@@ -204,8 +203,8 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                         if( !bSelection &&
                                 aSel.end.nIndex == rOwner.pEditEngine->GetTextLen( aSel.end.nPara ) )
                         {
-                            sal_Int32 nChildren = ParagraphList::GetChildCount(aSel.end.nPara, rOwner.GetEditEngine());
-                            if( nChildren && !ParagraphList::HasVisibleChildren(aSel.end.nPara, rOwner.GetEditEngine()))
+                            sal_Int32 nChildren = rOwner.GetChildCount(aSel.end.nPara);
+                            if( nChildren && !rOwner.HasVisibleChildren(aSel.end.nPara))
                             {
                                 rOwner.UndoActionStart( OLUNDO_INSERT );
                                 sal_Int32 nTemp = aSel.end.nPara;
@@ -324,12 +323,12 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     sal_Int32 nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseTarget::Bullet )
     {
-        bool bHasChildren = ParagraphList::HasChildren(nPara, rOwner.GetEditEngine());
+        bool bHasChildren = rOwner.HasChildren(nPara);
         if( rMEvt.GetClicks() == 1 )
         {
             sal_Int32 nEndPara = nPara;
-            if ( bHasChildren && ParagraphList::HasVisibleChildren(nPara, rOwner.GetEditEngine()) )
-                nEndPara += ParagraphList::GetChildCount( nPara, rOwner.GetEditEngine() );
+            if ( bHasChildren && rOwner.HasVisibleChildren(nPara) )
+                nEndPara += rOwner.GetChildCount( nPara );
             // The selection is inverted, so that EditEngine does not scroll
             ESelection aSel(nEndPara, EE_TEXTPOS_MAX, nPara, 0);
             pEditView->SetSelection( aSel );
@@ -345,7 +344,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     {
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.start.nPara;
-        if( ParagraphList::HasChildren(nPara, rOwner.GetEditEngine())
+        if( rOwner.HasChildren(nPara)
             && rOwner.GetEditEngine().HasParaFlag(nPara, ParaFlag::ISPAGE) )
         {
             ImpToggleExpand( nPara );
@@ -378,7 +377,7 @@ void OutlinerView::ReleaseMouse()
 void OutlinerView::ImpToggleExpand( sal_Int32 nPara )
 {
     pEditView->SetSelection(ESelection(nPara, 0));
-    ImplExpandOrCollaps( nPara, nPara, !ParagraphList::HasVisibleChildren( nPara, rOwner.GetEditEngine() ) );
+    ImplExpandOrCollaps( nPara, nPara, !rOwner.HasVisibleChildren( nPara ) );
     pEditView->ShowCursor();
 }
 
@@ -446,8 +445,8 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren ) 
     // Record the  invisible Children of the last Parents in the selection
     if ( bIncludeHiddenChildren )
     {
-        if ( ParagraphList::HasHiddenChildren( aParas.nEndPara, rOwner.GetEditEngine() ) )
-            aParas.nEndPara = aParas.nEndPara + ParagraphList::GetChildCount( aParas.nEndPara, rOwner.GetEditEngine() );
+        if ( rOwner.HasHiddenChildren( aParas.nEndPara ) )
+            aParas.nEndPara = aParas.nEndPara + rOwner.GetChildCount( aParas.nEndPara );
     }
     return aParas;
 }
@@ -538,9 +537,9 @@ void OutlinerView::Indent( short nDiff )
                 {
                     // Predecessor is collapsed and is on the same level
                     // => find next visible paragraph and expand it
-                    nPrevPara = ParagraphList::GetParent( nPrevPara, rOwner.GetEditEngine() );
+                    nPrevPara = rOwner.GetParent( nPrevPara );
                     while( !rOwner.GetEditEngine().IsBulletVisible(nPrevPara) )
-                        nPrevPara = ParagraphList::GetParent( nPrevPara, rOwner.GetEditEngine() );
+                        nPrevPara = rOwner.GetParent( nPrevPara );
 
                     rOwner.Expand( nPrevPara );
                     rOwner.InvalidateBullet(nPrevPara);
@@ -1019,7 +1018,7 @@ void OutlinerView::ApplyBulletsNumbering(
     const bool bCheckCurrentNumRuleBeforeApplyingNewNumRule,
     const bool bAtSelection )
 {
-    if (!rOwner.pEditEngine || !rOwner.pParaList)
+    if (!rOwner.pEditEngine)
         return;
 
     rOwner.UndoActionStart(OLUNDO_DEPTH);
