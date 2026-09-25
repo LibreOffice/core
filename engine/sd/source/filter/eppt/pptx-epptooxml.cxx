@@ -1017,6 +1017,8 @@ bool PowerPointExport::exportDocument()
 
     WriteVBA();
 
+    exportChartEmbeddings();
+
     WriteModifyVerifier();
 
     WriteSections();
