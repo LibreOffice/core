@@ -1441,6 +1441,11 @@ void EditEngine::setLineSpacingBelowBaseline(bool bBelow)
     getImpl().setLineSpacingBelowBaseline(bBelow);
 }
 
+bool EditEngine::isLineSpacingBelowBaseline() const
+{
+    return getImpl().isLineSpacingBelowBaseline();
+}
+
 void EditEngine::setTextFitting(EETextFitting eFitting)
 {
     getImpl().setTextFitting(eFitting);

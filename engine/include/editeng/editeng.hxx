@@ -426,6 +426,7 @@ public:
 
     SAL_DLLPRIVATE void setRoundFontSizeToPt(bool bRound);
     SAL_DLLPRIVATE void setLineSpacingBelowBaseline(bool bBelow);
+    SAL_DLLPRIVATE bool isLineSpacingBelowBaseline() const;
     SAL_DLLPRIVATE void setTextFitting(EETextFitting eFitting);
 
     void            SetItemPool( SfxItemPool* pPool );

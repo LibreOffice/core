@@ -1519,7 +1519,11 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
                             + aInfos.nFirstLineTextHeight / 2
                             - aBulletSize.Height() / 2 );
             // may prefer to print out on the baseline ...
-            if( ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
+            // A bullet character sits on the baseline of the first line, as in the reference
+            // program, unless the extra line height is kept below the baseline.
+            const bool bCharOnBaseline = pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL
+                                         && !pEditEngine->isLineSpacingBelowBaseline();
+            if( ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL || bCharOnBaseline ) )
             {
                 vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
                 if ( aBulletFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )

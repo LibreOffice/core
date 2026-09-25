@@ -677,6 +677,28 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
     assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", 3605.0, 3.0);
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBulletOnTextBaseline)
+{
+    // Three bulleted paragraphs with double line spacing. Each bullet sits on the baseline of the
+    // text it belongs to.
+    createSdImpressDoc("pptx/TextFittingBulletBaseline.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    const int nTextArrays = countXPathNodes(pXmlDoc, "//textarray");
+    int nBullets = 0;
+    for (int i = 1; i < nTextArrays; ++i)
+    {
+        const OString sPath = "(//textarray)[" + OString::number(i) + "]";
+        if (getXPathContent(pXmlDoc, sPath + "/text") != u"\u2022")
+            continue;
+        ++nBullets;
+        const OString sTextPath = "(//textarray)[" + OString::number(i + 1) + "]";
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(getXPath(pXmlDoc, sTextPath, "y").toDouble(),
+                                     getXPath(pXmlDoc, sPath, "y").toDouble(), 5.0);
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nBullets);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

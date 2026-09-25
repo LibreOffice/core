@@ -866,6 +866,7 @@ private:
 
     void setRoundToNearestPt(bool bRound) { mbRoundToNearestPt = bRound; }
     void setLineSpacingBelowBaseline(bool bBelow) { mbLineSpacingBelowBaseline = bBelow; }
+    bool isLineSpacingBelowBaseline() const { return mbLineSpacingBelowBaseline; }
     void setTextFitting(EETextFitting eFitting) { meTextFitting = eFitting; }
     double roundToNearestPt(double fInput) const;
 
