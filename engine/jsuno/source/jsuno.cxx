@@ -57,6 +57,7 @@
 #include <comphelper/json.hxx>
 #include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cool.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -72,6 +73,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <sfx2/kit/helper.hxx>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <vcl/kit.hxx>
@@ -3032,6 +3034,10 @@ public:
         {
             ~ReentryPopper() { vcl::kit::popExpectedReentry(); }
         } popper;
+        // Other sessions' input handled during the spin switches to their views, so switch back to
+        // the view that was current when the call was made:
+        comphelper::ScopeGuard restoreView(
+            [view = KitHelper::getCurrentView()] { KitHelper::setView(view); });
         OUString jsonResult;
         for (;;)
         {

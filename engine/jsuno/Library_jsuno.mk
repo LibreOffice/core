@@ -16,6 +16,7 @@ $(eval $(call gb_Library_add_exception_objects,jsuno, \
 ))
 
 $(eval $(call gb_Library_use_externals,jsuno, \
+    boost_headers \
     qjs \
 ))
 
@@ -24,6 +25,7 @@ $(eval $(call gb_Library_use_libraries,jsuno, \
     cppu \
     cppuhelper \
     sal \
+    sfx \
     tl \
     vcl \
 ))

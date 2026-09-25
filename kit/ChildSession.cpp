@@ -4642,6 +4642,8 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     auto const source = full.substr(lineEnd + 1, sourceEnd - lineEnd - 1);
     std::string const script(full.substr(sourceEnd + 1));
 
+    getLOKitDocument()->setView(_viewId);
+
     // Capturing `this` is safe even though the proxy callback can fire long after
     // executeScript has returned, since the callback runs only while the proxy stays
     // attached and ChildSession outlives that:
