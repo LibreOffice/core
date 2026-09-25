@@ -114,6 +114,8 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  u"IsSkipEmptyPages"_ustr, false );
         aCfgItem.ReadBool(  u"ExportFormFields"_ustr, false );
         aCfgItem.ReadInt32( u"FormsType"_ustr, 0 );
+        // tdf#160001 - restore AllowDuplicateFieldNames from the last user settings
+        aCfgItem.ReadBool(  u"AllowDuplicateFieldNames"_ustr, false );
         aCfgItem.ReadBool(  u"HideViewerToolbar"_ustr, false );
         aCfgItem.ReadBool(  u"HideViewerMenubar"_ustr, false );
         aCfgItem.ReadBool(  u"HideViewerWindowControls"_ustr, false );
