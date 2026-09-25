@@ -19,7 +19,8 @@ enum class SdrCompatibilityFlag
     ConnectorUseSnapRect, ///< for tdf#149756
     IgnoreBreakAfterMultilineField, ///< for tdf#148966
     UseTrailingEmptyLinesInLayout, ///< for tdf#168010
-    LAST = UseTrailingEmptyLinesInLayout /// add new items above
+    TextFittingLegacy, ///< for tdf#163590 true == the older shrink-on-overflow fitting
+    LAST = TextFittingLegacy /// add new items above
 };
 
 /// The name a SdrCompatibilityFlag is stored under in the settings of a document

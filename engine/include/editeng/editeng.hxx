@@ -425,6 +425,7 @@ public:
     const ScalingParameters & getScalingParameters() const;
 
     SAL_DLLPRIVATE void setRoundFontSizeToPt(bool bRound);
+    SAL_DLLPRIVATE void setTextFitting(EETextFitting eFitting);
 
     void            SetItemPool( SfxItemPool* pPool );
     SfxItemPool*    GetItemPool() const;

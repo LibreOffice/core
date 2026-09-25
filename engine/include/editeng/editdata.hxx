@@ -37,6 +37,9 @@ enum class EESelectionMode  { Std, Hidden };
     // EESelectionMode::Hidden can be used to completely hide the selection. This is useful e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
 enum class EESpellState  { Ok, NoSpeller, ErrorFound };
+// How text is shrunk to fit. Legacy is the fitting that documents in our own format keep.
+// Body is the fitting for any other text.
+enum class EETextFitting { Legacy, Body };
 enum class EEAnchorMode {
             TopLeft,     TopHCenter,     TopRight,
             VCenterLeft, VCenterHCenter, VCenterRight,

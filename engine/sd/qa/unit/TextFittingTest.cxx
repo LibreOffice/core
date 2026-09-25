@@ -13,10 +13,12 @@
 #include <svx/svdview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svddef.hxx>
 #include <Outliner.hxx>
 #include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
 #include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
@@ -201,6 +203,33 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTestBulletDifferenceViewAndEdit)
     }
     pView->SdrEndTextEdit();
     CPPUNIT_ASSERT_EQUAL(false, pView->IsTextEdit());
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testNewDocumentHasNoLegacyTextFitting)
+{
+    // A new document fits text the new way, and still does once saved in our own format and
+    // loaded again.
+    createSdImpressDoc();
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    CPPUNIT_ASSERT(
+        !pXImpressDocument->GetDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
+
+    saveAndReload(TestFilter::ODP);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    CPPUNIT_ASSERT(
+        !pXImpressDocument->GetDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testOwnFormatKeepsLegacyTextFitting)
+{
+    // A document in our own format saved before the flag existed keeps the older fitting.
+    createSdImpressDoc("TextFittingBulletEditVsView.odp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    CPPUNIT_ASSERT(
+        pXImpressDocument->GetDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
 }
 
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)

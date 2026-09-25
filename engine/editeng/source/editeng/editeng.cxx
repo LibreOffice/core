@@ -1436,6 +1436,11 @@ void EditEngine::setRoundFontSizeToPt(bool bRound)
     getImpl().setRoundToNearestPt(bRound);
 }
 
+void EditEngine::setTextFitting(EETextFitting eFitting)
+{
+    getImpl().setTextFitting(eFitting);
+}
+
 bool EditEngine::ShouldCreateBigTextObject() const
 {
     sal_Int32 nTextPortions = 0;

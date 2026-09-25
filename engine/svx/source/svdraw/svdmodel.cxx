@@ -106,6 +106,7 @@ struct SdrModelImpl
             false, // tdf#149756 ConnectorUseSnapRect
             false, // tdf#148966 IgnoreBreakAfterMultilineField
             false, // tdf#168010 UseTrailingEmptyLinesInLayout
+            false, // tdf#163590 TextFittingLegacy
           }
         , mpTheme(new model::Theme(u"Office"_ustr))
     {}
@@ -1794,6 +1795,7 @@ std::span<const SdrCompatibilityFlagName> SdrModel::GetCompatibilityFlagNames()
           SdrCompatibilityFlag::IgnoreBreakAfterMultilineField },
         { u"UseTrailingEmptyLinesInLayout"_ustr,
           SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout },
+        { u"TextFittingLegacy"_ustr, SdrCompatibilityFlag::TextFittingLegacy },
     };
     static_assert(std::size(aNames) == size_t(SdrCompatibilityFlag::LAST) + 1);
     return aNames;

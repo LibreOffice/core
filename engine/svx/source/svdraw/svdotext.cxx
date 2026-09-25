@@ -24,6 +24,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -1228,6 +1229,10 @@ void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner) const
 void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner, const Size& rTextBoxSize) const
 {
     rOutliner.setRoundFontSizeToPt(true); // We need to round the font size nearest integer pt size
+    if (getSdrModelFromSdrObject().GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy))
+        rOutliner.setTextFitting(EETextFitting::Legacy);
+    else
+        rOutliner.setTextFitting(EETextFitting::Body);
     rOutliner.SetMaxAutoPaperSize(rTextBoxSize);
     rOutliner.SetPaperSize(rTextBoxSize);
 

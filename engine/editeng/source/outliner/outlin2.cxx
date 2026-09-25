@@ -486,6 +486,11 @@ void Outliner::setRoundFontSizeToPt(bool bRound) const
     pEditEngine->setRoundFontSizeToPt(bRound);
 }
 
+void Outliner::setTextFitting(EETextFitting eFitting) const
+{
+    pEditEngine->setTextFitting(eFitting);
+}
+
 void Outliner::EraseVirtualDevice()
 {
     pEditEngine->EraseVirtualDevice();

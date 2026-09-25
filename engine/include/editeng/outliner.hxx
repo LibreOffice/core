@@ -892,6 +892,7 @@ public:
     }
 
     void setRoundFontSizeToPt(bool bRound) const;
+    void setTextFitting(EETextFitting eFitting) const;
 
     void            EraseVirtualDevice();
 

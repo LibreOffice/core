@@ -594,6 +594,7 @@ private:
     ScalingParameters maCustomScalingParameters;
     ScalingParameters maScalingParameters;
     bool mbRoundToNearestPt;
+    EETextFitting meTextFitting;
 
     CharCompressType mnAsianCompressionMode;
 
@@ -836,6 +837,7 @@ private:
     }
 
     void setRoundToNearestPt(bool bRound) { mbRoundToNearestPt = bRound; }
+    void setTextFitting(EETextFitting eFitting) { meTextFitting = eFitting; }
     double roundToNearestPt(double fInput) const;
 
     ContentNode*        GetPrevVisNode( ContentNode const * pCurNode );
