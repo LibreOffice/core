@@ -21,10 +21,7 @@ pdfium_patches += charcodetoglyphindex.patch.1
 pdfium_patches += getfontdictobjnum.patch.1
 
 pdfium_patches += system-fast_float.diff
-# https://pdfium-review.googlesource.com/c/pdfium/+/154490
-pdfium_patches += system-icu.patch.1
-# https://pdfium-review.googlesource.com/c/pdfium/+/154690
-pdfium_patches += fix-windows-build.patch.1
+pdfium_patches += system-dragonbox.diff
 
 ifeq ($(OS),WNT)
 pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
@@ -32,10 +29,6 @@ endif
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
-# https://pdfium-review.googlesource.com/c/pdfium/+/154910
-pdfium_patches += extractpatterns-stroke.patch.1
-# https://pdfium-review.googlesource.com/c/pdfium/+/157490
-pdfium_patches += extractpatterns-fill.patch.1
 pdfium_patches += container-stream-concepts.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
@@ -55,7 +48,8 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigUnsignedInABase.cc third_party/bigint/BigUnsignedInABase.cpp && \
     mv core/fxcrt/debug/alias.cc core/fxcrt/debug/alias.cpp && \
     mv core/fxcrt/win/win_util.cc core/fxcrt/win/win_util.cpp && \
-    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp \
+    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
+    mv third_party/abseil-cpp/absl/base/throw_delegate.cc third_party/abseil-cpp/absl/base/throw_delegate.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:
