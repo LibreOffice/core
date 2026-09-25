@@ -121,7 +121,11 @@ static bool NonFieldWordDelim( const sal_Unicode c )
 
 static bool IsWordDelim( const sal_Unicode c )
 {
-    return c == 0x1 || NonFieldWordDelim(c);
+    // tdf#154463 - 0x01 ... 0x08 are the characters put into the text to
+    // anchor a text attribute or to delimit a fieldmark: CH_TXTATR_BREAKWORD,
+    // CH_TXT_ATR_FIELDSEP, CH_TXT_ATR_INPUTFIELDSTART/END, CH_TXT_ATR_FORMELEMENT
+    // and CH_TXT_ATR_FIELDSTART/END (see sw/inc/hintids.hxx).
+    return (0x01 <= c && c <= 0x08) || NonFieldWordDelim(c);
 }
 
 
