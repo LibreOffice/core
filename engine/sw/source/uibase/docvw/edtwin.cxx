@@ -4874,7 +4874,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SdrObject* pObj = pSdrView ? pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER) : nullptr;
             if (pObj)
             {
-                if (SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
+                if (SwContact* pContact = GetUserCall(pObj))
                 {
                     SwFrameFormat* pFormat = pContact->GetFormat();
                     SwFrameFormat* pShapeFormat
