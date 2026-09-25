@@ -84,6 +84,8 @@ enum eServiceType
     SERVICE_NAME_NET_DIAGRAM,
     SERVICE_NAME_FILLED_NET_DIAGRAM,
     SERVICE_NAME_PIE_DIAGRAM,
+    SERVICE_NAME_BAR_OF_PIE_DIAGRAM,
+    SERVICE_NAME_PIE_OF_PIE_DIAGRAM,
     SERVICE_NAME_STOCK_DIAGRAM,
     SERVICE_NAME_XY_DIAGRAM,
     SERVICE_NAME_BUBBLE_DIAGRAM,
@@ -114,6 +116,8 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         {"com.sun.star.chart.NetDiagram",                     SERVICE_NAME_NET_DIAGRAM},
         {"com.sun.star.chart.FilledNetDiagram",               SERVICE_NAME_FILLED_NET_DIAGRAM},
         {"com.sun.star.chart.PieDiagram",                     SERVICE_NAME_PIE_DIAGRAM},
+        {"com.sun.star.chart.BarOfPieDiagram",                SERVICE_NAME_BAR_OF_PIE_DIAGRAM},
+        {"com.sun.star.chart.PieOfPieDiagram",                SERVICE_NAME_PIE_OF_PIE_DIAGRAM},
         {"com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM},
         {"com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM},
         {"com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM},
@@ -1204,6 +1208,22 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 {
                     xTemplate =
                         xChartTypeManager->createTemplate(u"com.sun.star.chart2.template.Pie"_ustr);
+                    bCreateDiagram = true;
+                }
+                break;
+            case SERVICE_NAME_BAR_OF_PIE_DIAGRAM:
+                if (xChartTypeManager.is())
+                {
+                    xTemplate = xChartTypeManager->createTemplate(
+                        u"com.sun.star.chart2.template.BarOfPie"_ustr);
+                    bCreateDiagram = true;
+                }
+                break;
+            case SERVICE_NAME_PIE_OF_PIE_DIAGRAM:
+                if (xChartTypeManager.is())
+                {
+                    xTemplate = xChartTypeManager->createTemplate(
+                        u"com.sun.star.chart2.template.PieOfPie"_ustr);
                     bCreateDiagram = true;
                 }
                 break;

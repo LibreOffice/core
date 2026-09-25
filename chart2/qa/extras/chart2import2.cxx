@@ -14,6 +14,9 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagram.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
@@ -2036,6 +2039,66 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, TestParetoDefaultColor)
     CPPUNIT_ASSERT(aAny >>= nFillColor);
     const sal_uInt32 nCorrectColor = 0xED7D31u;
     CPPUNIT_ASSERT_EQUAL(nCorrectColor, nFillColor);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf164516BarOfPieDiagram)
+{
+    loadFromFile(u"ods/chart.ods");
+
+    uno::Reference<lang::XComponent> xChartComp = getChartCompFromSheet(0, 0);
+    uno::Reference<chart::XChartDocument> xChartDoc(xChartComp, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xChartDoc, uno::UNO_QUERY_THROW);
+
+    // tdf#164516 - switch the chart type to bar-of-pie using the chart API
+    uno::Reference<chart::XDiagram> xDiagram(
+        xFactory->createInstance(u"com.sun.star.chart.BarOfPieDiagram"_ustr), uno::UNO_QUERY);
+    xChartDoc->setDiagram(xDiagram);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: com.sun.star.chart.BarOfPieDiagram
+    // - Actual  : com.sun.star.chart.BarDiagram
+    // i.e. the service name was unknown and the chart stays a bar chart
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart.BarOfPieDiagram"_ustr,
+                         xChartDoc->getDiagram()->getDiagramType());
+
+    uno::Reference<chart2::XChartDocument> xChart2Doc(xChartComp, uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChart2Doc, 0);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.PieChartType"_ustr, xChartType->getChartType());
+
+    uno::Reference<beans::XPropertySet> xPropSet(xChartType, uno::UNO_QUERY_THROW);
+    chart2::PieChartSubType eSubType;
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue(u"SubPieType"_ustr) >>= eSubType);
+    CPPUNIT_ASSERT_EQUAL(chart2::PieChartSubType_BAR, eSubType);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf164516PieOfPieDiagram)
+{
+    loadFromFile(u"ods/chart.ods");
+
+    uno::Reference<lang::XComponent> xChartComp = getChartCompFromSheet(0, 0);
+    uno::Reference<chart::XChartDocument> xChartDoc(xChartComp, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xChartDoc, uno::UNO_QUERY_THROW);
+
+    // tdf#164516 - switch the chart type to pie-of-pie using the chart API
+    uno::Reference<chart::XDiagram> xDiagram(
+        xFactory->createInstance(u"com.sun.star.chart.PieOfPieDiagram"_ustr), uno::UNO_QUERY);
+    xChartDoc->setDiagram(xDiagram);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: com.sun.star.chart.PieOfPieDiagram
+    // - Actual  : com.sun.star.chart.BarDiagram
+    // i.e. the service name was unknown and the chart stays a bar chart
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart.PieOfPieDiagram"_ustr,
+                         xChartDoc->getDiagram()->getDiagramType());
+
+    uno::Reference<chart2::XChartDocument> xChart2Doc(xChartComp, uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChart2Doc, 0);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.PieChartType"_ustr, xChartType->getChartType());
+
+    uno::Reference<beans::XPropertySet> xPropSet(xChartType, uno::UNO_QUERY_THROW);
+    chart2::PieChartSubType eSubType;
+    CPPUNIT_ASSERT(xPropSet->getPropertyValue(u"SubPieType"_ustr) >>= eSubType);
+    CPPUNIT_ASSERT_EQUAL(chart2::PieChartSubType_PIE, eSubType);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
