@@ -1,10 +1,10 @@
 --- nss/coreconf/WINNT.mk	2025-03-24 14:11:13.771104127 +0100
 +++ nss/coreconf/WINNT.mk	2025-03-24 14:11:13.771104127 +0100
-@@ -15,6 +15,3 @@
- # Win NT needs -GT so that fibers can work
+@@ -8,6 +8,3 @@
  #
- OS_CFLAGS += -GT
+ 
+ include $(CORE_DEPTH)/coreconf/WIN32.mk
 -
--# WINNT uses the lib prefix, Win95 doesn't
--NSPR31_LIB_PREFIX = lib
+-# NSPR's WIN95 target prefixes its import libraries only for GCC, like ours.
+-NSPR31_LIB_PREFIX = $(IMPORT_LIB_PREFIX)
 
