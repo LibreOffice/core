@@ -18,7 +18,7 @@ diff -ru pdfium.orig/core/fxge/cfx_face.cpp pdfium/core/fxge/cfx_face.cpp
  int FTPosToCBoxInt(FT_Pos pos) {
    // Boundary values to avoid integer overflow when multiplied by 1000.
    static constexpr FT_Pos kMinCBox = -2147483;
-@@ -1289,11 +1289,6 @@
+@@ -1209,11 +1209,6 @@
      int err = LoadGlyph(glyph_index, /*scale=*/false);
      if (err == 0) {
        rect = GetGlyphBBox(glyph_index);
@@ -27,6 +27,6 @@ diff -ru pdfium.orig/core/fxge/cfx_face.cpp pdfium/core/fxge/cfx_face.cpp
 -      } else {
 -        rect.top = std::numeric_limits<int>::max();
 -      }
- #if defined(PDF_ENABLE_SKIA_TYPEFACE_CHECKS)
- #if defined(PDF_ENABLE_FONTATIONS)
-       if (skrifa_font_ && skrifa_font_->font->is_ok()) {
+     }
+   }
+   return rect;

@@ -1,22 +1,22 @@
---- core/fpdfapi/page/cpdf_sampledfunc.cpp	2023-12-15 23:27:10.955659091 +0100
-+++ core/fpdfapi/page/cpdf_sampledfunc.cpp	2023-12-15 23:27:43.420136476 +0100
-@@ -17,8 +17,11 @@
- #include "core/fxcrt/compiler_specific.h"
+diff -urN before/core/fpdfapi/page/cpdf_sampledfunc.cpp after/core/fpdfapi/page/cpdf_sampledfunc.cpp
+--- core/fpdfapi/page/cpdf_sampledfunc.cpp	2026-09-24 15:11:27.153556875 +0000
++++ core/fpdfapi/page/cpdf_sampledfunc.cpp	2026-09-24 15:11:41.206965278 +0000
+@@ -18,7 +18,11 @@
+ #include "core/fxcrt/fx_ceil_div.h"
  #include "core/fxcrt/fx_memory_wrappers.h"
  #include "core/fxcrt/fx_safe_types.h"
 +#ifdef USE_SYSTEM_ABSEIL
 +#include <absl/container/inlined_vector.h>
 +#else
  #include "third_party/abseil-cpp/absl/container/inlined_vector.h"
--
 +#endif
+ 
  namespace {
  
- // See PDF Reference 1.7, page 170, table 3.36.
-diff -urN pdfium-old/core/fpdfdoc/cpdf_nametree.cpp pdfium/core/fpdfdoc/cpdf_nametree.cpp
---- core/fpdfdoc/cpdf_nametree.cpp	2025-10-13 21:48:18.759905514 +0200
-+++ core/fpdfdoc/cpdf_nametree.cpp	2025-10-13 22:00:01.912909396 +0200
-@@ -18,7 +18,11 @@
+diff -urN before/core/fpdfdoc/cpdf_nametree.cpp after/core/fpdfdoc/cpdf_nametree.cpp
+--- core/fpdfdoc/cpdf_nametree.cpp	2026-09-24 15:11:27.137556410 +0000
++++ core/fpdfdoc/cpdf_nametree.cpp	2026-09-24 15:11:41.169964202 +0000
+@@ -19,7 +19,11 @@
  #include "core/fxcrt/check.h"
  #include "core/fxcrt/ptr_util.h"
  #include "core/fxcrt/stl_util.h"
@@ -28,8 +28,9 @@ diff -urN pdfium-old/core/fpdfdoc/cpdf_nametree.cpp pdfium/core/fpdfdoc/cpdf_nam
  
  namespace {
  
---- core/fpdfdoc/cpvt_variabletext.cpp~	2026-08-01 01:50:23.000000000 +0200
-+++ core/fpdfdoc/cpvt_variabletext.cpp	2026-08-26 10:04:23.478434445 +0200
+diff -urN before/core/fpdfdoc/cpvt_variabletext.cpp after/core/fpdfdoc/cpvt_variabletext.cpp
+--- core/fpdfdoc/cpvt_variabletext.cpp	2026-09-24 15:11:27.145556642 +0000
++++ core/fpdfdoc/cpvt_variabletext.cpp	2026-09-24 15:11:41.189964784 +0000
 @@ -21,7 +21,11 @@
  #include "core/fxcrt/fx_safe_types.h"
  #include "core/fxcrt/span.h"
@@ -41,4 +42,19 @@ diff -urN pdfium-old/core/fpdfdoc/cpdf_nametree.cpp pdfium/core/fpdfdoc/cpdf_nam
 +#endif
  
  namespace {
+ 
+diff -urN before/core/fxge/cfx_face.cpp after/core/fxge/cfx_face.cpp
+--- core/fxge/cfx_face.cpp	2026-09-24 15:11:27.161557107 +0000
++++ core/fxge/cfx_face.cpp	2026-09-24 15:11:41.224965801 +0000
+@@ -46,7 +46,11 @@
+ 
+ #if defined(PDF_ENABLE_FONTATIONS)
+ #include "core/fxge/skrifa/src/main.rs.h"
++#ifdef USE_SYSTEM_ABSEIL
++#include <absl/cleanup/cleanup.h>
++#else
+ #include "third_party/abseil-cpp/absl/cleanup/cleanup.h"
++#endif
+ #include "third_party/rust/cxx/v1/cxx.h"
+ #endif
  
