@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-08-03 16:22:37 using:
+ Generated on 2026-09-24 17:32:45 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,9 +32,6 @@
 #include <algorithm>
 #include <array>
 #include <bit>
-#include <cassert>
-#include <cfloat>
-#include <climits>
 #include <cmath>
 #include <cstdlib>
 #include <ctype.h>
@@ -94,7 +91,6 @@
 #include <core/fpdfapi/cmaps/Japan1/cmaps_japan1.h>
 #include <core/fpdfapi/cmaps/Korea1/cmaps_korea1.h>
 #include <core/fpdfapi/cmaps/fpdf_cmaps.h>
-#include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
 #include <core/fpdfapi/edit/cpdf_font_util.h>
 #include <core/fpdfapi/edit/cpdf_fontsubsetter.h>
@@ -245,6 +241,7 @@
 #include <core/fpdfdoc/cpdf_structtree.h>
 #include <core/fpdfdoc/cpdf_viewerpreferences.h>
 #include <core/fpdfdoc/cpvt_fontmap.h>
+#include <core/fpdfdoc/cpvt_line.h>
 #include <core/fpdfdoc/cpvt_section.h>
 #include <core/fpdfdoc/cpvt_variabletext.h>
 #include <core/fpdfdoc/cpvt_word.h>
@@ -263,6 +260,7 @@
 #include <core/fxcodec/gif/cfx_gif.h>
 #include <core/fxcodec/gif/lzw_decompressor.h>
 #include <core/fxcodec/icc/icc_transform.h>
+#include <core/fxcodec/image_predictors.h>
 #include <core/fxcodec/jbig2/jbig2_arith_decoder.h>
 #include <core/fxcodec/jbig2/jbig2_arith_int_decoder.h>
 #include <core/fxcodec/jbig2/jbig2_bit_stream.h>
@@ -284,6 +282,7 @@
 #include <core/fxcodec/jbig2/jbig2_trd_proc.h>
 #include <core/fxcodec/jpeg/jpeg_common.h>
 #include <core/fxcodec/jpeg/jpegmodule.h>
+#include <core/fxcodec/jpeg/libjpeg_scanline_decoder.h>
 #include <core/fxcodec/jpx/cjpx_decoder.h>
 #include <core/fxcodec/jpx/jpx_decode_utils.h>
 #include <core/fxcodec/scanlinedecoder.h>
@@ -335,6 +334,8 @@
 #include <core/fxcrt/fixed_size_data_vector.h>
 #include <core/fxcrt/fx_2d_size.h>
 #include <core/fxcrt/fx_bidi.h>
+#include <core/fxcrt/fx_ceil_div.h>
+#include <core/fxcrt/fx_ceil_log2.h>
 #include <core/fxcrt/fx_codepage.h>
 #include <core/fxcrt/fx_coordinates.h>
 #include <core/fxcrt/fx_extension.h>
@@ -366,6 +367,7 @@
 #include <core/fxcrt/span_io.h>
 #include <core/fxcrt/span_util.h>
 #include <core/fxcrt/stl_util.h>
+#include <core/fxcrt/stream_write_utils.h>
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_template.h>
 #include <core/fxcrt/to_underlying.h>
@@ -490,7 +492,6 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
-#include <third_party/abseil-cpp/absl/cleanup/cleanup.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>

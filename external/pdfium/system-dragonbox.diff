@@ -1,0 +1,15 @@
+diff -urN db_before/core/fxcrt/stream_write_utils.cpp db_after/core/fxcrt/stream_write_utils.cpp
+--- core/fxcrt/stream_write_utils.cpp	2026-09-24 15:17:47.881621130 +0000
++++ core/fxcrt/stream_write_utils.cpp	2026-09-24 15:17:47.911622002 +0000
+@@ -10,7 +10,11 @@
+ #include <ostream>
+ 
+ #include "core/fxcrt/span.h"
++#ifdef USE_SYSTEM_DRAGONBOX
++#include <dragonbox/dragonbox.h>
++#else
+ #include "third_party/dragonbox/src/include/dragonbox/dragonbox.h"
++#endif
+ 
+ namespace {
+ 
