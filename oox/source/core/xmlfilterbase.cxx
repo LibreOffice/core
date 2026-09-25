@@ -21,6 +21,7 @@
 
 #include <cstdio>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -65,6 +66,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
@@ -193,12 +195,20 @@ struct XmlFilterBaseImpl
     RelationsMap                   maRelationsMap;
     const NamespaceMap&            mrNamespaceMap;
     NamedShapePairs* mpDiagramFontHeights = nullptr;
+    /// Package path of each linked chart data file in the GrabBag, and the path it is written to.
+    std::unordered_map<OUString, OUString> maLinkedChartEmbeddings;
+    /// Package paths reserved for parts of this export, in lowercase.
+    std::unordered_set<OUString>   maPartPaths;
 
     /// @throws RuntimeException
     explicit            XmlFilterBaseImpl();
 };
 
 constexpr OUString gaBinSuffix( u".bin"_ustr );
+constexpr OUString gaEmbeddingsName(u"OOXEmbeddings"_ustr);
+constexpr OUString gaContentTypesName(u"OOXContentTypes"_ustr);
+constexpr OUString gaEmbeddingDataName(u"Data"_ustr);
+constexpr OUString gaEmbeddingMediaTypeName(u"MediaType"_ustr);
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
     mrNamespaceMap(StaticNamespaceMap())
@@ -1208,7 +1218,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     if (xInputStream.is())
         aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, getComponentContext());
 
-    aGrabBagProperties[u"OOXContentTypes"_ustr] <<= aContentTypeInfo;
+    aGrabBagProperties[gaContentTypesName] <<= aContentTypeInfo;
 
     Reference<XComponent> xModel = getModel();
     oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(xModel, aGrabBagProperties);
@@ -1255,7 +1265,7 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
         {
             rProp.Value >>= customFragmentTargets;
         }
-        else if (propName == "OOXContentTypes")
+        else if (propName == gaContentTypesName)
         {
             rProp.Value >>= aContentTypes;
         }
@@ -1300,6 +1310,10 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
     {
         addRelation(customFragmentTypes[j], customFragmentTargets[j]);
         const OUString& aFilename = customFragmentTargets[j];
+        // Reserve path of a custom fragment, in case it is an embedded file, so it is
+        // not overwritten by another embedding
+        if (!reservePartPath(aFilename.startsWith("/") ? aFilename.copy(1) : aFilename))
+            SAL_WARN("oox", "exportCustomFragments: the path is taken already: " << aFilename);
         Reference<XOutputStream> xOutStream = openOutputStream(aFilename);
         if (xOutStream.is())
         {
@@ -1312,6 +1326,134 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
                 xProps->setPropertyValue(u"MediaType"_ustr, uno::Any(aContentType));
             }
         }
+    }
+}
+
+static Reference<XPropertySet> lcl_getGrabBagHolder(const Reference<XComponent>& xModel)
+{
+    Reference<XPropertySet> xProperties(xModel, UNO_QUERY);
+    if (xProperties.is()
+        && xProperties->getPropertySetInfo()->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        return xProperties;
+    return Reference<XPropertySet>();
+}
+
+/// Content of OOXEmbeddings list: for each file, named by its package path,
+/// and holding its content as Data and its media type as MediaType.
+static Sequence<PropertyValue> lcl_getEmbeddings(const Reference<XComponent>& xModel)
+{
+    Reference<XPropertySet> xProperties = lcl_getGrabBagHolder(xModel);
+    if (!xProperties.is())
+        return Sequence<PropertyValue>();
+
+    comphelper::SequenceAsHashMap aGrabBag(
+        xProperties->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG));
+    return aGrabBag.getUnpackedValueOrDefault(gaEmbeddingsName, Sequence<PropertyValue>());
+}
+
+/// Returns the content and the media type from OOXEmbeddings.
+static std::pair<StreamDataSequence, OUString> lcl_getEmbeddingContent(const PropertyValue& rEmbedding)
+{
+    comphelper::SequenceAsHashMap aEntry(rEmbedding.Value);
+    return { aEntry.getUnpackedValueOrDefault(gaEmbeddingDataName, StreamDataSequence()),
+             aEntry.getUnpackedValueOrDefault(gaEmbeddingMediaTypeName, OUString()) };
+}
+
+/// Returns the given package path with "_1" added to the end of the file name.
+static OUString lcl_getNextEmbeddingPath(std::u16string_view rPath)
+{
+    const size_t nSlash = rPath.rfind('/');
+    const size_t nNameStart = nSlash == std::u16string_view::npos ? 0 : nSlash + 1;
+    size_t nExtension = rPath.rfind('.');
+    if (nExtension == std::u16string_view::npos || nExtension < nNameStart)
+        nExtension = rPath.size();
+
+    return OUString::Concat(rPath.substr(0, nExtension)) + "_1" + rPath.substr(nExtension);
+}
+
+void XmlFilterBase::importChartEmbedding(const OUString& rFragmentPath)
+{
+    Reference<XPropertySet> xModelProperties = lcl_getGrabBagHolder(getModel());
+    if (!xModelProperties.is())
+        return;
+
+    comphelper::SequenceAsHashMap aGrabBag(
+        xModelProperties->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG));
+    Sequence<PropertyValue> aEmbeddings
+        = aGrabBag.getUnpackedValueOrDefault(gaEmbeddingsName, Sequence<PropertyValue>());
+    if (std::any_of(std::cbegin(aEmbeddings), std::cend(aEmbeddings),
+                    [&rFragmentPath](const PropertyValue& rEmbedding)
+                    { return rEmbedding.Name == rFragmentPath; }))
+        return;
+
+    // Use OOXContentTypes grabbag for content types
+    const OUString aMediaType = comphelper::OFOPXMLHelper::GetContentTypeByName(
+        aGrabBag.getUnpackedValueOrDefault(gaContentTypesName, Sequence<Sequence<StringPair>>()),
+        rFragmentPath);
+    if (aMediaType.isEmpty())
+        return;
+
+    StreamDataSequence aDataSequence;
+    if (!importBinaryData(aDataSequence, rFragmentPath))
+        return;
+
+    aGrabBag[gaEmbeddingsName] <<= comphelper::concatSequences(
+        aEmbeddings,
+        Sequence<PropertyValue>{ comphelper::makePropertyValue(
+            rFragmentPath,
+            Sequence<PropertyValue>{
+                comphelper::makePropertyValue(gaEmbeddingDataName, aDataSequence),
+                comphelper::makePropertyValue(gaEmbeddingMediaTypeName, aMediaType) }) });
+    xModelProperties->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
+                                       Any(aGrabBag.getAsConstPropertyValueList()));
+}
+
+OUString XmlFilterBase::linkChartEmbedding(const OUString& rPath, OUString& rMediaType)
+{
+    if (mxImpl->maLinkedChartEmbeddings.contains(rPath))
+        return OUString();
+
+    for (const PropertyValue& rEmbedding : lcl_getEmbeddings(getModel()))
+    {
+        if (rEmbedding.Name != rPath)
+            continue;
+
+        const auto [aData, aMediaType] = lcl_getEmbeddingContent(rEmbedding);
+        if (!aData.hasElements() || aMediaType.isEmpty())
+            return OUString();
+
+        // Keep adding "_1" to the file name while the path is taken
+        OUString aTargetPath = rPath;
+        while (!reservePartPath(aTargetPath))
+            aTargetPath = lcl_getNextEmbeddingPath(aTargetPath);
+
+        mxImpl->maLinkedChartEmbeddings.emplace(rPath, aTargetPath);
+        rMediaType = aMediaType;
+        return aTargetPath;
+    }
+    return OUString();
+}
+
+bool XmlFilterBase::reservePartPath(const OUString& rPath)
+{
+    return mxImpl->maPartPaths.insert(rPath.toAsciiLowerCase()).second;
+}
+
+void XmlFilterBase::exportChartEmbeddings()
+{
+    for (const PropertyValue& rEmbedding : lcl_getEmbeddings(getModel()))
+    {
+        const auto aLink = mxImpl->maLinkedChartEmbeddings.find(rEmbedding.Name);
+        if (aLink == mxImpl->maLinkedChartEmbeddings.end())
+            continue;
+
+        const auto [aData, aMediaType] = lcl_getEmbeddingContent(rEmbedding);
+        Reference<XOutputStream> xOutStream = openFragmentStream(aLink->second, aMediaType);
+        if (!xOutStream.is())
+            continue;
+
+        xOutStream->writeBytes(aData);
+        xOutStream->closeOutput();
     }
 }
 

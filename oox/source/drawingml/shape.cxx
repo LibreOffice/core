@@ -2943,6 +2943,11 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 rFilter.importFragment( pChartSpaceFragment );
 
+                // The DOCX import keeps the chart data parts in its own way, and a spreadsheet's
+                // chart data is in its sheets.
+                if (pPowerPointImport && !aModel.maSheetPath.isEmpty())
+                    rFilter.importChartEmbedding(aModel.maSheetPath);
+
                 // Import styles file.
                 // Create the styles path from the path to the chart*.xml file
                 sal_Int32 nLastSlash = mxChartShapeInfo->maFragmentPath.lastIndexOf('/');

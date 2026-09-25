@@ -20,6 +20,7 @@
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <tools/color.hxx>
 
@@ -495,6 +496,167 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
    CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
 }
 
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPPTXEmbeddingsGrabBagAndExport)
+{
+    loadFromFile(u"pptx/embedded-chart-data.pptx");
+
+    // Ensure embedded spreadsheet is kept in the grabbag
+    uno::Reference<beans::XPropertySet> xDocumentProperties(mxComponent, uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGrabBag(
+        xDocumentProperties->getPropertyValue(u"InteropGrabBag"_ustr));
+    const uno::Sequence<beans::PropertyValue> aEmbeddings
+        = aGrabBag.getUnpackedValueOrDefault(u"OOXEmbeddings"_ustr,
+                                             uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aEmbeddings.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"ppt/embeddings/Microsoft_Excel-munkalap1.xlsx"_ustr,
+                         aEmbeddings[0].Name);
+
+    comphelper::SequenceAsHashMap aEntry(aEmbeddings[0].Value);
+    CPPUNIT_ASSERT_EQUAL(
+        u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"_ustr,
+        aEntry.getUnpackedValueOrDefault(u"MediaType"_ustr, OUString()));
+    CPPUNIT_ASSERT(
+        aEntry.getUnpackedValueOrDefault(u"Data"_ustr, uno::Sequence<sal_Int8>()).hasElements());
+
+    // Save as PPTX and check exported XMLs
+    save(TestFilter::PPTX);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    xmlDocUniquePtr pXmlDocContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+
+    for (int i = 1; i <= 4; ++i)
+    {
+        const OUString aNum = OUString::number(i);
+        const OUString sXlsxName = u"Microsoft_Excel-munkalap"_ustr + aNum + u".xlsx"_ustr;
+        const OString sXlsxNameOS = sXlsxName.toUtf8();
+
+        CPPUNIT_ASSERT_MESSAGE(sXlsxNameOS.getStr(),
+                               xNameAccess->hasByName(u"ppt/embeddings/"_ustr + sXlsxName));
+
+        assertXPath(pXmlDocContentTypes,
+                    OString("/ContentType:Types/ContentType:Override[@PartName='/ppt/embeddings/"
+                            + sXlsxNameOS + "']")
+                        .getStr(),
+                    "ContentType",
+                    u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart"_ustr + aNum + u".xml"_ustr);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:externalData", 1);
+
+        xmlDocUniquePtr pXmlDocRels
+            = parseExport(u"ppt/charts/_rels/chart"_ustr + aNum + u".xml.rels"_ustr);
+        assertXPath(pXmlDocRels,
+                    OString("/rels:Relationships/rels:Relationship[@Target='../embeddings/"
+                            + sXlsxNameOS + "']")
+                        .getStr(),
+                    "Type",
+                    u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPPTXEmbeddingsRemovalAndExport)
+{
+    loadFromFile(u"pptx/embedded-chart-data.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xDrawPages->getCount());
+    uno::Reference<drawing::XDrawPage> xSlide4(xDrawPages->getByIndex(3), uno::UNO_QUERY_THROW);
+    xDrawPages->remove(xSlide4);
+    uno::Reference<drawing::XDrawPage> xSlide2(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
+    xDrawPages->remove(xSlide2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPages->getCount());
+
+    save(TestFilter::PPTX);
+
+    // Only the spreadsheets of the charts on the original slides 1 and 3 are supposed to be embedded
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    std::vector<OUString> aEmbeddedFiles;
+    for (const OUString& rName : xNameAccess->getElementNames())
+    {
+        if (rName.startsWith("ppt/embeddings/"))
+            aEmbeddedFiles.push_back(rName);
+    }
+    std::sort(aEmbeddedFiles.begin(), aEmbeddedFiles.end());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aEmbeddedFiles.size());
+    CPPUNIT_ASSERT_EQUAL(u"ppt/embeddings/Microsoft_Excel-munkalap1.xlsx"_ustr, aEmbeddedFiles[0]);
+    CPPUNIT_ASSERT_EQUAL(u"ppt/embeddings/Microsoft_Excel-munkalap3.xlsx"_ustr, aEmbeddedFiles[1]);
+
+    xmlDocUniquePtr pXmlDocContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pXmlDocContentTypes,
+                "/ContentType:Types/ContentType:Override"
+                "[starts-with(@PartName, '/ppt/embeddings/')]",
+                2);
+
+    // Each remaining slide links one chart, which links the spreadsheet it came with
+    const std::pair<OUString, OUString> aSlidesAndSpreadsheets[]
+        = { { u"slide1"_ustr, u"Microsoft_Excel-munkalap1.xlsx"_ustr },
+            { u"slide2"_ustr, u"Microsoft_Excel-munkalap3.xlsx"_ustr } };
+    for (const auto& [rSlide, rSpreadsheet] : aSlidesAndSpreadsheets)
+    {
+        xmlDocUniquePtr pXmlDocSlideRels
+            = parseExport("ppt/slides/_rels/" + rSlide + ".xml.rels");
+        const OUString aChartTarget = getXPath(
+            pXmlDocSlideRels,
+            "/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/"
+            "officeDocument/2006/relationships/chart']",
+            "Target");
+        OUString aChartName;
+        CPPUNIT_ASSERT_MESSAGE(aChartTarget.toUtf8().getStr(),
+                               aChartTarget.startsWith("../charts/", &aChartName));
+
+        xmlDocUniquePtr pXmlDocChart = parseExport("ppt/charts/" + aChartName);
+        assertXPath(pXmlDocChart, "/c:chartSpace/c:externalData", 1);
+
+        xmlDocUniquePtr pXmlDocChartRels = parseExport("ppt/charts/_rels/" + aChartName + ".rels");
+        assertXPath(pXmlDocChartRels,
+                    "/rels:Relationships/rels:Relationship"
+                    "[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/"
+                    "package']",
+                    "Target", Concat2View("../embeddings/" + rSpreadsheet));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPPTXEmbeddingsSpreadsheetWithClashingName)
+{
+    // This presentation contains two embedded files, both with the naming pattern oleObjectN.bin,
+    // but one is a spreadsheet. The test must ensure that clashing names get resolve by renaming.
+    // Not sure when such names can occur, the test file was crafted so the embedded spreadsheet
+    // has the 1st index, and an actual OLE object has the 2nd. Since OLE objects are exported
+    // first, it gets the 1st index on export, and without renaming, the embedded spreadsheet would
+    // overwrite it.
+    loadFromFile(u"pptx/embedded-chart-data-bins.pptx");
+    save(TestFilter::PPTX);
+
+    // The embedded spreadsheet gets to reserve the name first, and has the correct content type
+    xmlDocUniquePtr pXmlDocChartRels = parseExport(u"ppt/charts/_rels/chart1.xml.rels"_ustr);
+    assertXPath(pXmlDocChartRels,
+                "/rels:Relationships/rels:Relationship"
+                "[@Target='../embeddings/oleObject1.bin']",
+                "Type",
+                u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+
+    xmlDocUniquePtr pXmlDocContentTypes = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pXmlDocContentTypes,
+                "/ContentType:Types/ContentType:Override"
+                "[@PartName='/ppt/embeddings/oleObject1.bin']",
+                "ContentType",
+                u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    // OLE object is 2nd
+    xmlDocUniquePtr pXmlDocOLERels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    assertXPath(pXmlDocOLERels,
+                "/rels:Relationships/rels:Relationship"
+                "[@Target='../embeddings/oleObject2.bin']",
+                "Type",
+                u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
+}
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf115558_footnote_chart)
 {

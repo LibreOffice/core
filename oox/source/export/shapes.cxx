@@ -3062,9 +3062,15 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         assert(!sRelationType.isEmpty());
         assert(!sSuffix.isEmpty());
 
-        OUString sNumber = OUString::number(mpFB->getNewOLEUniqueId());
-        OUString sFileName = u"embeddings/oleObject"_ustr + sNumber + u"."_ustr + sSuffix;
-        OUString sFilePath = GetComponentDir() + u"/"_ustr + sFileName;
+        // Increment id until path is free, then reserve to avoid clash between embedding names from other sources
+        OUString sFileName;
+        OUString sFilePath;
+        do
+        {
+            OUString sNumber = OUString::number(mpFB->getNewOLEUniqueId());
+            sFileName = u"embeddings/oleObject"_ustr + sNumber + u"."_ustr + sSuffix;
+            sFilePath = GetComponentDir() + u"/"_ustr + sFileName;
+        } while (!mpFB->reservePartPath(sFilePath));
         uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(sFilePath, sMediaType));
         assert(xOutStream.is()); // no reason why that could fail
 

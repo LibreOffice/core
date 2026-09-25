@@ -2073,14 +2073,25 @@ OUString ChartExport::GetExternalDataPath() const
 void ChartExport::exportExternalData(bool bIsChartex)
 {
     if (bIsChartex) return; // TODO!!
-    // Embedded external data is grab bagged for docx file hence adding export part of
-    // external data for docx files only.
-    if(!mbLinkToExternalData || GetDocumentType() != DOCUMENT_DOCX)
+
+    // Only the DOCX and the PPTX export write the data file of a chart back, using GrabBag
+    if (!mbLinkToExternalData
+        || (GetDocumentType() != DOCUMENT_DOCX && GetDocumentType() != DOCUMENT_PPTX))
         return;
 
-    const OUString externalDataPath = GetExternalDataPath();
+    OUString externalDataPath = GetExternalDataPath();
     if(externalDataPath.isEmpty())
         return;
+
+    // The data file must have come with the document, and each data file can only have one link.
+    // The file may be written under another path, when its own path is taken already.
+    OUString aMediaType;
+    if (GetDocumentType() == DOCUMENT_PPTX)
+    {
+        externalDataPath = GetFB()->linkChartEmbedding(externalDataPath, aMediaType);
+        if (externalDataPath.isEmpty())
+            return;
+    }
 
     // Here adding external data entry to relationship.
     OUString relationPath = externalDataPath;
@@ -2095,9 +2106,18 @@ void ChartExport::exportExternalData(bool bIsChartex)
         }
     }
     FSHelperPtr pFS = GetFS();
-    OUString type = oox::getRelationship(Relationship::PACKAGE);
-    if (relationPath.endsWith(".bin"))
+    // A data file is either an OLE object or a spreadsheet package, tell apart based on
+    // media type, or if not know, a .bin file is taken to be an OLE object
+    const bool bIsOleObject
+        = aMediaType.isEmpty()
+              ? relationPath.endsWith(".bin")
+              : aMediaType == u"application/vnd.openxmlformats-officedocument.oleObject"_ustr;
+
+    OUString type;
+    if (bIsOleObject)
         type = oox::getRelationship(Relationship::OLEOBJECT);
+    else
+        type = oox::getRelationship(Relationship::PACKAGE);
 
     OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
                     type,

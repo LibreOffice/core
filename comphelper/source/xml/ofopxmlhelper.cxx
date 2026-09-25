@@ -107,23 +107,25 @@ OUString GetContentTypeByName(
     const uno::Sequence<beans::StringPair>& rDefaults = rContentTypes[0];
     const uno::Sequence<beans::StringPair>& rOverrides = rContentTypes[1];
 
-    // Find the extension and use it to get the type.
-    const sal_Int32 nDotOffset = rFilename.lastIndexOf('.');
-    const OUString aExt = (nDotOffset >= 0 ? rFilename.copy(nDotOffset + 1) : rFilename); // Skip the dot.
+    // An Override names one part, and a Default covers the parts with that extension that have no
+    // Override. Matching part names and extensions is done ignoring case.
+    const OUString aPartName = rFilename.startsWith("/") ? rFilename : "/" + rFilename;
+    const auto itOverride = std::find_if(rOverrides.begin(), rOverrides.end(),
+                                         [&aPartName](const beans::StringPair& rPair)
+                                         { return rPair.First.equalsIgnoreAsciiCase(aPartName); });
+    if (itOverride != rOverrides.end())
+        return itOverride->Second;
 
-    const std::vector<OUString> aNames = { aExt, "/" + rFilename };
-    for (const OUString& aName : aNames)
-    {
-        const auto it1 = std::find_if(rOverrides.begin(), rOverrides.end(), [&aName](const beans::StringPair& rPair)
-                                                                              { return rPair.First == aName; });
-        if (it1 != rOverrides.end())
-            return it1->Second;
-
-        const auto it2 = std::find_if(rDefaults.begin(), rDefaults.end(), [&aName](const beans::StringPair& rPair)
-                                                                            { return rPair.First == aName; });
-        if (it2 != rDefaults.end())
-            return it2->Second;
-    }
+    // The extension is what comes after its last dot
+    const sal_Int32 nDotOffset = aPartName.lastIndexOf('.');
+    if (nDotOffset < aPartName.lastIndexOf('/'))
+        return OUString();
+    const OUString aExtension = aPartName.copy(nDotOffset + 1);
+    const auto itDefault = std::find_if(rDefaults.begin(), rDefaults.end(),
+                                        [&aExtension](const beans::StringPair& rPair)
+                                        { return rPair.First.equalsIgnoreAsciiCase(aExtension); });
+    if (itDefault != rDefaults.end())
+        return itDefault->Second;
 
     return OUString();
 }
