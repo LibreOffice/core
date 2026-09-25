@@ -644,8 +644,6 @@ window.L.Map = window.L.Evented.extend({
 				this._modTimeout = setTimeout(window.L.bind(this.updateModificationIndicator, this, -1), timeout);
 			}
 		}
-		if (this.lastModIndicator !== null && this.lastModIndicator !== undefined)
-			this.lastModIndicator.innerHTML = dateValue;
 		this.setLastModDateValue(dateValue);
 		this._modTimeout = setTimeout(window.L.bind(this.updateModificationIndicator, this, -1), timeout);
 	},
