@@ -88,10 +88,13 @@ void sc::TableContentCopier::performCopy(const ScMarkData* pOnlyMarked, ScCloneF
 }
 
 void sc::TableContentCopier::updateReferencesAfterTabInsertion(
-    sc::RefUpdateInsertTabContext& rContext)
+    sc::RefUpdateInsertTabContext& rContext, SCTAB nPreviousSourceTabNo)
 {
     mpTargetTab->UpdateInsertTabAbs(mnTargetTabNo);
-    mpTargetTab->AdjustRelativeTabRefs(mnSourceTabNo, mnTargetTabNo, sc::TargetTabState::Inserted);
+    // The cloned relative sheet offsets still count from where the source was before the insert.
+    // When the copy goes in at or before the source, that is one less than mnSourceTabNo.
+    mpTargetTab->AdjustRelativeTabRefs(nPreviousSourceTabNo, mnTargetTabNo,
+                                       sc::TargetTabState::Inserted);
     mpSourceTab->UpdateInsertTab(rContext);
     mpSourceTab->UpdateCompile();
 }
