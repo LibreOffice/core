@@ -836,6 +836,17 @@ private:
         return scaleYLineSpacingValue(nYValue);
     }
 
+    double scaleProportionalLineSpacing(double fProportionalScale) const
+    {
+        const double fSpacingY = maScalingParameters.fSpacingY;
+        const double fReduced = fProportionalScale - (1.0 - fSpacingY);
+        // A reduction as large as the spacing itself multiplies instead, so a line keeps some
+        // height.
+        if (meTextFitting == EETextFitting::Legacy || fReduced <= 0.0)
+            return fProportionalScale * fSpacingY;
+        return fReduced;
+    }
+
     double scaleXFontValue(tools::Long nXValue) const
     {
         if (!maStatus.DoStretch() || (maScalingParameters.fFontX == 1.0))

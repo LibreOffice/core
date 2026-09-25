@@ -1584,25 +1584,25 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 sal_uInt16 nPropLineSpace = rLSItem.GetPropLineSpace();
                 double fProportionalScale = double(nPropLineSpace) / 100.0;
                 constexpr const double f80Percent = 8.0 / 10.0;
-                double fSpacingFactor = maScalingParameters.fSpacingY;
+                double fLineSpacing = scaleProportionalLineSpacing(fProportionalScale);
                 if (nPropLineSpace && nPropLineSpace < 100)
                 {
                     // Adapted code from sw/source/core/text/itrform2.cxx
                     sal_uInt16 nAscent = pLine->GetMaxAscent();
-                    sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor * fProportionalScale * f80Percent);
+                    sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fLineSpacing * f80Percent);
                     if (!nAscent || nAscent > nNewAscent)
                     {
                         pLine->SetMaxAscent(nNewAscent);
                         pLine->SetAscentCompressed(true);
                     }
-                    sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fProportionalScale * fSpacingFactor);
+                    sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fLineSpacing);
 
                     pLine->SetHeight(nHeight, pLine->GetTxtHeight());
                 }
                 else if (nPropLineSpace && nPropLineSpace != 100)
                 {
                     sal_uInt16 nTxtHeight = pLine->GetHeight();
-                    sal_Int32 nPropTextHeight = nTxtHeight * fProportionalScale * fSpacingFactor;
+                    sal_Int32 nPropTextHeight = nTxtHeight * fLineSpacing;
                     // The Ascent has to be adjusted for the difference:
                     tools::Long nDiff = pLine->GetHeight() - nPropTextHeight;
                     pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) );

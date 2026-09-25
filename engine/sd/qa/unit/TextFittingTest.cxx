@@ -350,9 +350,15 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesParagraphSpacing)
 
 namespace
 {
+struct FittedText
+{
+    tools::Long nHeight; // 1/100 mm
+    double fFontScale;
+};
+
 // Fits four lines of exact 1.5cm line spacing into a box too small for them and returns the
-// height of the fitted text in 1/100 mm.
-tools::Long fitExactLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLegacyFitting)
+// height of the fitted text and the font scale it took.
+FittedText fitExactLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLegacyFitting)
 {
     pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
                                                       bLegacyFitting);
@@ -368,9 +374,9 @@ tools::Long fitExactLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLeg
 
     // The text does not fit, so the line spacing scale has been taken down.
     CPPUNIT_ASSERT_LESS(1.0, rEditEngine.getScalingParameters().fSpacingY);
-    tools::Long nHeight = rEditEngine.GetTextHeight();
+    FittedText aFitted{ rEditEngine.GetTextHeight(), rEditEngine.getScalingParameters().fFontY };
     pView->SdrEndTextEdit();
-    return nHeight;
+    return aFitted;
 }
 }
 
@@ -381,7 +387,10 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testExactLineSpacingKeepsHeight)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), fitExactLineSpacing(pXImpressDocument, false));
+    FittedText aFitted = fitExactLineSpacing(pXImpressDocument, false);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aFitted.nHeight);
+    // No font scale makes the lines shorter, so the font ends at the smallest scale.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.25, aFitted.fFontScale, 1E-4);
 }
 
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesExactLineSpacing)
@@ -391,7 +400,68 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesExactLineSpacing)
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4800), fitExactLineSpacing(pXImpressDocument, true));
+    FittedText aFitted = fitExactLineSpacing(pXImpressDocument, true);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4800), aFitted.nHeight);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, aFitted.fFontScale, 1E-4);
+}
+
+namespace
+{
+// Shrinks the box around four lines of 150 percent line spacing to 97 percent of their height,
+// fits the text, and returns the fitted height as a fraction of the height before fitting.
+double fitProportionalLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLegacyFitting)
+{
+    pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
+                                                      bLegacyFitting);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTextObject = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    tools::Long nNaturalHeight
+        = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine().GetTextHeight();
+    pView->SdrEndTextEdit();
+
+    tools::Rectangle aRect = pTextObject->GetLogicRect();
+    aRect.SetSize(Size(aRect.GetWidth(), nNaturalHeight * 97 / 100
+                                             + pTextObject->GetTextUpperDistance()
+                                             + pTextObject->GetTextLowerDistance()));
+    pTextObject->SetLogicRect(aRect);
+
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+    // The first reduction of the line spacing is enough, with the font left alone.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
+    double fRatio = double(rEditEngine.GetTextHeight()) / nNaturalHeight;
+    pView->SdrEndTextEdit();
+    return fRatio;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLineSpacingReductionIsSubtracted)
+{
+    // A 10 percent reduction takes 150 percent line spacing to 140 percent.
+    createSdImpressDoc("pptx/TextFittingProportionalLineSpacing.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(140.0 / 150.0, fitProportionalLineSpacing(pXImpressDocument, false),
+                                 0.005);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingMultipliesLineSpacingReduction)
+{
+    // With the legacy fitting a 10 percent reduction takes 150 percent line spacing to 135.
+    createSdImpressDoc("pptx/TextFittingProportionalLineSpacing.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, fitProportionalLineSpacing(pXImpressDocument, true), 0.005);
 }
 
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
