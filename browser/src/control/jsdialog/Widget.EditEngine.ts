@@ -211,6 +211,12 @@ function editEngineOnKeyDown(
 	// keyCode 229 is what browsers report while an input method owns the keystroke.
 	if (event.isComposing || event.keyCode === 229) return;
 
+	// Let the browser handle clipboard shortcuts for the contenteditable element.
+	if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey) {
+		const key = event.key.toLowerCase();
+		if (key === 'x' || key === 'c' || key === 'v') return;
+	}
+
 	event.preventDefault();
 
 	const keyCode = editEngineToUNOKeyCode(event, container.builder);

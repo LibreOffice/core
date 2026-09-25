@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 
@@ -108,6 +108,45 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
 			'have.length',
 			2
+		);
+	});
+
+	it('Ctrl+V works while the notes panel has focus', function () {
+		// Given an open notes panel with its editengine widget focused:
+		openNotesPane();
+		cy.cGet('#notespanel-container .ui-editengine').click();
+
+		// When simulating Ctrl+V on the focused widget and then a paste event
+		// carrying external text:
+		cy.getFrameWindow().then(function (win) {
+			const editable = win.document.querySelector(
+				'#notespanel-container .ui-editengine'
+			);
+			editable.focus();
+			const keyEvent = new win.KeyboardEvent('keydown', {
+				key: 'v', code: 'KeyV', ctrlKey: true,
+				bubbles: true, cancelable: true
+			});
+			editable.dispatchEvent(keyEvent);
+
+			// Then the content is pasted to the notes pane:
+			// Without the accompanying fix in place, this test would have failed with:
+			// assert expected false to equal **true**
+			// i.e. the paste went to the main document content.
+			expect(win.L.Map.THIS._clip._isAnyInputFieldSelected()).to.equal(true);
+			expect(keyEvent.defaultPrevented).to.equal(false);
+			// Cypress does not produce a native paste event from a synthetic
+			// Ctrl+V keydown, so call it directly.
+			const dt = new win.DataTransfer();
+			dt.setData('text/plain', 'external text');
+			const pasteEvent = new win.ClipboardEvent('paste', {
+				clipboardData: dt, bubbles: true, cancelable: true
+			});
+			editable.dispatchEvent(pasteEvent);
+		});
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'contain.text',
+			'external text'
 		);
 	});
 });

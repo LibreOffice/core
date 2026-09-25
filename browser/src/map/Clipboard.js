@@ -675,6 +675,11 @@ window.L.Clipboard = window.L.Class.extend({
 		if (cool.Comment.isAnyFocus())
 		    return true;
 
+		// Editeng JSDialog widgets, e.g. the Impress notes bottom panel.
+		const activeElement = document.activeElement;
+		if (activeElement && activeElement.closest('.ui-editengine'))
+			return true;
+
 		if (forCopy) {
 			let selection = window.getSelection();
 			selection = selection && selection.toString();
