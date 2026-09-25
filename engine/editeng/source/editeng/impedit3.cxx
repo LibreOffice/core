@@ -299,7 +299,26 @@ tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRep
 
 namespace
 {
-constexpr std::array<ScalingParameters, 12> constScaleLevels =
+// Font and line spacing scales for fitting text, in the order the reference program tries them.
+constexpr std::array<ScalingParameters, 14> constScaleLevels =
+{
+    ScalingParameters{ 1.000,  1.000,  1.0,  0.9 },
+    ScalingParameters{ 0.925,  0.925,  1.0,  1.0 },
+    ScalingParameters{ 0.925,  0.925,  1.0,  0.9 },
+    ScalingParameters{ 0.925,  0.925,  1.0,  0.8 },
+    ScalingParameters{ 0.850,  0.850,  1.0,  0.9 },
+    ScalingParameters{ 0.850,  0.850,  1.0,  0.8 },
+    ScalingParameters{ 0.775,  0.775,  1.0,  0.8 },
+    ScalingParameters{ 0.700,  0.700,  1.0,  0.8 },
+    ScalingParameters{ 0.625,  0.625,  1.0,  0.8 },
+    ScalingParameters{ 0.550,  0.550,  1.0,  0.8 },
+    ScalingParameters{ 0.475,  0.475,  1.0,  0.8 },
+    ScalingParameters{ 0.400,  0.400,  1.0,  0.8 },
+    ScalingParameters{ 0.325,  0.325,  1.0,  0.8 },
+    ScalingParameters{ 0.250,  0.250,  1.0,  0.8 },
+};
+
+constexpr std::array<ScalingParameters, 12> constLegacyScaleLevels =
 {
     ScalingParameters{ 1.000,  1.000,  1.0,  0.9 },
     ScalingParameters{ 0.925,  0.925,  1.0,  0.9 },
@@ -333,7 +352,9 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
                      > (maMaxAutoPaperSize.Height() * mnColumns);
 
     std::span<const ScalingParameters> aScaleLevels = constScaleLevels;
-    if (meTextFitting == EETextFitting::Title)
+    if (meTextFitting == EETextFitting::Legacy)
+        aScaleLevels = constLegacyScaleLevels;
+    else if (meTextFitting == EETextFitting::Title)
         aScaleLevels = constTitleScaleLevels;
     size_t nCurrentScaleLevel = 0;
     while (bOverflow && nCurrentScaleLevel < aScaleLevels.size())

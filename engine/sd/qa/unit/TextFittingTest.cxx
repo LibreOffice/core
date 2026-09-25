@@ -486,6 +486,35 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testSpaceBelowLastLineLeftOutOfFit)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, pBody->GetSpacingScale(), 1E-4);
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testFitsLikeReference)
+{
+    // Each slide holds the same text in a box of a different height, and the reference program
+    // chose these font and line spacing scales for them. Six short lines come first, then three
+    // paragraphs that each wrap to two lines at full size and fit on one line at 92.5 percent.
+    createSdImpressDoc("pptx/TextFittingLikeReference.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    static constexpr std::pair<double, double> aExpected[] = {
+        { 1.0, 1.0 },   { 1.0, 0.9 },   { 1.0, 0.9 },   { 1.0, 0.9 },   { 1.0, 0.9 },
+        { 0.925, 1.0 }, { 0.925, 0.9 }, { 0.925, 0.9 }, { 0.925, 0.9 }, { 0.925, 0.8 },
+        { 0.85, 0.9 },  { 0.85, 0.8 },  { 0.85, 0.8 },  { 1.0, 0.9 },   { 0.925, 1.0 },
+        { 0.925, 1.0 }, { 0.925, 0.9 },
+    };
+    CPPUNIT_ASSERT_EQUAL(std::size(aExpected), size_t(pDoc->GetSdPageCount(PageKind::Standard)));
+    for (size_t i = 0; i < std::size(aExpected); ++i)
+    {
+        auto pBody = DynCastSdrTextObj(pDoc->GetSdPage(i, PageKind::Standard)->GetObj(1));
+        CPPUNIT_ASSERT(pBody);
+        OString sSlide = "slide " + OString::number(i + 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sSlide.getStr(), aExpected[i].first,
+                                             pBody->GetFontScale(), 1E-4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sSlide.getStr(), aExpected[i].second,
+                                             pBody->GetSpacingScale(), 1E-4);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
 {
     // The first slide stores a fit of 55 percent font with 20 percent less line spacing, though
