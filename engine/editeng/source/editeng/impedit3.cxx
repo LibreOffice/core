@@ -90,6 +90,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <span>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -314,6 +315,12 @@ constexpr std::array<ScalingParameters, 12> constScaleLevels =
     ScalingParameters{ 0.250,  0.250,  1.0,  0.8 },
 };
 
+// A title gets one step, as in the reference program.
+constexpr std::array<ScalingParameters, 1> constTitleScaleLevels =
+{
+    ScalingParameters{ 0.900,  0.900,  1.0,  1.0 },
+};
+
 } // end anonymous ns
 
 void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRepaintParagraphList)
@@ -324,8 +331,11 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
     tools::Long nHeight = FormatParagraphs(aRepaintParagraphList, true);
     bool bOverflow = nHeight > (maMaxAutoPaperSize.Height() * mnColumns);
 
+    std::span<const ScalingParameters> aScaleLevels = constScaleLevels;
+    if (meTextFitting == EETextFitting::Title)
+        aScaleLevels = constTitleScaleLevels;
     size_t nCurrentScaleLevel = 0;
-    while (bOverflow && nCurrentScaleLevel < constScaleLevels.size())
+    while (bOverflow && nCurrentScaleLevel < aScaleLevels.size())
     {
         // Clean-up and reset paragraphs
         aRepaintParagraphList.clear();
@@ -337,7 +347,7 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
         }
 
         // Get new scaling parameters
-        maScalingParameters = constScaleLevels[nCurrentScaleLevel];
+        maScalingParameters = aScaleLevels[nCurrentScaleLevel];
 
         // Try again with different scaling factor
         nHeight = FormatParagraphs(aRepaintParagraphList, true);

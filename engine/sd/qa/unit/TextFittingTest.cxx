@@ -232,6 +232,72 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testOwnFormatKeepsLegacyTextFitting)
         pXImpressDocument->GetDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy));
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testTitleKeepsLineSpacing)
+{
+    createSdImpressDoc("TextFittingTitle.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
+                                                      false);
+    SdPage* pPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+
+    // Both shapes hold the same text in the same space, so both have to be made smaller.
+    auto pTitle = DynCastSdrTextObj(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTitle);
+    auto pOutline = DynCastSdrTextObj(pPage->GetObj(1));
+    CPPUNIT_ASSERT(pOutline);
+
+    // The title is fitted by making the font smaller and nothing else.
+    CPPUNIT_ASSERT_LESS(1.0, pTitle->GetFontScale());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pTitle->GetSpacingScale(), 1E-4);
+
+    // Any other shape has its line spacing taken down as well.
+    CPPUNIT_ASSERT_LESS(1.0, pOutline->GetFontScale());
+    CPPUNIT_ASSERT_LESS(1.0, pOutline->GetSpacingScale());
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesTitleLineSpacing)
+{
+    // With the legacy fitting a title is fitted by taking its line spacing down as well as its
+    // font size.
+    createSdImpressDoc("TextFittingTitle.fodp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->GetDoc()->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
+                                                      true);
+    SdPage* pPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+    auto pTitle = DynCastSdrTextObj(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTitle);
+
+    CPPUNIT_ASSERT_LESS(1.0, pTitle->GetFontScale());
+    CPPUNIT_ASSERT_LESS(1.0, pTitle->GetSpacingScale());
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testTitleFitsLikeReference)
+{
+    // Titles holding the same text in boxes from just large enough down to less than half the
+    // height it needs. The reference program takes each overflowing title to 90 percent, leaves
+    // its line spacing alone, and goes no further even where the text still overflows.
+    createSdImpressDoc("pptx/TextFittingTitleLikeReference.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const sal_uInt16 nPages = pDoc->GetSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(17), nPages);
+    for (sal_uInt16 i = 0; i < nPages; ++i)
+    {
+        auto pTitle = DynCastSdrTextObj(pDoc->GetSdPage(i, PageKind::Standard)->GetObj(0));
+        CPPUNIT_ASSERT(pTitle);
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::TitleText, pTitle->GetTextKind());
+        OString sSlide = "slide " + OString::number(i + 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sSlide.getStr(), i == 0 ? 1.0 : 0.9,
+                                             pTitle->GetFontScale(), 1E-4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sSlide.getStr(), 1.0, pTitle->GetSpacingScale(),
+                                             1E-4);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)
 {
     // The first slide stores a fit of 55 percent font with 20 percent less line spacing, though

@@ -1231,6 +1231,8 @@ void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner, const Size& rTextBoxSi
     rOutliner.setRoundFontSizeToPt(true); // We need to round the font size nearest integer pt size
     if (getSdrModelFromSdrObject().GetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy))
         rOutliner.setTextFitting(EETextFitting::Legacy);
+    else if (GetTextKind() == SdrObjKind::TitleText)
+        rOutliner.setTextFitting(EETextFitting::Title);
     else
         rOutliner.setTextFitting(EETextFitting::Body);
     rOutliner.SetMaxAutoPaperSize(rTextBoxSize);

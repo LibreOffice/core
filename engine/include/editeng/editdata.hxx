@@ -38,8 +38,8 @@ enum class EESelectionMode  { Std, Hidden };
     // only as long as your window (which the edit view works on) has the focus
 enum class EESpellState  { Ok, NoSpeller, ErrorFound };
 // How text is shrunk to fit. Legacy is the fitting that documents in our own format keep.
-// Body is the fitting for any other text.
-enum class EETextFitting { Legacy, Body };
+// Body is the fitting for any other text, and Title for the text of a title placeholder.
+enum class EETextFitting { Legacy, Body, Title };
 enum class EEAnchorMode {
             TopLeft,     TopHCenter,     TopRight,
             VCenterLeft, VCenterHCenter, VCenterRight,
