@@ -283,8 +283,9 @@ class AboutDialog {
 		copyVersion.setAttribute('data-cooltip', copyVersionText);
 		var img = window.L.DomUtil.create('img', null, null);
 		app.LOUtil.setImage(img, 'lc_copy.svg', this.map);
-		copyVersion.innerHTML =
-			'<img src="' + sanitizeUrl(img.src) + '" width="18px" height="18px">';
+		img.width = 18;
+		img.height = 18;
+		copyVersion.appendChild(img);
 		copyVersion.addEventListener(
 			'click',
 			this.copyVersionInfoToClipboard.bind(this),
