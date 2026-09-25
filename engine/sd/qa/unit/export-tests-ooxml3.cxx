@@ -296,6 +296,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testFontScale)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(85000), sScale.toInt32(), 1000);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testFontScaleAndSpacingReductionExact)
+{
+    // Slide 10 fits at 92.5 percent font with 20 percent less line spacing, and both are written
+    // as those exact values.
+    createSdImpressDoc("pptx/TextFittingLikeReference.pptx");
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide10.xml"_ustr);
+
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr/a:normAutofit",
+                "fontScale", u"92500");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr/a:normAutofit",
+                "lnSpcReduction", u"20000");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testShapeAutofitPPTX)
 {
     createSdImpressDoc("pptx/testShapeAutofit.pptx");

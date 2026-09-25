@@ -4586,8 +4586,9 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
                 SdrTextObj* pTextObject = DynCastSdrTextObj(pTextShape->GetSdrObject());
                 if (pTextObject)
                 {
-                    nFontScale = sal_Int32(pTextObject->GetFontScale() * 100000.0);
-                    nSpacingReduction = sal_Int32((1.0 - pTextObject->GetSpacingScale()) * 100000.0);
+                    nFontScale = basegfx::fround(pTextObject->GetFontScale() * 100000.0);
+                    nSpacingReduction
+                        = basegfx::fround((1.0 - pTextObject->GetSpacingScale()) * 100000.0);
                 }
             }
 
