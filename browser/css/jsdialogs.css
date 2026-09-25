@@ -3197,6 +3197,55 @@ button.has-img img {
 	opacity: 0.5;
 }
 
+/* progressdots: one dot per step, and the dot of the current step stretches
+   into a pill in the colour of the document type. The colours are declared on
+   the widget root, because --doc-type is declared on the body and a var() in a
+   custom property is resolved where that property is declared. */
+.ui-progressdots {
+	--progressdots-current: rgb(var(--doc-type, 3, 105, 163));
+	--progressdots-idle: var(--color-text-light);
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-s);
+}
+
+/* The dark theme reads --color-text-light as white, which would make the idle
+   dots brighter than the current one. */
+[data-theme='dark'] .ui-progressdots {
+	--progressdots-idle: var(--color-border-darker);
+}
+
+.ui-progressdots-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: var(--border-radius-pill);
+	background-color: var(--progressdots-idle);
+}
+
+.ui-progressdots-dot.ui-progressdots-current {
+	width: 16px;
+	background-color: var(--progressdots-current);
+	animation: ui-progressdots-grow 0.2s ease-out;
+}
+
+/* The dots are built again for every change, so the current dot grows from
+   the size of the others when it is shown. */
+@keyframes ui-progressdots-grow {
+	from {
+		width: 6px;
+	}
+
+	to {
+		width: 16px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ui-progressdots-dot.ui-progressdots-current {
+		animation: none;
+	}
+}
+
 /* busy popup */
 
 #busypopup.jsdialog-container {

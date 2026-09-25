@@ -165,4 +165,13 @@
 		background-color: CanvasText !important;
 	}
 
+	.ui-progressdots-dot {
+		forced-color-adjust: none;
+		background-color: CanvasText;
+	}
+
+	.ui-progressdots-dot.ui-progressdots-current {
+		background-color: Highlight;
+	}
+
 }

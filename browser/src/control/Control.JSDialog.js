@@ -837,14 +837,21 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 			if (parent) {
 				calculated = true;
-				instance.posx = parent.getBoundingClientRect().left;
-				instance.posy = parent.getBoundingClientRect().bottom;
+				const parentRect = parent.getBoundingClientRect();
+				instance.posx = parentRect.left;
+				instance.posy = parentRect.bottom;
 
 				if (instance.popupAnchor && instance.popupAnchor.indexOf('top') >= 0)
-					instance.posy = parent.getBoundingClientRect().top;
+					instance.posy = parentRect.top;
 
 				else if (instance.popupAnchor && instance.popupAnchor.indexOf('bottom') >= 0)
 					instance.posy -= instance.content.clientHeight;
+
+				// 'above' puts the whole popup, title bar included, over the parent,
+				// its bottom edge on the top edge of the parent, and no higher than
+				// the top of the window.
+				else if (instance.popupAnchor && instance.popupAnchor.indexOf('above') >= 0)
+					instance.posy = Math.max(0, parentRect.top - instance.container.offsetHeight);
 
 				var anchor = parent;
 				if (parent.classList.contains('ui-combobox-whole-width-preview')) {
@@ -852,13 +859,27 @@ window.L.Control.JSDialog = window.L.Control.extend({
 					if (field)
 						anchor = field;
 				}
-				instance.container.style.minWidth = anchor.getBoundingClientRect().width + 'px';
+				// A popup is at least as wide as the element it opens from, unless it asks
+				// for the width of its content.
+				if (!instance.fitContent)
+					instance.container.style.minWidth = anchor.getBoundingClientRect().width + 'px';
 
 				if (isRTL)
 					instance.posx = ownerWindow.innerWidth - instance.posx;
 
+				// 'end' puts the popup beside the parent on its inline-end side. A submenu
+				// moves 15 px back over its parent menu so the two read as one.
 				if (instance.popupAnchor && instance.popupAnchor.indexOf('end') >= 0)
-					instance.posx += (isRTL ? 0 : 1) * (parent.clientWidth) - 15;
+					instance.posx += (isRTL ? 0 : 1) * (parent.clientWidth) - (instance.isSubmenu ? 15 : 0);
+
+				// 'start' puts the popup beside the parent on its inline-start
+				// side, so the two do not overlap. posx is the inline-start margin:
+				// from the left edge of the window in a left-to-right page, where
+				// it moves back by the width of the whole popup, and from the right
+				// edge in a right-to-left page, where it moves back by the parent
+				// and popup widths. The popup stays inside the window.
+				if (instance.popupAnchor && instance.popupAnchor.indexOf('start') >= 0)
+					instance.posx = Math.max(0, instance.posx - instance.container.offsetWidth - (isRTL ? parent.clientWidth : 0));
 
 				if (instance.content.clientWidth > ownerWindow.innerWidth)
 					instance.container.style.maxWidth = (ownerWindow.innerWidth - instance.posx - 20) + 'px';

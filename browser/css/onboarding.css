@@ -1,0 +1,327 @@
+/* -*- js-indent-level: 8 -*- */
+/*
+ * Copyright the Collabora Online contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+/* The onboarding tour. Its card is a JSDialog modal popup with the id
+   modal-dialog-onboarding-tour, and the element of the current step carries
+   the onboarding-highlight class. */
+
+/* The card. The window, the form, the title bar, the content and the
+   buttons are the ones every JSDialog popup has, and the rules below give
+   them the look of the tour.
+
+   The window is placed against the element of the step. It is a transparent
+   box whose padding is the gap between the highlight ring and the card, and
+   the form inside it is the card. A centred card stays centred, because the
+   padding is the same on every side. The tour points at elements as wide as
+   the window, so the card has a width of its own. */
+#modal-dialog-onboarding-tour {
+	--onboarding-card-gap: 20px;
+	--onboarding-card-width: 320px;
+	box-sizing: border-box;
+	width: calc(var(--onboarding-card-width) + 2 * var(--onboarding-card-gap));
+	max-width: calc(100vw - 32px);
+	padding: var(--onboarding-card-gap);
+	overflow: visible;
+	background: transparent;
+	/* !important because .jsdialog-window.modalpopup:not(.snackbar) sets the
+	   border of every modal popup with !important. */
+	border: none !important;
+	border-radius: 0;
+	box-shadow: none;
+	font-family: var(--cool-font);
+	color: var(--color-main-text);
+}
+
+/* !important on the background because the
+   .lokdialog_container.ui-dialog.ui-widget-content.jsdialog-container rule
+   paints every dialog form with !important. */
+/* Each step opens a new popup, so the card fades in and rises on every step. */
+#modal-dialog-onboarding-tour .jsdialog-container {
+	animation: onboarding-appear 0.2s ease-out;
+	box-sizing: border-box;
+	width: 100%;
+	padding: var(--spacing-xl);
+	background: var(--color-background-lighter) !important;
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-large);
+	box-shadow: var(--shadow-elevated);
+}
+
+/* The background is !important because the
+   .lokdialog_container .ui-dialog-titlebar.ui-widget-header rule paints every
+   dialog title bar with !important. */
+#modal-dialog-onboarding-tour .ui-dialog-titlebar {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-m);
+	margin: 0 0 var(--spacing-m);
+	padding: 0;
+	border: none;
+	background: transparent !important;
+}
+
+/* The title bar carries the clearfix pseudo-elements of jquery-ui. In this
+   flex row they would be items of their own and push the title away from the
+   start edge by one gap, so they are not drawn. */
+#modal-dialog-onboarding-tour .ui-dialog-titlebar::before,
+#modal-dialog-onboarding-tour .ui-dialog-titlebar::after {
+	display: none;
+}
+
+#modal-dialog-onboarding-tour .ui-dialog-title {
+	flex: 1;
+	float: none;
+	width: auto;
+	margin: 0;
+	font-size: var(--header-font-size);
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--color-main-text);
+}
+
+/* A small close button: the hit area of a toolbar button around a 16 px
+   cross, with no frame of its own. */
+#modal-dialog-onboarding-tour .ui-dialog-titlebar-close {
+	position: relative;
+	top: auto;
+	right: auto;
+	flex: none;
+	width: var(--btn-size);
+	height: var(--btn-size);
+	margin: 0;
+	padding: 0;
+	border: none;
+	border-radius: var(--border-radius);
+	background: transparent;
+}
+
+#modal-dialog-onboarding-tour .ui-dialog-titlebar-close:hover {
+	background-color: var(--color-background-hover);
+}
+
+/* The card has no content that scrolls, so its content boxes let the focus
+   ring of a button show past their edges. The overflow of the content is
+   !important because .jsdialog-container .ui-dialog-content sets overflow-y
+   with !important. */
+#modal-dialog-onboarding-tour .ui-dialog-content {
+	padding: 0;
+	overflow: visible !important;
+	line-height: 1.45;
+}
+
+#modal-dialog-onboarding-tour .root-container {
+	overflow: visible;
+}
+
+#modal-dialog-onboarding-tour #info-modal-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xl);
+}
+
+/* The text is a static label, which dialogs give the height of one form row.
+   Here it is a paragraph that wraps. */
+#modal-dialog-onboarding-tour #onboarding-text {
+	display: block;
+	margin: 0;
+	padding: 0;
+	font-size: var(--medium-font-size);
+	line-height: 1.45;
+	color: var(--color-main-text);
+}
+
+/* One row: the dots at the start, the buttons at the end. The buttons keep
+   their width, and when a long tour leaves too little room the dots wrap onto
+   a second line in their own column. */
+#modal-dialog-onboarding-tour #onboarding-footer {
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	column-gap: var(--spacing-m);
+}
+
+#modal-dialog-onboarding-tour #onboarding-progress {
+	justify-self: start;
+	flex-wrap: wrap;
+	row-gap: var(--spacing-s);
+}
+
+#modal-dialog-onboarding-tour #onboarding-buttons {
+	margin: 0;
+}
+
+#modal-dialog-onboarding-tour #onboarding-buttons .ui-button-box-right {
+	gap: var(--spacing-m);
+	margin: 0;
+}
+
+#modal-dialog-onboarding-tour .ui-pushbutton {
+	min-height: 32px;
+	margin: 0;
+	padding-inline: var(--spacing-l);
+	font-family: var(--cool-font);
+	font-size: var(--medium-font-size);
+}
+
+/* Skip is a text button, as wide as its label. The minimum width is
+   !important because .ui-button-box .ui-pushbutton in btns.css gives every
+   dialog button a minimum width with !important. */
+#modal-dialog-onboarding-tour #onboarding-skip-button {
+	min-width: 0 !important;
+	padding-inline: var(--spacing-m);
+	border: none;
+	background-color: transparent;
+	color: var(--color-text-light);
+}
+
+/* !important because the shared hover rules for dialog buttons in
+   device-desktop.css and jsdialogs.css set the hover colours with !important. */
+#modal-dialog-onboarding-tour #onboarding-skip-button:hover {
+	background-color: transparent !important;
+	color: var(--color-main-text) !important;
+	text-decoration: underline;
+}
+
+/* The label of the primary button takes the page background colour, which
+   reads on the accent fill in both themes. Its hover state keeps the shared
+   inverted look. */
+#modal-dialog-onboarding-tour #onboarding-next-button.button-primary:not(:hover):not(:focus-visible) {
+	font-weight: 500;
+	color: var(--color-main-background);
+}
+
+/* Next has the focus on every step, so it keeps its filled look with the
+   focus. The shared .button-primary:focus-visible rule in btns.css inverts a
+   focused primary button to a pale fill, and its border then reads as a second
+   ring inside the outline. Here the fill stays and the ring is drawn outside
+   the button in the text colour, which clears the card in both themes. The
+   fill is rgb(var(--doc-type)), the colour a primary button has under
+   branding and the accent of the tour, the same as the highlight ring and the
+   current dot. The pointer over the button still gives the shared hover
+   look. */
+#modal-dialog-onboarding-tour #onboarding-next-button.button-primary:focus-visible {
+	outline: 2px solid var(--color-main-text);
+	outline-offset: 2px;
+}
+
+#modal-dialog-onboarding-tour #onboarding-next-button.button-primary:focus-visible:not(:hover) {
+	background-color: rgb(var(--doc-type, 3, 105, 163));
+	border-color: rgb(var(--doc-type, 3, 105, 163));
+	color: var(--color-main-background);
+	font-weight: 500;
+}
+
+/* The highlight is drawn by an ::after pseudo-element that covers the
+   element, so an edge of the window or an ancestor that clips its overflow
+   never cuts it. From the edge inwards it is a light band of 2 px, a band of
+   2 px in the colour of the document type and a light band of 1 px, all inset
+   box-shadows of the pseudo-element. The light bands keep the coloured band
+   visible on any background, the colour of the document type included.
+
+   The element isolates its own stacking context, so the pseudo-element with
+   the highest z-index paints above every child, positioned children
+   included, while the element keeps its place among its siblings. The
+   colours are declared on the element, because --doc-type is declared on the
+   body and a var() in a custom property is resolved where that property is
+   declared.
+
+   The ring pulses three times, for about four and a half seconds, after a
+   step opens and then rests, so a user who stays on a step is not distracted:
+   a faint band in the colour of the document type grows inwards from the
+   light bands and back.
+   The class moves to a new element for every step, so the pulse starts again
+   on each step. */
+.onboarding-highlight {
+	--onboarding-ring-narrow: inset 0 0 0 2px var(--color-background-lighter),
+		inset 0 0 0 4px rgb(var(--doc-type, 3, 105, 163)),
+		inset 0 0 0 5px var(--color-background-lighter),
+		inset 0 0 0 5px rgba(var(--doc-type, 3, 105, 163), 0);
+	--onboarding-ring-wide: inset 0 0 0 2px var(--color-background-lighter),
+		inset 0 0 0 4px rgb(var(--doc-type, 3, 105, 163)),
+		inset 0 0 0 5px var(--color-background-lighter),
+		inset 0 0 0 9px rgba(var(--doc-type, 3, 105, 163), 0.25);
+	isolation: isolate;
+}
+
+/* The menu bar has a clearfix ::after from the menu library, which is hidden
+   and has no height, so those properties are set again here. */
+.onboarding-highlight::after {
+	content: '';
+	display: block;
+	position: absolute;
+	inset: 0;
+	z-index: 2147483647;
+	height: auto;
+	overflow: visible;
+	visibility: visible;
+	pointer-events: none;
+	/* The ring has the corner radius of the dialogs, whatever the corners of the element are. */
+	border-radius: var(--border-radius);
+	box-shadow: var(--onboarding-ring-narrow);
+	animation: onboarding-glow 1.5s ease-in-out 3;
+}
+
+@keyframes onboarding-glow {
+	0%,
+	100% {
+		box-shadow: var(--onboarding-ring-narrow);
+	}
+
+	50% {
+		box-shadow: var(--onboarding-ring-wide);
+	}
+}
+
+/* The pseudo-element fills the nearest positioned ancestor, so every target
+   is positioned. The document title, the menu bar (.sm in the menu library),
+   the sidebar and the user list header are already relative. These targets
+   are static and become relative with no offsets, which leaves their layout
+   as it is. The navigation panel is absolute while slides are being imported,
+   and that rule is more specific, so it keeps its position then. */
+.notebookbar-tabs-container.onboarding-highlight,
+.notebookbar-scroll-wrapper.onboarding-highlight,
+#toolbar-up.onboarding-highlight,
+#formulabar-row.onboarding-highlight,
+#navigation-sidebar.onboarding-highlight,
+#userListSummaryButton.onboarding-highlight,
+#ShareAs.onboarding-highlight,
+#toolbar-down.onboarding-highlight {
+	position: relative;
+}
+
+/* Forced colours drop the box-shadows, so the highlight becomes a border of
+   the pseudo-element in the system highlight colour. */
+@media (forced-colors: active) {
+	.onboarding-highlight::after {
+		border: 2px solid Highlight;
+	}
+}
+
+@keyframes onboarding-appear {
+	from {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* Under reduced motion the card appears in place and the ring does not
+   pulse. */
+@media (prefers-reduced-motion: reduce) {
+	#modal-dialog-onboarding-tour .jsdialog-container,
+	.onboarding-highlight::after {
+		animation: none;
+	}
+}

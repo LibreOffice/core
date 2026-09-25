@@ -532,6 +532,19 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 						}
 					]
 				},
+				{
+					'type': 'toolbox',
+					'children': [
+						{
+							'id': 'onboardingtour',
+							'type': 'bigcustomtoolitem',
+							'text': _('Show tour'),
+							'icon': 'lc_helpindex.svg',
+							'command': 'onboardingtour',
+							'accessibility': { focusBack: false, combination: 'ST', de: null }
+						}
+					]
+				},
 				{ type: 'separator', id: 'help-keyboardshortcuts-break', orientation: 'vertical' },
 				{
 					'type': 'toolbox',

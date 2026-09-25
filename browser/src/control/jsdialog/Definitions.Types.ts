@@ -260,6 +260,9 @@ interface PopupData extends JSDialogJSON {
 	hasClose: boolean;
 	noOverlay: boolean;
 	popupParent?: string;
+	// The popup takes the width of its content instead of at least the width of the element it
+	// opens from.
+	fitContent?: boolean;
 	clickToClose?: string; // raw id of the element that closes the popup when clicked
 	clickToCloseElement?: HTMLElement; // clickToClose resolved to a DOM element by addHandlers
 	clickToCloseText?: string; // clickToClose text when the closing element is a treeview entry
@@ -483,6 +486,7 @@ interface PushButtonWidget extends WidgetJSON {
 	checked?: boolean;
 	command?: string;
 	hidden?: boolean; // todo: deprecate it in favor of WidgetJson.visible
+	has_default?: boolean; // the button that Enter presses in its dialog
 }
 
 // type: 'menubutton'
@@ -686,6 +690,12 @@ interface ChipWidgetJSON extends WidgetJSON {
 	icon?: string; // optional leading glyph / emoji (or lc_*.svg path)
 	pressed?: boolean; // selected state, drives aria-pressed on the main button
 	actions?: ChipAction[]; // optional trailing action buttons inside the pill
+}
+
+// type: 'progressdots'
+interface ProgressDotsWidgetJSON extends WidgetJSON {
+	count: number; // number of steps, one dot each
+	current: number; // index of the current step, starting at 0
 }
 
 // type: 'checkbox'

@@ -27,6 +27,9 @@ interface ViewSetting {
 }
 
 class ServerConnectionService {
+	// True once sidebar initialization has finished.
+	private sidebarSettled: boolean = false;
+
 	public constructor() {
 		RenderManager.appendAfterVisualsReady(this.onVisualsReady.bind(this));
 	}
@@ -222,16 +225,32 @@ class ServerConnectionService {
 		}
 
 		// initialize notebookbar in core
+		let sidebarRequested = false;
 		if (!window.mode.isInteractivePreview()) {
-			app.map.uiManager.initializeLateComponents();
+			sidebarRequested = app.map.uiManager.initializeLateComponents();
 		}
 		JSDialog.RefreshScrollables();
+
+		// With no sidebar requested, there is no sidebar message to wait for, so sidebar
+		// initialization is finished here.
+		if (!sidebarRequested) this.onSidebarSettled();
 	}
 
 	/// only called the first time the sidebar is shown
 	public onShowSidebar() {
 		app.console.debug('ServerConnectionService: onShowSidebar');
 		app.map._docLayer.recalculateZoomOnResize();
+	}
+
+	/// called once, when sidebar initialization is finished: after the first sidebar message when
+	/// the sidebar was requested, or straight after the late components otherwise
+	public onSidebarSettled() {
+		if (this.sidebarSettled) return;
+		this.sidebarSettled = true;
+
+		app.console.debug('ServerConnectionService: onSidebarSettled');
+
+		if (app.onboardingTour) app.onboardingTour.onSidebarSettled();
 	}
 
 	public onNotebookbarInCoreInit() {

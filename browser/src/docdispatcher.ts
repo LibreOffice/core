@@ -76,6 +76,10 @@ class Dispatcher {
 			if (!app.map._disableDefaultAction['UI_Close']) app.map.remove();
 		};
 
+		this.actionsMap['onboardingtour'] = () => {
+			if (app.onboardingTour) app.onboardingTour.start();
+		};
+
 		this.actionsMap['userlist'] = () => {
 			if (app.map.userList) app.map.userList.openDropdown();
 		};

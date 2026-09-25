@@ -18,7 +18,10 @@ window.L.IFrameDialog = window.L.Class.extend({
 
 	options: {
 		prefix: 'iframe-none',
-		method: 'get'
+		method: 'get',
+		// Called instead of remove when the user closes the dialog with Escape or the close
+		// button of its title bar. It is then in charge of removing the dialog.
+		onUserClose: null
 	},
 
 	initialize: function (url, params, element, options) {
@@ -36,7 +39,7 @@ window.L.IFrameDialog = window.L.Class.extend({
 			title.innerText = this.options.title || _('Options');
 			const closeButton = window.L.DomUtil.create('button', 'ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close', titlebar);
 			window.L.DomUtil.create('span', 'ui-button-icon ui-icon ui-icon-closethick', closeButton);
-			window.L.DomEvent.on(closeButton, 'click', () => this.remove(this._container));
+			window.L.DomEvent.on(closeButton, 'click', () => this._closeByUser());
 			this._draggable = new window.L.Draggable(this._container, titlebar);
 			this._draggable.enable();
 		}
@@ -141,7 +144,7 @@ window.L.IFrameDialog = window.L.Class.extend({
 		if (this._iframe.contentDocument) {
 			this._iframe.contentDocument.addEventListener('keydown', function(e) {
 				if (e.key === 'Escape') {
-					self.remove();
+					self._closeByUser();
 				}
 			});
 		}
@@ -180,6 +183,13 @@ window.L.IFrameDialog = window.L.Class.extend({
 		} else if (this._container) {
 			this._container.focus();
 		}
+	},
+
+	_closeByUser: function () {
+		if (this.options.onUserClose)
+			this.options.onUserClose();
+		else
+			this.remove();
 	},
 
 	remove: function () {

@@ -1,8 +1,9 @@
-/* global describe it cy beforeEach require */
+/* global expect describe it cy beforeEach require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var calcHelper = require('../../common/calc_helper');
+const onboardingHelper = require('../../common/onboarding_helper');
 
 describe(['tagdesktop'], 'Notebookbar contextual tabs (Calc).', function() {
 
@@ -57,5 +58,35 @@ describe(['tagdesktop'], 'Notebookbar contextual tabs (Calc).', function() {
 
 		cy.cGet('#View-tab-label').should('have.class', 'selected');
 		cy.cGet('#Home-tab-label').should('not.have.class', 'selected');
+	});
+});
+
+describe(['tagdesktop'], 'Onboarding tour (Calc).', function() {
+
+	beforeEach(function() {
+		// This user has been shown the tour already, so it does not open on its
+		// own and the test starts it where it wants to.
+		localStorage.setItem(onboardingHelper.tourSeenKey('spreadsheet'), 'true');
+
+		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		desktopHelper.switchUIToNotebookbar();
+		cy.viewport(1920,1080);
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			helper.processToIdle(win);
+		});
+	});
+
+	it('The tour singles out the formula bar in a spreadsheet', function() {
+		onboardingHelper.startTour(this.win);
+
+		// The formula bar belongs to spreadsheets, so the tour reaches a card
+		// about it and highlights it.
+		onboardingHelper.stepForwardTo(this.win, 'formulabar', 8);
+		onboardingHelper.assertHighlighted('#formulabar-row');
+
+		cy.then(() => {
+			expect(this.win.app.onboardingTour.isRunning()).to.be.true;
+		});
 	});
 });

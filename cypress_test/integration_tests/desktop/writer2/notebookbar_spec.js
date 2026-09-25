@@ -3,6 +3,7 @@
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var writerHelper = require('../../common/writer_helper');
+const onboardingHelper = require('../../common/onboarding_helper');
 
 describe(['tagdesktop'], 'Notebookbar tests.', function() {
 
@@ -311,5 +312,158 @@ describe(['tagdesktop'], 'HideChangeTrackingControls mode tests.', function() {
 		cy.cGet('.notebookbar .unoRejectTrackedChangeToNext').should('not.exist');
 		cy.cGet('.notebookbar .unoReinstateTrackedChange').should('not.exist');
 		cy.cGet('.notebookbar .unoAcceptTrackedChanges').should('not.exist');
+	});
+});
+
+describe(['tagdesktop'], 'Onboarding tour on a first visit.', function() {
+
+	beforeEach(function() {
+		// This user has not been shown the tour yet.
+		localStorage.setItem(onboardingHelper.tourSeenKey('text'), 'false');
+
+		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		cy.viewport(1920,1080);
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('Someone opening a document for the first time is welcomed by the tour', function() {
+		onboardingHelper.assertStep(this.win, 'intro');
+
+		// The welcome card stands on its own, with nothing singled out behind it.
+		cy.cGet('.onboarding-highlight').should('not.exist');
+
+		// The welcome is remembered as soon as it appears, so a tour that is closed
+		// in any way at all is not offered again.
+		cy.then(() => {
+			expect(this.win.prefs.getBoolean(onboardingHelper.tourSeenKey('text'))).to.be.true;
+			expect(this.win.localStorage.getItem(onboardingHelper.tourSeenKey('text'))).to.equal('true');
+		});
+
+		// The next card puts the ring on the part of the screen it talks about,
+		// and on nothing else.
+		cy.cGet('#onboarding-next-button').click();
+		cy.cGet('.onboarding-highlight').should('have.length', 1);
+	});
+});
+
+describe(['tagdesktop'], 'Onboarding tour on a later visit.', function() {
+
+	beforeEach(function() {
+		// This user has been shown the tour already, so nothing opens on its own
+		// and each test below decides when the tour starts.
+		localStorage.setItem(onboardingHelper.tourSeenKey('text'), 'true');
+
+		helper.setupAndLoadDocument('writer/notebookbar.odt');
+		cy.viewport(1920,1080);
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			helper.processToIdle(win);
+		});
+	});
+
+	it('Someone who has seen the tour is not welcomed again', function() {
+		// A tour that opens on its own does so in a layout task, once the document
+		// is drawn and the sidebar has shown. The document checks have seen both,
+		// so once layout is idle the tour has had its chance to open.
+		cy.then(() => {
+			helper.processToIdle(this.win);
+		});
+
+		cy.cGet('#modal-dialog-onboarding-tour').should('not.exist');
+		cy.then(() => {
+			expect(this.win.app.onboardingTour.isRunning()).to.be.false;
+		});
+	});
+
+	it('Walking through the tour singles out the place each card describes', function() {
+		desktopHelper.switchUIToNotebookbar();
+		cy.then(() => {
+			helper.processToIdle(this.win);
+		});
+
+		onboardingHelper.startTour(this.win);
+		onboardingHelper.assertStep(this.win, 'intro');
+		cy.then(() => {
+			expect(this.win.app.onboardingTour.isRunning()).to.be.true;
+		});
+
+		// The first card has nowhere to go back to.
+		cy.cGet('#onboarding-back-button').should('be.disabled');
+		cy.cGet('#onboarding-progress .ui-progressdots-current').should('have.length', 1);
+
+		let welcomeProgress;
+		cy.cGet('#onboarding-progress').then(($progress) => {
+			welcomeProgress = $progress.text().trim();
+		});
+
+		// Going forward moves on to another card, and how far along the tour is
+		// says so.
+		let secondStepId;
+		cy.cGet('#onboarding-next-button').click();
+		cy.cGet('#onboarding-progress').should(($progress) => {
+			expect($progress.text().trim()).to.not.equal(welcomeProgress);
+		});
+		cy.then(() => {
+			secondStepId = this.win.app.onboardingTour.currentStepId();
+			expect(secondStepId).to.not.equal('intro');
+		});
+
+		// The keyboard focus stays in the card on its Next button, so the next key
+		// the user presses moves the tour on and does not reach the document.
+		cy.cGet('#onboarding-next-button').should(($button) => {
+			expect(this.win.document.activeElement).to.equal($button[0]);
+		});
+		// It is still there once everything has settled, not only for a moment.
+		cy.then(() => {
+			helper.processToIdle(this.win);
+		});
+		cy.cGet('#onboarding-next-button').then(($button) => {
+			expect(this.win.document.activeElement).to.equal($button[0]);
+		});
+
+		// Going back returns to the card the tour opened on.
+		cy.cGet('#onboarding-back-button').click();
+		onboardingHelper.assertStep(this.win, 'intro');
+		cy.cGet('#onboarding-progress').should(($progress) => {
+			expect($progress.text().trim()).to.equal(welcomeProgress);
+		});
+
+		// While the card has the focus, the right arrow key goes forward to the
+		// same card the Next button reached.
+		cy.cGet('#onboarding-next-button').focus();
+		cy.realPress('ArrowRight');
+		cy.then(() => {
+			onboardingHelper.assertStep(this.win, secondStepId);
+		});
+
+		// The left arrow key goes back to the card the tour opened on.
+		cy.cGet('#onboarding-next-button').focus();
+		cy.realPress('ArrowLeft');
+		onboardingHelper.assertStep(this.win, 'intro');
+
+		// The card about the document name highlights the name of the document.
+		onboardingHelper.stepForwardTo(this.win, 'document-name', 3);
+		onboardingHelper.assertHighlighted('#document-titlebar .document-title');
+
+		// Escape leaves the tour and hands the document back.
+		cy.cGet('#onboarding-next-button').focus();
+		cy.realPress('Escape');
+		onboardingHelper.assertTourEnded(this.win);
+	});
+
+	it('The tour can be left part way through, and the document is usable again', function() {
+		// Closing the tour from its second card leaves nothing of it behind.
+		onboardingHelper.startTour(this.win);
+		cy.cGet('#onboarding-next-button').click();
+		cy.cGet('#modal-dialog-onboarding-tour .ui-dialog-titlebar-close').click();
+		onboardingHelper.assertTourEnded(this.win);
+
+		// Skipping the tour from the same place does the same.
+		onboardingHelper.startTour(this.win);
+		cy.cGet('#onboarding-next-button').click();
+		cy.cGet('#onboarding-skip-button').click();
+		onboardingHelper.assertTourEnded(this.win);
 	});
 });

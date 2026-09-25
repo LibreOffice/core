@@ -310,6 +310,7 @@ COOL_CSS =\
 	$(srcdir)/css/jquery-ui-lightness.css \
 	$(srcdir)/css/infobar.css \
 	$(srcdir)/css/tooltip.css \
+	$(srcdir)/css/onboarding.css \
 	$(srcdir)/css/progressbar.css \
 	$(srcdir)/css/settings.css
 
@@ -718,6 +719,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.Checkbox.ts \
 	src/control/jsdialog/Widget.Calendar.js \
 	src/control/jsdialog/Widget.Chip.ts \
+	src/control/jsdialog/Widget.ProgressDots.tsx \
 	src/control/jsdialog/Widget.ColorPickerButton.js \
 	src/control/jsdialog/Widget.ColorPicker.ts \
 	src/control/jsdialog/Widget.PageMarginEntry.ts \
@@ -807,6 +809,9 @@ COOL_JS_LST =\
 	src/control/DropFileOverlay.tsx \
 	src/control/AccessibilityNotice.tsx \
 	src/control/UnlockPopup.tsx \
+	src/control/onboarding/OnboardingStep.ts \
+	src/control/onboarding/OnboardingSteps.ts \
+	src/control/onboarding/Control.OnboardingTour.ts \
 	src/control/Control.ContextToolbar.ts \
 	src/control/Control.SidebarBase.ts \
 	src/control/Control.Sidebar.ts \
@@ -1671,6 +1676,8 @@ pot:
 		src/control/backstage/CloudDialogs.tsx \
 		src/control/DropFileOverlay.tsx \
 		src/control/AccessibilityNotice.tsx \
+		src/control/onboarding/OnboardingSteps.ts \
+		src/control/onboarding/Control.OnboardingTour.ts \
 		src/control/Control.Command.js \
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \
@@ -1756,6 +1763,7 @@ pot:
 		src/control/jsdialog/Widget.NotebookbarIconView.ts \
 		src/control/jsdialog/Widget.RadioButton.ts \
 		src/control/jsdialog/Widget.PushButton.ts \
+		src/control/jsdialog/Widget.ProgressDots.tsx \
 		src/control/jsdialog/Widget.Comment.ts \
 		src/control/jsdialog/Widget.SpinField.ts \
 		src/control/jsdialog/Widget.FixedTextControl.ts \

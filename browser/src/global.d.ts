@@ -244,6 +244,7 @@ interface AppInterface {
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;
 	tableStyleGallery: TableStyleGalleryService;
+	onboardingTour: OnboardingTourController | null;
 	colorLastSelection: any;
 	serverAudit: any;
 	remoteLinks: Array<{

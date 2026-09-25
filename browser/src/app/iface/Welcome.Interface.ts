@@ -20,6 +20,11 @@ interface WelcomeInterface extends HandlerInterface {
 	onUpdateList(): void;
 	shouldWelcome(): boolean;
 	showWelcomeDialog(): void;
+	// Whether a welcome dialog is open: loading, shown, or waiting to be loaded again after a
+	// failed load.
+	isOpen(): boolean;
+	// Removes the welcome dialog for good and fires 'welcomeclosed' when one was open.
+	close(): void;
 	removeHooks(): void;
 	remove(): void;
 	onMessage(e: { data: any }): void;

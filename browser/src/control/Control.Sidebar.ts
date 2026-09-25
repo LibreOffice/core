@@ -37,6 +37,9 @@ interface SidebarDeckState {
 class Sidebar extends SidebarBase {
 	isUserRequest: boolean; /// automatic or user request to show the sidebar
 	sidebarShownTheFirstTime: boolean = true;
+	// True once the first sidebar message has been handled, whether it showed or closed the
+	// sidebar.
+	firstMessageHandled: boolean = false;
 
 	/// The whole deck-navigation state, changed only through setDeckState. Keeping it in one
 	/// value with one writer means the sidebar has a single place its state can move.
@@ -362,6 +365,13 @@ class Sidebar extends SidebarBase {
 				this.closeSidebar();
 				this.isUserRequest = true;
 			}
+		}
+
+		// Only the instance stored as map.sidebar reports, once, that its first message has been
+		// handled.
+		if (!this.firstMessageHandled && this.map.sidebar === this) {
+			this.firstMessageHandled = true;
+			app.serverConnectionService.onSidebarSettled();
 		}
 	}
 }

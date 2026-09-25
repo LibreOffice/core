@@ -1069,6 +1069,7 @@ class UIManager extends window.L.Control {
 		else
 			this.map.on('docloaded', startPresentation);
 		this.map.contextToolbar = new ContextToolbar(this.map);
+		app.onboardingTour = new OnboardingTourController();
 
 		this.map.once('docloaded', () => {
 			this.showAccessibilityStatementNotice();
@@ -1096,13 +1097,15 @@ class UIManager extends window.L.Control {
 	 * Initializes the heavy components which require core side to work.
 	 * Scheduled to be executed after we do first tiles requests to not
 	 * block the document content rendering on a load.
+	 * @returns True when the engine was asked to show the sidebar.
 	 */
-	initializeLateComponents(): void {
+	initializeLateComponents(): boolean {
 		app.console.debug('UIManager: late components init');
 		this.initializeNotebookbarInCore();
-		this.initializeSidebar();
+		const sidebarRequested = this.initializeSidebar();
 		this.initializeNavigator();
 		this.initializeQuickFindInCore();
+		return sidebarRequested;
 	}
 
 	// Brings the open document in line with the stored view preferences of its document type.
@@ -1206,35 +1209,41 @@ class UIManager extends window.L.Control {
 
 	/**
 	 * Initializes the sidebar based on saved state and preferences.
+	 * @returns True when the engine was asked to show the sidebar.
 	 */
-	initializeSidebar(): void {
+	initializeSidebar(): boolean {
 		this.documentReadyForAI = true;
+		let sidebarRequested = false;
 
 		// Hide the sidebar on start if saved state or UIDefault is set.
 		if (window.mode.isDesktop() && !window.mode.isInteractivePreview()) {
 			var showSidebar = this.getBooleanDocTypePref('ShowSidebar', true);
+			const requestSidebar = () => {
+				app.socket.sendMessage('uno .uno:SidebarShow');
+				sidebarRequested = true;
+			};
 
 			if (showSidebar && this.getBooleanDocTypePref('PropertyDeck', true)) {
-				app.socket.sendMessage('uno .uno:SidebarShow');
+				requestSidebar();
 				this.map.sidebar.setAsInitialized();
 			}
 
 			if (showSidebar && this.map.getDocType() === 'presentation') {
 				if (this.getBooleanDocTypePref('SdSlideTransitionDeck', false)) {
-					app.socket.sendMessage('uno .uno:SidebarShow');
+					requestSidebar();
 					app.socket.sendMessage('uno .uno:SlideChangeWindow');
 					this.map.sidebar.setupTargetDeck('.uno:SlideChangeWindow');
 				} else if (this.getBooleanDocTypePref('SdCustomAnimationDeck', false)) {
-					app.socket.sendMessage('uno .uno:SidebarShow');
+					requestSidebar();
 					app.socket.sendMessage('uno .uno:CustomAnimation');
 					this.map.sidebar.setupTargetDeck('.uno:CustomAnimation');
 				} else if (this.getBooleanDocTypePref('SdMasterPagesDeck', false)) {
-					app.socket.sendMessage('uno .uno:SidebarShow');
+					requestSidebar();
 					app.socket.sendMessage('uno .uno:MasterSlidesPanel');
 					this.map.sidebar.setupTargetDeck('.uno:MasterSlidesPanel');
 				}
 			} else if (showSidebar && this.getBooleanDocTypePref('StyleListDeck', false)) {
-				app.socket.sendMessage('uno .uno:SidebarShow');
+				requestSidebar();
 				app.socket.sendMessage('uno .uno:SidebarDeck.StyleListDeck');
 				this.map.sidebar.setupTargetDeck('.uno:SidebarDeck.StyleListDeck');
 			}
@@ -1256,6 +1265,7 @@ class UIManager extends window.L.Control {
 		}
 
 		this.initializeAIAssistant();
+		return sidebarRequested;
 	}
 
 	/**
@@ -2545,15 +2555,24 @@ class UIManager extends window.L.Control {
 			}
 		};
 
+		if (json.popupParent && typeof json.popupParent === 'object') {
+			// An element cannot be written into the text of a message, so a popup anchored to one
+			// goes to the dialog router directly, with the element in its data.
+			JSDialog.MessageRouter.processMessage(json, builderCallback);
+			return;
+		}
+
 		app.socket._onMessage({textMsg: 'jsdialog: ' + JSON.stringify(json), callback: builderCallback});
 	}
 
 	/**
 	 * Closes a modal dialog.
 	 * @param dialogId - The ID of the dialog to close.
+	 * @param focusHandled - True when the caller moves the focus itself, so the focus does not
+	 * go back to where it was before the dialog opened.
 	 */
-	closeModal(dialogId: string): void {
-		var closeMessage = { id: dialogId, jsontype: 'dialog', type: 'modalpopup', action: 'close' };
+	closeModal(dialogId: string, focusHandled?: boolean): void {
+		var closeMessage = { id: dialogId, jsontype: 'dialog', type: 'modalpopup', action: 'close', focusHandled: focusHandled === true };
 		app.socket._onMessage({ textMsg: 'jsdialog: ' + JSON.stringify(closeMessage) });
 	}
 

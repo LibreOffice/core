@@ -107,6 +107,23 @@ window.L.Map.Welcome = window.L.Handler.extend({
 		window.prefs.set('WSDWelcomeVersion', app.socket.WSDServer.Version);
 	},
 
+	// Whether a welcome dialog is open: loading, shown, or waiting to be loaded again after a
+	// failed load.
+	isOpen: function () {
+		if (this._reloadPending)
+			return true;
+		return !!this._iframeWelcome && !!this._iframeWelcome.queryContainer();
+	},
+
+	// Loads the welcome dialog again after a failed load.
+	_reloadWelcomeDialog: function () {
+		this._reloadPending = true;
+		app.timerRegistry.setTimeout('welcome', window.L.bind(function () {
+			this._reloadPending = false;
+			this.showWelcomeDialog();
+		}, this), 200);
+	},
+
 	showWelcomeDialog: function () {
 		if (this._iframeWelcome && this._iframeWelcome.queryContainer())
 			this.remove();
@@ -114,13 +131,16 @@ window.L.Map.Welcome = window.L.Handler.extend({
 		var uiTheme = window.prefs.getBoolean('darkTheme') ? 'dark' : 'light';
 		var params = [{ 'ui_theme': uiTheme }];
 
-		this._iframeWelcome = window.L.iframeDialog(this._url, params, null, { prefix: 'iframe-welcome' });
+		this._iframeWelcome = window.L.iframeDialog(this._url, params, null, {
+			prefix: 'iframe-welcome',
+			onUserClose: window.L.bind(this.close, this),
+		});
 		this._iframeWelcome._iframe.title = _('Welcome Dialog');
 	},
 
 	removeHooks: function () {
 		window.L.DomEvent.off(window, 'message', this.onMessage, this);
-		this.remove();
+		this.close();
 	},
 
 	remove: function () {
@@ -128,6 +148,15 @@ window.L.Map.Welcome = window.L.Handler.extend({
 			this._iframeWelcome.remove();
 			delete this._iframeWelcome;
 		}
+	},
+
+	// Removes the welcome dialog for good, with no load retry to follow.
+	close: function () {
+		var wasOpen = this.isOpen();
+		this._reloadPending = false;
+		this.remove();
+		if (wasOpen)
+			this._map.fire('welcomeclosed');
 	},
 
 	onMessage: function (e) {
@@ -154,21 +183,21 @@ window.L.Map.Welcome = window.L.Handler.extend({
 			this._iframeWelcome.postMessage(data);
 		} else if (data.MessageId === 'welcome-close') {
 			window.prefs.set('WSDWelcomeVersion', app.socket.WSDServer.Version);
-			this.remove();
+			this.close();
 		} else if (data.MessageId == 'iframe-welcome-load' && !this._iframeWelcome.isVisible()) {
 			if (this._retries-- > 0) {
 				this.remove();
-				setTimeout(window.L.bind(this.showWelcomeDialog, this), 200);
+				this._reloadWelcomeDialog();
 			} else if (this._fallback) {
 				var currentDate = new Date();
 				window.prefs.set('WSDWelcomeDisabled', true);
 				window.prefs.set('WSDWelcomeDisabledDate', currentDate.toDateString().replaceAll(' ', '-'));
-				this.remove();
+				this.close();
 			} else {
 				// fallback
 				this._url = this._getLocalWelcomeUrl();
 				this._fallback = true;
-				setTimeout(window.L.bind(this.showWelcomeDialog, this), 200);
+				this._reloadWelcomeDialog();
 			}
 		}
 	}
