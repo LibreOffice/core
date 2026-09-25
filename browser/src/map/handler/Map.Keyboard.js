@@ -7,7 +7,7 @@
  * at TextInput.
  */
 
-/* global app UNOKey RenderManager GraphicSelection */
+/* global app UNOKey RenderManager GraphicSelection JSDialog */
 
 window.L.Map.mergeOptions({
 	keyboard: true,
@@ -383,7 +383,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// The slide the sorter marks keeps the keys while the focus rests on it, and it keeps
 		// them as well over a preview the sorter builds again, where the focus falls back to
 		// the body. The document takes them back as soon as its own input holds the focus.
-		if (this._map.hasFocus())
+		if (this._map.hasFocus() || JSDialog.IsAnyInputFocused())
 			return false;
 
 		return preview.partsFocused === true || preview.hasSlideFocus();

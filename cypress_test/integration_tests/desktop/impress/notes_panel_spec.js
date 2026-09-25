@@ -93,6 +93,23 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 	});
 
+	// A click on a slide thumbnail puts the slide sorter in charge of the
+	// keys. Clicking into the notes afterwards has to take them back, so
+	// that everything typed there lands in the notes.
+	it('keys typed after a thumbnail click stay in the notes', function () {
+		openNotesPane();
+
+		cy.cGet('#slide-sorter .preview-img').eq(1).click();
+
+		cy.cGet('#notespanel-container .ui-editengine').click();
+		cy.cGet('#notespanel-container .ui-editengine').type('abc');
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'abc'
+		);
+		cy.cGet('#notespanel-container .ui-editengine').should('have.focus');
+	});
+
 	it('typed text reaches the notes of the current slide', function () {
 		openNotesPane();
 
