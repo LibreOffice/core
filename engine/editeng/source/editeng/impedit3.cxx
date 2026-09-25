@@ -329,7 +329,8 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
         maScalingParameters = maCustomScalingParameters;
 
     tools::Long nHeight = FormatParagraphs(aRepaintParagraphList, true);
-    bool bOverflow = nHeight > (maMaxAutoPaperSize.Height() * mnColumns);
+    bool bOverflow = nHeight - GetUncountedSpaceBelowLastLine()
+                     > (maMaxAutoPaperSize.Height() * mnColumns);
 
     std::span<const ScalingParameters> aScaleLevels = constScaleLevels;
     if (meTextFitting == EETextFitting::Title)
@@ -351,7 +352,8 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
 
         // Try again with different scaling factor
         nHeight = FormatParagraphs(aRepaintParagraphList, true);
-        bOverflow = nHeight > (maMaxAutoPaperSize.Height() * mnColumns);
+        bOverflow = nHeight - GetUncountedSpaceBelowLastLine()
+                    > (maMaxAutoPaperSize.Height() * mnColumns);
 
         // Increase scale level
         nCurrentScaleLevel++;
@@ -542,6 +544,35 @@ static tools::Long ImplAboveBaseline(tools::Long nLineHeight, tools::Long nSingl
     if (nLineHeight > nSingleHeight)
         return nShare;
     return std::max(nShare, nLineHeight - nSingleDescent);
+}
+
+tools::Long ImpEditEngine::GetUncountedSpaceBelowLastLine()
+{
+    if (meTextFitting == EETextFitting::Legacy || !IsFixedCellHeight()
+        || mbLineSpacingBelowBaseline)
+        return 0;
+
+    // The last paragraph counted in the fitted height, which leaves out blank ones at the end.
+    const ParaPortionList& rPortions = GetParaPortions();
+    sal_Int32 nLast = rPortions.lastIndex();
+    while (nLast >= 0 && isInEmptyClusterAtTheEnd(rPortions.getRef(nLast), true))
+        --nLast;
+    if (nLast < 0)
+        return 0;
+
+    const EditLineList& rLines = rPortions.getRef(nLast).GetLines();
+    if (!rLines.Count())
+        return 0;
+
+    // The last line counts down to the font's share of descent below a baseline three quarters of
+    // the way down the line, and at or below single spacing at least its whole height.
+    const EditLine& rLastLine = rLines[rLines.Count() - 1];
+    const tools::Long nHeight = rLastLine.GetHeight();
+    const tools::Long nUncounted
+        = nHeight - ImplShareAboveBaseline(nHeight) - rLastLine.GetShareDescent();
+    if (nHeight <= rLastLine.GetTxtHeight())
+        return std::min<tools::Long>(nUncounted, 0);
+    return nUncounted;
 }
 
 tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
@@ -1560,6 +1591,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( nLineHeight > pLine->GetHeight() )
             pLine->SetHeight( nLineHeight );
         pLine->SetMaxAscent( aFormatterMetrics.nMaxAscent );
+        pLine->SetShareDescent( aFormatterMetrics.nMaxShareDescent );
         pLine->SetAscentCompressed(false);
 
         bSameLineAgain = false;
@@ -1983,6 +2015,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
     FormatterFontMetric aFormatterMetrics;
     RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
     pTmpLine->SetMaxAscent( aFormatterMetrics.nMaxAscent );
+    pTmpLine->SetShareDescent( aFormatterMetrics.nMaxShareDescent );
     pTmpLine->SetHeight( static_cast<sal_uInt16>(pDummyPortion->GetSize().Height()) );
     sal_uInt16 nLineHeight = aFormatterMetrics.GetHeight();
     if ( nLineHeight > pTmpLine->GetHeight() )
@@ -3257,6 +3290,8 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
             nFontHeight > 0 ? basegfx::fround(double(nLineHeight) * aMetric.GetDescent() / nFontHeight)
                             : tools::Long(0),
             nLineHeight - ImplShareAboveBaseline(nLineHeight));
+        rCurMetrics.nMaxShareDescent = std::max(rCurMetrics.nMaxShareDescent,
+                                                sal::static_int_cast<sal_uInt16>(nShareDescent));
         const tools::Long nAboveBaseline
             = mbLineSpacingBelowBaseline ? rFont.GetFontHeight()
                                          : ImplAboveBaseline(nLineHeight, nLineHeight, nShareDescent);

@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingReducesExactLineSpacing)
 
 namespace
 {
-// Shrinks the box around four lines of 150 percent line spacing to 97 percent of their height,
+// Shrinks the box around four lines of 150 percent line spacing to 95 percent of their height,
 // fits the text, and returns the fitted height as a fraction of the height before fitting.
 double fitProportionalLineSpacing(SdXImpressDocument* pXImpressDocument, bool bLegacyFitting)
 {
@@ -426,7 +426,7 @@ double fitProportionalLineSpacing(SdXImpressDocument* pXImpressDocument, bool bL
     pView->SdrEndTextEdit();
 
     tools::Rectangle aRect = pTextObject->GetLogicRect();
-    aRect.SetSize(Size(aRect.GetWidth(), nNaturalHeight * 97 / 100
+    aRect.SetSize(Size(aRect.GetWidth(), nNaturalHeight * 95 / 100
                                              + pTextObject->GetTextUpperDistance()
                                              + pTextObject->GetTextLowerDistance()));
     pTextObject->SetLogicRect(aRect);
@@ -462,6 +462,28 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyFittingMultipliesLineSpacingRedu
     CPPUNIT_ASSERT(pXImpressDocument);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, fitProportionalLineSpacing(pXImpressDocument, true), 0.005);
+}
+
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testSpaceBelowLastLineLeftOutOfFit)
+{
+    // Six lines of 150 percent line spacing in boxes of 0.928 and 0.860 of their height. The
+    // reference program fits them at 100 percent font with 10 percent less spacing, and 92.5
+    // percent with 10 percent less, which fit only when the part of the last line's extra spacing
+    // below its baseline is left out of the height.
+    createSdImpressDoc("pptx/TextFittingLikeReference.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    auto pBody = DynCastSdrTextObj(pDoc->GetSdPage(4, PageKind::Standard)->GetObj(1));
+    CPPUNIT_ASSERT(pBody);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, pBody->GetSpacingScale(), 1E-4);
+
+    pBody = DynCastSdrTextObj(pDoc->GetSdPage(8, PageKind::Standard)->GetObj(1));
+    CPPUNIT_ASSERT(pBody);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.925, pBody->GetFontScale(), 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, pBody->GetSpacingScale(), 1E-4);
 }
 
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testStoredFitKeptUntilEdited)

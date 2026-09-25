@@ -42,6 +42,7 @@ private:
     sal_uInt16 mnHeight = 0; //  Total height of the line
     sal_uInt16 mnTextHeight = 0; // Pure Text height
     sal_uInt16 mnMaxAscent = 0;
+    sal_uInt16 mnShareDescent = 0; // Font share of the single spaced line below the baseline
     bool mbHangingPunctuation : 1 = false;
     bool mbInvalid : 1 = true; // for skillful formatting
     bool mbAscentCompressed : 1 = false;
@@ -89,6 +90,8 @@ public:
 
     void SetMaxAscent(sal_uInt16 nMaxAscent) { mnMaxAscent = nMaxAscent; }
     sal_uInt16 GetMaxAscent() const { return mnMaxAscent; }
+    void SetShareDescent(sal_uInt16 nShareDescent) { mnShareDescent = nShareDescent; }
+    sal_uInt16 GetShareDescent() const { return mnShareDescent; }
     void SetAscentCompressed(bool b) { mbAscentCompressed = b; }
     bool IsAscentCompressed() const { return mbAscentCompressed; }
 

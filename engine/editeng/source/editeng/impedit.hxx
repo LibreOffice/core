@@ -181,6 +181,9 @@ struct FormatterFontMetric
 {
     sal_uInt16 nMaxAscent = 0;
     sal_uInt16 nMaxDescent = 0;
+    // With fixed cell height: the font's own share of the line below the baseline, its descent
+    // over its ascent plus descent, at most a quarter of the line.
+    sal_uInt16 nMaxShareDescent = 0;
 
     sal_uInt16 GetHeight() const
     {
@@ -1050,6 +1053,7 @@ public:
 
     // Returns the height of the text, excluding empty lines in the end
     tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs, bool bIsScaling);
+    tools::Long GetUncountedSpaceBelowLastLine();
     void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
     void FormatDoc();
     void FormatFullDoc();
