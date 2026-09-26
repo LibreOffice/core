@@ -45,17 +45,6 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
 }
 
 
-ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< OUString >& denyList ) : m_sDenyList( denyList ), m_Sctx( scriptContext ), m_xContext( xContext )
-
-{
-    // initialise m_hProviderDetailsCache with details of ScriptProviders
-    // will use createContentEnumeration
-
-    m_xMgr = m_xContext->getServiceManager();
-    ENSURE_OR_THROW( m_xMgr.is(), "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
-    populateCache();
-}
-
 ProviderCache::~ProviderCache()
 {
 }

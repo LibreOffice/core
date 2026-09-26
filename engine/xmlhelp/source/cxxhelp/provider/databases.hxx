@@ -213,12 +213,6 @@ namespace chelp {
         const OUString& getProductName() const { return m_vReplacement[0]; }
         const OUString& getProductVersion() const { return m_vReplacement[1]; }
 
-        OUString expandURL( const OUString& aURL );
-        OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
-
-        static OUString expandURL( const OUString& aURL,
-            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
-
     private:
 
         std::mutex                                               m_aMutex;

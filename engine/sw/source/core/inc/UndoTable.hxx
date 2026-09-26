@@ -103,7 +103,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    SwHistory& GetHistory(); // will be created if necessary
     void AddFillBox( const SwTableBox& rBox );
 };
 

@@ -1975,18 +1975,6 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 #endif
 }
 
-void Desktop::SetSplashScreenText( const OUString& rText )
-{
-#if ENABLE_WASM_STRIP_SPLASH
-    (void) rText;
-#else
-    if( m_rSplashScreen.is() )
-    {
-        m_rSplashScreen->setText( rText );
-    }
-#endif
-}
-
 void Desktop::CloseSplashScreen()
 {
 #if !ENABLE_WASM_STRIP_SPLASH

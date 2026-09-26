@@ -70,11 +70,6 @@ namespace dbaccess
         TokenComposer & operator =(TokenComposer const &) = default;
         TokenComposer & operator =(TokenComposer &&) = default;
 
-        void operator() (const OUString& lhs)
-        {
-            append(lhs);
-        }
-
         void append( const OUString& lhs )
         {
             #ifdef DBG_UTIL

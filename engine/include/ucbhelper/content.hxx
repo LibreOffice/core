@@ -207,22 +207,6 @@ public:
       */
     const OUString& getURL() const;
 
-    // Command environment.
-
-    /**
-      * This method returns the environment to use when executing commands.
-      *
-      * @return the command environment.
-      */
-    const cpo::uno::Reference<css::ucb::XCommandEnvironment>& getCommandEnvironment() const;
-
-    /**
-      * This method sets a new command environment.
-      *
-      * @param xNewEnv is the new command environment.
-      */
-    void setCommandEnvironment(const cpo::uno::Reference<css::ucb::XCommandEnvironment>& xNewEnv);
-
     // Access to supported commands/properties.
 
     /**

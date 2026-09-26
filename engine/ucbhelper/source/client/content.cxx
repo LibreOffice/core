@@ -185,8 +185,6 @@ public:
     Any  executeCommand( const Command& rCommand );
 
     inline const Reference< XCommandEnvironment >& getEnvironment() const;
-    inline void setEnvironment(
-                        const Reference< XCommandEnvironment >& xNewEnv );
 
     void inserted();
 };
@@ -384,19 +382,6 @@ Reference< XContent > Content::get() const
 const OUString& Content::getURL() const
 {
     return m_xImpl->getURL();
-}
-
-
-const Reference< XCommandEnvironment >& Content::getCommandEnvironment() const
-{
-    return m_xImpl->getEnvironment();
-}
-
-
-void Content::setCommandEnvironment(
-                        const Reference< XCommandEnvironment >& xNewEnv )
-{
-    m_xImpl->setEnvironment( xNewEnv );
 }
 
 
@@ -1264,14 +1249,6 @@ inline const Reference< XCommandEnvironment >&
                                         Content_Impl::getEnvironment() const
 {
     return m_xEnv;
-}
-
-
-inline void Content_Impl::setEnvironment(
-                        const Reference< XCommandEnvironment >& xNewEnv )
-{
-    std::unique_lock aGuard( m_aMutex );
-    m_xEnv = xNewEnv;
 }
 
 

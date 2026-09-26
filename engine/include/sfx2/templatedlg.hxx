@@ -58,7 +58,6 @@ protected:
 
     DECL_DLLPRIVATE_LINK(OkClickHdl, weld::Button&, void);
     SAL_DLLPRIVATE void ImportActionHdl();
-    SAL_DLLPRIVATE void ExtensionsActionHdl();
 
     DECL_DLLPRIVATE_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 

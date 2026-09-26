@@ -81,11 +81,6 @@ cpo::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
     return comphelper::containerToSequence(vFiles);
 }
 
-void removeTree(OUString const & url) {
-    const bool bError = comphelper::DirectoryHelper::deleteDirRecursively(url);
-    SAL_WARN_IF(bError, "desktop.app", "error removing directory " << url);
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

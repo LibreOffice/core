@@ -33,9 +33,6 @@ namespace utl
         static          cpo::uno::Sequence< OUString >
                                 GetFolderContents( const OUString& rFolder, bool bFolder );
     };
-
-    /// recursively remove directory and all contents
-    UNOTOOLS_DLLPUBLIC void removeTree(OUString const & url);
 }
 
 #endif

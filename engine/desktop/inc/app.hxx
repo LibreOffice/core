@@ -113,7 +113,6 @@ class Desktop final : public Application
 
         // first-start (ever) related methods
 
-        void                    SetSplashScreenText( const OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
         // Bootstrap methods

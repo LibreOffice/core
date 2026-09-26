@@ -909,62 +909,6 @@ void ODatabaseMetaDataResultSet::openTablesTypes( )
     checkColumnCount();
 }
 
-void ODatabaseMetaDataResultSet::openCatalogs()
-{
-    SQLRETURN nRetcode;
-    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
-    {
-        nRetcode = functions().TablesW(m_aStatementHandle,
-                                       SQLWChars(u"" SQL_ALL_CATALOGS ""_ustr).get(), SQL_NTSL,
-                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
-                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
-                                       SQLWChars(u""_ustr).get(), SQL_NTSL);
-    }
-    else
-    {
-        nRetcode = functions().Tables(m_aStatementHandle,
-                                      SQLChars(SQL_ALL_CATALOGS ""_ostr).get(), SQL_NTS,
-                                      SQLChars(""_ostr).get(), SQL_NTS,
-                                      SQLChars(""_ostr).get(), SQL_NTS,
-                                      SQLChars(""_ostr).get(), SQL_NTS);
-    }
-    OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-
-    m_aColMapping.clear();
-    m_aColMapping.push_back(-1);
-    m_aColMapping.push_back(1);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
-    checkColumnCount();
-}
-
-void ODatabaseMetaDataResultSet::openSchemas()
-{
-    SQLRETURN nRetcode;
-    if (bUseWChar && functions().has(ODBC3SQLFunctionId::TablesW))
-    {
-        nRetcode = functions().TablesW(m_aStatementHandle,
-                                       SQLWChars(u""_ustr).get(), SQL_NTSL,
-                                       SQLWChars(u"" SQL_ALL_SCHEMAS ""_ustr).get(), SQL_NTSL,
-                                       SQLWChars(u""_ustr).get(),SQL_NTSL,
-                                       SQLWChars(u""_ustr).get(),SQL_NTSL);
-    }
-    else
-    {
-        nRetcode = functions().Tables(m_aStatementHandle,
-                                      SQLChars(""_ostr).get(), SQL_NTS,
-                                      SQLChars(SQL_ALL_SCHEMAS ""_ostr).get(), SQL_NTS,
-                                      SQLChars(""_ostr).get(), SQL_NTS,
-                                      SQLChars(""_ostr).get(), SQL_NTS);
-    }
-    OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-
-    m_aColMapping.clear();
-    m_aColMapping.push_back(-1);
-    m_aColMapping.push_back(2);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
-    checkColumnCount();
-}
-
 void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const OUString& schema,
                                         const OUString& table,
                                         const OUString& columnNamePattern )
@@ -1097,98 +1041,6 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     checkColumnCount();
 }
 
-void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     const OUString& schemaPattern,
-                                const OUString& procedureNamePattern,const OUString& columnNamePattern )
-{
-    OUString uPKQ;
-    catalog >>= uPKQ;
-    SQLRETURN nRetcode;
-    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ProcedureColumnsW))
-    {
-        SQLWChars aPKQ, aPKO;
-        if (!uPKQ.isEmpty())
-            aPKQ = SQLWChars(uPKQ);
-        if (!schemaPattern.isEmpty() && schemaPattern != "%")
-            aPKO = SQLWChars(schemaPattern);
-        SQLWChars aPKN(procedureNamePattern);
-        SQLWChars aCOL(columnNamePattern);
-
-        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
-             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
-
-        nRetcode = functions().ProcedureColumnsW(m_aStatementHandle,
-                                                 pPKQ, pPKQ ? SQL_NTSL : 0,
-                                                 pPKO, pPKO ? SQL_NTSL : 0,
-                                                 aPKN.get(), SQL_NTSL,
-                                                 aCOL.get(), SQL_NTSL);
-    }
-    else
-    {
-        SQLChars aPKQ, aPKO;
-        if (!uPKQ.isEmpty())
-            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
-        if (!schemaPattern.isEmpty() && schemaPattern != "%")
-            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
-        SQLChars aPKN(procedureNamePattern, m_nTextEncoding);
-        SQLChars aCOL(columnNamePattern, m_nTextEncoding);
-
-        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
-             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
-
-        nRetcode = functions().ProcedureColumns(m_aStatementHandle,
-                                                pPKQ, pPKQ ? SQL_NTS : 0,
-                                                pPKO, pPKO ? SQL_NTS : 0,
-                                                aPKN.get(), SQL_NTS,
-                                                aCOL.get(), SQL_NTS);
-    }
-    OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    checkColumnCount();
-}
-
-void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUString& schemaPattern,
-                                const OUString& procedureNamePattern)
-{
-    OUString uPKQ;
-    catalog >>= uPKQ;
-    SQLRETURN nRetcode;
-    if (bUseWChar && functions().has(ODBC3SQLFunctionId::ProceduresW))
-    {
-        SQLWChars aPKQ, aPKO;
-        if (!uPKQ.isEmpty())
-            aPKQ = SQLWChars(uPKQ);
-        if (!schemaPattern.isEmpty() && schemaPattern != "%")
-            aPKO = SQLWChars(schemaPattern);
-        SQLWChars aPKN(procedureNamePattern);
-
-        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
-             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
-
-        nRetcode = functions().ProceduresW(m_aStatementHandle,
-                                           pPKQ, pPKQ ? SQL_NTSL : 0,
-                                           pPKO, pPKO ? SQL_NTSL : 0,
-                                           aPKN.get(), SQL_NTSL);
-    }
-    else
-    {
-        SQLChars aPKQ, aPKO;
-        if (!uPKQ.isEmpty())
-            aPKQ = SQLChars(uPKQ, m_nTextEncoding);
-        if (!schemaPattern.isEmpty() && schemaPattern != "%")
-            aPKO = SQLChars(schemaPattern, m_nTextEncoding);
-        SQLChars aPKN(procedureNamePattern, m_nTextEncoding);
-
-        auto pPKQ = !aPKQ.empty() ? aPKQ.get() : nullptr,
-             pPKO = !aPKO.empty() ? aPKO.get() : nullptr;
-
-        nRetcode = functions().Procedures(m_aStatementHandle,
-                                          pPKQ, pPKQ ? SQL_NTS : 0,
-                                          pPKO, pPKO ? SQL_NTS : 0,
-                                          aPKN.get(), SQL_NTS);
-    }
-    OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    checkColumnCount();
-}
-
 void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& catalog, const OUString& schema,
                                     const OUString& table,sal_Int32 scope,   bool nullable )
 {
@@ -1248,12 +1100,6 @@ void ODatabaseMetaDataResultSet::openVersionColumns(const Any& catalog, const OU
                                     const OUString& table)
 {
     openSpecialColumns(true,catalog,schema,table,SQL_SCOPE_TRANSACTION,false);
-}
-
-void ODatabaseMetaDataResultSet::openBestRowIdentifier( const Any& catalog, const OUString& schema,
-                                        const OUString& table,sal_Int32 scope,bool nullable )
-{
-    openSpecialColumns(false,catalog,schema,table,scope,nullable);
 }
 
 void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUString* schema,
@@ -1336,12 +1182,6 @@ void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const OUSt
 {
 
     openForeignKeys(Any(),nullptr,nullptr,catalog, schema == "%" ? &schema : nullptr, &table);
-}
-
-void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const OUString& schema,
-                                  const OUString& table)
-{
-    openForeignKeys(catalog, schema == "%" ? &schema : nullptr, &table,Any(),nullptr,nullptr);
 }
 
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUString& schema,

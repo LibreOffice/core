@@ -188,12 +188,6 @@ namespace connectivity::odbc
         void openTypeInfo();
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        void openCatalogs();
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
-        void openSchemas();
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
         void openTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
                                         const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types );
         /// @throws css::sdbc::SQLException
@@ -206,27 +200,12 @@ namespace connectivity::odbc
                                                 const OUString& tableNamePattern,        const OUString& columnNamePattern );
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        void openProcedureColumns(      const cpo::uno::Any& catalog,            const OUString& schemaPattern,
-                                                        const OUString& procedureNamePattern,const OUString& columnNamePattern );
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
-        void openProcedures(    const cpo::uno::Any& catalog,            const OUString& schemaPattern,
-                                                        const OUString& procedureNamePattern);
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
         void openVersionColumns(const cpo::uno::Any& catalog, const OUString& schema,
                                                         const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        void openBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema,
-                                                                const OUString& table,sal_Int32 scope, bool nullable );
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
         void openForeignKeys( const cpo::uno::Any& catalog, const OUString* schema,const OUString* table,
                                                           const cpo::uno::Any& catalog2, const OUString* schema2,const OUString* table2);
-        /// @throws css::sdbc::SQLException
-        /// @throws cpo::uno::RuntimeException
-        void openExportedKeys(const cpo::uno::Any& catalog, const OUString& schema,const OUString& table);
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
         void openImportedKeys(const cpo::uno::Any& catalog, const OUString& schema,const OUString& table);

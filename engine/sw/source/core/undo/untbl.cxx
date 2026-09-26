@@ -838,13 +838,6 @@ void SwUndoTextToTable::AddFillBox( const SwTableBox& rBox )
     mvDelBoxes.push_back( rBox.GetSttIdx() );
 }
 
-SwHistory& SwUndoTextToTable::GetHistory()
-{
-    if( !m_pHistory )
-        m_pHistory = new SwHistory;
-    return *m_pHistory;
-}
-
 SwUndoTableHeadline::SwUndoTableHeadline( const SwTable& rTable, sal_uInt16 nOldHdl,
                                       sal_uInt16 nNewHdl )
     : SwUndo( SwUndoId::TABLEHEADLINE, rTable.GetFrameFormat()->GetDoc() ),

@@ -49,9 +49,6 @@ class ProviderCache
 public:
      /// @throws cpo::uno::RuntimeException
      ProviderCache( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext );
-     /// @throws cpo::uno::RuntimeException
-     ProviderCache( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext,
-        const cpo::uno::Sequence< OUString >& denyList );
     ~ProviderCache();
      cpo::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const OUString& providerName );

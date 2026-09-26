@@ -76,50 +76,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 
-OUString Databases::expandURL( const OUString& aURL )
-{
-    std::unique_lock aGuard(m_aMutex);
-    return expandURL(aGuard, aURL);
-}
-
-OUString Databases::expandURL( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& aURL )
-{
-    OUString aRetURL = expandURL( aURL, m_xContext );
-    return aRetURL;
-}
-
-OUString Databases::expandURL( const OUString& aURL, const Reference< cpo::uno::XComponentContext >& xContext )
-{
-    static Reference< util::XMacroExpander > xMacroExpander;
-    static Reference< uri::XUriReferenceFactory > xFac;
-
-    if( !xMacroExpander.is() || !xFac.is() )
-    {
-        xFac = uri::UriReferenceFactory::create( xContext );
-
-        xMacroExpander = util::theMacroExpander::get(xContext);
-    }
-
-    OUString aRetURL = aURL;
-    if( xMacroExpander.is() )
-    {
-        Reference< uri::XUriReference > uriRef;
-        for (;;)
-        {
-            uriRef = xFac->parse( aRetURL );
-            if ( uriRef.is() )
-            {
-                Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
-                if( !sxUri.is() )
-                    break;
-
-                aRetURL = sxUri->expand( xMacroExpander );
-            }
-        }
-    }
-    return aRetURL;
-}
-
 Databases::Databases( bool showBasic,
                       const OUString& instPath,
                       const OUString& productName,

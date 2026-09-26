@@ -705,11 +705,6 @@ bool CommandLineArgs::HasModuleParam() const
         || m_web;
 }
 
-void CommandLineArgs::RemoveFilesFromOpenListEndingWith(const OUString& rExt)
-{
-    std::erase_if(m_openlist, [rExt](OUString url) { return url.endsWithIgnoreAsciiCase(rExt); });
-}
-
 std::vector< OUString > CommandLineArgs::GetOpenList() const
 {
     return translateExternalUris(m_openlist);
