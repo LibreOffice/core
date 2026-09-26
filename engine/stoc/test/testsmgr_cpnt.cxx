@@ -89,10 +89,10 @@ public:
     ~Test_Manager_Impl();
 
     // XServiceInfo
-    OUString                    SAL_CALL getImplementationName() throw();
-    bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString >        SAL_CALL getSupportedServiceNames() throw();
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw();
+    OUString                    getImplementationName() throw();
+    bool                    supportsService(const OUString& ServiceName) throw();
+    Sequence< OUString >        getSupportedServiceNames() throw();
+    static Sequence< OUString > getSupportedServiceNames_Static() throw();
 
 private:
 //  static XIdlClassRef     getStaticIdlClass();
@@ -105,7 +105,7 @@ Test_Manager_Impl::~Test_Manager_Impl()
 
 
 // old, is no longer needed by the new Mimic
-Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
+Reference< XInterface > Test_Manager_Impl_CreateInstance_Impl()
 {
     return (OWeakObject *)new Test_Manager_Impl();
 }
@@ -113,7 +113,7 @@ Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 
 // Test_Manager_Impl_CreateInstance()
 
-Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
+Reference < XInterface > Test_Manager_Impl_CreateInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/ ) throw (Exception)
 {
     Reference < XInterface >  xService = (XWeak *)(OWeakObject *)new Test_Manager_Impl( );
@@ -161,7 +161,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw 
 *
 ****/
 
-extern "C" void SAL_CALL test_ServiceManager()
+extern "C" void test_ServiceManager()
 {
 #if ! defined SAL_DLLPREFIX
 #define SAL_DLLPREFIX ""
@@ -247,7 +247,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 extern "C"
 {
 
-bool SAL_CALL component_writeInfo(
+bool component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -274,7 +274,7 @@ bool SAL_CALL component_writeInfo(
     return false;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * component_getFactory(
     const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;

@@ -498,7 +498,7 @@ JavaVirtualMachine::JavaVirtualMachine(
     m_aAttachGuards(destroyAttachGuards) // TODO check for validity
 {}
 
-void SAL_CALL
+void
 JavaVirtualMachine::initialize(cpo::uno::Sequence< cpo::uno::Any > const &
                                    rArguments)
 {
@@ -555,24 +555,24 @@ JavaVirtualMachine::initialize(cpo::uno::Sequence< cpo::uno::Any > const &
     m_xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
 }
 
-OUString SAL_CALL JavaVirtualMachine::getImplementationName()
+OUString JavaVirtualMachine::getImplementationName()
 {
     return u"com.sun.star.comp.stoc.JavaVirtualMachine"_ustr;
 }
 
-bool SAL_CALL
+bool
 JavaVirtualMachine::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 JavaVirtualMachine::getSupportedServiceNames()
 {
     return { u"com.sun.star.java.JavaVirtualMachine"_ustr };
 }
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 JavaVirtualMachine::getJavaVM(cpo::uno::Sequence< sal_Int8 > const & rProcessId)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -794,7 +794,7 @@ JavaVirtualMachine::getJavaVM(cpo::uno::Sequence< sal_Int8 > const & rProcessId)
     }
 }
 
-bool SAL_CALL JavaVirtualMachine::isVMStarted()
+bool JavaVirtualMachine::isVMStarted()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -803,7 +803,7 @@ bool SAL_CALL JavaVirtualMachine::isVMStarted()
     return m_xUnoVirtualMachine.is();
 }
 
-bool SAL_CALL JavaVirtualMachine::isVMEnabled()
+bool JavaVirtualMachine::isVMEnabled()
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -821,7 +821,7 @@ bool SAL_CALL JavaVirtualMachine::isVMEnabled()
     return bEnabled;
 }
 
-bool SAL_CALL JavaVirtualMachine::isThreadAttached()
+bool JavaVirtualMachine::isThreadAttached()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -834,7 +834,7 @@ bool SAL_CALL JavaVirtualMachine::isThreadAttached()
     return pStack != nullptr && !pStack->empty();
 }
 
-void SAL_CALL JavaVirtualMachine::registerThread()
+void JavaVirtualMachine::registerThread()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -867,7 +867,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     }
 }
 
-void SAL_CALL JavaVirtualMachine::revokeThread()
+void JavaVirtualMachine::revokeThread()
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -887,7 +887,7 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
     pStack->pop();
 }
 
-void SAL_CALL
+void
 JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -895,11 +895,11 @@ JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
         m_xInetConfiguration.clear();
 }
 
-void SAL_CALL JavaVirtualMachine::elementInserted(
+void JavaVirtualMachine::elementInserted(
     css::container::ContainerEvent const &)
 {}
 
-void SAL_CALL JavaVirtualMachine::elementRemoved(
+void JavaVirtualMachine::elementRemoved(
     css::container::ContainerEvent const &)
 {}
 
@@ -908,7 +908,7 @@ void SAL_CALL JavaVirtualMachine::elementRemoved(
 // file does not contain an entry yet and that entry has to be inserted, this
 // function will be called.  We call java.lang.System.setProperty for the new
 // values.
-void SAL_CALL JavaVirtualMachine::elementReplaced(
+void JavaVirtualMachine::elementReplaced(
     css::container::ContainerEvent const & rEvent)
 {
     // TODO Using the new value stored in rEvent is wrong here.  If two threads
@@ -1039,7 +1039,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
 }
 
-void SAL_CALL JavaVirtualMachine::disposing()
+void JavaVirtualMachine::disposing()
 {
     cpo::uno::Reference< css::container::XContainer > xContainer1;
     {

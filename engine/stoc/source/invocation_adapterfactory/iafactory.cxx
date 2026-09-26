@@ -91,12 +91,12 @@ public:
     virtual ~FactoryImpl() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & rServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XInvocationAdapterFactory
-    virtual Reference< XInterface > SAL_CALL createAdapter(
+    virtual Reference< XInterface > createAdapter(
         const Reference< script::XInvocation > & xReceiver,
         const Sequence< Type > & rTypes ) override;
 };

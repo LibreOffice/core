@@ -182,11 +182,11 @@ public:
         : mxMgr( xMgr ) {}
 
     // Methods of XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  )
+    virtual Sequence< Property > getProperties(  )
         throw(RuntimeException);
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName )
+    virtual Property getPropertyByName( const OUString& aName )
         throw(UnknownPropertyException, RuntimeException);
-    virtual bool SAL_CALL hasPropertyByName( const OUString& Name )
+    virtual bool hasPropertyByName( const OUString& Name )
         throw(RuntimeException);
 };
 
@@ -306,112 +306,112 @@ public:
 
     // despite virtual inline, to simplify coding (testing only)
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+    virtual Reference< XPropertySetInfo > getPropertySetInfo(  )
         throw(RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+    virtual void setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName )
+    virtual Any getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
+    virtual void addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
+    virtual void removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+    virtual void addVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
+    virtual void removeVetoableChangeListener( const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener >& /*aListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
 
     // XIntroTest methods
     // Attributes
-    virtual OUString SAL_CALL getObjectName() throw(RuntimeException)
+    virtual OUString getObjectName() throw(RuntimeException)
         { return m_ObjectName; }
-    virtual void SAL_CALL setObjectName( const OUString& _objectname ) throw(RuntimeException)
+    virtual void setObjectName( const OUString& _objectname ) throw(RuntimeException)
         { m_ObjectName = _objectname; }
-    virtual OUString SAL_CALL getFirstName()
+    virtual OUString getFirstName()
         throw(RuntimeException);
-    virtual OUString SAL_CALL getLastName() throw(RuntimeException)
+    virtual OUString getLastName() throw(RuntimeException)
         { return OUString("Meyer"); }
-    virtual sal_Int16 SAL_CALL getAge() throw(RuntimeException)
+    virtual sal_Int16 getAge() throw(RuntimeException)
         { return m_nMarkusAge; }
-    virtual sal_Int16 SAL_CALL getChildrenCount() throw(RuntimeException)
+    virtual sal_Int16 getChildrenCount() throw(RuntimeException)
         { return m_nMarkusChildrenCount; }
-    virtual void SAL_CALL setChildrenCount( sal_Int16 _childrencount ) throw(RuntimeException)
+    virtual void setChildrenCount( sal_Int16 _childrencount ) throw(RuntimeException)
         { m_nMarkusChildrenCount = _childrencount; }
-    virtual Property SAL_CALL getFirstStruct() throw(RuntimeException)
+    virtual Property getFirstStruct() throw(RuntimeException)
         { return m_aFirstStruct; }
-    virtual void SAL_CALL setFirstStruct( const Property& _firststruct ) throw(RuntimeException)
+    virtual void setFirstStruct( const Property& _firststruct ) throw(RuntimeException)
         { m_aFirstStruct = _firststruct; }
-    virtual PropertyValue SAL_CALL getSecondStruct() throw(RuntimeException)
+    virtual PropertyValue getSecondStruct() throw(RuntimeException)
         { return m_aSecondStruct; }
-    virtual void SAL_CALL setSecondStruct( const PropertyValue& _secondstruct ) throw(RuntimeException)
+    virtual void setSecondStruct( const PropertyValue& _secondstruct ) throw(RuntimeException)
         { m_aSecondStruct = _secondstruct; }
 
     // Methods
-    virtual void SAL_CALL writeln( const OUString& Text )
+    virtual void writeln( const OUString& Text )
         throw(RuntimeException);
-    virtual sal_Int32 SAL_CALL getDroenk(  ) throw(RuntimeException)
+    virtual sal_Int32 getDroenk(  ) throw(RuntimeException)
         { return m_lDroenk; }
-    virtual Reference< ::ModuleA::XIntroTest > SAL_CALL getIntroTest(  ) throw(RuntimeException);
-    virtual sal_Int32 SAL_CALL getUps( sal_Int32 l ) throw(RuntimeException)
+    virtual Reference< ::ModuleA::XIntroTest > getIntroTest(  ) throw(RuntimeException);
+    virtual sal_Int32 getUps( sal_Int32 l ) throw(RuntimeException)
         { return 2*l; }
-    virtual void SAL_CALL setDroenk( sal_Int32 l ) throw(RuntimeException)
+    virtual void setDroenk( sal_Int32 l ) throw(RuntimeException)
         { m_lDroenk = l; }
-    virtual sal_Int16 SAL_CALL getBla(  ) throw(RuntimeException)
+    virtual sal_Int16 getBla(  ) throw(RuntimeException)
         { return m_nBla; }
-    virtual void SAL_CALL setBla( sal_Int32 n ) throw(RuntimeException)
+    virtual void setBla( sal_Int32 n ) throw(RuntimeException)
         { m_nBla = (sal_Int16)n; }
-    virtual sal_Int16 SAL_CALL getBlub(  ) throw(RuntimeException)
+    virtual sal_Int16 getBlub(  ) throw(RuntimeException)
         { return m_nBlub; }
-    virtual void SAL_CALL setBlub( sal_Int16 n ) throw(RuntimeException)
+    virtual void setBlub( sal_Int16 n ) throw(RuntimeException)
         { m_nBlub = n; }
-    virtual sal_Int16 SAL_CALL getGulp(  ) throw(RuntimeException)
+    virtual sal_Int16 getGulp(  ) throw(RuntimeException)
         { return m_nGulp; }
-    virtual sal_Int16 SAL_CALL setGulp( sal_Int16 n ) throw(RuntimeException)
+    virtual sal_Int16 setGulp( sal_Int16 n ) throw(RuntimeException)
         { m_nGulp = n; return 1; }
-    virtual TypeClass SAL_CALL getTypeClass( sal_Int16 /*n*/ ) throw(RuntimeException)
+    virtual TypeClass getTypeClass( sal_Int16 /*n*/ ) throw(RuntimeException)
         { return eTypeClass; }
-    virtual void SAL_CALL setTypeClass( TypeClass t, double /*d1*/, double /*d2*/ ) throw(RuntimeException)
+    virtual void setTypeClass( TypeClass t, double /*d1*/, double /*d2*/ ) throw(RuntimeException)
         { eTypeClass = t; }
-    virtual Sequence< OUString > SAL_CALL getStrings(  ) throw(RuntimeException)
+    virtual Sequence< OUString > getStrings(  ) throw(RuntimeException)
         { return aStringSeq; }
-    virtual void SAL_CALL setStrings( const Sequence< OUString >& Strings ) throw(RuntimeException)
+    virtual void setStrings( const Sequence< OUString >& Strings ) throw(RuntimeException)
         { aStringSeq = Strings; }
-    virtual void SAL_CALL setStringsPerMethod( const Sequence< OUString >& Strings, sal_Int16 /*n*/ ) throw(RuntimeException)
+    virtual void setStringsPerMethod( const Sequence< OUString >& Strings, sal_Int16 /*n*/ ) throw(RuntimeException)
         { aStringSeq = Strings; }
-    virtual Sequence< Sequence< Sequence< sal_Int16 > > > SAL_CALL getMultiSequence(  ) throw(RuntimeException)
+    virtual Sequence< Sequence< Sequence< sal_Int16 > > > getMultiSequence(  ) throw(RuntimeException)
         { return aMultSeq; }
-    virtual void SAL_CALL setMultiSequence( const Sequence< Sequence< Sequence< sal_Int16 > > >& Seq ) throw(RuntimeException)
+    virtual void setMultiSequence( const Sequence< Sequence< Sequence< sal_Int16 > > >& Seq ) throw(RuntimeException)
         { aMultSeq = Seq; }
-    virtual void SAL_CALL addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
+    virtual void addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
         throw(RuntimeException);
-    virtual void SAL_CALL removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& Listener )
+    virtual void removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& Listener )
         throw(RuntimeException);
 
 
     // Methods of XElementAccess
-    virtual Type SAL_CALL getElementType(  )
+    virtual Type getElementType(  )
         throw(RuntimeException);
-    virtual bool SAL_CALL hasElements(  )
+    virtual bool hasElements(  )
         throw(RuntimeException);
 
     // XNameAccess methods
     // Methods
-    virtual Any SAL_CALL getByName( const OUString& aName )
+    virtual Any getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getElementNames(  )
+    virtual Sequence< OUString > getElementNames(  )
         throw(RuntimeException);
-    virtual bool SAL_CALL hasByName( const OUString& aName )
+    virtual bool hasByName( const OUString& aName )
         throw(RuntimeException);
 
     // XIndexAccess methods
     // Methods
-    virtual sal_Int32 SAL_CALL getCount(  )
+    virtual sal_Int32 getCount(  )
         throw(RuntimeException);
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index )
+    virtual Any getByIndex( sal_Int32 Index )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 };
 

@@ -693,85 +693,85 @@ public:
     ImplIntrospectionAccess( Any obj, rtl::Reference< IntrospectionAccessStatic_Impl >  pStaticImpl_ );
 
     // Methods from XIntrospectionAccess
-    virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts() override;
-    virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts() override;
-    virtual Property SAL_CALL getProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
-    virtual bool SAL_CALL hasProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
-    virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts) override;
-    virtual Reference<XIdlMethod> SAL_CALL getMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
-    virtual bool SAL_CALL hasMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
-    virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts) override;
-    virtual Sequence< Type > SAL_CALL getSupportedListeners() override;
+    virtual sal_Int32 getSuppliedMethodConcepts() override;
+    virtual sal_Int32 getSuppliedPropertyConcepts() override;
+    virtual Property getProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
+    virtual bool hasProperty(const OUString& Name, sal_Int32 PropertyConcepts) override;
+    virtual Sequence< Property > getProperties(sal_Int32 PropertyConcepts) override;
+    virtual Reference<XIdlMethod> getMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
+    virtual bool hasMethod(const OUString& Name, sal_Int32 MethodConcepts) override;
+    virtual Sequence< Reference<XIdlMethod> > getMethods(sal_Int32 MethodConcepts) override;
+    virtual Sequence< Type > getSupportedListeners() override;
     using OWeakObject::queryAdapter;
-    virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType ) override;
+    virtual Reference<XInterface> queryAdapter( const Type& rType ) override;
 
     // Methods from XMaterialHolder
-    virtual Any SAL_CALL getMaterial() override;
+    virtual Any getMaterial() override;
 
     // Methods from XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) override;
+    virtual OUString getExactName( const OUString& rApproximateName ) override;
 
     // Methods from XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) override;
-    virtual void        SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() noexcept override { OWeakObject::release(); }
+    virtual Any queryInterface( const Type& rType ) override;
+    virtual void        acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void        release() noexcept override { OWeakObject::release(); }
 
     // Methods from XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const Any& aValue) override;
-    virtual Any SAL_CALL getPropertyValue(const OUString& aPropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener) override;
+    virtual Reference<XPropertySetInfo> getPropertySetInfo() override;
+    virtual void setPropertyValue(const OUString& aPropertyName, const Any& aValue) override;
+    virtual Any getPropertyValue(const OUString& aPropertyName) override;
+    virtual void addPropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener) override;
+    virtual void removePropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener) override;
+    virtual void addVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener) override;
+    virtual void removeVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener) override;
 
     // Methods from XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) override;
-    virtual Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+    virtual void setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) override;
+    virtual Any getFastPropertyValue(sal_Int32 nHandle) override;
 
     // Methods from XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() override;
-    virtual Property SAL_CALL getPropertyByName(const OUString& Name) override;
-    virtual bool SAL_CALL hasPropertyByName(const OUString& Name) override;
+    virtual Sequence< Property > getProperties() override;
+    virtual Property getPropertyByName(const OUString& Name) override;
+    virtual bool hasPropertyByName(const OUString& Name) override;
 
     // Methods from XElementAccess
-    virtual Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type getElementType() override;
+    virtual bool hasElements() override;
 
     // Methods from XNameAccess
-    virtual Any SAL_CALL getByName(const OUString& Name) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName(const OUString& Name) override;
+    virtual Any getByName(const OUString& Name) override;
+    virtual Sequence< OUString > getElementNames() override;
+    virtual bool hasByName(const OUString& Name) override;
 
     // Methods from XNameReplace
-    virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element) override;
+    virtual void replaceByName(const OUString& Name, const Any& Element) override;
 
     // Methods from XNameContainer
-    virtual void SAL_CALL insertByName(const OUString& Name, const Any& Element) override;
-    virtual void SAL_CALL removeByName(const OUString& Name) override;
+    virtual void insertByName(const OUString& Name, const Any& Element) override;
+    virtual void removeByName(const OUString& Name) override;
 
     // Methods from XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual Any SAL_CALL getByIndex(sal_Int32 Index) override;
+    virtual sal_Int32 getCount() override;
+    virtual Any getByIndex(sal_Int32 Index) override;
 
     // Methods from XIndexReplace
-    virtual void SAL_CALL replaceByIndex(sal_Int32 Index, const Any& Element) override;
+    virtual void replaceByIndex(sal_Int32 Index, const Any& Element) override;
 
     // Methods from XIndexContainer
-    virtual void SAL_CALL insertByIndex(sal_Int32 Index, const Any& Element) override;
-    virtual void SAL_CALL removeByIndex(sal_Int32 Index) override;
+    virtual void insertByIndex(sal_Int32 Index, const Any& Element) override;
+    virtual void removeByIndex(sal_Int32 Index) override;
 
     // Methods from XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration() override;
+    virtual Reference<XEnumeration> createEnumeration() override;
 
     // Methods from XIdlArray
-    virtual void SAL_CALL realloc(Any& array, sal_Int32 length) override;
-    virtual sal_Int32 SAL_CALL getLen(const Any& array) override;
-    virtual Any SAL_CALL get(const Any& array, sal_Int32 index) override;
-    virtual void SAL_CALL set(Any& array, sal_Int32 index, const Any& value) override;
+    virtual void realloc(Any& array, sal_Int32 length) override;
+    virtual sal_Int32 getLen(const Any& array) override;
+    virtual Any get(const Any& array, sal_Int32 index) override;
+    virtual void set(Any& array, sal_Int32 index, const Any& value) override;
 
     // Methods from XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 getSomething( const Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
@@ -930,7 +930,7 @@ Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
 }
 
 // Methods from XInterface
-Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
+Any ImplIntrospectionAccess::queryInterface( const Type& rType )
 {
     Any aRet( ::cppu::queryInterface(
         rType,
@@ -1356,7 +1356,7 @@ Sequence< Type > ImplIntrospectionAccess::getSupportedListeners()
     return comphelper::containerToSequence(mpStaticImpl->getSupportedListeners());
 }
 
-Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type& rType )
+Reference<XInterface> ImplIntrospectionAccess::queryAdapter( const Type& rType )
 {
     Reference<XInterface> xRet;
     if(    rType == cppu::UnoType<XInterface>::get()
@@ -1495,26 +1495,26 @@ public:
     {}
 
 private:
-    virtual void SAL_CALL disposing() override {
+    virtual void disposing() override {
         osl::MutexGuard g(m_aMutex);
         reflection_.clear();
         typeCache_.clear();
     }
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     { return u"com.sun.star.comp.stoc.Introspection"_ustr; }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL
+    virtual cpo::uno::Sequence<OUString>
     getSupportedServiceNames() override
     {
         Sequence<OUString> s { u"com.sun.star.beans.Introspection"_ustr };
         return s;
     }
 
-    virtual cpo::uno::Reference<css::beans::XIntrospectionAccess> SAL_CALL
+    virtual cpo::uno::Reference<css::beans::XIntrospectionAccess>
     inspect(cpo::uno::Any const & aObject) override;
 
     cpo::uno::Reference<css::reflection::XIdlReflection> reflection_;

@@ -137,8 +137,8 @@ public:
         {}
 
     // XEnumeration
-    bool SAL_CALL hasMoreElements() override;
-    Any SAL_CALL nextElement() override;
+    bool hasMoreElements() override;
+    Any nextElement() override;
 private:
     std::mutex                          aMutex;
     Sequence< Reference<XInterface > >  aFactories;
@@ -173,9 +173,9 @@ public:
         {}
 
     // XPropertySetInfo impl
-    virtual Sequence< beans::Property > SAL_CALL getProperties() override;
-    virtual beans::Property SAL_CALL getPropertyByName( OUString const & name ) override;
-    virtual bool SAL_CALL hasPropertyByName( OUString const & name ) override;
+    virtual Sequence< beans::Property > getProperties() override;
+    virtual beans::Property getPropertyByName( OUString const & name ) override;
+    virtual bool hasPropertyByName( OUString const & name ) override;
 };
 
 Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
@@ -213,8 +213,8 @@ public:
         {}
 
     // XEnumeration
-    virtual bool SAL_CALL hasMoreElements() override;
-    virtual Any SAL_CALL nextElement() override;
+    virtual bool hasMoreElements() override;
+    virtual Any nextElement() override;
 
 private:
     std::mutex                      aMutex;
@@ -275,7 +275,7 @@ public:
         {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject & rEvt ) override;
+    virtual void disposing(const EventObject & rEvt ) override;
 };
 
 void OServiceManager_Listener::disposing(const EventObject & rEvt )
@@ -317,64 +317,64 @@ public:
     explicit OServiceManager( Reference< XComponentContext > const & xContext );
 
     // XInitialization
-    void SAL_CALL initialize( Sequence< Any > const & args ) override;
+    void initialize( Sequence< Any > const & args ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XMultiComponentFactory
-    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+    virtual Reference< XInterface > createInstanceWithContext(
         OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext ) override;
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+    virtual Reference< XInterface > createInstanceWithArgumentsAndContext(
         OUString const & rServiceSpecifier,
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override;
-//      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
+//      virtual Sequence< OUString > getAvailableServiceNames()
 //          throw (RuntimeException);
 
     // XMultiServiceFactory
-    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
-    virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) override;
-    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) override;
+    virtual Sequence< OUString > getAvailableServiceNames() override;
+    virtual Reference<XInterface > createInstance(const OUString &) override;
+    virtual Reference<XInterface > createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) override;
 
     // The same as the getAvailableServiceNames, but only unique names
     Sequence< OUString > getUniqueAvailableServiceNames(
         HashSet_OWString & aNameSet );
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration > SAL_CALL createEnumeration() override;
+    virtual Reference<XEnumeration > createEnumeration() override;
 
     // XSet
-    virtual bool SAL_CALL has( const Any & Element ) override;
-    virtual void SAL_CALL insert( const Any & Element ) override;
-    virtual void SAL_CALL remove( const Any & Element ) override;
+    virtual bool has( const Any & Element ) override;
+    virtual void insert( const Any & Element ) override;
+    virtual void remove( const Any & Element ) override;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
+    virtual Reference<XEnumeration > createContentEnumeration(const OUString& aServiceName) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
     // XPropertySet
-    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
-    Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
-    void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override;
-    void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override;
-    void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override;
-    void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override;
+    Reference<XPropertySetInfo > getPropertySetInfo() override;
+    void setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
+    Any getPropertyValue(const OUString& PropertyName) override;
+    void addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override;
+    void removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override;
+    void addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override;
+    void removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override;
 
 protected:
     bool is_disposed() const;
     void check_undisposed() const;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
@@ -439,81 +439,81 @@ class OServiceManagerWrapper : public cppu::BaseMutex, public t_OServiceManagerW
     }
 
 protected:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 public:
     explicit OServiceManagerWrapper(
         Reference< XComponentContext > const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getImplementationName(); }
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override
+    virtual bool supportsService(const OUString& ServiceName) override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->supportsService( ServiceName ); }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual Sequence< OUString > getSupportedServiceNames() override
         { return Reference< XServiceInfo >(getRoot(), UNO_QUERY_THROW)->getSupportedServiceNames(); }
 
     // XMultiComponentFactory
-    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+    virtual Reference< XInterface > createInstanceWithContext(
         OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext ) override
         { return getRoot()->createInstanceWithContext( rServiceSpecifier, xContext ); }
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+    virtual Reference< XInterface > createInstanceWithArgumentsAndContext(
         OUString const & rServiceSpecifier,
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override
         { return getRoot()->createInstanceWithArgumentsAndContext( rServiceSpecifier, rArguments, xContext ); }
-//      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
+//      virtual Sequence< OUString > getAvailableServiceNames()
 //          throw (RuntimeException);
 
     // XMultiServiceFactory
-    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() override
+    virtual Sequence< OUString > getAvailableServiceNames() override
         { return getRoot()->getAvailableServiceNames(); }
-    virtual Reference<XInterface > SAL_CALL createInstance(const OUString & name) override
+    virtual Reference<XInterface > createInstance(const OUString & name) override
         { return getRoot()->createInstanceWithContext( name, m_xContext ); }
-    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString & name, const Sequence<Any >& Arguments) override
+    virtual Reference<XInterface > createInstanceWithArguments(const OUString & name, const Sequence<Any >& Arguments) override
         { return getRoot()->createInstanceWithArgumentsAndContext( name, Arguments, m_xContext ); }
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override
+    virtual Type getElementType() override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->getElementType(); }
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
         { return Reference< XElementAccess >(getRoot(), UNO_QUERY_THROW)->hasElements(); }
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration > SAL_CALL createEnumeration() override
+    virtual Reference<XEnumeration > createEnumeration() override
         { return Reference< XEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createEnumeration(); }
 
     // XSet
-    virtual bool SAL_CALL has( const Any & Element ) override
+    virtual bool has( const Any & Element ) override
         { return Reference< XSet >(getRoot(), UNO_QUERY_THROW)->has( Element ); }
-    virtual void SAL_CALL insert( const Any & Element ) override
+    virtual void insert( const Any & Element ) override
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->insert( Element ); }
-    virtual void SAL_CALL remove( const Any & Element ) override
+    virtual void remove( const Any & Element ) override
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->remove( Element ); }
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) override
+    virtual Reference<XEnumeration > createContentEnumeration(const OUString& aServiceName) override
         { return Reference< XContentEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createContentEnumeration( aServiceName ); }
 
     // XPropertySet
-    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() override
+    Reference<XPropertySetInfo > getPropertySetInfo() override
         { return Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->getPropertySetInfo(); }
 
-    void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
-    Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    void setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
+    Any getPropertyValue(const OUString& PropertyName) override;
 
-    void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override
+    void addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->addPropertyChangeListener( PropertyName, aListener ); }
-    void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override
+    void removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->removePropertyChangeListener( PropertyName, aListener ); }
-    void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override
+    void addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->addVetoableChangeListener( PropertyName, aListener ); }
-    void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override
+    void removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener) override
         { Reference< XPropertySet >(getRoot(), UNO_QUERY_THROW)->removeVetoableChangeListener( PropertyName, aListener ); }
 };
 
-void SAL_CALL OServiceManagerWrapper::setPropertyValue(
+void OServiceManagerWrapper::setPropertyValue(
     const OUString& PropertyName, const Any& aValue )
 {
     if ( PropertyName == "DefaultContext" )
@@ -536,7 +536,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
     }
 }
 
-Any SAL_CALL OServiceManagerWrapper::getPropertyValue(
+Any OServiceManagerWrapper::getPropertyValue(
     const OUString& PropertyName )
 {
     if ( PropertyName == "DefaultContext" )
@@ -1141,27 +1141,27 @@ public:
     explicit ORegistryServiceManager( Reference< XComponentContext > const & xContext );
 
     // XInitialization
-    void SAL_CALL initialize(const Sequence< Any >& Arguments) override;
+    void initialize(const Sequence< Any >& Arguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
         { return u"com.sun.star.comp.stoc.ORegistryServiceManager"_ustr; }
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    Sequence< OUString > getSupportedServiceNames() override;
 
     // XMultiServiceFactory
-    Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    Sequence< OUString > getAvailableServiceNames() override;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
+    Reference<XEnumeration > createContentEnumeration(const OUString& aServiceName) override;
 
     // XComponent
-    void SAL_CALL dispose() override;
+    void dispose() override;
 
     // OServiceManager
-    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    Reference<XPropertySetInfo > getPropertySetInfo() override;
+    Any getPropertyValue(const OUString& PropertyName) override;
 
 protected:
     //OServiceManager

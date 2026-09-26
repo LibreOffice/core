@@ -48,12 +48,12 @@ using namespace cppu;
 class EmptyComponentContext : public WeakImplHelper< XComponentContext >
 {
 public:
-    virtual Any SAL_CALL getValueByName( const OUString& /*Name*/ )
+    virtual Any getValueByName( const OUString& /*Name*/ )
         throw (RuntimeException)
         {
             return Any();
         }
-    virtual Reference< XMultiComponentFactory > SAL_CALL getServiceManager(  )
+    virtual Reference< XMultiComponentFactory > getServiceManager(  )
         throw (RuntimeException)
         {
             return Reference< XMultiComponentFactory > ();

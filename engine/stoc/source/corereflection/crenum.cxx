@@ -47,15 +47,15 @@ public:
         {}
 
     // XIdlMember
-    virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() override;
-    virtual OUString SAL_CALL getName() override;
+    virtual Reference< XIdlClass > getDeclaringClass() override;
+    virtual OUString getName() override;
     // XIdlField
-    virtual Reference< XIdlClass > SAL_CALL getType() override;
-    virtual FieldAccessMode SAL_CALL getAccessMode() override;
-    virtual Any SAL_CALL get( const Any & rObj ) override;
-    virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) override;
+    virtual Reference< XIdlClass > getType() override;
+    virtual FieldAccessMode getAccessMode() override;
+    virtual Any get( const Any & rObj ) override;
+    virtual void set( const Any & rObj, const Any & rValue ) override;
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
-    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) override;
+    virtual void set( Any & rObj, const Any & rValue ) override;
 };
 
 }

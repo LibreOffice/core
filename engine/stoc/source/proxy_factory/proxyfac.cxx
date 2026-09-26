@@ -62,12 +62,12 @@ struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
     FactoryImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & rServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XProxyFactory
-    virtual Reference< XAggregation > SAL_CALL createProxy(
+    virtual Reference< XAggregation > createProxy(
         Reference< XInterface > const & xTarget ) override;
 };
 
@@ -133,7 +133,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
 struct ProxyRoot : public ::cppu::OWeakAggObject
 {
     // XAggregation
-    virtual Any SAL_CALL queryAggregation( Type const & rType ) override;
+    virtual Any queryAggregation( Type const & rType ) override;
 
     ProxyRoot( ::rtl::Reference< FactoryImpl > factory,
                       Reference< XInterface > const & xTarget );

@@ -62,24 +62,24 @@ public:
     TargetObject()
         { ++s_obj; }
 
-    Any SAL_CALL queryInterface( Type const & type )
+    Any queryInterface( Type const & type )
         throw (RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
+    virtual OUString getImplementationName() throw (RuntimeException)
         { return OUString("target"); }
-    virtual bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
+    virtual bool supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return false; }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    virtual Sequence< OUString > getSupportedServiceNames()
         throw (RuntimeException)
         { return Sequence< OUString >(); }
     // XProxyFactory
-    virtual Reference< XAggregation > SAL_CALL createProxy(
+    virtual Reference< XAggregation > createProxy(
         const Reference< XInterface > & xTarget ) throw (RuntimeException)
         { return Reference< XAggregation >( xTarget, UNO_QUERY ); }
     // XCurrentContext
-    virtual Any SAL_CALL getValueByName( OUString const & name )
+    virtual Any getValueByName( OUString const & name )
         throw (RuntimeException)
         { return makeAny( name ); }
 };
@@ -118,7 +118,7 @@ public:
         SAL_INFO("stoc", "~TestMaster()" );
     }
 
-    virtual Any SAL_CALL queryInterface( const Type & rType )
+    virtual Any queryInterface( const Type & rType )
         throw (RuntimeException)
     {
         Any aRet(
@@ -129,12 +129,12 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
+    virtual OUString getImplementationName() throw (RuntimeException)
         { return OUString("master"); }
-    virtual bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
+    virtual bool supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return false; }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    virtual Sequence< OUString > getSupportedServiceNames()
         throw (RuntimeException)
         { return Sequence< OUString >(); }
 };

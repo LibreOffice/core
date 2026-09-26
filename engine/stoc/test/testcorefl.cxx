@@ -64,12 +64,12 @@ class OInterfaceA : public WeakImplHelper< XInterfaceA >
 {
 public:
 
-    virtual void SAL_CALL methodA() throw (RuntimeException)
+    virtual void methodA() throw (RuntimeException)
         {}
 
-    virtual void SAL_CALL methodB(sal_Int16 /*aShort*/) throw (RuntimeException)
+    virtual void methodB(sal_Int16 /*aShort*/) throw (RuntimeException)
         {}
-    virtual Sequence< StructB > SAL_CALL methodC(const StructC& /*aStructC*/, StructA& /*aStructA*/) throw (RuntimeException)
+    virtual Sequence< StructB > methodC(const StructC& /*aStructC*/, StructA& /*aStructA*/) throw (RuntimeException)
         { return Sequence< StructB >(); }
 };
 

@@ -71,15 +71,15 @@ public:
         {}
 
     // XIdlMember
-    virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() override;
-    virtual OUString SAL_CALL getName() override;
+    virtual Reference< XIdlClass > getDeclaringClass() override;
+    virtual OUString getName() override;
     // XIdlField
-    virtual Reference< XIdlClass > SAL_CALL getType() override;
-    virtual FieldAccessMode SAL_CALL getAccessMode() override;
-    virtual Any SAL_CALL get( const Any & rObj ) override;
-    virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) override;
+    virtual Reference< XIdlClass > getType() override;
+    virtual FieldAccessMode getAccessMode() override;
+    virtual Any get( const Any & rObj ) override;
+    virtual void set( const Any & rObj, const Any & rValue ) override;
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
-    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) override;
+    virtual void set( Any & rObj, const Any & rValue ) override;
 
 private:
     void checkException(
@@ -288,18 +288,18 @@ public:
         {}
 
     // XTypeProvider
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual Sequence< sal_Int8 > getImplementationId() override;
 
     // XIdlMember
-    virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() override;
-    virtual OUString SAL_CALL getName() override;
+    virtual Reference< XIdlClass > getDeclaringClass() override;
+    virtual OUString getName() override;
     // XIdlMethod
-    virtual Reference< XIdlClass > SAL_CALL getReturnType() override;
-    virtual Sequence< Reference< XIdlClass > > SAL_CALL getParameterTypes() override;
-    virtual Sequence< ParamInfo > SAL_CALL getParameterInfos() override;
-    virtual Sequence< Reference< XIdlClass > > SAL_CALL getExceptionTypes() override;
-    virtual MethodMode SAL_CALL getMode() override;
-    virtual Any SAL_CALL invoke( const Any & rObj, Sequence< Any > & rArgs ) override;
+    virtual Reference< XIdlClass > getReturnType() override;
+    virtual Sequence< Reference< XIdlClass > > getParameterTypes() override;
+    virtual Sequence< ParamInfo > getParameterInfos() override;
+    virtual Sequence< Reference< XIdlClass > > getExceptionTypes() override;
+    virtual MethodMode getMode() override;
+    virtual Any invoke( const Any & rObj, Sequence< Any > & rArgs ) override;
 };
 
 }
@@ -336,7 +336,7 @@ OUString IdlInterfaceMethodImpl::getName()
 
 // XIdlMethod
 
-Reference< XIdlClass > SAL_CALL IdlInterfaceMethodImpl::getReturnType()
+Reference< XIdlClass > IdlInterfaceMethodImpl::getReturnType()
 {
     return getReflection()->forType( getMethodTypeDescr()->pReturnTypeRef );
 }
@@ -447,13 +447,13 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
     return *m_xParamInfos;
 }
 
-MethodMode SAL_CALL IdlInterfaceMethodImpl::getMode()
+MethodMode IdlInterfaceMethodImpl::getMode()
 {
     return
         getMethodTypeDescr()->bOneWay ? MethodMode_ONEWAY : MethodMode_TWOWAY;
 }
 
-Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > & rArgs )
+Any IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > & rArgs )
 {
     if (auto ifc = o3tl::tryAccess<cpo::uno::Reference<cpo::uno::XInterface>>(
             rObj))

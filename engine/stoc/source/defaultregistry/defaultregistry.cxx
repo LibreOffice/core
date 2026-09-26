@@ -47,27 +47,27 @@ public:
     NestedRegistryImpl( );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
 
     // XSimpleRegistry
-    virtual OUString SAL_CALL getURL() override;
-    virtual void SAL_CALL open( const OUString& rURL, bool bReadOnly, bool bCreate ) override;
-    virtual bool SAL_CALL isValid(  ) override;
-    virtual void SAL_CALL close(  ) override;
-    virtual void SAL_CALL destroy(  ) override;
-    virtual Reference< XRegistryKey > SAL_CALL getRootKey(  ) override;
-    virtual bool SAL_CALL isReadOnly(  ) override;
-    virtual void SAL_CALL mergeKey( const OUString& aKeyName, const OUString& aUrl ) override;
+    virtual OUString getURL() override;
+    virtual void open( const OUString& rURL, bool bReadOnly, bool bCreate ) override;
+    virtual bool isValid(  ) override;
+    virtual void close(  ) override;
+    virtual void destroy(  ) override;
+    virtual Reference< XRegistryKey > getRootKey(  ) override;
+    virtual bool isReadOnly(  ) override;
+    virtual void mergeKey( const OUString& aKeyName, const OUString& aUrl ) override;
 
     // XEnumerationAccess
-    virtual Reference< XEnumeration > SAL_CALL createEnumeration(  ) override;
-    virtual Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual Reference< XEnumeration > createEnumeration(  ) override;
+    virtual Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     friend class NestedKeyImpl;
 protected:
@@ -92,35 +92,35 @@ public:
                     NestedKeyImpl* pKey);
 
     // XRegistryKey
-    virtual OUString SAL_CALL getKeyName() override;
-    virtual bool SAL_CALL isReadOnly(  ) override;
-    virtual bool SAL_CALL isValid(  ) override;
-    virtual RegistryKeyType SAL_CALL getKeyType( const OUString& rKeyName ) override;
-    virtual RegistryValueType SAL_CALL getValueType(  ) override;
-    virtual sal_Int32 SAL_CALL getLongValue(  ) override;
-    virtual void SAL_CALL setLongValue( sal_Int32 value ) override;
-    virtual Sequence< sal_Int32 > SAL_CALL getLongListValue(  ) override;
-    virtual void SAL_CALL setLongListValue( const cpo::uno::Sequence< sal_Int32 >& seqValue ) override;
-    virtual OUString SAL_CALL getAsciiValue(  ) override;
-    virtual void SAL_CALL setAsciiValue( const OUString& value ) override;
-    virtual Sequence< OUString > SAL_CALL getAsciiListValue(  ) override;
-    virtual void SAL_CALL setAsciiListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
-    virtual OUString SAL_CALL getStringValue(  ) override;
-    virtual void SAL_CALL setStringValue( const OUString& value ) override;
-    virtual Sequence< OUString > SAL_CALL getStringListValue(  ) override;
-    virtual void SAL_CALL setStringListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
-    virtual Sequence< sal_Int8 > SAL_CALL getBinaryValue(  ) override;
-    virtual void SAL_CALL setBinaryValue( const cpo::uno::Sequence< sal_Int8 >& value ) override;
-    virtual Reference< XRegistryKey > SAL_CALL openKey( const OUString& aKeyName ) override;
-    virtual Reference< XRegistryKey > SAL_CALL createKey( const OUString& aKeyName ) override;
-    virtual void SAL_CALL closeKey(  ) override;
-    virtual void SAL_CALL deleteKey( const OUString& rKeyName ) override;
-    virtual Sequence< Reference< XRegistryKey > > SAL_CALL openKeys(  ) override;
-    virtual Sequence< OUString > SAL_CALL getKeyNames(  ) override;
-    virtual bool SAL_CALL createLink( const OUString& aLinkName, const OUString& aLinkTarget ) override;
-    virtual void SAL_CALL deleteLink( const OUString& rLinkName ) override;
-    virtual OUString SAL_CALL getLinkTarget( const OUString& rLinkName ) override;
-    virtual OUString SAL_CALL getResolvedName( const OUString& aKeyName ) override;
+    virtual OUString getKeyName() override;
+    virtual bool isReadOnly(  ) override;
+    virtual bool isValid(  ) override;
+    virtual RegistryKeyType getKeyType( const OUString& rKeyName ) override;
+    virtual RegistryValueType getValueType(  ) override;
+    virtual sal_Int32 getLongValue(  ) override;
+    virtual void setLongValue( sal_Int32 value ) override;
+    virtual Sequence< sal_Int32 > getLongListValue(  ) override;
+    virtual void setLongListValue( const cpo::uno::Sequence< sal_Int32 >& seqValue ) override;
+    virtual OUString getAsciiValue(  ) override;
+    virtual void setAsciiValue( const OUString& value ) override;
+    virtual Sequence< OUString > getAsciiListValue(  ) override;
+    virtual void setAsciiListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
+    virtual OUString getStringValue(  ) override;
+    virtual void setStringValue( const OUString& value ) override;
+    virtual Sequence< OUString > getStringListValue(  ) override;
+    virtual void setStringListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
+    virtual Sequence< sal_Int8 > getBinaryValue(  ) override;
+    virtual void setBinaryValue( const cpo::uno::Sequence< sal_Int8 >& value ) override;
+    virtual Reference< XRegistryKey > openKey( const OUString& aKeyName ) override;
+    virtual Reference< XRegistryKey > createKey( const OUString& aKeyName ) override;
+    virtual void closeKey(  ) override;
+    virtual void deleteKey( const OUString& rKeyName ) override;
+    virtual Sequence< Reference< XRegistryKey > > openKeys(  ) override;
+    virtual Sequence< OUString > getKeyNames(  ) override;
+    virtual bool createLink( const OUString& aLinkName, const OUString& aLinkTarget ) override;
+    virtual void deleteLink( const OUString& rLinkName ) override;
+    virtual OUString getLinkTarget( const OUString& rLinkName ) override;
+    virtual OUString getResolvedName( const OUString& aKeyName ) override;
 
 protected:
     void        computeChanges();
@@ -241,14 +241,14 @@ OUString NestedKeyImpl::computeName(const OUString& name)
 }
 
 
-OUString SAL_CALL NestedKeyImpl::getKeyName()
+OUString NestedKeyImpl::getKeyName()
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     return m_name;
 }
 
 
-bool SAL_CALL NestedKeyImpl::isReadOnly(  )
+bool NestedKeyImpl::isReadOnly(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -260,7 +260,7 @@ bool SAL_CALL NestedKeyImpl::isReadOnly(  )
 }
 
 
-bool SAL_CALL NestedKeyImpl::isValid(  )
+bool NestedKeyImpl::isValid(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     return ((m_localKey.is() && m_localKey->isValid()) ||
@@ -268,7 +268,7 @@ bool SAL_CALL NestedKeyImpl::isValid(  )
 }
 
 
-RegistryKeyType SAL_CALL NestedKeyImpl::getKeyType( const OUString& rKeyName )
+RegistryKeyType NestedKeyImpl::getKeyType( const OUString& rKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -286,7 +286,7 @@ RegistryKeyType SAL_CALL NestedKeyImpl::getKeyType( const OUString& rKeyName )
 }
 
 
-RegistryValueType SAL_CALL NestedKeyImpl::getValueType(  )
+RegistryValueType NestedKeyImpl::getValueType(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -304,7 +304,7 @@ RegistryValueType SAL_CALL NestedKeyImpl::getValueType(  )
 }
 
 
-sal_Int32 SAL_CALL NestedKeyImpl::getLongValue(  )
+sal_Int32 NestedKeyImpl::getLongValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -324,7 +324,7 @@ sal_Int32 SAL_CALL NestedKeyImpl::getLongValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setLongValue( sal_Int32 value )
+void NestedKeyImpl::setLongValue( sal_Int32 value )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -347,7 +347,7 @@ void SAL_CALL NestedKeyImpl::setLongValue( sal_Int32 value )
 }
 
 
-Sequence< sal_Int32 > SAL_CALL NestedKeyImpl::getLongListValue(  )
+Sequence< sal_Int32 > NestedKeyImpl::getLongListValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -367,7 +367,7 @@ Sequence< sal_Int32 > SAL_CALL NestedKeyImpl::getLongListValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqValue )
+void NestedKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqValue )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -390,7 +390,7 @@ void SAL_CALL NestedKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqV
 }
 
 
-OUString SAL_CALL NestedKeyImpl::getAsciiValue(  )
+OUString NestedKeyImpl::getAsciiValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -410,7 +410,7 @@ OUString SAL_CALL NestedKeyImpl::getAsciiValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setAsciiValue( const OUString& value )
+void NestedKeyImpl::setAsciiValue( const OUString& value )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -433,7 +433,7 @@ void SAL_CALL NestedKeyImpl::setAsciiValue( const OUString& value )
 }
 
 
-Sequence< OUString > SAL_CALL NestedKeyImpl::getAsciiListValue(  )
+Sequence< OUString > NestedKeyImpl::getAsciiListValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -453,7 +453,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getAsciiListValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setAsciiListValue( const Sequence< OUString >& seqValue )
+void NestedKeyImpl::setAsciiListValue( const Sequence< OUString >& seqValue )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -476,7 +476,7 @@ void SAL_CALL NestedKeyImpl::setAsciiListValue( const Sequence< OUString >& seqV
 }
 
 
-OUString SAL_CALL NestedKeyImpl::getStringValue(  )
+OUString NestedKeyImpl::getStringValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -496,7 +496,7 @@ OUString SAL_CALL NestedKeyImpl::getStringValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setStringValue( const OUString& value )
+void NestedKeyImpl::setStringValue( const OUString& value )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -519,7 +519,7 @@ void SAL_CALL NestedKeyImpl::setStringValue( const OUString& value )
 }
 
 
-Sequence< OUString > SAL_CALL NestedKeyImpl::getStringListValue(  )
+Sequence< OUString > NestedKeyImpl::getStringListValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -539,7 +539,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getStringListValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setStringListValue( const Sequence< OUString >& seqValue )
+void NestedKeyImpl::setStringListValue( const Sequence< OUString >& seqValue )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -562,7 +562,7 @@ void SAL_CALL NestedKeyImpl::setStringListValue( const Sequence< OUString >& seq
 }
 
 
-Sequence< sal_Int8 > SAL_CALL NestedKeyImpl::getBinaryValue(  )
+Sequence< sal_Int8 > NestedKeyImpl::getBinaryValue(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -582,7 +582,7 @@ Sequence< sal_Int8 > SAL_CALL NestedKeyImpl::getBinaryValue(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
+void NestedKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
@@ -605,7 +605,7 @@ void SAL_CALL NestedKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
 }
 
 
-Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyName )
+Reference< XRegistryKey > NestedKeyImpl::openKey( const OUString& aKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -640,7 +640,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyN
 }
 
 
-Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKeyName )
+Reference< XRegistryKey > NestedKeyImpl::createKey( const OUString& aKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( (!m_localKey.is() && !m_defaultKey.is()) ||
@@ -697,7 +697,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKe
 }
 
 
-void SAL_CALL NestedKeyImpl::closeKey(  )
+void NestedKeyImpl::closeKey(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( m_localKey.is() && m_localKey->isValid() )
@@ -711,7 +711,7 @@ void SAL_CALL NestedKeyImpl::closeKey(  )
 }
 
 
-void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
+void NestedKeyImpl::deleteKey( const OUString& rKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() || !m_localKey->isValid() ||
@@ -731,7 +731,7 @@ void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
 }
 
 
-Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
+Sequence< Reference< XRegistryKey > > NestedKeyImpl::openKeys(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -774,7 +774,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
 }
 
 
-Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
+Sequence< OUString > NestedKeyImpl::getKeyNames(  )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -797,7 +797,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
 }
 
 
-bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OUString& aLinkTarget )
+bool NestedKeyImpl::createLink( const OUString& aLinkName, const OUString& aLinkTarget )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
 
@@ -853,7 +853,7 @@ bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OUStri
 }
 
 
-void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
+void NestedKeyImpl::deleteLink( const OUString& rLinkName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -895,7 +895,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
 }
 
 
-OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
+OUString NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -947,7 +947,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
 }
 
 
-OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
+OUString NestedKeyImpl::getResolvedName( const OUString& aKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     if ( !m_localKey.is() && !m_defaultKey.is() )
@@ -982,8 +982,8 @@ public:
         : m_xReg1( r1 ) , m_xReg2( r2 )
         {}
 public:
-    virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual Any SAL_CALL nextElement(  ) override;
+    virtual bool hasMoreElements(  ) override;
+    virtual Any nextElement(  ) override;
 
 private:
     Reference< XSimpleRegistry > m_xReg1;
@@ -1027,31 +1027,31 @@ Type NestedRegistryImpl::getElementType(  )
     return cppu::UnoType<decltype(m_localReg)>::get();
 }
 
-bool SAL_CALL NestedRegistryImpl::hasElements(  )
+bool NestedRegistryImpl::hasElements(  )
 {
     MutexGuard guard( m_mutex );
     return m_localReg.is() || m_defaultReg.is();
 }
 
 
-OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
+OUString NestedRegistryImpl::getImplementationName(  )
 {
     return u"com.sun.star.comp.stoc.NestedRegistry"_ustr;
 }
 
-bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceName )
+bool NestedRegistryImpl::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
+Sequence<OUString> NestedRegistryImpl::getSupportedServiceNames(  )
 {
     Sequence< OUString > seqNames { u"com.sun.star.registry.NestedRegistry"_ustr };
     return seqNames;
 }
 
 
-void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments )
+void NestedRegistryImpl::initialize( const Sequence< Any >& aArguments )
 {
     Guard< Mutex > aGuard( m_mutex );
     if ( (aArguments.getLength() == 2) &&
@@ -1066,7 +1066,7 @@ void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments 
 }
 
 
-OUString SAL_CALL NestedRegistryImpl::getURL()
+OUString NestedRegistryImpl::getURL()
 {
     Guard< Mutex > aGuard( m_mutex );
     try
@@ -1082,14 +1082,14 @@ OUString SAL_CALL NestedRegistryImpl::getURL()
 }
 
 
-void SAL_CALL NestedRegistryImpl::open( const OUString&, bool, bool )
+void NestedRegistryImpl::open( const OUString&, bool, bool )
 {
     throw InvalidRegistryException(
             u"the 'open' method is not specified for a nested registry"_ustr );
 }
 
 
-bool SAL_CALL NestedRegistryImpl::isValid(  )
+bool NestedRegistryImpl::isValid(  )
 {
     Guard< Mutex > aGuard( m_mutex );
     try
@@ -1106,7 +1106,7 @@ bool SAL_CALL NestedRegistryImpl::isValid(  )
 }
 
 
-void SAL_CALL NestedRegistryImpl::close(  )
+void NestedRegistryImpl::close(  )
 {
     Guard< Mutex > aGuard( m_mutex );
     if ( m_localReg.is() && m_localReg->isValid() )
@@ -1120,14 +1120,14 @@ void SAL_CALL NestedRegistryImpl::close(  )
 }
 
 
-void SAL_CALL NestedRegistryImpl::destroy(  )
+void NestedRegistryImpl::destroy(  )
 {
     throw InvalidRegistryException(
             u"the 'destroy' method is not specified for a nested registry"_ustr );
 }
 
 
-Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
+Reference< XRegistryKey > NestedRegistryImpl::getRootKey(  )
 {
     Guard< Mutex > aGuard( m_mutex );
     if ( !m_localReg.is() || !m_localReg->isValid() )
@@ -1153,7 +1153,7 @@ Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
 }
 
 
-bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
+bool NestedRegistryImpl::isReadOnly(  )
 {
     Guard< Mutex > aGuard( m_mutex );
     try
@@ -1169,7 +1169,7 @@ bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
 }
 
 
-void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
+void NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 {
     throw cpo::uno::RuntimeException(u"css.registry.NestedRegistry::mergeKey: not implemented"_ustr);
 }

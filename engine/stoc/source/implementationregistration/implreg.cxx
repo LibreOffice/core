@@ -1040,35 +1040,35 @@ public:
     explicit ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() override;
-    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
+    OUString                        getImplementationName() override;
+    bool                        supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            getSupportedServiceNames() override;
 
     // XImplementationRegistration
-    virtual void SAL_CALL registerImplementation(
+    virtual void registerImplementation(
         const OUString& implementationLoader,
         const OUString& location,
         const Reference < XSimpleRegistry > & xReg) override;
 
-    virtual bool SAL_CALL revokeImplementation(
+    virtual bool revokeImplementation(
         const OUString& location,
         const Reference < XSimpleRegistry >& xReg) override;
 
-    virtual Sequence< OUString > SAL_CALL getImplementations(
+    virtual Sequence< OUString > getImplementations(
         const OUString& implementationLoader,
         const OUString& location) override;
-    virtual Sequence< OUString > SAL_CALL checkInstantiation(
+    virtual Sequence< OUString > checkInstantiation(
         const OUString& implementationName) override;
 
     // XImplementationRegistration2
-    virtual void SAL_CALL registerImplementationWithLocation(
+    virtual void registerImplementationWithLocation(
         const OUString& implementationLoader,
         const OUString& location,
         const OUString& registeredLocation,
         const Reference < XSimpleRegistry > & xReg) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 private: // helper methods

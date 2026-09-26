@@ -52,13 +52,13 @@ public:
     NamingService_Impl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
-    virtual void SAL_CALL registerObject( const OUString& Name, const cpo::uno::Reference< cpo::uno::XInterface >& Object ) override;
-    virtual void SAL_CALL revokeObject( const OUString& Name ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+    virtual void registerObject( const OUString& Name, const cpo::uno::Reference< cpo::uno::XInterface >& Object ) override;
+    virtual void revokeObject( const OUString& Name ) override;
 };
 
 }

@@ -59,7 +59,7 @@ namespace {
 
 class Service: public cppu::WeakImplHelper< css::lang::XMain > {
 public:
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     run(cpo::uno::Sequence< OUString > const & arguments)
         throw (cpo::uno::RuntimeException);
 
@@ -67,7 +67,7 @@ public:
 
     static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
-    static cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(
+    static cpo::uno::Reference< cpo::uno::XInterface > createInstance(
         cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
         throw (cpo::uno::Exception);
 
@@ -744,7 +744,7 @@ cpo::uno::Reference< cpo::uno::XInterface > Service::createInstance(
     return cppu::getXWeak(new Service(context));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const * implName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * component_getFactory(char const * implName,
                                                 void * serviceManager, void *) {
     void * p = 0;
     if (serviceManager != 0) {
@@ -789,7 +789,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
 
 }
 
-extern "C" bool SAL_CALL component_writeInfo(void *, void * registryKey) {
+extern "C" bool component_writeInfo(void *, void * registryKey) {
     return registryKey
         && writeInfo(registryKey, Service::getImplementationName(),
                      Service::getSupportedServiceNames());

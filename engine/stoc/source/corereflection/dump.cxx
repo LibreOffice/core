@@ -107,13 +107,13 @@ public:
     {
     }
 
-    void SAL_CALL disposing() override
+    void disposing() override
     {
         osl::MutexGuard g(m_aMutex);
         manager_.clear();
     }
 
-    OUString SAL_CALL dumpValue(cpo::uno::Any const& value) override
+    OUString dumpValue(cpo::uno::Any const& value) override
     {
         switch (value.getValueTypeClass())
         {
@@ -225,12 +225,12 @@ public:
         }
     }
 
-    OUString SAL_CALL dumpAny(cpo::uno::Any const& value) override
+    OUString dumpAny(cpo::uno::Any const& value) override
     {
         return "[" + value.getValueTypeName() + ": " + dumpValue(value) + "]";
     }
 
-    OUString SAL_CALL dumpConstant(OUString const& constantsGroup,
+    OUString dumpConstant(OUString const& constantsGroup,
                                    cpo::uno::Any const& value) override
     {
         cpo::uno::Reference<css::container::XHierarchicalNameAccess> manager;

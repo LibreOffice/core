@@ -62,16 +62,16 @@ using namespace css::task;
 
 class Context: public WeakImplHelper<XCurrentContext>
 {
-    virtual Any SAL_CALL getValueByName( const OUString& Name ) throw (RuntimeException);
+    virtual Any getValueByName( const OUString& Name ) throw (RuntimeException);
 };
 
 class InteractionHandler: public WeakImplHelper<XInteractionHandler>
 {
-    virtual void SAL_CALL handle( const Reference< XInteractionRequest >& Request )
+    virtual void handle( const Reference< XInteractionRequest >& Request )
         throw (RuntimeException);
 };
 
-Any SAL_CALL Context::getValueByName( const OUString& Name) throw (RuntimeException)
+Any Context::getValueByName( const OUString& Name) throw (RuntimeException)
 {
     Any retVal;
     if( Name.equals( INTERACTION_HANDLER_NAME))
@@ -82,7 +82,7 @@ Any SAL_CALL Context::getValueByName( const OUString& Name) throw (RuntimeExcept
     return retVal;
 }
 
-void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >& Request )
+void InteractionHandler::handle( const Reference< XInteractionRequest >& Request )
         throw (RuntimeException)
 {
     Any anyExc= Request->getRequest();

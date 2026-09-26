@@ -63,58 +63,58 @@ public:
     UrlReference(const UrlReference&) = delete;
     UrlReference& operator=(const UrlReference&) = delete;
 
-    virtual OUString SAL_CALL getUriReference() override
+    virtual OUString getUriReference() override
     { return base_.getUriReference(); }
 
-    virtual bool SAL_CALL isAbsolute() override
+    virtual bool isAbsolute() override
     { return base_.isAbsolute(); }
 
-    virtual OUString SAL_CALL getScheme() override
+    virtual OUString getScheme() override
     { return base_.getScheme(); }
 
-    virtual OUString SAL_CALL getSchemeSpecificPart() override
+    virtual OUString getSchemeSpecificPart() override
     { return base_.getSchemeSpecificPart(); }
 
-    virtual bool SAL_CALL isHierarchical() override
+    virtual bool isHierarchical() override
     { return base_.isHierarchical(); }
 
-    virtual bool SAL_CALL hasAuthority() override
+    virtual bool hasAuthority() override
     { return base_.hasAuthority(); }
 
-    virtual OUString SAL_CALL getAuthority() override
+    virtual OUString getAuthority() override
     { return base_.getAuthority(); }
 
-    virtual OUString SAL_CALL getPath() override
+    virtual OUString getPath() override
     { return base_.getPath(); }
 
-    virtual bool SAL_CALL hasRelativePath() override
+    virtual bool hasRelativePath() override
     { return base_.hasRelativePath(); }
 
-    virtual ::sal_Int32 SAL_CALL getPathSegmentCount() override
+    virtual ::sal_Int32 getPathSegmentCount() override
     { return base_.getPathSegmentCount(); }
 
-    virtual OUString SAL_CALL getPathSegment(sal_Int32 index) override
+    virtual OUString getPathSegment(sal_Int32 index) override
     { return base_.getPathSegment(index); }
 
-    virtual bool SAL_CALL hasQuery() override
+    virtual bool hasQuery() override
     { return base_.hasQuery(); }
 
-    virtual OUString SAL_CALL getQuery() override
+    virtual OUString getQuery() override
     { return base_.getQuery(); }
 
-    virtual bool SAL_CALL hasFragment() override
+    virtual bool hasFragment() override
     { return base_.hasFragment(); }
 
-    virtual OUString SAL_CALL getFragment() override
+    virtual OUString getFragment() override
     { return base_.getFragment(); }
 
-    virtual void SAL_CALL setFragment(OUString const & fragment) override
+    virtual void setFragment(OUString const & fragment) override
     { base_.setFragment(fragment); }
 
-    virtual void SAL_CALL clearFragment() override
+    virtual void clearFragment() override
     { base_.clearFragment(); }
 
-    virtual OUString SAL_CALL expand(
+    virtual OUString expand(
         cpo::uno::Reference< css::util::XMacroExpander > const & expander) override;
 
 private:
@@ -144,15 +144,15 @@ public:
     Parser(const Parser&) = delete;
     Parser& operator=(const Parser&) = delete;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(
+    virtual bool supportsService(
         OUString const & serviceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference >
     parse(
         OUString const & scheme,
         OUString const & schemeSpecificPart) override;

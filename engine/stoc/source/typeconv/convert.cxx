@@ -226,13 +226,13 @@ public:
     TypeConverter_Impl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual  Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeConverter
-    virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType ) override;
-    virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) override;
+    virtual Any convertTo( const Any& aFrom, const Type& DestinationType ) override;
+    virtual Any convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) override;
 };
 
 }
@@ -452,7 +452,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
 }
 
 
-Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
+Any TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
 {
     const Type& aSourceType = rVal.getValueType();
     if (aSourceType == aDestType)

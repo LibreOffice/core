@@ -55,7 +55,7 @@ using namespace osl;
 
 namespace stoc_impreg
 {
-void SAL_CALL mergeKeys(
+void mergeKeys(
 Reference< registry::XRegistryKey > const & xDest,
 Reference< registry::XRegistryKey > const & xSource );
 }

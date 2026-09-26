@@ -85,84 +85,84 @@ public:
                                            bool bFromOLE );
 
     // XInterface
-    virtual Any         SAL_CALL queryInterface( const Type & aType) override;
-    virtual void        SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() noexcept override { OWeakObject::release(); }
+    virtual Any         queryInterface( const Type & aType) override;
+    virtual void        acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void        release() noexcept override { OWeakObject::release(); }
 
 
     // XTypeProvider
-    virtual Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XMaterialHolder
-    virtual Any         SAL_CALL getMaterial() override;
+    virtual Any         getMaterial() override;
 
     // XInvocation
-    virtual Reference<XIntrospectionAccess> SAL_CALL getIntrospection() override;
-    virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
-    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
-    virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual Reference<XIntrospectionAccess> getIntrospection() override;
+    virtual Any invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
+    virtual void setValue(const OUString& PropertyName, const Any& Value) override;
+    virtual Any getValue(const OUString& PropertyName) override;
+    virtual bool hasMethod(const OUString& Name) override;
+    virtual bool hasProperty(const OUString& Name) override;
 
     // XInvocation2
-    virtual Sequence< OUString > SAL_CALL getMemberNames(  ) override;
-    virtual Sequence< InvocationInfo > SAL_CALL getInfo(  ) override;
-    virtual InvocationInfo SAL_CALL getInfoForName( const OUString& aName, bool bExact ) override;
+    virtual Sequence< OUString > getMemberNames(  ) override;
+    virtual Sequence< InvocationInfo > getInfo(  ) override;
+    virtual InvocationInfo getInfoForName( const OUString& aName, bool bExact ) override;
 
     // All Access and Container methods are not thread safe
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override
+    virtual Type getElementType() override
         { return _xElementAccess->getElementType(); }
 
-    virtual bool SAL_CALL hasElements() override
+    virtual bool hasElements() override
         { return _xElementAccess->hasElements(); }
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& Name, const Any& Element ) override
+    virtual void insertByName( const OUString& Name, const Any& Element ) override
         { _xNameContainer->insertByName( Name, Element ); }
 
-    virtual void SAL_CALL removeByName( const OUString& Name ) override
+    virtual void removeByName( const OUString& Name ) override
         { _xNameContainer->removeByName( Name ); }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& Name, const Any& Element ) override
+    virtual void replaceByName( const OUString& Name, const Any& Element ) override
         { _xNameReplace->replaceByName( Name, Element ); }
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& Name ) override
+    virtual Any getByName( const OUString& Name ) override
         { return _xNameAccess->getByName( Name ); }
 
-    virtual Sequence<OUString> SAL_CALL getElementNames() override
+    virtual Sequence<OUString> getElementNames() override
         { return _xNameAccess->getElementNames(); }
 
-    virtual bool SAL_CALL hasByName( const OUString& Name ) override
+    virtual bool hasByName( const OUString& Name ) override
         { return _xNameAccess->hasByName( Name ); }
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) override
+    virtual void insertByIndex( sal_Int32 Index, const Any& Element ) override
         { _xIndexContainer->insertByIndex( Index, Element ); }
 
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override
+    virtual void removeByIndex( sal_Int32 Index ) override
         { _xIndexContainer->removeByIndex( Index ); }
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) override
+    virtual void replaceByIndex( sal_Int32 Index, const Any& Element ) override
         { _xIndexReplace->replaceByIndex( Index, Element ); }
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override
+    virtual sal_Int32 getCount() override
         { return _xIndexAccess->getCount(); }
 
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override
+    virtual Any getByIndex( sal_Int32 Index ) override
         { return _xIndexAccess->getByIndex( Index ); }
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration() override
+    virtual Reference<XEnumeration> createEnumeration() override
         { return _xEnumerationAccess->createEnumeration(); }
 
     // XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) override;
+    virtual OUString getExactName( const OUString& rApproximateName ) override;
 
 
 private:
@@ -221,7 +221,7 @@ Invocation_Impl::Invocation_Impl
 //### INTERFACE IMPLEMENTATIONS ####################################################################
 
 
-Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
+Any Invocation_Impl::queryInterface( const Type & aType )
 {
     // PropertySet implementation
     Any a = ::cppu::queryInterface( aType,
@@ -804,7 +804,7 @@ void Invocation_Impl::getInfoSequenceImpl
 }
 
 // XInvocation2
-Sequence< OUString > SAL_CALL Invocation_Impl::getMemberNames(  )
+Sequence< OUString > Invocation_Impl::getMemberNames(  )
 {
     if( _xDirect2.is() )
     {
@@ -815,7 +815,7 @@ Sequence< OUString > SAL_CALL Invocation_Impl::getMemberNames(  )
     return aRetSeq;
 }
 
-Sequence< InvocationInfo > SAL_CALL Invocation_Impl::getInfo(  )
+Sequence< InvocationInfo > Invocation_Impl::getInfo(  )
 {
     if( _xDirect2.is() )
     {
@@ -826,7 +826,7 @@ Sequence< InvocationInfo > SAL_CALL Invocation_Impl::getInfo(  )
     return aRetSeq;
 }
 
-InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, bool bExact )
+InvocationInfo Invocation_Impl::getInfoForName( const OUString& aName, bool bExact )
 {
     if( _xDirect2.is() )
     {
@@ -934,7 +934,7 @@ void Invocation_Impl::fillInfoForMethod
 
 
 // XTypeProvider
-Sequence< Type > SAL_CALL Invocation_Impl::getTypes()
+Sequence< Type > Invocation_Impl::getTypes()
 {
     static Sequence<Type> s_types = [this]() {
         std::vector<Type> tmp {
@@ -973,7 +973,7 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes()
     return s_types;
 }
 
-Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  )
+Sequence< sal_Int8 > Invocation_Impl::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
@@ -987,13 +987,13 @@ public:
     explicit InvocationService( const Reference<XComponentContext> & xCtx );
 
     // XServiceInfo
-    OUString                    SAL_CALL getImplementationName() override;
-    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >        SAL_CALL getSupportedServiceNames() override;
+    OUString                    getImplementationName() override;
+    bool                        supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >        getSupportedServiceNames() override;
 
     // XSingleServiceFactory
-    Reference<XInterface>       SAL_CALL createInstance() override;
-    Reference<XInterface>       SAL_CALL createInstanceWithArguments(
+    Reference<XInterface>       createInstance() override;
+    Reference<XInterface>       createInstanceWithArguments(
         const Sequence<Any>& rArguments ) override;
 private:
     Reference<XComponentContext> mxCtx;

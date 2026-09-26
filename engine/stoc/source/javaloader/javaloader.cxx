@@ -257,17 +257,17 @@ public:
 
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XImplementationLoader
-    virtual cpo::uno::Reference<XInterface> SAL_CALL activate(
+    virtual cpo::uno::Reference<XInterface> activate(
         const OUString& implementationName, const OUString& implementationLoaderUrl,
         const OUString& locationUrl, const cpo::uno::Reference<XRegistryKey>& xKey) override;
-    virtual bool SAL_CALL writeRegistryInfo(
+    virtual bool writeRegistryInfo(
         const cpo::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl) override;
 };
@@ -498,24 +498,24 @@ JavaComponentLoader::JavaComponentLoader(cpo::uno::Reference<XComponentContext> 
 }
 
 // XServiceInfo
-OUString SAL_CALL JavaComponentLoader::getImplementationName()
+OUString JavaComponentLoader::getImplementationName()
 {
     return u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr;
 }
 
-bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
+bool JavaComponentLoader::supportsService(const OUString & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
+Sequence<OUString> JavaComponentLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.loader.Java"_ustr, u"com.sun.star.loader.Java2"_ustr };
 }
 
 
 // XImplementationLoader
-bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
+bool JavaComponentLoader::writeRegistryInfo(
     const cpo::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
     const OUString & rLibName)
 {
@@ -526,7 +526,7 @@ bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     return loader->writeRegistryInfo(xKey, remoteArg, rLibName);
 }
 
-cpo::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
+cpo::uno::Reference<XInterface> JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const cpo::uno::Reference<XRegistryKey> & xKey)
 {

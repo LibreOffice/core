@@ -102,20 +102,20 @@ public:
     virtual ~IdlReflectionServiceImpl() override;
 
     // WeakComponentImplHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & rServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XIdlReflection
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL forName( const OUString & rTypeName ) override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL getType( const cpo::uno::Any & rObj ) override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > forName( const OUString & rTypeName ) override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > getType( const cpo::uno::Any & rObj ) override;
 
     // XHierarchicalNameAccess
-    virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString & rName ) override;
-    virtual bool SAL_CALL hasByHierarchicalName( const OUString & rName ) override;
+    virtual cpo::uno::Any getByHierarchicalName( const OUString & rName ) override;
+    virtual bool hasByHierarchicalName( const OUString & rName ) override;
 
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescription * pTypeDescr );
@@ -148,29 +148,29 @@ public:
     virtual ~IdlClassImpl() override;
 
     // XIdlClassImpl default implementation
-    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override;
-    virtual OUString SAL_CALL getName() override;
-    virtual bool SAL_CALL equals( const cpo::uno::Reference< css::reflection::XIdlClass >& xType ) override;
+    virtual cpo::uno::TypeClass getTypeClass() override;
+    virtual OUString getName() override;
+    virtual bool equals( const cpo::uno::Reference< css::reflection::XIdlClass >& xType ) override;
 
-    virtual bool SAL_CALL isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual void createObject( cpo::uno::Any & rObj ) override;
 
     // def impl ????
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getClasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL getClass( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getInterfaces() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getClasses() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > getClass( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getInterfaces() override;
 
     // structs, interfaces
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
     // structs
-    virtual cpo::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
     // interfaces
-    virtual cpo::uno::Reference< css::reflection::XIdlMethod > SAL_CALL getMethod( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > getMethods() override;
     // array
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL getComponentType() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlArray > SAL_CALL getArray() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > getComponentType() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlArray > getArray() override;
 };
 
 
@@ -204,13 +204,13 @@ public:
     virtual ~InterfaceIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual bool SAL_CALL isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlMethod > SAL_CALL getMethod( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
-    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlMethod > getMethod( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlMethod > > getMethods() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual void createObject( cpo::uno::Any & rObj ) override;
 };
 
 
@@ -236,10 +236,10 @@ public:
     virtual ~CompoundIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual bool SAL_CALL isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlClass > > getSuperclasses() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
 };
 
 
@@ -258,15 +258,15 @@ public:
         {}
 
     // IdlClassImpl modifications
-    virtual bool SAL_CALL isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL getComponentType() override;
-    virtual cpo::uno::Reference< css::reflection::XIdlArray > SAL_CALL getArray() override;
+    virtual bool isAssignableFrom( const cpo::uno::Reference< css::reflection::XIdlClass > & xType ) override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > getComponentType() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlArray > getArray() override;
 
     // XIdlArray
-    virtual void SAL_CALL realloc( cpo::uno::Any & rArray, sal_Int32 nLen ) override;
-    virtual sal_Int32 SAL_CALL getLen( const cpo::uno::Any & rArray ) override;
-    virtual cpo::uno::Any SAL_CALL get( const cpo::uno::Any & rArray, sal_Int32 nIndex ) override;
-    virtual void SAL_CALL set( cpo::uno::Any & rArray, sal_Int32 nIndex, const cpo::uno::Any & rNewValue ) override;
+    virtual void realloc( cpo::uno::Any & rArray, sal_Int32 nLen ) override;
+    virtual sal_Int32 getLen( const cpo::uno::Any & rArray ) override;
+    virtual cpo::uno::Any get( const cpo::uno::Any & rArray, sal_Int32 nIndex ) override;
+    virtual void set( cpo::uno::Any & rArray, sal_Int32 nIndex, const cpo::uno::Any & rNewValue ) override;
 };
 
 
@@ -289,9 +289,9 @@ public:
     virtual ~EnumIdlClassImpl() override;
 
     // IdlClassImpl modifications
-    virtual cpo::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
-    virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
+    virtual cpo::uno::Reference< css::reflection::XIdlField > getField( const OUString & rName ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::reflection::XIdlField > > getFields() override;
+    virtual void createObject( cpo::uno::Any & rObj ) override;
 };
 
 
@@ -322,8 +322,8 @@ public:
     virtual ~IdlMemberImpl() override;
 
     // XIdlMember
-    virtual cpo::uno::Reference< css::reflection::XIdlClass > SAL_CALL getDeclaringClass() override;
-    virtual OUString SAL_CALL getName() override;
+    virtual cpo::uno::Reference< css::reflection::XIdlClass > getDeclaringClass() override;
+    virtual OUString getName() override;
 };
 
 

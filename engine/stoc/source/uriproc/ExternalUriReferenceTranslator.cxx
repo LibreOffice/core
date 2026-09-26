@@ -49,17 +49,17 @@ public:
     Translator(const Translator&) = delete;
     Translator& operator=(const Translator&) = delete;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & serviceName) override;
+    virtual bool supportsService(OUString const & serviceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     translateToInternal(OUString const & externalUriReference) override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     translateToExternal(OUString const & internalUriReference) override;
 
 private:

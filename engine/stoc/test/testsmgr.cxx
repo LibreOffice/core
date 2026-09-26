@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-extern "C" void SAL_CALL test_ServiceManager();
+extern "C" void test_ServiceManager();
 
 #ifndef FALSE
 #define FALSE 0

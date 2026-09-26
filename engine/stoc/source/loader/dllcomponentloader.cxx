@@ -70,16 +70,16 @@ public:
     explicit DllComponentLoader( const Reference<XComponentContext> & xCtx );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XImplementationLoader
-    virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) override;
-    virtual bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) override;
+    virtual Reference<XInterface> activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) override;
+    virtual bool writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) override;
 
 private:
     Reference<XMultiServiceFactory> m_xSMgr;
@@ -91,17 +91,17 @@ DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCt
     m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
 
-OUString SAL_CALL DllComponentLoader::getImplementationName(  )
+OUString DllComponentLoader::getImplementationName(  )
 {
     return u"com.sun.star.comp.stoc.DLLComponentLoader"_ustr;
 }
 
-bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
+bool DllComponentLoader::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
+Sequence<OUString> DllComponentLoader::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.loader.SharedLibrary"_ustr };
 }
@@ -131,7 +131,7 @@ void DllComponentLoader::initialize( const cpo::uno::Sequence< cpo::uno::Any >& 
 }
 
 
-Reference<XInterface> SAL_CALL DllComponentLoader::activate(
+Reference<XInterface> DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
     const Reference< XRegistryKey > & )
 {
@@ -145,7 +145,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 }
 
 
-bool SAL_CALL DllComponentLoader::writeRegistryInfo(
+bool DllComponentLoader::writeRegistryInfo(
     const Reference< XRegistryKey > & xKey, const OUString &, const OUString & rLibName )
 {
 #ifdef DISABLE_DYNLOADING
