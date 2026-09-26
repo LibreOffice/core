@@ -4374,7 +4374,15 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             auto path = Poco::URI(url).getPath();
             auto lastSlash = path.find_last_of('/');
             auto filename = path.substr(lastSlash + 1);
+            const std::string previousUri = data.filenameAndUri.uri;
             data.filenameAndUri = { filename, Poco::URI(url).toString() } ;
+            // The app picked the name of a new document, so only the name the user saved it as
+            // belongs in the recent list.
+            if (data.mode == DocumentMode::NEW)
+            {
+                recentFiles.remove(previousUri);
+                data.mode = DocumentMode::EDIT;
+            }
             recentFiles.add(data.filenameAndUri.uri);
             data.docType = docTypeFromFilename(filename);
             data.isModified = false;

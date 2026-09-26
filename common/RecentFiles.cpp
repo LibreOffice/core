@@ -82,7 +82,24 @@ void RecentFiles::add(const std::string& uri, const std::string& displayUri)
         { uri, displayUri,
           std::chrono::time_point<std::chrono::system_clock>(std::chrono::system_clock::now()) });
 
-    // Save the list.
+    save();
+}
+
+void RecentFiles::remove(const std::string& uri)
+{
+    assert(_initialised);
+
+    for (auto it = _mostRecentlyUsed.begin(); it != _mostRecentlyUsed.end(); it++)
+        if (it->uri == uri)
+        {
+            _mostRecentlyUsed.erase(it);
+            save();
+            return;
+        }
+}
+
+void RecentFiles::save()
+{
     std::ofstream stream;
     FileUtil::openFileToOFStream(_fileName, stream);
     if (!stream.is_open() || stream.bad())

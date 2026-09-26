@@ -42,6 +42,9 @@ public:
     // `displayUri`: when in a flatpak sandbox carries real host location
     void add(const std::string& uri, const std::string& displayUri = std::string());
 
+    // Drop a document URI from the list, if it is there, and save the list.
+    void remove(const std::string& uri);
+
     // Produces a JSON string of the type that our JS expects.
     std::string serialise();
 
@@ -49,6 +52,8 @@ public:
     std::string serialiseFiltered(std::set<std::string> dropTheseURIs);
 
 private:
+    void save();
+
     struct Entry
     {
         std::string uri;
