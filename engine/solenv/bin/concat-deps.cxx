@@ -4,6 +4,7 @@
  *    License: GPLv3
  */
 
+#include <algorithm>
 #include <cctype>
 #include <cerrno>
 #include <cstdint>
@@ -48,6 +49,13 @@ static std::string src_dir;
    copies let a plain prefix compare decide whether an include lives inside the
    build tree. */
 static std::vector<std::string> build_tree_prefixes;
+
+/* The work directory with UnpackedTarball, the work directory, the build directory and the
+   source directory, each with a trailing slash and forward slashes, longest first. cl
+   /sourceDependencies reports its include paths in lower case, and make compares target names as
+   they are spelled, so a path that starts with one of these in any case gets it in this spelling.
+   The .done target of an unpacked tarball, which is made from such a path, then has a rule. */
+static std::vector<std::string> tree_spellings;
 
 /* Return a copy of s with every backslash turned into a forward slash. An empty
    string comes back for a null pointer, so an unset environment variable and an
@@ -535,6 +543,20 @@ static void append_escaped(std::string& w, const std::string& path)
     }
 }
 
+/* Give path the spelling of the tree prefix from tree_spellings that it starts with in any case. */
+static void respell_tree_prefix(std::string& path)
+{
+    for (const std::string& prefix : tree_spellings)
+    {
+        if (path.size() >= prefix.size()
+            && PATHNCMP(path.c_str(), prefix.c_str(), prefix.size()) == 0)
+        {
+            path.replace(0, prefix.size(), prefix);
+            return;
+        }
+    }
+}
+
 /* Walk the "Includes" array in json once. Every header inside the build tree is
    appended to includes, already make-escaped. Returns false when the JSON is
    malformed. */
@@ -562,6 +584,7 @@ static bool collect_includes(const char* json, const char* end, std::vector<std:
             return false;
         if (!path.empty() && include_in_build_tree(path))
         {
+            respell_tree_prefix(path);
             std::string escaped;
             append_escaped(escaped, path);
             includes.push_back(std::move(escaped));
@@ -607,6 +630,7 @@ static bool convert_source_deps_json(const char* json, size_t json_size, const c
                 return false;
             if (!source.empty())
             {
+                respell_tree_prefix(source);
                 out += ' ';
                 append_escaped(out, source);
                 out += " \\\n";
@@ -847,6 +871,16 @@ int main(int argc, char** argv)
     add_build_tree_prefix(getenv("BUILDDIR"));
     add_build_tree_prefix(srcdir);
     add_build_tree_prefix(workdir);
+
+    const std::string work_dir_slashes = dup_forward_slashes(workdir);
+    for (const std::string& dir : { work_dir_slashes + "/UnpackedTarball", work_dir_slashes,
+                                    dup_forward_slashes(getenv("BUILDDIR")), src_dir })
+    {
+        if (!dir.empty())
+            tree_spellings.push_back(dir + '/');
+    }
+    std::stable_sort(tree_spellings.begin(), tree_spellings.end(),
+                     [](const std::string& a, const std::string& b) { return a.size() > b.size(); });
 
     const char* env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str, "TRUE") != 0;
