@@ -99,14 +99,14 @@ public:
     explicit FileStreamWrapper_Impl(OUString aName);
     virtual ~FileStreamWrapper_Impl() override;
 
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) override;
-    virtual sal_Int64 SAL_CALL getPosition(  ) override;
-    virtual sal_Int64 SAL_CALL getLength(  ) override;
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override;
-    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
-    virtual sal_Int32 SAL_CALL available() override;
-    virtual void      SAL_CALL closeInput() override;
+    virtual void seek( sal_Int64 _nLocation ) override;
+    virtual sal_Int64 getPosition(  ) override;
+    virtual sal_Int64 getLength(  ) override;
+    virtual sal_Int32 readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override;
+    virtual sal_Int32 readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override;
+    virtual void      skipBytes(sal_Int32 nBytesToSkip) override;
+    virtual sal_Int32 available() override;
+    virtual void      closeInput() override;
 
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
 
@@ -139,7 +139,7 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 }
 
 
-sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+sal_Int32 FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     if ( m_aURL.isEmpty() )
     {
@@ -185,7 +185,7 @@ sal_Int32 FileStreamWrapper_Impl::readSomeBytes(sal_Int8* aData, sal_Int32 nByte
     return nRead;
 }
 
-sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+sal_Int32 FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if ( m_aURL.isEmpty() )
     {
@@ -208,7 +208,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip)
+void FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -221,7 +221,7 @@ void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip)
 }
 
 
-sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
+sal_Int32 FileStreamWrapper_Impl::available()
 {
     if ( m_aURL.isEmpty() )
         return 0;
@@ -236,7 +236,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::closeInput()
+void FileStreamWrapper_Impl::closeInput()
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -252,7 +252,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput()
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
+void FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -265,7 +265,7 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
 }
 
 
-sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
+sal_Int64 FileStreamWrapper_Impl::getPosition(  )
 {
     if ( m_aURL.isEmpty() )
         return 0;
@@ -279,7 +279,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
 }
 
 
-sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
+sal_Int64 FileStreamWrapper_Impl::getLength(  )
 {
     if ( m_aURL.isEmpty() )
         return 0;

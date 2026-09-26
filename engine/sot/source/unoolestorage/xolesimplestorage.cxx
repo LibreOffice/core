@@ -256,7 +256,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
 //  XNameContainer
 
 
-void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
+void OLESimpleStorage::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -305,7 +305,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const cpo::
 }
 
 
-void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
+void OLESimpleStorage::removeByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -331,7 +331,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
 }
 
 
-void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
+void OLESimpleStorage::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -355,7 +355,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const cpo:
 }
 
 
-cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
+cpo::uno::Any OLESimpleStorage::getByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -456,7 +456,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
+cpo::uno::Sequence< OUString > OLESimpleStorage::getElementNames()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -484,7 +484,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
 }
 
 
-bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
+bool OLESimpleStorage::hasByName( const OUString& aName )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -506,7 +506,7 @@ bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
 }
 
 
-cpo::uno::Type SAL_CALL OLESimpleStorage::getElementType()
+cpo::uno::Type OLESimpleStorage::getElementType()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -517,7 +517,7 @@ cpo::uno::Type SAL_CALL OLESimpleStorage::getElementType()
 }
 
 
-bool SAL_CALL OLESimpleStorage::hasElements()
+bool OLESimpleStorage::hasElements()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -543,7 +543,7 @@ bool SAL_CALL OLESimpleStorage::hasElements()
 //  XComponent
 
 
-void SAL_CALL OLESimpleStorage::dispose()
+void OLESimpleStorage::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -566,7 +566,7 @@ void SAL_CALL OLESimpleStorage::dispose()
 }
 
 
-void SAL_CALL OLESimpleStorage::addEventListener(
+void OLESimpleStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -578,7 +578,7 @@ void SAL_CALL OLESimpleStorage::addEventListener(
 }
 
 
-void SAL_CALL OLESimpleStorage::removeEventListener(
+void OLESimpleStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -593,7 +593,7 @@ void SAL_CALL OLESimpleStorage::removeEventListener(
 //  XTransactedObject
 
 
-void SAL_CALL OLESimpleStorage::commit()
+void OLESimpleStorage::commit()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -616,7 +616,7 @@ void SAL_CALL OLESimpleStorage::commit()
 }
 
 
-void SAL_CALL OLESimpleStorage::revert()
+void OLESimpleStorage::revert()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -642,7 +642,7 @@ void SAL_CALL OLESimpleStorage::revert()
 //  XClassifiedObject
 
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
+cpo::uno::Sequence< sal_Int8 > OLESimpleStorage::getClassID()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -655,29 +655,29 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
     return m_pStorage->GetClassName().GetByteSequence();
 }
 
-OUString SAL_CALL OLESimpleStorage::getClassName()
+OUString OLESimpleStorage::getClassName()
 {
     return OUString();
 }
 
-void SAL_CALL OLESimpleStorage::setClassInfo( const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/,
+void OLESimpleStorage::setClassInfo( const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/,
                             const OUString& /*sClassName*/ )
 {
     throw lang::NoSupportException();
 }
 
 //  XServiceInfo
-OUString SAL_CALL OLESimpleStorage::getImplementationName()
+OUString OLESimpleStorage::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OLESimpleStorage"_ustr;
 }
 
-bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
+bool OLESimpleStorage::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OLESimpleStorage::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OLESimpleStorage"_ustr };
 }

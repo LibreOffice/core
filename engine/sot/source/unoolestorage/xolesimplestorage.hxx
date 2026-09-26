@@ -73,54 +73,54 @@ public:
 
     //  XNameContainer
 
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
 
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() final override;
+    virtual void dispose() final override;
 
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
             const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
             const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     //  XTransactedObject
 
-    virtual void SAL_CALL commit() override;
+    virtual void commit() override;
 
-    virtual void SAL_CALL revert() override;
+    virtual void revert() override;
 
     //  XClassifiedObject
 
-    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID() override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > getClassID() override;
 
-    virtual OUString SAL_CALL getClassName() override;
+    virtual OUString getClassName() override;
 
-    virtual void SAL_CALL setClassInfo( const cpo::uno::Sequence< ::sal_Int8 >& aClassID,
+    virtual void setClassInfo( const cpo::uno::Sequence< ::sal_Int8 >& aClassID,
                                         const OUString& sClassName ) override;
 
     //  XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 #endif
