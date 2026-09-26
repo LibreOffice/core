@@ -324,7 +324,7 @@ public:
 
     void            SetText(sal_Int32 nPara, const OUString& rText);
 
-    virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
+    void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
     const SfxItemSet&   GetParaAttribs( sal_Int32 nPara ) const;
 
     /// Set attributes from rSet an all characters of nPara.
@@ -495,25 +495,24 @@ public:
     SAL_DLLPRIVATE void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
+    void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
-    virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
-    virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
-    virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
-    virtual void    ParaAttribsChanged( sal_Int32 nParagraph );
-    virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
+    void    ParagraphInserted( sal_Int32 nNewParagraph );
+    void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
+    void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
+    void    ParaAttribsChanged( sal_Int32 nParagraph );
+    void    StyleSheetChanged( SfxStyleSheet* pStyle );
     SAL_DLLPRIVATE void            ParagraphHeightChanged( sal_Int32 nPara );
 
-    virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
+    OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();
     /** @return true, when click was consumed. false otherwise. */
     virtual bool    FieldClicked( const SvxFieldItem& rField );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
-    // override this if access to bullet information needs to be provided
-    virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
+    const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
 
-    virtual tools::Rectangle GetBulletArea( sal_Int32 nPara );
+    tools::Rectangle GetBulletArea( sal_Int32 nPara );
 
     static rtl::Reference<SfxItemPool> CreatePool();
     static SfxItemPool& GetGlobalItemPool();

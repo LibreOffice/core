@@ -58,7 +58,7 @@ protected:
     bool mbCurrentlySettingZoom;
 
     virtual void InitializeWidgets();
-    virtual void UpdateToolBoxes(const MediaItem& rMediaItem);
+    void UpdateToolBoxes(const MediaItem& rMediaItem);
     void UpdateVolumeSlider( MediaItem const & aMediaItem );
     void UpdateTimeSlider( MediaItem const & aMediaItem );
     void UpdateTimeField( MediaItem const & aMediaItem, double fTime );
