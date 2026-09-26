@@ -1399,7 +1399,7 @@ UIName SwDoc::GetUniqueShapeName() const
 
 UIName SwDoc::GetUniqueDrawObjectName() const
 {
-    return lcl_GetUniqueFlyName(*this, TranslateId(nullptr, "DrawObject"), RES_DRAWFRMFMT);
+    return lcl_GetUniqueFlyName(*this, TranslateId(nullptr, "DrawObject "), RES_DRAWFRMFMT);
 }
 
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const UIName& rName, SwNodeType nNdTyp ) const
