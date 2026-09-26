@@ -38,15 +38,13 @@ enum class SfxCfgKind
 struct SfxGroupInfo_Impl
 {
     SfxCfgKind  nKind;
-    sal_uInt16  nUniqueID;
     void*       pObject;
     OUString    sCommand;
     OUString    sLabel;
     OUString    sHelpText;
-    OUString    sTooltip;
 
-                SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
-                    nKind( n ), nUniqueID( nr ), pObject( pObj ) {}
+                SfxGroupInfo_Impl( SfxCfgKind n, void* pObj = nullptr ) :
+                    nKind( n ), pObject( pObj ) {}
 };
 
 typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;

@@ -113,7 +113,6 @@ struct FactoryInfo
             nIcon                       = 0;
             bChangedTemplateFile        = false;
             bChangedDefaultFilter       = false;
-            bDefaultFilterReadonly      = false;
         }
 
         // returns list of properties, which has changed only!
@@ -217,7 +216,6 @@ struct FactoryInfo
 
         bool            bChangedTemplateFile        :1;
         bool            bChangedDefaultFilter       :1;
-        bool            bDefaultFilterReadonly      :1;
 
         cpo::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };

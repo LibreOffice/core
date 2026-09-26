@@ -51,9 +51,8 @@ namespace basctl
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
 
-MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame >& xDocFrame)
+MacroChooser::MacroChooser(weld::Window* pParnt)
     : SfxDialogController(pParnt, u"modules/BasicIDE/ui/basicmacrodialog.ui"_ustr, u"BasicMacroDialog"_ustr)
-    , m_xDocumentFrame(xDocFrame)
     // the Sfx doesn't ask the BasicManager whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
     , bForceStoreBasic(false)

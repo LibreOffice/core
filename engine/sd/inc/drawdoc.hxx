@@ -180,9 +180,6 @@ struct InsertBookmarkOptions
     bool bMergeMasterPages;   // Merge master pages
     bool bMergeMasterPagesOnly; // Only merge master pages
     bool bPreservePageNames;  // Preserve page names
-    bool bIsClipboardOperation; // Operation triggered by clipboard
-    bool bIsDragAndDropOperation; // Operation triggered by drag and drop
-    bool bIsSameDocumentOperation; // Operation within the same document
     bool bIsFileDocument;     // Operation involves a file document
     bool bAdoptTargetDesign;  // Inserted pages take the design of the destination document
     // The reference to record as the source of pages inserted as links, or
@@ -197,8 +194,7 @@ struct InsertBookmarkOptions
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
           bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
-          bPreservePageNames(false), bIsClipboardOperation(false),
-          bIsDragAndDropOperation(false), bIsSameDocumentOperation(false),
+          bPreservePageNames(false),
           bIsFileDocument(false), bAdoptTargetDesign(false)
     {}
 

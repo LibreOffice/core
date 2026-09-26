@@ -88,7 +88,7 @@ IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, 
     OUString aLabel = CuiResId(RID_CUISTR_COMMANDLABEL) + ": ";
     OUString aName = CuiResId(RID_CUISTR_COMMANDNAME) + ": ";
     OUString aTip = CuiResId(RID_CUISTR_COMMANDTIP) + ": ";
-    return  aLabel + pData->sLabel + "\n" + aName + pData->sCommand+ "\n" + aTip + pData->sTooltip;
+    return  aLabel + pData->sLabel + "\n" + aName + pData->sCommand+ "\n" + aTip;
 }
 
 void CuiConfigFunctionListBox::ClearAll()
@@ -324,7 +324,7 @@ void CuiConfigGroupListBox::FillScriptList(const cpo::uno::Reference< css::scrip
                     OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
 
                     aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
-                            0, static_cast<void *>( theChild.get())));
+                            static_cast<void *>( theChild.get())));
 
                     OUString sId(weld::toId(aArr.back().get()));
                     m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
@@ -524,7 +524,7 @@ void CuiConfigGroupListBox::GroupSelected()
                             OUString* pScriptURI = new OUString( uri );
 
                             OUString aImage = GetImage(childNode, Reference< XComponentContext >(), false);
-                            m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+                            m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, pScriptURI ));
                             m_pFunctionListBox->aArr.back()->sCommand = uri;
                             m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
                             m_pFunctionListBox->aArr.back()->sHelpText = description;
