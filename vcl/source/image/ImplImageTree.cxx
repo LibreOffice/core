@@ -57,10 +57,13 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/themecolors.hxx>
 #include <o3tl/string_view.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
 
 using namespace css;
+
+static bool bPreferDark; //initialized in ImplImageTree c'tor
 
 bool ImageRequestParameters::convertToDarkTheme()
 {
@@ -222,6 +225,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
 
 ImplImageTree::ImplImageTree()
 {
+    bPreferDark = ThemeColors::GetThemeColors().GetWindowColor().IsDark();
 }
 
 ImplImageTree::~ImplImageTree()
@@ -347,8 +351,13 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
         sResult = "breeze";
     else if (rsStyle == u"sifr_dark" )
         sResult = "breeze_dark";
-    else
+    else if (rsStyle == u"colibre_dark" )
         sResult = "colibre";
+    else
+        if (bPreferDark)
+            sResult = "colibre_dark";
+        else
+            sResult = "colibre";
 
     return sResult;
 }
