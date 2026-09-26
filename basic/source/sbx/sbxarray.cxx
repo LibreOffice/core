@@ -408,7 +408,8 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 /*nVer*/ )
     {
         sal_uInt16 nIdx;
         rStrm.ReadUInt16( nIdx );
-        SbxVariable* pVar = static_cast<SbxVariable*>(Load( rStrm ));
+        SbxBaseRef xBase(Load( rStrm ));
+        SbxVariableRef pVar = dynamic_cast<SbxVariable*>(xBase.get());
         if( pVar )
         {
             SbxVariableRef& rRef = GetRef( nIdx );

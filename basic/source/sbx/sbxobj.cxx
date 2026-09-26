@@ -532,7 +532,8 @@ void SbxObject::Remove( SbxVariable* pVar )
 
 static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 {
-    SbxArrayRef p = static_cast<SbxArray*>( SbxBase::Load( rStrm ) );
+    SbxBaseRef xBase(SbxBase::Load( rStrm ));
+    SbxArrayRef p = dynamic_cast<SbxArray*>( xBase.get() );
     if( !p.is() )
     {
         return false;
