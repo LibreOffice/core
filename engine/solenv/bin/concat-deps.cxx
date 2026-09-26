@@ -31,10 +31,6 @@
 #define PATHNCMP strncmp
 #endif
 
-/* True unless SYSTEM_BOOST is "TRUE": when the bundled boost is in use, its
-   many headers are collapsed to a single unpacked target. */
-static bool internal_boost = false;
-
 /* WORKDIR. */
 static std::string work_dir;
 
@@ -191,7 +187,6 @@ static void eat_space(const char** token)
  */
 static int elide_dependency(const char* key, int key_len, const char** unpacked_end)
 {
-    /* boost brings a plague of header files */
     int unpacked = 0;
     /* walk down path elements, including the first one of a relative path */
     for (int i = -1; i < key_len - 1; i++)
@@ -219,15 +214,6 @@ static int elide_dependency(const char* key, int key_len, const char** unpacked_
     }
 
     return 0;
-}
-
-/*
- * We collapse tens of internal boost headers to the unpacked target, such
- * that you can re-compile / install boost and all is well.
- */
-static void emit_single_boost_header(void)
-{
-    std::cout << "$(WORKDIR)/UnpackedTarball/boost.done ";
 }
 
 static void emit_path(const char* path, size_t len)
@@ -260,7 +246,8 @@ static bool is_relative_token(const char* token, size_t len)
 /* prefix paths to absolute */
 static void print_fullpaths(const char* line)
 {
-    int boost_count = 0;
+    /* The .done targets written for this rule. Every header of a tarball maps to the same one. */
+    std::unordered_set<std::string> unpacked_seen;
     const char* unpacked_end = nullptr; /* end of UnpackedTarget match (if any) */
     /* for UnpackedTarget the target is GenC{,xx}Object, don't mangle! */
     int target_seen = 0;
@@ -294,23 +281,15 @@ static void print_fullpaths(const char* line)
         {
             if (unpacked_end)
             {
-                if (internal_boost && !PATHNCMP(unpacked_end - 5, "boost", 5))
-                {
-                    ++boost_count;
-                    if (boost_count == 1)
-                        emit_single_boost_header();
-                    else
-                    {
-                        /* don't output, and swallow trailing \\\n if any */
-                        token = end;
-                        eat_space(&token);
-                        if (token[0] == '\\' && token[1] == '\n')
-                            end = token + 2;
-                    }
-                }
+                if (unpacked_seen.emplace(path, unpacked_end).second)
+                    emit_unpacked_target(path, unpacked_end);
                 else
                 {
-                    emit_unpacked_target(path, unpacked_end);
+                    /* don't output, and swallow trailing \\\n if any */
+                    token = end;
+                    eat_space(&token);
+                    if (token[0] == '\\' && token[1] == '\n')
+                        end = token + 2;
                 }
                 unpacked_end = nullptr;
             }
@@ -881,9 +860,6 @@ int main(int argc, char** argv)
     }
     std::stable_sort(tree_spellings.begin(), tree_spellings.end(),
                      [](const std::string& a, const std::string& b) { return a.size() > b.size(); });
-
-    const char* env_str = getenv("SYSTEM_BOOST");
-    internal_boost = !env_str || strcmp(env_str, "TRUE") != 0;
 
     std::string in_list;
     if (!file_load(argv[1], in_list))
