@@ -929,10 +929,12 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     // Preload?
     {
+        // A password-protected library of a document is loaded with the document's Basic project.
+        const bool bDocumentContainer = Reference< XModel >( mxOwnerDocument ).is();
         for (auto& aName : maNameContainer.getElementNames())
         {
             SfxLibrary* pImplLib = getImplLib( aName );
-            if( pImplLib->mbPreload )
+            if( pImplLib->mbPreload && !( bDocumentContainer && pImplLib->mbPasswordProtected ) )
             {
                 loadLibrary_Impl(aName, guard);
             }
