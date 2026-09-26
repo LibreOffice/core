@@ -2208,6 +2208,13 @@ private:
     /// may have landed and we have to work out which version storage holds.
     bool _lastUploadDefinitelyFailed;
 
+    /// True while the upload in flight, or the last one, uses an access token that has expired or
+    /// that the host has rejected.
+    bool _lastResortUpload;
+
+    /// True when the last upload used an expired or rejected access token and failed.
+    bool _lastResortUploadFailed;
+
     /// Base64 SHA-256 of the bytes of our last upload, taken only when its fate
     /// is unknown and we may have to recognise them in storage. Empty otherwise.
     std::string _lastUploadedFileHash;

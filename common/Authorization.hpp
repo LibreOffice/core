@@ -48,6 +48,9 @@ public:
 private:
     std::string _data;
     Type _type;
+    /// The kind of credential in _data: Token, Header, or None when there is none. It is kept when
+    /// the credential expires or is being refreshed.
+    Type _credentialType;
     duration _expiryEpoch; ///< Milliseconds from the epoch when the access_token will expire.
     std::chrono::steady_clock::time_point _tokenRefreshStartTime; ///< Only when refreshing.
     std::chrono::seconds _tokenRefreshTimeout; ///< Maximum time to wait for Token refresh.
@@ -62,6 +65,7 @@ public:
     Authorization(Type type, std::string data, bool noHeader)
         : _data(std::move(data))
         , _type(type)
+        , _credentialType(type == Type::Token || type == Type::Header ? type : Type::None)
         , _expiryEpoch(duration::zero())
         , _tokenRefreshStartTime(duration::zero())
         , _tokenRefreshTimeout(std::chrono::seconds::zero())
@@ -77,6 +81,7 @@ public:
     void resetAccessToken(std::string accessToken, duration expiryEpoch)
     {
         _type = Type::Token;
+        _credentialType = Type::Token;
         _data = std::move(accessToken);
         _expiryEpoch = expiryEpoch;
     }
@@ -93,7 +98,8 @@ public:
     /// Start waiting for a token refresh.
     void startTokenRefresh(const std::chrono::seconds timeout)
     {
-        LOG_ASSERT_MSG(_type == Type::Token, "Token refresh is meaningful only for access_token");
+        LOG_ASSERT_MSG(_credentialType == Type::Token,
+                       "Token refresh is meaningful only for access_token");
         _type = Type::TokenRefresh;
         _tokenRefreshStartTime = std::chrono::steady_clock::now();
         _tokenRefreshTimeout = timeout;
@@ -130,6 +136,16 @@ public:
     /// Expire the Authorization data.
     void expire() { _type = Type::Expired; }
 
+    /// Returns a copy that sends the access_token or access_header held here, even when it has
+    /// expired or the host has rejected it. The copy has no expiry time.
+    Authorization withExpiredCredential() const
+    {
+        Authorization auth(*this);
+        auth._type = _credentialType;
+        auth._expiryEpoch = duration::zero();
+        return auth;
+    }
+
     /// Returns true if Type is Expired or we passed the expiry-epoch.
     bool isExpired() const
     {
@@ -163,6 +179,7 @@ public:
 
         os << indent << "Authorization: " << (Anonymizer::enabled() ? "<redacted>" : _data);
         os << indent << "\ttype: " << name(_type);
+        os << indent << "\tcredentialType: " << name(_credentialType);
         os << indent << "\texpiryEpoch (TTL): " << _expiryEpoch
            << Util::getTimeForLog(
                   now, std::chrono::system_clock::time_point(

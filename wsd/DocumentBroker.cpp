@@ -292,6 +292,8 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     , _stop(false)
     , _documentChangedInStorage(false)
     , _lastUploadDefinitelyFailed(false)
+    , _lastResortUpload(false)
+    , _lastResortUploadFailed(false)
     , _isViewFileExtension(false)
     , _isViewSettingsUpdated(false)
     , _alwaysSaveOnExit(ConfigUtil::getConfigValue<bool>("per_document.always_save_on_exit", false))
@@ -3589,6 +3591,14 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
         return;
     }
 
+    // An expired or rejected token gets one last upload. After that failed, it gets no more.
+    if (_lastResortUploadFailed && !session->getAuthorization().isValid())
+    {
+        LOG_WRN("Session [" << sessionId << "] has an expired access token, which already failed "
+                            << "to upload docKey [" << _docKey << "]. Not uploading again");
+        return;
+    }
+
     LOG_DBG("Uploading to storage docKey [" << _docKey << "] for session [" << sessionId
                                             << "]. Force: " << force);
 
@@ -3727,10 +3737,21 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
 
     _nextStorageAttrs.reset();
 
+    // A token that has expired, or that the host has rejected, is still the only one this
+    // session has. Send it anyway, as the last way left to store the document.
+    _lastResortUpload = !session->getAuthorization().isValid();
+    if (_lastResortUpload)
+    {
+        LOG_WRN("Uploading docKey [" << _docKey << "] with the expired access token of session ["
+                                     << sessionId << "] as a last resort");
+    }
+
     _storageManager.markLastUploadRequestTime();
     const std::size_t size = _storage->uploadLocalFileToStorageAsync(
-        session->getAuthorization(), *_lockCtx, saveAsPath, saveAsFilename, isRename,
-        _lastStorageAttrs, _poll, asyncUploadCallback);
+        _lastResortUpload ? session->getAuthorization().withExpiredCredential()
+                          : session->getAuthorization(),
+        *_lockCtx, saveAsPath, saveAsFilename, isRename, _lastStorageAttrs, _poll,
+        asyncUploadCallback);
 
     _storageManager.setSizeAsUploaded(size);
 }
@@ -3923,6 +3944,7 @@ void DocumentBroker::handleUploadToStorageResponse(const StorageBase::UploadResu
     LOG_TRC("lastUploadSuccessful: " << lastUploadSuccessful
                                      << ", previousUploadSuccessful: " << previousUploadSuccessful);
     _storageManager.setLastUploadResult(lastUploadSuccessful);
+    _lastResortUploadFailed = _lastResortUpload && !lastUploadSuccessful;
 
     UNITWSD_CALL_INSTANCE(_unitWsd, onDocumentUploaded(lastUploadSuccessful));
 
@@ -4532,6 +4554,22 @@ void DocumentBroker::autoSaveAndStop(const std::string_view reason)
     LOG_TRC("autoSaveAndStop [" << reason << "] for docKey [" << getDocKey()
                                 << "]: " << name(needToSave) << ", " << name(needToUpload)
                                 << ", canStop: " << canStop);
+
+    if (!canStop && _lastResortUploadFailed)
+    {
+        // The upload with an expired token was the last way to store the document. Try again
+        // once a session has a valid token, and wait while a new token is being requested.
+        const auto session = getWriteableSession();
+        if (!session ||
+            (!session->getAuthorization().isValid() && !session->isRefreshingToken()))
+        {
+            LOG_ERR("Uploading docKey ["
+                    << getDocKey()
+                    << "] with an expired access token failed and no session has a valid one. "
+                       "May have data loss, but must stop");
+            canStop = true;
+        }
+    }
 
     if (!canStop && needToSave == NeedToSave::No && !isStorageOutdated())
     {
@@ -7517,6 +7555,8 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  needToUpload: " << name(needToUploadToStorage());
     os << "\n  documentChangedInStorage: " << _documentChangedInStorage;
     os << "\n  lastUploadDefinitelyFailed: " << _lastUploadDefinitelyFailed;
+    os << "\n  lastResortUpload: " << _lastResortUpload;
+    os << "\n  lastResortUploadFailed: " << _lastResortUploadFailed;
     os << "\n  lastUploadedFileHash: "
        << (_lastUploadedFileHash.empty() ? "<none>" : _lastUploadedFileHash);
     os << "\n  checkFileInfo grace: ";

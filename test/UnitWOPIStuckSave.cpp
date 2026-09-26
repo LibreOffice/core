@@ -400,10 +400,204 @@ public:
     }
 };
 
+/// The only editor modifies the document, then the host rejects its token on a lock refresh,
+/// which makes its view read-only. The document is then left idle, still modified. The token is
+/// the only one there is, so it is sent anyway, once, to upload the document before unloading.
+class UnitWOPIIdleRejectedToken : public WopiTestServer
+{
+public:
+    STATE_ENUM(Scenario,
+               UploadFails, ///< The host refuses the upload with the rejected token too.
+               UploadSucceeds ///< The host takes the upload with the rejected token.
+    );
+
+private:
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, RefuseRefresh, WaitUnload, Done)
+    _phase;
+
+    const Scenario _scenario;
+
+    /// Saves after the token was rejected before we call it a loop.
+    static constexpr std::size_t MaxSaves = 3;
+
+    std::atomic<std::size_t> _saves;
+    std::size_t _uploads;
+    bool _dataLoss;
+
+public:
+    UnitWOPIIdleRejectedToken(const std::string& name, Scenario scenario)
+        : WopiTestServer(name)
+        , _phase(Phase::Load)
+        , _scenario(scenario)
+        , _saves(0)
+        , _uploads(0)
+        , _dataLoss(false)
+    {
+        setTimeout(120s);
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.idle_timeout_secs", 3);
+        config.setInt("storage.wopi.locking.refresh", 1);
+
+        // The test client never answers a request for a new token.
+        config.setUInt("storage.wopi.access_token.refresh_timeout_secs", 2);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SupportsLocks", "true");
+    }
+
+    std::unique_ptr<http::Response>
+    assertLockRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        const std::string op = request.get("X-WOPI-Override", std::string());
+        TST_LOG(op << " request in " << name(_phase));
+
+        if (op == "LOCK" && _phase == Phase::RefuseRefresh)
+        {
+            TST_LOG("Rejecting the editor's token");
+            TRANSITION_STATE(_phase, Phase::WaitUnload);
+            return std::make_unique<http::Response>(http::StatusCode::Unauthorized);
+        }
+
+        return nullptr;
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        ++_uploads;
+        TST_LOG("PutFile #" << _uploads << " in " << name(_phase) << ": " << request.getURI());
+        LOK_ASSERT_STATE(_phase, Phase::WaitUnload);
+
+        LOK_ASSERT_MESSAGE("Expected a single upload with the rejected token", _uploads == 1);
+        LOK_ASSERT_MESSAGE("Expected the upload to carry the token",
+                           request.getURI().find("access_token=anything") != std::string::npos);
+        LOK_ASSERT_EQUAL_STR("Bearer anything", request.get("Authorization", std::string()));
+
+        if (_scenario == Scenario::UploadFails)
+            return std::make_unique<http::Response>(http::StatusCode::Unauthorized);
+
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        if (_phase == Phase::WaitModifiedStatus)
+            TRANSITION_STATE_MSG(_phase, Phase::RefuseRefresh, "Waiting for the lock refresh");
+
+        return true;
+    }
+
+    bool onFilterLOKitMessage(const std::shared_ptr<Message>& message) override
+    {
+        if (_phase == Phase::WaitUnload && message->contains(".uno:Save"))
+        {
+            const std::size_t saves = ++_saves;
+            TST_LOG("Save #" << saves << " after the token was rejected: ["
+                             << message->firstLine() << ']');
+            if (saves > MaxSaves)
+            {
+                failTest("Saved the document " + std::to_string(saves) +
+                         " times after the token was rejected");
+            }
+        }
+
+        return false;
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        TST_LOG("onDataLoss: " << reason);
+        if (_scenario == Scenario::UploadSucceeds)
+        {
+            failTest("Unexpected data loss after the upload was taken: " + reason);
+            return failed();
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitUnload);
+        _dataLoss = true;
+
+        // The loss is expected here. The test ends when the document is destroyed, so that any
+        // upload while the document shuts down is counted too.
+        return false;
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << "] in " << name(_phase));
+        LOK_ASSERT_STATE(_phase, Phase::WaitUnload);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected one upload with the rejected token", std::size_t(1),
+                                 _uploads);
+        if (_scenario == Scenario::UploadFails)
+        {
+            LOK_ASSERT_MESSAGE("Expected the unsaved changes to be reported lost", _dataLoss);
+            passTest("Gave up on the idle document after the upload with the rejected token "
+                     "failed");
+        }
+        else
+        {
+            passTest("Uploaded the idle document with the rejected token and unloaded it");
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::RefuseRefresh:
+            case Phase::WaitUnload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitWOPIStuckSave(), new UnitWOPIInfiniteSave(),
-                              new UnitWOPIIdleFailingSave(), nullptr };
+                              new UnitWOPIIdleFailingSave(),
+                              new UnitWOPIIdleRejectedToken(
+                                  "UnitWOPIIdleRejectedTokenUploadFails",
+                                  UnitWOPIIdleRejectedToken::Scenario::UploadFails),
+                              new UnitWOPIIdleRejectedToken(
+                                  "UnitWOPIIdleRejectedTokenUploadSucceeds",
+                                  UnitWOPIIdleRejectedToken::Scenario::UploadSucceeds),
+                              nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
