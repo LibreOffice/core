@@ -113,6 +113,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163178_columnbreakInTable)
     assertXPath(pXmlDoc, "//w:br", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163868_headerAsFramePr)
+{
+    // given a plain text document with a framePr'd paragraph in the header
+    createSwDoc("tdf163868_headerAsFramePr.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    CPPUNIT_ASSERT(getShapes()); // at least one text frame is seen
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171527_flyInFramePr)
 {
     // given a document with a framePr'd image anchoring a drawing shape
