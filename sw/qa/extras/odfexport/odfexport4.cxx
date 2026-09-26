@@ -1827,6 +1827,28 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyInDeleteRedline)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf173931)
+{
+    // Given a 4x4 table where the header row and its cells have a background, and the other rows
+    // and cells share one row style and one cell style:
+    createSwDoc("tdf173931.fodt");
+
+    // When exporting to ODT:
+    save(TestFilter::ODT);
+
+    // Then make sure identical rows and cells share one automatic style:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 13
+    // i.e. every body cell got its own style: a new format was inserted after, not before, the
+    // first entry that sorts after it, so the sorted list lost its order and later identical
+    // formats were no longer found.
+    assertXPath(pXmlDoc, "//office:automatic-styles/style:style[@style:family='table-cell']", 2);
+    // Same for rows: 4 instead of 2.
+    assertXPath(pXmlDoc, "//office:automatic-styles/style:style[@style:family='table-row']", 2);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
