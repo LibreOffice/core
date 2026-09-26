@@ -82,6 +82,7 @@ private:
     Link<Edit&,void>    maAutocompleteHdl;
     Link<Edit&,bool>    maActivateHdl;
     std::unique_ptr<VclBuilder> mpUIBuilder;
+    sal_uInt8           maEntryMessageType;
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
@@ -246,6 +247,8 @@ public:
     bool IsPassword() const { return mbPassword; }
 
     bool IsActivePopup() const { return mbActivePopup; }
+
+    void SetEntryMessageType(sal_uInt8 aEntryMessageType) { maEntryMessageType = aEntryMessageType; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,6 +43,7 @@
 #include <window.h>
 #include <svdata.hxx>
 #include <strings.hrc>
+#include <bitmaps.hlst>
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
@@ -253,6 +254,7 @@ void Edit::ImplInitEditData()
     mpDDInfo                = nullptr;
     mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
+    maEntryMessageType      = 0;
 
     // no default mirroring for Edit controls
     // note: controls that use a subedit will revert this (SpinField, ComboBox)
@@ -483,7 +485,16 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     ImplPaintBorder(rRenderContext);
 
-    bool bDrawSelection = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
+    if (maEntryMessageType > 0)
+    {
+        const OUString sType(  maEntryMessageType == 1 ? RID_MSGTYPE_INFO
+                             : maEntryMessageType == 2 ? RID_MSGTYPE_WARN
+                                                       : RID_MSGTYPE_ERR);
+        const Point aPoint(rRectangle.Right() - 18, rRectangle.Bottom() / 2 - 8);
+        rRenderContext.DrawImage(aPoint, Image(StockImage::Yes, sType));
+    }
+    bool bDrawSelection
+        = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
 
     aPos.setX( mnXOffset + ImplGetExtraXOffset() );
     if (bPaintPlaceholderText)

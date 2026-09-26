@@ -227,4 +227,8 @@ inline constexpr OUString CHEVRON = u"sfx2/res/chevron.png"_ustr;
 inline constexpr OUString RID_UPDATE_AVAILABLE_16 = u"extensions/res/update/ui/onlineupdate_16.png"_ustr;
 inline constexpr OUString RID_UPDATE_AVAILABLE_26 = u"extensions/res/update/ui/onlineupdate_26.png"_ustr;
 
+inline constexpr OUString RID_MSGTYPE_INFO = u"vcl/res/information.png"_ustr;
+inline constexpr OUString RID_MSGTYPE_WARN = u"vcl/res/warning.png"_ustr;
+inline constexpr OUString RID_MSGTYPE_ERR = u"vcl/res/error.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

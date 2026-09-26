@@ -3213,14 +3213,14 @@ void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
     switch (eType)
     {
         case weld::EntryMessageType::Normal:
+        case weld::EntryMessageType::Info:
             pEntry->SetForceControlBackground(false);
             pEntry->SetControlForeground();
             pEntry->SetControlBackground();
-            break;
-        case weld::EntryMessageType::Info:
-            pEntry->SetForceControlBackground(true);
-            pEntry->SetControlForeground(COL_BLACK);
-            pEntry->SetControlBackground(0xb4c7dc); // light blue 3
+            if (eType == weld::EntryMessageType::Normal)
+                pEntry->SetEntryMessageType(0);
+            else
+                pEntry->SetEntryMessageType(1);
             break;
         case weld::EntryMessageType::Warning:
             // tdf#114603: enable setting the background to a different color;
@@ -3228,6 +3228,7 @@ void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
             pEntry->SetForceControlBackground(true);
             pEntry->SetControlForeground(COL_BLACK);
             pEntry->SetControlBackground(0xffffa6); // "light yellow 3"
+            pEntry->SetEntryMessageType(2);
             break;
         case weld::EntryMessageType::Error:
             // tdf#114603: enable setting the background to a different color;
@@ -3235,6 +3236,7 @@ void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
             pEntry->SetForceControlBackground(true);
             pEntry->SetControlForeground(COL_BLACK); // contrast of 5.87 to the red background
             pEntry->SetControlBackground(0xffa6a6); // "light red 3"
+            pEntry->SetEntryMessageType(3);
             break;
     }
 }
