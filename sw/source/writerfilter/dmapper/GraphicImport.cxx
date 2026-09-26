@@ -784,7 +784,12 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                             m_nVertRelation = text::RelOrientation::PAGE_PRINT_AREA;
                         // only "from top" and "top" are appropriate. Others are implemented as Top
                         if (m_nVertOrient != text::VertOrientation::NONE)
-                            m_nVertOrient = text::VertOrientation::TOP;
+                        {
+                            if (m_nVertRelation == text::RelOrientation::TEXT_LINE)
+                                m_nVertOrient = text::VertOrientation::LINE_TOP;
+                            else
+                                m_nVertOrient = text::VertOrientation::TOP;
+                        }
                     }
                     else if (!m_bLayoutInCell && m_rDomainMapper.IsInTable())
                     {
