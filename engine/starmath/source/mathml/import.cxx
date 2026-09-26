@@ -634,21 +634,21 @@ private:
 public:
     /** Handles characters (text)
      */
-    virtual void SAL_CALL characters(const OUString& aChars) override;
+    virtual void characters(const OUString& aChars) override;
 
     /** Starts the mathml element
      */
-    virtual void SAL_CALL startFastElement(
+    virtual void startFastElement(
         sal_Int32 nElement, const Reference<XFastAttributeList>& aAttributeList) override;
 
     /** Ends the mathml element
      */
-    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
+    virtual void endFastElement(sal_Int32 Element) override;
 
     /** Creates child element
      */
     virtual uno::Reference<XFastContextHandler>
-        SAL_CALL createFastChildContext(sal_Int32 nElement,
+        createFastChildContext(sal_Int32 nElement,
                                         const uno::Reference<XFastAttributeList>& Attribs) override;
 
     /** Inherits the style from it's parents
@@ -668,7 +668,7 @@ public:
     SmLengthValue handleLengthAttribute(const OUString& aAttribute);
 };
 
-uno::Reference<XFastContextHandler> SAL_CALL
+uno::Reference<XFastContextHandler>
 SmMLImportContext::createFastChildContext(sal_Int32, const uno::Reference<XFastAttributeList>&)
 {
     return new SmMLImportContext(static_cast<SmMLImport&>(GetImport()), &m_pElement);

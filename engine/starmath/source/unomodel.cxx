@@ -329,7 +329,7 @@ SmModel::~SmModel() noexcept
 
 SmDocShell* SmModel::GetSmDocShell() const { return static_cast<SmDocShell*>(GetObjectShell()); }
 
-cpo::uno::Any SAL_CALL SmModel::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any SmModel::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // PropertySetHelper interfaces
@@ -343,17 +343,17 @@ cpo::uno::Any SAL_CALL SmModel::queryInterface( const cpo::uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL SmModel::acquire() noexcept
+void SmModel::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SmModel::release() noexcept
+void SmModel::release() noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SmModel::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SmModel::getTypes(  )
 {
     return comphelper::concatSequences(SfxBaseModel::getTypes(),
         cpo::uno::Sequence  {
@@ -369,7 +369,7 @@ const cpo::uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
     return theSmModelUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SmModel::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SmModel::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this,
                                         comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
@@ -948,14 +948,14 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 }
 
 
-sal_Int32 SAL_CALL SmModel::getRendererCount(
+sal_Int32 SmModel::getRendererCount(
         const cpo::uno::Any& /*rSelection*/,
         const cpo::uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
 {
     return 1;
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
+cpo::uno::Sequence< beans::PropertyValue > SmModel::getRenderer(
         sal_Int32 nRenderer,
         const cpo::uno::Any& /*rSelection*/,
         const cpo::uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
@@ -996,7 +996,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     return aRenderer;
 }
 
-void SAL_CALL SmModel::render(
+void SmModel::render(
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
         const cpo::uno::Sequence< beans::PropertyValue >& rxOptions )
@@ -1087,7 +1087,7 @@ void SAL_CALL SmModel::render(
     }
 }
 
-void SAL_CALL SmModel::setParent( const uno::Reference< cpo::uno::XInterface >& xParent)
+void SmModel::setParent( const uno::Reference< cpo::uno::XInterface >& xParent)
 {
     SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );

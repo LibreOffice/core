@@ -60,29 +60,29 @@ public:
     virtual ~SmModel() noexcept override;
 
     //XInterface
-    virtual     cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
+    virtual     cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    virtual void acquire(  ) noexcept override;
+    virtual void release(  ) noexcept override;
 
     //XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
     static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual sal_Int32 getRendererCount( const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual void render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    virtual void SAL_CALL setParent( const cpo::uno::Reference< cpo::uno::XInterface >& xParent ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& xParent ) override;
 
     // oox::FormulaImExportBase
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,

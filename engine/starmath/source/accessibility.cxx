@@ -77,7 +77,7 @@ OUString SmGraphicAccessible::GetAccessibleText_Impl()
     return aTxt;
 }
 
-void SAL_CALL SmGraphicAccessible::disposing()
+void SmGraphicAccessible::disposing()
 {
     pWin = nullptr;   // implicitly results in AccessibleStateType::DEFUNC set
 
@@ -92,7 +92,7 @@ void SmGraphicAccessible::LaunchEvent(
     NotifyAccessibleEvent(nAccessibleEventId, rOldVal, rNewVal);
 }
 
-uno::Reference<XAccessible> SAL_CALL SmGraphicAccessible::getAccessibleAtPoint(const awt::Point&)
+uno::Reference<XAccessible> SmGraphicAccessible::getAccessibleAtPoint(const awt::Point&)
 {
     SolarMutexGuard aGuard;
     return nullptr;
@@ -107,7 +107,7 @@ awt::Rectangle SmGraphicAccessible::implGetBounds()
     return css::awt::Rectangle(0, 0, aOutSize.Width(), aOutSize.Height());
 }
 
-void SAL_CALL SmGraphicAccessible::grabFocus()
+void SmGraphicAccessible::grabFocus()
 {
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -116,7 +116,7 @@ void SAL_CALL SmGraphicAccessible::grabFocus()
     pWin->GrabFocus();
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
+sal_Int32 SmGraphicAccessible::getForeground()
 {
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -128,7 +128,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
     return static_cast<sal_Int32>(rDevice.GetTextColor());
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
+sal_Int32 SmGraphicAccessible::getBackground()
 {
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -146,18 +146,18 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     return static_cast<sal_Int32>(nCol);
 }
 
-sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
+sal_Int64 SmGraphicAccessible::getAccessibleChildCount()
 {
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
+Reference< XAccessible > SmGraphicAccessible::getAccessibleChild(
         sal_Int64 /*i*/ )
 {
     throw IndexOutOfBoundsException();  // there is no child...
 }
 
-Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
+Reference< XAccessible > SmGraphicAccessible::getAccessibleParent()
 {
     SolarMutexGuard aGuard;
     if (!pWin)
@@ -166,30 +166,30 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     return pWin->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
+sal_Int16 SmGraphicAccessible::getAccessibleRole()
 {
     return AccessibleRole::DOCUMENT;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
+OUString SmGraphicAccessible::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
     SmDocShell *pDoc = GetDoc_Impl();
     return pDoc ? pDoc->GetText() : OUString();
 }
 
-OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
+OUString SmGraphicAccessible::getAccessibleName()
 {
     SolarMutexGuard aGuard;
     return aAccName;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > SmGraphicAccessible::getAccessibleRelationSet()
 {
     return new utl::AccessibleRelationSetHelper(); // empty relation set
 }
 
-sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
+sal_Int64 SmGraphicAccessible::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
     sal_Int64 nStateSet = 0;
@@ -215,7 +215,7 @@ sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
     return nStateSet;
 }
 
-Locale SAL_CALL SmGraphicAccessible::getLocale()
+Locale SmGraphicAccessible::getLocale()
 {
     SolarMutexGuard aGuard;
     // should be the document language...
@@ -223,12 +223,12 @@ Locale SAL_CALL SmGraphicAccessible::getLocale()
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
+sal_Int32 SmGraphicAccessible::getCaretPosition()
 {
     return 0;
 }
 
-bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
+bool SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -237,7 +237,7 @@ bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     return false;
 }
 
-sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
+sal_Unicode SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -246,7 +246,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
     return aTxt[nIndex];
 }
 
-Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
+Sequence< beans::PropertyValue > SmGraphicAccessible::getCharacterAttributes(
         sal_Int32 nIndex,
         const cpo::uno::Sequence< OUString > & /*rRequestedAttributes*/ )
 {
@@ -257,7 +257,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
     return Sequence< beans::PropertyValue >();
 }
 
-awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nIndex )
+awt::Rectangle SmGraphicAccessible::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -325,13 +325,13 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
     return aRes;
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getCharacterCount()
+sal_Int32 SmGraphicAccessible::getCharacterCount()
 {
     SolarMutexGuard aGuard;
     return GetAccessibleText_Impl().getLength();
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoint )
+sal_Int32 SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoint )
 {
     SolarMutexGuard aGuard;
 
@@ -394,22 +394,22 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
     return nRes;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getSelectedText()
+OUString SmGraphicAccessible::getSelectedText()
 {
     return OUString();
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionStart()
+sal_Int32 SmGraphicAccessible::getSelectionStart()
 {
     return -1;
 }
 
-sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionEnd()
+sal_Int32 SmGraphicAccessible::getSelectionEnd()
 {
     return -1;
 }
 
-bool SAL_CALL SmGraphicAccessible::setSelection(
+bool SmGraphicAccessible::setSelection(
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex )
 {
@@ -421,13 +421,13 @@ bool SAL_CALL SmGraphicAccessible::setSelection(
     return false;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getText()
+OUString SmGraphicAccessible::getText()
 {
     SolarMutexGuard aGuard;
     return GetAccessibleText_Impl();
 }
 
-OUString SAL_CALL SmGraphicAccessible::getTextRange(
+OUString SmGraphicAccessible::getTextRange(
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex )
 {
@@ -445,7 +445,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     return aTxt.copy( nStart, nEnd - nStart );
 }
 
-css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -468,7 +468,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sa
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -492,7 +492,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -516,7 +516,7 @@ css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex
     return aResult;
 }
 
-bool SAL_CALL SmGraphicAccessible::copyText(
+bool SmGraphicAccessible::copyText(
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex )
 {
@@ -546,23 +546,23 @@ bool SAL_CALL SmGraphicAccessible::copyText(
     return bReturn;
 }
 
-bool SAL_CALL SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool SmGraphicAccessible::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
 
-OUString SAL_CALL SmGraphicAccessible::getImplementationName()
+OUString SmGraphicAccessible::getImplementationName()
 {
     return u"SmGraphicAccessible"_ustr;
 }
 
-bool SAL_CALL SmGraphicAccessible::supportsService(
+bool SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
 {
     return  cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
+Sequence< OUString > SmGraphicAccessible::getSupportedServiceNames()
 {
     return {
         u"css::accessibility::Accessible"_ustr,

@@ -47,17 +47,17 @@ public:
     const SmPanelFactory& operator=(const SmPanelFactory&) = delete;
 
     // XUIElementFactory
-    cpo::uno::Reference<css::ui::XUIElement> SAL_CALL
+    cpo::uno::Reference<css::ui::XUIElement>
     createUIElement(const OUString& ResourceURL,
                     const cpo::uno::Sequence<css::beans::PropertyValue>& Arguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(OUString const& ServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(OUString const& ServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
-cpo::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElement(
+cpo::uno::Reference<css::ui::XUIElement> SmPanelFactory::createUIElement(
     const OUString& ResourceURL, const cpo::uno::Sequence<css::beans::PropertyValue>& Arguments)
 {
     try

@@ -33,16 +33,16 @@ public:
     MathTypeFilter();
 
     // XFilter
-    bool SAL_CALL filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
-    void SAL_CALL cancel() override;
+    bool filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    void cancel() override;
 
     // XImporter
-    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) override;
+    void setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString& rServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 }
 

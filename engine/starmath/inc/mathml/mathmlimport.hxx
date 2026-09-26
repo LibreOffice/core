@@ -85,7 +85,7 @@ public:
                 OUString const& implementationName, SvXMLImportFlags nImportFlags);
     virtual ~SmXMLImport() noexcept override;
 
-    void SAL_CALL endDocument() override;
+    void endDocument() override;
 
     SvXMLImportContext* CreateFastContext(
         sal_Int32 nElement,

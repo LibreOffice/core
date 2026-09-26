@@ -2025,7 +2025,7 @@ public:
     // ~SmController() { mpSelectionChangeHandler->Disconnect(); }
 
     // css::frame::XController
-    void SAL_CALL attachFrame(const cpo::uno::Reference<css::frame::XFrame>& xFrame) override
+    void attachFrame(const cpo::uno::Reference<css::frame::XFrame>& xFrame) override
     {
         SfxBaseController::attachFrame(xFrame);
 
@@ -2048,7 +2048,7 @@ public:
         mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
     }
 
-    virtual void SAL_CALL dispose() override
+    virtual void dispose() override
     {
         if (comphelper::COKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())

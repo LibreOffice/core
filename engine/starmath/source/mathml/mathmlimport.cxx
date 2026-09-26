@@ -476,8 +476,8 @@ public:
     SmXMLImport& GetSmImport() { return static_cast<SmXMLImport&>(GetImport()); }
 
     virtual void TCharacters(const OUString& /*rChars*/);
-    virtual void SAL_CALL characters(const OUString& rChars) override;
-    virtual void SAL_CALL startFastElement(
+    virtual void characters(const OUString& rChars) override;
+    virtual void startFastElement(
         sal_Int32 /*nElement*/,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& /*rAttrList*/) override
     {
@@ -808,10 +808,10 @@ public:
     {
     }
 
-    virtual uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual uno::Reference<xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 /*avert the gaze from the originator*/
@@ -827,12 +827,12 @@ public:
     {
     }
 
-    virtual uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual uno::Reference<xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 
     uno::Reference<xml::sax::XFastContextHandler> StrictCreateChildContext(sal_Int32 nElement);
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
@@ -845,7 +845,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -871,7 +871,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 class SmXMLSqrtContext_Impl : public SmXMLRowContext_Impl
@@ -882,7 +882,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 class SmXMLRootContext_Impl : public SmXMLRowContext_Impl
@@ -893,7 +893,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 class SmXMLStyleContext_Impl : public SmXMLRowContext_Impl
@@ -909,8 +909,8 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    void SAL_CALL startFastElement(
+    void endFastElement(sal_Int32 nElement) override;
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 }
@@ -945,7 +945,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -971,7 +971,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1014,9 +1014,9 @@ public:
     {
     }
 
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1107,7 +1107,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1145,7 +1145,7 @@ public:
 
     virtual void TCharacters(const OUString& rChars) override;
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1169,9 +1169,9 @@ public:
     {
     }
 
-    void SAL_CALL characters(const OUString& rChars) override;
+    void characters(const OUString& rChars) override;
 
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 }
@@ -1222,7 +1222,7 @@ public:
 
     virtual void TCharacters(const OUString& rChars) override;
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1251,7 +1251,7 @@ public:
 
     virtual void TCharacters(const OUString& rChars) override;
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1295,14 +1295,14 @@ public:
     }
 
     void TCharacters(const OUString& rChars) override;
-    void SAL_CALL
+    void
     startFastElement(sal_Int32 /*nElement*/,
                      const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override
     {
         maTokenAttrHelper.RetrieveAttrs(xAttrList);
         aStyleHelper.RetrieveAttrs(xAttrList);
     };
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1364,9 +1364,9 @@ public:
     }
 
     void TCharacters(const OUString& rChars) override;
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1445,7 +1445,7 @@ public:
     {
     }
 
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
@@ -1528,7 +1528,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override { GenericEndElement(TRSUB, RSUB); }
+    void endFastElement(sal_Int32) override { GenericEndElement(TRSUB, RSUB); }
 };
 }
 
@@ -1568,7 +1568,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override { GenericEndElement(TRSUP, RSUP); }
+    void endFastElement(sal_Int32) override { GenericEndElement(TRSUP, RSUP); }
 };
 
 class SmXMLSubSupContext_Impl : public SmXMLRowContext_Impl
@@ -1582,7 +1582,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override { GenericEndElement(TRSUB, RSUB, RSUP); }
+    void endFastElement(sal_Int32) override { GenericEndElement(TRSUB, RSUB, RSUP); }
 };
 }
 
@@ -1627,9 +1627,9 @@ public:
     {
     }
 
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
     void HandleAccent();
 };
 }
@@ -1693,8 +1693,8 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    void SAL_CALL startFastElement(
+    void endFastElement(sal_Int32 nElement) override;
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
     void HandleAccent();
 };
@@ -1747,7 +1747,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32) override { GenericEndElement(TCSUB, CSUB, CSUP); }
+    void endFastElement(sal_Int32) override { GenericEndElement(TCSUB, CSUB, CSUP); }
 };
 
 class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
@@ -1763,8 +1763,8 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    virtual uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    void endFastElement(sal_Int32 nElement) override;
+    virtual uno::Reference<xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
@@ -1776,7 +1776,7 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 }
 
@@ -1809,7 +1809,7 @@ public:
     {
     }
 
-    virtual uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual uno::Reference<xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
@@ -1821,8 +1821,8 @@ public:
     {
     }
 
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    virtual uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    void endFastElement(sal_Int32 nElement) override;
+    virtual uno::Reference<xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
@@ -1857,9 +1857,9 @@ public:
     {
     }
 
-    void SAL_CALL startFastElement(
+    void startFastElement(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList) override;
-    void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    void endFastElement(sal_Int32 nElement) override;
 };
 
 // NB: virtually inherit so we can multiply inherit properly
@@ -1872,7 +1872,7 @@ public:
     {
     }
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -1902,7 +1902,7 @@ public:
     SmXMLFlatDocContext_Impl(SmXMLImport& i_rImport,
                              const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
         const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
@@ -1917,7 +1917,7 @@ SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl(
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-    SAL_CALL SmXMLFlatDocContext_Impl::createFastChildContext(
+    SmXMLFlatDocContext_Impl::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     // behave like meta base class iff we encounter office:meta

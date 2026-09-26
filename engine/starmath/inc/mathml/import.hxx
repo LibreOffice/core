@@ -118,7 +118,7 @@ public:
 public:
     /** End the document
     */
-    void SAL_CALL endDocument() override;
+    void endDocument() override;
 
     /** Create a fast context
     */
