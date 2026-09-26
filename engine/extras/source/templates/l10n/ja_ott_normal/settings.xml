@@ -7,6 +7,10 @@
     <config:config-item-set config:name="ooo:configuration-settings">
       <config:config-item config:name="CharacterCompressionType" config:type="short">1</config:config-item>
       <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">true</config:config-item>
+      <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
+      <config:config-item config:name="LegacySingleLineFontwork" config:type="boolean">false</config:config-item>
+      <config:config-item config:name="LineSpacingBelowBaselineLegacy" config:type="boolean">false</config:config-item>
+      <config:config-item config:name="TextFittingLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-set>
   </office:settings>
 </office:document-settings>
