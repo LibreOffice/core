@@ -99,7 +99,7 @@ private:
     /** IStoreHandle query() template specialization.
      */
     friend OStoreLockBytes*
-    SAL_CALL query<> (OStoreObject *pHandle, OStoreLockBytes*);
+    query<> (OStoreObject *pHandle, OStoreLockBytes*);
 
     rtl::Reference<OStorePageManager> m_xManager;
 

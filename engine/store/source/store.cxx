@@ -48,7 +48,7 @@ public:
         : rtl::Reference<store_handle_type> (pHandle)
     {}
 
-    static store_handle_type * SAL_CALL query (void * pHandle)
+    static store_handle_type * query (void * pHandle)
     {
         return store::query (
             static_cast<OStoreObject*>(pHandle),
