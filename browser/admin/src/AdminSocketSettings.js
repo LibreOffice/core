@@ -90,8 +90,12 @@ var AdminSocketSettings = AdminSocketBase.extend({
 			var coolwsdVersionObj = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
 			var h = coolwsdVersionObj.Hash;
 			if (parseInt(h,16).toString(16) === h.toLowerCase().replace(/^0+/, '')) {
-				h = '<a target="_blank" href="https://gerrit.collaboraoffice.com/plugins/gitiles/online/+log/' + h + '">' + h + '</a>';
-				$('#coolwsd-version').html(coolwsdVersionObj.Version + ' (git hash: ' + h + ')');
+				var link = document.createElement('a');
+				link.target = '_blank';
+				link.href = 'https://gerrit.collaboraoffice.com/plugins/gitiles/online/+log/' + h;
+				link.textContent = h;
+				document.getElementById('coolwsd-version').replaceChildren(
+					coolwsdVersionObj.Version + ' (git hash: ', link, ')');
 			}
 			else {
 				$('#coolwsd-version').text(coolwsdVersionObj.Version);
