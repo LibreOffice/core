@@ -50,7 +50,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -557,14 +557,12 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         bool bVBACompat = false;
         if ( (xInfoSet->getPropertyValue(u"VBACompatibilityMode"_ustr) >>= bVBACompat) && bVBACompat )
         {
-            /*  Set library container to VBA compatibility mode, this
-                forces loading the Basic project, which in turn creates the
-                VBA Globals object and does all related initialization. */
+            // Set library container to VBA compatibility mode without loading the Basic project.
             if ( xModel.is() ) try
             {
-                uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModel->getPropertyValue(
+                uno::Reference< beans::XPropertySet > xLibraries( xModel->getPropertyValue(
                     u"BasicLibraries"_ustr ), uno::UNO_QUERY_THROW );
-                xVBACompat->setVBACompatibilityMode( true );
+                xLibraries->setPropertyValue( u"DeferredVBACompatibilityMode"_ustr, uno::Any( true ) );
             }
             catch( const cpo::uno::Exception& )
             {

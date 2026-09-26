@@ -2814,15 +2814,20 @@ cpo::uno::Reference<css::beans::XPropertySetInfo> SfxLibraryContainer::getProper
 void SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
                                                     const cpo::uno::Any& aValue)
 {
-    if (aPropertyName != sVBATextEncodingPropName)
+    if (aPropertyName == sVBATextEncodingPropName)
+        aValue >>= meVBATextEncoding;
+    else if (aPropertyName == sDeferredVBACompatibilityModePropName)
+        aValue >>= mbVBACompat;
+    else
         throw UnknownPropertyException(aPropertyName, getXWeak());
-    aValue >>= meVBATextEncoding;
 }
 
 cpo::uno::Any SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
 {
     if (aPropertyName == sVBATextEncodingPropName)
         return cpo::uno::Any(meVBATextEncoding);
+    if (aPropertyName == sDeferredVBACompatibilityModePropName)
+        return cpo::uno::Any(mbVBACompat);
     throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 

@@ -43,6 +43,7 @@
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -1006,8 +1007,18 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     // check macro security
     const bool bHasValidContentSignature = HasValidSignatures();
     const bool bHasMacros = pImpl->aMacroMode.hasMacros();
-    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature, bHasMacros );
+    const bool bMacrosAllowed = pImpl->aMacroMode.checkMacrosOnLoading(
+        xInteraction, bHasValidContentSignature, bHasMacros);
     pImpl->m_bHadCheckedMacrosOnLoad = bHasMacros;
+
+    // A document in VBA compatibility mode gets its Basic project loaded once macros are allowed.
+    if (bMacrosAllowed)
+    {
+        uno::Reference<script::vba::XVBACompatibility> xVBACompat(GetBasicContainer(),
+                                                                  uno::UNO_QUERY);
+        if (xVBACompat.is() && xVBACompat->getVBACompatibilityMode())
+            xVBACompat->setVBACompatibilityMode(true);
+    }
 }
 
 bool SfxObjectShell::GetHadCheckedMacrosOnLoad() const
