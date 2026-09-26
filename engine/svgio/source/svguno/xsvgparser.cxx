@@ -59,18 +59,18 @@ namespace svgio::svgreader
             XSvgParser& operator=(const XSvgParser&) = delete;
 
             // XSvgParser
-            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
+            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
                 const OUString& aAbsolutePath) override;
 
-            virtual cpo::uno::Any SAL_CALL getDrawCommands(
+            virtual cpo::uno::Any getDrawCommands(
                 uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath) override;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() override;
-            virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual OUString getImplementationName() override;
+            virtual bool supportsService(const OUString&) override;
+            virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
         };
 
         }
@@ -148,7 +148,7 @@ namespace svgio::svgreader
             return aRetval.toSequence();
         }
 
-        cpo::uno::Any SAL_CALL XSvgParser::getDrawCommands(
+        cpo::uno::Any XSvgParser::getDrawCommands(
                 uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath)
         {
@@ -176,17 +176,17 @@ namespace svgio::svgreader
             return aAnyResult;
         }
 
-        OUString SAL_CALL XSvgParser::getImplementationName()
+        OUString XSvgParser::getImplementationName()
         {
             return u"svgio::svgreader::XSvgParser"_ustr;
         }
 
-        bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName)
+        bool XSvgParser::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }
 
-        cpo::uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > XSvgParser::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.SvgTools"_ustr };
         }

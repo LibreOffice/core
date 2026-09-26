@@ -44,14 +44,14 @@ namespace svgio::svgreader
             virtual ~SvgDocHdl() override;
 
             // Methods XDocumentHandler
-            virtual void SAL_CALL startDocument(  ) override;
-            virtual void SAL_CALL endDocument(  ) override;
-            virtual void SAL_CALL startElement( const OUString& aName, const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
-            virtual void SAL_CALL endElement( const OUString& aName ) override;
-            virtual void SAL_CALL characters( const OUString& aChars ) override;
-            virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-            virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-            virtual void SAL_CALL setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+            virtual void startDocument(  ) override;
+            virtual void endDocument(  ) override;
+            virtual void startElement( const OUString& aName, const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+            virtual void endElement( const OUString& aName ) override;
+            virtual void characters( const OUString& aChars ) override;
+            virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+            virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+            virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
             const SvgDocument& getSvgDocument() const { return maDocument; }
         };
