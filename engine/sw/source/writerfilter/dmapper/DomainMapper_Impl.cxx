@@ -3300,8 +3300,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
 
     }
 
-    bool bIgnoreFrameState = IsInHeaderFooter();
-    if( (!bIgnoreFrameState && pParaContext && pParaContext->props().IsFrameMode()) || (bIgnoreFrameState && GetIsPreviousParagraphFramed()) )
+    if (pParaContext && pParaContext->props().IsFrameMode())
         SetIsPreviousParagraphFramed(true);
     else
         SetIsPreviousParagraphFramed(false);
@@ -10478,6 +10477,10 @@ void DomainMapper_Impl::substream(Id rName,
         m_bSaxError = true;
         throw;
     }
+
+    // finalize any waiting, substream-created frames before ending the substream
+    CheckUnregisteredFrameConversion();
+    ExecuteFrameConversion();
 
     switch( rName )
     {

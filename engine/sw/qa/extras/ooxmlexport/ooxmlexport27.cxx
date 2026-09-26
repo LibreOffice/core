@@ -565,6 +565,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163178_columnbreakInTable)
     assertXPath(pXmlDoc, "//w:br", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163868_headerAsFramePr)
+{
+    // given a plain text document with a framePr'd paragraph in the header
+    createSwDoc("tdf163868_headerAsFramePr.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    CPPUNIT_ASSERT(getShapes()); // at least one text frame is seen
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138027_pageBreakAfterShape, "tdf138027_pageBreakAfterShape.docx")
 {
     xmlDocUniquePtr pDump = parseLayoutDump();
