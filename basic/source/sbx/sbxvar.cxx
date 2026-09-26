@@ -440,6 +440,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         SbxValues aTmp;
         OUString aTmpString;
         OUString aVal;
+        SbxValue::Clear();
         aTmp.eType = aData.eType = static_cast<SbxDataType>(nType);
         aTmp.pOUString = &aVal;
         switch( nType )
