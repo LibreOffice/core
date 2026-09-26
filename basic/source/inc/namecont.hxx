@@ -331,6 +331,9 @@ private:
                     const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions();
     static constexpr OUString sVBATextEncodingPropName = u"VBATextEncoding"_ustr;
+    // Sets the VBA compatibility mode without loading the Basic project.
+    static constexpr OUString sDeferredVBACompatibilityModePropName
+        = u"DeferredVBACompatibilityMode"_ustr;
 
 public:
     SfxLibraryContainer();
