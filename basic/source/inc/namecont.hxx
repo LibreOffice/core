@@ -333,6 +333,9 @@ private:
                     std::unique_lock<std::mutex>& guard );
     void implScanExtensions(std::unique_lock<std::mutex>& guard);
     static constexpr OUString sVBATextEncodingPropName = u"VBATextEncoding"_ustr;
+    // Sets the VBA compatibility mode without loading the Basic project.
+    static constexpr OUString sDeferredVBACompatibilityModePropName
+        = u"DeferredVBACompatibilityMode"_ustr;
 
 public:
     SfxLibraryContainer();

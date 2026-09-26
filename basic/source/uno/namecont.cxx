@@ -2877,15 +2877,20 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SfxLibraryContainer::
 void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
                                                     const uno::Any& aValue)
 {
-    if (aPropertyName != sVBATextEncodingPropName)
+    if (aPropertyName == sVBATextEncodingPropName)
+        aValue >>= meVBATextEncoding;
+    else if (aPropertyName == sDeferredVBACompatibilityModePropName)
+        aValue >>= mbVBACompat;
+    else
         throw UnknownPropertyException(aPropertyName, getXWeak());
-    aValue >>= meVBATextEncoding;
 }
 
 css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
 {
     if (aPropertyName == sVBATextEncodingPropName)
         return uno::Any(meVBATextEncoding);
+    if (aPropertyName == sDeferredVBACompatibilityModePropName)
+        return uno::Any(mbVBACompat);
     throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 
