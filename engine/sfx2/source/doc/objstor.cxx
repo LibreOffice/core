@@ -505,6 +505,7 @@ bool SfxObjectShell::DoInitNew()
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
         pImpl->aMacroMode.allowMacroExecution();
+        pImpl->m_bMacroCallsAllowed = true;
         if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
             SetTitle(SfxResId(STR_NONAME));
 

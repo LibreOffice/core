@@ -70,6 +70,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <framework/documentmacrocalls.hxx>
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -140,6 +141,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aViewMonitor( m_aEventNotifier )
             ,m_eInitState( NotInitialized )
             ,m_bClosing( false )
+            ,m_bMacroCallsAllowed( false )
             ,m_bAllowDocumentScripting( false )
             ,m_bHasBeenRecovered( false )
             ,m_bEmbedded(false)
@@ -465,6 +467,9 @@ void ODatabaseDocument::initNew(  )
     impl_reset_nothrow();
 
     impl_setInitializing();
+
+    // A new document gets its macros from the user.
+    m_bMacroCallsAllowed = true;
 
     // create a temporary storage
     Reference< XStorage > xTempStor( ::comphelper::OStorageHelper::GetTemporaryStorage( m_pImpl->m_aContext ) );
@@ -813,7 +818,8 @@ void ODatabaseDocument::connectController( const Reference< XController >& _xCon
         return;
 
     // check/adjust our macro mode.
-    m_pImpl->checkMacrosOnLoading();
+    m_bMacroCallsAllowed = m_pImpl->checkMacrosOnLoading() || m_bMacroCallsAllowed;
+    framework::setDocumentMacroCallsAllowed( m_xUIConfigurationManager, m_bMacroCallsAllowed );
 }
 
 void ODatabaseDocument::disconnectController( const Reference< XController >& _xController )
@@ -1721,6 +1727,8 @@ Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurat
     if ( !m_xUIConfigurationManager.is() )
     {
         m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext );
+
+        framework::setDocumentMacroCallsAllowed( m_xUIConfigurationManager, m_bMacroCallsAllowed );
 
         OUString aUIConfigFolderName( u"Configurations2"_ustr );
 

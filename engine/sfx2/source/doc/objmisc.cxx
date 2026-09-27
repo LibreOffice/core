@@ -78,6 +78,8 @@
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
 #include <framework/documentundoguard.hxx>
+#include <framework/documentmacrocalls.hxx>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -984,6 +986,31 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 }
 
 
+bool SfxObjectShell::DocumentUIConfigurationHasMacroCalls_Impl()
+{
+    try
+    {
+        uno::Reference<embed::XStorage> xStorage = GetStorage();
+        if (!xStorage.is() || !xStorage->hasByName(u"Configurations2"_ustr))
+            return false;
+        uno::Reference<embed::XStorage> xConfigStorage
+            = xStorage->openStorageElement(u"Configurations2"_ustr, embed::ElementModes::READ);
+        // A separate manager reads the folder, so the model's own manager is still created when
+        // the view first asks for it.
+        uno::Reference<ui::XUIConfigurationManager2> xConfiguration
+            = ui::UIConfigurationManager::create(comphelper::getProcessComponentContext());
+        xConfiguration->setStorage(xConfigStorage);
+        const bool bHasMacroCalls = framework::documentConfigurationHasMacroCalls(xConfiguration);
+        xConfiguration->dispose();
+        return bHasMacroCalls;
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
+    }
+    return false;
+}
+
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
     if (GetErrorCode() == ERRCODE_IO_BROKENPACKAGE)
@@ -1005,11 +1032,16 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     CheckEncryption_Impl( xInteraction );
 
     // check macro security
+    if (!GetMacroCallsSeenWhileLoading() && DocumentUIConfigurationHasMacroCalls_Impl())
+        SetMacroCallsSeenWhileLoading();
     const bool bHasValidContentSignature = HasValidSignatures();
     const bool bHasMacros = pImpl->aMacroMode.hasMacros();
     const bool bMacrosAllowed = pImpl->aMacroMode.checkMacrosOnLoading(
         xInteraction, bHasValidContentSignature, bHasMacros);
     pImpl->m_bHadCheckedMacrosOnLoad = bHasMacros;
+    pImpl->m_bMacroCallsAllowed = bMacrosAllowed;
+    if (pImpl->pBaseModel.is())
+        pImpl->pBaseModel->SetUIConfigurationMacroCallsAllowed_Impl(bMacrosAllowed);
 
     // A document in VBA compatibility mode gets its Basic project loaded once macros are allowed.
     if (bMacrosAllowed)
