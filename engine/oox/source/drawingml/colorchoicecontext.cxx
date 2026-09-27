@@ -249,7 +249,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         else
             nValue = rAttribs.getInteger(XML_val, 0);
 
-        mpComplexColor->addTransformation({eType, sal_Int16(nValue / 10)});
+        mpComplexColor->addTransformation({eType, nValue / 10});
     }
 
     return nullptr;
