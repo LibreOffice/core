@@ -95,9 +95,9 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="asciifilterdialog|label2">_Character set:</property>
+                    <property name="label" translatable="yes" context="asciifilterdialog|label2">_Encoding:</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">charset</property>
+                    <property name="mnemonic-widget">encoding</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -146,13 +146,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="charset">
+                  <object class="GtkComboBoxText" id="encoding">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="charset-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="asciifilterdialog|extended_tip|charset">Specifies the character set of the file for export or import.</property>
+                      <object class="AtkObject" id="encoding-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asciifilterdialog|extended_tip|encoding">Specifies the encoding of the file for export or import.</property>
                       </object>
                     </child>
                   </object>

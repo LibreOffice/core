@@ -62,7 +62,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxDialogController(pParent, u"modules/swriter/ui/asciifilterdialog.ui"_ustr, u"AsciiFilterDialog"_ustr)
     , m_bSaveLineStatus(true)
-    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"charset"_ustr)))
+    , m_xEncodingLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box(u"encoding"_ustr)))
     , m_xFontFT(m_xBuilder->weld_label(u"fontft"_ustr))
     , m_xFontLB(m_xBuilder->weld_combo_box(u"font"_ustr))
     , m_xLanguageFT(m_xBuilder->weld_label(u"languageft"_ustr))
@@ -111,7 +111,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             aOpt.ReadUserData(sAsciiOptions);
     }
 
-    // read the first chars and check the charset, (language - with L&H)
+    // read the first chars and check the encoding, (language - with L&H)
     if( pStream )
     {
         char aBuffer[ 4098 ];
@@ -250,10 +250,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
     }
 
     // initialize character set
-    m_xCharSetLB->FillFromTextEncodingTable( pStream != nullptr );
-    m_xCharSetLB->SelectTextEncoding( aOpt.GetCharSet()  );
+    m_xEncodingLB->FillFromTextEncodingTable( pStream != nullptr );
+    m_xEncodingLB->SelectTextEncoding( aOpt.GetCharSet()  );
 
-    m_xCharSetLB->connect_changed( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));
+    m_xEncodingLB->connect_changed( LINK( this, SwAsciiFilterDlg, EncodingSelHdl ));
     m_xCRLF_RB->connect_toggled( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
     m_xLF_RB->connect_toggled( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
     m_xCR_RB->connect_toggled( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
@@ -275,7 +275,7 @@ SwAsciiFilterDlg::~SwAsciiFilterDlg()
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
-    sal_uLong nCCode = m_xCharSetLB->GetSelectTextEncoding();
+    sal_uLong nCCode = m_xEncodingLB->GetSelectTextEncoding();
     OUString sFont;
     LanguageType nLng = LANGUAGE_SYSTEM;
     if (m_xFontLB->get_visible())
@@ -354,7 +354,7 @@ void SwAsciiFilterDlg::UpdateIncludeBOMSensitiveState()
     if (!m_xIncludeBOM_CB->get_visible())
         return;
 
-    switch (m_xCharSetLB->GetSelectTextEncoding())
+    switch (m_xEncodingLB->GetSelectTextEncoding())
     {
         case RTL_TEXTENCODING_UTF8:
         case RTL_TEXTENCODING_UCS2:
@@ -366,7 +366,7 @@ void SwAsciiFilterDlg::UpdateIncludeBOMSensitiveState()
     }
 }
 
-IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SwAsciiFilterDlg, EncodingSelHdl, weld::ComboBox&, void)
 {
     LineEnd eOldEnd = GetCRLF();
     std::optional<LineEnd> eEnd;
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
                     : LANGUAGE_SYSTEM,
                 nOldLng = nLng;
 
-    rtl_TextEncoding nChrSet = m_xCharSetLB->GetSelectTextEncoding();
+    rtl_TextEncoding nChrSet = m_xEncodingLB->GetSelectTextEncoding();
     if( nChrSet == osl_getThreadTextEncoding() )
         eEnd = GetSystemLineEnd();
     else
