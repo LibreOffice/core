@@ -238,6 +238,8 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
     if( !pDocSh )
         return;
 
+    NotifyMacroEventRead();
+
     OUString sEvent(convertLineEnd(rName, GetSystemLineEnd()));
     OUString sScriptType;
     if( EXTENDED_STYPE == eScrType )
