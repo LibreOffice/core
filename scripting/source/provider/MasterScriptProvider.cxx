@@ -57,15 +57,6 @@ using namespace ::sf_misc;
 namespace func_provider
 {
 
-static bool endsWith( const OUString& target, const OUString& item )
-{
-    sal_Int32 index = target.indexOf( item );
-    return index != -1  &&
-           index == ( target.getLength() - item.getLength() );
-}
-
-/* should be available in some central location. */
-
 // XScriptProvider implementation
 
 
@@ -292,7 +283,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
     if  (   (   location == "document"
             &&  m_xModel.is()
             )
-            ||  ( endsWith( m_sCtxString, location ) )
+            ||  ( m_sCtxString == location )
             ||  ( language == "Basic" )
          )
     {
