@@ -1746,6 +1746,11 @@ bool SfxObjectShell::AdjustMacroMode()
     return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
+bool SfxObjectShell::IsMacroExecutionAllowed() const
+{
+    return pImpl->getCurrentMacroExecMode() == MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+}
+
 vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
 {
     VclPtr<vcl::Window> pWindow;
