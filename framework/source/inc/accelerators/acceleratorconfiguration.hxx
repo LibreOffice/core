@@ -307,6 +307,17 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
 };
 
+/** Creates the key binding configuration of a document stored in xDocumentRoot. A binding to a
+    macro call is left out while bMacroCallsAllowed is false.
+ */
+css::uno::Reference< css::ui::XAcceleratorConfiguration > createDocumentAcceleratorConfiguration(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::embed::XStorage >& xDocumentRoot, bool bMacroCallsAllowed);
+
+/** Sets whether the document key binding configuration xConfig keeps its bindings to macro calls. */
+void setDocumentAcceleratorMacroCallsAllowed(
+    const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xConfig, bool bAllowed);
+
 } // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -195,6 +195,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
+    /// the macro decision allows the document's own UI configuration to call macros
+    bool                                                                                        m_bMacroCallsAllowed;
     /// Using atomic because locking around accessing this will lead to deadlock in queryInterface
     std::atomic<bool>                                                                           m_bAllowDocumentScripting;
     bool                                                                                        m_bHasBeenRecovered;

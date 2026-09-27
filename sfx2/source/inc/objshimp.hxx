@@ -77,6 +77,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
                         bPreserveVersions:1,
                         m_bMacroSignBroken:1, // whether the macro signature was explicitly broken
                         m_bNoBasicCapabilities:1,
+                        m_bMacroCallsAllowed:1, // the macro decision allows the document's own UI configuration to call macros
                         m_bDocRecoverySupport:1,
                         bQueryLoadTemplate:1,
                         bLoadReadonly:1,

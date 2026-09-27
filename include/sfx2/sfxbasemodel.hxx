@@ -678,6 +678,10 @@ public:
     SfxObjectShell* GetObjectShell() const ;
 
     SAL_DLLPRIVATE bool impl_isDisposed() const ;
+    /** Passes the macro decision to the UI configuration manager of the document, if it exists
+        yet. A manager created later takes the decision from the object shell.
+     */
+    SAL_DLLPRIVATE void SetUIConfigurationMacroCallsAllowed_Impl( bool bAllowed );
     bool IsInitialized() const;
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
 
