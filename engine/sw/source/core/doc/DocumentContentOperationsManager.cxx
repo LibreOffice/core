@@ -4576,6 +4576,14 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
         return false;
     }
 
+    // A delete stays within one cell of a table, the same rule that a cursor selection follows
+    const SwStartNode* pStartBox = pStart->GetNode().FindTableBoxStartNode();
+    const SwStartNode* pEndBox = pEnd->GetNode().FindTableBoxStartNode();
+    if (pStartBox != pEndBox)
+    {
+        return false;
+    }
+
     if( m_rDoc.GetAutoCorrExceptWord() )
     {
         // if necessary the saved Word for the exception

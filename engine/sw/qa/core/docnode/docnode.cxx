@@ -100,6 +100,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTableBoxKeepsItsCellSection)
     CPPUNIT_ASSERT_EQUAL(26, nCellSections);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTableKeepsCellInsideDeletion)
+{
+    // Given a document whose tracked deletion starts in one cell and ends two cells later, so the
+    // cell between them lies wholly inside the deletion:
+    createSwDoc("ofz566727923.doc");
+
+    // Then every box of every table still has a cell section of its own:
+    auto [nBoxes, nCellSections] = CountTableBoxesAndCellSections(*getSwDoc());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(25), nBoxes);
+    CPPUNIT_ASSERT_EQUAL(25, nCellSections);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
