@@ -39,7 +39,7 @@ enum Grammar
     FRACTION            = 268,
     SUBSUP              = 269,
     EQOVER              = 270,
-    DELIMETER           = 271,
+    DELIMITER           = 271,
     LARGE_DELIM         = 272,
     DECORATION          = 273,
     SPACE_SYMBOL        = 274,

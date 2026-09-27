@@ -1288,7 +1288,7 @@ YY_RULE_SETUP
     //YY_BREAK
 case 31:
 YY_RULE_SETUP
-{ yylval.str = yytext+1; token_debug("  ==>Delimeter[%s]\n",yytext+1); return Grammar::DELIMETER; }
+{ yylval.str = yytext+1; token_debug("  ==>Delimiter[%s]\n",yytext+1); return Grammar::DELIMITER; }
     //YY_BREAK
 case 32:
 YY_RULE_SETUP
