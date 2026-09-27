@@ -988,16 +988,6 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartModel::impl_createDefaultChart
     return xTemplate;
 }
 
-void ChartModel::setChartTypeManager( const uno::Reference< chart2::XChartTypeManager >& xNewManager )
-{
-    {
-        MutexGuard aGuard( m_aModelMutex );
-        m_xChartTypeManager = dynamic_cast<::chart::ChartTypeManager*>(xNewManager.get());
-        assert(!xNewManager || m_xChartTypeManager);
-    }
-    setModified( true );
-}
-
 uno::Reference< chart2::XChartTypeManager > ChartModel::getChartTypeManager()
 {
     MutexGuard aGuard( m_aModelMutex );

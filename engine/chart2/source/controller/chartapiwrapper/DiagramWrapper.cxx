@@ -902,10 +902,6 @@ void DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Re
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
-css::awt::Rectangle DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  )
-{
-    return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
-}
 
 // ____ XAxisSupplier ____
 Reference< XAxis > DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )

@@ -45,11 +45,6 @@ interface XRegressionCurveContainer : cpo::uno::XInterface
     /** retrieve all regression curves
      */
     sequence< XRegressionCurve > getRegressionCurves();
-
-    /** set all regression curves
-     */
-    void setRegressionCurves( [in] sequence< XRegressionCurve > aRegressionCurves )
-        raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 } ; // chart2

@@ -88,12 +88,6 @@ interface XChartDocument : ::com::sun::star::frame::XModel
      */
     com::sun::star::chart2::data::XDataProvider getDataProvider();
 
-    /** sets a new component that is able to create different chart
-        type templates (components of type
-        ChartTypeTemplate)
-     */
-    void setChartTypeManager( [in] XChartTypeManager xNewManager );
-
     /** retrieves the component that is able to create different chart
         type templates (components of type
         ChartTypeTemplate)

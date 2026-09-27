@@ -388,8 +388,6 @@ public:
     virtual bool hasInternalDataProvider() override;
     virtual cpo::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() override;
-    virtual void
-        setChartTypeManager( const cpo::uno::Reference< css::chart2::XChartTypeManager >& xNewManager ) override;
     virtual cpo::uno::Reference< css::chart2::XChartTypeManager >
         getChartTypeManager() override;
     virtual cpo::uno::Reference< css::chart2::XChartStyle> getStyles() override;

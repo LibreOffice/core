@@ -80,11 +80,6 @@ public:
     css::awt::Rectangle SubstractAxisTitleSizes( const css::awt::Rectangle& rPositionRect );
 
     /** Returns the position and size of the diagram in logic coordinates (100th mm) including
-        the space used for axes including axes titles.
-     */
-    css::awt::Rectangle GetDiagramRectangleIncludingTitle() const;
-
-    /** Returns the position and size of the diagram in logic coordinates (100th mm) including
         the space used for axes excluding axes titles.
      */
     css::awt::Rectangle GetDiagramRectangleIncludingAxes() const;

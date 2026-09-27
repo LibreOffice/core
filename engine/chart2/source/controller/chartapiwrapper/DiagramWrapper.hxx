@@ -175,7 +175,6 @@ public:
     virtual void setDiagramPositionIncludingAxes( const css::awt::Rectangle& PositionRect ) override;
     virtual css::awt::Rectangle calculateDiagramPositionIncludingAxes(  ) override;
     virtual void setDiagramPositionIncludingAxesAndAxisTitles( const css::awt::Rectangle& PositionRect ) override;
-    virtual css::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles(  ) override;
 
     // ____ XDiagramProvider ____
     virtual cpo::uno::Reference< css::chart2::XDiagram > getDiagram() override;

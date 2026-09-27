@@ -93,23 +93,6 @@ public:
     virtual bool supportsCategories() override;
     virtual void changeDiagram(
         const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
-    virtual void changeDiagramData(
-        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
-    virtual bool matchesTemplate(
-        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        bool bAdaptProperties ) override final;
-    virtual cpo::uno::Reference< cpo::uno::XInterface > getDataInterpreter() override final;
-    virtual cpo::uno::Reference< ::css::chart2::XChartType > getChartTypeForNewSeries(
-        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
-    virtual void applyStyle(
-        const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries,
-        ::sal_Int32 nChartTypeIndex,
-        ::sal_Int32 nSeriesIndex,
-        ::sal_Int32 nSeriesCount ) override final;
-    virtual void resetStyles(
-        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
 
     void changeDiagram(
         const rtl::Reference< ::chart::Diagram >& xDiagram );

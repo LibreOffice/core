@@ -2656,7 +2656,6 @@ module com {
      void setDiagramPositionIncludingAxes([in] ::com::sun::star::awt::Rectangle PositionRect);
      ::com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxes();
      void setDiagramPositionIncludingAxesAndAxisTitles([in] ::com::sun::star::awt::Rectangle PositionRect);
-     ::com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles();
     };
     interface XSecondAxisTitleSupplier {
      interface ::cpo::uno::XInterface;

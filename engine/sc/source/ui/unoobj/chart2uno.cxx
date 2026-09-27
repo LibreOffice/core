@@ -2121,62 +2121,6 @@ uno::Reference< sheet::XRangeSelection > ScChart2DataProvider::getRangeSelection
     return xResult;
 }
 
-bool ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
-    const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
-{
-    if (!aTokens.hasElements())
-        return false;
-
-    ScTokenArray aCode(*m_pDocument);
-    if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
-        return false;
-
-    sal_uInt16 n = aCode.GetLen();
-    if (!n)
-        return false;
-
-    formula::FormulaTokenArrayPlainIterator aIter(aCode);
-    const formula::FormulaToken* pFirst = aIter.First();
-    const formula::FormulaToken* pLast = aCode.GetArray()[n-1];
-    for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
-    {
-        switch (p->GetType())
-        {
-            case svSep:
-            {
-                switch (p->GetOpCode())
-                {
-                    case ocSep:
-                        // separators are allowed.
-                    break;
-                    case ocOpen:
-                        if (p != pFirst)
-                            // open paran is allowed only as the first token.
-                            return false;
-                    break;
-                    case ocClose:
-                        if (p != pLast)
-                            // close paren is allowed only as the last token.
-                            return false;
-                    break;
-                    default:
-                        return false;
-                }
-            }
-            break;
-            case svSingleRef:
-            case svDoubleRef:
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
-            break;
-            default:
-                return false;
-        }
-    }
-
-    return true;
-}
-
 uno::Reference<chart2::data::XDataSequence>
 ScChart2DataProvider::createDataSequenceByFormulaTokens(
     const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
@@ -3497,45 +3441,6 @@ void ScChart2DataSequence::removeVetoableChangeListener(
 void ScChart2DataSequence::setDataChangedHint(bool b)
 {
     m_bGotDataChangedHint = b;
-}
-
-bool ScChart2DataSequence::switchToNext(bool bWrap)
-{
-    if(!mbTimeBased)
-        return true;
-
-    if(mnCurrentTab >= mnTimeBasedEnd)
-    {
-        if(bWrap)
-            setToPointInTime(0);
-        return false;
-    }
-
-    for(const auto& rxToken : m_aTokens)
-    {
-        if (rxToken->GetType() != svDoubleRef)
-            continue;
-
-        ScComplexRefData& rData = static_cast<ScDoubleRefToken*>(rxToken.get())->GetDoubleRef();
-        ScSingleRefData& s = rData.Ref1;
-        ScSingleRefData& e = rData.Ref2;
-
-        s.IncTab(1);
-        e.IncTab(1);
-    }
-
-    ++mnCurrentTab;
-
-    RebuildDataCache();
-
-    return true;
-}
-
-void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
-{
-    mnTimeBasedStart = nStart;
-    mnTimeBasedEnd = nEnd;
-    mnCurrentTab = mnTimeBasedStart;
 }
 
 bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)

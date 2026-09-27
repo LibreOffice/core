@@ -94,9 +94,6 @@ public:
     virtual cpo::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
 
     // XSheetDataProvider
-    virtual bool createDataSequenceByFormulaTokensPossible(
-        const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
-
     virtual cpo::uno::Reference< css::chart2::data::XDataSequence >
         createDataSequenceByFormulaTokens(
             const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
@@ -232,10 +229,7 @@ public:
         getTextualData() override;
 
     // XTimeBased
-    virtual bool switchToNext(bool bWrap) override;
     virtual bool setToPointInTime(sal_Int32 nPoint) override;
-
-    virtual void setRange(sal_Int32 nStart, sal_Int32 nEnd) override;
 
     // XPropertySet
     virtual cpo::uno::Reference<

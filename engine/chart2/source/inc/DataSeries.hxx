@@ -118,8 +118,6 @@ public:
     virtual void removeRegressionCurve(
         const cpo::uno::Reference< css::chart2::XRegressionCurve >& aRegressionCurve ) override;
     virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XRegressionCurve > > getRegressionCurves() override;
-    virtual void setRegressionCurves(
-        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XRegressionCurve > >& aRegressionCurves ) override;
 
     // ____ XCloneable ____
     virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;

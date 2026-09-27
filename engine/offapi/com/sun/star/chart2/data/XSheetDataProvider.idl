@@ -14,9 +14,6 @@ module com { module sun { module star { module chart2 { module data {
  */
 interface XSheetDataProvider : cpo::uno::XInterface
 {
-    boolean createDataSequenceByFormulaTokensPossible(
-        [in] sequence< com::sun::star::sheet::FormulaToken > aTokens );
-
     XDataSequence createDataSequenceByFormulaTokens(
         [in] sequence< com::sun::star::sheet::FormulaToken > aTokens )
         raises( com::sun::star::lang::IllegalArgumentException );

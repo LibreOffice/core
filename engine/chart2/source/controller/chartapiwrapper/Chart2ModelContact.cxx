@@ -171,24 +171,6 @@ awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle
     return aRect;
 }
 
-awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
-{
-    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
-    if( !xChartModel )
-    {
-        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
-        return awt::Rectangle(0,0,0,0);
-    }
-
-    awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
-
-    //add axis title sizes to the diagram size
-    aRect = ChartView::AddSubtractAxisTitleSizes(
-        *xChartModel, getChartView().get(), aRect, false );
-
-    return aRect;
-}
-
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);

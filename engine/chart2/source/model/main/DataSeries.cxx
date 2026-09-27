@@ -491,29 +491,6 @@ cpo::uno::Sequence< uno::Reference< chart2::XRegressionCurve > > DataSeries::get
     return comphelper::containerToSequence<uno::Reference< chart2::XRegressionCurve >>( m_aRegressionCurves );
 }
 
-void DataSeries::setRegressionCurves(
-    const Sequence< Reference< chart2::XRegressionCurve > >& aRegressionCurves )
-{
-    tRegressionCurveContainerType aOldCurves;
-    tRegressionCurveContainerType aNewCurves;
-    for (const auto & i : aRegressionCurves)
-    {
-        auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(i.get());
-        assert(pRegressionCurve);
-        aNewCurves.push_back(pRegressionCurve);
-    }
-    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
-    {
-        MutexGuard aGuard( m_aMutex );
-        xModifyEventForwarder = m_xModifyEventForwarder;
-        std::swap( aOldCurves, m_aRegressionCurves );
-        m_aRegressionCurves = aNewCurves;
-    }
-    ModifyListenerHelper::removeListenerFromAllElements( aOldCurves, xModifyEventForwarder );
-    ModifyListenerHelper::addListenerToAllElements( aNewCurves, xModifyEventForwarder );
-    fireModifyEvent();
-}
-
 // ____ XModifyBroadcaster ____
 void DataSeries::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
