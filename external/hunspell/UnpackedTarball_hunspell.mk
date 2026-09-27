@@ -13,6 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,hunspell,$(HUNSPELL_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,hunspell))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,hunspell,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
+	external/hunspell/0001-pass-npos-explicitly-to-std-string-assign-str-pos.patch \
+))
+
 ifeq ($(COM),MSC)
 $(eval $(call gb_UnpackedTarball_set_post_action,hunspell,\
 	touch src/hunspell/config.h \

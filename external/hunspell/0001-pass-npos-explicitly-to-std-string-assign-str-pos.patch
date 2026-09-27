@@ -1,0 +1,40 @@
+From 096df2b563a7bd4c415b2903e53bb22bfd448be6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@gmail.com>
+Date: Mon, 19 Oct 2026 14:14:19 +0000
+Subject: [PATCH] pass npos explicitly to std::string::assign(str, pos)
+
+With gcc 7.3 and the old copy-on-write string ABI, as with the
+devtoolset-7 toolchain on CentOS 7, that overload has no default
+for the length and the build fails with:
+
+    affentry.cxx:941:31: error: no matching function for call to 'std::basic_string<char>::assign(const string&, int&)'
+         tmpword.assign(word, start);
+---
+ src/hunspell/affentry.cxx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/hunspell/affentry.cxx b/src/hunspell/affentry.cxx
+index b0ba0b6..385c7fe 100644
+--- a/src/hunspell/affentry.cxx
++++ b/src/hunspell/affentry.cxx
+@@ -938,7 +938,7 @@ struct hentry* SfxEntry::check_twosfx(const std::string& word,
+     // or null terminating the shorter string
+ 
+     std::string& tmpword = scratch.sfx_check_twosfx;
+-    tmpword.assign(word, start);
++    tmpword.assign(word, start, std::string::npos);
+     tmpword.resize(tmpl);
+     tmpword.append(strip);
+     tmpl += strip.size();
+@@ -1004,7 +1004,7 @@ std::string SfxEntry::check_twosfx_morph(const std::string& word,
+     // or null terminating the shorter string
+ 
+     std::string& tmpword = scratch.sfx_check_twosfx;
+-    tmpword.assign(word, start);
++    tmpword.assign(word, start, std::string::npos);
+     tmpword.resize(tmpl);
+     tmpword.append(strip);
+     tmpl += strip.size();
+-- 
+2.56.0
+
