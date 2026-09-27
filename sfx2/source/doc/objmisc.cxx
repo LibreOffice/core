@@ -1742,6 +1742,11 @@ bool SfxObjectShell::AdjustMacroMode()
     return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
+bool SfxObjectShell::IsMacroExecutionAllowed() const
+{
+    return pImpl->getCurrentMacroExecMode() == MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+}
+
 css::uno::Reference<css::awt::XWindow> SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
 {
     css::uno::Reference<css::awt::XWindow> xWindow;

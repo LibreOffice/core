@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/docmacromode.hxx>
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
@@ -3753,10 +3754,30 @@ bool ScCompiler::ParseReference( const OUString& rName, const OUString* pErrRef 
     return false;
 }
 
-bool ScCompiler::ParseMacro( const OUString& rName )
+#if HAVE_FEATURE_SCRIPTING
+static bool lcl_IsBasicFunction( StarBASIC& rBasic, const OUString& rName )
+{
+    SbxMethod* pMeth = static_cast<SbxMethod*>(rBasic.Find( rName, SbxClassType::Method ));
+    if( !pMeth )
+    {
+        return false;
+    }
+    // It really should be a BASIC function!
+    if( pMeth->GetType() == SbxVOID
+     || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
+     || dynamic_cast<const SbMethod*>( pMeth) ==  nullptr )
+    {
+        return false;
+    }
+    return true;
+}
+#endif
+
+bool ScCompiler::ParseMacro( const OUString& rName, bool bParenFollows )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) rName;
+    (void) bParenFollows;
 
     return false;
 #else
@@ -3780,8 +3801,35 @@ bool ScCompiler::ParseMacro( const OUString& rName )
     }
 
     OUString aName( rName);
+    // ODFF recommends to store user-defined functions prefixed with "USER.",
+    // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
+    // function name so a function "USER.FOO" could not exist, and macro check
+    // is assigned the lowest priority in function name check.
+    if (FormulaGrammar::isODFF( GetGrammar()) && aName.startsWithIgnoreAsciiCase("USER."))
+        aName = aName.copy(5);
+
     StarBASIC* pObj = nullptr;
     ScDocShell* pDocSh = rDoc.GetDocumentShell();
+
+    // During ODF import the Basic of a document whose macros are not allowed yet stays unloaded.
+    // A called name that is not an application Basic function may be one of the document's own
+    // macros only if the document has Basic libraries. Such a call is kept as a macro call, and the
+    // document is flagged as calling macros.
+    if (pDocSh && rDoc.IsImportingXML() && !pDocSh->IsMacroExecutionAllowed())
+    {
+        if (!bParenFollows)
+            return false;
+        StarBASIC* pAppBasic = SfxApplication::GetBasic();
+        if (!pAppBasic || !lcl_IsBasicFunction(*pAppBasic, aName))
+        {
+            if (!sfx2::DocumentMacroMode::containerHasBasicMacros(pDocSh->GetBasicContainer()))
+                return false;
+            pDocSh->SetMacroCallsSeenWhileLoading();
+        }
+        maRawToken.SetExternal( aName );
+        maRawToken.eOp = ocMacro;
+        return true;
+    }
 
     try
     {
@@ -3795,28 +3843,9 @@ bool ScCompiler::ParseMacro( const OUString& rName )
         return false;
     }
 
-    if (!pObj)
+    if (!pObj || !lcl_IsBasicFunction(*pObj, aName))
         return false;
 
-    // ODFF recommends to store user-defined functions prefixed with "USER.",
-    // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
-    // function name so a function "USER.FOO" could not exist, and macro check
-    // is assigned the lowest priority in function name check.
-    if (FormulaGrammar::isODFF( GetGrammar()) && aName.startsWithIgnoreAsciiCase("USER."))
-        aName = aName.copy(5);
-
-    SbxMethod* pMeth = static_cast<SbxMethod*>(pObj->Find( aName, SbxClassType::Method ));
-    if( !pMeth )
-    {
-        return false;
-    }
-    // It really should be a BASIC function!
-    if( pMeth->GetType() == SbxVOID
-     || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
-     || dynamic_cast<const SbMethod*>( pMeth) ==  nullptr )
-    {
-        return false;
-    }
     maRawToken.SetExternal( aName );
     maRawToken.eOp = ocMacro;
     return true;
@@ -4960,7 +4989,7 @@ Label_Rewind:
                 if (!bParenFollows && ParseColRowName( aUpper ))
                     return true;
 
-                if (ParseMacro( aUpper ))
+                if (ParseMacro( aUpper, bParenFollows ))
                     return true;
 
                 if (ParseOpCode( aUpper, bInArray ))
@@ -5047,7 +5076,7 @@ Label_Rewind:
             // the same user-defined function, so in the call position the macro
             // takes priority over a same-named defined name. A plain name
             // reference still resolves as the named range.
-            if (bMayBeName && bParenFollows && ParseMacro(aUpper))
+            if (bMayBeName && bParenFollows && ParseMacro(aUpper, bParenFollows))
                 return true;
 
             if (ParseNamedRange( aUpper ))
@@ -5084,7 +5113,7 @@ Label_Rewind:
 
             if (bMayBeName)
             {
-                if (ParseMacro( aUpper ))
+                if (ParseMacro( aUpper, bParenFollows ))
                     return true;
 
                 if (ParseLocalName( aOrg ))
