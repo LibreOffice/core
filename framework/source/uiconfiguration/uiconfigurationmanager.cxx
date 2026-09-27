@@ -21,6 +21,8 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <framework/documentmacrocalls.hxx>
 #include <menuconfiguration.hxx>
 #include <statusbarconfiguration.hxx>
 #include <toolboxconfiguration.hxx>
@@ -51,6 +53,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <rtl/uri.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -127,6 +130,9 @@ public:
     virtual void SAL_CALL setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual sal_Bool SAL_CALL hasStorage() override;
 
+    void setMacroCallsAllowed( bool bAllowed );
+    bool hasMacroCalls();
+
 private:
     // private data types
     enum NotifyOp
@@ -200,6 +206,8 @@ private:
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
     rtl::Reference< ImageManager >                            m_xImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
+    /// whether the macros of the document may run
+    bool                                                      m_bMacroCallsAllowed;
 };
 
 // important: The order and position of the elements must match the constant
@@ -217,6 +225,65 @@ constexpr std::u16string_view UIELEMENTTYPENAMES[] =
 };
 
 constexpr std::u16string_view RESOURCEURL_PREFIX = u"private:resource/";
+
+bool lcl_hasMacroCalls( const Reference< XIndexAccess >& xItems )
+{
+    if ( !xItems.is() )
+        return false;
+    for ( sal_Int32 i = 0, nCount = xItems->getCount(); i < nCount; ++i )
+    {
+        Sequence< PropertyValue > aProps;
+        if ( !( xItems->getByIndex( i ) >>= aProps ) )
+            continue;
+        for ( const PropertyValue& rProp : aProps )
+        {
+            OUString sCommand;
+            Reference< XIndexAccess > xSubItems;
+            if ( rProp.Name == "CommandURL" && ( rProp.Value >>= sCommand )
+                 && isMacroCallCommand( sCommand ) )
+                return true;
+            if ( rProp.Name == "ItemDescriptorContainer" && ( rProp.Value >>= xSubItems )
+                 && lcl_hasMacroCalls( xSubItems ) )
+                return true;
+        }
+    }
+    return false;
+}
+
+Reference< XIndexAccess > lcl_withoutMacroCalls( const Reference< XIndexAccess >& xItems )
+{
+    if ( !lcl_hasMacroCalls( xItems ) )
+        return xItems;
+
+    rtl::Reference< RootItemContainer > xCopy = new RootItemContainer( xItems );
+    for ( sal_Int32 i = xCopy->getCount() - 1; i >= 0; --i )
+    {
+        Sequence< PropertyValue > aProps;
+        if ( !( xCopy->getByIndex( i ) >>= aProps ) )
+            continue;
+        bool bRemove = false;
+        bool bReplace = false;
+        for ( PropertyValue& rProp : asNonConstRange( aProps ) )
+        {
+            OUString sCommand;
+            Reference< XIndexAccess > xSubItems;
+            if ( rProp.Name == "CommandURL" && ( rProp.Value >>= sCommand )
+                 && isMacroCallCommand( sCommand ) )
+                bRemove = true;
+            else if ( rProp.Name == "ItemDescriptorContainer" && ( rProp.Value >>= xSubItems )
+                      && lcl_hasMacroCalls( xSubItems ) )
+            {
+                rProp.Value <<= lcl_withoutMacroCalls( xSubItems );
+                bReplace = true;
+            }
+        }
+        if ( bRemove )
+            xCopy->removeByIndex( i );
+        else if ( bReplace )
+            xCopy->replaceByIndex( i, Any( aProps ) );
+    }
+    return new ConstItemContainer( xCopy );
+}
 
 sal_Int16 RetrieveTypeFromResourceURL( std::u16string_view aResourceURL )
 {
@@ -678,6 +745,7 @@ UIConfigurationManager::UIConfigurationManager( css::uno::Reference< css::uno::X
     , m_bDisposed( false )
     , m_aPropUIName( u"UIName"_ustr )
     , m_xContext(std::move( xContext ))
+    , m_bMacroCallsAllowed( false )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -923,8 +991,10 @@ Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OU
         // Create a copy of our data if someone wants to change the data.
         if ( bWriteable )
             return Reference< XIndexAccess >( new RootItemContainer( pDataSettings->xSettings ) );
-        else
+        else if ( m_bMacroCallsAllowed )
             return pDataSettings->xSettings;
+        else
+            return lcl_withoutMacroCalls( pDataSettings->xSettings );
     }
 
     throw NoSuchElementException();
@@ -1139,7 +1209,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::createShortCutManager()
 {
-    return DocumentAcceleratorConfiguration::createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
+    return createDocumentAcceleratorConfiguration(m_xContext, m_xDocConfigStorage, m_bMacroCallsAllowed);
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()
@@ -1149,8 +1219,8 @@ Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShort
 
     if (!m_xAccConfig.is()) try
     {
-        m_xAccConfig = DocumentAcceleratorConfiguration::
-            createWithDocumentRoot(m_xContext, m_xDocConfigStorage);
+        m_xAccConfig = createDocumentAcceleratorConfiguration(m_xContext, m_xDocConfigStorage,
+                                                             m_bMacroCallsAllowed);
     }
     catch ( const css::uno::DeploymentException& )
     {
@@ -1159,6 +1229,50 @@ Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShort
     }
 
     return m_xAccConfig;
+}
+
+void UIConfigurationManager::setMacroCallsAllowed( bool bAllowed )
+{
+    SolarMutexGuard g;
+    m_bMacroCallsAllowed = bAllowed;
+    setDocumentAcceleratorMacroCallsAllowed( m_xAccConfig, bAllowed );
+}
+
+bool UIConfigurationManager::hasMacroCalls()
+{
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT; i++ )
+    {
+        impl_preloadUIElementTypeList( i );
+        for ( auto const& rElement : m_aUIElements[i].aElementsHashMap )
+        {
+            UIElementData* pData = impl_findUIElementData( rElement.first, i );
+            if ( pData && !pData->bDefault && lcl_hasMacroCalls( pData->xSettings ) )
+                return true;
+        }
+    }
+
+    Reference< XAcceleratorConfiguration > xAccConfig = getShortCutManager();
+    if ( !xAccConfig.is() )
+        return false;
+    for ( const css::awt::KeyEvent& rKey : xAccConfig->getAllKeyEvents() )
+    {
+        try
+        {
+            if ( isMacroCallCommand( xAccConfig->getCommandByKeyEvent( rKey ) ) )
+                return true;
+        }
+        catch ( const NoSuchElementException& )
+        {
+            // A listed key without a command has a macro call that is not allowed.
+            return true;
+        }
+    }
+    return false;
 }
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager()
@@ -1390,6 +1504,39 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
     });
 }
 
+}
+
+namespace framework
+{
+bool isMacroCallCommand( std::u16string_view rCommand )
+{
+    if ( rCommand.empty() )
+        return false;
+    OUString sCommand = rtl::Uri::decode( OUString( rCommand ), rtl_UriDecodeWithCharset,
+                                          RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
+    if ( !sCommand.startsWith( ".uno:" ) && !sCommand.startsWith( "slot:" ) )
+        return !sCommand.startsWith( "vnd.sun.star.findbar:" );
+    sal_Int32 nArguments = sCommand.indexOf( '?' );
+    if ( nArguments < 0 )
+        return false;
+    std::u16string_view aArguments = std::u16string_view( sCommand ).substr( nArguments + 1 );
+    return aArguments.find( u"macro:" ) != std::u16string_view::npos
+           || aArguments.find( u"vnd.sun.star.script:" ) != std::u16string_view::npos
+           || aArguments.find( u"referer" ) != std::u16string_view::npos;
+}
+
+void setDocumentMacroCallsAllowed( const Reference< XUIConfigurationManager2 >& rxManager,
+                                   bool bAllowed )
+{
+    if ( auto pManager = dynamic_cast< UIConfigurationManager* >( rxManager.get() ) )
+        pManager->setMacroCallsAllowed( bAllowed );
+}
+
+bool documentConfigurationHasMacroCalls( const Reference< XUIConfigurationManager2 >& rxManager )
+{
+    auto pManager = dynamic_cast< UIConfigurationManager* >( rxManager.get() );
+    return pManager && pManager->hasMacroCalls();
+}
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

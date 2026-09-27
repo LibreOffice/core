@@ -19,6 +19,7 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
+#include <framework/documentmacrocalls.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -52,6 +53,9 @@ private:
         where we can read/save our configuration data. */
     css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
 
+    /** whether the macros of the document may run */
+    bool m_bMacroCallsAllowed;
+
 public:
 
     /** initialize this instance and fill the internal cache.
@@ -64,6 +68,15 @@ public:
             const css::uno::Sequence< css::uno::Any >& lArguments);
 
     virtual ~DocumentAcceleratorConfiguration() override;
+
+    void setMacroCallsAllowed(bool bAllowed)
+    {
+        SolarMutexGuard g;
+        m_bMacroCallsAllowed = bAllowed;
+    }
+
+    // XAcceleratorConfiguration
+    virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -93,6 +106,7 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Sequence< css::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
+    , m_bMacroCallsAllowed(false)
 {
     SolarMutexGuard g;
     css::uno::Reference<css::embed::XStorage> xRoot;
@@ -131,6 +145,15 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 
     if (xStorage.is())
         fillCache();
+}
+
+OUString SAL_CALL DocumentAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+{
+    OUString sCommand = XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(aKeyEvent);
+    SolarMutexGuard g;
+    if (!m_bMacroCallsAllowed && isMacroCallCommand(sCommand))
+        throw css::container::NoSuchElementException();
+    return sCommand;
 }
 
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
@@ -180,6 +203,29 @@ void DocumentAcceleratorConfiguration::fillCache()
 }
 
 } // namespace framework
+
+namespace framework
+{
+
+css::uno::Reference< css::ui::XAcceleratorConfiguration > createDocumentAcceleratorConfiguration(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::embed::XStorage >& xDocumentRoot, bool bMacroCallsAllowed)
+{
+    rtl::Reference<DocumentAcceleratorConfiguration> inst = new DocumentAcceleratorConfiguration(
+        xContext, { css::uno::Any(xDocumentRoot) });
+    inst->setMacroCallsAllowed(bMacroCallsAllowed);
+    inst->fillCache();
+    return inst;
+}
+
+void setDocumentAcceleratorMacroCallsAllowed(
+    const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xConfig, bool bAllowed)
+{
+    if (auto pConfig = dynamic_cast<DocumentAcceleratorConfiguration*>(xConfig.get()))
+        pConfig->setMacroCallsAllowed(bAllowed);
+}
+
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
