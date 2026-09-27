@@ -18,9 +18,10 @@
 
 namespace framework
 {
-/** Whether a command URL runs a macro or a script, or names one in its arguments. A .uno:, slot:
-    or findbar command is not a macro call, unless its arguments name a macro: or
-    vnd.sun.star.script: URL or a Referer.
+/** Whether a command URL runs a macro or a script, or names one in its arguments. A .uno: or slot:
+    command is a macro call when its arguments name a macro: or vnd.sun.star.script: URL or a
+    Referer. The findbar command is not one. Any other command is one when its URL does not parse
+    or its scheme is one INetURLObject::IsExoticProtocol does not accept.
  */
 FWK_DLLPUBLIC bool isMacroCallCommand(std::u16string_view rCommand);
 
