@@ -19,6 +19,8 @@
 
 #include "COOLWSD.hpp"
 
+#if !MOBILEAPP && ENABLE_DEBUG
+
 /* Default host used in the start test URI */
 #define COOLWSD_TEST_HOST "localhost"
 
@@ -30,6 +32,8 @@
 
 /* Page that lists the documents this server can open, and opens the one picked */
 #define COOLWSD_TEST_DOCUMENT_PICKER "/browser/" COOLWSD_VERSION_HASH "/documents.html"
+
+#endif
 
 /* Default ciphers used, when not specified otherwise */
 #define DEFAULT_CIPHER_SET "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"
