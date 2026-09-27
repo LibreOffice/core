@@ -2651,6 +2651,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
                 u"datetime");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testThemeKeepColorTransforms)
+{
+    createSdImpressDoc("pptx/empty-title-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
+    const OString sBasePath = "/a:theme/a:themeElements/a:fmtScheme/a:bgFillStyleLst/a:gradFill[1]"
+                              "/a:gsLst/a:gs[@pos='40000']/a:schemeClr"_ostr;
+
+    // Without the fix satMod would end up negative
+    assertXPath(pXmlDoc, sBasePath, "val", u"phClr");
+    assertXPathChildren(pXmlDoc, sBasePath, 3);
+    assertXPath(pXmlDoc, sBasePath + "/a:tint", "val", u"45000");
+    assertXPath(pXmlDoc, sBasePath + "/a:shade", "val", u"99000");
+    assertXPath(pXmlDoc, sBasePath + "/a:satMod", "val", u"350000");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf166401_textGivenToAPicturePlaceholder)
 {
     // Given a slide whose picture placeholder is given text without any editing, which is what a
