@@ -882,6 +882,10 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 }
             }
 
+            // Shapes with no visible content anchor at 0,0
+            if (aBound.isEmpty())
+                aBound.expand(basegfx::B2DTuple(0, 0));
+
             aOut->EnableOutput( false );
             aOut->SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
