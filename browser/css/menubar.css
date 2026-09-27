@@ -267,11 +267,11 @@ nav [id^='save'].saved img {
 	border-bottom: 1px solid var(--color-border-darker);
 	padding: var(--spacing-m);
 }
-.lo-menu > #document-header > a.document-logo,
-.lo-menu > #document-header > a.document-logo:hover,
-.lo-menu > #document-header > a.document-logo:focus,
-.lo-menu > #document-header > a.document-logo:active,
-.lo-menu > #document-header > a.document-logo.highlighted {
+.main-nav > #document-header > a.document-logo,
+.main-nav > #document-header > a.document-logo:hover,
+.main-nav > #document-header > a.document-logo:focus,
+.main-nav > #document-header > a.document-logo:active,
+.main-nav > #document-header > a.document-logo.highlighted {
 	background-color: transparent;
 	background-image: var(--doc-icon-url);
 	background-size: 16px 16px;
