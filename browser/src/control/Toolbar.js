@@ -543,13 +543,20 @@ window.L.Map.include({
 							+ ' or add the binding to Accelerators.xcu / unoshortcuts.py.');
 						continue;
 					}
-					var html = '';
 					var parts = shortcut.split('+');
+					cell.replaceChildren();
 					for (var j = 0; j < parts.length; j++) {
-						if (j > 0) html += '<span class="kbd--plus" aria-hidden="true">+</span>';
-						html += '<kbd>' + parts[j] + '</kbd>';
+						if (j > 0) {
+							const plus = document.createElement('span');
+							plus.className = 'kbd--plus';
+							plus.setAttribute('aria-hidden', 'true');
+							plus.textContent = '+';
+							cell.appendChild(plus);
+						}
+						const key = document.createElement('kbd');
+						key.textContent = parts[j];
+						cell.appendChild(key);
 					}
-					cell.innerHTML = html;
 				}
 			}
 			document.getElementById('keyboard-shortcuts-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
