@@ -54,6 +54,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
@@ -1224,6 +1225,22 @@ bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium)
 }
 
 
+#if HAVE_FEATURE_SCRIPTING
+namespace
+{
+// A loaded library is stored through the document BasicManager, and an unloaded one is copied
+// from the old storage.
+bool lcl_isAnyLibraryLoaded( const uno::Reference< script::XStorageBasedLibraryContainer >& xContainer )
+{
+    if ( !xContainer.is() )
+        return false;
+    const uno::Sequence< OUString > aNames = xContainer->getElementNames();
+    return std::any_of( aNames.begin(), aNames.end(),
+                        [&xContainer]( const OUString& rName ) { return xContainer->isLibraryLoaded( rName ); } );
+}
+}
+#endif
+
 bool SfxObjectShell::DoSave()
 // DoSave is only invoked for OLE. Save your own documents in the SFX through
 // DoSave_Impl order to allow for the creation of backups.
@@ -1269,7 +1286,7 @@ bool SfxObjectShell::DoSave()
                 bOk = true;
             }
 #if HAVE_FEATURE_SCRIPTING
-            if ( HasBasic() )
+            if ( !pImpl->m_bNoBasicCapabilities )
             {
                 try
                 {
@@ -1288,16 +1305,21 @@ bool SfxObjectShell::DoSave()
                     if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
                         GetMedium()->GetStorage()->copyElementTo( aDialogsStorageName, xTmpStorage, aDialogsStorageName );
 
-                    GetBasicManager();
-
-                    // disconnect from the current storage
-                    pImpl->aBasicManager.setStorage( xTmpStorage );
-
-                    // store to the current storage
-                    pImpl->aBasicManager.storeLibrariesToStorage( GetMedium()->GetStorage() );
-
-                    // connect to the current storage back
-                    pImpl->aBasicManager.setStorage( GetMedium()->GetStorage() );
+                    const uno::Reference< script::XStorageBasedLibraryContainer > aContainers[]
+                        = { GetBasicContainer(), GetDialogContainer() };
+                    if ( lcl_isAnyLibraryLoaded( aContainers[0] ) )
+                        GetBasicManager();
+                    for ( const auto& xContainer : aContainers )
+                    {
+                        if ( !xContainer.is() )
+                            continue;
+                        // disconnect from the current storage
+                        xContainer->setRootStorage( xTmpStorage );
+                        // store to the current storage
+                        xContainer->storeLibrariesToStorage( GetMedium()->GetStorage() );
+                        // connect to the current storage back
+                        xContainer->setRootStorage( GetMedium()->GetStorage() );
+                    }
                 }
                 catch( cpo::uno::Exception& )
                 {
@@ -3472,13 +3494,17 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
         SetupStorage( xStorage, nVersion, bTemplate );
 #if HAVE_FEATURE_SCRIPTING
-        if ( HasBasic() )
+        if ( !pImpl->m_bNoBasicCapabilities )
         {
-            // Initialize Basic
-            GetBasicManager();
-
             // Save dialog/script container
-            pImpl->aBasicManager.storeLibrariesToStorage( xStorage );
+            if ( uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries = GetBasicContainer() )
+            {
+                if ( lcl_isAnyLibraryLoaded( xBasicLibraries ) )
+                    GetBasicManager();
+                xBasicLibraries->storeLibrariesToStorage( xStorage );
+            }
+            if ( uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries = GetDialogContainer() )
+                xDialogLibraries->storeLibrariesToStorage( xStorage );
         }
 #endif
 
