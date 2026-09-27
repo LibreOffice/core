@@ -36,6 +36,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/docmacromode.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -639,25 +640,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 #if HAVE_FEATURE_SCRIPTING
         if( !officecfg::Office::Common::Filter::HTML::Export::Basic::get()
             && officecfg::Office::Common::Filter::HTML::Export::Warning::get()
-            && HasBasic() )
+            && sfx2::DocumentMacroMode::containerHasBasicMacros( GetBasicContainer() ) )
         {
-            uno::Reference< XLibraryContainer > xLibCont = GetBasicContainer();
-            uno::Reference< XNameAccess > xLib;
-            const Sequence<OUString> aNames = xLibCont->getElementNames();
-            for(const OUString& rName : aNames)
-            {
-                Any aLib = xLibCont->getByName(rName);
-                aLib >>= xLib;
-                if(xLib.is())
-                {
-                    Sequence<OUString> aModNames = xLib->getElementNames();
-                    if(aModNames.hasElements())
-                    {
-                        SetError(WARN_SWG_HTML_NO_MACROS);
-                        break;
-                    }
-                }
-            }
+            SetError(WARN_SWG_HTML_NO_MACROS);
         }
 #endif
     }
