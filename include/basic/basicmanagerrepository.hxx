@@ -94,6 +94,13 @@ namespace basic
             const css::uno::Reference< css::frame::XModel >& _rxDocumentModel
         );
 
+        /** returns the BasicManager of the given document model, or <NULL/> if it has
+            not been created yet
+        */
+        static BasicManager* getExistingDocumentBasicManager(
+            const css::uno::Reference< css::frame::XModel >& _rxDocumentModel
+        );
+
         /** returns the application-wide BasicManager
 
         @attention
