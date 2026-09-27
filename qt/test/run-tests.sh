@@ -88,7 +88,21 @@ run_tests() {
     export WAYLAND_DISPLAY="$WAYLAND_SOCKET"
 
     cd "$SCRIPT_DIR"
-    npx wdio run wdio.conf.ts "$@"
+    local rc=0
+    npx wdio run wdio.conf.ts "$@" || rc=$?
+    if [ "$rc" -ne 0 ]; then
+        # The worker log is lost with the build directory. Its warnings and errors, each with the
+        # command and request it belongs to, show which driver call failed or hung.
+        local log
+        for log in logs/wdio-*-*.log; do
+            [ -f "$log" ] || continue
+            echo "== driver warnings and errors in $log"
+            awk '/ INFO webdriver: COMMAND /{command=$0}
+                 / INFO webdriver: \[(GET|POST|DELETE)\] /{request=$0}
+                 / (WARN|ERROR) /{print command; print request; print}' "$log" | cut -c1-300
+        done
+    fi
+    return "$rc"
 }
 
 if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
