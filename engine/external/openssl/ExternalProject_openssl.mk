@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
 		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
 		&& $(if $(JOM),$(JOM) $(wordlist 1,2,$(PARALLELISM_OPTION)),nmake) -f makefile \
-			$(if $(call gb_Module__symbols_enabled,openssl),DEBUG_FLAGS_VALUE="$(gb_DEBUGINFO_FLAGS)") \
+			$(if $(call gb_Module__symbols_enabled,openssl),DEBUG_FLAGS_VALUE="$(gb_DEBUGINFO_FLAGS)$(if $(JOM),-Z7)") \
 	)
 	$(call gb_Trace_EndRange,openssl,EXTERNAL)
 

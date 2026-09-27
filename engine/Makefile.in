@@ -99,7 +99,7 @@ include $(BUILDDIR)/config_$(gb_Side).mk
 
 export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
-PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)$(if $(LOADLIMIT), -l $(LOADLIMIT),)
+export PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)$(if $(LOADLIMIT), -l $(LOADLIMIT),)
 
 # When make runs under mintty, the parallel build's writes to the terminal are
 # not serialized: the announce lines (printed via $(info)) and the child process
