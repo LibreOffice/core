@@ -194,6 +194,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
+    /// the macro decision allows the document's own UI configuration to call macros
+    bool                                                                                        m_bMacroCallsAllowed;
     bool                                                                                        m_bAllowDocumentScripting;
     bool                                                                                        m_bHasBeenRecovered;
     /// If XModel::attachResource() was called to inform us that the document is embedded into another one.

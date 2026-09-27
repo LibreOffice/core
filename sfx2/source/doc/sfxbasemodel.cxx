@@ -94,6 +94,7 @@
 #include <sal/log.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
+#include <framework/documentmacrocalls.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -3554,6 +3555,12 @@ Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfigurati
     return Reference< ui::XUIConfigurationManager >( getUIConfigurationManager2(), UNO_QUERY_THROW );
 }
 
+void SfxBaseModel::SetUIConfigurationMacroCallsAllowed_Impl( bool bAllowed )
+{
+    if ( m_pData )
+        framework::setDocumentMacroCallsAllowed( m_pData->m_xUIConfigurationManager, bAllowed );
+}
+
 Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManager2()
 {
     SfxModelGuard aGuard( *this );
@@ -3562,6 +3569,9 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
     {
         Reference< ui::XUIConfigurationManager2 > xNewUIConfMan =
             ui::UIConfigurationManager::create( comphelper::getProcessComponentContext() );
+
+        framework::setDocumentMacroCallsAllowed(
+            xNewUIConfMan, m_pData->m_pObjectShell->Get_Impl()->m_bMacroCallsAllowed );
 
         Reference< embed::XStorage > xConfigStorage;
 
