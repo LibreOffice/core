@@ -435,6 +435,9 @@ public:
     */
     bool                        AdjustMacroMode();
 
+    /// whether macros from this document are already allowed to run, without asking
+    bool                        IsMacroExecutionAllowed() const;
+
     static bool                 UnTrustedScript(const OUString& rScriptURL);
 
     /// Check if script URL whitelist exists, and if so, if current script url is part of it

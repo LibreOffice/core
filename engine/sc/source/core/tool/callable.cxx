@@ -62,8 +62,13 @@ ScMacroFunction::ScMacroFunction(const ScInterpreter& rInterpreter, const OUStri
         return;
     }
 
-    // The macro security prompt is not raised here. CallBasic checks it when
-    // the macro actually runs.
+    // The macro mode is decided before the document's Basic is loaded.
+    if (!mpDocShell->AdjustMacroMode())
+    {
+        mbInvalid = true;
+        mnError = FormulaError::NoMacro;
+        return;
+    }
 
     // Find the Basic method by name, then keep the library and macro name
     // strings that CallBasic needs to invoke it.
