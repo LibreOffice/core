@@ -100,6 +100,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/embedhlp.hxx>
+#include <basic/basicmanagerrepository.hxx>
+#include <basic/basmgr.hxx>
 #include <basic/modsizeexceeded.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
@@ -3636,15 +3638,20 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
 #if !HAVE_FEATURE_SCRIPTING
     (void) xHandler;
 #else
-    if ( !HasBasic() )
+    if ( pImpl->m_bNoBasicCapabilities )
         return true;
 
-    if ( !pImpl->aBasicManager.isValid() )
-        GetBasicManager();
+    // Only a loaded password-protected library has modules to check, and one is loaded only
+    // through an existing BasicManager.
+    BasicManager* pBasicManager
+        = basic::BasicManagerRepository::getExistingDocumentBasicManager( GetModel() );
+    if ( !pBasicManager )
+        return true;
+
     std::vector< OUString > sModules;
     if ( xHandler.is() )
     {
-        if( pImpl->aBasicManager.LegacyPsswdBinaryLimitExceeded( sModules ) )
+        if( pBasicManager->LegacyPsswdBinaryLimitExceeded( sModules ) )
         {
             ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
             uno::Reference< task::XInteractionRequest > xReq( pReq );
