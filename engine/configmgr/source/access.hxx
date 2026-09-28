@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
-#include <com/sun/star/configuration/XDocumentation.hpp>
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -80,7 +79,6 @@ class Access:
     public cppu::OWeakObject, public css::lang::XTypeProvider,
     public css::lang::XServiceInfo,
     public css::lang::XComponent,
-    public css::configuration::XDocumentation,
     public css::container::XHierarchicalNameReplace,
     public css::container::XContainer,
     public css::beans::XExactName,
@@ -156,15 +154,6 @@ public:
     virtual bool hasByName(OUString const & aName) override;
 
     virtual cpo::uno::Any getByHierarchicalName(
-        OUString const & aName) override;
-
-    virtual OUString getDescriptionByHierarchicalName(
-        OUString const & aName) override;
-
-    virtual cpo::uno::Type getTypeByHierarchicalName(
-        OUString const & aName) override;
-
-    virtual bool getModifiedByHierarchicalName(
         OUString const & aName) override;
 
     virtual bool hasByHierarchicalName(OUString const & aName) override;

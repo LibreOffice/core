@@ -224,8 +224,6 @@ cpo::uno::Sequence< cpo::uno::Type > Access::getTypes()
     } else {
         types.push_back(
             cppu::UnoType< css::container::XHierarchicalNameAccess >::get());
-        types.push_back(
-            cppu::UnoType< css::configuration::XDocumentation >::get());
     }
     addTypes(&types);
     return comphelper::containerToSequence(types);
@@ -448,63 +446,6 @@ cpo::uno::Any Access::getByHierarchicalName(OUString const & aName)
             aName, getXWeak());
     }
     return child->asValue();
-}
-
-OUString Access::getDescriptionByHierarchicalName(OUString const & aName)
-{
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
-    rtl::Reference< ChildAccess > child(getSubChild(aName));
-    if (!child.is()) {
-        throw css::container::NoSuchElementException(
-            aName, getXWeak());
-    }
-    return child->getNode()->getDescription();
-}
-
-cpo::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
-{
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
-    rtl::Reference< ChildAccess > child(getSubChild(aName));
-    if (!child.is()) {
-        throw css::container::NoSuchElementException(
-            aName, getXWeak());
-    }
-    auto const & p = child->getNode();
-    switch (p->kind()) {
-    case Node::KIND_PROPERTY:
-        return mapType(static_cast<PropertyNode *>(p.get())->getStaticType());
-    case Node::KIND_LOCALIZED_PROPERTY:
-        return mapType(static_cast<LocalizedPropertyNode *>(p.get())->getStaticType());
-    default:
-        throw css::util::InvalidStateException(
-            aName, getXWeak());
-    }
-}
-
-bool Access::getModifiedByHierarchicalName(OUString const & aName)
-{
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
-    rtl::Reference< ChildAccess > child(getSubChild(aName));
-    if (!child.is()) {
-        throw css::container::NoSuchElementException(
-            aName, getXWeak());
-    }
-    auto const & p = child->getNode();
-    switch (p->kind()) {
-    case Node::KIND_PROPERTY:
-        return static_cast<PropertyNode *>(p.get())->isModified();
-    case Node::KIND_LOCALIZED_VALUE:
-        return static_cast<LocalizedValueNode *>(p.get())->isModified();
-    default:
-        throw css::util::InvalidStateException(
-            aName, getXWeak());
-    }
 }
 
 bool Access::hasByHierarchicalName(OUString const & aName)
@@ -1373,7 +1314,6 @@ cpo::uno::Any Access::queryInterface(cpo::uno::Type const & aType)
         static_cast< css::lang::XServiceInfo * >(this),
         static_cast< css::lang::XComponent * >(this),
         static_cast< css::container::XHierarchicalNameAccess * >(this),
-        static_cast< css::configuration::XDocumentation * >(this),
         static_cast< css::container::XContainer * >(this),
         static_cast< css::beans::XExactName * >(this),
         static_cast< css::container::XHierarchicalName * >(this),
