@@ -3493,16 +3493,21 @@ OUString SwAccessibleParagraph::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    OUString strHeading;
+    OUString sAttributes;
     if (m_nHeadingLevel >= 0)
     {
         // report heading level using the "level" object attribute as specified in ARIA,
         // maps to attributes of the same name for AT-SPI, IAccessible2, UIA
         // https://www.w3.org/TR/core-aam-1.2/#ariaLevelHeading
-        strHeading = "level:" + OUString::number(m_nHeadingLevel) + ";";
+        sAttributes = "level:" + OUString::number(m_nHeadingLevel) + ";";
     }
 
-    return strHeading;
+    // Writer gives each page's piece of a split paragraph its own accessible.
+    const SwTextFrame* pTextFrame = GetTextFrame();
+    if (pTextFrame && pTextFrame->IsFollow())
+        sAttributes += "continued-from-previous-page:true;";
+
+    return sAttributes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
