@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#include <com/sun/star/sdbc/XIsolatedConnection.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -61,7 +60,6 @@ typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
                                        ,   css::sdb::XQueryDefinitionsSupplier
                                        ,   css::sdb::XCompletedConnection
                                        ,   css::container::XContainerListener
-                                       ,   css::sdbc::XIsolatedConnection
                                        ,   css::sdbcx::XTablesSupplier
                                        ,   css::util::XFlushable
                                        ,   css::util::XFlushListener
@@ -162,10 +160,6 @@ public:
 //::css::sdb::XQueryDefinitionsSupplier
     virtual cpo::uno::Reference< css::container::XNameAccess > getQueryDefinitions(  ) override;
 
-// css::sdbc::XIsolatedConnection
-    virtual cpo::uno::Reference< css::sdbc::XConnection > getIsolatedConnection( const OUString& user, const OUString& password ) override;
-    virtual cpo::uno::Reference< css::sdbc::XConnection > getIsolatedConnectionWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler ) override;
-
 // XFlushable
     virtual void flush(  ) override;
     virtual void addFlushListener( const cpo::uno::Reference< css::util::XFlushListener >& l ) override;
@@ -199,10 +193,10 @@ private:
 
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    cpo::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password , bool _bIsolated);
+    cpo::uno::Reference< css::sdbc::XConnection > getConnectionImpl( const OUString& user, const OUString& password);
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    cpo::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated);
+    cpo::uno::Reference< css::sdbc::XConnection > connectWithCompletionImpl( const cpo::uno::Reference< css::task::XInteractionHandler >& handler);
 
 protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;

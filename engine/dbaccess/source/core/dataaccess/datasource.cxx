@@ -918,32 +918,22 @@ sal_Int32 ODatabaseSource::getLoginTimeout()
 // XCompletedConnection
 Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
 {
-    return connectWithCompletion(_rxHandler,false);
+    return connectWithCompletionImpl(_rxHandler);
 }
 
 Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password)
 {
-    return getConnection(user,password,false);
+    return getConnectionImpl(user,password);
 }
 
-Reference< XConnection > ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password )
-{
-    return getConnection(user,password,true);
-}
-
-Reference< XConnection > ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
-{
-    return connectWithCompletion(_rxHandler,true);
-}
-
-Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,bool _bIsolated )
+Reference< XConnection > ODatabaseSource::connectWithCompletionImpl( const Reference< XInteractionHandler >& _rxHandler)
 {
     ModelMethodGuard aGuard( *this );
 
     if (!_rxHandler.is())
     {
         SAL_WARN("dbaccess","ODatabaseSource::connectWithCompletion: invalid interaction handler!");
-        return getConnection(m_pImpl->m_sUser, m_pImpl->m_aPassword,_bIsolated);
+        return getConnectionImpl(m_pImpl->m_sUser, m_pImpl->m_aPassword);
     }
 
     OUString sUser(m_pImpl->m_sUser), sPassword(m_pImpl->m_aPassword);
@@ -1009,7 +999,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
 
     try
     {
-        return getConnection(sUser, sPassword,_bIsolated);
+        return getConnectionImpl(sUser, sPassword);
     }
     catch(Exception&)
     {
@@ -1037,24 +1027,18 @@ rtl::Reference< OConnection > ODatabaseSource::buildIsolatedConnection(const OUS
     return new OConnection(*this, xSdbcConn, m_pImpl->m_aContext);
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,bool _bIsolated)
+Reference< XConnection > ODatabaseSource::getConnectionImpl(const OUString& user, const OUString& password)
 {
     ModelMethodGuard aGuard( *this );
 
     Reference< XConnection > xConn;
-    if ( _bIsolated )
+    // create a new proxy for the connection
+    if ( !m_pImpl->m_xSharedConnectionManager.is() )
     {
-        xConn = buildIsolatedConnection(user,password);
+        m_pImpl->m_xSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
     }
-    else
-    { // create a new proxy for the connection
-        if ( !m_pImpl->m_xSharedConnectionManager.is() )
-        {
-            m_pImpl->m_xSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
-        }
-        xConn = m_pImpl->m_xSharedConnectionManager->getConnection(
-            m_pImpl->m_sConnectURL, user, password, m_pImpl->m_xSettings->getPropertyValues(), this );
-    }
+    xConn = m_pImpl->m_xSharedConnectionManager->getConnection(
+        m_pImpl->m_sConnectURL, user, password, m_pImpl->m_xSettings->getPropertyValues(), this );
 
     if ( xConn.is() )
     {

@@ -9766,17 +9766,11 @@ module com {
      void setLoginTimeout([in] long seconds) raises (::com::sun::star::sdbc::SQLException);
      long getLoginTimeout() raises (::com::sun::star::sdbc::SQLException);
     };
-    published interface XIsolatedConnection {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::sdbc::XConnection getIsolatedConnectionWithCompletion([in] ::com::sun::star::task::XInteractionHandler handler) raises (::com::sun::star::sdbc::SQLException);
-     ::com::sun::star::sdbc::XConnection getIsolatedConnection([in] string user, [in] string password) raises (::com::sun::star::sdbc::SQLException);
-    };
    };
    module sdb {
     published service DataSource {
      interface ::com::sun::star::beans::XPropertySet;
      interface ::com::sun::star::sdb::XCompletedConnection;
-     interface ::com::sun::star::sdbc::XIsolatedConnection;
      interface ::com::sun::star::util::XFlushable;
      interface ::com::sun::star::sdb::XQueryDefinitionsSupplier;
      interface ::com::sun::star::sdbc::XDataSource;

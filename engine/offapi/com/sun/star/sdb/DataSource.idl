@@ -19,7 +19,6 @@
 
 
  module com {  module sun {  module star {  module sdbc {
-     published interface XIsolatedConnection;
      published interface XDataSource;
  };};};};
 
@@ -43,14 +42,6 @@ published service DataSource
                 provided during user interaction.
      */
     interface XCompletedConnection;
-
-    /** useful for establishing isolated connections which are not shared among others
-        as it is the case when using XCompletedConnection or com::sun::star::sdbc::XDataSource.
-        @see XCompletedConnection
-        @see com::sun::star::sdbc::XDataSource
-     */
-    interface com::sun::star::sdbc::XIsolatedConnection;
-
 
     /** is provided to flush a DataSource within to a Database Context.
      */

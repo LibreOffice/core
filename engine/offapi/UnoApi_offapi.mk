@@ -2935,7 +2935,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbc,\
 	XDriverManager \
 	XDriverManager2 \
 	XGeneratedResultSet \
-	XIsolatedConnection \
 	XMultipleResults \
 	XOutParameters \
 	XParameters \
