@@ -948,10 +948,7 @@ module com {
      interface ::com::sun::star::awt::XExtendedToolkit;
      interface ::com::sun::star::awt::XReschedule;
      interface ::com::sun::star::awt::XFontMappingUse;
-     ::com::sun::star::awt::XWindowPeer getDesktopWindow();
-     ::com::sun::star::awt::Rectangle getWorkArea();
      ::com::sun::star::awt::XWindowPeer createWindow([in] ::com::sun::star::awt::WindowDescriptor Descriptor) raises (::com::sun::star::lang::IllegalArgumentException);
-     sequence< ::com::sun::star::awt::XWindowPeer > createWindows([in] sequence< ::com::sun::star::awt::WindowDescriptor > Descriptors) raises (::com::sun::star::lang::IllegalArgumentException);
      ::com::sun::star::awt::XDevice createScreenCompatibleDevice([in] long Width, [in] long Height);
      ::com::sun::star::awt::XRegion createRegion();
     };

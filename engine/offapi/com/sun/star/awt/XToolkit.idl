@@ -41,32 +41,11 @@ published interface XToolkit
 
     interface com::sun::star::awt::XFontMappingUse;
 
-    /** returns the desktop window.
-     */
-    com::sun::star::awt::XWindowPeer getDesktopWindow();
-
-
-    /**
-     * For LibreOffice versions < 4.1, this method just returned an empty rectangle.
-     * After that, it started returning a valid value.
-     *
-     * @returns the size and position of the primary display
-     */
-    com::sun::star::awt::Rectangle getWorkArea();
-
-
     /** creates a new window using the given descriptor.
      */
     com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-
-    /** returns a sequence of windows which are newly created using the
-        given descriptors.
-     */
-    sequence<com::sun::star::awt::XWindowPeer> createWindows(
-            [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors )
-        raises( com::sun::star::lang::IllegalArgumentException );
 
 
     /** creates a virtual device that is compatible with the screen.

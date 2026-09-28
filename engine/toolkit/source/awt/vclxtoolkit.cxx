@@ -478,10 +478,7 @@ public:
     virtual void waitUntilAllIdlesDispatched() override;
 
     // css::awt::XToolkit
-    cpo::uno::Reference< css::awt::XWindowPeer >  getDesktopWindow(  ) override;
-    css::awt::Rectangle                                        getWorkArea(  ) override;
     cpo::uno::Reference< css::awt::XWindowPeer >  createWindow( const css::awt::WindowDescriptor& Descriptor ) override;
-    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
     cpo::uno::Reference< css::awt::XDevice >      createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) override;
     cpo::uno::Reference< css::awt::XRegion >      createRegion(  ) override;
 
@@ -893,25 +890,6 @@ void VCLXToolkit::disposing(std::unique_lock<std::mutex>& rGuard)
     m_aTopWindowListeners.disposeAndClear(rGuard, aEvent);
 }
 
-
-cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
-{
-    cpo::uno::Reference< css::awt::XWindowPeer > xRef;
-    // 07/00: AppWindow doesn't exist anymore...
-    return xRef;
-}
-
-css::awt::Rectangle VCLXToolkit::getWorkArea(  )
-{
-    sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
-    AbsoluteScreenPixelRectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
-    css::awt::Rectangle aNotherRect;
-    aNotherRect.X = aWorkRect.Left();
-    aNotherRect.Y = aWorkRect.Top();
-    aNotherRect.Width = aWorkRect.GetWidth();
-    aNotherRect.Height = aWorkRect.GetHeight();
-    return aNotherRect;
-}
 
 cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
 {
@@ -1815,23 +1793,6 @@ cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     }
 
     return xRef;
-}
-
-cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
-{
-    sal_uInt32 nComponents = rDescriptors.getLength();
-    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
-    for ( sal_uInt32 n = 0; n < nComponents; n++ )
-    {
-        css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
-
-        if ( aDescr.ParentIndex == -1 )
-            aDescr.Parent = nullptr;
-        else if ( ( aDescr.ParentIndex >= 0 ) && ( o3tl::make_unsigned(aDescr.ParentIndex) < n ) )
-            aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
-        aSeq.getArray()[n] = createWindow( aDescr );
-    }
-    return aSeq;
 }
 
 // css::awt::XSystemChildFactory
