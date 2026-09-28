@@ -62,10 +62,6 @@ namespace dbaui
         virtual cpo::uno::Reference< css::frame::XController >
                 getXController() = 0;
 
-        /** allows interception of user input, aka mouse clicks and key events
-        */
-        virtual bool interceptUserInput( const NotifyEvent& _rEvent ) = 0;
-
         virtual void acquire(  ) noexcept = 0;
         virtual void release(  ) noexcept = 0;
 

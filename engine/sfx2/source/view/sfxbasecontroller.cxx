@@ -49,7 +49,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/userinputinterception.hxx>
 
 #include <unoctitm.hxx>
 #include <sfx2/childwin.hxx>
@@ -354,7 +353,6 @@ struct IMPL_SfxBaseController_DataContainer
     Reference< XFrame >                     m_xFrame                ;
     Reference< XFrameActionListener >       m_xListener             ;
     Reference< XCloseListener >             m_xCloseListener        ;
-    ::sfx2::UserInputInterception           m_aUserInputInterception;
     ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer    ;
     ::comphelper::OInterfaceContainerHelper3<ui::XContextMenuInterceptor> m_aInterceptorContainer ;
     rtl::Reference< SfxStatusIndicator >    m_xIndicator            ;
@@ -370,7 +368,6 @@ struct IMPL_SfxBaseController_DataContainer
                                             SfxBaseController*  pController )
             :   m_xListener                     ( new IMPL_SfxBaseController_ListenerHelper( pController ) )
             ,   m_xCloseListener                ( new IMPL_SfxBaseController_CloseListenerHelper( pController ) )
-            ,   m_aUserInputInterception        ( *pController, aMutex                                  )
             ,   m_aListenerContainer            ( aMutex                                                )
             ,   m_aInterceptorContainer         ( aMutex                                                )
             ,   m_pViewShell            ( pViewShell                                            )
@@ -1015,30 +1012,6 @@ void SfxBaseController::releaseContextMenuInterceptor( const Reference< ui::XCon
         m_pData->m_pViewShell->RemoveContextMenuInterceptor_Impl( xInterceptor );
 }
 
-void SfxBaseController::addKeyHandler( const Reference< awt::XKeyHandler >& xHandler )
-{
-    SolarMutexGuard aGuard;
-    m_pData->m_aUserInputInterception.addKeyHandler( xHandler );
-}
-
-void SfxBaseController::removeKeyHandler( const Reference< awt::XKeyHandler >& xHandler )
-{
-    SolarMutexGuard aGuard;
-    m_pData->m_aUserInputInterception.removeKeyHandler( xHandler );
-}
-
-void SfxBaseController::addMouseClickHandler( const Reference< awt::XMouseClickHandler >& xHandler )
-{
-    SolarMutexGuard aGuard;
-    m_pData->m_aUserInputInterception.addMouseClickHandler( xHandler );
-}
-
-void SfxBaseController::removeMouseClickHandler( const Reference< awt::XMouseClickHandler >& xHandler )
-{
-    SolarMutexGuard aGuard;
-    m_pData->m_aUserInputInterception.removeMouseClickHandler( xHandler );
-}
-
 cpo::uno::Sequence< sal_Int16 > SfxBaseController::getSupportedCommandGroups()
 {
     SolarMutexGuard aGuard;
@@ -1106,21 +1079,6 @@ cpo::uno::Sequence< frame::DispatchInformation > SfxBaseController::getConfigura
     }
 
     return comphelper::containerToSequence( aCmdVector );
-}
-
-bool SfxBaseController::HandleEvent_Impl( NotifyEvent const & rEvent )
-{
-    return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
-}
-
-bool SfxBaseController::HasKeyListeners_Impl() const
-{
-    return m_pData->m_aUserInputInterception.hasKeyHandlers();
-}
-
-bool SfxBaseController::HasMouseClickListeners_Impl() const
-{
-    return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
 
 void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )

@@ -102,7 +102,6 @@ void OGenericUnoController::executeUserDefinedFeatures( const URL& _rFeatureURL,
 // OGenericUnoController
 OGenericUnoController::OGenericUnoController(const Reference< XComponentContext >& _rM)
     :OGenericUnoController_Base( getMutex() )
-    ,m_aUserInputInterception(*this, getMutex())
     ,m_pView(nullptr)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
@@ -946,37 +945,9 @@ void OGenericUnoController::removeTitleChangeListener(const Reference< XTitleCha
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
-// XUserInputInterception
-void OGenericUnoController::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
-{
-    if ( _rxHandler.is() )
-        m_aUserInputInterception.addKeyHandler( _rxHandler );
-}
-
-void OGenericUnoController::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler )
-{
-    m_aUserInputInterception.removeKeyHandler( _rxHandler );
-}
-
-void OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
-{
-    if ( _rxHandler.is() )
-        m_aUserInputInterception.addMouseClickHandler( _rxHandler );
-}
-
-void OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
-{
-    m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
-}
-
 Reference< XController > OGenericUnoController::getXController()
 {
     return this;
-}
-
-bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
-{
-    return m_aUserInputInterception.handleNotifyEvent( _rEvent );
 }
 
 Sequence< ::sal_Int16 > OGenericUnoController::getSupportedCommandGroups()

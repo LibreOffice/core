@@ -536,7 +536,6 @@ excludelist:
     - com/sun/star/frame/XDispatchProvider.hpp
     - com/sun/star/task/XStatusIndicatorSupplier.hpp
     - com/sun/star/ui/XContextMenuInterception.hpp
-    - com/sun/star/awt/XUserInputInterception.hpp
     - com/sun/star/frame/XDispatchInformationProvider.hpp
     - com/sun/star/frame/XTitle.hpp
     - com/sun/star/frame/XTitleChangeBroadcaster.hpp

@@ -384,10 +384,6 @@ public:
 
     SAL_DLLPRIVATE void SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter );
 
-    SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent const & rEvent );
-    SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
-    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
-
     SAL_DLLPRIVATE SfxBaseController*   GetBaseController_Impl() const;
 
     // Shell Interface

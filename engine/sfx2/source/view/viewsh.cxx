@@ -4000,25 +4000,6 @@ bool SfxViewShell::TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu
     return true;
 }
 
-bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent const & rEvent )
-{
-    if (pImpl->m_pController.is())
-        return pImpl->m_pController->HandleEvent_Impl( rEvent );
-    return false;
-}
-
-bool SfxViewShell::HasKeyListeners_Impl() const
-{
-    return (pImpl->m_pController.is())
-        && pImpl->m_pController->HasKeyListeners_Impl();
-}
-
-bool SfxViewShell::HasMouseClickListeners_Impl() const
-{
-    return (pImpl->m_pController.is())
-        && pImpl->m_pController->HasMouseClickListeners_Impl();
-}
-
 bool SfxViewShell::Escape()
 {
     return GetViewFrame().GetBindings().Execute(SID_TERMINATE_INPLACEACTIVATION).is();

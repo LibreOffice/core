@@ -30,7 +30,6 @@
 
 #include <optional>
 
-#include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -60,7 +59,6 @@
 #include <sal/types.h>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
-#include <sfx2/userinputinterception.hxx>
 
 namespace com::sun::star {
     namespace awt { class XWindow; }
@@ -182,7 +180,6 @@ namespace dbaui
                                            ,   css::frame::XController2
                                            ,   css::frame::XTitle
                                            ,   css::frame::XTitleChangeBroadcaster
-                                           ,   css::awt::XUserInputInterception
                                            >   OGenericUnoController_Base;
 
     class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) OGenericUnoController
@@ -192,7 +189,6 @@ namespace dbaui
     {
     private:
         SupportedFeatures               m_aSupportedFeatures;
-        ::sfx2::UserInputInterception   m_aUserInputInterception;
         VclPtr<ODataView>               m_pView;                // our (VCL) "main window"
 
 #ifdef DBG_UTIL
@@ -358,7 +354,6 @@ namespace dbaui
         // IController
         virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual cpo::uno::Reference< css::frame::XController > getXController() override;
-        virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;
 
         // css::lang::XEventListener
         virtual void disposing(const css::lang::EventObject& Source) override;
@@ -429,12 +424,6 @@ namespace dbaui
         // XTitleChangeBroadcaster
         virtual void addTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
         virtual void removeTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
-
-        // XUserInputInterception
-        virtual void addKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-        virtual void removeKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-        virtual void addMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-        virtual void removeMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
     };
 }
 

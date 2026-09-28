@@ -64,10 +64,6 @@ published service Controller
      */
     [optional] interface com::sun::star::ui::XContextMenuInterception;
 
-    /** makes it possible to intercept keyboard and mouse input.
-     */
-    [optional] interface com::sun::star::awt::XUserInputInterception;
-
     /** makes it possible to access and change the selection in a view
      */
     [optional] interface com::sun::star::view::XSelectionSupplier;

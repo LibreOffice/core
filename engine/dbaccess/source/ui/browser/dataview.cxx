@@ -103,7 +103,7 @@ namespace dbaui
             case NotifyEventType::KEYUP:
             case NotifyEventType::MOUSEBUTTONDOWN:
             case NotifyEventType::MOUSEBUTTONUP:
-                bHandled = m_xController->interceptUserInput( _rNEvt );
+                bHandled = false;
                 break;
             default:
                 break;

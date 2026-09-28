@@ -53,9 +53,6 @@ sc.ScTableSheetObj::com::sun::star::sheet::XPrintAreas
 ### i42534 ###
 sc.ScAccessibleDocument::com::sun::star::accessibility::XAccessibleSelection
 
-### i53606 ###
-sc.ScTabViewObj::com::sun::star::awt::XUserInputInterception
-
 ### i55490 ###
 sc.XMLExporter::com::sun::star::document::XFilter
 sc.XMLStylesExporter::com::sun::star::document::XFilter

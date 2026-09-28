@@ -2208,13 +2208,6 @@ module com {
      void windowActivated([in] ::com::sun::star::lang::EventObject e);
      void windowDeactivated([in] ::com::sun::star::lang::EventObject e);
     };
-    published interface XUserInputInterception {
-     interface ::cpo::uno::XInterface;
-     void addKeyHandler([in] ::com::sun::star::awt::XKeyHandler xHandler);
-     void removeKeyHandler([in] ::com::sun::star::awt::XKeyHandler xHandler);
-     void addMouseClickHandler([in] ::com::sun::star::awt::XMouseClickHandler xHandler);
-     void removeMouseClickHandler([in] ::com::sun::star::awt::XMouseClickHandler xHandler);
-    };
     published interface XVclContainerListener;
     /** @deprecated */ published interface XVclContainer {
      interface ::cpo::uno::XInterface;
@@ -5320,7 +5313,6 @@ module com {
      interface ::com::sun::star::frame::XController;
      interface ::com::sun::star::frame::XDispatchProvider;
      [optional] interface ::com::sun::star::ui::XContextMenuInterception;
-     [optional] interface ::com::sun::star::awt::XUserInputInterception;
      [optional] interface ::com::sun::star::view::XSelectionSupplier;
      [optional] interface ::com::sun::star::datatransfer::XTransferableSupplier;
     };

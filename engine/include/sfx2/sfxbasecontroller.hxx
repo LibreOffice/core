@@ -36,7 +36,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-#include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <tools/link.hxx>
 
 #include <sfx2/groupid.hxx>
@@ -59,7 +58,6 @@ typedef ::cppu::WeakImplHelper  <   css::frame::XController2
                                 ,   css::frame::XDispatchProvider
                                 ,   css::task::XStatusIndicatorSupplier
                                 ,   css::ui::XContextMenuInterception
-                                ,   css::awt::XUserInputInterception
                                 ,   css::frame::XDispatchInformationProvider
                                 ,   css::frame::XInfobarProvider
                                 ,   css::frame::XTitle
@@ -146,12 +144,6 @@ public:
     virtual void registerContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
     virtual void releaseContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
 
-    virtual void addKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void removeKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void addMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-    virtual void removeMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-
-
     //  XDispatchInformationProvider
     virtual cpo::uno::Sequence< sal_Int16 > getSupportedCommandGroups() override;
     virtual cpo::uno::Sequence< css::frame::DispatchInformation > getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
@@ -182,9 +174,6 @@ public:
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
     SfxViewShell* GetViewShell_Impl() const;
-    SAL_DLLPRIVATE bool HandleEvent_Impl( NotifyEvent const & rEvent );
-    SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
-    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE cpo::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 

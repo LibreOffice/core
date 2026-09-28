@@ -28,13 +28,6 @@ sd.SdXImpressDocument::com::sun::star::view::XPrintable
 ### i34994 ###
 sd.SdXPresentation::com::sun::star::presentation::Presentation
 
-### i53605 ###
-sd.DrawController_OutlineView::com::sun::star::awt::XUserInputInterception
-sd.DrawController_PresentationView::com::sun::star::awt::XUserInputInterception
-sd.DrawController_DrawView::com::sun::star::awt::XUserInputInterception
-sd.DrawController_HandoutView::com::sun::star::awt::XUserInputInterception
-sd.DrawController_NotesView::com::sun::star::awt::XUserInputInterception
-
 ### i63664 ###
 sd.DrawController_OutlineView::com::sun::star::view::XSelectionSupplier
 sd.DrawController_PresentationView::com::sun::star::view::XSelectionSupplier

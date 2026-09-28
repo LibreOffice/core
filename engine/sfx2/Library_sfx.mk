@@ -301,7 +301,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/kithelper \
     sfx2/source/view/printer \
     sfx2/source/view/sfxbasecontroller \
-    sfx2/source/view/userinputinterception \
     sfx2/source/view/viewfac \
     sfx2/source/view/viewfrm \
     sfx2/source/view/viewfrm2 \
