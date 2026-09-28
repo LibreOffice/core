@@ -20,6 +20,7 @@
 #include "WrappedNumberFormatProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <Axis.hxx>
+#include <ChartModel.hxx>
 #include <DataSeries.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <unonames.hxx>
@@ -61,12 +62,23 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
         OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return Any();
     }
+    Reference< chart2::XDataSeries > xSeries( xInnerPropertySet, uno::UNO_QUERY );
+    ::chart::DataSeries* pDataSeries = dynamic_cast<DataSeries*>(xSeries.get());
+    if( pDataSeries )
+    {
+        // Labels linked to cells of the container document show the format of those cells, whatever
+        // key is stored. Older versions stored General there.
+        bool bLinkToSource = false;
+        pDataSeries->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+        rtl::Reference< ChartModel > xChartModel = m_spChart2ModelContact->getDocumentModel();
+        if( bLinkToSource && xChartModel.is() && !xChartModel->hasInternalDataProvider() )
+            return cpo::uno::Any( pDataSeries->getExplicitNumberFormatKeyForDataLabel() );
+    }
     Any aRet( xInnerPropertySet->getPropertyValue(getInnerName()));
     if( !aRet.hasValue() )
     {
         sal_Int32 nKey = 0;
-        Reference< chart2::XDataSeries > xSeries( xInnerPropertySet, uno::UNO_QUERY );
-        if( ::chart::DataSeries* pDataSeries = dynamic_cast<DataSeries*>(xSeries.get()) )
+        if( pDataSeries )
             nKey = pDataSeries->getExplicitNumberFormatKeyForDataLabel();
         else
         {

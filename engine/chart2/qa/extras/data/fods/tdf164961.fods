@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <number:percentage-style style:name="N11">
+   <number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1"/>
+   <number:text>%</number:text>
+  </number:percentage-style>
+  <style:style style:name="ce1" style:family="table-cell" style:data-style-name="N11"/>
+ </office:automatic-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:shapes>
+     <draw:frame draw:name="Object 1" svg:width="12cm" svg:height="8cm" svg:x="3cm" svg:y="0.5cm">
+      <draw:object draw:notify-on-update-of-ranges="Sheet1.A1:Sheet1.A3">
+       <office:document office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.chart">
+        <office:automatic-styles>
+         <!-- written this way before LibreOffice 25.2.2: General, but linked to the source -->
+         <number:number-style style:name="N0">
+          <number:number number:min-integer-digits="1"/>
+         </number:number-style>
+         <style:style style:name="ch1" style:family="chart" style:data-style-name="N0">
+          <style:chart-properties chart:link-data-style-to-source="true" chart:data-label-number="value"/>
+         </style:style>
+        </office:automatic-styles>
+        <office:body>
+         <office:chart>
+          <chart:chart svg:width="12cm" svg:height="8cm" chart:class="chart:bar">
+           <chart:plot-area table:cell-range-address="Sheet1.A1:Sheet1.A3" chart:data-source-has-labels="none">
+            <chart:axis chart:dimension="x" chart:name="primary-x"/>
+            <chart:axis chart:dimension="y" chart:name="primary-y"/>
+            <chart:series chart:style-name="ch1" chart:values-cell-range-address="Sheet1.A1:Sheet1.A3" chart:class="chart:bar"/>
+           </chart:plot-area>
+          </chart:chart>
+         </office:chart>
+        </office:body>
+       </office:document>
+      </draw:object>
+     </draw:frame>
+    </table:shapes>
+    <table:table-column table:default-cell-style-name="ce1"/>
+    <table:table-row>
+     <table:table-cell office:value-type="percentage" office:value="0.16"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="percentage" office:value="0.07"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="percentage" office:value="0.34"/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

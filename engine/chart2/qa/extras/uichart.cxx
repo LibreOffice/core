@@ -566,6 +566,33 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     CPPUNIT_ASSERT_EQUAL(u"values-y"_ustr, propY->getPropertyValue(u"Role"_ustr).get<OUString>());
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf164961)
+{
+    // Data labels pasted into Writer keep the percent format of the cells they were linked to, also
+    // for a chart saved by an older version, which stored General for them
+    loadFromFile(u"fods/tdf164961.fods");
+
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr,
+                    { comphelper::makePropertyValue(u"ToObject"_ustr, u"Object 1"_ustr) });
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    loadFromURL(u"private:factory/swriter"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0),
+                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSeries(getDataSeriesFromDoc(xChartDoc, 0),
+                                                uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xSeries->getPropertyValue(u"LinkNumberFormatToSource"_ustr).get<bool>());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 128 (PERCENT)
+    // - Actual  : 16 (NUMBER, the General format)
+    sal_Int32 nNumberFormat = xSeries->getPropertyValue(u"NumberFormat"_ustr).get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(util::NumberFormat::PERCENT,
+                         getNumberFormatType(xChartDoc, nNumberFormat));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
