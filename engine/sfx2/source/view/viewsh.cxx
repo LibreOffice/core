@@ -426,19 +426,23 @@ sal_Int64 getAccessibleSiblingCount(const Reference<accessibility::XAccessibleCo
     return nChildCount - 1;
 }
 
+uno::Reference<accessibility::XAccessibleTable>
+firstTablePiece(const uno::Reference<accessibility::XAccessibleTable>& xTable);
+
 // Put in rAncestorList all ancestors of xTable up to xAncestorTable or
 // up to the first not-a-table ancestor if xAncestorTable is not an ancestor.
 // xTable is included in the list, xAncestorTable is not included.
 // The list is ordered from the ancient ancestor to xTable.
 // Return true if xAncestorTable is an ancestor of xTable.
+// A table split across pages is named by its first page's piece.
 bool getAncestorList(XAccessibleTableList& rAncestorList,
                      const uno::Reference<accessibility::XAccessibleTable>& xTable,
                      const uno::Reference<accessibility::XAccessibleTable>& xAncestorTable = uno::Reference<accessibility::XAccessibleTable>())
 {
     uno::Reference<accessibility::XAccessibleTable> xCurrentTable = xTable;
-    while (xCurrentTable.is() && xCurrentTable != xAncestorTable)
+    while (xCurrentTable.is() && firstTablePiece(xCurrentTable) != xAncestorTable)
     {
-        rAncestorList.push_front(xCurrentTable);
+        rAncestorList.push_front(firstTablePiece(xCurrentTable));
 
         uno::Reference<accessibility::XAccessibleContext> xContext(xCurrentTable, uno::UNO_QUERY);
         xCurrentTable.clear();
@@ -458,7 +462,7 @@ bool getAncestorList(XAccessibleTableList& rAncestorList,
         }
     }
 
-    return xCurrentTable.is() && xCurrentTable == xAncestorTable;
+    return xCurrentTable.is() && firstTablePiece(xCurrentTable) == xAncestorTable;
 }
 
 void lookForParentTable(const uno::Reference<accessibility::XAccessibleContext>& xContext,
@@ -1647,6 +1651,37 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
         nRow += xPiece->getAccessibleRowCount() - nRepeated;
     }
     return aPieces;
+}
+
+uno::Reference<accessibility::XAccessibleTable>
+firstTablePiece(const uno::Reference<accessibility::XAccessibleTable>& xTable)
+{
+    size_t nCaretPiece = 0;
+    try
+    {
+        return getTablePieces(xTable, nCaretPiece).front().xTable;
+    }
+    // a deleted table is a piece of nothing
+    catch (const lang::DisposedException&)
+    {
+        return xTable;
+    }
+}
+
+sal_Int32 wholeTableRowCount(const uno::Reference<accessibility::XAccessibleTable>& xTable)
+{
+    size_t nCaretPiece = 0;
+    const std::vector<TablePiece> aPieces = getTablePieces(xTable, nCaretPiece);
+    const TablePiece& rLast = aPieces.back();
+    return rLast.nFirstRow + rLast.xTable->getAccessibleRowCount() - rLast.nRepeated;
+}
+
+sal_Int32 wholeTableRow(const uno::Reference<accessibility::XAccessibleTable>& xTable,
+                        sal_Int32 nRow)
+{
+    size_t nCaretPiece = 0;
+    const std::vector<TablePiece> aPieces = getTablePieces(xTable, nCaretPiece);
+    return aPieces[nCaretPiece].nFirstRow + nRow - aPieces[nCaretPiece].nRepeated;
 }
 
 // The rows around the caret's row of the innermost table holding the paragraph.
@@ -2841,7 +2876,7 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
 
     if (m_xLastTable.is())
     {
-        if (xTable != m_xLastTable)
+        if (firstTablePiece(xTable) != m_xLastTable)
         {
             // do we get in one or more nested tables ?
             // check if xTable is a descendant of m_xLastTable
@@ -2853,7 +2888,8 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
                 // do we get out of one or more nested tables ?
                 // check if m_xLastTable is a descendant of xTable
                 XAccessibleTableList lastTableAncestorList;
-                isNewAncestorOfLast = getAncestorList(lastTableAncestorList, m_xLastTable, xTable);
+                isNewAncestorOfLast
+                    = getAncestorList(lastTableAncestorList, m_xLastTable, firstTablePiece(xTable));
                 // we have to notify "out of table" for all  m_xLastTable ancestors up to xTable
                 // or the first not-a-table ancestor
                 nOutCount = lastTableAncestorList.size();
@@ -2864,8 +2900,8 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
                 // which is a child of m_xLastTable (isLastAncestorOfNew) or the first not-a-table ancestor
                 for (const auto& ancestor: newTableAncestorList)
                 {
-                    TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
-                                              ancestor->getAccessibleColumnCount()};
+                    TableSizeType aTableSize{ wholeTableRowCount(ancestor),
+                                              ancestor->getAccessibleColumnCount() };
                     aInList.push_back(aTableSize);
                 }
             }
@@ -2879,8 +2915,8 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
         getAncestorList(newTableAncestorList, xTable);
         for (const auto& ancestor: newTableAncestorList)
         {
-            TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
-                                      ancestor->getAccessibleColumnCount()};
+            TableSizeType aTableSize{ wholeTableRowCount(ancestor),
+                                      ancestor->getAccessibleColumnCount() };
             aInList.push_back(aTableSize);
         }
     }
@@ -2890,8 +2926,9 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
     sal_Int32 nCol = xTable->getAccessibleColumn(nChildIndex);
     sal_Int32 nRowSpan = xTable->getAccessibleRowExtentAt(nRow, nCol);
     sal_Int32 nColSpan = xTable->getAccessibleColumnExtentAt(nRow, nCol);
+    nRow = wholeTableRow(xTable, nRow);
 
-    m_xLastTable = xTable;
+    m_xLastTable = firstTablePiece(xTable);
     if (!updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED"))
         collectAndAttachContextWindow(xAccText);
     // a piece fetched from its parent comes with no CHILD event, so nothing attached to it yet

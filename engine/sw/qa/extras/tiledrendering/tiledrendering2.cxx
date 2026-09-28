@@ -2144,6 +2144,34 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yCaretInTableCell)
         pWrtShell->getShellCursor(false)->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yLeaveNestedTableInSplitTable)
+{
+    // Given a table nested in the last row of a table split across two pages:
+    createDoc("a11y-nested-in-split-table.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPageCnt());
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::string("Inner one"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+
+    // When the cursor leaves the inner table for the outer cell it is in:
+    // Writer tells a paragraph it has the focus only while its window has it, lost on idle here.
+    pWrtShell->GetWin()->GrabFocus();
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the reader is told it left one table, and is not told about the outer one again:
+    CPPUNIT_ASSERT_EQUAL(std::string("After the inner table."),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_aA11yFocusedCell.get<int>("outCount"));
+    CPPUNIT_ASSERT(!aView.m_aA11yFocusedCell.get_child_optional("inList"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
 {
     // Given a short hyperlink, then one wrapping over two lines:
@@ -2211,6 +2239,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithPageHeaderAndFo
     // Then the reader is given that row and the row count of the whole table:
     CPPUNIT_ASSERT_EQUAL(std::string("Row 60"),
                          aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    CPPUNIT_ASSERT_EQUAL(59, aView.m_aA11yFocusedCell.get<int>("row"));
     CPPUNIT_ASSERT_EQUAL(80, aView.m_aA11yFocusedCell.get<int>("paragraph.table.rowCount"));
 }
 
