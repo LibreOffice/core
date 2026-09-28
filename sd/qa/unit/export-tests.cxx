@@ -722,6 +722,53 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testUnknownAttributes)
     assertXPathNSDef(pXmlDoc, "/office:document-content", "foo", "http://example.com/");
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf173489)
+{
+    // Two tables without a table template. The first one has the opposite of the svx defaults: no
+    // first row and no banded rows, the other four set. The second one has the other half.
+    createSdImpressDoc("odp/tdf173489.fodp");
+    struct Flag
+    {
+        OUString aProperty;
+        const char* pAttribute;
+        bool bFirstTable;
+    };
+    const Flag aFlags[] = {
+        { u"UseFirstRowStyle"_ustr, "use-first-row-styles", false },
+        { u"UseLastRowStyle"_ustr, "use-last-row-styles", true },
+        { u"UseFirstColumnStyle"_ustr, "use-first-column-styles", true },
+        { u"UseLastColumnStyle"_ustr, "use-last-column-styles", true },
+        { u"UseBandingRowStyle"_ustr, "use-banding-rows-styles", false },
+        { u"UseBandingColumnStyle"_ustr, "use-banding-columns-styles", true },
+    };
+    auto checkFlags = [this, &aFlags]() {
+        for (int nTable = 0; nTable < 2; ++nTable)
+        {
+            uno::Reference<beans::XPropertySet> xTable(getShapeFromPage(nTable, 0));
+            for (const Flag& rFlag : aFlags)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(rFlag.pAttribute, rFlag.bFirstTable == (nTable == 0),
+                                             xTable->getPropertyValue(rFlag.aProperty).get<bool>());
+        }
+    };
+    checkFlags();
+
+    saveAndReload(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the fix in place, the flags were only written with table:template-name
+    for (int nTable = 0; nTable < 2; ++nTable)
+    {
+        OString aTable = "(//draw:frame/table:table)[" + OString::number(nTable + 1) + "]";
+        for (const Flag& rFlag : aFlags)
+        {
+            if (rFlag.bFirstTable == (nTable == 0))
+                assertXPath(pXmlDoc, aTable, rFlag.pAttribute, u"true");
+            else
+                assertXPathNoAttribute(pXmlDoc, aTable, rFlag.pAttribute);
+        }
+    }
+    checkFlags();
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf80020)
 {
     createSdImpressDoc("odp/tdf80020.odp");

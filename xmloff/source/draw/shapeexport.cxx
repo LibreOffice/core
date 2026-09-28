@@ -5413,23 +5413,22 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 {
                     const OUString sTemplate( xTemplate->getName() );
                     if( !sTemplate.isEmpty() )
-                    {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
+                }
 
-                        for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; !pEntry->IsEnd(); pEntry++ )
-                        {
-                            try
-                            {
-                                bool bBool = false;
-                                xPropSet->getPropertyValue( pEntry->getApiName() ) >>= bBool;
-                                if( bBool )
-                                    mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
-                            }
-                            catch( uno::Exception& )
-                            {
-                                DBG_UNHANDLED_EXCEPTION("xmloff.draw");
-                            }
-                        }
+                // the flags are also used without a template, e.g. for a table from PPTX
+                for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; !pEntry->IsEnd(); pEntry++ )
+                {
+                    try
+                    {
+                        bool bBool = false;
+                        xPropSet->getPropertyValue( pEntry->getApiName() ) >>= bBool;
+                        if( bBool )
+                            mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION("xmloff.draw");
                     }
                 }
 
