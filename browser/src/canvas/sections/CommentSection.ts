@@ -71,6 +71,8 @@ export class Comment extends CanvasSectionObject {
 	// position has been worked out yet.
 	positionedHeight: number | null = null;
 	canvasContainerBounds: DOMRect = new DOMRect();
+	// True while the text that selectText selected still has to be scrolled into view.
+	searchSelectionPending: boolean = false;
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public static makeName(data: any): string {
@@ -2294,7 +2296,25 @@ export class Comment extends CanvasSectionObject {
 		window.L.DomUtil.removeClass(this.sectionProperties.container, 'cool-annotation-collapsed-show');
 	}
 
-	public selectText(startParagraph: number, startIndex: number, endParagraph: number, endIndex: number): void {
+	// Returns the text node and the offset in it for an offset into all the text of an element.
+	private static getTextPosition(element: Node, offset: number): { node: Node, offset: number } | null {
+		const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
+		let remaining = offset;
+		for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+			const length = (node as Text).length;
+			if (remaining <= length)
+				return { node: node, offset: remaining };
+			remaining -= length;
+		}
+		return null;
+	}
+
+	// Selects text of this comment. searchText is the selected text, and searchOccurrence is the
+	// number of times it starts earlier in the paragraph. When they are given, they place the
+	// selection, because the paragraph here writes each link out and shortens the links that
+	// Autolinker finds, while the indexes count the text as the document engine has it.
+	public selectText(startParagraph: number, startIndex: number, endParagraph: number, endIndex: number,
+		searchText?: string, searchOccurrence?: number): void {
 		const selection = window.getSelection();
 		selection.removeAllRanges();
 
@@ -2306,38 +2326,73 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
-		// Find start position
 		const startElement = paragraphElements[startParagraph] as HTMLElement;
-		const startWalker = document.createTreeWalker(
-			startElement,
-			NodeFilter.SHOW_TEXT,
-			null
-		);
-		const startTextNode = startWalker.nextNode();
-		if (!startTextNode) {
-			return;
+		const endElement = paragraphElements[endParagraph] as HTMLElement;
+
+		if (searchText && startParagraph === endParagraph) {
+			const paragraphText = startElement.textContent;
+			let found = paragraphText.indexOf(searchText);
+			for (let i = 0; found >= 0 && i < searchOccurrence; i++)
+				found = paragraphText.indexOf(searchText, found + 1);
+			if (found >= 0) {
+				startIndex = found;
+				endIndex = found + searchText.length;
+			}
 		}
 
-		// Find end position
-		const endElement = paragraphElements[endParagraph] as HTMLElement;
-		const endWalker = document.createTreeWalker(
-			endElement,
-			NodeFilter.SHOW_TEXT,
-			null
-		);
-		const endTextNode = endWalker.nextNode();
-		if (!endTextNode)
+		const start = Comment.getTextPosition(startElement, startIndex);
+		const end = Comment.getTextPosition(endElement, endIndex);
+		if (!start || !end)
 			return;
 
 		// Create and apply the selection range
 		const range = document.createRange();
-		range.setStart(startTextNode, startIndex);
-		range.setEnd(endTextNode, endIndex);
+		range.setStart(start.node, start.offset);
+		range.setEnd(end.node, end.offset);
 
 		selection.addRange(range);
 
 		// Ensure the selection is visible
 		this.sectionProperties.contentText.focus();
+		this.searchSelectionPending = true;
+		this.revealSearchSelection();
+	}
+
+	// Scrolls the text of this comment to the text that selectText selected, and scrolls the
+	// document when that text is outside the document area, as a reply below the view can be. The
+	// text of a long comment scrolls inside its card, and the card moves with the document. While
+	// the comment is hidden, the selection waits for the layout that shows it.
+	public revealSearchSelection(): void {
+		if (!this.searchSelectionPending)
+			return;
+
+		const selection = window.getSelection();
+		const contentNode = this.sectionProperties.contentNode;
+		if (!selection.rangeCount || !contentNode.contains(selection.anchorNode)) {
+			this.searchSelectionPending = false;
+			return;
+		}
+
+		const contentRect = contentNode.getBoundingClientRect();
+		if (contentRect.height === 0)
+			return;
+
+		const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
+		if (selectionRect.top < contentRect.top || selectionRect.bottom > contentRect.bottom)
+			contentNode.scrollTop += selectionRect.top - contentRect.top
+				- (contentRect.height - selectionRect.height) / 2;
+		this.searchSelectionPending = false;
+
+		const documentRect = document.getElementById('document-container').getBoundingClientRect();
+		const shownRect = selection.getRangeAt(0).getBoundingClientRect();
+		const margin = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
+		let offset = 0;
+		if (shownRect.bottom > documentRect.bottom - margin)
+			offset = shownRect.bottom - documentRect.bottom + margin;
+		else if (shownRect.top < documentRect.top + margin)
+			offset = shownRect.top - documentRect.top - margin;
+		if (offset !== 0)
+			app.activeDocument.activeLayout.scroll(0, Math.round(offset * app.dpiScale));
 	}
 
 	public autoCompleteMention(username: string, profileLink: string, replacement: string): void {

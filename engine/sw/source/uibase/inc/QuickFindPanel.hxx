@@ -9,6 +9,7 @@
  */
 
 #pragma once
+#include <i18nutil/searchopt.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/quickfind.hxx>
 #include <svx/svxdlg.hxx>
@@ -58,7 +59,25 @@ public:
 
 private:
     friend class QuickFindPanelWindow;
-    std::vector<std::unique_ptr<SwPaM>> m_vPaMs;
+
+    /// One match of the search term. A match in the document text has m_nPostItId 0 and
+    /// m_xPaM covers the matched text. A match inside a comment has the comment's id in
+    /// m_nPostItId and a collapsed m_xPaM at the comment anchor. m_sCommentText is the text of
+    /// the comment at the time of the search, with one line feed between paragraphs, and the
+    /// match runs from offset m_nCommentStart up to m_nCommentEnd in it. m_sEntryText is the
+    /// text of its row in the list.
+    struct SearchFind
+    {
+        std::unique_ptr<SwPaM> m_xPaM;
+        sal_uInt32 m_nPostItId = 0;
+        OUString m_sCommentText;
+        sal_Int32 m_nCommentStart = 0;
+        sal_Int32 m_nCommentEnd = 0;
+        OUString m_sEntryText;
+    };
+    std::vector<SearchFind> m_vSearchFinds;
+    /// The options of the search that filled m_vSearchFinds.
+    i18nutil::SearchOptions2 m_aSearchOptions;
 
     std::unique_ptr<weld::Entry> m_xSearchFindEntry;
     std::unique_ptr<weld::Toolbar> m_xSearchOptionsToolbar;
@@ -102,6 +121,10 @@ private:
 
     void NavigateSearchFinds(bool bNext);
     void FillSearchFindsList();
+    void SetSearchFindFoundTimesLabel();
+    void AppendCommentSearchFinds();
+    /// Returns false when the comment or the match in it is gone.
+    bool SelectCommentSearchFind(const SearchFind& rSearchFind);
     static OUString CreatePageEntry(sal_Int32 nPageNum);
     bool IsPageEntry(const weld::TreeIter& rEntry);
     static bool IsPageEntry(std::u16string_view sEntryId);

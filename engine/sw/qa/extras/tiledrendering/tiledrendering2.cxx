@@ -59,6 +59,8 @@
 #include <cmdid.h>
 #include <viewimp.hxx>
 #include <dview.hxx>
+#include <AnnotationWin.hxx>
+#include <editeng/outliner.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -1535,6 +1537,261 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentDateTimeWithoutViewTimezon
     CPPUNIT_ASSERT(getOnlyPostItField(*pPostItMgr)->GetDateTime().IsBetween(aBefore, aAfter));
 }
 #endif
+
+/// Opens the QuickFind panel of rView while it lives.
+class QuickFindPanelOpener
+{
+    SwView& m_rView;
+    OUString m_sKey;
+
+public:
+    explicit QuickFindPanelOpener(SwView& rView)
+        : m_rView(rView)
+        , m_sKey(OUString::number(reinterpret_cast<sal_uInt64>(static_cast<SfxViewShell*>(&rView)))
+                 + "quickfind")
+    {
+        m_rView.GetViewFrame().ToggleChildWindow(SID_QUICKFIND);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // The panel keeps positions in the document, so it is closed before the document.
+    ~QuickFindPanelOpener()
+    {
+        m_rView.GetViewFrame().SetChildWindow(SID_QUICKFIND, false);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    /// Searches rTerm the way the client does: sets the text of the search field, then
+    /// activates it.
+    void search(const OUString& rTerm)
+    {
+        StringMap aChange;
+        aChange[u"cmd"_ustr] = u"change"_ustr;
+        aChange[u"type"_ustr] = u"edit"_ustr;
+        aChange[u"data"_ustr] = rTerm;
+        CPPUNIT_ASSERT(jsdialog::ExecuteAction(m_sKey, u"Find"_ustr, aChange));
+        StringMap aActivate;
+        aActivate[u"cmd"_ustr] = u"activate"_ustr;
+        aActivate[u"type"_ustr] = u"edit"_ustr;
+        CPPUNIT_ASSERT(jsdialog::ExecuteAction(m_sKey, u"Find"_ustr, aActivate));
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    /// Picks row nRow of the results, counting the page divider rows too.
+    void pickRow(int nRow)
+    {
+        StringMap aSelect;
+        aSelect[u"cmd"_ustr] = u"select"_ustr;
+        aSelect[u"type"_ustr] = u"treeview"_ustr;
+        aSelect[u"data"_ustr] = OUString::number(nRow);
+        CPPUNIT_ASSERT(jsdialog::ExecuteAction(m_sKey, u"searchfinds"_ustr, aSelect));
+        Scheduler::ProcessEventsToIdle();
+    }
+};
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindFindsTextInComments)
+{
+    // The navigator search lists a match inside a comment together with the matches in the
+    // document text. Picking the comment match tells the client to select the matched text in
+    // the comment, and typing afterwards still goes to the document. Picking a document match
+    // selects that text in the document again.
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    // The comment is anchored in a paragraph of its own, so the row of the match in the document
+    // text shows only letters.
+    pWrtShell->Insert(u"apple tree"_ustr);
+    pWrtShell->SplitNode();
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Text"_ustr, cpo::uno::Any(u"red apple"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    sal_uInt32 nPostItId = getOnlyPostItField(*pPostItMgr)->GetPostItId();
+
+    QuickFindPanelOpener aQuickFind(*getSwDocShell()->GetView());
+    aQuickFind.search(u"apple"_ustr);
+
+    // The rows are the page 1 divider, the match in the document text, then the match in the
+    // comment, which is anchored in the paragraph after it.
+    aQuickFind.pickRow(2);
+
+    // The client is told which text of the comment to select.
+    CPPUNIT_ASSERT_EQUAL(std::string("SearchHighlight"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+    CPPUNIT_ASSERT_EQUAL(std::string("0,4,0,9"),
+                         aView.m_aComment.get_child("searchSelection").get_value<std::string>());
+    CPPUNIT_ASSERT(!pPostItMgr->HasActiveSidebarWin());
+
+    // A key typed now goes to the document and leaves the comment text as it was.
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'X', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'X', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"red apple"_ustr, getOnlyPostItField(*pPostItMgr)->GetPar2());
+    CPPUNIT_ASSERT(pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText().indexOf('X')
+                   >= 0);
+
+    aQuickFind.pickRow(1);
+    CPPUNIT_ASSERT(!pPostItMgr->HasActiveSidebarWin());
+    CPPUNIT_ASSERT_EQUAL(u"apple"_ustr, pWrtShell->GetSelText());
+
+    // Text put in front of the match after the search moves the match along with it.
+    comphelper::dispatchCommand(u".uno:EditAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"apple red apple"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    aQuickFind.pickRow(2);
+    CPPUNIT_ASSERT_EQUAL(std::string("0,10,0,15"),
+                         aView.m_aComment.get_child("searchSelection").get_value<std::string>());
+
+    // When the matched text itself was changed, the match nearest to the old place is picked.
+    comphelper::dispatchCommand(u".uno:EditAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"apple red APPLE"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    aQuickFind.pickRow(2);
+    CPPUNIT_ASSERT_EQUAL(std::string("0,0,0,5"),
+                         aView.m_aComment.get_child("searchSelection").get_value<std::string>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindFindsTextInResolvedComments)
+{
+    // The navigator search also lists a match in a resolved comment while resolved comments are
+    // hidden. Picking the match shows the resolved comments and selects the match.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"tree"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Text"_ustr, cpo::uno::Any(u"red apple"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    sal_uInt32 nPostItId = getOnlyPostItField(*pPostItMgr)->GetPostItId();
+    comphelper::dispatchCommand(u".uno:ResolveComment"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    if (pWrtShell->GetViewOptions()->IsResolvedPostIts())
+    {
+        comphelper::dispatchCommand(u".uno:ShowResolvedAnnotations"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+    }
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsResolvedPostIts());
+    CPPUNIT_ASSERT(!pPostItMgr->GetPostItFields()[0]->mbShow);
+
+    QuickFindPanelOpener aQuickFind(*getSwDocShell()->GetView());
+    aQuickFind.search(u"apple"_ustr);
+    // The rows are the page 1 divider and the match in the resolved comment.
+    aQuickFind.pickRow(1);
+
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsResolvedPostIts());
+    CPPUNIT_ASSERT(pPostItMgr->GetPostItFields()[0]->mbShow);
+    CPPUNIT_ASSERT_EQUAL(std::string("SearchHighlight"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(std::string("0,4,0,9"),
+                         aView.m_aComment.get_child("searchSelection").get_value<std::string>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindCommentMatchEditedAway)
+{
+    // When a resolved comment no longer has the search term, picking its match selects nothing
+    // and leaves the resolved comments hidden.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"tree"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Text"_ustr, cpo::uno::Any(u"red apple"_ustr) },
+                                    { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    sal_uInt32 nPostItId = getOnlyPostItField(*pPostItMgr)->GetPostItId();
+    comphelper::dispatchCommand(u".uno:ResolveComment"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    if (pWrtShell->GetViewOptions()->IsResolvedPostIts())
+    {
+        comphelper::dispatchCommand(u".uno:ShowResolvedAnnotations"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+    }
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsResolvedPostIts());
+
+    QuickFindPanelOpener aQuickFind(*getSwDocShell()->GetView());
+    aQuickFind.search(u"apple"_ustr);
+
+    comphelper::dispatchCommand(u".uno:EditAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { u"Id"_ustr, cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { u"Text"_ustr, cpo::uno::Any(u"red pear"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"red pear"_ustr, getOnlyPostItField(*pPostItMgr)->GetPar2());
+
+    // The rows are the page 1 divider and the match that was in the resolved comment.
+    aQuickFind.pickRow(1);
+
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsResolvedPostIts());
+    CPPUNIT_ASSERT(aView.m_aComment.get_child("action").get_value<std::string>()
+                   != "SearchHighlight");
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindFindsTextAfterLinkInComment)
+{
+    // A link in a comment counts as one character in the selection that the client is told
+    // about, so a match after the link is still selected in the right place. The client also
+    // gets the matched text and how many times it occurs earlier in the paragraph.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"tree"_ustr);
+
+    comphelper::dispatchCommand(
+        u".uno:InsertAnnotation"_ustr,
+        comphelper::InitPropertySequence({
+            { u"Html"_ustr, cpo::uno::Any(u"<div>A kiwi, see <a href=\"https://example.com/\">"
+                                          "https://example.com/</a> for the kiwi</div>"_ustr) },
+            { u"Author"_ustr, cpo::uno::Any(u"Author"_ustr) },
+        }));
+    Scheduler::ProcessEventsToIdle();
+
+    QuickFindPanelOpener aQuickFind(*getSwDocShell()->GetView());
+    aQuickFind.search(u"kiwi"_ustr);
+    // The rows are the page 1 divider and the two matches in the comment.
+    aQuickFind.pickRow(2);
+
+    // "A kiwi, see " is 12 characters, the link is 1 and " for the " is 9.
+    CPPUNIT_ASSERT_EQUAL(std::string("0,22,0,26"),
+                         aView.m_aComment.get_child("searchSelection").get_value<std::string>());
+    // The client also learns the matched text and that it is the second "kiwi" of the paragraph.
+    CPPUNIT_ASSERT_EQUAL(std::string("kiwi"),
+                         aView.m_aComment.get_child("searchText").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_aComment.get_child("searchOccurrence").get_value<int>());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1434,6 +1434,9 @@
 #define STR_NB_REPLACED                         NC_("STR_NB_REPLACED", "Search key replaced XX times.")
 #define STR_SEARCH_KEY_FOUND_TIMES              NNC_("STR_SEARCH_KEY_FOUND_TIMES", "One match found.", "%1 results")
 #define STR_SEARCH_KEY_FOUND_XOFN               NNC_("STR_SEARCH_KEY_FOUND_XOFN", "One match found.", "Result %1 of %2")
+#define STR_QUICKFIND_COMMENT                   NC_("STR_QUICKFIND_COMMENT", "Comment:")
+// %1 is the name of the comment's author
+#define STR_QUICKFIND_COMMENT_BY                NC_("STR_QUICKFIND_COMMENT_BY", "Comment by %1:")
 #define STR_SRCVIEW_ROW                         NC_("STR_SRCVIEW_ROW", "Row ")
 #define STR_SRCVIEW_COL                         NC_("STR_SRCVIEW_COL", "Column ")
 #define STR_SAVEAS_SRC                          NC_("STR_SAVEAS_SRC", "~Export source...")

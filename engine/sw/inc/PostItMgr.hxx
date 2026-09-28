@@ -237,6 +237,11 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwPostItMgr final : public SfxListene
         sal_uInt16 Replace(SvxSearchItem const * pItem);
         sal_uInt16 SearchReplace(const SwFormatField &pField, const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
         sal_uInt16 FinishSearchReplace(const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
+        /// Make rWin the active comment, scroll it into view and announce the selection in its
+        /// text as a search match.
+        void ShowSearchFindInComment(sw::annotation::SwAnnotationWin& rWin);
+        /// Announce the selection in the text of rWin as a search match to the client.
+        void NotifySearchFindInComment(sw::annotation::SwAnnotationWin& rWin);
 
         void AssureStdModeAtShell();
 

@@ -28,11 +28,26 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <swwait.hxx>
+#include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
+#include <docufld.hxx>
+#include <postithelper.hxx>
+#include <viewopt.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/ESelection.hxx>
+#include <editeng/outliner.hxx>
+#include <unotools/textsearch.hxx>
+
+#include <optional>
 
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 
 #include <svx/srchdlg.hxx>
 #include <comphelper/kit.hxx>
@@ -62,6 +77,206 @@ void getAnchorPos(SwPosition& rPos)
         if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
             rPos = *pPos;
     }
+}
+
+// Returns the text of one entry in the search finds list: the match in square brackets, with up to
+// CharactersBeforeAndAfter characters of the surrounding text on each side, cut at word boundaries.
+OUString MakeSearchFindEntryText(const OUString& sNodeText, sal_Int32 nMarkIndex,
+                                 sal_Int32 nPointIndex)
+{
+    // determine the text node text subview start index for the list entry text
+    auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
+    if (nStartIndex < 0)
+    {
+        nStartIndex = 0;
+    }
+    else
+    {
+        // tdf#160539 format search finds results also to word boundaries
+        sal_Unicode ch;
+        do
+        {
+            ch = sNodeText[nStartIndex];
+        } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
+        if (nStartIndex < nMarkIndex)
+        {
+            // move past neighboring space and tab characters
+            ch = sNodeText[nStartIndex];
+            while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
+                ch = sNodeText[++nStartIndex];
+        }
+        if (nStartIndex == nMarkIndex) // no white space found
+            nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
+    }
+
+    // determine the text node text subview end index for the list entry text
+    auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+    if (nEndIndex >= sNodeText.getLength())
+    {
+        nEndIndex = sNodeText.getLength() - 1;
+    }
+    else
+    {
+        // tdf#160539 format search finds results also to word boundaries
+        sal_Unicode ch;
+        do
+        {
+            ch = sNodeText[nEndIndex];
+        } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
+        if (nEndIndex > nPointIndex)
+        {
+            // move past neighboring space and tab characters
+            ch = sNodeText[nEndIndex];
+            while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
+                ch = sNodeText[--nEndIndex];
+        }
+        if (nEndIndex == nPointIndex) // no white space found
+        {
+            nEndIndex = nPointIndex + CharactersBeforeAndAfter;
+            if (nEndIndex >= sNodeText.getLength())
+                nEndIndex = sNodeText.getLength() - 1;
+        }
+    }
+
+    auto nCount = nMarkIndex - nStartIndex;
+    OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
+    auto nCount1 = nPointIndex - nMarkIndex;
+    OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
+    auto nCount2 = nEndIndex - nPointIndex + 1;
+    OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
+    return sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
+}
+
+// The comment search works on the text of EditEngine::GetText, where a field such as a link
+// shows its text. The selection of the edit engine counts a field as one character instead.
+
+// Returns the offset of a position in the text of rEditEngine, counting one line feed between
+// paragraphs, as the text of EditEngine::GetText has it.
+sal_Int32 GetCommentTextOffset(const EditEngine& rEditEngine, sal_Int32 nPara, sal_Int32 nIndex)
+{
+    sal_Int32 nOffset = nIndex;
+    for (sal_Int32 i = 0; i < nPara; ++i)
+        nOffset += rEditEngine.GetText(i).getLength() + 1;
+    return nOffset;
+}
+
+// Returns the paragraph and the index in it for an offset of GetCommentTextOffset.
+EPaM GetCommentTextPosition(const EditEngine& rEditEngine, sal_Int32 nOffset)
+{
+    sal_Int32 nPara = 0;
+    while (nPara + 1 < rEditEngine.GetParagraphCount()
+           && nOffset > rEditEngine.GetText(nPara).getLength())
+    {
+        nOffset -= rEditEngine.GetText(nPara).getLength() + 1;
+        ++nPara;
+    }
+    return EPaM(nPara, nOffset);
+}
+
+// Returns the index in paragraph nPara as the selection of rEditEngine counts it, for an index
+// into the text of the paragraph where each field shows its text. An index inside the text of a
+// field becomes the index of the field, or the index after the field when bEnd is true.
+sal_Int32 GetCommentSelectionIndex(const EditEngine& rEditEngine, sal_Int32 nPara, sal_Int32 nIndex,
+                                   bool bEnd)
+{
+    sal_Int32 nFieldTextExtra = 0;
+    for (const EFieldInfo& rField : rEditEngine.GetFieldInfo(nPara))
+    {
+        const sal_Int32 nFieldStart = rField.aPosition.nIndex + nFieldTextExtra;
+        if (nIndex <= nFieldStart)
+            break;
+        if (nIndex < nFieldStart + rField.aCurrentText.getLength())
+            return rField.aPosition.nIndex + (bEnd ? 1 : 0);
+        nFieldTextExtra += rField.aCurrentText.getLength() - 1;
+    }
+    return nIndex - nFieldTextExtra;
+}
+
+// Returns rMatch, a match in the text where each field shows its text, as a selection of
+// rEditEngine.
+ESelection GetCommentSelection(const EditEngine& rEditEngine, const ESelection& rMatch)
+{
+    return ESelection(
+        rMatch.start.nPara,
+        GetCommentSelectionIndex(rEditEngine, rMatch.start.nPara, rMatch.start.nIndex, false),
+        rMatch.end.nPara,
+        GetCommentSelectionIndex(rEditEngine, rMatch.end.nPara, rMatch.end.nIndex, true));
+}
+
+// Returns every match of rTextSearch in the text of rEditEngine, where each field shows its text.
+// A match lies inside one paragraph.
+std::vector<ESelection> FindInCommentText(const EditEngine& rEditEngine,
+                                          utl::TextSearch& rTextSearch)
+{
+    std::vector<ESelection> aMatches;
+    for (sal_Int32 nPara = 0; nPara < rEditEngine.GetParagraphCount(); ++nPara)
+    {
+        const OUString sParaText = rEditEngine.GetText(nPara);
+        sal_Int32 nStart = 0;
+        sal_Int32 nEnd = sParaText.getLength();
+        while (nStart < sParaText.getLength()
+               && rTextSearch.SearchForward(sParaText, &nStart, &nEnd) && nStart < nEnd)
+        {
+            aMatches.emplace_back(nPara, nStart, nPara, nEnd);
+            nStart = nEnd;
+            nEnd = sParaText.getLength();
+        }
+    }
+    return aMatches;
+}
+
+// Returns where a match found in sOldText, from nStart up to nEnd, is in the current text of
+// rEditEngine, where each field shows its text. An edit before or after the match moves the
+// match along with the text around it.
+// When the edit changed the matched text itself, the match of rSearchOptions that starts nearest
+// to the old place is returned, if the text has one.
+std::optional<ESelection> LocateCommentMatch(const OUString& sOldText, sal_Int32 nStart,
+                                             sal_Int32 nEnd, const EditEngine& rEditEngine,
+                                             const i18nutil::SearchOptions2& rSearchOptions)
+{
+    const OUString sText = rEditEngine.GetText();
+    if (sText != sOldText)
+    {
+        // The edit lies between the text that the old and the new version start with and the
+        // text that they end with.
+        const sal_Int32 nShorterLength = std::min(sOldText.getLength(), sText.getLength());
+        sal_Int32 nCommonStart = 0;
+        while (nCommonStart < nShorterLength && sOldText[nCommonStart] == sText[nCommonStart])
+            ++nCommonStart;
+        sal_Int32 nCommonEnd = 0;
+        while (nCommonEnd < nShorterLength - nCommonStart
+               && sOldText[sOldText.getLength() - 1 - nCommonEnd]
+                      == sText[sText.getLength() - 1 - nCommonEnd])
+            ++nCommonEnd;
+
+        if (nStart >= sOldText.getLength() - nCommonEnd)
+        {
+            nStart += sText.getLength() - sOldText.getLength();
+            nEnd += sText.getLength() - sOldText.getLength();
+        }
+        else if (nEnd > nCommonStart)
+        {
+            utl::TextSearch aTextSearch(rSearchOptions);
+            std::optional<ESelection> oNearest;
+            sal_Int32 nNearestDistance = 0;
+            for (const ESelection& rMatch : FindInCommentText(rEditEngine, aTextSearch))
+            {
+                const sal_Int32 nDistance = std::abs(
+                    GetCommentTextOffset(rEditEngine, rMatch.start.nPara, rMatch.start.nIndex)
+                    - nStart);
+                if (!oNearest || nDistance < nNearestDistance)
+                {
+                    oNearest = rMatch;
+                    nNearestDistance = nDistance;
+                }
+            }
+            return oNearest;
+        }
+    }
+
+    const EPaM aStart = GetCommentTextPosition(rEditEngine, nStart);
+    const EPaM aEnd = GetCommentTextPosition(rEditEngine, nEnd);
+    return ESelection(aStart.nPara, aStart.nIndex, aEnd.nPara, aEnd.nIndex);
 }
 }
 
@@ -453,35 +668,59 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
     if (IsPageEntry(sId))
         return;
 
-    std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toUInt64()];
-
-    m_pWrtShell->StartAction();
-    bool bFound = false;
-    for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+    const SearchFind& rSearchFind = m_vSearchFinds[sId.toUInt64()];
+    if (rSearchFind.m_nPostItId)
     {
-        if (*rxPaM->GetPoint() == *rPaM.GetPoint() && *rxPaM->GetMark() == *rPaM.GetMark())
+        // The comment can have been deleted after the search, or edited so that the match is no
+        // longer in it. Then no match is picked, and the label shows the number of matches.
+        if (!SelectCommentSearchFind(rSearchFind))
         {
-            bFound = true;
-            break;
+            m_xSearchFindsList->unselect_all();
+            SetSearchFindFoundTimesLabel();
+            return;
         }
-        m_pWrtShell->GoNextCursor();
     }
-    if (!bFound)
+    else
     {
-        m_pWrtShell->AssureStdMode();
-        m_pWrtShell->SetSelection(*rxPaM);
+        // Leave the comment that an earlier comment match put the cursor in.
+        SwPostItMgr* pPostItMgr = m_pWrtShell->GetPostItMgr();
+        if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
+            pPostItMgr->SetActiveSidebarWin(nullptr);
+
+        const std::unique_ptr<SwPaM>& rxPaM = rSearchFind.m_xPaM;
+
+        m_pWrtShell->StartAction();
+        bool bFound = false;
+        for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+        {
+            if (*rxPaM->GetPoint() == *rPaM.GetPoint() && *rxPaM->GetMark() == *rPaM.GetMark())
+            {
+                bFound = true;
+                break;
+            }
+            m_pWrtShell->GoNextCursor();
+        }
+        if (!bFound)
+        {
+            m_pWrtShell->AssureStdMode();
+            m_pWrtShell->SetSelection(*rxPaM);
+        }
+        m_pWrtShell->EndAction();
     }
-    m_pWrtShell->EndAction();
 
     // tdf#163100 Need more FIND details
     // Set the found times label to show "Match X of N matches found."
-    auto nSearchFindFoundTimes = m_vPaMs.size();
+    auto nSearchFindFoundTimes = m_vSearchFinds.size();
     OUString sText = SwResId(STR_SEARCH_KEY_FOUND_XOFN, nSearchFindFoundTimes);
     sText = sText.replaceFirst("%1", OUString::number(sId.toUInt32() + 1));
     sText = sText.replaceFirst("%2", OUString::number(nSearchFindFoundTimes));
     m_xSearchFindFoundTimesLabel->set_label(sText);
     if (nSearchFindFoundTimes > 1)
         m_xQuickFindControls->set_visible(true);
+
+    // A comment match is shown by the selection in the comment.
+    if (rSearchFind.m_nPostItId)
+        return;
 
     SwShellCursor* pShellCursor = m_pWrtShell->GetCursor_();
     std::vector<basegfx::B2DRange> vRanges;
@@ -570,7 +809,7 @@ void QuickFindPanel::NavigateSearchFinds(bool bNext)
 
 void QuickFindPanel::FillSearchFindsList()
 {
-    m_vPaMs.clear();
+    m_vSearchFinds.clear();
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
     m_xQuickFindControls->set_visible(false);
@@ -604,6 +843,7 @@ void QuickFindPanel::FillSearchFindsList()
     if (!m_bMatchCase)
         nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
     aSearchOptions.transliterateFlags = nTransliterationFlags;
+    m_aSearchOptions = aSearchOptions;
 
     m_pWrtShell->StartAllAction();
     /*sal_Int32 nFound =*/m_pWrtShell->SearchPattern(
@@ -617,17 +857,28 @@ void QuickFindPanel::FillSearchFindsList()
         {
             SwPosition* pMarkPosition = rPaM.GetMark();
             SwPosition* pPointPosition = rPaM.GetPoint();
-            std::unique_ptr<SwPaM> xPaM(std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition));
-            m_vPaMs.push_back(std::move(xPaM));
+            SearchFind aSearchFind;
+            aSearchFind.m_xPaM = std::make_unique<SwPaM>(*pMarkPosition, *pPointPosition);
+            aSearchFind.m_sEntryText = MakeSearchFindEntryText(
+                pMarkPosition->GetContentNode()->GetTextNode()->GetText(),
+                pMarkPosition->GetContentIndex(), pPointPosition->GetContentIndex());
+            m_vSearchFinds.push_back(std::move(aSearchFind));
         }
+    }
 
+    AppendCommentSearchFinds();
+
+    if (!m_vSearchFinds.empty())
+    {
         // tdf#160538 sort finds in frames and footnotes in the order they occur in the document
         const SwNodeOffset nEndOfInsertsIndex
             = m_pWrtShell->GetNodes().GetEndOfInserts().GetIndex();
         const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
-        std::stable_sort(m_vPaMs.begin(), m_vPaMs.end(),
+        std::stable_sort(m_vSearchFinds.begin(), m_vSearchFinds.end(),
                          [&nEndOfInsertsIndex, &nEndOfExtrasIndex,
-                          this](const std::unique_ptr<SwPaM>& a, const std::unique_ptr<SwPaM>& b) {
+                          this](const SearchFind& rA, const SearchFind& rB) {
+                             const std::unique_ptr<SwPaM>& a = rA.m_xPaM;
+                             const std::unique_ptr<SwPaM>& b = rB.m_xPaM;
                              SwPosition aPos(*a->Start());
                              SwPosition bPos(*b->Start());
                              // use page number for footnotes and endnotes
@@ -662,95 +913,23 @@ void QuickFindPanel::FillSearchFindsList()
                          });
 
         // fill list
-        for (sal_uInt16 nPage = 0, i = 0; std::unique_ptr<SwPaM> & xPaM : m_vPaMs)
+        for (sal_uInt16 nPage = 0, i = 0; SearchFind & rSearchFind : m_vSearchFinds)
         {
-            SwPosition* pMarkPosition = xPaM->GetMark();
-            SwPosition* pPointPosition = xPaM->GetPoint();
-
-            const SwContentNode* pContentNode = pMarkPosition->GetContentNode();
-            const SwTextNode* pTextNode = pContentNode->GetTextNode();
-            const OUString& sNodeText = pTextNode->GetText();
-
-            auto nMarkIndex = pMarkPosition->GetContentIndex();
-            auto nPointIndex = pPointPosition->GetContentIndex();
-
-            // determine the text node text subview start index for the list entry text
-            auto nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-            if (nStartIndex < 0)
-            {
-                nStartIndex = 0;
-            }
-            else
-            {
-                // tdf#160539 format search finds results also to word boundaries
-                sal_Unicode ch;
-                do
-                {
-                    ch = sNodeText[nStartIndex];
-                } while (++nStartIndex < nMarkIndex && ch != ' ' && ch != '\t');
-                if (nStartIndex < nMarkIndex)
-                {
-                    // move past neighboring space and tab characters
-                    ch = sNodeText[nStartIndex];
-                    while (nStartIndex < nMarkIndex && (ch == ' ' || ch == '\t'))
-                        ch = sNodeText[++nStartIndex];
-                }
-                if (nStartIndex == nMarkIndex) // no white space found
-                    nStartIndex = nMarkIndex - CharactersBeforeAndAfter;
-            }
-
-            // determine the text node text subview end index for the list entry text
-            auto nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-            if (nEndIndex >= sNodeText.getLength())
-            {
-                nEndIndex = sNodeText.getLength() - 1;
-            }
-            else
-            {
-                // tdf#160539 format search finds results also to word boundaries
-                sal_Unicode ch;
-                do
-                {
-                    ch = sNodeText[nEndIndex];
-                } while (--nEndIndex > nPointIndex && ch != ' ' && ch != '\t');
-                if (nEndIndex > nPointIndex)
-                {
-                    // move past neighboring space and tab characters
-                    ch = sNodeText[nEndIndex];
-                    while (nEndIndex > nPointIndex && (ch == ' ' || ch == '\t'))
-                        ch = sNodeText[--nEndIndex];
-                }
-                if (nEndIndex == nPointIndex) // no white space found
-                {
-                    nEndIndex = nPointIndex + CharactersBeforeAndAfter;
-                    if (nEndIndex >= sNodeText.getLength())
-                        nEndIndex = sNodeText.getLength() - 1;
-                }
-            }
-
             // tdf#161291 indicate page of search finds
-            if (xPaM->GetPageNum() != nPage)
+            if (rSearchFind.m_xPaM->GetPageNum() != nPage)
             {
-                nPage = xPaM->GetPageNum();
+                nPage = rSearchFind.m_xPaM->GetPageNum();
                 OUString sPageEntry = CreatePageEntry(nPage);
                 m_xSearchFindsList->append(sPageEntry, sPageEntry);
             }
 
-            auto nCount = nMarkIndex - nStartIndex;
-            OUString sTextBeforeFind = OUString::Concat(sNodeText.subView(nStartIndex, nCount));
-            auto nCount1 = nPointIndex - nMarkIndex;
-            OUString sFind = OUString::Concat(sNodeText.subView(nMarkIndex, nCount1));
-            auto nCount2 = nEndIndex - nPointIndex + 1;
-            OUString sTextAfterFind = OUString::Concat(sNodeText.subView(nPointIndex, nCount2));
-            OUString sStr = sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
-
             OUString sId = OUString::number(i++);
-            m_xSearchFindsList->append(sId, sStr);
+            m_xSearchFindsList->append(sId, rSearchFind.m_sEntryText);
         }
     }
 
     // Any finds?
-    auto nSearchFindFoundTimes = m_vPaMs.size();
+    auto nSearchFindFoundTimes = m_vSearchFinds.size();
 
     // set the search term entry background
     m_xSearchFindEntry->set_message_type(nSearchFindFoundTimes ? weld::EntryMessageType::Normal
@@ -758,12 +937,105 @@ void QuickFindPanel::FillSearchFindsList()
     // make the search finds list focusable or not
     m_xSearchFindsList->set_sensitive(bool(nSearchFindFoundTimes));
 
+    SetSearchFindFoundTimesLabel();
+}
+
+void QuickFindPanel::SetSearchFindFoundTimesLabel()
+{
     // set the search term found label number of times found
+    auto nSearchFindFoundTimes = m_vSearchFinds.size();
     OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes));
     sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
     m_xSearchFindFoundTimesLabel->set_label(sText);
     if (nSearchFindFoundTimes > 1)
         m_xQuickFindControls->set_visible(true);
+}
+
+void QuickFindPanel::AppendCommentSearchFinds()
+{
+    SwPostItMgr* pPostItMgr = m_pWrtShell->GetPostItMgr();
+    if (!pPostItMgr)
+        return;
+
+    utl::TextSearch aTextSearch(m_aSearchOptions);
+    const bool bShowHiddenChar = m_pWrtShell->GetViewOptions()->IsShowHiddenChar();
+    for (const std::unique_ptr<SwAnnotationItem>& pItem : *pPostItMgr)
+    {
+        // Search the comments that are shown next to the document, and the resolved comments
+        // also while resolved comments are hidden. A comment is hidden as well when its anchor is
+        // not laid out, or when its anchor is in hidden text and hidden characters are not shown.
+        if (!pItem->mpPostIt || (!pItem->mbShow && !pItem->mpPostIt->IsResolved())
+            || pItem->mLayoutStatus == SwPostItHelper::INVISIBLE
+            || (pItem->mLayoutStatus == SwPostItHelper::HIDDEN && !bShowHiddenChar))
+            continue;
+
+        sw::annotation::SwAnnotationWin& rWin = *pItem->mpPostIt;
+        const SwPostItField* pField = rWin.GetPostItField();
+        const OUString sAuthor = pField->GetPar1();
+        const OUString sEntryPrefix
+            = sAuthor.isEmpty() ? SwResId(STR_QUICKFIND_COMMENT)
+                                : SwResId(STR_QUICKFIND_COMMENT_BY).replaceFirst("%1", sAuthor);
+        const EditEngine& rEditEngine = rWin.GetOutliner()->GetEditEngine();
+        const OUString sCommentText = rEditEngine.GetText();
+        for (const ESelection& rMatch : FindInCommentText(rEditEngine, aTextSearch))
+        {
+            SearchFind aSearchFind;
+            aSearchFind.m_xPaM = std::make_unique<SwPaM>(pItem->GetAnchorPosition());
+            aSearchFind.m_nPostItId = pField->GetPostItId();
+            aSearchFind.m_sCommentText = sCommentText;
+            aSearchFind.m_nCommentStart
+                = GetCommentTextOffset(rEditEngine, rMatch.start.nPara, rMatch.start.nIndex);
+            aSearchFind.m_nCommentEnd
+                = GetCommentTextOffset(rEditEngine, rMatch.end.nPara, rMatch.end.nIndex);
+            aSearchFind.m_sEntryText
+                = sEntryPrefix + " "
+                  + MakeSearchFindEntryText(rEditEngine.GetText(rMatch.start.nPara),
+                                            rMatch.start.nIndex, rMatch.end.nIndex);
+            m_vSearchFinds.push_back(std::move(aSearchFind));
+        }
+    }
+}
+
+bool QuickFindPanel::SelectCommentSearchFind(const SearchFind& rSearchFind)
+{
+    SwPostItMgr* pPostItMgr = m_pWrtShell->GetPostItMgr();
+    if (!pPostItMgr)
+        return false;
+
+    // The comment is gone when it was deleted after the search.
+    sw::annotation::SwAnnotationWin* pWin = pPostItMgr->GetAnnotationWin(rSearchFind.m_nPostItId);
+    if (!pWin)
+        return false;
+
+    // The comment text can have changed after the search.
+    const std::optional<ESelection> oSelection = LocateCommentMatch(
+        rSearchFind.m_sCommentText, rSearchFind.m_nCommentStart, rSearchFind.m_nCommentEnd,
+        pWin->GetOutliner()->GetEditEngine(), m_aSearchOptions);
+    if (!oSelection)
+        return false;
+
+    // A resolved comment is hidden while resolved comments are not shown. Picking a match in it
+    // shows the resolved comments, as their toggle does.
+    if (pWin->IsResolved() && !m_pWrtShell->GetViewOptions()->IsResolvedPostIts())
+        m_pWrtShell->GetView().GetViewFrame().GetDispatcher()->Execute(SID_TOGGLE_RESOLVED_NOTES,
+                                                                       SfxCallMode::SYNCHRON);
+
+    pWin->GetOutlinerView()->SetSelection(
+        GetCommentSelection(pWin->GetOutliner()->GetEditEngine(), *oSelection));
+    if (!comphelper::COKit::isActive())
+    {
+        pPostItMgr->ShowSearchFindInComment(*pWin);
+        return true;
+    }
+
+    // The client shows and edits comments itself, and the comment stays inactive here, so the
+    // keys the client sends keep going to the document. The cursor moves to the comment anchor,
+    // which brings the comment into view, and the client selects the match in its comment.
+    if (pPostItMgr->HasActiveSidebarWin())
+        pPostItMgr->SetActiveSidebarWin(nullptr);
+    m_pWrtShell->GotoField(*pWin->GetFormatField());
+    pPostItMgr->NotifySearchFindInComment(*pWin);
+    return true;
 }
 
 OUString QuickFindPanel::CreatePageEntry(sal_Int32 nPageNum)

@@ -2347,7 +2347,8 @@ export class CommentSection extends CanvasSectionObject {
 			const comment = this.getComment(id);
 			if (comment) {
 				const selection = obj[dataroot].searchSelection.split(",");
-				comment.selectText(parseInt(selection[0]), parseInt(selection[1]), parseInt(selection[2]), parseInt(selection[3]));
+				comment.selectText(parseInt(selection[0]), parseInt(selection[1]), parseInt(selection[2]), parseInt(selection[3]),
+					obj[dataroot].searchText, obj[dataroot].searchOccurrence);
 				this.showHideComment(comment);
 			}
 		}
@@ -2854,6 +2855,11 @@ export class CommentSection extends CanvasSectionObject {
 			extraWidth,
 			commentBottomY,
 		);
+
+		// The layout sets how much of each comment text is shown, so a search match in a comment
+		// is scrolled into view after it.
+		for (const comment of this.sectionProperties.commentList)
+			comment.revealSearchSelection();
 
 		this.disableLayoutAnimation = false;
 	}
