@@ -3,22 +3,22 @@
 window.CODA_TEMPLATES = [
 	{
 		"id": "writer-business-letter-sans-serif",
-		"name": _("Business Letter (sans-serif)"),
+		"name": _("Business Letter"),
 		"type": "writer",
 		"category": "writer",
-		"path": "templates/files/text/Business_letter_sans_serif.odt",
+		"path": "templates/files/text/Business_letter.odt",
 		"basename": _("Business Letter"),
-		"preview": "templates/previews/text/writer-business-letter-sans-serif.png",
+		"preview": "templates/previews/text/writer-business-letter.png",
 		"featured": true
 	},
 	{
-		"id": "writer-classic-business-letter-serif",
-		"name": _("Classic Business Letter (serif)"),
+		"id": "writer-classic-business-letter",
+		"name": _("Classic Business Letter"),
 		"type": "writer",
 		"category": "writer",
-		"path": "templates/files/text/Classic_business_letter_serif.odt",
+		"path": "templates/files/text/Classic_business_letter.odt",
 		"basename": _("Classic Business Letter"),
-		"preview": "templates/previews/text/writer-classic-business-letter-serif.png",
+		"preview": "templates/previews/text/writer-classic-business-letter.png",
 		"featured": true
 	},
 	{
