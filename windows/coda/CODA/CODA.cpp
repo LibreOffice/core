@@ -2938,10 +2938,20 @@ static void installTabSwitchAccelerator(ICoreWebView2Controller* controller, HWN
                 if (key != VK_TAB || !(GetKeyState(VK_CONTROL) & 0x8000))
                     return S_OK;
 
+                const WindowState* window = findWindow(hWnd);
+                if (!window)
+                    return S_OK;
+
+                // A full-screen presentation hides the tab strip, and the key does nothing there.
+                if (window->isFullScreen)
+                {
+                    args->put_Handled(TRUE);
+                    return S_OK;
+                }
+
                 // A window showing a single document has no other tab to move to, so the
                 // key belongs to the document.
-                const WindowState* window = findWindow(hWnd);
-                if (!window || window->tabIds.size() < 2)
+                if (window->tabIds.size() < 2)
                     return S_OK;
 
                 const int direction = (GetKeyState(VK_SHIFT) & 0x8000) ? -1 : 1;
