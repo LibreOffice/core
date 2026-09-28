@@ -4536,7 +4536,8 @@ kbd,
 
 /* Listbox UI grid */
 /* exclude text/bg color-picker: it's not a scolling list */
-.jsdialog.ui-grid[role='listbox']:not(:has(> .ui-iconview)):not(:has(> .ui-color-picker)) {
+/* and exclude the context menu and its submenus, whose placement keeps them inside the window: */
+.jsdialog.ui-grid[role='listbox']:not(:has(> .ui-iconview)):not(:has(> .ui-color-picker)):not([id^='jsd-context-menu-entries']) {
 	max-height: min(470px, calc(0.45 * var(--dialog-available-height)));
 }
 
