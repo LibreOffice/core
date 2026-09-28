@@ -92,10 +92,28 @@ void CollabSocketHandler::startValidation()
     // Send progress message
     sendTextMessage("progress: validating");
 
-    // Build the WOPI URL with access_token
-    Poco::URI wopiUrl(_wopiSrc);
-    wopiUrl.addQueryParameter("access_token", _accessToken);
-    const Poco::URI wopiUri = RequestDetails::sanitizeURI(wopiUrl.toString());
+    _wopiUri = RequestDetails::sanitizeURI(_wopiSrc);
+    // The access token comes from the first message, so the WOPISrc keeps none of its own.
+    Poco::URI::QueryParameters queryParams = _wopiUri.getQueryParameters();
+    std::erase_if(queryParams, [](const auto& param) { return param.first == "access_token"; });
+    _wopiUri.setQueryParameters(queryParams);
+
+    // Validate the WOPI host so that subsequent connections
+    // (e.g., switching from WASM to server mode) are authorized.
+    if (StorageBase::validate(_wopiUri, /*takeOwnership=*/false) != StorageBase::StorageType::Wopi)
+    {
+        LOG_ERR("Collab: WOPISrc is not an allowed WOPI host: "
+                << Anonymizer::anonymizeUrl(_wopiSrc));
+        _isValidating = false;
+        sendTextMessage("error: cmd=internal kind=unauthorized");
+        shutdown();
+        return;
+    }
+
+    // sanitizeURI decodes an access_token parameter, so decode this one the same way.
+    Poco::URI wopiUri(_wopiUri);
+    wopiUri.addQueryParameter("access_token", Uri::decode(_accessToken));
+
     LOG_INF("Collab: starting CheckFileInfo validation for: "
             << Anonymizer::anonymizeUrl(wopiUri.toString()));
 
@@ -206,11 +224,6 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                     }
                 }
             }
-
-            // Validate the WOPI host so that subsequent connections
-            // (e.g., switching from WASM to server mode) are authorized.
-            StorageBase::validate(
-                RequestDetails::sanitizeURI(_wopiSrc), false);
 
             _isAuthenticated = true;
             LOG_INF("Collab session authenticated for WOPISrc: "
@@ -400,9 +413,9 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
         }
         if (url.empty())
         {
-            // Construct WOPI /contents URL; _wopiSrc may already contain
+            // Construct WOPI /contents URL; _wopiUri may already contain
             // query parameters, so use Poco::URI to modify only the path.
-            Poco::URI contentsUri(_wopiSrc);
+            Poco::URI contentsUri(_wopiUri);
             contentsUri.setPath(contentsUri.getPath() + "/contents");
             contentsUri.addQueryParameter("access_token", _accessToken);
             url = contentsUri.toString();
@@ -507,9 +520,9 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
     }
 
     // Build the target URL by appending /contents to the WOPISrc path.
-    // _wopiSrc may already contain query parameters (access_token etc.),
+    // _wopiUri may already contain query parameters,
     // so use Poco::URI to modify only the path component.
-    Poco::URI targetUri(_wopiSrc);
+    Poco::URI targetUri(_wopiUri);
     targetUri.setPath(targetUri.getPath() + "/contents");
     const std::string targetUrl = targetUri.toString();
 

@@ -16,6 +16,7 @@
 #include <net/HttpRequest.hpp>
 
 #include <Poco/JSON/Object.h>
+#include <Poco/URI.h>
 
 #include <map>
 #include <memory>
@@ -35,6 +36,8 @@ class HTTPRequest;
 class CollabSocketHandler : public WebSocketHandler
 {
     std::string _wopiSrc;
+    /// The WOPISrc as it passed the WOPI host check, without the access token.
+    Poco::URI _wopiUri;
     std::string _accessToken;
     bool _isAuthenticated = false;
     bool _isValidating = false;

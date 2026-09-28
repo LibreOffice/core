@@ -93,9 +93,17 @@ public:
     {
     }
 
-    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
                              Poco::JSON::Object::Ptr& fileInfo) override
     {
+        // The WOPISrc carries an access_token too, but only the one sent in the first message
+        // reaches the WOPI host.
+        const Poco::URI::QueryParameters params = Poco::URI(request.getURI()).getQueryParameters();
+        LOK_ASSERT_EQUAL(std::size_t(1),
+                         std::size_t(std::count_if(params.begin(), params.end(),
+                                                   [](const auto& param)
+                                                   { return param.first == "access_token"; })));
+
         ++_checkFileInfoCount;
         fileInfo->set("UserId",
                       "user_" + std::to_string(_checkFileInfoCount));
