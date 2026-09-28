@@ -278,7 +278,7 @@ namespace sfx2
 
         bool hasMacros() const;
 
-        SFX2_DLLPUBLIC static bool containerHasBasicMacros( const cpo::uno::Reference< css::script::XLibraryContainer >& xContainer );
+        IF_MERGELIBS(SFX2_DLLPUBLIC) static bool containerHasBasicMacros( const cpo::uno::Reference< css::script::XLibraryContainer >& xContainer );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action
