@@ -3714,6 +3714,40 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, cool16122BadPantoneElement)
     CPPUNIT_ASSERT(bFound);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173773)
+{
+    // Two text boxes with a bulleted list each, the second list has a nested list
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"tdf173773.fodp");
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    int nL = 0, nLI = 0;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "StructElem")
+            continue;
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pS && pS->GetValue() == "L")
+            ++nL;
+        else if (pS && pS->GetValue() == "LI")
+        {
+            ++nLI;
+            auto pParent = pObject->LookupObject("P"_ostr);
+            CPPUNIT_ASSERT(pParent);
+            auto pParentS = dynamic_cast<vcl::filter::PDFNameElement*>(pParent->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pParentS);
+            // Without the fix in place, the items of the second list were in a Div
+            CPPUNIT_ASSERT_EQUAL("L"_ostr, pParentS->GetValue());
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(5, nLI);
+    CPPUNIT_ASSERT_EQUAL(3, nL);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)
 {
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };

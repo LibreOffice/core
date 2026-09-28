@@ -1666,6 +1666,8 @@ void VclMetafileProcessor2D::processTextHierarchyBlockPrimitive2D(
         {
             popList();
         }
+        // a list in the next text block opens its own L
+        mnCurrentOutlineLevel = -1;
     }
 
     mpMetaFile->AddAction(new MetaCommentAction("XTEXT_PAINTSHAPE_END"_ostr));
