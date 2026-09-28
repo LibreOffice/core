@@ -59,20 +59,6 @@ cpo::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  )
     return xRef;
 }
 
-cpo::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight )
-{
-    SolarMutexGuard aGuard;
-
-    if ( !GetOutputDevice() )
-        return nullptr;
-
-    rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
-    VclPtrInstance<VirtualDevice> pVclVDev( *GetOutputDevice() );
-    pVclVDev->SetOutputSizePixel( Size( nWidth, nHeight ) );
-    pVDev->SetVirtualDevice( pVclVDev );
-    return pVDev;
-}
-
 css::awt::DeviceInfo VCLXDevice::getInfo()
 {
     SolarMutexGuard aGuard;
@@ -85,25 +71,6 @@ css::awt::DeviceInfo VCLXDevice::getInfo()
     return aInfo;
 }
 
-cpo::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  )
-{
-    SolarMutexGuard aGuard;
-
-    cpo::uno::Sequence< css::awt::FontDescriptor> aFonts;
-    if( mpOutputDevice )
-    {
-        int nFonts = mpOutputDevice->GetFontFaceCollectionCount();
-        if ( nFonts )
-        {
-            aFonts = cpo::uno::Sequence< css::awt::FontDescriptor>( nFonts );
-            css::awt::FontDescriptor* pFonts = aFonts.getArray();
-            for ( int n = 0; n < nFonts; n++ )
-                pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetFontMetricFromCollection( n ) );
-        }
-    }
-    return aFonts;
-}
-
 cpo::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::FontDescriptor& rDescriptor )
 {
     SolarMutexGuard aGuard;
@@ -114,29 +81,6 @@ cpo::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::Font
     rtl::Reference<VCLXFont> pMetric
         = new VCLXFont(*this, VCLUnoHelper::CreateFont(rDescriptor, mpOutputDevice->GetFont()));
     return pMetric;
-}
-
-cpo::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
-{
-    SolarMutexGuard aGuard;
-
-    if( !mpOutputDevice )
-        return nullptr;
-
-    Bitmap aBmp = mpOutputDevice->GetBitmap( Point( nX, nY ), Size( nWidth, nHeight ) );
-    rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
-    pBmp->SetBitmap( aBmp );
-    return pBmp;
-}
-
-cpo::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const cpo::uno::Reference< css::awt::XBitmap >& rxBitmap )
-{
-    SolarMutexGuard aGuard;
-
-    Bitmap aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
-    rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
-    pBmp->SetBitmap( aBmp );
-    return pBmp;
 }
 
 VCLXVirtualDevice::~VCLXVirtualDevice()

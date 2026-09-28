@@ -27,6 +27,7 @@
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/ImageDrawMode.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 

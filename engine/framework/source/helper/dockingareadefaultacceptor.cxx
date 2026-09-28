@@ -21,6 +21,7 @@
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 #include <vcl/svapp.hxx>
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>

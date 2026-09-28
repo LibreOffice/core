@@ -38,25 +38,9 @@ published interface XDevice: cpo::uno::XInterface
      */
     XGraphics createGraphics();
 
-
-    /** creates a new device which is compatible with this one.
-
-        <p>If the device does not support the GETBITS device capability,
-        this method returns `NULL`.</p>
-     */
-    XDevice createDevice( [in] long nWidth,
-             [in] long nHeight );
-
-
     /** returns information about the device.
      */
     com::sun::star::awt::DeviceInfo getInfo();
-
-
-    /** returns the list of available font descriptors.
-     */
-    sequence<FontDescriptor> getFontDescriptors();
-
 
     /** returns information about a font offered by this device.
 
@@ -67,26 +51,6 @@ published interface XDevice: cpo::uno::XInterface
         The unit of measure is pixel for this device.
      */
     com::sun::star::awt::XFont getFont( [in] FontDescriptor aDescriptor );
-
-
-    /** creates a bitmap with the current device depth.
-
-        <p>If the specified area does not lie entirely in the device, the bits
-        outside are not specified.</p>
-     */
-    XBitmap createBitmap( [in] long nX,
-             [in] long nY,
-             [in] long nWidth,
-             [in] long nHeight );
-
-
-    /** creates a device compatible bitmap.
-
-        <p>The data of the bitmap is in process memory instead of in the device,
-        so that the output operation is fast.</p>
-     */
-    XDisplayBitmap createDisplayBitmap( [in] XBitmap Bitmap );
-
 };
 
 

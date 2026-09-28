@@ -1962,12 +1962,8 @@ module com {
     published interface XDevice {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::awt::XGraphics createGraphics();
-     ::com::sun::star::awt::XDevice createDevice([in] long nWidth, [in] long nHeight);
      ::com::sun::star::awt::DeviceInfo getInfo();
-     sequence< ::com::sun::star::awt::FontDescriptor > getFontDescriptors();
      ::com::sun::star::awt::XFont getFont([in] ::com::sun::star::awt::FontDescriptor aDescriptor);
-     ::com::sun::star::awt::XBitmap createBitmap([in] long nX, [in] long nY, [in] long nWidth, [in] long nHeight);
-     ::com::sun::star::awt::XDisplayBitmap createDisplayBitmap([in] ::com::sun::star::awt::XBitmap Bitmap);
     };
     published interface XDisplayBitmap {
      interface ::cpo::uno::XInterface;

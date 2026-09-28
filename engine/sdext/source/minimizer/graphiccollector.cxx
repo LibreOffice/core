@@ -19,6 +19,7 @@
 
 
 #include "graphiccollector.hxx"
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
