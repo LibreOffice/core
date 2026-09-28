@@ -45,7 +45,7 @@ public:
         {
             throw std::bad_alloc();
         }
-        mpData.reset(new sal_uInt8[nDataSize]);
+        mpData.reset(new sal_uInt8[nDataSize]());
     }
     void SetPixel(tools::Long nY, tools::Long nX, Color nColor)
     {
