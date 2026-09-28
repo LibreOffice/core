@@ -102,27 +102,4 @@ void OAdoGroup::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 }
 
 
-sal_Int32 OAdoGroup::getPrivileges( const OUString& objName, sal_Int32 objType )
-{
-    return MapRight(m_aGroup.GetPermissions(objName,MapObjectType(objType)));
-}
-
-sal_Int32 OAdoGroup::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
-{
-    RightsEnum eNum = m_aGroup.GetPermissions(objName,MapObjectType(objType));
-    if(eNum & adRightWithGrant)
-        return MapRight(eNum);
-    return 0;
-}
-
-void OAdoGroup::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-{
-    m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessGrant,Map2Right(objPrivileges));
-}
-
-void OAdoGroup::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-{
-    m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessDeny,Map2Right(objPrivileges));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

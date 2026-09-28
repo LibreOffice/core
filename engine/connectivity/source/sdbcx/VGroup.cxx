@@ -106,36 +106,6 @@ Reference< XNameAccess > OGroup::getUsers(  )
 }
 
 
-sal_Int32 OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
-    return 0;
-}
-
-sal_Int32 OGroup::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
-    return 0;
-}
-
-void OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedSQLException( u"XAuthorizable::grantPrivileges"_ustr, *this );
-}
-
-void OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-    throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
-}
-
 cpo::uno::Reference< css::beans::XPropertySetInfo > OGroup::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

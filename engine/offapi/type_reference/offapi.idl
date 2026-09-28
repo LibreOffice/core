@@ -10534,16 +10534,8 @@ module com {
      [optional] interface ::com::sun::star::sdbcx::XCreateCatalog;
      [optional] interface ::com::sun::star::sdbcx::XDropCatalog;
     };
-    published interface XAuthorizable {
-     interface ::cpo::uno::XInterface;
-     long getPrivileges([in] string objName, [in] long objType) raises (::com::sun::star::sdbc::SQLException);
-     long getGrantablePrivileges([in] string objName, [in] long objType) raises (::com::sun::star::sdbc::SQLException);
-     void grantPrivileges([in] string objName, [in] long objType, [in] long objPrivileges) raises (::com::sun::star::sdbc::SQLException);
-     void revokePrivileges([in] string objName, [in] long objType, [in] long objPrivileges) raises (::com::sun::star::sdbc::SQLException);
-    };
     published service Group {
      interface ::com::sun::star::sdbcx::XUsersSupplier;
-     interface ::com::sun::star::sdbcx::XAuthorizable;
      interface ::com::sun::star::beans::XPropertySet;
      [property, readonly] string Name;
     };
@@ -10636,7 +10628,6 @@ module com {
      [property] boolean UseBookmarks;
     };
     published service User {
-     interface ::com::sun::star::sdbcx::XAuthorizable;
      interface ::com::sun::star::beans::XPropertySet;
      [optional] interface ::com::sun::star::sdbcx::XGroupsSupplier;
      [property, readonly] string Name;

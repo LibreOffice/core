@@ -2968,7 +2968,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbcx,\
 	XAlterTable \
 	XAlterView \
 	XAppend \
-	XAuthorizable \
 	XColumnsSupplier \
 	XCreateCatalog \
 	XDataDefinitionSupplier \

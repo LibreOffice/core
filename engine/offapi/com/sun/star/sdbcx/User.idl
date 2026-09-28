@@ -20,7 +20,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
  published interface XGroupsSupplier;
- published interface XAuthorizable;
 
 
 /** represents a user of the database, who has certain access rights
@@ -28,9 +27,6 @@
  */
 published service User
 {
-    // used to change the password.
-    interface XAuthorizable;
-
     /** optional for implementation, if the database does not know the concept
              of user groups. Provides for access to the groups to which a user belongs.
      */

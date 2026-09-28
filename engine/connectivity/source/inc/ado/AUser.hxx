@@ -48,12 +48,6 @@ namespace connectivity::ado
         OAdoUser(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser=nullptr);
         OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
 
-        // XAuthorizable
-        virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual void grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-        virtual void revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-
         WpADOUser getImpl() const { return m_aUser;}
     };
 

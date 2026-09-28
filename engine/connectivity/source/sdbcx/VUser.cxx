@@ -105,34 +105,6 @@ Reference< XNameAccess > OUser::getGroups(  )
     return m_pGroups.get();
 }
 
-sal_Int32 OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::getPrivileges"_ustr, *this );
-}
-
-sal_Int32 OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::getGrantablePrivileges"_ustr, *this );
-}
-
-void OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::grantPrivileges"_ustr, *this );
-}
-
-void OUser::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
-}
-
 cpo::uno::Reference< css::beans::XPropertySetInfo > OUser::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
