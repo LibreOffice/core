@@ -83,6 +83,7 @@
 #include <unochart.hxx>
 #include <charatr.hxx>
 #include <svx/xmleohlp.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

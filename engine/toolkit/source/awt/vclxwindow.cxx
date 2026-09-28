@@ -2405,18 +2405,6 @@ void VCLXWindow::unlock(  )
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
 
-void VCLXWindow::startPopupMode( const css::awt::Rectangle& )
-{
-    // deprecated
-}
-
-bool VCLXWindow::isInPopupMode(  )
-{
-    // deprecated
-    return false;
-}
-
-
 // css::awt::XWindow2
 
 void VCLXWindow::setOutputSize( const css::awt::Size& aSize )

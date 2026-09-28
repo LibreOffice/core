@@ -188,8 +188,6 @@ public:
     void lock(  ) override;
     void unlock(  ) override;
     bool isLocked(  ) override;
-    void startPopupMode( const css::awt::Rectangle& WindowRect ) override;
-    bool isInPopupMode(  ) override;
 
     // css::awt::XWindow2
     void setOutputSize( const css::awt::Size& aSize ) override;
