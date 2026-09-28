@@ -10523,7 +10523,6 @@ module com {
     published interface XDataDefinitionSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::sdbcx::XTablesSupplier getDataDefinitionByConnection([in] ::com::sun::star::sdbc::XConnection connection) raises (::com::sun::star::sdbc::SQLException);
-     ::com::sun::star::sdbcx::XTablesSupplier getDataDefinitionByURL([in] string url, [in] sequence< ::com::sun::star::beans::PropertyValue > info) raises (::com::sun::star::sdbc::SQLException);
     };
     published interface XDropCatalog {
      interface ::cpo::uno::XInterface;

@@ -196,13 +196,6 @@ Reference< XTablesSupplier > ODriver::getDataDefinitionByConnection( const Refer
     return xTab;
 }
 
-Reference< XTablesSupplier > ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
-{
-    impl_checkURL_throw(url);
-    return getDataDefinitionByConnection(connect(url,info));
-}
-
-
 void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface)
 {
     sal::systools::COMReference<ADOErrors> pErrors;

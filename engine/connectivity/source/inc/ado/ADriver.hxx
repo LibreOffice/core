@@ -75,7 +75,6 @@ namespace connectivity::ado
 
         // XDataDefinitionSupplier
         virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByConnection( const cpo::uno::Reference< css::sdbc::XConnection >& connection ) override;
-        virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByURL( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
     };
 
 }
