@@ -163,14 +163,4 @@ void OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal
     ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
 }
 
-// XUser
-void OAdoUser::changePassword( const OUString& objPassword, const OUString& newPassword )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
-    m_aUser.ChangePassword(objPassword,newPassword);
-    ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),*this);
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

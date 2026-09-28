@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/sdbcx/XUser.hpp>
+#include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -35,7 +35,7 @@ namespace connectivity::sdbcx
 {
     typedef OCollection OGroups;
 
-    typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XUser,
+    typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XAuthorizable,
                                              css::sdbcx::XGroupsSupplier,
                                              css::container::XNamed,
                                              css::lang::XServiceInfo> OUser_BASE;
@@ -75,8 +75,6 @@ namespace connectivity::sdbcx
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
         virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
-        // XUser
-        virtual void changePassword( const OUString& objPassword, const OUString& newPassword ) override;
         // XAuthorizable
         virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
         virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;

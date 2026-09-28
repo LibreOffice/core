@@ -10636,12 +10636,8 @@ module com {
      service ::com::sun::star::sdbc::Statement;
      [property] boolean UseBookmarks;
     };
-    published interface XUser {
-     interface ::com::sun::star::sdbcx::XAuthorizable;
-     void changePassword([in] string oldPassword, [in] string newPassword) raises (::com::sun::star::sdbc::SQLException);
-    };
     published service User {
-     interface ::com::sun::star::sdbcx::XUser;
+     interface ::com::sun::star::sdbcx::XAuthorizable;
      interface ::com::sun::star::beans::XPropertySet;
      [optional] interface ::com::sun::star::sdbcx::XGroupsSupplier;
      [property, readonly] string Name;

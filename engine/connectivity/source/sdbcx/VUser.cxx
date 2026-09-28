@@ -81,14 +81,6 @@ Sequence< Type > OUser::getTypes(  )
     return *getArrayHelper();
 }
 
-// XUser
-void OUser::changePassword( const OUString& /*objPassword*/, const OUString& /*newPassword*/ )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XUser::changePassword"_ustr, *this );
-}
-
 // XGroupsSupplier
 Reference< XNameAccess > OUser::getGroups(  )
 {
@@ -117,7 +109,7 @@ sal_Int32 OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::changePassword"_ustr, *this );
+    ::dbtools::throwFeatureNotImplementedSQLException( u"XAuthorizable::getPrivileges"_ustr, *this );
 }
 
 sal_Int32 OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
