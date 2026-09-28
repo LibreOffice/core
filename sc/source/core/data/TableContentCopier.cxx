@@ -91,6 +91,7 @@ void sc::TableContentCopier::updateReferencesAfterTabInsertion(
     sc::RefUpdateInsertTabContext& rContext)
 {
     mpTargetTab->UpdateInsertTabAbs(mnTargetTabNo);
+    mpTargetTab->AdjustRelativeTabRefs(mnSourceTabNo, mnTargetTabNo, sc::TargetTabState::Inserted);
     mpSourceTab->UpdateInsertTab(rContext);
     mpSourceTab->UpdateCompile();
 }
