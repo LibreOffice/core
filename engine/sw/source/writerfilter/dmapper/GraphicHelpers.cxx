@@ -354,19 +354,10 @@ sal_Int32 GraphicZOrderHelper::findZOrder(sal_Int64 relativeHeight, bool bOldSty
         --it;
         itemZOrderOffset = 1; // after the topmost
 
-        // Check if this shape has a textbox. If so, the textbox will have its own ZOrder, so
-        // suggest a larger offset.
-        bool bTextBox = false;
-        uno::Reference<beans::XPropertySet> xShape = it->second;
-        uno::Reference<beans::XPropertySetInfo> xInfo = xShape->getPropertySetInfo();
-        if (xInfo->hasPropertyByName(u"TextBox"_ustr))
-        {
-            xShape->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
-        }
-        if (bTextBox)
-        {
-            ++itemZOrderOffset;
-        }
+        // The z-order read below is the one SwXShape reports, which counts the shapes only:
+        // SwTextBoxHelper::getOrdNum() leaves the text frame of a shape with a text box out of it.
+        // So a shape and its text box take one place here, not two, and the offset above
+        // already puts this shape after both of them.
     }
     // SwXFrame::getPropertyValue throws uno::RuntimeException
     // when its GetFrameFormat() returns nullptr

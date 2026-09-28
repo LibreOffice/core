@@ -232,6 +232,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), pEllipseShape->GetOrdNum());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testShapeZOrderOverTextBox)
+{
+    // Given a document with a shape that has a text box at the bottom and two plain shapes over
+    // it, the three of them asking for that order:
+    createSwDoc("textbox-shape-zorder.docx");
+
+    // Then the shapes have to keep the order the document gives them.
+    uno::Reference<beans::XPropertySet> xBottom(getShapeByName(u"WithTextBox"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMiddle(getShapeByName(u"Middle"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTop(getShapeByName(u"Top"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBottom.is());
+    CPPUNIT_ASSERT(xMiddle.is());
+    CPPUNIT_ASSERT(xTop.is());
+
+    sal_Int32 nBottom = 0;
+    sal_Int32 nMiddle = 0;
+    sal_Int32 nTop = 0;
+    xBottom->getPropertyValue(u"ZOrder"_ustr) >>= nBottom;
+    xMiddle->getPropertyValue(u"ZOrder"_ustr) >>= nMiddle;
+    xTop->getPropertyValue(u"ZOrder"_ustr) >>= nTop;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // The shape over the text box was put one place too high and ended up over the shape that5
+    // should have covered it: the import added a place for the text frame of the text box,
+    // which the z-order it read back does not count.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nBottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nMiddle);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nTop);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
 {
     // Given a document with an as-char textbox (as-char draw format + at-char fly format):
