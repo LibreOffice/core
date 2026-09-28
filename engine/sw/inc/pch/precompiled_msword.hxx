@@ -236,7 +236,6 @@
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XSpinListener.hpp>
-#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 #include <com/sun/star/awt/XTabListener.hpp>
 #include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>

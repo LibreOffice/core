@@ -1731,9 +1731,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XSpinField \
 	XSpinListener \
 	XSpinValue \
-	XStyleChangeListener \
-	XStyleSettings \
-	XStyleSettingsSupplier \
 	XSystemChildFactory \
 	XSystemDependentMenuPeer \
 	XSystemDependentWindowPeer \

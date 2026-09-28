@@ -311,7 +311,6 @@ excludelist:
     - com/sun/star/awt/XView.hpp
     - com/sun/star/beans/XPropertySetInfo.hpp
     - com/sun/star/awt/XDockableWindow.hpp
-    - com/sun/star/awt/XStyleSettingsSupplier.hpp
     include/toolkit/awt/vclxwindows.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XListBox.hpp
@@ -326,7 +325,6 @@ excludelist:
     - com/sun/star/beans/XPropertiesChangeListener.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/awt/XUnitConversion.hpp
-    - com/sun/star/awt/XStyleSettingsSupplier.hpp
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/util/XModeChangeBroadcaster.hpp
     include/toolkit/controls/unocontrolmodel.hxx:

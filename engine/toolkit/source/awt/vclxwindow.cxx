@@ -58,7 +58,6 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/profilezone.hxx>
-#include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
@@ -73,7 +72,6 @@ using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
 using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::XStyleSettings;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
@@ -127,8 +125,6 @@ public:
                                         mpPropHelper;
     cpo::uno::Reference< css::awt::XGraphics >
                                         mxViewGraphics;
-    rtl::Reference< toolkit::WindowStyleSettings >
-                                        mxWindowStyleSettings;
 
 public:
     bool&   getDrawingOntoParent_ref()  { return mbDrawingOntoParent; }
@@ -160,8 +156,6 @@ public:
     /** notifies the object that its VCLXWindow is being disposed
     */
     void    disposing();
-
-    Reference< XStyleSettings > getStyleSettings();
 
     /** returns the container of registered XWindowListener2 listeners
     */
@@ -241,10 +235,6 @@ void VCLXWindowImpl::disposing()
     maContainerListeners.disposeAndClear( aEvent );
     maTopWindowListeners.disposeAndClear( aEvent );
     maWindow2Listeners.disposeAndClear( aEvent );
-
-    if ( mxWindowStyleSettings )
-        mxWindowStyleSettings->dispose();
-    mxWindowStyleSettings.clear();
 }
 
 
@@ -290,17 +280,6 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
         }
     }
 }
-
-Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
-{
-    SolarMutexGuard aGuard;
-    if ( mbDisposed )
-        throw DisposedException( OUString(), mrAntiImpl );
-    if ( !mxWindowStyleSettings.is() )
-        mxWindowStyleSettings = new ::toolkit::WindowStyleSettings( maListenerContainerMutex, mrAntiImpl );
-    return mxWindowStyleSettings;
-}
-
 
 // Uses an out-parameter instead of return value, due to the object reference
 
@@ -2523,11 +2502,6 @@ bool
 VCLXWindow::hasPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->hasPropertyByName( rName );
-}
-
-Reference< XStyleSettings > VCLXWindow::getStyleSettings()
-{
-    return mpImpl->getStyleSettings();
 }
 
 bool VCLXWindow::IsDisposed() const

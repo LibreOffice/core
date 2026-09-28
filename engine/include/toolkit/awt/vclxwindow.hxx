@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
-#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -56,8 +55,7 @@ typedef cppu::ImplInheritanceHelper< VCLXDevice,
                                      css::awt::XLayoutConstrains,
                                      css::awt::XView,
                                      css::awt::XDockableWindow,
-                                     css::beans::XPropertySetInfo,
-                                     css::awt::XStyleSettingsSupplier
+                                     css::beans::XPropertySetInfo
                                    > VCLXWindow_Base;
 
 class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
@@ -205,9 +203,6 @@ public:
     cpo::uno::Sequence< css::beans::Property > getProperties(  ) override;
     css::beans::Property getPropertyByName( const OUString& aName ) override;
     bool hasPropertyByName( const OUString& Name ) override;
-
-    // XStyleSettingsSupplier
-    virtual cpo::uno::Reference< css::awt::XStyleSettings > getStyleSettings() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

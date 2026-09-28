@@ -26,14 +26,13 @@
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
-#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <tools/long.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <memory>
@@ -60,7 +59,7 @@ struct UnoControlComponentInfos
 struct UnoControl_Data;
 
 
-typedef ::cppu::WeakAggImplHelper9  <   css::awt::XControl
+typedef ::cppu::WeakAggImplHelper8  <   css::awt::XControl
                                     ,   css::awt::XWindow2
                                     ,   css::awt::XView
                                     ,   css::beans::XPropertiesChangeListener
@@ -68,7 +67,6 @@ typedef ::cppu::WeakAggImplHelper9  <   css::awt::XControl
                                     ,   css::accessibility::XAccessible
                                     ,   css::util::XModeChangeBroadcaster
                                     ,   css::awt::XUnitConversion
-                                    ,   css::awt::XStyleSettingsSupplier
                                     >   UnoControl_Base;
 
 class TOOLKIT_DLLPUBLIC UnoControl :    public UnoControl_Base
@@ -212,9 +210,6 @@ public:
     virtual css::awt::Point convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) override;
     virtual css::awt::Size convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) override;
     virtual css::awt::Size convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) override;
-
-    // XStyleSettingsSupplier
-    virtual cpo::uno::Reference< css::awt::XStyleSettings > getStyleSettings() override;
 
     cpo::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer();
 

@@ -1575,16 +1575,4 @@ awt::Size UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i
 }
 
 
-uno::Reference< awt::XStyleSettings > UnoControl::getStyleSettings()
-{
-    Reference< awt::XStyleSettingsSupplier > xPeerSupplier;
-    {
-        ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerSupplier.set(getPeer(), cpo::uno::UNO_QUERY);
-    }
-    if ( xPeerSupplier.is() )
-        return xPeerSupplier->getStyleSettings();
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
