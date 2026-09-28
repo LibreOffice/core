@@ -36,19 +36,6 @@ void Idle::Start(const bool bStartTimer)
     Task::Start(false);
 
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
-    if (Scheduler::GetDeterministicMode())
-    {
-        switch ( GetPriority() )
-        {
-            case TaskPriority::DEFAULT_IDLE:
-            case TaskPriority::LOWEST:
-                nPeriod = Scheduler::InfiniteTimeoutMs;
-                break;
-            default:
-                break;
-        }
-    }
-
     if (bStartTimer)
         Task::StartTimer(nPeriod);
 }

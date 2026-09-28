@@ -258,18 +258,6 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
     }
 }
 
-static bool g_bDeterministicMode = false;
-
-void Scheduler::SetDeterministicMode(bool bDeterministic)
-{
-    g_bDeterministicMode = bDeterministic;
-}
-
-bool Scheduler::GetDeterministicMode()
-{
-    return g_bDeterministicMode;
-}
-
 Scheduler::IdlesLockGuard::IdlesLockGuard()
 {
     ImplSVData* pSVData = ImplGetSVData();

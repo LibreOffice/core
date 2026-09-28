@@ -76,12 +76,6 @@ public:
      */
     static void       Wakeup();
 
-    /// Control the deterministic mode.  In this mode, two subsequent runs of
-    /// LibreOffice fire about the same amount idles.
-    static void       SetDeterministicMode(bool bDeterministic);
-    /// Return the current state of deterministic mode.
-    static bool       GetDeterministicMode();
-
     static int GetMostUrgentTaskPriority();
 
     // Makes sure that idles are not processed, until the guard is destroyed

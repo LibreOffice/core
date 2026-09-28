@@ -409,28 +409,6 @@ Size MessBox::GetOptimalSize() const
 namespace
 {
 
-class Pause : public Idle
-{
-public:
-    explicit Pause(sal_Int32 nPauseMilliseconds) :
-        Idle("pause"),
-        m_nPauseMilliseconds(nPauseMilliseconds)
-    {
-        SetPriority(TaskPriority::HIGHEST);
-        Start();
-    }
-
-    virtual void Invoke() override
-    {
-        SolarMutexGuard aSolarGuard;
-        std::this_thread::sleep_for(std::chrono::milliseconds(m_nPauseMilliseconds));
-        Stop();
-        delete this;
-    }
-
-    sal_Int32 m_nPauseMilliseconds;
-};
-
 class VCLXToolkit : public comphelper::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
                     css::awt::XToolkitRobot,
@@ -464,16 +442,6 @@ public:
 
     // css::awt::XToolkitExperimental
     virtual void processEventsToIdle() override;
-
-    virtual void setDeterministicScheduling(bool bDeterministicMode) override;
-
-    virtual void pause(sal_Int32 nMilliseconds) override;
-
-    virtual void startRecording() override;
-
-    virtual void stopRecording() override;
-
-    cpo::uno::Sequence< OUString > getRecordingAndClear() override;
 
     virtual void waitUntilAllIdlesDispatched() override;
 
@@ -2187,32 +2155,6 @@ void VCLXToolkit::processEventsToIdle()
     SolarMutexGuard aSolarGuard;
     comphelper::ProfileZone aZone("processEvents");
     Scheduler::ProcessEventsToIdle();
-}
-
-void VCLXToolkit::setDeterministicScheduling(bool bDeterministicMode)
-{
-    SolarMutexGuard aSolarGuard;
-    Scheduler::SetDeterministicMode(bDeterministicMode);
-}
-
-void VCLXToolkit::pause(sal_Int32 nMilliseconds)
-{
-    new Pause(nMilliseconds);
-}
-
-void VCLXToolkit::startRecording()
-{
-    comphelper::TraceEvent::startRecording();
-}
-
-void VCLXToolkit::stopRecording()
-{
-    comphelper::TraceEvent::stopRecording();
-}
-
-cpo::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
-{
-    return comphelper::ProfileZone::getRecordingAndClear();
 }
 
 void VCLXToolkit::waitUntilAllIdlesDispatched()
