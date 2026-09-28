@@ -332,8 +332,8 @@ HSQLDB_TARBALL := 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HUNSPELL_SHA256SUM := 433274dac0619cb00c2e18b43a3dd3a9d50da5b5613fa9b5c21781e35dd76bc1
-HUNSPELL_TARBALL := hunspell-1.7.3.tar.gz
+HUNSPELL_SHA256SUM := 66ec82a577395fe9d471504267e6dd04615c76517c61af7c6b9c19e5e34e73c8
+HUNSPELL_TARBALL := hunspell-1.7.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
