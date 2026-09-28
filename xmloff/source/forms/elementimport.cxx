@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -553,6 +554,13 @@ namespace xmloff
             Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
                         OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
+            // only use the created object when it is a form component
+            if (!Reference< XFormComponent >(xPure, UNO_QUERY).is())
+            {
+                SAL_WARN("xmloff.forms", "OElementImport::createElement: " << m_sServiceName
+                            << " is not a form component");
+                return xReturn;
+            }
             xReturn.set(xPure, UNO_QUERY);
             if (auto const props = Reference<css::beans::XPropertySet>(xPure, css::uno::UNO_QUERY))
             {
