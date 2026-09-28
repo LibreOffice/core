@@ -2532,8 +2532,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	// Set equal min-width on all widgets sharing a sizeGroupId (mirrors GTK size groups).
 	// A widget on a tab page that is not the open one keeps its layout box (see
 	// .ui-content.hidden in jsdialogs.css) and measures the same there as it does on
-	// the open page, so every page gets its final widths here, before the dialog is
-	// measured to fit the largest of them.
+	// the open page, so every page gets its final widths here, and the tab page area
+	// grows to fit the largest of them.
 	equalizeSizeGroups: function(container) {
 		var groups = {};
 		container.querySelectorAll('[data-size-group-id]').forEach(function(el) {

@@ -638,8 +638,11 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	align-items: stretch;
 }
 
+/* A page that is not the open one keeps the same layout as the open page, so the
+   shared grid cell is as large as the largest page and keeps that size on a tab
+   switch. */
 .ui-tabs-content.jsdialog > .ui-content.hidden {
-	display: inherit !important;
+	display: flex !important;
 	visibility: hidden;
 }
 
@@ -2705,6 +2708,11 @@ img.ui-combobox-value-preview {
 }
 #FontworkGalleryDialog #label1 {
 	display: none;
+}
+
+/* In the FormatCellsDialog. */
+#CellProtectionPage #label1 {
+	max-width: 52ch; /* wraps the long note instead of widening the page */
 }
 
 /* Macros dialog */

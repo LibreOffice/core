@@ -862,86 +862,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			this.setNewPosition(instance.container, instance.posx, instance.posy);
 	},
 
-	// Measure the largest tab page in the grid. Every page is laid out in the
-	// same grid cell, so make each page in turn the only one in the grid and
-	// read the grid size, in two passes: first the widest page, then the
-	// tallest page at that final width, so wrapping cannot inflate the height.
-	// The whole thing runs synchronously before paint, so nothing flickers.
-	measureLargestPage: function (grid) {
-		const panels = Array.prototype.slice.call(grid.querySelectorAll(':scope > .ui-content'));
-		if (!panels.length)
-			return null;
-
-		const savedWidth = grid.style.width;
-		const savedMinWidth = grid.style.minWidth;
-		const savedMinHeight = grid.style.minHeight;
-
-		// The rule that keeps a page which is not the open one in the layout is
-		// marked important, so taking a page out of the layout for the time of a
-		// measurement needs an important inline display of its own.
-		const showOnly = function (shown) {
-			panels.forEach(function (page) {
-				page.style.setProperty('display', page === shown ? 'flex' : 'none', 'important');
-			});
-		};
-
-		const measure = function (dimension) {
-			let max = 0;
-			panels.forEach(function (shown) {
-				showOnly(shown);
-				max = Math.max(max, grid.getBoundingClientRect()[dimension]);
-			});
-			return Math.ceil(max);
-		};
-
-		// The dialog's containing block has no width of its own, so a page is laid
-		// out at the smallest width its widgets still fit in. Measure each page at
-		// that same width, with the floor of an earlier measurement lifted, so a
-		// page is free to report a width below it.
-		grid.style.minWidth = '0px';
-		grid.style.minHeight = '0px';
-		grid.style.width = 'min-content';
-		const width = measure('width');
-
-		// Read the heights at the width the widest page asked for, which is the
-		// width every page gets, so a page cannot wrap into a taller size here
-		// than it has on screen.
-		grid.style.width = width + 'px';
-		const height = measure('height');
-
-		panels.forEach(function (page) { page.style.removeProperty('display'); });
-		grid.style.width = savedWidth;
-		grid.style.minWidth = savedMinWidth;
-		grid.style.minHeight = savedMinHeight;
-
-		return { width: width, height: height };
-	},
-
-	// A tabbed dialog is fully rebuilt on every tab switch and the new content
-	// is sized to the page that is now active, so the dialog resizes as you
-	// move between tabs. Size the tab page area to the largest page instead and
-	// keep that as a floor that travels to the rebuilt instance, so a smaller
-	// page can never shrink the dialog. This matches the desktop, where the
-	// window is sized once to the largest page. Only the tab area is sized, not
-	// the button row, so no gap opens below the buttons.
-	applySizeFloor: function (instance) {
-		var grid = instance.content && instance.content.querySelector('.ui-tabs-content.jsdialog');
-		if (!grid)
-			return;
-
-		var measured = this.measureLargestPage(grid);
-		if (!measured)
-			return;
-
-		var floor = instance.sizeFloor || { width: 0, height: 0 };
-		floor.width = Math.max(floor.width, measured.width);
-		floor.height = Math.max(floor.height, measured.height);
-		instance.sizeFloor = floor;
-
-		grid.style.minWidth = floor.width + 'px';
-		grid.style.minHeight = floor.height + 'px';
-	},
-
 	centerDialogPosition: function (instance) {
 		var isRTL = document.documentElement.dir === 'rtl';
 		var height = instance.form.getBoundingClientRect().height;
@@ -1296,10 +1216,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				instance.posx = existingNode.startX;
 				instance.posy = existingNode.startY;
 
-				// Carry the size floor so a rebuilt tabbed dialog keeps the
-				// largest size it reached instead of shrinking to the active tab.
-				instance.sizeFloor = existingNode.sizeFloor;
-
 				// Preserve keyboard focus across a full-dialog rebuild (tdf#169006 follow-up).
 				// Multiple FullUpdates may arrive back-to-back before any of the
 				// associated layouting tasks (which attach the new container) run, so
@@ -1390,9 +1306,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 				// do in task to apply correct focus when already shown
 				this.addHandlers(instance);
-
-				// Keep a tabbed dialog from shrinking when a tab switch rebuilds it.
-				this.applySizeFloor(instance);
 
 				// A popped-out dialog is positioned and sized by the shell;
 				// in-page coordinates do not apply to it.
