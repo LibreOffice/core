@@ -40,19 +40,19 @@ public:
     virtual ~Seekable() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& type) override;
-    virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type& type) override;
+    virtual void acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void release() noexcept override { OWeakObject::release(); }
 
     // XSeekable
-    virtual void SAL_CALL seek(sal_Int64 location) override;
+    virtual void seek(sal_Int64 location) override;
 
-    virtual sal_Int64 SAL_CALL getPosition() override;
+    virtual sal_Int64 getPosition() override;
 
-    virtual sal_Int64 SAL_CALL getLength() override;
+    virtual sal_Int64 getLength() override;
 
     // XTruncate
-    virtual void SAL_CALL truncate() override;
+    virtual void truncate() override;
 };
 
 } // namespace gio

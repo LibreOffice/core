@@ -44,17 +44,17 @@ public:
     virtual ~OutputStream() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type & type ) override;
-    virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type & type ) override;
+    virtual void acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void release() noexcept override { OWeakObject::release(); }
 
     // XOutputStream
-   virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+   virtual void writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
-   virtual void SAL_CALL flush() override;
+   virtual void flush() override;
 
 
-    virtual void SAL_CALL closeOutput() override;
+    virtual void closeOutput() override;
 };
 
 } // namespace gio

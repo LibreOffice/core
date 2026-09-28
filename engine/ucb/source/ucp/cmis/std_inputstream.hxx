@@ -33,42 +33,42 @@ namespace cmis
 
             virtual ~StdInputStream() override;
 
-            virtual cpo::uno::Any SAL_CALL queryInterface ( const cpo::uno::Type& rType ) override;
+            virtual cpo::uno::Any queryInterface ( const cpo::uno::Type& rType ) override;
 
-            virtual void SAL_CALL acquire( ) noexcept override;
+            virtual void acquire( ) noexcept override;
 
-            virtual void SAL_CALL release( ) noexcept override;
+            virtual void release( ) noexcept override;
 
-            virtual sal_Int32 SAL_CALL
+            virtual sal_Int32
             readBytes ( cpo::uno::Sequence< sal_Int8 >& aData,
                         sal_Int32 nBytesToRead ) override;
 
-            virtual sal_Int32 SAL_CALL
+            virtual sal_Int32
             readSomeBytes ( cpo::uno::Sequence< sal_Int8 >& aData,
                            sal_Int32 nMaxBytesToRead ) override;
 
-            virtual void SAL_CALL
+            virtual void
             skipBytes ( sal_Int32 nBytesToSkip ) override;
 
-            virtual sal_Int32 SAL_CALL
+            virtual sal_Int32
             available ( ) override;
 
-            virtual void SAL_CALL
+            virtual void
             closeInput ( ) override;
 
 
             /** XSeekable
              */
 
-            virtual void SAL_CALL
+            virtual void
             seek ( sal_Int64 location ) override;
 
 
-            virtual sal_Int64 SAL_CALL
+            virtual sal_Int64
             getPosition ( ) override;
 
 
-            virtual sal_Int64 SAL_CALL
+            virtual sal_Int64
             getLength ( ) override;
 
         private:

@@ -105,7 +105,7 @@ void DynamicResultSetWrapper::impl_InitResultSetTwo( std::unique_lock<std::mutex
 }
 
 // XInterface methods.
-cpo::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any DynamicResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -119,7 +119,7 @@ cpo::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const cpo::uno::
 // XComponent methods.
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper::dispose()
+void DynamicResultSetWrapper::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -149,7 +149,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
 
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
+void DynamicResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -159,7 +159,7 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
 
 
 // virtual
-void SAL_CALL DynamicResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
+void DynamicResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -259,7 +259,7 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
 // XSourceInitialization
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > & Source )
+void DynamicResultSetWrapper::setSource( const Reference< XInterface > & Source )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -292,7 +292,7 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
 // XDynamicResultSet
 
 //virtual
-Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
+Reference< XResultSet > DynamicResultSetWrapper::getStaticResultSet()
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -321,7 +321,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicResultSetListener > & Listener )
+void DynamicResultSetWrapper::setListener( const Reference< XDynamicResultSetListener > & Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -346,7 +346,7 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapper::connectToCache( const Reference< XDynamicResultSet > & xCache )
+void DynamicResultSetWrapper::connectToCache( const Reference< XDynamicResultSet > & xCache )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -384,7 +384,7 @@ void SAL_CALL DynamicResultSetWrapper::connectToCache( const Reference< XDynamic
 }
 
 //virtual
-sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
+sal_Int16 DynamicResultSetWrapper::getCapabilities()
 {
     {
         std::unique_lock aGuard( m_aMutex );
@@ -417,19 +417,19 @@ DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
 
 // XInterface methods.
 
-void SAL_CALL DynamicResultSetWrapperListener::acquire()
+void DynamicResultSetWrapperListener::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL DynamicResultSetWrapperListener::release()
+void DynamicResultSetWrapperListener::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any DynamicResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XDynamicResultSetListener* >(this),
@@ -441,7 +441,7 @@ cpo::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const cp
 // XDynamicResultSetListener methods:
 
 //virtual
-void SAL_CALL DynamicResultSetWrapperListener::disposing( const EventObject& rEventObject )
+void DynamicResultSetWrapperListener::disposing( const EventObject& rEventObject )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -450,7 +450,7 @@ void SAL_CALL DynamicResultSetWrapperListener::disposing( const EventObject& rEv
 }
 
 //virtual
-void SAL_CALL DynamicResultSetWrapperListener::notify( const ListEvent& Changes )
+void DynamicResultSetWrapperListener::notify( const ListEvent& Changes )
 {
     std::unique_lock aGuard( m_aMutex );
 

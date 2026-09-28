@@ -70,7 +70,7 @@ XInputStream_impl::~XInputStream_impl()
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 XInputStream_impl::readBytes(
                  cpo::uno::Sequence< sal_Int8 >& aData,
                  sal_Int32 nBytesToRead )
@@ -112,7 +112,7 @@ XInputStream_impl::readSomeBytes(
     return static_cast<sal_Int32>(nrc);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 XInputStream_impl::readSomeBytes(
     cpo::uno::Sequence< sal_Int8 >& aData,
     sal_Int32 nMaxBytesToRead )
@@ -121,14 +121,14 @@ XInputStream_impl::readSomeBytes(
 }
 
 
-void SAL_CALL
+void
 XInputStream_impl::skipBytes( sal_Int32 nBytesToSkip )
 {
     m_aFile.setPos( osl_Pos_Current, sal_uInt64( nBytesToSkip ) );
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 XInputStream_impl::available()
 {
     sal_Int64 avail = getLength() - getPosition();
@@ -136,7 +136,7 @@ XInputStream_impl::available()
 }
 
 
-void SAL_CALL
+void
 XInputStream_impl::closeInput()
 {
     if( m_nIsOpen )
@@ -149,7 +149,7 @@ XInputStream_impl::closeInput()
 }
 
 
-void SAL_CALL
+void
 XInputStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
@@ -159,7 +159,7 @@ XInputStream_impl::seek( sal_Int64 location )
 }
 
 
-sal_Int64 SAL_CALL
+sal_Int64
 XInputStream_impl::getPosition()
 {
     sal_uInt64 uPos;
@@ -168,7 +168,7 @@ XInputStream_impl::getPosition()
     return sal_Int64( uPos );
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 XInputStream_impl::getLength()
 {
     sal_uInt64 uEndPos;

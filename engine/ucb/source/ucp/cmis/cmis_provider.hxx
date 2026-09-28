@@ -28,23 +28,23 @@ public:
     virtual ~ContentProvider() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XContentProvider
-    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
     libcmis::Session* getSession( const OUString& sBindingUrl, const OUString& sUsername );

@@ -46,32 +46,32 @@ namespace fileaccess {
         TaskHandlerErr CtorSuccess() const { return m_nErrorCode;}
         sal_Int32 getMinorError() const { return m_nMinorErrorCode;}
 
-        virtual sal_Int32 SAL_CALL
+        virtual sal_Int32
         readBytes(
             cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nBytesToRead ) override;
 
-        virtual sal_Int32 SAL_CALL
+        virtual sal_Int32
         readSomeBytes(
             cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead ) override;
 
-        virtual void SAL_CALL
+        virtual void
         skipBytes( sal_Int32 nBytesToSkip ) override;
 
-        virtual sal_Int32 SAL_CALL
+        virtual sal_Int32
         available() override;
 
-        virtual void SAL_CALL
+        virtual void
         closeInput() override;
 
-        virtual void SAL_CALL
+        virtual void
         seek( sal_Int64 location ) override;
 
-        virtual sal_Int64 SAL_CALL
+        virtual sal_Int64
         getPosition() override;
 
-        virtual sal_Int64 SAL_CALL
+        virtual sal_Int64
         getLength() override;
 
         virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;

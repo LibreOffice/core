@@ -84,89 +84,89 @@ public:
     virtual ~Storage() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
             const cpo::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type >
     getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getImplementationId() override;
 
     // XComponent ( one of XStorage bases )
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XNameAccess ( one of XStorage bases )
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getElementNames() override;
-    virtual bool SAL_CALL
+    virtual bool
     hasByName( const OUString& aName ) override;
 
     // XElementAccess (base of XNameAccess)
-    virtual cpo::uno::Type SAL_CALL
+    virtual cpo::uno::Type
     getElementType() override;
-    virtual bool SAL_CALL
+    virtual bool
     hasElements() override;
 
     // XStorage
-    virtual void SAL_CALL
+    virtual void
     copyToStorage( const cpo::uno::Reference< css::embed::XStorage >& xDest ) override;
-    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream >
     openStreamElement( const OUString& aStreamName,
                        sal_Int32 nOpenMode ) override;
-    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream >
     openEncryptedStreamElement( const OUString& aStreamName,
                                 sal_Int32 nOpenMode,
                                 const OUString& aPassword ) override;
-    virtual cpo::uno::Reference< css::embed::XStorage > SAL_CALL
+    virtual cpo::uno::Reference< css::embed::XStorage >
     openStorageElement( const OUString& aStorName,
                         sal_Int32 nOpenMode ) override;
-    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream >
     cloneStreamElement( const OUString& aStreamName ) override;
-    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream >
     cloneEncryptedStreamElement( const OUString& aStreamName,
                                  const OUString& aPassword ) override;
-    virtual void SAL_CALL
+    virtual void
     copyLastCommitTo( const cpo::uno::Reference<
                         css::embed::XStorage >& xTargetStorage ) override;
-    virtual void SAL_CALL
+    virtual void
     copyStorageElementLastCommitTo( const OUString& aStorName,
                                     const cpo::uno::Reference<
                                         css::embed::XStorage > &
                                             xTargetStorage ) override;
-    virtual bool SAL_CALL
+    virtual bool
     isStreamElement( const OUString& aElementName ) override;
-    virtual bool SAL_CALL
+    virtual bool
     isStorageElement( const OUString& aElementName ) override;
-    virtual void SAL_CALL
+    virtual void
     removeElement( const OUString& aElementName ) override;
-    virtual void SAL_CALL
+    virtual void
     renameElement( const OUString& aEleName,
                    const OUString& aNewName ) override;
-    virtual void SAL_CALL
+    virtual void
     copyElementTo( const OUString& aElementName,
                    const cpo::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& aNewName ) override;
-    virtual void SAL_CALL
+    virtual void
     moveElementTo( const OUString& aElementName,
                    const cpo::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& rNewName ) override;
 
     // XTransactedObject
-    virtual void SAL_CALL commit() override;
-    virtual void SAL_CALL revert() override;
+    virtual void commit() override;
+    virtual void revert() override;
 
 private:
     rtl::Reference< StorageElementFactory >         m_xFactory;
@@ -199,32 +199,32 @@ public:
     virtual ~OutputStream() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     queryInterface( const cpo::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type >
     getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getImplementationId() override;
 
     // XOutputStream
-    virtual void SAL_CALL
+    virtual void
     writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
-    virtual void SAL_CALL
+    virtual void
     flush(  ) override;
     // Note: We need to intercept this one.
-    virtual void SAL_CALL
+    virtual void
     closeOutput(  ) override;
 
     // XComponent
     // Note: We need to intercept this one.
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
@@ -259,62 +259,62 @@ public:
     virtual ~Stream() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     queryInterface( const cpo::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type >
     getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getImplementationId() override;
 
     // XStream
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream >
     getInputStream() override;
 
-    virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XOutputStream >
     getOutputStream() override;
 
     // XOutputStream
-    virtual void SAL_CALL
+    virtual void
     writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
-    virtual void SAL_CALL
+    virtual void
     flush() override;
 
-    virtual void SAL_CALL
+    virtual void
     closeOutput() override;
 
     // XTruncate
-    virtual void SAL_CALL
+    virtual void
     truncate() override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     readBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                sal_Int32 nBytesToRead ) override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                    sal_Int32 nMaxBytesToRead ) override;
 
-    virtual void SAL_CALL
+    virtual void
     skipBytes( sal_Int32 nBytesToSkip ) override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     available() override;
 
-    virtual void SAL_CALL
+    virtual void
     closeInput() override;
 
     // XComponent
     // Note: We need to intercept this one.
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:

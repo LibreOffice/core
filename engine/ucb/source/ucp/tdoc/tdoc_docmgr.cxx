@@ -52,13 +52,13 @@ using namespace tdoc_ucp;
 
 
 // virtual
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
+void OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
          const lang::EventObject& /*Source*/, bool /*GetsOwnership*/ )
 {
 }
 
 
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
+void OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
          const lang::EventObject& Source )
 {
     if (!m_pManager) return; // disposed?
@@ -74,7 +74,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 
 
 // virtual
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
+void OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
         const lang::EventObject& /*Source*/ )
 {
 }
@@ -161,7 +161,7 @@ getDocumentId( const uno::Reference< cpo::uno::XInterface > & xDoc )
 
 
 // virtual
-void SAL_CALL OfficeDocumentsManager::documentEventOccured(
+void OfficeDocumentsManager::documentEventOccured(
         const document::DocumentEvent & Event )
 {
 /*
@@ -397,7 +397,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
 // lang::XDocumentEventListener (base of document::XDocumentEventListener)
 
 // virtual
-void SAL_CALL OfficeDocumentsManager::disposing(
+void OfficeDocumentsManager::disposing(
         const lang::EventObject& /*Source*/ )
 {
 }

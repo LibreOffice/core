@@ -61,66 +61,66 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         // XStream
 
-        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream >
         getInputStream() override;
 
-        virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XOutputStream >
         getOutputStream() override;
 
 
         // XTruncate
 
-        virtual void SAL_CALL truncate() override;
+        virtual void truncate() override;
 
 
         // XInputStream
 
-        sal_Int32 SAL_CALL
+        sal_Int32
         readBytes(
             cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nBytesToRead ) override;
 
-        sal_Int32 SAL_CALL
+        sal_Int32
         readSomeBytes(
             cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead ) override;
 
 
-        void SAL_CALL
+        void
         skipBytes( sal_Int32 nBytesToSkip ) override;
 
-        sal_Int32 SAL_CALL
+        sal_Int32
         available() override;
 
-        void SAL_CALL
+        void
         closeInput() override;
 
         // XSeekable
 
-        void SAL_CALL
+        void
         seek( sal_Int64 location ) override;
 
-        sal_Int64 SAL_CALL
+        sal_Int64
         getPosition() override;
 
-        sal_Int64 SAL_CALL
+        sal_Int64
         getLength() override;
 
 
         // XOutputStream
 
-        void SAL_CALL
+        void
         writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
 
-        void SAL_CALL
+        void
         flush() override;
 
 
-        void SAL_CALL
+        void
         closeOutput() override;
 
-        virtual void SAL_CALL waitForCompletion() override;
+        virtual void waitForCompletion() override;
 
         // utl::ByteReader
         virtual sal_Int32

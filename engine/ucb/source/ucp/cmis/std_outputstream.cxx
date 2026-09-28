@@ -31,24 +31,24 @@ namespace cmis
             m_pStream->setstate( std::ios::eofbit );
     }
 
-    cpo::uno::Any SAL_CALL StdOutputStream::queryInterface( const cpo::uno::Type& rType )
+    cpo::uno::Any StdOutputStream::queryInterface( const cpo::uno::Type& rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< XOutputStream* >( this ) );
 
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
 
-    void SAL_CALL StdOutputStream::acquire( ) noexcept
+    void StdOutputStream::acquire( ) noexcept
     {
         OWeakObject::acquire();
     }
 
-    void SAL_CALL StdOutputStream::release( ) noexcept
+    void StdOutputStream::release( ) noexcept
     {
         OWeakObject::release();
     }
 
-    void SAL_CALL StdOutputStream::writeBytes ( const cpo::uno::Sequence< sal_Int8 >& aData )
+    void StdOutputStream::writeBytes ( const cpo::uno::Sequence< sal_Int8 >& aData )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -66,7 +66,7 @@ namespace cmis
         }
     }
 
-    void SAL_CALL StdOutputStream::flush ( )
+    void StdOutputStream::flush ( )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -84,7 +84,7 @@ namespace cmis
         }
     }
 
-    void SAL_CALL StdOutputStream::closeOutput ( )
+    void StdOutputStream::closeOutput ( )
     {
         std::scoped_lock aGuard( m_aMutex );
 

@@ -41,32 +41,32 @@ namespace fileaccess {
         virtual ~XCommandInfo_impl() override;
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL
+        virtual cpo::uno::Any
         queryInterface( const cpo::uno::Type& aType ) override;
 
-        virtual void SAL_CALL
+        virtual void
         acquire()
             noexcept override;
 
-        virtual void SAL_CALL
+        virtual void
         release()
             noexcept override;
 
         // XCommandInfo
 
-        virtual cpo::uno::Sequence< css::ucb::CommandInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::ucb::CommandInfo >
         getCommands() override;
 
-        virtual css::ucb::CommandInfo SAL_CALL
+        virtual css::ucb::CommandInfo
         getCommandInfoByName( const OUString& Name ) override;
 
-        virtual css::ucb::CommandInfo SAL_CALL
+        virtual css::ucb::CommandInfo
         getCommandInfoByHandle( sal_Int32 Handle ) override;
 
-        virtual bool SAL_CALL
+        virtual bool
         hasCommandByName( const OUString& Name ) override;
 
-        virtual bool SAL_CALL
+        virtual bool
         hasCommandByHandle( sal_Int32 Handle ) override;
 
 

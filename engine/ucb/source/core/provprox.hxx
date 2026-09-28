@@ -44,12 +44,12 @@ public:
     virtual ~UcbContentProviderProxyFactory() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XContentProviderFactory
-    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider >
     createContentProvider( const OUString& Service ) override;
 };
 
@@ -81,35 +81,35 @@ public:
     virtual ~UcbContentProviderProxy() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XContentProviderSupplier
     virtual cpo::uno::Reference<
-        css::ucb::XContentProvider > SAL_CALL
+        css::ucb::XContentProvider >
     getContentProvider() override;
 
     // XContentProvider
     virtual cpo::uno::Reference<
-        css::ucb::XContent > SAL_CALL
+        css::ucb::XContent >
     queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     compareContentIds( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id1,
                        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
     // XParameterizedContentProvider
-    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider >
     registerInstance( const OUString& Template,
                       const OUString& Arguments,
                       bool ReplaceExisting ) override;
-    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider >
     deregisterInstance( const OUString& Template,
                         const OUString& Arguments ) override;
 };

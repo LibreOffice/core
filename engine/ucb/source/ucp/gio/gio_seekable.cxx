@@ -39,7 +39,7 @@ Seekable::~Seekable()
 {
 }
 
-void SAL_CALL Seekable::truncate()
+void Seekable::truncate()
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -53,7 +53,7 @@ void SAL_CALL Seekable::truncate()
         convertToIOException(pError, getXWeak());
 }
 
-void SAL_CALL Seekable::seek( sal_Int64 location )
+void Seekable::seek( sal_Int64 location )
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -67,7 +67,7 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
         convertToIOException(pError, getXWeak());
 }
 
-sal_Int64 SAL_CALL Seekable::getPosition()
+sal_Int64 Seekable::getPosition()
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -75,7 +75,7 @@ sal_Int64 SAL_CALL Seekable::getPosition()
     return g_seekable_tell(mpStream);
 }
 
-sal_Int64 SAL_CALL Seekable::getLength()
+sal_Int64 Seekable::getLength()
 {
     if (!mpStream)
         throw css::io::NotConnectedException();

@@ -59,14 +59,14 @@ public:
         {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( OUString const & serviceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XContentProvider
-    virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
+    virtual uno::Reference< ucb::XContent > queryContent(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) override;
-    virtual sal_Int32 SAL_CALL compareContentIds(
+    virtual sal_Int32 compareContentIds(
         uno::Reference< ucb::XContentIdentifier > const & xId1,
         uno::Reference< ucb::XContentIdentifier > const & xId2 ) override;
 };

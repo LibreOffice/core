@@ -29,7 +29,7 @@
 
 namespace gio
 {
-cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+cpo::uno::Reference< css::ucb::XContent >
 ContentProvider::queryContent(
             const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
 {
@@ -67,19 +67,19 @@ ContentProvider::~ContentProvider()
 }
 
 // XInterface
-void SAL_CALL ContentProvider::acquire()
+void ContentProvider::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentProvider::release()
+void ContentProvider::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< css::lang::XTypeProvider* >(this),
@@ -94,17 +94,17 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       css::lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
-cpo::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.GIOContentProvider"_ustr };
 }
 
-OUString SAL_CALL ContentProvider::getImplementationName()
+OUString ContentProvider::getImplementationName()
 {
     return u"com.sun.star.comp.GIOContentProvider"_ustr;
 }
 
-bool SAL_CALL ContentProvider::supportsService(const OUString& aServiceName)
+bool ContentProvider::supportsService(const OUString& aServiceName)
 {
     return cppu::supportsService(this, aServiceName);
 }

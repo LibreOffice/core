@@ -196,34 +196,34 @@ public:
     virtual ~HierarchyContent() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL
+    virtual OUString
     getImplementationName() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     // XContent
-    virtual OUString SAL_CALL
+    virtual OUString
     getContentType() override;
-    virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     getIdentifier() override;
 
     // XCommandProcessor
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
-    virtual void SAL_CALL
+    virtual void
     abort( sal_Int32 CommandId ) override;
 
 
@@ -231,9 +231,9 @@ public:
 
 
     // XContentCreator
-    virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentInfo >
     queryCreatableContentsInfo() override;
-    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent >
     createNewContent( const css::ucb::ContentInfo& Info ) override;
 
 

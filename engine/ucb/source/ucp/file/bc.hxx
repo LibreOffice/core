@@ -85,105 +85,105 @@ namespace fileaccess {
         virtual ~BaseContent() override;
 
         // XComponent
-        virtual void SAL_CALL
+        virtual void
         dispose() override;
 
-        virtual void SAL_CALL
+        virtual void
         addEventListener(
             const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
-        virtual void SAL_CALL
+        virtual void
         removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 
         // XServiceInfo
-        virtual OUString SAL_CALL
+        virtual OUString
         getImplementationName() override;
 
-        virtual bool SAL_CALL
+        virtual bool
         supportsService( const OUString& ServiceName ) override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
 
         // XCommandProcessor
-        virtual sal_Int32 SAL_CALL
+        virtual sal_Int32
         createCommandIdentifier() override;
 
-        virtual cpo::uno::Any SAL_CALL
+        virtual cpo::uno::Any
         execute(
             const css::ucb::Command& aCommand,
             sal_Int32 CommandId,
             const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
-        virtual void SAL_CALL
+        virtual void
         abort( sal_Int32 CommandId ) override;
 
 
         // XContent
-        virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
         getIdentifier() override;
 
-        virtual OUString SAL_CALL
+        virtual OUString
         getContentType() override;
 
-        virtual void SAL_CALL
+        virtual void
         addContentEventListener(
             const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
-        virtual void SAL_CALL
+        virtual void
         removeContentEventListener(
             const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
         // XPropertiesChangeNotifier
 
-        virtual void SAL_CALL
+        virtual void
         addPropertiesChangeListener(
             const cpo::uno::Sequence< OUString >& PropertyNames,
             const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
-        virtual void SAL_CALL
+        virtual void
         removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames,
                                         const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
         // XPropertyContainer
 
-        virtual void SAL_CALL
+        virtual void
         addProperty(
             const OUString& Name,
             sal_Int16 Attributes,
             const cpo::uno::Any& DefaultValue ) override;
 
-        virtual void SAL_CALL
+        virtual void
         removeProperty( const OUString& Name ) override;
 
         // XPropertySetInfoChangeNotifier
 
-        virtual void SAL_CALL
+        virtual void
         addPropertySetInfoChangeListener(
             const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
-        virtual void SAL_CALL
+        virtual void
         removePropertySetInfoChangeListener(
             const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
 
         // XContentCreator
 
-        virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo() override;
 
-        virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContent >
         createNewContent( const css::ucb::ContentInfo& Info ) override;
 
 
         // XChild
-        virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
+        virtual cpo::uno::Reference< cpo::uno::XInterface >
         getParent() override;
 
         // Not supported
-        virtual void SAL_CALL
+        virtual void
         setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 

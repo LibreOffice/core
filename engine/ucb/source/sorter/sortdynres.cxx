@@ -75,24 +75,24 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL SortedDynamicResultSet::getImplementationName()
+OUString SortedDynamicResultSet::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.SortedDynamicResultSet"_ustr;
 }
 
-bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& ServiceName )
+bool SortedDynamicResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SortedDynamicResultSet::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.SortedDynamicResultSet"_ustr };
 }
 
 // XComponent methods.
 
-void SAL_CALL SortedDynamicResultSet::dispose()
+void SortedDynamicResultSet::dispose()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -110,7 +110,7 @@ void SAL_CALL SortedDynamicResultSet::dispose()
     mbUseOne = true;
 }
 
-void SAL_CALL SortedDynamicResultSet::addEventListener(
+void SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( maMutex );
@@ -118,7 +118,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
     maDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
-void SAL_CALL SortedDynamicResultSet::removeEventListener(
+void SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( maMutex );
@@ -129,7 +129,7 @@ void SAL_CALL SortedDynamicResultSet::removeEventListener(
 
 // XDynamicResultSet methods.
 
-Reference< XResultSet > SAL_CALL
+Reference< XResultSet >
 SortedDynamicResultSet::getStaticResultSet()
 {
     std::unique_lock aGuard( maMutex );
@@ -149,7 +149,7 @@ SortedDynamicResultSet::getStaticResultSet()
 }
 
 
-void SAL_CALL
+void
 SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener >& Listener )
 {
     std::unique_lock aGuard( maMutex );
@@ -166,7 +166,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
 }
 
 
-void SAL_CALL
+void
 SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & xCache )
 {
     {
@@ -201,7 +201,7 @@ SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & x
 }
 
 
-sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
+sal_Int16 SortedDynamicResultSet::getCapabilities()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -408,17 +408,17 @@ SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL SortedDynamicResultSetFactory::getImplementationName()
+OUString SortedDynamicResultSetFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.SortedDynamicResultSetFactory"_ustr;
 }
 
-bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
+bool SortedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SortedDynamicResultSetFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.SortedDynamicResultSetFactory"_ustr };
 }
@@ -433,7 +433,7 @@ ucb_SortedDynamicResultSetFactory_get_implementation(
 
 // SortedDynamicResultSetFactory methods.
 
-Reference< XDynamicResultSet > SAL_CALL
+Reference< XDynamicResultSet >
 SortedDynamicResultSetFactory::createSortedDynamicResultSet(
                 const Reference< XDynamicResultSet > & Source,
                 const Sequence< NumberedSortingInfo > & Info,
@@ -475,7 +475,7 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 
 // XEventListener ( base of XDynamicResultSetListener )
 
-void SAL_CALL
+void
 SortedDynamicResultSetListener::disposing( const EventObject& /*Source*/ )
 {
     std::unique_lock aGuard( maMutex );
@@ -487,7 +487,7 @@ SortedDynamicResultSetListener::disposing( const EventObject& /*Source*/ )
 
 // XDynamicResultSetListener
 
-void SAL_CALL
+void
 SortedDynamicResultSetListener::notify( const ListEvent& Changes )
 {
     std::unique_lock aGuard( maMutex );

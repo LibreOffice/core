@@ -79,7 +79,7 @@ XStream_impl::~XStream_impl()
 }
 
 
-uno::Reference< io::XInputStream > SAL_CALL
+uno::Reference< io::XInputStream >
 XStream_impl::getInputStream(  )
 {
     {
@@ -90,7 +90,7 @@ XStream_impl::getInputStream(  )
 }
 
 
-uno::Reference< io::XOutputStream > SAL_CALL
+uno::Reference< io::XOutputStream >
 XStream_impl::getOutputStream(  )
 {
     {
@@ -101,7 +101,7 @@ XStream_impl::getOutputStream(  )
 }
 
 
-void SAL_CALL XStream_impl::truncate()
+void XStream_impl::truncate()
 {
     if (osl::FileBase::E_None != m_aFile.setSize(0))
         throw io::IOException();
@@ -114,7 +114,7 @@ void SAL_CALL XStream_impl::truncate()
 // XStream_impl private non interface methods
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 XStream_impl::readBytes(
     cpo::uno::Sequence< sal_Int8 >& aData,
     sal_Int32 nBytesToRead )
@@ -160,7 +160,7 @@ XStream_impl::readSomeBytes(
     return static_cast<sal_Int32>(nrc);
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 XStream_impl::readSomeBytes(
     cpo::uno::Sequence< sal_Int8 >& aData,
     sal_Int32 nMaxBytesToRead )
@@ -169,14 +169,14 @@ XStream_impl::readSomeBytes(
 }
 
 
-void SAL_CALL
+void
 XStream_impl::skipBytes( sal_Int32 nBytesToSkip )
 {
     m_aFile.setPos( osl_Pos_Current, sal_uInt64( nBytesToSkip ) );
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 XStream_impl::available()
 {
     sal_Int64 avail = getLength() - getPosition();
@@ -184,7 +184,7 @@ XStream_impl::available()
 }
 
 
-void SAL_CALL
+void
 XStream_impl::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     sal_uInt32 length = aData.getLength();
@@ -214,7 +214,7 @@ XStream_impl::closeStream()
     }
 }
 
-void SAL_CALL
+void
 XStream_impl::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
@@ -225,7 +225,7 @@ XStream_impl::closeInput()
 }
 
 
-void SAL_CALL
+void
 XStream_impl::closeOutput()
 {
     std::scoped_lock aGuard( m_aMutex );
@@ -236,7 +236,7 @@ XStream_impl::closeOutput()
 }
 
 
-void SAL_CALL
+void
 XStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
@@ -246,7 +246,7 @@ XStream_impl::seek( sal_Int64 location )
 }
 
 
-sal_Int64 SAL_CALL
+sal_Int64
 XStream_impl::getPosition()
 {
     sal_uInt64 uPos;
@@ -255,7 +255,7 @@ XStream_impl::getPosition()
     return sal_Int64( uPos );
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 XStream_impl::getLength()
 {
     sal_uInt64 uEndPos;
@@ -264,7 +264,7 @@ XStream_impl::getLength()
     return sal_Int64( uEndPos );
 }
 
-void SAL_CALL
+void
 XStream_impl::flush()
 {}
 

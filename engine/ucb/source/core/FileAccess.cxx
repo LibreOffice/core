@@ -93,33 +93,33 @@ public:
     explicit OFileAccess( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext) {}
     // Methods
-    virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) override;
-    virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) override;
-    virtual void SAL_CALL kill( const OUString& FileURL ) override;
-    virtual bool SAL_CALL isFolder( const OUString& FileURL ) override;
-    virtual bool SAL_CALL isReadOnly( const OUString& FileURL ) override;
-    virtual void SAL_CALL setReadOnly( const OUString& FileURL, bool bReadOnly ) override;
-    virtual void SAL_CALL createFolder( const OUString& NewFolderURL ) override;
-    virtual sal_Int32 SAL_CALL getSize( const OUString& FileURL ) override;
-    virtual OUString SAL_CALL getContentType( const OUString& FileURL ) override;
-    virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
-    virtual bool SAL_CALL exists( const OUString& FileURL ) override;
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
-    virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
-    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) override;
-    virtual void SAL_CALL setInteractionHandler( const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
-    virtual void SAL_CALL writeFile( const OUString& FileURL, const cpo::uno::Reference< css::io::XInputStream >& data ) override;
-    virtual bool SAL_CALL isHidden( const OUString& FileURL ) override;
-    virtual void SAL_CALL setHidden( const OUString& FileURL, bool bHidden ) override;
+    virtual void copy( const OUString& SourceURL, const OUString& DestURL ) override;
+    virtual void move( const OUString& SourceURL, const OUString& DestURL ) override;
+    virtual void kill( const OUString& FileURL ) override;
+    virtual bool isFolder( const OUString& FileURL ) override;
+    virtual bool isReadOnly( const OUString& FileURL ) override;
+    virtual void setReadOnly( const OUString& FileURL, bool bReadOnly ) override;
+    virtual void createFolder( const OUString& NewFolderURL ) override;
+    virtual sal_Int32 getSize( const OUString& FileURL ) override;
+    virtual OUString getContentType( const OUString& FileURL ) override;
+    virtual css::util::DateTime getDateTimeModified( const OUString& FileURL ) override;
+    virtual cpo::uno::Sequence< OUString > getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
+    virtual bool exists( const OUString& FileURL ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > openFileRead( const OUString& FileURL ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > openFileWrite( const OUString& FileURL ) override;
+    virtual cpo::uno::Reference< css::io::XStream > openFileReadWrite( const OUString& FileURL ) override;
+    virtual void setInteractionHandler( const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+    virtual void writeFile( const OUString& FileURL, const cpo::uno::Reference< css::io::XInputStream >& data ) override;
+    virtual bool isHidden( const OUString& FileURL ) override;
+    virtual void setHidden( const OUString& FileURL, bool bHidden ) override;
 
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.comp.ucb.SimpleFileAccess"_ustr; }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     { return { SERVICE_NAME }; }
 };
 
@@ -132,8 +132,8 @@ class OActiveDataSink : public cppu::WeakImplHelper< XActiveDataSink >
 public:
 
     // Methods
-    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream ) override;
-    virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
+    virtual void setInputStream( const Reference< XInputStream >& aStream ) override;
+    virtual Reference< XInputStream > getInputStream(  ) override;
 };
 
 // Implementation XActiveDataStreamer
@@ -145,8 +145,8 @@ class OActiveDataStreamer : public cppu::WeakImplHelper< XActiveDataStreamer >
 public:
 
     // Methods
-    virtual void SAL_CALL setStream( const Reference< XStream >& aStream ) override;
-    virtual Reference< XStream > SAL_CALL getStream() override;
+    virtual void setStream( const Reference< XStream >& aStream ) override;
+    virtual Reference< XStream > getStream() override;
 };
 
 // Implementation XCommandEnvironment
@@ -162,8 +162,8 @@ public:
     }
 
     // Methods
-    virtual Reference< XInteractionHandler > SAL_CALL getInteractionHandler() override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
+    virtual Reference< XInteractionHandler > getInteractionHandler() override;
+    virtual Reference< XProgressHandler > getProgressHandler() override;
 };
 
 void OActiveDataSink::setInputStream( const Reference< XInputStream >& aStream )
@@ -612,7 +612,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
     return false;
 }
 
-void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
+void OFileAccess::writeFile( const OUString& FileURL,
                                       const Reference< XInputStream >& data )
 {
     INetURLObject aURL( FileURL, INetProtocol::File );

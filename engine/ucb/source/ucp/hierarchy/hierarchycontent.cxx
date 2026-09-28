@@ -155,7 +155,7 @@ HierarchyContent::~HierarchyContent()
 
 
 // virtual
-void SAL_CALL HierarchyContent::acquire()
+void HierarchyContent::acquire()
     noexcept
 {
     ContentImplHelper::acquire();
@@ -163,7 +163,7 @@ void SAL_CALL HierarchyContent::acquire()
 
 
 // virtual
-void SAL_CALL HierarchyContent::release()
+void HierarchyContent::release()
     noexcept
 {
     ContentImplHelper::release();
@@ -171,7 +171,7 @@ void SAL_CALL HierarchyContent::release()
 
 
 // virtual
-cpo::uno::Any SAL_CALL HierarchyContent::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any HierarchyContent::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ContentImplHelper::queryInterface( rType );
 
@@ -199,7 +199,7 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 
 
 // virtual
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL HierarchyContent::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > HierarchyContent::getTypes()
 {
     if ( isFolder() && !isReadOnly() )
     {
@@ -242,14 +242,14 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL HierarchyContent::getTypes()
 
 
 // virtual
-OUString SAL_CALL HierarchyContent::getImplementationName()
+OUString HierarchyContent::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.HierarchyContent"_ustr;
 }
 
 
 // virtual
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 HierarchyContent::getSupportedServiceNames()
 {
     cpo::uno::Sequence< OUString > aSNS( 1 );
@@ -269,14 +269,14 @@ HierarchyContent::getSupportedServiceNames()
 
 
 // virtual
-OUString SAL_CALL HierarchyContent::getContentType()
+OUString HierarchyContent::getContentType()
 {
     return m_aProps.getContentType();
 }
 
 
 // virtual
-uno::Reference< ucb::XContentIdentifier > SAL_CALL
+uno::Reference< ucb::XContentIdentifier >
 HierarchyContent::getIdentifier()
 {
     // Transient?
@@ -294,7 +294,7 @@ HierarchyContent::getIdentifier()
 
 
 // virtual
-cpo::uno::Any SAL_CALL HierarchyContent::execute(
+cpo::uno::Any HierarchyContent::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
@@ -507,7 +507,7 @@ cpo::uno::Any SAL_CALL HierarchyContent::execute(
 
 
 // virtual
-void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
+void HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 {
     // @@@ Generally, no action takes much time...
 }
@@ -517,7 +517,7 @@ void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 
 
 // virtual
-cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo >
 HierarchyContent::queryCreatableContentsInfo()
 {
     return m_aProps.getCreatableContentsInfo();
@@ -525,7 +525,7 @@ HierarchyContent::queryCreatableContentsInfo()
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
 {
     if ( isFolder() )

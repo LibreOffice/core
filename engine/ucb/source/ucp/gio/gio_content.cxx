@@ -114,14 +114,14 @@ OUString Content::getParentURL()
     return sURL;
 }
 
-void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
+void Content::abort( sal_Int32 /*CommandId*/ )
 {
     //TODO
     //stick a map from each CommandId to a new GCancellable and propagate
     //it throughout the g_file_* calls
 }
 
-OUString SAL_CALL Content::getContentType()
+OUString Content::getContentType()
 {
     return isFolder(cpo::uno::Reference< css::ucb::XCommandEnvironment >())
         ? GIO_FOLDER_TYPE
@@ -935,7 +935,7 @@ cpo::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
     return aRet;
 }
 
-cpo::uno::Any SAL_CALL Content::execute(
+cpo::uno::Any Content::execute(
         const css::ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
@@ -1147,13 +1147,13 @@ cpo::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
     }
 }
 
-cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+cpo::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo()
 {
     return queryCreatableContentsInfo( cpo::uno::Reference< css::ucb::XCommandEnvironment >() );
 }
 
 cpo::uno::Reference< css::ucb::XContent >
-    SAL_CALL Content::createNewContent( const css::ucb::ContentInfo& Info )
+    Content::createNewContent( const css::ucb::ContentInfo& Info )
 {
     bool create_document;
     const char *name;
@@ -1188,7 +1188,7 @@ cpo::uno::Reference< css::ucb::XContent >
     }
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Content::getTypes()
 {
     if ( isFolder( cpo::uno::Reference< css::ucb::XCommandEnvironment >() ) )
     {
@@ -1315,28 +1315,28 @@ cpo::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const cpo::uno
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-void SAL_CALL Content::acquire() noexcept
+void Content::acquire() noexcept
 {
     ContentImplHelper::acquire();
 }
 
-void SAL_CALL Content::release() noexcept
+void Content::release() noexcept
 {
     ContentImplHelper::release();
 }
 
-cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any Content::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< css::ucb::XContentCreator * >( this ) );
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
 }
 
-OUString SAL_CALL Content::getImplementationName()
+OUString Content::getImplementationName()
 {
        return u"com.sun.star.comp.GIOContent"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Content::getSupportedServiceNames()
 {
        cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.GIOContent"_ustr };
        return aSNS;

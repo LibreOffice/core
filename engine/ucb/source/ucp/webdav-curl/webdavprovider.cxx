@@ -51,17 +51,17 @@ ContentProvider::~ContentProvider()
 
 
 // XInterface methods.
-void SAL_CALL ContentProvider::acquire() noexcept
+void ContentProvider::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentProvider::release() noexcept
+void ContentProvider::release() noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
     static_cast< lang::XTypeProvider* >(this),
@@ -104,7 +104,7 @@ ContentProvider::supportsService(const OUString& s)
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 ContentProvider::queryContent(
             const uno::Reference<
                     ucb::XContentIdentifier >& Identifier )

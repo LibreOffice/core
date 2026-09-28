@@ -52,7 +52,7 @@ FileContentIdentifier::getContentIdentifier()
 }
 
 
-OUString SAL_CALL
+OUString
 FileContentIdentifier::getContentProviderScheme()
 {
     return m_aProviderScheme;

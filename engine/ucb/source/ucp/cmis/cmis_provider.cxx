@@ -23,7 +23,7 @@ using namespace ::cpo;
 
 namespace cmis
 {
-uno::Reference< css::ucb::XContent > SAL_CALL
+uno::Reference< css::ucb::XContent >
 ContentProvider::queryContent(
             const uno::Reference< css::ucb::XContentIdentifier >& Identifier )
 {
@@ -85,19 +85,19 @@ ContentProvider::~ContentProvider()
 }
 
 //XInterface
-void SAL_CALL ContentProvider::acquire()
+void ContentProvider::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentProvider::release()
+void ContentProvider::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),

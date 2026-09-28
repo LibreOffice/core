@@ -242,7 +242,7 @@ UniversalContentBroker::~UniversalContentBroker()
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::dispose()
+void UniversalContentBroker::dispose()
 {
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
@@ -257,7 +257,7 @@ void SAL_CALL UniversalContentBroker::dispose()
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::addEventListener(
+void UniversalContentBroker::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
     if ( !m_pDisposeEventListeners )
@@ -268,7 +268,7 @@ void SAL_CALL UniversalContentBroker::addEventListener(
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::removeEventListener(
+void UniversalContentBroker::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
     if ( m_pDisposeEventListeners )
@@ -280,15 +280,15 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 
 // XServiceInfo methods.
 
-OUString SAL_CALL UniversalContentBroker::getImplementationName()
+OUString UniversalContentBroker::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UniversalContentBroker"_ustr;
 }
-bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceName )
+bool UniversalContentBroker::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-cpo::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UniversalContentBroker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.UniversalContentBroker"_ustr };
 }
@@ -306,7 +306,7 @@ ucb_UniversalContentBroker_get_implementation(
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::initialize( const cpo::uno::Sequence< Any >& aArguments )
+void UniversalContentBroker::initialize( const cpo::uno::Sequence< Any >& aArguments )
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -341,7 +341,7 @@ void SAL_CALL UniversalContentBroker::initialize( const cpo::uno::Sequence< Any 
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
 UniversalContentBroker::registerContentProvider(
                             const Reference< XContentProvider >& Provider,
                             const OUString& Scheme,
@@ -388,7 +388,7 @@ UniversalContentBroker::registerContentProvider(
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::deregisterContentProvider(
+void UniversalContentBroker::deregisterContentProvider(
                               const Reference< XContentProvider >& Provider,
                             const OUString& Scheme )
 {
@@ -420,7 +420,7 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
 
 
 // virtual
-cpo::uno::Sequence< ContentProviderInfo > SAL_CALL
+cpo::uno::Sequence< ContentProviderInfo >
                             UniversalContentBroker::queryContentProviders()
 {
     // Return a list with information about active(!) content providers.
@@ -445,7 +445,7 @@ cpo::uno::Sequence< ContentProviderInfo > SAL_CALL
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
         UniversalContentBroker::queryContentProvider( const OUString&
                                                           Identifier )
 {
@@ -457,7 +457,7 @@ Reference< XContentProvider > SAL_CALL
 
 
 // virtual
-Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
+Reference< XContent > UniversalContentBroker::queryContent(
                         const Reference< XContentIdentifier >& Identifier )
 {
 
@@ -478,7 +478,7 @@ Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
 
 
 // virtual
-sal_Int32 SAL_CALL UniversalContentBroker::compareContentIds(
+sal_Int32 UniversalContentBroker::compareContentIds(
                                 const Reference< XContentIdentifier >& Id1,
                                 const Reference< XContentIdentifier >& Id2 )
 {
@@ -504,7 +504,7 @@ sal_Int32 SAL_CALL UniversalContentBroker::compareContentIds(
 
 
 // virtual
-Reference< XContentIdentifier > SAL_CALL
+Reference< XContentIdentifier >
         UniversalContentBroker::createContentIdentifier(
                                             const OUString& ContentId )
 {
@@ -537,7 +537,7 @@ Reference< XContentIdentifier > SAL_CALL
 
 
 // virtual
-sal_Int32 SAL_CALL UniversalContentBroker::createCommandIdentifier()
+sal_Int32 UniversalContentBroker::createCommandIdentifier()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -547,7 +547,7 @@ sal_Int32 SAL_CALL UniversalContentBroker::createCommandIdentifier()
 
 
 // virtual
-Any SAL_CALL UniversalContentBroker::execute(
+Any UniversalContentBroker::execute(
                           const Command& aCommand,
                           sal_Int32,
                           const Reference< XCommandEnvironment >& Environment )
@@ -635,14 +635,14 @@ Any SAL_CALL UniversalContentBroker::execute(
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::releaseCommandIdentifier(sal_Int32 /*aCommandId*/)
+void UniversalContentBroker::releaseCommandIdentifier(sal_Int32 /*aCommandId*/)
 {
     // @@@ Not implemented ( yet).
 }
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
+void UniversalContentBroker::abort( sal_Int32 )
 {
     // @@@ Not implemented ( yet).
 }
@@ -652,7 +652,7 @@ void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent& Event )
+void UniversalContentBroker::changesOccurred( const util::ChangesEvent& Event )
 {
     if ( !Event.Changes.hasElements() )
         return;
@@ -692,7 +692,7 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::disposing(const lang::EventObject&)
+void UniversalContentBroker::disposing(const lang::EventObject&)
 {
     if ( m_xNotifier.is() )
     {

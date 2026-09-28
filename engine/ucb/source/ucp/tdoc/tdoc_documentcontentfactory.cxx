@@ -55,20 +55,20 @@ DocumentContentFactory::~DocumentContentFactory()
 
 
 // virtual
-OUString SAL_CALL DocumentContentFactory::getImplementationName()
+OUString DocumentContentFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory"_ustr;
 }
 
 // virtual
-bool SAL_CALL
+bool
 DocumentContentFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // virtual
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 DocumentContentFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.TransientDocumentsDocumentContentFactory"_ustr };
@@ -79,7 +79,7 @@ DocumentContentFactory::getSupportedServiceNames()
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 DocumentContentFactory::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
 {

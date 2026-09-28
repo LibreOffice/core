@@ -64,21 +64,21 @@ public:
     virtual ~Package() override { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     queryInterface( const cpo::uno::Type& aType ) override
     { return m_xNA->queryInterface( aType ); }
-    virtual void SAL_CALL
+    virtual void
     acquire() noexcept override
     { OWeakObject::acquire(); }
-    virtual void SAL_CALL
+    virtual void
     release() noexcept override
     { OWeakObject::release(); }
 
     // XHierarchicalNameAccess
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getByHierarchicalName( const OUString& aName ) override
     { return m_xNA->getByHierarchicalName( aName ); }
-    virtual bool SAL_CALL
+    virtual bool
     hasByHierarchicalName( const OUString& aName ) override
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
@@ -102,19 +102,19 @@ ContentProvider::~ContentProvider()
 }
 
 // XInterface methods.
-void SAL_CALL ContentProvider::acquire()
+void ContentProvider::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentProvider::release()
+void ContentProvider::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),
@@ -158,7 +158,7 @@ ContentProvider::getSupportedServiceNames()
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
+uno::Reference< ucb::XContent > ContentProvider::queryContent(
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
     if ( !Identifier.is() )

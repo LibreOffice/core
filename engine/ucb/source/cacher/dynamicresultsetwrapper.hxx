@@ -99,38 +99,38 @@ public:
 
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     queryInterface( const cpo::uno::Type & rType ) override;
 
 
     // XDynamicResultSet
-    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSet >
     getStaticResultSet() override;
 
-    virtual void SAL_CALL
+    virtual void
     setListener( const cpo::uno::Reference< css::ucb::XDynamicResultSetListener > & Listener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     connectToCache( const cpo::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
     getCapabilities() override;
 
 
     // XComponent ( base of XDynamicResultSet )
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
 
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     // XSourceInitialization
 
-    virtual void SAL_CALL
+    virtual void
     setSource(  const cpo::uno::Reference< cpo::uno::XInterface > & Source ) override;
 
 
@@ -159,19 +159,19 @@ public:
 
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XEventListener ( base of XDynamicResultSetListener )
 
-    virtual void SAL_CALL
+    virtual void
     disposing( const css::lang::EventObject& Source ) override;
 
     // XDynamicResultSetListener
-    virtual void SAL_CALL
+    virtual void
     notify( const css::ucb::ListEvent& Changes ) override;
 
 

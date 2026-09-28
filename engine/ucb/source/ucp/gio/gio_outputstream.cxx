@@ -39,7 +39,7 @@ OutputStream::~OutputStream()
     closeOutput();
 }
 
-void SAL_CALL OutputStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData )
+void OutputStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData )
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -49,7 +49,7 @@ void SAL_CALL OutputStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& rD
         convertToIOException(pError, getXWeak());
 }
 
-void SAL_CALL OutputStream::flush()
+void OutputStream::flush()
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -59,7 +59,7 @@ void SAL_CALL OutputStream::flush()
         convertToIOException(pError, getXWeak());
 }
 
-void SAL_CALL OutputStream::closeOutput()
+void OutputStream::closeOutput()
 {
     if (mpStream)
         g_output_stream_close(G_OUTPUT_STREAM(mpStream), nullptr, nullptr);

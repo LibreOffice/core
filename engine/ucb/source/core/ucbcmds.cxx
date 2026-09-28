@@ -108,13 +108,13 @@ public:
     : m_xOrig(std::move( xOrig )) {}
 
     // XInteractionHandler methods.
-    virtual void SAL_CALL handle(
+    virtual void handle(
             const uno::Reference< task::XInteractionRequest >& Request ) override;
 };
 
 
 // virtual
-void SAL_CALL InteractionHandlerProxy::handle(
+void InteractionHandlerProxy::handle(
             const uno::Reference< task::XInteractionRequest >& Request )
 {
     if ( !m_xOrig.is() )
@@ -172,14 +172,14 @@ class ActiveDataSink : public cppu::WeakImplHelper< io::XActiveDataSink >
 
 public:
     // XActiveDataSink methods.
-    virtual void SAL_CALL setInputStream(
+    virtual void setInputStream(
                         const uno::Reference< io::XInputStream >& aStream ) override;
-    virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream() override;
+    virtual uno::Reference< io::XInputStream > getInputStream() override;
 };
 
 
 // virtual
-void SAL_CALL ActiveDataSink::setInputStream(
+void ActiveDataSink::setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
 {
     m_xStream = aStream;
@@ -187,7 +187,7 @@ void SAL_CALL ActiveDataSink::setInputStream(
 
 
 // virtual
-uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
+uno::Reference< io::XInputStream > ActiveDataSink::getInputStream()
 {
     return m_xStream;
 }
@@ -204,13 +204,13 @@ public:
     CommandProcessorInfo();
 
     // XCommandInfo methods
-    virtual cpo::uno::Sequence< ucb::CommandInfo > SAL_CALL getCommands() override;
-    virtual ucb::CommandInfo SAL_CALL
+    virtual cpo::uno::Sequence< ucb::CommandInfo > getCommands() override;
+    virtual ucb::CommandInfo
     getCommandInfoByName( const OUString& Name ) override;
-    virtual ucb::CommandInfo SAL_CALL
+    virtual ucb::CommandInfo
     getCommandInfoByHandle( sal_Int32 Handle ) override;
-    virtual bool SAL_CALL hasCommandByName( const OUString& Name ) override;
-    virtual bool SAL_CALL hasCommandByHandle( sal_Int32 Handle ) override;
+    virtual bool hasCommandByName( const OUString& Name ) override;
+    virtual bool hasCommandByHandle( sal_Int32 Handle ) override;
 };
 
 
@@ -233,7 +233,7 @@ CommandProcessorInfo::CommandProcessorInfo()
 
 
 // virtual
-cpo::uno::Sequence< ucb::CommandInfo > SAL_CALL
+cpo::uno::Sequence< ucb::CommandInfo >
 CommandProcessorInfo::getCommands()
 {
     return m_xInfo;
@@ -241,7 +241,7 @@ CommandProcessorInfo::getCommands()
 
 
 // virtual
-ucb::CommandInfo SAL_CALL
+ucb::CommandInfo
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 {
     auto pInfo = std::find_if(std::cbegin(m_xInfo), std::cend(m_xInfo),
@@ -254,7 +254,7 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 
 
 // virtual
-ucb::CommandInfo SAL_CALL
+ucb::CommandInfo
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 {
     auto pInfo = std::find_if(std::cbegin(m_xInfo), std::cend(m_xInfo),
@@ -267,7 +267,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 
 
 // virtual
-bool SAL_CALL CommandProcessorInfo::hasCommandByName(
+bool CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
     return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
@@ -276,7 +276,7 @@ bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 
 // virtual
-bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
+bool CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
     return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });

@@ -56,19 +56,19 @@ CachedContentResultSetStub::~CachedContentResultSetStub()
 
 
 // XInterface methods.
-void SAL_CALL CachedContentResultSetStub::acquire()
+void CachedContentResultSetStub::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL CachedContentResultSetStub::release()
+void CachedContentResultSetStub::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-Any SAL_CALL CachedContentResultSetStub
+Any CachedContentResultSetStub
     ::queryInterface( const Type&  rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
@@ -138,7 +138,7 @@ void CachedContentResultSetStub
 
 XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 //list all interfaces exclusive baseclasses
-Sequence< Type > SAL_CALL CachedContentResultSetStub
+Sequence< Type > CachedContentResultSetStub
     ::getTypes()
 {
     static Sequence<Type> ourTypes(
@@ -162,17 +162,17 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 
 // XServiceInfo methods.
 
-OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
+OUString CachedContentResultSetStub::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSetStub"_ustr;
 }
 
-bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
+bool CachedContentResultSetStub::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CachedContentResultSetStub::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetStub"_ustr };
 }
@@ -301,7 +301,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
     return aRet;
 }
 
-FetchResult SAL_CALL CachedContentResultSetStub
+FetchResult CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
     , sal_Int32 nRowCount, bool bDirection )
 {
@@ -452,7 +452,7 @@ void CachedContentResultSetStub
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
+FetchResult CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection )
 {
@@ -464,7 +464,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
+FetchResult CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection )
 {
@@ -476,7 +476,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
+FetchResult CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection )
 {
@@ -501,15 +501,15 @@ CachedContentResultSetStubFactory::~CachedContentResultSetStubFactory()
 
 // CachedContentResultSetStubFactory XServiceInfo methods.
 
-OUString SAL_CALL CachedContentResultSetStubFactory::getImplementationName()
+OUString CachedContentResultSetStubFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSetStubFactory"_ustr;
 }
-bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
+bool CachedContentResultSetStubFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CachedContentResultSetStubFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetStubFactory"_ustr };
 }
@@ -531,7 +531,7 @@ ucb_CachedContentResultSetStubFactory_get_implementation(
 
 
     //virtual
-Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
+Reference< XResultSet > CachedContentResultSetStubFactory
     ::createCachedContentResultSetStub(
             const Reference< XResultSet > & xSource )
 {

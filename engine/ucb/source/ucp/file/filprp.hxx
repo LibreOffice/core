@@ -35,13 +35,13 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
 
         virtual ~XPropertySetInfo_impl() override;
 
-        virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
+        virtual cpo::uno::Sequence< css::beans::Property >
         getProperties() override;
 
-        virtual css::beans::Property SAL_CALL
+        virtual css::beans::Property
         getPropertyByName( const OUString& aName ) override;
 
-        virtual bool SAL_CALL
+        virtual bool
         hasPropertyByName( const OUString& Name ) override;
 
     private:

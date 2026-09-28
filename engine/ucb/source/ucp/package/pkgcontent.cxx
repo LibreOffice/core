@@ -281,7 +281,7 @@ Content::~Content()
 
 
 // virtual
-void SAL_CALL Content::acquire()
+void Content::acquire()
     noexcept
 {
     ContentImplHelper::acquire();
@@ -289,7 +289,7 @@ void SAL_CALL Content::acquire()
 
 
 // virtual
-void SAL_CALL Content::release()
+void Content::release()
     noexcept
 {
     ContentImplHelper::release();
@@ -297,7 +297,7 @@ void SAL_CALL Content::release()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any Content::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet;
 
@@ -316,7 +316,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Content::getTypes()
 {
     if ( isFolder() )
     {
@@ -359,14 +359,14 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 
 
 // virtual
-OUString SAL_CALL Content::getImplementationName()
+OUString Content::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.PackageContent"_ustr;
 }
 
 
 // virtual
-cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Content::getSupportedServiceNames()
 {
     return { isFolder()? u"com.sun.star.ucb.PackageFolderContent"_ustr:u"com.sun.star.ucb.PackageStreamContent"_ustr } ;
 }
@@ -376,7 +376,7 @@ cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 
 // virtual
-OUString SAL_CALL Content::getContentType()
+OUString Content::getContentType()
 {
     return m_aProps.aContentType;
 }
@@ -386,7 +386,7 @@ OUString SAL_CALL Content::getContentType()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::execute(
+cpo::uno::Any Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
@@ -618,7 +618,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 
 
 // virtual
-void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
+void Content::abort( sal_Int32 /*CommandId*/ )
 {
     // @@@ Implement logic to abort running commands, if this makes
     //     sense for your content.
@@ -629,7 +629,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 
 
 // virtual
-cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo >
 Content::queryCreatableContentsInfo()
 {
     return m_aProps.getCreatableContentsInfo( m_aUri );
@@ -637,7 +637,7 @@ Content::queryCreatableContentsInfo()
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 Content::createNewContent( const ucb::ContentInfo& Info )
 {
     if ( isFolder() )

@@ -41,22 +41,22 @@ public:
     virtual ~UcbCommandEnvironment() override;
 
     // XInitialization
-    virtual void SAL_CALL
+    virtual void
     initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
     supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     // XCommandEnvironment
-    virtual cpo::uno::Reference< css::task::XInteractionHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::task::XInteractionHandler >
     getInteractionHandler() override;
-    virtual cpo::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XProgressHandler >
     getProgressHandler() override;
 };
 

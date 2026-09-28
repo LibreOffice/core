@@ -48,21 +48,21 @@ public:
     virtual ~HierarchyDataSource() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
-    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & aListener ) override;
 
     // XMultiServiceFactory
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString & aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
     // Non-Interface methods
 

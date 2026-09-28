@@ -209,7 +209,7 @@ bool ContentResultSetWrapper::impl_isForwardOnly(std::unique_lock<std::mutex>& /
 
 // XInterface methods.
 
-cpo::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -227,7 +227,7 @@ cpo::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const cpo::uno::
 // XComponent methods.
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::dispose()
+void ContentResultSetWrapper::dispose()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -294,7 +294,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
+void ContentResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -304,7 +304,7 @@ void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEvent
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
+void ContentResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -315,7 +315,7 @@ void SAL_CALL ContentResultSetWrapper::removeEventListener( const Reference< XEv
 //XCloseable methods.
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::close()
+void ContentResultSetWrapper::close()
 {
     {
         std::unique_lock aGuard( m_aMutex );
@@ -328,7 +328,7 @@ void SAL_CALL ContentResultSetWrapper::close()
 //XResultSetMetaDataSupplier methods.
 
 //virtual
-Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
+Reference< XResultSetMetaData > ContentResultSetWrapper::getMetaData()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -356,7 +356,7 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
 // XPropertySet methods.
 
 // virtual
-Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper::getPropertySetInfo()
+Reference< XPropertySetInfo > ContentResultSetWrapper::getPropertySetInfo()
 {
     std::unique_lock aGuard( m_aMutex );
     return getPropertySetInfoImpl(aGuard);
@@ -373,7 +373,7 @@ const Reference< XPropertySetInfo > & ContentResultSetWrapper::getPropertySetInf
 }
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void ContentResultSetWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     std::unique_lock aGuard( m_aMutex );
     return setPropertyValueImpl(aGuard, rPropertyName, rValue);
@@ -394,7 +394,7 @@ void ContentResultSetWrapper::setPropertyValueImpl( std::unique_lock<std::mutex>
 
 
 // virtual
-Any SAL_CALL ContentResultSetWrapper::getPropertyValue( const OUString& rPropertyName )
+Any ContentResultSetWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -409,7 +409,7 @@ Any SAL_CALL ContentResultSetWrapper::getPropertyValue( const OUString& rPropert
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void ContentResultSetWrapper::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -451,7 +451,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
+void ContentResultSetWrapper::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -492,7 +492,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void ContentResultSetWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -541,7 +541,7 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
+void ContentResultSetWrapper::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     impl_EnsureNotDisposed(aGuard);
@@ -645,7 +645,7 @@ void ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rE
 
 
 // virtual
-OUString SAL_CALL ContentResultSetWrapper::queryContentIdentifierString()
+OUString ContentResultSetWrapper::queryContentIdentifierString()
 {
     std::unique_lock aGuard(m_aMutex);
     return queryContentIdentifierStringImpl(aGuard);
@@ -665,7 +665,7 @@ OUString ContentResultSetWrapper::queryContentIdentifierStringImpl(std::unique_l
 }
 
 // virtual
-Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentIdentifier()
+Reference< XContentIdentifier > ContentResultSetWrapper::queryContentIdentifier()
 {
     std::unique_lock aGuard(m_aMutex);
     return queryContentIdentifierImpl(aGuard);
@@ -685,7 +685,7 @@ Reference<XContentIdentifier> ContentResultSetWrapper::queryContentIdentifierImp
 }
 
 // virtual
-Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
+Reference< XContent > ContentResultSetWrapper::queryContent()
 {
     std::unique_lock aGuard(m_aMutex);
     return queryContentImpl(aGuard);
@@ -707,7 +707,7 @@ Reference<XContent> ContentResultSetWrapper::queryContentImpl(std::unique_lock<s
 
 //virtual
 
-bool SAL_CALL ContentResultSetWrapper::next()
+bool ContentResultSetWrapper::next()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -721,7 +721,7 @@ bool SAL_CALL ContentResultSetWrapper::next()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::previous()
+bool ContentResultSetWrapper::previous()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -735,7 +735,7 @@ bool SAL_CALL ContentResultSetWrapper::previous()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
+bool ContentResultSetWrapper::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -749,7 +749,7 @@ bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
+bool ContentResultSetWrapper::relative( sal_Int32 rows )
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -764,7 +764,7 @@ bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
 
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::first()
+bool ContentResultSetWrapper::first()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -778,7 +778,7 @@ bool SAL_CALL ContentResultSetWrapper::first()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::last()
+bool ContentResultSetWrapper::last()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -792,7 +792,7 @@ bool SAL_CALL ContentResultSetWrapper::last()
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::beforeFirst()
+void ContentResultSetWrapper::beforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -806,7 +806,7 @@ void SAL_CALL ContentResultSetWrapper::beforeFirst()
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::afterLast()
+void ContentResultSetWrapper::afterLast()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -820,7 +820,7 @@ void SAL_CALL ContentResultSetWrapper::afterLast()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::isAfterLast()
+bool ContentResultSetWrapper::isAfterLast()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -834,7 +834,7 @@ bool SAL_CALL ContentResultSetWrapper::isAfterLast()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
+bool ContentResultSetWrapper::isBeforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -848,7 +848,7 @@ bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::isFirst()
+bool ContentResultSetWrapper::isFirst()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -862,7 +862,7 @@ bool SAL_CALL ContentResultSetWrapper::isFirst()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::isLast()
+bool ContentResultSetWrapper::isLast()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -877,7 +877,7 @@ bool SAL_CALL ContentResultSetWrapper::isLast()
 
 
 //virtual
-sal_Int32 SAL_CALL ContentResultSetWrapper::getRow()
+sal_Int32 ContentResultSetWrapper::getRow()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -891,7 +891,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper::getRow()
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper::refreshRow()
+void ContentResultSetWrapper::refreshRow()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -905,7 +905,7 @@ void SAL_CALL ContentResultSetWrapper::refreshRow()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::rowUpdated()
+bool ContentResultSetWrapper::rowUpdated()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -919,7 +919,7 @@ bool SAL_CALL ContentResultSetWrapper::rowUpdated()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::rowInserted()
+bool ContentResultSetWrapper::rowInserted()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -933,7 +933,7 @@ bool SAL_CALL ContentResultSetWrapper::rowInserted()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::rowDeleted()
+bool ContentResultSetWrapper::rowDeleted()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -947,7 +947,7 @@ bool SAL_CALL ContentResultSetWrapper::rowDeleted()
 }
 
 //virtual
-Reference< XInterface > SAL_CALL ContentResultSetWrapper::getStatement()
+Reference< XInterface > ContentResultSetWrapper::getStatement()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -972,7 +972,7 @@ void ContentResultSetWrapper::verifyGet()
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::wasNull()
+bool ContentResultSetWrapper::wasNull()
 {
     std::unique_lock aGuard(m_aMutex);
     impl_EnsureNotDisposed(aGuard);
@@ -986,105 +986,105 @@ bool SAL_CALL ContentResultSetWrapper::wasNull()
 }
 
 //virtual
-OUString SAL_CALL ContentResultSetWrapper::getString( sal_Int32 columnIndex )
+OUString ContentResultSetWrapper::getString( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getString( columnIndex );
 }
 
 //virtual
-bool SAL_CALL ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
+bool ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getBoolean( columnIndex );
 }
 
 //virtual
-sal_Int8 SAL_CALL ContentResultSetWrapper::getByte( sal_Int32 columnIndex )
+sal_Int8 ContentResultSetWrapper::getByte( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getByte( columnIndex );
 }
 
 //virtual
-sal_Int16 SAL_CALL ContentResultSetWrapper::getShort( sal_Int32 columnIndex )
+sal_Int16 ContentResultSetWrapper::getShort( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getShort( columnIndex );
 }
 
 //virtual
-sal_Int32 SAL_CALL ContentResultSetWrapper::getInt( sal_Int32 columnIndex )
+sal_Int32 ContentResultSetWrapper::getInt( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getInt( columnIndex );
 }
 
 //virtual
-sal_Int64 SAL_CALL ContentResultSetWrapper::getLong( sal_Int32 columnIndex )
+sal_Int64 ContentResultSetWrapper::getLong( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getLong( columnIndex );
 }
 
 //virtual
-float SAL_CALL ContentResultSetWrapper::getFloat( sal_Int32 columnIndex )
+float ContentResultSetWrapper::getFloat( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getFloat( columnIndex );
 }
 
 //virtual
-double SAL_CALL ContentResultSetWrapper::getDouble( sal_Int32 columnIndex )
+double ContentResultSetWrapper::getDouble( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getDouble( columnIndex );
 }
 
 //virtual
-Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > ContentResultSetWrapper::getBytes( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getBytes( columnIndex );
 }
 
 //virtual
-Date SAL_CALL ContentResultSetWrapper::getDate( sal_Int32 columnIndex )
+Date ContentResultSetWrapper::getDate( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getDate( columnIndex );
 }
 
 //virtual
-Time SAL_CALL ContentResultSetWrapper::getTime( sal_Int32 columnIndex )
+Time ContentResultSetWrapper::getTime( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getTime( columnIndex );
 }
 
 //virtual
-DateTime SAL_CALL ContentResultSetWrapper::getTimestamp( sal_Int32 columnIndex )
+DateTime ContentResultSetWrapper::getTimestamp( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getTimestamp( columnIndex );
 }
 
 //virtual
-Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getBinaryStream( columnIndex );
 }
 
 //virtual
-Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getCharacterStream( columnIndex );
 }
 
 //virtual
-Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
+Any ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     //if you change this macro please pay attention to
     //define XROW_GETXXX, where this is similar implemented
@@ -1101,28 +1101,28 @@ Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Re
 }
 
 //virtual
-Reference< XRef > SAL_CALL ContentResultSetWrapper::getRef( sal_Int32 columnIndex )
+Reference< XRef > ContentResultSetWrapper::getRef( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getRef( columnIndex );
 }
 
 //virtual
-Reference< XBlob > SAL_CALL ContentResultSetWrapper::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > ContentResultSetWrapper::getBlob( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getBlob( columnIndex );
 }
 
 //virtual
-Reference< XClob > SAL_CALL ContentResultSetWrapper::getClob( sal_Int32 columnIndex )
+Reference< XClob > ContentResultSetWrapper::getClob( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getClob( columnIndex );
 }
 
 //virtual
-Reference< XArray > SAL_CALL ContentResultSetWrapper::getArray( sal_Int32 columnIndex )
+Reference< XArray > ContentResultSetWrapper::getArray( sal_Int32 columnIndex )
 {
     verifyGet();
     return m_xRowOrigin->getArray( columnIndex );
@@ -1143,19 +1143,19 @@ ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
 
 
 // XInterface methods.
-void SAL_CALL ContentResultSetWrapperListener::acquire()
+void ContentResultSetWrapperListener::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentResultSetWrapperListener::release()
+void ContentResultSetWrapperListener::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any ContentResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -1171,7 +1171,7 @@ cpo::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const cp
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener::disposing( const EventObject& rEventObject )
+void ContentResultSetWrapperListener::disposing( const EventObject& rEventObject )
 {
     if( m_pOwner )
         m_pOwner->impl_disposing( rEventObject );
@@ -1182,7 +1182,7 @@ void SAL_CALL ContentResultSetWrapperListener::disposing( const EventObject& rEv
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener::propertyChange( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapperListener::propertyChange( const PropertyChangeEvent& rEvt )
 {
     if( m_pOwner )
         m_pOwner->impl_propertyChange( rEvt );
@@ -1192,7 +1192,7 @@ void SAL_CALL ContentResultSetWrapperListener::propertyChange( const PropertyCha
 //XVetoableChangeListener methods.
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener::vetoableChange( const PropertyChangeEvent& rEvt )
+void ContentResultSetWrapperListener::vetoableChange( const PropertyChangeEvent& rEvt )
 {
     if( m_pOwner )
         m_pOwner->impl_vetoableChange( rEvt );

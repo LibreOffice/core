@@ -215,22 +215,22 @@ namespace cmis
 
     XTYPEPROVIDER_COMMON_IMPL( RepoContent );
 
-    OUString SAL_CALL RepoContent::getImplementationName()
+    OUString RepoContent::getImplementationName()
     {
        return u"com.sun.star.comp.CmisRepoContent"_ustr;
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > RepoContent::getSupportedServiceNames()
     {
        return { u"com.sun.star.ucb.Content"_ustr };
     }
 
-    OUString SAL_CALL RepoContent::getContentType()
+    OUString RepoContent::getContentType()
     {
         return CMIS_REPO_TYPE;
     }
 
-    cpo::uno::Any SAL_CALL RepoContent::execute(
+    cpo::uno::Any RepoContent::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -270,13 +270,13 @@ namespace cmis
         return aRet;
     }
 
-    void SAL_CALL RepoContent::abort( sal_Int32 /*CommandId*/ )
+    void RepoContent::abort( sal_Int32 /*CommandId*/ )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - RepoContent::abort()" );
         // TODO Implement me
     }
 
-    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL RepoContent::getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > RepoContent::getTypes()
     {
         static cppu::OTypeCollection s_aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),

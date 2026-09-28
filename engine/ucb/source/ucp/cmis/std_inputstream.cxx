@@ -40,7 +40,7 @@ namespace cmis
     {
     }
 
-    cpo::uno::Any SAL_CALL StdInputStream::queryInterface( const cpo::uno::Type& rType )
+    cpo::uno::Any StdInputStream::queryInterface( const cpo::uno::Type& rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                           static_cast< XInputStream* >( this ),
@@ -49,17 +49,17 @@ namespace cmis
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
 
-    void SAL_CALL StdInputStream::acquire( ) noexcept
+    void StdInputStream::acquire( ) noexcept
     {
         OWeakObject::acquire();
     }
 
-    void SAL_CALL StdInputStream::release( ) noexcept
+    void StdInputStream::release( ) noexcept
     {
         OWeakObject::release();
     }
 
-    sal_Int32 SAL_CALL StdInputStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    sal_Int32 StdInputStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -84,7 +84,7 @@ namespace cmis
         return nRead;
     }
 
-    sal_Int32 SAL_CALL StdInputStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
+    sal_Int32 StdInputStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead )
     {
         std::scoped_lock aGuard( m_aMutex );
@@ -108,7 +108,7 @@ namespace cmis
         return nRead;
     }
 
-    void SAL_CALL StdInputStream::skipBytes( sal_Int32 nBytesToSkip )
+    void StdInputStream::skipBytes( sal_Int32 nBytesToSkip )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -126,17 +126,17 @@ namespace cmis
         }
     }
 
-    sal_Int32 SAL_CALL StdInputStream::available( )
+    sal_Int32 StdInputStream::available( )
     {
         return std::min<sal_Int64>( SAL_MAX_INT32, m_nLength - getPosition() );
     }
 
-    void SAL_CALL StdInputStream::closeInput( )
+    void StdInputStream::closeInput( )
     {
         // No need to implement this for an istream
     }
 
-    void SAL_CALL StdInputStream::seek( sal_Int64 location )
+    void StdInputStream::seek( sal_Int64 location )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -160,7 +160,7 @@ namespace cmis
         }
     }
 
-    sal_Int64 SAL_CALL StdInputStream::getPosition( )
+    sal_Int64 StdInputStream::getPosition( )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -174,7 +174,7 @@ namespace cmis
         return nPos;
     }
 
-    sal_Int64 SAL_CALL StdInputStream::getLength( )
+    sal_Int64 StdInputStream::getLength( )
     {
         return m_nLength;
     }

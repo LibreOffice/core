@@ -41,10 +41,10 @@ ContentIdentifier::~ContentIdentifier() {}
 
 // XContentIdentifier methods.
 // virtual
-OUString SAL_CALL ContentIdentifier::getContentIdentifier() { return m_aContentId; }
+OUString ContentIdentifier::getContentIdentifier() { return m_aContentId; }
 
 // virtual
-OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
+OUString ContentIdentifier::getContentProviderScheme()
 {
     if (m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty())
     {

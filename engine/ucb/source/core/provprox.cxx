@@ -51,15 +51,15 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL UcbContentProviderProxyFactory::getImplementationName()
+OUString UcbContentProviderProxyFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbContentProviderProxyFactory"_ustr;
 }
-bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
+bool UcbContentProviderProxyFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-cpo::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UcbContentProviderProxyFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.ContentProviderProxyFactory"_ustr };
 }
@@ -79,7 +79,7 @@ ucb_UcbContentProviderProxyFactory_get_implementation(
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
 UcbContentProviderProxyFactory::createContentProvider(
                                                 const OUString& Service )
 {
@@ -111,7 +111,7 @@ UcbContentProviderProxy::~UcbContentProviderProxy()
 // XInterface methods.
 
 // virtual
-Any SAL_CALL
+Any
 UcbContentProviderProxy::queryInterface( const Type & rType )
 {
     Any aRet = UcbContentProviderProxy_BASE::queryInterface(rType);
@@ -130,7 +130,7 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 
 // XTypeProvider methods.
 
-Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
+Sequence< Type > UcbContentProviderProxy::getTypes()
 {
     // Get original provider and forward the call...
     if (Reference<XTypeProvider> xProvider{ getContentProvider(), UNO_QUERY })
@@ -142,17 +142,17 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL UcbContentProviderProxy::getImplementationName()
+OUString UcbContentProviderProxy::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbContentProviderProxy"_ustr;
 }
 
-bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceName )
+bool UcbContentProviderProxy::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UcbContentProviderProxy::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.ContentProviderProxy"_ustr };
 }
@@ -162,7 +162,7 @@ cpo::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedSer
 
 
 // virtual
-Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
+Reference< XContent > UcbContentProviderProxy::queryContent(
                         const Reference< XContentIdentifier >& Identifier )
 {
     // Get original provider and forward the call...
@@ -176,7 +176,7 @@ Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
 
 
 // virtual
-sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
+sal_Int32 UcbContentProviderProxy::compareContentIds(
                        const Reference< XContentIdentifier >& Id1,
                        const Reference< XContentIdentifier >& Id2 )
 {
@@ -197,7 +197,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
 UcbContentProviderProxy::registerInstance( const OUString& Template,
                                              const OUString& Arguments,
                                              bool ReplaceExisting )
@@ -220,7 +220,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
 UcbContentProviderProxy::deregisterInstance( const OUString& Template,
                                              const OUString& Arguments )
 {
@@ -256,7 +256,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
 
 
 // virtual
-Reference< XContentProvider > SAL_CALL
+Reference< XContentProvider >
 UcbContentProviderProxy::getContentProvider()
 {
     std::scoped_lock aGuard( m_aMutex );

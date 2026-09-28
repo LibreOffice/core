@@ -37,16 +37,16 @@ public:
     virtual ~DocumentContentFactory() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL
+    virtual bool
     supportsService( const OUString& ServiceName ) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     // XTransientDocumentsDocumentContentFactory
-    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent >
     createDocumentContent( const cpo::uno::Reference< css::frame::XModel >& Model ) override;
 
 private:

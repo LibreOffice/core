@@ -167,36 +167,36 @@ public:
     virtual OUString getParentURL() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     getImplementationName() override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     getContentType() override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
         const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
-    virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
+    virtual void abort( sal_Int32 CommandId ) override;
 
     virtual cpo::uno::Sequence< css::ucb::ContentInfo >
-        SAL_CALL queryCreatableContentsInfo() override;
+        queryCreatableContentsInfo() override;
 
     virtual cpo::uno::Reference< css::ucb::XContent >
-        SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
+        createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::ucb::ContentInfo >

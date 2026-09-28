@@ -53,65 +53,65 @@ public:
     virtual ~UniversalContentBroker() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XComponent
-    virtual void SAL_CALL
+    virtual void
     dispose() override;
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference<
                             css::lang::XEventListener >& Listener ) override;
 
     // XInitialization
-    virtual void SAL_CALL
+    virtual void
     initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XContentProviderManager
-    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider >
     registerContentProvider( const cpo::uno::Reference< css::ucb::XContentProvider >&  Provider,
                              const OUString& Scheme,
                              bool ReplaceExisting ) override;
-    virtual void SAL_CALL
+    virtual void
     deregisterContentProvider( const cpo::uno::Reference< css::ucb::XContentProvider >&  Provider,
                                const OUString& Scheme ) override;
-    virtual cpo::uno::Sequence< css::ucb::ContentProviderInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentProviderInfo >
     queryContentProviders() override;
-    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider >
     queryContentProvider( const OUString& Identifier ) override;
 
     // XContentProvider
-    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     compareContentIds( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id1,
                        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
     // XContentIdentifierFactory
-    virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     createContentIdentifier( const OUString& ContentId ) override;
 
     // XCommandProcessor
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     createCommandIdentifier() override;
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
-    virtual void SAL_CALL
+    virtual void
     abort( sal_Int32 CommandId ) override;
 
     // XCommandProcessor2
-    virtual void SAL_CALL releaseCommandIdentifier(sal_Int32 aCommandId) override;
+    virtual void releaseCommandIdentifier(sal_Int32 aCommandId) override;
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
+    virtual void changesOccurred( const css::util::ChangesEvent& Event ) override;
 
      // XEventListener ( base of XChangesLisetenr )
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 private:
     cpo::uno::Reference< css::ucb::XContentProvider >

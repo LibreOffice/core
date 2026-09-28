@@ -2670,15 +2670,15 @@ public:
     WebDAVManager() {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.comp.WebDAVManager"_ustr;
     }
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override
+    virtual bool supportsService(const OUString& ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.ucb.WebDAVManager"_ustr };
     }

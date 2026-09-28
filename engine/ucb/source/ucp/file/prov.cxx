@@ -65,7 +65,7 @@ void FileProvider::init()
 }
 
 
-void SAL_CALL
+void
 FileProvider::initialize(
     const Sequence< Any >& aArguments )
 {
@@ -81,18 +81,18 @@ FileProvider::initialize(
 }
 
 // XServiceInfo methods.
-OUString SAL_CALL
+OUString
 FileProvider::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.FileProvider"_ustr;
 }
 
-bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
+bool FileProvider::supportsService(const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 FileProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.FileContentProvider"_ustr };
@@ -100,7 +100,7 @@ FileProvider::getSupportedServiceNames()
 
 // XContent
 
-Reference< XContent > SAL_CALL
+Reference< XContent >
 FileProvider::queryContent(
     const Reference< XContentIdentifier >& xIdentifier )
 {
@@ -117,7 +117,7 @@ FileProvider::queryContent(
     return Reference<XContent>(new BaseContent(m_pMyShell.get(), xIdentifier, aUnc));
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 FileProvider::compareContentIds(
                 const Reference< XContentIdentifier >& Id1,
                 const Reference< XContentIdentifier >& Id2 )
@@ -174,7 +174,7 @@ FileProvider::compareContentIds(
 }
 
 
-Reference< XContentIdentifier > SAL_CALL
+Reference< XContentIdentifier >
 FileProvider::createContentIdentifier(
                       const OUString& ContentId )
 {
@@ -195,25 +195,25 @@ public:
     XPropertySetInfoImpl2();
 
     // XInterface
-    virtual Any SAL_CALL
+    virtual Any
     queryInterface( const Type& aType ) override;
 
-    virtual void SAL_CALL
+    virtual void
     acquire()
         noexcept override;
 
-    virtual void SAL_CALL
+    virtual void
     release()
         noexcept override;
 
 
-    virtual Sequence< Property > SAL_CALL
+    virtual Sequence< Property >
     getProperties() override;
 
-    virtual Property SAL_CALL
+    virtual Property
     getPropertyByName( const OUString& aName ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     hasPropertyByName( const OUString& Name ) override;
 
 
@@ -239,7 +239,7 @@ XPropertySetInfoImpl2::XPropertySetInfoImpl2()
 {
 }
 
-void SAL_CALL
+void
 XPropertySetInfoImpl2::acquire()
     noexcept
 {
@@ -247,7 +247,7 @@ XPropertySetInfoImpl2::acquire()
 }
 
 
-void SAL_CALL
+void
 XPropertySetInfoImpl2::release()
     noexcept
 {
@@ -255,7 +255,7 @@ XPropertySetInfoImpl2::release()
 }
 
 
-Any SAL_CALL
+Any
 XPropertySetInfoImpl2::queryInterface( const Type& rType )
 {
     Any aRet = cppu::queryInterface( rType,
@@ -264,7 +264,7 @@ XPropertySetInfoImpl2::queryInterface( const Type& rType )
 }
 
 
-Property SAL_CALL
+Property
 XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
 {
     auto pProp = std::find_if(std::cbegin(m_seq), std::cend(m_seq),
@@ -276,14 +276,14 @@ XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
 }
 
 
-Sequence< Property > SAL_CALL
+Sequence< Property >
 XPropertySetInfoImpl2::getProperties()
 {
     return m_seq;
 }
 
 
-bool SAL_CALL
+bool
 XPropertySetInfoImpl2::hasPropertyByName(
     const OUString& aName )
 {
@@ -320,7 +320,7 @@ void FileProvider::initProperties(std::unique_lock<std::mutex>& /*rGuard*/)
 
 // XPropertySet
 
-Reference< XPropertySetInfo > SAL_CALL
+Reference< XPropertySetInfo >
 FileProvider::getPropertySetInfo(  )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -329,7 +329,7 @@ FileProvider::getPropertySetInfo(  )
 }
 
 
-void SAL_CALL
+void
 FileProvider::setPropertyValue( const OUString& aPropertyName,
                                 const Any& )
 {
@@ -340,7 +340,7 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
 }
 
 
-Any SAL_CALL
+Any
 FileProvider::getPropertyValue(
     const OUString& aPropertyName )
 {
@@ -363,7 +363,7 @@ FileProvider::getPropertyValue(
 }
 
 
-void SAL_CALL
+void
 FileProvider::addPropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
@@ -371,14 +371,14 @@ FileProvider::addPropertyChangeListener(
 }
 
 
-void SAL_CALL
+void
 FileProvider::removePropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
 {
 }
 
-void SAL_CALL
+void
 FileProvider::addVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
@@ -386,7 +386,7 @@ FileProvider::addVetoableChangeListener(
 }
 
 
-void SAL_CALL
+void
 FileProvider::removeVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
@@ -396,7 +396,7 @@ FileProvider::removeVetoableChangeListener(
 
 // XFileIdentifierConverter
 
-sal_Int32 SAL_CALL
+sal_Int32
 FileProvider::getFileProviderLocality( const OUString& BaseURL )
 {
     // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
@@ -411,7 +411,7 @@ FileProvider::getFileProviderLocality( const OUString& BaseURL )
                10 : -1;
 }
 
-OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const OUString&,
+OUString FileProvider::getFileURLFromSystemPath( const OUString&,
                                                                const OUString& SystemPath )
 {
     OUString aNormalizedPath;
@@ -421,7 +421,7 @@ OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const OUString&,
     return aNormalizedPath;
 }
 
-OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const OUString& URL )
+OUString FileProvider::getSystemPathFromFileURL( const OUString& URL )
 {
     OUString aSystemPath;
     if (osl::FileBase::getSystemPathFromFileURL( URL,aSystemPath ) != osl::FileBase::E_None )

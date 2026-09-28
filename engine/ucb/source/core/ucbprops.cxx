@@ -196,15 +196,15 @@ UcbPropertiesManager::~UcbPropertiesManager()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL UcbPropertiesManager::getImplementationName()
+OUString UcbPropertiesManager::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.UcbPropertiesManager"_ustr;
 }
-bool SAL_CALL UcbPropertiesManager::supportsService( const OUString& ServiceName )
+bool UcbPropertiesManager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-cpo::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UcbPropertiesManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.PropertiesManager"_ustr };
 }
@@ -224,14 +224,14 @@ ucb_UcbPropertiesManager_get_implementation(
 
 
 // virtual
-Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
+Sequence< Property > UcbPropertiesManager::getProperties()
 {
     return m_pProps;
 }
 
 
 // virtual
-Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName )
+Property UcbPropertiesManager::getPropertyByName( const OUString& aName )
 {
     Property aProp;
     if ( queryProperty( aName, aProp ) )
@@ -242,7 +242,7 @@ Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName
 
 
 // virtual
-bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name )
+bool UcbPropertiesManager::hasPropertyByName( const OUString& Name )
 {
     Property aProp;
     return queryProperty( Name, aProp );

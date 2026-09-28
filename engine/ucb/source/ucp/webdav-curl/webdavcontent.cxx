@@ -267,21 +267,21 @@ Content::~Content()
 
 
 // virtual
-void SAL_CALL Content::acquire() noexcept
+void Content::acquire() noexcept
 {
     ContentImplHelper::acquire();
 }
 
 
 // virtual
-void SAL_CALL Content::release() noexcept
+void Content::release() noexcept
 {
     ContentImplHelper::release();
 }
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any Content::queryInterface( const cpo::uno::Type & rType )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -327,7 +327,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Content::getTypes()
 {
     bool bFolder = false;
     try
@@ -383,14 +383,14 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 
 
 // virtual
-OUString SAL_CALL Content::getImplementationName()
+OUString Content::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.WebDAVContent"_ustr;
 }
 
 
 // virtual
-cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Content::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
     return aSNS;
@@ -401,7 +401,7 @@ cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 
 // virtual
-OUString SAL_CALL Content::getContentType()
+OUString Content::getContentType()
 {
     bool bFolder = false;
     try
@@ -428,7 +428,7 @@ OUString SAL_CALL Content::getContentType()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::execute(
+cpo::uno::Any Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
@@ -774,7 +774,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 
 
 // virtual
-void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
+void Content::abort( sal_Int32 /*CommandId*/ )
 {
     try
     {
@@ -1042,7 +1042,7 @@ void Content::removeProperty( const OUString& Name,
 }
 
 // virtual
-void SAL_CALL Content::addProperty( const OUString& Name,
+void Content::addProperty( const OUString& Name,
                                     sal_Int16 Attributes,
                                     const cpo::uno::Any& DefaultValue )
 {
@@ -1057,7 +1057,7 @@ void SAL_CALL Content::addProperty( const OUString& Name,
 }
 
 // virtual
-void SAL_CALL Content::removeProperty( const OUString& Name )
+void Content::removeProperty( const OUString& Name )
 {
     removeProperty( Name,
                     uno::Reference< ucb::XCommandEnvironment >() );
@@ -1068,7 +1068,7 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
 
 
 // virtual
-cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo >
 Content::queryCreatableContentsInfo()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1101,7 +1101,7 @@ Content::queryCreatableContentsInfo()
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 Content::createNewContent( const ucb::ContentInfo& Info )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );

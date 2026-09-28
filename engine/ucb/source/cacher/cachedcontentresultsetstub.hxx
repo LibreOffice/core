@@ -94,10 +94,10 @@ public:
 
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // own inherited
@@ -110,33 +110,33 @@ public:
 
     // XTypeProvider
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XFetchProvider
 
 
-    virtual css::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult
     fetch( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection ) override;
 
 
     // XFetchProviderForContentAccess
 
-    virtual css::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection ) override;
 
-    virtual css::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult
          fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection ) override;
 
-    virtual css::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult
          fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, bool bDirection ) override;
 };
@@ -154,13 +154,13 @@ public:
     virtual ~CachedContentResultSetStubFactory() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XCachedContentResultSetStubFactory
 
-    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSet >
     createCachedContentResultSetStub(
                 const cpo::uno::Reference< css::sdbc::XResultSet > & xSource ) override;
 };

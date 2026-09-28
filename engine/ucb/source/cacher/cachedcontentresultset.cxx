@@ -385,24 +385,24 @@ public:
             XPropertySetInfo > const & xPropertySetInfoOrigin );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XPropertySetInfo
-    virtual Sequence< css::beans::Property > SAL_CALL
+    virtual Sequence< css::beans::Property >
     getProperties() override;
 
-    virtual css::beans::Property SAL_CALL
+    virtual css::beans::Property
     getPropertyByName( const OUString& aName ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     hasPropertyByName( const OUString& Name ) override;
 };
 
@@ -480,19 +480,19 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
 
 // XInterface methods.
 
-void SAL_CALL CCRS_PropertySetInfo::acquire()
+void CCRS_PropertySetInfo::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL CCRS_PropertySetInfo::release()
+void CCRS_PropertySetInfo::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any CCRS_PropertySetInfo::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XTypeProvider* >(this),
@@ -512,14 +512,14 @@ XTYPEPROVIDER_IMPL_2( CCRS_PropertySetInfo
 // XPropertySetInfo methods.
 
 //virtual
-Sequence< Property > SAL_CALL CCRS_PropertySetInfo
+Sequence< Property > CCRS_PropertySetInfo
     ::getProperties()
 {
     return *m_xProperties;
 }
 
 //virtual
-Property SAL_CALL CCRS_PropertySetInfo
+Property CCRS_PropertySetInfo
     ::getPropertyByName( const OUString& aName )
 {
     Property aProp;
@@ -530,7 +530,7 @@ Property SAL_CALL CCRS_PropertySetInfo
 }
 
 //virtual
-bool SAL_CALL CCRS_PropertySetInfo
+bool CCRS_PropertySetInfo
     ::hasPropertyByName( const OUString& Name )
 {
     return ( impl_getPos( Name ) != -1 );
@@ -857,19 +857,19 @@ void CachedContentResultSet
 
 
 // XInterface methods.
-void SAL_CALL CachedContentResultSet::acquire()
+void CachedContentResultSet::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL CachedContentResultSet::release()
+void CachedContentResultSet::release()
     noexcept
 {
     OWeakObject::release();
 }
 
-Any SAL_CALL CachedContentResultSet
+Any CachedContentResultSet
     ::queryInterface( const Type&  rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
@@ -908,17 +908,17 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 
 // XServiceInfo methods.
 
-OUString SAL_CALL CachedContentResultSet::getImplementationName()
+OUString CachedContentResultSet::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSet"_ustr;
 }
 
-bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceName )
+bool CachedContentResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CachedContentResultSet::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSet"_ustr };
 }
@@ -1025,7 +1025,7 @@ void CachedContentResultSet
 
 
 // virtual
-Any SAL_CALL CachedContentResultSet
+Any CachedContentResultSet
     ::getPropertyValue( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1238,7 +1238,7 @@ Reference<XContent> CachedContentResultSet
 
 //virtual
 
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::next()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1275,7 +1275,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::previous()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1312,7 +1312,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1417,7 +1417,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::relative( sal_Int32 rows )
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1467,7 +1467,7 @@ bool SAL_CALL CachedContentResultSet
 
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::first()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1496,7 +1496,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::last()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1543,7 +1543,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::beforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1557,7 +1557,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::afterLast()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1571,7 +1571,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::isAfterLast()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1602,7 +1602,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::isBeforeFirst()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1636,7 +1636,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::isFirst()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1665,7 +1665,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::isLast()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1692,7 +1692,7 @@ bool SAL_CALL CachedContentResultSet
 
 
 //virtual
-sal_Int32 SAL_CALL CachedContentResultSet
+sal_Int32 CachedContentResultSet
     ::getRow()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1704,7 +1704,7 @@ sal_Int32 SAL_CALL CachedContentResultSet
 }
 
 //virtual
-void SAL_CALL CachedContentResultSet
+void CachedContentResultSet
     ::refreshRow()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1715,7 +1715,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::rowUpdated()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1725,7 +1725,7 @@ bool SAL_CALL CachedContentResultSet
     return false;
 }
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::rowInserted()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1736,7 +1736,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::rowDeleted()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1747,7 +1747,7 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< XInterface > SAL_CALL CachedContentResultSet
+Reference< XInterface > CachedContentResultSet
     ::getStatement()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1761,7 +1761,7 @@ Reference< XInterface > SAL_CALL CachedContentResultSet
 
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::wasNull()
 {
     std::unique_lock aGuard(m_aMutex);
@@ -1779,63 +1779,63 @@ bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-OUString SAL_CALL CachedContentResultSet
+OUString CachedContentResultSet
     ::getString( sal_Int32 columnIndex )
 {
     return rowOriginGet<OUString>(&css::sdbc::XRow::getString, columnIndex);
 }
 
 //virtual
-bool SAL_CALL CachedContentResultSet
+bool CachedContentResultSet
     ::getBoolean( sal_Int32 columnIndex )
 {
     return rowOriginGet<bool>(&css::sdbc::XRow::getBoolean, columnIndex);
 }
 
 //virtual
-sal_Int8 SAL_CALL CachedContentResultSet
+sal_Int8 CachedContentResultSet
     ::getByte( sal_Int32 columnIndex )
 {
     return rowOriginGet<sal_Int8>(&css::sdbc::XRow::getByte, columnIndex);
 }
 
 //virtual
-sal_Int16 SAL_CALL CachedContentResultSet
+sal_Int16 CachedContentResultSet
     ::getShort( sal_Int32 columnIndex )
 {
     return rowOriginGet<sal_Int16>(&css::sdbc::XRow::getShort, columnIndex);
 }
 
 //virtual
-sal_Int32 SAL_CALL CachedContentResultSet
+sal_Int32 CachedContentResultSet
     ::getInt( sal_Int32 columnIndex )
 {
     return rowOriginGet<sal_Int32>(&css::sdbc::XRow::getInt, columnIndex);
 }
 
 //virtual
-sal_Int64 SAL_CALL CachedContentResultSet
+sal_Int64 CachedContentResultSet
     ::getLong( sal_Int32 columnIndex )
 {
     return rowOriginGet<sal_Int64>(&css::sdbc::XRow::getLong, columnIndex);
 }
 
 //virtual
-float SAL_CALL CachedContentResultSet
+float CachedContentResultSet
     ::getFloat( sal_Int32 columnIndex )
 {
     return rowOriginGet<float>(&css::sdbc::XRow::getFloat, columnIndex);
 }
 
 //virtual
-double SAL_CALL CachedContentResultSet
+double CachedContentResultSet
     ::getDouble( sal_Int32 columnIndex )
 {
     return rowOriginGet<double>(&css::sdbc::XRow::getDouble, columnIndex);
 }
 
 //virtual
-Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
+Sequence< sal_Int8 > CachedContentResultSet
     ::getBytes( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Sequence<sal_Int8> >(
@@ -1843,7 +1843,7 @@ Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Date SAL_CALL CachedContentResultSet
+Date CachedContentResultSet
     ::getDate( sal_Int32 columnIndex )
 {
     return rowOriginGet<css::util::Date>(
@@ -1851,7 +1851,7 @@ Date SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Time SAL_CALL CachedContentResultSet
+Time CachedContentResultSet
     ::getTime( sal_Int32 columnIndex )
 {
     return rowOriginGet<css::util::Time>(
@@ -1859,7 +1859,7 @@ Time SAL_CALL CachedContentResultSet
 }
 
 //virtual
-DateTime SAL_CALL CachedContentResultSet
+DateTime CachedContentResultSet
     ::getTimestamp( sal_Int32 columnIndex )
 {
     return rowOriginGet<css::util::DateTime>(
@@ -1868,7 +1868,7 @@ DateTime SAL_CALL CachedContentResultSet
 
 //virtual
 Reference< css::io::XInputStream >
-    SAL_CALL CachedContentResultSet
+    CachedContentResultSet
     ::getBinaryStream( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::io::XInputStream> >(
@@ -1877,7 +1877,7 @@ Reference< css::io::XInputStream >
 
 //virtual
 Reference< css::io::XInputStream >
-    SAL_CALL CachedContentResultSet
+    CachedContentResultSet
     ::getCharacterStream( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::io::XInputStream> >(
@@ -1885,7 +1885,7 @@ Reference< css::io::XInputStream >
 }
 
 //virtual
-Any SAL_CALL CachedContentResultSet
+Any CachedContentResultSet
     ::getObject( sal_Int32 columnIndex,
            const Reference<
             css::container::XNameAccess >& typeMap )
@@ -1925,7 +1925,7 @@ Any SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< XRef > SAL_CALL CachedContentResultSet
+Reference< XRef > CachedContentResultSet
     ::getRef( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::sdbc::XRef> >(
@@ -1933,7 +1933,7 @@ Reference< XRef > SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< XBlob > SAL_CALL CachedContentResultSet
+Reference< XBlob > CachedContentResultSet
     ::getBlob( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::sdbc::XBlob> >(
@@ -1941,7 +1941,7 @@ Reference< XBlob > SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< XClob > SAL_CALL CachedContentResultSet
+Reference< XClob > CachedContentResultSet
     ::getClob( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::sdbc::XClob> >(
@@ -1949,7 +1949,7 @@ Reference< XClob > SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< XArray > SAL_CALL CachedContentResultSet
+Reference< XArray > CachedContentResultSet
     ::getArray( sal_Int32 columnIndex )
 {
     return rowOriginGet< cpo::uno::Reference<css::sdbc::XArray> >(
@@ -1989,15 +1989,15 @@ CachedContentResultSetFactory::~CachedContentResultSetFactory()
 
 // CachedContentResultSetFactory XServiceInfo methods.
 
-OUString SAL_CALL CachedContentResultSetFactory::getImplementationName()
+OUString CachedContentResultSetFactory::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.CachedContentResultSetFactory"_ustr;
 }
-bool SAL_CALL CachedContentResultSetFactory::supportsService( const OUString& ServiceName )
+bool CachedContentResultSetFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CachedContentResultSetFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetFactory"_ustr };
 }
@@ -2018,7 +2018,7 @@ ucb_CachedContentResultSetFactory_get_implementation(
 
 
     //virtual
-Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
+Reference< XResultSet > CachedContentResultSetFactory
     ::createCachedContentResultSet(
             const Reference< XResultSet > & xSource,
             const Reference< XContentIdentifierMapping > & xMapping )

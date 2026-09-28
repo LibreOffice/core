@@ -39,7 +39,7 @@ XCommandInfo_impl::~XCommandInfo_impl()
 }
 
 
-void SAL_CALL
+void
 XCommandInfo_impl::acquire()
   noexcept
 {
@@ -47,7 +47,7 @@ XCommandInfo_impl::acquire()
 }
 
 
-void SAL_CALL
+void
 XCommandInfo_impl::release()
   noexcept
 {
@@ -55,7 +55,7 @@ XCommandInfo_impl::release()
 }
 
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 XCommandInfo_impl::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -64,14 +64,14 @@ XCommandInfo_impl::queryInterface( const cpo::uno::Type& rType )
 }
 
 
-cpo::uno::Sequence< CommandInfo > SAL_CALL
+cpo::uno::Sequence< CommandInfo >
 XCommandInfo_impl::getCommands()
 {
     return m_pMyShell->m_sCommandInfo;
 }
 
 
-CommandInfo SAL_CALL
+CommandInfo
 XCommandInfo_impl::getCommandInfoByName(
     const OUString& aName )
 {
@@ -84,7 +84,7 @@ XCommandInfo_impl::getCommandInfoByName(
 }
 
 
-CommandInfo SAL_CALL
+CommandInfo
 XCommandInfo_impl::getCommandInfoByHandle(
     sal_Int32 Handle )
 {
@@ -97,7 +97,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
 }
 
 
-bool SAL_CALL
+bool
 XCommandInfo_impl::hasCommandByName(
     const OUString& aName )
 {
@@ -106,7 +106,7 @@ XCommandInfo_impl::hasCommandByName(
 }
 
 
-bool SAL_CALL
+bool
 XCommandInfo_impl::hasCommandByHandle(
     sal_Int32 Handle )
 {

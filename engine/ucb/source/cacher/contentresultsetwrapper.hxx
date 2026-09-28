@@ -141,64 +141,64 @@ public:
 
     // XInterface
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     queryInterface( const cpo::uno::Type & rType ) override;
 
 
     // XComponent
 
-    virtual void SAL_CALL
+    virtual void
     dispose() override final;
 
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     //XCloseable
 
-    virtual void SAL_CALL
+    virtual void
     close() override;
 
 
     //XResultSetMetaDataSupplier
 
-    virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData >
     getMetaData() override;
 
 
     // XPropertySet
 
-    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
     getPropertySetInfo() override final;
     const cpo::uno::Reference< css::beans::XPropertySetInfo > &
     getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard);
 
-    virtual void SAL_CALL
+    virtual void
     setPropertyValue( const OUString& aPropertyName,
                       const cpo::uno::Any& aValue ) final override;
     virtual void
     setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
                       const cpo::uno::Any& aValue );
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getPropertyValue( const OUString& PropertyName ) override;
 
-    virtual void SAL_CALL
+    virtual void
     addPropertyChangeListener( const OUString& aPropertyName,
                                const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removePropertyChangeListener( const OUString& aPropertyName,
                                   const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     addVetoableChangeListener( const OUString& PropertyName,
                                const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removeVetoableChangeListener( const OUString& PropertyName,
                                   const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
@@ -221,17 +221,17 @@ public:
 
     // XContentAccess
 
-    virtual OUString SAL_CALL
+    virtual OUString
     queryContentIdentifierString() override final;
     virtual OUString
     queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard);
 
-    virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier() override final;
     virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard);
 
-    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent() override final;
     virtual cpo::uno::Reference<css::ucb::XContent>
     queryContentImpl(std::unique_lock<std::mutex>& rGuard);
@@ -239,106 +239,106 @@ public:
 
     // XResultSet
 
-    virtual bool SAL_CALL
+    virtual bool
     next() override;
-    virtual bool SAL_CALL
+    virtual bool
     isBeforeFirst() override;
-    virtual bool SAL_CALL
+    virtual bool
     isAfterLast() override;
-    virtual bool SAL_CALL
+    virtual bool
     isFirst() override;
-    virtual bool SAL_CALL
+    virtual bool
     isLast() override;
-    virtual void SAL_CALL
+    virtual void
     beforeFirst() override;
-    virtual void SAL_CALL
+    virtual void
     afterLast() override;
-    virtual bool SAL_CALL
+    virtual bool
     first() override;
-    virtual bool SAL_CALL
+    virtual bool
     last() override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getRow() override;
-    virtual bool SAL_CALL
+    virtual bool
     absolute( sal_Int32 row ) override;
-    virtual bool SAL_CALL
+    virtual bool
     relative( sal_Int32 rows ) override;
-    virtual bool SAL_CALL
+    virtual bool
     previous() override;
-    virtual void SAL_CALL
+    virtual void
     refreshRow() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowUpdated() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowInserted() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowDeleted() override;
     virtual cpo::uno::Reference<
-                cpo::uno::XInterface > SAL_CALL
+                cpo::uno::XInterface >
     getStatement() override;
 
 
     // XRow
 
-    virtual bool SAL_CALL
+    virtual bool
     wasNull() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     getString( sal_Int32 columnIndex ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     getBoolean( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int8 SAL_CALL
+    virtual sal_Int8
     getByte( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
     getShort( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getInt( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
     getLong( sal_Int32 columnIndex ) override;
 
-    virtual float SAL_CALL
+    virtual float
     getFloat( sal_Int32 columnIndex ) override;
 
-    virtual double SAL_CALL
+    virtual double
     getDouble( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getBytes( sal_Int32 columnIndex ) override;
 
-    virtual css::util::Date SAL_CALL
+    virtual css::util::Date
     getDate( sal_Int32 columnIndex ) override;
 
-    virtual css::util::Time SAL_CALL
+    virtual css::util::Time
     getTime( sal_Int32 columnIndex ) override;
 
-    virtual css::util::DateTime SAL_CALL
+    virtual css::util::DateTime
     getTimestamp( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream >
     getBinaryStream( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream >
     getCharacterStream( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getObject( sal_Int32 columnIndex,
                const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XRef >
     getRef( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XBlob >
     getBlob( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XClob >
     getClob( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XArray >
     getArray( sal_Int32 columnIndex ) override;
 };
 
@@ -357,27 +357,27 @@ public:
 
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     //XEventListener
 
-    virtual void SAL_CALL
+    virtual void
         disposing( const css::lang::EventObject& Source ) override;
 
 
     //XPropertyChangeListener
 
-    virtual void SAL_CALL
+    virtual void
     propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
 
     //XVetoableChangeListener
 
-    virtual void SAL_CALL
+    virtual void
     vetoableChange( const css::beans::PropertyChangeEvent& aEvent ) override;
 
 

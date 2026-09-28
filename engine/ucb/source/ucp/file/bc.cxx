@@ -146,7 +146,7 @@ BaseContent::~BaseContent( )
 // XComponent
 
 
-void SAL_CALL
+void
 BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -155,7 +155,7 @@ BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener
 }
 
 
-void SAL_CALL
+void
 BaseContent::removeEventListener( const Reference< lang::XEventListener >& Listener )
 {
     std::unique_lock aGuard( m_aMutex );
@@ -164,7 +164,7 @@ BaseContent::removeEventListener( const Reference< lang::XEventListener >& Liste
 }
 
 
-void SAL_CALL
+void
 BaseContent::dispose()
 {
     lang::EventObject aEvt;
@@ -184,19 +184,19 @@ BaseContent::dispose()
 }
 
 //  XServiceInfo
-OUString SAL_CALL
+OUString
 BaseContent::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.FileContent"_ustr;
 }
 
-bool SAL_CALL
+bool
 BaseContent::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString >
 BaseContent::getSupportedServiceNames()
 {
     Sequence<OUString> ret { u"com.sun.star.ucb.FileContent"_ustr };
@@ -206,20 +206,20 @@ BaseContent::getSupportedServiceNames()
 //  XCommandProcessor
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 BaseContent::createCommandIdentifier()
 {
     return m_pMyShell->getCommandId();
 }
 
 
-void SAL_CALL
+void
 BaseContent::abort( sal_Int32 /*CommandId*/ )
 {
 }
 
 
-Any SAL_CALL
+Any
 BaseContent::execute( const Command& aCommand,
                       sal_Int32 CommandId,
                       const Reference< XCommandEnvironment >& Environment )
@@ -329,7 +329,7 @@ BaseContent::execute( const Command& aCommand,
 }
 
 
-void SAL_CALL
+void
 BaseContent::addPropertiesChangeListener(
     const Sequence< OUString >& PropertyNames,
     const Reference< beans::XPropertiesChangeListener >& Listener )
@@ -355,7 +355,7 @@ BaseContent::addPropertiesChangeListener(
 }
 
 
-void SAL_CALL
+void
 BaseContent::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames,
                                              const Reference< beans::XPropertiesChangeListener >& Listener )
 {
@@ -377,14 +377,14 @@ BaseContent::removePropertiesChangeListener( const Sequence< OUString >& Propert
 // XContent
 
 
-Reference< ucb::XContentIdentifier > SAL_CALL
+Reference< ucb::XContentIdentifier >
 BaseContent::getIdentifier()
 {
     return m_xContentIdentifier;
 }
 
 
-OUString SAL_CALL
+OUString
 BaseContent::getContentType()
 {
     if( !( m_nState & Deleted ) )
@@ -427,7 +427,7 @@ BaseContent::getContentType()
 }
 
 
-void SAL_CALL
+void
 BaseContent::addContentEventListener(
     const Reference< XContentEventListener >& Listener )
 {
@@ -437,7 +437,7 @@ BaseContent::addContentEventListener(
 }
 
 
-void SAL_CALL
+void
 BaseContent::removeContentEventListener(
     const Reference< XContentEventListener >& Listener )
 {
@@ -450,7 +450,7 @@ BaseContent::removeContentEventListener(
 // XPropertyContainer
 
 
-void SAL_CALL
+void
 BaseContent::addProperty(
     const OUString& Name,
     sal_Int16 Attributes,
@@ -465,7 +465,7 @@ BaseContent::addProperty(
 }
 
 
-void SAL_CALL
+void
 BaseContent::removeProperty( const OUString& Name )
 {
     if( m_nState & Deleted )
@@ -478,14 +478,14 @@ BaseContent::removeProperty( const OUString& Name )
 // XContentCreator
 
 
-Sequence< ContentInfo > SAL_CALL
+Sequence< ContentInfo >
 BaseContent::queryCreatableContentsInfo()
 {
     return TaskManager::queryCreatableContentsInfo();
 }
 
 
-Reference< XContent > SAL_CALL
+Reference< XContent >
 BaseContent::createNewContent( const ContentInfo& Info )
 {
     // Check type.
@@ -540,7 +540,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
 // XPropertySetInfoChangeNotifier
 
 
-void SAL_CALL
+void
 BaseContent::addPropertySetInfoChangeListener(
     const Reference< beans::XPropertySetInfoChangeListener >& Listener )
 {
@@ -550,7 +550,7 @@ BaseContent::addPropertySetInfoChangeListener(
 }
 
 
-void SAL_CALL
+void
 BaseContent::removePropertySetInfoChangeListener(
     const Reference< beans::XPropertySetInfoChangeListener >& Listener )
 {
@@ -563,7 +563,7 @@ BaseContent::removePropertySetInfoChangeListener(
 // XChild
 
 
-Reference< XInterface > SAL_CALL
+Reference< XInterface >
 BaseContent::getParent()
 {
     OUString ParentUnq = getParentName( m_aUncPath );
@@ -587,7 +587,7 @@ BaseContent::getParent()
 }
 
 
-void SAL_CALL
+void
 BaseContent::setParent(
     const Reference< XInterface >& )
 {

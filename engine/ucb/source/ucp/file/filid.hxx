@@ -36,10 +36,10 @@ namespace fileaccess {
         virtual ~FileContentIdentifier() override;
 
         // XContentIdentifier
-        virtual OUString SAL_CALL
+        virtual OUString
         getContentIdentifier() override;
 
-        virtual OUString SAL_CALL
+        virtual OUString
         getContentProviderScheme() override;
 
     private:

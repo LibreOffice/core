@@ -77,9 +77,9 @@ public:
                 SRSPropertySetInfo();
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() override;
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-    virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+    virtual Sequence< Property > getProperties() override;
+    virtual Property getPropertyByName( const OUString& aName ) override;
+    virtual bool hasPropertyByName( const OUString& Name ) override;
 };
 
 
@@ -118,17 +118,17 @@ SortedResultSet::~SortedResultSet()
 
 // XServiceInfo methods.
 
-OUString SAL_CALL SortedResultSet::getImplementationName()
+OUString SortedResultSet::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.SortedResultSet"_ustr;
 }
 
-bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName )
+bool SortedResultSet::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SortedResultSet::getSupportedServiceNames()
 {
     return { RESULTSET_SERVICE_NAME };
 }
@@ -136,7 +136,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceName
 
 // XComponent methods.
 
-void SAL_CALL SortedResultSet::dispose()
+void SortedResultSet::dispose()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -166,7 +166,7 @@ void SAL_CALL SortedResultSet::dispose()
 }
 
 
-void SAL_CALL SortedResultSet::addEventListener(
+void SortedResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( maMutex );
@@ -175,7 +175,7 @@ void SAL_CALL SortedResultSet::addEventListener(
 }
 
 
-void SAL_CALL SortedResultSet::removeEventListener(
+void SortedResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
 {
     std::unique_lock aGuard( maMutex );
@@ -187,7 +187,7 @@ void SAL_CALL SortedResultSet::removeEventListener(
 // XContentAccess methods.
 
 
-OUString SAL_CALL
+OUString
 SortedResultSet::queryContentIdentifierString()
 {
     std::unique_lock aGuard( maMutex );
@@ -195,7 +195,7 @@ SortedResultSet::queryContentIdentifierString()
 }
 
 
-Reference< XContentIdentifier > SAL_CALL
+Reference< XContentIdentifier >
 SortedResultSet::queryContentIdentifier()
 {
     std::unique_lock aGuard( maMutex );
@@ -203,7 +203,7 @@ SortedResultSet::queryContentIdentifier()
 }
 
 
-Reference< XContent > SAL_CALL
+Reference< XContent >
 SortedResultSet::queryContent()
 {
     std::unique_lock aGuard( maMutex );
@@ -213,7 +213,7 @@ SortedResultSet::queryContent()
 
 // XResultSet methods.
 
-bool SAL_CALL SortedResultSet::next()
+bool SortedResultSet::next()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -235,7 +235,7 @@ bool SAL_CALL SortedResultSet::next()
 }
 
 
-bool SAL_CALL SortedResultSet::isBeforeFirst()
+bool SortedResultSet::isBeforeFirst()
 {
     std::unique_lock aGuard( maMutex );
     if ( mnCurEntry )
@@ -245,7 +245,7 @@ bool SAL_CALL SortedResultSet::isBeforeFirst()
 }
 
 
-bool SAL_CALL SortedResultSet::isAfterLast()
+bool SortedResultSet::isAfterLast()
 {
     std::unique_lock aGuard( maMutex );
     if ( mnCurEntry > mnCount )
@@ -255,7 +255,7 @@ bool SAL_CALL SortedResultSet::isAfterLast()
 }
 
 
-bool SAL_CALL SortedResultSet::isFirst()
+bool SortedResultSet::isFirst()
 {
     std::unique_lock aGuard( maMutex );
     if ( mnCurEntry == 1 )
@@ -265,7 +265,7 @@ bool SAL_CALL SortedResultSet::isFirst()
 }
 
 
-bool SAL_CALL SortedResultSet::isLast()
+bool SortedResultSet::isLast()
 {
     std::unique_lock aGuard( maMutex );
     if ( mnCurEntry == mnCount )
@@ -275,7 +275,7 @@ bool SAL_CALL SortedResultSet::isLast()
 }
 
 
-void SAL_CALL SortedResultSet::beforeFirst()
+void SortedResultSet::beforeFirst()
 {
     std::unique_lock aGuard( maMutex );
     mnCurEntry = 0;
@@ -283,7 +283,7 @@ void SAL_CALL SortedResultSet::beforeFirst()
 }
 
 
-void SAL_CALL SortedResultSet::afterLast()
+void SortedResultSet::afterLast()
 {
     std::unique_lock aGuard( maMutex );
     mnCurEntry = mnCount+1;
@@ -291,7 +291,7 @@ void SAL_CALL SortedResultSet::afterLast()
 }
 
 
-bool SAL_CALL SortedResultSet::first()
+bool SortedResultSet::first()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -309,7 +309,7 @@ bool SAL_CALL SortedResultSet::first()
 }
 
 
-bool SAL_CALL SortedResultSet::last()
+bool SortedResultSet::last()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -327,7 +327,7 @@ bool SAL_CALL SortedResultSet::last()
 }
 
 
-sal_Int32 SAL_CALL SortedResultSet::getRow()
+sal_Int32 SortedResultSet::getRow()
 {
     std::unique_lock aGuard( maMutex );
     return mnCurEntry;
@@ -359,7 +359,7 @@ sal_Int32 SAL_CALL SortedResultSet::getRow()
     if a database access error occurs or if row is 0, or the result set
     type is FORWARD_ONLY.
  */
-bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
+bool SortedResultSet::absolute( sal_Int32 row )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -421,7 +421,7 @@ bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
     if a database access error occurs or if there is no
     current row, or the result set type is FORWARD_ONLY.
  */
-bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
+bool SortedResultSet::relative( sal_Int32 rows )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -465,7 +465,7 @@ bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
     if a database access error occurs or the result set type
     is FORWARD_ONLY.
  */
-bool SAL_CALL SortedResultSet::previous()
+bool SortedResultSet::previous()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -486,7 +486,7 @@ bool SAL_CALL SortedResultSet::previous()
 }
 
 
-void SAL_CALL SortedResultSet::refreshRow()
+void SortedResultSet::refreshRow()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -499,7 +499,7 @@ void SAL_CALL SortedResultSet::refreshRow()
 }
 
 
-bool SAL_CALL SortedResultSet::rowUpdated()
+bool SortedResultSet::rowUpdated()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -512,7 +512,7 @@ bool SAL_CALL SortedResultSet::rowUpdated()
 }
 
 
-bool SAL_CALL SortedResultSet::rowInserted()
+bool SortedResultSet::rowInserted()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -525,7 +525,7 @@ bool SAL_CALL SortedResultSet::rowInserted()
 }
 
 
-bool SAL_CALL SortedResultSet::rowDeleted()
+bool SortedResultSet::rowDeleted()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -538,7 +538,7 @@ bool SAL_CALL SortedResultSet::rowDeleted()
 }
 
 
-Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
+Reference< XInterface > SortedResultSet::getStatement()
 {
     std::unique_lock aGuard( maMutex );
 
@@ -554,97 +554,97 @@ Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
 // XRow methods.
 
 
-bool SAL_CALL SortedResultSet::wasNull()
+bool SortedResultSet::wasNull()
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->wasNull();
 }
 
 
-OUString SAL_CALL SortedResultSet::getString( sal_Int32 columnIndex )
+OUString SortedResultSet::getString( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getString( columnIndex );
 }
 
 
-bool SAL_CALL SortedResultSet::getBoolean( sal_Int32 columnIndex )
+bool SortedResultSet::getBoolean( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBoolean( columnIndex );
 }
 
 
-sal_Int8 SAL_CALL SortedResultSet::getByte( sal_Int32 columnIndex )
+sal_Int8 SortedResultSet::getByte( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getByte( columnIndex );
 }
 
 
-sal_Int16 SAL_CALL SortedResultSet::getShort( sal_Int32 columnIndex )
+sal_Int16 SortedResultSet::getShort( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getShort( columnIndex );
 }
 
 
-sal_Int32 SAL_CALL SortedResultSet::getInt( sal_Int32 columnIndex )
+sal_Int32 SortedResultSet::getInt( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getInt( columnIndex );
 }
 
-sal_Int64 SAL_CALL SortedResultSet::getLong( sal_Int32 columnIndex )
+sal_Int64 SortedResultSet::getLong( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getLong( columnIndex );
 }
 
 
-float SAL_CALL SortedResultSet::getFloat( sal_Int32 columnIndex )
+float SortedResultSet::getFloat( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getFloat( columnIndex );
 }
 
 
-double SAL_CALL SortedResultSet::getDouble( sal_Int32 columnIndex )
+double SortedResultSet::getDouble( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getDouble( columnIndex );
 }
 
 
-Sequence< sal_Int8 > SAL_CALL SortedResultSet::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > SortedResultSet::getBytes( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBytes( columnIndex );
 }
 
 
-Date SAL_CALL SortedResultSet::getDate( sal_Int32 columnIndex )
+Date SortedResultSet::getDate( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getDate( columnIndex );
 }
 
 
-Time SAL_CALL SortedResultSet::getTime( sal_Int32 columnIndex )
+Time SortedResultSet::getTime( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getTime( columnIndex );
 }
 
 
-DateTime SAL_CALL SortedResultSet::getTimestamp( sal_Int32 columnIndex )
+DateTime SortedResultSet::getTimestamp( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getTimestamp( columnIndex );
 }
 
 
-Reference< XInputStream > SAL_CALL
+Reference< XInputStream >
 SortedResultSet::getBinaryStream( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
@@ -652,7 +652,7 @@ SortedResultSet::getBinaryStream( sal_Int32 columnIndex )
 }
 
 
-Reference< XInputStream > SAL_CALL
+Reference< XInputStream >
 SortedResultSet::getCharacterStream( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
@@ -660,7 +660,7 @@ SortedResultSet::getCharacterStream( sal_Int32 columnIndex )
 }
 
 
-Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
+Any SortedResultSet::getObject( sal_Int32 columnIndex,
                        const Reference< XNameAccess >& typeMap )
 {
     std::unique_lock aGuard( maMutex );
@@ -669,28 +669,28 @@ Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
 }
 
 
-Reference< XRef > SAL_CALL SortedResultSet::getRef( sal_Int32 columnIndex )
+Reference< XRef > SortedResultSet::getRef( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getRef( columnIndex );
 }
 
 
-Reference< XBlob > SAL_CALL SortedResultSet::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > SortedResultSet::getBlob( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBlob( columnIndex );
 }
 
 
-Reference< XClob > SAL_CALL SortedResultSet::getClob( sal_Int32 columnIndex )
+Reference< XClob > SortedResultSet::getClob( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getClob( columnIndex );
 }
 
 
-Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
+Reference< XArray > SortedResultSet::getArray( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getArray( columnIndex );
@@ -700,7 +700,7 @@ Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
 // XCloseable methods.
 
 
-void SAL_CALL SortedResultSet::close()
+void SortedResultSet::close()
 {
     std::unique_lock aGuard( maMutex );
     Reference< XCloseable >::query(mxOriginal)->close();
@@ -710,7 +710,7 @@ void SAL_CALL SortedResultSet::close()
 // XResultSetMetaDataSupplier methods.
 
 
-Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
+Reference< XResultSetMetaData > SortedResultSet::getMetaData()
 {
     std::unique_lock aGuard( maMutex );
     return Reference< XResultSetMetaDataSupplier >::query(mxOriginal)->getMetaData();
@@ -720,7 +720,7 @@ Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
 // XPropertySet methods.
 
 
-Reference< XPropertySetInfo > SAL_CALL
+Reference< XPropertySetInfo >
 SortedResultSet::getPropertySetInfo()
 {
     std::unique_lock aGuard( maMutex );
@@ -734,7 +734,7 @@ SortedResultSet::getPropertySetInfo()
 }
 
 
-void SAL_CALL SortedResultSet::setPropertyValue(
+void SortedResultSet::setPropertyValue(
                         const OUString& PropertyName,
                         const Any& )
 {
@@ -745,7 +745,7 @@ void SAL_CALL SortedResultSet::setPropertyValue(
 }
 
 
-Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
+Any SortedResultSet::getPropertyValue( const OUString& PropertyName )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -783,7 +783,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
 }
 
 
-void SAL_CALL SortedResultSet::addPropertyChangeListener(
+void SortedResultSet::addPropertyChangeListener(
                         const OUString& PropertyName,
                         const Reference< XPropertyChangeListener >& Listener )
 {
@@ -793,7 +793,7 @@ void SAL_CALL SortedResultSet::addPropertyChangeListener(
 }
 
 
-void SAL_CALL SortedResultSet::removePropertyChangeListener(
+void SortedResultSet::removePropertyChangeListener(
                         const OUString& PropertyName,
                         const Reference< XPropertyChangeListener >& Listener )
 {
@@ -803,7 +803,7 @@ void SAL_CALL SortedResultSet::removePropertyChangeListener(
 }
 
 
-void SAL_CALL SortedResultSet::addVetoableChangeListener(
+void SortedResultSet::addVetoableChangeListener(
                         const OUString& PropertyName,
                         const Reference< XVetoableChangeListener >& Listener )
 {
@@ -813,7 +813,7 @@ void SAL_CALL SortedResultSet::addVetoableChangeListener(
 }
 
 
-void SAL_CALL SortedResultSet::removeVetoableChangeListener(
+void SortedResultSet::removeVetoableChangeListener(
                         const OUString& PropertyName,
                         const Reference< XVetoableChangeListener >& Listener )
 {
@@ -1721,14 +1721,14 @@ SRSPropertySetInfo::SRSPropertySetInfo()
 
 // XPropertySetInfo methods.
 
-Sequence< Property > SAL_CALL
+Sequence< Property >
 SRSPropertySetInfo::getProperties()
 {
     return Sequence < Property > ( maProps, 2 );
 }
 
 
-Property SAL_CALL
+Property
 SRSPropertySetInfo::getPropertyByName( const OUString& Name )
 {
     if ( Name == "RowCount" )
@@ -1740,7 +1740,7 @@ SRSPropertySetInfo::getPropertyByName( const OUString& Name )
 }
 
 
-bool SAL_CALL
+bool
 SRSPropertySetInfo::hasPropertyByName( const OUString& Name )
 {
     if ( Name == "RowCount" )

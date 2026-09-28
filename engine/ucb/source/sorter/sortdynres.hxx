@@ -71,32 +71,32 @@ public:
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XComponent
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
-    virtual void SAL_CALL
+    virtual void
     addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     // XDynamicResultSet
 
-    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL getStaticResultSet() override;
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > getStaticResultSet() override;
 
-    virtual void SAL_CALL
+    virtual void
     setListener( const cpo::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener ) override;
 
-    virtual void SAL_CALL
+    virtual void
     connectToCache( const cpo::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
     getCapabilities() override;
 
 
@@ -121,12 +121,12 @@ public:
 
     // XEventListener ( base of XDynamicResultSetListener )
 
-    virtual void SAL_CALL
+    virtual void
     disposing( const css::lang::EventObject& Source ) override;
 
     // XDynamicResultSetListener
 
-    virtual void SAL_CALL notify( const css::ucb::ListEvent& Changes ) override;
+    virtual void notify( const css::ucb::ListEvent& Changes ) override;
 
     // own methods:
 
@@ -149,12 +149,12 @@ public:
 
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XSortedDynamicResultSetFactory
-    virtual cpo::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XDynamicResultSet >
     createSortedDynamicResultSet(
                 const cpo::uno::Reference< css::ucb::XDynamicResultSet > & Source,
                 const cpo::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,

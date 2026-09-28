@@ -184,21 +184,21 @@ public:
 
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire()
         noexcept override;
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
     // XTypeProvider
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPropertySet inherited
 
@@ -207,7 +207,7 @@ public:
     setPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName,
                       const cpo::uno::Any& aValue ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getPropertyValue( const OUString& PropertyName ) override;
 
 
@@ -237,106 +237,106 @@ public:
 
     // XResultSet inherited
 
-    virtual bool SAL_CALL
+    virtual bool
     next() override;
-    virtual bool SAL_CALL
+    virtual bool
     isBeforeFirst() override;
-    virtual bool SAL_CALL
+    virtual bool
     isAfterLast() override;
-    virtual bool SAL_CALL
+    virtual bool
     isFirst() override;
-    virtual bool SAL_CALL
+    virtual bool
     isLast() override;
-    virtual void SAL_CALL
+    virtual void
     beforeFirst() override;
-    virtual void SAL_CALL
+    virtual void
     afterLast() override;
-    virtual bool SAL_CALL
+    virtual bool
     first() override;
-    virtual bool SAL_CALL
+    virtual bool
     last() override;
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getRow() override;
-    virtual bool SAL_CALL
+    virtual bool
     absolute( sal_Int32 row ) override;
-    virtual bool SAL_CALL
+    virtual bool
     relative( sal_Int32 rows ) override;
-    virtual bool SAL_CALL
+    virtual bool
     previous() override;
-    virtual void SAL_CALL
+    virtual void
     refreshRow() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowUpdated() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowInserted() override;
-    virtual bool SAL_CALL
+    virtual bool
     rowDeleted() override;
     virtual cpo::uno::Reference<
-                cpo::uno::XInterface > SAL_CALL
+                cpo::uno::XInterface >
     getStatement() override;
 
 
     // XRow inherited
 
-    virtual bool SAL_CALL
+    virtual bool
     wasNull() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
     getString( sal_Int32 columnIndex ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     getBoolean( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int8 SAL_CALL
+    virtual sal_Int8
     getByte( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
     getShort( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int32 SAL_CALL
+    virtual sal_Int32
     getInt( sal_Int32 columnIndex ) override;
 
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
     getLong( sal_Int32 columnIndex ) override;
 
-    virtual float SAL_CALL
+    virtual float
     getFloat( sal_Int32 columnIndex ) override;
 
-    virtual double SAL_CALL
+    virtual double
     getDouble( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
     getBytes( sal_Int32 columnIndex ) override;
 
-    virtual css::util::Date SAL_CALL
+    virtual css::util::Date
     getDate( sal_Int32 columnIndex ) override;
 
-    virtual css::util::Time SAL_CALL
+    virtual css::util::Time
     getTime( sal_Int32 columnIndex ) override;
 
-    virtual css::util::DateTime SAL_CALL
+    virtual css::util::DateTime
     getTimestamp( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream >
     getBinaryStream( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream >
     getCharacterStream( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
     getObject( sal_Int32 columnIndex,
                const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XRef >
     getRef( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XBlob >
     getBlob( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XClob >
     getClob( sal_Int32 columnIndex ) override;
 
-    virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XArray >
     getArray( sal_Int32 columnIndex ) override;
 
 
@@ -369,13 +369,13 @@ public:
     virtual ~CachedContentResultSetFactory() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XCachedContentResultSetFactory
 
-    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSet >
     createCachedContentResultSet(
             const cpo::uno::Reference< css::sdbc::XResultSet > & xSource,
             const cpo::uno::Reference< css::ucb::XContentIdentifierMapping > & xMapping ) override;

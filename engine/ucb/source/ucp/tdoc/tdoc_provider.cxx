@@ -66,17 +66,17 @@ ContentProvider::~ContentProvider()
 
 
 // XServiceInfo methods.
-OUString SAL_CALL ContentProvider::getImplementationName()
+OUString ContentProvider::getImplementationName()
 {
     return u"com.sun.star.comp.ucb.TransientDocumentsContentProvider"_ustr;
 }
 
-bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
+bool ContentProvider::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr };
 }
@@ -96,7 +96,7 @@ ucb_tdoc_ContentProvider_get_implementation(
 
 
 // virtual
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
 {
@@ -129,7 +129,7 @@ ContentProvider::queryContent(
 
 // XTransientDocumentsDocumentContentIdentifierFactory methods.
 
-uno::Reference<ucb::XContentIdentifier> SAL_CALL
+uno::Reference<ucb::XContentIdentifier>
 ContentProvider::createDocumentContentIdentifier(
         uno::Reference<frame::XModel> const& xModel)
 {
@@ -160,7 +160,7 @@ ContentProvider::createDocumentContentIdentifier(
 
 // XTransientDocumentsDocumentContentFactory methods.
 
-uno::Reference< ucb::XContent > SAL_CALL
+uno::Reference< ucb::XContent >
 ContentProvider::createDocumentContent(
         uno::Reference<frame::XModel> const& xModel)
 {

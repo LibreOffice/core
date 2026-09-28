@@ -31,17 +31,17 @@ namespace cmis
 
             virtual ~StdOutputStream( ) override;
 
-            virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override;
+            virtual cpo::uno::Any queryInterface( const cpo::uno::Type& rType ) override;
 
-            virtual void SAL_CALL acquire ( ) noexcept override;
+            virtual void acquire ( ) noexcept override;
 
-            virtual void SAL_CALL release ( ) noexcept override;
+            virtual void release ( ) noexcept override;
 
-            virtual void SAL_CALL writeBytes ( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+            virtual void writeBytes ( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
-            virtual void SAL_CALL flush ( ) override;
+            virtual void flush ( ) override;
 
-            virtual void SAL_CALL closeOutput ( ) override;
+            virtual void closeOutput ( ) override;
 
         private:
 

@@ -46,19 +46,19 @@ public:
     {}
 
 private:
-    OUString SAL_CALL getImplementationName() override
+    OUString getImplementationName() override
     { return u"com.sun.star.comp.ucb.ImageContentProvider"_ustr; }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override
+    bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return cpo::uno::Sequence<OUString>{
             u"com.sun.star.ucb.ImageContentProvider"_ustr};
     }
 
-    cpo::uno::Reference<css::ucb::XContent> SAL_CALL queryContent(
+    cpo::uno::Reference<css::ucb::XContent> queryContent(
         cpo::uno::Reference<css::ucb::XContentIdentifier> const & Identifier)
         override
     {
@@ -137,7 +137,7 @@ private:
             ? content.get() : cpo::uno::Reference<css::ucb::XContent>();
     }
 
-    sal_Int32 SAL_CALL compareContentIds(
+    sal_Int32 compareContentIds(
         cpo::uno::Reference<css::ucb::XContentIdentifier> const & Id1,
         cpo::uno::Reference<css::ucb::XContentIdentifier> const & Id2) override
     {

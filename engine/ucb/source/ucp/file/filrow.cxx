@@ -82,7 +82,7 @@ XRow_impl::~XRow_impl()
 }
 
 
-bool SAL_CALL
+bool
 XRow_impl::wasNull()
 {
   std::scoped_lock aGuard( m_aMutex );
@@ -90,7 +90,7 @@ XRow_impl::wasNull()
 }
 
 
-OUString SAL_CALL
+OUString
 XRow_impl::getString(
              sal_Int32 columnIndex )
 {
@@ -99,7 +99,7 @@ XRow_impl::getString(
   return getValue<OUString>(columnIndex);
 }
 
-bool SAL_CALL
+bool
 XRow_impl::getBoolean(
     sal_Int32 columnIndex )
 {
@@ -109,7 +109,7 @@ XRow_impl::getBoolean(
 }
 
 
-sal_Int8 SAL_CALL
+sal_Int8
 XRow_impl::getByte(
     sal_Int32 columnIndex )
 {
@@ -118,7 +118,7 @@ XRow_impl::getByte(
     return getValue<sal_Int8>(columnIndex);
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
 XRow_impl::getShort(
     sal_Int32 columnIndex )
 {
@@ -128,7 +128,7 @@ XRow_impl::getShort(
 }
 
 
-sal_Int32 SAL_CALL
+sal_Int32
 XRow_impl::getInt(
           sal_Int32 columnIndex )
 {
@@ -137,7 +137,7 @@ XRow_impl::getInt(
     return getValue<sal_Int32>(columnIndex);
 }
 
-sal_Int64 SAL_CALL
+sal_Int64
 XRow_impl::getLong(
            sal_Int32 columnIndex )
 {
@@ -146,7 +146,7 @@ XRow_impl::getLong(
     return getValue<sal_Int64>(columnIndex);
 }
 
-float SAL_CALL
+float
 XRow_impl::getFloat(
     sal_Int32 columnIndex )
 {
@@ -155,7 +155,7 @@ XRow_impl::getFloat(
     return getValue<float>(columnIndex);
 }
 
-double SAL_CALL
+double
 XRow_impl::getDouble(
     sal_Int32 columnIndex )
 {
@@ -164,7 +164,7 @@ XRow_impl::getDouble(
     return getValue<double>(columnIndex);
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL
+cpo::uno::Sequence< sal_Int8 >
 XRow_impl::getBytes(
     sal_Int32 columnIndex )
 {
@@ -173,7 +173,7 @@ XRow_impl::getBytes(
     return getValue<cpo::uno::Sequence< sal_Int8 >>(columnIndex);
 }
 
-util::Date SAL_CALL
+util::Date
 XRow_impl::getDate(
     sal_Int32 columnIndex )
 {
@@ -182,7 +182,7 @@ XRow_impl::getDate(
     return getValue<util::Date>(columnIndex);
 }
 
-util::Time SAL_CALL
+util::Time
 XRow_impl::getTime(
     sal_Int32 columnIndex )
 {
@@ -191,7 +191,7 @@ XRow_impl::getTime(
     return getValue<util::Time>(columnIndex);
 }
 
-util::DateTime SAL_CALL
+util::DateTime
 XRow_impl::getTimestamp(
             sal_Int32 columnIndex )
 {
@@ -201,7 +201,7 @@ XRow_impl::getTimestamp(
 }
 
 
-uno::Reference< io::XInputStream > SAL_CALL
+uno::Reference< io::XInputStream >
 XRow_impl::getBinaryStream(
                sal_Int32 columnIndex )
 {
@@ -211,7 +211,7 @@ XRow_impl::getBinaryStream(
 }
 
 
-uno::Reference< io::XInputStream > SAL_CALL
+uno::Reference< io::XInputStream >
 XRow_impl::getCharacterStream(
                   sal_Int32 columnIndex )
 {
@@ -221,7 +221,7 @@ XRow_impl::getCharacterStream(
 }
 
 
-cpo::uno::Any SAL_CALL
+cpo::uno::Any
 XRow_impl::getObject(
     sal_Int32 columnIndex,
     const uno::Reference< container::XNameAccess >& )
@@ -234,7 +234,7 @@ XRow_impl::getObject(
     return Value;
 }
 
-uno::Reference< sdbc::XRef > SAL_CALL
+uno::Reference< sdbc::XRef >
 XRow_impl::getRef(
     sal_Int32 columnIndex )
 {
@@ -243,7 +243,7 @@ XRow_impl::getRef(
     return getValue<uno::Reference< sdbc::XRef >>(columnIndex);
 }
 
-uno::Reference< sdbc::XBlob > SAL_CALL
+uno::Reference< sdbc::XBlob >
 XRow_impl::getBlob(
            sal_Int32 columnIndex )
 {
@@ -252,7 +252,7 @@ XRow_impl::getBlob(
     return getValue<uno::Reference< sdbc::XBlob >>(columnIndex);
 }
 
-uno::Reference< sdbc::XClob > SAL_CALL
+uno::Reference< sdbc::XClob >
 XRow_impl::getClob(
            sal_Int32 columnIndex )
 {
@@ -262,7 +262,7 @@ XRow_impl::getClob(
 }
 
 
-uno::Reference< sdbc::XArray > SAL_CALL
+uno::Reference< sdbc::XArray >
 XRow_impl::getArray(
     sal_Int32 columnIndex )
 {

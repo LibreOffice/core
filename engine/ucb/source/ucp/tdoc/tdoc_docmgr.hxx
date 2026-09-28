@@ -73,15 +73,15 @@ namespace tdoc_ucp {
                 : m_pManager( pMgr ) {}
 
             // util::XCloseListener
-            virtual void SAL_CALL queryClosing(
+            virtual void queryClosing(
                     const css::lang::EventObject& Source,
                     bool GetsOwnership ) override;
 
-            virtual void SAL_CALL notifyClosing(
+            virtual void notifyClosing(
                     const css::lang::EventObject& Source ) override;
 
             // lang::XEventListener (base of util::XCloseListener)
-            virtual void SAL_CALL disposing(
+            virtual void disposing(
                     const css::lang::EventObject & Source ) override;
 
             void Dispose() { m_pManager = nullptr; }
@@ -99,11 +99,11 @@ namespace tdoc_ucp {
         void destroy();
 
         // document::XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured(
+        virtual void documentEventOccured(
                 const css::document::DocumentEvent & Event ) override;
 
         // lang::XEventListener (base of document::XDocumentEventListener)
-        virtual void SAL_CALL disposing(
+        virtual void disposing(
                 const css::lang::EventObject & Source ) override;
 
         // Non-interface

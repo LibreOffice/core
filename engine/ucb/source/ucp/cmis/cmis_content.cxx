@@ -1734,34 +1734,34 @@ namespace cmis
 
     XTYPEPROVIDER_COMMON_IMPL( Content );
 
-    void SAL_CALL Content::acquire() noexcept
+    void Content::acquire() noexcept
     {
         ContentImplHelper::acquire();
     }
 
-    void SAL_CALL Content::release() noexcept
+    void Content::release() noexcept
     {
         ContentImplHelper::release();
     }
 
-    cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
+    cpo::uno::Any Content::queryInterface( const cpo::uno::Type & rType )
     {
         cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
     }
 
-    OUString SAL_CALL Content::getImplementationName()
+    OUString Content::getImplementationName()
     {
        return u"com.sun.star.comp.CmisContent"_ustr;
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > Content::getSupportedServiceNames()
     {
            cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.CmisContent"_ustr };
            return aSNS;
     }
 
-    OUString SAL_CALL Content::getContentType()
+    OUString Content::getContentType()
     {
         OUString sRet;
         try
@@ -1785,7 +1785,7 @@ namespace cmis
         return sRet;
     }
 
-    cpo::uno::Any SAL_CALL Content::execute(
+    cpo::uno::Any Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1913,18 +1913,18 @@ namespace cmis
         return aRet;
     }
 
-    void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
+    void Content::abort( sal_Int32 /*CommandId*/ )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - Content::abort()" );
         // TODO Implement me
     }
 
-    cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+    cpo::uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo()
     {
         return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
     }
 
-    uno::Reference< ucb::XContent > SAL_CALL Content::createNewContent(
+    uno::Reference< ucb::XContent > Content::createNewContent(
             const ucb::ContentInfo& Info )
     {
         bool create_document;
@@ -1954,7 +1954,7 @@ namespace cmis
         }
     }
 
-    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > Content::getTypes()
     {
         try
         {
