@@ -1,0 +1,30 @@
+From 648ff3be795c39d9d5f8bccb55253fd674ffe91d Mon Sep 17 00:00:00 2001
+From: fredt <fredt@7c7dc5f5-a22d-0410-a3af-b41755a11667>
+Date: Mon, 31 Aug 2009 17:27:31 +0000
+Subject: [PATCH] code updates leading to 1.8.1 release
+
+git-svn-id: https://svn.code.sf.net/p/hsqldb/svn/base-one/trunk@3155 7c7dc5f5-a22d-0410-a3af-b41755a11667
+---
+ src/org/hsqldb/persist/LockFile.java | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/org/hsqldb/persist/LockFile.java b/src/org/hsqldb/persist/LockFile.java
+index ece83bb..6045bed 100755
+--- a/src/org/hsqldb/persist/LockFile.java
++++ b/src/org/hsqldb/persist/LockFile.java
+@@ -795,9 +795,9 @@ public class LockFile {
+         try {
+             if (withCreateNewFile) {
+                 try {
+-                    file.createNewFile();
+-
+-                    return;
++                    if (file.createNewFile()) {
++                        return;
++                    }
+                 } catch (IOException ioe) {}
+             }
+ 
+-- 
+2.55.0
+
