@@ -60,6 +60,23 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 		});
 	}
 
+	// The heading is row 1 of the table, so Rk is row k + 1.
+	function toldRowOnMove(keys, row) {
+		let told;
+		cy.then(function () {
+			told = cy.spy(win.app.map._textInput, '_setDescription');
+		});
+		move(keys);
+		editing('R' + row);
+		cy.then(function () {
+			const said = told.getCalls().map(function (call) { return call.args[0]; }).join(' | ');
+			told.restore();
+			expect(said, 'what the reader is told on reaching R' + row).to.contain('Row ' + (row + 1) + '.');
+			expect(said, 'the same table, not another one').to.not.contain('Table with');
+			expect(said, 'still inside the table').to.not.contain('Out of table');
+		});
+	}
+
 	before(function () {
 		helper.setupAndLoadDocument('writer/split_table_context.fodt');
 
@@ -82,5 +99,11 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 	it('on a later page the rows are the table\'s, without its repeated heading', function () {
 		toRow(60);
 		givenAround(60);
+	});
+
+	it('crossing the page break tells the row of the same table', function () {
+		toRow(44);
+		toldRowOnMove('{downarrow}', 45);
+		toldRowOnMove('{downarrow}', 46);
 	});
 });
