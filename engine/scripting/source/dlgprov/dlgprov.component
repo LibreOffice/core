@@ -21,7 +21,6 @@
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.scripting.DialogProvider"
     constructor="scripting_DialogProviderImpl_get_implementation">
-    <service name="com.sun.star.awt.ContainerWindowProvider"/>
     <service name="com.sun.star.awt.DialogProvider"/>
     <service name="com.sun.star.awt.DialogProvider2"/>
   </implementation>

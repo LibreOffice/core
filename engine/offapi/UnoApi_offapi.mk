@@ -42,7 +42,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/auth,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/awt,\
 	AsyncCallback \
-	ContainerWindowProvider \
 	DialogProvider \
 	DialogProvider2 \
 	MenuBar \
@@ -1663,8 +1662,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XCallback \
 	XCheckBox \
 	XComboBox \
-	XContainerWindowEventHandler \
-	XContainerWindowProvider \
 	XControl \
 	XControlContainer \
 	XControlModel \

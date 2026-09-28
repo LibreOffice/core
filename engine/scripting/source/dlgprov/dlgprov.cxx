@@ -429,8 +429,7 @@ namespace dlgprov
     void DialogProviderImpl::attachControlEvents(
         const Reference< XControl >& rxControl,
         const Reference< XInterface >& rxHandler,
-        const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
-        bool bDialogProviderMode )
+        const Reference< XIntrospectionAccess >& rxIntrospectionAccess)
     {
         if ( !rxControl.is() )
             return;
@@ -454,7 +453,6 @@ namespace dlgprov
         Reference<XScriptEventsAttacher> xScriptEventsAttacher
             = new DialogEventsAttacherImpl(
                 m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
-                bDialogProviderMode,
                 (m_BasicInfo ? m_BasicInfo->mxBasicRTLListener : nullptr), msDialogLibName);
 
         Any aHelper;
@@ -506,8 +504,7 @@ namespace dlgprov
     Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.DialogProvider"_ustr,
-                 u"com.sun.star.awt.DialogProvider2"_ustr,
-                 u"com.sun.star.awt.ContainerWindowProvider"_ustr };
+                 u"com.sun.star.awt.DialogProvider2"_ustr };
     }
 
 
@@ -556,7 +553,7 @@ namespace dlgprov
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,
-        const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
+        const Reference< XWindowPeer >& xParent )
     {
         // if the dialog is located in a document, the document must already be open!
 
@@ -588,32 +585,29 @@ namespace dlgprov
         if ( xCtrlMod.is() )
         {
             // i83963 Force decoration
-            if( bDialogProviderMode )
+            uno::Reference< beans::XPropertySet > xDlgModPropSet( xCtrlMod, uno::UNO_QUERY );
+            if( xDlgModPropSet.is() )
             {
-                uno::Reference< beans::XPropertySet > xDlgModPropSet( xCtrlMod, uno::UNO_QUERY );
-                if( xDlgModPropSet.is() )
+                try
                 {
-                    try
+                    bool bDecoration = true;
+                    Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
+                    aDecorationAny >>= bDecoration;
+                    if( !bDecoration )
                     {
-                        bool bDecoration = true;
-                        Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
-                        aDecorationAny >>= bDecoration;
-                        if( !bDecoration )
-                        {
-                            xDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
-                            xDlgModPropSet->setPropertyValue( u"Title"_ustr, Any( OUString() ) );
-                        }
+                        xDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
+                        xDlgModPropSet->setPropertyValue( u"Title"_ustr, Any( OUString() ) );
                     }
-                    catch( UnknownPropertyException& )
-                    {}
                 }
+                catch( UnknownPropertyException& )
+                {}
             }
 
             xCtrl.set( createDialogControl( xCtrlMod, xParent ) );
             if ( xCtrl.is() )
             {
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
-                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
+                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess );
             }
         }
 
@@ -624,7 +618,7 @@ namespace dlgprov
     {
         Reference< XInterface > xDummyHandler;
         Reference< XWindowPeer > xDummyPeer;
-        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xDummyHandler, xDummyPeer, true );
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xDummyHandler, xDummyPeer );
         Reference< XDialog > xDialog( xControl, UNO_QUERY );
         return xDialog;
     }
@@ -639,7 +633,7 @@ namespace dlgprov
                 Reference< XInterface >(), 1 );
         }
         Reference< XWindowPeer > xDummyPeer;
-        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xDummyPeer, true );
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xDummyPeer );
         Reference< XDialog > xDialog( xControl, UNO_QUERY );
         return xDialog;
     }
@@ -663,26 +657,10 @@ namespace dlgprov
 
         const Reference< XInterface > xHandler( aArguments.get( u"EventHandler"_ustr ), UNO_QUERY );
 
-        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParentPeer, true );
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParentPeer );
         Reference< XDialog > xDialog( xControl, UNO_QUERY );
         return xDialog;
     }
-
-    Reference< XWindow > DialogProviderImpl::createContainerWindow(
-        const OUString& URL, const OUString&,
-        const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
-    {
-        if( !xParent.is() )
-        {
-            throw IllegalArgumentException(
-                u"DialogProviderImpl::createContainerWindow: Invalid xParent!"_ustr,
-                Reference< XInterface >(), 1 );
-        }
-        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, false );
-        Reference< XWindow> xWindow( xControl, UNO_QUERY );
-        return xWindow;
-    }
-
 
     // component operations
 

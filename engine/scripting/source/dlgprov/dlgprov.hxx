@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XDialogProvider2.hpp>
-#include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XUnoControlDialog.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -63,8 +62,7 @@ namespace dlgprov
     typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
-        css::awt::XDialogProvider2,
-        css::awt::XContainerWindowProvider > DialogProviderImpl_BASE;
+        css::awt::XDialogProvider2 > DialogProviderImpl_BASE;
 
     class DialogProviderImpl : public DialogProviderImpl_BASE
     {
@@ -88,8 +86,7 @@ namespace dlgprov
 
         void attachControlEvents( const cpo::uno::Reference< css::awt::XControl >& rxControlContainer,
             const cpo::uno::Reference< cpo::uno::XInterface >& rxHandler,
-            const cpo::uno::Reference< css::beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode );
+            const cpo::uno::Reference< css::beans::XIntrospectionAccess >& rxIntrospectionAccess );
         cpo::uno::Reference< css::beans::XIntrospectionAccess > inspectHandler(
             const cpo::uno::Reference< cpo::uno::XInterface >& rxHandler );
     // helper methods
@@ -107,8 +104,7 @@ namespace dlgprov
         cpo::uno::Reference < css::awt::XControl > createDialogImpl(
             const OUString& URL,
             const cpo::uno::Reference< cpo::uno::XInterface >& xHandler,
-            const cpo::uno::Reference< css::awt::XWindowPeer >& xParent,
-            bool bDialogProviderMode );
+            const cpo::uno::Reference< css::awt::XWindowPeer >& xParent );
 
     public:
         explicit DialogProviderImpl(
@@ -135,11 +131,6 @@ namespace dlgprov
         virtual cpo::uno::Reference < css::awt::XDialog > createDialogWithArguments(
             const OUString& URL,
             const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
-
-        virtual cpo::uno::Reference< css::awt::XWindow > createContainerWindow(
-            const OUString& URL, const OUString& WindowType,
-            const cpo::uno::Reference< css::awt::XWindowPeer >& xParent,
-            const cpo::uno::Reference< cpo::uno::XInterface >& xHandler ) override;
      };
 
 

@@ -62,7 +62,6 @@ namespace dlgprov
              const cpo::uno::Reference< css::awt::XControl >& xControl,
              const cpo::uno::Reference< cpo::uno::XInterface >& xHandler,
              const cpo::uno::Reference< css::beans::XIntrospectionAccess >& xIntrospect,
-             bool bProviderMode,
              const cpo::uno::Reference< css::script::XScriptListener >& xRTLListener ,const OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl() override;
 
