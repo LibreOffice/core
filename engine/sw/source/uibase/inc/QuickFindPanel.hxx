@@ -125,6 +125,12 @@ private:
 public:
     QuickFindPanelWindow(SfxBindings* _pBindings, SfxChildWindow* pChildWin, vcl::Window* pParent,
                          SfxChildWinInfo* pInfo);
+    virtual void dispose() override
+    {
+        m_xQuickFindPanel.reset();
+        SfxQuickFind::dispose();
+    }
+    virtual ~QuickFindPanelWindow() override { disposeOnce(); }
 };
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
