@@ -46,8 +46,6 @@ public:
 
     void add(std::vector<OUString> const& path);
 
-    void remove(std::vector<OUString> const& path);
-
 #if ENABLE_DCONF
     void clear() { root_.children.clear(); }
 #endif

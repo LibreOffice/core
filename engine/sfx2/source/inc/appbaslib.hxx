@@ -75,18 +75,6 @@ public:
                 const cpo::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 
-    /** calls the storeLibrariesToStorage at all our XStorageBasedLibraryContainer.
-    */
-    void    storeLibrariesToStorage(
-                const cpo::uno::Reference< css::embed::XStorage >& _rxStorage
-            );
-
-
-    /** checks if any modules in the SfxLibraryContainer exceed the binary
-        limits.
-    */
-    bool ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& sModules );
-
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 
 private:

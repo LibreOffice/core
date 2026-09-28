@@ -110,20 +110,6 @@ void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage 
 #endif
 }
 
-void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >& _rxStorage )
-{
-#if !HAVE_FEATURE_SCRIPTING
-    (void) _rxStorage;
-#else
-    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
-
-    if ( mxBasicContainer.is() )
-        mxBasicContainer->storeLibrariesToStorage( _rxStorage );
-    if ( mxDialogContainer.is() )
-        mxDialogContainer->storeLibrariesToStorage( _rxStorage );
-#endif
-}
-
 XStorageBasedLibraryContainer* SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
 {
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
@@ -141,17 +127,6 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 {
     mxBasicContainer.clear();
     mxDialogContainer.clear();
-}
-
-bool SfxBasicManagerHolder::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >& sModules )
-{
-#if !HAVE_FEATURE_SCRIPTING
-    (void) sModules;
-#else
-    if ( mpBasicManager )
-        return mpBasicManager->ImgVersion12PsswdBinaryLimitExceeded( sModules );
-#endif
-    return true;
 }
 
 // Service for application library container

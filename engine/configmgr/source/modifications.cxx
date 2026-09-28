@@ -50,28 +50,6 @@ void Modifications::add(std::vector<OUString> const & path) {
     p->children.clear();
 }
 
-void Modifications::remove(std::vector<OUString> const & path) {
-    assert(!path.empty());
-    Node * p = &root_;
-    for (auto i(path.begin());;) {
-        Node::Children::iterator j(p->children.find(*i));
-        if (j == p->children.end()) {
-            break;
-        }
-        if (++i == path.end()) {
-            p->children.erase(j);
-            if (p->children.empty()) {
-                std::vector<OUString> parent(path);
-                parent.pop_back();
-                remove(parent);
-            }
-            break;
-        }
-        p = &j->second;
-    }
-}
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

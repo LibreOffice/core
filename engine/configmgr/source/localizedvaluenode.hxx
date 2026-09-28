@@ -47,8 +47,6 @@ public:
 
     void setValue(int layer, cpo::uno::Any const& value, bool bIsUserModification);
 
-    bool isModified() { return modified_; }
-
 private:
     LocalizedValueNode(LocalizedValueNode const&) = default;
 

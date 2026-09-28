@@ -52,8 +52,6 @@ public:
 
     bool isExtension() const { return extension_;}
 
-    bool isModified() const { return modified_;}
-
 private:
     PropertyNode(PropertyNode const&) = default;
 

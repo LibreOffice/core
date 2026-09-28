@@ -42,32 +42,6 @@ enum class HelpProcessingErrorClass
     XmlParsing     // Errors thrown by libxml
 };
 
-struct HelpProcessingErrorInfo
-{
-    HelpProcessingErrorClass   m_eErrorClass;
-    OUString                   m_aErrorMsg;
-    OUString                   m_aXMLParsingFile;
-    sal_Int32                  m_nXMLParsingLine;
-
-    HelpProcessingErrorInfo()
-        : m_eErrorClass( HelpProcessingErrorClass::NONE )
-        , m_nXMLParsingLine( -1 )
-    {}
-
-    HelpProcessingErrorInfo& operator=( const struct HelpProcessingException& e );
-};
-
-
-// Returns true in case of success, false in case of error
-HELPLINKER_DLLPUBLIC bool compileExtensionHelp
-(
-     const OUString& aOfficeHelpPath,
-    std::u16string_view aExtensionName,
-    std::u16string_view aExtensionLanguageRoot,
-    sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
-    std::u16string_view aDestination,
-    HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
-);
 
 #endif
 

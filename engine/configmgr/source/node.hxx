@@ -55,7 +55,6 @@ public:
     int getFinalized() const { return finalized_;}
 
     void setDescription(OUString const& description) { description_ = description; };
-    const OUString & getDescription() { return description_; }
 
     rtl::Reference< Node > getMember(OUString const & name);
 

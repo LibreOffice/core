@@ -346,7 +346,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/lineinfo \
     vcl/source/gdi/mapmod \
     vcl/source/gdi/metaact \
-    vcl/source/gdi/oldprintadaptor \
     vcl/source/gdi/print2 \
     vcl/source/gdi/print3 \
     vcl/source/gdi/print \

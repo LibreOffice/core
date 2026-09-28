@@ -52,7 +52,6 @@ class NodeMap
     rtl::Reference<Node> &operator[](const OUString &aStr) { clearCache(); return maImpl[aStr]; }
     std::pair<iterator,bool> insert(const value_type &vt) { clearCache(); return maImpl.insert(vt); }
     void erase(const iterator &it) { maImpl.erase(it); clearCache(); }
-    void erase(const OUString &aStr) { maImpl.erase(aStr); clearCache(); }
 
     rtl::Reference< Node > findNode(int layer, OUString const & name) const;
     void cloneInto(NodeMap * target) const;
