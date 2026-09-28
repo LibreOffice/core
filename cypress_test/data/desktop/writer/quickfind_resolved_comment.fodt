@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>The fruit bowl<office:annotation office:name="__Annotation__1" loext:resolved="true"><dc:creator>Bob</dc:creator><dc:date>2026-09-28T10:00:00</dc:date><text:p>Please check the fruit</text:p></office:annotation><office:annotation loext:parent-name="__Annotation__1" loext:resolved="true"><dc:creator>Eve</dc:creator><dc:date>2026-09-28T10:05:00</dc:date><text:p>Line 1 of a long reply about fruit</text:p><text:p>Line 2 of a long reply about fruit</text:p><text:p>Line 3 of a long reply about fruit</text:p><text:p>Line 4 of a long reply about fruit</text:p><text:p>Line 5 of a long reply about fruit</text:p><text:p>Line 6 of a long reply about fruit</text:p><text:p>Line 7 of a long reply about fruit</text:p><text:p>Line 8 of a long reply about fruit</text:p><text:p>Line 9 of a long reply about fruit</text:p><text:p>Line 10 of a long reply about fruit</text:p><text:p>Line 11 of a long reply about fruit</text:p><text:p>The last line names a ripe plum</text:p></office:annotation></text:p>
+   <text:p>A second line<office:annotation><dc:creator>Frank</dc:creator><dc:date>2026-09-28T10:10:00</dc:date><text:p>A short note</text:p></office:annotation></text:p>
+  </office:text>
+ </office:body>
+</office:document>

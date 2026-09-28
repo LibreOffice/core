@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Body line 1</text:p>
+   <text:p>Body line 2</text:p>
+   <text:p>Body line 3</text:p>
+   <text:p>Body line 4</text:p>
+   <text:p>Body line 5</text:p>
+   <text:p>Body line 6</text:p>
+   <text:p>Body line 7</text:p>
+   <text:p>Body line 8</text:p>
+   <text:p>Body line 9</text:p>
+   <text:p>Body line 10</text:p>
+   <text:p>Body line 11</text:p>
+   <text:p>Body line 12</text:p>
+   <text:p>Body line 13</text:p>
+   <text:p>Body line 14</text:p>
+   <text:p>Body line 15</text:p>
+   <text:p>Body line 16</text:p>
+   <text:p>Body line 17</text:p>
+   <text:p>Body line 18</text:p>
+   <text:p>Body line 19</text:p>
+   <text:p>Body line 20</text:p>
+   <text:p>Body line 21</text:p>
+   <text:p>Body line 22</text:p>
+   <text:p>Body line 23</text:p>
+   <text:p>Body line 24</text:p>
+   <text:p>Body line 25</text:p>
+   <text:p>Body line 26</text:p>
+   <text:p>Body line 27</text:p>
+   <text:p>Body line 28</text:p>
+   <text:p>Body line 29</text:p>
+   <text:p>Body line 30</text:p>
+   <text:p>Body line 31</text:p>
+   <text:p>Body line 32</text:p>
+   <text:p>Body line 33</text:p>
+   <text:p>Body line 34</text:p>
+   <text:p>Body line 35</text:p>
+   <text:p>Body line 36</text:p>
+   <text:p>Body line 37</text:p>
+   <text:p>Body line 38</text:p>
+   <text:p>Body line 39</text:p>
+   <text:p>Body line 40</text:p>
+   <text:p>The fruit bowl<office:annotation office:name="__Annotation__1"><dc:creator>Bob</dc:creator><dc:date>2026-09-28T10:00:00</dc:date><text:p>Please check the fruit</text:p></office:annotation><office:annotation loext:parent-name="__Annotation__1"><dc:creator>Carol</dc:creator><dc:date>2026-09-28T10:05:00</dc:date><text:p>Line 1 of a long reply about fruit</text:p><text:p>Line 2 of a long reply about fruit</text:p><text:p>Line 3 of a long reply about fruit</text:p><text:p>Line 4 of a long reply about fruit</text:p><text:p>Line 5 of a long reply about fruit</text:p><text:p>Line 6 of a long reply about fruit</text:p><text:p>Line 7 of a long reply about fruit</text:p><text:p>Line 8 of a long reply about fruit</text:p><text:p>Line 9 of a long reply about fruit</text:p><text:p>Line 10 of a long reply about fruit</text:p><text:p>Line 11 of a long reply about fruit</text:p><text:p>The last line names the kiwi</text:p></office:annotation></text:p>
+   <text:p>A second line<office:annotation><dc:creator>Frank</dc:creator><dc:date>2026-09-28T10:10:00</dc:date><text:p>A short note</text:p></office:annotation></text:p>
+  </office:text>
+ </office:body>
+</office:document>

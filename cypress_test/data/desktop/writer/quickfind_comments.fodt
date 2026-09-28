@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>The apple tree<office:annotation><dc:creator>Alice</dc:creator><dc:date>2026-09-28T10:00:00</dc:date><text:p>A red apple</text:p></office:annotation></text:p>
+  </office:text>
+ </office:body>
+</office:document>

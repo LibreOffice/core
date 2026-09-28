@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach require */
+/* global describe it cy before beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -112,5 +112,198 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Opening quickfind', functi
 
         // Search input should still have the focus.
         helper.assertFocus('id', 'navigator-search-input');
+    });
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments via quickfind', function() {
+
+    beforeEach(function() {
+        // Wide enough for the comments to be shown next to the page.
+        cy.viewport(1400, 600);
+        helper.setupAndLoadDocument('writer/quickfind_comments.fodt');
+        writerHelper.openQuickFind();
+    });
+
+    it('A match inside a comment is listed and selected in the comment', function() {
+        writerHelper.searchInQuickFind('apple');
+
+        // One match is in the document text and one is in the comment.
+        writerHelper.assertQuickFindMatches(2);
+
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by Alice:').click();
+
+        // The comment shows the matched word selected.
+        cy.cGet('.cool-annotation-content-wrapper').should('be.visible');
+        cy.getFrameWindow().should(function(win) {
+            const selection = win.getSelection();
+            expect(selection.toString()).to.equal('apple');
+            const content = win.document.querySelector('.cool-annotation-content');
+            expect(content.contains(selection.anchorNode)).to.equal(true);
+        });
+
+        // Picking the match in the document text selects it in the document again.
+        cy.cGet('#QuickFindPanel #searchfinds div:nth-child(2)').click();
+        helper.textSelectionShouldExist();
+    });
+
+    it('A match inside a comment is still selected after the comment is edited', function() {
+        // The sidebar and the zoom level would otherwise hide the comment menu.
+        desktopHelper.switchUIToNotebookbar();
+        desktopHelper.sidebarToggle();
+        desktopHelper.selectZoomLevel('50', false);
+
+        // Only the author of a comment may edit it, so the test user writes one.
+        helper.typeIntoDocument('{ctrl}{end}');
+        desktopHelper.insertComment('green pear');
+        writerHelper.searchInQuickFind('pear');
+
+        // Put the search word in front of the comment text after the search.
+        cy.cGet('.cool-annotation').last().find('.cool-annotation-menu').click();
+        cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+        cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+            .type('{home}pear ');
+        cy.cGet('.cool-annotation').last().find('[value="Save"]').click();
+        cy.cGet('.cool-annotation').last().find('.cool-annotation-content')
+            .should('have.text', 'pear green pear');
+
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by').click();
+
+        // The word selected in the comment is the match, which moved with the edit.
+        cy.getFrameWindow().should(function(win) {
+            const selection = win.getSelection();
+            expect(selection.toString()).to.equal('pear');
+            expect(selection.anchorOffset).to.equal(11);
+        });
+    });
+
+    it('A comment match that was edited away is not picked', function() {
+        // The sidebar and the zoom level would otherwise hide the comment menu.
+        desktopHelper.switchUIToNotebookbar();
+        desktopHelper.sidebarToggle();
+        desktopHelper.selectZoomLevel('50', false);
+
+        // Only the author of a comment may edit it, so the test user writes one.
+        helper.typeIntoDocument('{ctrl}{end}');
+        desktopHelper.insertComment('green apple');
+        writerHelper.searchInQuickFind('apple');
+        writerHelper.assertQuickFindMatches(3);
+
+        // Take the search word out of the comment after the search.
+        cy.cGet('.cool-annotation').last().find('.cool-annotation-menu').click();
+        cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+        cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+            .type('{selectall}green plum');
+        cy.cGet('.cool-annotation').last().find('[value="Save"]').click();
+        cy.cGet('.cool-annotation').last().find('.cool-annotation-content')
+            .should('have.text', 'green plum');
+
+        cy.cGet('#QuickFindPanel #searchfinds').contains('green').click();
+        cy.getFrameWindow().then(function(win) {
+            return helper.processToIdle(win);
+        });
+
+        // The label still gives the number of matches instead of naming a picked one. It said
+        // the same before the click, so the check waits until the click was handled.
+        writerHelper.assertQuickFindMatches(3);
+    });
+
+    it('A comment inserted after picking a comment match keeps its text', function() {
+        desktopHelper.switchUIToNotebookbar();
+        writerHelper.searchInQuickFind('apple');
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by Alice:').click();
+        cy.getFrameWindow().then(function(win) {
+            return helper.processToIdle(win);
+        });
+
+        // The helper checks that the new comment shows the text typed into it.
+        desktopHelper.insertComment('green apple');
+
+        writerHelper.searchInQuickFind('green');
+        cy.cGet('#numberofsearchfinds').should('have.text', 'One match found.');
+    });
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in resolved comments via quickfind', function() {
+
+    beforeEach(function() {
+        // Wide enough for the comments to be shown next to the page.
+        cy.viewport(1400, 600);
+        helper.setupAndLoadDocument('writer/quickfind_resolved_comment.fodt');
+        writerHelper.openQuickFind();
+    });
+
+    it('A match in a long resolved reply shows the resolved comments', function() {
+        // The resolved thread is hidden when the document opens.
+        cy.cGet('.cool-annotation-content-wrapper').should('not.be.visible');
+
+        writerHelper.searchInQuickFind('plum');
+        cy.cGet('#numberofsearchfinds').should('have.text', 'One match found.');
+
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by Eve:').click();
+
+        // The reply is shown with the matched word selected. The word is on the last line of the
+        // long reply, and both the comment text and the document are scrolled to show it.
+        cy.getFrameWindow().should(function(win) {
+            const selection = win.getSelection();
+            expect(selection.toString()).to.equal('plum');
+            const wordRect = selection.getRangeAt(0).getBoundingClientRect();
+            const contentRect = selection.anchorNode.parentElement.closest('.cool-annotation-content')
+                .getBoundingClientRect();
+            const documentRect = win.document.getElementById('document-container').getBoundingClientRect();
+            expect(wordRect.height).to.be.above(0);
+            expect(wordRect.top).to.be.at.least(Math.max(contentRect.top, documentRect.top));
+            expect(wordRect.bottom).to.be.at.most(Math.min(contentRect.bottom, documentRect.bottom));
+        });
+    });
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in long replies via quickfind', function() {
+
+    beforeEach(function() {
+        // Wide enough for the comments to be shown next to the page.
+        cy.viewport(1400, 600);
+        helper.setupAndLoadDocument('writer/quickfind_long_comment.fodt');
+        writerHelper.openQuickFind();
+    });
+
+    it('A match beyond the visible lines of a long reply is scrolled into view', function() {
+        writerHelper.searchInQuickFind('kiwi');
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by Carol:').click();
+
+        // The thread is far down the page, below the part that shows when the document opens.
+        // Picking the reply opens its thread, and a later comment leaves room for only part of
+        // the long reply, so its text scrolls inside its card. The selected word is inside the
+        // part of the reply that is shown, and inside the document area.
+        cy.getFrameWindow().should(function(win) {
+            const selection = win.getSelection();
+            expect(selection.toString()).to.equal('kiwi');
+            const wordRect = selection.getRangeAt(0).getBoundingClientRect();
+            const contentRect = selection.anchorNode.parentElement.closest('.cool-annotation-content')
+                .getBoundingClientRect();
+            const documentRect = win.document.getElementById('document-container').getBoundingClientRect();
+            expect(wordRect.height).to.be.above(0);
+            expect(wordRect.top).to.be.at.least(Math.max(contentRect.top, documentRect.top));
+            expect(wordRect.bottom).to.be.at.most(Math.min(contentRect.bottom, documentRect.bottom));
+        });
+    });
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching in comments with links via quickfind', function() {
+
+    beforeEach(function() {
+        // Wide enough for the comments to be shown next to the page.
+        cy.viewport(1400, 600);
+        helper.setupAndLoadDocument('writer/quickfind_link_comment.fodt');
+        writerHelper.openQuickFind();
+    });
+
+    it('A match after links in a comment is selected', function() {
+        // The comment has a link and a web address written as plain text before the match.
+        writerHelper.searchInQuickFind('kiwi');
+        cy.cGet('#QuickFindPanel #searchfinds').contains('Comment by Dave:').click();
+
+        cy.getFrameWindow().should(function(win) {
+            expect(win.getSelection().toString()).to.equal('kiwi');
+        });
     });
 });
