@@ -1505,7 +1505,7 @@ struct TableWindow
     sal_Int32 nColCount = 0;
     std::vector<TableRowText> aRows;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
-    uno::Reference<accessibility::XAccessibleContext> xTable;
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aPieces;
     uno::Reference<accessibility::XAccessible> xCaretCell;
 };
 
@@ -1564,6 +1564,91 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
     return aText.makeStringAndClear();
 }
 
+sal_Int32 repeatedHeadingRows(const uno::Reference<accessibility::XAccessibleTable>& xPiece)
+{
+    uno::Reference<accessibility::XAccessibleExtendedAttributes> xAttributes(xPiece,
+                                                                             uno::UNO_QUERY);
+    if (!xAttributes.is())
+        return 0;
+    const OUString sAttributes = xAttributes->getExtendedAttributes();
+    static constexpr std::u16string_view sKey = u"repeated-heading-rows:";
+    const sal_Int32 nAt = sAttributes.indexOf(sKey);
+    return nAt < 0 ? 0 : o3tl::toInt32(sAttributes.subView(nAt + sKey.size()));
+}
+
+struct TablePiece
+{
+    uno::Reference<accessibility::XAccessibleTable> xTable;
+    sal_Int32 nRepeated; // heading rows the piece repeats from the page before
+    sal_Int32 nFirstRow; // row of the whole table that the piece's first own row is
+};
+
+// The pages' pieces of the table xTable belongs to, in order, and which one xTable is.
+std::vector<TablePiece>
+getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, size_t& rCaretPiece)
+{
+    uno::Reference<accessibility::XAccessibleContext> xTableContext(xTable, uno::UNO_QUERY);
+    uno::Reference<accessibility::XAccessible> xParent
+        = xTableContext.is() ? xTableContext->getAccessibleParent() : nullptr;
+    uno::Reference<accessibility::XAccessibleContext> xParentContext
+        = xParent.is() ? xParent->getAccessibleContext() : nullptr;
+    rCaretPiece = 0;
+    if (!xParentContext.is())
+        return { { xTable, 0, 0 } };
+
+    auto tableAt = [&xParentContext](sal_Int64 i) {
+        uno::Reference<accessibility::XAccessible> xChild = xParentContext->getAccessibleChild(i);
+        return uno::Reference<accessibility::XAccessibleTable>(xChild, uno::UNO_QUERY);
+    };
+    auto continues = [](const uno::Reference<accessibility::XAccessibleTable>& xPiece) {
+        return continuesPreviousPiece(
+            uno::Reference<accessibility::XAccessibleContext>(xPiece, uno::UNO_QUERY));
+    };
+    // Writer lists a page's footnotes and footer, and the next page's header, between two pieces.
+    auto isPageFurniture = [&xParentContext](sal_Int64 i) {
+        uno::Reference<accessibility::XAccessible> xChild = xParentContext->getAccessibleChild(i);
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xChild.is() ? xChild->getAccessibleContext() : nullptr;
+        if (!xChildContext.is())
+            return false;
+        const sal_Int16 nRole = xChildContext->getAccessibleRole();
+        return nRole == accessibility::AccessibleRole::HEADER
+               || nRole == accessibility::AccessibleRole::FOOTER
+               || nRole == accessibility::AccessibleRole::FOOTNOTE
+               || nRole == accessibility::AccessibleRole::END_NOTE;
+    };
+
+    const sal_Int64 nIndex = xTableContext->getAccessibleIndexInParent();
+    const sal_Int64 nCount = xParentContext->getAccessibleChildCount();
+    sal_Int64 nFirst = nIndex;
+    while (nFirst > 0 && continues(tableAt(nFirst)))
+    {
+        sal_Int64 nPrevious = nFirst - 1;
+        while (nPrevious >= 0 && isPageFurniture(nPrevious))
+            --nPrevious;
+        if (nPrevious < 0 || !tableAt(nPrevious).is())
+            break;
+        nFirst = nPrevious;
+    }
+
+    std::vector<TablePiece> aPieces;
+    sal_Int32 nRow = 0;
+    for (sal_Int64 i = nFirst; i < nCount; ++i)
+    {
+        if (i > nFirst && isPageFurniture(i))
+            continue;
+        uno::Reference<accessibility::XAccessibleTable> xPiece = i == nIndex ? xTable : tableAt(i);
+        if (!xPiece.is() || (i > nFirst && !continues(xPiece)))
+            break;
+        const sal_Int32 nRepeated = i > nFirst ? repeatedHeadingRows(xPiece) : 0;
+        if (i == nIndex)
+            rCaretPiece = aPieces.size();
+        aPieces.push_back({ xPiece, nRepeated, nRow });
+        nRow += xPiece->getAccessibleRowCount() - nRepeated;
+    }
+    return aPieces;
+}
+
 // The rows around the caret's row of the innermost table holding the paragraph.
 void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                         sal_Int32 nRadius, TableWindow& rTable)
@@ -1582,31 +1667,45 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
 
     try
     {
-        rTable.xTable.set(xTable, uno::UNO_QUERY);
-        rTable.nRowCount = xTable->getAccessibleRowCount();
+        size_t nCaretPiece = 0;
+        const std::vector<TablePiece> aPieces = getTablePieces(xTable, nCaretPiece);
+        for (const TablePiece& rPiece : aPieces)
+            rTable.aPieces.emplace_back(rPiece.xTable, uno::UNO_QUERY);
+        const TablePiece& rLastPiece = aPieces.back();
+        rTable.nRowCount = rLastPiece.nFirstRow + rLastPiece.xTable->getAccessibleRowCount()
+                           - rLastPiece.nRepeated;
         rTable.nColCount = xTable->getAccessibleColumnCount();
-        const sal_Int32 nCaretRow = xTable->getAccessibleRow(nChildIndex);
+        const TablePiece& rCaretPiece = aPieces[nCaretPiece];
+        const sal_Int32 nCaretRow
+            = rCaretPiece.nFirstRow + xTable->getAccessibleRow(nChildIndex) - rCaretPiece.nRepeated;
         const sal_Int32 nFirst = std::max<sal_Int32>(0, nCaretRow - nRadius);
         const sal_Int32 nLast = std::min<sal_Int32>(rTable.nRowCount - 1, nCaretRow + nRadius);
 
+        size_t nPiece = 0;
         for (sal_Int32 nRow = nFirst; nRow <= nLast; ++nRow)
         {
+            while (nPiece + 1 < aPieces.size() && aPieces[nPiece + 1].nFirstRow <= nRow)
+                ++nPiece;
+            const uno::Reference<accessibility::XAccessibleTable>& xPiece = aPieces[nPiece].xTable;
+            const sal_Int32 nPieceRow
+                = nRow - aPieces[nPiece].nFirstRow + aPieces[nPiece].nRepeated;
+
             TableRowText aRow{ nRow, {} };
-            for (sal_Int32 nCol = 0; nCol < rTable.nColCount; ++nCol)
+            for (sal_Int32 nCol = 0; nCol < xPiece->getAccessibleColumnCount(); ++nCol)
             {
-                const sal_Int64 nIndex = xTable->getAccessibleIndex(nRow, nCol);
+                const sal_Int64 nIndex = xPiece->getAccessibleIndex(nPieceRow, nCol);
                 // a merged cell is listed once, at its top left position
-                if (xTable->getAccessibleRow(nIndex) != nRow
-                    || xTable->getAccessibleColumn(nIndex) != nCol)
+                if (xPiece->getAccessibleRow(nIndex) != nPieceRow
+                    || xPiece->getAccessibleColumn(nIndex) != nCol)
                     continue;
                 const uno::Reference<accessibility::XAccessible> xCell
-                    = xTable->getAccessibleCellAt(nRow, nCol);
+                    = xPiece->getAccessibleCellAt(nPieceRow, nCol);
                 std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
                 OUString sText = getCellText(xCell, aCellParagraphs);
                 rTable.aParagraphs.insert(rTable.aParagraphs.end(), aCellParagraphs.begin(),
                                           aCellParagraphs.end());
-                aRow.aCells.push_back({ nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
-                                        xTable->getAccessibleColumnExtentAt(nRow, nCol),
+                aRow.aCells.push_back({ nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
+                                        xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol),
                                         std::move(sText), xCell, std::move(aCellParagraphs) });
             }
             rTable.aRows.push_back(std::move(aRow));
@@ -2163,8 +2262,7 @@ void KitDocumentFocusListener::collectContextWindow(
     }
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aSkip = m_aList.aParagraphs;
     aSkip.insert(aSkip.end(), m_aTable.aParagraphs.begin(), m_aTable.aParagraphs.end());
-    if (m_aTable.xTable.is())
-        aSkip.push_back(m_aTable.xTable);
+    aSkip.insert(aSkip.end(), m_aTable.aPieces.begin(), m_aTable.aPieces.end());
     collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(), aSkip,
                            m_aParagraphsBefore, m_aParagraphsAfter);
 }
@@ -2796,9 +2894,10 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
     m_xLastTable = xTable;
     if (!updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED"))
         collectAndAttachContextWindow(xAccText);
-    // a table fetched from its parent comes with no CHILD event, so nothing attached to it yet
-    if (uno::Reference<accessibility::XAccessible> xAccTable{ m_aTable.xTable, uno::UNO_QUERY })
-        attachRecursive(xAccTable);
+    // a piece fetched from its parent comes with no CHILD event, so nothing attached to it yet
+    for (const auto& xPiece : m_aTable.aPieces)
+        if (uno::Reference<accessibility::XAccessible> xPieceAccessible{ xPiece, uno::UNO_QUERY })
+            attachRecursive(xPieceAccessible);
     notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
 }
 

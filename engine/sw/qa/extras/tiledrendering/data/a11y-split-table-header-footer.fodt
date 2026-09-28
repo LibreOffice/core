@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header><text:p>Page header.</text:p></style:header>
+   <style:footer><text:p>Page footer.</text:p></style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="T1">
+    <table:table-column/>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 1</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 2</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 3</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 4</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 5</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 6</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 7</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 8</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 9</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 10</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 11</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 12</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 13</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 14</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 15</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 16</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 17</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 18</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 19</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 20</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 21</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 22</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 23</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 24</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 25</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 26</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 27</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 28</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 29</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 30</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 31</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 32</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 33</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 34</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 35</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 36</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 37</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 38</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 39</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 40</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 41</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 42</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 43</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 44</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 45</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 46</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 47</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 48</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 49</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 50</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 51</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 52</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 53</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 54</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 55</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 56</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 57</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 58</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 59</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 60</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 61</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 62</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 63</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 64</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 65</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 66</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 67</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 68</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 69</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 70</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 71</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 72</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 73</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 74</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 75</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 76</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 77</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 78</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 79</text:p></table:table-cell></table:table-row>
+    <table:table-row><table:table-cell office:value-type="string"><text:p>Row 80</text:p></table:table-cell></table:table-row>
+   </table:table>
+   <text:p>End.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

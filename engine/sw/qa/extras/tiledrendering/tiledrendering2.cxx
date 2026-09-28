@@ -2192,6 +2192,28 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
                          aLink.get<std::string>("url"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithPageHeaderAndFooter)
+{
+    // Given a table split across two pages that have a header and a footer:
+    createDoc("a11y-split-table-header-footer.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPageCnt());
+
+    // When the cursor goes to a row on the second page:
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    for (int i = 0; i < 21; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPhyPageNum());
+
+    // Then the reader is given that row and the row count of the whole table:
+    CPPUNIT_ASSERT_EQUAL(std::string("Row 60"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    CPPUNIT_ASSERT_EQUAL(80, aView.m_aA11yFocusedCell.get<int>("paragraph.table.rowCount"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinkURLChangeSameText)
 {
     // Given the cursor moving between two paragraphs of the same text and link:
