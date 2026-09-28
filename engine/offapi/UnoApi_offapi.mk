@@ -1630,8 +1630,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	Point \
 	PopupMenuDirection \
 	PosSize \
-	PrinterException \
-	PrinterServer \
 	PushButtonType \
 	RasterOperation \
 	Rectangle \
@@ -1692,7 +1690,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XImageButton \
 	XImageConsumer \
 	XImageProducer \
-	XInfoPrinter \
 	XItemEventBroadcaster \
 	XItemList \
 	XItemListListener \
@@ -1716,10 +1713,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XPatternField \
 	XPointer \
 	XPopupMenu \
-	XPrinter \
-	XPrinterPropertySet \
-	XPrinterServer \
-	XPrinterServer2 \
 	XProgressBar \
 	XProgressMonitor \
 	XRadioButton \

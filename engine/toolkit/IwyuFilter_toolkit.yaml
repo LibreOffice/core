@@ -17,12 +17,6 @@ excludelist:
     toolkit/inc/awt/vclxspinbutton.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XSpinValue.hpp
-    toolkit/inc/awt/vclxprinter.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XPrinterPropertySet.hpp
-    - com/sun/star/awt/XInfoPrinter.hpp
-    - com/sun/star/awt/XPrinterPropertySet.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     toolkit/inc/awt/vclxtabpagecontainer.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/tab/XTabPageContainer.hpp

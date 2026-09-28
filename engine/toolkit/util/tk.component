@@ -357,11 +357,6 @@
     <service name="com.sun.star.awt.PopupMenu"/>
     <service name="stardiv.vcl.PopupMenu"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXPrinterServer"
-      constructor="stardiv_Toolkit_VCLXPrinterServer_get_implementation">
-    <service name="com.sun.star.awt.PrinterServer"/>
-    <service name="stardiv.vcl.PrinterServer"/>
-  </implementation>
   <implementation name="stardiv.Toolkit.VCLXToolkit"
       constructor="stardiv_Toolkit_VCLXToolkit_get_implementation">
     <service name="com.sun.star.awt.Toolkit"/>

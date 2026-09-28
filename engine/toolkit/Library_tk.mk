@@ -61,7 +61,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxgraphics \
     toolkit/source/awt/vclxmenu \
     toolkit/source/awt/vclxpointer \
-    toolkit/source/awt/vclxprinter \
     toolkit/source/awt/vclxregion \
     toolkit/source/awt/vclxspinbutton \
     toolkit/source/awt/vclxsystemdependentwindow \

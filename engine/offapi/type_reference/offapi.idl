@@ -710,16 +710,6 @@ module com {
      const short X = 1;
      const short Y = 2;
     };
-    published exception PrinterException: ::cpo::uno::Exception {
-    };
-    published interface XInfoPrinter;
-    published interface XPrinter;
-    published interface XPrinterServer {
-     interface ::cpo::uno::XInterface;
-     sequence< string > getPrinterNames();
-     ::com::sun::star::awt::XPrinter createPrinter([in] string printerName);
-     ::com::sun::star::awt::XInfoPrinter createInfoPrinter([in] string printerName);
-    };
     published enum PushButtonType {
      STANDARD = 0,
      OK = 1,
@@ -2078,18 +2068,6 @@ module com {
      void removeConsumer([in] ::com::sun::star::awt::XImageConsumer xConsumer);
      void startProduction();
     };
-    published interface XPrinterPropertySet {
-     interface ::com::sun::star::beans::XPropertySet;
-     void setHorizontal([in] boolean bHorizontal) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException);
-     sequence< string > getFormDescriptions();
-     void selectForm([in] string aFormDescription) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException);
-     sequence< byte > getBinarySetup();
-     void setBinarySetup([in] sequence< byte > data) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException);
-    };
-    published interface XInfoPrinter {
-     interface ::com::sun::star::awt::XPrinterPropertySet;
-     ::com::sun::star::awt::XDevice createDevice();
-    };
     published interface XItemListener {
      interface ::com::sun::star::lang::XEventListener;
      void itemStateChanged([in] ::com::sun::star::awt::ItemEvent rEvent);
@@ -2142,14 +2120,6 @@ module com {
     published interface XPaintListener {
      interface ::com::sun::star::lang::XEventListener;
      void windowPaint([in] ::com::sun::star::awt::PaintEvent e);
-    };
-    published interface XPrinter {
-     interface ::com::sun::star::awt::XPrinterPropertySet;
-     boolean start([in] string nJobName, [in] short nCopies, [in] boolean nCollate) raises (::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException);
-     void end() raises (::com::sun::star::awt::PrinterException);
-     void terminate();
-     ::com::sun::star::awt::XDevice startPage() raises (::com::sun::star::awt::PrinterException);
-     void endPage() raises (::com::sun::star::awt::PrinterException);
     };
     /** @deprecated */ published interface XProgressMonitor {
      interface ::com::sun::star::awt::XProgressBar;
