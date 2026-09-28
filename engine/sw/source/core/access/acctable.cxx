@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <frmfmt.hxx>
 #include <tabfrm.hxx>
+#include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <swtable.hxx>
 #include <crsrsh.hxx>
@@ -944,6 +945,27 @@ uno::Reference< XAccessible > SwAccessibleTable::getAccessibleSummary()
 {
     // summaries aren't supported
     return uno::Reference< XAccessible >();
+}
+
+OUString SwAccessibleTable::getExtendedAttributes()
+{
+    SolarMutexGuard aGuard;
+
+    // Writer gives each page's piece of a split table its own accessible, and
+    // counts the heading rows a piece repeats among its rows.
+    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
+    if (!pTabFrame || !pTabFrame->IsFollow())
+        return OUString();
+
+    sal_Int32 nRepeated = 0;
+    for (const SwFrame* pLower = pTabFrame->Lower();
+         pLower && pLower->IsRowFrame()
+         && static_cast<const SwRowFrame*>(pLower)->IsRepeatedHeadline();
+         pLower = pLower->GetNext())
+        ++nRepeated;
+
+    return "continued-from-previous-page:true;repeated-heading-rows:" + OUString::number(nRepeated)
+           + ";";
 }
 
 bool SwAccessibleTable::isAccessibleSelected(

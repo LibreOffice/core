@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
@@ -34,10 +35,11 @@ class SwAccessibleTableData_Impl;
 class SwTableBox;
 class SwSelBoxes;
 
-using SwAccessibleTable_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
-                                                           css::accessibility::XAccessibleTable,
-                                                           css::accessibility::XAccessibleSelection,
-                                                           css::accessibility::XAccessibleTableSelection>;
+using SwAccessibleTable_BASE
+    = cppu::ImplInheritanceHelper<SwAccessibleContext, css::accessibility::XAccessibleTable,
+                                  css::accessibility::XAccessibleSelection,
+                                  css::accessibility::XAccessibleTableSelection,
+                                  css::accessibility::XAccessibleExtendedAttributes>;
 class SwAccessibleTable :
         public SwAccessibleTable_BASE,
         public SvtListener
@@ -142,6 +144,9 @@ public:
     virtual bool selectColumn( sal_Int32 column ) override ;
     virtual bool unselectRow( sal_Int32 row ) override;
     virtual bool unselectColumn( sal_Int32 column ) override;
+
+    // XAccessibleExtendedAttributes
+    virtual OUString getExtendedAttributes() override;
 
     // C++ interface
 
