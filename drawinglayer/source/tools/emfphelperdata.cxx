@@ -1632,8 +1632,10 @@ namespace emfplushelper
                 if (mbMultipart)
                 {
                     SAL_INFO("drawinglayer.emf", "EMF+ multipart record flags: " << mMFlags);
-                    mMStream.Seek(0);
-                    processObjectRecord(mMStream, mMFlags, 0, true);
+                    // a read-only view of the parts written so far, which cannot grow on a seek
+                    SvMemoryStream aObjectStream(const_cast<void*>(mMStream.GetData()),
+                                                 mMStream.Tell(), StreamMode::READ);
+                    processObjectRecord(aObjectStream, mMFlags, 0, true);
                 }
 
                 mbMultipart = false;
