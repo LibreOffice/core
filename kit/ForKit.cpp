@@ -91,6 +91,9 @@ std::vector<std::string> cleanupJailPaths;
 /// The [subforkit pid -> subforkit id] map.
 std::map<pid_t, std::string> subForKitPids;
 
+/// The jail of a crashed kit is kept for this long before it is removed.
+constexpr int CrashedJailKeepSecs = 180;
+
 /// The Main polling main-loop of this (single threaded) process
 std::unique_ptr<SocketPoll> ForKitPoll;
 
@@ -229,6 +232,11 @@ protected:
     {
         if (Util::isMobileApp())
             return;
+        if (SigUtil::getTerminationFlag())
+        {
+            LOG_DBG("ForKit connection closed after exit arrived from wsd");
+            return;
+        }
         LOG_ERR("ForKit connection lost without exit arriving from wsd. Setting TerminationFlag");
         SigUtil::setTerminationFlag();
     }
@@ -310,6 +318,14 @@ bool haveCorrectCapabilities()
     return getuid() == 0;
 }
 #endif // HAVE_LIBCAP
+
+/// Remove the shared settings directory of the configuration with the given subforkit id.
+void removeSharedPresets(const std::string& childRoot, const std::string& ident)
+{
+    Poco::Path sharedPresets(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
+    std::string presetsPath = Poco::Path(sharedPresets, Uri::encode(ident)).toString();
+    FileUtil::removeFile(presetsPath, true);
+}
 
 /// Check if some previously forked kids have died.
 void cleanupChildren(const std::string& childRoot)
@@ -396,12 +412,18 @@ void cleanupChildren(const std::string& childRoot)
             LOG_INF("SubForKit " << exitedChildPid << " [" << subit->second
                     << "] has exited with status " << status << ".");
 
-            // remove subforkit settings dir now
-            Poco::Path sharedPresets(childRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH);
-            std::string presetsPath = Poco::Path(sharedPresets, Uri::encode(subit->second)).toString();
-            FileUtil::removeFile(presetsPath, true);
-
+            const std::string ident = subit->second;
             subForKitPids.erase(subit);
+
+            // A subforkit that exits normally has removed its settings directory already. Every
+            // subforkit of one configuration reads the same settings directory, so it stays while
+            // another of them runs.
+            const bool exitedNormally = info.si_code == CLD_EXITED && status == EX_OK;
+            const bool identInUse =
+                std::any_of(subForKitPids.begin(), subForKitPids.end(),
+                            [&ident](const auto& pair) { return pair.second == ident; });
+            if (!exitedNormally && !identInUse)
+                removeSharedPresets(childRoot, ident);
         }
         else
         {
@@ -451,7 +473,7 @@ void cleanupChildren(const std::string& childRoot)
         if (noteStat.good())
         {
             const time_t modifiedTimeSec = noteStat.modifiedTimeMs() / 1000;
-            if (time(nullptr) < modifiedTimeSec + 180)
+            if (time(nullptr) < modifiedTimeSec + CrashedJailKeepSecs)
                 continue;
         }
 
@@ -630,6 +652,11 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
 
         // reset this global counter for this new subForKit
         ForkCounter = 0;
+
+        // The children of the parent forkit are not children of this subForKit.
+        childJails.clear();
+        cleanupJailPaths.clear();
+        subForKitPids.clear();
 
         // Apply core configmgr xcu settings to this forkit for its coolkits to inherit
         {
@@ -1144,6 +1171,32 @@ int forkit_main(int argc, char** argv)
                 // new sub forkits are launched after an 'addforkit' message
                 createSubForKits(childRoot, sysTemplate, loTemplate, useMountNamespaces);
             }
+    }
+
+    if (!ForKitIdent.empty() && getppid() == parentPid)
+    {
+        // No document uses this configuration any more, so its settings are removed now.
+        removeSharedPresets(childRoot, ForKitIdent);
+
+        // A subForKit that was told to exit is still the parent of its kits. It stays until they
+        // have exited, and removes their jails. The wait is a little longer than a crashed jail is
+        // kept, so that jail is removed too.
+        LOG_INF("SubForKit [" << ForKitIdent << "] waits for " << childJails.size()
+                              << " kits to exit.");
+        const std::chrono::seconds maxWait(CrashedJailKeepSecs + 2 * POLL_FORKIT_TIMEOUT_SECS);
+        const auto deadline = std::chrono::steady_clock::now() + maxWait;
+        cleanupChildren(childRoot);
+        while ((!childJails.empty() || !cleanupJailPaths.empty()) && getppid() == parentPid &&
+               std::chrono::steady_clock::now() < deadline)
+        {
+            ForKitPoll->poll(std::chrono::seconds(POLL_FORKIT_TIMEOUT_SECS));
+            cleanupChildren(childRoot);
+        }
+
+        if (!childJails.empty() || !cleanupJailPaths.empty())
+            LOG_WRN("SubForKit [" << ForKitIdent << "] exits with " << childJails.size()
+                                  << " kits still running and " << cleanupJailPaths.size()
+                                  << " jails not removed.");
     }
 
     const int returnValue = UnitBase::uninit();

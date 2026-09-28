@@ -422,9 +422,16 @@ void COOLWSD::checkDiskSpaceAndWarnClients(const bool cacheLastCheck)
 #endif
 }
 
+#if !MOBILEAPP
+static void closeSubForKit(const std::string& configId,
+                           const std::shared_ptr<ForKitProcess>& subForKit);
+#endif
+
 namespace {
 
-SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it)
+/// Forget a subforkit. With askToExit, it and its spare kits are asked to exit. Otherwise it is
+/// killed.
+SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
 {
     // copy as it will be used after erase()
     std::string configId = it->first;
@@ -433,6 +440,12 @@ SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it)
     OutstandingForks.erase(configId);
     OutstandingSubForKitSpawns.erase(configId);
     LastSubForKitSpawnRequestTimes.erase(configId);
+#if !MOBILEAPP
+    if (askToExit)
+        closeSubForKit(configId, it->second);
+#else
+    (void)askToExit;
+#endif
     it = SubForKitProcs.erase(it);
     UNITWSD_CALL(killSubForKit(configId));
 
@@ -537,14 +550,14 @@ void COOLWSD::cleanupDocBrokers()
                 LOG_DBG("subforkit " << configId << " is unused, dropping it");
                 auto it = SubForKitProcs.find(configId);
                 assert(it != SubForKitProcs.end());
-                dropSubForKit(it);
+                dropSubForKit(it, /*askToExit=*/true);
             }
             else if (recentlyUsedKept >= MaxRecentlyUsedSubForKits)
             {
                 LOG_DBG("subforkit " << configId << " recently used but excess idle subforkit, dropping it");
                 auto it = SubForKitProcs.find(configId);
                 assert(it != SubForKitProcs.end());
-                dropSubForKit(it);
+                dropSubForKit(it, /*askToExit=*/true);
             }
             else
             {
@@ -1073,7 +1086,7 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
         if (it != SubForKitProcs.end())
         {
             LOG_WRN("subForKit " << configId << " failed to respond, resetting it");
-            dropSubForKit(it);
+            dropSubForKit(it, /*askToExit=*/false);
         }
     }
 
@@ -1287,6 +1300,42 @@ void COOLWSD::requestTerminateSpareKits()
                     NewChildren[i]->requestTermination();
             });
     }
+}
+
+/// Ask the spare kits of a configuration to exit, then its subforkit. The subforkit is still their
+/// parent, so it reaps them and removes their jails before it exits itself.
+static void closeSubForKit(const std::string& configId,
+                           const std::shared_ptr<ForKitProcess>& subForKit)
+{
+    if (!PrisonerPoll)
+        return;
+
+    // The spare kits are taken now, so no document gets one of them, and the kits of a later
+    // subforkit with the same configuration stay.
+    std::vector<std::shared_ptr<ChildProcess>> spareKits;
+    {
+        std::unique_lock<std::mutex> lock(NewChildrenMutex);
+        for (auto it = NewChildren.begin(); it != NewChildren.end();)
+        {
+            if ((*it)->getConfigId() == configId)
+            {
+                spareKits.push_back(*it);
+                it = NewChildren.erase(it);
+            }
+            else
+                ++it;
+        }
+    }
+
+    // The sockets belong to the prisoner poll, so the messages are sent from its thread.
+    PrisonerPoll->addCallback(
+        [spareKits = std::move(spareKits), subForKit]
+        {
+            for (const std::shared_ptr<ChildProcess>& kit : spareKits)
+                kit->close();
+
+            subForKit->close();
+        });
 }
 
 namespace
@@ -2954,7 +3003,7 @@ bool COOLWSD::checkAndRestoreForKit()
                 for (auto it = SubForKitProcs.begin(); it != SubForKitProcs.end(); )
                 {
                     LOG_DBG("dropping subforkit " << it->first);
-                    it = dropSubForKit(it);
+                    it = dropSubForKit(it, /*askToExit=*/false);
                 }
                 OutstandingSubForKitSpawns.clear();
                 LastSubForKitSpawnRequestTimes.clear();
