@@ -2210,6 +2210,16 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
     }
 }
 
+namespace
+{
+// Offset from the coordinates of a Math view to those of the document
+Point GetInPlaceOffset(const SmViewShell& rViewShell, const SmGraphicWidget& rWidget)
+{
+    KitStarMathHelper aHelper(KitStarMathHelper::FindContainerViewShell(&rViewShell));
+    return rWidget.GetFormulaDrawPos() + aHelper.GetBoundingBox().TopLeft();
+}
+}
+
 std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int nViewId) const
 {
     switch (eType)
@@ -2222,11 +2232,8 @@ std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int n
                 SmCursor& rCursor = GetDoc()->GetCursor();
                 OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
                 tools::Rectangle aCaret = rCursor.GetCaretRectangle(rOutDev);
-                Point aFormulaDrawPos = widget.GetFormulaDrawPos();
-                aCaret.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
-                KitStarMathHelper helper(SfxViewShell::Current());
-                tools::Rectangle aBounds = helper.GetBoundingBox();
-                aCaret.Move(aBounds.Left(), aBounds.Top());
+                const Point aOffset = GetInPlaceOffset(*this, widget);
+                aCaret.Move(aOffset.X(), aOffset.Y());
                 sRectangle = aCaret.toString();
             }
             return KitHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
@@ -2241,12 +2248,8 @@ std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int n
                 tools::Rectangle aSelection = rCursor.GetSelectionRectangle(rOutDev);
                 if (!aSelection.IsEmpty())
                 {
-                    Point aFormulaDrawPos = widget.GetFormulaDrawPos();
-                    aSelection.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
-                    KitStarMathHelper helper(SfxViewShell::Current());
-                    tools::Rectangle aBounds = helper.GetBoundingBox();
-
-                    aSelection.Move(aBounds.Left(), aBounds.Top());
+                    const Point aOffset = GetInPlaceOffset(*this, widget);
+                    aSelection.Move(aOffset.X(), aOffset.Y());
                     sRectangle = aSelection.toString();
                 }
             }

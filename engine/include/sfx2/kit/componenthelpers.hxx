@@ -73,6 +73,8 @@ public:
     const SfxViewShell* GetSmViewShell();
     tools::Rectangle GetBoundingBox() const;
 
+    static const SfxViewShell* FindContainerViewShell(const SfxViewShell* pSmViewShell);
+
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,

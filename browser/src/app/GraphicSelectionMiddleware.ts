@@ -22,6 +22,8 @@ class GraphicSelection {
 		null;
 	public static chartContextToolbarSaveStyle: ChartContextButtonSection = null;
 	public static diagramButton: DiagramButtonSection = null;
+	/// The object the dark overlay was last laid out for.
+	public static darkOverlayRectangle: cool.SimpleRectangle | null = null;
 
 	public static hasActiveSelection() {
 		return this.rectangle !== null;
@@ -98,13 +100,27 @@ class GraphicSelection {
 		this.handlesSection.addEmbeddedVideo(videoToInsert);
 	}
 
-	static renderDarkOverlay() {
-		var topLeft = new cool.Point(this.rectangle.pX1, this.rectangle.pY1);
-		var bottomRight = new cool.Point(this.rectangle.pX2, this.rectangle.pY2);
+	static renderDarkOverlay(rectangle: cool.SimpleRectangle = this.rectangle) {
+		this.darkOverlayRectangle = rectangle;
+
+		const anchor = app.activeDocument.activeLayout.documentAnchorPosition;
+		var topLeft = new cool.Point(
+			rectangle.v1X - anchor[0],
+			rectangle.v1Y - anchor[1],
+		);
+		var bottomRight = new cool.Point(
+			rectangle.v4X - anchor[0],
+			rectangle.v4Y - anchor[1],
+		);
 
 		var bounds = new cool.Bounds(topLeft, bottomRight);
 
 		app.map._docLayer._oleCSelections.setPointSet(CPointSet.fromBounds(bounds));
+	}
+
+	static refreshDarkOverlay() {
+		if (this.darkOverlayRectangle && this.hasDarkOverlay())
+			this.renderDarkOverlay(this.darkOverlayRectangle);
 	}
 
 	static hasDarkOverlay(): boolean {
@@ -364,6 +380,7 @@ class GraphicSelection {
 			this.resetSelectionRanges();
 		} else if (textMsg.match('INPLACE EXIT')) {
 			app.map._docLayer._oleCSelections.clear();
+			this.darkOverlayRectangle = null;
 		} else if (textMsg.match('INPLACE')) {
 			const startingInPlaceEditing = app.map._docLayer._oleCSelections.empty();
 

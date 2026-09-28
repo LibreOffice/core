@@ -224,10 +224,20 @@ class CanvasOverlay extends CanvasSectionObject {
 		return spc ? spc.getPxBoundList() : [this.getBounds().clone()];
 	}
 
+	getFixedBounds(): cool.Bounds {
+		return new cool.Bounds(new cool.Point(0, 0), this.getBounds().getSize());
+	}
+
+	onNewDocumentTopLeft(): void {
+		GraphicSelection.refreshDarkOverlay();
+	}
+
 	private isPathVisible(path: CPath): boolean {
 		var pathBounds = path.getBounds();
 		if (!pathBounds.isValid())
 			return false;
+		if (path.fixed)
+			return pathBounds.intersects(this.getFixedBounds());
 		return this.intersectsVisible(pathBounds);
 	}
 

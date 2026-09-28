@@ -13,6 +13,7 @@
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -134,6 +135,24 @@ const SfxViewShell* KitStarMathHelper::GetSmViewShell()
         });
     }
     return nullptr;
+}
+
+const SfxViewShell* KitStarMathHelper::FindContainerViewShell(const SfxViewShell* pSmViewShell)
+{
+    if (!pSmViewShell)
+        return nullptr;
+
+    const vcl::Window* pSmWindow = pSmViewShell->GetWindow();
+    if (!pSmWindow)
+        return nullptr;
+
+    return SfxViewShell::GetFirst(false, [pSmViewShell, pSmWindow](const SfxViewShell& rShell) {
+        if (&rShell == pSmViewShell || !rShell.GetIPClient())
+            return false;
+        const vcl::Window* pGraphicWindow = KitStarMathHelper(&rShell).GetGraphicWindow();
+        return pGraphicWindow
+               && (pGraphicWindow == pSmWindow || pSmWindow->IsChild(pGraphicWindow));
+    });
 }
 
 tools::Rectangle KitStarMathHelper::GetBoundingBox() const

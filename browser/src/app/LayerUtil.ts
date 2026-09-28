@@ -141,6 +141,7 @@ class CSelections extends BaseClass {
 					fillOpacity: 0.25,
 					weight: 0,
 					opacity: 0.25,
+					fixed: true,
 				};
 			}
 
