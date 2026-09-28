@@ -92,20 +92,9 @@ public:
 
     void setParent( MutableTreeNode* pParent );
     void broadcast_changes();
-    void broadcast_changes(std::unique_lock<std::mutex> & rLock,
-            const Reference< XTreeNode >& xNode, bool bNew);
 
     // XMutableTreeNode
-    virtual cpo::uno::Any getDataValue() override;
-    virtual void setDataValue( const cpo::uno::Any& _datavalue ) override;
-    virtual void appendChild( const cpo::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
-    virtual void insertChildByIndex( ::sal_Int32 Index, const cpo::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
-    virtual void removeChildByIndex( ::sal_Int32 Index ) override;
-    virtual void setHasChildrenOnDemand( bool ChildrenOnDemand ) override;
     virtual void setDisplayValue( const cpo::uno::Any& Value ) override;
-    virtual void setNodeGraphicURL( const OUString& URL ) override;
-    virtual void setExpandedGraphicURL( const OUString& URL ) override;
-    virtual void setCollapsedGraphicURL( const OUString& URL ) override;
 
     // XTreeNode
     virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getChildAt( ::sal_Int32 Index ) override;
@@ -126,7 +115,6 @@ public:
 private:
     TreeNodeVector  maChildren;
     Any maDisplayValue;
-    Any maDataValue;
     bool mbHasChildrenOnDemand;
     std::mutex maMutex;
     MutableTreeNode* mpParent;
@@ -288,104 +276,6 @@ void MutableTreeNode::broadcast_changes()
     }
 }
 
-void MutableTreeNode::broadcast_changes(std::unique_lock<std::mutex> & rLock,
-        const Reference< XTreeNode >& xNode, bool const bNew)
-{
-    auto const xModel(mxModel);
-    rLock.unlock();
-    if (xModel.is())
-    {
-        xModel->broadcast(bNew ? nodes_inserted : nodes_removed, this, xNode);
-    }
-}
-
-Any MutableTreeNode::getDataValue()
-{
-    std::scoped_lock aGuard( maMutex );
-    return maDataValue;
-}
-
-void MutableTreeNode::setDataValue( const Any& _datavalue )
-{
-    std::scoped_lock aGuard( maMutex );
-    maDataValue = _datavalue;
-}
-
-void MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
-{
-    std::unique_lock aGuard( maMutex );
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
-
-    if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
-        throw IllegalArgumentException();
-
-    maChildren.push_back( xImpl );
-    xImpl->setParent(this);
-    xImpl->mbIsInserted = true;
-
-    broadcast_changes(aGuard, xChildNode, true);
-}
-
-void MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode )
-{
-    std::unique_lock aGuard( maMutex );
-
-    if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) > maChildren.size()) )
-        throw IndexOutOfBoundsException();
-
-    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
-    if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
-        throw IllegalArgumentException();
-
-    xImpl->mbIsInserted = true;
-
-    TreeNodeVector::iterator aIter( maChildren.begin() );
-    std::advance(aIter, nChildIndex);
-
-    maChildren.insert( aIter, xImpl );
-    xImpl->setParent( this );
-
-    broadcast_changes(aGuard, xChildNode, true);
-}
-
-void MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
-{
-    std::unique_lock aGuard( maMutex );
-
-    if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) >= maChildren.size()) )
-        throw IndexOutOfBoundsException();
-
-    rtl::Reference< MutableTreeNode > xImpl;
-
-    TreeNodeVector::iterator aIter( maChildren.begin() );
-    std::advance(aIter, nChildIndex);
-
-    xImpl = *aIter;
-    maChildren.erase( aIter );
-
-    if( !xImpl.is() )
-        throw IndexOutOfBoundsException();
-
-    xImpl->setParent(nullptr);
-    xImpl->mbIsInserted = false;
-
-    broadcast_changes(aGuard, xImpl, false);
-}
-
-void MutableTreeNode::setHasChildrenOnDemand( bool bChildrenOnDemand )
-{
-    bool bChanged;
-
-    {
-        std::scoped_lock aGuard( maMutex );
-        bChanged = mbHasChildrenOnDemand != bool(bChildrenOnDemand);
-        mbHasChildrenOnDemand = bChildrenOnDemand;
-    }
-
-    if( bChanged )
-        broadcast_changes();
-}
-
 void MutableTreeNode::setDisplayValue( const Any& aValue )
 {
     {
@@ -394,48 +284,6 @@ void MutableTreeNode::setDisplayValue( const Any& aValue )
     }
 
     broadcast_changes();
-}
-
-void MutableTreeNode::setNodeGraphicURL( const OUString& rURL )
-{
-    bool bChanged;
-
-    {
-        std::scoped_lock aGuard( maMutex );
-        bChanged = maNodeGraphicURL != rURL;
-        maNodeGraphicURL = rURL;
-    }
-
-    if( bChanged )
-        broadcast_changes();
-}
-
-void MutableTreeNode::setExpandedGraphicURL( const OUString& rURL )
-{
-    bool bChanged;
-
-    {
-        std::scoped_lock aGuard( maMutex );
-        bChanged = maExpandedGraphicURL != rURL;
-        maExpandedGraphicURL = rURL;
-    }
-
-    if( bChanged )
-        broadcast_changes();
-}
-
-void MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL )
-{
-    bool bChanged;
-
-    {
-        std::scoped_lock aGuard( maMutex );
-        bChanged = maCollapsedGraphicURL != rURL;
-        maCollapsedGraphicURL = rURL;
-    }
-
-    if( bChanged )
-        broadcast_changes();
 }
 
 Reference< XTreeNode > MutableTreeNode::getChildAt( sal_Int32 nChildIndex )
