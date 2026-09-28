@@ -53,6 +53,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	onAdd: function() {
 		window.L.TextInput.prototype.onAdd.call(this);
+		this._initContextRegions();
 		// the canvas only exists once the doc layer has been built
 		this._map.on('doclayerinit', this._bindCanvasFocusGuard, this);
 		this._map.on('doclayerinit', this._updateA11yEditableState, this);
@@ -230,6 +231,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			this.updateLastContent();
 			this._updateSelection(pos, start, end, true);
 		}
+		this._placeContextRegions();
 	},
 
 	_updateFocusedParagraph: function() {
@@ -248,8 +250,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._remoteSelectionEnd = undefined;
 	},
 
-	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force) {
+	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after) {
 		this._listPrefixLength = listPrefixLength;
+		this._setContextParagraphs(before, after);
 		if (!this.hasFocus() || (this._isComposing && !force)) {
 			this._log('onAccessibilityFocusChanged: skipped updating: '
 				+ '\n  hasFocus: ' + this.hasFocus()
@@ -264,8 +267,87 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 	},
 
-	setA11yFocusedParagraph: function(content, pos, start, end) {
+	setA11yFocusedParagraph: function(content, pos, start, end, before, after) {
 		this._setFocusedParagraph(content, pos, start, end);
+		this._setContextParagraphs(before, after);
+	},
+
+	// getPlainTextContent() reads the whole editable, and every caret offset is
+	// measured against it.
+	_initContextRegions: function() {
+		if (this._contextBefore || !this._container)
+			return;
+
+		const createContextRegion = function (id) {
+			const region = document.createElement('div');
+			region.id = id;
+			region.className = 'a11y-context';
+			region.setAttribute('aria-hidden', 'false');
+			region.setAttribute('contenteditable', 'false');
+			return region;
+		};
+
+		this._contextBefore = createContextRegion('a11y-context-before');
+		this._contextAfter = createContextRegion('a11y-context-after');
+		this._container.insertBefore(this._contextBefore, this._textArea);
+		this._container.insertBefore(this._contextAfter, this._textArea.nextSibling);
+	},
+
+	onVisibleAreaChanged: function() {
+		if (!this.hasAccessibilitySupport() || !this._map || !this._map._docLoaded || !this.hasFocus())
+			return;
+
+		clearTimeout(this._contextRequestTimer);
+		this._contextRequestTimer = setTimeout(this._requestFocusedParagraph.bind(this), 250);
+	},
+
+	_setContextParagraphs: function(before, after) {
+		this._initContextRegions();
+		if (!this._contextBefore)
+			return;
+
+		const fillContextRegion = function (region, paragraphs) {
+			region.replaceChildren();
+			if (!Array.isArray(paragraphs))
+				return;
+			paragraphs.forEach(function (text) {
+				const span = document.createElement('span');
+				span.setAttribute('role', 'paragraph');
+				span.textContent = text;
+				region.appendChild(span);
+			});
+		};
+
+		fillContextRegion(this._contextBefore, before);
+		fillContextRegion(this._contextAfter, after);
+		this._placeContextRegions();
+	},
+
+	// The editable is 1px tall and its text overflows below it: a region drawn over that
+	// text is read by a screen reader as part of the same line.
+	_placeContextRegions: function() {
+		if (!this._container || !this._contextBefore)
+			return;
+
+		const textArea = this._textArea;
+		const regions = Array.from(this._container.children).filter(function (child) {
+			return child.classList.contains('a11y-context');
+		});
+		const isBefore = function (region) {
+			return !!(region.compareDocumentPosition(textArea) & Node.DOCUMENT_POSITION_FOLLOWING);
+		};
+
+		let above = textArea.offsetTop;
+		regions.filter(isBefore).reverse().forEach(function (region) {
+			above -= region.offsetHeight;
+			region.style.top = above + 'px';
+		});
+
+		let below = textArea.offsetTop + textArea.scrollHeight;
+		regions.filter(function (region) { return !isBefore(region); }).forEach(function (region) {
+			region.style.top = below + 'px';
+			below += region.offsetHeight;
+		});
 	},
 
 	onAccessibilityCaretChanged: function(nPos) {

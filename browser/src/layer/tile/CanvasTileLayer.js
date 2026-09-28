@@ -1038,7 +1038,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 						parseInt(obj.start),
 						parseInt(obj.end),
 						listPrefixLength,
-						parseInt(obj.force) > 0);
+						parseInt(obj.force) > 0,
+						obj.before,
+						obj.after);
 				}
 			}
 			else if (textMsg.startsWith('a11ycaretchanged:')) {
@@ -1074,7 +1076,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (textMsg.startsWith('a11yfocusedparagraph:')) {
 				obj = JSON.parse(textMsg.substring('a11yfocusedparagraph:'.length + 1));
 				this._map._textInput.setA11yFocusedParagraph(
-					obj.content, parseInt(obj.position), parseInt(obj.start), parseInt(obj.end));
+					obj.content, parseInt(obj.position), parseInt(obj.start), parseInt(obj.end),
+					obj.before, obj.after);
 			}
 			else if (textMsg.startsWith('a11ycaretposition:')) {
 				var pos = textMsg.substring('a11ycaretposition:'.length + 1);

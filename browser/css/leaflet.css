@@ -609,6 +609,17 @@ div.leaflet-cursor-container:hover > .leaflet-cursor-header {
 	opacity: 0;
 }
 
+/* in flow they push the editable, which the IME window follows, off the caret */
+.clipboard-container .a11y-context {
+	position: absolute;
+	/* the container is 0px wide, so a reader moving by line got one word at a time */
+	width: 100vw;
+}
+
+.clipboard-container .a11y-context > span {
+	display: block;
+}
+
 input.clipboard {
 	width: 1px;
 	height: 1px;

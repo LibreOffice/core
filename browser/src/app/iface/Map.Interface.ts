@@ -34,6 +34,7 @@ interface MapInterface extends Evented {
 	_textInput: {
 		debug(value: boolean): void;
 		_isDebugOn: boolean;
+		onVisibleAreaChanged?(): void;
 		update(): void;
 	};
 	addressInputField: AddressInputField;

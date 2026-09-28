@@ -196,6 +196,9 @@ class ViewLayoutBase {
 		this.onVisibleAreaChanged();
 		app.socket.sendMessage(visibleAreaCommand);
 
+		if (app.map._textInput && app.map._textInput.onVisibleAreaChanged)
+			app.map._textInput.onVisibleAreaChanged();
+
 		if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
 
 		// The command counts as sent only while the connection is healthy, so the

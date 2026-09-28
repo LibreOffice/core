@@ -71,12 +71,10 @@ describe(['tagdesktop'], 'Writer readable content', { testIsolation: false }, fu
 				expect(nodes, 'the paragraph above').to.not.be.empty;
 			});
 		});
-		cy.then(function () {
-			// The canvas text is not in the tree, so the only node that can
-			// carry it is the one the reader is handed.
-			return announced(SECOND).then(function (nodes) {
-				expect(nodes, 'only that paragraph').to.be.empty;
-			});
+		// The paragraphs around the view reach the tree as context, so what says
+		// the readable content moved is that it no longer carries this one.
+		cy.cGet('#readable-content').should(function ($span) {
+			expect($span.text(), 'the readable content moved off it').to.not.contain(SECOND);
 		});
 
 		// and back down
