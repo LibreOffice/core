@@ -38,29 +38,29 @@ namespace DOM
         , m_aState( SAXDocumentBuilderState_READY)
     {}
 
-    Sequence< OUString > SAL_CALL CSAXDocumentBuilder::getSupportedServiceNames()
+    Sequence< OUString > CSAXDocumentBuilder::getSupportedServiceNames()
     {
         return { u"com.sun.star.xml.dom.SAXDocumentBuilder"_ustr };
     }
 
-    OUString SAL_CALL CSAXDocumentBuilder::getImplementationName()
+    OUString CSAXDocumentBuilder::getImplementationName()
     {
         return u"com.sun.star.comp.xml.dom.SAXDocumentBuilder"_ustr;
     }
 
-    bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
+    bool CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
-    SAXDocumentBuilderState SAL_CALL CSAXDocumentBuilder::getState()
+    SAXDocumentBuilderState CSAXDocumentBuilder::getState()
     {
         std::scoped_lock g(m_Mutex);
 
         return m_aState;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::reset()
+    void CSAXDocumentBuilder::reset()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -70,7 +70,7 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_READY;
     }
 
-    Reference< XDocument > SAL_CALL CSAXDocumentBuilder::getDocument()
+    Reference< XDocument > CSAXDocumentBuilder::getDocument()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -80,7 +80,7 @@ namespace DOM
         return m_aDocument;
     }
 
-    Reference< XDocumentFragment > SAL_CALL CSAXDocumentBuilder::getDocumentFragment()
+    Reference< XDocumentFragment > CSAXDocumentBuilder::getDocumentFragment()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -89,7 +89,7 @@ namespace DOM
         return m_aFragment;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
+    void CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
     {
         std::scoped_lock g(m_Mutex);
 
@@ -105,7 +105,7 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_BUILDING_FRAGMENT;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endDocumentFragment()
+    void CSAXDocumentBuilder::endDocumentFragment()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -121,7 +121,7 @@ namespace DOM
     }
 
     //XFastDocumentHandler
-    void SAL_CALL CSAXDocumentBuilder::startDocument()
+    void CSAXDocumentBuilder::startDocument()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -137,7 +137,7 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_BUILDING_DOCUMENT;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endDocument()
+    void CSAXDocumentBuilder::endDocument()
     {
         std::scoped_lock g(m_Mutex);
 
@@ -152,7 +152,7 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_DOCUMENT_FINISHED;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::processingInstruction( const OUString& rTarget, const OUString& rData )
+    void CSAXDocumentBuilder::processingInstruction( const OUString& rTarget, const OUString& rData )
     {
         std::scoped_lock g(m_Mutex);
 
@@ -166,11 +166,11 @@ namespace DOM
         m_aNodeStack.top()->appendChild(aInstruction);
     }
 
-    void SAL_CALL CSAXDocumentBuilder::setDocumentLocator( const Reference< XLocator >& )
+    void CSAXDocumentBuilder::setDocumentLocator( const Reference< XLocator >& )
     {
     }
 
-    void SAL_CALL CSAXDocumentBuilder::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& xAttribs  )
+    void CSAXDocumentBuilder::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& xAttribs  )
     {
         std::scoped_lock g(m_Mutex);
 
@@ -206,7 +206,7 @@ namespace DOM
     }
 
     // For arbitrary meta elements
-    void SAL_CALL CSAXDocumentBuilder::startUnknownElement( const OUString& rNamespace, const OUString& rName, const Reference< XFastAttributeList >& xAttribs )
+    void CSAXDocumentBuilder::startUnknownElement( const OUString& rNamespace, const OUString& rName, const Reference< XFastAttributeList >& xAttribs )
     {
         std::scoped_lock g(m_Mutex);
 
@@ -260,7 +260,7 @@ namespace DOM
         }
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endFastElement( sal_Int32 nElement )
+    void CSAXDocumentBuilder::endFastElement( sal_Int32 nElement )
     {
         std::scoped_lock g(m_Mutex);
 
@@ -283,7 +283,7 @@ namespace DOM
     }
 
 
-    void SAL_CALL CSAXDocumentBuilder::endUnknownElement( const OUString& /*rNamespace*/, const OUString& rName )
+    void CSAXDocumentBuilder::endUnknownElement( const OUString& /*rNamespace*/, const OUString& rName )
     {
         std::scoped_lock g(m_Mutex);
 
@@ -310,18 +310,18 @@ namespace DOM
         m_aNodeStack.pop();
     }
 
-    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* xAttribs */ )
+    Reference< XFastContextHandler > CSAXDocumentBuilder::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* xAttribs */ )
     {
         return nullptr;
     }
 
 
-    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createUnknownChildContext( const OUString&/* rNamespace */, const OUString&/* rName */, const Reference< XFastAttributeList >&/* xAttribs */ )
+    Reference< XFastContextHandler > CSAXDocumentBuilder::createUnknownChildContext( const OUString&/* rNamespace */, const OUString&/* rName */, const Reference< XFastAttributeList >&/* xAttribs */ )
     {
         return nullptr;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::characters( const OUString& rChars )
+    void CSAXDocumentBuilder::characters( const OUString& rChars )
     {
         std::scoped_lock g(m_Mutex);
 

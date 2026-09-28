@@ -46,11 +46,11 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() override;
+        virtual sal_Int32 getLength() override;
         /**
         Returns the indexth item in the collection.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > item(sal_Int32 index) override;
     };
 }
 

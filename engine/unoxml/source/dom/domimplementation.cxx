@@ -37,13 +37,13 @@ namespace DOM
     }
 
     // there is just 1 static instance, so these must not delete it!
-    void SAL_CALL CDOMImplementation::acquire() noexcept { }
-    void SAL_CALL CDOMImplementation::release() noexcept { }
+    void CDOMImplementation::acquire() noexcept { }
+    void CDOMImplementation::release() noexcept { }
 
     /**
     Creates a DOM Document object of the specified type with its document element.
     */
-    Reference <XDocument > SAL_CALL CDOMImplementation::createDocument(
+    Reference <XDocument > CDOMImplementation::createDocument(
            OUString const& /*rNamespaceURI*/,
            OUString const& /*rQualifiedName*/,
            Reference< XDocumentType > const& /*xDoctype*/)
@@ -56,7 +56,7 @@ namespace DOM
     /**
     Creates an empty DocumentType node.
     */
-    Reference< XDocumentType > SAL_CALL CDOMImplementation::createDocumentType(
+    Reference< XDocumentType > CDOMImplementation::createDocumentType(
             OUString const& /*rQualifiedName*/,
             OUString const& /*rPublicId*/, OUString const& /*rSystemId*/)
     {
@@ -68,7 +68,7 @@ namespace DOM
     /**
     Test if the DOM implementation implements a specific feature.
     */
-    bool SAL_CALL
+    bool
     CDOMImplementation::hasFeature(OUString const& /*feature*/, OUString const& /*ver*/)
     {
         OSL_ENSURE(false,

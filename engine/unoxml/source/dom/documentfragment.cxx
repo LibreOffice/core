@@ -47,11 +47,11 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CDocumentFragment::getNodeName()
+    OUString CDocumentFragment::getNodeName()
     {
         return u"#document-fragment"_ustr;
     }
-    OUString SAL_CALL CDocumentFragment::getNodeValue()
+    OUString CDocumentFragment::getNodeValue()
     {
         return OUString();
     }

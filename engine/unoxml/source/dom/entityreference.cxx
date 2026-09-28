@@ -49,7 +49,7 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CEntityReference::getNodeName()
+    OUString CEntityReference::getNodeName()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -62,7 +62,7 @@ namespace DOM
         return aName;
     }
 
-    OUString SAL_CALL CEntityReference::getNodeValue()
+    OUString CEntityReference::getNodeValue()
     {
         return OUString();
     }

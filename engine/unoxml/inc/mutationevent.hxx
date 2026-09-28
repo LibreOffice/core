@@ -50,12 +50,12 @@ public:
 
     virtual ~CMutationEvent() override;
 
-    virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
-    virtual OUString SAL_CALL getPrevValue() override;
-    virtual OUString SAL_CALL getNewValue() override;
-    virtual OUString SAL_CALL getAttrName() override;
-    virtual css::xml::dom::events::AttrChangeType SAL_CALL getAttrChange() override;
-    virtual void SAL_CALL initMutationEvent(
+    virtual cpo::uno::Reference< css::xml::dom::XNode > getRelatedNode() override;
+    virtual OUString getPrevValue() override;
+    virtual OUString getNewValue() override;
+    virtual OUString getAttrName() override;
+    virtual css::xml::dom::events::AttrChangeType getAttrChange() override;
+    virtual void initMutationEvent(
                            const OUString& typeArg,
                            bool canBubbleArg,
                            bool cancelableArg,
@@ -66,16 +66,16 @@ public:
                            css::xml::dom::events::AttrChangeType attrChangeArg) override;
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    virtual OUString SAL_CALL getType() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
-    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
-    virtual bool SAL_CALL getBubbles() override;
-    virtual bool SAL_CALL getCancelable() override;
-    virtual css::util::Time SAL_CALL getTimeStamp() override;
-    virtual void SAL_CALL stopPropagation() override;
-    virtual void SAL_CALL preventDefault() override;
-    virtual void SAL_CALL initEvent(
+    virtual OUString getType() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getTarget() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getCurrentTarget() override;
+    virtual css::xml::dom::events::PhaseType getEventPhase() override;
+    virtual bool getBubbles() override;
+    virtual bool getCancelable() override;
+    virtual css::util::Time getTimeStamp() override;
+    virtual void stopPropagation() override;
+    virtual void preventDefault() override;
+    virtual void initEvent(
         const OUString& eventTypeArg,
         bool canBubbleArg,
         bool cancelableArg) override;

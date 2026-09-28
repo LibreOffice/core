@@ -42,12 +42,12 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CComment::getNodeName()
+    OUString CComment::getNodeName()
     {
         return u"#comment"_ustr;
     }
 
-    OUString SAL_CALL CComment::getNodeValue()
+    OUString CComment::getNodeValue()
     {
         return CCharacterData::getData();
     }

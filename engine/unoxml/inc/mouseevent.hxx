@@ -47,18 +47,18 @@ class CMouseEvent final
 public:
     explicit CMouseEvent();
 
-    virtual sal_Int32 SAL_CALL getScreenX() override;
-    virtual sal_Int32 SAL_CALL getScreenY() override;
-    virtual sal_Int32 SAL_CALL getClientX() override;
-    virtual sal_Int32 SAL_CALL getClientY() override;
-    virtual bool SAL_CALL getCtrlKey() override;
-    virtual bool SAL_CALL getShiftKey() override;
-    virtual bool SAL_CALL getAltKey() override;
-    virtual bool SAL_CALL getMetaKey() override;
-    virtual sal_Int16 SAL_CALL getButton() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getRelatedTarget() override;
+    virtual sal_Int32 getScreenX() override;
+    virtual sal_Int32 getScreenY() override;
+    virtual sal_Int32 getClientX() override;
+    virtual sal_Int32 getClientY() override;
+    virtual bool getCtrlKey() override;
+    virtual bool getShiftKey() override;
+    virtual bool getAltKey() override;
+    virtual bool getMetaKey() override;
+    virtual sal_Int16 getButton() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getRelatedTarget() override;
 
-    virtual void SAL_CALL initMouseEvent(
+    virtual void initMouseEvent(
                         const OUString& typeArg,
                         bool canBubbleArg,
                         bool cancelableArg,
@@ -76,23 +76,23 @@ public:
                         const cpo::uno::Reference< css::xml::dom::events::XEventTarget >& relatedTargetArg) override;
 
     // delegate to CUIevent
-    virtual cpo::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() override;
-    virtual sal_Int32 SAL_CALL getDetail() override;
-    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
+    virtual cpo::uno::Reference< css::xml::dom::views::XAbstractView > getView() override;
+    virtual sal_Int32 getDetail() override;
+    virtual void initUIEvent(const OUString& typeArg,
                      bool canBubbleArg,
                      bool cancelableArg,
                      const cpo::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
                      sal_Int32 detailArg) override;
-    virtual OUString SAL_CALL getType() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
-    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
-    virtual bool SAL_CALL getBubbles() override;
-    virtual bool SAL_CALL getCancelable() override;
-    virtual css::util::Time SAL_CALL getTimeStamp() override;
-    virtual void SAL_CALL stopPropagation() override;
-    virtual void SAL_CALL preventDefault() override;
-    virtual void SAL_CALL initEvent(
+    virtual OUString getType() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getTarget() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getCurrentTarget() override;
+    virtual css::xml::dom::events::PhaseType getEventPhase() override;
+    virtual bool getBubbles() override;
+    virtual bool getCancelable() override;
+    virtual css::util::Time getTimeStamp() override;
+    virtual void stopPropagation() override;
+    virtual void preventDefault() override;
+    virtual void initEvent(
         const OUString& eventTypeArg,
         bool canBubbleArg,
         bool cancelableArg) override;

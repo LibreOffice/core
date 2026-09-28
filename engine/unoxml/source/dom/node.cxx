@@ -288,7 +288,7 @@ namespace DOM
     /**
     Adds the node newChild to the end of the list of children of this node.
     */
-    Reference< XNode > SAL_CALL CNode::appendChild(
+    Reference< XNode > CNode::appendChild(
             Reference< XNode > const& xNewChild)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
@@ -392,7 +392,7 @@ namespace DOM
     Returns a duplicate of this node, i.e., serves as a generic copy
     constructor for nodes.
     */
-    Reference< XNode > SAL_CALL CNode::cloneNode(bool bDeep)
+    Reference< XNode > CNode::cloneNode(bool bDeep)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -410,7 +410,7 @@ namespace DOM
     A NamedNodeMap containing the attributes of this node (if it is an Element)
     or null otherwise.
     */
-    Reference< XNamedNodeMap > SAL_CALL CNode::getAttributes()
+    Reference< XNamedNodeMap > CNode::getAttributes()
     {
         // return empty reference; only element node may override this impl
         return Reference< XNamedNodeMap>();
@@ -419,7 +419,7 @@ namespace DOM
     /**
     A NodeList that contains all children of this node.
     */
-    Reference< XNodeList > SAL_CALL CNode::getChildNodes()
+    Reference< XNodeList > CNode::getChildNodes()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -433,7 +433,7 @@ namespace DOM
     /**
     The first child of this node.
     */
-    Reference< XNode > SAL_CALL CNode::getFirstChild()
+    Reference< XNode > CNode::getFirstChild()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -446,7 +446,7 @@ namespace DOM
     /**
     The last child of this node.
     */
-    Reference< XNode > SAL_CALL CNode::getLastChild()
+    Reference< XNode > CNode::getLastChild()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -459,7 +459,7 @@ namespace DOM
     /**
     Returns the local part of the qualified name of this node.
     */
-    OUString SAL_CALL CNode::getLocalName()
+    OUString CNode::getLocalName()
     {
         // see CElement/CAttr
         return OUString();
@@ -469,7 +469,7 @@ namespace DOM
     /**
     The namespace URI of this node, or null if it is unspecified.
     */
-    OUString SAL_CALL CNode::getNamespaceURI()
+    OUString CNode::getNamespaceURI()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -487,7 +487,7 @@ namespace DOM
     /**
     The node immediately following this node.
     */
-    Reference< XNode > SAL_CALL CNode::getNextSibling()
+    Reference< XNode > CNode::getNextSibling()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -500,7 +500,7 @@ namespace DOM
     /**
     The name of this node, depending on its type; see the table above.
     */
-    OUString SAL_CALL CNode::getNodeName()
+    OUString CNode::getNodeName()
     {
         /*
         Interface        nodeName               nodeValue                       attributes
@@ -526,7 +526,7 @@ namespace DOM
     /**
     A code representing the type of the underlying object, as defined above.
     */
-    NodeType SAL_CALL CNode::getNodeType()
+    NodeType CNode::getNodeType()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -536,7 +536,7 @@ namespace DOM
     /**
     The value of this node, depending on its type; see the table above.
     */
-    OUString SAL_CALL CNode::getNodeValue()
+    OUString CNode::getNodeValue()
     {
         return OUString();
     }
@@ -544,7 +544,7 @@ namespace DOM
     /**
     The Document object associated with this node.
     */
-    Reference< XDocument > SAL_CALL CNode::getOwnerDocument()
+    Reference< XDocument > CNode::getOwnerDocument()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -558,7 +558,7 @@ namespace DOM
     /**
     The parent of this node.
     */
-    Reference< XNode > SAL_CALL CNode::getParentNode()
+    Reference< XNode > CNode::getParentNode()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -571,7 +571,7 @@ namespace DOM
     /**
     The namespace prefix of this node, or null if it is unspecified.
     */
-    OUString SAL_CALL CNode::getPrefix()
+    OUString CNode::getPrefix()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -591,7 +591,7 @@ namespace DOM
     /**
     The node immediately preceding this node.
     */
-    Reference< XNode > SAL_CALL CNode::getPreviousSibling()
+    Reference< XNode > CNode::getPreviousSibling()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -604,7 +604,7 @@ namespace DOM
     /**
     Returns whether this node (if it is an element) has any attributes.
     */
-    bool SAL_CALL CNode::hasAttributes()
+    bool CNode::hasAttributes()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -614,7 +614,7 @@ namespace DOM
     /**
     Returns whether this node has any children.
     */
-    bool SAL_CALL CNode::hasChildNodes()
+    bool CNode::hasChildNodes()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -624,7 +624,7 @@ namespace DOM
     /**
     Inserts the node newChild before the existing child node refChild.
     */
-    Reference< XNode > SAL_CALL CNode::insertBefore(
+    Reference< XNode > CNode::insertBefore(
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
     {
         if (!newChild.is() || !refChild.is()) { throw RuntimeException(); }
@@ -696,7 +696,7 @@ namespace DOM
     Tests whether the DOM implementation implements a specific feature and
     that feature is supported by this node.
     */
-  bool SAL_CALL CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
+  bool CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
     {
         OSL_ENSURE(false, "CNode::isSupported: not implemented (#i113683#)");
         return false;
@@ -709,7 +709,7 @@ namespace DOM
     entity references) separates Text nodes, i.e., there are neither adjacent
     Text nodes nor empty Text nodes.
     */
-    void SAL_CALL CNode::normalize()
+    void CNode::normalize()
     {
         //XXX combine adjacent text nodes and remove empty ones
         OSL_ENSURE(false, "CNode::normalize: not implemented (#i113683#)");
@@ -719,7 +719,7 @@ namespace DOM
     Removes the child node indicated by oldChild from the list of children,
     and returns it.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CNode::removeChild(const Reference< XNode >& xOldChild)
     {
         if (!xOldChild.is()) {
@@ -794,7 +794,7 @@ namespace DOM
     Replaces the child node oldChild with newChild in the list of children,
     and returns the oldChild node.
     */
-    Reference< XNode > SAL_CALL CNode::replaceChild(
+    Reference< XNode > CNode::replaceChild(
             Reference< XNode > const& xNewChild,
             Reference< XNode > const& xOldChild)
      {
@@ -905,7 +905,7 @@ namespace DOM
     /**
     The value of this node, depending on its type; see the table above.
     */
-    void SAL_CALL CNode::setNodeValue(const OUString& /*nodeValue*/)
+    void CNode::setNodeValue(const OUString& /*nodeValue*/)
     {
         // use specific node implementation
         // if we end up down here, something went wrong
@@ -917,7 +917,7 @@ namespace DOM
     /**
     The namespace prefix of this node, or null if it is unspecified.
     */
-    void SAL_CALL CNode::setPrefix(const OUString& prefix)
+    void CNode::setPrefix(const OUString& prefix)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -940,7 +940,7 @@ namespace DOM
     }
 
         // --- XEventTarget
-    void SAL_CALL CNode::addEventListener(const OUString& eventType,
+    void CNode::addEventListener(const OUString& eventType,
         const Reference< css::xml::dom::events::XEventListener >& listener,
         bool useCapture)
     {
@@ -951,7 +951,7 @@ namespace DOM
         rDispatcher.addListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
-    void SAL_CALL CNode::removeEventListener(const OUString& eventType,
+    void CNode::removeEventListener(const OUString& eventType,
         const Reference< css::xml::dom::events::XEventListener >& listener,
         bool useCapture)
     {
@@ -962,7 +962,7 @@ namespace DOM
         rDispatcher.removeListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
-    bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
+    bool CNode::dispatchEvent(const Reference< XEvent >& evt)
     {
         CDocument * pDocument;
         events::CEventDispatcher * pDispatcher;

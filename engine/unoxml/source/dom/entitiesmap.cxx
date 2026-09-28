@@ -33,7 +33,7 @@ namespace DOM
     /**
     The number of nodes in this map.
     */
-    sal_Int32 SAL_CALL CEntitiesMap::getLength()
+    sal_Int32 CEntitiesMap::getLength()
     {
         OSL_ENSURE(false,
             "CEntitiesMap::getLength: not implemented (#i113683#)");
@@ -43,7 +43,7 @@ namespace DOM
     /**
     Retrieves a node specified by local name
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::getNamedItem(OUString const& /*name*/)
     {
         OSL_ENSURE(false,
@@ -54,7 +54,7 @@ namespace DOM
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::getNamedItemNS(
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     {
@@ -66,7 +66,7 @@ namespace DOM
     /**
     Returns the indexth item in the map.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::item(sal_Int32 /*index*/)
     {
         OSL_ENSURE(false, "CEntitiesMap::item: not implemented (#i113683#)");
@@ -76,7 +76,7 @@ namespace DOM
     /**
     Removes a node specified by name.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::removeNamedItem(OUString const& /*name*/)
     {
         OSL_ENSURE(false,
@@ -87,7 +87,7 @@ namespace DOM
     /**
     // Removes a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::removeNamedItemNS(
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     {
@@ -99,7 +99,7 @@ namespace DOM
     /**
     // Adds a node using its nodeName attribute.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::setNamedItem(Reference< XNode > const& /*arg*/)
     {
         OSL_ENSURE(false,
@@ -110,7 +110,7 @@ namespace DOM
     /**
     Adds a node using its namespaceURI and localName.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CEntitiesMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
     {
         OSL_ENSURE(false,

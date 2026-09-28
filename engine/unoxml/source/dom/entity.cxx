@@ -56,7 +56,7 @@ namespace DOM
     /**
     For unparsed entities, the name of the notation for the entity.
     */
-    OUString SAL_CALL CEntity::getNotationName()
+    OUString CEntity::getNotationName()
     {
         OSL_ENSURE(false,
                 "CEntity::getNotationName: not implemented (#i113683#)");
@@ -66,7 +66,7 @@ namespace DOM
     /**
     The public identifier associated with the entity, if specified.
     */
-    OUString SAL_CALL CEntity::getPublicId()
+    OUString CEntity::getPublicId()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -81,7 +81,7 @@ namespace DOM
     /**
     The system identifier associated with the entity, if specified.
     */
-    OUString SAL_CALL CEntity::getSystemId()
+    OUString CEntity::getSystemId()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -92,7 +92,7 @@ namespace DOM
         }
         return aID;
     }
-    OUString SAL_CALL CEntity::getNodeName()
+    OUString CEntity::getNodeName()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -104,7 +104,7 @@ namespace DOM
         }
         return aName;
     }
-    OUString SAL_CALL CEntity::getNodeValue()
+    OUString CEntity::getNodeValue()
     {
         return OUString();
     }

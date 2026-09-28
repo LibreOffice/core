@@ -49,7 +49,7 @@ namespace DOM
         {
         }
 
-        virtual void SAL_CALL handleEvent(const cpo::uno::Reference<css::xml::dom::events::XEvent>& rEvent) override
+        virtual void handleEvent(const cpo::uno::Reference<css::xml::dom::events::XEvent>& rEvent) override
         {
             rtl::Reference<DOM::CElementListImpl> xOwner(mxOwner);
             if (xOwner)
@@ -147,7 +147,7 @@ namespace DOM
     /**
     The number of nodes in the list.
     */
-    sal_Int32 SAL_CALL CElementListImpl::getLength()
+    sal_Int32 CElementListImpl::getLength()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -160,7 +160,7 @@ namespace DOM
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CElementListImpl::item(sal_Int32 index)
+    Reference< XNode > CElementListImpl::item(sal_Int32 index)
     {
         if (index < 0) throw cpo::uno::RuntimeException();
 
@@ -176,7 +176,7 @@ namespace DOM
     }
 
     // tree mutations can change the list
-    void SAL_CALL CElementListImpl::handleEvent(Reference< XEvent > const&)
+    void CElementListImpl::handleEvent(Reference< XEvent > const&)
     {
         ::osl::MutexGuard const g(m_rMutex);
 

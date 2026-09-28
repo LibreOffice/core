@@ -40,15 +40,15 @@ public:
     CBlankNode();
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString & ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() override;
+    virtual OUString getStringValue() override;
 
 private:
     CBlankNode(CBlankNode const&) = delete;
@@ -61,23 +61,23 @@ CBlankNode::CBlankNode()
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL CBlankNode::getImplementationName()
+OUString CBlankNode::getImplementationName()
 {
     return  u"CBlankNode"_ustr;
 }
 
-bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName)
+bool CBlankNode::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CBlankNode::getSupportedServiceNames()
 {
     return { u"com.sun.star.rdf.BlankNode"_ustr };
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CBlankNode::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void CBlankNode::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
@@ -99,7 +99,7 @@ void SAL_CALL CBlankNode::initialize(const cpo::uno::Sequence< cpo::uno::Any > &
 }
 
 // css::rdf::XNode:
-OUString SAL_CALL CBlankNode::getStringValue()
+OUString CBlankNode::getStringValue()
 {
     return m_NodeID;
 }

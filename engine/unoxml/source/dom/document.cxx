@@ -319,14 +319,14 @@ namespace DOM
     }
 
 
-    void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
+    void CDocument::addListener(const Reference< XStreamListener >& aListener )
     {
         ::osl::MutexGuard const g(m_Mutex);
 
         m_streamListeners.insert(aListener);
     }
 
-    void SAL_CALL CDocument::removeListener(const Reference< XStreamListener >& aListener )
+    void CDocument::removeListener(const Reference< XStreamListener >& aListener )
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -366,7 +366,7 @@ namespace DOM
     }
     } // extern "C"
 
-    void SAL_CALL CDocument::start()
+    void CDocument::start()
     {
         listenerlist_t streamListeners;
         {
@@ -400,19 +400,19 @@ namespace DOM
         }
     }
 
-    void SAL_CALL CDocument::terminate()
+    void CDocument::terminate()
     {
         // not supported
     }
 
-    void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
+    void CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
     {
         ::osl::MutexGuard const g(m_Mutex);
 
         m_rOutputStream = aStream;
     }
 
-    Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream()
+    Reference< XOutputStream >  CDocument::getOutputStream()
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -420,7 +420,7 @@ namespace DOM
     }
 
     // Creates an Attr of the given name.
-    Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
+    Reference< XAttr > CDocument::createAttribute(const OUString& name)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -436,7 +436,7 @@ namespace DOM
     };
 
     // Creates an attribute of the given qualified name and namespace URI.
-    Reference< XAttr > SAL_CALL CDocument::createAttributeNS(
+    Reference< XAttr > CDocument::createAttributeNS(
             const OUString& ns, const OUString& qname)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -471,7 +471,7 @@ namespace DOM
     };
 
     // Creates a CDATASection node whose value is the specified string.
-    Reference< XCDATASection > SAL_CALL CDocument::createCDATASection(const OUString& data)
+    Reference< XCDATASection > CDocument::createCDATASection(const OUString& data)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -488,7 +488,7 @@ namespace DOM
     }
 
     // Creates a Comment node given the specified string.
-    Reference< XComment > SAL_CALL CDocument::createComment(const OUString& data)
+    Reference< XComment > CDocument::createComment(const OUString& data)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -502,7 +502,7 @@ namespace DOM
     }
 
     //Creates an empty DocumentFragment object.
-    Reference< XDocumentFragment > SAL_CALL CDocument::createDocumentFragment()
+    Reference< XDocumentFragment > CDocument::createDocumentFragment()
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -514,7 +514,7 @@ namespace DOM
     }
 
     // Creates an element of the type specified.
-    Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
+    Reference< XElement > CDocument::createElement(const OUString& tagName)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -528,7 +528,7 @@ namespace DOM
     }
 
     // Creates an element of the given qualified name and namespace URI.
-    Reference< XElement > SAL_CALL CDocument::createElementNS(
+    Reference< XElement > CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -564,7 +564,7 @@ namespace DOM
     }
 
     //Creates an EntityReference object.
-    Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
+    Reference< XEntityReference > CDocument::createEntityReference(const OUString& name)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -579,7 +579,7 @@ namespace DOM
 
     // Creates a ProcessingInstruction node given the specified name and
     // data strings.
-    Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
+    Reference< XProcessingInstruction > CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -597,7 +597,7 @@ namespace DOM
     }
 
     // Creates a Text node given the specified string.
-    Reference< XText > SAL_CALL CDocument::createTextNode(const OUString& data)
+    Reference< XText > CDocument::createTextNode(const OUString& data)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -612,7 +612,7 @@ namespace DOM
 
     // The Document Type Declaration (see DocumentType) associated with this
     // document.
-    Reference< XDocumentType > SAL_CALL CDocument::getDoctype()
+    Reference< XDocumentType > CDocument::getDoctype()
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -625,7 +625,7 @@ namespace DOM
 
     // This is a convenience attribute that allows direct access to the child
     // node that is the root element of the document.
-    Reference< XElement > SAL_CALL CDocument::getDocumentElement()
+    Reference< XElement > CDocument::getDocumentElement()
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -664,7 +664,7 @@ namespace DOM
     }
 
     // Returns the Element whose ID is given by elementId.
-    Reference< XElement > SAL_CALL
+    Reference< XElement >
     CDocument::getElementById(const OUString& elementId)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -682,7 +682,7 @@ namespace DOM
     }
 
 
-    Reference< XNodeList > SAL_CALL
+    Reference< XNodeList >
     CDocument::getElementsByTagName(OUString const& rTagname)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -692,7 +692,7 @@ namespace DOM
         return xRet;
     }
 
-    Reference< XNodeList > SAL_CALL CDocument::getElementsByTagNameNS(
+    Reference< XNodeList > CDocument::getElementsByTagNameNS(
             OUString const& rNamespaceURI, OUString const& rLocalName)
     {
         ::osl::MutexGuard const g(m_Mutex);
@@ -703,7 +703,7 @@ namespace DOM
         return xRet;
     }
 
-    Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
+    Reference< XDOMImplementation > CDocument::getImplementation()
     {
         // does not need mutex currently
         return Reference< XDOMImplementation >(CDOMImplementation::get());
@@ -886,7 +886,7 @@ namespace DOM
         return xNode;
     }
 
-    Reference< XNode > SAL_CALL CDocument::importNode(
+    Reference< XNode > CDocument::importNode(
             Reference< XNode > const& xImportedNode, bool deep)
     {
         if (!xImportedNode.is()) { throw RuntimeException(); }
@@ -916,19 +916,19 @@ namespace DOM
         return xNode;
     }
 
-    OUString SAL_CALL CDocument::getNodeName()
+    OUString CDocument::getNodeName()
     {
         // does not need mutex currently
         return u"#document"_ustr;
     }
 
-    OUString SAL_CALL CDocument::getNodeValue()
+    OUString CDocument::getNodeValue()
     {
         // does not need mutex currently
         return OUString();
     }
 
-    Reference< XNode > SAL_CALL CDocument::cloneNode(bool bDeep)
+    Reference< XNode > CDocument::cloneNode(bool bDeep)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -943,7 +943,7 @@ namespace DOM
         return xRet;
     }
 
-    Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType)
+    Reference< XEvent > CDocument::createEvent(const OUString& aType)
     {
         // does not need mutex currently
         rtl::Reference<events::CEvent> pEvent;
@@ -969,7 +969,7 @@ namespace DOM
     }
 
     // css::xml::sax::XSAXSerializable
-    void SAL_CALL CDocument::serialize(
+    void CDocument::serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
     {
@@ -994,7 +994,7 @@ namespace DOM
     }
 
     // css::xml::sax::XFastSAXSerializable
-    void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
+    void CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
                                             const Reference< XFastTokenHandler >& i_xTokenHandler,
                                             const Sequence< beans::StringPair >& i_rNamespaces,
                                             const Sequence< beans::Pair< OUString, sal_Int32 > >& i_rRegisterNamespaces )

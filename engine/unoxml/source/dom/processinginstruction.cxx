@@ -49,7 +49,7 @@ namespace DOM
     /**
     The content of this processing instruction.
     */
-    OUString SAL_CALL
+    OUString
     CProcessingInstruction::getData()
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -70,7 +70,7 @@ namespace DOM
     /**
     The target of this processing instruction.
     */
-    OUString SAL_CALL
+    OUString
     CProcessingInstruction::getTarget()
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -91,7 +91,7 @@ namespace DOM
     /**
     The content of this processing instruction.
     */
-    void SAL_CALL CProcessingInstruction::setData(OUString const& rData)
+    void CProcessingInstruction::setData(OUString const& rData)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -107,7 +107,7 @@ namespace DOM
         m_aNodePtr->content = xmlStrdup(pData);
     }
 
-    OUString SAL_CALL
+    OUString
     CProcessingInstruction::getNodeName()
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -122,12 +122,12 @@ namespace DOM
         return ret;
     }
 
-    OUString SAL_CALL CProcessingInstruction::getNodeValue()
+    OUString CProcessingInstruction::getNodeValue()
     {
         return getData();
     }
 
-    void SAL_CALL
+    void
     CProcessingInstruction::setNodeValue(OUString const& rNodeValue)
     {
         return setData(rNodeValue);

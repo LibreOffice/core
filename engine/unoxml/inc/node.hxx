@@ -142,109 +142,109 @@ namespace DOM
         /**
         Adds the node newChild to the end of the list of children of this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+        virtual cpo::uno::Reference< css::xml::dom::XNode >
             appendChild(cpo::uno::Reference< css::xml::dom::XNode > const& xNewChild) override;
 
         /**
         Returns a duplicate of this node, i.e., serves as a generic copy
         constructor for nodes.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > cloneNode(bool deep) override;
 
         /**
         A NamedNodeMap containing the attributes of this node
         (if it is an Element) or null otherwise.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNamedNodeMap > getAttributes() override;
 
         /**
         A NodeList that contains all children of this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > getChildNodes() override;
 
         /**
         The first child of this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getFirstChild() override;
 
         /**
         The last child of this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getLastChild() override;
 
         /**
         Returns the local part of the qualified name of this node.
         */
-        virtual OUString SAL_CALL getLocalName() override;
+        virtual OUString getLocalName() override;
 
         /**
         The namespace URI of this node, or null if it is unspecified.
         */
-        virtual OUString SAL_CALL getNamespaceURI() override;
+        virtual OUString getNamespaceURI() override;
 
         /**
         The node immediately following this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getNextSibling() override;
 
         /**
         The name of this node, depending on its type; see the table above.
         -- virtual implemented by actual node types
         */
-        virtual OUString SAL_CALL getNodeName() override;
+        virtual OUString getNodeName() override;
 
         /**
         A code representing the type of the underlying object, as defined above.
         */
-        virtual css::xml::dom::NodeType SAL_CALL getNodeType() override;
+        virtual css::xml::dom::NodeType getNodeType() override;
 
         /**
         The value of this node, depending on its type; see the table above.
         -- virtual implemented by actual node types
         */
-        virtual OUString SAL_CALL getNodeValue() override;
+        virtual OUString getNodeValue() override;
 
         /**
         The Document object associated with this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > getOwnerDocument() override;
 
         /**
         The parent of this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getParentNode() override;
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
         */
-        virtual OUString SAL_CALL getPrefix() override;
+        virtual OUString getPrefix() override;
 
         /**
         The node immediately preceding this node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getPreviousSibling() override;
 
         /**
         Returns whether this node (if it is an element) has any attributes.
         */
-        virtual bool SAL_CALL hasAttributes() override;
+        virtual bool hasAttributes() override;
 
         /**
         Returns whether this node has any children.
         */
-        virtual bool SAL_CALL hasChildNodes() override;
+        virtual bool hasChildNodes() override;
 
         /**
         Inserts the node newChild before the existing child node refChild.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > insertBefore(
                 const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& refChild) override;
 
         /**
         Tests whether the DOM implementation implements a specific feature and
         that feature is supported by this node.
         */
-        virtual bool SAL_CALL isSupported(const OUString& feature, const OUString& ver) override;
+        virtual bool isSupported(const OUString& feature, const OUString& ver) override;
 
         /**
         Puts all Text nodes in the full depth of the sub-tree underneath this
@@ -253,42 +253,42 @@ namespace DOM
         entity references) separates Text nodes, i.e., there are neither adjacent
         Text nodes nor empty Text nodes.
         */
-        virtual void SAL_CALL normalize() override;
+        virtual void normalize() override;
 
         /**
         Removes the child node indicated by oldChild from the list of children,
         and returns it.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > removeChild(const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override;
 
         /**
         Replaces the child node oldChild with newChild in the list of children,
         and returns the oldChild node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > replaceChild(
                 const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override;
 
         /**
         The value of this node, depending on its type; see the table above.
         */
-        virtual void SAL_CALL setNodeValue(const OUString& nodeValue) override;
+        virtual void setNodeValue(const OUString& nodeValue) override;
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
         */
-        virtual void SAL_CALL setPrefix(const OUString& prefix) override;
+        virtual void setPrefix(const OUString& prefix) override;
 
 
         // --- XEventTarget
-        virtual void SAL_CALL addEventListener(const OUString& eventType,
+        virtual void addEventListener(const OUString& eventType,
             const cpo::uno::Reference< css::xml::dom::events::XEventListener >& listener,
             bool useCapture) override;
 
-        virtual void SAL_CALL removeEventListener(const OUString& eventType,
+        virtual void removeEventListener(const OUString& eventType,
             const cpo::uno::Reference< css::xml::dom::events::XEventListener >& listener,
             bool useCapture) override;
 
-        virtual bool SAL_CALL dispatchEvent(const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
+        virtual bool dispatchEvent(const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
     };
 
     /// eliminate redundant namespace declarations

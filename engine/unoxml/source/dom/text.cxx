@@ -58,12 +58,12 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CText::getNodeName()
+    OUString CText::getNodeName()
     {
         return u"#text"_ustr;
     }
 
-    Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
+    Reference< XText > CText::splitText(sal_Int32 /*offset*/)
     {
         OSL_FAIL("CText::splitText: not implemented (#i113683#)");
         return Reference< XText >(this);

@@ -42,25 +42,25 @@ class CUIEvent
 public:
     explicit CUIEvent();
 
-    virtual cpo::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() override;
-    virtual sal_Int32 SAL_CALL getDetail() override;
-    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
+    virtual cpo::uno::Reference< css::xml::dom::views::XAbstractView > getView() override;
+    virtual sal_Int32 getDetail() override;
+    virtual void initUIEvent(const OUString& typeArg,
                      bool canBubbleArg,
                      bool cancelableArg,
                      const cpo::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
                      sal_Int32 detailArg) override;
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    virtual OUString SAL_CALL getType() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
-    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
-    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
-    virtual bool SAL_CALL getBubbles() override;
-    virtual bool SAL_CALL getCancelable() override;
-    virtual css::util::Time SAL_CALL getTimeStamp() override;
-    virtual void SAL_CALL stopPropagation() override;
-    virtual void SAL_CALL preventDefault() override;
-    virtual void SAL_CALL initEvent(
+    virtual OUString getType() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getTarget() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getCurrentTarget() override;
+    virtual css::xml::dom::events::PhaseType getEventPhase() override;
+    virtual bool getBubbles() override;
+    virtual bool getCancelable() override;
+    virtual css::util::Time getTimeStamp() override;
+    virtual void stopPropagation() override;
+    virtual void preventDefault() override;
+    virtual void initEvent(
         const OUString& eventTypeArg,
         bool canBubbleArg,
         bool cancelableArg) override;

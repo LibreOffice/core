@@ -45,7 +45,7 @@ namespace DOM
     A NamedNodeMap containing the general entities, both external and
     internal, declared in the DTD.
     */
-    cpo::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities()
+    cpo::uno::Reference< XNamedNodeMap > CDocumentType::getEntities()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -60,7 +60,7 @@ namespace DOM
     /**
     The internal subset as a string, or null if there is none.
     */
-    OUString SAL_CALL CDocumentType::getInternalSubset()
+    OUString CDocumentType::getInternalSubset()
     {
         OSL_ENSURE(false,
             "CDocumentType::getInternalSubset: not implemented (#i113683#)");
@@ -71,7 +71,7 @@ namespace DOM
     The name of DTD; i.e., the name immediately following the DOCTYPE
     keyword.
     */
-    OUString SAL_CALL CDocumentType::getName()
+    OUString CDocumentType::getName()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -86,7 +86,7 @@ namespace DOM
     /**
     A NamedNodeMap containing the notations declared in the DTD.
     */
-    cpo::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations()
+    cpo::uno::Reference< XNamedNodeMap > CDocumentType::getNotations()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -101,7 +101,7 @@ namespace DOM
     /**
     The public identifier of the external subset.
     */
-    OUString SAL_CALL CDocumentType::getPublicId()
+    OUString CDocumentType::getPublicId()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -116,7 +116,7 @@ namespace DOM
     /**
     The system identifier of the external subset.
     */
-    OUString SAL_CALL CDocumentType::getSystemId()
+    OUString CDocumentType::getSystemId()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -128,12 +128,12 @@ namespace DOM
         return aId;
     }
 
-    OUString SAL_CALL CDocumentType::getNodeName()
+    OUString CDocumentType::getNodeName()
     {
         return getName();
     }
 
-    OUString SAL_CALL CDocumentType::getNodeValue()
+    OUString CDocumentType::getNodeValue()
     {
         return OUString();
     }

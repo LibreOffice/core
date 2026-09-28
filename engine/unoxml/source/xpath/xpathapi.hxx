@@ -63,43 +63,43 @@ namespace XPath
         explicit CXPathAPI( const cpo::uno::Reference< cpo::uno::XComponentContext >& );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService(const OUString& ServiceName) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
 
         // --- XXPathAPI ---
 
-        virtual void SAL_CALL registerNS(const OUString& aPrefix, const OUString& aURI) override;
+        virtual void registerNS(const OUString& aPrefix, const OUString& aURI) override;
 
-        virtual void SAL_CALL unregisterNS(const OUString& aPrefix, const OUString& aURI) override;
-
-        /**
-        Use an XPath string to select a nodelist.
-        */
-        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeList(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
+        virtual void unregisterNS(const OUString& aPrefix, const OUString& aURI) override;
 
         /**
         Use an XPath string to select a nodelist.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeListNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > selectNodeList(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
+
+        /**
+        Use an XPath string to select a nodelist.
+        */
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > selectNodeListNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
 
         /**
         Use an XPath string to select a single node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNode(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > selectSingleNode(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
 
         /**
         Use an XPath string to select a single node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNodeNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > selectSingleNodeNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
 
-        virtual cpo::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL eval(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
+        virtual cpo::uno::Reference< css::xml::xpath::XXPathObject > eval(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str) override;
 
-        virtual cpo::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL evalNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
+        virtual cpo::uno::Reference< css::xml::xpath::XXPathObject > evalNS(const cpo::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const cpo::uno::Reference< css::xml::dom::XNode >&  namespaceNode) override;
 
-        virtual void SAL_CALL registerExtension(const OUString& aName) override;
-        virtual void SAL_CALL registerExtensionInstance(const cpo::uno::Reference< css::xml::xpath::XXPathExtension>& aExtension) override;
+        virtual void registerExtension(const OUString& aName) override;
+        virtual void registerExtensionInstance(const cpo::uno::Reference< css::xml::xpath::XXPathExtension>& aExtension) override;
 
     };
 }

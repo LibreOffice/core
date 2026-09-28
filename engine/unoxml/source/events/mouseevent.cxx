@@ -38,57 +38,57 @@ namespace DOM::events
     {
     }
 
-    sal_Int32 SAL_CALL CMouseEvent::getScreenX()
+    sal_Int32 CMouseEvent::getScreenX()
     {
         std::unique_lock const g(m_Mutex);
         return m_screenX;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getScreenY()
+    sal_Int32 CMouseEvent::getScreenY()
     {
         std::unique_lock const g(m_Mutex);
         return m_screenY;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getClientX()
+    sal_Int32 CMouseEvent::getClientX()
     {
         std::unique_lock const g(m_Mutex);
         return m_clientX;
     }
-    sal_Int32 SAL_CALL CMouseEvent::getClientY()
+    sal_Int32 CMouseEvent::getClientY()
     {
         std::unique_lock const g(m_Mutex);
         return m_clientY;
     }
-    bool SAL_CALL CMouseEvent::getCtrlKey()
+    bool CMouseEvent::getCtrlKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_ctrlKey;
     }
-    bool SAL_CALL CMouseEvent::getShiftKey()
+    bool CMouseEvent::getShiftKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_shiftKey;
     }
-    bool SAL_CALL CMouseEvent::getAltKey()
+    bool CMouseEvent::getAltKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_altKey;
     }
-    bool SAL_CALL CMouseEvent::getMetaKey()
+    bool CMouseEvent::getMetaKey()
     {
         std::unique_lock const g(m_Mutex);
         return m_metaKey;
     }
-    sal_Int16 SAL_CALL CMouseEvent::getButton()
+    sal_Int16 CMouseEvent::getButton()
     {
         std::unique_lock const g(m_Mutex);
         return m_button;
     }
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()
+    Reference< XEventTarget > CMouseEvent::getRelatedTarget()
     {
         return Reference< XEventTarget >();
     }
 
-    void SAL_CALL CMouseEvent::initMouseEvent(
+    void CMouseEvent::initMouseEvent(
                         const OUString& typeArg,
                         bool canBubbleArg,
                         bool cancelableArg,
@@ -119,17 +119,17 @@ namespace DOM::events
     }
 
     // delegate to CUIEvent, since we are inheriting from CUIEvent and XUIEvent
-    Reference< XAbstractView > SAL_CALL CMouseEvent::getView()
+    Reference< XAbstractView > CMouseEvent::getView()
     {
         return CUIEvent::getView();
     }
 
-    sal_Int32 SAL_CALL CMouseEvent::getDetail()
+    sal_Int32 CMouseEvent::getDetail()
     {
         return CUIEvent::getDetail();
     }
 
-    void SAL_CALL CMouseEvent::initUIEvent(const OUString& typeArg,
+    void CMouseEvent::initUIEvent(const OUString& typeArg,
                      bool canBubbleArg,
                      bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
@@ -138,52 +138,52 @@ namespace DOM::events
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
     }
 
-    OUString SAL_CALL CMouseEvent::getType()
+    OUString CMouseEvent::getType()
     {
         return CUIEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getTarget()
+    Reference< XEventTarget > CMouseEvent::getTarget()
     {
         return CUIEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CMouseEvent::getCurrentTarget()
+    Reference< XEventTarget > CMouseEvent::getCurrentTarget()
     {
         return CUIEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CMouseEvent::getEventPhase()
+    PhaseType CMouseEvent::getEventPhase()
     {
         return CUIEvent::getEventPhase();
     }
 
-    bool SAL_CALL CMouseEvent::getBubbles()
+    bool CMouseEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    bool SAL_CALL CMouseEvent::getCancelable()
+    bool CMouseEvent::getCancelable()
     {
         return CUIEvent::getCancelable();
     }
 
-    css::util::Time SAL_CALL CMouseEvent::getTimeStamp()
+    css::util::Time CMouseEvent::getTimeStamp()
     {
         return CUIEvent::getTimeStamp();
     }
 
-    void SAL_CALL CMouseEvent::stopPropagation()
+    void CMouseEvent::stopPropagation()
     {
         CUIEvent::stopPropagation();
     }
 
-    void SAL_CALL CMouseEvent::preventDefault()
+    void CMouseEvent::preventDefault()
     {
         CUIEvent::preventDefault();
     }
 
-    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+    void CMouseEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
         bool cancelableArg)
     {
         // base initializer

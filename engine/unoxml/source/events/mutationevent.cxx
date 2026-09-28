@@ -34,37 +34,37 @@ namespace DOM::events
     {
     }
 
-    Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode()
+    Reference< XNode > CMutationEvent::getRelatedNode()
     {
         std::unique_lock const g(m_Mutex);
         return m_relatedNode;
     }
 
-    OUString SAL_CALL CMutationEvent::getPrevValue()
+    OUString CMutationEvent::getPrevValue()
     {
         std::unique_lock const g(m_Mutex);
         return m_prevValue;
     }
 
-    OUString SAL_CALL CMutationEvent::getNewValue()
+    OUString CMutationEvent::getNewValue()
     {
         std::unique_lock const g(m_Mutex);
         return m_newValue;
     }
 
-    OUString SAL_CALL CMutationEvent::getAttrName()
+    OUString CMutationEvent::getAttrName()
     {
         std::unique_lock const g(m_Mutex);
         return m_attrName;
     }
 
-    AttrChangeType SAL_CALL CMutationEvent::getAttrChange()
+    AttrChangeType CMutationEvent::getAttrChange()
     {
         std::unique_lock const g(m_Mutex);
         return m_attrChangeType;
     }
 
-    void SAL_CALL CMutationEvent::initMutationEvent(const OUString& typeArg,
+    void CMutationEvent::initMutationEvent(const OUString& typeArg,
         bool canBubbleArg, bool cancelableArg,
         const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg,
         const OUString& newValueArg, const OUString& attrNameArg,
@@ -82,51 +82,51 @@ namespace DOM::events
     }
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    OUString SAL_CALL CMutationEvent::getType()
+    OUString CMutationEvent::getType()
     {
         return CEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CMutationEvent::getTarget()
+    Reference< XEventTarget > CMutationEvent::getTarget()
     {
         return CEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CMutationEvent::getCurrentTarget()
+    Reference< XEventTarget > CMutationEvent::getCurrentTarget()
     {
         return CEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CMutationEvent::getEventPhase()
+    PhaseType CMutationEvent::getEventPhase()
     {
         return CEvent::getEventPhase();
     }
 
-    bool SAL_CALL CMutationEvent::getBubbles()
+    bool CMutationEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    bool SAL_CALL CMutationEvent::getCancelable()
+    bool CMutationEvent::getCancelable()
     {
         return CEvent::getCancelable();
     }
 
-    css::util::Time SAL_CALL CMutationEvent::getTimeStamp()
+    css::util::Time CMutationEvent::getTimeStamp()
     {
         return CEvent::getTimeStamp();
     }
 
-    void SAL_CALL CMutationEvent::stopPropagation()
+    void CMutationEvent::stopPropagation()
     {
         CEvent::stopPropagation();
     }
-    void SAL_CALL CMutationEvent::preventDefault()
+    void CMutationEvent::preventDefault()
     {
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+    void CMutationEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
         bool cancelableArg)
     {
         // base initializer

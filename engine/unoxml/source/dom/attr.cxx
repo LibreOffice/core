@@ -82,15 +82,15 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CAttr::getNodeName()
+    OUString CAttr::getNodeName()
     {
         return getName();
     }
-    OUString SAL_CALL CAttr::getNodeValue()
+    OUString CAttr::getNodeValue()
     {
         return getValue();
     }
-    OUString SAL_CALL CAttr::getLocalName()
+    OUString CAttr::getLocalName()
     {
         return getName();
     }
@@ -99,7 +99,7 @@ namespace DOM
     /**
     Returns the name of this attribute.
     */
-    OUString SAL_CALL CAttr::getName()
+    OUString CAttr::getName()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -115,7 +115,7 @@ namespace DOM
     The Element node this attribute is attached to or null if this
     attribute is not in use.
     */
-    Reference< XElement > SAL_CALL CAttr::getOwnerElement()
+    Reference< XElement > CAttr::getOwnerElement()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -136,7 +136,7 @@ namespace DOM
     If this attribute was explicitly given a value in the original
     document, this is true; otherwise, it is false.
     */
-    bool SAL_CALL CAttr::getSpecified()
+    bool CAttr::getSpecified()
     {
         // FIXME if this DOM implementation supported DTDs it would need
         // to check that this attribute is not default or something
@@ -146,7 +146,7 @@ namespace DOM
     /**
     On retrieval, the value of the attribute is returned as a string.
     */
-    OUString SAL_CALL CAttr::getValue()
+    OUString CAttr::getValue()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -163,7 +163,7 @@ namespace DOM
     /**
     Sets the value of the attribute from a string.
     */
-    void SAL_CALL CAttr::setValue(const OUString& value)
+    void CAttr::setValue(const OUString& value)
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
@@ -209,7 +209,7 @@ namespace DOM
         dispatchSubtreeModified();
     }
 
-    void SAL_CALL CAttr::setPrefix(const OUString& prefix)
+    void CAttr::setPrefix(const OUString& prefix)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -227,7 +227,7 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CAttr::getPrefix()
+    OUString CAttr::getPrefix()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -246,7 +246,7 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CAttr::getNamespaceURI()
+    OUString CAttr::getNamespaceURI()
     {
         ::osl::MutexGuard const g(m_rMutex);
 

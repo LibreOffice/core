@@ -30,20 +30,20 @@ namespace DOM::events
     {
     }
 
-    Reference< XAbstractView > SAL_CALL
+    Reference< XAbstractView >
     CUIEvent::getView()
     {
         std::unique_lock const g(m_Mutex);
         return m_view;
     }
 
-    sal_Int32 SAL_CALL CUIEvent::getDetail()
+    sal_Int32 CUIEvent::getDetail()
     {
         std::unique_lock const g(m_Mutex);
         return m_detail;
     }
 
-    void SAL_CALL CUIEvent::initUIEvent(const OUString& typeArg,
+    void CUIEvent::initUIEvent(const OUString& typeArg,
                      bool canBubbleArg,
                      bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
@@ -57,52 +57,52 @@ namespace DOM::events
 
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    OUString SAL_CALL CUIEvent::getType()
+    OUString CUIEvent::getType()
     {
         return CEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CUIEvent::getTarget()
+    Reference< XEventTarget > CUIEvent::getTarget()
     {
         return CEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CUIEvent::getCurrentTarget()
+    Reference< XEventTarget > CUIEvent::getCurrentTarget()
     {
         return CEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CUIEvent::getEventPhase()
+    PhaseType CUIEvent::getEventPhase()
     {
         return CEvent::getEventPhase();
     }
 
-    bool SAL_CALL CUIEvent::getBubbles()
+    bool CUIEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    bool SAL_CALL CUIEvent::getCancelable()
+    bool CUIEvent::getCancelable()
     {
         // mutation events cannot be canceled
         return false;
     }
 
-    css::util::Time SAL_CALL CUIEvent::getTimeStamp()
+    css::util::Time CUIEvent::getTimeStamp()
     {
         return CEvent::getTimeStamp();
     }
 
-    void SAL_CALL CUIEvent::stopPropagation()
+    void CUIEvent::stopPropagation()
     {
         CEvent::stopPropagation();
     }
-    void SAL_CALL CUIEvent::preventDefault()
+    void CUIEvent::preventDefault()
     {
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
+    void CUIEvent::initEvent(const OUString& eventTypeArg, bool canBubbleArg,
         bool cancelableArg)
     {
         // base initializer

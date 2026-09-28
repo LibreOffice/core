@@ -41,19 +41,19 @@ public:
     explicit CURI();
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString & ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() override;
+    virtual OUString getStringValue() override;
 
     // css::rdf::XURI:
-    virtual OUString SAL_CALL getLocalName() override;
-    virtual OUString SAL_CALL getNamespace() override;
+    virtual OUString getLocalName() override;
+    virtual OUString getNamespace() override;
 
 private:
     CURI(CURI const&) = delete;
@@ -70,17 +70,17 @@ CURI::CURI()
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL CURI::getImplementationName()
+OUString CURI::getImplementationName()
 {
     return u"CURI"_ustr;
 }
 
-bool SAL_CALL CURI::supportsService(OUString const & serviceName)
+bool CURI::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CURI::getSupportedServiceNames()
 {
     return { u"com.sun.star.rdf.URI"_ustr };
 }
@@ -710,7 +710,7 @@ void CURI::initFromConstant(const sal_Int16 i_Constant)
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CURI::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void CURI::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
@@ -776,18 +776,18 @@ void SAL_CALL CURI::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArgu
 }
 
 // css::rdf::XNode:
-OUString SAL_CALL CURI::getStringValue()
+OUString CURI::getStringValue()
 {
     return m_Namespace + m_LocalName;
 }
 
 // css::rdf::XURI:
-OUString SAL_CALL CURI::getNamespace()
+OUString CURI::getNamespace()
 {
     return m_Namespace;
 }
 
-OUString SAL_CALL CURI::getLocalName()
+OUString CURI::getLocalName()
 {
     return m_LocalName;
 }

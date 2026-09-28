@@ -62,7 +62,7 @@ namespace DOM
     class CDefaultEntityResolver : public cppu::WeakImplHelper< XEntityResolver >
     {
     public:
-        virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId ) override
+        virtual InputSource resolveEntity( const OUString& sPublicId, const OUString& sSystemId ) override
         {
             InputSource is;
             is.sPublicId = sPublicId;
@@ -96,38 +96,38 @@ namespace DOM
         xmlInitParser();
     }
 
-    Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
+    Sequence< OUString > CDocumentBuilder::getSupportedServiceNames()
     {
         return { u"com.sun.star.xml.dom.DocumentBuilder"_ustr };
     }
 
-    OUString SAL_CALL CDocumentBuilder::getImplementationName()
+    OUString CDocumentBuilder::getImplementationName()
     {
         return u"com.sun.star.comp.xml.dom.DocumentBuilder"_ustr;
     }
 
-    bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
+    bool CDocumentBuilder::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
-    Reference< XDOMImplementation > SAL_CALL CDocumentBuilder::getDOMImplementation()
+    Reference< XDOMImplementation > CDocumentBuilder::getDOMImplementation()
     {
 
         return Reference< XDOMImplementation >();
     }
 
-    bool SAL_CALL CDocumentBuilder::isNamespaceAware()
+    bool CDocumentBuilder::isNamespaceAware()
     {
         return true;
     }
 
-    bool SAL_CALL CDocumentBuilder::isValidating()
+    bool CDocumentBuilder::isValidating()
     {
         return false;
     }
 
-    Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()
+    Reference< XDocument > CDocumentBuilder::newDocument()
     {
         std::scoped_lock const g(m_Mutex);
 
@@ -324,7 +324,7 @@ namespace DOM
 
     }
 
-    Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
+    Reference< XDocument > CDocumentBuilder::parse(const Reference< XInputStream >& is)
     {
         if (!is.is()) {
             throw RuntimeException();
@@ -359,7 +359,7 @@ namespace DOM
         return CDocument::CreateCDocument(pDoc);
     }
 
-    Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)
+    Reference< XDocument > CDocumentBuilder::parseURI(const OUString& sUri)
     {
         std::scoped_lock const g(m_Mutex);
 
@@ -397,7 +397,7 @@ namespace DOM
         return xRet;
     }
 
-    void SAL_CALL
+    void
     CDocumentBuilder::setEntityResolver(Reference< XEntityResolver > const& xER)
     {
         std::scoped_lock const g(m_Mutex);
@@ -412,7 +412,7 @@ namespace DOM
         return m_xEntityResolver;
     }
 
-    void SAL_CALL
+    void
     CDocumentBuilder::setErrorHandler(Reference< XErrorHandler > const& xEH)
     {
         std::scoped_lock const g(m_Mutex);

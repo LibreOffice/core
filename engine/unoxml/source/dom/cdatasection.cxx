@@ -46,12 +46,12 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CCDATASection::getNodeName()
+    OUString CCDATASection::getNodeName()
     {
         return u"#cdata-section"_ustr;
     }
 
-    OUString SAL_CALL CCDATASection::getNodeValue()
+    OUString CCDATASection::getNodeValue()
     {
         return CCharacterData::getData();
     }

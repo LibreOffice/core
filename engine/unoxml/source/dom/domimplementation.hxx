@@ -38,23 +38,23 @@ namespace DOM
         static CDOMImplementation* get();
 
         // there is just 1 static instance, so these must not delete it!
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
         /**
         Creates a DOM Document object of the specified type with its document element.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const cpo::uno::Reference< css::xml::dom::XDocumentType >& doctype) override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const cpo::uno::Reference< css::xml::dom::XDocumentType >& doctype) override;
 
         /**
         Creates an empty DocumentType node.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId) override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentType > createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId) override;
 
         /**
         Test if the DOM implementation implements a specific feature.
         */
-        virtual bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver) override;
+        virtual bool hasFeature(const OUString& feature, const OUString& ver) override;
         };
 }
 

@@ -58,32 +58,32 @@ namespace DOM
 
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService(const OUString& ServiceName) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
         // XFastDocumentHandler
-        virtual void SAL_CALL startDocument() override;
-        virtual void SAL_CALL endDocument() override;
-        virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
-        virtual void SAL_CALL setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+        virtual void startDocument() override;
+        virtual void endDocument() override;
+        virtual void processingInstruction( const OUString& rTarget, const OUString& rData ) override;
+        virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
         // XFastContextHandler
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
-        virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-        virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual void SAL_CALL characters( const OUString& aChars ) override;
+        virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void endFastElement( sal_Int32 Element ) override;
+        virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+        virtual cpo::uno::Reference< XFastContextHandler > createFastChildContext( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual cpo::uno::Reference< XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void characters( const OUString& aChars ) override;
 
         // XSAXDocumentBuilder
-        virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState() override;
-        virtual void SAL_CALL reset() override;
-        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument() override;
-        virtual cpo::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment() override;
-        virtual void SAL_CALL startDocumentFragment(const cpo::uno::Reference< css::xml::dom::XDocument >& ownerDoc) override;
-        virtual void SAL_CALL endDocumentFragment() override;
+        virtual css::xml::dom::SAXDocumentBuilderState getState() override;
+        virtual void reset() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > getDocument() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentFragment > getDocumentFragment() override;
+        virtual void startDocumentFragment(const cpo::uno::Reference< css::xml::dom::XDocument >& ownerDoc) override;
+        virtual void endDocumentFragment() override;
 
 
     };

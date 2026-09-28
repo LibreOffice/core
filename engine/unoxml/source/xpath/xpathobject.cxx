@@ -85,7 +85,7 @@ namespace XPath
     /**
         get the nodes from a nodelist type object
     */
-    Reference< XNodeList > SAL_CALL
+    Reference< XNodeList >
     CXPathObject::getNodeList()
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -98,7 +98,7 @@ namespace XPath
      /**
         get value of a boolean object
      */
-    bool SAL_CALL CXPathObject::getBoolean()
+    bool CXPathObject::getBoolean()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -108,7 +108,7 @@ namespace XPath
     /**
         get number as byte
     */
-    sal_Int8 SAL_CALL CXPathObject::getByte()
+    sal_Int8 CXPathObject::getByte()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -118,7 +118,7 @@ namespace XPath
     /**
         get number as short
     */
-    sal_Int16 SAL_CALL CXPathObject::getShort()
+    sal_Int16 CXPathObject::getShort()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -128,7 +128,7 @@ namespace XPath
     /**
         get number as long
     */
-    sal_Int32 SAL_CALL CXPathObject::getLong()
+    sal_Int32 CXPathObject::getLong()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -138,7 +138,7 @@ namespace XPath
     /**
         get number as hyper
     */
-    sal_Int64 SAL_CALL CXPathObject::getHyper()
+    sal_Int64 CXPathObject::getHyper()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -148,7 +148,7 @@ namespace XPath
     /**
         get number as float
     */
-    float SAL_CALL CXPathObject::getFloat()
+    float CXPathObject::getFloat()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -158,7 +158,7 @@ namespace XPath
     /**
         get number as double
     */
-    double SAL_CALL CXPathObject::getDouble()
+    double CXPathObject::getDouble()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -168,7 +168,7 @@ namespace XPath
     /**
         get string value
     */
-    OUString SAL_CALL CXPathObject::getString()
+    OUString CXPathObject::getString()
     {
         ::osl::MutexGuard const g(m_rMutex);
 

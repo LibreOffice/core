@@ -40,20 +40,20 @@ public:
     explicit CLiteral();
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString & ServiceName) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() override;
+    virtual OUString getStringValue() override;
 
     // css::rdf::XLiteral:
-    virtual OUString SAL_CALL getValue() override;
-    virtual OUString SAL_CALL getLanguage() override;
-    virtual cpo::uno::Reference< css::rdf::XURI > SAL_CALL getDatatype() override;
+    virtual OUString getValue() override;
+    virtual OUString getLanguage() override;
+    virtual cpo::uno::Reference< css::rdf::XURI > getDatatype() override;
 
 private:
     CLiteral(CLiteral const&) = delete;
@@ -68,23 +68,23 @@ CLiteral::CLiteral()
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL CLiteral::getImplementationName()
+OUString CLiteral::getImplementationName()
 {
     return u"CLiteral"_ustr;
 }
 
-bool SAL_CALL CLiteral::supportsService(OUString const & serviceName)
+bool CLiteral::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CLiteral::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CLiteral::getSupportedServiceNames()
 {
     return { u"com.sun.star.rdf.Literal"_ustr };
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CLiteral::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void CLiteral::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     const sal_Int32 len( aArguments.getLength() );
     if (len < 1 || len > 2) {
@@ -128,7 +128,7 @@ void SAL_CALL CLiteral::initialize(const cpo::uno::Sequence< cpo::uno::Any > & a
 }
 
 // css::rdf::XNode:
-OUString SAL_CALL CLiteral::getStringValue()
+OUString CLiteral::getStringValue()
 {
     if (!m_Language.isEmpty()) {
         return m_Value + "@" + m_Language;
@@ -140,17 +140,17 @@ OUString SAL_CALL CLiteral::getStringValue()
 }
 
 // css::rdf::XLiteral:
-OUString SAL_CALL CLiteral::getValue()
+OUString CLiteral::getValue()
 {
     return m_Value;
 }
 
-OUString SAL_CALL CLiteral::getLanguage()
+OUString CLiteral::getLanguage()
 {
     return m_Language;
 }
 
-cpo::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
+cpo::uno::Reference< css::rdf::XURI > CLiteral::getDatatype()
 {
     return m_xDatatype;
 }

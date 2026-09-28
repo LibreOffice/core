@@ -46,46 +46,46 @@ namespace DOM
         /**
         The number of nodes in this map.
         */
-        virtual sal_Int32 SAL_CALL getLength() override;
+        virtual sal_Int32 getLength() override;
 
         /**
         Retrieves a node specified by local name
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItem(OUString const& name) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getNamedItem(OUString const& name) override;
 
         /**
         Retrieves a node specified by local name and namespace URI.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItemNS(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > getNamedItemNS(
                 OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         Returns the indexth item in the map.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > item(sal_Int32 index) override;
 
         /**
         Removes a node specified by name.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+        virtual cpo::uno::Reference< css::xml::dom::XNode >
             removeNamedItem(OUString const& name) override;
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeNamedItemNS(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > removeNamedItemNS(
                 OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         // Adds a node using its nodeName attribute.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+        virtual cpo::uno::Reference< css::xml::dom::XNode >
             setNamedItem(cpo::uno::Reference< css::xml::dom::XNode > const& arg) override;
 
         /**
         Adds a node using its namespaceURI and localName.
         */
-        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+        virtual cpo::uno::Reference< css::xml::dom::XNode >
             setNamedItemNS(cpo::uno::Reference< css::xml::dom::XNode > const& arg) override;
     };
 }

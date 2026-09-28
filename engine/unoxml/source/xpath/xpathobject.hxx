@@ -52,52 +52,52 @@ namespace XPath
     /**
         get object type
     */
-    virtual css::xml::xpath::XPathObjectType SAL_CALL getObjectType() override;
+    virtual css::xml::xpath::XPathObjectType getObjectType() override;
 
     /**
         get the nodes from a nodelist type object
     */
-    virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getNodeList() override;
+    virtual cpo::uno::Reference< css::xml::dom::XNodeList > getNodeList() override;
 
      /**
         get value of a boolean object
      */
-     virtual bool SAL_CALL getBoolean() override;
+     virtual bool getBoolean() override;
 
     /**
         get number as byte
     */
-    virtual sal_Int8 SAL_CALL getByte() override;
+    virtual sal_Int8 getByte() override;
 
     /**
         get number as short
     */
-    virtual sal_Int16 SAL_CALL getShort() override;
+    virtual sal_Int16 getShort() override;
 
     /**
         get number as long
     */
-    virtual sal_Int32 SAL_CALL getLong() override;
+    virtual sal_Int32 getLong() override;
 
     /**
         get number as hyper
     */
-    virtual sal_Int64 SAL_CALL getHyper() override;
+    virtual sal_Int64 getHyper() override;
 
     /**
         get number as float
     */
-    virtual float SAL_CALL getFloat() override;
+    virtual float getFloat() override;
 
     /**
         get number as double
     */
-    virtual double SAL_CALL getDouble() override;
+    virtual double getDouble() override;
 
     /**
         get string value
     */
-    virtual OUString SAL_CALL getString() override;
+    virtual OUString getString() override;
 
     };
 }

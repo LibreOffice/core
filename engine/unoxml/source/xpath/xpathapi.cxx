@@ -54,22 +54,22 @@ namespace XPath
     {
     }
 
-    Sequence< OUString > SAL_CALL CXPathAPI::getSupportedServiceNames()
+    Sequence< OUString > CXPathAPI::getSupportedServiceNames()
     {
         return { u"com.sun.star.xml.xpath.XPathAPI"_ustr };
     }
 
-    OUString SAL_CALL CXPathAPI::getImplementationName()
+    OUString CXPathAPI::getImplementationName()
     {
         return u"com.sun.star.comp.xml.xpath.XPathAPI"_ustr;
     }
 
-    bool SAL_CALL CXPathAPI::supportsService(const OUString& aServiceName)
+    bool CXPathAPI::supportsService(const OUString& aServiceName)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
-    void SAL_CALL CXPathAPI::registerNS(
+    void CXPathAPI::registerNS(
             const OUString& aPrefix,
             const OUString& aURI)
     {
@@ -78,7 +78,7 @@ namespace XPath
         m_nsmap.emplace(aPrefix, aURI);
     }
 
-    void SAL_CALL CXPathAPI::unregisterNS(
+    void CXPathAPI::unregisterNS(
             const OUString& aPrefix,
             const OUString& aURI)
     {
@@ -173,7 +173,7 @@ namespace XPath
     /**
      * Use an XPath string to select a nodelist.
      */
-    Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeList(
+    Reference< XNodeList > CXPathAPI::selectNodeList(
             const Reference< XNode >& contextNode,
             const OUString& expr)
     {
@@ -184,7 +184,7 @@ namespace XPath
     /**
      * same as selectNodeList but registers all name space declarations found on namespaceNode
      */
-    Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeListNS(
+    Reference< XNodeList > CXPathAPI::selectNodeListNS(
             const Reference< XNode >&  contextNode,
             const OUString& expr,
             const Reference< XNode >&  namespaceNode)
@@ -196,7 +196,7 @@ namespace XPath
     /**
      * Same as selectNodeList but returns the first node (if any)
      */
-    Reference< XNode > SAL_CALL CXPathAPI::selectSingleNode(
+    Reference< XNode > CXPathAPI::selectSingleNode(
             const Reference< XNode >& contextNode,
             const OUString& expr)
     {
@@ -209,7 +209,7 @@ namespace XPath
      * Same as selectSingleNode but registers all namespaces declared on
      * namespaceNode
      */
-    Reference< XNode > SAL_CALL CXPathAPI::selectSingleNodeNS(
+    Reference< XNode > CXPathAPI::selectSingleNodeNS(
             const Reference< XNode >& contextNode,
             const OUString& expr,
             const Reference< XNode >&  namespaceNode )
@@ -275,7 +275,7 @@ namespace XPath
      * evaluates an XPath string. relative XPath expressions are evaluated relative to
      * the context Node
      */
-    Reference< XXPathObject > SAL_CALL CXPathAPI::eval(
+    Reference< XXPathObject > CXPathAPI::eval(
             Reference< XNode > const& xContextNode,
             const OUString& expr)
     {
@@ -348,7 +348,7 @@ namespace XPath
     /**
      * same as eval but registers all namespace declarations found on namespaceNode
      */
-    Reference< XXPathObject > SAL_CALL CXPathAPI::evalNS(
+    Reference< XXPathObject > CXPathAPI::evalNS(
             const Reference< XNode >& contextNode,
             const OUString& expr,
             const Reference< XNode >& namespaceNode)
@@ -362,7 +362,7 @@ namespace XPath
      * If the returned object implements the XXPathExtension interface, it is added to the list
      * of extensions that are used when evaluating XPath strings with this XPathAPI instance
      */
-    void SAL_CALL CXPathAPI::registerExtension(
+    void CXPathAPI::registerExtension(
             const OUString& aName)
     {
         std::scoped_lock const g(m_Mutex);
@@ -377,7 +377,7 @@ namespace XPath
      * registers the given extension instance to be used by XPath evaluations performed through this
      * XPathAPI instance
      */
-    void SAL_CALL CXPathAPI::registerExtensionInstance(
+    void CXPathAPI::registerExtensionInstance(
             Reference< XXPathExtension> const& xExtension)
     {
         if (!xExtension.is()) {

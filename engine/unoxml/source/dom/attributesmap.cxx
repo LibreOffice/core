@@ -42,7 +42,7 @@ namespace DOM
     /**
     The number of nodes in this map.
     */
-    sal_Int32 SAL_CALL CAttributesMap::getLength()
+    sal_Int32 CAttributesMap::getLength()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -63,7 +63,7 @@ namespace DOM
     /**
     Retrieves a node specified by local name
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::getNamedItem(OUString const& name)
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -92,7 +92,7 @@ namespace DOM
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::getNamedItemNS(
             OUString const& namespaceURI, OUString const& localName)
     {
@@ -127,7 +127,7 @@ namespace DOM
     /**
     Returns the indexth item in the map.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::item(sal_Int32 index)
     {
         ::osl::MutexGuard const g(m_rMutex);
@@ -156,7 +156,7 @@ namespace DOM
     /**
     Removes a node specified by name.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::removeNamedItem(OUString const& name)
     {
         // no MutexGuard needed: m_pElement is const
@@ -173,7 +173,7 @@ namespace DOM
     /**
     // Removes a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::removeNamedItemNS(
             OUString const& namespaceURI, OUString const& localName)
     {
@@ -192,7 +192,7 @@ namespace DOM
     /**
     // Adds a node using its nodeName attribute.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::setNamedItem(Reference< XNode > const& xNode)
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
@@ -209,7 +209,7 @@ namespace DOM
     /**
     Adds a node using its namespaceURI and localName.
     */
-    Reference< XNode > SAL_CALL
+    Reference< XNode >
     CAttributesMap::setNamedItemNS(Reference< XNode > const& xNode)
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
