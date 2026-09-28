@@ -2600,10 +2600,10 @@ static std::string docTypeFromFilename(const std::string& filename)
     for (char& c : extension)
         c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
 
-    static const std::set<std::string> writer = { "odt", "ott", "doc", "docx", "rtf", "txt", "fodt" };
-    static const std::set<std::string> calc = { "ods", "ots", "xls", "xlsx", "csv", "fods" };
-    static const std::set<std::string> impress = { "odp", "otp", "ppt", "pptx", "fodp" };
-    static const std::set<std::string> draw = { "odg", "otg", "fodg" };
+    static const std::set<std::string> writer = { "odt", "doc", "docx", "docm", "rtf", "txt", "fodt" };
+    static const std::set<std::string> calc = { "ods", "xls", "xlsx", "xlsm", "csv", "fods" };
+    static const std::set<std::string> impress = { "odp", "ppt", "pptx", "pptm", "ppsx", "fodp" };
+    static const std::set<std::string> draw = { "odg", "fodg" };
 
     if (writer.count(extension))
         return "writer";
@@ -4424,7 +4424,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             auto openResult = fileOpenDialog(
                 L"",
                 { { L"",
-                    L"*.odt;*.docx;*.doc;*.rtf;*.txt;*.md;*.ods;*.xlsx;*.xls;*.odp;*.pptx;*.ppt" },
+                    L"*.odt;*.fodt;*.docx;*.docm;*.doc;*.rtf;*.txt;*.md;*.ods;*.fods;*.xlsx;*.xlsm;*.xls;*.odp;*.fodp;*.pptx;*.pptm;*.ppsx;*.ppt" },
                   { L"", L"*.*" } },
                 true);
             if (openResult.size() > 0)
