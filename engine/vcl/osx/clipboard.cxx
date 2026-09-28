@@ -95,7 +95,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
       if (mPasteboard == nil)
       {
             throw cpo::uno::RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
-                static_cast<XClipboardEx*>(this));
+                static_cast<cppu::OWeakObject*>(this));
       }
     }
 
@@ -109,7 +109,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
         throw cpo::uno::RuntimeException(
             "AquaClipboard: Cannot create pasteboard change listener",
-            static_cast<XClipboardEx*>(this));
+            static_cast<cppu::OWeakObject*>(this));
     }
 
     if (mIsSystemPasteboard)
@@ -197,18 +197,13 @@ OUString AquaClipboard::getName()
     return OUString();
 }
 
-sal_Int8 AquaClipboard::getRenderingCapabilities()
-{
-    return 0;
-}
-
 void AquaClipboard::addClipboardListener(uno::Reference<datatransfer::clipboard::XClipboardListener> const & listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     if (!listener.is())
         throw lang::IllegalArgumentException("empty reference",
-                                   static_cast<XClipboardEx*>(this), 1);
+                                   static_cast<cppu::OWeakObject*>(this), 1);
 
     mClipboardListeners.push_back(listener);
 }
@@ -219,7 +214,7 @@ void AquaClipboard::removeClipboardListener(uno::Reference<datatransfer::clipboa
 
     if (!listener.is())
         throw lang::IllegalArgumentException("empty reference",
-                                   static_cast<XClipboardEx*>(this), 1);
+                                   static_cast<cppu::OWeakObject*>(this), 1);
 
     mClipboardListeners.remove(listener);
 }
@@ -289,7 +284,7 @@ void AquaClipboard::fireLostClipboardOwnershipEvent(
 
     try
     {
-        rOldOwner->lostOwnership(static_cast<XClipboardEx*>(this), rOldContent);
+        rOldOwner->lostOwnership(this, rOldContent);
     }
     catch(cpo::uno::RuntimeException&)
     {}

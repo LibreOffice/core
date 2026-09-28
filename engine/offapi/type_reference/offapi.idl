@@ -4113,10 +4113,6 @@ module com {
       void setContents([in] ::com::sun::star::datatransfer::XTransferable xTrans, [in] ::com::sun::star::datatransfer::clipboard::XClipboardOwner xClipboardOwner);
       string getName();
      };
-     published interface XClipboardEx {
-      interface ::com::sun::star::datatransfer::clipboard::XClipboard;
-      byte getRenderingCapabilities();
-     };
      published interface XClipboardListener;
      published interface XClipboardNotifier {
       interface ::cpo::uno::XInterface;
@@ -4124,7 +4120,7 @@ module com {
       void removeClipboardListener([in] ::com::sun::star::datatransfer::clipboard::XClipboardListener listener);
      };
      published service GenericClipboard {
-      interface ::com::sun::star::datatransfer::clipboard::XClipboardEx;
+      interface ::com::sun::star::datatransfer::clipboard::XClipboard;
       interface ::com::sun::star::datatransfer::clipboard::XClipboardNotifier;
       interface ::com::sun::star::lang::XInitialization;
       interface ::com::sun::star::lang::XComponent;
@@ -4134,7 +4130,7 @@ module com {
       void flushClipboard();
      };
      published interface XSystemClipboard {
-      interface ::com::sun::star::datatransfer::clipboard::XClipboardEx;
+      interface ::com::sun::star::datatransfer::clipboard::XClipboard;
       interface ::com::sun::star::datatransfer::clipboard::XClipboardNotifier;
       interface ::com::sun::star::lang::XComponent;
       [optional] interface ::com::sun::star::datatransfer::clipboard::XFlushableClipboard;

@@ -93,12 +93,6 @@ public:
     virtual OUString getName() override;
 
     /*
-     * XClipboardEx
-     */
-
-    virtual sal_Int8 getRenderingCapabilities() override;
-
-    /*
      * XClipboardNotifier
      */
     virtual void addClipboardListener(
@@ -164,11 +158,6 @@ void GenericClipboard::setContents(
 OUString GenericClipboard::getName()
 {
     return u"CLIPBOARD"_ustr;
-}
-
-sal_Int8 GenericClipboard::getRenderingCapabilities()
-{
-    return 0;
 }
 
 void GenericClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )

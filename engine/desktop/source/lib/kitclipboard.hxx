@@ -79,9 +79,6 @@ public:
                          xClipboardOwner) override;
     OUString getName() override { return u"CLIPBOARD"_ustr; }
 
-    // XClipboardEx
-    sal_Int8 getRenderingCapabilities() override { return 0; }
-
     // XClipboardNotifier
     void addClipboardListener(
         const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)

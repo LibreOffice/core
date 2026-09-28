@@ -21,7 +21,6 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/servicefactory.hxx>

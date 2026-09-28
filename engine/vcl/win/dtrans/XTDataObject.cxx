@@ -27,7 +27,6 @@
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/awt/AsyncCallback.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
 #include "FmtFilter.hxx"

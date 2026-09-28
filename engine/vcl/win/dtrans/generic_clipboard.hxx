@@ -21,8 +21,6 @@
 
 #include <comphelper/compbase.hxx>
 
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,7 +30,7 @@ namespace dtrans
 {
 
     class GenericClipboard : public ::comphelper::WeakComponentImplHelper <
-        css::datatransfer::clipboard::XClipboardEx,
+        css::datatransfer::clipboard::XClipboard,
         css::datatransfer::clipboard::XClipboardNotifier,
         css::lang::XServiceInfo,
         css::lang::XInitialization >
@@ -77,12 +75,6 @@ namespace dtrans
             const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
         virtual OUString getName() override;
-
-        /*
-         * XClipboardEx
-         */
-
-        virtual sal_Int8 getRenderingCapabilities() override;
 
         /*
          * XClipboardNotifier

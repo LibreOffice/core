@@ -21,7 +21,7 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
 
- published interface XClipboardEx;
+ published interface XClipboard;
  published interface XClipboardNotifier;
 
 /** A generic clipboard service is a simple container for transferable objects.
@@ -30,7 +30,7 @@ published service GenericClipboard
 {
     /** Provides access to the clipboard content.
     */
-    interface XClipboardEx;
+    interface XClipboard;
 
     /** Provides the ability to request notifications on content changes.
     */

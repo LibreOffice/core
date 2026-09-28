@@ -24,7 +24,6 @@
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
@@ -90,9 +89,6 @@ public:
 
     // XFlushableClipboard
     virtual void flushClipboard() override;
-
-    // XClipboardEx
-    virtual sal_Int8 getRenderingCapabilities() override;
 
     // XClipboardNotifier
     virtual void addClipboardListener(

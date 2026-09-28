@@ -106,11 +106,6 @@ OUString GenericClipboard::getName()
     return m_aName;
 }
 
-sal_Int8 GenericClipboard::getRenderingCapabilities()
-{
-    return RenderingCapabilities::Delayed;
-}
-
 void GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
     std::unique_lock aGuard( m_aMutex );

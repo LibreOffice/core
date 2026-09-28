@@ -53,7 +53,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
@@ -825,12 +824,6 @@ public:
     virtual OUString getName() override;
 
     /*
-     * XClipboardEx
-     */
-
-    virtual sal_Int8 getRenderingCapabilities() override;
-
-    /*
      * XFlushableClipboard
      */
     virtual void flushClipboard() override;
@@ -1225,11 +1218,6 @@ void VclGtkClipboard::setContents(
 OUString VclGtkClipboard::getName()
 {
     return (m_eSelection == SELECTION_CLIPBOARD) ? u"CLIPBOARD"_ustr : u"PRIMARY"_ustr;
-}
-
-sal_Int8 VclGtkClipboard::getRenderingCapabilities()
-{
-    return 0;
 }
 
 void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )

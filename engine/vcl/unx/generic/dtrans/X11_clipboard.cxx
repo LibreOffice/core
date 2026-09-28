@@ -176,11 +176,6 @@ OUString X11Clipboard::getName()
     return m_xSelectionManager->getString( m_aSelection );
 }
 
-sal_Int8 X11Clipboard::getRenderingCapabilities()
-{
-    return RenderingCapabilities::Delayed;
-}
-
 void X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
     MutexGuard aGuard( m_xSelectionManager->getMutex() );

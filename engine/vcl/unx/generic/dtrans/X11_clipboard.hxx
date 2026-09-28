@@ -79,12 +79,6 @@ namespace x11 {
         virtual OUString getName() override;
 
         /*
-         * XClipboardEx
-         */
-
-        virtual sal_Int8 getRenderingCapabilities() override;
-
-        /*
          * XClipboardNotifier
          */
         virtual void addClipboardListener(

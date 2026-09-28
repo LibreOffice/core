@@ -27,7 +27,7 @@ published interface XSystemClipboard
 {
     /** Provides access to the clipboard content.
     */
-    interface XClipboardEx;
+    interface XClipboard;
 
     /** Provides the ability to request notifications on content changes.
     */

@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
@@ -92,10 +91,6 @@ public:
                                     cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner) override;
 
   virtual OUString getName() override;
-
-  // XClipboardEx
-
-  virtual sal_Int8 getRenderingCapabilities() override;
 
   // XClipboardNotifier
 

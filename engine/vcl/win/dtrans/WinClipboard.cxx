@@ -133,7 +133,7 @@ cpo::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents
 {
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     assert(!getOwnClipContent() || !m_foreignContent); // Both can be null, or only one set
 
@@ -172,7 +172,7 @@ sal::systools::COMReference<IDataObject> CWinClipboard::getIDataObject()
 
         if (m_bDisposed)
             throw lang::DisposedException("object is already disposed",
-                                          static_cast<XClipboardEx*>(this));
+                                          static_cast<cppu::OWeakObject*>(this));
     }
     // get the current dataobject from clipboard
     sal::systools::COMReference<IDataObject> pIDataObject;
@@ -196,7 +196,7 @@ void CWinClipboard::setContents(
 
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     sal::systools::COMReference<IDataObject> pIDataObj;
 
@@ -230,7 +230,7 @@ OUString CWinClipboard::getName()
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     return m_itsName;
 }
@@ -243,7 +243,7 @@ void CWinClipboard::flushClipboard()
 
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     // FlushClipboard does a callback and frees DataObject, which calls onReleaseDataObject and
     // locks mutex. FlushClipboard has to be synchron in order to prevent shutdown until all
@@ -259,18 +259,6 @@ void CWinClipboard::flushClipboard()
     }
 }
 
-// XClipboardEx
-
-sal_Int8 CWinClipboard::getRenderingCapabilities()
-{
-    if (m_bDisposed)
-        throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
-
-    using namespace datatransfer::clipboard::RenderingCapabilities;
-    return (Delayed | Persistent);
-}
-
 // XClipboardNotifier
 
 void CWinClipboard::addClipboardListener(
@@ -279,11 +267,11 @@ void CWinClipboard::addClipboardListener(
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     // check input parameter
     if (!listener.is())
-        throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
+        throw lang::IllegalArgumentException("empty reference", static_cast<cppu::OWeakObject*>(this),
                                              1);
 
     maClipboardListeners.addInterface(aGuard, listener);
@@ -295,11 +283,11 @@ void CWinClipboard::removeClipboardListener(
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
-                                      static_cast<XClipboardEx*>(this));
+                                      static_cast<cppu::OWeakObject*>(this));
 
     // check input parameter
     if (!listener.is())
-        throw lang::IllegalArgumentException("empty reference", static_cast<XClipboardEx*>(this),
+        throw lang::IllegalArgumentException("empty reference", static_cast<cppu::OWeakObject*>(this),
                                              1);
 
     maClipboardListeners.removeInterface(aGuard, listener);
