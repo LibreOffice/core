@@ -1133,6 +1133,8 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 
     m_xWidthED->save_value();
     m_xHeightED->save_value();
+    m_xRelWidthRelationLB->save_value();
+    m_xRelHeightRelationLB->save_value();
 
     m_bNoModifyHdl = false;
     //lock PercentFields
