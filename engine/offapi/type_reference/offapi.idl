@@ -10636,14 +10636,9 @@ module com {
      service ::com::sun::star::sdbcx::Descriptor;
      [property] string Password;
     };
-    interface XAlterView {
-     interface ::cpo::uno::XInterface;
-     void alterCommand([in] string NewCommand) raises (::com::sun::star::sdbc::SQLException);
-    };
     published service View {
      interface ::com::sun::star::beans::XPropertySet;
      [optional] interface ::com::sun::star::sdbcx::XRename;
-     [optional] interface ::com::sun::star::sdbcx::XAlterView;
      [property, readonly] string Name;
      [property, readonly] string CatalogName;
      [property, readonly] string SchemaName;

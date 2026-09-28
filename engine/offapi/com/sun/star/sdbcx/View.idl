@@ -20,7 +20,6 @@
  module com {  module sun {  module star {  module sdbcx {
 
 published interface XRename;
-published interface XAlterView;
 
 
 /** is used to specify views on data. A view object is only used for creation and
@@ -45,11 +44,6 @@ published service View
 
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
-
-    /** allows changing the view's #Command.
-    */
-    [optional] interface XAlterView;
-
 
     /** is the name of the view.
      */

@@ -2966,7 +2966,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbcx,\
 	Privilege \
 	PrivilegeObject \
 	XAlterTable \
-	XAlterView \
 	XAppend \
 	XColumnsSupplier \
 	XCreateCatalog \

@@ -21,20 +21,17 @@
 
 #include <connectivity/sdbcx/VView.hxx>
 
-#include <com/sun/star/sdbcx/XAlterView.hpp>
 #include <com/sun/star/sdb/tools/XViewAccess.hpp>
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
 
     // View
     typedef ::connectivity::sdbcx::OView                                View_Base;
-    typedef ::cppu::ImplHelper1< css::sdbcx::XAlterView >  View_IBASE;
-    class View :public View_Base
-                ,public View_IBASE
+    class View : public View_Base
     {
     public:
         View(
@@ -44,13 +41,6 @@ namespace dbaccess
             const OUString& _rSchemaName,
             const OUString& _rName
         );
-
-        // UNO
-        DECLARE_XINTERFACE()
-        DECLARE_XTYPEPROVIDER()
-
-        // XAlterView
-        virtual void alterCommand( const OUString& NewCommand ) override;
 
     protected:
         virtual ~View() override;

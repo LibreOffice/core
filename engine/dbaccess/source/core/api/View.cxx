@@ -65,40 +65,6 @@ using namespace cpo::uno;
     {
     }
 
-    IMPLEMENT_FORWARD_REFCOUNT( View, View_Base )
-    IMPLEMENT_GET_IMPLEMENTATION_ID( View )
-
-    Any View::queryInterface( const Type & _rType )
-    {
-        if(_rType == cppu::UnoType<XAlterView>::get()&& !m_xViewAccess.is() )
-            return Any();
-        Any aReturn = View_Base::queryInterface( _rType );
-        if ( !aReturn.hasValue() )
-            aReturn = View_IBASE::queryInterface( _rType );
-        return aReturn;
-    }
-
-    Sequence< Type > View::getTypes(  )
-    {
-        Type aAlterType = cppu::UnoType<XAlterView>::get();
-
-        Sequence< Type > aTypes( ::comphelper::concatSequences(View_Base::getTypes(),View_IBASE::getTypes()) );
-        std::vector<Type> aOwnTypes;
-        aOwnTypes.reserve(aTypes.getLength());
-
-        for (auto& type : aTypes)
-            if (m_xViewAccess || type != aAlterType)
-                aOwnTypes.push_back(type);
-
-        return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
-    }
-
-    void View::alterCommand( const OUString& _rNewCommand )
-    {
-        OSL_ENSURE(m_xViewAccess.is(),"Illegal call to AlterView!");
-        m_xViewAccess->alterCommand(this,_rNewCommand);
-    }
-
     void View::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( _nHandle == m_nCommandHandle && m_xViewAccess.is() )
