@@ -84,14 +84,9 @@ public:
     void flushModifications();
         // must be called with configmgr::lock unacquired; must be called before
         // shutdown if writeModifications has ever been called (probably
-        // indirectly, via removeExtensionXcuFile)
-
-    void insertExtensionXcsFile(OUString const & fileUri);
+        // indirectly)
 
     void insertExtensionXcuFile(
-        OUString const & fileUri, Modifications * modifications);
-
-    void removeExtensionXcuFile(
         OUString const & fileUri, Modifications * modifications);
 
     void insertModificationXcuFile(

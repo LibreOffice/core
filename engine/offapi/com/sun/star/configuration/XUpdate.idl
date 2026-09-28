@@ -24,13 +24,8 @@ module com { module sun { module star { module configuration {
    <p>This interface is unpublished and unstable.</p>
 */
 interface XUpdate {
-    void insertExtensionXcsFile([in] string fileUri);
 
     void insertExtensionXcuFile([in] string fileUri);
-
-    void removeExtensionXcuFile([in] string fileUri);
-        // fileUri must exactly match corresponding insertExtensionXcuFile
-        // argument
 
     void insertModificationXcuFile(
         [in] string fileUri, [in] sequence< string > includedPaths,

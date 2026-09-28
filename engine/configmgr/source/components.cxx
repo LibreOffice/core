@@ -125,28 +125,6 @@ OUString expand(OUString const & str) {
     return s;
 }
 
-bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
-    assert(node.is());
-    if (node->getLayer() > layer && node->getLayer() < Data::NO_LAYER) {
-        return false;
-    }
-    switch (node->kind()) {
-    case Node::KIND_LOCALIZED_PROPERTY:
-    case Node::KIND_GROUP:
-        for (auto const& member : node->getMembers())
-        {
-            if (!canRemoveFromLayer(layer, member.second)) {
-                return false;
-            }
-        }
-        return true;
-    case Node::KIND_SET:
-        return node->getMembers().empty();
-    default: // Node::KIND_PROPERTY, Node::KIND_LOCALIZED_VALUE
-        return true;
-    }
-}
-
 }
 
 class Components::WriteThread: public salhelper::Thread {
@@ -349,17 +327,6 @@ void Components::flushModifications() {
     }
 }
 
-void Components::insertExtensionXcsFile(OUString const & fileUri)
-{
-    int layer = getExtensionLayer();
-    try {
-        parseXcsFile(fileUri, layer, data_, nullptr, nullptr, nullptr);
-    } catch (css::container::NoSuchElementException & e) {
-        throw cpo::uno::RuntimeException(
-            "insertExtensionXcsFile does not exist: " + e.Message);
-    }
-}
-
 void Components::insertExtensionXcuFile(
     OUString const & fileUri, Modifications * modifications)
 {
@@ -373,60 +340,6 @@ void Components::insertExtensionXcuFile(
         throw cpo::uno::RuntimeException(
             "insertExtensionXcuFile does not exist: " + e.Message);
     }
-}
-
-void Components::removeExtensionXcuFile(
-    OUString const & fileUri, Modifications * modifications)
-{
-    //TODO: Ideally, exactly the data coming from the specified xcu file would
-    // be removed.  However, not enough information is recorded in the in-memory
-    // data structures to do so.  So, as a workaround, all those set elements
-    // that were freshly added by the xcu and have afterwards been left
-    // unchanged or have only had their properties changed in the user layer are
-    // removed (and nothing else).  The heuristic to determine
-    // whether a node has been left unchanged is to check the layer ID (as
-    // usual) and additionally to check that the node does not recursively
-    // contain any non-empty sets (multiple extension xcu files are merged into
-    // one layer, so checking layer ID alone is not enough).  Since
-    // item->additions records all additions of set members in textual order,
-    // the latter check works well when iterating through item->additions in
-    // reverse order.
-    assert(modifications != nullptr);
-    rtl::Reference< Data::ExtensionXcu > item(
-        data_.removeExtensionXcuAdditions(fileUri));
-    if (!item.is())
-        return;
-
-    for (Additions::reverse_iterator i(item->additions.rbegin());
-         i != item->additions.rend(); ++i)
-    {
-        rtl::Reference< Node > parent;
-        NodeMap const * map = &data_.getComponents();
-        rtl::Reference< Node > node;
-        for (auto const& j : *i)
-        {
-            parent = node;
-            node = map->findNode(Data::NO_LAYER, j);
-            if (!node.is()) {
-                break;
-            }
-            map = &node->getMembers();
-        }
-        if (node.is()) {
-            assert(parent.is());
-            if (parent->kind() == Node::KIND_SET) {
-                assert(
-                    node->kind() == Node::KIND_GROUP ||
-                    node->kind() == Node::KIND_SET);
-                if (canRemoveFromLayer(item->layer, node)) {
-                    parent->getMembers().erase(i->back());
-                    data_.modifications.remove(*i);
-                    modifications->add(*i);
-                }
-            }
-        }
-    }
-    writeModifications();
 }
 
 void Components::insertModificationXcuFile(
