@@ -258,7 +258,9 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		else
 			nodesToHide.hide();
 
-		$(contentToShow).children('.ui-header').hide();
+		// A running slide is finished first, because jQuery UI restores the visible style when a
+		// slide ends.
+		$(contentToShow).children('.ui-header').stop(true, true).hide();
 
 		$('#mobile-wizard.funcwizard div#mobile-wizard-content').removeClass('hideHelpBG');
 		$('#mobile-wizard.funcwizard div#mobile-wizard-content').addClass('showHelpBG');
@@ -341,7 +343,9 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 
 			headers = headers.not('.hidden');
 
-			$('.ui-content.level-' + this._currentDepth + '.mobile-wizard:visible').hide();
+			// A running slide is finished first, because jQuery UI restores the visible style when a
+			// slide ends.
+			$('.ui-content.level-' + this._currentDepth + '.mobile-wizard:visible').stop(true, true).hide();
 			$('#mobile-wizard.funcwizard div#mobile-wizard-content').removeClass('showHelpBG');
 			$('#mobile-wizard.funcwizard div#mobile-wizard-content').addClass('hideHelpBG');
 			headers.show('slide', { direction: 'left' }, 'fast');
