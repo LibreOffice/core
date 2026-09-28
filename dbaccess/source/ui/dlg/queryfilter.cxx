@@ -317,8 +317,8 @@ bool DlgFilterCrit::getCondition(const weld::ComboBox& _rField,const weld::Combo
     _rFilter.Handle = GetOSQLPredicateType( _rComp.get_active_text() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
-        OUString sPredicateValue;
-        m_aPredicateInput.getPredicateValue( _rValue.get_text(), getMatchingColumn( _rValue ) ) >>= sPredicateValue;
+        OUString sPredicateValue(_rValue.get_text());
+        m_aPredicateInput.normalizePredicateString(sPredicateValue, getMatchingColumn(_rValue));
         if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
              _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
             ::Replace_OS_PlaceHolder( sPredicateValue );
