@@ -1118,11 +1118,13 @@ static std::string synthesizeGasSidecar(
         supports.push_back("presentation");
     }
 
-    // Guess a display name from setTitle("...") or a NAME_TITLE = "..." constant:
+    // Guess a display name from setTitle("..."), a NAME_TITLE = "..." constant, or the name an
+    // addMenu("...", ...) call gives its own menu:
     std::string displayName;
     static const std::regex reSetTitle(R"RE(setTitle\s*\(\s*(?:'([^']+)'|"([^"]+)"))RE");
     static const std::regex reTitleConst(
         R"RE([A-Za-z_][A-Za-z0-9_]*_TITLE\s*=\s*(?:'([^']+)'|"([^"]+)"))RE");
+    static const std::regex reMenuName(R"RE(addMenu\s*\(\s*(?:'([^']+)'|"([^"]+)"))RE");
     auto tryMatch = [&scripts](std::regex const & re) -> std::string {
         for (auto const & [name, src]: scripts) {
             std::smatch m;
@@ -1135,6 +1137,9 @@ static std::string synthesizeGasSidecar(
     displayName = tryMatch(reSetTitle);
     if (displayName.empty()) {
         displayName = tryMatch(reTitleConst);
+    }
+    if (displayName.empty()) {
+        displayName = tryMatch(reMenuName);
     }
 
     std::string body = "{\"scripts\":[";

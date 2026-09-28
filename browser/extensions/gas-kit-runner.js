@@ -45,6 +45,24 @@ globalThis.__gasKitRunner = function(
             YES_NO_CANCEL: { name: 'YES_NO_CANCEL' }
         };
 
+        // A message an add-on wanted shown.  Only the strings among the arguments are text: the
+        // several forms of alert() and msgBox() take a title, a message and a button set in
+        // varying order, and the button set is an object on our side.  With a title and a
+        // message, the first string is the title:
+        function recordMessage(args) {
+            const texts = [];
+            for (let i = 0; i !== args.length; ++i) {
+                const a = args[i];
+                if (typeof a === 'string' || typeof a === 'number') {
+                    texts.push(String(a));
+                }
+            }
+            pendingAlerts.push({
+                title: texts.length > 1 ? texts[0] : '',
+                message: texts.length > 1 ? texts.slice(1).join('\n') : (texts[0] || '')
+            });
+        }
+
         // An add-on's onOpen() builds its menu against this.  Submenu items land in the same flat
         // list as top-level ones, so a menu is a sequence of captioned items and separators:
         function menuBuilder() {
@@ -97,17 +115,7 @@ globalThis.__gasKitRunner = function(
             // travels back with the call's result, so an add-on that alerts and then keeps
             // editing has its message appear after the edit rather than before it:
             alert: function() {
-                const texts = [];
-                for (let i = 0; i !== arguments.length; ++i) {
-                    const a = arguments[i];
-                    if (typeof a === 'string' || typeof a === 'number') {
-                        texts.push(String(a));
-                    }
-                }
-                pendingAlerts.push({
-                    title: texts.length > 1 ? texts[0] : '',
-                    message: texts.length > 1 ? texts.slice(1).join('\n') : (texts[0] || '')
-                });
+                recordMessage(arguments);
                 return buttonValues.OK;
             },
             prompt: function() {
@@ -223,6 +231,8 @@ globalThis.__gasKitRunner = function(
                         sheet);
                 },
                 setBackground: function(c) { xr.setBackgroundColor(String(c)); return r; },
+                // The older name for the same thing, which plenty of samples still use:
+                setBackgroundColor: function(c) { xr.setBackgroundColor(String(c)); return r; },
                 setFontWeight: function(w) { xr.setFontWeight(String(w)); return r; },
                 setFontStyle: function(w) { xr.setFontStyle(String(w)); return r; },
                 setFontColor: function(c) { xr.setFontColor(String(c)); return r; },
@@ -307,6 +317,20 @@ globalThis.__gasKitRunner = function(
                     return sheetFacade(xss.getActiveSheet()).getActiveCell();
                 },
                 flush: function() { xss.flush(); },
+                // The older menu call, which takes the whole menu at once: an array of
+                // {name, functionName} objects, where a null entry stands for a separator.  The
+                // menu's own name is dropped, because the items are offered under the
+                // extension's name either way:
+                addMenu: function(name, items) {
+                    (items || []).forEach(function(item) {
+                        if (item) {
+                            menuItems.push({ caption: String(item.name),
+                                             functionName: String(item.functionName) });
+                        } else {
+                            menuItems.push({ separator: true });
+                        }
+                    });
+                },
                 // Not a modal, but the same one-way message, so it takes the alert path:
                 toast: function(message, title) {
                     pendingAlerts.push(
@@ -393,6 +417,22 @@ globalThis.__gasKitRunner = function(
             };
             return o;
         }
+        // The older dialog service.  Like getUi().alert(), a message is recorded and travels
+        // back with the call's result rather than stopping the script, so msgBox answers with
+        // the button an add-on gets when a person clicks OK:
+        globalThis.Browser = {
+            msgBox: function() {
+                recordMessage(arguments);
+                return 'ok';
+            },
+            inputBox: function() {
+                throw new Error(
+                    'Browser.inputBox is not yet supported in the COOL Apps Script wrapper');
+            },
+            // The same enum as getUi().ButtonSet, so a button set stays out of the message:
+            Buttons: buttonSetValues
+        };
+
         globalThis.HtmlService = {
             createHtmlOutputFromFile: makeHtmlOutput,
             createHtmlOutput: function() { return makeHtmlOutput(); },
