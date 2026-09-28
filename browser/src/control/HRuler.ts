@@ -1471,6 +1471,23 @@ class HRuler extends Ruler {
 		}
 	}
 
+	// A dragged tab stop stays inside the tab-stop container, far enough from
+	// each edge that its whole marker sits clear of the indent marker drawn
+	// there, so it stays visible on the ruler where it can be moved or deleted.
+	_clampToTabStopContainer(
+		tabstopContainer: HTMLElement,
+		marker: HTMLElement,
+		pointX: number,
+	) {
+		const halfWidth = marker.offsetWidth / 2.0;
+		const minX = this._pStartMarker.offsetWidth / 2.0 + halfWidth;
+		const maxX =
+			tabstopContainer.clientWidth -
+			this._pEndMarker.offsetWidth / 2.0 -
+			halfWidth;
+		return Math.min(Math.max(pointX, minX), maxX);
+	}
+
 	_moveTabstop(event: any) {
 		var tabstopContainer = null;
 		var viewportX = null;
@@ -1491,7 +1508,11 @@ class HRuler extends Ruler {
 
 		//window.app.console.log('===> _moveTabstop ' + event.type);
 
-		var pointX = viewportX - tabstopContainer.getBoundingClientRect().left;
+		var pointX = this._clampToTabStopContainer(
+			tabstopContainer,
+			marker,
+			viewportX - tabstopContainer.getBoundingClientRect().left,
+		);
 		var pixelDiff = pointX - tabstopContainer.tabStopInitialPosiiton;
 		marker.style.left = marker.tabStopLocation.left + pixelDiff + 'px';
 	}
@@ -1515,7 +1536,11 @@ class HRuler extends Ruler {
 		var marker = tabstopContainer.tabStopMarkerBeingDragged;
 		if (marker === null) return;
 
-		var pointX = viewportX - tabstopContainer.getBoundingClientRect().left;
+		var pointX = this._clampToTabStopContainer(
+			tabstopContainer,
+			marker,
+			viewportX - tabstopContainer.getBoundingClientRect().left,
+		);
 		var positionTwip = this._pointerToTabTwips(pointX);
 		var params = {
 			Index: {
