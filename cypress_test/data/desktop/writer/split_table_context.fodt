@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Above the table.</text:p>
+   <table:table table:name="Split">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-header-rows>
+     <table:table-row><table:table-cell office:value-type="string"><text:p>Name</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>Value</text:p></table:table-cell></table:table-row>
+    </table:table-header-rows>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V1</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R2</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V2</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R3</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V3</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R4</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V4</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R5</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V5</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R6</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V6</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R7</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V7</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R8</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V8</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R9</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V9</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R10</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V10</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R11</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V11</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R12</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V12</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R13</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V13</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R14</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V14</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R15</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V15</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R16</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V16</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R17</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V17</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R18</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V18</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R19</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V19</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R20</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V20</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R21</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V21</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R22</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V22</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R23</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V23</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R24</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V24</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R25</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V25</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R26</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V26</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R27</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V27</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R28</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V28</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R29</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V29</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R30</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V30</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R31</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V31</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R32</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V32</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R33</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V33</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R34</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V34</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R35</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V35</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R36</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V36</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R37</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V37</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R38</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V38</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R39</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V39</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R40</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V40</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R41</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V41</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R42</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V42</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R43</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V43</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R44</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V44</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R45</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V45</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R46</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V46</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R47</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V47</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R48</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V48</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R49</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V49</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R50</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V50</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R51</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V51</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R52</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V52</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R53</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V53</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R54</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V54</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R55</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V55</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R56</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V56</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R57</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V57</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R58</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V58</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R59</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V59</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R60</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V60</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R61</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V61</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R62</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V62</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R63</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V63</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R64</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V64</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R65</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V65</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R66</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V66</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R67</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V67</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R68</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V68</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R69</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V69</text:p></table:table-cell></table:table-row>
+   <table:table-row><table:table-cell office:value-type="string"><text:p>R70</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>V70</text:p></table:table-cell></table:table-row>
+   </table:table>
+   <text:p>Below the table.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
