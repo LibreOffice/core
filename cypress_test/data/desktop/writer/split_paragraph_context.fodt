@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="12cm" fo:page-height="8cm" fo:margin-top="1cm" fo:margin-bottom="1cm" fo:margin-left="1cm" fo:margin-right="1cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>Above the split.</text:p>
+   <text:p>Split sentence 1 goes on for a while. Split sentence 2 goes on for a while. Split sentence 3 goes on for a while. Split sentence 4 goes on for a while. Split sentence 5 goes on for a while. Split sentence 6 goes on for a while. Split sentence 7 goes on for a while. Split sentence 8 goes on for a while. Split sentence 9 goes on for a while. Split sentence 10 goes on for a while. Split sentence 11 goes on for a while. Split sentence 12 goes on for a while. Split sentence 13 goes on for a while. Split sentence 14 goes on for a while. Split sentence 15 goes on for a while. Split sentence 16 goes on for a while. Split sentence 17 goes on for a while. Split sentence 18 goes on for a while. Split sentence 19 goes on for a while. Split sentence 20 goes on for a while. Split sentence 21 goes on for a while. Split sentence 22 goes on for a while. Split sentence 23 goes on for a while. Split sentence 24 goes on for a while. Split sentence 25 goes on for a while. Split sentence 26 goes on for a while. Split sentence 27 goes on for a while. Split sentence 28 goes on for a while. Split sentence 29 goes on for a while. Split sentence 30 goes on for a while. Split sentence 31 goes on for a while. Split sentence 32 goes on for a while. Split sentence 33 goes on for a while. Split sentence 34 goes on for a while. Split sentence 35 goes on for a while. Split sentence 36 goes on for a while. Split sentence 37 goes on for a while. Split sentence 38 goes on for a while. Split sentence 39 goes on for a while. Split sentence 40 goes on for a while.</text:p>
+   <text:p>Below the split.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
