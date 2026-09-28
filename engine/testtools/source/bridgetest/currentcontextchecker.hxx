@@ -41,7 +41,7 @@ public:
 
     virtual ~CurrentContextChecker() override;
 
-    virtual bool SAL_CALL perform(
+    virtual bool perform(
         cpo::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
         ::sal_Int32 setSteps, ::sal_Int32 checkSteps) override;
 

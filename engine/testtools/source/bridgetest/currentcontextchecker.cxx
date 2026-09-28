@@ -49,7 +49,7 @@ public:
     CurrentContext(const CurrentContext&) = delete;
     CurrentContext& operator=(const CurrentContext&) = delete;
 
-    virtual cpo::uno::Any SAL_CALL getValueByName(OUString const & Name) override;
+    virtual cpo::uno::Any getValueByName(OUString const & Name) override;
 };
 
 CurrentContext::CurrentContext() {}

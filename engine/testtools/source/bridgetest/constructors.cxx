@@ -56,7 +56,7 @@ public:
 private:
     virtual ~Impl() override {}
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         cpo::uno::Sequence< cpo::uno::Any > const & arguments) override;
 };
 
@@ -188,14 +188,14 @@ public:
 private:
     virtual ~Impl2() override {}
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         cpo::uno::Sequence< cpo::uno::Any > const & arguments) override;
 
     //XMultiBase1
-    virtual double SAL_CALL getatt1() override;
-    virtual void SAL_CALL setatt1( double _att1 ) override;
-    virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg ) override;
-    virtual OUString SAL_CALL fn12( const OUString& arg ) override;
+    virtual double getatt1() override;
+    virtual void setatt1( double _att1 ) override;
+    virtual ::sal_Int32 fn11( ::sal_Int32 arg ) override;
+    virtual OUString fn12( const OUString& arg ) override;
 
 
     double m_attr1;

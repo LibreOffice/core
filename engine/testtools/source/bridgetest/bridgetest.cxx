@@ -114,12 +114,12 @@ public:
         {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & rServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XMain
-    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) override;
+    virtual sal_Int32 run( const Sequence< OUString > & rArgs ) override;
 };
 
 }
@@ -323,7 +323,7 @@ private:
     Mutex m_mutex;
 
 public:
-    void SAL_CALL callRecursivly(
+    void callRecursivly(
         const cpo::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall ) override
         {

@@ -160,22 +160,22 @@ public:
                   m_bSequenceOfCallTestPassed( true )
         {}
 
-    void SAL_CALL acquire() noexcept override
+    void acquire() noexcept override
     {
         OWeakObject::acquire();
     }
-    void SAL_CALL release() noexcept override
+    void release() noexcept override
     {
         OWeakObject::release();
      }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & rServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 
     // XLBTestBase
-    virtual void SAL_CALL setValues( bool bBool,
+    virtual void setValues( bool bBool,
                                      sal_Unicode cChar,
                                      sal_Int8 nByte,
                                      sal_Int16 nShort,
@@ -195,7 +195,7 @@ public:
                                      const cpo::uno::Sequence<TestElement >& rSequence,
                                      const ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL setValues2( bool& bBool,
+    virtual ::test::testtools::bridgetest::TestDataElements setValues2( bool& bBool,
                                                                                  sal_Unicode& cChar,
                                                                                  sal_Int8& nByte,
                                                                                  sal_Int16& nShort,
@@ -215,7 +215,7 @@ public:
                                                                                  cpo::uno::Sequence<TestElement >& rSequence,
                                                                                  ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getValues( bool& bBool,
+    virtual ::test::testtools::bridgetest::TestDataElements getValues( bool& bBool,
                                                                                 sal_Unicode& cChar,
                                                                                 sal_Int8& nByte,
                                                                                 sal_Int16& nShort,
@@ -235,222 +235,222 @@ public:
                                                                                 cpo::uno::Sequence< TestElement >& rSequence,
                                                                                 ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
-    virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) override
+    virtual SmallStruct echoSmallStruct(const SmallStruct& rStruct) override
         { return rStruct; }
-    virtual MediumStruct SAL_CALL echoMediumStruct(const MediumStruct& rStruct) override
+    virtual MediumStruct echoMediumStruct(const MediumStruct& rStruct) override
         { return rStruct; }
-    virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) override
+    virtual BigStruct echoBigStruct(const BigStruct& rStruct) override
         { return rStruct; }
-    virtual TwoFloats SAL_CALL echoTwoFloats(const TwoFloats& rStruct) override
+    virtual TwoFloats echoTwoFloats(const TwoFloats& rStruct) override
         { return rStruct; }
-    virtual FourFloats SAL_CALL echoFourFloats(const FourFloats& rStruct) override
+    virtual FourFloats echoFourFloats(const FourFloats& rStruct) override
         { return rStruct; }
-    virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) override
+    virtual MixedFloatAndInteger echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) override
         { return rStruct; }
-    virtual DoubleHyper SAL_CALL echoDoubleHyper(DoubleHyper const & s) override { return s; }
-    virtual HyperDouble SAL_CALL echoHyperDouble(HyperDouble const & s) override { return s; }
-    virtual FloatFloatLongByte SAL_CALL echoFloatFloatLongByte(FloatFloatLongByte const & s)
+    virtual DoubleHyper echoDoubleHyper(DoubleHyper const & s) override { return s; }
+    virtual HyperDouble echoHyperDouble(HyperDouble const & s) override { return s; }
+    virtual FloatFloatLongByte echoFloatFloatLongByte(FloatFloatLongByte const & s)
         override
     { return s; }
-    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) override
+    virtual ThreeByteStruct echoThreeByteStruct(const ThreeByteStruct& rStruct) override
         { return rStruct; }
-    virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) override
+    virtual sal_Int32 testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) override
         { return i2; }
-    virtual sal_Int32 SAL_CALL testPPC64Alignment( double , double , double , sal_Int32 i1 ) override
+    virtual sal_Int32 testPPC64Alignment( double , double , double , sal_Int32 i1 ) override
         { return i1; }
-    virtual double SAL_CALL testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) override
+    virtual double testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) override
         { return d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8 + d9 + d10; }
-    virtual bool SAL_CALL getBool() override
+    virtual bool getBool() override
         { return _aData.Bool; }
-    virtual sal_Int8 SAL_CALL getByte() override
+    virtual sal_Int8 getByte() override
         { return _aData.Byte; }
-    virtual sal_Unicode SAL_CALL getChar() override
+    virtual sal_Unicode getChar() override
         { return _aData.Char; }
-    virtual sal_Int16 SAL_CALL getShort() override
+    virtual sal_Int16 getShort() override
         { return _aData.Short; }
-    virtual sal_uInt16 SAL_CALL getUShort() override
+    virtual sal_uInt16 getUShort() override
         { return _aData.UShort; }
-    virtual sal_Int32 SAL_CALL getLong() override
+    virtual sal_Int32 getLong() override
         { return _aData.Long; }
-    virtual sal_uInt32 SAL_CALL getULong() override
+    virtual sal_uInt32 getULong() override
         { return _aData.ULong; }
-    virtual sal_Int64 SAL_CALL getHyper() override
+    virtual sal_Int64 getHyper() override
         { return _aData.Hyper; }
-    virtual sal_uInt64 SAL_CALL getUHyper() override
+    virtual sal_uInt64 getUHyper() override
         { return _aData.UHyper; }
-    virtual float SAL_CALL getFloat() override
+    virtual float getFloat() override
         { return _aData.Float; }
-    virtual double SAL_CALL getDouble() override
+    virtual double getDouble() override
         { return _aData.Double; }
-    virtual TestEnum SAL_CALL getEnum() override
+    virtual TestEnum getEnum() override
         { return _aData.Enum; }
-    virtual OUString SAL_CALL getString() override
+    virtual OUString getString() override
         { return _aData.String; }
-    virtual sal_Int8 SAL_CALL getByte2() override
+    virtual sal_Int8 getByte2() override
         { return _aData.Byte2; }
-    virtual sal_Int16 SAL_CALL getShort2() override
+    virtual sal_Int16 getShort2() override
         { return _aData.Short2; }
-    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getInterface(  ) override
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getInterface(  ) override
         { return _aData.Interface; }
-    virtual cpo::uno::Any SAL_CALL getAny() override
+    virtual cpo::uno::Any getAny() override
         { return _aData.Any; }
-    virtual cpo::uno::Sequence< TestElement > SAL_CALL getSequence() override
+    virtual cpo::uno::Sequence< TestElement > getSequence() override
         { return _aData.Sequence; }
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getStruct() override
+    virtual ::test::testtools::bridgetest::TestDataElements getStruct() override
         { return _aStructData; }
 
-    virtual void SAL_CALL setBool( bool _bool ) override
+    virtual void setBool( bool _bool ) override
         { _aData.Bool = _bool; }
-    virtual void SAL_CALL setByte( sal_Int8 _byte ) override
+    virtual void setByte( sal_Int8 _byte ) override
         { _aData.Byte = _byte; }
-    virtual void SAL_CALL setChar( sal_Unicode _char ) override
+    virtual void setChar( sal_Unicode _char ) override
         { _aData.Char = _char; }
-    virtual void SAL_CALL setShort( sal_Int16 _short ) override
+    virtual void setShort( sal_Int16 _short ) override
         { _aData.Short = _short; }
-    virtual void SAL_CALL setUShort( sal_uInt16 _ushort ) override
+    virtual void setUShort( sal_uInt16 _ushort ) override
         { _aData.UShort = _ushort; }
-    virtual void SAL_CALL setLong( sal_Int32 _long ) override
+    virtual void setLong( sal_Int32 _long ) override
         { _aData.Long = _long; }
-    virtual void SAL_CALL setULong( sal_uInt32 _ulong ) override
+    virtual void setULong( sal_uInt32 _ulong ) override
         { _aData.ULong = _ulong; }
-    virtual void SAL_CALL setHyper( sal_Int64 _hyper ) override
+    virtual void setHyper( sal_Int64 _hyper ) override
         { _aData.Hyper = _hyper; }
-    virtual void SAL_CALL setUHyper( sal_uInt64 _uhyper ) override
+    virtual void setUHyper( sal_uInt64 _uhyper ) override
         { _aData.UHyper = _uhyper; }
-    virtual void SAL_CALL setFloat( float _float ) override
+    virtual void setFloat( float _float ) override
         { _aData.Float = _float; }
-    virtual void SAL_CALL setDouble( double _double ) override
+    virtual void setDouble( double _double ) override
         { _aData.Double = _double; }
-    virtual void SAL_CALL setEnum( TestEnum _enum ) override
+    virtual void setEnum( TestEnum _enum ) override
         { _aData.Enum = _enum; }
-    virtual void SAL_CALL setString( const OUString& _string ) override
+    virtual void setString( const OUString& _string ) override
         { _aData.String = _string; }
-    virtual void SAL_CALL setByte2( sal_Int8 _byte ) override
+    virtual void setByte2( sal_Int8 _byte ) override
         { _aData.Byte2 = _byte; }
-    virtual void SAL_CALL setShort2( sal_Int16 _short ) override
+    virtual void setShort2( sal_Int16 _short ) override
         { _aData.Short2 = _short; }
-    virtual void SAL_CALL setInterface( const cpo::uno::Reference< cpo::uno::XInterface >& _interface ) override
+    virtual void setInterface( const cpo::uno::Reference< cpo::uno::XInterface >& _interface ) override
         { _aData.Interface = _interface; }
-    virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) override
+    virtual void setAny( const cpo::uno::Any& _any ) override
         { _aData.Any = _any; }
-    virtual void SAL_CALL setSequence( const cpo::uno::Sequence<TestElement >& _sequence ) override
+    virtual void setSequence( const cpo::uno::Sequence<TestElement >& _sequence ) override
         { _aData.Sequence = _sequence; }
-    virtual void SAL_CALL setStruct( const ::test::testtools::bridgetest::TestDataElements& _struct ) override
+    virtual void setStruct( const ::test::testtools::bridgetest::TestDataElements& _struct ) override
         { _aStructData = _struct; }
 
-    virtual sal_Int32 SAL_CALL getRaiseAttr1() override
+    virtual sal_Int32 getRaiseAttr1() override
     { throw RuntimeException(); }
 
-    virtual void SAL_CALL setRaiseAttr1(sal_Int32) override
+    virtual void setRaiseAttr1(sal_Int32) override
     { throw IllegalArgumentException(); }
 
-    virtual sal_Int32 SAL_CALL getRaiseAttr2() override
+    virtual sal_Int32 getRaiseAttr2() override
     { throw IllegalArgumentException(); }
 
-    virtual TestPolyStruct< bool > SAL_CALL transportPolyBoolean(
+    virtual TestPolyStruct< bool > transportPolyBoolean(
         TestPolyStruct< bool > const & arg) override
     { return arg; }
 
-    virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > &) override {}
+    virtual void transportPolyHyper(TestPolyStruct< sal_Int64 > &) override {}
 
-    virtual void SAL_CALL transportPolySequence(
+    virtual void transportPolySequence(
         TestPolyStruct< Sequence< Any > > const & arg1,
         TestPolyStruct< Sequence< Any > > & arg2) override
     { arg2 = arg1; }
 
-    virtual TestPolyStruct< sal_Int32 > SAL_CALL getNullPolyLong() override
+    virtual TestPolyStruct< sal_Int32 > getNullPolyLong() override
     { return TestPolyStruct< sal_Int32 >(0); /* work around MS compiler bug */ }
 
-    virtual TestPolyStruct< OUString > SAL_CALL getNullPolyString() override
+    virtual TestPolyStruct< OUString > getNullPolyString() override
     { return TestPolyStruct< OUString >(); }
 
-    virtual TestPolyStruct< Type > SAL_CALL getNullPolyType() override
+    virtual TestPolyStruct< Type > getNullPolyType() override
     { return TestPolyStruct< Type >(); }
 
-    virtual TestPolyStruct< Any > SAL_CALL getNullPolyAny() override
+    virtual TestPolyStruct< Any > getNullPolyAny() override
     { return TestPolyStruct< Any >(); }
 
-    virtual TestPolyStruct< Sequence< bool > > SAL_CALL
+    virtual TestPolyStruct< Sequence< bool > >
     getNullPolySequence() override
     { return TestPolyStruct< Sequence< bool > >(); }
 
-    virtual TestPolyStruct< TestEnum > SAL_CALL getNullPolyEnum() override
+    virtual TestPolyStruct< TestEnum > getNullPolyEnum() override
     { return TestPolyStruct< TestEnum >(
         test::testtools::bridgetest::TestEnum_TEST);
           /* work around MS compiler bug */ }
 
-    virtual TestPolyStruct< TestBadEnum > SAL_CALL getNullPolyBadEnum() override
+    virtual TestPolyStruct< TestBadEnum > getNullPolyBadEnum() override
     { return TestPolyStruct< TestBadEnum >(
         test::testtools::bridgetest::TestBadEnum_M);
           /* explicitly instantiate with default enumerator */ }
 
-    virtual TestPolyStruct< TestStruct > SAL_CALL getNullPolyStruct() override
+    virtual TestPolyStruct< TestStruct > getNullPolyStruct() override
     { return TestPolyStruct< TestStruct >(); }
 
-    virtual TestPolyStruct< Reference< XBridgeTestBase > > SAL_CALL
+    virtual TestPolyStruct< Reference< XBridgeTestBase > >
     getNullPolyInterface() override
     { return TestPolyStruct< Reference< XBridgeTestBase > >(); }
 
-    virtual cpo::uno::Any SAL_CALL transportAny(
+    virtual cpo::uno::Any transportAny(
         const cpo::uno::Any& value ) override;
 
-    virtual void SAL_CALL call( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
-    virtual void SAL_CALL callOneway( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
-    virtual bool SAL_CALL sequenceOfCallTestPassed(  ) override;
-    virtual void SAL_CALL startRecursiveCall(
+    virtual void call( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
+    virtual void callOneway( sal_Int32 nCallId, sal_Int32 nWaitMUSEC ) override;
+    virtual bool sequenceOfCallTestPassed(  ) override;
+    virtual void startRecursiveCall(
         const cpo::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) override;
 
-    virtual Reference< XMulti > SAL_CALL getMulti() override;
+    virtual Reference< XMulti > getMulti() override;
 
-    virtual OUString SAL_CALL testMulti(Reference< XMulti > const & multi) override;
+    virtual OUString testMulti(Reference< XMulti > const & multi) override;
 
 public: // XBridgeTest
-    virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext ) override;
+    virtual ::test::testtools::bridgetest::TestDataElements raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xCOntext ) override;
 
-    virtual void SAL_CALL raiseRuntimeExceptionOneway(
+    virtual void raiseRuntimeExceptionOneway(
         const OUString& Message, const cpo::uno::Reference< cpo::uno::XInterface >& Context ) override;
 
-    virtual sal_Int32 SAL_CALL getRuntimeException() override;
-    virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) override;
+    virtual sal_Int32 getRuntimeException() override;
+    virtual void setRuntimeException( sal_Int32 _runtimeexception ) override;
 
     // XBridgeTest2
-    virtual Sequence< bool > SAL_CALL setSequenceBool(
+    virtual Sequence< bool > setSequenceBool(
         const Sequence< bool >& aSeq ) override;
-    virtual Sequence< sal_Unicode > SAL_CALL setSequenceChar(
+    virtual Sequence< sal_Unicode > setSequenceChar(
         const Sequence< sal_Unicode >& aSeq ) override;
-    virtual Sequence< sal_Int8 > SAL_CALL setSequenceByte(
+    virtual Sequence< sal_Int8 > setSequenceByte(
         const Sequence< sal_Int8 >& aSeq ) override;
-    virtual Sequence< sal_Int16 > SAL_CALL setSequenceShort(
+    virtual Sequence< sal_Int16 > setSequenceShort(
         const Sequence< sal_Int16 >& aSeq ) override;
-    virtual Sequence< sal_uInt16 > SAL_CALL setSequenceUShort(
+    virtual Sequence< sal_uInt16 > setSequenceUShort(
         const Sequence< sal_uInt16 >& aSeq ) override;
-    virtual Sequence< sal_Int32 > SAL_CALL setSequenceLong(
+    virtual Sequence< sal_Int32 > setSequenceLong(
         const Sequence< sal_Int32 >& aSeq ) override;
-    virtual Sequence< sal_uInt32 > SAL_CALL setSequenceULong(
+    virtual Sequence< sal_uInt32 > setSequenceULong(
         const Sequence< sal_uInt32 >& aSeq ) override;
-    virtual Sequence< sal_Int64 > SAL_CALL setSequenceHyper(
+    virtual Sequence< sal_Int64 > setSequenceHyper(
         const Sequence< sal_Int64 >& aSeq ) override;
-    virtual Sequence< sal_uInt64 > SAL_CALL setSequenceUHyper(
+    virtual Sequence< sal_uInt64 > setSequenceUHyper(
         const Sequence< sal_uInt64 >& aSeq ) override;
-    virtual Sequence< float > SAL_CALL setSequenceFloat(
+    virtual Sequence< float > setSequenceFloat(
         const Sequence< float >& aSeq ) override;
-    virtual Sequence< double > SAL_CALL setSequenceDouble(
+    virtual Sequence< double > setSequenceDouble(
         const Sequence< double >& aSeq ) override;
-    virtual Sequence< TestEnum > SAL_CALL setSequenceEnum(
+    virtual Sequence< TestEnum > setSequenceEnum(
         const Sequence< TestEnum >& aSeq ) override ;
-    virtual Sequence< OUString > SAL_CALL setSequenceString(
+    virtual Sequence< OUString > setSequenceString(
         const Sequence< OUString >& aString ) override;
-    virtual Sequence< Reference< XInterface > > SAL_CALL setSequenceXInterface(
+    virtual Sequence< Reference< XInterface > > setSequenceXInterface(
         const Sequence< Reference< XInterface > >& aSeq ) override;
-    virtual Sequence<Any > SAL_CALL setSequenceAny(
+    virtual Sequence<Any > setSequenceAny(
         const Sequence<Any >& aSeq ) override;
-    virtual Sequence<TestElement > SAL_CALL setSequenceStruct(
+    virtual Sequence<TestElement > setSequenceStruct(
         const Sequence< TestElement >& aSeq ) override;
-    virtual Sequence< Sequence< sal_Int32 > > SAL_CALL setDim2(
+    virtual Sequence< Sequence< sal_Int32 > > setDim2(
         const Sequence<Sequence< sal_Int32 > >& aSeq ) override;
-    virtual Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL setDim3(
+    virtual Sequence< Sequence< Sequence< sal_Int32 > > > setDim3(
         const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq ) override;
-    virtual void SAL_CALL setSequencesInOut(Sequence< bool >& aSeqBoolean,
+    virtual void setSequencesInOut(Sequence< bool >& aSeqBoolean,
                                 Sequence< sal_Unicode >& aSeqChar,
                                 Sequence< sal_Int8 >& aSeqByte,
                                 Sequence< sal_Int16 >& aSeqShort,
@@ -467,7 +467,7 @@ public: // XBridgeTest
                                 Sequence< Any >& aSeqAny,
                                 Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                                 Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 ) override;
-    virtual void SAL_CALL setSequencesOut( Sequence< bool >& aSeqBoolean,
+    virtual void setSequencesOut( Sequence< bool >& aSeqBoolean,
                              Sequence< sal_Unicode >& aSeqChar,
                              Sequence< sal_Int8 >& aSeqByte,
                              Sequence< sal_Int16 >& aSeqShort,
@@ -484,13 +484,13 @@ public: // XBridgeTest
                              Sequence< Any >& aSeqAny,
                              Sequence< Sequence< sal_Int32 > >& aSeqDim2,
                              Sequence< Sequence< Sequence< sal_Int32 > > >& aSeqDim3 ) override;
-    virtual void SAL_CALL testConstructorsService(
+    virtual void testConstructorsService(
         Reference< XComponentContext > const & context) override;
-    virtual Reference< XCurrentContextChecker > SAL_CALL
+    virtual Reference< XCurrentContextChecker >
     getCurrentContextChecker() override;
 
 public:
-    virtual void SAL_CALL callRecursivly( const cpo::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) override;
+    virtual void callRecursivly( const cpo::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall ) override;
 };
 
 //Dummy class for XComponent implementation
@@ -548,7 +548,7 @@ bool Test_Impl::sequenceOfCallTestPassed()
 }
 
 
-void SAL_CALL Test_Impl::startRecursiveCall(
+void Test_Impl::startRecursiveCall(
     const cpo::uno::Reference< XRecursiveCall >& xCall, sal_Int32 nToCall )
 {
     MutexGuard guard( m_mutex );
@@ -560,7 +560,7 @@ void SAL_CALL Test_Impl::startRecursiveCall(
 }
 
 
-void SAL_CALL Test_Impl::callRecursivly(
+void Test_Impl::callRecursivly(
     const cpo::uno::Reference< XRecursiveCall >& xCall,
     sal_Int32 nToCall )
 {
@@ -748,133 +748,133 @@ void Test_Impl::setRuntimeException( sal_Int32 )
 }
 
 // XBridgeTest2 -------------------------------------------------------------
-Sequence< bool > SAL_CALL Test_Impl::setSequenceBool(
+Sequence< bool > Test_Impl::setSequenceBool(
         const Sequence< bool >& aSeq )
 {
     _arBool = aSeq;
     return aSeq;
 }
 
-Sequence< sal_Unicode > SAL_CALL Test_Impl::setSequenceChar(
+Sequence< sal_Unicode > Test_Impl::setSequenceChar(
         const Sequence< sal_Unicode >& aSeq )
 {
     _arChar = aSeq;
     return aSeq;
 }
 
-Sequence< sal_Int8 > SAL_CALL Test_Impl::setSequenceByte(
+Sequence< sal_Int8 > Test_Impl::setSequenceByte(
         const Sequence< sal_Int8 >& aSeq )
 {
     _arByte = aSeq;
     return aSeq;
 }
 
-Sequence< sal_Int16 > SAL_CALL Test_Impl::setSequenceShort(
+Sequence< sal_Int16 > Test_Impl::setSequenceShort(
         const Sequence< sal_Int16 >& aSeq )
 {
     _arShort = aSeq;
     return aSeq;
 }
 
-Sequence< sal_uInt16 > SAL_CALL Test_Impl::setSequenceUShort(
+Sequence< sal_uInt16 > Test_Impl::setSequenceUShort(
         const Sequence< sal_uInt16 >& aSeq )
 {
     _arUShort = aSeq;
     return aSeq;
 }
 
-Sequence< sal_Int32 > SAL_CALL Test_Impl::setSequenceLong(
+Sequence< sal_Int32 > Test_Impl::setSequenceLong(
         const Sequence< sal_Int32 >& aSeq )
 {
     _arLong = aSeq;
     return aSeq;
 }
 
-Sequence< sal_uInt32 > SAL_CALL Test_Impl::setSequenceULong(
+Sequence< sal_uInt32 > Test_Impl::setSequenceULong(
         const Sequence< sal_uInt32 >& aSeq )
 {
     _arULong = aSeq;
     return aSeq;
 }
 
-Sequence< sal_Int64 > SAL_CALL Test_Impl::setSequenceHyper(
+Sequence< sal_Int64 > Test_Impl::setSequenceHyper(
         const Sequence< sal_Int64 >& aSeq )
 {
     _arHyper = aSeq;
     return aSeq;
 }
 
-Sequence< sal_uInt64 > SAL_CALL Test_Impl::setSequenceUHyper(
+Sequence< sal_uInt64 > Test_Impl::setSequenceUHyper(
         const Sequence< sal_uInt64 >& aSeq )
 {
     _arUHyper = aSeq;
     return aSeq;
 }
 
-Sequence< float > SAL_CALL Test_Impl::setSequenceFloat(
+Sequence< float > Test_Impl::setSequenceFloat(
         const Sequence< float >& aSeq )
 {
     _arFloat = aSeq;
     return aSeq;
 }
 
-Sequence< double > SAL_CALL Test_Impl::setSequenceDouble(
+Sequence< double > Test_Impl::setSequenceDouble(
     const Sequence< double >& aSeq )
 {
     _arDouble = aSeq;
     return aSeq;
 }
 
-Sequence< TestEnum > SAL_CALL Test_Impl::setSequenceEnum(
+Sequence< TestEnum > Test_Impl::setSequenceEnum(
     const Sequence< TestEnum >& aSeq )
 {
     _arEnum = aSeq;
     return aSeq;
 }
 
-Sequence< OUString > SAL_CALL Test_Impl::setSequenceString(
+Sequence< OUString > Test_Impl::setSequenceString(
     const Sequence< OUString >& aSeq )
 {
     _arString = aSeq;
     return aSeq;
 }
 
-Sequence< Reference< XInterface > > SAL_CALL Test_Impl::setSequenceXInterface(
+Sequence< Reference< XInterface > > Test_Impl::setSequenceXInterface(
         const Sequence< Reference< XInterface > >& aSeq )
 {
     _arObject = aSeq;
     return aSeq;
 }
 
-Sequence<Any > SAL_CALL Test_Impl::setSequenceAny(
+Sequence<Any > Test_Impl::setSequenceAny(
     const Sequence<Any >& aSeq )
 {
     _arAny = aSeq;
     return aSeq;
 }
 
-Sequence<TestElement > SAL_CALL Test_Impl::setSequenceStruct(
+Sequence<TestElement > Test_Impl::setSequenceStruct(
     const Sequence< TestElement >& aSeq )
 {
     _arStruct = aSeq;
     return aSeq;
 }
 
-Sequence< Sequence< sal_Int32 > > SAL_CALL Test_Impl::setDim2(
+Sequence< Sequence< sal_Int32 > > Test_Impl::setDim2(
         const Sequence<Sequence< sal_Int32 > >& aSeq )
 {
     _arLong2 = aSeq;
     return aSeq;
 }
 
-Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL Test_Impl::setDim3(
+Sequence< Sequence< Sequence< sal_Int32 > > > Test_Impl::setDim3(
         const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq )
 {
     _arLong3 = aSeq;
     return aSeq;
 }
 
-void SAL_CALL Test_Impl::setSequencesInOut(Sequence< bool >& aSeqBoolean,
+void Test_Impl::setSequencesInOut(Sequence< bool >& aSeqBoolean,
                                 Sequence< sal_Unicode >& aSeqChar,
                                 Sequence< sal_Int8 >& aSeqByte,
                                 Sequence< sal_Int16 >& aSeqShort,
@@ -911,7 +911,7 @@ void SAL_CALL Test_Impl::setSequencesInOut(Sequence< bool >& aSeqBoolean,
     _arLong3 = aSeqDim3;
 }
 
-void SAL_CALL Test_Impl::setSequencesOut( Sequence< bool >& aSeqBoolean,
+void Test_Impl::setSequencesOut( Sequence< bool >& aSeqBoolean,
                              Sequence< sal_Unicode >& aSeqChar,
                              Sequence< sal_Int8 >& aSeqByte,
                              Sequence< sal_Int16 >& aSeqShort,

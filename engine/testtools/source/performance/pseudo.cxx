@@ -60,7 +60,7 @@ struct pseudo_unoInterfaceProxy : public uno_Interface
                                      const OUString & rOId_ );
 };
 
-static void SAL_CALL pseudo_unoInterfaceProxy_dispatch(
+static void pseudo_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI,
     const typelib_TypeDescription * pMemberType,
     void * pReturn,
@@ -72,7 +72,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_dispatch(
 }
 
 
-static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy )
+static void pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy )
 {
     pseudo_unoInterfaceProxy * pThis =
         static_cast< pseudo_unoInterfaceProxy * >(
@@ -90,7 +90,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, v
     delete pThis;
 }
 
-static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
+static void pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
 {
     if (1 == osl_atomic_increment( &static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
@@ -106,7 +106,7 @@ static void SAL_CALL pseudo_unoInterfaceProxy_acquire( uno_Interface * pUnoI )
     }
 }
 
-static void SAL_CALL pseudo_unoInterfaceProxy_release( uno_Interface * pUnoI )
+static void pseudo_unoInterfaceProxy_release( uno_Interface * pUnoI )
 {
     if (! osl_atomic_decrement( & static_cast< pseudo_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
@@ -138,7 +138,7 @@ inline pseudo_unoInterfaceProxy::pseudo_unoInterfaceProxy(
 }
 
 
-static void SAL_CALL pseudo_Mapping_mapInterface(
+static void pseudo_Mapping_mapInterface(
     uno_Mapping * pMapping, void ** ppOut,
     void * pUnoI, typelib_InterfaceTypeDescription * pTypeDescr )
 {
@@ -181,12 +181,12 @@ static void SAL_CALL pseudo_Mapping_mapInterface(
     }
 }
 
-static void SAL_CALL pseudo_Mapping_free( uno_Mapping * pMapping )
+static void pseudo_Mapping_free( uno_Mapping * pMapping )
 {
     delete static_cast< pseudo_Mapping * >( pMapping );
 }
 
-static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
+static void pseudo_Mapping_acquire( uno_Mapping * pMapping )
 {
     if (1 == osl_atomic_increment( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
     {
@@ -199,7 +199,7 @@ static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
     }
 }
 
-static void SAL_CALL pseudo_Mapping_release( uno_Mapping * pMapping )
+static void pseudo_Mapping_release( uno_Mapping * pMapping )
 {
     if (! osl_atomic_decrement( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
     {
@@ -230,12 +230,12 @@ pseudo_Mapping::~pseudo_Mapping()
 }
 
 
-extern "C" void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
+extern "C" void uno_initEnvironment( uno_Environment * pUnoEnv )
 {
     OSL_FAIL( "### no impl: unexpected call!" );
 }
 
-extern "C" void SAL_CALL uno_ext_getMapping(
+extern "C" void uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
 {
     OSL_ASSERT( ppMapping && pFrom && pTo );

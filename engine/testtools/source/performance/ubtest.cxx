@@ -406,12 +406,12 @@ public:
     virtual ~TestImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString getImplementationName() throw (RuntimeException);
+    virtual bool supportsService( const OUString & rServiceName ) throw (RuntimeException);
+    virtual Sequence< OUString > getSupportedServiceNames() throw (RuntimeException);
 
     // XMain
-    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException);
+    virtual sal_Int32 run( const Sequence< OUString > & rArgs ) throw (RuntimeException);
 };
 
 
@@ -425,7 +425,7 @@ TestImpl::~TestImpl()
 }
 
 
-static Reference< XInterface > SAL_CALL TestImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
+static Reference< XInterface > TestImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference< XInterface >( *new TestImpl( xSMgr ) );
 }
@@ -1227,7 +1227,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 extern "C"
 {
 
-bool SAL_CALL component_writeInfo(
+bool component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -1249,7 +1249,7 @@ bool SAL_CALL component_writeInfo(
     return false;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * component_getFactory(
     const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
