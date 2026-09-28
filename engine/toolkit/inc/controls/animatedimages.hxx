@@ -52,17 +52,9 @@ namespace toolkit
         cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XAnimatedImages
-        virtual ::sal_Int32 getStepTime() override;
-        virtual void setStepTime( ::sal_Int32 _steptime ) override;
-        virtual bool getAutoRepeat() override;
-        virtual void setAutoRepeat( bool _autorepeat ) override;
-        virtual ::sal_Int16 getScaleMode() override;
-        virtual void setScaleMode( ::sal_Int16 _scalemode ) override;
         virtual ::sal_Int32 getImageSetCount(  ) override;
         virtual cpo::uno::Sequence< OUString > getImageSet( ::sal_Int32 i_index ) override;
         virtual void insertImageSet( ::sal_Int32 i_index, const cpo::uno::Sequence< OUString >& i_imageURLs ) override;
-        virtual void replaceImageSet( ::sal_Int32 i_index, const cpo::uno::Sequence< OUString >& i_imageURLs ) override;
-        virtual void removeImageSet( ::sal_Int32 i_index ) override;
 
         // XAnimatedImages::XContainer
         virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& i_listener ) override;

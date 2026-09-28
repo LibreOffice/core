@@ -342,48 +342,6 @@ namespace toolkit {
     }
 
 
-    ::sal_Int32 AnimatedImagesControlModel::getStepTime()
-    {
-        sal_Int32 nStepTime( 100 );
-        OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ) ) >>= nStepTime );
-        return nStepTime;
-    }
-
-
-    void AnimatedImagesControlModel::setStepTime( ::sal_Int32 i_stepTime )
-    {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ), Any( i_stepTime ) );
-    }
-
-
-    bool AnimatedImagesControlModel::getAutoRepeat()
-    {
-        bool bAutoRepeat( true );
-        OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ) ) >>= bAutoRepeat );
-        return bAutoRepeat;
-    }
-
-
-    void AnimatedImagesControlModel::setAutoRepeat( bool i_autoRepeat )
-    {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), Any( i_autoRepeat ) );
-    }
-
-
-    ::sal_Int16 AnimatedImagesControlModel::getScaleMode()
-    {
-        sal_Int16 nImageScaleMode( ImageScaleMode::ANISOTROPIC );
-        OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ) ) >>= nImageScaleMode );
-        return nImageScaleMode;
-    }
-
-
-    void AnimatedImagesControlModel::setScaleMode( ::sal_Int16 i_scaleMode )
-    {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), Any( i_scaleMode ) );
-    }
-
-
     ::sal_Int32 AnimatedImagesControlModel::getImageSetCount(  )
     {
         std::unique_lock aGuard( m_aMutex );
@@ -420,42 +378,6 @@ namespace toolkit {
 
         // listener notification
         lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
-    }
-
-
-    void AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs )
-    {
-        std::unique_lock aGuard( m_aMutex );
-        // sanity checks
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        lcl_checkIndex( maImageSets, i_index, *this );
-
-        // actual insertion
-        maImageSets[ i_index ] = i_imageURLs;
-
-        // listener notification
-        lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
-    }
-
-
-    void AnimatedImagesControlModel::removeImageSet( ::sal_Int32 i_index )
-    {
-        std::unique_lock aGuard( m_aMutex );
-        // sanity checks
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        lcl_checkIndex( maImageSets, i_index, *this );
-
-        // actual removal
-        ::std::vector< Sequence< OUString > >::iterator removalPos = maImageSets.begin() + i_index;
-        Sequence< OUString > aRemovedElement( *removalPos );
-        maImageSets.erase( removalPos );
-
-        // listener notification
-        lcl_notify( aGuard, maContainerListeners, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
     }
 
 

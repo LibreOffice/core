@@ -29,29 +29,6 @@ module com { module sun { module star { module awt {
  */
 interface XAnimatedImages
 {
-    /** specifies the time in milliseconds between two animation steps.
-
-        <p>This is the minimum time, the actual value might be longer due to
-        system load. The default value will be 100 ms.</p>
-    */
-    [attribute] long    StepTime;
-
-    /** specifies whether the animation should start over with the first image of the image series when the last image
-        has been played.
-
-        <p>The default value for this attribute is `TRUE`.</p>
-    */
-    [attribute] boolean AutoRepeat;
-
-    /** controls the way the images are scaled up or down, when the available space is larger or smaller
-        than what is needed for them.
-
-        <p>Allowed values are those from the ImageScaleMode constants group.</p>
-    */
-    [attribute] short ScaleMode
-    {
-        set raises (::com::sun::star::lang::IllegalArgumentException);
-    };
 
     /** returns the number of images sets maintained by the component.
     */
@@ -98,50 +75,6 @@ interface XAnimatedImages
         (
             ::com::sun::star::lang::IndexOutOfBoundsException
         );
-
-    /** replaces the image set given by index with a new one
-
-        @param iIndex
-            the index of the set those image URLs are to be replaced. Must be greater than or equal to <code>0</code>,
-            and smaller than the value returned by getImageSetCount().
-
-        @param iImageURLs
-            the URLs for the images for the given set. Will be resolved using a com::sun::star::graphic::GraphicProvider.
-
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>iIndex</code> is not a valid index.
-    */
-    void
-        replaceImageSet
-        (
-            [in] long iIndex,
-            [in] sequence< string > iImageURLs
-        )
-        raises
-        (
-            ::com::sun::star::lang::IndexOutOfBoundsException
-        );
-
-
-    /** removes the image set with the given index
-
-        @param iIndex
-            the index of the set to remove. Must be greater than or equal to <code>0</code>,
-            and smaller than the value returned by getImageSetCount().
-
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>iIndex</code> is not a valid index.
-    */
-    void
-        removeImageSet
-        (
-            [in] long iIndex
-        )
-        raises
-        (
-            ::com::sun::star::lang::IndexOutOfBoundsException
-        );
-
 
     /** allows other components to observer the insertion, removal, and replacement of image sets
     */
