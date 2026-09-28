@@ -133,26 +133,6 @@ void StorageBase::initialize()
 #endif // MOBILEAPP
 }
 
-#if !MOBILEAPP
-
-static bool isLocalhost(const std::string& targetHost)
-{
-    const std::string targetAddress = net::resolveHostAddress(targetHost);
-
-    if (net::isLocalhost(targetHost))
-    {
-        LOG_INF("WOPI host [" << targetHost << "] is on the same host as the WOPI client: \""
-                              << targetAddress << "\". Connection is allowed.");
-        return true;
-    }
-
-    LOG_INF("WOPI host [" << targetHost << "] is not on the same host as the WOPI client: \""
-                          << targetAddress << "\". Connection is not allowed.");
-    return false;
-}
-
-#endif
-
 StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
                                                [[maybe_unused]] bool takeOwnership)
 {
@@ -204,7 +184,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
     {
         const auto& targetHost = uri.getHost();
         HostUtil::setFirstHost(uri);
-        if (HostUtil::allowedWopiHost(targetHost) || isLocalhost(targetHost))
+        if (HostUtil::allowedWopiHost(targetHost))
         {
             LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString()) << "] as WOPI");
             return StorageBase::StorageType::Wopi;
