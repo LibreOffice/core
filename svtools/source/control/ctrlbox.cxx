@@ -466,19 +466,19 @@ void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
     aStream.WriteLine( "" );
 }
 
-void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
+std::vector<OUString> FontNameBox::LoadMRUEntries(const OUString& aFontMRUEntriesFile)
 {
     if (aFontMRUEntriesFile.isEmpty())
-        return;
+        return {};
 
     if (!officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get())
-        return;
+        return {};
 
     SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
         SAL_INFO("svtools.control", "FontNameBox::LoadMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed");
-        return;
+        return {};
     }
 
     OStringBuffer aLine;
@@ -494,7 +494,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile )
             aFontEntries.push_back(sEntry);
     }
 
-    m_xComboBox->set_mru_entries(aFontEntries);
+    return aFontEntries;
 }
 
 void FontNameBox::InitFontMRUEntriesFile()
@@ -520,8 +520,8 @@ void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
     OUString aOldText = m_xComboBox->get_active_text();
-    std::vector<OUString> rEntries = m_xComboBox->get_mru_entries();
-    bool bLoadFromFile = rEntries.empty();
+    std::vector<OUString> aEntries = m_xComboBox->get_mru_entries();
+    bool bLoadFromFile = aEntries.empty();
     m_xComboBox->freeze();
     m_xComboBox->clear();
 
@@ -538,9 +538,9 @@ void FontNameBox::Fill( const FontList* pList )
     }
 
     if (bLoadFromFile)
-        LoadMRUEntries(maFontMRUEntriesFile);
-    else
-        m_xComboBox->set_mru_entries(rEntries);
+        aEntries = LoadMRUEntries(maFontMRUEntriesFile);
+
+    m_xComboBox->set_mru_entries(aEntries);
 
     m_xComboBox->thaw();
 

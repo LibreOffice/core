@@ -346,7 +346,7 @@ private:
     DECL_DLLPRIVATE_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
     DECL_DLLPRIVATE_LINK(UpdateHdl, Timer*, void);
 
-    void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
+    static std::vector<OUString> LoadMRUEntries(const OUString& aFontMRUEntriesFile);
     void            SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const;
 
     OutputDevice&   CachePreview(size_t nIndex, Point* pTopLeft,
