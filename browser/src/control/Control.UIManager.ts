@@ -72,38 +72,39 @@ class UIManager extends window.L.Control {
 	onAdd(map: any) {
 		this.map = map;
 		this.notebookbar = null;
-		// Every time the UI mode changes from 'classic' to 'notebookbar'
-		// the two below elements will be destroyed.
-		// Here we save the original state of the elements, as provided
-		// by server, in order to apply to them the same initialization
-		// code when activating the 'classic' mode as if the elements are
-		// initialized for the first time since the start of the application.
-		// It is important to use the same initial structure provided by server
-		// in order to keep a single place (server) of initial properties setting.
-		this.map.toolbarUpTemplate = $('#toolbar-up')[0].cloneNode(true);
-		this.map.mainMenuTemplate = $('#main-menu')[0].cloneNode(true);
+		if (!window.mode.isInteractivePreview()) {
+			// Every time the UI mode changes from 'classic' to 'notebookbar'
+			// the two below elements will be destroyed.
+			// Here we save the original state of the elements, as provided
+			// by server, in order to apply to them the same initialization
+			// code when activating the 'classic' mode as if the elements are
+			// initialized for the first time since the start of the application.
+			// It is important to use the same initial structure provided by server
+			// in order to keep a single place (server) of initial properties setting.
+			this.map.toolbarUpTemplate = $('#toolbar-up')[0].cloneNode(true);
+			this.map.mainMenuTemplate = $('#main-menu')[0].cloneNode(true);
 
-		map.on('infobar', this.showInfoBar, this);
-		map.on('legacyunoapinotice', this.showLegacyUnoApiSnackbarOnce, this);
-		map.on('docloaded', this._onDocLoadedForLegacyUnoApiSnackbar, this);
-		app.events.on('updatepermission', this.onUpdatePermission.bind(this));
+			map.on('infobar', this.showInfoBar, this);
+			map.on('legacyunoapinotice', this.showLegacyUnoApiSnackbarOnce, this);
+			map.on('docloaded', this._onDocLoadedForLegacyUnoApiSnackbar, this);
+			app.events.on('updatepermission', this.onUpdatePermission.bind(this));
 
-		if (window.mode.isSmallScreenDevice()) {
-			window.addEventListener('popstate', this.onGoBack.bind(this));
+			if (window.mode.isSmallScreenDevice()) {
+				window.addEventListener('popstate', this.onGoBack.bind(this));
 
-			// provide entries in the history we can catch to close the app
-			history.pushState({context: 'app-started'}, 'app-started');
-			history.pushState({context: 'app-started'}, 'app-started');
-		}
+				// provide entries in the history we can catch to close the app
+				history.pushState({context: 'app-started'}, 'app-started');
+				history.pushState({context: 'app-started'}, 'app-started');
+			}
 
-		map.on('blockUI', this.blockUI, this);
-		map.on('unblockUI', this.unblockUI, this);
+			map.on('blockUI', this.blockUI, this);
+			map.on('unblockUI', this.unblockUI, this);
 
-		$('#toolbar-wrapper').on('click', (event) => {
-			const target = event.target as HTMLElement;
-			if (target.parentElement?.id === 'toolbar-up') // checks if clicked on empty part of the toolbar on tabbed view
-				this.map.fire('editorgotfocus');
-		});
+			$('#toolbar-wrapper').on('click', (event) => {
+				const target = event.target as HTMLElement;
+				if (target.parentElement?.id === 'toolbar-up') // checks if clicked on empty part of the toolbar on tabbed view
+					this.map.fire('editorgotfocus');
+			});
 
 		$('.main-nav').on('click', (event) => {
 			const target = event.target as HTMLElement;
@@ -125,7 +126,10 @@ class UIManager extends window.L.Control {
 
 			// Prevent vertical scroll only within this element
 			e.preventDefault();
-		  }, { passive: false });
+		}, { passive: false });
+		} else {
+			$('.main-nav').hide();
+		}
 		this.map.on('updateviewslist', this.onUpdateViews, this);
 
 		this.map['stateChangeHandler'].setItemValue('toggledarktheme', 'false');
@@ -671,6 +675,9 @@ class UIManager extends window.L.Control {
 	 * Setup menubar and the top toolbar.
 	 */
 	initializeMenubarAndTopToolbar(): void {
+		if (window.mode.isInteractivePreview()) {
+			return;
+		}
 		const enableNotebookbar = this.shouldUseNotebookbarMode();
 		const isSmallScreenDevice = window.mode.isSmallScreenDevice();
 		if (isSmallScreenDevice || !enableNotebookbar) {
@@ -705,7 +712,7 @@ class UIManager extends window.L.Control {
 			});
 		}
 
-		if (!window.mode.isSmallScreenDevice()) {
+		if (!window.mode.isSmallScreenDevice() && !window.mode.isInteractivePreview()) {
 			this.map.statusBar = JSDialog.StatusBar(this.map);
 
 			this.map.sidebar = JSDialog.Sidebar(this.map);
@@ -728,7 +735,7 @@ class UIManager extends window.L.Control {
 
 		window.setupToolbar(this.map);
 
-		if (!(window.mode.isCODesktop())) {
+		if (!window.mode.isCODesktop() && !window.mode.isInteractivePreview()) {
 			this.documentNameInput = window.L.control.documentNameInput();
 			this.map.addControl(this.documentNameInput);
 		}
@@ -741,9 +748,11 @@ class UIManager extends window.L.Control {
 		this.map.dialog = window.L.control.lokDialog();
 		this.map.addControl(this.map.dialog);
 		this.map.addControl(new ContextMenuControl());
-		this.map.userList = window.L.control.userList();
-		this.map.addControl(this.map.userList);
-		this.map.aboutDialog = JSDialog.aboutDialog(this.map);
+		if (!window.mode.isInteractivePreview()) {
+			this.map.userList = window.L.control.userList();
+			this.map.addControl(this.map.userList);
+			this.map.aboutDialog = JSDialog.aboutDialog(this.map);
+		}
 
 		if (window.L.Map.versionBar && window.allowUpdateNotification)
 			this.map.addControl(window.L.Map.versionBar);
@@ -837,6 +846,10 @@ class UIManager extends window.L.Control {
 	 */
 	initializeSpecializedUI(docType: string): void {
 		app.console.debug('UIManager: initialize specialized UI for: ' + docType);
+		if (window.mode.isInteractivePreview()) {
+			this.disableComments();
+			return;
+		}
 
 		const startWelcomePresentation = window.coolParams.get('welcome');
 
@@ -1108,7 +1121,7 @@ class UIManager extends window.L.Control {
 	 */
 	initializeSidebar(): void {
 		// Hide the sidebar on start if saved state or UIDefault is set.
-		if (window.mode.isDesktop()) {
+		if (window.mode.isDesktop() && !window.mode.isInteractivePreview()) {
 			var showSidebar = this.getBooleanDocTypePref('ShowSidebar', true);
 
 			if (showSidebar && this.getBooleanDocTypePref('PropertyDeck', true)) {
@@ -1171,6 +1184,14 @@ class UIManager extends window.L.Control {
 			this.map['stateChangeHandler'].setItemValue('showruler', rulerState);
 			this._map.fire('commandstatechanged', {commandName : 'showruler', state : rulerState});
 		}
+	}
+
+	/**
+	 * Disable comments for good.
+	 */
+	disableComments(): void {
+		this.map['stateChangeHandler'].setItemValue('showannotations', 'false');
+		this._map.fire('commandstatechanged', {commandName : 'showannotations', state : 'false'});
 	}
 
 	initializeComments(): void {
@@ -1829,7 +1850,7 @@ class UIManager extends window.L.Control {
 
 	initializeNotebookbarInCore(): void {
 		// do it always apart of mobile as we need it for contextual toolbar
-		if (window.mode.isSmallScreenDevice()) return;
+		if (window.mode.isSmallScreenDevice() || window.mode.isInteractivePreview()) return;
 
 		if (!this.notebookbar.impl.initialized) {
 			this.map.sendUnoCommand('.uno:ToolbarMode?Mode:string=Default');

@@ -370,7 +370,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (!this._previewInitialized || !this._map.userList)
 			return;
 
-		if (window.mode.isSmallScreenDevice() || this._map.userList.hideUserList())
+		if (window.mode.isSmallScreenDevice() || window.mode.isInteractivePreview() || this._map.userList.hideUserList())
 			return;
 
 		var viewIdsByPart = new Map();

@@ -45,7 +45,7 @@ if (window.enableDebug) {
 var filePath = global.coolParams.get('file_path');
 
 app.localeService = new LocaleService();
-app.setPermission(global.coolParams.get('permission') || 'edit');
+app.setPermission(global.coolParams.get('permission') || (window.mode.isInteractivePreview() ? 'readonly' : 'edit'));
 app.serverConnectionService = new ServerConnectionService();
 app.layoutingService = new LayoutingService();
 app.pendingOnDemandRenders = 0;

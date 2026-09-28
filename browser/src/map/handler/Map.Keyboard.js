@@ -686,7 +686,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		var docLayer = this._map._docLayer;
 
 		// if any key is pressed, we stop the following other users
-		if (docLayer) this._map.userList.followUser(docLayer._viewId, false);
+		if (docLayer && !window.mode.isInteractivePreview()) this._map.userList.followUser(docLayer._viewId, false);
 
 		if (window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, ev)) {
 			ev.shortCutActivated = true;

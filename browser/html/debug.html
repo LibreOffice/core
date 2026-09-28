@@ -27,12 +27,22 @@
             let localServer = window.location.protocol + "//" + window.location.host;
             let localUrl = localServer + window.location.pathname + "?";
             let params = new URLSearchParams(window.location.search);
+            let page = "cool.html";
+            let preview = params.get('interactivepreview');
+            if (preview)
+            {
+                page = 'cool-preview.html';
+                let iframe = document.getElementById('coolframe');
+                iframe.width = 350;
+                iframe.height = 221;
+                iframe.removeAttribute('style');
+            }
             let req = params.get('req');
             params.delete('req');
             if (req)
-              req = req.replace('debug.html', 'cool.html')
+              req = req.replace('debug.html', page)
             else
-              localUrl = localUrl.replace('debug.html', 'cool.html');
+              localUrl = localUrl.replace('debug.html', page);
             var wopiSrc = params.get('WOPISrc');
             if (wopiSrc)
             {

@@ -383,6 +383,9 @@ class SlideLinks {
 	// one the notebookbar bars consult when they are built, and the menubar
 	// keeps a record of its own that its rebuilds read.
 	private showUpdateCommand(): void {
+		if (window.coolPreview) {
+			return;
+		}
 		const offered = this.hasLinks();
 		this.map.uiManager.showCommand('updateslidelinks', offered);
 		const menubar = this.map.menubar;

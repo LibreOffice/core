@@ -8,6 +8,7 @@
             <action name="edit" default="true" ext="odt"/>
             <action name="view" ext="odt"/>
             <action name="editnew" ext="odt"/>
+            <action name="interactivepreview" ext="odt"/>
             <action name="edit" default="true" ext="fodt"/>
             <action name="view" ext="fodt"/>
             <action name="editnew" ext="fodt"/>
@@ -19,11 +20,13 @@
             <!-- MS Word -->
             <action name="edit" default="true" ext="doc"/>
             <action name="view" ext="doc"/>
+            <action name="interactivepreview" ext="doc"/>
             <action name="view" default="true" ext="dot"/>
             <!-- OOXML wordprocessing -->
             <action name="edit" default="true" ext="docx"/>
             <action name="view" ext="docx"/>
             <action name="editnew" ext="docx"/>
+            <action name="interactivepreview" ext="docx"/>
             <action name="edit" default="true" ext="docm"/>
             <action name="view" ext="docm"/>
             <action name="edit" default="true" ext="dotx"/>
@@ -76,6 +79,7 @@
             <action name="edit" default="true" ext="ods"/>
             <action name="view" ext="ods"/>
             <action name="editnew" ext="ods"/>
+            <action name="interactivepreview" ext="ods"/>
             <action name="edit" default="true" ext="fods"/>
             <action name="view" ext="fods"/>
             <action name="editnew" ext="fods"/>
@@ -87,6 +91,7 @@
             <!-- MS Excel -->
             <action name="edit" default="true" ext="xls"/>
             <action name="view" ext="xls"/>
+            <action name="interactivepreview" ext="xls"/>
             <action name="edit" default="true" ext="xla"/>
             <action name="view" ext="xla"/>
             <!-- OOXML spreadsheet -->
@@ -97,6 +102,7 @@
             <action name="edit" default="true" ext="xlsx"/>
             <action name="view" ext="xlsx"/>
             <action name="editnew" ext="xlsx"/>
+            <action name="interactivepreview" ext="xslx"/>
             <action name="edit" default="true" ext="xlsb"/>
             <action name="view" ext="xlsb"/>
             <action name="edit" default="true" ext="xlsm"/>
@@ -131,6 +137,7 @@
             <action name="edit" default="true" ext="odp"/>
             <action name="view" ext="odp"/>
             <action name="editnew" ext="odp"/>
+            <action name="interactivepreview" ext="odp"/>
             <action name="edit" default="true" ext="fodp"/>
             <action name="view" ext="fodp"/>
             <action name="editnew" ext="fodp"/>
@@ -142,11 +149,13 @@
             <!-- MS PowerPoint -->
             <action name="edit" default="true" ext="ppt"/>
             <action name="view" ext="ppt"/>
+            <action name="interactivepreview" ext="ppt"/>
             <action name="view" default="true" ext="pot"/>
             <!-- OOXML presentation -->
             <action name="edit" default="true" ext="pptx"/>
             <action name="view" ext="pptx"/>
             <action name="editnew" ext="pptx"/>
+            <action name="interactivepreview" ext="pptx"/>
             <action name="edit" default="true" ext="pptm"/>
             <action name="view" ext="pptm"/>
             <action name="edit" default="true" ext="potx"/>
@@ -165,6 +174,7 @@
             <action name="view" default="true" ext="sxd"/>
             <action name="edit" default="true" ext="odg"/>
             <action name="view" ext="odg"/>
+            <action name="interactivepreview" ext="odg"/>
             <action name="edit" default="true" ext="fodg"/>
             <action name="view" ext="fodg"/>
             <action name="editnew" ext="fodg"/>

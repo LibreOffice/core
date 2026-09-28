@@ -1399,6 +1399,9 @@ class Dispatcher {
 
 	/// optional docType specifies which commands should we load
 	constructor(docType: string = undefined) {
+		if (window.mode.isInteractivePreview()) {
+			return;
+		}
 		docType = docType ? docType : app.map._docLayer._docType;
 
 		this.addGeneralCommands();
@@ -1523,6 +1526,10 @@ class Dispatcher {
 			return;
 		}
 
+		if (window.mode.isInteractivePreview()) {
+			// No need to alert anyone here.
+			return;
+		}
 		console.error('unknown dispatch: "' + action + '"');
 	}
 }

@@ -894,6 +894,10 @@ window.L.Map.include({
 			mobileTopBar.showItem('redo', true);
 		} else {
 			var jsdialogFormulabar = map.formulabar;
+			if (!jsdialogFormulabar && !window.mode.isInteractivePreview()) {
+				console.error("onFormulaBarFocus: formulabar is nil");
+				return;
+			}
 			jsdialogFormulabar.hide('cancelformula');
 			jsdialogFormulabar.hide('acceptformula');
 			jsdialogFormulabar.show('startformula');

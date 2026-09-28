@@ -1337,6 +1337,9 @@ describe('ViewLayout', function () {
 				isSmallScreenDevice: function () {
 					return false;
 				},
+				isInteractivePreview: function () {
+					return false;
+				},
 			};
 
 			const activeDocument = new DocumentBase();

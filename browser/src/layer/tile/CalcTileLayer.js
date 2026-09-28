@@ -165,7 +165,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._replayPrintTwipsMsgAllViews('cellviewcursor');
 			this._replayPrintTwipsMsgAllViews('textviewselection');
 			// Hide previous tab's shown comment (if any).
-			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).hideAllComments();
+			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (section) {
+				section.hideAllComments();
+			}
 			this._sheetSwitch.gotSetPart(part);
 			this._syncTileContainerSize();
 		}
@@ -1143,12 +1146,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._oldSheetGeomMsg = textMsg;
 			this._handleSheetGeometryDataMsg(values, differentSheet);
 			this._syncTileContainerSize();
-		} else if (values.comments) {
+		} else if (values.comments && !window.mode.isInteractivePreview()) {
 			values.comments.forEach(function(comment) {
 				comment.id = String(comment.id);
 			});
 			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).importComments(values.comments);
-		} else if (values.commentsPos) {
+		} else if (values.commentsPos && !window.mode.isInteractivePreview()) {
 			var section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 			// invalidate all comments
 			section.sectionProperties.commentList.forEach(function (comment) {

@@ -651,6 +651,7 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
 
         if (endPoint == "cool.html" ||
             endPoint == "cool-qt.html" ||
+            endPoint == "cool-preview.html" ||
             endPoint == "help-localizations.json" ||
             endPoint == "localizations.json" ||
             endPoint == "uno-localizations.json")

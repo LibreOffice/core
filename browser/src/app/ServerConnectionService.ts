@@ -186,7 +186,10 @@ class ServerConnectionService {
 	public onVisualsReady() {
 		app.console.debug('ServerConnectionService: onVisualsReady');
 
-		if (!window.mode.isSmallScreenDevice()) {
+		if (
+			!window.mode.isSmallScreenDevice() &&
+			!window.mode.isInteractivePreview()
+		) {
 			// show zotero items if needed
 			const zoteroItems = [
 				'zoteroaddeditbibliography',
@@ -210,7 +213,9 @@ class ServerConnectionService {
 		}
 
 		// initialize notebookbar in core
-		app.map.uiManager.initializeLateComponents();
+		if (!window.mode.isInteractivePreview()) {
+			app.map.uiManager.initializeLateComponents();
+		}
 		JSDialog.RefreshScrollables();
 	}
 

@@ -280,6 +280,8 @@
           url += '&permission=readonly';
         if (options.vector)
           url += '&vector=true';
+        if (options.interactivepreview)
+          url += '&interactivepreview=true';
         return url;
       }
 
@@ -309,7 +311,7 @@
       function documentRow(entry, kind) {
         // Each row carries its own choices, so one document opens read only and the next
         // for editing.
-        const options = { readonly: false, postMessage: false, vector: false };
+        const options = { readonly: false, postMessage: false, vector: false, interactivepreview: false };
 
         const link = document.createElement('a');
         link.textContent = entry.name;
@@ -347,6 +349,11 @@
         toggles.appendChild(toggleButton('vector', 'Open ' + entry.name + ' with vector rendering',
                                          function(pressed) {
                                            options.vector = pressed;
+                                           followOptions();
+                                         }));
+        toggles.appendChild(toggleButton('preview', 'Open ' + entry.name + ' interactive preview',
+                                         function(pressed) {
+                                           options.interactivepreview = pressed;
                                            followOptions();
                                          }));
 

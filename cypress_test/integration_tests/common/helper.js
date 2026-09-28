@@ -113,6 +113,23 @@ function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang, extraQuer
 }
 
 /*
+ * Covers most use cases for test interactive preview. For more flexibility,
+ * call setupDocument and loadDocument directly. loadDocument must be called
+ * with skipDocumentChecks: true otherwise it will fail in preview.
+ * filePath: test document path, for example: 'calc/hello-world.ods'
+ */
+function setupAndPreviewDocument(filePath) {
+	cy.log('>> setupAndPreviewDocument - start');
+
+	cy.viewport(350, 221);
+	var newFilePath = setupDocument(filePath, false);
+	loadDocument(newFilePath, true, undefined, undefined, 'interactivepreview=true');
+
+	cy.log('<< setupAndPreviewDocument - end');
+	return newFilePath;
+}
+
+/*
  * Covers most use cases. For more flexibility,
  * call setupDocument and loadDocument directly
  * filePath: test document path, for example: 'calc/hello-world.ods'
@@ -1581,6 +1598,7 @@ function getContextMenuItemList() {
 
 module.exports.setupDocument = setupDocument;
 module.exports.loadDocument = loadDocument;
+module.exports.setupAndPreviewDocument = setupAndPreviewDocument;
 module.exports.setupAndLoadDocument = setupAndLoadDocument;
 module.exports.setupAndLoadTwoDocuments = setupAndLoadTwoDocuments;
 module.exports.reloadDocument = reloadDocument;

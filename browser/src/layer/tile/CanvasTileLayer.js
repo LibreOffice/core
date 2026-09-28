@@ -392,7 +392,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		// Add it regardless of the file type.
-		app.sectionContainer.addSection(new app.definitions.CommentSection());
+		if (!window.mode.isInteractivePreview()) {
+			app.sectionContainer.addSection(new app.definitions.CommentSection());
+		}
 
 		document.addEventListener('blur', this._onDocumentBlur.bind(this));
 		document.addEventListener('focus', this._onDocumentFocus.bind(this));
@@ -973,16 +975,25 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		else if (textMsg.startsWith('comment:')) {
 			var obj = JSON.parse(textMsg.substring('comment:'.length + 1));
-			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).onACKComment(obj);
+			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (section) {
+				section.onACKComment(obj);
+			}
 			this._map.fire('comment', obj);
 		}
 		else if (textMsg.startsWith('redlinetablemodified:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablemodified:'.length + 1));
-			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).onACKComment(obj);
+			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (section) {
+				section.onACKComment(obj);
+			}
 		}
 		else if (textMsg.startsWith('redlinetablechanged:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablechanged:'.length + 1));
-			app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).onACKComment(obj);
+			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+			if (section) {
+				section.onACKComment(obj);
+			}
 		}
 		else if (textMsg.startsWith('applicationbackgroundcolor:')) {
 			app.sectionContainer.setClearColor('#' + textMsg.substring('applicationbackgroundcolor:'.length + 1).trim());
@@ -2786,7 +2797,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (type === 'buttondown')
 			this._clearSearchResults();
 
-		if (this._map && this._map._docLayer && (type === 'buttondown' || type === 'buttonup'))
+		if (this._map && this._map._docLayer && (type === 'buttondown' || type === 'buttonup') && !window.mode.isInteractivePreview())
 			this._map.userList.followUser(this._map._docLayer._getViewId(), false);
 	},
 
@@ -3323,7 +3334,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (this.isWriter())
 			return 13; /* 170% */
 
-		window.app.console.error('_getMaxZoom should only be called for Impress or Writer.');
+		if (!window.mode.isInteractivePreview()) {
+			// In the interactive preview it is called to set the proper size for Draw
+			// as well.
+			window.app.console.error('_getMaxZoom should only be called for Impress or Writer.');
+		}
 		return 10; /* failsafe 100% */
 	},
 
@@ -3902,9 +3917,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	setInitialZoom: function (map) {
-		if (this.isWriter()) {
+		// We want dynamic zoom (smartZoom) in interactive preview (except calc).
+		const wantDynamicZoom = window.mode.isInteractivePreview() && !this.isCalc();
+		if (wantDynamicZoom || this.isWriter()) {
 			let zoom;
-			const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
+			const smartZoomEnabled = window.prefs.get('smartZoom') != 'false' || wantDynamicZoom;
 			const maxZoom = this._getMaxZoom();
 
 			if (smartZoomEnabled) {

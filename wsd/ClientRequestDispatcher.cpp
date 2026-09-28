@@ -3163,6 +3163,9 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
     const std::string uriValue = uriBaseValue
         + (COOLWSD::WASMEnabled ? "wasm/" : "")
         + "cool.html?";
+    const std::string previewUriValue = uriBaseValue
+        + (COOLWSD::WASMEnabled ? "wasm/" : "")
+        + "cool-preview.html";
 
     LOG_DBG_S("Processing discovery.xml from " << discoveryPath);
     Poco::XML::InputSource inputSrc(discoveryPath);
@@ -3179,14 +3182,17 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
         {
             elem->setAttribute(urlsrc, rootUriValue + CAPABILITIES_END_POINT);
         }
-        else
-        {
-            elem->setAttribute(urlsrc, uriValue);
-        }
-
-        if (parent && parent->getAttribute("name") == "Settings")
+        else if (parent && parent->getAttribute("name") == "Settings")
         {
             elem->setAttribute(urlsrc, uriBaseValue + SETTING_IFRAME_END_POINT);
+        }
+        else
+        {
+            if (elem->getAttribute("name") == "interactivepreview") {
+                elem->setAttribute(urlsrc, previewUriValue);
+            } else {
+                elem->setAttribute(urlsrc, uriValue);
+            }
         }
 
         // Set the View extensions cache as well.

@@ -338,9 +338,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			// Need this check else dialog loses focus
 			return;
 
-		app.sectionContainer
-			.getSectionWithName(app.CSections.CommentList.name)
-			.onPartChange();
+		let commentSection =  app.sectionContainer
+			.getSectionWithName(app.CSections.CommentList.name);
+		if (commentSection) {
+			commentSection.onPartChange();
+		}
 	},
 
 	onUpdatePermission: function (e) {
@@ -457,7 +459,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		if (values.comments) {
+		if (values.comments && !window.mode.isInteractivePreview()) {
 			var comments = Array.isArray(values.comments)
 				? values.comments
 				: Object.values(values.comments);

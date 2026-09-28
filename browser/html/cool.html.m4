@@ -173,6 +173,9 @@ m4_ifelse(MOBILEAPP, [true],
         </div>
       </nav>
 
+m4_ifelse(PREVIEW, [true],
+    [],
+    [
       <div id="toolbar-wrapper" role="toolbar" aria-orientation="horizontal">
           <div id="toolbar-row" class="toolbar-row">
             <div id="toolbar-logo"></div>
@@ -196,6 +199,8 @@ m4_ifelse(MOBILEAPP, [true],
       <input id="insertmultimedia" aria-hidden="true" type="file" accept="audio/*, video/*" tabindex="-1">
       <input id="selectbackground" aria-hidden="true" type="file" accept="image/*" tabindex="-1">
       <input id="comparedocuments" aria-hidden="true" type="file" accept="application/*" tabindex="-1">
+    ]
+)
     </dialog>
 
     <div id="main-document-content">
@@ -232,6 +237,9 @@ m4_ifelse(MOBILEAPP, [true],
       </div>
     </div>
 
+m4_ifelse(PREVIEW, [true],
+    [],
+    [
     <div id="spreadsheet-toolbar" class="hidden"></div>
 
     <div id="mobile-edit-button">
@@ -270,6 +278,8 @@ m4_ifelse(MOBILEAPP, [true],
         </div>
       </div>
     </dialog>
+]
+)
 
     <div id="snackbar-live-region" class="visuallyhidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
@@ -303,6 +313,11 @@ m4_ifelse(MOBILEAPP, [true],
       data-check-file-info-override = "%CHECK_FILE_INFO_OVERRIDE%"
       data-cool-logging = "%BROWSER_LOGGING%"
       data-coolwsd-version = "%COOLWSD_VERSION%"
+      m4_ifelse(PREVIEW, [true],
+        [
+          data-cool-preview = "true"
+        ]
+      )
       data-copyright-year = _YEAR_
       data-deepl-enabled = "%DEEPL_ENABLED%"
       data-default-zoom = "%DEFAULT_ZOOM%"

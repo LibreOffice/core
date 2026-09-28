@@ -176,6 +176,7 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		) as cool.CommentSection;
 
 		if (
+			commentSection &&
 			commentSection.sectionProperties.selectedComment &&
 			!commentSection.sectionProperties.selectedComment.isEdit()
 		) {

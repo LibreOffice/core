@@ -386,6 +386,7 @@ interface Window {
 		isTablet(): boolean;
 		isCODesktop(): boolean;
 		isChromebook(): boolean;
+		isInteractivePreview(): boolean;
 		getDeviceFormFactor(): string;
 	};
 	prefs: {
@@ -471,6 +472,7 @@ interface Window {
 	vendor: string;
 	copyrightYear: string;
 	WOPIPostmessageReady: boolean;
+	coolPreview: boolean;
 
 	socket: SockInterface;
 	errorMessages: ErrorMessages;

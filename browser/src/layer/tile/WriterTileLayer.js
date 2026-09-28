@@ -54,7 +54,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
-		if (values.comments) {
+		if (values.comments && !window.mode.isInteractivePreview()) {
 			values.comments.forEach(function(comment) {
 				comment.id = comment.id.toString();
 				comment.parent = comment.parentId.toString();

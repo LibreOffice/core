@@ -1104,6 +1104,7 @@ build-cool: \
 	$(DIST_FOLDER)/color-palette-dark.css \
 	$(DIST_FOLDER)/bundle.js \
 	$(DIST_FOLDER)/cool.html \
+	$(DIST_FOLDER)/cool-preview.html \
 	$(TABSTRIP_FILES) \
 	$(COOL_QT_HTML) \
 	$(WASM_FILES) \
@@ -1298,6 +1299,11 @@ $(DIST_FOLDER)/cool.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 
 $(DIST_FOLDER)/cool-qt.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=true \
+		$(srcdir)/html/cool.html.m4 > $@
+
+# cool-preview.html is for the interactive preview. It defines PREVIEW.
+$(DIST_FOLDER)/cool-preview.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
+	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=false -DPREVIEW=true \
 		$(srcdir)/html/cool.html.m4 > $@
 
 if ENABLE_TABSTRIP

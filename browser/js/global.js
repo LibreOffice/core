@@ -226,6 +226,9 @@ class BrowserProperties {
 
 				return !global.L.Browser.mobile;
 			},
+			isInteractivePreview: function() {
+				return global.coolPreview;
+			},
 			getDeviceFormFactor: function() {
 				if (global.mode.isSmallScreenDevice())
 					return 'mobile';
@@ -312,6 +315,8 @@ class InitializerBase {
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
 		window.enableExperimentalFeatures = element.dataset.enableExperimentalFeatures === 'true';
 
+		window.coolPreview = element.dataset.coolPreview === 'true';
+
 		window.tileSize = 256;
 
 		window.ThisIsAMobileApp = false;
@@ -331,7 +336,6 @@ class InitializerBase {
 
 			document.getElementById('content-keeper').remove();
 		}, false);
-
 		let productName = document.getElementById("init-product-branding-name") ? document.getElementById("init-product-branding-name").value : "";
 		if (typeof productName === 'string' && productName.length) {
 			window.brandProductName = productName;
