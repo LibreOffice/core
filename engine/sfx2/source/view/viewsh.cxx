@@ -682,6 +682,16 @@ bool isSiblingParagraph(const uno::Reference<accessibility::XAccessibleContext>&
     return isParagraphRole(xContext->getAccessibleRole()) && textRoot(xContext) == xParent;
 }
 
+// Writer gives each page's piece of a paragraph or a table split across pages its own accessible.
+bool continuesPreviousPiece(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    uno::Reference<accessibility::XAccessibleExtendedAttributes> xAttributes(xContext,
+                                                                             uno::UNO_QUERY);
+    return xAttributes.is()
+           && xAttributes->getExtendedAttributes().indexOf(u"continued-from-previous-page:true;")
+                  >= 0;
+}
+
 // Writer reports a heading as "level:N;", following the ARIA level object attribute.
 sal_Int32 getHeadingLevel(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
@@ -1150,6 +1160,30 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
     return aParagraph;
 }
 
+void appendPiece(ContextParagraph& rParagraph, ContextParagraph&& rPiece)
+{
+    const sal_Int32 nShift = rParagraph.aText.getLength();
+    for (ParagraphLink& rLink : rPiece.aLinks)
+    {
+        rLink.nStart += nShift;
+        rLink.nEnd += nShift;
+        rParagraph.aLinks.push_back(std::move(rLink));
+    }
+    for (ParagraphImage& rImage : rPiece.aImages)
+    {
+        rImage.nPosition += nShift;
+        rParagraph.aImages.push_back(std::move(rImage));
+    }
+    for (SfxParagraphComment& rComment : rPiece.aComments)
+    {
+        rComment.nStart += nShift;
+        rComment.nEnd += nShift;
+        rParagraph.aComments.push_back(std::move(rComment));
+    }
+    rParagraph.aText += rPiece.aText;
+    rParagraph.aTwips.Union(rPiece.aTwips);
+}
+
 // A paragraph of a cell covered by a merged one has the table for its parent, which does not list
 // it among its children.
 bool isSkipped(const uno::Reference<accessibility::XAccessibleContext>& xContext,
@@ -1171,9 +1205,25 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
     const accessibility::AccessibleRelationType eType
         = bBackward ? accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM
                     : accessibility::AccessibleRelationType_CONTENT_FLOWS_TO;
+    uno::Reference<accessibility::XAccessibleContext> xPrevious = xStart;
+    bool bAdjacent = !rOut.empty();
     uno::Reference<accessibility::XAccessibleContext> xContext = flowNeighbour(xStart, eType);
-    for (; xContext.is(); xContext = flowNeighbour(xContext, eType))
+    for (; xContext.is(); xPrevious = xContext, xContext = flowNeighbour(xContext, eType))
     {
+        // a paragraph split across pages is given whole, even past the window
+        if (bAdjacent && continuesPreviousPiece(bBackward ? xPrevious : xContext))
+        {
+            ContextParagraph aPiece = contextParagraph(pViewShell, xContext, rOriginOnScreen);
+            if (bBackward)
+            {
+                appendPiece(aPiece, std::move(rOut.back()));
+                rOut.back() = std::move(aPiece);
+            }
+            else
+                appendPiece(rOut.back(), std::move(aPiece));
+            continue;
+        }
+        bAdjacent = false;
         if (bByArea)
         {
             const WindowSide eSide = windowSide(xContext, rParentOnScreen, nTop, nBottom);
@@ -1186,7 +1236,10 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
         if (isSiblingParagraph(xContext, xParent) && !isSkipped(xContext, rSkip))
+        {
             rOut.push_back(contextParagraph(pViewShell, xContext, rOriginOnScreen));
+            bAdjacent = true;
+        }
     }
     if (bBackward)
         std::reverse(rOut.begin(), rOut.end());
@@ -1319,11 +1372,17 @@ void collectParagraphWindow(
     std::vector<ContextParagraph>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
     walkParagraphFlow(pViewShell, xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true,
                       nTop, nBottom, 0, rSkip, rOut);
-    if (isSiblingParagraph(xAnchor, xParent) && !isSkipped(xAnchor, rSkip))
-        rOut.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     std::vector<ContextParagraph> aFollowing;
+    const bool bAnchorGiven = isSiblingParagraph(xAnchor, xParent) && !isSkipped(xAnchor, rSkip);
+    if (bAnchorGiven)
+        aFollowing.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     walkParagraphFlow(pViewShell, xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true,
                       nTop, nBottom, 0, rSkip, aFollowing);
+    if (bAnchorGiven && !rOut.empty() && continuesPreviousPiece(xAnchor))
+    {
+        appendPiece(rOut.back(), std::move(aFollowing.front()));
+        aFollowing.erase(aFollowing.begin());
+    }
     rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
 }
 
