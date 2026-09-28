@@ -51,6 +51,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -58,6 +59,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
@@ -111,6 +115,7 @@
 #include <sfx2/kit/callback.hxx>
 #include <openuriexternally.hxx>
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <list>
 #include <libxml/xmlwriter.h>
@@ -551,6 +556,209 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
     }
 }
 
+uno::Reference<accessibility::XAccessibleContext>
+flowNeighbour(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+              accessibility::AccessibleRelationType eType)
+{
+    uno::Reference<accessibility::XAccessibleRelationSet> xRelations
+        = xContext->getAccessibleRelationSet();
+    if (!xRelations.is())
+        return {};
+    const accessibility::AccessibleRelation aRelation = xRelations->getRelationByType(eType);
+    if (!aRelation.TargetSet.hasElements() || !aRelation.TargetSet[0].is())
+        return {};
+    return aRelation.TargetSet[0]->getAccessibleContext();
+}
+
+enum class WindowSide
+{
+    Above,
+    Inside,
+    Below,
+    NotLaidOut,
+    Unknown
+};
+
+// getLocationOnScreen, unlike getBounds, puts a table cell's paragraphs on the parent's scale.
+WindowSide windowSide(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                      const css::awt::Point& rParentOnScreen, sal_Int32 nTop, sal_Int32 nBottom)
+{
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
+    if (!xComponent.is())
+        return WindowSide::Unknown;
+    const sal_Int32 nY = xComponent->getLocationOnScreen().Y - rParentOnScreen.Y;
+    const sal_Int32 nHeight = xComponent->getSize().Height;
+    // Writer leaves a paragraph it has not laid out yet at the origin, with no height.
+    if (nY <= 0 && nHeight <= 1)
+        return WindowSide::NotLaidOut;
+    if (nY + nHeight < nTop)
+        return WindowSide::Above;
+    if (nY > nBottom)
+        return WindowSide::Below;
+    return WindowSide::Inside;
+}
+
+bool isSiblingParagraph(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                        const uno::Reference<accessibility::XAccessible>& xParent)
+{
+    return xContext->getAccessibleRole() == accessibility::AccessibleRole::PARAGRAPH
+           && xContext->getAccessibleParent() == xParent;
+}
+
+OUString paragraphText(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    uno::Reference<accessibility::XAccessibleText> xText(xContext, uno::UNO_QUERY);
+    return xText.is() ? xText->getText() : OUString();
+}
+
+void walkParagraphFlow(const uno::Reference<accessibility::XAccessibleContext>& xStart,
+                       bool bBackward, const uno::Reference<accessibility::XAccessible>& xParent,
+                       const css::awt::Point& rParentOnScreen, bool bByArea, sal_Int32 nTop,
+                       sal_Int32 nBottom, sal_Int32 nRadius, std::vector<OUString>& rOut)
+{
+    const accessibility::AccessibleRelationType eType
+        = bBackward ? accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM
+                    : accessibility::AccessibleRelationType_CONTENT_FLOWS_TO;
+    uno::Reference<accessibility::XAccessibleContext> xContext = flowNeighbour(xStart, eType);
+    for (; xContext.is(); xContext = flowNeighbour(xContext, eType))
+    {
+        if (bByArea)
+        {
+            const WindowSide eSide = windowSide(xContext, rParentOnScreen, nTop, nBottom);
+            if (eSide == WindowSide::NotLaidOut
+                || eSide == (bBackward ? WindowSide::Above : WindowSide::Below))
+                break;
+            if (eSide != WindowSide::Inside)
+                continue;
+        }
+        else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
+            break;
+        if (isSiblingParagraph(xContext, xParent))
+            rOut.push_back(paragraphText(xContext));
+    }
+    if (bBackward)
+        std::reverse(rOut.begin(), rOut.end());
+}
+
+uno::Reference<accessibility::XAccessibleContext>
+paragraphInWindow(const uno::Reference<accessibility::XAccessible>& xParent, sal_Int32 nX,
+                  sal_Int32 nTop, sal_Int32 nBottom)
+{
+    uno::Reference<accessibility::XAccessibleComponent> xParentComponent(
+        xParent->getAccessibleContext(), uno::UNO_QUERY);
+    if (!xParentComponent.is())
+        return {};
+
+    constexpr sal_Int32 nProbes = 16;
+    const sal_Int32 nStep = std::max<sal_Int32>(1, (nBottom - nTop) / nProbes);
+    for (sal_Int32 nY = std::max<sal_Int32>(0, nTop); nY <= nBottom; nY += nStep)
+    {
+        uno::Reference<accessibility::XAccessibleComponent> xComponent = xParentComponent;
+        css::awt::Point aPoint(nX, nY);
+        for (int nDepth = 0; nDepth < 4 && xComponent.is(); ++nDepth)
+        {
+            uno::Reference<accessibility::XAccessible> xHit
+                = xComponent->getAccessibleAtPoint(aPoint);
+            if (!xHit.is())
+                break;
+            uno::Reference<accessibility::XAccessibleContext> xHitContext
+                = xHit->getAccessibleContext();
+            if (!xHitContext.is())
+                break;
+            if (xHitContext->getAccessibleRole() == accessibility::AccessibleRole::PARAGRAPH)
+                return xHitContext;
+            xComponent.set(xHitContext, uno::UNO_QUERY);
+            if (!xComponent.is())
+                break;
+            const css::awt::Point aOrigin = xComponent->getLocation();
+            aPoint.X -= aOrigin.X;
+            aPoint.Y -= aOrigin.Y;
+        }
+    }
+    return {};
+}
+
+void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                            sal_Int32 nRadius, const tools::Rectangle& rVisibleTwips,
+                            std::vector<OUString>& rBefore, std::vector<OUString>& rAfter)
+{
+    rBefore.clear();
+    rAfter.clear();
+
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is())
+        return;
+
+    uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
+    if (!xParent.is())
+        return;
+
+    uno::Reference<accessibility::XAccessibleComponent> xParentComponent(
+        xParent->getAccessibleContext(), uno::UNO_QUERY);
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
+
+    const bool bByArea = !rVisibleTwips.IsEmpty() && xParentComponent.is() && xComponent.is();
+    if (!bByArea)
+    {
+        walkParagraphFlow(xContext, true, xParent, {}, false, 0, 0, nRadius, rBefore);
+        walkParagraphFlow(xContext, false, xParent, {}, false, 0, 0, nRadius, rAfter);
+        return;
+    }
+
+    const tools::Rectangle aVisiblePx
+        = o3tl::convert(rVisibleTwips, o3tl::Length::twip, o3tl::Length::px);
+    const sal_Int32 nMargin = aVisiblePx.GetHeight();
+    const sal_Int32 nTop = aVisiblePx.Top() - nMargin;
+    const sal_Int32 nBottom = aVisiblePx.Bottom() + nMargin;
+    const css::awt::Point aParentOnScreen = xParentComponent->getLocationOnScreen();
+
+    const WindowSide eCaretSide = windowSide(xContext, aParentOnScreen, nTop, nBottom);
+    if (eCaretSide != WindowSide::Above && eCaretSide != WindowSide::Below)
+    {
+        walkParagraphFlow(xContext, true, xParent, aParentOnScreen, true, nTop, nBottom, 0,
+                          rBefore);
+        walkParagraphFlow(xContext, false, xParent, aParentOnScreen, true, nTop, nBottom, 0,
+                          rAfter);
+        return;
+    }
+
+    const css::awt::Rectangle aCaretBounds = xComponent->getBounds();
+    uno::Reference<accessibility::XAccessibleContext> xAnchor = paragraphInWindow(
+        xParent, aCaretBounds.X + aCaretBounds.Width / 2, aVisiblePx.Top(), aVisiblePx.Bottom());
+    if (!xAnchor.is())
+    {
+        walkParagraphFlow(xContext, eCaretSide == WindowSide::Below, xParent, aParentOnScreen, true,
+                          nTop, nBottom, 0, eCaretSide == WindowSide::Below ? rBefore : rAfter);
+        return;
+    }
+
+    std::vector<OUString>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
+    walkParagraphFlow(xAnchor, true, xParent, aParentOnScreen, true, nTop, nBottom, 0, rOut);
+    if (isSiblingParagraph(xAnchor, xParent))
+        rOut.push_back(paragraphText(xAnchor));
+    std::vector<OUString> aFollowing;
+    walkParagraphFlow(xAnchor, false, xParent, aParentOnScreen, true, nTop, nBottom, 0, aFollowing);
+    rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
+}
+
+// A deleted paragraph outlives its frame, and Writer reads its markup through
+// the frame without checking.
+bool isDefunct(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is())
+        return true;
+    try
+    {
+        return (xContext->getAccessibleStateSet() & accessibility::AccessibleStateType::DEFUNC)
+               != 0;
+    }
+    catch (const lang::DisposedException&)
+    {
+        return true;
+    }
+}
+
 sal_Int32 getListPrefixSize(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
     if (!xAccText.is())
@@ -747,6 +955,7 @@ class KitDocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
+    static constexpr sal_Int32 PARAGRAPH_WINDOW = 10;
 
     const SfxViewShell* m_pViewShell;
     sal_Int16 m_nDocumentType;
@@ -756,6 +965,9 @@ class KitDocumentFocusListener :
     sal_Int32 m_nSelectionStart;
     sal_Int32 m_nSelectionEnd;
     sal_Int32 m_nListPrefixLength;
+    mutable std::vector<OUString> m_aParagraphsBefore;
+    mutable std::vector<OUString> m_aParagraphsAfter;
+    uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
     uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
     bool m_bIsEditingCell;
@@ -828,6 +1040,7 @@ public:
     void notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj, const OUString& sAction);
 
     std::string getFocusedParagraph() const;
+    tools::Rectangle visibleArea() const;
     int getCaretPosition() const;
 
 private:
@@ -868,6 +1081,21 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
     aPayloadTree.put("end", bLeftToRight ? m_nSelectionEnd : m_nSelectionStart);
     if (m_nListPrefixLength > 0)
         aPayloadTree.put("listPrefixLength", m_nListPrefixLength);
+    if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
+    {
+        auto toArray = [](const std::vector<OUString>& rParagraphs) {
+            boost::property_tree::ptree aArray;
+            for (const OUString& rText : rParagraphs)
+            {
+                boost::property_tree::ptree aNode;
+                aNode.put("", rText.toUtf8().getStr());
+                aArray.push_back(std::make_pair("", aNode));
+            }
+            return aArray;
+        };
+        aPayloadTree.add_child("before", toArray(m_aParagraphsBefore));
+        aPayloadTree.add_child("after", toArray(m_aParagraphsAfter));
+    }
     if (force)
         aPayloadTree.put("force", 1);
 }
@@ -881,12 +1109,28 @@ void KitDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, 
     aPayload = aStream.str();
 }
 
+tools::Rectangle KitDocumentFocusListener::visibleArea() const
+{
+    return m_pViewShell ? m_pViewShell->getKitVisibleArea() : tools::Rectangle();
+}
+
 std::string KitDocumentFocusListener::getFocusedParagraph() const
 {
     aboutView("KitDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
     aboutParagraph("KitDocumentFocusListener::getFocusedParagraph",
                    m_sFocusedParagraph, m_nCaretPosition,
                    m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength);
+
+    if (m_xFocusedText.is() && isDefunct(m_xFocusedText))
+    {
+        m_aParagraphsBefore.clear();
+        m_aParagraphsAfter.clear();
+    }
+    else if (m_xFocusedText.is())
+    {
+        collectParagraphWindow(m_xFocusedText, PARAGRAPH_WINDOW, visibleArea(), m_aParagraphsBefore, m_aParagraphsAfter);
+
+    }
 
     std::string aPayload;
     paragraphPropertiesToJson(aPayload);
@@ -1204,6 +1448,8 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         if (m_sFocusedParagraph != sText)
         {
             m_sFocusedParagraph = sText;
+            m_xFocusedText = xAccText;
+            collectParagraphWindow(xAccText, PARAGRAPH_WINDOW, visibleArea(), m_aParagraphsBefore, m_aParagraphsAfter);
             bNotify = true;
         }
     }
@@ -1236,6 +1482,9 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_nSelectionStart = -1;
     m_nSelectionEnd = -1;
     m_nListPrefixLength = 0;
+    m_aParagraphsBefore.clear();
+    m_aParagraphsAfter.clear();
+    m_xFocusedText.clear();
 }
 
 // For a presentation document when an accessible event of type SELECTION_CHANGED_XXX occurs
