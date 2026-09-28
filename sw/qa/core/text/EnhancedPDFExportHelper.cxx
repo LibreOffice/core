@@ -16,6 +16,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -467,6 +468,133 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
         "P de-DE: Ein deutscher Absatz mit einem Bild.\n"
         "Figure en-US: A picture described in the language of the document\n"_ustr,
         aLanguages);
+}
+
+// the rectangle of every link annotation, down the page, each annotation carrying the
+// /StructParent that ISO 14289-1 7.18.5 needs to find its Link element
+std::vector<basegfx::B2DRectangle> lcl_CollectTaggedLinkRects(vcl::filter::PDFDocument& rDocument)
+{
+    std::vector<basegfx::B2DRectangle> aRects;
+    for (auto* pObject : rDocument.GetObjects())
+    {
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        if (!pSubtype || pSubtype->GetValue() != "Link")
+            continue;
+        CPPUNIT_ASSERT_MESSAGE("a link annotation with no /StructParent",
+                               pObject->Lookup("StructParent"_ostr));
+        auto pRect = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("Rect"_ostr));
+        CPPUNIT_ASSERT(pRect);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pRect->GetElements().size());
+        const auto aCorner = [pRect](size_t nIndex) {
+            auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(pRect->GetElement(nIndex));
+            CPPUNIT_ASSERT(pNumber);
+            return pNumber->GetValue();
+        };
+        aRects.emplace_back(aCorner(0), aCorner(1), aCorner(2), aCorner(3));
+    }
+    // PDF y coordinates increase upwards, so the highest bottom is the first line
+    std::ranges::sort(aRects,
+                      [](const basegfx::B2DRectangle& rLeft, const basegfx::B2DRectangle& rRight) {
+                          return rLeft.getMinY() > rRight.getMinY();
+                      });
+    return aRects;
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRuby)
+{
+    createSwDoc("link-ends-in-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // one rectangle per line the link covers, and no third one over the empty band beside
+    // the ruby, which no structure element could cover
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRects.size());
+    // the first line holds text alone; the second carries the ruby, and its rectangle
+    // stands over the ruby's band so that the phonetic annotation takes the click
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[0].getHeight(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[1].getHeight(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVertical)
+{
+    createSwDoc("link-ends-in-ruby-vertical.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // the region split hands this line back in pieces, one of them holding the ruby and
+    // none of the line's text, which nothing paints in and so nothing tags; the count is
+    // what this pins - the width was already right before the pieces were joined
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getWidth(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkPartRubyOneLine)
+{
+    createSwDoc("link-part-ruby-one-line.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // an annotation is a plain box, so a ruby over the link's second half raises the whole
+    // rectangle; leaving the first half its own height would need a quadrilateral
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAfterRuby)
+{
+    createSwDoc("link-starts-after-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    // the ruby raises the line, so the link standing beside it is as tall as the line
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+    // the ruby belongs to no link, so the rectangle starts to the right of it, not at the
+    // left text margin of 56.7pt
+    CPPUNIT_ASSERT_GREATER(65.0, aRects[0].getMinX());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAtAbuttingRuby)
+{
+    createSwDoc("link-starts-at-abutting-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+    // a hit test at the link's first character lands in the ruby before it, which the link
+    // does not cover, so the rectangle starts at the second ruby
+    CPPUNIT_ASSERT_GREATER(65.0, aRects[0].getMinX());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRubyStructureOrder)

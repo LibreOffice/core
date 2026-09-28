@@ -30,6 +30,7 @@
 #include <hintids.hxx>
 
 #include <comphelper/scopeguard.hxx>
+#include <o3tl/temporary.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/embedhlp.hxx>
 #include <vcl/outdev.hxx>
@@ -598,6 +599,8 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
         // the centre of a one-glyph rectangle falls in that glyph's second half, so the hit
         // test below returns the character that contains the point
         cms.m_bPosMatchesBounds = true;
+        // the band of the portion, not the taller band a ruby gives the line
+        cms.m_bRealHeight = true;
         SwPosition pos(rShell.GetDoc()->GetNodes());
         if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
             && *pStart <= pos && pos <= *pEnd)
@@ -606,14 +609,105 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
             std::pair<Point, bool> const tmp(center, false);
             SwContentFrame const*const pFrame(
                 pos.nNode.GetNode().GetTextNode()->getLayoutFrame(rShell.GetLayout(), &pos, &tmp));
-            if (pFrame->GetCharRect(charRect, pos, &cms, false)
-                && rRect.Overlaps(charRect))
+            if (pFrame->GetCharRect(charRect, pos, &cms, false))
             {
-                ret.push_back(rRect);
+                // a reverse portion in a vertical frame can give a negative offset, which
+                // no band matches
+                if (cms.m_aRealHeight.X() >= 0)
+                {
+                    // the band lies along X, and its extent arrives as a negative height, in
+                    // a vertical frame or a rotated portion but not in the two together
+                    if (cms.m_aRealHeight.Y() > 0)
+                    {
+                        charRect.SetPosY(charRect.Top() + cms.m_aRealHeight.X());
+                        charRect.Height(cms.m_aRealHeight.Y());
+                    }
+                    else if (cms.m_aRealHeight.Y() < 0)
+                    {
+                        charRect.SetPosX(charRect.Left() + cms.m_aRealHeight.X());
+                        charRect.Width(-cms.m_aRealHeight.Y());
+                    }
+                }
+                if (rRect.Overlaps(charRect))
+                {
+                    ret.push_back(rRect);
+                }
             }
         }
         // reset stupid static var that may have gotten set now
         SwTextCursor::SetRightMargin(false); // WTF is this crap
+    }
+
+    if (ret.empty())
+        return ret;
+
+    // a ruby's band holds no text of the line, so grow the rectangle over the ruby portion
+    const auto aCoverRuby = [&rShell, &ret](const SwPosition& rPos, sal_Int32 nRubyAt,
+                                            const SwRect& rOnItsLine) -> bool {
+        const SwTextNode* pNode = rPos.GetNode().GetTextNode();
+        // a hit test descends into a ruby for the position right after it too, so the hint
+        // decides whether the link reaches into one
+        if (!pNode || nRubyAt < 0 || !pNode->GetTextAttrAt(nRubyAt, RES_TXTATR_CJK_RUBY))
+            return false;
+
+        const std::pair<Point, bool> aPoint(rOnItsLine.Center(), false);
+        const SwContentFrame* pFrame = pNode->getLayoutFrame(rShell.GetLayout(), &rPos, &aPoint);
+        if (!pFrame)
+            return false;
+
+        SwCursorMoveState cms(CursorMoveState::NONE);
+        cms.m_b2Lines = true;
+        // CalcFrameRects sets it too - an undersized frame is not scrolled to be hit
+        cms.m_bNoScroll = true;
+        // the multi type is the innermost portion's, the portion rectangle the outermost
+        // one's, so a nested ruby would grow over whatever encloses it
+        if (!pFrame->GetCharRect(o3tl::temporary(SwRect()), rPos, &cms, false) || !cms.m_p2Lines
+            || cms.m_p2Lines->nMultiType != MultiPortionType::RUBY
+            || cms.m_p2Lines->aPortion2.HasArea())
+        {
+            return false;
+        }
+
+        bool bGrown = false;
+        for (SwRect& rKept : ret)
+        {
+            if (rKept.Overlaps(cms.m_p2Lines->aPortion))
+            {
+                rKept.Union(cms.m_p2Lines->aPortion);
+                bGrown = true;
+            }
+        }
+        return bGrown;
+    };
+    // either end may reach into a ruby; the rectangle only picks the frame of a node laid
+    // out more than once, and any rectangle of the link serves for that
+    const bool bStartGrown = aCoverRuby(*pStart, pStart->GetContentIndex(), ret.front());
+    const bool bEndGrown = aCoverRuby(*pEnd, pEnd->GetContentIndex() - 1, ret.back());
+    if (!bStartGrown && !bEndGrown)
+        return ret;
+
+    // rectangles that tile one strip of a line are one annotation
+    for (bool bMerged = true; bMerged;)
+    {
+        bMerged = false;
+        for (size_t i = 0; !bMerged && i + 1 < ret.size(); ++i)
+        {
+            for (size_t j = i + 1; !bMerged && j < ret.size(); ++j)
+            {
+                const SwRect aUnion(ret[i].GetUnion(ret[j]));
+                // the full extent across the line, and no gap along it
+                const bool bTiles
+                    = (aUnion.Width() == ret[i].Width() && aUnion.Width() == ret[j].Width()
+                       && aUnion.Height() <= ret[i].Height() + ret[j].Height())
+                      || (aUnion.Height() == ret[i].Height() && aUnion.Height() == ret[j].Height()
+                          && aUnion.Width() <= ret[i].Width() + ret[j].Width());
+                if (!bTiles)
+                    continue;
+                ret[i] = aUnion;
+                ret.erase(ret.begin() + j);
+                bMerged = true;
+            }
+        }
     }
     return ret;
 }
