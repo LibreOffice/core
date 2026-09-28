@@ -39,8 +39,8 @@
 
 class EDITENG_DLLPUBLIC SvxEscapementItem final : public SfxPoolItem
 {
-    short nEsc;
-    sal_uInt8  nProp;
+    short m_nEsc;
+    sal_uInt8  m_nProp;
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -68,25 +68,25 @@ public:
         ASSERT_CHANGE_REFCOUNTED_ITEM;
         if( SvxEscapement::Off == eNew )
         {
-            nEsc = 0;
-            nProp = 100;
+            m_nEsc = 0;
+            m_nProp = 100;
         }
         else
         {
-            nProp = DFLT_ESC_PROP;
+            m_nProp = DFLT_ESC_PROP;
             if( SvxEscapement::Superscript == eNew )
-                nEsc = DFLT_ESC_AUTO_SUPER;
+                m_nEsc = DFLT_ESC_AUTO_SUPER;
             else
-                nEsc = DFLT_ESC_AUTO_SUB;
+                m_nEsc = DFLT_ESC_AUTO_SUB;
         }
     }
     SvxEscapement GetEscapement() const;
 
-    short GetEsc() const { return nEsc; }
-    void SetEsc(short nNewEsc) { ASSERT_CHANGE_REFCOUNTED_ITEM; nEsc = nNewEsc; }
+    short GetEsc() const { return m_nEsc; }
+    void SetEsc(short nNewEsc) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nEsc = nNewEsc; }
 
-    sal_uInt8 GetProportionalHeight() const { return nProp; }
-    void SetProportionalHeight(sal_uInt8 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; nProp = n; }
+    sal_uInt8 GetProportionalHeight() const { return m_nProp; }
+    void SetProportionalHeight(sal_uInt8 n) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nProp = n; }
 };
 
 #endif
