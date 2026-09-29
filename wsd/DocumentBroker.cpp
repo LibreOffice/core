@@ -761,9 +761,10 @@ void DocumentBroker::pollThread()
                 else if (!isAsyncUploading() && !_storageManager.lastUploadSuccessful() &&
                          needToUploadToStorage() != NeedToUpload::No)
                 {
-                    // Retry uploading, if the last one failed and we can try again.
+                    // Retry uploading, if the last one failed and we can try again. Only an
+                    // editable view with a valid token can upload.
                     const auto session = getWriteableSession();
-                    if (session && session->getAuthorization().isValid())
+                    if (session && session->isEditable() && session->getAuthorization().isValid())
                     {
                         checkAndUploadToStorage(session, /*justSaved=*/false);
                     }
@@ -4655,9 +4656,11 @@ void DocumentBroker::autoSaveAndStop(const std::string_view reason)
         if (!autoSave(/*force=*/possiblyModified || !lastSaveSuccessful,
                       /*dontSaveIfUnmodified=*/true, /*finalWrite=*/true))
         {
-            // Nothing to save. Try to upload if necessary.
+            // Nothing to save. Try to upload if necessary. Only an editable view with a valid
+            // token can upload, and getWriteableSession returns a view-only session when there is
+            // no other.
             const auto session = getWriteableSession();
-            if (session && session->getAuthorization().isValid())
+            if (session && session->isEditable() && session->getAuthorization().isValid())
             {
                 checkAndUploadToStorage(session, /*justSaved=*/false);
                 if (isAsyncUploading())

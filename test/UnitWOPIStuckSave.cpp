@@ -21,6 +21,7 @@
 #include <test/WopiTestServer.hpp>
 #include <test/helpers.hpp>
 #include <test/lokassert.hpp>
+#include <wsd/ClientSession.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Util/LayeredConfiguration.h>
@@ -587,6 +588,153 @@ public:
     }
 };
 
+/// The editor modifies the document and saves, and the host answers the upload with 413 (too
+/// large). That makes every view read-only, the editor's too, so the unsaved changes are left
+/// with views that cannot upload them. Once idle, the document is unloaded and the changes are
+/// reported lost.
+class UnitWOPIIdleViewOnly : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitViews, WaitModifiedStatus, WaitUpload, WaitUnload, Done)
+    _phase;
+
+    /// How long the document may stay loaded after the refused upload: several times the idle
+    /// timeout, with room for the save and upload retries.
+    static constexpr std::chrono::seconds MaxUnloadDuration = std::chrono::seconds(20);
+
+    std::size_t _checkFileInfoCount;
+    std::size_t _viewCount;
+    std::size_t _uploads;
+    bool _dataLoss;
+    std::chrono::steady_clock::time_point _refusedTime;
+
+public:
+    UnitWOPIIdleViewOnly()
+        : WopiTestServer("UnitWOPIIdleViewOnly")
+        , _phase(Phase::Load)
+        , _checkFileInfoCount(0)
+        , _viewCount(0)
+        , _uploads(0)
+        , _dataLoss(false)
+    {
+        setTimeout(120s);
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.idle_timeout_secs", 3);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // The first session is the editor, the second a viewer.
+        const bool editor = _checkFileInfoCount == 0;
+        ++_checkFileInfoCount;
+        TST_LOG("CheckFileInfo #" << _checkFileInfoCount << ": " << (editor ? "editor" : "viewer"));
+
+        if (!editor)
+            fileInfo->set("UserCanWrite", "false");
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        ++_uploads;
+        TST_LOG("PutFile #" << _uploads << " in " << name(_phase));
+        LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+
+        TST_LOG("Refusing the upload as too large");
+        _refusedTime = std::chrono::steady_clock::now();
+        TRANSITION_STATE(_phase, Phase::WaitUnload);
+        return std::make_unique<http::Response>(http::StatusCode::PayloadTooLarge);
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        ++_viewCount;
+        TST_LOG("View #" << _viewCount << " [" << session->getName() << "] loaded");
+
+        if (_viewCount == 2)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+            TST_LOG("Modifying (editor)");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=97 key=0");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
+        }
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        if (_phase == Phase::WaitModifiedStatus)
+        {
+            TRANSITION_STATE_MSG(_phase, Phase::WaitUpload, "Saving (editor), expecting PutFile");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+
+        return true;
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        TST_LOG("onDataLoss: " << reason);
+        LOK_ASSERT_STATE(_phase, Phase::WaitUnload);
+        _dataLoss = true;
+
+        // The loss is expected here. The test ends when the document is destroyed.
+        return false;
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << "] in " << name(_phase));
+        LOK_ASSERT_STATE(_phase, Phase::WaitUnload);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_MESSAGE("Expected the unsaved changes to be reported lost", _dataLoss);
+        passTest("Unloaded the idle document that no view could upload");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitViews);
+
+                TST_LOG("Creating the editor and viewer connections");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                addWebSocket();
+
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitUnload:
+            {
+                if (std::chrono::steady_clock::now() - _refusedTime >= MaxUnloadDuration)
+                {
+                    failTest("The idle document is still loaded " +
+                             std::to_string(MaxUnloadDuration.count()) +
+                             " seconds after the upload was refused as too large, with no view "
+                             "able to upload");
+                }
+                break;
+            }
+            case Phase::WaitViews:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitWOPIStuckSave(), new UnitWOPIInfiniteSave(),
@@ -597,6 +745,7 @@ UnitBase** unit_create_wsd_multi(void)
                               new UnitWOPIIdleRejectedToken(
                                   "UnitWOPIIdleRejectedTokenUploadSucceeds",
                                   UnitWOPIIdleRejectedToken::Scenario::UploadSucceeds),
+                              new UnitWOPIIdleViewOnly(),
                               nullptr };
 }
 
