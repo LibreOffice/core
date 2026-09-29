@@ -202,10 +202,14 @@ extern "C"
     static void forwardSigUsr2();
 }
 
-void COOLWSD::appendAllowedHostsFrom(const LayeredConfiguration& conf, const std::string& root, std::vector<std::string>& allowed)
+void COOLWSD::appendAllowedHostsFrom(const LayeredConfiguration& conf, const std::string& root,
+                                     std::vector<std::string>& allowed, bool onlyAllowed)
 {
     for (const std::string& path : ConfigUtil::getIndexedKeys(conf, root, "host"))
     {
+        if (onlyAllowed && !conf.getBool(path + "[@allow]", false))
+            continue;
+
         std::string host = ConfigUtil::getConfigValue<std::string>(conf, path, "");
         if (!host.empty())
         {
@@ -2574,7 +2578,7 @@ void COOLWSD::setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguratio
     bool wopiAllowed = conf.getBool("storage.wopi[@allow]", false);
     if (wopiAllowed)
     {
-        appendAllowedHostsFrom(conf, "storage.wopi", lokAllowedHosts);
+        appendAllowedHostsFrom(conf, "storage.wopi", lokAllowedHosts, /*onlyAllowed=*/true);
         appendAllowedAliasGroups(conf, lokAllowedHosts);
     }
 
