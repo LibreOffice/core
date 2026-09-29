@@ -60,6 +60,10 @@
 #include <memory>
 #include <vector>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editund2.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 using namespace ::cpo;
@@ -168,6 +172,12 @@ public:
     /// Test that the whole space kept for a bullet selects the paragraph
     void testBulletHitAreaCoversWholeLabel();
 
+    void testOutlinerRemoveTrailingParagraphs();
+    void testOutlinerAddTextNumbering();
+    void testOutlinerLastParagraphIsChild();
+    void testOutlinerUndoParaFlag();
+    void testOutlinerReadDepth();
+
     // Fills rOutliner with two bulleted paragraphs whose label runs from 300 to 1200
     // twips, where the second paragraph keeps 500 twips of space above itself.
     static void prepareBulletedParagraphs(Outliner& rOutliner);
@@ -228,6 +238,11 @@ public:
 #endif
     CPPUNIT_TEST(testPasteURLOverSelection);
     CPPUNIT_TEST(testBulletHitAreaCoversWholeLabel);
+    CPPUNIT_TEST(testOutlinerRemoveTrailingParagraphs);
+    CPPUNIT_TEST(testOutlinerAddTextNumbering);
+    CPPUNIT_TEST(testOutlinerLastParagraphIsChild);
+    CPPUNIT_TEST(testOutlinerUndoParaFlag);
+    CPPUNIT_TEST(testOutlinerReadDepth);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3004,6 +3019,85 @@ void Test::testBulletHitAreaCoversWholeLabel()
     bBullet = true;
     CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(1300, nMiddle), 0, &bBullet));
     CPPUNIT_ASSERT(!bBullet);
+}
+
+void Test::testOutlinerRemoveTrailingParagraphs()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
+    aOutliner.SetText(u"a\nb\nc"_ustr, aOutliner.GetParagraph(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aOutliner.GetParagraphCount());
+
+    // The last removal leaves no paragraph at the removed position.
+    aOutliner.Remove(aOutliner.GetParagraph(1), 2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aOutliner.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aOutliner.GetText(aOutliner.GetParagraph(0)));
+}
+
+void Test::testOutlinerAddTextNumbering()
+{
+    Outliner aSource(mpItemPool.get(), OutlinerMode::OutlineObject);
+    aSource.SetText(u"x\ny"_ustr, aSource.GetParagraph(0));
+    aSource.SetNumberingStartValue(1, 5);
+    std::optional<OutlinerParaObject> oParaObj = aSource.CreateParaObject();
+    CPPUNIT_ASSERT(oParaObj);
+
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
+    aOutliner.SetText(u"a"_ustr, aOutliner.GetParagraph(0));
+    aOutliner.AddText(*oParaObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aOutliner.GetParagraphCount());
+
+    // The start value belongs to the appended "y", not to the paragraph at its source index.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetNumberingStartValue(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), aOutliner.GetNumberingStartValue(2));
+}
+
+void Test::testOutlinerLastParagraphIsChild()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
+    aOutliner.SetText(u"a\nb\nc"_ustr, aOutliner.GetParagraph(0));
+    aOutliner.SetDepth(aOutliner.GetParagraph(0), 0);
+    aOutliner.SetDepth(aOutliner.GetParagraph(1), 0);
+    aOutliner.SetDepth(aOutliner.GetParagraph(2), 1);
+
+    // "c", the last paragraph, is a child of "b".
+    CPPUNIT_ASSERT(aOutliner.HasChildren(aOutliner.GetParagraph(1)));
+    CPPUNIT_ASSERT(aOutliner.IsExpanded(aOutliner.GetParagraph(1)));
+    CPPUNIT_ASSERT(!aOutliner.HasChildren(aOutliner.GetParagraph(0)));
+}
+
+void Test::testOutlinerUndoParaFlag()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineView);
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    OutlinerView aView(aOutliner, xWindow.get());
+    aOutliner.InsertView(&aView);
+    comphelper::ScopeGuard aGuard([&aOutliner, &aView] { aOutliner.RemoveView(&aView); });
+    aOutliner.SetText(u"a"_ustr, aOutliner.GetParagraph(0));
+    aOutliner.EnableUndo(true);
+
+    aOutliner.SetParaFlag(aOutliner.GetParagraph(0), ParaFlag::ISPAGE);
+    CPPUNIT_ASSERT(Outliner::HasParaFlag(aOutliner.GetParagraph(0), ParaFlag::ISPAGE));
+
+    // Undo clears the flag again.
+    CPPUNIT_ASSERT(aOutliner.GetUndoManager().Undo());
+    CPPUNIT_ASSERT(!Outliner::HasParaFlag(aOutliner.GetParagraph(0), ParaFlag::ISPAGE));
+}
+
+void Test::testOutlinerReadDepth()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineView);
+    SvMemoryStream aStream;
+    aStream.WriteOString("a\n\tb");
+    aStream.Seek(0);
+    aOutliner.Read(aStream, OUString(), EETextFormat::Text);
+    // The text is read into the empty paragraph in front, which stays.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aOutliner.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aOutliner.GetText(aOutliner.GetParagraph(0)));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, aOutliner.GetText(aOutliner.GetParagraph(1)));
+
+    // Each paragraph takes the depth of its outline level, not the depth set before reading.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetDepth(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetDepth(1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
