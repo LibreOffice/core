@@ -1149,7 +1149,6 @@ ios*) # iOS
     _os=iOS
     enable_mpl_subset=yes
     enable_coinmp=no
-    enable_xmlhelp=no
     with_ppds=no
     # The simulator ran only on Intel Macs when this was written, so it
     # forced the host triple to x86_64. On Apple Silicon the simulator is
@@ -1246,7 +1245,6 @@ linux-android*)
     enable_mpl_subset=yes
     enable_coinmp=yes
     enable_python=no
-    enable_xmlhelp=no
     _os=Android
     ;;
 
@@ -2124,9 +2122,9 @@ else
 fi
 
 AC_ARG_ENABLE(xmlhelp,
-    AS_HELP_STRING([--disable-xmlhelp],
-        [Disable XML help support]),
-,enable_xmlhelp=yes)
+    AS_HELP_STRING([--enable-xmlhelp],
+        [Enable XML help support. Disabled by default.]),
+,enable_xmlhelp=no)
 
 AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
@@ -2994,7 +2992,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_readonly_installset=yes
     enable_scripting=no
     enable_skia=no
-    enable_xmlhelp=no
     enable_zxing=no
     test_libepubgen=no
     test_libcmis=no
@@ -6089,7 +6086,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-openssl \
         --disable-pdfimport \
         --disable-skia \
-        --disable-xmlhelp \
         --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
         --without-tls \
