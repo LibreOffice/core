@@ -1165,7 +1165,9 @@ private:
     void endPage();
 
     void beginStructureElementMCSeq();
-    enum class EndMode { Default, OnlyStruct };
+    /// OnlyStruct: a child element begins, keep an artifact open
+    /// OwnOnly: an element ends, close an artifact only if it is that element
+    enum class EndMode { Default, OnlyStruct, OwnOnly };
     void endStructureElementMCSeq(EndMode = EndMode::Default);
     /** checks whether a non struct element lies in the ancestor hierarchy
         of the current structure element
@@ -1176,6 +1178,8 @@ private:
         false else
      */
     bool checkEmitStructure();
+    /// the current structure element or its nearest ancestor that is a NonStructElement, or 0
+    sal_Int32 getArtifactElement() const;
 
     /* draws an emphasis mark */
     void drawEmphasisMark(  tools::Long nX, tools::Long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );

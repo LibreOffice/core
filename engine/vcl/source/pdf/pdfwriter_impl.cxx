@@ -7775,6 +7775,9 @@ SvStream* PDFWriterImpl::endRedirect()
 
 void PDFWriterImpl::beginTransparencyGroup()
 {
+    // begin the marked content in the outer stream, so that it contains the group
+    MARK( "beginTransparencyGroup" );
+
     updateGraphicsState();
     if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
         beginRedirect( new SvMemoryStream( 1024, 1024 ), tools::Rectangle() );
@@ -10571,19 +10574,17 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         // mark element MC sequence as open
         rEle.m_bOpenMCSeq = true;
     }
-    // handle artifacts
-    else if( ! m_bEmitStructure && m_aContext.Tagged &&
-               m_nCurrentStructElement > 0 &&
-               m_aStructure[m_nCurrentStructElement].m_oType &&
-               *m_aStructure[m_nCurrentStructElement].m_oType == StructElement::NonStructElement &&
-             ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
-             )
+    // handle artifacts: content inside one, e.g. the text of a decorative shape, belongs to it
+    else if (!m_bEmitStructure && m_aContext.Tagged && m_nCurrentStructElement > 0)
     {
+        sal_Int32 const nArtifact = getArtifactElement();
+        if (nArtifact <= 0 || m_aStructure[nArtifact].m_bOpenMCSeq) // already opened sequence
+            return;
         OString aLine = "/Artifact "_ostr;
         writeBuffer( aLine );
         // emit property list if requested
         OStringBuffer buf;
-        for (auto const& rAttr : m_aStructure[m_nCurrentStructElement].m_aAttributes)
+        for (auto const& rAttr : m_aStructure[nArtifact].m_aAttributes)
         {
             appendStructureAttributeLine(rAttr.first, rAttr.second, buf, false);
         }
@@ -10598,43 +10599,48 @@ void PDFWriterImpl::beginStructureElementMCSeq()
             writeBuffer(">> BDC\n");
         }
         // mark element MC sequence as open
-        m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = true;
+        m_aStructure[nArtifact].m_bOpenMCSeq = true;
     }
 }
 
 void PDFWriterImpl::endStructureElementMCSeq(EndMode const endMode)
 {
-    if (m_nCurrentStructElement > 0 // not StructTreeRoot
-        && m_aStructure[m_nCurrentStructElement].m_oType
-        && (m_bEmitStructure
-            || (endMode != EndMode::OnlyStruct
-                && m_aStructure[m_nCurrentStructElement].m_oType == StructElement::NonStructElement))
-        && m_aStructure[m_nCurrentStructElement].m_bOpenMCSeq)
+    if (m_nCurrentStructElement <= 0) // StructTreeRoot
+        return;
+    sal_Int32 nEle = m_nCurrentStructElement;
+    if (!m_bEmitStructure)
+    {
+        if (endMode == EndMode::OnlyStruct)
+            return;
+        // the artifact may be opened on an ancestor
+        nEle = getArtifactElement();
+        // keep it open for the rest of the ancestor's content
+        if (endMode == EndMode::OwnOnly && nEle != m_nCurrentStructElement)
+            return;
+    }
+    if (nEle > 0 && m_aStructure[nEle].m_bOpenMCSeq)
     {
         writeBuffer( "EMC\n" );
-        m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = false;
+        m_aStructure[nEle].m_bOpenMCSeq = false;
     }
 }
 
 bool PDFWriterImpl::checkEmitStructure()
 {
-    bool bEmit = false;
-    if( m_aContext.Tagged )
+    return m_aContext.Tagged && getArtifactElement() == 0;
+}
+
+sal_Int32 PDFWriterImpl::getArtifactElement() const
+{
+    sal_Int32 nEle = m_nCurrentStructElement;
+    while( nEle > 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
     {
-        bEmit = true;
-        sal_Int32 nEle = m_nCurrentStructElement;
-        while( nEle > 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
-        {
-            if (m_aStructure[nEle].m_oType
-                && *m_aStructure[nEle].m_oType == StructElement::NonStructElement)
-            {
-                bEmit = false;
-                break;
-            }
-            nEle = m_aStructure[ nEle ].m_nParentElement;
-        }
+        if (m_aStructure[nEle].m_oType
+            && *m_aStructure[nEle].m_oType == StructElement::NonStructElement)
+            return nEle;
+        nEle = m_aStructure[ nEle ].m_nParentElement;
     }
-    return bEmit;
+    return 0;
 }
 
 sal_Int32 PDFWriterImpl::ensureStructureElement()
@@ -10772,7 +10778,7 @@ void PDFWriterImpl::endStructureElement()
     }
 
     // end the marked content sequence
-    endStructureElementMCSeq();
+    endStructureElementMCSeq(EndMode::OwnOnly);
 
     OStringBuffer aLine;
     if (g_bDebugDisableCompression)

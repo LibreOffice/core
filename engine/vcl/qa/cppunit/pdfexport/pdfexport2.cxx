@@ -7185,6 +7185,85 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173773)
     CPPUNIT_ASSERT_EQUAL(3, nL);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173780)
+{
+    // A text box and a decorative text box, and both with transparent text
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"tdf173780.fodp");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* const pEnd = pStart + aUncompressed.GetSize();
+    enum class MC
+    {
+        Tagged,
+        Artifact,
+        ArtifactWithText
+    };
+    std::vector<MC> aMarkedContent;
+    int nArtifactText = 0, nTaggedText = 0, nArtifactsWithText = 0, nGroups = 0;
+    for (auto pLine = std::find(pStart, pEnd, '\n'); pLine != pEnd;
+         pStart = pLine + 1, pLine = std::find(pStart, pEnd, '\n'))
+    {
+        std::string_view aLine(pStart, pLine - pStart);
+        // an artifact's property list may span lines up to ">> BDC"
+        if (o3tl::starts_with(aLine, "/Artifact"))
+            aMarkedContent.push_back(MC::Artifact);
+        else if (o3tl::starts_with(aLine, "/")
+                 && (o3tl::ends_with(aLine, "BMC") || o3tl::ends_with(aLine, "BDC")))
+            aMarkedContent.push_back(MC::Tagged);
+        else if (aLine == "EMC")
+        {
+            CPPUNIT_ASSERT(!aMarkedContent.empty());
+            if (aMarkedContent.back() == MC::ArtifactWithText)
+                ++nArtifactsWithText;
+            aMarkedContent.pop_back();
+        }
+        else if (aLine == "BT")
+        {
+            // Without the fix in place, the decorative text was in no marked content
+            CPPUNIT_ASSERT(!aMarkedContent.empty());
+            if (aMarkedContent.back() == MC::Tagged)
+                ++nTaggedText;
+            else
+            {
+                ++nArtifactText;
+                aMarkedContent.back() = MC::ArtifactWithText;
+            }
+        }
+        else if (o3tl::ends_with(aLine, " Do Q"))
+        {
+            // Without the fix in place, the marked content of the transparent text began
+            // inside the transparency group, and ended in the page stream
+            CPPUNIT_ASSERT(!aMarkedContent.empty());
+            ++nGroups;
+        }
+    }
+    CPPUNIT_ASSERT(aMarkedContent.empty());
+    // the transparent texts of a decorative and a normal text box
+    CPPUNIT_ASSERT_EQUAL(2, nGroups);
+    CPPUNIT_ASSERT_GREATER(0, nTaggedText);
+    CPPUNIT_ASSERT_EQUAL(2, nArtifactText);
+    // both paragraphs of the decorative text box are in one artifact
+    CPPUNIT_ASSERT_EQUAL(1, nArtifactsWithText);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)
 {
     cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
