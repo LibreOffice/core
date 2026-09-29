@@ -1241,10 +1241,10 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
             // Update the rsid of each pasted text node
             SwNodes &rDestNodes = GetNodes();
-            SwNodeOffset const nEndIdx = aPaM.End()->GetNodeIndex();
+            auto [pStart, pEnd] = aPaM.StartEnd(); // SwPosition*
+            SwNodeOffset const nEndIdx = pEnd->GetNodeIndex();
 
-            for (SwNodeOffset nIdx = aPaM.Start()->GetNodeIndex();
-                    nIdx <= nEndIdx; ++nIdx)
+            for (SwNodeOffset nIdx = pStart->GetNodeIndex(); nIdx <= nEndIdx; ++nIdx)
             {
                 SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();
                 if ( pTextNode )

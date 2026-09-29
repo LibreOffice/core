@@ -68,17 +68,18 @@ namespace {
         // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection
-        if ( rPam.HasMark() &&
-             rPam.End()->GetNode().GetTextNode() )
+        if (rPam.HasMark())
         {
-            SwPaM aPam( rPam.Start()->GetNode(), 0,
-                        rPam.End()->GetNode(), rPam.End()->GetNode().GetTextNode()->Len() );
-            pDoc->ResetAttrs( aPam, false, rResetAttrsArray, true, pLayout );
+            auto [pStart, pEnd] = rPam.StartEnd();
+            if (pEnd->GetNode().GetTextNode())
+            {
+                SwPaM aPam(pStart->GetNode(), 0, pEnd->GetNode(),
+                           pEnd->GetNode().GetTextNode()->Len());
+                pDoc->ResetAttrs(aPam, false, rResetAttrsArray, true, pLayout);
+                return;
+            }
         }
-        else
-        {
-            pDoc->ResetAttrs( rPam, false, rResetAttrsArray, true, pLayout );
-        }
+        pDoc->ResetAttrs( rPam, false, rResetAttrsArray, true, pLayout );
     }
 
     void ExpandPamForParaPropsNodes(SwPaM& rPam, SwRootFrame const*const pLayout)
@@ -208,8 +209,9 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-    SwNode* const pSttNd = &aPam.Start()->GetNode();
-    SwNode* const pEndNd = &aPam.End()->GetNode();
+    auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+    SwNode* const pSttNd = &pStart->GetNode();
+    SwNode* const pEndNd = &pEnd->GetNode();
     SwOutlineNodes::size_type nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
@@ -450,8 +452,9 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
                 SwOutlineNodes::difference_type nOffset, const SwOutlineNodesInline* pOutlineNodesInline )
 {
     // Do not move to special sections in the nodes array
-    const SwPosition& rStt = *rPam.Start(),
-                    & rEnd = *rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    const SwPosition& rStt = *pStt;
+    const SwPosition& rEnd = *pEnd;
     if( GetNodes().GetOutLineNds().empty() || !nOffset ||
         (rStt.GetNodeIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
         (rEnd.GetNodeIndex() < GetNodes().GetEndOfExtras().GetIndex()))
@@ -1352,8 +1355,9 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
     bool bFirst = true;
 
-    const SwNodeOffset nStt = rPaM.Start()->GetNodeIndex();
-    const SwNodeOffset nEnd = rPaM.End()->GetNodeIndex();
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+    const SwNodeOffset nStt = pStart->GetNodeIndex();
+    const SwNodeOffset nEnd = pEnd->GetNodeIndex();
     for (SwNodeOffset n = nStt; n <= nEnd; n++)
     {
         SwTextNode * pCNd = GetNodes()[n]->GetTextNode();
@@ -1434,8 +1438,9 @@ void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
 {
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
-    SwNodeOffset nStt = aPam.Start()->GetNodeIndex();
-    SwNodeOffset const nEnd = aPam.End()->GetNodeIndex();
+    auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+    SwNodeOffset nStt = pStart->GetNodeIndex();
+    SwNodeOffset const nEnd = pEnd->GetNodeIndex();
 
     SwUndoDelNum* pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1848,8 +1853,9 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
 {
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
-    SwNodeOffset nStt = aPam.Start()->GetNodeIndex();
-    SwNodeOffset const nEnd = aPam.End()->GetNodeIndex();
+    auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+    SwNodeOffset nStt = pStart->GetNodeIndex();
+    SwNodeOffset const nEnd = pEnd->GetNodeIndex();
 
     // -> outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
@@ -2317,6 +2323,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             sal_uInt32 nMovedID = getIDocumentRedlineAccess().GetRedlineTable().getNewMovedID();
             getIDocumentContentOperations().CopyRange(*oPam, aInsPos, SwCopyFlags::CheckPosInFly,
                                                       nMovedID);
+            auto [pPamStart, pPamEnd] = oPam->StartEnd(); // SwPosition*
 
             // now delete all the delete redlines that were copied
 #ifndef NDEBUG
@@ -2327,24 +2334,23 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             else
                 assert(oPam->Start()->GetNodeIndex() - oPam->End()->GetNodeIndex() + nOffset == aInsPos.GetNodeIndex() - oPam->End()->GetNodeIndex());
             SwRedlineTable::size_type i;
-            getIDocumentRedlineAccess().GetRedline(*oPam->End(), &i);
+            getIDocumentRedlineAccess().GetRedline(*pPamEnd, &i);
             for ( ; 0 < i; --i)
             {   // iterate backwards and offset via the start nodes difference
                 SwRangeRedline const*const pRedline = getIDocumentRedlineAccess().GetRedlineTable()[i - 1];
-                if (*pRedline->End() < *oPam->Start())
+                if (*pRedline->End() < *pPamStart)
                 {
                     break;
                 }
                 if (pRedline->GetType() == RedlineType::Delete &&
                     // tdf#145066 skip full-paragraph deletion which was jumped over
                     // in Show Changes mode to avoid of deleting an extra row
-                    *oPam->Start() <= *pRedline->Start())
+                    *pPamStart <= *pRedline->Start())
                 {
                     SwRangeRedline* pNewRedline;
                     {
                         SwPaM pam(*pRedline, nullptr);
-                        SwNodeOffset const nCurrentOffset(
-                            nOrigIdx - oPam->Start()->GetNodeIndex());
+                        SwNodeOffset const nCurrentOffset(nOrigIdx - pPamStart->GetNodeIndex());
                         pam.GetPoint()->Assign(pam.GetPoint()->GetNodeIndex() + nCurrentOffset,
                                                pam.GetPoint()->GetContentIndex());
                         pam.GetMark()->Assign(pam.GetMark()->GetNodeIndex() + nCurrentOffset,

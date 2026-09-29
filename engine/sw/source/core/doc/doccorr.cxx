@@ -92,8 +92,9 @@ namespace
 void PaMCorrAbs( const SwPaM& rRange,
                 const SwPosition& rNewPos )
 {
-    SwPosition const aStart( *rRange.Start() );
-    SwPosition const aEnd( *rRange.End() );
+    auto [pStart, pEnd] = rRange.StartEnd(); // SwPosition*
+    SwPosition const aStart(*pStart);
+    SwPosition const aEnd(*pEnd);
     SwPosition const aNewPos( rNewPos );
     SwDoc& rDoc = aStart.GetNode().GetDoc();
 
@@ -197,14 +198,14 @@ void SwDoc::CorrAbs(const SwNode& rOldNode,
     if (!mbDontCorrectBookmarks)
         getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     // fix redlines
+    if (SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable(); !rTable.empty())
     {
-        SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
+        auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
         for (SwRedlineTable::size_type n = 0; n < rTable.size(); )
         {
             // is on position ??
             SwRangeRedline *const pRedline( rTable[ n ] );
-            bool const bChanged =
-                lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
+            bool const bChanged = lcl_PaMCorrAbs(*pRedline, *pStart, *pEnd, aNewPos);
             // clean up empty redlines: docredln.cxx asserts these as invalid
             if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
                          && (pRedline->GetContentIdx() == nullptr))
@@ -231,8 +232,9 @@ void SwDoc::CorrAbs(
     const SwPosition& rNewPos,
     bool bMoveCursor )
 {
-    const SwPosition& aStart(*rRange.Start());
-    const SwPosition& aEnd(*rRange.End());
+    auto [pStart, pEnd] = rRange.StartEnd(); // SwPosition*
+    const SwPosition& aStart(*pStart);
+    const SwPosition& aEnd(*pEnd);
 
     DelBookmarks( aStart.GetNode(), aEnd.GetNode(), nullptr, aStart.GetContentIndex(), aEnd.GetContentIndex() );
 

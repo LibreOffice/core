@@ -281,10 +281,10 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
         SwNodeOffset nNdIdx = rNd.GetIndex();
         SwExtTextInput* pTmp = mpExtInputRing;
         do {
-            SwNodeOffset nStartNode = pTmp->Start()->GetNodeIndex(),
-                         nEndNode = pTmp->End()->GetNodeIndex();
-            sal_Int32 nStartCnt = pTmp->Start()->GetContentIndex();
-            sal_Int32 nEndCnt = pTmp->End()->GetContentIndex();
+            auto [pStart, pEnd] = pTmp->StartEnd(); // SwPosition*
+            SwNodeOffset nStartNode = pStart->GetNodeIndex(), nEndNode = pEnd->GetNodeIndex();
+            sal_Int32 nStartCnt = pStart->GetContentIndex();
+            sal_Int32 nEndCnt = pEnd->GetContentIndex();
 
             if( nStartNode <= nNdIdx && nNdIdx <= nEndNode &&
                 ( nContentPos<0 ||

@@ -1710,7 +1710,8 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
 
     const SvxTabStopItem& rTabItem = GetDefault( RES_PARATR_TABSTOP );
     const sal_Int32 nDefDist = rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134;
-    const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    const SwPosition &rStt = *pStt, &rEnd = *pEnd;
     SwNodeIndex aIdx( rStt.GetNode() );
     while( aIdx <= rEnd.GetNode() )
     {

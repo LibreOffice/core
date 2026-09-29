@@ -46,12 +46,13 @@ SwList::SwList( OUString sListId,
         }
         aVisited[static_cast<sal_Int32>(nIndex)] = true;
         SwPaM aPam( *pNode, *pNode->EndOfSectionNode() );
+        auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
 
         maListTrees.emplace_back(
             std::make_unique<SwNodeNum>( &rDefaultListStyle ),
             std::make_unique<SwNodeNum>( &rDefaultListStyle ),
             std::make_unique<SwNodeNum>( &rDefaultListStyle ),
-            std::make_unique<SwPaM>( *(aPam.Start()), *(aPam.End()) ));
+            std::make_unique<SwPaM>(*pStart, *pEnd));
 
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())

@@ -449,11 +449,11 @@ OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
-    return rPaM.Start()->GetNode().IsTextNode() &&
-           rPaM.Start()->GetContentIndex() == 0 &&
-           ( !rPaM.HasMark() ||
-             ( rPaM.GetMark()->GetNode() == rPaM.GetPoint()->GetNode() &&
-               rPaM.End()->GetContentIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+    return pStart->GetNode().IsTextNode() && pStart->GetContentIndex() == 0
+           && (!rPaM.HasMark()
+               || (rPaM.GetMark()->GetNode() == rPaM.GetPoint()->GetNode()
+                   && pEnd->GetContentIndex() == pEnd->GetNode().GetTextNode()->Len()));
 }
 
 void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::Fieldmark const& rMark)
@@ -1071,8 +1071,9 @@ namespace sw::mark
 
     bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM, bool const isReplace) const
     {
-        SwPosition const& rStart(*rPaM.Start());
-        SwPosition const& rEnd(*rPaM.End());
+        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+        SwPosition const& rStart(*pStart);
+        SwPosition const& rEnd(*pEnd);
         for (auto ppMark = m_vBookmarks.begin();
             ppMark != m_vBookmarks.end();
             ++ppMark)
