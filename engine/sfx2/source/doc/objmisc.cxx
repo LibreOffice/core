@@ -1550,8 +1550,12 @@ bool SfxObjectShell::isScriptAccessAllowed( const Reference< XInterface >& _rxSc
         Reference< XEmbeddedScripts > xScripts( _rxScriptContext, UNO_QUERY );
         if ( !xScripts.is() )
         {
-            Reference< XScriptInvocationContext > xContext( _rxScriptContext, UNO_QUERY_THROW );
-            xScripts.set( xContext->getScriptContainer(), UNO_SET_THROW );
+            Reference< XScriptInvocationContext > xContext( _rxScriptContext, UNO_QUERY );
+            if (!xContext)
+                return false;
+            xScripts = xContext->getScriptContainer();
+            if (!xScripts)
+                return false;
         }
 
         return xScripts->getAllowMacroExecution();
