@@ -183,7 +183,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 		// The shape still holds one hyperlink, now with the new text. Autocorrect capitalised the
 		// first word of the sentence when it was typed.
 		impressHelper.triggerNewSVGForShapeInTheCenter();
-		cy.cGet('#document-container g.Page .TextParagraph')
+		cy.cGet('#document-container g.Page .TextParagraph .TextPosition tspan')
 			.should('have.text', 'Before linkedit after');
 	});
 

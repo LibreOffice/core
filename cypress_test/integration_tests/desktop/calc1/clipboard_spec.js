@@ -275,6 +275,64 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', { 
 		cy.cGet('#info-modal-label2').should('contain.text', url);
 	});
 
+	it('A link on a word keeps its address after text is typed before the word', function () {
+		// Typing into the selected A1 starts the cell edit.
+		helper.typeIntoDocument('here');
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
+
+		// The link is set on the whole text of the cell, so the dialog shows it as the link text.
+		helper.typeIntoDocument('{ctrl}a');
+		helper.processToIdle(this.win);
+		helper.typeIntoDocument('{ctrl}k');
+		cy.cGet('#target-input').should('be.visible');
+		helper.processToIdle(this.win);
+		cy.cGet('#indication-input').should('have.value', 'here');
+		cy.cGet('#target-input').type('https://example.com');
+		cy.cGet('#ok').click();
+		cy.cGet('#target-input').should('not.exist');
+		helper.processToIdle(this.win);
+
+		helper.typeIntoDocument('{enter}');
+		helper.typeIntoDocument('{upArrow}');
+		calcHelper.assertAddressAfterIdle(this.win, 'A1');
+
+		cy.realPress('F2');
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
+
+		helper.typeIntoDocument('{home}');
+		helper.typeIntoDocument(' hello ');
+
+		// The caret now sits at the start of the linked word. Its two ends give the point to
+		// click on once the edit is finished.
+		helper.getBlinkingCursorPosition('linkStart');
+		helper.typeIntoDocument('{end}');
+		helper.getBlinkingCursorPosition('linkEnd');
+
+		helper.typeIntoDocument('{enter}');
+		helper.processToIdle(this.win);
+
+		cy.get('@linkStart').then((start) => {
+			cy.get('@linkEnd').then((end) => {
+				cy.cGet('body').click((start.x + end.x) / 2, (start.y + end.y) / 2);
+			});
+		});
+
+		// The dialog stores the address with a slash after the host name.
+		cy.cGet('.hyperlink-pop-up-container').should('be.visible');
+		cy.cGet('#hyperlink-pop-up').should('have.text', 'https://example.com/');
+
+		// The edit button opens the dialog on the clicked link, so the link text is only the
+		// linked word and not the whole text of the cell.
+		helper.processToIdle(this.win);
+		cy.cGet('#hyperlink-pop-up-edit').click();
+		cy.cGet('#target-input').should('be.visible');
+		helper.processToIdle(this.win);
+		cy.cGet('#indication-input').should('have.value', 'here');
+		cy.cGet('#target-input').should('have.value', 'https://example.com/');
+		cy.cGet('#cancel').click();
+		cy.cGet('#target-input').should('not.exist');
+	});
+
 	it('HTML paste falls back to HTML content when server-side clipboard fetch fails', function() {
 		// Copy A1 first so the server registers a valid clipboard tag. The tag is
 		// needed later when the fallback uploads the HTML to the server's own
