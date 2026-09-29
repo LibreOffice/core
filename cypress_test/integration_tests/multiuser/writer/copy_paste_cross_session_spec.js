@@ -40,9 +40,10 @@ describe(['tagmultiuser'], 'Multiuser Writer Cross-Session Paste', function() {
 		});
 
 		// User A closes the tab: its session goes away while User B keeps the
-		// document open. close() drops the socket without reconnecting.
-		cy.getFrameWindow().then(function(win) {
-			win.app.socket.close();
+		// document open. Unloading the page ends its session the way closing a
+		// tab does.
+		cy.get('#iframe1').then(function(frame) {
+			frame[0].src = 'about:blank';
 		});
 
 		// User B observes User A's view leave. By the time the view list drops
