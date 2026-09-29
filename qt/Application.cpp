@@ -43,6 +43,23 @@
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
 
+namespace
+{
+QWebEngineProfile* createSavedProfile(const QString& storageName, const QString& storagePath,
+                                      const QString& cachePath)
+{
+    LOG_DBG("Application: profile '" << storageName.toStdString() << "' keeps its files in '"
+                                     << storagePath.toStdString() << "' and its cache in '"
+                                     << cachePath.toStdString() << "'");
+
+    auto* profile = new QWebEngineProfile(storageName);
+    profile->setPersistentStoragePath(storagePath);
+    profile->setCachePath(cachePath);
+    profile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
+    return profile;
+}
+}
+
 QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
 std::unique_ptr<Prefs> Application::prefs;
@@ -159,16 +176,13 @@ void Application::initialize()
             qputenv("QTWEBENGINE_CHROMIUM_FLAGS", chromiumFlags);
         }
 
-        globalProfile = new QWebEngineProfile(QStringLiteral("PersistentProfile"));
-
         // Keep the WebEngine's persistent data (localStorage, cookies) under the
         // same directory as our settings instead of a separate data location.
         QString configData = QString::fromStdString(Desktop::getConfigPath().toString());
         QString cacheData = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
-        globalProfile->setPersistentStoragePath(configData);
-        globalProfile->setCachePath(cacheData);
-        globalProfile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
+        globalProfile = createSavedProfile(QStringLiteral("PersistentProfile"), configData,
+                                           cacheData);
 
         globalProfile->installUrlSchemeHandler(
             "cool", new CoolUrlSchemeHandler(globalProfile));
