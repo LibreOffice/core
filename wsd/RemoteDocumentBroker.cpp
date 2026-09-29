@@ -138,7 +138,7 @@ void HeadlessClientSession::sendHandshake()
     // The chain travels in the load message: a URL query value would be
     // decoded once per RequestDetails::sanitizeURI pass and the docKeys'
     // own encoding would not survive that.
-    std::string loadMessage = "load url=" + _loadUrl + " readonly=1";
+    std::string loadMessage = "load url=" + _loadUrl;
     if (!_docKeyChain.empty())
         loadMessage += " remotechain=" + _docKeyChain;
     sendTextMessage(loadMessage);

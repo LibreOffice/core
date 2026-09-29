@@ -1634,7 +1634,8 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
     std::string loadOverHeadlessConnection(const std::string& wopiSrc,
                                            const std::string& loadOptions)
     {
-        const std::string encodedWopiSrc = Uri::encode(wopiSrc + "?access_token=anything");
+        const std::string encodedWopiSrc =
+            Uri::encode(wopiSrc + "?access_token=anything&permission=readonly");
 
         const std::shared_ptr<http::WebSocketSession> session =
             http::WebSocketSession::create(helpers::getTestServerURI());
@@ -1648,7 +1649,7 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
                     RemoteDocumentBroker::getChainSecret());
         session->asyncRequest(request, socketPoll());
 
-        helpers::sendTextFrame(session, "load url=" + encodedWopiSrc + " readonly=1" + loadOptions,
+        helpers::sendTextFrame(session, "load url=" + encodedWopiSrc + loadOptions,
                                getTestname());
 
         const std::string answer =
