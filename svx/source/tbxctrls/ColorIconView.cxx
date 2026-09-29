@@ -64,6 +64,13 @@ void ColorIconView::grab_focus() { m_pIconView->grab_focus(); }
 
 void ColorIconView::set_sensitive(bool bSensitive) { m_pIconView->set_sensitive(bSensitive); }
 
+void ColorIconView::set_size_request(int nWidth, int nHeight)
+{
+    m_pIconView->set_size_request(nWidth, nHeight);
+}
+
+Size ColorIconView::get_size_request() const { return m_pIconView->get_size_request(); }
+
 void ColorIconView::set_help_id(const OUString& rName) { m_pIconView->set_help_id(rName); }
 
 IMPL_LINK(ColorIconView, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)

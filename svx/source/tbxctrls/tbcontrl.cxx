@@ -2105,6 +2105,11 @@ ColorWindow::ColorWindow(OUString  rCommand,
     mxPaletteManager->ReloadColorSet(maColorIconView);
     mxPaletteManager->ReloadRecentColorSet(maRecentColorIconView);
 
+    // ensure minimum height to also provide space for palettes with
+    // more colors when one with few colors is initially selected
+    if (maColorIconView.get_size_request().Height() < 200)
+        maColorIconView.set_size_request(-1, 200);
+
     AddStatusListener( u".uno:ColorTableState"_ustr );
     AddStatusListener( maCommand );
     if ( maCommand == ".uno:FrameLineColor" )
